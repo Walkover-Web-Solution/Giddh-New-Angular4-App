@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { SharedModule } from '../shared/shared.module';
 import { AllGiddhItemComponent } from './all-item.component';
 import { AllItemRoutingModule } from './all-item.routing.module';
 
@@ -8,7 +9,8 @@ import { AllItemRoutingModule } from './all-item.routing.module';
     ],
     imports: [
         AllGiddhItemComponent,
-        AllItemRoutingModule
+        AllItemRoutingModule,
+        SharedModule
     ],
     exports: [
         AllGiddhItemComponent,
