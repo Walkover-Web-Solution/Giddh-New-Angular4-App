@@ -42,7 +42,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
 
     ngOnInit() {
         this.onSearchQueryChanged('');
-        fromEvent(this.searchElement.nativeElement, 'input').pipe(
+        fromEvent(this.searchElement?.nativeElement, 'input').pipe(
             debounceTime(700),
             distinctUntilChanged(),
             map((e: any) => e.target.value),

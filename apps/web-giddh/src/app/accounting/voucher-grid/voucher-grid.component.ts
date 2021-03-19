@@ -160,7 +160,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                 this.createAccountsList();
                 this.resetEntriesIfVoucherChanged();
                 setTimeout(() => {
-                    this.dateField.nativeElement.focus();
+                    this.dateField?.nativeElement.focus();
                 }, 50);
             } else if (d) {
                 this.createAccountsList();
@@ -205,7 +205,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                 this.refreshEntry();
                 this.store.dispatch(this._ledgerActions.ResetLedger());
                 this.requestObj.description = '';
-                this.dateField.nativeElement.focus();
+                this.dateField?.nativeElement.focus();
             }
         });
 
@@ -224,7 +224,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                 this.autoFocusStockGroupField = false;
                 this.getStock(null, null, true);
                 setTimeout(() => {
-                    this.dateField.nativeElement.focus();
+                    this.dateField?.nativeElement.focus();
                 }, 1000);
             }
         });
@@ -233,7 +233,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     public ngOnChanges(c: SimpleChanges) {
         if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
             this.showFromDatePicker = c.openDatePicker.currentValue;
-            this.dateField.nativeElement.focus();
+            this.dateField?.nativeElement.focus();
         }
         if ('openCreateAccountPopup' in c && c.openCreateAccountPopup.currentValue !== c.openCreateAccountPopup.previousValue) {
             if (c.openCreateAccountPopup.currentValue) {
@@ -393,7 +393,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     public openChequeDetailForm() {
         this.chequeEntryModal.show();
         setTimeout(() => {
-            this.chequeNumberInput.nativeElement.focus();
+            this.chequeNumberInput?.nativeElement.focus();
         }, 200);
     }
 
@@ -437,9 +437,9 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             if (openChequePopup === false) {
                 setTimeout(() => {
                     if (transaction.type === 'by') {
-                        this.byAmountField.nativeElement.focus();
+                        this.byAmountField?.nativeElement.focus();
                     } else {
-                        this.toAmountField.nativeElement.focus();
+                        this.toAmountField?.nativeElement.focus();
                     }
                 }, 200);
             }
@@ -484,7 +484,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             }
             this.requestObj.transactions.splice(indx, 1);
             if (reqField === null) {
-                this.dateField.nativeElement.focus();
+                this.dateField?.nativeElement.focus();
             } else {
                 reqField.focus();
             }
@@ -525,7 +525,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             }
         } else {
             this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            return setTimeout(() => this.narrationBox?.nativeElement.focus(), 500);
         }
     }
 
@@ -546,17 +546,17 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
         if (foundContraEntry && data.voucherType !== 'Contra') {
             this._toaster.errorToast('Contra entry (Cash + Bank), not allowed in ' + data.voucherType, 'Error');
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            return setTimeout(() => this.narrationBox?.nativeElement.focus(), 500);
         }
         if (!foundContraEntry && data.voucherType === 'Contra') {
             this._toaster.errorToast('There should be Cash and Bank entry in contra.', 'Error');
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            return setTimeout(() => this.narrationBox?.nativeElement.focus(), 500);
         }
 
         // This suggestion was given by Sandeep
         if (foundSalesAndBankEntry && data.voucherType === 'Journal') {
             this._toaster.errorToast('Sales and Purchase entry not allowed in journal.', 'Error');
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            return setTimeout(() => this.narrationBox?.nativeElement.focus(), 500);
         }
 
         if (this.totalCreditAmount === this.totalDebitAmount) {
@@ -572,11 +572,11 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             } else {
                 const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
                 this._toaster.errorToast('Please select at least one cash or bank account in ' + byOrTo.toUpperCase(), 'Error');
-                setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+                setTimeout(() => this.narrationBox?.nativeElement.focus(), 500);
             }
         } else {
             this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
-            setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            setTimeout(() => this.narrationBox?.nativeElement.focus(), 500);
         }
     }
 
@@ -627,7 +627,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         this.requestObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
         this.journalDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         this.requestObj.description = '';
-        this.dateField.nativeElement.focus();
+        this.dateField?.nativeElement.focus();
         setTimeout(() => {
             this.newEntryObj();
             this.requestObj.transactions[0].type = 'by';
@@ -706,7 +706,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             return validEntry;
         } else {
             this._toaster.errorToast("Particular can't be blank");
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            return setTimeout(() => this.narrationBox?.nativeElement.focus(), 500);
         }
 
     }
@@ -945,7 +945,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             componentInstance.destroyed$.next(true);
             componentInstance.destroyed$.complete();
             this.isNoAccFound = false;
-            this.dateField.nativeElement.focus();
+            this.dateField?.nativeElement.focus();
         });
         componentInstance.isQuickAccountCreatedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe((status: boolean) => {
             if (status) {
@@ -968,7 +968,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
     public hideQuickAccountModal() {
         this.quickAccountModal.hide();
-        this.dateField.nativeElement.focus();
+        this.dateField?.nativeElement.focus();
         return setTimeout(() => {
             this.selectedAccountInputField.value = '';
             this.selectedAccountInputField.focus();
@@ -980,7 +980,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         this.autoFocusStockGroupField = false;
         // after creating stock, get all stocks again
         this.filterByText = '';
-        this.dateField.nativeElement.focus();
+        this.dateField?.nativeElement.focus();
         this.getStock(null, null, true, true);
     }
 
@@ -990,9 +990,9 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             e.stopPropagation();
             return setTimeout(() => {
                 if (fieldType === 'chqNumber') {
-                    this.chequeClearanceDateInput.nativeElement.focus();
+                    this.chequeClearanceDateInput?.nativeElement.focus();
                 } else if (fieldType === 'chqDate') {
-                    this.chqFormSubmitBtn.nativeElement.focus();
+                    this.chqFormSubmitBtn?.nativeElement.focus();
                 }
             }, 100);
         }
@@ -1000,21 +1000,21 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
     public keyUpOnSubmitButton(e) {
         if (e && (e.keyCode === 39 || e.which === 39) || (e.keyCode === 78 || e.which === 78)) {
-            return setTimeout(() => this.resetButton.nativeElement.focus(), 50);
+            return setTimeout(() => this.resetButton?.nativeElement.focus(), 50);
         }
         if (e && (e.keyCode === 8 || e.which === 8)) {
             this.showConfirmationBox = false;
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+            return setTimeout(() => this.narrationBox?.nativeElement.focus(), 50);
         }
     }
 
     public keyUpOnResetButton(e) {
         if (e && (e.keyCode === 37 || e.which === 37) || (e.keyCode === 89 || e.which === 89)) {
-            return setTimeout(() => this.submitButton.nativeElement.focus(), 50);
+            return setTimeout(() => this.submitButton?.nativeElement.focus(), 50);
         }
         if (e && (e.keyCode === 13 || e.which === 13)) {
             this.showConfirmationBox = false;
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+            return setTimeout(() => this.narrationBox?.nativeElement.focus(), 50);
         }
     }
 

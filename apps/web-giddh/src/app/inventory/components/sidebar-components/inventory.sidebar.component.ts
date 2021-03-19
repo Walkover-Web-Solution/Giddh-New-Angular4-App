@@ -69,7 +69,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
 			this.groupUniqueName = v.groupUniqueName;
 			this.stockUniqueName = v.stockUniqueName;
 		})
-		observableFromEvent(this.search.nativeElement, 'input').pipe(
+		observableFromEvent(this.search?.nativeElement, 'input').pipe(
 			debounceTime(500),
 			distinctUntilChanged(),
 			map((e: any) => e.target.value), takeUntil(this.destroyed$))

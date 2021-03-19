@@ -703,7 +703,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public showAccountSearchBox() {
         this.showAccountSearch = !this.showAccountSearch;
         setTimeout(() => {
-            this.accountName.nativeElement.focus();
+            this.accountName?.nativeElement.focus();
             this.accountName.nativeElement.value = null;
         }, 200);
     }
@@ -784,7 +784,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             this.advanceSearchForm.controls['filterAmount'].setValue(null);
             this.getStockReport(true);
         }
-        if (this.stockReportRequest.sortBy || this.stockReportRequest.accountName || this.accountName.nativeElement.value) {
+        if (this.stockReportRequest.sortBy || this.stockReportRequest.accountName || this.accountName?.nativeElement.value) {
             // do something...
         } else {
             this.isFilterCorrect = false;
@@ -875,7 +875,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         } else {
             this.stockReportRequest.val = null;
         }
-        if (this.stockReportRequest.sortBy || this.stockReportRequest.accountName || this.accountName.nativeElement.value || this.stockReportRequest.param || this.stockReportRequest.expression || this.stockReportRequest.val) {
+        if (this.stockReportRequest.sortBy || this.stockReportRequest.accountName || this.accountName?.nativeElement.value || this.stockReportRequest.param || this.stockReportRequest.expression || this.stockReportRequest.val) {
             this.isFilterCorrect = true;
         } else {
             this.isFilterCorrect = false;

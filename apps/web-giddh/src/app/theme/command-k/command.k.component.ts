@@ -141,12 +141,12 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.setParentWidth && this.mainEle) {
             let box: any = this.parentEle.getBoundingClientRect();
             this.ItemWidth = (box.width > this.ItemWidth) ? box.width : this.ItemWidth;
-            this.renderer.setStyle(this.mainEle.nativeElement, 'width', `${box.width}px`);
+            this.renderer.setStyle(this.mainEle?.nativeElement, 'width', `${box.width}px`);
             if (this.searchWrapEle) {
-                this.renderer.setStyle(this.searchWrapEle.nativeElement, 'width', `${box.width}px`);
+                this.renderer.setStyle(this.searchWrapEle?.nativeElement, 'width', `${box.width}px`);
             }
             if (box.width > 300) {
-                this.renderer.setStyle(this.wrapper.nativeElement, 'wider', true);
+                this.renderer.setStyle(this.wrapper?.nativeElement, 'wider', true);
             }
         }
     }
@@ -328,7 +328,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
                 e.preventDefault();
                 e.stopPropagation();
                 // first escape
-                if (this.searchEle.nativeElement.value) {
+                if (this.searchEle?.nativeElement.value) {
                     this.searchEle.nativeElement.value = null;
                 } else {
                     // second time pressing escape
@@ -338,7 +338,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         if (this.isOpen && key === BACKSPACE) {
-            if (!this.searchEle.nativeElement.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
+            if (!this.searchEle?.nativeElement.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
                 this.removeItemFromSelectedGroups();
             }
         }

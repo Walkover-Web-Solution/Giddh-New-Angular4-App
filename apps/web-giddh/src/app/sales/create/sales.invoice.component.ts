@@ -370,7 +370,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                     }
                 }
             } else {
-                this.cashInvoiceInput.nativeElement.focus();
+                this.cashInvoiceInput?.nativeElement.focus();
             }
         }, 200);
     }
@@ -843,7 +843,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                     }
                 }
             } else {
-                this.cashInvoiceInput.nativeElement.focus();
+                this.cashInvoiceInput?.nativeElement.focus();
             }
         }, 200);
 

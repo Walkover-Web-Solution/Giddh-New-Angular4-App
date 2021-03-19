@@ -93,7 +93,7 @@ export class SelectDropdownComponent
 	public ngAfterViewInit() {
 		this.moveHighlightedIntoView();
 		if ((!this.multiple && !this.isTypeAheadMode) && this.filterEnabled) {
-			this.filterInput.nativeElement.focus();
+			this.filterInput?.nativeElement.focus();
         }
         this.subscribeToQueryChange();
 	}
@@ -156,7 +156,7 @@ export class SelectDropdownComponent
 
 	public moveHighlightedIntoView() {
 
-		let list = this.optionsList.nativeElement;
+		let list = this.optionsList?.nativeElement;
 		let listHeight = list.offsetHeight;
 
 		let itemIndex = this.optionList.getHighlightedIndex();
@@ -186,7 +186,7 @@ export class SelectDropdownComponent
      */
     public subscribeToQueryChange(): void {
         if (this.enableDynamicSearch) {
-            fromEvent(this.filterInput.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((event: any) => {
+            fromEvent(this.filterInput?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((event: any) => {
                 this.dynamicSearchedQuery.emit(event?.target?.value?.trim());
             });
         }
@@ -200,7 +200,7 @@ export class SelectDropdownComponent
 	}
 
 	private handleOptionsWheel(e: any) {
-		let div = this.optionsList.nativeElement;
+		let div = this.optionsList?.nativeElement;
 		let atTop = div.scrollTop === 0;
 		let atBottom = div.offsetHeight + div.scrollTop === div.scrollHeight;
 

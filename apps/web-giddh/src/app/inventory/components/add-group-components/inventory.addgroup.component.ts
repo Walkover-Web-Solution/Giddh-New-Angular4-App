@@ -357,7 +357,9 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public removeGroup() {
         let activeGroup: StockGroupResponse = null;
         this.activeGroup$.pipe(take(1)).subscribe(a => activeGroup = a);
-        this.store.dispatch(this.inventoryActions.removeGroup(activeGroup.uniqueName));
+        if(activeGroup) {
+            this.store.dispatch(this.inventoryActions.removeGroup(activeGroup.uniqueName));
+        }
         this.addGroupForm.reset();
         this.router.navigateByUrl('/pages/inventory');
     }

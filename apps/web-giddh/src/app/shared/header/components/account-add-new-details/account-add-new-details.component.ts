@@ -301,7 +301,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         if (this.autoFocus !== undefined) {
             setTimeout(() => {
-                this.autoFocus.nativeElement.focus();
+                this.autoFocus?.nativeElement?.focus();
             }, 50);
         }
 

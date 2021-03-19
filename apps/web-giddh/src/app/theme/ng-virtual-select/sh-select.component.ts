@@ -154,7 +154,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
      */
     @HostListener('window:mouseup', ['$event'])
     public onDocumentClick(event) {
-        if (this.isOpen && !this.element.nativeElement.contains(event.target)) {
+        if (this.isOpen && !this.element?.nativeElement.contains(event.target)) {
             this.isOpen = false;
             if (this.selectedValues && this.selectedValues.length === 1 && !this.multiple) {
                 this.filter = this.selectedValues[0].label;
@@ -323,7 +323,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             // this.updateFilter(this.filter);
         }
         setTimeout(() => {
-            (this.inputFilter.nativeElement as any)['focus'].apply(this.inputFilter.nativeElement);
+            (this.inputFilter?.nativeElement as any)['focus'].apply(this.inputFilter?.nativeElement);
         }, 0);
     }
 
@@ -401,7 +401,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             return;
         }
         if (event) {
-            if (event.relatedTarget && (!this.ele.nativeElement.contains(event.relatedTarget))) {
+            if (event.relatedTarget && (!this.ele?.nativeElement.contains(event.relatedTarget))) {
                 this.isOpen = false;
                 if (this.selectedValues && this.selectedValues.length === 1) {
                     this.filter = this.selectedValues[0].label;
@@ -427,8 +427,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }
 
     public filterInputBlur(event) {
-        if (event.relatedTarget && this.ele.nativeElement) {
-            if (this.ele.nativeElement.contains(event.relatedTarget)) {
+        if (event.relatedTarget && this.ele?.nativeElement) {
+            if (this.ele?.nativeElement.contains(event.relatedTarget)) {
                 return false;
             } else if (this.doNotReset && event && event.target && event.target.value) {
                 return false;
@@ -483,7 +483,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
      */
     public subscribeToQueryChange(): void {
         if (this.enableDynamicSearch) {
-            fromEvent(this.inputFilter.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((event: any) => {
+            fromEvent(this.inputFilter?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((event: any) => {
                 this.dynamicSearchedQuery.emit(event?.target?.value.trim());
             });
         }
