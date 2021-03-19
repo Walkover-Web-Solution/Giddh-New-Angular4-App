@@ -51,11 +51,11 @@
             </div>
         </form>
 
-        <div class="no-data" *ngIf="!completedData?.length">
+        <div class="no-data" *ngIf="!isLoading && !completedData?.length">
             <h1>{{localeData?.no_entries_found}}</h1>
         </div>
 
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" *ngIf="completedData?.length">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" *ngIf="!isLoading && completedData?.length">
             <div class="panel panel-default" *ngFor="let row of completedData;">
                 <div class="panel-heading">
                     <span class="m-r-15">{{row.type === 'TALLY' ? localeData?.tally : row.type === 'COMPANY_JSON_IMPORT' ? localeData?.import_json : ''}} {{row.company.name}}</span>
@@ -152,10 +152,11 @@
             </div>
         </div>
         <!-- pagination -->
-        <div class="text-center" *ngIf="completedData?.length && completedtallySyncDataResponse.totalItems>paginationRequest?.count-1">
+        <div class="text-center" [hidden]="isLoading" *ngIf="completedData?.length && completedtallySyncDataResponse.totalItems>paginationRequest?.count-1">
             <pagination [maxSize]="5" [totalItems]="completedtallySyncDataResponse?.totalItems" [itemsPerPage]="completedtallySyncDataResponse.count" [(ngModel)]="paginationRequest.page" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"
                         [rotate]="false">
             </pagination>
         </div>
+        <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </ng-container>
 </ng-container>

@@ -25,7 +25,9 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
 	public updateIndex: number = null;
 	public confirmationMessage: string = '';
 	public searchText: string = '';
-	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
 	constructor(
 		private store: Store<AppState>,
@@ -34,6 +36,10 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit() {
+        this.store.pipe(select(state => state.settings.isGetAllTagsInProcess), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLoading = response;
+        });
+
 		this.tags$ = this.store.pipe(select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
 			if (tags && tags.length) {
 				_.map(tags, (tag) => {
@@ -89,7 +95,12 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
 	}
 
 	public filterData(searchTxt: string) {
-		let tags = _.filter(this.tagsBackup, (tag) => tag.name.includes(searchTxt.toLowerCase()));
+        let tags;
+        if(searchTxt) {
+            tags = _.filter(this.tagsBackup, (tag) => tag.name.includes(searchTxt.toLowerCase()));
+        } else {
+            tags = _.cloneDeep(this.tagsBackup);
+        }
 		this.tags$ = observableOf(tags);
 	}
 
