@@ -519,9 +519,12 @@ aside-menu-account .container-fluid {
     padding-top: 10px;
 }
 
-.pd-t2,
-.pd-t3 {
+.pd-t2{
     padding-top: 20px;
+}
+
+.pd-t3 {
+    padding-top: 30px;
 }
 
 .pd-b1 {
@@ -565,11 +568,11 @@ aside-menu-account .container-fluid {
 }
 
 .pd-t4 {
-    padding-top: 30px;
+    padding-top: 40px;
 }
 
 .pd-t5 {
-    padding-top: 30px;
+    padding-top: 50px;
 }
 
 .pd-b4 {
