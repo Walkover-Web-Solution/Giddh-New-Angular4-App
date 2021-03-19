@@ -57,8 +57,10 @@ export class TranslateDirective implements OnInit, OnDestroy {
         }
 
         if(this.requireCommonData) {
-            this.store.pipe(select(state => state.session.commonLocaleData), take(1)).subscribe((response) => {
-                this.commonLocaleData.emit(response);
+            this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
+                if(response) {
+                    this.commonLocaleData.emit(response);
+                }
             });
         }
     }
