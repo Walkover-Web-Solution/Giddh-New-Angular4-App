@@ -8,22 +8,23 @@
                         <i class="icon-search-new"></i>
                     </span>
                 </div>
-                <input type="text" class="form-control" placeholder="Search" aria-label="Username"
-                    aria-describedby="addon-wrapping">
+                <input type="text" class="form-control" placeholder="Search" aria-label="Search"
+                    aria-describedby="addon-wrapping" #searchField [(ngModel)]="search"
+                    (ngModelChange)="searchAllItems($event)">
             </div>
         </div>
         <div class="all-item-block">
-            <div class="main-item">
-                <h3 class="mr-b1 d-flex align-items-center"><i class="icon-customer mr-r1"></i> Customer </h3>
+            <div class="main-item" *ngFor="let item of filteredItems;">
+                <h3 class="mr-b1 d-flex align-items-center"><i class="icon-customer mr-r1"></i> {{item?.label}} </h3>
                 <div class="sub-item-block">
                     <div class="row">
-                        <div class="col-xl-2 col-lg-4 col-md-3 col-sm-6 col-12">
-                            <div class="single-menu-item mr-b1" [routerLink]="['/pages/invoice/preview/sales']">
-                               <h4> <i class="icon-invoice-new mr-r1"></i> Invoice </h4>
-                               <p>Lorem ipsum dolor sit  amet, consectetur</p>
+                        <div class="col-xl-2 col-lg-4 col-md-3 col-sm-6 col-12" *ngFor="let menuItem of item?.items">
+                            <div class="single-menu-item mr-b1" [routerLink]="[menuItem?.link]">
+                               <h4> <i class="{{menuItem?.icon}} mr-r1"></i> {{menuItem?.label}} </h4>
+                               <p>{{menuItem?.description}}</p>
                             </div>
                         </div>
-                        <div class="col-xl-2 col-lg-4 col-md-3 col-sm-6 col-12">
+                        <!-- <div class="col-xl-2 col-lg-4 col-md-3 col-sm-6 col-12">
                             <div class="single-menu-item mr-b1">
                                 <h4 [routerLink]="['/pages/invoice/preview/estimates']"> <i class="icon-invoice-new mr-r1"></i> Estimate </h4>
                                 <p>Lorem ipsum dolor sit amet, consectetur</p>
@@ -64,12 +65,12 @@
                                 <h4 [routerLink]="['/pages/invoice/preview/credit%20note']"> <i class="icon-credit-note-new mr-r1"></i> Credit Note </h4>
                                 <p>Lorem ipsum dolor sit amet, consectetur</p>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
 
-            <div class="main-item">
+            <!-- <div class="main-item">
                 <h3 class="mr-b1 d-flex align-items-center"><i class="icon-customer mr-r1"></i> Vendor </h3>
                 <div class="sub-item-block">
                     <div class="row">
@@ -324,7 +325,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
