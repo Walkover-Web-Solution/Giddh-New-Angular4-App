@@ -199,6 +199,14 @@ export class InvoiceUiDataService {
                         selectedTemplate.sections.footer.data.message1.label = `We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.`;
                     }
                 }
+                if (!selectedTemplate.sections['footer'].data['showNotesAtLastPage']) {
+                    selectedTemplate.sections['footer'].data['showNotesAtLastPage'] = defaultTemplate ?
+                        defaultTemplate.sections['footer'].data['showNotesAtLastPage'] : {
+                            label: '',
+                            display: false,
+                            width: null
+                        };
+                }
 
                 this.BRToNewLine(selectedTemplate);
                 this.customTemplate.next(_.cloneDeep(selectedTemplate));
