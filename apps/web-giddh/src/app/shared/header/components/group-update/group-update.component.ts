@@ -181,7 +181,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         setTimeout(() => {
-            this.autoFocus.nativeElement.focus();
+            this.autoFocus?.nativeElement.focus();
         }, 50);
         this.getDiscountList();
         combineLatest([

@@ -65,7 +65,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 			}
 		});
 		setTimeout(() => {
-			this.autoFocus.nativeElement.focus();
+			this.autoFocus?.nativeElement.focus();
 		}, 50);
 	}
 

@@ -1,5 +1,5 @@
 <div class="grp-col" fxLayout="column" fxLayoutAlign="stretch" fxFlex>
-    <div class="grp-wrapper" fxFlex [ngStyle]="{'width':mc.columns.length * 255 + 'px'}"
+    <div class="grp-wrapper" fxFlex [ngStyle]="{'width':mc.columns?.length * 255 + 'px'}"
         [navigationWalker]="{vertical:'nav-vr-item',horizontal:'nav-hr-item'}" #navigation="navigationWalker" #root
         (onReset)="initNavigator(navigation,root.children[0])" (onRight)="onRightKey($event,navigation)"
         (onLeft)="onLeftKey($event,navigation)">

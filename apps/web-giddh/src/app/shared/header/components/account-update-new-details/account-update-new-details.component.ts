@@ -429,7 +429,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         if (this.autoFocusUpdate !== undefined) {
             setTimeout(() => {
-                this.autoFocusUpdate.nativeElement.focus();
+                this.autoFocusUpdate?.nativeElement?.focus();
             }, 50);
         }
 

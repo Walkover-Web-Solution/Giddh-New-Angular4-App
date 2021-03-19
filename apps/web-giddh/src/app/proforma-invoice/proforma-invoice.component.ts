@@ -1537,7 +1537,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (!this.isProformaInvoice && !this.isEstimateInvoice) {
                     if (result[0]) {
                         result[0] = result[0] as ReciptResponse;
-                        result[0].items.forEach(item => {
+                        result[0]?.items.forEach(item => {
                             arr.push({
                                 versionNumber: item.voucherNumber, date: item.voucherDate, grandTotal: item.grandTotal,
                                 account: {name: item.account.name, uniqueName: item.account.uniqueName}
