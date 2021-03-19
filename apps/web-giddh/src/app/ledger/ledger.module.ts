@@ -50,7 +50,6 @@ import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryP
 import { LedgerComponent } from './ledger.component';
 import { LedgerRoutingModule } from './ledger.routing.module';
 import { ImportStatementComponent } from './components/import-statement/import-statement.component';
-import { AmountFieldComponent } from '../shared/amount-field/amount-field.component';
 
 
 // import { ElementViewContainerRef } from '../shared/helpers/pipes/element.viewchild.directive';
@@ -70,8 +69,7 @@ import { AmountFieldComponent } from '../shared/amount-field/amount-field.compon
         LedgerAsidePaneAccountComponent,
         BaseAccountComponent,
         LedgerColumnarReportTableComponent,
-        ImportStatementComponent,
-        AmountFieldComponent
+        ImportStatementComponent
     ],
     exports: [
         LedgerComponent, UpdateLedgerEntryPanelComponent
