@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { ModalDirective, BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
-import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
+import { combineLatest, Observable, ReplaySubject, Subscription } from 'rxjs';
 import { takeUntil, take } from "rxjs/operators";
 import { CompanyActions } from "../../actions/company.actions";
 import { GeneralActions } from "../../actions/general/general.actions";
@@ -15,13 +15,15 @@ import { CompanyService } from "../../services/companyService.service";
 import { GeneralService } from "../../services/general.service";
 import { AppState } from "../../store";
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
-import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from '../header/components';
+import { ManageGroupsAccountsComponent } from '../header/components';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { DbService } from '../../services/db.service';
-import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/defaultMenus';
-import { clone, cloneDeep, concat, orderBy, sortBy, map as lodashMap, slice, find } from '../../lodash-optimized';
+import { DEFAULT_AC, DEFAULT_MENUS } from '../../models/defaultMenus';
+import { cloneDeep, orderBy, slice } from '../../lodash-optimized';
+import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
+import { LoginActions } from "../../actions/login.action";
 @Component({
     selector: 'primary-sidebar',
     templateUrl: './primary-sidebar.component.html',
@@ -57,12 +59,13 @@ export class PrimarySidebarComponent implements OnInit {
     public menuItemsFromIndexDB: any[] = DEFAULT_MENUS;
     public accountItemsFromIndexDB: any[] = DEFAULT_AC;
     private smartCombinedList$: Observable<any>;
+    public companyInitials: any = '';
 
     @Input() public isOpen: boolean = false;
-    @ViewChild('dropdown', { static: true }) public companyDropdown: BsDropdownDirective;
+    @ViewChild('subBranchDropdown', { static: false }) public subBranchDropdown: BsDropdownDirective;
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: ModalDirective;
-    @ViewChild('addmanage', { static: true }) public addmanage: ElementViewContainerRef;
+    @ViewChild('addmanage', { static: false }) public addmanage: ElementViewContainerRef;
 
     constructor(
         private generalService: GeneralService,
@@ -74,10 +77,12 @@ export class PrimarySidebarComponent implements OnInit {
         private changeDetection: ChangeDetectorRef,
         private router: Router,
         private componentFactoryResolver: ComponentFactoryResolver,
-        private _generalActions: GeneralActions,
+        private generalActions: GeneralActions,
         private ledgerAction: LedgerActions,
         private accountsAction: AccountsAction,
-        private _dbService: DbService,
+        private dbService: DbService,
+        private settingsBranchAction: SettingsBranchActions,
+        private loginAction: LoginActions
     ) {
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
@@ -112,6 +117,11 @@ export class PrimarySidebarComponent implements OnInit {
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentBranch = response.find(branch =>
                         (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
+
+                    if (!this.activeCompanyForDb) {
+                        this.activeCompanyForDb = new CompAidataModel();
+                    }
+
                     this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
                     this.activeCompanyForDb.uniqueName = this.currentBranch ? this.currentBranch.uniqueName : ''
                 } else {
@@ -119,14 +129,34 @@ export class PrimarySidebarComponent implements OnInit {
                 }
             }
         });
-
     }
+
+    public ngOnInit(): void {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+            if (selectedCmp) {
+                this.selectedCompanyDetails = selectedCmp;
+                
+                let selectedCompanyArray = selectedCmp.name.split(" ");
+                let companyInitials = [];
+                for (let loop = 0; loop < selectedCompanyArray.length; loop++) {
+                    if (loop <= 1) {
+                        companyInitials.push(selectedCompanyArray[loop][0]);
+                    } else {
+                        break;
+                    }
+                }
+
+                this.companyInitials = companyInitials.join(" ");
+            }
+        });
+    }
+
     /**
-   * Switches to branch mode
-   *
-   * @param {string} branchUniqueName Branch uniqueName
-   * @memberof HeaderComponent
-   */
+     * Switches to branch mode
+     *
+     * @param {string} branchUniqueName Branch uniqueName
+     * @memberof HeaderComponent
+     */
     public switchToBranch(branchUniqueName: string, event: any): void {
         event.stopPropagation();
         if (branchUniqueName === this.generalService.currentBranchUniqueName) {
@@ -138,8 +168,8 @@ export class PrimarySidebarComponent implements OnInit {
             }
         });
         event.preventDefault();
-        this.companyDropdown.isOpen = false;
-        //this.toggleBodyScroll();
+        this.subBranchDropdown.isOpen = false;
+        
         const details = {
             branchDetails: {
                 uniqueName: branchUniqueName
@@ -208,7 +238,7 @@ export class PrimarySidebarComponent implements OnInit {
     * @memberof HeaderComponent
      */
     public toggleBodyScroll(): void {
-        if (this.companyDropdown.isOpen && !this.isMobileSite) {
+        if (this.subBranchDropdown.isOpen && !this.isMobileSite) {
             document.querySelector('body').classList.add('prevent-body-scroll');
         } else {
             document.querySelector('body').classList.remove('prevent-body-scroll');
@@ -277,7 +307,7 @@ export class PrimarySidebarComponent implements OnInit {
         }
 
         let combined = cloneDeep([...menuList, ...acList]);
-        this.store.dispatch(this._generalActions.setSmartList(combined));
+        this.store.dispatch(this.generalActions.setSmartList(combined));
         if (!this.activeCompanyForDb) {
             this.activeCompanyForDb = new CompAidataModel();
         }
@@ -289,7 +319,7 @@ export class PrimarySidebarComponent implements OnInit {
 
         // due to some issue
         // this.selectedPage = menuList[0].name;
-        this._dbService.insertFreshData(this.activeCompanyForDb);
+        this.dbService.insertFreshData(this.activeCompanyForDb);
     }
 
     public findListFromDb(dbResult: ICompAidata) {
@@ -314,9 +344,6 @@ export class PrimarySidebarComponent implements OnInit {
 
             // sortby name
             this.menuItemsFromIndexDB = orderBy(this.menuItemsFromIndexDB, ['name'], ['asc']);
-
-            // let combined = this._dbService.extractDataForUI(dbResult.aidata);
-            // this.store.dispatch(this._generalActions.setSmartList(combined));
         } else {
             let data: IUlist[];
             this.smartCombinedList$.pipe(take(1)).subscribe(listResult => {
@@ -340,7 +367,7 @@ export class PrimarySidebarComponent implements OnInit {
     public hideManageGroupsModal() {
         this.store.pipe(select(c => c.session.lastState), take(1)).subscribe((s: string) => {
             if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1)) {
-                this.store.dispatch(this._generalActions.addAndManageClosed());
+                this.store.dispatch(this.generalActions.addAndManageClosed());
                 if (this.selectedLedgerName) {
                     this.store.dispatch(this.ledgerAction.GetLedgerAccount(this.selectedLedgerName));
                     this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedLedgerName));
@@ -366,7 +393,7 @@ export class PrimarySidebarComponent implements OnInit {
             this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
                 branches = response || [];
             });
-            this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
+            this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
                 this.currentOrganizationType === OrganizationType.Company && branches.length > 1).then((res) => {
                     this.findListFromDb(res);
                 }, (err: any) => {
@@ -381,6 +408,9 @@ export class PrimarySidebarComponent implements OnInit {
     }
 
     public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null, isCtrlClicked?: boolean) {
+        if (this.modelRef) {
+            this.modelRef.hide();
+        }
 
         setTimeout(() => {
             if (item && item.type === 'MENU') {
@@ -419,7 +449,14 @@ export class PrimarySidebarComponent implements OnInit {
         let viewContainerRef = this.addmanage.viewContainerRef;
         viewContainerRef.clear();
         let componentRef = viewContainerRef.createComponent(componentFactory);
-
+        (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
+            this.hideManageGroupsModal();
+            viewContainerRef.remove();
+        });
+        this.manageGroupsAccountsModal.onShown.pipe(takeUntil(this.destroyed$)).subscribe((a => {
+            (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
+            (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel.nativeElement.getBoundingClientRect();
+        }));
     }
 
     private unsubscribe() {
@@ -429,9 +466,68 @@ export class PrimarySidebarComponent implements OnInit {
         this.subscriptions = [];
     }
 
-    public ngOnInit(): void {
-
-
+    /**
+     * Loads company branches
+     *
+     * @memberof HeaderComponent
+     */
+    public loadCompanyBranches(): void {
+        if (this.generalService.companyUniqueName) {
+            // Avoid API call if new user is onboarded
+            this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+        }
     }
 
+    /**
+     * Switches to company view from branch view
+     *
+     * @memberof HeaderComponent
+     */
+    public goToCompany(): void {
+        if (!localStorage.getItem('isNewArchitecture')) {
+            /* New architecture displays more items in menu panel in company mode
+               as accounts are not visible hence to detect the environment for current customer
+               in PROD we are using local storage to reset the index DB once and replace it with new items
+            */
+            this.dbService.clearAllData();
+            localStorage.setItem('isNewArchitecture', String(true));
+        }
+        this.activeCompanyForDb.uniqueName = this.generalService.companyUniqueName;
+        this.activeCompanyForDb.name = this.selectedCompanyDetails.name;
+        this.subBranchDropdown.isOpen = false;
+        const details = {
+            branchDetails: {
+                uniqueName: ''
+            }
+        };
+        this.setOrganizationDetails(OrganizationType.Company, details);
+        this.toggleBodyScroll();
+        this.changeCompany(this.selectedCompanyDetails.uniqueName, false);
+    }
+
+    public changeCompany(selectedCompanyUniqueName: string, fetchLastState?: boolean) {
+        this.subBranchDropdown.isOpen = false;
+        this.generalService.companyUniqueName = selectedCompanyUniqueName;
+        const details = {
+            branchDetails: {
+                uniqueName: ''
+            }
+        };
+        this.setOrganizationDetails(OrganizationType.Company, details);
+        this.toggleBodyScroll();
+        this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName, fetchLastState));
+    }
+
+    public analyzeAccounts(e: any, acc) {
+        if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
+            this.onItemSelected(acc, null, true);
+            return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        if (this.subBranchDropdown) {
+            this.subBranchDropdown.hide();
+        }
+        this.onItemSelected(acc);
+    }
 }
