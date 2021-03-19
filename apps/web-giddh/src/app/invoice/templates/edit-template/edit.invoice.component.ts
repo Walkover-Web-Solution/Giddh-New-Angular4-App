@@ -722,6 +722,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         if (defaultTemplate && defaultTemplate.sections && defaultTemplate.sections.footer && defaultTemplate.sections.footer.data && defaultTemplate.sections.footer.data.companyName) { // slogan default company on new template creation
             defaultTemplate.sections.footer.data.slogan.label = defaultTemplate.sections.footer.data.companyName.label;
         }
+        this._invoiceUiDataService.setLogoPath('');
         this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
         this.showtemplateModal = true;
         this.templateModal.show();
@@ -798,6 +799,12 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.fontDefault = data.fontSize;
                 data.fontMedium = data.fontSize - 2;
             }
+            if (data.sections['footer'].data['message1'].display && !data?.sections['footer']?.data['message1']?.label ||
+                !data.sections['footer'].data['message1'].display && data?.sections['footer']?.data['message1']?.label) {
+                // If user checks the checkbox but didn't provide label then remove the selection
+                data.sections['footer'].data['message1'].display = false;
+                data.sections['footer'].data['message1'].label = '';
+            }
             data = this.newLineToBR(data);
             this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
@@ -807,7 +814,8 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                     this.deleteTemplateConfirmationMessage = null;
                     this.customTemplateConfirmationModal.hide();
                     this.templateModal.hide();
-
+                    this._invoiceUiDataService.resetCustomTemplate();
+                    this._invoiceUiDataService.setLogoPath('');
                     if (this.invoiceTemplateModalComponent && this.invoiceTemplateModalComponent.editFiltersComponent) {
                         this.invoiceTemplateModalComponent.editFiltersComponent.openTab('design');
                     }
@@ -903,6 +911,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 this.invoiceTemplateModalComponent.editFiltersComponent.openTab('design');
             }
             this._invoiceUiDataService.resetCustomTemplate();
+            this._invoiceUiDataService.setLogoPath('');
             this.templateModal.hide();
             this.showtemplateModal = false;
         }
