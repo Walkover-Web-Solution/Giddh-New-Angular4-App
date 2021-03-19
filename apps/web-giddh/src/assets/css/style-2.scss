@@ -2526,10 +2526,6 @@ input[type="checkbox"]:checked:after {
     white-space: normal;
 }
 
-.pd-b1 {
-    padding-bottom: 10px;
-}
-
 .templateInfo {
     position: relative;
     width: 100%;
@@ -3762,10 +3758,6 @@ a.btn.btn-xs.btn-link.pull-right {
     opacity: 1;
     text-shadow: none;
     cursor: pointer;
-}
-
-.pd-b5 {
-    padding-bottom: 50px;
 }
 
 .size-xs {
@@ -7974,6 +7966,10 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 
 .welcome-select .menu {
     width: 120px !important;
+}
+
+.create-select .menu{
+    width: 142px !important; 
 }
 
 .select-caret:after,

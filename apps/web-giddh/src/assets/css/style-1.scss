@@ -433,10 +433,6 @@ aside-menu-account .container-fluid {
     padding-left: 5px;
 }
 
-.pl-0 {
-    padding-left: 0;
-}
-
 .pd-r05 {
     padding-right: 5px;
 }
@@ -445,9 +441,12 @@ aside-menu-account .container-fluid {
     padding-top: 10px;
 }
 
-.pd-t2,
-.pd-t3 {
+.pd-t2{
     padding-top: 20px;
+}
+
+.pd-t3 {
+    padding-top: 30px;
 }
 
 .pd-b1 {
@@ -487,11 +486,11 @@ aside-menu-account .container-fluid {
 }
 
 .pd-t4 {
-    padding-top: 30px;
+    padding-top: 40px;
 }
 
 .pd-t5 {
-    padding-top: 30px;
+    padding-top: 50px;
 }
 
 .pd-b4 {
@@ -504,6 +503,18 @@ aside-menu-account .container-fluid {
 
 .pd-r4 {
     padding-right: 40px;
+}
+
+.pd-b5 {
+    padding-bottom: 50px;
+}
+
+.pd-r5{
+    padding-right: 50px;
+}
+
+.pd-l5{
+    padding-left: 50px;
 }
 
 .mr {
@@ -598,6 +609,7 @@ aside-menu-account .container-fluid {
     margin-top: 40px;
 }
 
+
 .mr-t5 {
     margin-top: 50px;
 }
@@ -614,6 +626,14 @@ aside-menu-account .container-fluid {
 
 .mr-r4 {
     margin-right: 40px;
+}
+
+.mr-l5 {
+    margin-left: 50px;
+}
+
+.mr-r5 {
+    margin-right: 50px;
 }
 
 .bdr {
