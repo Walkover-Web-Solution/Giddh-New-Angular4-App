@@ -68,20 +68,20 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnCha
 
         // cast $ to any to avoid jquery type checking
         this.ngZone.runOutsideAngular(() => {
-            ($(this.input.nativeElement) as any).daterangepicker(this.targetOptions, this.callback.bind(this, this.options.startDate, this.options.endDate));
-            this.datePicker = ($(this.input.nativeElement) as any).data('daterangepicker');
+            ($(this.input?.nativeElement) as any).daterangepicker(this.targetOptions, this.callback.bind(this, this.options.startDate, this.options.endDate));
+            this.datePicker = ($(this.input?.nativeElement) as any).data('daterangepicker');
         });
     }
 
     public attachEvents() {
-        $(this.input.nativeElement).on("cancel.daterangepicker",
+        $(this.input?.nativeElement).on("cancel.daterangepicker",
             (e: any, picker: any) => {
                 let event = { event: e, picker };
                 this.cancelDaterangepicker.emit(event);
             }
         );
 
-        $(this.input.nativeElement).on("apply.daterangepicker",
+        $(this.input?.nativeElement).on("apply.daterangepicker",
             (e: any, picker: any) => {
                 let event = { event: e, picker };
                 this.options.chosenLabel = picker.chosenLabel;
@@ -89,28 +89,28 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnCha
             }
         );
 
-        $(this.input.nativeElement).on("hideCalendar.daterangepicker",
+        $(this.input?.nativeElement).on("hideCalendar.daterangepicker",
             (e: any, picker: any) => {
                 let event = { event: e, picker };
                 this.hideCalendarDaterangepicker.emit(event);
             }
         );
 
-        $(this.input.nativeElement).on("showCalendar.daterangepicker",
+        $(this.input?.nativeElement).on("showCalendar.daterangepicker",
             (e: any, picker: any) => {
                 let event = { event: e, picker };
                 this.showCalendarDaterangepicker.emit(event);
             }
         );
 
-        $(this.input.nativeElement).on("hide.daterangepicker",
+        $(this.input?.nativeElement).on("hide.daterangepicker",
             (e: any, picker: any) => {
                 let event = { event: e, picker };
                 this.hideDaterangepicker.emit(event);
             }
         );
 
-        $(this.input.nativeElement).on("show.daterangepicker",
+        $(this.input?.nativeElement).on("show.daterangepicker",
             (e: any, picker: any) => {
                 let event = { event: e, picker };
                 this.highlightSelectedFilter(picker);
@@ -121,7 +121,7 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnCha
 
     public destroyPicker() {
         try {
-            ($(this.input.nativeElement) as any).data("daterangepicker").remove();
+            ($(this.input?.nativeElement) as any).data("daterangepicker").remove();
         } catch (e) {
             //
         }

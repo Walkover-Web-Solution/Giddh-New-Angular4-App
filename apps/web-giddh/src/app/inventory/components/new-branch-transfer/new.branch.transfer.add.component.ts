@@ -1241,7 +1241,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public toggleTransporterModel(): void {
         this.transporterPopupStatus = !this.transporterPopupStatus;
-        this.generateNewTransporterForm.reset();
+        this.generateNewTransporterForm?.reset();
         this.transportEditMode = false;
     }
 

@@ -93,8 +93,8 @@ export class DecimalDigitsDirective implements OnDestroy {
 
         if (this.giddhDecimalPlaces) {
             let currentCursorPos: number = -1;
-            if (typeof this.elemRef.nativeElement.selectionStart === 'number') {
-                currentCursorPos = this.elemRef.nativeElement.selectionStart;
+            if (typeof this.elemRef?.nativeElement.selectionStart === 'number') {
+                currentCursorPos = this.elemRef?.nativeElement.selectionStart;
             } else {
                 // Probably an old IE browser
             }

@@ -258,8 +258,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     ngAfterViewInit(): void {
-        this.searchElement.nativeElement.focus();
-        fromEvent(this.searchElement.nativeElement, 'input')
+        this.searchElement?.nativeElement.focus();
+        fromEvent(this.searchElement?.nativeElement, 'input')
             .pipe(
                 debounceTime(500),
                 distinctUntilChanged(),
@@ -270,8 +270,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.filterVouchers(term);
             }))
 
-        this.invoiceDetailWrapperHeight = this.invoiceDetailWrapperView.nativeElement.offsetHeight;
-        this.invoiceDetailViewHeight = this.invoiceDetailView.nativeElement.offsetHeight;
+        this.invoiceDetailWrapperHeight = this.invoiceDetailWrapperView?.nativeElement.offsetHeight;
+        this.invoiceDetailViewHeight = this.invoiceDetailView?.nativeElement.offsetHeight;
         this.invoiceImageSectionViewHeight = this.invoiceDetailWrapperHeight - this.invoiceDetailViewHeight - 90;
     }
 
@@ -533,7 +533,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 || 0;
             const left = (windowWidth / 2) - 450;
             const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
-            printWindow.document.write((this.attachedDocumentPreview.nativeElement as HTMLElement).innerHTML);
+            printWindow.document.write((this.attachedDocumentPreview?.nativeElement as HTMLElement).innerHTML);
             printWindow.document.close();
             printWindow.focus();
             printWindow.print();

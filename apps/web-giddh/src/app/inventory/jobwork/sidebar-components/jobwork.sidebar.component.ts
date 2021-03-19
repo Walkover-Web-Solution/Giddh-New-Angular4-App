@@ -80,7 +80,7 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
 	}
 
 	public ngAfterViewInit() {
-		observableFromEvent(this.search.nativeElement, 'input').pipe(
+		observableFromEvent(this.search?.nativeElement, 'input').pipe(
 			debounceTime(300),
 			distinctUntilChanged(),
 			map((e: any) => e.target.value), takeUntil(this.destroyed$))

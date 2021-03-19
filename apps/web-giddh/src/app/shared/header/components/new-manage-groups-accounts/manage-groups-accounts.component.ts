@@ -101,8 +101,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
 	@HostListener('window:resize', ['$event'])
 	public resizeEvent(e) {
-		this.headerRect = this.header.nativeElement.getBoundingClientRect();
-		this.myModelRect = this.myModel.nativeElement.getBoundingClientRect();
+		this.headerRect = this.header.nativeElement?.getBoundingClientRect();
+		this.myModelRect = this.myModel.nativeElement?.getBoundingClientRect();
     }
 
     /**
@@ -114,7 +114,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     @HostListener('keyup', ['$event'])
     public onKeyUp(event: any): void {
         if(!this.keyupInitialized && this._generalService.allowCharactersNumbersSpecialCharacters(event)) {
-            this.groupSrch.nativeElement.focus();
+            this.groupSrch?.nativeElement.focus();
             this.searchString = event.key;
             this.keyupInitialized = true;
         }
@@ -167,7 +167,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.groupList$.subscribe(response => {
             if(this.keyupInitialized) {
                 setTimeout(() => {
-                    this.groupSrch.nativeElement.focus();
+                    this.groupSrch?.nativeElement.focus();
                 }, 200);
             }
         });
@@ -192,7 +192,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
 		this.breadcrumbPath = [];
 		this.breadcrumbUniquePath = [];
-		this.renderer.setProperty(this.groupSrch.nativeElement, 'value', '');
+		this.renderer.setProperty(this.groupSrch?.nativeElement, 'value', '');
 	}
 
 	public closePopupEvent() {
@@ -463,7 +463,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                 this.groupList$ = of(data.body.results);
                 if (this.keyupInitialized) {
                     setTimeout(() => {
-                        this.groupSrch.nativeElement.focus();
+                        this.groupSrch?.nativeElement.focus();
                     }, 200);
                 }
             }
