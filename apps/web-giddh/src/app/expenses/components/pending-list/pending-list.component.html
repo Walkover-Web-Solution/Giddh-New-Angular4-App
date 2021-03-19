@@ -65,8 +65,7 @@
                             {{expenses.particularAccount.name}}
                         </td>
 
-                        <td [attr.data-title]="commonLocaleData?.app_amount" class="text-right pr-2">
-                            {{expenses.currencySymbol}}
+                        <td [attr.data-title]="commonLocaleData?.app_amount" class="text-right pr-2"> {{expenses.currencySymbol}}
                             {{ expenses.amount | giddhCurrency}}</td>
 
                         <td [attr.data-title]="localeData?.payment_receipt">

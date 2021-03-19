@@ -80,7 +80,7 @@ input {
  table.ledger-footer-1 td[class*="col-"]{
     justify-content: flex-end;
 }
-.ledg-head table td.pdR25imp {
+.ledg-head table td.pd-r25 {
     padding-right: 25px !important;
 }
 
@@ -845,6 +845,7 @@ sh-select:focus {
             display: none;
         }
     }
+
 }
 @media only screen and (max-width: 1024px) {
     .container {

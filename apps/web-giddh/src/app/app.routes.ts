@@ -24,7 +24,6 @@ import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mo
 import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
 import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component';
 import { DownloadComponent } from './download/download.component';
-
 export const ROUTES: Routes = [
     { path: 'download', component: DownloadComponent },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
