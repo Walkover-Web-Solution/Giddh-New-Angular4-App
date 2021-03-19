@@ -1,5 +1,6 @@
-<ng-container appTranslate [file]="'ledger'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
-    <ng-container *ngIf="localeData?.page_heading">
+<ng-container appTranslate [file]="'ledger'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+    <ng-container *ngIf="localeData?.page_heading && commonLocaleData?.app_ac">
         <div class="btn-group ledger-ellipse" dropdown dropdown placement="left" *ngIf="isMobileScreen">
             <button id="button-basic" dropdownToggle type="button" class="dropdown-toggle btn mr-0" aria-controls="dropdown-basic">
                 <i class="icon-dots-three-vertical"></i>
