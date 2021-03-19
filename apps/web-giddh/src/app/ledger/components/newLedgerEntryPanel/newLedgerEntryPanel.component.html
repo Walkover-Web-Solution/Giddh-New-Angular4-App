@@ -462,13 +462,13 @@
 
                 <div class="pull-left pd-l15">
 
-                    <ul class="list-inline font-14" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                    <ul class="list-inline font-14 d-flex align-items-center" *ngIf="isLedgerAccountAllowsMultiCurrency">
                         <li>
                             {{commonLocaleData?.app_numbers?.one}} {{ blankLedger.selectedCurrencyToDisplay === 0 ? blankLedger.baseCurrencyToDisplay?.code : blankLedger.foreignCurrencyToDisplay?.code }}
                         </li>
 
                         <li>
-                            <a class="text-light" href="javascript:void(0)" (click)="currencyChange()">
+                            <a class="text-light pl-2 pr-2" href="javascript:void(0)" (click)="currencyChange()">
                                 <i class="icon-switch-icon font-16"></i>
                             </a>
                         </li>
