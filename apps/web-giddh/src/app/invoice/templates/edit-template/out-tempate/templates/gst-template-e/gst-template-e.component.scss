@@ -311,6 +311,12 @@ table.tax-table.item {
     clear: both;
 }
 
+.name-email{
+    p{
+        word-break: break-word;
+    }
+}
+
 .d-block{
     display:block !important;
 }
