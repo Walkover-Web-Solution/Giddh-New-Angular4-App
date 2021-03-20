@@ -366,14 +366,6 @@
                         <th class="text-right">SGST %</th>
                         <th class="text-right">SGST Amt.</th>
                     </ng-container>
-                    <ng-container>
-                        <th class="text-right"
-                            *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'">IGST %
-                        </th>
-                        <th class="text-right"
-                            *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'">IGST Amt.
-                        </th>
-                    </ng-container>
                     <th class="text-right"
                         *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'">Total Amt.
                     </th>
@@ -416,8 +408,6 @@
                     </td>
                     <td *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'" class="text-right ">162.00
                     </td>
-                    <td *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'">18%</td>
-                    <td *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'">100.00</td>
                     <td *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'">2124.00
                     </td>
                 </tr>
@@ -431,9 +421,6 @@
                     <th class="text-right ">162.00</th>
                     <th></th>
                     <th class="text-right ">162.00</th>
-                    <th *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label==='taxRateBifurcation' "></th>
-                    <th class="text-right "
-                        *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label==='taxRateBifurcation' ">600.00</th>
                     <th class="text-right "
                         *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label==='taxRateBifurcation' ">2124.00
                     </th>
