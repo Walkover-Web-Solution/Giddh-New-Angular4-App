@@ -626,7 +626,7 @@
                                         accept="image/png, image/jpeg" id="signatureImg-edit" ngFileSelect
                                         (uploadOutput)="onUploadFileOutput($event)" [options]="fileUploadOptions"
                                         [uploadInput]="uploadInput">
-                                    <small>Upload Your Logo</small>
+                                    <small>Upload Signature</small>
 
                                 </label>
                                 <label for="signatureImg-edit" class="logo-preview" [hidden]="!signatureImgAttached">
@@ -638,10 +638,8 @@
                                     <span><b>Uploading...</b></span>
                             </label>
                             </span>
-                            <button type="button" class="start-upload-btn btn btn-success"
-                            tooltip="Clicking on Upload, will Upload image on server">Upload</button>
-                        <button type="button" class="start-upload-btn btn btn-danger"
-                            tooltip="Clicking on this, will delete image from server">Delete</button>
+                            <button *ngIf="signatureImgAttached" (click)="removeFile(imageSignatureId)" type="button" class="start-upload-btn btn btn-danger"
+                                tooltip="Clicking on this, will delete image from server">Delete</button>
                         </div>
                     </div>
                     <div class="clearfix" class="col-lg-6 col-md-12">
