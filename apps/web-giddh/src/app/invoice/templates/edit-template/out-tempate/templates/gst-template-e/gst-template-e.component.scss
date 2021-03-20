@@ -209,8 +209,13 @@ tfoot.table-details tr th {
     vertical-align: baseline;
 }
 
-#royal .vertical-align-middle {
-    vertical-align: middle;
+#royal {
+    .vertical-align-middle {
+        vertical-align: middle;
+    }
+    .vertical-align-top {
+        vertical-align: top;
+    }
 }
 
 #royal .note {
