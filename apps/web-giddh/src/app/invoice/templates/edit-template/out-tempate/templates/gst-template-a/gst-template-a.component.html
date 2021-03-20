@@ -640,14 +640,6 @@
                                     <th class="text-right "
                                         [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">SGST Amt.</th>
                                 </ng-container>
-                                <ng-container>
-                                    <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} "
-                                        *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
-                                        IGST %</th>
-                                    <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} "
-                                        *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
-                                        IGST Amt.</th>
-                                </ng-container>
                                 <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} "
                                     *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
                                     Total Amt.</th>
@@ -693,10 +685,6 @@
                                 <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'" class="text-right ">162.00
                                 </td>
                                 <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
-                                    18%</td>
-                                <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
-                                    100.00</td>
-                                <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
                                     2124.00</td>
                             </tr>
                         </tbody>
@@ -711,11 +699,6 @@
                                 <th class="text-right ">162.00</th>
                                 <th></th>
                                 <th class="text-right ">162.00</th>
-                                <th *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label==='taxRateBifurcation' ">
-                                </th>
-                                <th class="text-right "
-                                    *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label==='taxRateBifurcation' ">
-                                    600.00</th>
                                 <th class="text-right "
                                     *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label==='taxRateBifurcation' ">
                                     2124</th>
