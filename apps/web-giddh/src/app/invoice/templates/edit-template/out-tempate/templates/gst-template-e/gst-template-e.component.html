@@ -443,7 +443,7 @@
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
             <i class="icon-edit-pencil"></i>
         </a>
-        <p class="font-10" *ngIf="fieldsAndVisibility.footer.showNotesAtLastPage?.display">{{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.'}}</p>
+        <p class="font-10" [ngStyle]="{ 'white-space': 'pre-line'}" *ngIf="fieldsAndVisibility.footer.showNotesAtLastPage?.display">{{fieldsAndVisibility.footer.message1?.label}}</p>
         <table class="subfooter">
             <tbody>
                 <tr>
