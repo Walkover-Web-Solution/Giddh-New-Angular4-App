@@ -220,7 +220,7 @@
                     <th [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">
                         {{(fieldsAndVisibility.table.discount?.label?.length > 0) ? fieldsAndVisibility.table.discount?.label : 'Disc.'}}
                     </th>
-                    <!-- <th [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">{{(fieldsAndVisibility.table.taxableValue?.label?.length > 0) ? fieldsAndVisibility.table.taxableValue?.label : 'Taxable Amt.'}}</th> -->
+                    <th [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">{{(fieldsAndVisibility.table.taxableValue?.label?.length > 0) ? fieldsAndVisibility.table.taxableValue?.label : 'Taxable Amt.'}}</th>
 
                     <th [hidden]="!fieldsAndVisibility.table.total?.display" class="text-right">
                         {{(fieldsAndVisibility.table.total?.label?.length > 0) ? fieldsAndVisibility.table.total?.label : 'Total'}}
@@ -235,7 +235,7 @@
                     </td>
                     <td>5000.00</td>
                 </tr>
-                <tr>
+                <tr class="vertical-align-top">
                     <td [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-center">1</td>
                     <td [hidden]="!fieldsAndVisibility.table.item?.display"
                         class="text-left">
@@ -254,13 +254,13 @@
                         <p class="font-10 text-gray line-height-initial">$14.28</p>
                     </td>
                     <td [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">-300.00</td>
-                    <!-- <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">970.00</td> -->
+                    <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">1700.00</td>
 
                     <td [hidden]="!fieldsAndVisibility.table.total?.display" class="text-right">2006.00
                         <p class="font-10 text-gray line-height-initial">$28.65</p>
                     </td>
                 </tr>
-                <tr>
+                <tr class="vertical-align-top">
                     <td [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-center">2</td>
                     <td [hidden]="!fieldsAndVisibility.table.item?.display"
                         class="text-left">
@@ -280,7 +280,7 @@
                         <p class="font-10 text-gray line-height-initial">$4.20</p>
                     </td>
                     <td [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">-500.00</td>
-                    <!-- <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">970.00</td> -->
+                    <td [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">100.00</td>
 
                     <td [hidden]="!fieldsAndVisibility.table.total?.display" class="text-right">118.00
                         <p class="font-10 text-gray line-height-initial">$1.68</p>
