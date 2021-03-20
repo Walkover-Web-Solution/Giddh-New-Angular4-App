@@ -554,4 +554,17 @@ export class LedgerService {
 			return data;
 		}), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
 	}
+
+    /**
+     * Removes the attachment
+     *
+     * @param {string} attachmentUniqueName Unique name of the attachment
+     * @return {*}  {Observable<BaseResponse<any, any>>} Observable to carry out further operations
+     * @memberof LedgerService
+     */
+    public removeAttachment(attachmentUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        const url = `${this.config.apiUrl}${LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))}/${attachmentUniqueName}`;
+        return this._http.delete(url).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error)));
+    }
 }
