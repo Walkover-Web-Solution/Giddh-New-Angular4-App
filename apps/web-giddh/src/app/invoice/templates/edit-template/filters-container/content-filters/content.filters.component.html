@@ -582,7 +582,7 @@
                 </div>
                 <div class="clearfix mr-t1">
                     <div>
-                        <input type="checkbox" name="showNotesAtLastPage" [(ngModel)]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show notes at the last page
+                        <input type="checkbox" name="showNotesAtLastPage" [checked]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display" [(ngModel)]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show notes at the last page
                     </div>
                 </div>
                 <div class="clearfix mr-t1">
