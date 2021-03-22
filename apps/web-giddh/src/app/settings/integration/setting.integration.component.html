@@ -427,6 +427,11 @@
                                         <sh-select #paymentFormAccountName [options]="bankAccounts$ | async" name="accountUniqueName" formControlName="accountUniqueName" placeholder="Select Account" [ItemHeight]="33" autocomplete="off" [isRequired]="true">
                                         </sh-select>
                                     </div>
+                                    <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                                        <label>User</label>
+                                        <br>
+                                        <sh-select [options]="usersList" name="usersList" formControlName="emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select>
+                                    </div>
                                 </div>
                                 <!-- <ng-container formArrayName="userAmountRanges">
                                     <ng-container *ngFor="let item of addBankForm.get('userAmountRanges')['controls'];let index = index;let f = first; let l = last" [formGroupName]="index">
@@ -559,6 +564,11 @@
                                     <br>
                                     <sh-select *ngIf="bankAccounts$ && regAcc?.account?.uniqueName" [disabled]="isBankUpdateInEdit !== parentIndex" required [options]="bankAccounts$ | async" name="accountUniqueName" [defaultValue]="regAcc?.account?.name" [(ngModel)]="regAcc.account.uniqueName"
                                         placeholder="Select Account" [ItemHeight]="33" autocomplete="off" [isRequired]="true"></sh-select>
+                                </div>
+                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                                    <label>User</label>
+                                    <br>
+                                    <sh-select [disabled]="isBankUpdateInEdit !== parentIndex" [options]="usersList" name="usersList" [defaultValue]="regAcc?.userName" [(ngModel)]="regAcc.emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off"   (selected)="selectUser($event)"></sh-select>
                                 </div>
                             </div>
                             <!-- Added this new row make it dynamic -->
@@ -808,6 +818,11 @@
                                 <br>
                                 <sh-select #paymentFormAccountName [options]="bankAccounts$ | async" name="accountUniqueName" formControlName="accountUniqueName" [forceClearReactive]="forceClear$ | async" placeholder="Select Account" [ItemHeight]="33" autocomplete="off" [isRequired]="true">
                                 </sh-select>
+                            </div>
+                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                                <label>User</label>
+                                <br>
+                                <sh-select [options]="usersList" name="usersList" formControlName="emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select>
                             </div>
                         </div>
                         <!-- <ng-container formArrayName="userAmountRanges">

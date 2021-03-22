@@ -166,6 +166,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public activeUrn: any;
     /** Beneficiary aside pan status */
     public beneficiaryAsideState: string = "out";
+    /** This will hold users list */
+    public usersList: any[] = [];
 
     constructor(
         private router: Router,
@@ -376,7 +378,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.isBankUpdateInEdit = null;
                 this.updateBankUrnNumber = null;
             }
-        })
+        });
+
+        this.store.pipe(select(state => state.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.usersList = [];
+                response.forEach(user => {
+                    this.usersList.push({ label: user.userName, value: user.emailId });
+                });
+            }
+        });
     }
 
     public ngAfterViewInit() {
@@ -725,7 +736,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         let requestData = {
             URN: this.updateBankUrnNumber,
             accountUniqueName: registeredAccountObj.accountUniqueName,
-            userAmountRanges: registeredAccountObj.userAmountRanges
+            userAmountRanges: registeredAccountObj.userAmountRanges,
+            userName: registeredAccountObj.userName,
+            emailId: registeredAccountObj.emailId
         }
         this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentInfo(requestData));
         this.paymentFormObj = new PaymentClass();
@@ -1161,6 +1174,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     approvalUniqueName: [''],
                 })
             ]),
+            userName: [null],
+            emailId: [null]
         });
     }
 
@@ -1603,5 +1618,18 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 account.registrationStatus = "";
             }
         });
+    }
+
+    /**
+     * Callback for user selected
+     *
+     * @param {*} event
+     * @memberof SettingIntegrationComponent
+     */
+    public selectUser(event: any): void {
+        if(event) {
+            this.addBankForm.get('userName').patchValue(event.label);
+            this.addBankForm.get('emailId').patchValue(event.value);
+        }
     }
 }
