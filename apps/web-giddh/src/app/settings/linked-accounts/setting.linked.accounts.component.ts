@@ -147,7 +147,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                         token: token.value,
                         extraParams: ['callback=' + this.config.appUrl + 'app/yodlee-success.html?companyUniqueName=' + this.companyUniqueName]
                     });
-                    this.yodleeFormHTML.nativeElement.submit();
+                    this.yodleeFormHTML?.nativeElement.submit();
                     this.connectBankModel.show();
                 }
             }

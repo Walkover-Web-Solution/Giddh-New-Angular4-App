@@ -65,6 +65,15 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Language</label>
+                                    <sh-select class="language-selection" [options]="translationLocales" placeholder="Select Language"
+                                        (selected)="selectLocale($event)" [isFilterEnabled]="true "
+                                        name="activeLocale" [(ngModel)]="activeLocale">
+                                    </sh-select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- <div class="col-md-6">

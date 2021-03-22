@@ -29,6 +29,10 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     // showBackButton will be used to show/hide the back button
     public showBackButton: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,

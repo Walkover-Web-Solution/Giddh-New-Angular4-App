@@ -4,7 +4,7 @@
         <h2>Header</h2>
         <div class="scroll-auto">
             <div class="clearfix">
-                <div *ngIf="fieldsAndVisibility.header.companyName && (customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e')" class="form-group">
+                <div *ngIf="fieldsAndVisibility.header.companyName && (customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d')" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['companyName'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Name
                 </div>
                 <div class="form-group" *ngIf="customTemplate?.templateType === 'gst_template_e'">
@@ -158,7 +158,7 @@
                 </div>
             </div>
 
-            <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e' && customTemplate?.templateType !== 'gst_template_h'">
+            <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_h'">
                 <h3>Shipping Details</h3>
                 <div *ngIf="fieldsAndVisibility.header.shippingAddress" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableShipping();" checked /> Shipping Address
@@ -183,7 +183,7 @@
                     <i class="cp collapse-icons" aria-hidden="true" (click)="showTransportField = !showTransportField" [ngClass]="{'icon-minus': showTransportField, 'icon-plus': !showTransportField}"></i> Transport Details</h3>
                 <div class="clearfix" [collapse]="!showTransportField">
                     <div class="form-group" *ngIf="fieldsAndVisibility.header.shippingDate">
-                        <input type="checkbox" [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display" [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display && customTemplate.sections['header'].data['shippingDate'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                        <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['shippingDate'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         /> Ship Date
                         <div class="ml-3">
                             <input type="text" [maxlength]="15" class="form-control" name="shp" [(ngModel)]="customTemplate.sections['header'].data['shippingDate'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['shippingDate'].display"
@@ -191,7 +191,7 @@
                         </div>
                     </div>
                     <div class="form-group" *ngIf="fieldsAndVisibility.header.shippedVia">
-                        <input type="checkbox" [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display" [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display && customTemplate.sections['header'].data['shippedVia'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                        <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['shippedVia'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             checked /> Ship Via
                         <div class="ml-3">
                             <input type="text" [maxlength]="15" class="form-control" name="shpvi" [(ngModel)]="customTemplate.sections['header'].data['shippedVia'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['shippedVia'].display"
@@ -199,7 +199,7 @@
                         </div>
                     </div>
                     <div class="form-group" *ngIf="fieldsAndVisibility.header.trackingNumber">
-                        <input type="checkbox" [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display" [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display && customTemplate.sections['header'].data['trackingNumber'].display"
+                        <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['trackingNumber'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Tracking No.
                         <div class="ml-3">
                             <input type="text" [maxlength]="15" class="form-control" name="tra" [(ngModel)]="customTemplate.sections['header'].data['trackingNumber'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['trackingNumber'].display"
@@ -546,7 +546,7 @@
                 <div *ngIf="fieldsAndVisibility.footer.companyAddress" class="form-group">
                     <input type="checkbox" name="cad" [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Address
                     <div class="ml-3">
-                        <textarea class="form-control" placeholder="Company Address" [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].label" name="cmpAdd" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['companyAddress'].display"></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Company Address" [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].label" name="cmpAdd" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['companyAddress'].display"></textarea>
                     </div>
                 </div>
                 <!-- *ngIf="customTemplate?.templateType !== 'gst_template_c' && customTemplate?.templateType !== 'gst_template_f' && customTemplate?.templateType !== 'gst_template_g'" -->
@@ -587,7 +587,7 @@
                     <div *ngIf="fieldsAndVisibility.footer.message1" class="form-group ml-3 clearfix">
                         <div class="row">
                             <div class="col-12">
-                                <textarea class="form-control" placeholder="Enter any other text you would like in the footer. " [(ngModel)]="customTemplate.sections['footer'].data['message1'].label" name="msg11" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['message1'].display"></textarea>
+                                <textarea class="form-control" rows="3" placeholder="Enter any other text you would like in the footer. " [(ngModel)]="customTemplate.sections['footer'].data['message1'].label" name="msg11" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['message1'].display"></textarea>
                             </div>
                         </div>
                     </div>

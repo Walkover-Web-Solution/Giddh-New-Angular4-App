@@ -10,7 +10,6 @@ import { ReverseChargeService } from '../../../services/reversecharge.service';
 import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { CurrentPage } from '../../../models/api-models/Common';
 import { Router } from '@angular/router';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -86,6 +85,10 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
@@ -98,7 +101,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private modalService: BsModalService
     ) {
-        this.setCurrentPageTitle();
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -191,11 +193,11 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
 
         setTimeout(() => {
             if (this.inlineSearch === 'suppliersName') {
-                this.suppliersNameField.nativeElement.focus();
+                this.suppliersNameField?.nativeElement.focus();
             } else if (this.inlineSearch === 'invoiceNumber') {
-                this.invoiceNumberField.nativeElement.focus();
+                this.invoiceNumberField?.nativeElement.focus();
             } else if (this.inlineSearch === 'supplierCountry') {
-                this.supplierCountryField.nativeElement.focus();
+                this.supplierCountryField?.nativeElement.focus();
             }
         }, 200);
     }
@@ -296,18 +298,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public changeVoucherType(voucherType: string): void {
         this.reverseChargeReportPostRequest.voucherType = voucherType;
         this.getReverseChargeReport(true);
-    }
-
-    /**
-     * This will set the page heading
-     *
-     * @memberof ReverseChargeReport
-     */
-    public setCurrentPageTitle() {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = "Reports > Reverse Charge";
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
     }
 
     /**

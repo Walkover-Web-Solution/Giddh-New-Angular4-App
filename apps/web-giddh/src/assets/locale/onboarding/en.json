@@ -1,4 +1,5 @@
 {
+    "page_heading": "Onboarding",
     "try_things" : "Try things out",
     "create_send_invoice" : "Create and send an Invoice",
     "add_customer" : "Add a customer",
@@ -11,8 +12,6 @@
     "ask_question" : "Have a question to ask?",
     "request_demo" : "Request a demo:",
     "call" : "or call:",
-    "phone1" : "8818888764",
-    "phone2" : "8889500411",
     "visit" : "or visit:",
     "help_url" : "giddh.com/help",
     "import_data" : "Import Data",

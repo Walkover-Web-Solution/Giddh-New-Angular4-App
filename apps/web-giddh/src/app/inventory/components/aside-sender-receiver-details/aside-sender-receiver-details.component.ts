@@ -181,7 +181,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
 
         if (this.autoFocus !== undefined) {
             setTimeout(() => {
-                this.autoFocus.nativeElement.focus();
+                this.autoFocus?.nativeElement.focus();
             }, 50);
         }
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {

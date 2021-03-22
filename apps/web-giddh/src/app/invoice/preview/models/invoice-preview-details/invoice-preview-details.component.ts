@@ -24,7 +24,6 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { PurchaseRecordService } from 'apps/web-giddh/src/app/services/purchase-record.service';
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { saveAs } from 'file-saver';
-import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { fromEvent, Observable, ReplaySubject } from 'rxjs';
@@ -58,13 +57,14 @@ import { ProformaListComponent } from '../../../proforma/proforma-list.component
 
 export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
-    @ViewChild(PdfJsViewerComponent, {static: false}) public pdfViewer: PdfJsViewerComponent;
     @ViewChild('showEmailSendModal', {static: true}) public showEmailSendModal: ModalDirective;
     @ViewChild('downloadVoucherModal', {static: true}) public downloadVoucherModal: ModalDirective;
     @ViewChild('invoiceDetailWrapper', {static: true}) invoiceDetailWrapperView: ElementRef;
     @ViewChild('invoicedetail', {static: true}) invoiceDetailView: ElementRef;
     /** Attached document preview container instance */
     @ViewChild('attachedDocumentPreview', {static: true}) attachedDocumentPreview: ElementRef;
+    /** Instance of PDF container iframe */
+    @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
 
     @Input() public items: InvoicePreviewDetailsVm[];
     @Input() public selectedItem: InvoicePreviewDetailsVm;
@@ -103,7 +103,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public invoiceDetailViewHeight: number;
     public invoiceImageSectionViewHeight: number;
     public isMobileView = false;
-    public pagecount: number = 0;
     public fileUploadOptions: UploaderOptions;
     public uploadInput: EventEmitter<UploadInput>;
 
@@ -141,6 +140,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public pdfPreviewHasError: boolean = false;
     /** This will hold the search value */
     @Input() public invoiceSearch: any = "";
+    /** PDF file url created with blob */
+    public sanitizedPdfFileUrl: any = '';
+    /** PDF src */
+    public pdfFileURL: any = '';
     /** This will hold the attached file in Purchase Bill */
     private attachedAttachmentBlob: Blob;
 
@@ -159,7 +162,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private purchaseRecordService: PurchaseRecordService,
         private sanitizer: DomSanitizer,
         private salesService: SalesService,
-        private modalService: BsModalService) {
+        private modalService: BsModalService,
+        private domSanitizer: DomSanitizer) {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -254,8 +258,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     ngAfterViewInit(): void {
-        this.searchElement.nativeElement.focus();
-        fromEvent(this.searchElement.nativeElement, 'input')
+        this.searchElement?.nativeElement.focus();
+        fromEvent(this.searchElement?.nativeElement, 'input')
             .pipe(
                 debounceTime(500),
                 distinctUntilChanged(),
@@ -266,8 +270,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.filterVouchers(term);
             }))
 
-        this.invoiceDetailWrapperHeight = this.invoiceDetailWrapperView.nativeElement.offsetHeight;
-        this.invoiceDetailViewHeight = this.invoiceDetailView.nativeElement.offsetHeight;
+        this.invoiceDetailWrapperHeight = this.invoiceDetailWrapperView?.nativeElement.offsetHeight;
+        this.invoiceDetailViewHeight = this.invoiceDetailView?.nativeElement.offsetHeight;
         this.invoiceImageSectionViewHeight = this.invoiceDetailWrapperHeight - this.invoiceDetailViewHeight - 90;
     }
 
@@ -366,11 +370,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this._receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                     if (result) {
                         this.selectedItem.blob = result;
-                        if(this.pdfViewer) {
-                            this.pdfViewer.pdfSrc = result;
-                            this.pdfViewer.showSpinner = true;
-                            this.pdfViewer.refresh();
-                        }
+                        const file = new Blob([result], { type: 'application/pdf' });
+                        URL.revokeObjectURL(this.pdfFileURL);
+                        this.pdfFileURL = URL.createObjectURL(file);
+                        this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                         this.isVoucherDownloadError = false;
                     } else {
                         this.isVoucherDownloadError = true;
@@ -405,11 +408,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                             this.attachedAttachmentBlob = base64ToBlob(data.body.uploadedFile, 'application/pdf', 512);
                             setTimeout(() => {
                                 this.selectedItem.blob = this.attachedAttachmentBlob;
-                                if(this.pdfViewer) {
-                                    this.pdfViewer.pdfSrc = this.attachedAttachmentBlob;
-                                    this.pdfViewer.showSpinner = true;
-                                    this.pdfViewer.refresh();
-                                }
+                                const file = new Blob([this.attachedAttachmentBlob], { type: 'application/pdf' });
+                                URL.revokeObjectURL(this.pdfFileURL);
+                                this.pdfFileURL = URL.createObjectURL(file);
+                                this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                                 this.detectChanges();
                             }, 250);
                             this.isVoucherDownloadError = false;
@@ -439,11 +441,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 if (response && response.status === "success" && response.body) {
                     let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
                     this.attachedDocumentBlob = blob;
-                    if(this.pdfViewer) {
-                        this.pdfViewer.pdfSrc = blob;
-                        this.pdfViewer.showSpinner = true;
-                        this.pdfViewer.refresh();
-                    }
+                    const file = new Blob([blob], { type: 'application/pdf' });
+                    URL.revokeObjectURL(this.pdfFileURL);
+                    this.pdfFileURL = URL.createObjectURL(file);
+                    this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                     this.pdfPreviewLoaded = true;
                     this.detectChanges();
                 } else {
@@ -466,12 +467,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     if (result && result.status === 'success') {
                         let blob: Blob = base64ToBlob(result.body, 'application/pdf', 512);
                         this.selectedItem.blob = blob;
-
-                        if(this.pdfViewer) {
-                            this.pdfViewer.pdfSrc = blob;
-                            this.pdfViewer.showSpinner = true;
-                            this.pdfViewer.refresh();
-                        }
+                        const file = new Blob([blob], { type: 'application/pdf' });
+                        URL.revokeObjectURL(this.pdfFileURL);
+                        this.pdfFileURL = URL.createObjectURL(file);
+                        this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                         this.isVoucherDownloadError = false;
                     } else {
                         this._toasty.errorToast(result.message, result.code);
@@ -519,10 +518,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         if (this.isVoucherDownloading || this.isVoucherDownloadError) {
             return;
         }
-        if (this.pdfViewer && this.pdfViewer.pdfSrc) {
-            this.pdfViewer.startPrint = true;
-            this.pdfViewer.refresh();
-            this.pdfViewer.startPrint = false;
+        if (this.pdfContainer) {
+            const window = this.pdfContainer?.nativeElement?.contentWindow;
+            if (window) {
+                window.focus();
+                setTimeout(() => {
+                    window.print();
+                }, 200);
+            }
         } else if (this.attachedDocumentPreview) {
             const windowWidth = window.innerWidth
                 || document.documentElement.clientWidth
@@ -530,7 +533,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 || 0;
             const left = (windowWidth / 2) - 450;
             const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
-            printWindow.document.write((this.attachedDocumentPreview.nativeElement as HTMLElement).innerHTML);
+            printWindow.document.write((this.attachedDocumentPreview?.nativeElement as HTMLElement).innerHTML);
             printWindow.document.close();
             printWindow.focus();
             printWindow.print();
@@ -552,10 +555,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('fixed');
-    }
-
-    public testPagesLoaded(count: number) {
-        this.pagecount = count;
     }
 
     /**

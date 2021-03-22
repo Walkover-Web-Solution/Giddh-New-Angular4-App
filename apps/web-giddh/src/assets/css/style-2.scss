@@ -1333,6 +1333,7 @@ modal-container.modal {
 .form-box .btn {
     min-width: 73px;
     margin-right: 2px;
+    width: 95px;
 }
 
 .table-no-border tr th,
@@ -2525,10 +2526,6 @@ input[type="checkbox"]:checked:after {
     white-space: normal;
 }
 
-.pd-b1 {
-    padding-bottom: 10px;
-}
-
 .templateInfo {
     position: relative;
     width: 100%;
@@ -2773,21 +2770,6 @@ li.no-click {
 
 .align-items-start {
     align-items: flex-start !important;
-}
-
-.fixed-ng2pdfview-2 iframe {
-    height: 2915px !important;
-    overflow: hidden;
-}
-
-.fixed-ng2pdfview-3 iframe {
-    height: 4353px !important;
-    overflow: hidden;
-}
-
-.fixed-ng2pdfview-4 iframe {
-    height: 5453px !important;
-    overflow: hidden;
 }
 
 .fixed-ng2pdfview iframe {
@@ -3593,6 +3575,12 @@ a.btn.btn-xs.btn-link.pull-right {
 .w100 {
     width: 100px;
 }
+.w120{
+    width: 120px;
+}
+.w125{
+    width: 125px;
+}
 
 .multi-select {
     position: relative;
@@ -3770,10 +3758,6 @@ a.btn.btn-xs.btn-link.pull-right {
     opacity: 1;
     text-shadow: none;
     cursor: pointer;
-}
-
-.pd-b5 {
-    padding-bottom: 50px;
 }
 
 .size-xs {
@@ -4252,7 +4236,7 @@ label {
 }
 
 .calc-width {
-    width: calc(100% - 93px) !important;
+    width: calc(100% - 112px) !important;
 }
 
 .view-forms {
@@ -7984,6 +7968,10 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     width: 120px !important;
 }
 
+.create-select .menu{
+    width: 142px !important; 
+}
+
 .select-caret:after,
 .select-caret .form-control:after {
     content: "";
@@ -9582,6 +9570,15 @@ input.mat-input-element{
     input{
         width: 18px !important;
         height: 18px !important;
+    }
+}
+.time-selection , .language-selection{
+    .menu{
+        min-height: 120px !important;
+        .total-padding{
+            min-height: 120px !important;
+            height: 120px !important;
+        }
     }
 }
 /* responsive  starts here */

@@ -141,7 +141,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
      */
     @HostListener('window:mouseup', ['$event'])
     public onDocumentClick(event) {
-        if (this.isOpen && !this.element.nativeElement.contains(event.target)) {
+        if (this.isOpen && !this.element?.nativeElement.contains(event.target)) {
             this.isOpen = false;
             if (this.selectedValues && this.selectedValues.length === 1 && !this.multiple) {
                 this.filter = this.selectedValues[0].label;
@@ -292,7 +292,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
         this.cdRef.markForCheck();
 
         setTimeout(() => {
-            this.inputFilter.nativeElement.focus();
+            this.inputFilter?.nativeElement.focus();
         }, 500);
     }
 
@@ -335,7 +335,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
 
     public hide(event?) {
         if (event) {
-            if (event.relatedTarget && (!this.ele.nativeElement.contains(event.relatedTarget))) {
+            if (event.relatedTarget && (!this.ele?.nativeElement.contains(event.relatedTarget))) {
                 this.isOpen = false;
                 if (this.selectedValues && this.selectedValues.length === 1) {
                     this.filter = this.selectedValues[0].label;
@@ -361,8 +361,8 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
     }
 
     public filterInputBlur(event) {
-        if (event.relatedTarget && this.ele.nativeElement) {
-            if (this.ele.nativeElement.contains(event.relatedTarget)) {
+        if (event.relatedTarget && this.ele?.nativeElement) {
+            if (this.ele?.nativeElement.contains(event.relatedTarget)) {
                 return false;
             } else if (this.doNotReset && event && event.target && event.target.value) {
                 return false;
@@ -484,7 +484,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
             this.filter = ev.target.value;
             this.show(ev);
             setTimeout(() => {
-                (this.inputFilter.nativeElement as any)['focus'].apply(this.inputFilter.nativeElement);
+                (this.inputFilter?.nativeElement as any)['focus'].apply(this.inputFilter?.nativeElement);
                 if (this.enableDynamicSearch) {
                     this.dynamicSearchedQuery.emit(ev.target.value?.trim());
                 }
@@ -531,7 +531,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
      */
     public subscribeToQueryChange(): void {
         if (this.enableDynamicSearch) {
-            fromEvent(this.inputFilter.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((event: any) => {
+            fromEvent(this.inputFilter?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((event: any) => {
                 this.dynamicSearchedQuery.emit(event?.target?.value?.trim());
             });
         }

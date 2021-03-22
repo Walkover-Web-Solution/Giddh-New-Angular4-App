@@ -24,6 +24,8 @@ import { SUPPORT_TEAM_NUMBERS } from '../app.constant';
 export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('talkSalesModal', {static: true}) public talkSalesModal: ModalDirective;
     @ViewChild('supportTab', {static: true}) public supportTab: TabsetComponent;
+    /* Schedule now modal */
+    @ViewChild('scheduleNowModel') public scheduleNowModel: ModalDirective;
     public sideMenu: { isopen: boolean } = { isopen: true };
     public loadAPI: Promise<any>;
     public CompanySettingsObj: any = {};
@@ -32,6 +34,10 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public companyCountry: string;
     /** This will hold displayed support team number */
     public supportTeamNumber: any = [];
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private _router: Router, private _window: WindowRef, private _generalService: GeneralService,
@@ -84,14 +90,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public scheduleNow() {
-        if (isElectron) {
-            (window as any).require("electron").shell.openExternal('https://calendly.com/sales-accounting-software/talk-to-sale');
-        }else if (isCordova) {
-            // todo: scheduleNow in cordova
-        } else {
-            this.openScheduleCalendlyModel();  // to show calendly block
-        }
-        return false;
+        this.scheduleNowModel?.show();
     }
 
     public openScheduleModal() {

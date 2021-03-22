@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { of as observableOf, ReplaySubject } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import {map as lodashMap } from '../../../lodash-optimized';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { flatten, omit, union } from '../../../lodash-optimized';
@@ -22,7 +22,13 @@ import { API_COUNT_LIMIT } from '../../../app.constant';
     templateUrl: './audit-logs.sidebar.component.html',
     styleUrls: ['audit-logs.sidebar.component.scss']
 })
+
 export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
+
     public vm: AuditLogsSidebarVM;
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
@@ -75,8 +81,10 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.showWeekNumbers = false;
+    }
 
-        this.vm = new AuditLogsSidebarVM();
+    public ngOnInit() {
+        this.vm = new AuditLogsSidebarVM(this.localeData, this.commonLocaleData);
         this.vm.getLogsInprocess$ = this.store.pipe(select(p => p.auditlog.getLogInProcess), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -103,9 +111,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                 this.vm.canManageCompany = false;
             }
         });
-    }
 
-    public ngOnInit() {
         this.vm.reset();
         this.loadDefaultAccountsSuggestions();
         this.loadDefaultGroupsSuggestions();

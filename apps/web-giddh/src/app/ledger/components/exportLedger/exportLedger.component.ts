@@ -12,11 +12,13 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import { Store, select } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
 import { download } from '@giddh-workspaces/utils';
+
 @Component({
     selector: 'export-ledger',
     templateUrl: './exportLedger.component.html',
     styleUrls: ['./exportLedger.component.scss']
 })
+
 export class ExportLedgerComponent implements OnInit {
     @Input() public accountUniqueName: string = '';
     // @Input() public from: string = '';
@@ -38,6 +40,10 @@ export class ExportLedgerComponent implements OnInit {
     /** Columnar report in balance type for Credit/Debit as +/- sign */
     public balanceTypeAsSign: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private _ledgerService: LedgerService, private _toaster: ToasterService, private _permissionDataService: PermissionDataService, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
@@ -114,8 +120,7 @@ export class ExportLedgerComponent implements OnInit {
                 if (validateEmail(cdata[i])) {
                     sendData.recipients.push(cdata[i]);
                 } else {
-                    // this._toaster.clearAllToaster();
-                    this._toaster.warningToast('Enter valid Email ID', 'Warning');
+                    this._toaster.warningToast(this.localeData?.email_error, 'Warning');
                     data = '';
                     sendData.recipients = [];
                     break;

@@ -1,9 +1,8 @@
-import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef, OnDestroy, Input } from '@angular/core';
 import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AgingReportActions } from '../../actions/aging-report.actions';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { cloneDeep, map as lodashMap } from '../../lodash-optimized';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
@@ -27,7 +26,13 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
     templateUrl: 'aging-report.component.html',
     styleUrls: ['aging-report.component.scss']
 })
+
 export class AgingReportComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
+
     public totalDueSelectedOption: string = '0';
     public totalDueAmount: number = 0;
     public includeName: boolean = false;
@@ -78,6 +83,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
 
+    /** Observable if loading in process */
+    public getAgingReportRequestInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
@@ -93,6 +100,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.setDueRangeOpen$ = this.store.pipe(select(s => s.agingreport.setDueRangeOpen), takeUntil(this.destroyed$));
         this.getDueAmountreportData();
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        this.getAgingReportRequestInProcess$ = this.store.pipe(select(s => s.agingreport.getAgingReportRequestInFlight), takeUntil(this.destroyed$));
     }
 
     public getDueAmountreportData() {
@@ -114,7 +122,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 });
             }
             setTimeout(() => {
-                this.detetcChanges();
+                this.detectChanges();
             }, 60000);
         });
     }
@@ -123,7 +131,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.agingReportActions.GetDueReport(this.agingAdvanceSearchModal, this.dueAmountReportRequest, this.currentBranch.uniqueName));
     }
 
-    public detetcChanges() {
+    public detectChanges() {
         this._cdr.detectChanges();
     }
 

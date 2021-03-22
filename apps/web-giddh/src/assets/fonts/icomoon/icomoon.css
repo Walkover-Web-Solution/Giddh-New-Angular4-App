@@ -28,7 +28,7 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-upload-icon:before {
+.icon-upload:before {
     content: "\e999";
 }
 .icon-item-product:before {

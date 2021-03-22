@@ -330,7 +330,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     }
 
     public _focusSelectContainer() {
-        this.selectionSpan.nativeElement.focus();
+        this.selectionSpan?.nativeElement.focus();
     }
 
     /**
@@ -473,7 +473,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
             this.updatePosition();
             this.isOpen = true;
             if ((this.multiple || this.isTypeAheadMode) && this.filterEnabled) {
-                this.filterInput.nativeElement.focus();
+                this.filterInput?.nativeElement.focus();
             }
             this.opened.emit(null);
         }
@@ -575,10 +575,10 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
         let key = event.which;
         if (key === this.KEYS.BACKSPACE) {
             if (this.optionList.hasSelected && this.filterEnabled &&
-                (this.filterInput.nativeElement.value === '' && !this.isTypeAheadMode)) {
+                (this.filterInput?.nativeElement.value === '' && !this.isTypeAheadMode)) {
                 this.deselectLast();
             } else if (this.optionList.hasSelected && this.filterEnabled &&
-                (this.filterInput.nativeElement.value === '' || (this.filterInput.nativeElement.value.length === 1 && this.isTypeAheadMode))) {
+                (this.filterInput?.nativeElement.value === '' || (this.filterInput?.nativeElement.value.length === 1 && this.isTypeAheadMode))) {
                 this.clearSelectionManually();
             }
         }
@@ -605,19 +605,19 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     }
 
     private updateWidth() {
-        this.width = this.selectionSpan.nativeElement.getBoundingClientRect().width;
+        this.width = this.selectionSpan?.nativeElement.getBoundingClientRect().width;
     }
 
     private updatePosition() {
-        const hostRect = this.hostElement.nativeElement.getBoundingClientRect();
-        const spanRect = this.selectionSpan.nativeElement.getBoundingClientRect();
+        const hostRect = this.hostElement?.nativeElement.getBoundingClientRect();
+        const spanRect = this.selectionSpan?.nativeElement.getBoundingClientRect();
         this.left = spanRect.left - hostRect.left;
         this.top = (spanRect.top - hostRect.top) + spanRect.height;
     }
 
     private updateFilterWidth() {
         if (typeof this.filterInput !== 'undefined') {
-            let value: string = this.filterInput.nativeElement.value;
+            let value: string = this.filterInput?.nativeElement.value;
             this.filterInputWidth = value.length === 0 ?
                 1 + this.placeholderView.length * 10 : 1 + value.length * 10;
         }

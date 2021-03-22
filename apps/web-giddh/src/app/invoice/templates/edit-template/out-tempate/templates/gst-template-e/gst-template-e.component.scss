@@ -263,10 +263,11 @@ tfoot.table-details tr th {
 
 .tax-table {
     table-layout: fixed;
+    min-width: 100% !important;
 }
 
 .tax-table thead tr th:nth-child(1) {
-    width: 30%;
+    width: 20%;
 }
 
 #royal .tax-table thead tr th,
@@ -308,6 +309,16 @@ table.tax-table.item {
 
 #template-table {
     clear: both;
+}
+
+.name-email{
+    p{
+        word-break: break-word;
+    }
+}
+
+.d-block{
+    display:block !important;
 }
 
 .edit-template {

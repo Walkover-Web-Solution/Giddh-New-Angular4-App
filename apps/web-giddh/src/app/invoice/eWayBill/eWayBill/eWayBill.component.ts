@@ -42,7 +42,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public EwaybillLists: IEwayBillAllList;
     public modalRef: BsModalRef;
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    public needToShowLoader: boolean = true;
+    /** True if api call in progress */
+    public isLoading: boolean = true;
     public selectedEwayItem: any;
     public updateEwayVehicleObj: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -193,7 +194,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     public selectedDate(value: any) {
-        this.needToShowLoader = false;
         if (value) {
             this.EwayBillfilterRequest.fromDate = moment(value.picker.startDate._d).format(GIDDH_DATE_FORMAT);
             this.EwayBillfilterRequest.toDate = moment(value.picker.endDate._d).format(GIDDH_DATE_FORMAT);
@@ -291,6 +291,10 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             this.EwayBillfilterRequest.searchTerm = s;
             this.EwayBillfilterRequest.searchOn = 'customerName';
             this.getAllFilteredInvoice();
+        });
+
+        this.store.pipe(select(state => state.ewaybillstate.isGetAllEwaybillRequestInProcess), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLoading = response;
         });
     }
 
@@ -397,13 +401,13 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             this.showSearchCustomer = false;
 
             setTimeout(() => {
-                this.invoiceSearch.nativeElement.focus();
+                this.invoiceSearch?.nativeElement.focus();
             }, 200);
         } else if (fieldName === 'customerUniqueName') {
             this.showSearchCustomer = true;
             this.showSearchInvoiceNo = false;
             setTimeout(() => {
-                this.customerSearch.nativeElement.focus();
+                this.customerSearch?.nativeElement.focus();
             }, 200);
         } else {
             this.showSearchInvoiceNo = false;
@@ -519,7 +523,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.needToShowLoader = false;
             this.EwayBillfilterRequest.fromDate = this.fromDate;
             this.EwayBillfilterRequest.toDate = this.toDate;
             this.getAllFilteredInvoice();

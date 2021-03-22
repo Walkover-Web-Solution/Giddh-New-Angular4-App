@@ -268,12 +268,7 @@
 <ng-container *ngTemplateOutlet="loaderTemplate;context: { $implicit: (isGetManufactureStockInProgress$ | async),  isColumn: false}">
 </ng-container>
 <ng-template #loaderTemplate let-isShow let-isColumn="isColumn">
-    <div class="no-data mr-t2 loader-main" [ngClass]="{'col-xs-12 col-sm-12' : isColumn}" *ngIf="isShow ">
-        <div class="spinner2 ">
-            <div class="cube1 "></div>
-            <div class="cube2 "></div>
-        </div>
-    </div>
+    <giddh-page-loader [cssClass]="(isColumn ? 'col-xs-12 col-sm-12' : '')" *ngIf="isShow"></giddh-page-loader>
 </ng-template>
 
 <!--delete manufacturing confirmation modal -->

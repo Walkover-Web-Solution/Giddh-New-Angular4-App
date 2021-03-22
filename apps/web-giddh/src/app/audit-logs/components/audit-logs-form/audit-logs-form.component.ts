@@ -4,14 +4,11 @@ import * as moment from 'moment/moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { API_COUNT_LIMIT } from '../../../app.constant';
 import { cloneDeep, flatten, map, omit, union } from '../../../lodash-optimized';
-import { UserDetails } from '../../../models/api-models/loginModels';
 import { GetAuditLogsRequest } from '../../../models/api-models/Logs';
 import { IForceClear } from '../../../models/api-models/Sales';
-import { AccountService } from '../../../services/account.service';
 import { CompanyService } from '../../../services/companyService.service';
 import { GroupService } from '../../../services/group.service';
 import { LogsService } from '../../../services/logs.service';
@@ -27,7 +24,12 @@ import { AuditLogsSidebarVM } from './Vm';
     templateUrl: './audit-logs-form.component.html',
     styleUrls: ['audit-logs-form.component.scss']
 })
+
 export class AuditLogsFormComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /** Audit log form object */
     public auditLogFormVM: AuditLogsSidebarVM;
     /** Date format type */
@@ -100,7 +102,6 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     @ViewChild('selectEntity') public shSelectEntityReference: ShSelectComponent;
 
     constructor(private store: Store<AppState>,
-        private accountService: AccountService,
         private companyService: CompanyService,
         private auditLogsActions: AuditLogsActions,
         private bsConfig: BsDatepickerConfig,
@@ -108,16 +109,20 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         private groupService: GroupService,
         private searchService: SearchService
     ) {
-
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.showWeekNumbers = false;
+    }
 
-        this.auditLogFormVM = new AuditLogsSidebarVM();
+    /**
+     * Component lifecycle hook
+     *
+     * @memberof AuditLogsFormComponent
+     */
+    public ngOnInit(): void {
+        this.auditLogFormVM = new AuditLogsSidebarVM(this.localeData, this.commonLocaleData);
         this.auditLogFormVM.getLogsInprocess$ = this.store.pipe(select(state => state.auditlog.getLogInProcess), takeUntil(this.destroyed$));
         this.auditLogFormVM.user$ = this.store.pipe(select(state => { if (state.session.user) { return state.session.user.user; } }), take(1));
-        let loginUser: UserDetails = null;
-        this.auditLogFormVM.user$.pipe(take(1)).subscribe((response) => loginUser = response);
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let users: IOption[] = [];
@@ -130,14 +135,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                 this.auditLogFormVM.canManageCompany = false;
             }
         });
-    }
-
-    /**
-     * Component lifecycle hook
-     *
-     * @memberof AuditLogsFormComponent
-     */
-    public ngOnInit(): void {
+        
         // To get audit log form filter
         this.getFormFilter();
         this.auditLogFormVM.reset();

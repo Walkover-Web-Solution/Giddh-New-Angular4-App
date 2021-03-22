@@ -120,7 +120,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.isStockDeleteInProcess$ = this.store.pipe(select(s => s.inventory.isStockDeleteInProcess), takeUntil(this.destroyed$));
         this.showLoadingForStockEditInProcess$ = this.store.pipe(select(s => s.inventory.showLoadingForStockEditInProcess), takeUntil(this.destroyed$));
         this.createGroupSuccess$ = this.store.pipe(select(s => s.inventory.createGroupSuccess), takeUntil(this.destroyed$));
-        this.store.dispatch(this.companyActions.getTax());
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.invoiceSetting$ = this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$));
 
@@ -938,7 +937,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         } else {
             stockObj.manufacturingDetails = null;
         }
-        
+
         this.showOtherDetails = false;
 
         this.store.dispatch(this.inventoryAction.updateStock(stockObj, this.groupUniqueName, this.stockUniqueName));
@@ -1094,7 +1093,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             }
         }
         if (s.autoFocusInChild && s.autoFocusInChild.currentValue) {
-            this.groupDDList.inputFilter.nativeElement.click();
+            this.groupDDList.inputFilter?.nativeElement.click();
         }
     }
 
