@@ -157,7 +157,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody *ngIf="!isLoading">
                     <tr *ngFor="let receipt of allReceipts; let i = index">
                         <td data-title="#">{{ i + 1 }}</td>
                         <td data-title="{{localeData?.receipt_no_label}}">{{ receipt?.receiptNumber }}</td>
@@ -183,9 +183,17 @@
                         <td colspan="10" align="center" class="no-entries">{{commonLocaleData?.app_no_records_found}}</td>
                     </tr>
                 </tbody>
+                <tbody *ngIf="isLoading">
+                    <tr>
+                        <td colspan="10">
+                            <giddh-page-loader></giddh-page-loader>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
-        <div *ngIf="pageConfiguration.totalItems > paginationLimit" class="pagination-wrapper">
+
+        <div [hidden]="isLoading" *ngIf="pageConfiguration.totalItems > paginationLimit" class="pagination-wrapper">
             <pagination [totalItems]="pageConfiguration.totalItems" [(ngModel)]="pageConfiguration.currentPage"
                 [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit"
                 [rotate]="false" previousText="&#9668;" nextText="&#9658;" (pageChanged)="onPageChanged($event)">

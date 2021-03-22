@@ -5,7 +5,10 @@
     </button>
 </div>
 <div class="modal-body">
-    <div class="export-modal-wrapper">
+    <div class="export-modal-wrapper" *ngIf="isLoading">
+        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+    </div>
+    <div class="export-modal-wrapper" *ngIf="!isLoading">
         <!-- <div class="row mr-b15">
             <div class="col-sm-4">
                 <label>Export</label>

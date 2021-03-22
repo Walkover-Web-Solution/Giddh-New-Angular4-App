@@ -242,18 +242,13 @@
             <tbody *ngIf="isLoading">
                 <tr>
                     <td colspan="8">
-                        <div class="no-data mr-t2 loader-main">
-                            <div class="spinner2">
-                                <div class="cube1"></div>
-                                <div class="cube2"></div>
-                            </div>
-                        </div>
+                        <giddh-page-loader></giddh-page-loader>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <pagination *ngIf="purchaseOrders.totalPages > 1" class="pagination" [(ngModel)]="purchaseOrderGetRequest.page" [totalItems]="purchaseOrders.totalItems" [itemsPerPage]="purchaseOrderGetRequest.count" [maxSize]="5" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+    <pagination [hidden]="isLoading" *ngIf="purchaseOrders.totalPages > 1" class="pagination" [(ngModel)]="purchaseOrderGetRequest.page" [totalItems]="purchaseOrders.totalItems" [itemsPerPage]="purchaseOrderGetRequest.count" [maxSize]="5" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
 </div>
 <ng-template #template>
     <div class="purchase-order-bulk-update">

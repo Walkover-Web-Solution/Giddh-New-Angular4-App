@@ -82,12 +82,7 @@
         </div> -->
     </div>
 </div>
-<div class="no-data mr-t2 loader-main" *ngIf="showLoader">
-    <div class="spinner2">
-        <div class="cube1"></div>
-        <div class="cube2"></div>
-    </div>
-</div>
+<giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
 <!--add and manage group account modal -->
 <div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade full-screen-modal manage-account-popup add-manage-group-acc" role="dialog">
     <div class="modal-dialog modal-xl modal-liq-90 m-0 width-100 h100">

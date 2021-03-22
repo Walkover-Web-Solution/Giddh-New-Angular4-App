@@ -29,7 +29,7 @@
 
                     </thead>
 
-                    <tbody *ngIf="availableTaxes.length">
+                    <tbody *ngIf="!isLoading && availableTaxes.length">
 
                         <tr *ngFor="let tax of availableTaxes; let i = index">
 
@@ -156,10 +156,17 @@
                             </td>
                         </tr>
                     </tbody>
-                    <tbody *ngIf="!availableTaxes.length" class="on-mobile-view no-records">
+                    <tbody *ngIf="!isLoading && !availableTaxes.length" class="on-mobile-view no-records">
                         <tr>
                             <td colspan="10" class="text-center empty-table">
                                 <h1>No Record Found !!</h1>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="isLoading">
+                        <tr>
+                            <td colspan="10" class="text-center empty-table">
+                                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
                             </td>
                         </tr>
                     </tbody>

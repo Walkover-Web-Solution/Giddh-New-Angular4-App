@@ -66,7 +66,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
             this.filteredSettingsPageTabs = this.settingsPageTabs;
         }
 
-        this.searchField.nativeElement.focus();
+        this.searchField?.nativeElement.focus();
     }
 
     /**

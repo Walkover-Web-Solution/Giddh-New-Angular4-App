@@ -159,6 +159,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public activeCompany: any;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     /** Advance search model to initialize the advance search fields */
     private advanceSearchModel: ReceiptAdvanceSearchModel = {
@@ -365,25 +367,25 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public searchBy(event: any, filterName: string, openFilter: boolean): void {
         switch (filterName) {
             case ADVANCE_RECEIPT_REPORT_FILTERS.RECEIPT_FILTER:
-                if (event && this.childOf(event.target, this.receiptNumberParent.nativeElement)) {
+                if (event && this.childOf(event.target, this.receiptNumberParent?.nativeElement)) {
                     return;
                 }
                 this.showReceiptSearchBar = openFilter;
                 break;
             case ADVANCE_RECEIPT_REPORT_FILTERS.CUSTOMER_FILTER:
-                if (event && this.childOf(event.target, this.customerNameParent.nativeElement)) {
+                if (event && this.childOf(event.target, this.customerNameParent?.nativeElement)) {
                     return;
                 }
                 this.showCustomerSearchBar = openFilter;
                 break;
             case ADVANCE_RECEIPT_REPORT_FILTERS.PAYMENT_FILTER:
-                if (event && this.childOf(event.target, this.paymentModeParent.nativeElement)) {
+                if (event && this.childOf(event.target, this.paymentModeParent?.nativeElement)) {
                     return;
                 }
                 this.showPaymentSearchBar = openFilter;
                 break;
             case ADVANCE_RECEIPT_REPORT_FILTERS.INVOICE_FILTER:
-                if (event && this.childOf(event.target, this.invoiceNumberParent.nativeElement)) {
+                if (event && this.childOf(event.target, this.invoiceNumberParent?.nativeElement)) {
                     return;
                 }
                 this.showInvoiceSearchBar = openFilter;
@@ -518,10 +520,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     private subscribeToEvents(): void {
         merge(
-            fromEvent(this.customerName.nativeElement, 'input'),
-            fromEvent(this.receiptNumber.nativeElement, 'input'),
-            fromEvent(this.paymentMode.nativeElement, 'input'),
-            fromEvent(this.invoiceNumber.nativeElement, 'input')).pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
+            fromEvent(this.customerName?.nativeElement, 'input'),
+            fromEvent(this.receiptNumber?.nativeElement, 'input'),
+            fromEvent(this.paymentMode?.nativeElement, 'input'),
+            fromEvent(this.invoiceNumber?.nativeElement, 'input')).pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
                 this.showClearFilter = true;
                 this.fetchAllReceipts(this.searchQueryParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
             });
@@ -547,6 +549,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     private fetchAllReceipts(additionalRequestParameters?: GetAllAdvanceReceiptsRequest): Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>> {
+        this.isLoading = true;
         let requestObject: GetAllAdvanceReceiptsRequest = {
             companyUniqueName: this.activeCompanyUniqueName,
             from: this.fromDate,
@@ -605,6 +608,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     private handleFetchAllReceiptResponse(response: any): any {
+        this.isLoading = false;
         if (response) {
             if (response.status === 'success' && response.body) {
                 this.pageConfiguration.currentPage = response.body.page;

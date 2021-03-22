@@ -110,7 +110,7 @@
                                     <th class="nowrap">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody *ngIf="!isLoading">
                                 <tr *ngFor="let item of EwaybillLists?.results let i = index">
                                     <td data-title="#">{{ i + 1 }}</td>
                                     <td data-title="Date" class="nowrap">{{item?.invoiceDate}}</td>
@@ -159,11 +159,17 @@
                                     </td>
                                 </tr>
                             </tbody>
-
+                            <tbody *ngIf="isLoading">
+                                <tr>
+                                    <td colspan="9" align="center">
+                                        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                                    </td>
+                                </tr>
+                            </tbody>
 
                         </table>
                         <div class="no-data"
-                            *ngIf="EwaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)">
+                            *ngIf="!isLoading && EwaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)">
                             <h1>No entries found within given criteria.</h1>
                             <h1>Do search with some other dates</h1>
                         </div>
