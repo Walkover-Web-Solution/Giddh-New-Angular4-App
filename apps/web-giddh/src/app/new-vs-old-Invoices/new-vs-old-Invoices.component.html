@@ -55,12 +55,6 @@
                             <div class="div-cell align-end">{{localeData?.clients}}</div>
                             <div class="div-cell align-end">
                                 {{commonLocaleData?.app_amount}}
-                                <span class="d-inline-flex">
-                                    <amount-field [amount]="commonLocaleData?.app_amount"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false">
-                                    </amount-field>
-                                </span>
                             </div>
                             <div class="div-cell align-end">{{localeData?.no_invoices}}</div>
                         </div>
@@ -227,7 +221,7 @@
                             <div class="div-cell align-end">
                                 <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.uniqueCount | giddhCurrency}} -->
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.uniqueCount " [currencySymbol]="false" [currencyCode]="false">
+                                    <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[3]?.uniqueCount" [currencySymbol]="false" [currencyCode]="false">
                                     </amount-field>
                                 </span>
                             </div>
@@ -590,7 +584,7 @@
                             <div class="div-cell align-end">
                                 <!-- {{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount | giddhCurrency}} -->
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount " [currencySymbol]="false"
+                                    <amount-field [amount]="(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount" [currencySymbol]="false"
                                         [currencyCode]="false">
                                     </amount-field>
                                 </span>
