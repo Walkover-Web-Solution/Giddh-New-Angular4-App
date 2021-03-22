@@ -145,6 +145,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public senderWarehouseClear$: Observable<IForceClear> = observableOf({ status: false });
     /* This will clear the destination warehouse value in dropdown */
     public destinationWarehouseClear$: Observable<IForceClear> = observableOf({ status: false });
+    /** Information message to be shown to the user for branch transfer */
+    public branchTransferInfoText: string = '';
 
     constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
@@ -505,6 +507,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                             this.formFields[res.fields[key].name] = res.fields[key];
                         }
                     });
+                    this.branchTransferInfoText = `Branch Transfer is allowed only if the Sender and Receiver warehouses have the same ${this.formFields['taxName']?.label || 'tax'}  or doesn't have any ${this.formFields['taxName']?.label || 'tax'}`;
                 }
             } else {
                 let onboardingFormRequest = new OnboardingFormRequest();

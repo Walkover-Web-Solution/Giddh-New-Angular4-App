@@ -423,9 +423,30 @@ tfoot td .table-sec.form-group {
         margin-right: 8px;
     }
 }
-@media(max-width:991px){
+.position-relative{
+    .icon-info{
+        position: absolute;
+        right: -10px;
+        top: 10px;
+    }
+}
+.icon-info-on-table{
+    .icon-info{
+        position: absolute;
+        right: -35px;
+        top: 1px;
+        transform: translateY(16px);
+        font-size: 18px;
+        color: $gray;
+        &.change-position{
+            right: -55px;
+        }
+    }
+}
+/* responsive starts here*/
+@media(max-width:1280px){
     #table-receipt{
-       width: calc(100% - 30px);
+       width: calc(100% - 50px);
     }
 }
 @media(max-width:768px){
