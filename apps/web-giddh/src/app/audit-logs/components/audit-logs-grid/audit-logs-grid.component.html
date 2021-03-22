@@ -30,10 +30,12 @@
                 <label class="pull-left mr-l2">{{localeData?.company}}:</label>
                 <p class="pull-left mr-l05">{{log.companyName}}</p>
             </div>
-            <div *ngIf="log.log && log.log?.sharedWith && log.log?.sharedWith != undefined && log.log?.sharedWith?.name.length > 0">
+            <div
+                *ngIf="log.log && log.log?.sharedWith && log.log?.sharedWith != undefined && log.log?.sharedWith?.name.length > 0">
                 <label class="pull-left mr-l2">{{localeData?.shared_with}}:</label>
                 <p class="pull-left mr-l05">{{log.log?.sharedWith?.name}}
-                    <span *ngIf="log.log?.sharedWith?.email && log.log?.sharedWith?.email != null && log.log?.sharedWith?.email?.length > 0">
+                    <span
+                        *ngIf="log.log?.sharedWith?.email && log.log?.sharedWith?.email != null && log.log?.sharedWith?.email?.length > 0">
                         | {{log.log?.sharedWith?.email}}</span>
                 </p>
             </div>
@@ -43,7 +45,8 @@
             </div>
         </div>
 
-        <div class="mr-t05 table-container" *ngIf="log.log != null && log.log?.transactions != undefined && log.log?.transactions?.length > 0">
+        <div class="mr-t05 table-container"
+            *ngIf="log.log != null && log.log?.transactions != undefined && log.log?.transactions?.length > 0">
             <table class="table table-bordered ">
                 <thead>
                     <tr>
@@ -59,13 +62,21 @@
                         <td>{{i + 1}}</td>
                         <td>{{log.log?.entryDate}}</td>
                         <td>{{transaction.particular?.name}} ({{transaction.particular?.uniqueName}})</td>
-                        <td>{{transaction.amount | giddhCurrency}}</td>
+                        <td>
+                            <!-- {{transaction.amount | giddhCurrency}} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="transaction.amount" [currencySymbol]="false"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
                         <td>{{transaction.type}}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="mr-t05 text-center table-container" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
+        <div class="mr-t05 text-center table-container"
+            *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
             <label>{{localeData?.updated}}</label>
             <table class="table table-bordered">
                 <thead>
@@ -82,7 +93,14 @@
                         <td>{{i + 1}}</td>
                         <td>{{log.log.updated.entryDate}}</td>
                         <td>{{transaction.particular?.name}} ({{transaction.particular?.uniqueName}})</td>
-                        <td>{{transaction.amount}}</td>
+                        <td>
+                            <!-- {{transaction.amount}} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="transaction.amount" [currencySymbol]="false"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
                         <td>{{transaction.type}}</td>
                     </tr>
                 </tbody>
@@ -104,13 +122,21 @@
                         <td>{{i + 1}}</td>
                         <td>{{log.log.old.entryDate}}</td>
                         <td>{{transaction.particular?.name}} ({{transaction.particular?.uniqueName}})</td>
-                        <td>{{transaction.amount}}</td>
+                        <td>
+                            <!-- {{transaction.amount}} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="transaction.amount" [currencySymbol]="false"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
                         <td>{{transaction.type}}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="mr-t05 text-center table-container" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
+        <div class="mr-t05 text-center table-container"
+            *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
             <label>{{localeData?.updated}}</label>
             <table class="table table-bordered">
                 <thead>
@@ -162,5 +188,6 @@
             <p>{{localeData?.no_results_note}}</p>
         </div>
     </section>
-    <button class='btn btn-success pull-left mr-t2 mr-b2' [ladda]="loadMoreInProcess$ | async" (click)='loadMoreLogs()' *ngIf='(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)'>{{localeData?.load_more}}</button>
+    <button class='btn btn-success pull-left mr-t2 mr-b2' [ladda]="loadMoreInProcess$ | async" (click)='loadMoreLogs()'
+        *ngIf='(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)'>{{localeData?.load_more}}</button>
 </ng-container>

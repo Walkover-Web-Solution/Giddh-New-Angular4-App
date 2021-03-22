@@ -110,15 +110,42 @@
                             <td class="text-center" data-title="Total Transactions" *ngIf="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'">
                                 -
                             </td>
-                            <td class="text-right" data-title="Taxable Amount"> <i class="icon-rupees font-11"></i>{{item?.taxableAmount |giddhCurrency}}
+                            <td class="text-right" data-title="Taxable Amount"> <i class="icon-rupees font-11"></i>
+                                <!-- {{item?.taxableAmount |giddhCurrency}} -->
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item?.taxableAmount"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
-                            <td class="text-right" data-title="TIGST"> <i class="icon-rupees font-11"></i>{{item?.igstAmount |giddhCurrency}}
+                            <td class="text-right" data-title="IGST"> <i class="icon-rupees font-11"></i>
+                                <!-- {{item?.igstAmount |giddhCurrency}} -->
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item?.igstAmount" [currencySymbol]="false" [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
-                            <td class="text-right" data-title="CGST"> <i class="icon-rupees font-11"></i>{{item?.cgstAmount |giddhCurrency}}
+                            <td class="text-right" data-title="CGST"> <i class="icon-rupees font-11"></i>
+                                <!-- {{item?.cgstAmount |giddhCurrency}} -->
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item?.cgstAmount" [currencySymbol]="false" [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
-                            <td class="text-right" data-title="SGST"> <i class="icon-rupees font-11"></i>{{item?.sgstAmount |giddhCurrency}}
+                            <td class="text-right" data-title="SGST"> <i class="icon-rupees font-11"></i>
+                                <!-- {{item?.sgstAmount |giddhCurrency}} -->
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item?.sgstAmount" [currencySymbol]="false" [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
-                            <td class="text-right" data-title="CESS"> <i class="icon-rupees font-11"></i>{{item?.cessAmount |giddhCurrency}}
+                            <td class="text-right" data-title="CESS"> <i class="icon-rupees font-11"></i>
+                                <!-- {{item?.cessAmount |giddhCurrency}} -->
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="item?.cessAmount" [currencySymbol]="false" [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
                         </tr>
 
@@ -131,14 +158,40 @@
                                 <td class="text-center" data-title="Total Transactions"><a href="javascript:void(0)">
                                         {{item?.totalTransactions}} </a>
                                 </td>
-                                <td class="text-right" data-title="Taxable Amount"> <i class="icon-rupees font-11"></i>{{item?.taxableAmount |giddhCurrency}}</td>
-                                <td class="text-right" data-title="IGST"> <i class="icon-rupees font-11"></i>{{item?.igstAmount |giddhCurrency}}
+                                <td class="text-right" data-title="Taxable Amount"> <i class="icon-rupees font-11"></i>
+                                    <!-- {{item?.taxableAmount |giddhCurrency}} -->
+                                    <span class="d-inline-flex">
+                                        <amount-field [amount]="item?.taxableAmount" [currencySymbol]="false" [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
                                 </td>
-                                <td class="text-right" data-title="CGST"> <i class="icon-rupees font-11"></i>{{item?.cgstAmount |giddhCurrency}}
+                                <td class="text-right" data-title="IGST"> <i class="icon-rupees font-11"></i>
+                                    <!-- {{item?.igstAmount |giddhCurrency}} -->
+                                    <span class="d-inline-flex">
+                                        <amount-field [amount]="item?.igstAmount" [currencySymbol]="false" [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
                                 </td>
-                                <td class="text-right" data-title="SGST"> <i class="icon-rupees font-11"></i>{{item?.sgstAmount |giddhCurrency}}
+                                <td class="text-right" data-title="CGST"> <i class="icon-rupees font-11"></i>
+                                    <!-- {{item?.cgstAmount |giddhCurrency}} -->
+                                    <span class="d-inline-flex">
+                                        <amount-field [amount]="item?.cgstAmount" [currencySymbol]="false" [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
                                 </td>
-                                <td class="text-right" data-title="CESS"> <i class="icon-rupees font-11"></i>{{item?.cessAmount |giddhCurrency}}
+                                <td class="text-right" data-title="SGST"> <i class="icon-rupees font-11"></i>
+                                    <!-- {{item?.sgstAmount |giddhCurrency}} -->
+                                    <span class="d-inline-flex">
+                                        <amount-field [amount]="item?.sgstAmount" [currencySymbol]="false" [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+                                </td>
+                                <td class="text-right" data-title="CESS"> <i class="icon-rupees font-11"></i>
+                                    <!-- {{item?.cessAmount |giddhCurrency}} -->
+                                    <span class="d-inline-flex">
+                                        <amount-field [amount]="item?.cessAmount" [currencySymbol]="false" [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
                                 </td>
                             </tr>
                         </ng-container>

@@ -3,7 +3,6 @@
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <ng-container *ngIf="!showLoader">
         <div class="transactions-page pd-t15 position-relative clearfix">
-
             <!-- ledger header -->
             <div class="col-md-12">
                 <div>
@@ -38,16 +37,11 @@
                             <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker border-radius-2"/>
                         </div>
                         <div class="form-group cursor-pointer">
-
-
                             <div class="advance-icon align-items-center" tooltip="Advance Search" (click)="onOpenAdvanceSearch()">
                                 <span class="icon-advance-filter"></span>
                             </div>
-
-
                         </div>
                         <div class="form-group expand-collapse-btn">
-
                             <button type="button" class="btn btn-default" (click)="toggleExpand()">{{ isAllExpanded ? commonLocaleData?.app_collapse_all : commonLocaleData?.app_expand_all }}
                             </button>
 
@@ -69,16 +63,13 @@
 
                 </div>
             </div>
-
             <div class="container-fluid">
                 <div class="box clearfix mr-t15">
                     <div class="text-center mr-b2 transaction-report">
                         <p>{{localeData?.transaction_report}}</p>
                         <p>{{daybookQueryRequest.from }} - {{ daybookQueryRequest.to}}</p>
                     </div>
-
                     <div class="clearfix trial-balance table-responsive">
-
                         <table class="tb-head table-bordered table basic on-mobile-view">
                             <thead>
                                 <tr>
@@ -108,8 +99,22 @@
                                     <td [attr.data-title]="commonLocaleData?.app_particular">{{ entry.particular.name }}</td>
                                     <td [attr.data-title]="localeData?.voucher_name">{{ entry.voucherName }}</td>
                                     <td class="text-right" [attr.data-title]="localeData?.voucher_no">{{ entry.voucherNo }}</td>
-                                    <td class="text-right" [attr.data-title]="localeData?.debit_amount">{{ entry.debitAmount || 0 |giddhCurrency }}</td>
-                                    <td class="text-right" [attr.data-title]="localeData?.credit_amount">{{ entry.creditAmount || 0 |giddhCurrency}}</td>
+                                    <td class="text-right" [attr.data-title]="localeData?.debit_amount">
+                                        <!-- {{ entry.debitAmount || 0 |giddhCurrency }} -->
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="entry.debitAmount"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
+                                    </td>
+                                    <td class="text-right" [attr.data-title]="localeData?.credit_amount">
+                                        <!-- {{ entry.creditAmount || 0 |giddhCurrency}} -->
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="entry.creditAmount" [currencySymbol]="false" [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
+                                    </td>
                                     <td *ngIf="isEntryExpanded" colspan="7"> </td>
                                 </tr>
                                 <ng-container *ngIf="entry !== undefined && entry.isExpanded">
@@ -119,11 +124,23 @@
                                         <td class="hide-td"></td>
                                         <td class="hide-td"></td>
                                         <td class="text-right" [attr.data-title]="localeData?.debit_amount">
-                                            <span *ngIf="details.type === 'DEBIT'">{{ details.amount || 0 |giddhCurrency}}</span>
+                                            <span *ngIf="details.type === 'DEBIT'">
+                                                <!-- {{ details.amount || 0 |giddhCurrency}} -->
+                                                <span class="d-flex justify-content-end">
+                                                    <amount-field [amount]="details.amount" [currencySymbol]="false" [currencyCode]="false">
+                                                    </amount-field>
+                                                </span>
+                                            </span>
                                             <span *ngIf="details.type !== 'DEBIT'">-</span>
                                         </td>
                                         <td class="text-right" [attr.data-title]="localeData?.credit_amount">
-                                            <span *ngIf="details.type === 'CREDIT'">{{ details.amount|| 0  |giddhCurrency}}</span>
+                                            <span *ngIf="details.type === 'CREDIT'">
+                                                <!-- {{ details.amount|| 0  |giddhCurrency}} -->
+                                                <span class="d-flex justify-content-end">
+                                                    <amount-field [amount]="details.amount" [currencySymbol]="false" [currencyCode]="false">
+                                                    </amount-field>
+                                                </span>
+                                            </span>
                                             <span *ngIf="details.type !== 'CREDIT'">-</span>
                                         </td>
                                         <ng-container *ngIf="isEntryExpanded">
@@ -135,7 +152,12 @@
                                             </td>
                                             <td>{{details.inventory?details.inventory.unit.name:''}}
                                             </td>
-                                            <td *ngIf="details.inventory" class=" text-right">{{details.inventory.rate |giddhCurrency}}
+                                            <td *ngIf="details.inventory" class=" text-right">
+                                                <!-- {{details.inventory.rate |giddhCurrency}} -->
+                                                <span class="d-flex justify-content-end">
+                                                    <amount-field [amount]="details.inventory.rate" [currencySymbol]="false" [currencyCode]="false">
+                                                    </amount-field>
+                                                </span>
                                             </td>
                                             <td *ngIf="!details.inventory" class=" text-right">{{'-'}}
                                             </td>
@@ -147,7 +169,7 @@
                                             </td>
                                         </ng-container>
                                     </tr>
-                                </ng-container>        
+                                </ng-container>
                             </tbody>
                         </table>
                     </div>
@@ -159,14 +181,12 @@
                         </small>
                         <small class="grey" *ngIf="!((daybookData$ | async)?.totalItems)">0 {{commonLocaleData?.app_transactions}} | 0 {{commonLocaleData?.app_pages}}</small>
                     </div>
-
                     <!-- pagination -->
                     <div class="mt-1">
                         <pagination [totalItems]="daybookData?.totalItems" [(ngModel)]="daybookData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="daybookData?.count" [rotate]="false" (pageChanged)="pageChanged($event)">
                         </pagination>
                     </div>
                     <!-- pagination -->
-
                 </div>
             </div>
         </div>

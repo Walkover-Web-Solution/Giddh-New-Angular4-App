@@ -16,7 +16,7 @@
                             <table class="mr-b05 table basic bs-table-grid">
                                 <thead>
                                     <tr>
-                                        <th class="pd-0" width="33.33%">
+                                        <th class="p-0" width="33.33%">
                                             <div #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
                                                 <div [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}"
                                                     class="d-flex align-items-center">
@@ -81,10 +81,22 @@
                                     <strong>{{localeData?.total_liabilities}}</strong>
                                 </div>
                                 <div class="col-4  group text-right">
-                                    <strong>{{ bsData?.liabTotal | giddhCurrency }}</strong>
+                                    <strong>
+                                        <!-- {{ bsData?.liabTotal | giddhCurrency }} -->
+                                        <span class="d-inline-flex">
+                                            <amount-field [amount]="bsData?.liabTotal" [currencySymbol]="false" [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
+                                    </strong>
                                 </div>
                                 <div class="col-4  group text-right">
-                                    <strong>{{ bsData?.liabTotalEnd | giddhCurrency }}</strong>
+                                    <strong>
+                                        <!-- {{ bsData?.liabTotalEnd | giddhCurrency }} -->
+                                        <span class="d-inline-flex">
+                                            <amount-field [amount]="bsData?.liabTotalEnd" [currencySymbol]="false" [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
+                                    </strong>
                                 </div>
                             </div>
                             <!--<hr class="bd-rt"/>-->
@@ -129,10 +141,22 @@
                             <strong>{{localeData?.total_assets}}</strong>
                         </div>
                         <div class="col-4  group text-right">
-                            <strong>{{ bsData?.assetTotal | giddhCurrency }}</strong>
+                            <strong>
+                                <!-- {{ bsData?.assetTotal | giddhCurrency }} -->
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="bsData?.assetTotal" [currencySymbol]="false" [currencyCode]="false">
+                                    </amount-field>
+                                </span>
+                            </strong>
                         </div>
                         <div class="col-4  group text-right">
-                            <strong>{{ bsData?.assetTotalEnd | giddhCurrency }}</strong>
+                            <strong>
+                                <!-- {{ bsData?.assetTotalEnd | giddhCurrency }} -->
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="bsData?.assetTotalEnd" [currencySymbol]="false" [currencyCode]="false">
+                                    </amount-field>
+                                </span>
+                            </strong>
                         </div>
                     </div>
                     <!--<hr class="bd-rt"/>-->
