@@ -6353,7 +6353,6 @@ table td[class*=col-]:last-child {
 .universal-date {
     float: none !important;
     display: inline-block;
-    padding-top: 12px;
 }
 
 .divide-ico {
@@ -9624,6 +9623,9 @@ input.mat-input-element{
             }
         }
     }
+}
+#primary-new-header.primary-main-header.open{
+    padding-left: 240px !important;
 }
 /* responsive  starts here */
 @media (max-width: 1440px) {
