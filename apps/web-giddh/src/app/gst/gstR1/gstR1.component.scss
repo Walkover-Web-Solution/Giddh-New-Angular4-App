@@ -1,4 +1,4 @@
-@import '../../../assets/css/color.scss';
+@import "../../../assets/css/color.scss";
 
 .column.list-column.expanded-list-column {
     width: auto;
@@ -36,8 +36,8 @@
                     border: 1px solid $gainsboro;
                 }
             }
-        }
-    }
+        } 
+    } 
 }
 
 list-header .btn-toolbar .btn-group {
@@ -232,7 +232,7 @@ address {
 }
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
-    font-size: 14px;
+    font-size: 13px;
     border-bottom: 1px solid $gainsboro;
 }
 .tax-engine .table thead:first-child tr:first-child th {
@@ -336,7 +336,7 @@ address {
             display: inline-block;
         }
     }
-    }
+    } 
 }
 .tax-engine .sub-filter-nav-band ul > li > a {
     cursor: pointer;
