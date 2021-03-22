@@ -28,11 +28,29 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-walkover-logo .path1:before {
+.icon-calender-new:before {
+  content: "\e9c9";
+}
+.icon-question-new:before {
+  content: "\e9cb";
+}
+.icon-settings-new:before {
+  content: "\e9cd";
+}
+.icon-bell-new:before {
+  content: "\e9c8";
+}
+.icon-master-new1:before {
+  content: "\e9ca";
+}
+.icon-user-new:before {
+  content: "\e9cc";
+}
+.icon-Mask-Group .path1:before {
   content: "\e9c5";
   color: rgb(230, 69, 86);
 }
-.icon-walkover-logo .path2:before {
+.icon-Mask-Group .path2:before {
   content: "\e9c6";
   margin-left: -1em;
   color: rgb(255, 255, 255);
@@ -90,6 +108,7 @@
 }
 .icon-branch-connection:before {
   content: "\e9a8";
+  color: #999da0;
 }
 .icon-credit-note-new:before {
   content: "\e9a9";
