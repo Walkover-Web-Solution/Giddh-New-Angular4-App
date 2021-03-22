@@ -28,9 +28,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../../../store';
 import {
-    ADVANCE_RECEIPT_ADVANCE_SEARCH_AMOUNT_FILTERS,
     ADVANCE_RECEIPT_REPORT_FILTERS,
-    RECEIPT_TYPES,
     ReceiptAdvanceSearchModel,
 } from '../../constants/reports.constant';
 import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt-advance-search.component';
@@ -115,7 +113,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         endDate: moment()
     };
     /** Receipt type for filter */
-    public receiptType: Array<any> = RECEIPT_TYPES;
+    public receiptType: Array<any>;
     public modalRef: BsModalRef;
     public message: string;
     public showEntryDate = true;
@@ -161,21 +159,23 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public activeCompany: any;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     /** Advance search model to initialize the advance search fields */
     private advanceSearchModel: ReceiptAdvanceSearchModel = {
         adjustmentVoucherDetails: {
-            vouchers: [...RECEIPT_TYPES],
+            vouchers: [],
             selectedValue: this.searchQueryParams.receiptTypes[0],
             isDisabled: !!this.searchQueryParams.receiptTypes.length
         },
         totalAmountFilter: {
-            filterValues: [...ADVANCE_RECEIPT_ADVANCE_SEARCH_AMOUNT_FILTERS],
+            filterValues: [],
             selectedValue: '',
             amount: ''
         },
         unusedAmountFilter: {
-            filterValues: [...ADVANCE_RECEIPT_ADVANCE_SEARCH_AMOUNT_FILTERS],
+            filterValues: [],
             selectedValue: '',
             amount: ''
         }
@@ -206,6 +206,14 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public universalDate$: Observable<any>;
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** Amount filter values for Advance Search in receipt reports */
+    public advanceReceiptAdvanceSearchAmountFilters: any;
+    /** List of receipt types for filters */
+    public receiptTypes: any;
 
     /** @ignore */
     constructor(
@@ -321,6 +329,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         this.advanceSearchModel.adjustmentVoucherDetails.selectedValue = this.searchQueryParams.receiptTypes[0];
         this.advanceSearchModel.adjustmentVoucherDetails.isDisabled = !!this.searchQueryParams.receiptTypes.length;
         (componentRef.instance as ReceiptAdvanceSearchComponent).searchModel = cloneDeep(this.advanceSearchModel);
+        (componentRef.instance as ReceiptAdvanceSearchComponent).localeData = cloneDeep(this.localeData);
+        (componentRef.instance as ReceiptAdvanceSearchComponent).commonLocaleData = cloneDeep(this.commonLocaleData);
+
         merge(
             (componentRef.instance as ReceiptAdvanceSearchComponent).closeModal,
             (componentRef.instance as ReceiptAdvanceSearchComponent).cancel).pipe(takeUntil(this.destroyed$)).subscribe(() => {
@@ -356,25 +367,25 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public searchBy(event: any, filterName: string, openFilter: boolean): void {
         switch (filterName) {
             case ADVANCE_RECEIPT_REPORT_FILTERS.RECEIPT_FILTER:
-                if (event && this.childOf(event.target, this.receiptNumberParent.nativeElement)) {
+                if (event && this.childOf(event.target, this.receiptNumberParent?.nativeElement)) {
                     return;
                 }
                 this.showReceiptSearchBar = openFilter;
                 break;
             case ADVANCE_RECEIPT_REPORT_FILTERS.CUSTOMER_FILTER:
-                if (event && this.childOf(event.target, this.customerNameParent.nativeElement)) {
+                if (event && this.childOf(event.target, this.customerNameParent?.nativeElement)) {
                     return;
                 }
                 this.showCustomerSearchBar = openFilter;
                 break;
             case ADVANCE_RECEIPT_REPORT_FILTERS.PAYMENT_FILTER:
-                if (event && this.childOf(event.target, this.paymentModeParent.nativeElement)) {
+                if (event && this.childOf(event.target, this.paymentModeParent?.nativeElement)) {
                     return;
                 }
                 this.showPaymentSearchBar = openFilter;
                 break;
             case ADVANCE_RECEIPT_REPORT_FILTERS.INVOICE_FILTER:
-                if (event && this.childOf(event.target, this.invoiceNumberParent.nativeElement)) {
+                if (event && this.childOf(event.target, this.invoiceNumberParent?.nativeElement)) {
                     return;
                 }
                 this.showInvoiceSearchBar = openFilter;
@@ -459,17 +470,17 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         };
         this.advanceSearchModel = {
             adjustmentVoucherDetails: {
-                vouchers: [...RECEIPT_TYPES],
+                vouchers: [...this.receiptTypes],
                 selectedValue: this.searchQueryParams.receiptTypes[0],
                 isDisabled: !!this.searchQueryParams.receiptTypes.length
             },
             totalAmountFilter: {
-                filterValues: [...ADVANCE_RECEIPT_ADVANCE_SEARCH_AMOUNT_FILTERS],
+                filterValues: [...this.advanceReceiptAdvanceSearchAmountFilters],
                 selectedValue: '',
                 amount: ''
             },
             unusedAmountFilter: {
-                filterValues: [...ADVANCE_RECEIPT_ADVANCE_SEARCH_AMOUNT_FILTERS],
+                filterValues: [...this.advanceReceiptAdvanceSearchAmountFilters],
                 selectedValue: '',
                 amount: ''
             }
@@ -509,10 +520,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     private subscribeToEvents(): void {
         merge(
-            fromEvent(this.customerName.nativeElement, 'input'),
-            fromEvent(this.receiptNumber.nativeElement, 'input'),
-            fromEvent(this.paymentMode.nativeElement, 'input'),
-            fromEvent(this.invoiceNumber.nativeElement, 'input')).pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
+            fromEvent(this.customerName?.nativeElement, 'input'),
+            fromEvent(this.receiptNumber?.nativeElement, 'input'),
+            fromEvent(this.paymentMode?.nativeElement, 'input'),
+            fromEvent(this.invoiceNumber?.nativeElement, 'input')).pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
                 this.showClearFilter = true;
                 this.fetchAllReceipts(this.searchQueryParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
             });
@@ -538,6 +549,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     private fetchAllReceipts(additionalRequestParameters?: GetAllAdvanceReceiptsRequest): Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>> {
+        this.isLoading = true;
         let requestObject: GetAllAdvanceReceiptsRequest = {
             companyUniqueName: this.activeCompanyUniqueName,
             from: this.fromDate,
@@ -596,6 +608,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     private handleFetchAllReceiptResponse(response: any): any {
+        this.isLoading = false;
         if (response) {
             if (response.status === 'success' && response.body) {
                 this.pageConfiguration.currentPage = response.body.page;
@@ -678,6 +691,34 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             this.datePickerOptions.endDate = this.toDate;
             this.showClearFilter = true;
             this.fetchReceiptsData();
+        }
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof AdvanceReceiptReportComponent
+     */
+    public translationComplete(event: boolean): void {
+        if(event) {
+            this.advanceReceiptAdvanceSearchAmountFilters = [
+                { label: this.commonLocaleData?.app_comparision_filters.greater_than, value: 'GREATER_THAN' },
+                { label: this.commonLocaleData?.app_comparision_filters.greater_than_equals, value: 'GREATER_THAN_OR_EQUALS' },
+                { label: this.commonLocaleData?.app_comparision_filters.less_than_equals, value: 'LESS_THAN_OR_EQUALS' },
+                { label: this.commonLocaleData?.app_comparision_filters.equals, value: 'EQUALS' },
+                { label: this.commonLocaleData?.app_comparision_filters.not_equals, value: 'NOT_EQUALS' }
+            ];
+
+            this.receiptTypes = [
+                { label: this.localeData?.receipt_types.normal_receipts, value: 'normal receipt' },
+                { label: this.localeData?.receipt_types.advance_receipts, value: 'advance receipt' }
+            ];
+
+            this.receiptType = this.receiptTypes;
+            this.advanceSearchModel.adjustmentVoucherDetails.vouchers = this.receiptTypes;
+            this.advanceSearchModel.totalAmountFilter.filterValues = this.advanceReceiptAdvanceSearchAmountFilters;
+            this.advanceSearchModel.unusedAmountFilter.filterValues = this.advanceReceiptAdvanceSearchAmountFilters;
         }
     }
 }

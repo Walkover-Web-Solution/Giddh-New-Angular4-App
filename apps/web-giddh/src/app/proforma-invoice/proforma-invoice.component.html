@@ -1,9 +1,4 @@
-<div class="no-data mr-t2 loader-main" *ngIf="showLoader">
-    <div class="spinner2">
-        <div class="cube1"></div>
-        <div class="cube2"></div>
-    </div>
-</div>
+<giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
 <div [ngStyle]="{'display': !showLoader ? 'block' : 'none'}">
     <!-- region page change menu -->
         <div class="d-flex border-bottom mobile-view-padding">
@@ -46,13 +41,7 @@
     <!-- region update mode loader-->
     <ng-container *ngIf="isUpdateDataInProcess">
         <div class="loader-class">
-            <div class="no-data mr-t2 loader-main">
-                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                <div class="spinner2">
-                    <div class="cube1"></div>
-                    <div class="cube2"></div>
-                </div>
-            </div>
+            <giddh-page-loader></giddh-page-loader>
         </div>
     </ng-container>
     <!--endregion-->
@@ -582,6 +571,7 @@
                                                                         [options]="companyStatesSource"
                                                                         name="companyBillingDetailsStateCode"
                                                                         [disabled]="(purchaseBillCompany.billingDetails.gstNumber && purchaseBillCompany.billingDetails.gstNumber.length >= 2) ? true : null"
+                                                                        [fixedValue]="purchaseBillCompany.billingDetails.state.name"
                                                                         [(ngModel)]="purchaseBillCompany.billingDetails.state.code">
                                                                     </sales-sh-select>
                                                                 </div>
@@ -640,6 +630,7 @@
                                                                             [options]="companyStatesSource"
                                                                             name="companyShippingDetailsStateCode"
                                                                             [disabled]="(purchaseBillCompany.shippingDetails.gstNumber && purchaseBillCompany.shippingDetails.gstNumber.length >= 2) ? true : null"
+                                                                            [fixedValue]="purchaseBillCompany.shippingDetails.state.name"
                                                                             [(ngModel)]="purchaseBillCompany.shippingDetails.state.code">
                                                                         </sales-sh-select>
                                                                     </div>
@@ -776,7 +767,7 @@
                                                     [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                     [(ngModel)]="invFormData.voucherDetails.dueDate"
                                                     [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
-                                                    (blur)="onBlurDueDate(0)" />
+                                                    (blur)="onBlurDueDate(0);openProductDropdown()" />
                                                 <p class="text-danger"
                                                     *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid
                                                     Date
@@ -965,18 +956,13 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody [hidden]="showBulkLoader" (clickOutside)="handleOutsideClick()" [exclude]="'.entries-tr'" >
+                        <tbody [hidden]="showBulkLoader" (clickOutside)="handleOutsideClick()" [exclude]="'.entries-tr, .add-line-bulk-item'">
                             <ng-container #itemsContainer></ng-container>
                         </tbody>
                         <tbody *ngIf="showBulkLoader">
                             <tr>
                                 <td colspan="8">
-                                    <div class="col-12 no-data mr-t2 loader-main">
-                                        <div class="spinner2">
-                                            <div class="cube1"></div>
-                                            <div class="cube2"></div>
-                                        </div>
-                                    </div>
+                                    <giddh-page-loader></giddh-page-loader>
                                 </td>
                             </tr>
                         </tbody>
@@ -2182,7 +2168,7 @@
                                                 <label class="card-label">Product/Service Description</label>
                                                 <div class="product-name">
                                                     <div class="ng-select-wrap">
-                                                        <sh-select [options]="salesAccounts$ | async"
+                                                        <sh-select [options]="salesAccounts$ | async" #selectAccount
                                                             [(ngModel)]="transaction.fakeAccForSelect2"
                                                             name="transaction.fakeAccForSelect2_{{entryIdx}}"
                                                             (selected)="onSelectSalesAccount($event,transaction, entry, false, false, entryIdx)"
@@ -2225,7 +2211,7 @@
                                                     </div>
 
                                                     <div class="description">
-                                                        <textarea type="text" placeholder="Add Description"
+                                                        <textarea type="text" placeholder="Add Description" #description
                                                             name="transaction.description_{{entryIdx}}" class="form-control"
                                                             [(ngModel)]="transaction.description">
                                                           </textarea>

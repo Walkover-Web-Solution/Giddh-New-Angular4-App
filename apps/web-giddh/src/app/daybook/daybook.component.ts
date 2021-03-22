@@ -41,7 +41,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     @ViewChild('exportDaybookModal', {static: true}) public exportDaybookModal: ModalDirective;
     @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent, static: false }) public dateRangePickerCmp: DaterangePickerComponent;
     /** Daybook advance search component reference */
-    @ViewChild('daybookAdvanceSearch', {static: true}) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
+    @ViewChild('daybookAdvanceSearch', {static: false}) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
     /** True, if entry expanded (at least one entry) */
     public isEntryExpanded: boolean = false;
     /** Date format type */
@@ -89,6 +89,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public isAdvanceSearchOpened: boolean = false;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -126,6 +130,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'daybook';
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+
+        this.store.pipe(select(state => state.daybook.showLoader), takeUntil(this.destroyed$)).subscribe(response => {
+            this.showLoader = response;
+        });
+
         this.store.pipe(select(state => state.daybook.data), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.entries) {
                 this.daybookQueryRequest.page = data.page;
@@ -147,7 +156,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.daybookData$ = observableOf(data);
                 this.checkIsStockEntryAvailable();
             }
-            this.showLoader = false;
             this.changeDetectorRef.detectChanges();
         });
         this.store.pipe(
@@ -202,7 +210,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
         let from = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
         let to = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         if ((this.daybookQueryRequest.from !== from) || (this.daybookQueryRequest.to !== to)) {
-            this.showLoader = true;
             this.daybookQueryRequest.from = from;
             this.daybookQueryRequest.to = to;
             this.daybookQueryRequest.page = 0;
@@ -302,12 +309,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public pageChanged(event: any): void {
-        this.daybookQueryRequest.page = event.page;
-        this.go(this.searchFilterData);
+        if(this.daybookQueryRequest.page !== event.page) {
+            this.daybookQueryRequest.page = event.page;
+            this.go(this.searchFilterData);
+        }
     }
 
     public exportDaybook() {
-        this.daybookExportRequestType = 'get';
+        this.daybookExportRequestType = 'post';
         this.exportDaybookModal.show();
     }
 
@@ -429,7 +438,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
             if ((this.daybookQueryRequest.from !== this.fromDate) || (this.daybookQueryRequest.to !== this.toDate)) {
-                this.showLoader = true;
                 this.daybookQueryRequest.from = this.fromDate;
                 this.daybookQueryRequest.to = this.toDate;
                 this.daybookQueryRequest.page = 0;

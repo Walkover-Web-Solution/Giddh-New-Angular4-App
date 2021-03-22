@@ -51,8 +51,10 @@ import { digitsOnly } from '../../../helpers';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
+import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
+import { INameUniqueName } from 'apps/web-giddh/src/app/models/api-models/Inventory';
 
 @Component({
     selector: 'account-update-new-details',
@@ -119,7 +121,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public countryCurrency: any[] = [];
     public countryPhoneCode: IOption[] = [];
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
-    public accounts$: Observable<IOption[]>;
+    public accounts: IOption[];
     public stateGstCode: any[] = [];
     public isMobileNumberValid: boolean = true;
     public formFields: any[] = [];
@@ -143,8 +145,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public GSTIN_OR_TRN: string;
     public selectedCompanyCountryName: string;
     public selectedCurrency: string;
-    private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
-    // private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
     public isStateRequired: boolean = false;
     public selectedCountryCode: string = '';
     public bankIbanNumberMaxLength: string = '18';
@@ -161,27 +161,68 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isDiscountSaveDisable$: Observable<boolean> = observableOf(true);
     /** This will hold active parent group */
     public activeParentGroup: string = "";
+    /** Stores the search results pagination details for group dropdown */
+    public groupsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for group dropdown */
+    public defaultGroupSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for group dropdown */
+    public preventDefaultGroupScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for group dropdown */
+    public defaultGroupPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
     /** This will hold inventory settings */
     public inventorySettings: any;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** This will hold placeholder for tax */
+    public taxNamePlaceholder: string = "";
+    /** Stores the search results pagination details */
+    public accountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search */
+    public defaultAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details */
+    public defaultAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the active account group */
+    public activeAccountGroup: IOption[] | INameUniqueName[] = [];
 
-    constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction, private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions, private groupService: GroupService, private invoiceService: InvoiceService) {
-        this.discountList$ = this.store.pipe(select(s => s.settings.discount.discountList), takeUntil(this.destroyed$));
-        this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
-        this.moveAccountSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.moveAccountSuccess), takeUntil(this.destroyed$));
-        this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountTaxHierarchy), takeUntil(this.destroyed$));
-        this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
-        this.store.dispatch(this._settingsDiscountAction.GetDiscount());
-        this.getCompanyCustomField();
-        this.getCountry();
-        this.getCurrency();
-        this.getCallingCodes();
-        this.getPartyTypes();
-        if (this.flatGroupsOptions === undefined) {
-            this.getAccount();
-        }
-        this.prepareTaxDropdown();
-        this.getDiscountList();
+    constructor(
+        private _fb: FormBuilder,
+        private store: Store<AppState>,
+        private accountsAction: AccountsAction,
+        private searchService: SearchService,
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private _settingsDiscountAction: SettingsDiscountActions,
+        private _accountService: AccountService,
+        private _toaster: ToasterService,
+        private companyActions: CompanyActions,
+        private commonActions: CommonActions,
+        private _generalActions: GeneralActions,
+        private groupService: GroupService,
+        private invoiceService: InvoiceService
+    ) {
 
+    }
+
+    public ngOnInit() {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 if (activeCompany.countryV2) {
@@ -191,9 +232,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.companyCurrency = _.clone(activeCompany.baseCurrency);
             }
         });
-    }
-
-    public ngOnInit() {
+        this.discountList$ = this.store.pipe(select(s => s.settings.discount.discountList), takeUntil(this.destroyed$));
+        this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
+        this.moveAccountSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.moveAccountSuccess), takeUntil(this.destroyed$));
+        this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountTaxHierarchy), takeUntil(this.destroyed$));
+        this.store.dispatch(this._settingsDiscountAction.GetDiscount());
+        this.getCompanyCustomField();
+        this.getCountry();
+        this.getCurrency();
+        this.getCallingCodes();
+        this.getPartyTypes();
+        this.prepareTaxDropdown();
+        this.getDiscountList();
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
         }
@@ -217,6 +267,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     let col = acc.parentGroups[0].uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                     this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
+                    this.activeAccountGroup = acc.parentGroups.length > 0 ? [{
+                        label: acc.parentGroups[acc.parentGroups.length - 1].name,
+                        value: acc.parentGroups[acc.parentGroups.length - 1].uniqueName,
+                        additional: acc.parentGroups[acc.parentGroups.length - 1],
+                    }] : this.flatGroupsOptions;
                     this.activeGroupUniqueName = acc.parentGroups.length > 0 ? acc.parentGroups[acc.parentGroups.length - 1].uniqueName : '';
                     this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.activeGroupUniqueName));
                 }
@@ -336,45 +391,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 hsn.disable();
             }
         });
-        // this.flattenGroups$.subscribe(flattenGroups => {
-        //     if (flattenGroups) {
-        //         let items: IOption[] = flattenGroups.filter(grps => {
-        //             return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-        //         }).map(m => {
-        //             return {
-        //                 value: m.groupUniqueName, label: m.groupName
-        //             }
-        //         });
-        //         this.flatGroupsOptions = items;
-        //     }
-        // });
-        // get country code value change
-        // this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
-
-        //     if (a) {
-        //         const addresses = this.addAccountForm.get('addresses') as FormArray;
-        //         if (addresses.controls.length === 0) {
-        //             this.addBlankGstForm();
-        //         }
-        //         // let addressFormArray = (this.addAccountForm.controls['addresses'] as FormArray);
-        //         if (a !== 'IN') {
-        //             this.isIndia = false;
-        //             // Object.keys(addressFormArray.controls).forEach((key) => {
-        //             //     if (parseInt(key) > 0) {
-        //             //         addressFormArray.removeAt(1); // removing index 1 only because as soon as we remove any index, it automatically updates index
-        //             //     }
-        //             // });
-        //         } else {
-        //             if (addresses.controls.length === 0) {
-        //                 this.addBlankGstForm();
-        //             }
-        //             this.isIndia = true;
-        //         }
-
-        //         // this.resetGstStateForm();
-        //     }
-        // });
-        // get openingblance value changes
         this.addAccountForm.get('openingBalance').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
@@ -382,12 +398,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             }
         });
-        // this.addAccountForm.get('foreignOpeningBalance').valueChanges.subscribe(a => {
-        //     if (!a) {
-        //         this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
-        //         this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
-        //     }
-        // });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
@@ -419,86 +429,51 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         if (this.autoFocusUpdate !== undefined) {
             setTimeout(() => {
-                this.autoFocusUpdate.nativeElement.focus();
+                this.autoFocusUpdate?.nativeElement?.focus();
             }, 50);
         }
 
-        this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                if (res.fields) {
-                    this.formFields = [];
-                    Object.keys(res.fields).forEach(key => {
-                        if (res.fields[key]) {
-                            this.formFields[res.fields[key].name] = [];
-                            this.formFields[res.fields[key].name] = res.fields[key];
-                        }
-                    });
-                }
-                if (this.formFields['taxName'] && this.formFields['taxName'].label) {
-                    this.GSTIN_OR_TRN = this.formFields['taxName'].label;
-                } else {
-                    this.GSTIN_OR_TRN = '';
-                }
-            }
-        });
         this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
         this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.selectedaccountForMerge = '';
         });
         this.isTaxableAccount$ = this.store.pipe(select(createSelector([
-            (state: AppState) => state.groupwithaccounts.groupswithaccounts,
             (state: AppState) => state.groupwithaccounts.activeAccount],
-            (groupswithaccounts, activeAccount) => {
+            (activeAccount) => {
                 let result: boolean = false;
-                if (groupswithaccounts && this.activeGroupUniqueName && activeAccount) {
-                    result = this.getAccountFromGroup(groupswithaccounts, this.activeGroupUniqueName, false);
+                if (this.activeGroupUniqueName && activeAccount) {
+                    result = this.getAccountFromGroup(activeAccount, false);
                 } else {
                     result = false;
                 }
                 return result;
             })), takeUntil(this.destroyed$));
     }
+
     public ngAfterViewInit() {
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
         this.taxHierarchy();
-        let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
         let selectedGroupDetails;
 
-        this.flatGroupsOptions.forEach(res => {
-            if (res.value === activegroupName) {
-                selectedGroupDetails = res;
+        this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroup), take(1)).subscribe(response => {
+            if (response) {
+                selectedGroupDetails = response;
             }
         })
-        if (selectedGroupDetails) {
-            if (selectedGroupDetails.additional) {
-                let parentGroup = selectedGroupDetails.additional.length > 1 ? selectedGroupDetails.additional[1] : { uniqueName: selectedGroupDetails.value };
-                if (parentGroup) {
-                    this.isParentDebtorCreditor(parentGroup.uniqueName);
-                }
+        if (selectedGroupDetails?.parentGroups) {
+            let parentGroup = selectedGroupDetails.parentGroups.length > 1 ? selectedGroupDetails.parentGroups[1] : { uniqueName: selectedGroupDetails.uniqueName };
+            if (parentGroup) {
+                this.isParentDebtorCreditor(parentGroup.uniqueName);
             }
         }
         this.prepareTaxDropdown();
     }
 
-    public getAccountFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: boolean): boolean {
-        if (result) {
-            return result;
-        }
-        for (const el of groupList) {
-            if (el.accounts) {
-                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses' || this.isDebtorCreditor)) {
-                    result = true;
-                    break;
-                }
-            }
-            if (el.groups) {
-                result = this.getAccountFromGroup(el.groups, uniqueName, result);
-                if (result) {
-                    break;
-                }
-            }
+    public getAccountFromGroup(activeGroup: AccountResponseV2, result: boolean): boolean {
+        if (activeGroup.category === 'income' || activeGroup.category === 'expenses' || this.isDebtorCreditor) {
+            result = true;
         }
         return result;
     }
@@ -758,7 +733,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                                 gstForm.get('stateCode').patchValue(null);
                                 gstForm.get('state').get('code').patchValue(null);
                             }
-                            this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
+
+                            let invalidTaxName = this.commonLocaleData?.app_invalid_tax_name;
+                            invalidTaxName = invalidTaxName.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                            this._toaster.errorToast(invalidTaxName);
                         }
                     }
                 });
@@ -818,12 +796,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.isMobileNumberValid = true;
             } else {
                 this.isMobileNumberValid = false;
-                this._toaster.errorToast('Invalid Contact number');
+                this._toaster.errorToast(this.localeData?.invalid_contact_number);
                 ele.classList.add('error-box');
             }
         } catch (error) {
             this.isMobileNumberValid = false;
-            this._toaster.errorToast('Invalid Contact number');
+            this._toaster.errorToast(this.localeData?.invalid_contact_number);
             ele.classList.add('error-box');
         }
     }
@@ -851,7 +829,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             accountRequest.mobileCode = '';
         } else {
             if(!this.isMobileNumberValid) {
-                this._toaster.errorToast('Invalid Contact number');
+                this._toaster.errorToast(this.localeData?.invalid_contact_number);
                 return false;
             }
         }
@@ -982,6 +960,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public isParentDebtorCreditor(activeParentgroup: string) {
         this.activeParentGroup = activeParentgroup;
+        this.toggleStateRequired();
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
@@ -1180,7 +1159,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.store.dispatch(this.accountsAction.mergeAccount(activeAccount.uniqueName, finalData));
             this.showDeleteMove = false;
         } else {
-            this._toaster.errorToast('Please Select at least one account');
+            this._toaster.errorToast(this.localeData?.merge_account_error);
             return;
         }
     }
@@ -1194,7 +1173,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public showDeleteMergedAccountModal(merge: string) {
         merge = merge.trim();
-        this.deleteMergedAccountModalBody = `Are you sure you want to delete ${merge} Account ?`;
+        this.deleteMergedAccountModalBody = this.localeData?.delete_merged_account_content;
+        this.deleteMergedAccountModalBody = this.deleteMergedAccountModalBody.replace("[MERGE]", merge);
         this.selectedAccountForDelete = merge;
         this.deleteMergedAccountModal.show();
     }
@@ -1225,20 +1205,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             }
         });
-
-        this.accountService.getFlattenAccounts().pipe(takeUntil(this.destroyed$)).subscribe(a => {
-            let accounts: IOption[] = [];
-            if (a.status === 'success') {
-                a.body.results.map(acc => {
-                    accounts.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName });
-                });
-                let accountIndex = accounts.findIndex(acc => acc.value === activeAccount.uniqueName);
-                if (accountIndex > -1) {
-                    accounts.splice(accountIndex, 1);
-                }
-            }
-            this.accounts$ = observableOf(accounts);
-        });
+        this.loadDefaultAccountsSuggestions();
     }
 
     public taxHierarchy() {
@@ -1309,7 +1276,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public showMoveMergedAccountModal() {
-        this.moveMergedAccountModalBody = `Are you sure you want to move ${this.setAccountForMove} Account to ${this.selectedAccountForMove} ?`;
+        this.moveMergedAccountModalBody = this.localeData?.move_merged_account_content;
+        this.moveMergedAccountModalBody = this.moveMergedAccountModalBody.replace("[SOURCE_ACCOUNT]", this.setAccountForMove);
+        this.moveMergedAccountModalBody = this.moveMergedAccountModalBody.replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
         this.moveMergedAccountModal.show();
     }
 
@@ -1328,19 +1297,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         // this.accountForMoveSelect2.setElementValue('');
         this.hideMoveMergedAccountModal();
     }
+
     public getAccount() {
-        this.flattenGroups$.subscribe(flattenGroups => {
-            if (flattenGroups) {
-                let items: IOption[] = flattenGroups.filter(grps => {
-                    return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-                }).map(m => {
-                    return {
-                        value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups
-                    }
-                });
-                this.flatGroupsOptions = items;
-            }
-        });
+        this.loadDefaultGroupsSuggestions();
     }
 
     /**
@@ -1374,7 +1333,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors')) {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroup === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors' || this.activeParentGroup === 'sundrydebtors')) {
             return true;
         } else {
             return false;
@@ -1437,14 +1396,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (type === 'bankAccountNo') {
             if (this.selectedCountryCode === 'IN') {
                 if (element && element.value && element.value.length < 9) {
-                    this._toaster.errorToast('The bank account number must contain 9 to 18 characters');
+                    this._toaster.errorToast(this.commonLocaleData?.app_invalid_bank_account_number);
                     element.classList.add('error-box');
                 } else {
                     element.classList.remove('error-box');
                 }
             } else {
                 if (element && element.value && element.value.length < 23) {
-                    this._toaster.errorToast('The IBAN must contain 23 to 34 characters.');
+                    this._toaster.errorToast(this.commonLocaleData?.app_invalid_iban);
                     element.classList.add('error-box');
                 } else {
                     element.classList.remove('error-box');
@@ -1452,7 +1411,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         } else if (type === 'swiftCode') {
             if (element && element.value && element.value.length < 8) {
-                this._toaster.errorToast('The SWIFT Code/BIC must contain 8 to 11 characters.');
+                this._toaster.errorToast(this.commonLocaleData?.app_invalid_swift_code);
                 element.classList.add('error-box');
             } else {
                 element.classList.remove('error-box');
@@ -1654,6 +1613,243 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                 }
             }
+        });
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public translationComplete(event: boolean): void {
+        if(event) {
+            this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+                if (res) {
+                    if (res.fields) {
+                        this.formFields = [];
+                        Object.keys(res.fields).forEach(key => {
+                            if (res.fields[key]) {
+                                this.formFields[res.fields[key].name] = [];
+                                this.formFields[res.fields[key].name] = res.fields[key];
+                            }
+                        });
+                    }
+                    if (this.formFields['taxName'] && this.formFields['taxName'].label) {
+                        this.GSTIN_OR_TRN = this.formFields['taxName'].label;
+                    } else {
+                        this.GSTIN_OR_TRN = '';
+                    }
+                    this.taxNamePlaceholder = this.commonLocaleData.app_enter_tax_name;
+                    this.taxNamePlaceholder = this.taxNamePlaceholder.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                }
+            });
+        }
+    }
+
+
+    /**
+     * Search query change handler for group
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.groupsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultGroupScrollApiCall &&
+            (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                count: API_COUNT_LIMIT,
+            }
+            this.groupService.searchGroups(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name}`,
+                            additional: result.parentGroups
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.flatGroupsOptions = searchResults;
+                    } else {
+                        this.flatGroupsOptions = [
+                            ...this.flatGroupsOptions,
+                            ...searchResults
+                        ];
+                    }
+                    this.groupsSearchResultsPaginationData.page = data.body.page;
+                    this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.flatGroupsOptions = [...this.defaultGroupSuggestions];
+            this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
+            this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
+            this.preventDefaultGroupScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultGroupScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler for group dropdown
+     *
+     * @returns null
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public handleGroupScrollEnd(): void {
+        if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
+            this.onGroupSearchQueryChanged(
+                this.groupsSearchResultsPaginationData.query,
+                this.groupsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.groupsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name}`,
+                                additional: result.parentGroups
+                            }
+                        }) || [];
+                        this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default group list for advance search
+     *
+     * @private
+     * @memberof AccountAddNewDetailsComponent
+     */
+    private loadDefaultGroupsSuggestions(): void {
+        this.onGroupSearchQueryChanged('', 1, (response) => {
+            this.defaultGroupSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: `${result.name}`,
+                    additional: result.parentGroups
+                }
+            }) || [];
+            this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+            this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+            this.flatGroupsOptions = [...this.defaultGroupSuggestions];
+        });
+    }
+
+    /**
+     * Search query change handler
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof AuditLogsFormComponent
+     */
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.accountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page
+            }
+            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    let activeAccountUniqueName: string;
+                    this.activeAccount$.pipe(take(1)).subscribe(account => activeAccountUniqueName = account.uniqueName);
+                    data.body.results = data.body.results.filter(account => account.uniqueName !== activeAccountUniqueName);
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name} (${result.uniqueName})`
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.accounts = searchResults;
+                    } else {
+                        this.accounts = [
+                            ...this.accounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.accountsSearchResultsPaginationData.page = data.body.page;
+                    this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.accounts = [...this.defaultAccountSuggestions];
+            this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
+            this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler
+     *
+     * @returns null
+     * @memberof AuditLogsFormComponent
+     */
+    public handleScrollEnd(): void {
+        if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
+            this.onAccountSearchQueryChanged(
+                this.accountsSearchResultsPaginationData.query,
+                this.accountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.accountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name} (${result.uniqueName})`
+                            }
+                        }) || [];
+                        this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default account search suggestion when module is loaded
+     *
+     * @private
+     * @memberof AuditLogsFormComponent
+     */
+    private loadDefaultAccountsSuggestions(): void {
+        this.onAccountSearchQueryChanged('', 1, (response) => {
+            this.defaultAccountSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: `${result.name} (${result.uniqueName})`
+                }
+            }) || [];
+            this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+            this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+            this.accounts = [...this.defaultAccountSuggestions];
         });
     }
 }

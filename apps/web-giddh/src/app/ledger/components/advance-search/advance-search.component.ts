@@ -29,15 +29,6 @@ import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.co
 import { SearchService } from '../../../services/search.service';
 import { InventoryService } from '../../../services/inventory.service';
 
-const COMPARISON_FILTER = [
-    { label: 'Greater Than', value: 'greaterThan' },
-    { label: 'Less Than', value: 'lessThan' },
-    { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-    { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-    { label: 'Equals', value: 'equals' },
-    { label: 'Exclude', value: 'exclude' }
-];
-
 @Component({
     selector: 'advance-search-model',
     templateUrl: './advance-search.component.html',
@@ -141,6 +132,10 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     };
     /** Stores the value of groups */
     public searchedGroups: IOption[];
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private _groupService: GroupService,
@@ -150,7 +145,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         private generalService: GeneralService,
         private searchService: SearchService,
     ) {
-        this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
+        
     }
 
     public ngOnInit() {
@@ -161,7 +156,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         if(!this.advanceSearchForm) {
             this.setAdvanceSearchForm();
         }
-        this.setVoucherTypes();
     }
 
     public ngOnChanges(s: SimpleChanges) {
@@ -284,48 +278,48 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         }
     }
 
-    public setVoucherTypes() {
-        this.voucherTypeList = observableOf([{
-            label: 'Sales',
-            value: 'sales'
-        }, {
-            label: 'Purchases',
-            value: 'purchase'
-        }, {
-            label: 'Receipt',
-            value: 'receipt'
-        }, {
-            label: 'Payment',
-            value: 'payment'
-        }, {
-            label: 'Journal',
-            value: 'journal'
-        }, {
-            label: 'Contra',
-            value: 'contra'
-        }, {
-            label: 'Debit Note',
-            value: 'debit note'
-        }, {
-            label: 'Credit Note',
-            value: 'credit note'
-        }]);
+    public setVoucherTypes(event?: any) {
+        if(event) {
+            this.voucherTypeList = observableOf([{
+                label: this.commonLocaleData?.app_voucher_types?.sales,
+                value: 'sales'
+            }, {
+                label: this.commonLocaleData?.app_voucher_types?.purchases,
+                value: 'purchase'
+            }, {
+                label: this.commonLocaleData?.app_voucher_types?.receipt,
+                value: 'receipt'
+            }, {
+                label: this.commonLocaleData?.app_voucher_types?.payment,
+                value: 'payment'
+            }, {
+                label: this.commonLocaleData?.app_voucher_types?.journal,
+                value: 'journal'
+            }, {
+                label: this.commonLocaleData?.app_voucher_types?.contra,
+                value: 'contra'
+            }, {
+                label: this.commonLocaleData?.app_voucher_types?.debit_note,
+                value: 'debit note'
+            }, {
+                label: this.commonLocaleData?.app_voucher_types?.credit_note,
+                value: 'credit note'
+            }]);
+
+            this.comparisonFilterDropDown$ = observableOf([
+                { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
+                { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },
+                { label: this.commonLocaleData?.app_comparision_filters?.greater_than_equals, value: 'greaterThanOrEquals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.less_than_equals, value: 'lessThanOrEquals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.exclude, value: 'exclude' }
+            ]);
+        }
     }
 
     public onCancel() {
         this.closeModelEvent.emit({ advanceSearchData: this.advanceSearchRequest, isClose: true });
         this.hideGiddhDatepicker();
-    }
-
-    /**
-     * onDateRangeSelected
-     */
-    public onDateRangeSelected(data) {
-        if (data && data.length) {
-            // this.advanceSearchRequest.from = moment(data[0]).format(GIDDH_DATE_FORMAT);
-            // this.advanceSearchRequest.to = moment(data[1]).format(GIDDH_DATE_FORMAT);
-        }
-        // this.closeModelEvent.emit(_.cloneDeep(this.advanceSearchRequest));
     }
 
     /**

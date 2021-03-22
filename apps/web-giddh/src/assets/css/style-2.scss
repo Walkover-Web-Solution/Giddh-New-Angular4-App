@@ -1333,6 +1333,7 @@ modal-container.modal {
 .form-box .btn {
     min-width: 73px;
     margin-right: 2px;
+    width: 95px;
 }
 
 .table-no-border tr th,
@@ -2525,10 +2526,6 @@ input[type="checkbox"]:checked:after {
     white-space: normal;
 }
 
-.pd-b1 {
-    padding-bottom: 10px;
-}
-
 .templateInfo {
     position: relative;
     width: 100%;
@@ -2773,21 +2770,6 @@ li.no-click {
 
 .align-items-start {
     align-items: flex-start !important;
-}
-
-.fixed-ng2pdfview-2 iframe {
-    height: 2915px !important;
-    overflow: hidden;
-}
-
-.fixed-ng2pdfview-3 iframe {
-    height: 4353px !important;
-    overflow: hidden;
-}
-
-.fixed-ng2pdfview-4 iframe {
-    height: 5453px !important;
-    overflow: hidden;
 }
 
 .fixed-ng2pdfview iframe {
@@ -3593,6 +3575,12 @@ a.btn.btn-xs.btn-link.pull-right {
 .w100 {
     width: 100px;
 }
+.w120{
+    width: 120px;
+}
+.w125{
+    width: 125px;
+}
 
 .multi-select {
     position: relative;
@@ -3770,10 +3758,6 @@ a.btn.btn-xs.btn-link.pull-right {
     opacity: 1;
     text-shadow: none;
     cursor: pointer;
-}
-
-.pd-b5 {
-    padding-bottom: 50px;
 }
 
 .size-xs {
@@ -4252,7 +4236,7 @@ label {
 }
 
 .calc-width {
-    width: calc(100% - 93px) !important;
+    width: calc(100% - 112px) !important;
 }
 
 .view-forms {
@@ -5972,11 +5956,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     content: " ";
     transform: translateX(-50%);
     display: none;
-}
-
-.d-block {
-    display: block !important;
-    margin: auto;
 }
 
 .p-lr-15 {
@@ -7989,6 +7968,10 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     width: 120px !important;
 }
 
+.create-select .menu{
+    width: 142px !important; 
+}
+
 .select-caret:after,
 .select-caret .form-control:after {
     content: "";
@@ -9557,6 +9540,46 @@ input.mat-input-element{
         }
     }
 }
+.wrap-hsn-box{
+        .hsn-code-dropdown{
+            padding: 20px !important;
+            max-width: 250px;
+        }
+    input{
+        border: 1px solid $whisper-light;
+        height: 36px !important;
+    }
+    .wrap-hsn-sac{
+        span{
+            display: flex;
+            width: 50%;
+            flex-wrap: wrap;
+            flex-direction: row;
+            align-items: center;
+            input[type="radio"]{
+                width: 18px !important;
+                padding: 20px !important;
+                margin-right: 5px;
+                height: 18px !important;
+            }
+        }
+    }
+}
+.wrap-hsn-sac{
+    input{
+        width: 18px !important;
+        height: 18px !important;
+    }
+}
+.time-selection , .language-selection{
+    .menu{
+        min-height: 120px !important;
+        .total-padding{
+            min-height: 120px !important;
+            height: 120px !important;
+        }
+    }
+}
 /* responsive  starts here */
 
 @media (max-width: 1440px) {
@@ -9631,45 +9654,7 @@ input.mat-input-element{
         width: 100%;
         white-space: nowrap;
     }
-    .wrap-hsn-box{
-            .hsn-code-dropdown{
-                padding: 20px !important;
-                max-width: 250px;
-            }
-        input{
-            border: 1px solid $whisper-light;
-            height: 36px !important;
-        }
-        .wrap-hsn-sac{
-            span{
-                display: flex;
-                width: 50%;
-                flex-wrap: wrap;
-                flex-direction: row;
-                align-items: center;
-                input[type="radio"]{
-                    width: 18px !important;
-                    padding: 20px !important;
-                    margin-right: 5px;
-                    height: 18px !important;
-                }
-            }
-        }
-    }
-    .wrap-hsn-sac{
-        input{
-            width: 18px !important;
-            height: 18px !important;
-        }
-    }
-    /* responsive  starts here*/
-
-    @media (max-width: 1440px) {
-        .font-xxlarge {
-            font-size: 20px;
-        }
-    }
-    #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs{
+        #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs{
             display: inline-flex;
         }
     #setting-tab-wrapper .tab-integration .nav-tabs > li > a {
@@ -9687,10 +9672,17 @@ input.mat-input-element{
             sh-select{
                 div{
                     width: 100%;
-                    .mat-form-field{
-                        max-width: 100%;
+                    input{
                         min-width: 100%;
+                        max-width: 100%;
                     }
+                }
+            }
+            giddh-datepicker{
+                width: 100%;
+                .mat-form-field{
+                    max-width: 100%;
+                    min-width: 100%;
                 }
             }
         }

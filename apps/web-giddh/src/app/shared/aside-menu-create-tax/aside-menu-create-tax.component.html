@@ -66,7 +66,7 @@
                         <div class="form-group col-sm-6 col-xs-12" *ngIf="newTaxObj.taxType === 'others' && !tax">
                             <label>Linked Account <span class="text-danger">*</span></label><br>
                             <sh-select [customFilter]="customAccountFilter" placeholder="Select Account" name="account"
-                                [(ngModel)]="newTaxObj.account" [options]="flattenAccountsOptions"></sh-select>
+                                [(ngModel)]="newTaxObj.account" [options]="linkedAccountsOption"></sh-select>
                         </div>
 
 

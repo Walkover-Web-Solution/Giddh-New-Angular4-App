@@ -29,6 +29,7 @@ import { CustomActions } from '../customActions';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { userLoginStateEnum } from '../../models/user-login-state';
+import { CommonActions } from '../../actions/common.actions';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -89,6 +90,8 @@ export interface SessionState {
     currentOrganizationDetails: Organization;
     activeCompany: any;
     companyUser: any;
+    commonLocaleData: any;
+    currentLocale: any;
 }
 
 /**
@@ -148,7 +151,9 @@ const sessionInitialState: SessionState = {
     registerReportFilters: null,
     currentOrganizationDetails: null,
     activeCompany: null,
-    companyUser: null
+    companyUser: null,
+    commonLocaleData: null,
+    currentLocale: null
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -562,6 +567,11 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             }
             return state;
         }
+        case CompanyActions.SET_STATE_DETAILS_REQUEST:
+            return Object.assign({}, state, {
+                lastState: action.payload.lastState,
+                companyUniqueName: action.payload.companyUniqueName
+            });
         case CompanyActions.SET_STATE_DETAILS_RESPONSE:
             let setStateData: BaseResponse<string, StateDetailsRequest> = action.payload;
             if (setStateData.status === 'success') {
@@ -797,6 +807,17 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 activeCompany: action.payload
             });
         }
+        case CommonActions.SET_COMMON_LOCALE_DATA: {
+            return Object.assign({}, state, {
+                commonLocaleData: action.payload
+            });
+        }
+        case CommonActions.SET_ACTIVE_LOCALE: {
+            return Object.assign({}, state, {
+                currentLocale: action.payload
+            });
+        }
+
         default:
             return state;
     }

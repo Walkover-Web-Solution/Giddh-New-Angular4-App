@@ -45,7 +45,7 @@
                     </div>
                 </div>
             </section>
-            <section class="pd-t4">
+            <section class="pd-t3">
                 <!-- v-if="!isResponsive" -->
                 <div id="mob-cont" class="container">
                     <div class="row white-bg pd-b1 pd-t1">
@@ -143,7 +143,7 @@
                                                             <template v-for="txn in filterBy(ledger, searchText)">
                                                                 <tr class="text-left magic-table bd-rb row mr-0 ml-0">
                                                                     <td class="col-3">{{ledger.entryDate}}</td>
-                                                                    <td class="col-6 bd-rl">To {{txn.particular.name}}
+                                                                    <td class="col-6 bd-rl">To {{txn.inventory && txn.inventory.stock ? (txn.particular.name + ' (' + txn.inventory.stock.name + ')'): txn.particular.name}}
                                                                     </td>
                                                                     <td class="col-3 bd-rl position-relative"
                                                                         v-bind:class="{'pd-r25': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
@@ -261,7 +261,7 @@
                                                             <template v-for="txn in filterBy(ledger, searchText)">
                                                                 <tr class="text-left magic-table bd-rb row mr-0 ml-0">
                                                                     <td class="col-3">{{ledger.entryDate}}</td>
-                                                                    <td class="col-6 bd-rl">By {{txn.particular.name}}
+                                                                    <td class="col-6 bd-rl">By {{txn.inventory && txn.inventory.stock ? (txn.particular.name + ' (' + txn.inventory.stock.name + ')'): txn.particular.name}}
                                                                     </td>
                                                                     <td class="col-3 bd-rl position-relative bd-rr"
                                                                         v-bind:class="{'pd-r25': ledger.voucherGenerated || ledger.attachedFileUniqueName}"

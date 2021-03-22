@@ -57,7 +57,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public userIsSuperUser: boolean = true; // Protect permission module
     public session$: Observable<userLoginStateEnum>;
     public accountSearchValue: string = '';
-    public accountSearchControl: FormControl = new FormControl();
     public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co', 'msg91.com'];
     public moment = moment;
     public imgPath: string = '';
@@ -224,6 +223,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         return this.currentOrganizationType === OrganizationType.Branch ||
             (this.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches && this.currentCompanyBranches.length === 1);
     }
+    /** This will hold that how many days are left for subscription expiration */
+    public remainingSubscriptionDays: any = false;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -490,6 +491,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                this.store.dispatch(this.commonActions.getCommonLocaleData(response.value));
+            } else {
+                let supportedLocales = this.generalService.getSupportedLocales();
+                this.store.dispatch(this.commonActions.setActiveLocale(supportedLocales[0]));
+            }
+        });
+
         this.getCurrentCompanyData();
         this._breakpointObserver.observe([
             '(max-width: 767px)'
@@ -521,7 +531,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         });
                         reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, response.body);
                         this.menuItemsFromIndexDB = DEFAULT_MENUS;
-                        this.accountItemsFromIndexDB = DEFAULT_AC;
                         this.changeDetection.detectChanges();
                     }
                 });
@@ -560,59 +569,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
         });
 
-        this.accountSearchControl.valueChanges.pipe(
-            debounceTime(300), takeUntil(this.destroyed$))
-            .subscribe((newValue) => {
-                this.accountSearchValue = newValue;
-                if (newValue.length > 0) {
-                    this.noGroups = true;
-                }
-                this.filterAccounts(newValue);
-            });
-
-        this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
-            if (a && a !== '') {
-                this.zone.run(() => {
-                    this.filterAccounts('');
-                });
-            }
-        });
         this.loadCompanyBranches();
-
-        // region creating list for cmd+g modal
-        combineLatest([
-            this.store.pipe(select(p => p.general.flattenGroups), takeUntil(this.destroyed$)),
-            this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$))
-        ]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
-                let menuList = cloneDeep(NAVIGATION_ITEM_LIST);
-                let grpList = cloneDeep(resp[0]);
-                let acList = cloneDeep(resp[1]);
-                let combinedList;
-                if (grpList && grpList.length && acList && acList.length) {
-
-                    // sort menus by name
-                    menuList = sortBy(menuList, ['name']);
-
-                    // modifying grouplist as per ulist requirement
-                    grpList.map((item: any) => {
-                        item.type = 'GROUP';
-                        item.name = item.groupName || item.name;
-                        item.uniqueName = item.groupUniqueName || item.uniqueName;
-                        delete item.groupName;
-                        delete item.groupUniqueName;
-                        return item;
-                    });
-
-                    // sort group list by name
-                    grpList = sortBy(grpList, ['name']);
-                    // sort group list by name
-                    acList = sortBy(acList, ['name']);
-
-                    combinedList = concat(menuList, grpList, acList);
-                    this.store.dispatch(this._generalActions.setCombinedList(combinedList));
-                }
-            });
-        // endregion
 
         // region subscribe to last state for showing title of page this.selectedPage
         this.store.pipe(select(s => s.session.lastState), take(1)).subscribe(s => {
@@ -743,6 +700,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.store.dispatch(this.loginAction.SetCurrencyInStore(response.body));
             }
         });
+
+        if (this.activeCompanyForDb?.uniqueName) {
+            this._dbService.getAllItems(this.activeCompanyForDb.uniqueName, 'accounts').subscribe(accountList => {
+                if (accountList?.length) {
+                    if (window.innerWidth > 1440 && window.innerHeight > 717) {
+                        this.accountItemsFromIndexDB = accountList.slice(0, 7);
+                    } else {
+                        this.accountItemsFromIndexDB = accountList.slice(0, 5);
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -773,6 +742,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                     this.currentCompanyPlanAmount = res.subscription.planDetails.amount;
                     this.subscribedPlan = res.subscription;
+
+                    if(this.subscribedPlan?.expiry) {
+                        let expiry = (this.subscribedPlan?.expiry)?.split("-")?.reverse()?.join("-");
+                        this.remainingSubscriptionDays = Number((new Date(expiry).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
+                    } else {
+                        this.remainingSubscriptionDays = false;
+                    }
+
                     this.isSubscribedPlanHaveAdditionalCharges = res.subscription.additionalCharges;
                     this.selectedPlanStatus = res.subscription.status;
                 }
@@ -817,11 +794,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.zone.run(() => {
                     this.router.navigate(['/new-user']);
                 });                // });
-            } else {
-                // get groups with accounts for general use
-                this.store.dispatch(this._generalActions.getGroupWithAccounts());
-                this.store.dispatch(this._generalActions.getFlattenAccount());
-                this.store.dispatch(this._generalActions.getFlattenGroupsReq());
             }
         });
         if (this.route.snapshot.url.toString() === 'new-user') {
@@ -849,11 +821,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngAfterViewChecked() {
         this.changeDetection.detectChanges();
-    }
-
-    public handleNoResultFoundEmitter(e: any) {
-        this.store.dispatch(this._generalActions.getFlattenAccount());
-        this.store.dispatch(this._generalActions.getFlattenGroupsReq());
     }
 
     public handleNewTeamCreationEmitter(e: any) {
@@ -1030,9 +997,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // '/pages/trial-balance-and-profit-loss'
         let menuList: IUlist[] = [];
         let groupList: IUlist[] = [];
-        let acList: IUlist[] = [];
-        let defaultGrp = cloneDeep(lodashMap(DEFAULT_GROUPS, (o: any) => o.uniqueName));
-        let defaultAcc = cloneDeep(lodashMap(DEFAULT_AC, (o: any) => o.uniqueName));
+        let acList: IUlist[] = DEFAULT_AC;
         let defaultMenu = cloneDeep(DEFAULT_MENUS);
 
         // parse and push default menu to menulist for sidebar menu for initial usage
@@ -1051,24 +1016,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             });
         }
 
-        if(data && data.length > 0) {
-            data.forEach((item: IUlist) => {
-                if (item.type === 'GROUP') {
-                    if (defaultGrp.indexOf(item.uniqueName) !== -1) {
-                        item.time = +new Date();
-                        groupList.push(item);
-                    }
-                } else {
-                    if (defaultAcc.indexOf(item.uniqueName) !== -1) {
-                        item.time = +new Date();
-                        acList.push(item);
-                    }
-                }
-            });
-        }
-
-        let combined = cloneDeep([...menuList, ...groupList, ...acList]);
+        let combined = cloneDeep([...menuList, ...acList]);
         this.store.dispatch(this._generalActions.setSmartList(combined));
+        if (!this.activeCompanyForDb) {
+            this.activeCompanyForDb = new CompAidataModel();
+        }
         this.activeCompanyForDb.aidata = {
             menus: menuList,
             groups: groupList,
@@ -1122,7 +1074,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public showManageGroupsModal() {
-        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         this.loadAddManageComponent();
         this.manageGroupsAccountsModal.show();
     }
@@ -1331,13 +1282,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             viewContainerRef.remove();
         });
         this.manageGroupsAccountsModal.onShown.pipe(takeUntil(this.destroyed$)).subscribe((a => {
-            (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
-            (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel.nativeElement.getBoundingClientRect();
+            (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header?.nativeElement.getBoundingClientRect();
+            (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel?.nativeElement.getBoundingClientRect();
         }));
-    }
-
-    public filterAccounts(q: string) {
-        this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(q));
     }
 
     /**
@@ -1473,9 +1420,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public filterCompanyList(ev) {
         let companies: CompanyResponse[] = [];
-        this.companies$.pipe(take(1)).subscribe(cmps => companies = cmps);
+        this.companies$?.pipe(take(1)).subscribe(cmps => companies = cmps);
 
-        this.companyListForFilter = companies.filter((cmp) => {
+        this.companyListForFilter = companies?.filter((cmp) => {
             if (!cmp.alias) {
                 return cmp.name.toLowerCase().includes(ev.toLowerCase());
             } else {
@@ -1641,9 +1588,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             });
             this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
                 this.currentOrganizationType === OrganizationType.Company && branches.length > 1).then((res) => {
-                if (res) {
-                    this.findListFromDb(res);
-                }
+                this.findListFromDb(res);
             }, (err: any) => {
                 console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
             });

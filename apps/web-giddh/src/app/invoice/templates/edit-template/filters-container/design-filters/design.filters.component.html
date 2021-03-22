@@ -101,13 +101,13 @@
                         <div class="pull-left mr-l1 mr-t1 choose-size">
                             <div class="d-block" [class.cursor-disable]="isFileUploaded">
                                 <p>Size</p>
-                                <input name="chooseSize" type="radio" id="fontS" value="S" [disabled]="isFileUploaded"
-                                    (click)="onValueChange('logoSize', '40')">
+                                <input [(ngModel)]="defaultImageSize" name="chooseSize" type="radio" id="fontS" value="S" [disabled]="isFileUploaded"
+                                    (click)="onValueChange('logoSize', '40')" checked>
                                 <label for="fontS">S</label>
-                                <input name="chooseSize" type="radio" id="fontM" value="M" [disabled]="isFileUploaded"
+                                <input [(ngModel)]="defaultImageSize" name="chooseSize" type="radio" id="fontM" value="M" [disabled]="isFileUploaded"
                                     (click)="onValueChange('logoSize', '50')">
                                 <label for="fontM">M</label>
-                                <input name="chooseSize" type="radio" id="fontL" value="L" [disabled]="isFileUploaded"
+                                <input [(ngModel)]="defaultImageSize" name="chooseSize" type="radio" id="fontL" value="L" [disabled]="isFileUploaded"
                                     (click)="onValueChange('logoSize', '60')">
                                 <label for="fontL">L</label>
                             </div>

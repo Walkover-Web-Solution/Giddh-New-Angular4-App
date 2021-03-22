@@ -66,6 +66,10 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         totalPages: 0,
         query: ''
     };
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         public settingsFinancialYearService: SettingsFinancialYearService,
@@ -165,7 +169,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                         this.columnarReportResponse = res.body;
                     } else {
                         let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                        return saveAs(blob, `ColumnarReport.xlsx`);
+                        return saveAs(blob, this.localeData?.downloaded_filename);
                     }
                 } else {
                     this.toaster.clearAllToaster();

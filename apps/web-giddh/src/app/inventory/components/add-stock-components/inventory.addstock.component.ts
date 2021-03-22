@@ -120,7 +120,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.isStockDeleteInProcess$ = this.store.pipe(select(s => s.inventory.isStockDeleteInProcess), takeUntil(this.destroyed$));
         this.showLoadingForStockEditInProcess$ = this.store.pipe(select(s => s.inventory.showLoadingForStockEditInProcess), takeUntil(this.destroyed$));
         this.createGroupSuccess$ = this.store.pipe(select(s => s.inventory.createGroupSuccess), takeUntil(this.destroyed$));
-        this.store.dispatch(this.companyActions.getTax());
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.invoiceSetting$ = this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$));
 
@@ -346,7 +345,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                         }
                     });
                     a.manufacturingDetails.linkedStocks.map((item, i) => {
-                        this.addItemInLinkedStocks(item, i, a.manufacturingDetails.linkedStocks.length - 1);
+                        this.addItemInLinkedStocks(item, i, a.manufacturingDetails?.linkedStocks?.length - 1);
                     });
                 } else {
                     this.addStockForm.patchValue({ isFsStock: false });
@@ -360,7 +359,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 });
 
                 this.taxTempArray = [];
-                if (a.taxes.length) {
+                if (a?.taxes?.length) {
                     this.mapSavedTaxes(a.taxes);
                 }
                 this.store.dispatch(this.inventoryAction.hideLoaderForStock());
@@ -431,7 +430,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         let isOk = pattern.test(e.key);
         if (!isOk) {
             let val = this.addStockForm.get('skuCode').value;
-            val = val.substr(0, (val.length - 1));
+            val = val.substr(0, (val?.length - 1));
             this.addStockForm.get('skuCode').patchValue(val);
             return;
         }
@@ -501,7 +500,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public removePurchaseUnitRates(i: number) {
         // remove address from the list
         const control = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
-        if (control.length > 1) {
+        if (control?.length > 1) {
             control.removeAt(i);
         } else {
             control.controls[0].reset();
@@ -534,7 +533,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public removeSaleUnitRates(i: number) {
         // remove address from the list
         const control = this.addStockForm.controls['saleUnitRates'] as FormArray;
-        if (control.length > 1) {
+        if (control?.length > 1) {
             control.removeAt(i);
         } else {
             control.controls[0].reset();
@@ -636,7 +635,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.editLinkedStockIdx = i;
         const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
         const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
-        let last = control.controls.length - 1;
+        let last = control.controls?.length - 1;
         control.disable();
         control.controls[i].enable();
         control.controls[last].enable();
@@ -649,7 +648,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         control.controls[i].patchValue(item);
         this.editLinkedStockIdx = null;
         this.editModeForLinkedStokes = false;
-        let last = control.controls.length;
+        let last = control.controls?.length;
         control.disable();
         control.controls[last - 1].enable();
     }
@@ -693,13 +692,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         const manufacturingDetailsContorls = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
         const linkedStocksControls = manufacturingDetailsContorls.controls['linkedStocks'] as FormArray;
 
-        if (purchaseUnitRatesControls.controls.length > 1) {
+        if (purchaseUnitRatesControls.controls?.length > 1) {
             purchaseUnitRatesControls.controls = purchaseUnitRatesControls.controls.splice(1);
         }
-        if (saleUnitRatesControls.length > 1) {
+        if (saleUnitRatesControls?.length > 1) {
             saleUnitRatesControls.controls = saleUnitRatesControls.controls.splice(1);
         }
-        if (linkedStocksControls.length > 1) {
+        if (linkedStocksControls?.length > 1) {
             linkedStocksControls.controls = [];
             linkedStocksControls.push(this.initialIManufacturingDetails());
         }
@@ -750,7 +749,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     }
                 });
                 activeStock.manufacturingDetails.linkedStocks.map((item, i) => {
-                    this.addItemInLinkedStocks(item, i, activeStock.manufacturingDetails.linkedStocks.length - 1);
+                    this.addItemInLinkedStocks(item, i, activeStock.manufacturingDetails.linkedStocks?.length - 1);
                 });
             } else {
                 this.addStockForm.patchValue({ isFsStock: false });
@@ -938,7 +937,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         } else {
             stockObj.manufacturingDetails = null;
         }
-        
+
         this.showOtherDetails = false;
 
         this.store.dispatch(this.inventoryAction.updateStock(stockObj, this.groupUniqueName, this.stockUniqueName));
@@ -1094,7 +1093,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             }
         }
         if (s.autoFocusInChild && s.autoFocusInChild.currentValue) {
-            this.groupDDList.inputFilter.nativeElement.click();
+            this.groupDDList.inputFilter?.nativeElement.click();
         }
     }
 
@@ -1228,7 +1227,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             const formEntries = unitRates.filter((unitRate) => {
                 return (unitRate.stockUnitCode && !unitRate.rate) || (!unitRate.stockUnitCode && unitRate.rate);
             });
-            return formEntries.length === 0;
+            return formEntries?.length === 0;
         }
         return true;
     }

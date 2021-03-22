@@ -242,6 +242,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     };
     /** Stores the current searched account keyboard event */
     public searchedAccountQuery: Subject<any> = new Subject();
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(
         private _ledgerActions: LedgerActions,
@@ -305,7 +307,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     this.requestObj.voucherType = this.currentVoucher;
                     this.resetEntriesIfVoucherChanged();
                     setTimeout(() => {
-                        this.dateField.nativeElement.focus();
+                        this.dateField?.nativeElement?.focus();
                     }, 50);
                 } else {
                     this.resetEntriesIfVoucherChanged();
@@ -353,13 +355,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         });
 
+        this.store.pipe(select(state => state.ledger.ledgerCreateInProcess), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLoading = response;
+        });
+
         this.store.pipe(select(p => p.ledger.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
             if (s) {
                 this._toaster.successToast('Entry created successfully', 'Success');
                 this.refreshEntry();
                 this.store.dispatch(this._ledgerActions.ResetLedger());
                 this.requestObj.description = '';
-                this.dateField.nativeElement.focus();
+                this.dateField?.nativeElement?.focus();
             }
         });
 
@@ -371,7 +377,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.autoFocusStockGroupField = false;
                 this.getStock(null, null, true);
                 setTimeout(() => {
-                    this.dateField.nativeElement.focus();
+                    this.dateField?.nativeElement?.focus();
                 }, 1000);
             }
         });
@@ -560,7 +566,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public openChequeDetailForm() {
         this.chequeEntryModal.show();
         setTimeout(() => {
-            this.chequeNumberInput.nativeElement.focus();
+            this.chequeNumberInput?.nativeElement?.focus();
         }, 200);
     }
 
@@ -614,11 +620,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     if (openChequePopup === false) {
                         setTimeout(() => {
                             if (transaction.type === 'by') {
-                                // this.byAmountField.nativeElement.focus();
-                                this.byAmountFields.last.nativeElement.focus();
+                                this.byAmountFields?.last?.nativeElement?.focus();
                             } else {
-                                // this.toAmountField.nativeElement.focus();
-                                this.toAmountFields.last.nativeElement.focus();
+                                this.toAmountFields?.last?.nativeElement?.focus();
                             }
                         }, 200);
                     }
@@ -687,31 +691,31 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public addNewEntry(amount: any, transactionObj: any, entryIndex: number) {
         let index = entryIndex;
-        let reqField: any = document.getElementById(`first_element_${entryIndex - 1}`);
-        if (amount === 0 || amount === '0') {
-            if (entryIndex === 0) {
-                this.isFirstRowDeleted = true;
-            } else {
-                this.isFirstRowDeleted = false;
-            }
-            this.requestObj.transactions[index].currentBalance = '';
-            this.requestObj.transactions[index].selectedAccount.type = '';
-            this.requestObj.transactions.splice(index, 1);
-            if (reqField === null) {
-                this.dateField.nativeElement.focus();
-            } else {
-                reqField.focus();
-            }
-            if (!this.requestObj.transactions.length) {
-                if (this.requestObj.voucherType === VOUCHERS.CONTRA) {
-                    this.newEntryObj('by');
-                } else if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
-                    this.newEntryObj('to');
-                }
-            }
-        } else {
+        // let reqField: any = document.getElementById(`first_element_${entryIndex - 1}`);
+        // if (amount === 0 || amount === '0') {
+        //     if (entryIndex === 0) {
+        //         this.isFirstRowDeleted = true;
+        //     } else {
+        //         this.isFirstRowDeleted = false;
+        //     }
+        //     this.requestObj.transactions[index].currentBalance = '';
+        //     this.requestObj.transactions[index].selectedAccount.type = '';
+        //     this.requestObj.transactions.splice(index, 1);
+        //     if (reqField === null) {
+        //         this.dateField.nativeElement.focus();
+        //     } else {
+        //         reqField.focus();
+        //     }
+        //     if (!this.requestObj.transactions.length) {
+        //         if (this.requestObj.voucherType === VOUCHERS.CONTRA) {
+        //             this.newEntryObj('by');
+        //         } else if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
+        //             this.newEntryObj('to');
+        //         }
+        //     }
+        // } else {
             this.calModAmt(amount, transactionObj, index);
-        }
+        //}
     }
 
     public calModAmt(amount, transactionObj, indx) {
@@ -724,11 +728,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let creditTransactions = filter(this.requestObj.transactions, (o: any) => o.type === 'to');
         this.totalCreditAmount = sumBy(creditTransactions, (o: any) => Number(o.amount));
         if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
-            if (this.totalCreditAmount < this.totalDebitAmount) {
+            if (this.totalCreditAmount < this.totalDebitAmount || (this.totalCreditAmount === 0 && this.totalDebitAmount === 0)) {
                 if (this.requestObj.voucherType !== VOUCHERS.RECEIPT) {
                     this.newEntryObj('to');
+                } else {
+                    if(this.requestObj.transactions.length === 1) {
+                        this.newEntryObj('by');
+                    }
                 }
-            } else if (this.totalDebitAmount < this.totalCreditAmount) {
+            } else if (this.totalDebitAmount < this.totalCreditAmount || (this.totalCreditAmount === 0 && this.totalDebitAmount === 0)) {
                 this.newEntryObj('by');
             }
         }
@@ -750,7 +758,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         } else {
             this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
     }
 
@@ -771,17 +779,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         if (foundContraEntry && data.voucherType !== 'Contra') {
             this._toaster.errorToast('Contra entry (Cash + Bank), not allowed in ' + data.voucherType, 'Error');
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
         if (!foundContraEntry && data.voucherType === 'Contra') {
             this._toaster.errorToast('There should be Cash and Bank entry in contra.', 'Error');
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
 
         // This suggestion was given by Sandeep
         if (foundSalesAndBankEntry && data.voucherType === 'Journal') {
             this._toaster.errorToast('Sales and Purchase entry not allowed in journal.', 'Error');
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
 
         if (this.totalCreditAmount === this.totalDebitAmount) {
@@ -858,7 +866,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 let accUniqueName: string = maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
                 let indexOfMaxAmountEntry = findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
                 if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
-                    data.transactions.splice(0, 2);
+                    if (this.receiptEntries && this.receiptEntries.length > 0) {
+                        data.transactions.splice(0, 2);
+                    } else {
+                        data.transactions.splice(0, 1);
+                    }
                 } else {
                     data.transactions.splice(indexOfMaxAmountEntry, 1);
                 }
@@ -867,11 +879,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             } else {
                 const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
                 this._toaster.errorToast('Please select at least one cash or bank account in ' + byOrTo.toUpperCase(), 'Error');
-                setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+                setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
             }
         } else {
             this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
-            setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
     }
 
@@ -1030,7 +1042,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             return validEntry;
         } else {
             this._toaster.errorToast("Particular can't be blank");
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
 
     }
@@ -1124,7 +1136,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public changeQuantity(idx, val) {
         let i = this.selectedIdx;
-        let entry = this.requestObj.transactions[i];
         this.requestObj.transactions[i].inventory[idx].quantity = Number(val);
         this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(2));
         this.amountChanged(idx);
@@ -1132,7 +1143,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public validateAndAddNewStock(idx) {
         let i = this.selectedIdx;
-        if (this.requestObj.transactions[i].inventory.length - 1 === idx && this.requestObj.transactions[i].inventory[idx].amount) {
+        if (this.requestObj.transactions[i].inventory.length - 1 === idx) {
             this.requestObj.transactions[i].inventory.push(this.initInventory());
         }
     }
@@ -1270,7 +1281,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             componentInstance.destroyed$.next(true);
             componentInstance.destroyed$.complete();
             this.isNoAccFound = false;
-            this.dateField.nativeElement.focus();
+            this.dateField?.nativeElement?.focus();
         });
     }
 
@@ -1288,7 +1299,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public hideQuickAccountModal() {
         this.quickAccountModal.hide();
-        this.dateField.nativeElement.focus();
+        this.dateField?.nativeElement?.focus();
         return setTimeout(() => {
             this.selectedAccountInputField.value = '';
             this.selectedAccountInputField.focus();
@@ -1300,7 +1311,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.autoFocusStockGroupField = false;
         // after creating stock, get all stocks again
         this.filterByText = '';
-        this.dateField.nativeElement.focus();
+        this.dateField?.nativeElement?.focus();
         this.getStock(null, null, true, true);
     }
 
@@ -1315,11 +1326,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             return setTimeout(() => {
                 if (fieldType === 'chqNumber') {
                     datePickerField.show();
-                    this.chequeClearanceInputField.nativeElement.focus();
+                    this.chequeClearanceInputField?.nativeElement?.focus();
                 } else if (fieldType === 'chqDate') {
                     datePickerField.hide();
                     if (!event.shiftKey) {
-                        this.chqFormSubmitBtn.nativeElement.focus();
+                        this.chqFormSubmitBtn?.nativeElement?.focus();
                     }
                 }
             }, 100);
@@ -1328,21 +1339,21 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public keyUpOnSubmitButton(e) {
         if (e && (e.keyCode === 39 || e.which === 39) || (e.keyCode === 78 || e.which === 78)) {
-            return setTimeout(() => this.resetButton.nativeElement.focus(), 50);
+            return setTimeout(() => this.resetButton?.nativeElement?.focus(), 50);
         }
         if (e && (e.keyCode === 8 || e.which === 8)) {
             this.showConfirmationBox = false;
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+            return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 50);
         }
     }
 
     public keyUpOnResetButton(e) {
         if (e && (e.keyCode === 37 || e.which === 37) || (e.keyCode === 89 || e.which === 89)) {
-            return setTimeout(() => this.submitButton.nativeElement.focus(), 50);
+            return setTimeout(() => this.submitButton?.nativeElement?.focus(), 50);
         }
         if (e && (e.keyCode === 13 || e.which === 13)) {
             this.showConfirmationBox = false;
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+            return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 50);
         }
     }
 
@@ -1504,7 +1515,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public handleVoucherDateChange(): void {
-        this.dateField.nativeElement.focus();
+        this.dateField?.nativeElement?.focus();
     }
 
     /**
@@ -1514,9 +1525,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public focusDebitCreditAmount(): void {
         if (this.requestObj?.transactions[this.selectedIdx]?.type === 'by') {
-            this.byAmountFields.last.nativeElement.focus();
+            this.byAmountFields?.last?.nativeElement?.focus();
         } else {
-            this.toAmountFields.last.nativeElement.focus();
+            this.toAmountFields?.last?.nativeElement?.focus();
         }
     }
 
@@ -1718,33 +1729,29 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if(this.receiptEntries?.length > 0) {
             this.receiptEntries.forEach(receipt => {
                 if (isValid) {
-                    if (parseFloat(receipt.amount) === 0 || isNaN(parseFloat(receipt.amount))) {
+                    if (isNaN(parseFloat(receipt.amount))) {
                         isValid = false;
                     } else {
                         if (receipt.type === AdjustmentTypesEnum.againstReference) {
                             adjustmentTotal += parseFloat(receipt.amount);
                         } else {
-                            if (receipt.type === AdjustmentTypesEnum.againstReference) {
-                                adjustmentTotal += parseFloat(receipt.amount);
-                            } else {
-                                receiptTotal += parseFloat(receipt.amount);
-                            }
+                            receiptTotal += parseFloat(receipt.amount);
                         }
+                    }
 
-                        if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && !receipt.invoice.uniqueName) {
-                            isValid = false;
-                            invoiceRequired = true;
-                        } else if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && receipt.invoice.uniqueName && parseFloat(receipt.invoice.amount) < parseFloat(receipt.amount)) {
-                            isValid = false;
-                            invoiceAmountError = true;
-                        }
+                    if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && !receipt.invoice.uniqueName) {
+                        isValid = false;
+                        invoiceRequired = true;
+                    } else if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && receipt.invoice.uniqueName && parseFloat(receipt.invoice.amount) < parseFloat(receipt.amount)) {
+                        isValid = false;
+                        invoiceAmountError = true;
                     }
                 }
             });
         }
 
         if (isValid) {
-            if (receiptTotal != this.adjustmentTransaction.amount || adjustmentTotal > this.adjustmentTransaction.amount) {
+            if (this.adjustmentTransaction.amount && (receiptTotal != this.adjustmentTransaction.amount || adjustmentTotal > this.adjustmentTransaction.amount)) {
                 this.isValidForm = false;
 
                 if (showErrorMessage) {
@@ -1975,19 +1982,20 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public validateAndOpenAdjustmentPopup(transaction: any, template: TemplateRef<any>): void {
-        if (this.requestObj.voucherType === VOUCHERS.RECEIPT && transaction && transaction.type === "to" && transaction.amount && Number(transaction.amount) > 0 && !transaction.voucherAdjustments) {
+        if (this.requestObj.voucherType === VOUCHERS.RECEIPT && transaction && transaction.type === "to" && !transaction.voucherAdjustments) {
+            if(transaction.amount && Number(transaction.amount) > 0) {
+                if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
+                    this.pendingInvoicesListParams.accountUniqueNames = [];
+                    this.pendingInvoicesListParams.accountUniqueNames.push(transaction.selectedAccount.UniqueName);
+                }
 
-            if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
-                this.pendingInvoicesListParams.accountUniqueNames = [];
-                this.pendingInvoicesListParams.accountUniqueNames.push(transaction.selectedAccount.UniqueName);
+                this.getInvoiceListForReceiptVoucher();
+                this.currentTransaction = transaction;
+                this.modalRef = this.modalService.show(
+                    template,
+                    Object.assign({}, { class: 'modal-lg', ignoreBackdropClick: true })
+                );
             }
-
-            this.getInvoiceListForReceiptVoucher();
-            this.currentTransaction = transaction;
-            this.modalRef = this.modalService.show(
-                template,
-                Object.assign({}, { class: 'modal-lg', ignoreBackdropClick: true })
-            );
         }
     }
 

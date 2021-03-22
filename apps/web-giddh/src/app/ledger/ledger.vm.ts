@@ -6,9 +6,7 @@ import * as moment from 'moment/moment';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { v4 as uuidv4 } from 'uuid';
 import { cloneDeep, forEach, remove } from '../lodash-optimized';
-import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { INameUniqueName } from '../models/api-models/Inventory';
-import { underStandingTextData } from './underStandingTextData';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { TaxControlData } from '../theme/tax-control/tax-control.component';
@@ -109,7 +107,7 @@ export class LedgerVM {
     }
 
     public calculateReckonging(transactions: any) {
-        if (transactions.forwardedBalance.amount === 0) {
+        if (transactions.forwardedBalance?.amount === 0) {
             let recTotal = 0;
             let convertedTotal = 0;
             if (transactions.creditTotal > transactions.debitTotal) {
@@ -125,8 +123,8 @@ export class LedgerVM {
             this.reckoningDebitTotal = recTotal;
             this.convertedReckoningDebitTotal = convertedTotal;
         } else {
-            if (transactions.forwardedBalance.type === 'DEBIT') {
-                if ((transactions.forwardedBalance.amount + transactions.debitTotal) <= transactions.creditTotal) {
+            if (transactions.forwardedBalance?.type === 'DEBIT') {
+                if ((transactions.forwardedBalance?.amount + transactions.debitTotal) <= transactions.creditTotal) {
                     this.reckoningCreditTotal = transactions.creditTotal;
                     this.convertedReckoningCreditTotal = transactions.convertedCreditTotal;
 
@@ -134,15 +132,15 @@ export class LedgerVM {
                     this.convertedReckoningDebitTotal = transactions.convertedCreditTotal;
                     return;
                 } else {
-                    this.reckoningCreditTotal = transactions.forwardedBalance.amount + transactions.debitTotal;
-                    this.convertedReckoningCreditTotal = transactions.convertedForwardedBalance.amount + transactions.convertedDebitTotal;
+                    this.reckoningCreditTotal = transactions.forwardedBalance?.amount + transactions.debitTotal;
+                    this.convertedReckoningCreditTotal = transactions.convertedForwardedBalance?.amount + transactions.convertedDebitTotal;
 
-                    this.reckoningDebitTotal = transactions.forwardedBalance.amount + transactions.debitTotal;
-                    this.convertedReckoningDebitTotal = transactions.convertedForwardedBalance.amount + transactions.convertedDebitTotal;
+                    this.reckoningDebitTotal = transactions.forwardedBalance?.amount + transactions.debitTotal;
+                    this.convertedReckoningDebitTotal = transactions.convertedForwardedBalance?.amount + transactions.convertedDebitTotal;
                     return;
                 }
             } else {
-                if ((transactions.forwardedBalance.amount + transactions.creditTotal) <= transactions.debitTotal) {
+                if ((transactions.forwardedBalance?.amount + transactions.creditTotal) <= transactions.debitTotal) {
                     this.reckoningCreditTotal = transactions.debitTotal;
                     this.convertedReckoningCreditTotal = transactions.convertedDebitTotal;
 
@@ -150,11 +148,11 @@ export class LedgerVM {
                     this.convertedReckoningDebitTotal = transactions.convertedDebitTotal;
                     return;
                 } else {
-                    this.reckoningCreditTotal = transactions.forwardedBalance.amount + transactions.creditTotal;
-                    this.convertedReckoningCreditTotal = transactions.convertedForwardedBalance.amount + transactions.convertedCreditTotal;
+                    this.reckoningCreditTotal = transactions.forwardedBalance?.amount + transactions.creditTotal;
+                    this.convertedReckoningCreditTotal = transactions.convertedForwardedBalance?.amount + transactions.convertedCreditTotal;
 
-                    this.reckoningDebitTotal = transactions.forwardedBalance.amount + transactions.creditTotal;
-                    this.convertedReckoningDebitTotal = transactions.convertedForwardedBalance.amount + transactions.convertedCreditTotal;
+                    this.reckoningDebitTotal = transactions.forwardedBalance?.amount + transactions.creditTotal;
+                    this.convertedReckoningDebitTotal = transactions.convertedForwardedBalance?.amount + transactions.convertedCreditTotal;
                 }
             }
         }
@@ -216,39 +214,43 @@ export class LedgerVM {
         };
     }
 
-    public getUnderstandingText(selectedLedgerAccountType, accountName, parentGroups) {
-        let data;
-        let isReverseChargeAccount = false;
+    public getUnderstandingText(selectedLedgerAccountType, accountName, parentGroups, localeData?: any) {
+        if(localeData) {
+            let data;
+            let isReverseChargeAccount = false;
 
-        if (parentGroups) {
-            parentGroups.forEach(key => {
-                if (key.uniqueName === "reversecharge") {
-                    isReverseChargeAccount = true;
+            if (parentGroups) {
+                parentGroups.forEach(key => {
+                    if (key.uniqueName === "reversecharge") {
+                        isReverseChargeAccount = true;
+                    }
+                });
+            }
+
+            let underStandingTextData = localeData?.text_data;
+
+            if (isReverseChargeAccount) {
+                data = _.cloneDeep(underStandingTextData.find(p => p.accountType === "ReverseCharge"));
+            } else {
+                data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
+            }
+
+            if (data) {
+                if(data.balanceText && data.balanceText.cr) {
+                    data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
                 }
-            });
-        }
+                if(data.balanceText && data.balanceText.dr) {
+                    data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+                }
 
-        if (isReverseChargeAccount) {
-            data = _.cloneDeep(underStandingTextData.find(p => p.accountType === "ReverseCharge"));
-        } else {
-            data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
-        }
-
-        if (data) {
-            if(data.balanceText && data.balanceText.cr) {
-                data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
+                if(data.text && data.text.dr) {
+                    data.text.dr = data.text.dr.replace('<accountName>', accountName);
+                }
+                if(data.text && data.text.cr) {
+                    data.text.cr = data.text.cr.replace('<accountName>', accountName);
+                }
+                this.ledgerUnderStandingObj = _.cloneDeep(data);
             }
-            if(data.balanceText && data.balanceText.dr) {
-                data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
-            }
-
-            if(data.text && data.text.dr) {
-                data.text.dr = data.text.dr.replace('<accountName>', accountName);
-            }
-            if(data.text && data.text.cr) {
-                data.text.cr = data.text.cr.replace('<accountName>', accountName);
-            }
-            this.ledgerUnderStandingObj = _.cloneDeep(data);
         }
     }
 
@@ -275,7 +277,6 @@ export class LedgerVM {
                     ];
                 }
                 item.entryDate = txn.date;
-                // item.entryDate = moment(txn.date).format('YYYY-MM-DD');
                 item.transactionId = txn.transactionId;
                 item.isBankTransaction = true;
                 forEach(txn.transactions, (bankTxn: IELedgerTransaction) => {

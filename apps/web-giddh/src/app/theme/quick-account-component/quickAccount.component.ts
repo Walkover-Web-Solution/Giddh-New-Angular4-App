@@ -88,7 +88,6 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isQuickAccountCreatedSuccessfully$.subscribe(a => {
             if (a) {
                 this.closeQuickAccountModal.emit(true);
-                this.store.dispatch(this._generalActions.getFlattenAccount());
                 this.store.dispatch(this.ledgerAction.resetQuickAccountModal());
             }
         });
@@ -97,7 +96,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
     public ngAfterViewInit() {
         if (this.needAutoFocus) {
             setTimeout(() => {
-                this.groupDDList.inputFilter.nativeElement.click();
+                this.groupDDList.inputFilter?.nativeElement.click();
             }, 500);
         }
     }

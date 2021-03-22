@@ -1,5 +1,5 @@
 import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
-import {distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
 import {
     AfterViewInit,
     Component,
@@ -150,6 +150,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     };
     /** This will hold inventory settings */
     public inventorySettings: any;
+    /** This will hold parent unique name */
+    public activeParentGroupUniqueName: string = '';
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** This will hold placeholder for tax */
+    public taxNamePlaceholder: string = "";
 
     constructor(
         private _fb: FormBuilder,
@@ -293,29 +301,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         if (this.autoFocus !== undefined) {
             setTimeout(() => {
-                this.autoFocus.nativeElement.focus();
+                this.autoFocus?.nativeElement?.focus();
             }, 50);
         }
-        this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                if (res.fields) {
-                    this.formFields = [];
-                    Object.keys(res.fields).forEach(key => {
-                        if (res.fields[key]) {
-                            this.formFields[res.fields[key].name] = [];
-                            this.formFields[res.fields[key].name] = res.fields[key];
-                        }
-                    });
-                }
-                if (this.formFields['taxName'] && this.formFields['taxName'].label) {
-                    this.GSTIN_OR_TRN = this.formFields['taxName'].label;
-                } else {
-                    this.GSTIN_OR_TRN = '';
-                }
-            }
-        });
-        this.getCurrency();
 
+        this.getCurrency();
         this.isStateRequired = this.checkActiveGroupCountry();
     }
 
@@ -544,7 +534,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                                 gstForm.get('stateCode').patchValue(null);
                                 gstForm.get('state').get('code').patchValue(null);
                             }
-                            this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
+
+                            let invalidTaxName = this.commonLocaleData?.app_invalid_tax_name;
+                            invalidTaxName = invalidTaxName?.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                            this._toaster.errorToast(invalidTaxName);
                         }
                     }
                 });
@@ -604,12 +597,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.isMobileNumberValid = true;
             } else {
                 this.isMobileNumberValid = false;
-                this._toaster.errorToast('Invalid Contact number');
+                this._toaster.errorToast(this.localeData?.invalid_contact_number);
                 ele.classList.add('error-box');
             }
         } catch (error) {
             this.isMobileNumberValid = false;
-            this._toaster.errorToast('Invalid Contact number');
+            this._toaster.errorToast(this.localeData?.invalid_contact_number);
             ele.classList.add('error-box');
         }
     }
@@ -635,7 +628,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             accountRequest.mobileCode = '';
         } else {
             if(!this.isMobileNumberValid) {
-                this._toaster.errorToast('Invalid Contact number');
+                this._toaster.errorToast(this.localeData?.invalid_contact_number);
                 return false;
             }
         }
@@ -734,11 +727,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (event) {
             this.activeGroupUniqueName = event.value;
             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
-            // let parent = event.additional;
-            // if (parent[1]) {
-            //     this.isParentDebtorCreditor(parent[1].uniqueName);
-            // }
             this.isParentDebtorCreditor(this.activeGroupUniqueName);
+
+            let parent = event.additional;
+            if (parent && parent[1]) {
+                this.activeParentGroupUniqueName = parent[1].uniqueName;
+            }
+
             this.isGroupSelected.emit(event);
             this.toggleStateRequired();
         }
@@ -746,6 +741,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public isParentDebtorCreditor(activeParentgroup: string) {
         this.activeParentGroup = activeParentgroup;
+        this.activeParentGroupUniqueName = activeParentgroup;
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
@@ -927,7 +923,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors')) {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroupUniqueName === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors' || this.activeParentGroupUniqueName === 'sundrydebtors')) {
             return true;
         } else {
             return false;
@@ -990,14 +986,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (type === 'bankAccountNo') {
             if (this.selectedCountryCode === 'IN') {
                 if (element && element.value && element.value.length < 9) {
-                    this._toaster.errorToast('The bank account number must contain 9 to 18 characters');
+                    this._toaster.errorToast(this.commonLocaleData?.app_invalid_bank_account_number);
                     element.classList.add('error-box');
                 } else {
                     element.classList.remove('error-box');
                 }
             } else {
                 if (element && element.value && element.value.length < 23) {
-                    this._toaster.errorToast('The IBAN must contain 23 to 34 characters.');
+                    this._toaster.errorToast(this.commonLocaleData?.app_invalid_iban);
                     element.classList.add('error-box');
                 } else {
                     element.classList.remove('error-box');
@@ -1005,7 +1001,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         } else if (type === 'swiftCode') {
             if (element && element.value && element.value.length < 8) {
-                this._toaster.errorToast('The SWIFT Code/BIC must contain 8 to 11 characters.');
+                this._toaster.errorToast(this.commonLocaleData?.app_invalid_swift_code);
                 element.classList.add('error-box');
             } else {
                 element.classList.remove('error-box');
@@ -1181,6 +1177,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 // The result will include this group and its children
                 requestObject.includeSearchedGroup = true;
             }
+            let activeGroup;
+            this.activeGroup$.pipe(take(1)).subscribe(response => activeGroup = response);
             this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
@@ -1191,12 +1189,21 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         }
                     }) || [];
                     if (page === 1) {
+                        if (activeGroup && searchResults.findIndex(group => group.value === activeGroup.uniqueName) === -1) {
+                            // Active group is not found in first page add it
+                            searchResults.push({
+                                value: activeGroup.uniqueName,
+                                label: `${activeGroup.name}`,
+                                additional: activeGroup.parentGroups
+                            });
+                        }
                         this.flatGroupsOptions = searchResults;
                     } else {
-                        this.flatGroupsOptions = [
+                        const results = [
                             ...this.flatGroupsOptions,
                             ...searchResults
                         ];
+                        this.flatGroupsOptions = _.uniqBy(results, 'value');
                     }
                     this.groupsSearchResultsPaginationData.page = data.body.page;
                     this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
@@ -1264,7 +1271,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }) || [];
             this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
             this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
-            this.flatGroupsOptions = [...this.defaultGroupSuggestions];
         });
     }
 
@@ -1286,5 +1292,36 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             }
         });
+    }
+
+    /*
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public translationComplete(event: boolean): void {
+        if(event) {
+            this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+                if (res) {
+                    if (res.fields) {
+                        this.formFields = [];
+                        Object.keys(res.fields).forEach(key => {
+                            if (res.fields[key]) {
+                                this.formFields[res.fields[key].name] = [];
+                                this.formFields[res.fields[key].name] = res.fields[key];
+                            }
+                        });
+                    }
+                    if (this.formFields['taxName'] && this.formFields['taxName'].label) {
+                        this.GSTIN_OR_TRN = this.formFields['taxName'].label;
+                        this.taxNamePlaceholder = this.commonLocaleData?.app_enter_tax_name;
+                        this.taxNamePlaceholder = this.taxNamePlaceholder?.replace("[TAX_NAME]", this.formFields['taxName']?.label || '');
+                    } else {
+                        this.GSTIN_OR_TRN = '';
+                    }
+                }
+            });
+        }
     }
 }

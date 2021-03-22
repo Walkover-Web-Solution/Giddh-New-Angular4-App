@@ -1,8 +1,13 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { currencyNumberSystems, digitAfterDecimal } from 'apps/web-giddh/src/app/shared/helpers/currencyNumberSystem';
 import { ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { CommonActions } from '../../actions/common.actions';
 import { OrganizationType } from '../../models/user-login-state';
+import { GeneralService } from '../../services/general.service';
+import { ToasterService } from '../../services/toaster.service';
+import { AppState } from '../../store';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { OrganizationProfile } from '../constants/settings.constant';
 
@@ -53,8 +58,16 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
 
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** List of supported locale */
+    public translationLocales: IOption[] = [];
+    /** This holds the active locale */
+    public activeLocale: string = "";
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True if need to show message */
+    public showLanguageChangeMessage: boolean = false;
 
-    constructor() { }
+    constructor(private commonActions: CommonActions, private generalService: GeneralService, private store: Store<AppState>, private toasterService: ToasterService) { }
 
     /**
      * Initializes the component
@@ -75,6 +88,24 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
         if (currencySystem) {
             this.numberSystem = currencySystem.name;
         }
+
+        this.translationLocales = this.generalService.getSupportedLocales();
+
+        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            this.activeLocale = response?.value;
+        });
+
+        this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
+            if(response) {
+                this.commonLocaleData = response;
+
+                if(this.showLanguageChangeMessage) {
+                    this.toasterService.clearAllToaster();
+                    this.toasterService.successToast(this.commonLocaleData?.app_language_selected);
+                    this.showLanguageChangeMessage = false;
+                }
+            }
+        });
     }
 
     /**
@@ -107,5 +138,16 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
     public inventoryTypeUpdated(value: boolean): void {
         this.profileData.manageInventory = value;
         this.profileUpdated('manageInventory');
+    }
+
+    /**
+     * This will set active locale
+     *
+     * @param {*} [event]
+     * @memberof OtherSettingsComponent
+     */
+    public selectLocale(event?: any): void {
+        this.store.dispatch(this.commonActions.setActiveLocale({label: event?.label, value: event?.value}));
+        this.showLanguageChangeMessage = true;
     }
 }
