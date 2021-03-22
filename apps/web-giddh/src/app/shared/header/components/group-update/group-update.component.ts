@@ -8,15 +8,12 @@ import { Observable, ReplaySubject, BehaviorSubject, combineLatest, of } from 'r
 import { GroupResponse, GroupsTaxHierarchyResponse, MoveGroupRequest } from '../../../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as _ from '../../../../lodash-optimized';
-import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
-import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
-import { GeneralActions } from '../../../../actions/general/general.actions';
 import { digitsOnly } from '../../../helpers';
 import { BlankLedgerVM, TransactionVM } from '../../../../ledger/ledger.vm';
 import { cloneDeep } from '../../../../lodash-optimized';
@@ -25,6 +22,8 @@ import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.c
 import { SettingsDiscountActions } from 'apps/web-giddh/src/app/actions/settings/discount/settings.discount.action';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
+import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
+import { API_COUNT_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'group-update',
@@ -33,6 +32,10 @@ import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models
 })
 
 export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public uniqueName: string = null;
     public totalForTax: number = 0;
     @Input() public blankLedger: BlankLedgerVM;
@@ -54,26 +57,15 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public isGroupNameAvailable$: Observable<boolean>;
     public isTaxableGroup$: Observable<boolean>;
     public showEditGroup$: Observable<boolean>;
-    public groupList$: Observable<GroupsWithAccountsResponse[]>;
     public activeGroupSelected$: Observable<string[]>;
     public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
     public isUpdateGroupInProcess$: Observable<boolean>;
     public isUpdateGroupSuccess$: Observable<boolean>;
     public optionsForDropDown: IOption[] = [{ label: 'Vishal', value: 'vishal' }];
-    public taxPopOverTemplate: string = `
-  <div class="popover-content">
-  <label>Tax being inherited from:</label>
-    <ul>
-    <li>@inTax.name</li>
-    </ul>
-  </div>
-  `;
+    public taxPopOverTemplate: string = '';
     public showEditTaxSection: boolean = false;
-    public groupsList: IOption[] = [];
     public accountList: any[];
     public showTaxes: boolean = false;
-    // list of groups with less details (parent information)
-    public groupWithParentLessDetailsList:any[] = [];
     @ViewChild('deleteGroupModal', {static: true}) public deleteGroupModal: ModalDirective;
     @ViewChild('moveToGroupDropDown', {static: true}) public moveToGroupDropDown: ShSelectComponent;
     /** To check is groups belongs to debtor or creditors type  */
@@ -90,12 +82,36 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public isTaxesSaveDisable$: Observable<boolean> = of(true);
     /** To check applied discounts modified  */
     public isDiscountSaveDisable$: Observable<boolean> = of(true);
+    /** Stores the search results pagination details for group dropdown */
+    public groupsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for group dropdown */
+    public defaultGroupSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for group dropdown */
+    public preventDefaultGroupScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for group dropdown */
+    public defaultGroupPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the value of groups */
+    public searchedGroups: IOption[];
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-        private companyActions: CompanyActions, private accountsAction: AccountsAction, private _generalActions: GeneralActions, private settingsDiscountAction: SettingsDiscountActions ) {
-        this.groupList$ = this.store.pipe(select(state => state.general.groupswithaccounts), takeUntil(this.destroyed$));
+    constructor(
+        private _fb: FormBuilder,
+        private store: Store<AppState>,
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private companyActions: CompanyActions,
+        private accountsAction: AccountsAction,
+        private groupService: GroupService,
+        private settingsDiscountAction: SettingsDiscountActions
+    ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
         this.fetchingGrpUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingGrpUniqueName), takeUntil(this.destroyed$));
@@ -121,7 +137,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
-        this.store.dispatch(this._generalActions.getGroupWithAccounts());
+        this.taxPopOverTemplate = '<div class="popover-content"><label>'+this.localeData?.tax_inherited+':</label><ul><li>@inTax.name</li></ul></div>';
+        // this.store.dispatch(this._generalActions.getGroupWithAccounts());
         this.groupDetailForm = this._fb.group({
             name: ['', Validators.required],
             uniqueName: ['', Validators.required],
@@ -155,27 +172,16 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.groupDetailForm.get('uniqueName').enable();
                     this.groupDetailForm.get('description').enable();
                 }
+                if (!activeGroup.fixed && activeGroup?.category) {
+                    // Again load the group suggestions for Move to group operations when activeGroup has all the details
+                    // done to avoid redundant API calls
+                    this.loadDefaultGroupsSuggestions();
+                }
             }
         });
 
-        this.groupList$.subscribe((a) => {
-            if (a && a.length > 0) {
-                let activeGroupUniqueName: string;
-                this.activeGroup$.pipe(take(1)).subscribe(grp => activeGroupUniqueName = grp.uniqueName);
-                let grpsList = this.makeGroupListFlatwithLessDtl(this.flattenGroup(a, []));
-                this.groupWithParentLessDetailsList = _.cloneDeep(grpsList);
-                let flattenGroupsList: IOption[] = [];
-
-                grpsList.forEach(grp => {
-                    if (grp.uniqueName !== activeGroupUniqueName) {
-                        flattenGroupsList.push({ label: grp.name, value: grp.uniqueName });
-                    }
-                });
-                this.groupsList = flattenGroupsList;
-            }
-        });
         setTimeout(() => {
-            this.autoFocus.nativeElement.focus();
+            this.autoFocus?.nativeElement.focus();
         }, 50);
         this.getDiscountList();
         combineLatest([
@@ -234,22 +240,15 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngAfterViewInit() {
         this.isTaxableGroup$ = this.store.pipe(select(state => {
             let result: boolean = false;
-            if (state.groupwithaccounts.groupswithaccounts && state.groupwithaccounts.activeGroup) {
+            if (state.groupwithaccounts.activeGroup) {
                 if (state.groupwithaccounts.activeAccount) {
                     return false;
                 }
-                result = this.getAccountFromGroup(state.groupwithaccounts.groupswithaccounts, state.groupwithaccounts.activeGroup.uniqueName, false);
+                result = this.getAccountFromGroup(state.groupwithaccounts.activeGroup, false);
             } else {
                 result = false;
             }
             return result;
-
-            this.needToReCalculate.subscribe(a => {
-                if (a) {
-                    this.amountChanged();
-                    this.calculateTotal();
-                }
-            });
         }), takeUntil(this.destroyed$));
 
         this.activeGroupSelected$.subscribe((p) => {
@@ -496,21 +495,11 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.showEditTaxSection = false;
     }
 
-    public getAccountFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: boolean): boolean {
-        groupList.forEach(element => {
-            if (element && element.accounts) {
-                if (element.uniqueName === uniqueName) {
-                    this.isDebtorCreditorGroups = this.isDebtorCreditorGroup(uniqueName);
-                    if (element.category === 'income' || element.category === 'expenses' || this.isDebtorCreditorGroups) {
-                        result = true;
-                        return;
-                    }
-                }
-            }
-            if (element && element.groups) {
-                result = this.getAccountFromGroup(element.groups, uniqueName, result);
-            }
-        });
+    public getAccountFromGroup(activeGroup: GroupResponse, result: boolean): boolean {
+        this.isDebtorCreditorGroups = this.isDebtorCreditorGroup(activeGroup);
+        if (activeGroup.category === 'income' || activeGroup.category === 'expenses' || this.isDebtorCreditorGroups) {
+            result = true;
+        }
         return result;
     }
 
@@ -531,17 +520,11 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     * @param {*} item
     * @memberof GroupUpdateComponent
     */
-    public isDebtorCreditorGroup(itemUniqueName: any): boolean {
+    public isDebtorCreditorGroup(activeGroup: GroupResponse): boolean {
         let isTaxableGroup: boolean = false;
-        const item = this.groupWithParentLessDetailsList.find(element => (itemUniqueName === element.uniqueName));
-        if (item) {
-            isTaxableGroup = item.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
+        if (activeGroup && activeGroup.parentGroups) {
+            isTaxableGroup = activeGroup.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
         }
-        // this.groupWithParentLessDetailsList.forEach(element => {
-        //     if (itemUniqueName === element.uniqueName) {
-        //         isTaxableGroup = element.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
-        //     }
-        // });
         return isTaxableGroup;
     }
 
@@ -605,6 +588,112 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public discountSelected(): void {
         this.isDiscountSaveDisable$ = of(false);
+    }
+
+    /**
+     * Search query change handler for group
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof SearchSidebarComponent
+     */
+    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.groupsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultGroupScrollApiCall &&
+            (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                count: API_COUNT_LIMIT
+            };
+            this.groupService.searchGroups(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    let activeGroupUniqueName: string;
+                    this.activeGroupUniqueName$.pipe(take(1)).subscribe(uniqueName => activeGroupUniqueName = uniqueName);
+                    data.body.results = data.body.results.filter(group => group.uniqueName !== activeGroupUniqueName);
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: result.name
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.searchedGroups = searchResults;
+                    } else {
+                        this.searchedGroups = [
+                            ...this.searchedGroups,
+                            ...searchResults
+                        ];
+                    }
+                    this.groupsSearchResultsPaginationData.page = data.body.page;
+                    this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+                }
+            });
+        } else {
+            this.searchedGroups = [...this.defaultGroupSuggestions];
+            this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
+            this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
+            this.preventDefaultGroupScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultGroupScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler for group dropdown
+     *
+     * @returns null
+     * @memberof SearchSidebarComponent
+     */
+    public handleGroupScrollEnd(): void {
+        if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
+            this.onGroupSearchQueryChanged(
+                this.groupsSearchResultsPaginationData.query,
+                this.groupsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.groupsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: result.name
+                            }
+                        }) || [];
+                        this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default group list for advance search
+     *
+     * @private
+     * @memberof SearchSidebarComponent
+     */
+    private loadDefaultGroupsSuggestions(): void {
+        this.onGroupSearchQueryChanged('', 1, (response) => {
+            this.defaultGroupSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: result.name
+                }
+            }) || [];
+            this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+            this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+            this.searchedGroups = [...this.defaultGroupSuggestions];
+        });
     }
 
 }

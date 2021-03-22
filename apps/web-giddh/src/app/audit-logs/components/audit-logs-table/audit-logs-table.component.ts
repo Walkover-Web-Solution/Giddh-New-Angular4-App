@@ -1,19 +1,23 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, Input, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { cloneDeep } from '../../../lodash-optimized';
 import { GetAuditLogsRequest } from '../../../models/api-models/Logs';
 import { AppState } from '../../../store/roots';
 
 @Component({
-    selector: 'audit-logs-table',  // <home></home>
+    selector: 'audit-logs-table',
     templateUrl: './audit-logs-table.component.html',
     styleUrls: ['audit-logs-table.component.scss']
 })
+
 export class AuditLogsTableComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /** To toggle multiple line show/hide for address*/
     public showSingleAddress: boolean = false;
     /** Total pages in audit log response*/
@@ -30,6 +34,8 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
     public isShowMultipleDataIndex: number = null;
     /** To destroy observers */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(private store: Store<AppState>, private auditLogsActions: AuditLogsActions) {
         this.loadMoreInProcess$ = this.store.pipe(select(state => state.auditlog.LoadMoreInProcess), takeUntil(this.destroyed$));
@@ -45,7 +51,9 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsTableComponent
      */
     public ngOnInit(): void {
-
+        this.store.pipe(select(state => state.auditlog.getLogInProcess), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLoading = response;
+        });
     }
 
     /**

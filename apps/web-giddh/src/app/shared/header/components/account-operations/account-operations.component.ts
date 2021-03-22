@@ -20,7 +20,7 @@ import * as _ from '../../../../lodash-optimized';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequestV2, AccountResponseV2, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
+import { ColumnGroupsAccountVM, GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -38,7 +38,16 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
     templateUrl: './account-operations.component.html',
     styleUrls: [`./account-operations.component.scss`]
 })
+
 export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
+    /** This will hold content for group shared with */
+    public groupSharedWith: string = "";
+    /** This will hold content for account shared with */
+    public accountSharedWith: string = "";
     public showAddNewAccount$: Observable<boolean>;
     public showAddNewGroup$: Observable<boolean>;
     public showEditAccount$: Observable<boolean>;
@@ -83,12 +92,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public activeGroupUniqueName$: Observable<string>;
     public activeGroupInProgress$: Observable<boolean>;
     public activeGroupSharedWith$: Observable<ShareRequestForm[]>;
-    public groupList$: Observable<GroupsWithAccountsResponse[]>;
     public isRootLevelGroup: boolean = false;
     public companyTaxes$: Observable<TaxResponse[]>;
     public companyTaxDropDown: Observable<IOption[]>;
     public companyDiscountDropDown: IOption[] = [];
-    public groupsList: IOption[];
     public accounts$: Observable<IOption[]>;
     public groupExportLedgerQueryRequest: DaybookQueryRequest = new DaybookQueryRequest();
     public showTaxDropDown: boolean = false;
@@ -103,14 +110,14 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public updateAccountInProcess$: Observable<boolean>;
     public updateAccountIsSuccess$: Observable<boolean>;
     public discountList$: Observable<IDiscountList[]>;
-    public taxPopOverTemplate: string = `
-  <div class="popover-content">
-  <label>Tax being inherited from:</label>
-    <ul>
-    <li>@inTax.name</li>
-    </ul>
-  </div>
-  `;
+//     public taxPopOverTemplate: string = `
+//   <div class="popover-content">
+//   <label>Tax being inherited from:</label>
+//     <ul>
+//     <li>@inTax.name</li>
+//     </ul>
+//   </div>
+//   `;
     public moveAccountSuccess$: Observable<boolean>;
     public showDeleteMove: boolean = false;
     public isGstEnabledAcc: boolean = false;
@@ -127,7 +134,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public accountDetails: any = '';
     @ViewChild('discountShSelect', {static: true}) public discountShSelect: ShSelectComponent;
     public selectedCompany: Observable<CompanyResponse>;
-    private groupsListBackUp: IOption[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     dropdownList = [];
@@ -203,7 +209,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.activeGroupInProgress$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupInProgress), takeUntil(this.destroyed$));
         this.activeGroupSharedWith$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupSharedWith), takeUntil(this.destroyed$));
         this.activeAccountSharedWith$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountSharedWith), takeUntil(this.destroyed$));
-        this.groupList$ = this.store.pipe(select(state => state.general.groupswithaccounts), takeUntil(this.destroyed$));
         this.activeGroupTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupTaxHierarchy), takeUntil(this.destroyed$));
         this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountTaxHierarchy), takeUntil(this.destroyed$));
         this.companyTaxes$ = this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$));
@@ -226,10 +231,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.selectedItems = [];
         this.settings = {
             singleSelection: false,
-            text: "Select Fields",
-            selectAllText: 'Select All',
-            unSelectAllText: 'UnSelect All',
-            searchPlaceholderText: 'Search Fields',
+            text: this.localeData?.select_fields,
+            selectAllText: this.commonLocaleData?.app_select_all,
+            unSelectAllText: this.commonLocaleData?.app_unselect_all,
+            searchPlaceholderText: this.localeData?.search_fields,
             enableSearchFilter: true,
             badgeShowLimit: 5,
             groupBy: "category",
@@ -272,71 +277,30 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             userEmail: ['', [Validators.required, Validators.email]]
         });
 
-        this.groupList$.subscribe((a) => {
-            if (a) {
-                // this.groupsList = this.makeGroupListFlatwithLessDtl(this.flattenGroup(a, []));
-                let grpsList = this.makeGroupListFlatwithLessDtl(this.flattenGroup(a, []));
-                let flattenGroupsList: IOption[] = [];
-
-                grpsList.forEach(grp => {
-                    flattenGroupsList.push({ label: grp.name, value: grp.uniqueName, additional: grp.parentGroups });
-                });
-                this.groupsList = flattenGroupsList;
-                this.groupsListBackUp = flattenGroupsList;
-            }
-        });
-        // this.flattenGroups$.subscribe(flattenGroups => {
-        //     if (flattenGroups) {
-        //         let items: IOption[] = flattenGroups.filter(grps => {
-        //             return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-        //         }).map(m => {
-        //             return {
-        //                 value: m.groupUniqueName, label: m.groupName
-        //             }
-        //         });
-        //         this.flatGroupsOptions = items;
-        //     }
-        // });
-
         this.showAddNewGroup$.subscribe(s => {
             if (s) {
-                if (this.breadcrumbPath.indexOf('Create Group') === -1) {
-                    this.breadcrumbPath.push('Create Group');
+                if (this.breadcrumbPath.indexOf(this.commonLocaleData?.app_create_group) === -1) {
+                    this.breadcrumbPath.push(this.commonLocaleData?.app_create_group);
                 }
             }
         });
 
         this.showAddNewAccount$.subscribe(s => {
             if (s) {
-                if (this.breadcrumbPath.indexOf('Create Account') === -1) {
-                    this.breadcrumbPath.push('Create Account');
+                if (this.breadcrumbPath.indexOf(this.commonLocaleData?.app_create_account) === -1) {
+                    this.breadcrumbPath.push(this.commonLocaleData?.app_create_account);
                 }
             }
         });
 
         this.activeGroup$.subscribe((a) => {
             if (a) {
-                this.groupsList = _.filter(this.groupsListBackUp, (l => l.value !== a.uniqueName));
                 if (a.uniqueName === 'sundrycreditors' || a.uniqueName === 'sundrydebtors') {
                     this.showGroupLedgerExportButton$ = observableOf(true);
                     this.isDebtorCreditor = true;
                 } else {
                     this.showGroupLedgerExportButton$ = observableOf(false);
-                    // this.isDebtorCreditor = false;
                 }
-                // this.taxGroupForm.get('taxes').reset();
-                // let showAddForm: boolean = null;
-                // this.showAddNewGroup$.take(1).subscribe((d) => showAddForm = d);
-                // if (!showAddForm) {
-                //   this.showGroupForm = true;
-                //   this.ShowForm.emit(true);
-                //   this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
-                //
-                //   let taxes = a.applicableTaxes.map(acc => acc.uniqueName);
-                //   this.taxGroupForm.get('taxes').setValue(taxes);
-                //   this.store.dispatch(this.groupWithAccountsAction.showEditGroupForm());
-                // }
-
                 this.virtualAccountEnable$.subscribe(s => {
                     if (s && s.companyCashFreeSettings && s.companyCashFreeSettings.autoCreateVirtualAccountsForDebtors && this.breadcrumbUniquePath[1] === 'sundrydebtors') {
                         this.showVirtualAccount = true;
@@ -369,10 +333,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             }
         });
 
-        this.showNewForm$.subscribe(s => {
-
-        });
-
         this.moveAccountSuccess$.subscribe(p => {
             if (p) {
                 this.moveAccountForm.reset();
@@ -393,52 +353,34 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.selectedaccountForMerge = '';
         });
+
+        this.activeGroupSharedWith$.subscribe(response => {
+            if(response) {
+                this.groupSharedWith = this.localeData?.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
+            }
+        });
+
+        this.activeAccountSharedWith$.subscribe(response => {
+            if(response) {
+                this.accountSharedWith = this.localeData?.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
+            }
+        });
     }
 
     public ngAfterViewInit() {
 
         this.isTaxableAccount$ = this.store.pipe(select(createSelector([
-            (state: AppState) => state.groupwithaccounts.groupswithaccounts,
             (state: AppState) => state.groupwithaccounts.activeAccount],
-            (groupswithaccounts, activeAccount) => {
+            (activeAccount) => {
                 let result: boolean = false;
                 let activeGroupUniqueName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
-                if (groupswithaccounts && activeGroupUniqueName && activeAccount) {
-                    result = this.getAccountFromGroup(groupswithaccounts, activeGroupUniqueName, false);
+                if (activeGroupUniqueName && activeAccount) {
+                    result = this.getAccountFromGroup(activeAccount, false);
                 } else {
                     result = false;
                 }
                 return result;
             })), takeUntil(this.destroyed$));
-    }
-
-    public loadAccountData() {
-        let activeAccount: AccountResponseV2 = null;
-        this.activeAccount$.pipe(take(1)).subscribe(p => {
-            activeAccount = p;
-            if (!this.showBankDetail) {
-                if (p && p.parentGroups) {
-                    p.parentGroups.forEach(grp => {
-                        this.showBankDetail = grp.uniqueName === "sundrycreditors" ? true : false;
-                        return;
-                    });
-                }
-            }
-        });
-
-        this.accountService.getFlattenAccounts().pipe(takeUntil(this.destroyed$)).subscribe(a => {
-            let accounts: IOption[] = [];
-            if (a.status === 'success') {
-                a.body.results.map(acc => {
-                    accounts.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName });
-                });
-                let accountIndex = accounts.findIndex(acc => acc.value === activeAccount.uniqueName);
-                if (accountIndex > -1) {
-                    accounts.splice(accountIndex, 1);
-                }
-            }
-            this.accounts$ = observableOf(accounts);
-        });
     }
 
     public shareAccount() {
@@ -505,16 +447,15 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public isRootLevelGroupFunc(uniqueName: string) {
-        this.groupList$.pipe(take(1)).subscribe(list => {
-            for (let grp of list) {
-                if (grp.uniqueName === uniqueName) {
-                    this.isRootLevelGroup = true;
-                    return;
-                } else {
-                    this.isRootLevelGroup = false;
-                }
+        const rootLevelGroups: ColumnGroupsAccountVM[] | any[] = this.columnsRef?.columns[0]?.groups || [];
+        for (let grp of rootLevelGroups) {
+            if (grp.uniqueName === uniqueName) {
+                this.isRootLevelGroup = true;
+                return;
+            } else {
+                this.isRootLevelGroup = false;
             }
-        });
+        }
     }
 
     public flattenAccounts(groups: GroupsWithAccountsResponse[] = [], accounts: IAccountsInfo[]): IAccountsInfo[] {
@@ -569,23 +510,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     }
 
-    public getAccountFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: boolean): boolean {
-        if (result) {
-            return result;
-        }
-        for (const el of groupList) {
-            if (el.accounts) {
-                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses')) {
-                    result = true;
-                    break;
-                }
-            }
-            if (el.groups) {
-                result = this.getAccountFromGroup(el.groups, uniqueName, result);
-                if (result) {
-                    break;
-                }
-            }
+    public getAccountFromGroup(activeGroup: AccountResponseV2, result: boolean): boolean {
+        if (activeGroup.category === 'income' || activeGroup.category === 'expenses') {
+            result = true;
         }
         return result;
     }
@@ -677,13 +604,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public showDeleteMergedAccountModal(merge: string) {
         merge = merge.trim();
-        this.deleteMergedAccountModalBody = `Are you sure you want to delete ${merge} Account ?`;
+        this.deleteMergedAccountModalBody = this.localeData?.delete_merged_account_content.replace("[MERGE]", merge);
         this.selectedAccountForDelete = merge;
-        this.deleteMergedAccountModal.show();
+        this.deleteMergedAccountModal?.show();
     }
 
     public hideDeleteMergedAccountModal() {
-        this.deleteMergedAccountModal.hide();
+        this.deleteMergedAccountModal?.hide();
     }
 
     public deleteMergedAccount() {
@@ -728,13 +655,15 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             this.store.dispatch(this.accountsAction.mergeAccount(activeAccount.uniqueName, finalData));
             this.showDeleteMove = false;
         } else {
-            this._toaster.errorToast('Please Select at least one account');
+            this._toaster.errorToast(this.localeData?.merge_account_error);
             return;
         }
     }
 
     public showMoveMergedAccountModal() {
-        this.moveMergedAccountModalBody = `Are you sure you want to move ${this.setAccountForMove} Account to ${this.selectedAccountForMove} ?`;
+        this.moveMergedAccountModalBody = this.localeData?.move_merged_account_content
+                                          .replace("[SOURCE_ACCOUNT]", this.setAccountForMove)
+                                          .replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
         this.moveMergedAccountModal.show();
     }
 

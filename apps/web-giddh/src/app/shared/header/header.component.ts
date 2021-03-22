@@ -223,6 +223,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         return this.currentOrganizationType === OrganizationType.Branch ||
             (this.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches && this.currentCompanyBranches.length === 1);
     }
+    /** This will hold that how many days are left for subscription expiration */
+    public remainingSubscriptionDays: any = false;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -489,6 +491,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                this.store.dispatch(this.commonActions.getCommonLocaleData(response.value));
+            } else {
+                let supportedLocales = this.generalService.getSupportedLocales();
+                this.store.dispatch(this.commonActions.setActiveLocale(supportedLocales[0]));
+            }
+        });
+
         this.getCurrentCompanyData();
         this._breakpointObserver.observe([
             '(max-width: 767px)'
@@ -731,6 +742,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                     this.currentCompanyPlanAmount = res.subscription.planDetails.amount;
                     this.subscribedPlan = res.subscription;
+
+                    if(this.subscribedPlan?.expiry) {
+                        let expiry = (this.subscribedPlan?.expiry)?.split("-")?.reverse()?.join("-");
+                        this.remainingSubscriptionDays = Number((new Date(expiry).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
+                    } else {
+                        this.remainingSubscriptionDays = false;
+                    }
+
                     this.isSubscribedPlanHaveAdditionalCharges = res.subscription.additionalCharges;
                     this.selectedPlanStatus = res.subscription.status;
                 }
@@ -1055,7 +1074,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public showManageGroupsModal() {
-        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         this.loadAddManageComponent();
         this.manageGroupsAccountsModal.show();
     }
@@ -1264,13 +1282,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             viewContainerRef.remove();
         });
         this.manageGroupsAccountsModal.onShown.pipe(takeUntil(this.destroyed$)).subscribe((a => {
-            (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
-            (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel.nativeElement.getBoundingClientRect();
+            (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header?.nativeElement.getBoundingClientRect();
+            (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel?.nativeElement.getBoundingClientRect();
         }));
-    }
-
-    public filterAccounts(q: string) {
-        this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(q));
     }
 
     /**
@@ -1406,9 +1420,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public filterCompanyList(ev) {
         let companies: CompanyResponse[] = [];
-        this.companies$.pipe(take(1)).subscribe(cmps => companies = cmps);
+        this.companies$?.pipe(take(1)).subscribe(cmps => companies = cmps);
 
-        this.companyListForFilter = companies.filter((cmp) => {
+        this.companyListForFilter = companies?.filter((cmp) => {
             if (!cmp.alias) {
                 return cmp.name.toLowerCase().includes(ev.toLowerCase());
             } else {

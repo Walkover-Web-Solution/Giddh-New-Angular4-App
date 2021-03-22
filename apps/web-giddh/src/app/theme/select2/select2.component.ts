@@ -107,14 +107,14 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
 		}
 
 		if (changes['disabled'] && changes['disabled'].previousValue !== changes['disabled'].currentValue) {
-			this.renderer.setProperty(this.selector.nativeElement, 'disabled', this.disabled);
+			this.renderer.setProperty(this.selector?.nativeElement, 'disabled', this.disabled);
 		}
 	}
 
 	public ngAfterViewInit() {
 		let that = this;
 
-		this.element = jQuery(this.selector.nativeElement);
+		this.element = jQuery(this.selector?.nativeElement);
 		this.initPlugin();
 		if (typeof this.value !== 'undefined') {
 			this.setElementValue(this.value);
@@ -165,7 +165,7 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
 		// If select2 already initialized remove him and remove all tags inside
 		if (this.element.hasClass('select2-hidden-accessible') === true) {
 			this.element.select2('destroy');
-			this.renderer.setProperty(this.selector.nativeElement, 'innerHTML', '');
+			this.renderer.setProperty(this.selector?.nativeElement, 'innerHTML', '');
 		}
 		//
 		let parentElement = this.element.parent().parent();
@@ -191,7 +191,7 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
 		}
 
 		if (this.disabled) {
-			this.renderer.setProperty(this.selector.nativeElement, 'disabled', this.disabled);
+			this.renderer.setProperty(this.selector?.nativeElement, 'disabled', this.disabled);
 		}
 	}
 
@@ -203,7 +203,7 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
 				}
 			}
 		} else {
-			this.renderer.setProperty(this.selector.nativeElement, 'value', newValue);
+			this.renderer.setProperty(this.selector?.nativeElement, 'value', newValue);
 		}
 
 		this.element.trigger('change.select2');

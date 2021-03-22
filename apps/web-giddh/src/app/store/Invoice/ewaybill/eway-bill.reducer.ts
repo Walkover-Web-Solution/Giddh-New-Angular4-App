@@ -72,6 +72,13 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
 				isGetAllEwaybillRequestSuccess: false,
 				isGetAllEwaybillRequestInProcess: true
 			});
+        }
+        
+        case EWAYBILL_ACTIONS.GET_All_FILTERED_LIST_EWAYBILLS: {
+			return Object.assign({}, state, {
+				isGetAllEwaybillRequestSuccess: false,
+				isGetAllEwaybillRequestInProcess: true
+			});
 		}
 
 		case EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS_RESPONSE: {

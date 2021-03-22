@@ -1,7 +1,7 @@
 {
+    "page_heading": "Company Import/Export",
     "backup" : "Backup",
-    "export" : "Export",
-    "import" : "Import",
+    "data": "Data",
     "import_export_note" : "Import or export your account master data",
     "file_type" : "File Type",
     "data_range" : "Data Range",

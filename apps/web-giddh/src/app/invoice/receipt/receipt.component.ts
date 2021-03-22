@@ -444,14 +444,14 @@ export class ReceiptComponent implements OnInit, OnDestroy {
             this.showAccountSearch = false;
 
             setTimeout(() => {
-                this.voucherSearch.nativeElement.focus();
+                this.voucherSearch?.nativeElement.focus();
             }, 200);
         } else {
             this.showAccountSearch = true;
             this.showVoucherSearch = false;
 
             setTimeout(() => {
-                this.accountSearch.nativeElement.focus();
+                this.accountSearch?.nativeElement.focus();
             }, 200);
         }
     }

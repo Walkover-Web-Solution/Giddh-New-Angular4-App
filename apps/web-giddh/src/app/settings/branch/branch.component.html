@@ -293,24 +293,6 @@
         </div>
     </div>
 
-    <div *ngIf="(branches$ | async)?.length < 1">
-        <div class="col-12  text-center">
-            <div class="illustration-box">
-                <img src="assets/images/new/branch-Illus.png" />
-                <div class="" *ngIf="!parentCompanyName">
-                    <h3 class="lead mr-t2 mr-b2 font-18">Add branch under <strong
-                            class="primary-color text-capitalize">{{ currentBranch }} <span *ngIf="currentBranchNameAlias">(
-                                {{currentBranchNameAlias}} )</span></strong> headquarter.
-                    </h3>
-                    <button class="btn btn-default mr-l1 btn-lg" (click)="openAddBranchModal()">Add Branch</button>
-                </div>
-                <div class="" *ngIf="parentCompanyName">
-                    <h3 class="lead mr-t2 font-18">This is a branch of <strong class="primary-color text-capitalize">{{ parentCompanyName
-					}}</strong> headquarter.</h3>
-                </div>
-            </div>
-        </div>
-    </div>
     <br>
     <br>
     <br>

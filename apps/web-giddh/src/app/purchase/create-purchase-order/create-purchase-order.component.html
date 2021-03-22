@@ -1,11 +1,7 @@
 <hamburger-menu *ngIf="!isUpdateMode" [pageHeading]="'New Purchase Order'"></hamburger-menu>
 <hamburger-menu *ngIf="isUpdateMode" [pageHeading]="'Edit Purchase Order'"></hamburger-menu>
-<div class="no-data mr-t2 loader-main" *ngIf="showLoader">
-    <div class="spinner2">
-        <div class="cube1"></div>
-        <div class="cube2"></div>
-    </div>
-</div>
+<giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
+
 <form #poForm="ngForm" novalidate autocomplete="off"
     [ngClass]="{'create-purchase-order-form': true, 'customer-purchase-order' : !purchaseOrder.voucherDetails.customerName, 'for-multi-currency' : isMulticurrencyAccount  } "
     [ngStyle]="{'display': !showLoader ? 'block' : 'none'}">
@@ -486,12 +482,7 @@
             <tbody *ngIf="showBulkLoader">
                 <tr>
                     <td colspan="8">
-                        <div class="col-12 no-data mr-t2 loader-main">
-                            <div class="spinner2">
-                                <div class="cube1"></div>
-                                <div class="cube2"></div>
-                            </div>
-                        </div>
+                        <giddh-page-loader></giddh-page-loader>
                     </td>
                 </tr>
             </tbody>
@@ -1409,7 +1400,7 @@
                                     <div class="product-name">
                                         <div class="ng-select-wrap">
                                             <sh-select [options]="salesAccounts$ | async"
-                                                [(ngModel)]="transaction.fakeAccForSelect2"
+                                                [(ngModel)]="transaction.fakeAccForSelect2" #selectAccount
                                                 name="transaction.fakeAccForSelect2_{{entryIdx}}"
                                                 (selected)="onSelectSalesAccount($event,transaction, entry, false, entryIdx)"
                                                 [placeholder]="'Select A/cc'" [notFoundLink]="true"
@@ -1442,7 +1433,7 @@
                                     </div>
                                     <div>
                                         <div class="description mt-1">
-                                            <textarea type="text" placeholder="Add Description"
+                                            <textarea type="text" placeholder="Add Description" #description
                                                 name="transaction.description_{{entryIdx}}" class="form-control"
                                                 [(ngModel)]="transaction.description"></textarea>
                                             <p class="small text-muted sku-custom-fields"

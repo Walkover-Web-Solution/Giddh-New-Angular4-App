@@ -257,10 +257,5 @@
 </div>
 <!-- two way auth popup -->
 <div *ngIf="(isSignupWithPasswordInProcess$ | async) || (isTwoWayAuthInProcess$ | async) ||  (isVerifyEmailInProcess$ | async) ||  (isLoginWithEmailInProcess$ | async) ||  (isLoginWithGoogleInProcess$ | async) ">
-    <div class="no-data mr-t2 loader-main">
-        <div class="spinner2">
-            <div class="cube1"></div>
-            <div class="cube2"></div>
-        </div>
-    </div>
+    <giddh-page-loader></giddh-page-loader>
 </div>

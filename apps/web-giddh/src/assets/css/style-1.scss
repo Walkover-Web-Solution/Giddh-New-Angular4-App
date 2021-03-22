@@ -401,7 +401,6 @@ aside-menu-account .container-fluid {
 .pd {
     padding: 5px;
 }
-
 .pd-1 {
     padding: 10px;
 }
@@ -441,9 +440,12 @@ aside-menu-account .container-fluid {
     padding-top: 10px;
 }
 
-.pd-t2,
-.pd-t3 {
+.pd-t2{
     padding-top: 20px;
+}
+
+.pd-t3 {
+    padding-top: 30px;
 }
 
 .pd-b1 {
@@ -483,11 +485,11 @@ aside-menu-account .container-fluid {
 }
 
 .pd-t4 {
-    padding-top: 30px;
+    padding-top: 40px;
 }
 
 .pd-t5 {
-    padding-top: 30px;
+    padding-top: 50px;
 }
 
 .pd-b4 {
@@ -500,6 +502,18 @@ aside-menu-account .container-fluid {
 
 .pd-r4 {
     padding-right: 40px;
+}
+
+.pd-b5 {
+    padding-bottom: 50px;
+}
+
+.pd-r5{
+    padding-right: 50px;
+}
+
+.pd-l5{
+    padding-left: 50px;
 }
 
 .mr {
@@ -612,6 +626,14 @@ aside-menu-account .container-fluid {
     margin-right: 40px;
 }
 
+.mr-l5 {
+    margin-left: 50px;
+}
+
+.mr-r5 {
+    margin-right: 50px;
+}
+
 .bdr {
     border: 1px solid $gainsboro;
 }
@@ -695,6 +717,10 @@ aside-menu-account .container-fluid {
 
 .overflow-hidden {
     overflow: hidden;
+}
+
+.overflow-visible{
+    overflow: visible;
 }
 
 .overflow-y-auto {
@@ -1474,6 +1500,12 @@ li:last-child .angular-ui-tree-handle {
 
 .pl-bs-tb tfoot {
     background: $gray-95;
+}
+
+.tb-pl-bs-data{
+    height: 60vh !important;
+    font-size: 31px !important;
+    color: $silver !important;
 }
 
 .circle {

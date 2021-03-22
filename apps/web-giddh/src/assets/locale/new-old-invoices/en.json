@@ -1,4 +1,5 @@
 {
+    "page_heading": "New V/S Old Invoices",
     "select_year_label" : "Select Year",
     "select_year_placeholder" : "Search Year...",
     "select_type_label" : "Select Type",
@@ -7,13 +8,13 @@
     "select_month_label" : "Select Month",
     "select_month_placeholder" : "Search Month...",
     "invalid_month" : "please select month",
-    "select_quarter_label" : "Select Quater",
-    "select_quarter_placeholder" : "Search Quater...",
+    "select_quarter_label" : "Select Quarter",
+    "select_quarter_placeholder" : "Search Quarter...",
     "invalid_quarter" : "please select quater",
     "sales_from" : "Sales from",
     "clients" : "Clients",
     "no_invoices" : "No. of Invoices",
-    "bifurcation_clients" : "Bifurcation of clients in {{COLUMN_NAME}}",
+    "bifurcation_clients" : "Bifurcation of clients in [COLUMN_NAME]",
     "from_new_clients" : "From new Clients",
     "from_old_clients" : "From old Clients",
     "quarters" : {

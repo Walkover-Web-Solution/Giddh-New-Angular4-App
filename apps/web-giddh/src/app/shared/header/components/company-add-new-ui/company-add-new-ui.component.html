@@ -58,7 +58,7 @@
 						<div *ngIf="!createBranch" class="col-xs-12 col-sm-12 mr-b3">
 							<span>
 								<label for="contactNo" class="d-block">Mobile Number<sup>*</sup></label>
-								<div class="d-flex welcome-select ">
+								<div class="d-flex welcome-select create-select">
 									<sh-select class="pull-left select-caret phone-code-caret" required [isRequired]="true" name="phoneCode" [placeholder]="+91"
 										[options]="countryPhoneCode" [(ngModel)]="company.phoneCode"
 										[defaultValue]="company.phoneCode">

@@ -10,6 +10,7 @@ import { GroupResponse } from '../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { AccountAddNewDetailsComponent } from '../../shared/header/components';
+import { AccountService } from '../../services/account.service';
 
 @Component({
     selector: 'aside-menu-account',
@@ -17,6 +18,8 @@ import { AccountAddNewDetailsComponent } from '../../shared/header/components';
     templateUrl: './aside.menu.account.component.html'
 })
 export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     @Input() public activeGroupUniqueName: string;
     @Input() public isUpdateAccount: boolean;
@@ -50,6 +53,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
+        private accountService: AccountService,
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
         private _groupWithAccountsAction: GroupWithAccountsAction,
@@ -74,20 +78,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountDetails.uniqueName));
         }
 
-        // loop over flatten accounts and check if given account is under sundrycreditors group
-        this.store.pipe(select(p => p.general.flattenAccounts), take(1)).subscribe(flattenAccounts => {
-
-            if (flattenAccounts && flattenAccounts.length) {
-                // get account from flatten accounts array
-                let accountFromFlattenAcc = flattenAccounts.find(fAcc => fAcc.uniqueName === this.accountDetails.uniqueName);
-                if (accountFromFlattenAcc) {
-                    // if yes set showBankDetail = true for showing adding bank details in account-update form.
-                    this.showBankDetail = accountFromFlattenAcc.parentGroups.some(group => group.uniqueName === 'sundrycreditors');
-                }
-            } else {
-                this.showBankDetail = false;
-            }
-        });
+        this.shouldShowBankDetail(this.accountDetails.uniqueName);
 
         // this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
         this.activeGroup$.subscribe((a) => {
@@ -194,5 +185,23 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Decides if bank section should be shown if the current account belongs to sundrycreditors
+     *
+     * @private
+     * @param {string} accountUniqueName
+     * @memberof AsideMenuAccountInContactComponent
+     */
+    private shouldShowBankDetail(accountUniqueName: string): void {
+        this.accountService.GetAccountDetailsV2(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body) {
+                const accountDetails = response.body;
+                this.showBankDetail = accountDetails.parentGroups.some(parent => parent.uniqueName === 'sundrycreditors');
+            } else {
+                this.showBankDetail = false;
+            }
+        });
     }
 }

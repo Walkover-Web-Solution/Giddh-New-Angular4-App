@@ -195,7 +195,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
      * createCompany
      */
     public createCompany(mobileNoEl) {
-        this.checkMobileNo(mobileNoEl);
+        this.isValidMobileNumber();
 
         if (!this.isMobileNumberValid) {
             if (mobileNoEl) {
@@ -255,7 +255,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             if (companies.length > 0) {
                 let previousState;
                 this.store.dispatch(this._generalActions.getGroupWithAccounts());
-                this.store.dispatch(this._generalActions.getFlattenAccount());
                 this.store.pipe(select(ss => ss.session.lastState), take(1)).subscribe(se => {
                     previousState = se;
                 });
@@ -326,7 +325,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
     public isValidMobileNumber() {
         if (this.mobileNoEl?.nativeElement?.value) {
-            this.checkMobileNo(this.mobileNoEl.nativeElement);
+            this.checkMobileNo(this.mobileNoEl?.nativeElement);
         }
     }
 

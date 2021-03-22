@@ -18,10 +18,7 @@
             </div>
         </div>
         <div class="create-warehouse" *ngIf="showLoader">
-            <div class="spinner2">
-                <div class="cube1"></div>
-                <div class="cube2"></div>
-            </div>
+            <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
         </div>
         <div class="no-data" *ngIf="!warehouses.length && !showLoader">
             <h1>No warehouse found within given criteria.</h1>
