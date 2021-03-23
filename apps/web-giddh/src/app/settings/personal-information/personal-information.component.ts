@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
@@ -10,7 +10,7 @@ import { OrganizationProfile } from '../constants/settings.constant';
     templateUrl: './personal-information.component.html',
     styleUrls: ['./personal-information.component.scss']
 })
-export class PersonalInformationComponent implements OnInit, OnDestroy {
+export class PersonalInformationComponent implements OnInit, OnDestroy{
 
     /** Decides when to emit the value for UPDATE operation */
     public saveProfileSubject: Subject<any> = new Subject();
@@ -53,9 +53,12 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      * @memberof PersonalInformationComponent
      */
     public ngOnInit(): void {
+        
         this.saveProfileSubject.pipe(debounceTime(5000), takeUntil(this.destroyed$)).subscribe(() => {
             this.saveProfile.emit(this.updatedData);
+    
         });
+
     }
 
     /**
@@ -76,6 +79,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      */
     public profileUpdated(keyName: string): void {
         this.updatedData[keyName] = this.profileData[keyName];
+       
         this.saveProfileSubject.next();
     }
 

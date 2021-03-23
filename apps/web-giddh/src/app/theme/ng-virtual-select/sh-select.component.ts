@@ -529,7 +529,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
         if ('options' in changes) {
             if (changes.options && changes.options.currentValue) {
+                // this.options = changes.options.currentValue;
                 this.refreshList();
+               
             }
         }
     }

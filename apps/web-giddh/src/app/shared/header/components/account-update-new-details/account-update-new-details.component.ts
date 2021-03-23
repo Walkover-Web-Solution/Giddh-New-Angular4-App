@@ -747,7 +747,17 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             // statesEle.clear();
             gstForm.get('stateCode').patchValue(null);
             gstForm.get('state').get('code').patchValue(null);
-        }
+
+            } 
+            // else {
+            //     if (this.isIndia) {
+            //         statesEle.forceClearReactive.status = true;
+            //         statesEle.clear();
+            //         gstForm.get('stateCode').patchValue(null);
+            //         gstForm.get('state').get('code').patchValue(null);
+            //     }
+            // }
+        
     }
 
     public showMoreGst() {

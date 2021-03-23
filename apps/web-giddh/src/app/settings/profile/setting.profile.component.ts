@@ -599,8 +599,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public patchProfile(obj) {
+     
         for (let member in obj) {
-            if (obj[member] === null) {
+            if (obj[member] == null) {
                 obj[member] = '';
             }
         }
@@ -759,6 +760,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public handleSaveProfile(value: any): void {
+        // console.log("parent component");
+        // console.log(value);
         if (this.currentOrganizationType === OrganizationType.Company) {
             if ('manageInventory' in value) {
                 this.updateInventorySetting(value.manageInventory);

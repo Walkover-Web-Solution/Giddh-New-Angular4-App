@@ -209,11 +209,11 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                                 // set value in tax group form
                                 setTimeout(() => {
                                     this.taxGroupForm.setValue({ taxes: allTaxes });
-                                }, 200);
+                                }, 20);
                             } else {
                                 setTimeout(() => {
                                     this.taxGroupForm.setValue({ taxes: applicableTaxes });
-                                }, 200);
+                                }, 20);
                             }
 
                         } else {
@@ -223,11 +223,12 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                             // set value in tax group form
                             setTimeout(() => {
                                 this.taxGroupForm.setValue({ taxes: applicableTaxes});
-                            }, 200);
+                            }, 20);
 
                         }
                     }
-                } else {
+                } 
+                else {
                     this.companyTaxDropDown = arr;
                 }
             }
@@ -457,17 +458,20 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 //
                 this.store.dispatch(this.companyActions.getTax());
                 this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
-            } else {
+            } 
+            else {
                 this.store.dispatch(this.companyActions.getTax());
                 this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroupUniqueName));
                 this.showEditTaxSection = true;
+                
             }
         }
     }
 
     public applyTax() {
-        let activeAccount: AccountResponseV2 = null;
-        let activeGroup: GroupResponse = null;
+        let activeAccount: AccountResponseV2=null;
+        let activeGroup: GroupResponse=null;
+        console.log(this.taxGroupForm.value.taxes);
         this.store.pipe(take(1)).subscribe(s => {
             if (s.groupwithaccounts) {
                 activeAccount = s.groupwithaccounts.activeAccount;
@@ -481,7 +485,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             if (t) {
                 t.inheritedTaxes.forEach(tt => {
                     tt.applicableTaxes.forEach(ttt => {
-                        data.taxes.push(ttt.uniqueName);
+                        data.taxes.push(tt.uniqueName);
                     });
                 });
             }
@@ -489,7 +493,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         data.taxes.push.apply(data.taxes, this.taxGroupForm.value.taxes);
         data.uniqueName = activeGroup.uniqueName;
         this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
-        this.showEditTaxSection = false;
+        this.showEditTaxSection=false;
+        console.log(data.taxes);
+        
     }
 
     public getAccountFromGroup(activeGroup: GroupResponse, result: boolean): boolean {

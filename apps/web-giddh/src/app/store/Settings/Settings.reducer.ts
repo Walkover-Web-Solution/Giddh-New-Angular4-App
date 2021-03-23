@@ -263,6 +263,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             });
         }
         case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE: {
+
             return {
                 ...state,
                 updateProfileSuccess: false,
