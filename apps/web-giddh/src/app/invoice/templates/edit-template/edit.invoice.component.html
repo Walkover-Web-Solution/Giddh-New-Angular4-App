@@ -120,9 +120,9 @@
     <div class="sticky-footer pd-2">
         <!--<button class="btn btn-default">Preview</button>-->
         <div class="pull-right mr-r4" *ngIf="voucherType ==='sales' ">
-            <button *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate('invoice')">Save
+            <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate('invoice')">Save
             </button>
-            <button *ngIf="transactionMode == 'update'" class="btn btn-success"
+            <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'update'" class="btn btn-success"
                 (click)="updateTemplate('invoice')">Update
                 Invoice
             </button>
