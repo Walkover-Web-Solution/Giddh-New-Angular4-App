@@ -554,8 +554,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             //lastedited
             statesEle.forceClearReactive.status = true;
             // statesEle.clear();
-            gstForm.get('stateCode').patchValue(null);
-            gstForm.get('state').get('code').patchValue(null);
+            // gstForm.get('stateCode').patchValue(null);
+            // gstForm.get('state').get('code').patchValue(null);
         }
     }
 

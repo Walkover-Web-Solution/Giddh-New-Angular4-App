@@ -748,11 +748,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     gstForm.get('state').get('code').patchValue(null);
                 }
             }
-        } else {
-            statesEle.forceClearReactive.status = true;
-            // statesEle.clear();
-            gstForm.get('stateCode').patchValue(null);
-            gstForm.get('state').get('code').patchValue(null);
         }
     }
 
