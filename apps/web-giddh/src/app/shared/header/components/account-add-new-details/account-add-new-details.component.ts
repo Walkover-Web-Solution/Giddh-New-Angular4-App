@@ -543,21 +543,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         }
                     }
                 });
-            } else {
-                // statesEle.setDisabledState(false);
-                if (this.isIndia) {
-                    statesEle.forceClearReactive.status = true;
-                    statesEle.clear();
-                    gstForm.get('stateCode').patchValue(null);
-                    gstForm.get('state').get('code').patchValue(null);
-                }
-            }
-        } else {
-            //lastedited
-            statesEle.forceClearReactive.status = true;
-            // statesEle.clear();
-            // gstForm.get('stateCode').patchValue(null);
-            // gstForm.get('state').get('code').patchValue(null);
+            } 
+            // else {
+            //     // statesEle.setDisabledState(false);
+            //     if (this.isIndia) {
+            //         statesEle.forceClearReactive.status = true;
+            //         statesEle.clear();
+            //         gstForm.get('stateCode').patchValue(null);
+            //         gstForm.get('state').get('code').patchValue(null);
+            //     }
+            // }
         }
     }
 
