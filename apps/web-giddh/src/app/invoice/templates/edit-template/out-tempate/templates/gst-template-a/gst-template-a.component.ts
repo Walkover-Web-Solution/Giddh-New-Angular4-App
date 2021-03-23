@@ -44,7 +44,7 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
 	public isBaseCurrencyRupee = true;
 	public dollarSymbol = '$';
     public rupeeSymbol = '&#8377';
-    
+
 	constructor(
 		private store: Store<AppState>,
 		private settingsProfileActions: SettingsProfileActions) {
@@ -100,10 +100,8 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
 				if (changes.fieldsAndVisibility.currentValue.table.taxes && changes.fieldsAndVisibility.currentValue.table.taxes.display) {
 					this.columnsVisibled++;
 				}
-				if (changes.fieldsAndVisibility.currentValue.table.total && changes.fieldsAndVisibility.currentValue.table.total.display) {
-					this.columnsVisibled++;
-				}
 				if (this.columnsVisibled) {
+					this.columnsVisibled++;
 					this.columnsVisibled++;
 					this.columnsVisibled++;
 				}
