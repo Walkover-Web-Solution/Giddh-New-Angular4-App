@@ -634,8 +634,26 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     public showtemplateModal: boolean = false;
     public templateType: any;
 
-    constructor(private _toasty: ToasterService, private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _activatedRoute: ActivatedRoute, private _invoiceUiDataService: InvoiceUiDataService) {
+    constructor(
+        private _toasty: ToasterService,
+        private store: Store<AppState>,
+        private invoiceActions: InvoiceActions,
+        private _invoiceTemplatesService: InvoiceTemplatesService,
+        private _activatedRoute: ActivatedRoute,
+        private _invoiceUiDataService: InvoiceUiDataService
+    ) {
         this.store.dispatch(this.invoiceActions.getTemplateState());
+    }
+
+    /**
+     * Returns the content filter form invalid status
+     *
+     * @readonly
+     * @type {boolean} True, if form is invalid
+     * @memberof EditInvoiceComponent
+     */
+    public get isFormInValid(): boolean {
+        return this._invoiceUiDataService.contentForm?.invalid;
     }
 
     public ngOnInit() {
