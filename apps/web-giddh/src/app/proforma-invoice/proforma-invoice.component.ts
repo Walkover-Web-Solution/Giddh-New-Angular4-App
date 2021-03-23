@@ -116,45 +116,8 @@ import { PURCHASE_ORDER_STATUS } from '../shared/helpers/purchaseOrderStatus';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
 import { AccountsAction } from '../actions/accounts.actions';
-
-const THEAD_ARR_READONLY = [
-    {
-        display: true,
-        label: '#'
-    },
-    {
-        display: true,
-        label: 'Product/Service  Description '
-    },
-    {
-        display: true,
-        label: 'Qty/Unit'
-    },
-    {
-        display: true,
-        label: 'Rate'
-    },
-    {
-        display: true,
-        label: 'Amount'
-    },
-    {
-        display: true,
-        label: 'Discount'
-    },
-    {
-        display: true,
-        label: 'Tax'
-    },
-    {
-        display: true,
-        label: 'Total'
-    },
-    {
-        display: true,
-        label: ''
-    }
-];
+import { VoucherTypeToNamePipe } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.pipe';
+import { TitleCasePipe } from '@angular/common';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -256,11 +219,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public showTRNNo: boolean;
 
     public hsnDropdownShow: boolean = false;
-    public customerPlaceHolder: string = 'Select Customer';
-    public customerNotFoundText: string = 'Add Customer';
-    public invoiceNoLabel: string = 'Invoice #';
-    public invoiceDateLabel: string = 'Invoice Date';
-    public invoiceDueDateLabel: string = 'Invoice Due Date';
+    public customerPlaceHolder: string = '';
+    public customerNotFoundText: string = '';
+    public invoiceNoLabel: string = '';
+    public invoiceDateLabel: string = '';
+    public invoiceDueDateLabel: string = '';
 
     public isGenDtlCollapsed: boolean = true;
     public isMlngAddrCollapsed: boolean = true;
@@ -278,7 +241,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public asideMenuStateForProductService: string = 'out';
     public asideMenuStateForRecurringEntry: string = 'out';
     public asideMenuStateForOtherTaxes: string = 'out';
-    public theadArrReadOnly: IContentCommon[] = THEAD_ARR_READONLY;
+    public theadArrReadOnly: IContentCommon[] = [];
     public companyTaxesList: TaxResponse[] = [];
     public showCreateAcModal: boolean = false;
     public showCreateGroupModal: boolean = false;
@@ -605,6 +568,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public showBulkLoader: boolean;
     /** This will hold how many linked po items added */
     public linkedPoItemsAdded: number = 0;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** This will hold copy previous invoice text */
+    public copyPreviousInvoiceText: string = "";
+    /** This will hold generate invoice text */
+    public generateInvoiceText: string = "";
+    /** This will hold update invoice text */
+    public updateInvoiceText: string = "";
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -650,7 +625,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private searchService: SearchService,
         private settingsBranchAction: SettingsBranchActions,
         private ngZone: NgZone,
-        private accountActions: AccountsAction
+        private accountActions: AccountsAction,
+        private voucherTypeToNamePipe: VoucherTypeToNamePipe,
+        private titleCasePipe: TitleCasePipe
     ) {
         this.getInventorySettings();
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
@@ -732,7 +709,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public toggleRcmCheckbox(event: any): void {
         event.preventDefault();
-        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked);
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked, this.commonLocaleData);
     }
 
     /**
@@ -912,6 +889,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.getAllLastInvoices();
             this.fillDeliverToAddress();
             this.initiateVoucherModule();
+
+            if(this.translationLoaded) {
+                this.translationComplete(true);
+            }
         });
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
@@ -1684,24 +1665,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         if (!this.isCashInvoice) {
-            this.customerPlaceHolder = `Select ${!this.isPurchaseInvoice ? 'Customer' : 'Vendor'}`;
-            this.customerNotFoundText = `Add ${!this.isPurchaseInvoice ? 'Customer' : 'Vendor'}`;
+            this.customerPlaceHolder = !this.isPurchaseInvoice ? this.localeData?.select_customer : this.localeData?.select_vendor;
+            this.customerNotFoundText = !this.isPurchaseInvoice ? this.localeData?.add_customer : this.localeData?.add_vendor;
         }
 
         if (this.isProformaInvoice || this.isEstimateInvoice) {
-            this.invoiceNoLabel = this.isProformaInvoice ? 'Proforma #' : 'Estimate #';
-            this.invoiceDateLabel = this.isProformaInvoice ? 'Proforma Date' : 'Estimate Date';
-            this.invoiceDueDateLabel = 'Expiry Date';
+            this.invoiceNoLabel = this.isProformaInvoice ? this.localeData?.proforma_no : this.localeData?.estimate_no;
+            this.invoiceDateLabel = this.isProformaInvoice ? this.localeData?.proforma_date : this.localeData?.estimate_date;
+            this.invoiceDueDateLabel = this.localeData?.expiry_date;
         } else if (this.isCreditNote) {
-            this.invoiceDateLabel = 'Credit Note Date';
+            this.invoiceDateLabel = this.localeData?.cr_note_date;
         } else if (this.isDebitNote) {
-            this.invoiceDateLabel = 'Debit Note Date';
+            this.invoiceDateLabel = this.localeData?.dr_note_date;
         } else if (this.isPurchaseInvoice) {
-            this.invoiceDateLabel = 'Bill Date';
+            this.invoiceDateLabel = this.localeData?.bill_date;
         } else {
-            this.invoiceNoLabel = !this.isPurchaseInvoice ? 'Invoice #' : 'Purchase Bill #';
-            this.invoiceDateLabel = 'Invoice Date';
-            this.invoiceDueDateLabel = !this.isPurchaseInvoice ? 'Due Date' : 'Balance Due Date';
+            this.invoiceNoLabel = !this.isPurchaseInvoice ? this.localeData?.invoice_no : this.localeData?.purchase_bill_no;
+            this.invoiceDateLabel = this.commonLocaleData?.app_invoice_date;
+            this.invoiceDueDateLabel = !this.isPurchaseInvoice ? this.localeData?.due_date : this.localeData?.balance_due_date;
         }
 
         //---------------------//
@@ -1880,9 +1861,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (!this.isValidGstinNumber) {
                 this.startLoader(false);
                 if (fieldName) {
-                    this._toasty.errorToast(`Invalid ${this.formFields['taxName'].label} in ${fieldName}! Please fix and try again`);
+                    let invalidTax = this.localeData?.invalid_tax_field;
+                    invalidTax = invalidTax.replace("[TAX_NAME]", this.formFields['taxName']?.label);
+                    invalidTax = invalidTax.replace("[FIELD_NAME]", fieldName);
+                    this._toasty.errorToast(invalidTax);
                 } else {
-                    this._toasty.errorToast(`Invalid ${this.formFields['taxName'].label}! Please fix and try again`);
+                    let invalidTax = this.localeData?.invalid_tax_field;
+                    invalidTax = invalidTax.replace("[TAX_NAME]", this.formFields['taxName']?.label);
+                    this._toasty.errorToast(invalidTax);
                 }
             }
         }
@@ -2005,14 +1991,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // special check if gst no filed is visible then and only then check for gst validation
         if (data.accountDetails && data.accountDetails.billingDetails && data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
-            this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber, 'Billing Address');
+            this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber, this.localeData?.billing_address);
             if (!this.isValidGstinNumber) {
                 this.startLoader(false);
                 return;
             }
         }
         if (data.accountDetails && data.accountDetails.shippingDetails && data.accountDetails.shippingDetails.gstNumber && this.showGSTINNo) {
-            this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, 'Shipping Address');
+            this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, this.localeData?.shipping_address);
             if (!this.isValidGstinNumber) {
                 this.startLoader(false);
                 return;
@@ -2021,14 +2007,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         if(this.isPurchaseInvoice) {
             if (this.purchaseBillCompany && this.purchaseBillCompany.billingDetails && this.purchaseBillCompany.billingDetails.gstNumber && this.showGSTINNo) {
-                this.checkGstNumValidation(this.purchaseBillCompany.billingDetails.gstNumber, 'Billing Address');
+                this.checkGstNumValidation(this.purchaseBillCompany.billingDetails.gstNumber, this.localeData?.billing_address);
                 if (!this.isValidGstinNumber) {
                     this.startLoader(false);
                     return;
                 }
             }
             if (this.purchaseBillCompany && this.purchaseBillCompany.shippingDetails && this.purchaseBillCompany.shippingDetails.gstNumber && this.showGSTINNo) {
-                this.checkGstNumValidation(this.purchaseBillCompany.shippingDetails.gstNumber, 'Shipping Address');
+                this.checkGstNumValidation(this.purchaseBillCompany.shippingDetails.gstNumber, this.localeData?.shipping_address);
                 if (!this.isValidGstinNumber) {
                     this.startLoader(false);
                     return;
@@ -2040,17 +2026,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
                 this.startLoader(false);
 
-                let dateText = "Invoice";
+                let dateText = this.commonLocaleData?.app_invoice;
 
                 if (this.isProformaInvoice) {
-                    dateText = "Proforma";
+                    dateText = this.localeData?.invoice_types?.proforma;
                 }
 
                 if (this.isEstimateInvoice) {
-                    dateText = "Estimate";
+                    dateText = this.localeData?.invoice_types?.estimate;
                 }
 
-                this._toasty.errorToast('Due date cannot be less than ' + dateText + ' Date');
+                let dueDateError = this.localeData?.due_date_error;
+                dueDateError = dueDateError.replace("[INVOICE_TYPE]", dateText);
+                this._toasty.errorToast(dueDateError);
                 return;
             }
         } else {
@@ -2087,9 +2075,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (data.accountDetails) {
             if (!data.accountDetails.uniqueName) {
                 if (this.typeaheadNoResultsOfCustomer) {
-                    this._toasty.warningToast('Need to select Bank/Cash A/c or Customer Name');
+                    this._toasty.warningToast(this.localeData?.no_account_error);
                 } else {
-                    this._toasty.warningToast('Customer Name can\'t be empty');
+                    this._toasty.warningToast(this.localeData?.no_customer_error);
                 }
                 this.startLoader(false);
                 return;
@@ -2097,7 +2085,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (data.accountDetails.email) {
                 if (!EMAIL_REGEX_PATTERN.test(data.accountDetails.email)) {
                     this.startLoader(false);
-                    this._toasty.warningToast('Invalid Email Address.');
+                    this._toasty.warningToast(this.localeData?.invalid_email);
                     return;
                 }
             }
@@ -2156,7 +2144,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     // will get errors of string and if not error then true boolean
                     if (!txn.isValid()) {
                         this.startLoader(false);
-                        this._toasty.warningToast('Product/Service can\'t be empty');
+                        this._toasty.warningToast(this.localeData?.no_product_error);
                         txnErr = true;
                         return false;
                     } else {
@@ -2166,7 +2154,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             });
         } else {
             this.startLoader(false);
-            this._toasty.warningToast('At least a single entry needed to generate sales-invoice');
+            this._toasty.warningToast(this.localeData?.no_entry_error);
             return;
         }
 
@@ -2346,7 +2334,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.billingState.nativeElement.classList.add('error-box');
                     }
                     this.startLoader(false);
-                    this._toasty.errorToast('State is mandatory');
+                    this._toasty.errorToast(this.localeData?.no_state_error);
                     return;
                 }
             } else {
@@ -2355,14 +2343,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.handleGenerateResponse(response, form);
                     }, () => {
                         this.startLoader(false);
-                        this._toasty.errorToast('Something went wrong! Try again');
+                        this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                     });
                 } else {
                     this.salesService.generateGenericItem(updatedData, isVoucherV4).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
                         this.handleGenerateResponse(response, form);
                     }, () => {
                         this.startLoader(false);
-                        this._toasty.errorToast('Something went wrong! Try again');
+                        this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                     });
                 }
 
@@ -2969,17 +2957,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // description with sku and custom fields
         if ((o.stock) && (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice)) {
             let description = [];
-            let skuCodeHeading = o.stock.skuCodeHeading ? o.stock.skuCodeHeading : 'SKU Code';
+            let skuCodeHeading = o.stock.skuCodeHeading ? o.stock.skuCodeHeading : this.commonLocaleData?.app_sku_code;
             if (o.stock.skuCode) {
                 description.push(skuCodeHeading + ':' + o.stock.skuCode);
             }
 
-            let customField1Heading = o.stock.customField1Heading ? o.stock.customField1Heading : 'Custom field 1';
+            let customField1Heading = o.stock.customField1Heading ? o.stock.customField1Heading : this.localeData?.custom_field1;
             if (o.stock.customField1Value) {
                 description.push(customField1Heading + ':' + o.stock.customField1Value);
             }
 
-            let customField2Heading = o.stock.customField2Heading ? o.stock.customField2Heading : 'Custom field 2';
+            let customField2Heading = o.stock.customField2Heading ? o.stock.customField2Heading : this.localeData?.custom_field2;
             if (o.stock.customField2Value) {
                 description.push(customField2Heading + ':' + o.stock.customField2Value);
             }
@@ -3226,7 +3214,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             // if transaction is valid then add new row else show toasty
             if (!txn.isValid()) {
-                this._toasty.warningToast('Product/Service can\'t be empty');
+                this._toasty.warningToast(this.localeData?.no_product_error);
                 return;
             }
             let entry: SalesEntryClass = new SalesEntryClass();
@@ -3410,7 +3398,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public ngOnChanges(s: SimpleChanges) {
         if (s && s['isPurchaseInvoice'] && s['isPurchaseInvoice'].currentValue) {
-            this.pageChanged(VoucherTypeEnum.purchase, 'Purchase');
+            this.pageChanged(VoucherTypeEnum.purchase, this.commonLocaleData?.app_purchase);
             this.isSalesInvoice = false;
         }
 
@@ -3521,7 +3509,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.isFileUploading = false;
                 this.invFormData.entries[0].attachedFile = output.file.response.body.uniqueName;
                 this.invFormData.entries[0].attachedFileName = output.file.response.body.name;
-                this._toasty.successToast('file uploaded successfully');
+                this._toasty.successToast(this.localeData?.file_uploaded);
             } else {
                 this.isFileUploading = false;
                 this.invFormData.entries[0].attachedFile = '';
@@ -3784,7 +3772,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.actionsAfterVoucherUpdate(response, invoiceForm);
                     }, (err) => {
                         this.startLoader(false);
-                        this._toasty.errorToast('Something went wrong! Try again');
+                        this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                     });
             } else if (this.isPurchaseInvoice) {
                 if (this.isRcmEntry && !this.validateTaxes(cloneDeep(data))) {
@@ -3825,7 +3813,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.actionsAfterVoucherUpdate(response, invoiceForm);
                     }, (err) => {
                         this.startLoader(false);
-                        this._toasty.errorToast('Something went wrong! Try again');
+                        this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                     });
             }
         }
@@ -3851,7 +3839,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             // reset form and other
             this.resetInvoiceForm(invoiceForm);
-            this._toasty.successToast('Voucher updated Successfully');
+            this._toasty.successToast(this.localeData?.voucher_updated);
             this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
             this.voucherNumber = response.body.number;
             this.invoiceNo = this.voucherNumber;
@@ -3878,13 +3866,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // special check if gst no filed is visible then and only then check for gst validation
         if (data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
-            this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber, 'Billing Address');
+            this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber, this.localeData?.billing_address);
             if (!this.isValidGstinNumber) {
                 this.startLoader(false);
                 return;
             }
             if (!this.autoFillShipping) {
-                this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, 'Shipping Address');
+                this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, this.localeData?.shipping_address);
                 if (!this.isValidGstinNumber) {
                     this.startLoader(false);
                     return;
@@ -3896,17 +3884,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
                 this.startLoader(false);
 
-                let dateText = "Invoice";
+                let dateText = this.commonLocaleData?.app_invoice;
 
                 if (this.isProformaInvoice) {
-                    dateText = "Proforma";
+                    dateText = this.localeData?.invoice_types?.proforma;
                 }
 
                 if (this.isEstimateInvoice) {
-                    dateText = "Estimate";
+                    dateText = this.localeData?.invoice_types?.estimate;
                 }
 
-                this._toasty.errorToast('Due date cannot be less than ' + dateText + ' Date');
+                let dueDateError = this.localeData?.due_date_error;
+                dueDateError = dueDateError.replace("[INVOICE_TYPE]", dateText);
+                this._toasty.errorToast(dueDateError);
                 return;
             }
         } else {
@@ -3934,15 +3924,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (data.accountDetails) {
             if (!data.accountDetails.uniqueName) {
                 if (this.typeaheadNoResultsOfCustomer) {
-                    this._toasty.warningToast('Need to select Bank/Cash A/c or Customer Name');
+                    this._toasty.warningToast(this.localeData?.no_account_error);
                 } else {
-                    this._toasty.warningToast('Customer Name can\'t be empty');
+                    this._toasty.warningToast(this.localeData?.no_customer_error);
                 }
                 return;
             }
             if (data.accountDetails.email) {
                 if (!EMAIL_REGEX_PATTERN.test(data.accountDetails.email)) {
-                    this._toasty.warningToast('Invalid Email Address.');
+                    this._toasty.warningToast(this.localeData?.invalid_email);
                     return;
                 }
             }
@@ -4003,7 +3993,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     // will get errors of string and if not error then true boolean
                     if (!txn.isValid()) {
-                        this._toasty.warningToast('Product/Service can\'t be empty');
+                        this._toasty.warningToast(this.localeData?.no_product_error);
                         txnErr = true;
                         return false;
                     } else {
@@ -4012,7 +4002,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 });
             });
         } else {
-            this._toasty.warningToast('At least a single entry needed to generate sales-invoice');
+            this._toasty.warningToast(this.localeData?.no_entry_error);
             return;
         }
 
@@ -4278,15 +4268,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             newTrxObj.sku_and_customfields = null;
                             if (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice) {
                                 let description = [];
-                                let skuCodeHeading = stock.skuCodeHeading ? stock.skuCodeHeading : 'SKU Code';
+                                let skuCodeHeading = stock.skuCodeHeading ? stock.skuCodeHeading : this.commonLocaleData?.app_sku_code;
                                 if (stock.skuCode) {
                                     description.push(skuCodeHeading + ':' + stock.skuCode);
                                 }
-                                let customField1Heading = stock.customField1 ? stock.customField1.key : 'Custom field 1';
+                                let customField1Heading = stock.customField1 ? stock.customField1.key : this.localeData?.custom_field1;
                                 if (stock.customField1.value) {
                                     description.push(customField1Heading + ':' + stock.customField1.value);
                                 }
-                                let customField2Heading = stock.customField2 ? stock.customField2.key : 'Custom field 2';
+                                let customField2Heading = stock.customField2 ? stock.customField2.key : this.localeData?.custom_field2;
                                 if (stock.customField2.value) {
                                     description.push(customField2Heading + ':' + stock.customField2.value);
                                 }
@@ -4806,7 +4796,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if(this.voucherDateBeforeUpdate && this.invFormData.voucherDetails.voucherDate && this.voucherDateBeforeUpdate !== this.invFormData.voucherDetails.voucherDate) {
             this.isVoucherDateChanged = true;
             this.dateChangeType = "voucher";
-            this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(true);
+            this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(this.localeData, this.commonLocaleData, true);
             this.dateChangeConfirmationModel.show();
         }
 
@@ -5162,7 +5152,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.isUpdateMode = true;
         } else {
             // User denied the permission or closed the popup
-            this._toasty.errorToast('Please change either purchase invoice number or vendor details.', 'Purchase Bill');
+            this._toasty.errorToast(this.localeData?.purchase_record_error, this.localeData?.purchase_bill);
         }
         if (this.purchaseRecordConfirmationPopup) {
             this.purchaseRecordConfirmationPopup.hide();
@@ -5183,7 +5173,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if(this.isPurchaseInvoice && transaction.maxQuantity !== undefined && !this.copyPurchaseBill) {
                 if(transaction.quantity > transaction.maxQuantity) {
                     transaction.quantity = transaction.maxQuantity;
-                    this._toasty.errorToast("Quantity recorded can't be more than quantity ordered (" + transaction.maxQuantity + ")");
+                    this._toasty.errorToast(this.localeData?.quantity_error + " (" + transaction.maxQuantity + ")");
                 }
             }
 
@@ -5306,7 +5296,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private generatePurchaseRecord(requestObject: PurchaseRecordRequest): void {
-        this.purchaseRecordConfirmationConfiguration = this.proformaInvoiceUtilityService.getPurchaseRecordConfirmationConfiguration();
+        this.purchaseRecordConfirmationConfiguration = this.proformaInvoiceUtilityService.getPurchaseRecordConfirmationConfiguration(this.localeData, this.commonLocaleData);
         if (this.isPurchaseRecordContractBroken) {
             this.validatePurchaseRecord().pipe(takeUntil(this.destroyed$)).subscribe((data: any) => {
                 if (data && data.body) {
@@ -5331,7 +5321,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }, () => {
                 this.startLoader(false);
-                this._toasty.errorToast('Something went wrong! Try again')
+                this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong)
             });
         } else {
             if(this.copyPurchaseBill) {
@@ -5355,7 +5345,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.handleGenerateResponse(response, this.invoiceForm);
         }, () => {
             this.startLoader(false);
-            this._toasty.errorToast('Something went wrong! Try again')
+            this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong)
         });
     }
 
@@ -5372,7 +5362,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.actionsAfterVoucherUpdate(response, this.invoiceForm);
         }, () => {
             this.startLoader(false);
-            this._toasty.errorToast('Something went wrong! Try again')
+            this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong)
         });
     }
 
@@ -5402,9 +5392,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             if (this.isPurchaseInvoice) {
-                this._toasty.successToast(`Purchase bill created successfully`);
+                this._toasty.successToast(this.localeData?.purchase_bill_created);
             } else {
-                this._toasty.successToast(`Entry created successfully with Voucher Number: ${this.voucherNumber}`);
+                this._toasty.successToast(`${this.localeData?.entry_created}: ${this.voucherNumber}`);
             }
 
             /** For pending type need to navigate to get all module of voucher type   */
@@ -6066,10 +6056,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 let pending = [];
 
                                 if(item.pendingDetails.stocks) {
-                                    pending.push(item.pendingDetails.stocks + ((item.pendingDetails.stocks === 1) ? " Product" : " Products"));
+                                    pending.push(item.pendingDetails.stocks + ((item.pendingDetails.stocks === 1) ? " " + this.commonLocaleData?.app_product : " " + this.commonLocaleData?.app_products));
                                 }
                                 if(item.pendingDetails.services) {
-                                    pending.push(item.pendingDetails.services + ((item.pendingDetails.services === 1) ? " Service" : " Services"));
+                                    pending.push(item.pendingDetails.services + ((item.pendingDetails.services === 1) ? " " + this.commonLocaleData?.app_service : " " + this.commonLocaleData?.app_services));
                                 }
 
                                 this.purchaseOrders.push({label: item.number, value: item.uniqueName, additional: {grandTotal: item.pendingDetails.grandTotal, pending: pending.join(", ")}});
@@ -6682,7 +6672,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.isEntryDateChangeConfirmationDisplayed = true;
             this.dateChangeType = "entry";
             this.updatedEntryIndex = entryIdx;
-            this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(false);
+            this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(this.localeData, this.commonLocaleData, false);
             this.dateChangeConfirmationModel.show();
         }
     }
@@ -6901,5 +6891,110 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
             }
         }
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof ProformaInvoiceComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.translationLoaded = true;
+            this.customerPlaceHolder = this.localeData?.select_customer;
+            this.customerNotFoundText = this.localeData?.add_customer;
+            this.invoiceNoLabel = this.localeData?.invoice_no;
+            this.invoiceDateLabel = this.commonLocaleData?.app_invoice_date;
+            this.invoiceDueDateLabel = this.localeData?.invoice_due_date;
+
+            this.getItemColumns();
+            this.getCopyPreviousInvoiceText();
+            this.getGenerateInvoiceText();
+            this.getUpdateInvoiceText();
+            this.prepareInvoiceTypeFlags();
+        }
+    }
+
+    /**
+     * This will get copy previous invoice text
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public getCopyPreviousInvoiceText(): void {
+        this.copyPreviousInvoiceText = this.localeData?.copy_previous_invoices;
+        let invoiceType = this.voucherTypeToNamePipe.transform(this.invoiceType);
+        invoiceType = this.titleCasePipe.transform(invoiceType);
+        this.copyPreviousInvoiceText = this.copyPreviousInvoiceText?.replace("[INVOICE_TYPE]", invoiceType);
+    }
+
+    /**
+     * This will get generate invoice text
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public getGenerateInvoiceText(): void {
+        this.generateInvoiceText = this.localeData?.generate_invoice;
+        let invoiceType = ((this.invoiceType === 'proforma' || this.invoiceType === 'proformas') ? this.localeData?.invoice_types?.proforma : (this.invoiceType === 'estimate' || this.invoiceType === 'estimates') ? this.localeData?.invoice_types?.estimate : this.invoiceType);
+        invoiceType = this.titleCasePipe.transform(invoiceType);
+        this.generateInvoiceText = this.generateInvoiceText?.replace("[INVOICE_TYPE]", invoiceType);
+    }
+
+    /**
+     * This will get update invoice text
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public getUpdateInvoiceText(): void {
+        this.updateInvoiceText = this.localeData?.update_invoice;
+        let invoiceType = ((this.invoiceType === 'proforma' || this.invoiceType === 'proformas') ? this.localeData?.invoice_types?.proforma : (this.invoiceType === 'estimate' || this.invoiceType === 'estimates') ? this.localeData?.invoice_types?.estimate : this.invoiceType);
+        invoiceType = this.titleCasePipe.transform(invoiceType);
+        this.updateInvoiceText = this.updateInvoiceText?.replace("[INVOICE_TYPE]", invoiceType);
+    }
+
+    /**
+     * This will get text for item table
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public getItemColumns(): void {
+        this.theadArrReadOnly = [
+            {
+                display: true,
+                label: '#'
+            },
+            {
+                display: true,
+                label: this.localeData?.product_service_description
+            },
+            {
+                display: true,
+                label: this.commonLocaleData?.app_quantity_unit
+            },
+            {
+                display: true,
+                label: this.commonLocaleData?.app_rate
+            },
+            {
+                display: true,
+                label: this.commonLocaleData?.app_amount
+            },
+            {
+                display: true,
+                label: this.commonLocaleData?.app_discount
+            },
+            {
+                display: true,
+                label: this.commonLocaleData?.app_tax
+            },
+            {
+                display: true,
+                label: this.commonLocaleData?.app_total
+            },
+            {
+                display: true,
+                label: ''
+            }
+        ];
     }
 }
