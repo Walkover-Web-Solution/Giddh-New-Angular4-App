@@ -543,7 +543,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         }
                     }
                 });
-            } else {
+            } 
+            else {
                 // statesEle.setDisabledState(false);
                 if (this.isIndia) {
                     statesEle.forceClearReactive.status = true;
@@ -552,7 +553,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     gstForm.get('state').get('code').patchValue(null);
                 }
             }
-        } else {
+        } 
+        else {
             //lastedited
             statesEle.forceClearReactive.status = true;
             // statesEle.clear();
@@ -569,6 +571,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             //         gstForm.get('state').get('code').patchValue(null);
             //     }
             // }
+
     }
 
     public showMoreGst() {
