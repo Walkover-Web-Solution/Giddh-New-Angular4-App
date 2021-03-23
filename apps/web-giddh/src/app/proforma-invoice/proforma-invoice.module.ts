@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
@@ -89,7 +89,7 @@ import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjust
         AsideMenuProductServiceComponent,
         ProformaPrintInPlaceComponent
     ],
-    providers: [],
+    providers: [TitleCasePipe],
 })
 export class ProformaInvoiceModule {
 }
