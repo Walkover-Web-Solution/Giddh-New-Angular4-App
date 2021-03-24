@@ -605,6 +605,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public showBulkLoader: boolean;
     /** This will hold how many linked po items added */
     public linkedPoItemsAdded: number = 0;
+    /** True, if user has opted to show notes at the last page of sales invoice */
+    public showNotesAtLastPage: boolean;
+
+    /**
+     * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
+     * need to apply max characters limit on Notes/notes2/messsage2
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof ProformaInvoiceComponent
+     */
+    public get shouldApplyMaxLengthOnNotes(): boolean {
+        return (this.isSalesInvoice || this.isProformaInvoice || this.isEstimateInvoice);
+    }
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -1388,7 +1402,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (!this.isProformaInvoice && !this.isEstimateInvoice) {
                     if (result[0]) {
                         result[0] = result[0] as ReciptResponse;
-                        result[0].items.forEach(item => {
+                        result[0]?.items.forEach(item => {
                             arr.push({
                                 versionNumber: item.voucherNumber, date: item.voucherDate, grandTotal: item.grandTotal,
                                 account: {name: item.account.name, uniqueName: item.account.uniqueName}
@@ -5964,6 +5978,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         shippedDateLabel,
                         trackingNumber
                     };
+                }
+                if (sections?.footer?.data) {
+                    this.showNotesAtLastPage = sections.footer.data.showNotesAtLastPage?.display;
                 }
             }
         }

@@ -675,9 +675,7 @@ ul.sub-list {
 }
 
 .company-list .input-group .form-control {
-    /* border-bottom: 1px solid #e8e8e8 !important; */
     border: 0px solid !important;
-    /* border-bottom: 1px solid #e8e8e8 !important; */
 }
 
 .company-list .input-group .input-group-addon {
@@ -2521,14 +2519,6 @@ input[type="checkbox"]:checked:after {
     white-space: normal;
 }
 
-.pd-b1 {
-    padding-bottom: 10px;
-}
-
-.pdB0 {
-    padding-bottom: 0;
-}
-
 .templateInfo {
     position: relative;
     width: 100%;
@@ -3753,10 +3743,6 @@ a.btn.btn-xs.btn-link.pull-right {
     opacity: 1;
     text-shadow: none;
     cursor: pointer;
-}
-
-.pd-b5 {
-    padding-bottom: 50px;
 }
 
 .size-xs {
@@ -5252,7 +5238,7 @@ a {
     margin-bottom: 0;
 }
 
-#customInvoice .template-editor .custom-field span {
+#customInvoice .template-editor .custom-field span:not(.max-character-label) {
     display: inline-block;
     float: right;
     width: calc(100% - 30px);
@@ -7626,7 +7612,7 @@ app-header {
 }
 
 .error-box {
-    border: 2px solid $red;
+    border: 2px solid $red !important;
 }
 
 .text-warning {
@@ -7960,6 +7946,10 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 
 .welcome-select .menu {
     width: 120px !important;
+}
+
+.create-select .menu{
+    width: 142px !important;
 }
 
 .select-caret:after,
@@ -9379,7 +9369,15 @@ span#HW_badge_cont:nth-child(3) {
         background-color: $whisper-light !important;
     }
 }
-
+.max-character-label {
+    padding-left: 6px;
+    font-size: 11px;
+    color: $gray;
+}
+.max-character-value {
+    width: auto !important;
+    float: none !important;
+}
 
 #update-ledger-voucher-type-default.disabled-ledger, #update-ledger-assign-tag.disabled-ledger{
     .sh-select-disabled{

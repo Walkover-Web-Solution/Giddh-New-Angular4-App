@@ -507,7 +507,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                             this.formFields[res.fields[key].name] = res.fields[key];
                         }
                     });
-                    this.branchTransferInfoText = `Branch transfer is allowed only for same ${this.formFields['taxName']?.label || 'tax'} numbers or missing ${this.formFields['taxName']?.label || 'tax'} numbers of both the sender & receiver`;
+                    this.branchTransferInfoText = `Branch Transfer is allowed only if the Sender and Receiver warehouses have the same ${this.formFields['taxName']?.label || 'tax'}  or doesn't have any ${this.formFields['taxName']?.label || 'tax'}`;
                 }
             } else {
                 let onboardingFormRequest = new OnboardingFormRequest();
@@ -1241,7 +1241,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public toggleTransporterModel(): void {
         this.transporterPopupStatus = !this.transporterPopupStatus;
-        this.generateNewTransporterForm.reset();
+        this.generateNewTransporterForm?.reset();
         this.transportEditMode = false;
     }
 

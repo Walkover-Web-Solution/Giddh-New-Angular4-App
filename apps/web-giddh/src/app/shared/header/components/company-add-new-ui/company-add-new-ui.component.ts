@@ -325,7 +325,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
     public isValidMobileNumber() {
         if (this.mobileNoEl?.nativeElement?.value) {
-            this.checkMobileNo(this.mobileNoEl.nativeElement);
+            this.checkMobileNo(this.mobileNoEl?.nativeElement);
         }
     }
 

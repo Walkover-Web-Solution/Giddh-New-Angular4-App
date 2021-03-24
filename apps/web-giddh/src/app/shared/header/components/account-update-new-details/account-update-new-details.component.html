@@ -1,12 +1,12 @@
 <ng-container appTranslate [file]="'accounts'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <form name="addAccountForm" class="create-acc-form" [formGroup]="addAccountForm">
-    <div class="">
+    <div>
         <div class="upper-form">
             <div class="row ">
                 <div class="col-sm-4">
                     <div class="ng-select-wrap select-list select-group disable-select-group">
                         <label>{{localeData?.select_group_label}}<span class="red-text">*</span> </label>
-                        <ng-select [placeholder]="localeData?.select_group_label" [disabled]="true" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="activeAccountGroup" class="wd100">
+                        <ng-select [placeholder]="localeData?.select_group_label" [disabled]="true" [filterPlaceholder]="localeData?.select_group_label" (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="activeAccountGroup" class="wd100">
                             <ng-template #optionTemplate let-option="option">
                                 <div class="account-list-item">{{option?.label}}</div>
                                 <div class="account-list-item font-12">{{option?.value}}</div>

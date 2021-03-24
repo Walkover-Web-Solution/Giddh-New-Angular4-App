@@ -38,6 +38,7 @@ import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ESCAPE } from '@angular/cdk/keycodes';
+import { isEqual } from '../../lodash-optimized';
 
 export declare const gapi: any;
 
@@ -165,6 +166,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public activeUrn: any;
     /** Beneficiary aside pan status */
     public beneficiaryAsideState: string = "out";
+    /** This will hold users list */
+    public usersList: any[] = [];
 
     constructor(
         private router: Router,
@@ -287,25 +290,28 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && o.account) {
-                this.registeredAccount = o.account;
-                if (this.registeredAccount && this.registeredAccount.length === 0) {
-                    this.openNewRegistration = true;
-                }
-                if (this.registeredAccount && this.registeredAccount.length) {
-                    this.registeredAccount.map(item => {
-                        if (item && !item.userAmountRanges) {
-                            item.userAmountRanges = [this.getBlankAmountRangeRow()]
-                        }
-                    });
-                }
-                if (this.registeredAccount) {
-                    this.registeredAccount.map(item => {
-                        item.userAmountRanges.map(element => {
-                            if (typeof element.maxBankLimit === "boolean") {
-                                element.maxBankLimit = element.maxBankLimit ? 'max' : 'custom';
+                if(!isEqual(this.registeredAccount, o.account)) {
+                    this.registeredAccount = o.account;
+                    if (this.registeredAccount && this.registeredAccount.length === 0) {
+                        this.openNewRegistration = true;
+                    }
+                    if (this.registeredAccount && this.registeredAccount.length) {
+                        this.registeredAccount.map(item => {
+                            if (item && !item.userAmountRanges) {
+                                item.userAmountRanges = [this.getBlankAmountRangeRow()]
                             }
                         });
-                    });
+                    }
+                    if (this.registeredAccount) {
+                        this.registeredAccount.map(item => {
+                            this.getRegistrationStatus(item);
+                            item.userAmountRanges.map(element => {
+                                if (typeof element.maxBankLimit === "boolean") {
+                                    element.maxBankLimit = element.maxBankLimit ? 'max' : 'custom';
+                                }
+                            });
+                        });
+                    }
                 }
                 if (this.addBankForm) {
                     this.addBankForm.reset();
@@ -372,7 +378,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.isBankUpdateInEdit = null;
                 this.updateBankUrnNumber = null;
             }
-        })
+        });
+
+        this.store.pipe(select(state => state.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.usersList = [];
+                response.forEach(user => {
+                    this.usersList.push({ label: user.userName, value: user.emailId });
+                });
+            }
+        });
     }
 
     public ngAfterViewInit() {
@@ -721,7 +736,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         let requestData = {
             URN: this.updateBankUrnNumber,
             accountUniqueName: registeredAccountObj.accountUniqueName,
-            userAmountRanges: registeredAccountObj.userAmountRanges
+            userAmountRanges: registeredAccountObj.userAmountRanges,
+            userName: registeredAccountObj.userName,
+            emailId: registeredAccountObj.emailId
         }
         this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentInfo(requestData));
         this.paymentFormObj = new PaymentClass();
@@ -1157,6 +1174,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     approvalUniqueName: [''],
                 })
             ]),
+            userName: [null],
+            emailId: [null]
         });
     }
 
@@ -1582,6 +1601,35 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public handleKeyboardEvent(event: KeyboardEvent) {
         if (event.keyCode === ESCAPE) {
             this.hideBeneficiaryModal();
+        }
+    }
+
+    /**
+     * This will get the account registration status
+     *
+     * @param {*} account
+     * @memberof SettingIntegrationComponent
+     */
+    public getRegistrationStatus(account: any): void {
+        this.settingsIntegrationService.getRegistrationStatus(account.URN).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.body) {
+                account.registrationStatus = response?.body?.Status;
+            } else {
+                account.registrationStatus = "";
+            }
+        });
+    }
+
+    /**
+     * Callback for user selected
+     *
+     * @param {*} event
+     * @memberof SettingIntegrationComponent
+     */
+    public selectUser(event: any): void {
+        if(event) {
+            this.addBankForm.get('userName').patchValue(event.label);
+            this.addBankForm.get('emailId').patchValue(event.value);
         }
     }
 }

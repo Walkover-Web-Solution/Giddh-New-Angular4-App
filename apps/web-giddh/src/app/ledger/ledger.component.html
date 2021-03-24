@@ -1,6 +1,6 @@
 <ng-container appTranslate [file]="'ledger'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
-    <ng-container *ngIf="localeData?.page_heading">
+    <ng-container *ngIf="localeData?.page_heading && commonLocaleData?.app_ac">
         <div class="btn-group ledger-ellipse" dropdown dropdown placement="left" *ngIf="isMobileScreen">
             <button id="button-basic" dropdownToggle type="button" class="dropdown-toggle btn mr-0"
                 aria-controls="dropdown-basic">
@@ -775,7 +775,7 @@
 
                     <!-- region debit transaction-->
                     <div [ngClass]="Shown ? 'active' : ''" hr-item
-                        (ngInit)="initNavigator(navigator,$event.nativeElement); navigator.nextVertical();"
+                        (ngInit)="initNavigator(navigator,$event?.nativeElement); navigator.nextVertical();"
                         class="left-col-new"
                         [ngClass]="{'bd-rr': (lc.transactionData$ | async)?.debitTransactions?.length >= (lc.transactionData$ | async)?.creditTransactions?.length}">
 
@@ -1077,7 +1077,7 @@
 
                     <!-- region credit transaction-->
                     <div [ngClass]="isHide ? 'active' : 'right-col-new'" class="right-col-new" hr-item
-                        (ngInit)="initNavigator(navigator,$event.nativeElement); navigator.nextVertical();"
+                        (ngInit)="initNavigator(navigator,$event?.nativeElement); navigator.nextVertical();"
                         [ngClass]="{'bd-rl': (lc.transactionData$ | async)?.debitTransactions?.length < (lc.transactionData$ | async)?.creditTransactions?.length}">
                         <!-- region credit transaction header-->
                         <table class="width-100 h-table hidden-xs">
@@ -1404,7 +1404,6 @@
                                     <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
                                         <div class="d-flex flex-column">
                                             <span class="bd-rt ng-binding padding-ledger">
-
                                                 <!-- {{ ledgerTxnBalance?.currencySymbol }}{{lc.reckoningDebitTotal  | giddhCurrency }} -->
                                                 <amount-field [amount]="lc.reckoningDebitTotal"
                                                     [currencySymbol]="ledgerTxnBalance?.currencySymbol"

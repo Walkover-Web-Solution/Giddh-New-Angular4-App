@@ -309,7 +309,7 @@
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">
                                 {{(fieldsAndVisibility.table.cess?.label?.length > 0) ? fieldsAndVisibility.table.cess?.label : 'CESS'}}
                             </th>
-                            <th *ngIf="fieldsAndVisibility.table.total?.display " class="text-right "
+                            <th class="text-right "
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">
                                 {{(fieldsAndVisibility.table.total?.label?.length > 0) ? fieldsAndVisibility.table.total?.label : 'Total'}}
                             </th>
@@ -356,7 +356,7 @@
                                     [innerHTML]='rupeeSymbol'></span>0.00
                                 <p [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'} ">@0%</p>
                             </td>
-                            <td colspan="3 " *ngIf="fieldsAndVisibility.table.total?.display " class="text-right "><span
+                            <td colspan="3 " class="text-right "><span
                                     [innerHTML]='rupeeSymbol'></span>2006.00
                                 <p><span [innerHTML]='dollarSymbol'></span>28.65</p>
                             </td>
@@ -396,7 +396,7 @@
                                     [innerHTML]='rupeeSymbol'></span>0.00
                                 <p [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'} ">@0%</p>
                             </td>
-                            <td colspan="3 " *ngIf="fieldsAndVisibility.table.total?.display " class="text-right "><span
+                            <td colspan="3 " class="text-right "><span
                                     [innerHTML]='rupeeSymbol'></span>118.00
                                 <p><span [innerHTML]='dollarSymbol'></span>1.68</p>
                             </td>
@@ -478,7 +478,7 @@
                         </tr> -->
                     </tbody>
                     <tfoot>
-                        <tr>
+                        <tr *ngIf="fieldsAndVisibility.table.total?.display">
                             <th *ngIf="fieldsAndVisibility.table.sNo?.display " class="text-right "
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">&nbsp;
                             </th>
@@ -505,7 +505,7 @@
             <th *ngIf="fieldsAndVisibility.table.discount?.display " class="text-right "
                 [ngStyle]="{ 'background-color': inputTemplate.tableColor} "><span [innerHTML]='rupeeSymbol'></span>800.00
             </th>-->
-                            <th *ngIf="fieldsAndVisibility.table.taxableValue?.display " class="text-right "
+                            <th *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right "
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor} "><span
                                     [innerHTML]='rupeeSymbol'></span>1800.00
                             </th>
@@ -526,7 +526,7 @@
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor} "><span
                                     [innerHTML]='rupeeSymbol'></span>0.00
                             </th>
-                            <th *ngIf="fieldsAndVisibility.table.total?.display " class="text-right "
+                            <th class="text-right "
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor} "><span
                                     [innerHTML]='rupeeSymbol'></span>2124.00
                             </th>
@@ -640,14 +640,6 @@
                                     <th class="text-right "
                                         [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">SGST Amt.</th>
                                 </ng-container>
-                                <ng-container>
-                                    <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} "
-                                        *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
-                                        IGST %</th>
-                                    <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} "
-                                        *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
-                                        IGST Amt.</th>
-                                </ng-container>
                                 <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} "
                                     *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
                                     Total Amt.</th>
@@ -693,10 +685,6 @@
                                 <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'" class="text-right ">162.00
                                 </td>
                                 <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
-                                    18%</td>
-                                <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
-                                    100.00</td>
-                                <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
                                     2124.00</td>
                             </tr>
                         </tbody>
@@ -711,11 +699,6 @@
                                 <th class="text-right ">162.00</th>
                                 <th></th>
                                 <th class="text-right ">162.00</th>
-                                <th *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label==='taxRateBifurcation' ">
-                                </th>
-                                <th class="text-right "
-                                    *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label==='taxRateBifurcation' ">
-                                    600.00</th>
                                 <th class="text-right "
                                     *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label==='taxRateBifurcation' ">
                                     2124</th>
@@ -730,11 +713,12 @@
                     <i class="icon-edit-pencil "></i>
                 </a>
                 <aside>
+                    <p class="pd-1" [ngStyle]="{ 'font-size' : inputTemplate.fontMedium + 'px', 'white-space': 'pre-line'}" *ngIf="fieldsAndVisibility.footer.showNotesAtLastPage?.display">{{fieldsAndVisibility.footer.message1?.label}}</p>
                     <table cellpadding="0" cellspacing="0" class="subfooter">
                         <tbody>
                             <tr>
                                 <td class="accc " [ngStyle]="{ 'font-size' : inputTemplate.fontMedium + 'px' } ">
-                                    <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display ">
+                                    <ng-container *ngIf="!fieldsAndVisibility.footer.showNotesAtLastPage?.display && fieldsAndVisibility.footer.message1?.display ">
                                         <p *ngIf="fieldsAndVisibility.footer.message1?.display ">
                                             <span><br>
                                                 <strong>Notes</strong> <br>
@@ -743,11 +727,6 @@
                                                         {{fieldsAndVisibility.footer.message1?.label}}
                                                     </ng-container>
                                                 </span>
-                                                <ng-container *ngIf="!fieldsAndVisibility?.footer?.message1?.label ">
-                                                    *Tax to be paid on Reverse Charge.<br>
-                                                    All payments to be made in cash. <br> Contact us for queries on
-                                                    these quotations. <br>
-                                                </ng-container>
                                             </span>
                                         </p>
                                     </ng-container>
