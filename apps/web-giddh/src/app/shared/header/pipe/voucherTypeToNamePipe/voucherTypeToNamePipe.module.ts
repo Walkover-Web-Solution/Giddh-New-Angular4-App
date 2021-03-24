@@ -5,7 +5,7 @@ import { VoucherTypeToNamePipe } from './voucherTypeToNamePipe.pipe';
     imports: [],
     exports: [VoucherTypeToNamePipe],
     declarations: [VoucherTypeToNamePipe],
-    providers: [],
+    providers: [VoucherTypeToNamePipe],
 })
 export class VoucherTypeToNamePipeModule {
 }

@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
-import { InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 
 @Component({
     selector: 'app-send-email-invoice-component',
@@ -8,7 +7,7 @@ import { InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
     styleUrls: ['./send-email-invoice.component.scss']
 })
 
-export class SendEmailInvoiceComponent implements OnInit, OnDestroy {
+export class SendEmailInvoiceComponent implements OnInit {
     @Input() voucherType: VoucherTypeEnum;
     @Input() selectedItem: { voucherNumber: string, uniqueName: string, account: {email: string} };
     @Output() public successEvent: EventEmitter<any> = new EventEmitter<any>();
@@ -18,6 +17,10 @@ export class SendEmailInvoiceComponent implements OnInit, OnDestroy {
     public isTransport: boolean = false;
     public isCustomer: boolean = false;
     public activeTab: string = 'email';
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor() {
     }
@@ -58,8 +61,5 @@ export class SendEmailInvoiceComponent implements OnInit, OnDestroy {
         this.invoiceType = [];
         this.isTransport = false;
         this.isCustomer = false;
-    }
-
-    ngOnDestroy(): void {
     }
 }
