@@ -327,7 +327,7 @@
                                 <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
                                     <!-- {{(gstr3BData?.sup_details?.osup_nongst?.txval?gstr3BData?.sup_details?.osup_nongst?.txval: 0 )| giddhCurrency}} -->
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="(gstr3BData?.sup_details?.osup_nongst?.txval?.gstr3BData?.sup_details?.osup_nongst?.txval: 0 )"
+                                        <amount-field [amount]="(gstr3BData?.sup_details?.osup_nongst?.txval ? gstr3BData?.sup_details?.osup_nongst?.txval : 0 )"
                                             [currencySymbol]="false" [currencyCode]="false">
                                         </amount-field>
                                     </span>
