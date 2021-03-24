@@ -966,6 +966,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.getBankTransactions();
             this.getTransactionData();
         }
+        if (this.lc.currentBlankTxn) {
+            this.lc.currentBlankTxn.showDropdown = false;
+        }
+        this.selectedTrxWhileHovering = '';
         this.lc.showBankLedgerPanel = false;
         this.lc.currentBlankTxn = null;
         this.lc.selectedBankTxnUniqueName = null;
@@ -1198,6 +1202,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public hideNewLedgerEntryPopup(event?) {
+        this.selectedTrxWhileHovering = '';
         if (event && event.path) {
             let classList = event.path.map(m => {
                 return m.classList;
