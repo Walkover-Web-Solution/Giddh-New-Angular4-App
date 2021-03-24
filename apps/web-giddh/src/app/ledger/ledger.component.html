@@ -696,7 +696,8 @@
                                             <td class="pd-l15 pd-r15 relative"
                                                 [ngClass]="{'compound-entry': transactions.entryUniqueName === lc.selectedTxnUniqueName || transactions.isChecked}"
                                                 tooltip="{{transactions.description}}"
-                                                (click)="entryHovered(transactions.entryUniqueName)">
+                                                (mouseover)="entryHovered(transactions.entryUniqueName)"
+                                                (mouseout)="selectedTrxWhileHovering = ''">
                                                 <span class="pull-left account-holder-checkbox">
                                                     <input type="checkbox" id="{{'mobile-view-select-entry-cr-' + i}}"
                                                         [ngClass]="{'d-none': (selectedTrxWhileHovering !== transactions.entryUniqueName && !(transactions.isChecked) && checkedTrxWhileHovering?.length === 0)}"
@@ -858,7 +859,8 @@
                                     *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions; let i = index;"
                                     (dblclick)="showUpdateLedgerModal(txn)" (keydown.enter)="showUpdateLedgerModal(txn)"
                                     [ngClass]="{'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
-                                    tooltip="{{txn.description}}" (click)="entryHovered(txn.entryUniqueName)">
+                                    tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
+                                    (mouseout)="selectedTrxWhileHovering = ''">
 
                                     <td class="col-xs-3 col-md-3 col-lg-3"
                                         [attr.data-title]="commonLocaleData?.app_date">
@@ -1159,7 +1161,7 @@
                                     (keydown.enter)="showUpdateLedgerModal(txn)"
                                     [ngClass]="{'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
                                     tooltip="{{txn.description}}" data-toggle="tooltip"
-                                    (click)="entryHovered(txn.entryUniqueName)">
+                                    (mouseover)="entryHovered(txn.entryUniqueName)" (mouseout)="selectedTrxWhileHovering = ''">
 
                                     <td class="col-xs-3 col-md-3 col-lg-3"
                                         [attr.data-title]="commonLocaleData?.app_date">
