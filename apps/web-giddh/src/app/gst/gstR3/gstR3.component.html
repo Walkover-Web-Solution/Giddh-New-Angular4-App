@@ -740,7 +740,7 @@
                                     <td class="text-right "><i class="icon-rupees font-11"></i>
                                         <!-- {{(gstr3BData?.itc_elg?.itc_net?.csamt? gstr3BData?.itc_elg?.itc_net?.csamt: 0) | giddhCurrency}} -->
                                         <span class="d-inline-flex">
-                                            <amount-field [amount]="(gstr3BData?.itc_elg?.itc_net?.csamt ? gstr3BData?.itc_elg?.itc_net?.csamt: 0)" [currencySymbol]="false" [currencyCode]="false">
+                                            <amount-field [amount]="(gstr3BData?.itc_elg?.itc_net?.csamt ? gstr3BData?.itc_elg?.itc_net?.csamt : 0)" [currencySymbol]="false" [currencyCode]="false">
                                             </amount-field>
                                         </span>
                                     </td>
