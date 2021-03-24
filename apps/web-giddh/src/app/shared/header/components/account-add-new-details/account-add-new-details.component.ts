@@ -521,7 +521,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 gstForm.get('partyType').reset('NOT APPLICABLE');
             }
 
-            if (gstVal.length >= 2) {
+            if (gstVal.length >=2) {
                 this.statesSource$.pipe(take(1)).subscribe(state => {
                     let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
@@ -543,20 +543,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         }
                     }
                 });
-            } else {
-                // statesEle.setDisabledState(false);
-                if (this.isIndia) {
-                    statesEle.forceClearReactive.status = true;
-                    statesEle.clear();
-                    gstForm.get('stateCode').patchValue(null);
-                    gstForm.get('state').get('code').patchValue(null);
-                }
-            }
-        } else {
-            statesEle.forceClearReactive.status = true;
-            statesEle.clear();
-            gstForm.get('stateCode').patchValue(null);
-            gstForm.get('state').get('code').patchValue(null);
+            } 
+            // else {
+            //     // statesEle.setDisabledState(false);
+            //     if (this.isIndia) {
+            //         statesEle.forceClearReactive.status = true;
+            //         statesEle.clear();
+            //         gstForm.get('stateCode').patchValue(null);
+            //         gstForm.get('state').get('code').patchValue(null);
+            //     }
+            // }
         }
     }
 
