@@ -34,6 +34,7 @@ import { API_COUNT_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 
 @Component({
     selector: 'account-add-new-details',
@@ -165,6 +166,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private _toaster: ToasterService,
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
+        private generalService: GeneralService,
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private invoiceService: InvoiceService) {
@@ -541,7 +543,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         }
                     }
                 });
-            } 
+            }
             // else {
             //     // statesEle.setDisabledState(false);
             //     if (this.isIndia) {
@@ -610,6 +612,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
         if (!this.addAccountForm.get('foreignOpeningBalance').value) {
             this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
+        }
+        if (this.showBankDetail) {
+            const bankDetails = _.cloneDeep(this.addAccountForm.get('accountBankDetails')?.value);
+            const isValid = this.generalService.checkForValidBankDetails(bankDetails?.pop(), this.selectedCountryCode);
+            if (!isValid) {
+                this._toaster.errorToast(this.localeData?.bank_details_error_message);
+                return;
+            }
         }
         let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
