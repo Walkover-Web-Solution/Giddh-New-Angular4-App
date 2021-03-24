@@ -492,5 +492,6 @@
     "app_start_date": "प्रारंभ तारीख",
     "app_end_date": "शेवटची तारीख",
     "app_send": "पाठवा",
-    "app_validate": "प्रमाणित करा"
+    "app_validate": "प्रमाणित करा",
+    "app_prefix": "Prefix"
 }
