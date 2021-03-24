@@ -260,7 +260,8 @@
                                                 <ng-container *ngFor="let item of lc.bankTransactionsData; trackBy: trackByTransactionId; let i = index">
                                                     <ng-container *ngFor="let txn of item.transactions;">
                                                         <ng-container *ngIf="txn.type === 'DEBIT'">
-                                                            <tr class="ledger-row row" (mouseenter)="txn.showDropdown = true;" (mouseleave)="txn.showDropdown = false;" [ngClass]="{'compound-entry': txn.id === lc.selectedBankTxnUniqueName}">
+                                                            <tr class="ledger-row row"
+                                                                [ngClass]="{'compound-entry': txn.id === lc.selectedBankTxnUniqueName}">
                                                                 <td class="col-3 col-md-3 col-lg-3">
                                                                     <div class="d-flex align-items-center">
                                                                         <span class="pd-l05 checkbox-span">
@@ -273,10 +274,21 @@
                                                                     </div>
                                                                 </td>
                                                                 <td class="col-5 col-md-6 col-lg-6 select2-parent select2-ledger">
-                                                                    <div class="w-100" *ngIf="txn.type === 'DEBIT'" (click)="showBankLedgerPopup(txn, item);">
-                                                                        <span [ngClass]="{'account-placeholder': true, 'account-placeholder-text': txn.selectedAccount && txn.selectedAccount.name}" *ngIf="!txn.showDropdown">{{txn.selectedAccount ? (txn.selectedAccount.name) : commonLocaleData?.app_select_accounts}}</span>
-                                                                        <sh-select *ngIf="txn.showDropdown" class="transaction-list-sh-select" [options]="searchResults" [(ngModel)]="txn.particular" [isPaginationEnabled]="true"
-                                                                            (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                                    <div class="w-100" *ngIf="txn.type === 'DEBIT'"
+                                                                        (click)="txn.showDropdown = true;showBankLedgerPopup(txn, item);">
+                                                                        <span
+                                                                            [ngClass]="{'account-placeholder': true, 'account-placeholder-text': txn.selectedAccount && txn.selectedAccount.name}"
+                                                                            *ngIf="!txn.showDropdown">{{txn.selectedAccount
+                                                                            ? (txn.selectedAccount.name) :
+                                                                            commonLocaleData?.app_select_accounts}}</span>
+                                                                        <sh-select *ngIf="txn.showDropdown"
+                                                                            class="transaction-list-sh-select" #debitShSelect
+                                                                            (viewInitEvent)="debitShSelect?.show()"
+                                                                            [options]="searchResults"
+                                                                            [(ngModel)]="txn.particular"
+                                                                            [isPaginationEnabled]="true"
+                                                                            (scrollEnd)="handleScrollEnd()"
+                                                                            (dynamicSearchedQuery)="onSearchQueryChanged($event)"
                                                                             [notFoundMsg]="noResultsFoundLabel"
                                                                             [showSearchSuggestion]="!(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
                                                                             [readonlyInput]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2"
@@ -343,7 +355,7 @@
                                                 <ng-container *ngFor="let item of lc.bankTransactionsData; trackBy: trackByTransactionId; let i = index">
                                                     <ng-container *ngFor="let txn of item.transactions;">
                                                         <ng-container *ngIf="txn.type === 'CREDIT'">
-                                                            <tr class="ledger-row row" (mouseenter)="txn.showDropdown = true;" (mouseleave)="txn.showDropdown = false;">
+                                                            <tr class="ledger-row row">
                                                                 <td class="col-3 col-md-3 col-lg-3">
                                                                     <div class="d-flex align-items-center">
                                                                         <span class="pd-l05 checkbox-span">
@@ -356,11 +368,23 @@
                                                                     </div>
                                                                 </td>
                                                                 <td class="col-5 col-md-6 col-lg-6 select2-parent select2-ledger">
-                                                                    <div class="w-100" *ngIf="txn.type === 'CREDIT'" (click)="showBankLedgerPopup(txn, item);">
-                                                                        <span [ngClass]="{'account-placeholder': true, 'account-placeholder-text': txn.selectedAccount && txn.selectedAccount.name}" *ngIf="!txn.showDropdown">{{txn.selectedAccount ? (txn.selectedAccount.name) : commonLocaleData?.app_select_accounts}}</span>
-                                                                        <sh-select *ngIf="txn.showDropdown" class="transaction-list-sh-select" [options]="searchResults" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
-                                                                            [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
-                                                                            (dynamicSearchedQuery)="onSearchQueryChanged($event)" [notFoundMsg]="noResultsFoundLabel"
+                                                                    <div class="w-100" *ngIf="txn.type === 'CREDIT'"
+                                                                        (click)="txn.showDropdown = true;showBankLedgerPopup(txn, item);">
+                                                                        <span
+                                                                            [ngClass]="{'account-placeholder': true, 'account-placeholder-text': txn.selectedAccount && txn.selectedAccount.name}"
+                                                                            *ngIf="!txn.showDropdown">{{txn.selectedAccount
+                                                                            ? (txn.selectedAccount.name) :
+                                                                            commonLocaleData?.app_select_accounts}}</span>
+                                                                        <sh-select *ngIf="txn.showDropdown"
+                                                                            class="transaction-list-sh-select" #creditShSelect
+                                                                            (viewInitEvent)="creditShSelect?.show()"
+                                                                            [options]="searchResults"
+                                                                            [(ngModel)]="txn.particular"
+                                                                            (selected)="selectAccount($event,txn)"
+                                                                            [isPaginationEnabled]="true"
+                                                                            (scrollEnd)="handleScrollEnd()"
+                                                                            (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                                            [notFoundMsg]="noResultsFoundLabel"
                                                                             [showSearchSuggestion]="!(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
                                                                             [readonlyInput]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2"
                                                                             [enableDynamicSearch]="true" [placeholder]="commonLocaleData?.app_select_accounts" [notFoundLink]="true"
@@ -469,38 +493,39 @@
                 <div class="mobile-ledger-view clearfix" *ngIf="isMobileScreen">
                     <table *ngIf="allTransactionDates && allTransactionDates.length > 0">
                         <tbody>
-                        <tr *ngFor="let transactionDate of allTransactionDates;">
-                            <td class="border-none pt-0 pb-0">
-                                <table width="100%">
-                                    <tr>
-                                        <td class="transaction-date pd-l15 pd-r15 pd-t05" colspan="2">{{transactionDate}}</td>
-                                    </tr>
-                                    <tr class="second-row" *ngFor="let transactions of allTransactionsList[transactionDate]; let i = index">
-                                        <td class="pd-l15 pd-r15 relative"
-                                            [ngClass]="{'compound-entry': transactions.entryUniqueName === lc.selectedTxnUniqueName || transactions.isChecked}"
-                                            tooltip="{{transactions.description}}"
-                                            (mouseover)="entryHovered(transactions.entryUniqueName)"
-                                            (mouseout)="selectedTrxWhileHovering = ''">
-                                            <span class="pull-left account-holder-checkbox">
-                                                <input type="checkbox" id="{{'mobile-view-select-entry-cr-' + i}}"
-                                                    [ngClass]="{'d-none': (selectedTrxWhileHovering !== transactions.entryUniqueName && !(transactions.isChecked) && checkedTrxWhileHovering?.length === 0)}"
-                                                    class="d-none" [(ngModel)]="transactions.isChecked"
-                                                    (click)="entrySelected($event, transactions.entryUniqueName, visibleTransactionTypeMobile)">
-                                            </span>
-                                            <span class="account-holder-name">
-                                                <span *ngIf="transactions.type === 'CREDIT'" class="text-gray mr-r05">{{localeData?.by}}</span>
-                                                <span *ngIf="transactions.type === 'DEBIT'" class="text-gray mr-r05">{{localeData?.to}}</span>
-                                                <span>{{ transactions?.inventory ? transactions?.particular?.name + ' (' + transactions?.inventory?.stock?.name + ')' : transactions?.particular?.name }}</span>
-                                                <span class="download-invoice-ledger d-flex"
-                                                    *ngIf="transactions.attachedFileUniqueName"
-                                                    (click)="downloadAttachedFile(transactions.attachedFileUniqueName , $event)">
-                                                    <i class="icon-download-circle pull-left"></i>
+                            <tr *ngFor="let transactionDate of allTransactionDates;">
+                                <td class="border-none pt-0 pb-0">
+                                    <table width="100%">
+                                        <tr>
+                                            <td class="transaction-date pd-l15 pd-r15 pd-t05" colspan="2">
+                                                {{transactionDate}}</td>
+                                        </tr>
+                                        <tr class="second-row"
+                                            *ngFor="let transactions of allTransactionsList[transactionDate]; let i = index">
+                                            <td class="pd-l15 pd-r15 relative"
+                                                [ngClass]="{'compound-entry': transactions.entryUniqueName === lc.selectedTxnUniqueName || transactions.isChecked}"
+                                                tooltip="{{transactions.description}}"
+                                                (click)="entryHovered(transactions.entryUniqueName)">
+                                                <span class="pull-left account-holder-checkbox">
+                                                    <input type="checkbox" id="{{'mobile-view-select-entry-cr-' + i}}"
+                                                        [ngClass]="{'d-none': (selectedTrxWhileHovering !== transactions.entryUniqueName && !(transactions.isChecked) && checkedTrxWhileHovering?.length === 0)}"
+                                                        class="d-none" [(ngModel)]="transactions.isChecked"
+                                                        (click)="entrySelected($event, transactions.entryUniqueName, visibleTransactionTypeMobile)">
                                                 </span>
-                                                <span class="download-invoice-ledger d-flex"
-                                                    *ngIf="transactions.voucherGenerated"
-                                                    (click)="downloadInvoice(transactions.voucherNumber, transactions.voucherGeneratedType, $event)">
-                                                    <i class="icon-download-circle pull-left"></i>
-                                                </span>
+                                                <span class="account-holder-name">
+                                                    <span *ngIf="transactions.type === 'CREDIT'" class="text-gray mr-r05">{{localeData?.by}}</span>
+                                                    <span *ngIf="transactions.type === 'DEBIT'" class="text-gray mr-r05">{{localeData?.to}}</span>
+                                                    <span>{{ transactions?.inventory ? transactions?.particular?.name + ' (' + transactions?.inventory?.stock?.name + ')' : transactions?.particular?.name }}</span>
+                                                    <span class="download-invoice-ledger d-flex"
+                                                        *ngIf="transactions.attachedFileUniqueName"
+                                                        (click)="downloadAttachedFile(transactions.attachedFileUniqueName , $event)">
+                                                        <i class="icon-download-circle pull-left"></i>
+                                                    </span>
+                                                    <span class="download-invoice-ledger d-flex"
+                                                        *ngIf="transactions.voucherGenerated"
+                                                        (click)="downloadInvoice(transactions.voucherNumber, transactions.voucherGeneratedType, $event)">
+                                                        <i class="icon-download-circle pull-left"></i>
+                                                    </span>
                                             </span>
                                         </td>
                                         <td class="pd-l15 pd-r15 text-right">
@@ -607,8 +632,7 @@
                                     *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions; let i = index;"
                                     (dblclick)="showUpdateLedgerModal(txn)" (keydown.enter)="showUpdateLedgerModal(txn)"
                                     [ngClass]="{'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
-                                    tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
-                                    (mouseout)="selectedTrxWhileHovering = ''">
+                                    tooltip="{{txn.description}}" (click)="entryHovered(txn.entryUniqueName)">
 
                                     <td class="col-xs-3 col-md-3 col-lg-3" [attr.data-title]="commonLocaleData?.app_date">
 
@@ -857,7 +881,7 @@
                                     (keydown.enter)="showUpdateLedgerModal(txn)"
                                     [ngClass]="{'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
                                     tooltip="{{txn.description}}" data-toggle="tooltip"
-                                    (mouseover)="entryHovered(txn.entryUniqueName)" (mouseout)="selectedTrxWhileHovering = ''">
+                                    (click)="entryHovered(txn.entryUniqueName)">
 
                                     <td class="col-xs-3 col-md-3 col-lg-3" [attr.data-title]="commonLocaleData?.app_date">
 
