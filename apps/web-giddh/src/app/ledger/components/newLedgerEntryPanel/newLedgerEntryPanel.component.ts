@@ -1628,7 +1628,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         }
 
-        totalInCurrency = totalInCurrency.replace("[CURRENCY]", currency);
+        totalInCurrency = totalInCurrency?.replace("[CURRENCY]", currency);
         return totalInCurrency;
     }
 
