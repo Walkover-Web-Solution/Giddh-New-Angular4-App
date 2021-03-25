@@ -1,18 +1,21 @@
 <div class="primary-sidebar py-3 position-relative" [ngClass]="{'sidebar-collapse': !isOpen}">
     <div class="company-branch-block px-3 position-relative">
         <ul class="list-style-none">
-            <li>
-                <h3 class="font-16 d-flex align-items-center" [checkPermission]="['MENU', 'MANAGE']"
-                    (click)="showManageGroupsModal()">
+            <li class="company-name position-relative cursor-pointer" dropdown #companyDetailsDropDownWeb="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="companyDetailsDropDownWeb.hide()" [exclude]="'.company-name'">
+                <h3 class="font-16 d-flex align-items-center" [checkPermission]="['MENU', 'MANAGE']" dropdownToggle>
                     <img src="../../../assets/images/logo-icon.svg" class="company-icon mr-r1">
                     <span hidden class="company-alice font-14 mr-r05">{{companyInitials}}</span>
-                    <span class="d-flex justify-content-between w-100 align-items-center company-name">{{selectedCompanyDetails?.name}}
+                    <span class="d-flex justify-content-between w-100 align-items-center company-full-name">{{selectedCompanyDetails?.name}}
                         <span class="d-flex"> <i class="icon-down-new"></i> </span></span>
                 </h3>
+                <ul class="dropdown-menu user-dropdown-header" role="menu" *dropdownMenu>
+                    <ng-container *ngTemplateOutlet="headDropdownMenu"></ng-container>
+                </ul>
             </li>
             <ul class="list-style-none current-branch-name mr-t15 mr-l3  switch-branch-wrapper">
                 <li class="btn-group" dropdown placement="bottom right" #subBranchDropdown="bs-dropdown"
                     [autoClose]="false" (onShown)="loadCompanyBranches()">
+
                     <a id="button-basic" dropdownToggle *ngIf="(currentCompanyBranches$ | async)?.length > 1"
                         href="javascript:void(0)"
                         class="dropdown-toggle cursor-pointer switch-branch-section font-14 branch-name"
@@ -23,7 +26,7 @@
                         <ng-container *ngIf="!currentBranch">Switch Branch <i class="icon-down-new"></i></ng-container>
                     </a>
 
-                    <a href="javascript:void(0)" id="button-basic" dropdownToggle
+                    <!-- <a href="javascript:void(0)" id="button-basic" dropdownToggle
                         *ngIf="(currentCompanyBranches$ | async)?.length > 1" href="javascript:void(0)"
                         class="dropdown-toggle cursor-pointer switch-branch-section font-14 font-14 branch-alice"
                         [exclude]="'.switch-branch-section'" [attachOutsideOnClick]="true"
@@ -32,7 +35,8 @@
                         </ng-container>
                         <ng-container *ngIf="!currentBranch">Switch Branch <i class="icon-down-new"></i></ng-container>
 
-                    </a>
+                    </a> -->
+
                     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                         aria-labelledby="button-basic">
                         <div class="input-group mr-b1" container="body">
@@ -98,7 +102,7 @@
     <div class="search-block mr-b1 px-3">
         <div class="search-box position-relative mr-t2">
             <div class="input-group flex-nowrap">
-                <div class="input-group-prepend">
+                <div class="input-group-prepend" (click)="showNavigationModal()">
                     <span class="input-group-text" id="addon-wrapping">
                         <i class="icon-search-new"></i>
                     </span>
@@ -111,7 +115,7 @@
     <div class="wrap-menus">
         <div class="account-block mr-t2 mr-b2 px-3">
             <div class="account-collapse">
-                <p class="font-12">Accounts</p>
+                <p class="font-12 d-flex justify-content-between">Accounts <i class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i> </p>
                 <ul class="list-style-none font-14 lh33 mr-t05">
                     <li *ngFor="let acc of accountItemsFromIndexDB">
                         <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}" (click)="analyzeAccounts($event, acc)">{{acc.name}} A/c</a>
@@ -126,7 +130,7 @@
                     <i class="icon-down-new mr-l1 font-14"></i>
                 </a>
                 <ul id="dropdown-basic-01" *dropdownMenu
-                    class="dropdown-menu account-dropdown-collapse list-style-none pd-l2 sub-menu" role="menu"
+                    class="dropdown-menu account-dropdown-collapse list-style-none sub-menu" role="menu"
                     aria-labelledby="button-basic-01">
                     <li *ngFor="let acc of accountItemsFromIndexDB">
                         <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}" (click)="analyzeAccounts($event, acc)">{{acc.name}} A/c</a>
@@ -143,7 +147,9 @@
                         class="d-inline-flex align-items-center cursor-pointer">
                         Menu
                         <i class="icon-down-new mr-l05"></i> </span>
-                    <span class="text-gray cursor-pointer" (click)="showNavigationModal()">Cmd + G</span>
+                    <span class="text-gray cursor-pointer" (click)="showNavigationModal()">
+                        <i class="icon-go font-18"></i>
+                    </span>
                 </p>
             </div>
             <div class="menu-item-wrapper font-14">
@@ -183,7 +189,7 @@
                         </a>
                         <ul id="dropdown-basic-03" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu"
                             role="menu" aria-labelledby="button-basic-03">
-                            <li><a href="javascript:void(0);"><i class="icon-purchase"></i> Purchase</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/proforma-invoice/invoice/purchase']" ><i class="icon-purchase"></i> Purchase</a></li>
                             <!-- <li><a href="javascript:void(0);"><i class="icon-cash-purchase"></i> Cash Purchase</a></li> -->
                             <li><a href="javascript:void(0);"
                                     [routerLink]="['/pages/purchase-management/purchase/order']"><i
@@ -270,7 +276,7 @@
                         </a>
                         <ul id="dropdown-basic-06" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu"
                             role="menu" aria-labelledby="button-basic-06">
-                            <li><a href="javascript:void(0);" [checkPermission]="['MENU', 'MANAGE']"
+                            <li><a href="javascript:void(0);" container="body" [checkPermission]="['MENU', 'MANAGE']"
                                     (click)="showManageGroupsModal()"><i class="icon-master-new"></i>Master</a></li>
                             <li><a href="javascript:void(0);" [routerLink]="['/pages/import/account']"><i
                                         class="icon-accounts-new"></i>Accounts</a></li>
@@ -311,12 +317,12 @@
                                         class="icon-audit-log"></i>Audit Log</a></li>
                             <li><a href="javascript:void(0);" [routerLink]="['/pages/search']"><i
                                         class="icon-search-new"></i>Search</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/reports/onboarding']"><i
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/onboarding']"><i
                                         class="icon-onboarding-new"></i>Onboarding</a></li>
                             <li><a href="javascript:void(0);" [routerLink]="['/pages/tallysync']"><i
                                         class="icon-tally-import"></i>Tally Import</a></li>
                             <li><a href="javascript:void(0);" [routerLink]="['/pages/reports/company-import-export']">
-                                    <i class="icon-company-import"></i>Company Import </a></li>
+                                    <i class="icon-company-impex"></i>Company Impex </a></li>
                         </ul>
                     </li>
 
@@ -328,6 +334,126 @@
         <i class="icon-down-new"></i>
     </div> -->
 </div>
+
+<ng-template #headDropdownMenu>
+
+    <li>
+        <div class="company-text head-nav">
+            <div class="company-name-finance-year" placement="bottom">
+                <span class=" text-ellipsis pd-r1">{{ ((selectedCompany | async)?.name)}}
+                </span>
+
+                <div class="unique-name-financial-year">
+                    <span *ngIf="(selectedCompany | async)?.nameAlias" class="branch-unique-name">
+                        ({{ (selectedCompany | async)?.nameAlias }})
+                    </span>
+                    <span class="fyear">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    <li>
+        <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/company-import-export')">Import/Export Data
+            (Backup)</a>
+    </li>
+<!-- #dropdown="bs-dropdown" -->
+<!--  -->
+<li dropdown class="position-relative" #subdropdown="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true"
+    (clickOutside)="subdropdown.isOpen = false" (onShown)="switchCompanyMenuShown()">
+    <a href="javascript:void(0)" class="clearfix" dropdownToggle>
+        Switch company
+        <span class="icon-arrow-down"></span>
+    </a>
+
+    <ul id="companyList" class="company-list dropdown-menu sub-menu-nav" dropdown>
+
+        <div class="input-group" container="body">
+
+            <input type="text" class="form-control" placeholder="Search Company here" [(ngModel)]="searchCmp"
+                #searchCmpTextBox name="searchCompany" (ngModelChange)="filterCompanyList($event)" autocomplete="off" />
+
+            <span tooltip="Refresh" class="input-group-addon" id="" (click)="refreshCompanies($event)">
+                <i class="icon-refresh cp" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
+            </span>
+        </div>
+
+        <li class="p-0">
+
+            <perfect-scrollbar class="" [scrollIndicators]="true">
+
+                <ul class="sub-list" *ngIf="companyListForFilter && companyListForFilter.length">
+
+                    <li class="cmp position-relative header-tooltip"
+                        *ngFor="let cmp of companyListForFilter; let i = index"
+                        [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
+                        (keydown.enter)="changeCompany(cmp.uniqueName, true)"
+                        (click)="changeCompany(cmp.uniqueName, true)">
+
+                        <a vr-item href="javascript:void(0);" class="text-ellipsis"
+                            (mouseenter)="mouseEnteredOnCompanyName(i)">
+
+                            <ng-template #CompanyBranchname> {{ cmp.name }}
+                                <span *ngIf="cmp.alias">({{(cmp.alias)}})</span>
+                            </ng-template>
+
+                            <span container="body" [tooltip]="CompanyBranchname" placement="top">
+                                {{ cmp.name }} <span *ngIf="cmp.alias">({{(cmp.alias)}})</span> </span>
+
+                            <img class="pull-right permission-icon"
+                                *ngIf="hoveredIndx !== i && cmp?.createdBy?.email !== (user$ | async)?.email"
+                                src="assets/images/users.svg">
+
+                            <img class="pull-right permission-icon"
+                                *ngIf="hoveredIndx === i && cmp?.createdBy?.email !== (user$ | async)?.email"
+                                src="assets/images/users-white.svg">
+
+                        </a>
+                    </li>
+
+                </ul>
+
+            </perfect-scrollbar>
+
+        </li>
+
+        <li class="create-company-btn">
+            <button href="javascript:void(0)" (click)="createNewCompany()" class="btn-link btn">Create
+                Company
+            </button>
+        </li>
+
+    </ul>
+</li>
+
+    <li role="separator" class="divider width-100"></li>
+
+    <li class="mr-b1" *ngIf="!isMobileSite">
+        <a [tooltip]="userEmail" placement="top" href="javascript:void(0)"
+            (click)="analyzeMenus($event, '/pages/user-details', { tab: 'profile', tabIndex: 1 })" class="oh d-flex">
+            <span class="user-circle pull-left" *ngIf="!userAvatar">
+                <span>{{userName | uppercase}}</span>
+            </span>
+            <span class="user-circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'">
+                <img src="{{userAvatar}}" alt="" />
+            </span>
+            <div class="pull-left user-name-wrap text-ellipsis">{{ userFullName }}
+                <small class="grey-color">Profile</small>
+            </div>
+        </a>
+    </li>
+    <li>
+        <a href="javascript:void(0)"
+            (click)="analyzeMenus($event, '/pages/user-details/auth-key', { tab: 'api', tabIndex: 0 })">User Profile</a>
+    </li>
+    <li *ngIf="!isMobileSite">
+        <a href="javascript:void(0)"
+            (click)="analyzeMenus($event, '/pages/user-details', { tab: 'api', tabIndex: 0 })">API</a>
+    </li>
+    <li role="separator" class="divider width-100"></li>
+    <li class="pb-1">
+        <a href="javascript:void(0)" (click)="logout()">Logout</a>
+    </li>
+</ng-template>
 
 <!--CMD + G modal  -->
 <ng-template #navigationModal>
@@ -344,7 +470,7 @@
         </div>
     </div>
 </ng-template>
-<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade full-screen-modal manage-account-popup add-manage-group-acc" role="dialog">
+<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true, backdrop: false }" class="modal fade full-screen-modal manage-account-popup add-manage-group-acc" role="dialog">
     <div class="modal-dialog modal-xl modal-liq-90 mr-0 width-100 h-100">
         <div class="modal-content full-screen-modal">
             <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
@@ -352,3 +478,4 @@
         </div>
     </div>
 </div>
+
