@@ -186,6 +186,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private commonActions: CommonActions) {
         this.advanceSearchFilter.page = 1;
@@ -914,5 +918,18 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             }
             this.getAll();
         }
+    }
+
+    /**
+     * Returns the search field text
+     *
+     * @param {*} title
+     * @returns {string}
+     * @memberof ProformaListComponent
+     */
+    public getSearchFieldText(title: any): string {
+        let searchField = this.localeData?.search_field;
+        searchField = searchField?.replace("[FIELD]", title);
+        return searchField;
     }
 }
