@@ -496,5 +496,6 @@
     "app_send_mail": "Send Mail",
     "app_enter_email": "Enter email addresss",
     "app_history": "History",
-    "app_prefix": "Prefix"
+    "app_prefix": "Prefix",
+    "app_submit": "Submit"
 }
