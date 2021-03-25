@@ -1012,11 +1012,16 @@ ul.sub-list {
     .lower-layer-header {
         padding-top: 5px;
     }
-    .hamburger-menu button {
-        width: 32px;
-        padding: 4px 4px 3px 0;
-        i {
-            font-size: 20px !important;
+    .hamburger-menu{
+        display: flex;
+        align-items: center;
+        button {
+            width: 32px;
+            padding: 4px 4px 3px 0;
+            margin-right: 4px !important;
+            i {
+                font-size: 22px !important;
+            }
         }
     }
 }
@@ -1063,11 +1068,20 @@ ul.sub-list {
                     .date-range-picker{
                         padding-left: 19px !important;
                     }
+                    &.if-today{
+                        left: 10px;
+                        .giddh-datepicker{
+                            padding-left: 30px !important;
+                        }
+                    }
                 }
                 #add-manage{
                     position: absolute;
                     right: 10px;
                     bottom: 10px;
+                }
+                .header-utility-icons{
+                 padding-right: 0;
                 }
                 }
         }

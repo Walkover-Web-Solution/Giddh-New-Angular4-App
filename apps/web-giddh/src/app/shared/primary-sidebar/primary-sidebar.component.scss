@@ -3,6 +3,18 @@
 .primary-sidebar {
     background-color: $solitude;
     .company-branch-block {
+        .company-name{
+            .head-nav {
+                background: $white-smoke;
+                border-bottom: 1px solid $gainsboro;
+                margin-bottom: 5px;
+            }
+            .user-dropdown-header{
+                left: auto !important;
+                right: -286px !important;
+                top: 0 !important;
+            }
+        }
         h3 {
             font-family: "opensans-semibold";
             color: $black-pearl;
@@ -67,6 +79,14 @@
         overflow-x: hidden;
     }
     .account-block {
+        .account-collapse {
+            p{
+                i{
+                    font-size: 18px;
+                    color: $grey-chateau;
+                }
+            }
+        }
         p {
             color: $black-pearl;
             font-family: "opensans-semibold";
@@ -295,7 +315,7 @@
         }
     }
     &.sidebar-collapse {
-        .company-name {
+        .company-full-name {
             display: none !important;
         }
         .company-branch-block {
