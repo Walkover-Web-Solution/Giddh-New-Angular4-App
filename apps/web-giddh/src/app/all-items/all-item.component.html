@@ -15,7 +15,7 @@
         </div>
         <div class="all-item-block">
             <div class="main-item" *ngFor="let item of filteredItems;">
-                <h3 class="mr-b1 d-flex align-items-center"><i class="icon-customer mr-r1"></i> {{item?.label}} </h3>
+                <h3 class="mr-b1 d-flex align-items-center"><i class="{{item?.icon}} mr-r1"></i> {{item?.label}} </h3>
                 <div class="sub-item-block">
                     <div class="row">
                         <div class="col-xl-2 col-lg-4 col-md-3 col-sm-6 col-12" *ngFor="let menuItem of item?.items">

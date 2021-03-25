@@ -24,7 +24,7 @@
 }
 :host.setting-sidebar{
     position: fixed;
-    top: 61px;
+    top: 0;
     bottom: 0;
     min-height: 100vh;
     background: $white;
@@ -157,7 +157,7 @@
 
 :host.setting-sidebar{
     position: fixed;
-    top: 61px;
+    top: 0;
     bottom: 0;
     min-height: 100vh;
     background:$white;

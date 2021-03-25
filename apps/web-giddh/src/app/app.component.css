@@ -24,11 +24,16 @@ footer#footer.sticky-footer {
     padding-bottom: 80px;
     padding-left: 60px;
 }
-#content-wrapper.menu_open{
-    padding-left: 240px;
+ .menu_open{
+    padding-left: 240px !important;
+}
+@media(max-width:1019px){
+  .menu_open{
+        padding-left: 240px !important;
+    }
 }
 @media(max-width:767px){
-   #content-wrapper{
-        padding-left: 0;
+  #content-wrapper {
+        padding-left: 0 !important;
     }
 }
