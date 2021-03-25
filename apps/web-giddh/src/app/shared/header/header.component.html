@@ -188,7 +188,6 @@
 
                         </li>
 
-
                     </div>
 
                 </div>
@@ -503,13 +502,13 @@
 </div>
 
 <!-- New header starts -->
-<div class="fixed-padding">
+<div class="fixed-padding" >
     <div class="primary-main-header py-2" id="primary-new-header" [ngClass]="{'open': sideMenu.isopen, 'unvisible': companyList.length===0 }">
         <div *ngIf="isMobileScreen">
             <ul class="list-style-none">
                 <li class="hamburger-menu cursor-pointer pull-left">
                     <button class="btn mr-0" placement="right" (click)="redirectToMobileHome()">
-                        <i class="icon-home-icon"></i>
+                        <i class="icon-home-new"></i>
                     </button>
                     <span class="setting-menu-icon" (click)="toggleSidebarPane(true, true)"> <i class="icon-bar"></i> </span>
                     <span class="mobile-back-btn" (click)="redirectToMobileHome()"><i class="icon-back-arrow"></i></span>
@@ -518,13 +517,13 @@
         </div>
         <div class="d-flex justify-content-end align-items-end">
             <ul class="nav universal-date mr-r15" *ngIf="(selectedCompany | async)">
-                <li class="border-none pd-r15" [ngClass]="{'notification': !isMobileScreen, 'mr-0':isTodaysDateSelected}">
+                <li class="border-none pd-r15" [ngClass]="{'notification': isMobileScreen, 'mr-0':isTodaysDateSelected}">
                     <i class="icon-bell-new"></i>
                 </li>
                 <li class="border-none pl-0 select-today">
                     <button class="btn btn-link" *ngIf="!isTodaysDateSelected" (click)="dateSelectedCallback()">Today</button>
                 </li>
-                <li class="not-today cursor-pointer">
+                <li class="not-today cursor-pointer" [ngClass]="{'if-today': isTodaysDateSelected}">
                     <span class="icon-calender-new calendar-addon" (click)="showGiddhDatepicker($event)"></span>
                     <div class="input-date" [ngClass]="{'today-date pl-2': isTodaysDateSelected}">
                         <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
@@ -536,16 +535,13 @@
                     <a href="javascript:void(0);" id="add-manage"
                         (click)="showManageGroupsModal()"><i class="icon-master-new1"></i> Master</a>
                 </li>
-                <li class="header-utility-icons" (click)="toggleSidebarPane(true, false)">
+                <li *ngIf="!isMobileScreen" class="header-utility-icons" (click)="toggleSidebarPane(true, false)">
                     <a href="javascript:void(0);" ><i class="icon-settings-new"></i></a>
                 </li>
                 <li class="header-utility-icons">
                     <a href="javascript:void(0);" (click)="toggleHelpSupportPane(true)"><i class="icon-question-new"></i></a>
                 </li>
             </ul>
-
-
-
         </div>
     </div>
 </div>
