@@ -7664,6 +7664,7 @@ app-header {
     padding: 10px;
     box-shadow: 0 0px 6px rgba(0, 0, 0, 0.16);
     text-align: right !important;
+    padding-left: 60px;
 }
 
 .menu_open .sticky-footer.sticky-footer-sale-amount {
@@ -9054,7 +9055,7 @@ span#HW_badge_cont:nth-child(3) {
 
 .mobile-home {
     background-color: $lavender;
-    .padding-top-fixed-mobile,
+    .fixed-padding,
     .padding-top-fixed,
     .desktop-header {
         display: none;
@@ -9078,7 +9079,7 @@ span#HW_badge_cont:nth-child(3) {
             padding-bottom: 5px;
         }
     }
-    .padding-top-fixed-mobile {
+    .fixed-padding {
         padding-top: 50px;
     }
 }
@@ -9144,16 +9145,20 @@ span#HW_badge_cont:nth-child(3) {
     left: 0 !important;
 }
 .on-setting-page aside-setting.setting-sidebar, .on-user-page aside-setting.setting-sidebar{
-    left: -225px;
+    left: -250px;
 }
 .setting-sidebar-open #content-wrapper.menu_open {
     padding-left: -240px;
 }
+
 .setting-sidebar-open .desktop-header {
     padding-left: 0;
 }
 .setting-sidebar-open .desktop-header.menu_open {
-    padding-left: 240px;
+    padding-left: 240px !important;
+}
+.desktop-header.menu_open {
+    padding-left: 60px !important;
 }
 /*flex css start*/
 .flex-column {
@@ -9675,6 +9680,11 @@ input.mat-input-element{
     #primary-new-header.primary-main-header.open{
         padding-left: 240px !important;
     }
+    .add-manage-group-acc{
+        .modal-header{
+            border-radius: 0 !important;
+        }
+    }
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {
@@ -10095,6 +10105,9 @@ input.mat-input-element{
     }
 }
 @media (max-width: 767px) {
+    .invoice-footer, .sticky-footer.sticky-footer-sale-amount {
+       left: 0;
+    }
     .custom-tabs.create-item-tab .nav-tabs{
         display: inline-block;
         white-space: nowrap;
@@ -10491,18 +10504,18 @@ input.mat-input-element{
         .panel-block .card-body {
             min-height: auto;
         }
-        .page-has-tabs .padding-top-fixed-mobile,
-        .on-user-page .padding-top-fixed-mobile {
+        .page-has-tabs .fixed-padding,
+        .on-user-page .fixed-padding {
             padding-top: 130px !important;
         }
-        .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile {
+        .page-has-tabs.setting-sidebar-open .fixed-padding {
             padding-top: 85px !important;
         }
-        .on-setting-page .padding-top-fixed-mobile {
+        .on-setting-page .fixed-padding {
             padding-top: 90px !important;
         }
 
-        .padding-top-fixed-mobile {
+        .fixed-padding {
             padding-top: 90px;
         }
         ngx-daterangepicker-material {

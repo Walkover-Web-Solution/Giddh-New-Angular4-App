@@ -46,6 +46,21 @@
 .icon-user-new:before {
   content: "\e9cc";
 }
+.icon-add-new:before {
+  content: "\e9cf";
+}
+.icon-company-impex:before {
+  content: "\e9d0";
+}
+.icon-go:before {
+  content: "\e9d1";
+}
+.icon-purchase-order:before {
+  content: "\e9d2";
+}
+.icon-home-new:before {
+  content: "\e9ce";
+}
 .icon-Mask-Group .path1:before {
   content: "\e9c5";
   color: rgb(230, 69, 86);

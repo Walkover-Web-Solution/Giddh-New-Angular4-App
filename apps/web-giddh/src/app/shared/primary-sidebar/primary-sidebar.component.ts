@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ChangeDetectorRef, TemplateRef, ComponentFactoryResolver } from "@angular/core";
 import { Router } from "@angular/router";
+import { AuthService } from '../../theme/ng-social-login-module/index';
 import { Store, select } from "@ngrx/store";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { ModalDirective, BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
@@ -8,7 +9,7 @@ import { takeUntil, take } from "rxjs/operators";
 import { CompanyActions } from "../../actions/company.actions";
 import { GeneralActions } from "../../actions/general/general.actions";
 import { AccountResponse } from "../../models/api-models/Account";
-import { CompanyResponse, Organization, OrganizationDetails } from "../../models/api-models/Company";
+import { CompanyResponse, Organization, OrganizationDetails, ActiveFinancialYear } from "../../models/api-models/Company";
 import { CompAidataModel } from "../../models/db";
 import { OrganizationType } from "../../models/user-login-state";
 import { CompanyService } from "../../services/companyService.service";
@@ -24,6 +25,7 @@ import { DEFAULT_AC, DEFAULT_MENUS } from '../../models/defaultMenus';
 import { cloneDeep, orderBy, slice } from '../../lodash-optimized';
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { LoginActions } from "../../actions/login.action";
+
 @Component({
     selector: 'primary-sidebar',
     templateUrl: './primary-sidebar.component.html',
@@ -45,6 +47,11 @@ export class PrimarySidebarComponent implements OnInit {
     public selectedCompanyDetails: CompanyResponse;
     /** Current organization type */
     public currentOrganizationType: OrganizationType;
+
+    /** store current selected company */
+    public selectedCompany: Observable<CompanyResponse>;
+    public activeFinancialYear: ActiveFinancialYear;
+
     /** Stores the details of the current branch */
     public currentBranch: any;
     public userAvatar: string;
@@ -60,6 +67,10 @@ export class PrimarySidebarComponent implements OnInit {
     public accountItemsFromIndexDB: any[] = DEFAULT_AC;
     private smartCombinedList$: Observable<any>;
     public companyInitials: any = '';
+    public seletedCompanywithBranch: string = '';
+    public companies$: Observable<CompanyResponse[]>;
+    public companyListForFilter: CompanyResponse[] = [];
+    public isLoggedInWithSocialAccount$: Observable<boolean>;
 
     @Input() public isOpen: boolean = false;
     @ViewChild('subBranchDropdown', { static: false }) public subBranchDropdown: BsDropdownDirective;
@@ -81,7 +92,8 @@ export class PrimarySidebarComponent implements OnInit {
         private accountsAction: AccountsAction,
         private dbService: DbService,
         private settingsBranchAction: SettingsBranchActions,
-        private loginAction: LoginActions
+        private loginAction: LoginActions,
+        private socialAuthService: AuthService,
     ) {
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
@@ -134,7 +146,7 @@ export class PrimarySidebarComponent implements OnInit {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
             if (selectedCmp) {
                 this.selectedCompanyDetails = selectedCmp;
-                
+
                 let selectedCompanyArray = selectedCmp.name.split(" ");
                 let companyInitials = [];
                 for (let loop = 0; loop < selectedCompanyArray.length; loop++) {
@@ -146,6 +158,22 @@ export class PrimarySidebarComponent implements OnInit {
                 }
 
                 this.companyInitials = companyInitials.join(" ");
+                this.activeFinancialYear = selectedCmp.activeFinancialYear;
+                this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
+                if (selectedCmp.alias) {
+                    this.seletedCompanywithBranch = selectedCmp.name + ' (' + selectedCmp.alias + ')';
+                } else {
+                    this.seletedCompanywithBranch = selectedCmp.name;
+                }
+
+                this.activeCompanyForDb = new CompAidataModel();
+                if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
+                    this.activeCompanyForDb.uniqueName = this.generalService.currentBranchUniqueName;
+                } else {
+                    this.activeCompanyForDb.name = selectedCmp.name;
+                    this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
+                }
             }
         });
     }
@@ -168,7 +196,7 @@ export class PrimarySidebarComponent implements OnInit {
         });
         event.preventDefault();
         this.subBranchDropdown.isOpen = false;
-        
+
         const details = {
             branchDetails: {
                 uniqueName: branchUniqueName
@@ -190,7 +218,18 @@ export class PrimarySidebarComponent implements OnInit {
             }
         });
     }
+    public filterCompanyList(ev) {
+        let companies: CompanyResponse[] = [];
+        this.companies$?.pipe(take(1)).subscribe(cmps => companies = cmps);
 
+        this.companyListForFilter = companies?.filter((cmp) => {
+            if (!cmp.alias) {
+                return cmp.name.toLowerCase().includes(ev.toLowerCase());
+            } else {
+                return cmp.name.toLowerCase().includes(ev.toLowerCase()) || cmp.alias.toLowerCase().includes(ev.toLowerCase());
+            }
+        });
+    }
     /**
      * Filters the branches based on text provided
      *
@@ -528,5 +567,43 @@ export class PrimarySidebarComponent implements OnInit {
             this.subBranchDropdown.hide();
         }
         this.onItemSelected(acc);
+    }
+    public logout() {
+        /** Reset the current organization type on logout as we
+         * don't know receive switched branch from API in last state (state API)
+        */
+        const details = {
+            branchDetails: {
+                uniqueName: ''
+            }
+        };
+        this.setOrganizationDetails(OrganizationType.Company, details);
+        localStorage.removeItem('isNewArchitecture');
+        if (isElectron) {
+            this.store.dispatch(this.loginAction.ClearSession());
+        } else if (isCordova) {
+            (window as any).plugins.googleplus.logout(
+                (msg) => {
+                    this.store.dispatch(this.loginAction.ClearSession());
+                }
+            );
+        } else {
+            // check if logged in via social accounts
+            this.isLoggedInWithSocialAccount$.subscribe((val) => {
+                if (val) {
+                    this.socialAuthService.signOut().then(() => {
+                        this.store.dispatch(this.loginAction.ClearSession());
+                        this.store.dispatch(this.loginAction.socialLogoutAttempt());
+                    }).catch((err) => {
+                        this.store.dispatch(this.loginAction.ClearSession());
+                        this.store.dispatch(this.loginAction.socialLogoutAttempt());
+                    });
+
+                } else {
+                    this.store.dispatch(this.loginAction.ClearSession());
+                }
+            });
+
+        }
     }
 }
