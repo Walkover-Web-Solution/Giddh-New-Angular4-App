@@ -102,8 +102,9 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 
 .total-col span.bd-rt {
     width: 150px;
-    display: inline-block;
+    display: inline-flex;
     padding: 2px 0;
+    justify-content: flex-end;
 }
 
 .ledger-main .form-control {
