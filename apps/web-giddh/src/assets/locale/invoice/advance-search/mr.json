@@ -1,0 +1,9 @@
+{
+    "invoice_date_range" : "Invoice Date Range",
+    "invoice_total_amt" : "Invoice Total Amt",
+    "due_date_range" : "Due Date Range",
+    "due_amount" : "Due Amount",
+    "description" : "Description",
+    "expiry_date" : "Expiry Date",
+    "total_amt" : "Total Amt"
+}
