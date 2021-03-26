@@ -3,7 +3,6 @@ import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, take
 import {
     ChangeDetectorRef,
     Component,
-    ComponentFactoryResolver,
     ElementRef,
     Input,
     OnChanges,
@@ -283,13 +282,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public selectedRangeLabel: any = "";
     /** This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService,
         private _toaster: ToasterService,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private _activatedRoute: ActivatedRoute,
         private companyActions: CompanyActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
@@ -1859,5 +1861,28 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
             this.getVoucher(this.isUniversalDateApplicable);
         }
+    }
+
+    public getOverdueDaysText(days: any): string {
+        let overdueDays = this.localeData?.overdue_days;
+        overdueDays = overdueDays?.replace("[DAYS]", days);
+        return overdueDays;
+    }
+
+    public getTotalText(): string {
+        return !(this.selectedVoucher === 'credit note' || this.selectedVoucher === 'debit note') ? (this.selectedVoucher === 'purchase') ? this.localeData?.total_purchases : this.localeData?.total_sale : this.commonLocaleData?.app_total + ':';
+    }
+
+    /**
+     * Returns the search field text
+     *
+     * @param {*} title
+     * @returns {string}
+     * @memberof InvoicePreviewComponent
+     */
+    public getSearchFieldText(title: any): string {
+        let searchField = this.localeData?.search_field;
+        searchField = searchField?.replace("[FIELD]", title);
+        return searchField;
     }
 }
