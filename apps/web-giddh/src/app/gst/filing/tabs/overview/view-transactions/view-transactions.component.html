@@ -207,44 +207,50 @@
                             {{item.pos ? item.pos : '-'}}
                         </td>
                         <td>{{item.reverseCharge ? item.reverseCharge : '-'}}</td>
-                        <td class="text-right"><i class="icon-rupees font-11"></i>
+                        <td class="text-right">
                             <!-- {{item.taxableAmount | giddhCurrency}} -->
-                            <span class="d-inline-flex">
+                            <span class="d-inline-flex align-items-center">
+                                <i class="icon-rupees font-11"></i>
                                 <amount-field [amount]="item?.taxableAmount" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-                        <td class="text-right"><i class="icon-rupees font-11"></i>
+                        <td class="text-right">
                             <!-- {{item.igstAmount | giddhCurrency}} -->
-                            <span class="d-inline-flex">
+                            <span class="d-inline-flex align-items-center">
+                                <i class="icon-rupees font-11"></i>
                                 <amount-field [amount]="item?.igstAmount" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-                        <td class="text-right"><i class="icon-rupees font-11"></i>
+                        <td class="text-right">
                             <!-- {{item.cgstAmount | giddhCurrency}} -->
-                            <span class="d-inline-flex">
+                            <span class="d-inline-flex align-items-center">
+                                <i class="icon-rupees font-11"></i>
                                 <amount-field [amount]="item?.cgstAmount" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-                        <td class="text-right"><i class="icon-rupees font-11"></i>
+                        <td class="text-right">
                             <!-- {{item.sgstAmount | giddhCurrency}} -->
-                            <span class="d-inline-flex">
+                            <span class="d-inline-flex align-items-center">
+                                <i class="icon-rupees font-11"></i>
                                 <amount-field [amount]="item?.sgstAmount" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-                        <td class="text-right"><i class="icon-rupees font-11"></i>
+                        <td class="text-right">
                             <!-- {{item.cessAmount | giddhCurrency}} -->
-                            <span class="d-inline-flex">
+                            <span class="d-inline-flex align-items-center">
+                                <i class="icon-rupees font-11"></i>
                                 <amount-field [amount]="item?.cessAmount" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-                        <td class="text-right"><i class="icon-rupees font-11"></i>
+                        <td class="text-right">
                             <!-- {{item.totalAmount | giddhCurrency}} -->
-                            <span class="d-inline-flex">
+                            <span class="d-inline-flex align-items-center">
+                                <i class="icon-rupees font-11"></i>
                                 <amount-field [amount]="item?.totalAmount" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
