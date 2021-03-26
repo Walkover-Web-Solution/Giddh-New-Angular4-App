@@ -89,27 +89,6 @@
     "quantity_error": "Quantity recorded can't be more than quantity ordered",
     "purchase_bill_created": "Purchase bill created successfully",
     "entry_created": "Entry created successfully with Voucher Number",
-    "interval_options": {
-        "weekly": "Weekly",
-        "monthly": "Monthly",
-        "quarterly": "Quarterly",
-        "halfyearly": "Halfyearly",
-        "yearly": "Yearly"
-    },
-    "time_options": {
-        "first": "1st",
-        "second": "2nd",
-        "third": "3rd",
-        "fourth": "4th",
-        "fifth": "5th"
-    },
-    "recurring_date_error": "Date should be greater than today",
-    "recurring_all_field_required": "All * fields should be valid and filled",
-    "recurring_account": "Recurring Account",
-    "never_expire": "Never expire",
-    "interval": "Interval",
-    "select_interval": "Select Interval",
-    "type_to_search": "Type to search...",
     "gst_treatment": "Gst Treatment",
     "party_type": "Party Type",
     "print_voucher": "Print Voucher",
