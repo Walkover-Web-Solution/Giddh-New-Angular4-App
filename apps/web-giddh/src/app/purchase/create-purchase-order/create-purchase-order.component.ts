@@ -2569,8 +2569,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         this.purchaseOrder.voucherDetails.voucherDate = this.universalDate || new Date();
                         this.assignDueDate();
                     }
-
-                    this.purchaseOrder.number = this.purchaseOrderDetails.number;
                 } else {
                     this.toaster.errorToast(response.message);
                 }
