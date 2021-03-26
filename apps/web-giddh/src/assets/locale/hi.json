@@ -493,5 +493,6 @@
     "app_end_date": "अंतिम तिथि",
     "app_send": "संदेश",
     "app_validate": "मान्य",
-    "app_prefix": "Prefix"
+    "app_prefix": "Prefix",
+    "app_submit": "Submit"
 }
