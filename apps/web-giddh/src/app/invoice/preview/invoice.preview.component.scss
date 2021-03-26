@@ -849,3 +849,16 @@ span.icon-export-icon {
         }
     }
 }
+@media(max-width:360px){
+    .input-grp-date-range-picker{
+        .form-group{
+            margin-right: 0 !important;
+            justify-content: space-between;
+        }
+        .search-icon-block{
+            position: absolute;
+            right: 0;
+            bottom: -40px;
+        }
+    }
+}
