@@ -2990,7 +2990,7 @@
             (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
 
         <app-aside-recurring-entry *ngIf="asideMenuStateForRecurringEntry === 'in'" [voucherType]="invoiceType"
-            [voucherNumber]="voucherNumber" [class]="asideMenuStateForRecurringEntry" [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+            [voucherNumber]="voucherNumber" [class]="asideMenuStateForRecurringEntry"
             [@slideInOut]="asideMenuStateForRecurringEntry" (closeAsideEvent)="toggleRecurringAsidePane('out')">
         </app-aside-recurring-entry>
         <!-- region send email popup -->

@@ -1863,12 +1863,25 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Returns the overdue days text
+     *
+     * @param {*} days
+     * @returns {string}
+     * @memberof InvoicePreviewComponent
+     */
     public getOverdueDaysText(days: any): string {
         let overdueDays = this.localeData?.overdue_days;
         overdueDays = overdueDays?.replace("[DAYS]", days);
         return overdueDays;
     }
 
+    /**
+     * Returns the total text
+     *
+     * @returns {string}
+     * @memberof InvoicePreviewComponent
+     */
     public getTotalText(): string {
         return !(this.selectedVoucher === 'credit note' || this.selectedVoucher === 'debit note') ? (this.selectedVoucher === 'purchase') ? this.localeData?.total_purchases : this.localeData?.total_sale : this.commonLocaleData?.app_total + ':';
     }

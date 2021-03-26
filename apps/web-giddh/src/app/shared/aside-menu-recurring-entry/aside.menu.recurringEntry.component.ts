@@ -35,15 +35,15 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
     @Input() public invoice: RecurringInvoice;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     @Input() public isCompany: boolean;
-    /* This will hold local JSON data */
-    @Input() public localeData: any = {};
-    /* This will hold common JSON data */
-    @Input() public commonLocaleData: any = {};
 	@Output() public closeAsideEvent: EventEmitter<RecurringInvoice> = new EventEmitter(true);
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
 	constructor(private store: Store<AppState>,
 		private _fb: FormBuilder,
@@ -85,23 +85,6 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 	}
 
 	public ngOnInit() {
-
-		this.intervalOptions = [
-            { label: this.localeData?.interval_options?.weekly, value: 'weekly' },
-            { label: this.localeData?.interval_options?.monthly, value: 'monthly' },
-			{ label: this.localeData?.interval_options?.quarterly, value: 'quarterly' },
-			{ label: this.localeData?.interval_options?.halfyearly, value: 'halfyearly' },
-			{ label: this.localeData?.interval_options?.yearly, value: 'yearly' }
-		];
-
-		this.timeOptions = [
-			{ label: this.localeData?.time_options?.first, value: '1' },
-			{ label: this.localeData?.time_options?.second, value: '2' },
-			{ label: this.localeData?.time_options?.third, value: '3' },
-			{ label: this.localeData?.time_options?.fourth, value: '4' },
-			{ label: this.localeData?.time_options?.fifth, value: '5' },
-        ];
-
 		this.store.pipe(select(state => state.invoice.recurringInvoiceData), takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = response.isRequestInFlight;
             this.isDeleteLoading = response.isDeleteRequestInFlight;
@@ -182,5 +165,31 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 	public ngOnDestroy() {
 		this.destroyed$.next(true);
 		this.destroyed$.complete();
-	}
+    }
+    
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof AsideMenuRecurringEntryComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.intervalOptions = [
+                { label: this.localeData?.interval_options?.weekly, value: 'weekly' },
+                { label: this.localeData?.interval_options?.monthly, value: 'monthly' },
+                { label: this.localeData?.interval_options?.quarterly, value: 'quarterly' },
+                { label: this.localeData?.interval_options?.halfyearly, value: 'halfyearly' },
+                { label: this.localeData?.interval_options?.yearly, value: 'yearly' }
+            ];
+    
+            this.timeOptions = [
+                { label: this.localeData?.time_options?.first, value: '1' },
+                { label: this.localeData?.time_options?.second, value: '2' },
+                { label: this.localeData?.time_options?.third, value: '3' },
+                { label: this.localeData?.time_options?.fourth, value: '4' },
+                { label: this.localeData?.time_options?.fifth, value: '5' },
+            ];
+        }
+    }
 }
