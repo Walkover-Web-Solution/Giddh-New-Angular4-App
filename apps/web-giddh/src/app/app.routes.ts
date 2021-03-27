@@ -24,7 +24,6 @@ import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mo
 import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
 import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component';
 import { DownloadComponent } from './download/download.component';
-import { AllGiddhItemComponent } from './all-items/all-item.component';
 
 export const ROUTES: Routes = [
     { path: 'download', component: DownloadComponent },
@@ -72,8 +71,6 @@ export const ROUTES: Routes = [
     { path: 'select-plan', component: SelectPlanComponent },
     { path: 'billing-detail', component: BillingDetailComponent },
     { path: 'billing-detail/buy-plan', component: BillingDetailComponent },
-   // { path: 'giddh-all-items', redirectTo: 'pages/giddh-all-items', pathMatch: 'full', component: AllGiddhItemComponent  },
-    //{ path: 'new-inventory/create-group', component: InventoryCreateGroupComponent },
     {
         path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
         children: [
@@ -121,7 +118,7 @@ export const ROUTES: Routes = [
             { path: 'mobile-home-sidebar', component: MobileHomeSidebarComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-search-company', component: MobileSearchCompanyComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-search-branch', component: MobileSearchBranchComponent, canActivate: [NeedsAuthorization] },
-            { path: 'giddh-all-items', component: AllGiddhItemComponent, canActivate: [NeedsAuthorization] },
+            { path: 'giddh-all-items', loadChildren: () => import('./all-items/all-item.module').then(module => module.AllItemModule), canActivate: [NeedsAuthorization] },
             { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule), canActivate: [NeedsAuthorization] },
             { path: 'expenses-manager', loadChildren: () => import('./expenses/expenses.module').then(module => module.ExpensesModule), canActivate: [NeedsAuthorization] },
             { path: 'vat-report', loadChildren: () => import('./vat-report/vatReport.module').then(module => module.VatReportModule), canActivate: [NeedsAuthorization] },

@@ -8,12 +8,11 @@ import { AllItemRoutingModule } from './all-item.routing.module';
         AllGiddhItemComponent
     ],
     imports: [
-        AllGiddhItemComponent,
         AllItemRoutingModule,
         SharedModule
     ],
     exports: [
-        AllGiddhItemComponent,
+        AllGiddhItemComponent
     ]
 })
 export class AllItemModule {
