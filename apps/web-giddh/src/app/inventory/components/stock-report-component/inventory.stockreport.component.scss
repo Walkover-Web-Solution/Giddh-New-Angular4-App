@@ -352,6 +352,25 @@ button.btn.btn-filter {
 .inventory-branch-dropdown{
     display: none !important;
 }
+
+@media(max-width:1440px){
+    .head-report {
+        max-width: 245px;
+        white-space: normal;
+        word-break: break-all;
+    }
+    .right-inventory{
+        width: 43%;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex-direction: row !important;
+        text-align: right;
+        .transfer-btn{
+            margin-top: 0;
+            margin-right: 15px;
+        }
+    }
+}
 @media(max-width:1024px){
     .wrap-head-report{
        width: 55%;
