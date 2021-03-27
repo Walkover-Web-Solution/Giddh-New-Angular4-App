@@ -832,4 +832,24 @@ export class GeneralService {
             return [];
         }
     }
+
+    /**
+     * Returns the string initials upto 2 letters/characters
+     *
+     * @param {string} name String whose intials are required
+     * @param {string} [delimiter] Delimiter to break the strings
+     * @return {*} {string} Initials of string
+     * @memberof GeneralService
+     */
+    public getInitialsFromString(name: string, delimiter?: string): string {
+        if (name) {
+            let nameArray = name.split(delimiter || " ");
+            if (nameArray?.length > 1) {
+                return `${nameArray[0][0]} ${nameArray[1][0]}`;
+            } else if (nameArray?.length === 1) {
+                return nameArray[0][0];
+            }
+        }
+        return '';
+    }
 }

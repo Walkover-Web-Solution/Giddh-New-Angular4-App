@@ -1,24 +1,31 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { allItems } from "../shared/helpers/allItems";
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
+import { cloneDeep } from '../lodash-optimized';
+import { AllItem, ALL_ITEMS } from "../shared/helpers/allItems";
+import { AppState } from '../store';
 
 @Component({
     selector: 'all-giddh-item',
     templateUrl: './all-item.component.html',
     styleUrls: ['./all-item.component.scss'],
-
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class AllGiddhItemComponent implements OnInit {
     /** Instance of search field */
-    @ViewChild('searchField', {static: true}) public searchField: ElementRef;
+    @ViewChild('searchField', { static: true }) public searchField: ElementRef;
     /** This will hold all menu items */
     public allItems: any[] = [];
     /** This will hold filtered items */
     public filteredItems: any[] = [];
     /** This will hold search string */
     public search: any;
-    
-    constructor() {
+
+    constructor(
+        private store: Store<AppState>,
+        private groupWithAction: GroupWithAccountsAction
+    ) {
 
     }
 
@@ -28,17 +35,8 @@ export class AllGiddhItemComponent implements OnInit {
      * @memberof AllGiddhItemComponent
      */
     public ngOnInit(): void {
-        if(allItems) {
-            let loop = 0;
-            Object.keys(allItems).forEach(key => {
-                this.allItems[loop] = [];
-                this.allItems[loop]['label'] = Object.keys(allItems[key])[0];
-                this.allItems[loop]['items'] = allItems[key][this.allItems[loop]['label']];
-                loop++;
-            });
-
-            this.filteredItems = this.allItems;
-        }
+        this.allItems = cloneDeep(ALL_ITEMS);
+        this.filteredItems = this.allItems;
         this.searchField?.nativeElement?.focus();
     }
 
@@ -76,16 +74,28 @@ export class AllGiddhItemComponent implements OnInit {
                         }
                     });
 
-                    if(itemsFound?.length > 0) {
-                        this.filteredItems[loop] = {label: items.label, items: itemsFound};
+                    if (itemsFound?.length > 0) {
+                        this.filteredItems[loop] = { label: items.label, items: itemsFound };
                     }
                 }
-                if(found) {
+                if (found) {
                     loop++;
                 }
             });
         } else {
             this.filteredItems = this.allItems;
+        }
+    }
+
+    /**
+     * Item click handler
+     *
+     * @param {AllItem} item Menu item
+     * @memberof AllGiddhItemComponent
+     */
+    public handleItemClick(item: AllItem): void {
+        if (item.label === 'Master') {
+            this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
         }
     }
 }

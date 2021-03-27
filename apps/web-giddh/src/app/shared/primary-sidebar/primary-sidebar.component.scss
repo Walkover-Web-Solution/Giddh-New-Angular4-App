@@ -14,6 +14,15 @@
                 right: -286px !important;
                 top: 0 !important;
             }
+            .company-text {
+                padding: 6px 8px 6px 0 !important;
+                overflow: hidden;
+                .company-name-finance-year {
+                    display: inline-block;
+                    padding-left: 15px;
+                    width: 90%;
+                }
+            }
         }
         h3 {
             font-family: "opensans-semibold";
@@ -85,6 +94,9 @@
                     font-size: 18px;
                     color: $grey-chateau;
                 }
+            }
+            .left-fixed-header > li a.active {
+                background: $lavender;
             }
         }
         p {

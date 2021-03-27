@@ -190,8 +190,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isAllowedForBetaTesting: boolean = false;
     /* This will hold value if settings sidebar is open through mobile hamburger icon */
     public isMobileSidebar: boolean = false;
-    /** update IndexDb flags observable **/
-    public updateIndexDbSuccess$: Observable<boolean>;
     /* This will hold if resolution is less than 768 to consider as mobile screen */
     public isMobileScreen: boolean = false;
     /* This will hold current page url */
@@ -384,7 +382,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.getCurrentCompanyData();
             }
         });
-        this.updateIndexDbSuccess$ = this.store.pipe(select(p => p.general.updateIndexDbComplete), takeUntil(this.destroyed$))
 
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
             if (!companies || companies.length === 0) {
@@ -665,17 +662,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         this.totalNumberOfcompanies$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.totalNumberOfcompanies = res;
-        });
-
-        this.updateIndexDbSuccess$.subscribe(res => {
-            if (res) {
-                if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
-                    this._dbService.getItemDetails(this.activeCompanyForDb.uniqueName).toPromise().then(dbResult => {
-                        this.findListFromDb(dbResult);
-                        this._generalActions.updateUiFromDb();
-                    });
-                }
-            }
         });
 
         this.companyService.CurrencyList().pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1107,74 +1093,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName, fetchLastState));
     }
 
-    /**
-     * Switches to branch mode
-     *
-     * @param {string} branchUniqueName Branch uniqueName
-     * @memberof HeaderComponent
-     */
-    public switchToBranch(branchUniqueName: string, event: any): void {
-        event.stopPropagation();
-        if (branchUniqueName === this.generalService.currentBranchUniqueName) {
-            return;
-        }
-        this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
-            if (response) {
-                this.currentBranch = response.find(branch => branch.uniqueName === branchUniqueName);
-            }
-        });
-        event.preventDefault();
-        this.companyDropdown.isOpen = false;
-        this.toggleBodyScroll();
-        const details = {
-            branchDetails: {
-                uniqueName: branchUniqueName
-            }
-        };
-        this.setOrganizationDetails(OrganizationType.Branch, details);
-        this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(take(1)).subscribe(response => {
-            if (response && response.body) {
-                if (screen.width <= 767 || isCordova) {
-                    window.location.href = '/pages/mobile-home';
-                } else if (isElectron) {
-                    this.router.navigate([response.body.lastState]);
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 200);
-                } else {
-                    window.location.href = response.body.lastState;
-                }
-            }
-        });
-    }
-
-    /**
-     * Switches to company view from branch view
-     *
-     * @memberof HeaderComponent
-     */
-    public goToCompany(): void {
-        if (!localStorage.getItem('isNewArchitecture')) {
-            /* New architecture displays more items in menu panel in company mode
-               as accounts are not visible hence to detect the environment for current customer
-               in PROD we are using local storage to reset the index DB once and replace it with new items
-            */
-            this._dbService.clearAllData();
-            localStorage.setItem('isNewArchitecture', String(true));
-        }
-        this.activeCompanyForDb.uniqueName = this.generalService.companyUniqueName;
-        this.activeCompanyForDb.name = this.selectedCompanyDetails.name;
-        this.companyDropdown.isOpen = false;
-        const details = {
-            branchDetails: {
-                uniqueName: ''
-            }
-        };
-        this.setOrganizationDetails(OrganizationType.Company, details);
-        this.toggleBodyScroll();
-        this.changeCompany(this.selectedCompanyDetails.uniqueName, false);
-    }
-
     public deleteCompany(e: Event) {
         e.stopPropagation();
         this.store.dispatch(this.companyActions.DeleteCompany(this.markForDeleteCompany.uniqueName));
@@ -1330,29 +1248,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // this.authService.getUserAvatar(userId).subscribe(res => {
         //   let data = res;
         //   this.userAvatar = res.entry.gphoto$thumbnail.$t;
-        // });
-    }
-
-    // CMD + G functionality
-    @HostListener('document:keydown', ['$event'])
-    public handleKeyboardUpEvent(event: KeyboardEvent) {
-        if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71) && !this.navigationModalVisible) {
-            event.preventDefault();
-            event.stopPropagation();
-            if (this.companyList.length > 0) {
-                this.showNavigationModal();
-            }
-        }
-
-        // window.addEventListener('keyup', (e: KeyboardEvent) => {
-        //   if (e.keyCode === 27) {
-        //     if (this.sideMenu.isopen) {
-        //       this.sideMenu.isopen = false;
-        //     }
-        //     if (this.manageGroupsAccountsModal.isShown) {
-        //       this.hideManageGroupsModal();
-        //     }
-        //   }
         // });
     }
 

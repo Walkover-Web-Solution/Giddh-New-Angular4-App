@@ -13,29 +13,15 @@
                 </ul>
             </li>
             <ul class="list-style-none current-branch-name mr-t15 mr-l3  switch-branch-wrapper">
-                <li class="btn-group" dropdown placement="bottom right" #subBranchDropdown="bs-dropdown"
+                <li class="btn-group" [exclude]="'.switch-branch-section'" (clickOutside)="subBranchDropdown.hide()" dropdown placement="bottom right" #subBranchDropdown="bs-dropdown"
                     [autoClose]="false" (onShown)="loadCompanyBranches()">
 
-                    <a id="button-basic" dropdownToggle *ngIf="(currentCompanyBranches$ | async)?.length > 1"
-                        href="javascript:void(0)"
-                        class="dropdown-toggle cursor-pointer switch-branch-section font-14 branch-name"
-                        [exclude]="'.switch-branch-section'" [attachOutsideOnClick]="true"
-                        (clickOutside)="subBranchDropdown.hide()">
+                    <a id="button-basic" dropdownToggle *ngIf="(currentCompanyBranches$ | async)?.length > 1" href="javascript:void(0)"
+                        class="dropdown-toggle cursor-pointer switch-branch-section font-14 branch-name">
                         <ng-container *ngIf="currentBranch">{{currentBranch?.alias}} <i class="icon-down-new"></i>
                         </ng-container>
                         <ng-container *ngIf="!currentBranch">Switch Branch <i class="icon-down-new"></i></ng-container>
                     </a>
-
-                    <!-- <a href="javascript:void(0)" id="button-basic" dropdownToggle
-                        *ngIf="(currentCompanyBranches$ | async)?.length > 1" href="javascript:void(0)"
-                        class="dropdown-toggle cursor-pointer switch-branch-section font-14 font-14 branch-alice"
-                        [exclude]="'.switch-branch-section'" [attachOutsideOnClick]="true"
-                        (clickOutside)="subBranchDropdown.hide()" class="font-14 branch-alice">
-                        <ng-container *ngIf="currentBranch">{{currentBranch?.alias}} <i class="icon-down-new"></i>
-                        </ng-container>
-                        <ng-container *ngIf="!currentBranch">Switch Branch <i class="icon-down-new"></i></ng-container>
-
-                    </a> -->
 
                     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                         aria-labelledby="button-basic">
@@ -75,27 +61,14 @@
                                 Branch</a>
                         </li>
                     </ul>
-                    <!-- switch branch start -->
-                    <!-- <div class="btn-group" dropdown placement="bottom right" #subBranchDropdown="bs-dropdown" [autoClose]="false"
-                        (onShown)="loadCompanyBranches()">
-                        <a id="button-basic" dropdownToggle class="dropdown-toggle cursor-pointer switch-branch-section"
-                            aria-controls="dropdown-basic">
-                            <ng-container *ngIf="currentBranch">{{currentBranch?.alias}}</ng-container>
-                            <ng-container *ngIf="!currentBranch">Switch Branch</ng-container>
-                            <span class="icon-arrow-down"></span>
-                        </a>
-
-                    </div> -->
-
-                    <!-- Switch branch end -->
                 </li>
 
                 <li>
-                    <a href="javascript:void(0)" class="font-14 branch-alice">WB</a>
+                    <a href="javascript:void(0)" *ngIf="branchInitials" class="font-14 branch-alice">{{branchInitials}}</a>
                 </li>
             </ul>
         </ul>
-        <div class="branch-connection">
+        <div *ngIf="(currentCompanyBranches$ | async)?.length > 1" class="branch-connection">
             <i class="icon-branch-connection"></i>
         </div>
     </div>
@@ -116,9 +89,9 @@
         <div class="account-block mr-t2 mr-b2 px-3">
             <div class="account-collapse">
                 <p class="font-12 d-flex justify-content-between">Accounts <i class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i> </p>
-                <ul class="list-style-none font-14 lh33 mr-t05">
+                <ul class="left-fixed-header list-style-none font-14 lh33 mr-t05">
                     <li *ngFor="let acc of accountItemsFromIndexDB">
-                        <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}" (click)="analyzeAccounts($event, acc)">{{acc.name}} A/c</a>
+                        <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}"  [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName" (click)="analyzeAccounts($event, acc)">{{acc.name}} A/c</a>
                     </li>
                     <li><a (click)="showNavigationModal()" class="show-more cursor-pointer">Show more</a></li>
                 </ul>
@@ -154,185 +127,37 @@
             </div>
             <div class="menu-item-wrapper font-14">
                 <ul class="list-style-none giddh-primary-items">
-                    <li class="main-item btn-group" dropdown [attr.container]="!isOpen ? 'body' : ''">
-                        <a href="javascript:void(0);" id="button-basic-02" dropdownToggle type="button"
-                            class="dropdown-toggle" aria-controls="dropdown-basic-02">
-                            <span><i class="icon-customer"></i> <span class="item-name"> Customer </span> </span>
+                    <li class="main-item btn-group" *ngFor="let menu of allItems" dropdown [attr.container]="!isOpen ? 'body' : ''">
+                        <a href="javascript:void(0);" *ngIf="menu?.items?.length" id="button-basic-02"
+                            dropdownToggle type="button" class="dropdown-toggle" aria-controls="dropdown-basic-02">
+                            <span><i [ngClass]="menu?.icon"></i>
+                                <span class="item-name">{{menu?.label}}</span>
+                            </span>
                             <i class="icon-down-new mr-l1 font-14"></i>
                         </a>
-                        <ul id="dropdown-basic-02" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu"
-                            role="menu" aria-labelledby="button-basic-02">
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/sales']"><i
-                                        class="icon-invoice-new"></i> Invoice</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/estimates']"><i
-                                        class="icon-estimate-new"></i> Estimate</a></li>
-                            <!-- <li><a href="javascript:void(0);"><i class="icon-sales-order1"></i> Sales Order</a></li> -->
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/contact/customer']"><i
-                                        class="icon-customer"></i> Customer</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/contact/aging-report']"><i
-                                        class="icon-aging-report-new"></i> Aging Report</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/reports/sales-register']"><i
-                                        class="icon-register-new"></i> Sales Register</a></li>
-                            <li><a href="javascript:void(0);"
-                                    [routerLink]="['/pages/invoice/preview/templates/sales']"><i
-                                        class="icon-template-new"></i> Template</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/credit%20note']"><i
-                                        class="icon-credit-note-new"></i> Credit Note</a></li>
-
-                        </ul>
-                    </li>
-                    <li class="main-item btn-group" dropdown>
-                        <a href="javascript:void(0);" id="button-basic-03" dropdownToggle type="button"
-                            class="dropdown-toggle" aria-controls="dropdown-basic-03">
-                            <span><i class="icon-vendor"></i> <span class="item-name">Vendor </span> </span>
-                            <i class="icon-down-new mr-l1 font-14"></i>
+                        <a href="javascript:void(0);" *ngIf="menu?.items?.length === 0" [routerLink]="[menu?.link]" [queryParams]="menu?.additional" id="button-basic-02"
+                            dropdownToggle type="button" class="dropdown-toggle" aria-controls="dropdown-basic-02">
+                            <span><i [ngClass]="menu?.icon"></i>
+                                <span class="item-name">{{menu?.label}}</span>
+                            </span>
                         </a>
-                        <ul id="dropdown-basic-03" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu"
-                            role="menu" aria-labelledby="button-basic-03">
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/proforma-invoice/invoice/purchase']" ><i class="icon-purchase"></i> Purchase</a></li>
-                            <!-- <li><a href="javascript:void(0);"><i class="icon-cash-purchase"></i> Cash Purchase</a></li> -->
-                            <li><a href="javascript:void(0);"
-                                    [routerLink]="['/pages/purchase-management/purchase/order']"><i
-                                        class="icon-sales-order1"></i> Purchase Order</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/contact/vendor']"><i
-                                        class="icon-vendor"></i> Vendor</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/contact/aging-report']"><i
-                                        class="icon-aging-report-new"></i> Aging Report</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/reports/purchase-register']"><i
-                                        class="icon-register-new"></i> Purchase Register</a></li>
-                            <li><a href="javascript:void(0);"
-                                    [routerLink]="['/pages/invoice/preview/templates/sales']"><i
-                                        class="icon-template-new"></i> Template</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/credit%20note']"><i
-                                        class="icon-credit-note-new"></i> Credit Note</a></li>
-                        </ul>
-
+                        <ng-container *ngIf="menu?.items?.length">
+                            <ul id="dropdown-basic-02" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
+                                aria-labelledby="button-basic-02">
+                                <li *ngFor="let item of menu?.items">
+                                    <a *ngIf="item?.link" href="javascript:void(0);" [routerLink]="[item?.link]"
+                                        [queryParams]="item?.additional"><i [ngClass]="item.icon"></i> {{item?.label}}
+                                    </a>
+                                    <a *ngIf="!item?.link" href="javascript:void(0);" (click)="handleItemClick(menuItem)"><i [ngClass]="item.icon"></i> {{item?.label}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </ng-container>
                     </li>
-                    <li class="main-item btn-group" dropdown>
-                        <a href="javascript:void(0);" id="button-basic-04" dropdownToggle type="button"
-                            class="dropdown-toggle" aria-controls="dropdown-basic-04">
-                            <span><i class="icon-voucher"></i> <span class="item-name">Other Voucher</span> </span>
-                            <i class="icon-down-new mr-l1 font-14"></i>
-                        </a>
-                        <ul id="dropdown-basic-04" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu"
-                            role="menu" aria-labelledby="button-basic-04">
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/credit%20note']"><i
-                                        class="icon-credit-note-new"></i> Credit Note</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/debit%20note']"><i
-                                        class="icon-debit-note-new"></i> Debit Note</a></li>
-                            <li><a href="javascript:void(0);"
-                                    [routerLink]="['/pages/purchase-management/purchase/order']"><i
-                                        class="icon-sales-order1"></i> Purchase Order</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/reports/receipt']"><i
-                                        class="icon-reciept-new"></i> Reciept</a></li>
-                            <!-- <li><a  href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/debit%20note']"><i class="icon-payment-new"></i> Payment</a></li> -->
-                            <li><a href="javascript:void(0);"
-                                    [routerLink]="['/pages/invoice/preview/templates/sales']"><i
-                                        class="icon-template-new"></i> Template</a></li>
-                        </ul>
-                    </li>
-                    <li class="main-item">
-                        <a href="javascript:void(0);" [routerLink]="['/pages/inventory']" class="px-3"><span><i
-                                    class="icon-inventory"></i> <span class="item-name">Inventory</span></span></a>
-                    </li>
-                    <li class="main-item btn-group" dropdown>
-                        <a href="javascript:void(0);" id="button-basic-05" dropdownToggle type="button"
-                            class="dropdown-toggle" aria-controls="dropdown-basic-05">
-                            <span><i class="icon-voucher"></i><span class="item-name">Reports</span></span>
-                            <i class="icon-down-new mr-l1 font-14"></i>
-                        </a>
-                        <ul id="dropdown-basic-05" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu"
-                            role="menu" aria-labelledby="button-basic-05">
-                            <li>
-                                <a href="javascript:void(0);" [routerLink]="['/pages/trial-balance-and-profit-loss']"
-                                    [queryParams]="{ tab: 'trial-balance', tabIndex: 2 }"><i
-                                        class="icon-balance-sheet-new"></i>Balance Sheet
-                                </a>
-                            </li>
-
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/trial-balance-and-profit-loss']"
-                                    [queryParams]="{ tab: 'trial-balance', tabIndex: 1 }"><i
-                                        class="icon-proft-loss-new"></i>Profit and Loss</a></li>
-
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/trial-balance-and-profit-loss']"
-                                    [queryParams]="{ tab: 'trial-balance', tabIndex: 0 }"><i
-                                        class="icon-trial-balance-new"></i>Trial Balance</a></li>
-
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/new-vs-old-invoices']"><i
-                                        class="icon-sale-bifurcation"></i>Sales Bifurcation</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/daybook']"><i
-                                        class="icon-daybook-new"></i> Daybook</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/settings/taxes']"><i
-                                        class="icon-tax-new"></i> TAX (GST)</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/ewaybill']"><i
-                                        class="icon-eway-bill-new"></i> E-way Bill</a></li>
-                        </ul>
-                    </li>
-                    <li class="main-item btn-group" dropdown>
-                        <a href="javascript:void(0);" id="button-basic-06" dropdownToggle type="button"
-                            class="dropdown-toggle" aria-controls="dropdown-basic-06">
-                            <span><i class="icon-import"></i><span class="item-name">Import</span></span>
-                            <i class="icon-down-new mr-l1 font-14"></i>
-                        </a>
-                        <ul id="dropdown-basic-06" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu"
-                            role="menu" aria-labelledby="button-basic-06">
-                            <li><a href="javascript:void(0);" container="body" [checkPermission]="['MENU', 'MANAGE']"
-                                    (click)="showManageGroupsModal()"><i class="icon-master-new"></i>Master</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/import/account']"><i
-                                        class="icon-accounts-new"></i>Accounts</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/sales']"><i
-                                        class="icon-invoice-new"></i>Invoice</a></li>
-                            <li>
-                                <a href="javascript:void(0);" [routerLink]="['/pages/import/group']">
-                                    <i class="icon-group-new"></i>Group</a>
-                            </li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/trial-balance-and-profit-loss']"
-                                    [queryParams]="{ tab: 'trial-balance', tabIndex: 0 }"><i
-                                        class="icon-trial-balance-new"></i>Trial Balance</a></li>
-                        </ul>
-                    </li>
-                    <li class="main-item btn-group" dropdown>
-                        <a href="javascript:void(0);" id="button-basic-07" dropdownToggle type="button"
-                            class="dropdown-toggle " aria-controls="dropdown-basic-07">
-                            <span><i class="icon-other"></i><span class="item-name">Other</span></span>
-                            <i class="icon-down-new mr-l1 font-14"></i>
-                        </a>
-                        <ul id="dropdown-basic-07" *dropdownMenu
-                            class="dropdown-menu other-sub-menu-item list-style-none pd-l2 sub-menu" role="menu"
-                            aria-labelledby="button-basic-07">
-                            <li><a href="javascript:void(0);"
-                                    [routerLink]="['/pages/expenses-manager?tab=pending&tabIndex=0']"><i
-                                        class="icon-petty-cash"></i>Petty Cash</a></li>
-                            <li><a href="javascript:void(0);"><i class="icon-journal-voucher-new"></i>JV</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/home']"><i
-                                        class="icon-dashboard-new"></i>Dashboard</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/reports/cash-flow-statement']"><i
-                                        class="icon-cash-flow-statement"></i>Cash Flow</a></li>
-                            <li><a href="javascript:void(0);"
-                                    [routerLink]="['/pages/reports/monthly-columnar-report']"><i
-                                        class="icon-monthly-columnar-report"></i>Columnar Report</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/reports/reverse-charge']"><i
-                                        class="icon-reverse-charge"></i>Reverse Charge</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/audit-logs']"><i
-                                        class="icon-audit-log"></i>Audit Log</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/search']"><i
-                                        class="icon-search-new"></i>Search</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/onboarding']"><i
-                                        class="icon-onboarding-new"></i>Onboarding</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/tallysync']"><i
-                                        class="icon-tally-import"></i>Tally Import</a></li>
-                            <li><a href="javascript:void(0);" [routerLink]="['/pages/reports/company-import-export']">
-                                    <i class="icon-company-impex"></i>Company Impex </a></li>
-                        </ul>
-                    </li>
-
                 </ul>
             </div>
         </div>
     </div>
-    <!-- <div class="toogle-sidebar" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
-        <i class="icon-down-new"></i>
-    </div> -->
 </div>
 
 <ng-template #headDropdownMenu>
@@ -359,7 +184,7 @@
 <!-- #dropdown="bs-dropdown" -->
 <!--  -->
 <li dropdown class="position-relative" #subdropdown="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true"
-    (clickOutside)="subdropdown.isOpen = false" (onShown)="switchCompanyMenuShown()">
+    (clickOutside)="subdropdown.isOpen = false">
     <a href="javascript:void(0)" class="clearfix" dropdownToggle>
         Switch company
         <span class="icon-arrow-down"></span>
@@ -379,7 +204,7 @@
 
         <li class="p-0">
 
-            <perfect-scrollbar class="" [scrollIndicators]="true">
+            <perfect-scrollbar>
 
                 <ul class="sub-list" *ngIf="companyListForFilter && companyListForFilter.length">
 
