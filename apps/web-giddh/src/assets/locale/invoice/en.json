@@ -120,5 +120,11 @@
     "select_copy": "Select Copy",
     "select_order": "Select Order",
     "add_multiple_email": "You can add multiple id's comma separated",
-    "recipients_email": "Recipient Email Id's"
+    "recipients_email": "Recipient Email Id's",
+    "generate_multiple": "Generate Multiple",
+    "generate_compound": "Generate Compound",
+    "preview_generate": "Preview & Generate",
+    "search_particular": "Search Particular",
+    "search_description": "Search Description",
+    "currency_conversion": "In [BASE_CURRENCY]: [AMOUNT]<br />(Conversion Rate: [CONVERSION_RATE])"
 }

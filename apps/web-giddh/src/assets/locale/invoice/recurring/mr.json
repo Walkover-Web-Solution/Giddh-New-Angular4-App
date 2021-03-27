@@ -1,0 +1,36 @@
+{
+    "interval_options": {
+        "weekly": "साप्ताहिक",
+        "monthly": "मासिक",
+        "quarterly": "त्रैमासिक",
+        "halfyearly": "सहामाही",
+        "yearly": "वार्षिक"
+    },
+    "वेळ_प्रदर्शन": {
+        "first": "1st",
+        "second": "2nd",
+        "third": "3rd",
+        "fourth": "4th",
+        "fifth": "5th"
+    },
+    "recurring_date_error": "आजची तारीख जास्त असणे आवश्यक आहे",
+    "recurring_all_field_required": "सर्व * फील्ड वैध आणि भरली पाहिजेत",
+    "recurring_account": "आवर्ती खाते",
+    "never_expire": "कालबाह्य होऊ नका",
+    "interval": "मध्यांतर",
+    "select_interval": "मध्यांतर निवडा",
+    "type_to_search": "शोधण्यासाठी टाइप करा...",
+    "search_here": "Search here...",
+    "invoice_type": "Invoice Type",
+    "last_invoice_date": "Last Invoice Date",
+    "search_invoice_no": "Search Invoice No.",
+    "search_customer_name": "Search Customer Name",
+    "bulk_note": "Bulk Note",
+    "generate_eway_bill": "Generate E-way Bill",
+    "next_invoice_date": "Next Invoice Date",
+    "invoice_amount": "Invoice Amt",
+    "no_vouchers_found": "No Recurring Vouchers Found!",
+    "search_field": "Search [FIELD]",
+    "active": "Active",
+    "inactive": "InActive"
+}
