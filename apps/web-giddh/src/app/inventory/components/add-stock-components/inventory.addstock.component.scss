@@ -104,7 +104,9 @@ tr.fsstock td {
     padding: 2px;
     top: 0 !important;
 }
-
+.output-row .form-group sh-select {
+    min-width: 170px;
+}
 @media (max-width: 767px) {
     section.form-body table.no-hover td {
         width: 100%;
