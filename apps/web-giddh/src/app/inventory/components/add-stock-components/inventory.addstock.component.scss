@@ -103,7 +103,7 @@ tr.fsstock td {
     padding: 2px;
     top: 0 !important;
 }
-.output-row .form-group sh-select {
+.output-row .form-group sh-select , .output-row .form-group input{
     min-width: 170px;
 }
 @media (max-width: 767px) {
