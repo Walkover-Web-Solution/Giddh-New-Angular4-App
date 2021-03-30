@@ -15,7 +15,7 @@
             }
             input{
                 height: 50px;
-                background-color: $solitude !important;
+                background-color: $solitude-new !important;
                 border:none;
                 font-size: 16px;
             }
@@ -24,8 +24,8 @@
     }
     .all-item-block{
         .main-item{
-            border-bottom: 1px solid $solitude;
-            margin-bottom: 20PX;
+            border-bottom: 1px solid $solitude-new;
+            margin-bottom: 20px;
             h3{
                 color: $persian-blue;
                 font-family: 'opensans-semibold';
