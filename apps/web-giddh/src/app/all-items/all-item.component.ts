@@ -29,7 +29,7 @@ export class AllGiddhItemComponent implements OnInit {
         private companyActions: CompanyActions,
         private generalService: GeneralService,
         private groupWithAction: GroupWithAccountsAction,
-        private store: Store<AppState>,
+        private store: Store<AppState>
     ) {
 
     }
