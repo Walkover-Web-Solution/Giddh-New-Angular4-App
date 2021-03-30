@@ -56,7 +56,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
     public currentCompanyBranches: Array<any>;
     /** Search query to search branch */
     public searchBranchQuery: string;
-    /** Current organization type */
+    /** Stores the active ledger account details */
     public activeAccount$: Observable<AccountResponse>;
     /* This will show sidebar is open */
     /** Stores the active company details */
@@ -66,6 +66,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
 
     /** store current selected company */
     public selectedCompany: Observable<CompanyResponse>;
+    /** Stores the current financial year data */
     public activeFinancialYear: ActiveFinancialYear;
 
     /** Stores the details of the current branch */
@@ -149,9 +150,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
     ) {
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
-        this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
+        this.activeAccount$ = this.store.pipe(select(appStore => appStore.ledger.account), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(p => p.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
+        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(appStore => appStore.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
             if (organization && organization.details && organization.details.branchDetails) {
                 this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
@@ -207,8 +208,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
      * @memberof PrimarySidebarComponent
      */
     public ngOnInit(): void {
-        this.smartCombinedList$ = this.store.pipe(select(s => s.general.smartCombinedList), takeUntil(this.destroyed$));
-        this.updateIndexDbSuccess$ = this.store.pipe(select(p => p.general.updateIndexDbComplete), takeUntil(this.destroyed$))
+        this.smartCombinedList$ = this.store.pipe(select(appStore => appStore.general.smartCombinedList), takeUntil(this.destroyed$));
+        this.updateIndexDbSuccess$ = this.store.pipe(select(appStore => appStore.general.updateIndexDbComplete), takeUntil(this.destroyed$))
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
             if (selectedCmp) {
                 this.selectedCompany = observableOf(selectedCmp);
@@ -366,7 +367,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
      * @param {*} ev Modal change event
      * @memberof PrimarySidebarComponent
      */
-    public filterCompanyList(ev) {
+    public filterCompanyList(ev): void {
         let companies: CompanyResponse[] = [];
         this.companies$?.pipe(take(1)).subscribe(cmps => companies = cmps);
 
@@ -731,18 +732,18 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
     /**
      * Makes selected account entry in DB
      *
-     * @param {*} e Select account event
+     * @param {*} event Select account event
      * @param {*} acc Account selected
      * @returns
      * @memberof PrimarySidebarComponent
      */
-    public analyzeAccounts(e: any, acc): void {
-        if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
+    public analyzeAccounts(event: any, acc): void {
+        if (event.shiftKey || event.ctrlKey || event.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
             this.onItemSelected(acc, null, true);
             return;
         }
-        e.preventDefault();
-        e.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
         if (this.subBranchDropdown) {
             this.subBranchDropdown.hide();
         }
@@ -795,18 +796,18 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
 
     /**
      * redirect to route and save page entry into db
-     * @param e event
+     * @param event event
      * @param pageName page router url
      * @param queryParamsObj additional data
      */
-    public analyzeMenus(e: any, pageName: string, queryParamsObj?: any): void {
+    public analyzeMenus(event: any, pageName: string, queryParamsObj?: any): void {
         this.isLedgerAccSelected = false;
-        if (e) {
-            if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
+        if (event) {
+            if (event.shiftKey || event.ctrlKey || event.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
                 return;
             }
-            e.preventDefault();
-            e.stopPropagation();
+            event.preventDefault();
+            event.stopPropagation();
         }
         // this.companyDropdown.isOpen = false;
         if (this.subBranchDropdown) {
@@ -860,11 +861,11 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
     /**
      * Mouse enter call back on company
      *
-     * @param {number} i Index of company entered
+     * @param {number} index Index of company entered
      * @memberof PrimarySidebarComponent
      */
-    public mouseEnteredOnCompanyName(i: number) {
-        this.hoveredIndx = i;
+    public mouseEnteredOnCompanyName(index: number): void {
+        this.hoveredIndx = index;
     }
 
     /**
@@ -887,7 +888,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
      * @returns
      * @memberof PrimarySidebarComponent
      */
-    private getReadableNameFromUrl(url) {
+    private getReadableNameFromUrl(url): string {
         let name = '';
         switch (url) {
             case 'SETTINGS?TAB=PERMISSION&TABINDEX=5':
