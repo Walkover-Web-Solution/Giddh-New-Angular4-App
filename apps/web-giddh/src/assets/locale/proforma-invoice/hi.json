@@ -89,27 +89,6 @@
     "quantity_error": "दर्ज की गई मात्रा, मात्रा से अधिक नहीं हो सकती",
     "purchase_bill_created": "खरीद बिल सफलतापूर्वक बनाया गया",
     "entry_created": "वाउचर नंबर के साथ प्रवेश सफलतापूर्वक बनाया गया",
-    "interval_options": {
-        "weekly": "साप्ताहिक",
-        "monthly": "महीने के",
-        "quarterly": "त्रैमासिक",
-        "halfyearly": "अर्धवार्षिक",
-        "yearly": "सालाना"
-    },
-    "time_options": {
-        "first": "1st",
-        "second": "2nd",
-        "third": "3rd",
-        "fourth": "4th",
-        "fifth": "5th"
-    },
-    "recurring_date_error": "तिथि आज से अधिक होनी चाहिए",
-    "recurring_all_field_required": "तिथि आज से अधिक होनी चाहिए",
-    "recurring_account": "आवर्ती खाता",
-    "never_expire": "कभी समाप्ति न करें",
-    "interval": "मध्यान्तर",
-    "select_interval": "अंतराल का चयन करें",
-    "type_to_search": "खोजने के लिए लिखें...",
     "gst_treatment": "जीएसटी उपचार",
     "party_type": "पार्टी प्रकार",
     "print_voucher": "प्रिंट वाउचर",
