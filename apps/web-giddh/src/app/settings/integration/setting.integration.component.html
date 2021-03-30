@@ -660,7 +660,7 @@
                         </div> -->
                         <a href="javascript:;" class="text-right btn btn-primary" (click)="showBeneficiaryModal(regAcc.URN)"> List Beneficiary </a>
                     </div>
-                    <br/>
+                    <br *ngIf="parentIndex !== (registeredAccount?.length - 1)" />
                 </div>
                 <!-- <div *ngIf="openNewRegistration && !(isPaymentAdditionSuccess$ | async)" class="box clearfix">
                     <h3 class="font-20 bold mb-2">ICICI Bank</h3>
@@ -927,6 +927,7 @@
                         </div>
                     </div>
                 </div>
+                <p class="mt-2 mb-4 font-14"><a href="https://cadigital.icicibank.com/SmartFormWeb/apps/services/www/SmartFormWeb/desktopbrowser/default/index.html?source=BC-application-Giddh#/" target="_blank">Open a new current account</a></p>
                 <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" class="btn btn-sky-blue mr-r1" (click)="openNewRegistartionForm()">Add More ID</button>
             </div>
         </tab>

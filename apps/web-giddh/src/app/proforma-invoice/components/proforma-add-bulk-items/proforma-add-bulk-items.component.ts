@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { fromEvent, ReplaySubject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { SearchService } from '../../../services/search.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestroy {
+export class ProformaAddBulkItemsComponent implements OnInit, OnDestroy {
     @Input() public invoiceType: string;
 
     @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
@@ -32,6 +32,10 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
     };
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -162,7 +166,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
     addItemToSelectedArr(item: SalesAddBulkStockItems) {
         let index = this.selectedItems.findIndex(f => f.uniqueName === item.uniqueName);
         if (index > -1) {
-            this.toaster.warningToast('this item is already selected please increase it\'s quantity');
+            this.toaster.warningToast(this.localeData?.item_selected);
             return;
         }
         let requestObject = {
@@ -223,10 +227,6 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
         if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
             this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
         }
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        //
     }
 
     ngOnDestroy(): void {

@@ -736,23 +736,23 @@ export class GeneralService {
      * @returns {ConfirmationModalConfiguration}
      * @memberof GeneralService
      */
-    public getDateChangeConfiguration(isVoucherDateSelected: boolean): ConfirmationModalConfiguration {
+    public getDateChangeConfiguration(localeData: any, commonLocaleData: any, isVoucherDateSelected: boolean): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
-            text: 'Yes',
+            text: commonLocaleData?.app_yes,
             cssClass: 'btn btn-success'
         },
         {
-            text: 'No',
+            text: commonLocaleData?.app_no,
             cssClass: 'btn btn-danger'
         }];
-        const headerText: string = 'Date Change Confirmation';
+        const headerText: string = localeData?.date_change_confirmation_heading;
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1 text-light';
         const footerCssClass: string = 'mr-b1';
         return (isVoucherDateSelected) ? {
             headerText,
             headerCssClass,
-            messageText: `Do you want to change the entry date as well?`,
+            messageText: localeData?.change_single_entry_date,
             messageCssClass,
             footerText: '',
             footerCssClass,
@@ -760,7 +760,7 @@ export class GeneralService {
         } : {
                 headerText,
                 headerCssClass,
-                messageText: `Do you want to change the all entries date with this date?`,
+                messageText: localeData?.change_all_entry_dates,
                 messageCssClass,
                 footerText: '',
                 footerCssClass,
@@ -878,5 +878,29 @@ export class GeneralService {
             });
         });
         return visibleMenuItems;
+    }
+
+    /**
+     * Validates the bank details: Bank Name, Account number, IFSC code.
+     * If either of them is provided then the rest two fields are also mandatory
+     * as all the 3 values are required for payment purpose. If none of them is provided,
+     * then also it is valid. It is invalid when anyone of them is missing and rest
+     * are provided
+     *
+     * @returns {boolean} True, if bank details are valid
+     * @memberof GeneralService
+     */
+     public checkForValidBankDetails(bankDetails: any, countryCode: string): boolean {
+        const fieldsWithValue = bankDetails;
+        const keys = countryCode === 'AE' ?
+            ['beneficiaryName', 'bankName', 'branchName', 'bankAccountNo', 'swiftCode'] :
+            ['bankName', 'bankAccountNo', 'ifsc'];
+        let isValid = true;
+        if (fieldsWithValue) {
+            isValid = keys.every(key => Boolean(fieldsWithValue[key])) || keys.every(key => !Boolean(fieldsWithValue[key]));
+            return isValid;
+        } else {
+            return isValid;
+        }
     }
 }
