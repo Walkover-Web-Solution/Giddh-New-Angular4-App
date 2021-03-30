@@ -1,9 +1,9 @@
 import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { AuthService } from '../../theme/ng-social-login-module/index';
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, Input, TemplateRef, ViewChild} from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -18,8 +18,6 @@ import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
-import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
-import { FormControl } from '@angular/forms';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { createSelector } from 'reselect';
 import * as moment from 'moment/moment';
@@ -31,7 +29,7 @@ import { CompAidataModel } from '../../models/db';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/defaultMenus';
+import { DEFAULT_AC, DEFAULT_MENUS, NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/defaultMenus';
 import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { environment } from 'apps/web-giddh/src/environments/environment';
@@ -45,7 +43,6 @@ import { SettingsBranchActions } from '../../actions/settings/branch/settings.br
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
-import { PermissionService } from '../../services/permission.service';
 
 @Component({
     selector: 'app-header',
@@ -77,7 +74,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('manageGroupsAccountsModal', {static: true}) public manageGroupsAccountsModal: ModalDirective;
     @ViewChild('addCompanyModal', {static: true}) public addCompanyModal: ModalDirective;
     @ViewChild('addCompanyNewModal', {static: true}) public addCompanyNewModal: ModalDirective;
-    @ViewChild('deleteCompanyModal', {static: true}) public deleteCompanyModal: ModalDirective;
     @ViewChild('navigationModal', {static: true}) public navigationModal: TemplateRef<any>; // CMD + K
     @ViewChild('dateRangePickerCmp', {static: true}) public dateRangePickerCmp: ElementRef;
     @ViewChild('dropdown', {static: true}) public companyDropdown: BsDropdownDirective;
@@ -104,13 +100,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public sideMenu: { isopen: boolean } = { isopen: false };
     public companyMenu: { isopen: boolean } = { isopen: false };
     public isCompanyRefreshInProcess$: Observable<boolean>;
-    public isLoggedInWithSocialAccount$: Observable<boolean>;
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     public companies$: Observable<CompanyResponse[]>;
     public selectedCompany: Observable<CompanyResponse>;
     /** Stores the active company details */
     public selectedCompanyDetails: CompanyResponse;
-    public seletedCompanywithBranch: string = '';
     public selectedCompanyCountry: string;
     public markForDeleteCompany: CompanyResponse;
     public deleteCompanyBody: string;
@@ -126,7 +120,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public userAvatar: string;
     public navigationModalVisible: boolean = false;
     public apkVersion: string;
-    public menuItemsFromIndexDB: any[] = DEFAULT_MENUS;
     public accountItemsFromIndexDB: any[] = DEFAULT_AC;
     public selectedPage: any = '';
     public selectedLedgerName: string;
@@ -163,7 +156,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     };
     public currentState: any = '';
     public isCalendlyModelActivate: boolean = false;
-    public companyInitials: any = '';
     public forceOpenNavigation: boolean = false;
     /** VAT supported countries to show the Vat Report section in all modules */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
@@ -246,7 +238,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private companyActions: CompanyActions,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private router: Router,
-        private flyAccountActions: FlyAccountsActions,
         private componentFactoryResolver: ComponentFactoryResolver,
         private zone: NgZone,
         private route: ActivatedRoute,
@@ -269,7 +260,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
-        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(p => p.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
 
         // SETTING CURRENT PAGE ON INIT
         this.setCurrentPage();
@@ -310,28 +300,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (event instanceof NavigationStart) {
                 this.navigationEnd = false;
             }
-            if (event instanceof NavigationError) {
+            if (event instanceof NavigationError || event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
                 this.navigationEnd = true;
-                let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
-                    return item.uniqueName.toLocaleLowerCase() === event.url.toLowerCase();
-                });
-                if (menuItem) {
-                    this._dbService.removeItem(this.generalService.companyUniqueName, 'menus', menuItem.uniqueName).then((dbResult) => {
-                        this.findListFromDb(dbResult);
-                        this._generalActions.updateUiFromDb();
-                    });
-                }
-            }
-            if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
-                this.navigationEnd = true;
-                if (event instanceof NavigationEnd) {
-                    let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
-                        return item.uniqueName.toLocaleLowerCase() === event.url.toLowerCase();
-                    });
-                    if (menuItem) {
-                        this.doEntryInDb('menus', menuItem);
-                    }
-                }
             }
         });
 
@@ -412,24 +382,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (selectedCmp) {
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
-                let selectedCompanyArray = selectedCmp.name.split(" ");
-                let companyInitials = [];
-                for (let loop = 0; loop < selectedCompanyArray.length; loop++) {
-                    if (loop <= 1) {
-                        companyInitials.push(selectedCompanyArray[loop][0]);
-                    } else {
-                        break;
-                    }
-                }
-
-                this.companyInitials = companyInitials.join(" ");
                 this.activeFinancialYear = selectedCmp.activeFinancialYear;
                 this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
-                if (selectedCmp.alias) {
-                    this.seletedCompanywithBranch = selectedCmp.name + ' (' + selectedCmp.alias + ')';
-                } else {
-                    this.seletedCompanywithBranch = selectedCmp.name;
-                }
 
                 this.activeCompanyForDb = new CompAidataModel();
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
@@ -529,7 +483,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                             branches = data || [];
                         });
                         reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, response.body);
-                        this.menuItemsFromIndexDB = DEFAULT_MENUS;
                         this.apiMenuItems = response.body;
                         this.changeDetection.detectChanges();
                     }
@@ -952,8 +905,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 menu.additional = queryParamsObj;
             }
         }
-        this.doEntryInDb('menus', menu);
-
         this.setCurrentPageTitle(menu);
 
         if (menu.additional) {
@@ -1029,23 +980,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             return;
         }
         if (dbResult) {
-
-            this.menuItemsFromIndexDB = (dbResult && dbResult.aidata) ? dbResult.aidata.menus : [];
-
             // slice menus
             if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 10);
                 this.accountItemsFromIndexDB = (dbResult && dbResult.aidata) ? slice(dbResult.aidata.accounts, 0, 7) : [];
             } else {
-                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 8);
                 this.accountItemsFromIndexDB = (dbResult && dbResult.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : [];
             }
-
-            // sortby name
-            this.menuItemsFromIndexDB = orderBy(this.menuItemsFromIndexDB, ['name'], ['asc']);
-
-            // let combined = this._dbService.extractDataForUI(dbResult.aidata);
-            // this.store.dispatch(this._generalActions.setSmartList(combined));
         } else {
             let data: IUlist[];
             this.smartCombinedList$.pipe(take(1)).subscribe(listResult => {
@@ -1056,7 +996,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             // slice default menus and account on small screen
             if (!(window.innerWidth > 1440 && window.innerHeight > 717)) {
-                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 10) : slice(this.menuItemsFromIndexDB, 0, 8);
                 this.accountItemsFromIndexDB = slice(this.accountItemsFromIndexDB, 0, 5);
             }
         }
@@ -1099,76 +1038,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         e.stopPropagation();
         e.preventDefault();
         this.store.dispatch(this.companyActions.RefreshCompanies());
-    }
-
-    public changeCompany(selectedCompanyUniqueName: string, fetchLastState?: boolean) {
-        this.companyDropdown.isOpen = false;
-        this.generalService.companyUniqueName = selectedCompanyUniqueName;
-        const details = {
-            branchDetails: {
-                uniqueName: ''
-            }
-        };
-        this.setOrganizationDetails(OrganizationType.Company, details);
-        this.toggleBodyScroll();
-        this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName, fetchLastState));
-    }
-
-    public deleteCompany(e: Event) {
-        e.stopPropagation();
-        this.store.dispatch(this.companyActions.DeleteCompany(this.markForDeleteCompany.uniqueName));
-        this.hideDeleteCompanyModal(e);
-    }
-
-    public showDeleteCompanyModal(company: CompanyResponse, e: Event) {
-        this.markForDeleteCompany = company;
-        this.deleteCompanyBody = `Are You Sure You Want To Delete ${company.name} ? `;
-        this.deleteCompanyModal.show();
-        e.stopPropagation();
-    }
-
-    public hideDeleteCompanyModal(e: Event) {
-        e.stopPropagation();
-        this.deleteCompanyModal.hide();
-    }
-
-    public logout() {
-        /** Reset the current organization type on logout as we
-         * don't know receive switched branch from API in last state (state API)
-        */
-        const details = {
-            branchDetails: {
-                uniqueName: ''
-            }
-        };
-        this.setOrganizationDetails(OrganizationType.Company, details);
-        localStorage.removeItem('isNewArchitecture');
-        if (isElectron) {
-            this.store.dispatch(this.loginAction.ClearSession());
-        } else if (isCordova) {
-            (window as any).plugins.googleplus.logout(
-                (msg) => {
-                    this.store.dispatch(this.loginAction.ClearSession());
-                }
-            );
-        } else {
-            // check if logged in via social accounts
-            this.isLoggedInWithSocialAccount$.subscribe((val) => {
-                if (val) {
-                    this.socialAuthService.signOut().then(() => {
-                        this.store.dispatch(this.loginAction.ClearSession());
-                        this.store.dispatch(this.loginAction.socialLogoutAttempt());
-                    }).catch((err) => {
-                        this.store.dispatch(this.loginAction.ClearSession());
-                        this.store.dispatch(this.loginAction.socialLogoutAttempt());
-                    });
-
-                } else {
-                    this.store.dispatch(this.loginAction.ClearSession());
-                }
-            });
-
-        }
     }
 
     public onHide() {
