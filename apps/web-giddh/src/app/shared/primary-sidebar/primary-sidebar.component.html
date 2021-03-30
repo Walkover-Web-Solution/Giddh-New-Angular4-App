@@ -12,11 +12,11 @@
                     <ng-container *ngTemplateOutlet="headDropdownMenu"></ng-container>
                 </ul>
             </li>
-            <ul class="list-style-none  current-branch-name mr-l3  switch-branch-wrapper" >
+            <ul *ngIf="(currentCompanyBranches$ | async)?.length > 1" class="list-style-none  current-branch-name mr-l3  switch-branch-wrapper" >
                 <li class="btn-group" [exclude]="'.switch-branch-section'" (clickOutside)="subBranchDropdown.hide()" dropdown placement="bottom right" #subBranchDropdown="bs-dropdown"
                     [autoClose]="false" (onShown)="loadCompanyBranches()">
 
-                    <a id="button-basic"  *ngIf="(currentCompanyBranches$ | async)?.length > 1" dropdownToggle href="javascript:void(0)"
+                    <a id="button-basic" dropdownToggle href="javascript:void(0)"
                         class="dropdown-toggle cursor-pointer switch-branch-section font-14 branch-name">
                         <ng-container *ngIf="currentBranch">{{currentBranch?.alias}} <i class="icon-down-new"></i>
                         </ng-container>
