@@ -63,7 +63,7 @@ export const ALL_ITEMS: AllItems[] = [
         items: [
             { label: 'Balance Sheet', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-balance-sheet-new', description: 'Lorem ipsum dolor sit amet, consectetur', additional: { tab: 'balance-sheet', tabIndex: 2 } },
             { label: 'Profit and Loss', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-proft-loss-new', description: 'Lorem ipsum dolor sit amet, consectetur', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
-            { label: 'Trial balance', link: '/pages/trial-balance-and-profit-losst', icon: 'icon-trial-balance-new', description: 'Lorem ipsum dolor sit amet, consectetur', additional: { tab: 'trial-balance', tabIndex: 0 } },
+            { label: 'Trial balance', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-trial-balance-new', description: 'Lorem ipsum dolor sit amet, consectetur', additional: { tab: 'trial-balance', tabIndex: 0 } },
             { label: 'Sales Bifurcation ', link: '/pages/new-vs-old-invoices', icon: 'icon-sale-bifurcation', description: 'Lorem ipsum dolor sit amet, consectetur' },
             { label: 'Daybook', link: '/pages/daybook', icon: 'icon-daybook-new', description: 'Lorem ipsum dolor sit amet, consectetur' },
             { label: 'Taxes', link: '/pages/settings/taxes', icon: 'icon-tax-new', description: 'Lorem ipsum dolor sit amet, consectetur' },

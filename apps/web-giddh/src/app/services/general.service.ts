@@ -7,8 +7,9 @@ import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import * as moment from 'moment';
-import { find } from '../lodash-optimized';
+import { cloneDeep, find } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
+import { AllItems } from '../shared/helpers/allItems';
 
 @Injectable()
 export class GeneralService {
@@ -875,5 +876,31 @@ export class GeneralService {
             }
         }
         return '';
+    }
+
+    /**
+     * Returns the visible menu items to be shown for menu panel (as per permission)
+     *
+     * @param {Array<any>} apiItems List of permissible items obtained from API
+     * @param {Array<AllItems>} itemList List of all the items of menu
+     * @param {boolean} isBranch True, if user is in branch mode
+     * @returns {Array<AllItems>} Array of permissible menu items
+     * @memberof GeneralService
+     */
+    public getVisibleMenuItems(apiItems: Array<any>, itemList: Array<AllItems>, isBranch: boolean): Array<AllItems> {
+        const visibleMenuItems = cloneDeep(itemList);
+        itemList.forEach((menuItem, menuIndex) => {
+            visibleMenuItems[menuIndex].items = [];
+            menuItem.items.forEach(item => {
+                const isValidItem = isBranch ?
+                    apiItems.find(apiItem => (apiItem.uniqueName === item.link && !apiItem.notBranchViewable)) :
+                    apiItems.find(apiItem => (apiItem.uniqueName === item.link && !apiItem.notCompanyViewable));
+                if (isValidItem) {
+                    // If items returned from API have the current item which can be shown in branch/company mode, add it
+                    visibleMenuItems[menuIndex].items.push(item);
+                }
+            });
+        });
+        return visibleMenuItems;
     }
 }
