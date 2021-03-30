@@ -75,9 +75,6 @@ export const ROUTES: Routes = [
         path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
         children: [
             { path: 'home', loadChildren: () => import('./home/home.module').then(module => module.HomeModule), canActivate: [NeedsAuthorization] },
-
-            // { path: 'giddh-all-items', loadChildren: () => import('./giddh-all-items/giddh-all-items.module').then(module => module.AllItemModule)  },
-
             { path: 'invoice', loadChildren: () => import('./invoice/invoice.module').then(module => module.InvoiceModule), canActivate: [NeedsAuthorization] },
             {
                 path: 'daybook',
