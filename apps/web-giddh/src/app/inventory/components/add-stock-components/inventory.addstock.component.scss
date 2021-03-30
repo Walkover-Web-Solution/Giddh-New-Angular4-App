@@ -13,7 +13,7 @@
         padding-top: 12px !important;
         padding-bottom: 5px;
     }
-} 
+}
 
 .dropdown-menu {
     max-height: 168px;
@@ -102,6 +102,14 @@ tr.fsstock td {
     border-radius: 4px;
     padding: 2px;
     top: 0 !important;
+}
+.output-row  sh-select , .output-row .form-group input{
+    min-width: 140px;
+}
+.section-head.bd-rb, .output-row span{
+    white-space: normal;
+    word-break: break-word;
+
 }
 @media (max-width: 767px) {
     section.form-body table.no-hover td {

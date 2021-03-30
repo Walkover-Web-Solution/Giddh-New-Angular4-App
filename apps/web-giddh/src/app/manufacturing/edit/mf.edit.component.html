@@ -243,7 +243,7 @@
                             <span class="col-xs-7 col-sm-7"><strong>Grand Total:</strong></span>
                             <span class="col-xs-5 col-sm-5 text-right"><strong>{{ (getTotal('otherExpenses', 'amount') + getTotal('linkedStocks', 'amount')) | number:'1.0-2' }}</strong></span>
                         </div>
-                        <div class="mr-b1 clearfix row">
+                        <div class="mr-b1 clearfix row cost-per">
                             <span class="col-xs-7 col-sm-7"><strong>Cost per {{selectedProductName}}:</strong></span>
                             <span class="col-xs-5 col-sm-5 text-right"><strong>{{ getCostPerProduct() | number:'1.0-2'}}</strong></span>
                         </div>
