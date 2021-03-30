@@ -1,15 +1,15 @@
 @import "../../../assets/css/color.scss";
 
 .primary-sidebar {
-    background-color: $solitude;
+    background-color: $solitude-new;
     .company-branch-block {
-        .company-name{
+        .company-name {
             .head-nav {
                 background: $white-smoke;
                 border-bottom: 1px solid $gainsboro;
                 margin-bottom: 5px;
             }
-            .user-dropdown-header{
+            .user-dropdown-header {
                 left: auto !important;
                 right: -286px !important;
                 top: 0 !important;
@@ -40,7 +40,7 @@
                 letter-spacing: -2px;
                 font-size: 13px !important;
             }
-            .company-full-name{
+            .company-full-name {
                 margin-top: 5px;
                 height: 38px;
             }
@@ -74,22 +74,24 @@
         input {
             border-left: none;
             padding-left: 0 !important;
-             &:focus{
+            border-right: none !important;
+            &:focus {
                 border-color: $gainsboro !important;
             }
         }
-        &:after {
-            content: "Cmd + G ";
-            position: absolute;
-            display: block;
-            clear: both;
-            top: 0;
-            right: 10px;
+        .input-group-append{
             font-size: 12px;
-            line-height: 36px;
-            color: $trout;
-            z-index: 1;
-            color: $grey-chateau;
+            color: $grey-chateau;;
+            right: 10px;
+            top: 0;
+            padding: 0 5px;
+            height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: $white;
+            border: 1px solid $gainsboro;
+            border-left: none;
         }
     }
     .wrap-menus {
@@ -99,8 +101,8 @@
     }
     .account-block {
         .account-collapse {
-            p{
-                i{
+            p {
+                i {
                     font-size: 18px;
                     color: $grey-chateau;
                 }
@@ -257,7 +259,7 @@
                 justify-content: space-between;
                 word-break: break-word;
                 white-space: inherit;
-                i{
+                i {
                     position: relative;
                     top: 2px;
                 }
@@ -335,7 +337,6 @@
                     input {
                         padding-left: 30px;
                         border-left: none;
-                        // background-image: url(../../../assets/images/Search.svg);
                     }
                     .input-group-addon {
                         display: flex;
@@ -360,7 +361,7 @@
                     height: 34px;
                 }
             }
-             .current-branch-name {
+            .current-branch-name {
                 margin-top: 0;
                 margin-left: 0;
                 .branch-name {
@@ -374,33 +375,33 @@
                     margin-top: 15px;
                     font-family: "opensans-semibold";
                 }
-             }
+            }
         }
         .account-dropdown-collapse {
-                            position: absolute !important;
-                            left: 60px !important;
-                            z-index: 9999999 !important;
-                            background-color: $white !important;
-                            border: 1px solid $cornflower !important;
-                            border-radius: 0;
-                            width: 180px;
-                            top: 0px !important;
-                            padding-bottom: 0 !important;
-                            li {
-                                margin-top: 0 !important;
-                                margin-bottom: 0 !important;
-                                a {
-                                    padding: 10px 10px !important;
-                                    line-height: 20px;
-                                    display: flex;
-                                    i {
-                                        transform: none !important;
-                                        height: auto !important;
-                                        margin-bottom: 0;
-                                    }
-                                }
-                            }
-                        }
+            position: absolute !important;
+            left: 60px !important;
+            z-index: 9999999 !important;
+            background-color: $white !important;
+            border: 1px solid $cornflower !important;
+            border-radius: 0;
+            width: 180px;
+            top: 0px !important;
+            padding-bottom: 0 !important;
+            li {
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+                a {
+                    padding: 10px 10px !important;
+                    line-height: 20px;
+                    display: flex;
+                    i {
+                        transform: none !important;
+                        height: auto !important;
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
         .branch-connection {
             display: none;
         }
@@ -465,7 +466,7 @@
                                     transform: none;
                                 }
                             }
-                            i{
+                            i {
                                 transform: rotate(-90deg);
                                 margin-left: 0;
                                 width: 15px;
@@ -542,17 +543,17 @@
     }
 }
 /*responsive starts here*/
-@media(max-height:800px){
-    .sidebar-collapse{
-         .other-sub-menu-item{
+@media (max-height: 800px) {
+    .sidebar-collapse {
+        .other-sub-menu-item {
             height: 200px;
             overflow-y: auto;
         }
     }
-    .menu-block{
+    .menu-block {
         padding-bottom: 40px;
     }
-    .wrap-menus{
-          padding-bottom: 80px;
+    .wrap-menus {
+        padding-bottom: 80px;
     }
 }
