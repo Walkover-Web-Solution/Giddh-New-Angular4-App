@@ -2,21 +2,21 @@
     <div class="company-branch-block px-3 position-relative">
         <ul class="list-style-none">
             <li class="company-name position-relative cursor-pointer" dropdown #companyDetailsDropDownWeb="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="companyDetailsDropDownWeb.hide()" [exclude]="'.company-name'">
-                <h3 class="font-16 d-flex align-items-center" [checkPermission]="['MENU', 'MANAGE']" dropdownToggle>
-                    <img src="../../../assets/images/logo-icon.svg" class="company-icon mr-r1">
-                    <span hidden class="company-alice font-14 mr-r05">{{companyInitials}}</span>
-                    <span class="d-flex justify-content-between w-100 align-items-center company-full-name">{{selectedCompanyDetails?.name}}
+                <h3 class="font-16 d-flex" [checkPermission]="['MENU', 'MANAGE']" dropdownToggle>
+                    <img hidden src="../../../assets/images/logo-icon.svg" class="company-icon mr-r1">
+                    <span  class="company-alice mr-r05">{{companyInitials}}</span>
+                    <span class="d-flex justify-content-between w-100 company-full-name">{{selectedCompanyDetails?.name}}
                         <span class="d-flex"> <i class="icon-down-new"></i> </span></span>
                 </h3>
                 <ul class="dropdown-menu user-dropdown-header" role="menu" *dropdownMenu>
                     <ng-container *ngTemplateOutlet="headDropdownMenu"></ng-container>
                 </ul>
             </li>
-            <ul class="list-style-none current-branch-name mr-t15 mr-l3  switch-branch-wrapper">
+            <ul class="list-style-none  current-branch-name mr-l3  switch-branch-wrapper" >
                 <li class="btn-group" [exclude]="'.switch-branch-section'" (clickOutside)="subBranchDropdown.hide()" dropdown placement="bottom right" #subBranchDropdown="bs-dropdown"
                     [autoClose]="false" (onShown)="loadCompanyBranches()">
 
-                    <a id="button-basic" dropdownToggle *ngIf="(currentCompanyBranches$ | async)?.length > 1" href="javascript:void(0)"
+                    <a id="button-basic"  *ngIf="(currentCompanyBranches$ | async)?.length > 1" dropdownToggle href="javascript:void(0)"
                         class="dropdown-toggle cursor-pointer switch-branch-section font-14 branch-name">
                         <ng-container *ngIf="currentBranch">{{currentBranch?.alias}} <i class="icon-down-new"></i>
                         </ng-container>

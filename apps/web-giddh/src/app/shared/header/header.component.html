@@ -1,5 +1,4 @@
 <div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen, 'unvisible': companyList.length===0 }" (clickOutside)="closeSidebarMobile($event)">
-
     <div class="menu-wrapper">
         <primary-sidebar [isOpen]="sideMenu?.isopen" [apiMenuItems]="apiMenuItems" (newCompany)="createNewCompany()"></primary-sidebar>
     </div>
@@ -8,7 +7,7 @@
     </div>
 </div>
 
-<header class="clearfix header-container desktop-header" [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen }">
+<header class="clearfix header-container desktop-header" *ngIf="false" [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen }">
     <nav class="navbar ">
         <div class="container-fluid pd-t1 pd-b1">
             <div class="navbar-header">
