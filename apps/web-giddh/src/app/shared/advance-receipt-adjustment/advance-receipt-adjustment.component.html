@@ -36,6 +36,7 @@
                                         [currencyCode]="invoiceFormDetails.accountDetails.currency?.code">
                                     </amount-field>
                                 </span>
+                                <span class="d-flex justify-content-end">$200.00</span>
                         </p>
                         <p>{{(adjustedVoucherType === 'rcpt' || adjustedVoucherType === 'advance-receipt') ?
                             commonLocaleData?.app_balance : commonLocaleData?.app_due }} <span class="text-light">{{localeData?.post_adj}}</span> <span class="nowrap"><i class="font-10"></i>
@@ -47,6 +48,7 @@
                                     [currencyCode]="invoiceFormDetails.accountDetails.currency?.code">
                                 </amount-field>
                             </span>
+                            <span class="d-flex justify-content-end">$200.00</span>
                         </p>
                     </div>
                 </div>
@@ -118,9 +120,11 @@
                                         [(ngModel)]="entry.balanceDue.amountForAccount"
                                         (ngModelChange)="calculateTax(entry, entryIdx);" [prefix]="currencySymbol"
                                         [mask]="inputMaskFormat">
+                                        <span class="coverted-currency">$200.00</span>
                                     <span
                                         *ngIf="entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'"
-                                        class="text-light inclusive-tax">({{localeData?.inclusive_tax}})</span>
+                                        class="text-light inclusive-tax">({{localeData?.inclusive_tax}})
+                                    </span>
                                 </div>
                             </div>
                             <div class="col-sm-2">
@@ -132,6 +136,7 @@
                                         [(ngModel)]="entry.calculatedTaxAmount"
                                         [placeholder]="commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero+'.'+commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero"
                                         disabled>
+                                        <span class="coverted-currency">$200.00</span>
                                 </div>
                             </div>
                             <div *ngIf="!entry.linkingAdjustment && !shouldDisableEdit(entry)" class="col-sm-3">
@@ -182,6 +187,7 @@
                                                     [options]="availableTdsTaxes" (selected)="tdsTaxSelected($event)"
                                                     [notFoundLink]="false" [multiple]="false" [ItemHeight]="33">
                                                 </sh-select>
+                                                <span class="coverted-currency">$200.00</span>
                                             </div>
                                         </div>
                                     </div>
