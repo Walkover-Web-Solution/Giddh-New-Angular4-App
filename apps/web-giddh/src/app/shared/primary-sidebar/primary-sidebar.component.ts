@@ -426,7 +426,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
     * @memberof PrimarySidebarComponent
      */
     public toggleBodyScroll(): void {
-        if (this.subBranchDropdown.isOpen && !this.isMobileSite) {
+        if (this.subBranchDropdown?.isOpen && !this.isMobileSite) {
             document.querySelector('body').classList.add('prevent-body-scroll');
         } else {
             document.querySelector('body').classList.remove('prevent-body-scroll');
@@ -693,7 +693,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
         }
         this.activeCompanyForDb.uniqueName = this.generalService.companyUniqueName;
         this.activeCompanyForDb.name = this.selectedCompanyDetails.name;
-        this.subBranchDropdown.isOpen = false;
+        if (this.subBranchDropdown) {
+            this.subBranchDropdown.isOpen = false;
+        }
         const details = {
             branchDetails: {
                 uniqueName: ''
@@ -712,7 +714,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
      * @memberof PrimarySidebarComponent
      */
     public changeCompany(selectedCompanyUniqueName: string, fetchLastState?: boolean) {
-        this.subBranchDropdown.isOpen = false;
+        if (this.subBranchDropdown) {
+            this.subBranchDropdown.isOpen = false;
+        }
         this.generalService.companyUniqueName = selectedCompanyUniqueName;
         const details = {
             branchDetails: {
