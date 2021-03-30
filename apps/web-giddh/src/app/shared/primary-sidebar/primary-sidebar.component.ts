@@ -1,33 +1,44 @@
-import { Component, OnInit, Input, ViewChild, ChangeDetectorRef, TemplateRef, ComponentFactoryResolver, HostListener, ChangeDetectionStrategy, Output, EventEmitter, SimpleChanges, OnChanges } from "@angular/core";
-import { Router } from "@angular/router";
-import { AuthService } from '../../theme/ng-social-login-module/index';
-import { Store, select, createSelector } from "@ngrx/store";
-import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
-import { ModalDirective, BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    HostListener,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    SimpleChanges,
+    TemplateRef,
+    ViewChild,
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { createSelector, select, Store } from '@ngrx/store';
+import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
-import { takeUntil, take } from "rxjs/operators";
-import { CompanyActions } from "../../actions/company.actions";
-import { GeneralActions } from "../../actions/general/general.actions";
-import { AccountResponse } from "../../models/api-models/Account";
-import { CompanyResponse, Organization, OrganizationDetails, ActiveFinancialYear } from "../../models/api-models/Company";
-import { CompAidataModel } from "../../models/db";
-import { OrganizationType } from "../../models/user-login-state";
-import { CompanyService } from "../../services/companyService.service";
-import { GeneralService } from "../../services/general.service";
-import { AppState } from "../../store";
-import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
-import { ManageGroupsAccountsComponent } from '../header/components';
-import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
-import { LedgerActions } from '../../actions/ledger/ledger.actions';
-import { AccountsAction } from '../../actions/accounts.actions';
-import { DbService } from '../../services/db.service';
+import { take, takeUntil } from 'rxjs/operators';
+
+import { CompanyActions } from '../../actions/company.actions';
+import { GeneralActions } from '../../actions/general/general.actions';
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
+import { LoginActions } from '../../actions/login.action';
+import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { clone, cloneDeep, find, slice } from '../../lodash-optimized';
+import { AccountResponse } from '../../models/api-models/Account';
+import { ActiveFinancialYear, CompanyResponse, Organization, OrganizationDetails } from '../../models/api-models/Company';
+import { UserDetails } from '../../models/api-models/loginModels';
+import { CompAidataModel } from '../../models/db';
 import { DEFAULT_AC, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
-import { clone, cloneDeep, find, orderBy, slice } from '../../lodash-optimized';
-import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
-import { LoginActions } from "../../actions/login.action";
-import { UserDetails } from "../../models/api-models/loginModels";
-import { AllItem, AllItems, ALL_ITEMS } from "../helpers/allItems";
-import { GroupWithAccountsAction } from "../../actions/groupwithaccounts.actions";
+import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
+import { OrganizationType } from '../../models/user-login-state';
+import { CompanyService } from '../../services/companyService.service';
+import { DbService } from '../../services/db.service';
+import { GeneralService } from '../../services/general.service';
+import { AppState } from '../../store';
+import { AuthService } from '../../theme/ng-social-login-module';
+import { ALL_ITEMS, AllItem, AllItems } from '../helpers/allItems';
+import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 
 @Component({
     selector: 'primary-sidebar',
@@ -59,40 +70,64 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
 
     /** Stores the details of the current branch */
     public currentBranch: any;
+    /** Avatar image */
     public userAvatar: string;
+    /** True if CMD+K modal is opened */
     public navigationModalVisible: boolean = false;
+    /** True if mobile screen size */
     public isMobileSite: boolean;
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1)
+    /** Subject to unsubscribe from listeners */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Active company details for indexedDB */
     private activeCompanyForDb: ICompAidata;
+    /** Stores the navigation modal event subscriptions */
     private subscriptions: Subscription[] = [];
+    /** Modal instance */
     public modelRef: BsModalRef;
+    /** Current ledger name */
     public selectedLedgerName: string;
+    /** True, if ledger account is selected */
     public isLedgerAccSelected: boolean = false;
-    public menuItemsFromIndexDB: any[] = DEFAULT_MENUS;
+    /** Holds the navigated accounts */
     public accountItemsFromIndexDB: any[] = DEFAULT_AC;
+    /** Stores the list of menu and accounts navigated */
     private smartCombinedList$: Observable<any>;
+    /** Company name initials (upto 2 characters) */
     public companyInitials: any = '';
+    /** Branch alias/name initials (upto 2 characters) */
     public branchInitials: any = '';
-    public seletedCompanywithBranch: string = '';
+    /** Stores the list of all the companies for a user */
     public companies$: Observable<CompanyResponse[]>;
+    /** Stores filtered list of companies */
     public companyListForFilter: CompanyResponse[] = [];
+    /** True, if login is made with social account */
     public isLoggedInWithSocialAccount$: Observable<boolean>;
+    /** User name of logged in user */
     public userName: string;
+    /** User email of logged in user */
     public userEmail: string;
+    /** User full name of logged in user */
     public userFullName: string;
+    /** User details of logged in user */
     public user$: Observable<UserDetails>;
+    /** Stores the hovered index for company in company switch dropdown */
     public hoveredIndx: number;
+    /** Stores the total company list */
     public companyList: CompanyResponse[] = [];
+    /** Stores all the menu items to be shown */
     public allItems: AllItems[] = [];
 
+    /** True, if sidebar needs to be shown */
     @Input() public isOpen: boolean = false;
     /** API menu items, required to show permissible items only in the menu */
     @Input() public apiMenuItems: Array<any> = [];
+    /** Event to carry out new company onboarding */
     @Output() public newCompany: EventEmitter<void> = new EventEmitter();
+    /** Stores the instance of branch dropdown */
     @ViewChild('subBranchDropdown', { static: false }) public subBranchDropdown: BsDropdownDirective;
+    /** Stores the instance of CMD+K dropdown */
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
-    @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: ModalDirective;
-    @ViewChild('addmanage', { static: false }) public addmanage: ElementViewContainerRef;
+    /** Stores the instance of company detail dropdown */
     @ViewChild('companyDetailsDropDownWeb', {static: true}) public companyDetailsDropDownWeb: BsDropdownDirective;
 
     constructor(
@@ -105,10 +140,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
         private modalService: BsModalService,
         private changeDetection: ChangeDetectorRef,
         private router: Router,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private generalActions: GeneralActions,
-        private ledgerAction: LedgerActions,
-        private accountsAction: AccountsAction,
         private dbService: DbService,
         private settingsBranchAction: SettingsBranchActions,
         private loginAction: LoginActions,
@@ -169,6 +201,11 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
         }
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof PrimarySidebarComponent
+     */
     public ngOnInit(): void {
         this.smartCombinedList$ = this.store.pipe(select(s => s.general.smartCombinedList), takeUntil(this.destroyed$));
         this.updateIndexDbSuccess$ = this.store.pipe(select(p => p.general.updateIndexDbComplete), takeUntil(this.destroyed$))
@@ -177,14 +214,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
                 this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
-                this.branchInitials = this.generalService.getInitialsFromString(this.currentBranch?.name);
+                this.branchInitials = this.generalService.getInitialsFromString(this.currentBranch?.alias || this.currentBranch?.name);
                 this.activeFinancialYear = selectedCmp.activeFinancialYear;
                 this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
-                if (selectedCmp.alias) {
-                    this.seletedCompanywithBranch = selectedCmp.name + ' (' + selectedCmp.alias + ')';
-                } else {
-                    this.seletedCompanywithBranch = selectedCmp.name;
-                }
 
                 this.activeCompanyForDb = new CompAidataModel();
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
@@ -291,7 +323,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
      * Switches to branch mode
      *
      * @param {string} branchUniqueName Branch uniqueName
-     * @memberof HeaderComponent
+     * @memberof PrimarySidebarComponent
      */
     public switchToBranch(branchUniqueName: string, event: any): void {
         event.stopPropagation();
@@ -328,6 +360,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
         });
     }
 
+    /**
+     * Company filtering method
+     *
+     * @param {*} ev Modal change event
+     * @memberof PrimarySidebarComponent
+     */
     public filterCompanyList(ev) {
         let companies: CompanyResponse[] = [];
         this.companies$?.pipe(take(1)).subscribe(cmps => companies = cmps);
@@ -345,7 +383,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
      * Filters the branches based on text provided
      *
      * @param {string} branchName Branch name query entered by the user
-     * @memberof HeaderComponent
+     * @memberof PrimarySidebarComponent
      */
     public filterBranch(branchName: string): void {
         let branches = [];
@@ -371,7 +409,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
     * @private
     * @param {OrganizationType} type Type of the organization
     * @param {OrganizationDetails} branchDetails Branch details of an organization
-    * @memberof HeaderComponent
+    * @memberof PrimarySidebarComponent
     */
     private setOrganizationDetails(type: OrganizationType, branchDetails: OrganizationDetails): void {
         const organization: Organization = {
@@ -385,7 +423,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
     /**
      * This will stop the body scroll if company dropdown is open
      *
-    * @memberof HeaderComponent
+    * @memberof PrimarySidebarComponent
      */
     public toggleBodyScroll(): void {
         if (this.subBranchDropdown.isOpen && !this.isMobileSite) {
@@ -395,7 +433,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
         }
     }
 
-    public showNavigationModal() {
+    /**
+     * Displays the CMD+K modal
+     *
+     * @memberof PrimarySidebarComponent
+     */
+    public showNavigationModal(): void {
         this.navigationModalVisible = true;
         const _combine = combineLatest([
             this.modalService.onShow,
@@ -416,12 +459,24 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
         this.modelRef = this.modalService.show(this.navigationModal, config);
     }
 
-    public handleNewTeamCreationEmitter(e: any) {
+    /**
+     * New group creation handler for CMD+K
+     *
+     * @param {*} e Create new group event
+     * @memberof PrimarySidebarComponent
+     */
+    public handleNewTeamCreationEmitter(e: any): void {
         this.modelRef.hide();
         this.showManageGroupsModal();
     }
 
-    public prepareSmartList(data: IUlist[]) {
+    /**
+     * Prepares list of accounts and menus
+     *
+     * @param {IUlist[]} data Data with which list needs to be created
+     * @memberof PrimarySidebarComponent
+     */
+    public prepareSmartList(data: IUlist[]): void {
         // hardcoded aiData
         // '/pages/trial-balance-and-profit-loss'
         let menuList: IUlist[] = [];
@@ -461,7 +516,14 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
         this.dbService.insertFreshData(this.activeCompanyForDb);
     }
 
-    public findListFromDb(dbResult: ICompAidata) {
+    /**
+     * Finds the item list from DB
+     *
+     * @param {ICompAidata} dbResult Current DB result
+     * @returns
+     * @memberof PrimarySidebarComponent
+     */
+    public findListFromDb(dbResult: ICompAidata): void {
         if (!this.activeCompanyForDb) {
             return;
         }
@@ -469,20 +531,11 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
             return;
         }
         if (dbResult) {
-
-            this.menuItemsFromIndexDB = (dbResult && dbResult.aidata) ? dbResult.aidata.menus : [];
-
-            // slice menus
             if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 10);
                 this.accountItemsFromIndexDB = (dbResult && dbResult.aidata) ? slice(dbResult.aidata.accounts, 0, 7) : [];
             } else {
-                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 8);
                 this.accountItemsFromIndexDB = (dbResult && dbResult.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : [];
             }
-
-            // sortby name
-            this.menuItemsFromIndexDB = orderBy(this.menuItemsFromIndexDB, ['name'], ['asc']);
         } else {
             let data: IUlist[];
             this.smartCombinedList$.pipe(take(1)).subscribe(listResult => {
@@ -493,33 +546,31 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
 
             // slice default menus and account on small screen
             if (!(window.innerWidth > 1440 && window.innerHeight > 717)) {
-                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 10) : slice(this.menuItemsFromIndexDB, 0, 8);
                 this.accountItemsFromIndexDB = slice(this.accountItemsFromIndexDB, 0, 5);
             }
         }
         this.changeDetectorRef.detectChanges();
     }
 
-    public showManageGroupsModal() {
-        this.loadAddManageComponent();
-        this.manageGroupsAccountsModal.show();
+    /**
+     * Displays the manage group modal / master modal
+     *
+     * @memberof PrimarySidebarComponent
+     */
+    public showManageGroupsModal(): void {
+        this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
     }
 
-    public hideManageGroupsModal() {
-        this.store.pipe(select(c => c.session.lastState), take(1)).subscribe((s: string) => {
-            if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1)) {
-                this.store.dispatch(this.generalActions.addAndManageClosed());
-                if (this.selectedLedgerName) {
-                    this.store.dispatch(this.ledgerAction.GetLedgerAccount(this.selectedLedgerName));
-                    this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedLedgerName));
-                }
-            }
-        });
-
-        this.manageGroupsAccountsModal.hide();
-    }
-
-    private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null) {
+    /**
+     * Do entry in DB method for create/update operation on entry
+     *
+     * @private
+     * @param {string} entity Company uniquename
+     * @param {IUlist} item New item whose entry needs to be done
+     * @param {{ next: IUlist, previous: IUlist }} [fromInvalidState=null] Current and previous states
+     * @memberof PrimarySidebarComponent
+     */
+    private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null): void {
         if (entity === 'menus') {
             //this.selectedPage = item.name;
             this.isLedgerAccSelected = false;
@@ -544,13 +595,27 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
         }
     }
 
-    public makeGroupEntryInDB(item: IUlist) {
+    /**
+     * Creates a new group entry
+     *
+     * @param {IUlist} item
+     * @memberof PrimarySidebarComponent
+     */
+    public makeGroupEntryInDB(item: IUlist): void {
         // save data to db
         item.time = +new Date();
         this.doEntryInDb('groups', item);
     }
 
-    public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null, isCtrlClicked?: boolean) {
+    /**
+     * Item selection handler for CMD+K
+     *
+     * @param {IUlist} item Selected item
+     * @param {{ next: IUlist, previous: IUlist }} [fromInvalidState=null] Current and previous states
+     * @param {boolean} [isCtrlClicked] True, if CTRL is clicked
+     * @memberof PrimarySidebarComponent
+     */
+    public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null, isCtrlClicked?: boolean): void {
         if (this.modelRef) {
             this.modelRef.hide();
         }
@@ -587,22 +652,13 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
         }, 200);
     }
 
-    public loadAddManageComponent() {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(ManageGroupsAccountsComponent);
-        let viewContainerRef = this.addmanage.viewContainerRef;
-        viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
-            this.hideManageGroupsModal();
-            viewContainerRef.remove();
-        });
-        this.manageGroupsAccountsModal.onShown.pipe(takeUntil(this.destroyed$)).subscribe((a => {
-            (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
-            (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel.nativeElement.getBoundingClientRect();
-        }));
-    }
-
-    private unsubscribe() {
+    /**
+     * Unsubscribes from all the listeners
+     *
+     * @private
+     * @memberof PrimarySidebarComponent
+     */
+    private unsubscribe(): void {
         this.subscriptions.forEach((subscription: Subscription) => {
             subscription.unsubscribe();
         });
@@ -612,7 +668,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
     /**
      * Loads company branches
      *
-     * @memberof HeaderComponent
+     * @memberof PrimarySidebarComponent
      */
     public loadCompanyBranches(): void {
         if (this.generalService.companyUniqueName) {
@@ -624,7 +680,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
     /**
      * Switches to company view from branch view
      *
-     * @memberof HeaderComponent
+     * @memberof PrimarySidebarComponent
      */
     public goToCompany(): void {
         if (!localStorage.getItem('isNewArchitecture')) {
@@ -648,6 +704,13 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
         this.changeCompany(this.selectedCompanyDetails.uniqueName, false);
     }
 
+    /**
+     * Change company callback method
+     *
+     * @param {string} selectedCompanyUniqueName Selected company unique name
+     * @param {boolean} [fetchLastState] True, if last state of the company needs to be fetched
+     * @memberof PrimarySidebarComponent
+     */
     public changeCompany(selectedCompanyUniqueName: string, fetchLastState?: boolean) {
         this.subBranchDropdown.isOpen = false;
         this.generalService.companyUniqueName = selectedCompanyUniqueName;
@@ -661,7 +724,15 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
         this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName, fetchLastState));
     }
 
-    public analyzeAccounts(e: any, acc) {
+    /**
+     * Makes selected account entry in DB
+     *
+     * @param {*} e Select account event
+     * @param {*} acc Account selected
+     * @returns
+     * @memberof PrimarySidebarComponent
+     */
+    public analyzeAccounts(e: any, acc): void {
         if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
             this.onItemSelected(acc, null, true);
             return;
@@ -674,7 +745,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
         this.onItemSelected(acc);
     }
 
-    public logout() {
+    /**
+     * Logs out the user
+     *
+     * @memberof PrimarySidebarComponent
+     */
+    public logout(): void {
         /** Reset the current organization type on logout as we
          * don't know receive switched branch from API in last state (state API)
         */
@@ -719,7 +795,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
      * @param pageName page router url
      * @param queryParamsObj additional data
      */
-    public analyzeMenus(e: any, pageName: string, queryParamsObj?: any) {
+    public analyzeMenus(e: any, pageName: string, queryParamsObj?: any): void {
         this.isLedgerAccSelected = false;
         if (e) {
             if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
@@ -770,8 +846,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
                 menu.additional = queryParamsObj;
             }
         }
-        this.doEntryInDb('menus', menu);
-
         if (menu.additional) {
             this.router.navigate([pageName], { queryParams: menu.additional });
         } else {
@@ -779,16 +853,36 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
         }
     }
 
+    /**
+     * Mouse enter call back on company
+     *
+     * @param {number} i Index of company entered
+     * @memberof PrimarySidebarComponent
+     */
     public mouseEnteredOnCompanyName(i: number) {
         this.hoveredIndx = i;
     }
 
+    /**
+     * Menu item click handler
+     *
+     * @param {AllItem} item Selected item
+     * @memberof PrimarySidebarComponent
+     */
     public handleItemClick(item: AllItem): void {
         if (item.label === 'Master') {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
         }
     }
 
+    /**
+     * Returns the readable format name of menu item
+     *
+     * @private
+     * @param {*} url Url of menu item
+     * @returns
+     * @memberof PrimarySidebarComponent
+     */
     private getReadableNameFromUrl(url) {
         let name = '';
         switch (url) {
@@ -813,7 +907,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
     /**
      * Opens new company modal
      *
-     * @memberof HeaderComponent
+     * @memberof PrimarySidebarComponent
      */
      public createNewCompany(): void {
         this.newCompany.emit();
