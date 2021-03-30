@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ChangeDetectorRef, TemplateRef, ComponentFactoryResolver, HostListener, ChangeDetectionStrategy, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, ViewChild, ChangeDetectorRef, TemplateRef, ComponentFactoryResolver, HostListener, ChangeDetectionStrategy, Output, EventEmitter, SimpleChanges, OnChanges } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from '../../theme/ng-social-login-module/index';
 import { Store, select, createSelector } from "@ngrx/store";
@@ -36,7 +36,7 @@ import { GroupWithAccountsAction } from "../../actions/groupwithaccounts.actions
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class PrimarySidebarComponent implements OnInit {
+export class PrimarySidebarComponent implements OnInit, OnChanges {
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** update IndexDb flags observable **/
@@ -83,9 +83,11 @@ export class PrimarySidebarComponent implements OnInit {
     public user$: Observable<UserDetails>;
     public hoveredIndx: number;
     public companyList: CompanyResponse[] = [];
-    public allItems: AllItems[] = cloneDeep(ALL_ITEMS);
+    public allItems: AllItems[] = [];
 
     @Input() public isOpen: boolean = false;
+    /** API menu items, required to show permissible items only in the menu */
+    @Input() public apiMenuItems: Array<any> = [];
     @Output() public newCompany: EventEmitter<void> = new EventEmitter();
     @ViewChild('subBranchDropdown', { static: false }) public subBranchDropdown: BsDropdownDirective;
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
@@ -150,6 +152,19 @@ export class PrimarySidebarComponent implements OnInit {
             if (this.companyList.length > 0) {
                 this.showNavigationModal();
             }
+        }
+    }
+
+    /**
+     * Re-creates the menu items list on change of permissible items obtained
+     * from API
+     *
+     * @param {SimpleChanges} changes Changed properties
+     * @memberof PrimarySidebarComponent
+     */
+    public ngOnChanges(changes: SimpleChanges): void {
+        if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length) {
+            this.allItems = this.generalService.getVisibleMenuItems(changes.apiMenuItems.currentValue, ALL_ITEMS, this.generalService.currentOrganizationType === OrganizationType.Branch);
         }
     }
 

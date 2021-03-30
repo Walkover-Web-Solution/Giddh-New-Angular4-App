@@ -212,6 +212,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public allModulesList = [];
     /** This will hold that how many days are left for subscription expiration */
     public remainingSubscriptionDays: any = false;
+    /** Menu items received from API */
+    public apiMenuItems: Array<any> = [];
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -510,6 +512,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         });
                         reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, response.body);
                         this.menuItemsFromIndexDB = DEFAULT_MENUS;
+                        this.apiMenuItems = response.body;
                         this.changeDetection.detectChanges();
                     }
                 });

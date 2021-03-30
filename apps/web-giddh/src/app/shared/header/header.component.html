@@ -1,7 +1,7 @@
 <div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen, 'unvisible': companyList.length===0 }" (clickOutside)="closeSidebarMobile($event)">
 
     <div class="menu-wrapper">
-        <primary-sidebar [isOpen]="sideMenu?.isopen" (newCompany)="createNewCompany()"></primary-sidebar>
+        <primary-sidebar [isOpen]="sideMenu?.isopen" [apiMenuItems]="apiMenuItems" (newCompany)="createNewCompany()"></primary-sidebar>
     </div>
     <div class="mobile-menu-icon" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
         <span class="icon-bar" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right"></span>
@@ -43,7 +43,7 @@
         </div>
         <div class="d-flex justify-content-end align-items-end">
             <ul class="nav universal-date mr-r15" *ngIf="(selectedCompany | async)">
-                <li class="border-none pd-r15" [ngClass]="{'notification': isMobileScreen, 'mr-0':isTodaysDateSelected}">
+                <li class="border-none pd-r15 notification" [ngClass]="{'mr-0':isTodaysDateSelected}">
                     <i class="icon-bell-new"></i>
                 </li>
                 <li class="border-none pl-0 select-today">
