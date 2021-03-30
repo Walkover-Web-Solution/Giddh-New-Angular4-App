@@ -1,7 +1,10 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { CompanyActions } from '../actions/company.actions';
 import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { cloneDeep } from '../lodash-optimized';
+import { StateDetailsRequest } from '../models/api-models/Company';
+import { GeneralService } from '../services/general.service';
 import { AllItem, ALL_ITEMS } from "../shared/helpers/allItems";
 import { AppState } from '../store';
 
@@ -23,8 +26,10 @@ export class AllGiddhItemComponent implements OnInit {
     public search: any;
 
     constructor(
+        private companyActions: CompanyActions,
+        private generalService: GeneralService,
+        private groupWithAction: GroupWithAccountsAction,
         private store: Store<AppState>,
-        private groupWithAction: GroupWithAccountsAction
     ) {
 
     }
@@ -38,6 +43,7 @@ export class AllGiddhItemComponent implements OnInit {
         this.allItems = cloneDeep(ALL_ITEMS);
         this.filteredItems = this.allItems;
         this.searchField?.nativeElement?.focus();
+        this.saveLastState();
     }
 
     /**
@@ -97,5 +103,20 @@ export class AllGiddhItemComponent implements OnInit {
         if (item.label === 'Master') {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
         }
+    }
+
+    /**
+     * Saves the last state
+     *
+     * @private
+     * @memberof AllGiddhItemComponent
+     */
+    private saveLastState(): void {
+        let state = 'giddh-all-items';
+        let stateDetailsRequest = new StateDetailsRequest();
+        stateDetailsRequest.companyUniqueName = this.generalService.companyUniqueName;
+        stateDetailsRequest.lastState = `/pages/${state}`;
+
+        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 }

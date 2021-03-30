@@ -91,7 +91,7 @@
                 <p class="font-12 d-flex justify-content-between">Accounts <i class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i> </p>
                 <ul class="left-fixed-header list-style-none font-14 lh33 mr-t05">
                     <li *ngFor="let acc of accountItemsFromIndexDB">
-                        <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}"  [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName" (click)="analyzeAccounts($event, acc)">{{acc.name}} A/c</a>
+                        <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}"  routerLinkActive="active" [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName" (click)="analyzeAccounts($event, acc)">{{acc.name}} A/c</a>
                     </li>
                     <li><a (click)="showNavigationModal()" class="show-more cursor-pointer">Show more</a></li>
                 </ul>
@@ -295,12 +295,4 @@
         </div>
     </div>
 </ng-template>
-<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true, backdrop: false }" class="modal fade full-screen-modal manage-account-popup add-manage-group-acc" role="dialog">
-    <div class="modal-dialog modal-xl modal-liq-90 mr-0 width-100 h-100">
-        <div class="modal-content full-screen-modal">
-            <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
-            </ng-template>
-        </div>
-    </div>
-</div>
 
