@@ -9685,6 +9685,12 @@ input.mat-input-element{
             border-radius: 0 !important;
         }
     }
+    .plan-wrapper{
+        padding-left: 60px;
+    }
+    .plan-wrapper.menu_open{
+            padding-left: 240px !important;
+    }
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {

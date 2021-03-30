@@ -899,9 +899,17 @@ ul.sub-list {
 }
 
 /*new header css starts*/
+.fixed-padding{
+    padding-top: 60px;
+}
 #primary-new-header.primary-main-header{
     padding-left: 60px;
     border-bottom: 1px solid $gainsboro;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background-color: #F7F8FA;
+    z-index: 990;
     .universal-date{
         color:$persian-blue !important;
         display: flex;

@@ -36,6 +36,13 @@
                 display: inline-flex;
                 justify-content: center;
                 align-items: center;
+                white-space: nowrap;
+                letter-spacing: -2px;
+                font-size: 13px !important;
+            }
+            .company-full-name{
+                margin-top: 5px;
+                height: 38px;
             }
             img.company-icon {
                 width: 28px;
@@ -53,9 +60,9 @@
         }
         .branch-connection {
             position: absolute;
-            top: 32px;
-            font-size: 24px;
-            left: 20px;
+            top: 36px;
+            font-size: 30px;
+            left: 15px;
             color: $grey-chateau;
         }
     }
@@ -67,6 +74,9 @@
         input {
             border-left: none;
             padding-left: 0 !important;
+             &:focus{
+                border-color: $gainsboro !important;
+            }
         }
         &:after {
             content: "Cmd + G ";
@@ -105,6 +115,9 @@
         }
         ul {
             li {
+                line-height: 1.5;
+                margin-bottom: 12px;
+                margin-top: 12px;
                 a {
                     color: $trout;
                     line-height: 16px;
@@ -229,6 +242,7 @@
         }
     }
     .switch-branch-wrapper {
+        margin-top: 15px;
         .btn-group {
             display: flex;
             a.dropdown-toggle {
@@ -238,10 +252,14 @@
                 font-family: "opensans-regular";
                 color: $nero;
                 width: 100%;
-                align-items: center;
+                align-items: flex-start;
                 justify-content: space-between;
                 word-break: break-word;
                 white-space: inherit;
+                i{
+                    position: relative;
+                    top: 2px;
+                }
                 span {
                     font-size: 9px;
                     float: right;
@@ -328,6 +346,7 @@
     }
     &.sidebar-collapse {
         .company-full-name {
+            margin-top: 5px;
             display: none !important;
         }
         .company-branch-block {
@@ -367,6 +386,8 @@
                             top: 0px !important;
                             padding-bottom: 0 !important;
                             li {
+                                margin-top: 0 !important;
+                                margin-bottom: 0 !important;
                                 a {
                                     padding: 10px 10px !important;
                                     line-height: 20px;
@@ -531,6 +552,6 @@
         padding-bottom: 40px;
     }
     .wrap-menus{
-          padding-bottom: 120px;
+          padding-bottom: 80px;
     }
 }
