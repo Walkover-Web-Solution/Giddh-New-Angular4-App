@@ -12,7 +12,7 @@
     top: 0;
     bottom: 0;
     min-height: 100vh;
-    background-color: $solitude;
+    background-color: $solitude-new;
     width: 60px;
     left: 0;
     z-index: 991;
@@ -917,7 +917,7 @@ ul.sub-list {
     position: fixed;
     width: 100%;
     top: 0;
-    background-color: #F7F8FA;
+    background-color: $alice-blue-light;
     z-index: 990;
     .universal-date{
         color:$persian-blue !important;
@@ -1036,7 +1036,7 @@ ul.sub-list {
     .fixed-padding{
         padding-top: 80px;
         #primary-new-header.primary-main-header{
-            background-color: #fff;
+            background-color: $white;
             position: fixed;
             top: 0;
             width: 100%;
