@@ -36,6 +36,7 @@
                                         [currencyCode]="invoiceFormDetails.accountDetails.currency?.code">
                                     </amount-field>
                                 </span>
+                                <!-- Make it funcational -->
                                 <span class="d-flex justify-content-end">$200.00</span>
                         </p>
                         <p>{{(adjustedVoucherType === 'rcpt' || adjustedVoucherType === 'advance-receipt') ?
@@ -48,6 +49,7 @@
                                     [currencyCode]="invoiceFormDetails.accountDetails.currency?.code">
                                 </amount-field>
                             </span>
+                            <!-- Make it funcational -->
                             <span class="d-flex justify-content-end">$200.00</span>
                         </p>
                     </div>
@@ -120,6 +122,7 @@
                                         [(ngModel)]="entry.balanceDue.amountForAccount"
                                         (ngModelChange)="calculateTax(entry, entryIdx);" [prefix]="currencySymbol"
                                         [mask]="inputMaskFormat">
+                                        <!-- Make it funcational -->
                                         <span class="coverted-currency">$200.00</span>
                                     <span
                                         *ngIf="entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'"
@@ -187,6 +190,7 @@
                                                     [options]="availableTdsTaxes" (selected)="tdsTaxSelected($event)"
                                                     [notFoundLink]="false" [multiple]="false" [ItemHeight]="33">
                                                 </sh-select>
+                                                <!-- Make it funcational -->
                                                 <span class="coverted-currency">$200.00</span>
                                             </div>
                                         </div>
