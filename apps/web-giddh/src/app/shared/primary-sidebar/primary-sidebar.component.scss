@@ -374,6 +374,8 @@
                     padding: 0;
                     margin-top: 15px;
                     font-family: "opensans-semibold";
+                    letter-spacing: -2px;
+                    font-size: 16px;
                 }
             }
         }
@@ -410,6 +412,7 @@
             .search-box {
                 margin-top: 15px !important;
                 .input-group {
+                    justify-content: center;
                     .input-group-prepend {
                         .input-group-text {
                             border-radius: 50%;
@@ -420,7 +423,7 @@
                             align-items: center;
                         }
                     }
-                    input {
+                    input , .input-group-append{
                         display: none;
                     }
                 }
