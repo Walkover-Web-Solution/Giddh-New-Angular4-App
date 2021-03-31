@@ -1,0 +1,36 @@
+<div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)" asideInventorySidebarMenuState>
+    <div class="help-aside-body">
+        <div class="back-to-main-slider">
+            <a href="javascript:;">
+                <span (click)="goToPreviousPage()">
+                    <i class="icon-back-arrow"></i>
+                    Back
+                </span>
+            </a>
+        </div>
+        <div class="inventory-items">
+            <ul class="mb-3">
+                <li>
+                    <a class="d-block clearfix">
+                        <!-- <span [innerHTML]="tab.icon"></span>
+                        <span>{{tab.label}}</span> -->
+                        <span><i class="icon-summary"></i></span>
+                        <span>GSTR 3B SUMMARY</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-block clearfix" [routerLink]="['/pages/new-inventory/create-new-inventory']">
+                        <span><i class="icon-ecomm"></i></span>
+                        <span>GSTR-1 (March 2021)</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-gstr"></i></span>
+                        <span>GSTR-2 (March 2021)</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

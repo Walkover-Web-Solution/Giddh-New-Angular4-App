@@ -20,7 +20,12 @@ import { OrganizationType } from '../../models/user-login-state';
 })
 export class FilingComponent implements OnInit, OnDestroy {
 	@ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
-
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideInventorySidebarMenuState: string = 'in';
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
+    /* this will check mobile screen size */
+    public isMobileScreen: boolean = false;
 	public currentPeriod: GstDatePeriod = null;
 	public selectedGst: string = null;
 	public gstNumber: string = null;
@@ -67,6 +72,28 @@ export class FilingComponent implements OnInit, OnDestroy {
             }
         });
 	}
+
+    /* Aside pane toggle fixed class */
+    public toggleBodyClass(): void {
+        if (this.asideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+    /**
+      * This will toggle the settings popup
+      *
+      * @param {*} [event]
+      * @memberof SettingsComponent
+      */
+    public toggleSettingPane(event?): void {
+        this.toggleBodyClass();
+
+        if (this.isMobileScreen && event && this.asideInventorySidebarMenuState === 'in') {
+            this.asideInventorySidebarMenuState = "out";
+        }
+    }
 
 	public ngOnInit() {
 		this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
