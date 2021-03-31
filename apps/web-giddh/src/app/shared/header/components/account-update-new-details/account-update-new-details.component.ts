@@ -55,6 +55,7 @@ import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { INameUniqueName } from 'apps/web-giddh/src/app/models/api-models/Inventory';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 
 @Component({
     selector: 'account-update-new-details',
@@ -216,6 +217,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         private companyActions: CompanyActions,
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
+        private generalService: GeneralService,
         private groupService: GroupService,
         private invoiceService: InvoiceService
     ) {
@@ -740,7 +742,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         }
                     }
                 });
-            } 
+            }
             // else {
             //     if (this.isIndia) {
             //         statesEle.forceClearReactive.status = true;
@@ -808,6 +810,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         if (!this.addAccountForm.get('foreignOpeningBalance').value) {
             this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
+        }
+        if (this.showBankDetail) {
+            const bankDetails = _.cloneDeep(this.addAccountForm.get('accountBankDetails')?.value);
+            const isValid = this.generalService.checkForValidBankDetails(bankDetails?.pop(), this.selectedCountryCode);
+            if (!isValid) {
+                this._toaster.errorToast(this.localeData?.bank_details_error_message);
+                return;
+            }
         }
         let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
@@ -1848,4 +1858,5 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.accounts = [...this.defaultAccountSuggestions];
         });
     }
+
 }
