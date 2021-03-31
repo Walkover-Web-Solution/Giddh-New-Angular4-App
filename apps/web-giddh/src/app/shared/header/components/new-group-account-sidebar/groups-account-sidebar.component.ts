@@ -150,9 +150,9 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
             this.breadcrumbUniqueNamePath = [];
 
             if (!activeAccount) {
-                this.getBreadCrumbPathFromGroup(groups, activeGroup.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
+                this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
             } else {
-                this.getBreadCrumbPathFromGroup(groups, activeAccount.uniqueName, null, this.breadcrumbPath, false, this.breadcrumbUniqueNamePath);
+                this.getBreadCrumbPathFromGroup(activeAccount, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
             }
 
             this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
@@ -178,6 +178,20 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(activeGroup => {
             if (activeGroup) {
                 this.populateNewColumns(activeGroup);
+            }
+        });
+
+        this.activeAccount.pipe(takeUntil(this.destroyed$)).subscribe(activeAccount => {
+            if (activeAccount) {
+                let activeGroup;
+                this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
+                if (!activeGroup) {
+                    // Active group doesn't exist when search is made in Master
+                    this.breadcrumbPath = [];
+                    this.breadcrumbUniqueNamePath = [];
+                    this.getBreadCrumbPathFromGroup(activeAccount, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
+                    this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
+                }
             }
         });
     }
@@ -368,7 +382,17 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
 
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
-        let parentGrp = this.getBreadCrumbPathFromGroup(grpsBck, item.uniqueName, null, this.breadcrumbPath, false, this.breadcrumbUniqueNamePath);
+        let activeGroup;
+        this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
+        const currentAccount = {
+            name: item.name,
+            uniqueName: item.uniqueName,
+            parentGroups: activeGroup ? [
+                ...activeGroup.parentGroups,
+                { name: activeGroup.name, uniqueName: activeGroup.uniqueName }
+            ] : []
+        };
+        let parentGrp = this.getBreadCrumbPathFromGroup(currentAccount, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
         this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
         if (parentGrp) {
             if (this.mc.columns[currentIndex - 1] && this.mc.columns[currentIndex - 1].uniqueName !== parentGrp.uniqueName) {
@@ -386,7 +410,9 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
         // if (col.uniqueName) {
-        this.getBreadCrumbPathFromGroup(this._groups, col.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
+        let activeGroup;
+        this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
+        this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
         this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
         // } else {
         //   let grp = col.groups.find(p => p.isOpen);
@@ -438,39 +464,27 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         return orderedGroups;
     }
 
-    public getBreadCrumbPathFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts, parentPath: string[], isGroup: boolean, parentUniquenamePath: string[]) {
+    /**
+     * Forms the breadcrumb path
+     *
+     * @param {*} activeEntity Active entity (either group or account)
+     * @param {IGroupsWithAccounts} result Entity that is selected for which breadcrumb is formed
+     * @param {string[]} parentPath Stores the path of names
+     * @param {string[]} parentUniquenamePath Stores the path of uniquenames
+     * @returns {*} Entity that is selected for which breadcrumb is formed
+     * @memberof GroupsAccountSidebarComponent
+     */
+    public getBreadCrumbPathFromGroup(activeEntity: any, result: IGroupsWithAccounts, parentPath: string[], parentUniquenamePath: string[]): any {
         if (result !== null) {
             return result;
         }
-        for (let el of groupList) {
-            parentUniquenamePath.push(el.uniqueName);
-            parentPath.push(el.name);
-            if (!isGroup) {
-                if (el.accounts) {
-                    for (let key of el.accounts) {
-                        if (key.uniqueName === uniqueName) {
-                            parentPath.push(key.name);
-                            parentUniquenamePath.push(key.uniqueName);
-                            result = el;
-                            return result;
-                        }
-                    }
-                }
-            } else {
-                if (el.uniqueName === uniqueName) {
-                    result = el;
-                    return result;
-                }
-            }
-            if (el.groups) {
-                result = this.getBreadCrumbPathFromGroup(el.groups, uniqueName, result, parentPath, isGroup, parentUniquenamePath);
-                if (result !== null) {
-                    return result;
-                }
-            }
-            parentUniquenamePath.pop();
-            parentPath.pop();
+        for (let group of activeEntity.parentGroups) {
+            parentUniquenamePath.push(group.uniqueName);
+            parentPath.push(group.name);
         }
+        parentUniquenamePath.push(activeEntity.uniqueName);
+        parentPath.push(activeEntity.name);
+        result = activeEntity;
         return result;
     }
 
@@ -534,7 +548,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
                 ...activeGroup
             }
             this.resetData();
-            this.getBreadCrumbPathFromGroup(this._groups, this.currentGroup.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
+            this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
             this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
             this.mc.selectGroup(this.currentGroup, this.currentGroupIndex, true);
             return;
@@ -543,7 +557,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         let grpsBck: GroupsWithAccountsResponse[];
         this.groupsListBackupStream$.pipe(take(1)).subscribe(s => grpsBck = s);
 
-        this.getBreadCrumbPathFromGroup(grpsBck, this.currentGroup.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
+        this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
 
         let listBckup = this.mc.activeGroupFromGroupListBackup(grpsBck, this.currentGroup.uniqueName, null);
         if (listBckup) {
