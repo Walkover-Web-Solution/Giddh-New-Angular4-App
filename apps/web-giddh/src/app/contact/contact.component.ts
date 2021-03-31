@@ -20,8 +20,8 @@ import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bo
 import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { cloneDeep, find, forEach, map as lodashMap, uniq } from '../../app/lodash-optimized';
+import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
+import { cloneDeep, find, map as lodashMap, uniq } from '../../app/lodash-optimized';
 import { CommonActions } from '../actions/common.actions';
 import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
@@ -223,6 +223,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
+    /** Listens for Master open/close event, required to load the data once master is closed */
+    public isAddAndManageOpenedFromOutside$: Observable<boolean>;
 
     constructor(
         private store: Store<AppState>,
@@ -311,6 +315,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.currentOrganizationType = this._generalService.currentOrganizationType;
+        this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
         // localStorage supported
         if (window.localStorage) {
             let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));
@@ -441,6 +446,9 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
                 }
             }
+        });
+        this.isAddAndManageOpenedFromOutside$.pipe(filter(event => !event)).subscribe(() => {
+            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
         });
     }
 
@@ -614,14 +622,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     // }
 
     public getUpdatedList(grpName?): void {
-        setTimeout(() => {
-            if (grpName) {
-                if (this.accountAsideMenuState === 'in') {
-                    this.toggleAccountAsidePane();
-                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
-                }
+        if (grpName) {
+            if (this.accountAsideMenuState === 'in') {
+                this.toggleAccountAsidePane();
+                this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
-        }, 1000);
+        }
     }
 
     public toggleBodyClass() {

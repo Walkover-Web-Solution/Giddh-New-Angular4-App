@@ -99,6 +99,12 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.accountsAction.resetDeleteAccountFlags());
             }
         });
+        this.updateAccountIsSuccess$.subscribe((res) => {
+            if (res) {
+                this.getUpdateList.emit(this.activeGroupUniqueName);
+                this.store.dispatch(this.accountsAction.resetUpdateAccountV2());
+            }
+        });
     }
 
     public addNewAcSubmit(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {
@@ -141,7 +147,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
         this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject.value, accRequestObject.accountRequest));
         this.hideDeleteAccountModal();
-        this.getUpdateList.emit(this.activeGroupUniqueName);
     }
 
     public makeGroupListFlatwithLessDtl(rawList: any) {
