@@ -24,6 +24,12 @@ import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-
     styleUrls: ['gstR3.component.scss'],
 })
 export class FileGstR3Component implements OnInit, OnDestroy {
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideInventorySidebarMenuState: string = 'in';
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
+    /* this will check mobile screen size */
+    public isMobileScreen: boolean = false;
 
     public gstr3BData: Gstr3bOverviewResult2;
     public currentPeriod: GstDatePeriod = null;
@@ -67,6 +73,27 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             }
         });
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
+    }
+    /* Aside pane toggle fixed class */
+    public toggleBodyClass(): void {
+        if (this.asideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+    /**
+      * This will toggle the settings popup
+      *
+      * @param {*} [event]
+      * @memberof SettingsComponent
+      */
+    public toggleSettingPane(event?): void {
+        this.toggleBodyClass();
+
+        if (this.isMobileScreen && event && this.asideInventorySidebarMenuState === 'in') {
+            this.asideInventorySidebarMenuState = "out";
+        }
     }
 
     public ngOnInit(): void {
