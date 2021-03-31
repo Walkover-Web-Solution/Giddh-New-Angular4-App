@@ -9,10 +9,37 @@ declare var $: any;
     styleUrls: ['gstR2.component.scss'],
 })
 export class FileGstR2Component implements OnInit {
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideInventorySidebarMenuState: string = 'in';
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
+    /* this will check mobile screen size */
+    public isMobileScreen: boolean = false;
+
     constructor() {
         //
     }
+    /* Aside pane toggle fixed class */
+    public toggleBodyClass(): void {
+        if (this.asideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+    /**
+      * This will toggle the settings popup
+      *
+      * @param {*} [event]
+      * @memberof SettingsComponent
+      */
+    public toggleSettingPane(event?): void {
+        this.toggleBodyClass();
 
+        if (this.isMobileScreen && event && this.asideInventorySidebarMenuState === 'in') {
+            this.asideInventorySidebarMenuState = "out";
+        }
+    }
     public ngOnInit() {
         $('.tabs-new a').on('click', function (event) {
             event.preventDefault();
