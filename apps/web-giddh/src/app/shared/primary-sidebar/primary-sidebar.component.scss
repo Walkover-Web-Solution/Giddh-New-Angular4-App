@@ -43,6 +43,8 @@
             .company-full-name {
                 margin-top: 5px;
                 height: 38px;
+                white-space: normal;
+                word-break: break-word;
             }
             img.company-icon {
                 width: 28px;
