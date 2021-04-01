@@ -9692,6 +9692,9 @@ input.mat-input-element{
     .plan-wrapper.menu_open{
             padding-left: 240px !important;
     }
+    .setting-sidebar-open #content-wrapper{
+        padding-left: 0;
+    }
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {
