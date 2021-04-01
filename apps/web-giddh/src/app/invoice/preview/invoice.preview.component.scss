@@ -715,10 +715,13 @@ span.icon-export-icon {
     .mobile-search .input-container input {
         font-size: 13px;
     }
-    .invoice-modal-content:after,
     .invoice-modal-content {
         top: 131px;
         left: 0;
+        &:after{
+            top: 131px;
+            left: 0;
+        }
     }
     .invoice-footer .font-xxlarge {
         font-size: 16px;
