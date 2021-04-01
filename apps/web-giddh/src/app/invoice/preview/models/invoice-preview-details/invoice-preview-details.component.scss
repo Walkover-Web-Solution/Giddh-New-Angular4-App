@@ -11,7 +11,7 @@
     background-color: $white;
     top: 170px;
     bottom: 0;
-    left: 0;
+    left: 240px;
     z-index: -1;
 }
 
@@ -27,13 +27,13 @@
 .invoice-modal-content {
     padding: 0;
     position: fixed;
-    top: 0;
-    width: 100%;
+    top: 46px;
+    width: calc(100% - 240px);
     background-color: $white;
     margin: 0 0;
     height: 100vh;
     z-index: 992;
-    left: 0;
+    left: 240px;
 }
 
 .invoice-sidebar {
@@ -1084,6 +1084,15 @@ strong {
         }
     }
 }
+@media(max-width:768px){
+    .invoice-modal-content{
+        left: 60px;
+        width: 100%;
+    }
+    .invoice-modal-content:after{
+        display: none;
+    }
+}
 @media (max-width: 767px) {
     .center-block .btn-sm {
         float: none !important;
@@ -1187,6 +1196,7 @@ strong {
     .invoice-modal-content:after,
     .invoice-modal-content {
         top: 90px !important;
+        left: 0;
     }
 }
 
