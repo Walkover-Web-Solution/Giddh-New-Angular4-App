@@ -331,6 +331,18 @@ export class GstComponent implements OnInit, OnDestroy {
         this.loadTaxReport();
     }
 
+    public handleNavigation(type: string): void {
+        switch(type) {
+            case 'gstr1': case 'gstr2':
+                this.navigateToOverview(type);
+                break;
+            case 'gstr3b':
+                this.navigateTogstR3B(type);
+                break;
+            default: break;
+        }
+    }
+
     /**
      * Loads the tax details of a company
      *
