@@ -11,23 +11,27 @@
         <div class="inventory-items">
             <ul class="mb-3">
                 <li>
-                    <a class="d-block clearfix">
-                        <!-- <span [innerHTML]="tab.icon"></span>
-                        <span>{{tab.label}}</span> -->
+                    <a class="d-block clearfix" [routerLink]="['/pages/gstfiling']">
+                        <span><i class="icon-dashboard-new"></i></span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" [attr.disabled]="!activeCompanyGstNumber" [ngClass]="{'disabled': !activeCompanyGstNumber}" class="d-block clearfix"  (click)="navigate('gstr3b')">
                         <span><i class="icon-summary"></i></span>
                         <span>GSTR 3B SUMMARY</span>
                     </a>
                 </li>
                 <li>
-                    <a class="d-block clearfix" [routerLink]="['/pages/new-inventory/create-new-inventory']">
+                    <a href="javascript:void(0);" [ngClass]="{'disabled': !activeCompanyGstNumber}" class="d-block clearfix" (click)="navigate('gstr1')">
                         <span><i class="icon-ecomm"></i></span>
-                        <span>GSTR-1 (March 2021)</span>
+                        <span>GSTR-1</span>
                     </a>
                 </li>
                 <li>
-                    <a class="d-block clearfix">
+                    <a href="javascript:void(0);" [ngClass]="{'disabled': !activeCompanyGstNumber}" class="d-block clearfix" (click)="navigate('gstr2')">
                         <span><i class="icon-gstr"></i></span>
-                        <span>GSTR-2 (March 2021)</span>
+                        <span>GSTR-2</span>
                     </a>
                 </li>
             </ul>

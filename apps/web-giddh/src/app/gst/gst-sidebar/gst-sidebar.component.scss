@@ -9,6 +9,7 @@
     width: 240px;
     left: 0;
     z-index: 999;
+    box-shadow: 0 0 0 6px rgba(0,0,0,0.2);
     .aside-pane {
         background: $white;
         overflow: initial;
@@ -32,6 +33,11 @@
                                     color: grey;
                                     margin-right: 10px;
                                     font-size: 14px;
+                                }
+                            }
+                            &.disabled{
+                                span{
+                                    color: $gray !important;
                                 }
                             }
                         }
