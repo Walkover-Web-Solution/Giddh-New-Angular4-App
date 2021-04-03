@@ -1,5 +1,9 @@
 @import "../../../assets/css/color.scss";
 
+@mixin highlight-color($bgColor, $color) {
+    background-color: $bgColor !important;
+    color: $color !important;
+}
 .primary-sidebar {
     background-color: $solitude-new;
     .company-branch-block {
@@ -110,8 +114,7 @@
                 }
             }
             .left-fixed-header > li a.active {
-                background: $lavender;
-                color: $cornflower-blue;
+                @include highlight-color($lavender, $cornflower-blue);
             }
         }
         p {
@@ -216,11 +219,13 @@
                                     font-size: 20px;
                                     margin-right: 10px;
                                 }
+                                &.active {
+                                    @include highlight-color($cornflower, $white);
+                                }
                             }
                             &:hover {
                                 a {
-                                    background-color: $cornflower !important;
-                                    color: $white !important;
+                                    @include highlight-color($cornflower, $white);
                                 }
                             }
                         }
@@ -451,9 +456,8 @@
                             display: flex;
                             justify-content: flex-start;
                             align-items: center;
-                            &:hover {
-                                background-color: $cornflower;
-                                color: $white;
+                            &:hover, &.active {
+                                @include highlight-color($cornflower, $white);
                             }
                             a.dropdown-toggle {
                                 padding: 0 10px;
