@@ -1,11 +1,22 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+
 import { CompanyActions } from '../actions/company.actions';
 import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
-import { cloneDeep } from '../lodash-optimized';
 import { StateDetailsRequest } from '../models/api-models/Company';
+import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
-import { AllItem, ALL_ITEMS } from "../shared/helpers/allItems";
+import { ALL_ITEMS, AllItem } from '../shared/helpers/allItems';
 import { AppState } from '../store';
 
 @Component({
@@ -15,17 +26,20 @@ import { AppState } from '../store';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class AllGiddhItemComponent implements OnInit {
+export class AllGiddhItemComponent implements OnInit, OnDestroy {
     /** Instance of search field */
     @ViewChild('searchField', { static: true }) public searchField: ElementRef;
     /** This will hold all menu items */
-    public allItems: any[] = [];
+    public allItems$: Observable<any[]> = of([]);
     /** This will hold filtered items */
-    public filteredItems: any[] = [];
+    public filteredItems$: Observable<any[]> = of([]);
     /** This will hold search string */
     public search: any;
+    /** Subject to unsubscribe from listeners */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
+        private changeDetectorRef: ChangeDetectorRef,
         private companyActions: CompanyActions,
         private generalService: GeneralService,
         private groupWithAction: GroupWithAccountsAction,
@@ -40,10 +54,26 @@ export class AllGiddhItemComponent implements OnInit {
      * @memberof AllGiddhItemComponent
      */
     public ngOnInit(): void {
-        this.allItems = cloneDeep(ALL_ITEMS);
-        this.filteredItems = this.allItems;
+        this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(items => {
+            if (items) {
+                const allItems = this.generalService.getVisibleMenuItems(items, ALL_ITEMS, this.generalService.currentOrganizationType === OrganizationType.Branch);
+                this.allItems$ = of(allItems);
+                this.filteredItems$ = of(allItems);
+                this.changeDetectorRef.detectChanges();
+            }
+        });
         this.searchField?.nativeElement?.focus();
         this.saveLastState();
+    }
+
+    /**
+     * Releases the occupied memory
+     *
+     * @memberof AllGiddhItemComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     /**
@@ -53,26 +83,28 @@ export class AllGiddhItemComponent implements OnInit {
      * @memberof AllGiddhItemComponent
      */
     public searchAllItems(search: any): void {
-        this.filteredItems = [];
-
+        this.filteredItems$ = of([]);
+        let allItems = [];
+        this.allItems$.pipe(take(1)).subscribe(items => allItems = items);
         if (search && search.trim()) {
             let loop = 0;
             let found = false;
-            this.allItems.forEach((items) => {
+            let filteredItems = [];
+            allItems.forEach((items) => {
                 found = false;
                 if (items.label.toLowerCase().includes(search.trim().toLowerCase())) {
-                    if (this.filteredItems[loop] === undefined) {
-                        this.filteredItems[loop] = [];
+                    if (filteredItems[loop] === undefined) {
+                        filteredItems[loop] = [];
                     }
 
-                    this.filteredItems[loop] = items;
+                    filteredItems[loop] = items;
                     found = true;
                 } else {
                     let itemsFound = [];
                     items.items.forEach(item => {
                         if (item.label.toLowerCase().includes(search.trim().toLowerCase())) {
-                            if (this.filteredItems[loop] === undefined) {
-                                this.filteredItems[loop] = [];
+                            if (filteredItems[loop] === undefined) {
+                                filteredItems[loop] = [];
                             }
 
                             itemsFound.push(item);
@@ -81,15 +113,16 @@ export class AllGiddhItemComponent implements OnInit {
                     });
 
                     if (itemsFound?.length > 0) {
-                        this.filteredItems[loop] = { label: items.label, items: itemsFound };
+                        filteredItems[loop] = { label: items.label, items: itemsFound };
                     }
                 }
                 if (found) {
                     loop++;
                 }
             });
+            this.filteredItems$ = of(filteredItems);
         } else {
-            this.filteredItems = this.allItems;
+            this.filteredItems$ = of(allItems);
         }
     }
 

@@ -6,6 +6,7 @@ import {
     HostListener,
     Input,
     OnChanges,
+    OnDestroy,
     OnInit,
     Output,
     SimpleChanges,
@@ -47,7 +48,7 @@ import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class PrimarySidebarComponent implements OnInit, OnChanges {
+export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** update IndexDb flags observable **/
@@ -317,6 +318,16 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
                 }
             });
         }
+    }
+
+    /**
+     * Releases the occupied memory
+     *
+     * @memberof PrimarySidebarComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     /**
