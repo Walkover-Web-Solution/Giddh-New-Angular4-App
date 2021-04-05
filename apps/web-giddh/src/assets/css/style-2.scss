@@ -9695,6 +9695,23 @@ input.mat-input-element{
     .setting-sidebar-open #content-wrapper{
         padding-left: 0;
     }
+    .share-grp.account-share-modal, .group-share-modal{
+        .add-mailer{
+            .input-group{
+                input {
+                    min-width: 230px;
+                    max-width: 230px;
+                    margin-right: 10px;
+                }
+                .selected-permission{
+                    margin-left: 0 !important;
+                }
+                .btn-share{
+                    width: 110px;
+                }
+            }
+        }
+    }
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {
