@@ -55,7 +55,7 @@ export const ALL_ITEMS: AllItems[] = [
         items: [
             { label: 'Inventory', link: '/pages/inventory', icon: 'icon-inventory', description: 'Import/create stock, group & unit' },
             { label: 'Manufacturing', link: '/pages/inventory/manufacturing', icon: 'icon-manufacturing1', description: 'Find mfg. inventory status about quantity & value' },
-            { label: 'Branch Transfer', link: '/pages/inventory/report', icon: 'icon-branch-transfer', description: 'manage & Transfer inventory of multiple branches' },
+            { label: 'Branch Transfer', link: '/pages/inventory/report', icon: 'icon-branch-transfer', description: 'Manage & Transfer inventory of multiple branches' },
             { label: 'Warehouse', link: '/pages/settings/warehouse', icon: 'icon-warehouse1', description: 'See all the warehouses' }
         ]
     },
@@ -112,14 +112,14 @@ export const ALL_ITEMS: AllItems[] = [
         icon: 'icon-security',
         items: [
             { label: 'Permissions', link: '/pages/settings/permission', icon: 'icon-permission1', description: 'Select role, pages, CIDR range' },
-            { label: 'Integration', link: '/pages/settings/integration', icon: 'icon-integration1', description: 'Integrate for SMS, EMail, Ecom, reconciliation' }
+            { label: 'Integration', link: '/pages/settings/integration', icon: 'icon-integration1', description: 'Integrate for SMS, Email, Ecom, reconciliation' }
         ]
     },
     {
         label: 'User',
         icon: 'icon-user-new',
         items: [
-            { label: 'Profile', link: '/pages/settings/profile', icon: 'icon-permission1', description: 'personal info and addresses associated', additional: { tab: 'profile', tabIndex: 3 }},
+            { label: 'Profile', link: '/pages/settings/profile', icon: 'icon-permission1', description: 'Personal info and addresses associated', additional: { tab: 'profile', tabIndex: 3 }},
             { label: 'Subscriptions', link: '/pages/user-details/subscription', icon: 'icon-subscription2', description: 'About the plan', additional: { tab: 'subscription', tabIndex: 3, isPlanPage: true } },
             { label: 'Linked Accounts', link: '/pages/settings/linked-accounts', icon: 'icon-linked-account', description: 'Connect bank for CCavenue & Razor pay', additional: { tab: 'linked-accounts', tabIndex: 2 } }
         ]
