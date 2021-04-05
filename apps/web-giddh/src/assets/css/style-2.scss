@@ -7960,7 +7960,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 .create-select .menu{
-    width: 142px !important; 
+    width: 142px !important;
 }
 
 .select-caret:after,
@@ -9569,6 +9569,23 @@ input.mat-input-element{
         .total-padding{
             min-height: 120px !important;
             height: 120px !important;
+        }
+    }
+}
+.share-grp.account-share-modal, .group-share-modal{
+    .add-mailer{
+        .input-group{
+            input {
+                min-width: 230px;
+                max-width: 230px;
+                margin-right: 10px;
+            }
+            .selected-permission{
+                margin-left: 0 !important;
+            }
+            .btn-share{
+                width: 110px;
+            }
         }
     }
 }
