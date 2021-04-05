@@ -1025,13 +1025,13 @@ ul.sub-list {
 }
 @media (max-width: 767px) {
     .fixed-padding{
-        padding-top: 80px;
+        padding-top: 90px;
         #primary-new-header.primary-main-header{
             background-color: $white;
             position: fixed;
             top: 0;
             width: 100%;
-            height: 80px;
+            height: 90px;
             padding: 5px 15px !important;
             display: flex;
             align-items: flex-start;
