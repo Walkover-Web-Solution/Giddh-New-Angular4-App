@@ -36,7 +36,7 @@ export const ALL_ITEMS: AllItems[] = [
         items: [
             { label: 'Purchase Bill', link: '/pages/proforma-invoice/invoice/purchase', icon: 'icon-invoice-new', description: 'Purchase request, purchase bill, modify PO' },
             { label: 'Purchase Order', link: '/pages/purchase-management/purchase/order', icon: 'icon-purchase-order', description: 'Purchase request, purchase bill, modify PO' },
-            { label: 'Vendor', link: '/pages/contact/vendor', icon: 'icon-vendor', description: 'Send Bulk SMS/EMails, Set reminders, filter by date/name' },
+            { label: 'Vendor', link: '/pages/contact/vendor', icon: 'icon-vendor', description: 'Send Bulk SMS/Emails, Set reminders, filter by date/name' },
             { label: 'Aging Report', link: '/pages/contact/aging-report', icon: 'icon-aging-report-new', description: 'Amount Due in previous days & upcoming' },
             { label: 'Purchase Register', link: '/pages/reports/purchase-register', icon: 'icon-register-new', description: 'Net & cumulative purchases weekly/monthly/quarterly' },
             { label: 'Debit Note', link: '/pages/invoice/preview/debit note', icon: 'icon-debit-note-new', description: 'Record debit note & update A/c', additional: { tab: 'debit note', tabIndex: 0 } }
@@ -79,7 +79,7 @@ export const ALL_ITEMS: AllItems[] = [
             { label: 'Accounts', link: '/pages/import/account', icon: 'icon-proft-loss-new', description: 'Import excel and CSV and update existing one' },
             { label: 'Invoice', link: '/pages/import/entries', icon: 'icon-invoice-new', description: 'Multicurrency, Recurring invoice, Cash invoice' },
             { label: 'Group', link: '/pages/import/group', icon: 'icon-group-new', description: 'Import excel and CSV and update existing one' },
-            { label: 'Import Data', link: '/pages/import/select-type', icon: 'icon-import', description: '' },
+            { label: 'Import Data', link: '/pages/import/select-type', icon: 'icon-import', description: 'Import excel and CSV and update existing one' },
             { label: 'TALLY Import', link: '/pages/tallysync', icon: 'icon-tally-import1', description: 'Check your synced Tally data online' },
         ]
     },
