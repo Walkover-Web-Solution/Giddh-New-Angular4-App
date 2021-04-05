@@ -305,11 +305,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                                    Login ID = (Corporate ID).(User ID) or
                                    Login ID = Alias ID
                                 */
-                               if (item.corpId && item.userId) {
-                                   item.loginId = `${item.corpId}.${item.userId}`;
-                               } else if (item.aliasId) {
-                                   item.loginId = item.aliasId
-                               }
+                                if (item.aliasId) {
+                                    item.loginId = item.aliasId
+                                } else if (item.corpId && item.userId) {
+                                    item.loginId = `${item.corpId}.${item.userId}`;
+                                }
                             }
                         });
                     }
