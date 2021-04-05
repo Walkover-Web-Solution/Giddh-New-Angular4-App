@@ -641,7 +641,9 @@ input {
     max-height: 305px;
     overflow-y: scroll;
 }
-
+.nav-left-bar .sub-list.all-company-list{
+    overflow-y: unset;
+}
 ul.sub-list {
     margin-top: 5px;
 }
