@@ -3,6 +3,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { CustomTemplateResponse } from '../models/api-models/Invoice';
 import { CompanyResponse } from '../models/api-models/Company';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { NgForm } from '@angular/forms';
 
 export class TemplateContentUISectionVisibility {
     public header: boolean = true;
@@ -26,6 +27,8 @@ export class InvoiceUiDataService {
     public companyPAN: BehaviorSubject<string> = new BehaviorSubject(null);
     public fieldsAndVisibility: BehaviorSubject<any> = new BehaviorSubject(null);
     public templateVoucherType: BehaviorSubject<string> = new BehaviorSubject(null);
+    /** Stores the content form instance  */
+    public contentForm: NgForm;
 
     private companyName: string;
     private companyAddress: string;
@@ -199,6 +202,14 @@ export class InvoiceUiDataService {
                         selectedTemplate.sections.footer.data.message1.label = `We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.`;
                     }
                 }
+                if (!selectedTemplate.sections['footer'].data['showNotesAtLastPage']) {
+                    selectedTemplate.sections['footer'].data['showNotesAtLastPage'] = defaultTemplate ?
+                        defaultTemplate.sections['footer'].data['showNotesAtLastPage'] : {
+                            label: '',
+                            display: false,
+                            width: null
+                        };
+                }
 
                 this.BRToNewLine(selectedTemplate);
                 this.customTemplate.next(_.cloneDeep(selectedTemplate));
@@ -212,6 +223,18 @@ export class InvoiceUiDataService {
             };
 
             this.customTemplate.next(_.cloneDeep(selectedTemplate));
+        }
+    }
+
+    /**
+     * Sets the content form instance for carrying out validation
+     *
+     * @param {NgForm} form Content form instance
+     * @memberof InvoiceUiDataService
+     */
+    public setContentForm(form: NgForm): void {
+        if (form) {
+            this.contentForm = form;
         }
     }
 }

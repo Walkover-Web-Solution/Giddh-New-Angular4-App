@@ -401,15 +401,10 @@
                                 <div class="row">
                                     <div class="form-group col-xl-2 col-md-6 payment-col pl-0">
                                         <div class="">
-                                            <label>Corporate ID <span class="required">*</span></label>
+                                            <label>Login ID <span class="required">*</span></label>
                                             <br>
-                                            <input type="text" placeholder="Enter Corporate ID" class="form-control" disabled formControlName="corpId" name="corpId" autocomplete="off" />
+                                            <input type="text" placeholder="Enter Login ID" class="form-control" disabled formControlName="loginId" name="loginId" autocomplete="off" />
                                         </div>
-                                    </div>
-                                    <div class="form-group col-xl-2 col-md-6 payment-col">
-                                        <label>User ID <span class="required">*</span></label>
-                                        <br>
-                                        <input type="text" placeholder="Enter User ID" class="form-control" disabled formControlName="userId" name="userId" required autocomplete="off" />
                                     </div>
                                     <div class="form-group col-xl-2 col-md-6 payment-col">
                                         <label>Account Number <span class="required">*</span></label>
@@ -417,15 +412,15 @@
                                         <input type="text" placeholder="Enter Account Number" class="form-control" disabled formControlName="accountNo" name="accountNo" autocomplete="off" />
                                     </div>
                                     <div class="form-group col-xl-2 col-md-6 payment-col">
-                                        <label>Alias ID</label>
-                                        <br>
-                                        <input type="text" placeholder="Enter Alias ID" class="form-control" name="aliasId" disabled formControlName="aliasId" />
-                                    </div>
-                                    <div class="form-group col-xl-2 col-md-6 payment-col">
                                         <label>Accounts <span class="required">*</span></label>
                                         <br>
                                         <sh-select #paymentFormAccountName [options]="bankAccounts$ | async" name="accountUniqueName" formControlName="accountUniqueName" placeholder="Select Account" [ItemHeight]="33" autocomplete="off" [isRequired]="true">
                                         </sh-select>
+                                    </div>
+                                    <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                                        <label>User</label>
+                                        <br>
+                                        <sh-select [options]="usersList" name="usersList" [multiple]="true" formControlName="emailIds" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select>
                                     </div>
                                 </div>
                                 <!-- <ng-container formArrayName="userAmountRanges">
@@ -527,16 +522,9 @@
                         <form #paymentFormUpdate="ngForm" *ngIf="isBankUpdateInEdit !== parentIndex ">
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col pl-0">
-                                    <label>Corporate ID <span class="required">*</span></label>
+                                    <label>Login ID <span class="required">*</span></label>
                                     <br>
-                                    <input type="text" placeholder="Enter Corporate ID" required name="corpId" class="form-control" [(ngModel)]="regAcc.corpId" disabled />
-
-                                </div>
-                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                    <label>User ID <span class="required">*</span></label>
-                                    <br>
-
-                                    <input type="text" placeholder="Enter User ID" name="userId" required class="form-control" [(ngModel)]="regAcc.userId" disabled />
+                                    <input type="text" placeholder="Enter Login ID" required name="loginId" class="form-control" [(ngModel)]="regAcc.loginId" disabled />
 
                                 </div>
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
@@ -546,19 +534,17 @@
                                     <input type="text" placeholder="Enter Account Number" name="accountNo" required class="form-control" [(ngModel)]="regAcc.accountNo" disabled />
 
                                 </div>
-                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                    <label>Alias ID</label>
-                                    <br>
-
-                                    <input type="text" placeholder="Enter Alias ID" name="aliasId" class="form-control" [(ngModel)]="regAcc.aliasId" disabled />
-
-                                </div>
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col" *ngIf="bankAccounts$ && regAcc?.account?.uniqueName">
 
                                     <label>Accounts <span class="required">*</span></label>
                                     <br>
                                     <sh-select *ngIf="bankAccounts$ && regAcc?.account?.uniqueName" [disabled]="isBankUpdateInEdit !== parentIndex" required [options]="bankAccounts$ | async" name="accountUniqueName" [defaultValue]="regAcc?.account?.name" [(ngModel)]="regAcc.account.uniqueName"
                                         placeholder="Select Account" [ItemHeight]="33" autocomplete="off" [isRequired]="true"></sh-select>
+                                </div>
+                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                                    <label>User</label>
+                                    <br>
+                                    <sh-select [disabled]="isBankUpdateInEdit !== parentIndex" [options]="usersList" name="usersList" [defaultValue]="regAcc?.combinedUserNames" [(ngModel)]="regAcc.emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off"   (selected)="selectUser($event)"></sh-select>
                                 </div>
                             </div>
                             <!-- Added this new row make it dynamic -->
@@ -650,7 +636,7 @@
                         </div> -->
                         <a href="javascript:;" class="text-right btn btn-primary" (click)="showBeneficiaryModal(regAcc.URN)"> List Beneficiary </a>
                     </div>
-                    <br/>
+                    <br *ngIf="parentIndex !== (registeredAccount?.length - 1)" />
                 </div>
                 <!-- <div *ngIf="openNewRegistration && !(isPaymentAdditionSuccess$ | async)" class="box clearfix">
                     <h3 class="font-20 bold mb-2">ICICI Bank</h3>
@@ -783,15 +769,10 @@
                         <div class="row">
                             <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col amount-upto">
                                 <div>
-                                    <label>Corporate ID <span class="required">*</span></label>
+                                    <label>Login ID <span class="required">*</span></label>
                                     <br>
-                                    <input type="text" placeholder="Enter Corporate ID" class="form-control" formControlName="corpId" name="corpId" autocomplete="off" />
+                                    <input type="text" placeholder="Enter Login ID" class="form-control" formControlName="loginId" name="loginId" autocomplete="off" />
                                 </div>
-                            </div>
-                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                <label>User ID <span class="required">*</span></label>
-                                <br>
-                                <input type="text" placeholder="Enter User ID" class="form-control" formControlName="userId" name="userId" required autocomplete="off" />
                             </div>
                             <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                 <label>Account Number <span class="required">*</span></label>
@@ -799,15 +780,15 @@
                                 <input type="text" placeholder="Enter Account Number" class="form-control" formControlName="accountNo" name="accountNo" autocomplete="off" />
                             </div>
                             <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col">
-                                <label>Alias ID</label>
-                                <br>
-                                <input type="text" placeholder="Enter Alias ID" class="form-control" name="aliasId" formControlName="aliasId" />
-                            </div>
-                            <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col">
                                 <label>Accounts <span class="required">*</span></label>
                                 <br>
                                 <sh-select #paymentFormAccountName [options]="bankAccounts$ | async" name="accountUniqueName" formControlName="accountUniqueName" [forceClearReactive]="forceClear$ | async" placeholder="Select Account" [ItemHeight]="33" autocomplete="off" [isRequired]="true">
                                 </sh-select>
+                            </div>
+                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                                <label>User</label>
+                                <br>
+                                <sh-select [options]="usersList" name="usersList" formControlName="emailIds" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select>
                             </div>
                         </div>
                         <!-- <ng-container formArrayName="userAmountRanges">
@@ -912,6 +893,7 @@
                         </div>
                     </div>
                 </div>
+                <p class="mt-2 mb-4 font-14"><a href="https://cadigital.icicibank.com/SmartFormWeb/apps/services/www/SmartFormWeb/desktopbrowser/default/index.html?source=BC-application-Giddh#/" target="_blank">Open a new current account</a></p>
                 <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" class="btn btn-sky-blue mr-r1" (click)="openNewRegistartionForm()">Add More ID</button>
             </div>
         </tab>

@@ -40,6 +40,10 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
 	constructor(private store: Store<AppState>,
 		private _fb: FormBuilder,
@@ -81,24 +85,6 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 	}
 
 	public ngOnInit() {
-
-		this.intervalOptions = [
-            { label: 'Weekly', value: 'weekly' },
-            { label: 'Monthly', value: 'monthly' },
-			{ label: 'Quarterly', value: 'quarterly' },
-			{ label: 'Halfyearly', value: 'halfyearly' },
-			{ label: 'Yearly', value: 'yearly' }
-
-		];
-
-		this.timeOptions = [
-			{ label: '1st', value: '1' },
-			{ label: '2nd', value: '2' },
-			{ label: '3rd', value: '3' },
-			{ label: '4th', value: '4' },
-			{ label: '5th', value: '5' },
-        ];
-
 		this.store.pipe(select(state => state.invoice.recurringInvoiceData), takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = response.isRequestInFlight;
             this.isDeleteLoading = response.isDeleteRequestInFlight;
@@ -143,12 +129,12 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 	public saveRecurringInvoice() {
 		if (this.mode === 'update') {
 			if (this.form.controls.cronEndDate.invalid) {
-				this._toaster.errorToast('Date should be greater than today');
+				this._toaster.errorToast(this.localeData?.recurring_date_error);
 				return;
 			}
 		} else {
 			if (this.form.invalid) {
-				this._toaster.errorToast('All * fields should be valid and filled');
+				this._toaster.errorToast(this.localeData?.recurring_all_field_required);
 				return;
 			}
 		}
@@ -167,7 +153,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 				this.store.dispatch(this._invoiceActions.createRecurringInvoice(invoiceModel));
 			}
 		} else {
-			this._toaster.errorToast('All * fields should be valid and filled');
+			this._toaster.errorToast(this.localeData?.recurring_all_field_required);
 		}
 
 	}
@@ -179,5 +165,31 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 	public ngOnDestroy() {
 		this.destroyed$.next(true);
 		this.destroyed$.complete();
-	}
+    }
+    
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof AsideMenuRecurringEntryComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.intervalOptions = [
+                { label: this.localeData?.interval_options?.weekly, value: 'weekly' },
+                { label: this.localeData?.interval_options?.monthly, value: 'monthly' },
+                { label: this.localeData?.interval_options?.quarterly, value: 'quarterly' },
+                { label: this.localeData?.interval_options?.halfyearly, value: 'halfyearly' },
+                { label: this.localeData?.interval_options?.yearly, value: 'yearly' }
+            ];
+    
+            this.timeOptions = [
+                { label: this.localeData?.time_options?.first, value: '1' },
+                { label: this.localeData?.time_options?.second, value: '2' },
+                { label: this.localeData?.time_options?.third, value: '3' },
+                { label: this.localeData?.time_options?.fourth, value: '4' },
+                { label: this.localeData?.time_options?.fifth, value: '5' },
+            ];
+        }
+    }
 }

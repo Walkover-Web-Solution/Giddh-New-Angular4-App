@@ -2,12 +2,12 @@
 
 :host.inventory-sidebar {
     position: fixed;
-    top: 61px;
+    top: 46px;
     bottom: 0;
     min-height: 100vh;
     background: $white;
-    width: 215px;
-    left: -215px;
+    width: 240px;
+    left: -240px;
     z-index: 999;
     .aside-pane {
         background: $white;

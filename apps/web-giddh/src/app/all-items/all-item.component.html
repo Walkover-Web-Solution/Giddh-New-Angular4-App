@@ -1,0 +1,39 @@
+<div class="giddh-all-items-wrapper">
+    <hamburger-menu [pageHeading]="'All Items'"></hamburger-menu>
+    <div class="container-fluid">
+        <div class="search-any-item">
+            <div class="input-group flex-nowrap">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="addon-wrapping">
+                        <i class="icon-search-new"></i>
+                    </span>
+                </div>
+                <input type="text" class="form-control" placeholder="Search" aria-label="Search"
+                    aria-describedby="addon-wrapping" #searchField [(ngModel)]="search"
+                    (ngModelChange)="searchAllItems($event)">
+            </div>
+        </div>
+        <div class="all-item-block">
+            <div class="main-item" *ngFor="let item of (filteredItems$ | async);">
+                <h3 *ngIf="!item?.link" class="mr-b1 d-flex align-items-center"><i class="{{item?.icon}} mr-r1"></i> {{item?.label}} </h3>
+                <h3 *ngIf="item?.link" [routerLink]="[item?.link]" class="cursor-pointer mr-b1 d-flex align-items-center"><i class="{{item?.icon}} mr-r1"></i> {{item?.label}} </h3>
+                <div class="sub-item-block">
+                    <div class="row">
+                        <div class="col-xl-2 col-lg-4 col-md-3 col-sm-6 col-12" *ngFor="let menuItem of item?.items">
+                            <div *ngIf="menuItem.link" class="single-menu-item mr-b1" [routerLink]="[menuItem?.link]"
+                                [queryParams]="menuItem?.additional">
+                                <h4> <i class="{{menuItem?.icon}} mr-r1"></i> {{menuItem?.label}} </h4>
+                                <p>{{menuItem?.description}}</p>
+                            </div>
+                            <div *ngIf="!menuItem.link" class="single-menu-item mr-b1"
+                                (click)="handleItemClick(menuItem)">
+                                <h4> <i class="{{menuItem?.icon}} mr-r1"></i> {{menuItem?.label}} </h4>
+                                <p>{{menuItem?.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
