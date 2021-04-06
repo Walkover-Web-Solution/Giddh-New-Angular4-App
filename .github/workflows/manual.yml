@@ -42,6 +42,7 @@ jobs:
           restore-keys: |
             ${{ matrix.os }}-node-
       - if: ${{ matrix.os == 'windows-latest' }}
+        name: Get npm cache directory
         id: npm-cache
         run: |
             echo "::set-output name=dir::$(npm config get cache)"
