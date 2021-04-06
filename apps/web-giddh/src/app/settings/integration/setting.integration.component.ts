@@ -300,6 +300,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                             if (item && !item.userAmountRanges) {
                                 item.userAmountRanges = [this.getBlankAmountRangeRow()]
                             }
+                            if (!item.loginId) {
+                                /* Login ID is not present, create it:
+                                   Login ID = (Corporate ID).(User ID) or
+                                   Login ID = Alias ID
+                                */
+                                if (item.aliasId) {
+                                    item.loginId = item.aliasId
+                                } else if (item.corpId && item.userId) {
+                                    item.loginId = `${item.corpId}.${item.userId}`;
+                                }
+                            }
                         });
                     }
                     if (this.registeredAccount) {
@@ -1124,6 +1135,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public clearForm(): void {
         this.paymentFormObj = new PaymentClass();
         this.paymentFormObj.corpId = "";
+        this.paymentFormObj.loginId = "";
         this.paymentFormObj.userId = "";
         this.paymentFormObj.accountNo = "";
         this.paymentFormObj.aliasId = "";
@@ -1161,10 +1173,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public createBankIntegrationForm(): FormGroup {
         return this._fb.group({
-            corpId: [null, Validators.compose([Validators.required])],
-            userId: [null, Validators.compose([Validators.required])],
+            loginId: [null, Validators.compose([Validators.required])],
             accountNo: [null, Validators.compose([Validators.required])],
-            aliasId: [null, Validators.compose([])],
             accountUniqueName: [null, Validators.compose([Validators.required])],
             userAmountRanges: this._fb.array([
                 this._fb.group({
@@ -1308,7 +1318,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public checkFormValidations(item: IntegratedBankList): boolean {
         let valid = false;
         if (item) {
-            valid = (item.corpId && item.userId && item.accountUniqueName && item.accountNo && item.userAmountRanges &&
+            valid = (item.loginId && item.accountUniqueName && item.accountNo && item.userAmountRanges &&
                 item.userAmountRanges.length) ? true : false;
             if (valid) {
                 valid = item.userAmountRanges.every((rangeData: any) => {
@@ -1593,7 +1603,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public hideBeneficiaryModal(event?: any): void {
-        this.activeUrn = ''; 
+        this.activeUrn = '';
         this.beneficiaryAsideState = 'out'
     }
 

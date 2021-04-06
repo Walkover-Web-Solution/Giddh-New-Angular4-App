@@ -401,25 +401,15 @@
                                 <div class="row">
                                     <div class="form-group col-xl-2 col-md-6 payment-col pl-0">
                                         <div class="">
-                                            <label>Corporate ID <span class="required">*</span></label>
+                                            <label>Login ID <span class="required">*</span></label>
                                             <br>
-                                            <input type="text" placeholder="Enter Corporate ID" class="form-control" disabled formControlName="corpId" name="corpId" autocomplete="off" />
+                                            <input type="text" placeholder="Enter Login ID" class="form-control" disabled formControlName="loginId" name="loginId" autocomplete="off" />
                                         </div>
-                                    </div>
-                                    <div class="form-group col-xl-2 col-md-6 payment-col">
-                                        <label>User ID <span class="required">*</span></label>
-                                        <br>
-                                        <input type="text" placeholder="Enter User ID" class="form-control" disabled formControlName="userId" name="userId" required autocomplete="off" />
                                     </div>
                                     <div class="form-group col-xl-2 col-md-6 payment-col">
                                         <label>Account Number <span class="required">*</span></label>
                                         <br>
                                         <input type="text" placeholder="Enter Account Number" class="form-control" disabled formControlName="accountNo" name="accountNo" autocomplete="off" />
-                                    </div>
-                                    <div class="form-group col-xl-2 col-md-6 payment-col">
-                                        <label>Alias ID</label>
-                                        <br>
-                                        <input type="text" placeholder="Enter Alias ID" class="form-control" name="aliasId" disabled formControlName="aliasId" />
                                     </div>
                                     <div class="form-group col-xl-2 col-md-6 payment-col">
                                         <label>Accounts <span class="required">*</span></label>
@@ -532,16 +522,9 @@
                         <form #paymentFormUpdate="ngForm" *ngIf="isBankUpdateInEdit !== parentIndex ">
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col pl-0">
-                                    <label>Corporate ID <span class="required">*</span></label>
+                                    <label>Login ID <span class="required">*</span></label>
                                     <br>
-                                    <input type="text" placeholder="Enter Corporate ID" required name="corpId" class="form-control" [(ngModel)]="regAcc.corpId" disabled />
-
-                                </div>
-                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                    <label>User ID <span class="required">*</span></label>
-                                    <br>
-
-                                    <input type="text" placeholder="Enter User ID" name="userId" required class="form-control" [(ngModel)]="regAcc.userId" disabled />
+                                    <input type="text" placeholder="Enter Login ID" required name="loginId" class="form-control" [(ngModel)]="regAcc.loginId" disabled />
 
                                 </div>
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
@@ -549,13 +532,6 @@
                                     <br>
 
                                     <input type="text" placeholder="Enter Account Number" name="accountNo" required class="form-control" [(ngModel)]="regAcc.accountNo" disabled />
-
-                                </div>
-                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                    <label>Alias ID</label>
-                                    <br>
-
-                                    <input type="text" placeholder="Enter Alias ID" name="aliasId" class="form-control" [(ngModel)]="regAcc.aliasId" disabled />
 
                                 </div>
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col" *ngIf="bankAccounts$ && regAcc?.account?.uniqueName">
@@ -793,25 +769,15 @@
                         <div class="row">
                             <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col amount-upto">
                                 <div>
-                                    <label>Corporate ID <span class="required">*</span></label>
+                                    <label>Login ID <span class="required">*</span></label>
                                     <br>
-                                    <input type="text" placeholder="Enter Corporate ID" class="form-control" formControlName="corpId" name="corpId" autocomplete="off" />
+                                    <input type="text" placeholder="Enter Login ID" class="form-control" formControlName="loginId" name="loginId" autocomplete="off" />
                                 </div>
-                            </div>
-                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                <label>User ID <span class="required">*</span></label>
-                                <br>
-                                <input type="text" placeholder="Enter User ID" class="form-control" formControlName="userId" name="userId" required autocomplete="off" />
                             </div>
                             <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                 <label>Account Number <span class="required">*</span></label>
                                 <br>
                                 <input type="text" placeholder="Enter Account Number" class="form-control" formControlName="accountNo" name="accountNo" autocomplete="off" />
-                            </div>
-                            <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col">
-                                <label>Alias ID</label>
-                                <br>
-                                <input type="text" placeholder="Enter Alias ID" class="form-control" name="aliasId" formControlName="aliasId" />
                             </div>
                             <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col">
                                 <label>Accounts <span class="required">*</span></label>

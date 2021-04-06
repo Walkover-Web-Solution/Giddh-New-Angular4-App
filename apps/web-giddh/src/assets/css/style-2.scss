@@ -9697,6 +9697,23 @@ input.mat-input-element{
     .setting-sidebar-open #content-wrapper{
         padding-left: 0;
     }
+    .share-grp.account-share-modal, .group-share-modal{
+        .add-mailer{
+            .input-group{
+                input {
+                    min-width: 230px;
+                    max-width: 230px;
+                    margin-right: 10px;
+                }
+                .selected-permission{
+                    margin-left: 0 !important;
+                }
+                .btn-share{
+                    width: 110px;
+                }
+            }
+        }
+    }
     .invoice-modal-content{
         left: 60px !important;
         width: calc(100% - 60px) !important;
@@ -9705,7 +9722,6 @@ input.mat-input-element{
         left: 240px !important;
         width: calc(100% - 240px) !important;
     }
-
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {
