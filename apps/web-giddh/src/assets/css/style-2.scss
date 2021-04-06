@@ -9646,6 +9646,15 @@ input.mat-input-element{
 .plan-wrapper.menu_open{
         padding-left: 240px !important;
 }
+.invoice-modal-content{
+    left: 60px !important;
+    width: calc(100% - 60px) !important;
+}
+.menu_open .invoice-modal-content{
+    left: 240px !important;
+    width: calc(100% - 240px) !important;
+}
+
 /* responsive  starts here */
 @media (max-width: 1440px) {
     .font-xxlarge {
@@ -9778,10 +9787,21 @@ input.mat-input-element{
     .form-bg {
         width: 100%;
     }
+<<<<<<< HEAD
     .grp-col {
         float: none !important;
         width: 100% !important;
         max-width: 100% !important;
+=======
+}
+@media (max-width: 767px) {
+    .invoice-modal-content{
+        left: 0 !important;
+        width: 100% !important;
+    }
+    .invoice-footer, .sticky-footer.sticky-footer-sale-amount {
+       left: 0;
+>>>>>>> 1a164dd409... shalinee | TEST | correct preview page
     }
     .grp-list .list-item {
         display: inline-block;
