@@ -9779,54 +9779,10 @@ input.mat-input-element{
     }
     .grp-list .list-item {
         display: inline-block;
-    }
-    .col-wrapper {
-        white-space: initial;
-    }
     .col-wrapper:nth-child(2) {
-        margin-left: 0px;
-        width: 100%;
-    }
-    .grp-list {
-        padding: 0px;
-        background: $solitude;
-        width: 100%;
-        display: block;
-    }
-    .users-last-list > li:last-child {
         height: inherit !important;
-    }
-    .xs-left {
-        text-align: left !important;
-    }
-    .form-box.form-bg {
-        height: auto !important;
-        min-height: auto;
-    }
-    .left-account-operation {
-        height: initial !important;
         width: 100%;
-        background: $white;
-    }
-    .users-last-list > li {
-        display: inline-block;
-    }
-    #inventory-sidebar {
-        min-height: initial;
-        width: 100% !important;
-    }
-    .stock-grp-list:first-child {
         max-height: initial !important;
-        min-height: initial !important;
-    }
-    .sticky-footer {
-        position: relative;
-    }
-    .stock-lists {
-        position: absolute;
-        box-shadow: 0 3px 6px $very-light-gray;
-        background: $white;
-        min-width: 200px;
         display: inline-block;
         z-index: 9;
         max-height: 400px;
