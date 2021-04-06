@@ -28,14 +28,27 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Install Node.js, NPM and Yarn
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: 14.15.1
-      - name: Cache dependencies and read from cache
-        uses: c-hive/gha-npm-cache@v1
+          node-version: '14'
+      - if: ${{ matrix.os == 'macos-latest' }}
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ matrix.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ matrix.os }}-node-
+      - if: ${{ matrix.os == 'windows-latest' }}
+        id: npm-cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.npm-cache.outputs.dir }}
+          key: ${{ matrix.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ matrix.os }}-node-
       - run: npm i
       - if: ${{ matrix.os == 'macos-latest' }}
         run: npm run package:mac
