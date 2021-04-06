@@ -311,10 +311,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                                     item.loginId = `${item.corpId}.${item.userId}`;
                                 }
                             }
-                        });
-                    }
-                    if (this.registeredAccount) {
-                        this.registeredAccount.map(item => {
+                            item.combinedUserNames = item.userNames?.join(', ');
                             this.getRegistrationStatus(item);
                             item.userAmountRanges.map(element => {
                                 if (typeof element.maxBankLimit === "boolean") {
@@ -748,8 +745,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             URN: this.updateBankUrnNumber,
             accountUniqueName: registeredAccountObj.accountUniqueName,
             userAmountRanges: registeredAccountObj.userAmountRanges,
-            userName: registeredAccountObj.userName,
-            emailId: registeredAccountObj.emailId
+            userNames: registeredAccountObj.userNames,
+            emailIds: registeredAccountObj.emailIds
         }
         this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentInfo(requestData));
         this.paymentFormObj = new PaymentClass();
@@ -1184,8 +1181,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     approvalUniqueName: [''],
                 })
             ]),
-            userName: [null],
-            emailId: [null]
+            userNames: [[]],
+            emailIds: [[]]
         });
     }
 
@@ -1638,8 +1635,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public selectUser(event: any): void {
         if(event) {
-            this.addBankForm.get('userName').patchValue(event.label);
-            this.addBankForm.get('emailId').patchValue(event.value);
+            this.addBankForm.get('userNames').patchValue(event.map(ev => ev.label));
         }
     }
 }
