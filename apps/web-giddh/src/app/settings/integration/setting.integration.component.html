@@ -420,7 +420,7 @@
                                     <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                         <label>User</label>
                                         <br>
-                                        <sh-select [options]="usersList" name="usersList" formControlName="emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select>
+                                        <sh-select [options]="usersList" name="usersList" [multiple]="true" formControlName="emailIds" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select>
                                     </div>
                                 </div>
                                 <!-- <ng-container formArrayName="userAmountRanges">
@@ -544,7 +544,7 @@
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                     <label>User</label>
                                     <br>
-                                    <sh-select [disabled]="isBankUpdateInEdit !== parentIndex" [options]="usersList" name="usersList" [defaultValue]="regAcc?.userName" [(ngModel)]="regAcc.emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off"   (selected)="selectUser($event)"></sh-select>
+                                    <sh-select [disabled]="isBankUpdateInEdit !== parentIndex" [options]="usersList" name="usersList" [defaultValue]="regAcc?.combinedUserNames" [(ngModel)]="regAcc.emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off"   (selected)="selectUser($event)"></sh-select>
                                 </div>
                             </div>
                             <!-- Added this new row make it dynamic -->
@@ -788,7 +788,7 @@
                             <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                 <label>User</label>
                                 <br>
-                                <sh-select [options]="usersList" name="usersList" formControlName="emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select>
+                                <sh-select [options]="usersList" name="usersList" formControlName="emailIds" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select>
                             </div>
                         </div>
                         <!-- <ng-container formArrayName="userAmountRanges">
