@@ -42,7 +42,11 @@ jobs:
           restore-keys: |
             ${{ matrix.os }}-node-
       - if: ${{ matrix.os == 'windows-latest' }}
-        uses: actions/cache@v2
+        name: Get npm cache directory
+        id: npm-cache
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+      - uses: actions/cache@v2
         with:
           path: '%AppData%/npm-cache'
           key: ${{ matrix.os }}-node-${{ hashFiles('**/package-lock.json') }}
