@@ -34,7 +34,23 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.15.1
-
+      - if: ${{ matrix.os == 'windows-latest' }}
+        id: npm-cache
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.npm-cache.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - if: ${{ matrix.os == 'macos-latest' }}
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - run: npm i
       - if: ${{ matrix.os == 'macos-latest' }}
         run: npm run package:mac
