@@ -37,7 +37,6 @@ export const ALL_ITEMS: AllItems[] = [
             { label: 'Purchase Bill', link: '/pages/proforma-invoice/invoice/purchase', icon: 'icon-invoice-new', description: 'Purchase request, purchase bill, modify PO' },
             { label: 'Purchase Order', link: '/pages/purchase-management/purchase/order', icon: 'icon-purchase-order', description: 'Purchase request, purchase bill, modify PO' },
             { label: 'Vendor', link: '/pages/contact/vendor', icon: 'icon-vendor', description: 'Send Bulk SMS/EMails, Set reminders, filter by date/name' },
-            { label: 'Aging Report', link: '/pages/contact/aging-report', icon: 'icon-aging-report-new', description: 'Amount Due in previous days & upcoming' },
             { label: 'Purchase Register', link: '/pages/reports/purchase-register', icon: 'icon-register-new', description: 'Net & cumulative purchases weekly/monthly/quarterly' },
             { label: 'Debit Note', link: '/pages/invoice/preview/debit note', icon: 'icon-debit-note-new', description: 'Record debit note & update A/c', additional: { tab: 'debit note', tabIndex: 0 } }
         ]
@@ -61,7 +60,7 @@ export const ALL_ITEMS: AllItems[] = [
     },
     {
         label: 'Reports',
-        icon: 'icon-voucher',
+        icon: 'icon-reports',
         items: [
             { label: 'Balance Sheet', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-balance-sheet-new', description: 'Download BS in Excel, multiple type of exports', additional: { tab: 'balance-sheet', tabIndex: 2 } },
             { label: 'Profit and Loss', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-proft-loss-new', description: 'Download data in Excel, project wise report', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
@@ -99,12 +98,11 @@ export const ALL_ITEMS: AllItems[] = [
             { label: 'Tally Import', link: '/pages/tallysync', icon: 'icon-tally-import', description: 'Check your synced Tally data online' },
             { label: 'Company Impex', link: '/pages/company-import-export', icon: 'icon-company-impex', description: 'Company import & export' },
             { label: 'Template', link: '/pages/invoice/preview/templates/sales', icon: 'icon-template-new', description: 'Edit design & content of the template', alwaysPresent: true },
-            { label: 'Purchase Management', link: '/pages/purchase-management/purchase', icon: 'icon-purchase-management1', description: 'Purchase request, purchase bill, modify PO' },
             { label: 'Journal Voucher *', link: '/pages/journal-voucher', icon: 'icon-journal-voucher-new', description: 'Entries of Journal Voucher' },
             { label: 'Settings', link: '/pages/settings', icon: 'icon-settings-new', description: 'Add & manage various taxes' },
             { label: 'GSTR', link: '/pages/gstfiling', icon: 'icon-gstr', description: 'File & view GSTR1, GSTR2 & GSTR3B' },
             { label: 'VAT Report', link: '/pages/vat-report', icon: 'icon-vat', description: 'File & review VAT' },
-            { label: 'Aging Report', link: '/pages/contact/aging-report', icon: 'icon-aging-report-new', description: 'Amount Due in previous days & upcoming' },
+
         ]
     },
     {
