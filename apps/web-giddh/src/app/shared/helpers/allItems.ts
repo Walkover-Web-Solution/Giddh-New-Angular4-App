@@ -52,6 +52,30 @@ export const ALL_ITEMS: AllItems[] = [
         ]
     },
     {
+        label: 'Reports',
+        icon: 'icon-reports',
+        items: [
+            { label: 'Balance Sheet', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-balance-sheet-new', description: 'Download BS in Excel, multiple type of exports', additional: { tab: 'balance-sheet', tabIndex: 2 } },
+            { label: 'Profit and Loss', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-proft-loss-new', description: 'Download data in Excel, project wise report', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
+            { label: 'Trial balance', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-trial-balance-new', description: 'Download of all credit & debit balances in CSV/PDF or Excel', additional: { tab: 'trial-balance', tabIndex: 0 } },
+            { label: 'Sales Bifurcation ', link: '/pages/new-vs-old-invoices', icon: 'icon-sale-bifurcation', description: 'Compare new versus old invoices' },
+            { label: 'Daybook', link: '/pages/daybook', icon: 'icon-daybook-new', description: 'Everyday entries, search with advanced settings, export' },
+            { label: 'Taxes', link: '/pages/settings/taxes', icon: 'icon-tax-new', description: 'File & view GSTR1, GSTR2 & GSTR3B' },
+            { label: 'E-way bill', link: '/pages/invoice/ewaybill', icon: 'icon-eway-bill-new', description: 'Generate directly from Giddh after Invoice generation' }
+        ]
+    },
+    {
+        label: 'Import',
+        icon: 'icon-import',
+        items: [
+            { label: 'Accounts', link: '/pages/import/account', icon: 'icon-proft-loss-new', description: 'Import excel and CSV and update existing one' },
+            { label: 'Invoice', link: '/pages/import/entries', icon: 'icon-invoice-new', description: 'Multicurrency, Recurring invoice, Cash invoice' },
+            { label: 'Group', link: '/pages/import/group', icon: 'icon-group-new', description: 'Import excel and CSV and update existing one' },
+            { label: 'Import Data', link: '/pages/import/select-type', icon: 'icon-import', description: '' },
+            { label: 'TALLY Import', link: '/pages/tallysync', icon: 'icon-tally-import1', description: 'Check your synced Tally data online' },
+        ]
+    },
+    {
         label: 'Other',
         icon: 'icon-other',
         items: [
@@ -72,19 +96,6 @@ export const ALL_ITEMS: AllItems[] = [
             { label: 'Settings', link: '/pages/settings', icon: 'icon-settings-new', description: 'Add & manage various taxes' },
             { label: 'Template', link: '/pages/invoice/preview/templates/sales', icon: 'icon-template-new', description: 'Edit design & content of the template', alwaysPresent: true },
             { label: 'VAT Report', link: '/pages/vat-report', icon: 'icon-vat', description: 'File & review VAT' },
-        ]
-    },
-    {
-        label: 'Reports',
-        icon: 'icon-voucher',
-        items: [
-            { label: 'Balance Sheet', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-balance-sheet-new', description: 'Download BS in Excel, multiple type of exports', additional: { tab: 'balance-sheet', tabIndex: 2 } },
-            { label: 'Daybook', link: '/pages/daybook', icon: 'icon-daybook-new', description: 'Everyday entries, search with advanced settings, export' },
-            { label: 'E-way bill', link: '/pages/invoice/ewaybill', icon: 'icon-eway-bill-new', description: 'Generate directly from Giddh after Invoice generation' },
-            { label: 'Profit and Loss', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-proft-loss-new', description: 'Download data in Excel, project wise report', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
-            { label: 'Sales Bifurcation ', link: '/pages/new-vs-old-invoices', icon: 'icon-sale-bifurcation', description: 'Compare new versus old invoices' },
-            { label: 'Taxes', link: '/pages/settings/taxes', icon: 'icon-tax-new', description: 'File & view GSTR1, GSTR2 & GSTR3B' },
-            { label: 'Trial balance', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-trial-balance-new', description: 'Download of all credit & debit balances in CSV/PDF or Excel', additional: { tab: 'trial-balance', tabIndex: 0 } },
         ]
     },
     {

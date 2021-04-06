@@ -28,6 +28,15 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-left:before {
+  content: "\e9e1";
+}
+.icon-right:before {
+  content: "\e9e2";
+}
+.icon-up:before {
+  content: "\e9e3";
+}
 .icon-security:before {
   content: "\e9e0";
 }
