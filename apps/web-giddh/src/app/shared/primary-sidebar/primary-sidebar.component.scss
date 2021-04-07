@@ -65,6 +65,14 @@
                 }
             }
             .branch-alice {
+                display: none !important;
+            }
+            .switch-branch{
+                display: flex !important;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .switch-branch-alice{
                 display: none;
             }
         }
@@ -375,11 +383,38 @@
                     height: 36px;
                 }
             }
+            .company-name{
+                .user-dropdown-header{
+                    right: -281px !important;
+                }
+            }
             .current-branch-name {
                 margin-top: 0;
                 margin-left: 0;
                 .branch-name {
-                    display: none;
+                    .branch-name-full{
+                        display: none;
+                    }
+                    .switch-branch{
+                        display: none !important;
+                    }
+                    .switch-branch-alice{
+                        display: flex !important;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 0;
+                        margin-top: 15px;
+                        font-family: "opensans-semibold";
+                        letter-spacing: 0;
+                        font-size: 16px;
+                        height: 36px;
+                        width: 36px;
+                        min-width: 50px;
+                        i{
+                            top: 0;
+                        }
+                    }
+
                 }
                 .branch-alice {
                     display: flex !important;
@@ -392,6 +427,16 @@
                     font-size: 16px;
                     height: 36px;
                     width: 36px;
+                }
+            }
+            .switch-branch-wrapper{
+                .switch-branch-section{
+                    width: 0;
+                }
+                .btn-group{
+                    .dropdown-menu{
+                        right: -281px !important;
+                    }
                 }
             }
         }
@@ -584,15 +629,18 @@
     .wrap-menus {
         padding-bottom: 80px;
     }
-     .menu-item-wrapper{
-         ul{
-             .main-item{
-                 .sub-menu{
-                    overflow-y: auto;
-                    max-height: 285px;
+    .primary-sidebar{
+         .menu-item-wrapper{
+            ul{
+                .main-item{
+                    .sub-menu{
+                        overflow-y: auto;
+                        max-height: 285px;
+                    }
                 }
-             }
-         }
-     }
+            }
+        }
+    }
+
 
 }

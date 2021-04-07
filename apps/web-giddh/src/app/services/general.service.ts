@@ -871,7 +871,7 @@ export class GeneralService {
                 const isValidItem = isBranch ?
                     apiItems.find(apiItem => (apiItem.uniqueName === item.link && !apiItem.notBranchViewable)) :
                     apiItems.find(apiItem => (apiItem.uniqueName === item.link && !apiItem.notCompanyViewable));
-                if (isValidItem) {
+                if (isValidItem || item.alwaysPresent) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
                     visibleMenuItems[menuIndex].items.push(item);
                 }
