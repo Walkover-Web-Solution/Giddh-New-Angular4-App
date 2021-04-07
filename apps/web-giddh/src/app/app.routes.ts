@@ -95,7 +95,6 @@ export const ROUTES: Routes = [
             { path: 'search', loadChildren: () => import('./search/search.module').then(module => module.SearchModule) },
             { path: 'trial-balance-and-profit-loss', loadChildren: () => import('./tb-pl-bs/tb-pl-bs.module').then(module => module.TBPlBsModule), canActivate: [NeedsAuthentication, NeedsAuthorization] },
             { path: 'audit-logs', loadChildren: () => import('./audit-logs/audit-logs.module').then(module => module.AuditLogsModule), canActivate: [NeedsAuthorization] },
-            { path: 'all-modules', loadChildren: () => import('./all-modules/all-modules.module').then(module => module.AllModulesModule), canActivate: [NeedsAuthorization] },
             { path: 'create-advance-receipt', loadChildren: () => import('./create-advance-receipt/create-advance-receipt.module').then(module => module.CreateAdvanceReceiptModule), canActivate: [NeedsAuthorization] },
             { path: 'ledger', loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule), canActivate: [NeedsAuthorization] },
             { path: 'permissions', loadChildren: () => import('./permissions/permission.module').then(module => module.PermissionModule), canActivate: [NeedsAuthorization] },

@@ -401,25 +401,15 @@
                                 <div class="row">
                                     <div class="form-group col-xl-2 col-md-6 payment-col pl-0">
                                         <div class="">
-                                            <label>Corporate ID <span class="required">*</span></label>
+                                            <label>Login ID <span class="required">*</span></label>
                                             <br>
-                                            <input type="text" placeholder="Enter Corporate ID" class="form-control" disabled formControlName="corpId" name="corpId" autocomplete="off" />
+                                            <input type="text" placeholder="Enter Login ID" class="form-control" disabled formControlName="loginId" name="loginId" autocomplete="off" />
                                         </div>
-                                    </div>
-                                    <div class="form-group col-xl-2 col-md-6 payment-col">
-                                        <label>User ID <span class="required">*</span></label>
-                                        <br>
-                                        <input type="text" placeholder="Enter User ID" class="form-control" disabled formControlName="userId" name="userId" required autocomplete="off" />
                                     </div>
                                     <div class="form-group col-xl-2 col-md-6 payment-col">
                                         <label>Account Number <span class="required">*</span></label>
                                         <br>
                                         <input type="text" placeholder="Enter Account Number" class="form-control" disabled formControlName="accountNo" name="accountNo" autocomplete="off" />
-                                    </div>
-                                    <div class="form-group col-xl-2 col-md-6 payment-col">
-                                        <label>Alias ID</label>
-                                        <br>
-                                        <input type="text" placeholder="Enter Alias ID" class="form-control" name="aliasId" disabled formControlName="aliasId" />
                                     </div>
                                     <div class="form-group col-xl-2 col-md-6 payment-col">
                                         <label>Accounts <span class="required">*</span></label>
@@ -430,7 +420,19 @@
                                     <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                         <label>User</label>
                                         <br>
-                                        <sh-select [options]="usersList" name="usersList" formControlName="emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select>
+                                        <div class="btn-group btn-block select-caret invoice-btn" dropdown>
+                                            <button dropdownToggle type="button"
+                                                class="form-control text-left btn-block dropdown-toggle">{{ getSelectedItemCount(usersList) || 'Select User' }}<span
+                                                    class="select-drop pull-right mr-t1"></span></button>
+                                            <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
+                                                <li *ngIf="usersList.length==0">No results found</li>
+                                                <li *ngFor="let user of usersList; index as userIndex">
+                                                    <input type="checkbox" (click)="selectUsers(user, $event, userIndex)"
+                                                        [checked]="user.isSelected" /> {{user.label}}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <!-- <sh-select [options]="usersList" name="usersList" [multiple]="true" formControlName="emailIds" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select> -->
                                     </div>
                                 </div>
                                 <!-- <ng-container formArrayName="userAmountRanges">
@@ -532,16 +534,9 @@
                         <form #paymentFormUpdate="ngForm" *ngIf="isBankUpdateInEdit !== parentIndex ">
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col pl-0">
-                                    <label>Corporate ID <span class="required">*</span></label>
+                                    <label>Login ID <span class="required">*</span></label>
                                     <br>
-                                    <input type="text" placeholder="Enter Corporate ID" required name="corpId" class="form-control" [(ngModel)]="regAcc.corpId" disabled />
-
-                                </div>
-                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                    <label>User ID <span class="required">*</span></label>
-                                    <br>
-
-                                    <input type="text" placeholder="Enter User ID" name="userId" required class="form-control" [(ngModel)]="regAcc.userId" disabled />
+                                    <input type="text" placeholder="Enter Login ID" required name="loginId" class="form-control" [(ngModel)]="regAcc.loginId" disabled />
 
                                 </div>
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
@@ -549,13 +544,6 @@
                                     <br>
 
                                     <input type="text" placeholder="Enter Account Number" name="accountNo" required class="form-control" [(ngModel)]="regAcc.accountNo" disabled />
-
-                                </div>
-                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                    <label>Alias ID</label>
-                                    <br>
-
-                                    <input type="text" placeholder="Enter Alias ID" name="aliasId" class="form-control" [(ngModel)]="regAcc.aliasId" disabled />
 
                                 </div>
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col" *ngIf="bankAccounts$ && regAcc?.account?.uniqueName">
@@ -568,7 +556,19 @@
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                     <label>User</label>
                                     <br>
-                                    <sh-select [disabled]="isBankUpdateInEdit !== parentIndex" [options]="usersList" name="usersList" [defaultValue]="regAcc?.userName" [(ngModel)]="regAcc.emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off"   (selected)="selectUser($event)"></sh-select>
+                                    <div class="btn-group btn-block select-caret invoice-btn">
+                                        <button disabled type="button"
+                                            class="form-control text-left btn-block dropdown-toggle"> {{regAcc?.selectedUsers?.length || 'Select User'}} <span
+                                                class="select-drop pull-right mr-t1"></span></button>
+                                        <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
+                                            <li *ngIf="usersList.length==0">No results found</li>
+                                            <li *ngFor="let user of usersList; index as userIndex">
+                                                <input type="checkbox" (click)="selectUsers(user, $event, userIndex)"
+                                                    [checked]="user.isSelected" /> {{user.label}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- <sh-select [disabled]="isBankUpdateInEdit !== parentIndex" [options]="usersList" name="usersList" [defaultValue]="regAcc?.combinedUserNames" [(ngModel)]="regAcc.emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off"   (selected)="selectUser($event)"></sh-select> -->
                                 </div>
                             </div>
                             <!-- Added this new row make it dynamic -->
@@ -660,7 +660,7 @@
                         </div> -->
                         <a href="javascript:;" class="text-right btn btn-primary" (click)="showBeneficiaryModal(regAcc.URN)"> List Beneficiary </a>
                     </div>
-                    <br *ngIf="parentIndex !== (registeredAccount?.length - 1)" />
+                    <br *ngIf="parentIndex !== (registeredAccount?.length - 1) || openNewRegistration" />
                 </div>
                 <!-- <div *ngIf="openNewRegistration && !(isPaymentAdditionSuccess$ | async)" class="box clearfix">
                     <h3 class="font-20 bold mb-2">ICICI Bank</h3>
@@ -793,25 +793,15 @@
                         <div class="row">
                             <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col amount-upto">
                                 <div>
-                                    <label>Corporate ID <span class="required">*</span></label>
+                                    <label>Login ID <span class="required">*</span></label>
                                     <br>
-                                    <input type="text" placeholder="Enter Corporate ID" class="form-control" formControlName="corpId" name="corpId" autocomplete="off" />
+                                    <input type="text" placeholder="Enter Login ID" class="form-control" formControlName="loginId" name="loginId" autocomplete="off" />
                                 </div>
-                            </div>
-                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                <label>User ID <span class="required">*</span></label>
-                                <br>
-                                <input type="text" placeholder="Enter User ID" class="form-control" formControlName="userId" name="userId" required autocomplete="off" />
                             </div>
                             <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                 <label>Account Number <span class="required">*</span></label>
                                 <br>
                                 <input type="text" placeholder="Enter Account Number" class="form-control" formControlName="accountNo" name="accountNo" autocomplete="off" />
-                            </div>
-                            <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col">
-                                <label>Alias ID</label>
-                                <br>
-                                <input type="text" placeholder="Enter Alias ID" class="form-control" name="aliasId" formControlName="aliasId" />
                             </div>
                             <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col">
                                 <label>Accounts <span class="required">*</span></label>
@@ -822,7 +812,19 @@
                             <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                 <label>User</label>
                                 <br>
-                                <sh-select [options]="usersList" name="usersList" formControlName="emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select>
+                                <div class="btn-group btn-block select-caret invoice-btn" dropdown>
+                                    <button dropdownToggle type="button"
+                                        class="form-control text-left btn-block dropdown-toggle">{{ getSelectedItemCount(usersList) || 'Select User' }}<span
+                                            class="select-drop pull-right mr-t1"></span></button>
+                                    <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
+                                        <li *ngIf="usersList.length==0">No results found</li>
+                                        <li *ngFor="let user of usersList; index as userIndex">
+                                            <input type="checkbox" (click)="selectUsers(user, $event, userIndex)"
+                                                [checked]="user.isSelected" /> {{user.label}}
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- <sh-select [options]="usersList" name="usersList" formControlName="emailIds" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select> -->
                             </div>
                         </div>
                         <!-- <ng-container formArrayName="userAmountRanges">

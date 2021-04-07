@@ -6,6 +6,7 @@ import {
     HostListener,
     Input,
     OnChanges,
+    OnDestroy,
     OnInit,
     Output,
     SimpleChanges,
@@ -47,7 +48,7 @@ import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class PrimarySidebarComponent implements OnInit, OnChanges {
+export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** update IndexDb flags observable **/
@@ -129,7 +130,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
     /** Stores the instance of CMD+K dropdown */
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Stores the instance of company detail dropdown */
-    @ViewChild('companyDetailsDropDownWeb', {static: true}) public companyDetailsDropDownWeb: BsDropdownDirective;
+    @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -174,6 +175,20 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
                 this.currentOrganizationType = OrganizationType.Company;
             }
         });
+    }
+
+    /**
+     * Returns true, if route with query params is activated
+     *
+     * @param {string} routeUrl Route URL without params
+     * @returns {boolean} True, if passed route is activated
+     * @memberof PrimarySidebarComponent
+     */
+    public isRouteWithParamsActive(routeUrl: string): boolean {
+        const queryParamsIndex = this.router.url.indexOf('?');
+        const baseUrl = queryParamsIndex === -1 ? this.router.url :
+            this.router.url.slice(0, queryParamsIndex);
+        return decodeURI(baseUrl) === decodeURI(routeUrl);
     }
 
     // CMD + G functionality
@@ -320,6 +335,16 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
     }
 
     /**
+     * Releases the occupied memory
+     *
+     * @memberof PrimarySidebarComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    /**
      * Switches to branch mode
      *
      * @param {string} branchUniqueName Branch uniqueName
@@ -401,23 +426,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
         } else {
             this.currentCompanyBranches = branches;
         }
-    }
-
-    /**
-    * Sets the organization details
-    *
-    * @private
-    * @param {OrganizationType} type Type of the organization
-    * @param {OrganizationDetails} branchDetails Branch details of an organization
-    * @memberof PrimarySidebarComponent
-    */
-    private setOrganizationDetails(type: OrganizationType, branchDetails: OrganizationDetails): void {
-        const organization: Organization = {
-            type, // Mode to which user is switched to
-            uniqueName: this.selectedCompanyDetails ? this.selectedCompanyDetails.uniqueName : '',
-            details: branchDetails
-        };
-        this.store.dispatch(this.companyActions.setCompanyBranch(organization));
     }
 
     /**
@@ -562,40 +570,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
     }
 
     /**
-     * Do entry in DB method for create/update operation on entry
-     *
-     * @private
-     * @param {string} entity Company uniquename
-     * @param {IUlist} item New item whose entry needs to be done
-     * @param {{ next: IUlist, previous: IUlist }} [fromInvalidState=null] Current and previous states
-     * @memberof PrimarySidebarComponent
-     */
-    private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null): void {
-        if (entity === 'menus') {
-            //this.selectedPage = item.name;
-            this.isLedgerAccSelected = false;
-        } else if (entity === 'accounts') {
-            this.isLedgerAccSelected = true;
-            this.selectedLedgerName = item.uniqueName;
-            //this.selectedPage = 'ledger - ' + item.name;
-        }
-
-        if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
-            let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
-            let branches = [];
-            this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
-                branches = response || [];
-            });
-            this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
-                this.currentOrganizationType === OrganizationType.Company && branches.length > 1).then((res) => {
-                    this.findListFromDb(res);
-                }, (err: any) => {
-                    console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
-                });
-        }
-    }
-
-    /**
      * Creates a new group entry
      *
      * @param {IUlist} item
@@ -650,19 +624,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
             let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
             this.doEntryInDb(entity, item, fromInvalidState);
         }, 200);
-    }
-
-    /**
-     * Unsubscribes from all the listeners
-     *
-     * @private
-     * @memberof PrimarySidebarComponent
-     */
-    private unsubscribe(): void {
-        this.subscriptions.forEach((subscription: Subscription) => {
-            subscription.unsubscribe();
-        });
-        this.subscriptions = [];
     }
 
     /**
@@ -880,6 +841,27 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
     }
 
     /**
+     * Opens new company modal
+     *
+     * @memberof PrimarySidebarComponent
+     */
+    public createNewCompany(): void {
+        this.newCompany.emit();
+    }
+
+    /**
+     * Track by for menu items
+     *
+     * @param {number} index Index of current item
+     * @param {AllItem} item Item instance
+     * @returns {string} Item unique link
+     * @memberof PrimarySidebarComponent
+     */
+    public trackItems(index: number, item: AllItem): string {
+        return item.link;
+    }
+
+    /**
      * Returns the readable format name of menu item
      *
      * @private
@@ -909,11 +891,66 @@ export class PrimarySidebarComponent implements OnInit, OnChanges {
     }
 
     /**
-     * Opens new company modal
+     * Unsubscribes from all the listeners
      *
+     * @private
      * @memberof PrimarySidebarComponent
      */
-     public createNewCompany(): void {
-        this.newCompany.emit();
-     }
+    private unsubscribe(): void {
+        this.subscriptions.forEach((subscription: Subscription) => {
+            subscription.unsubscribe();
+        });
+        this.subscriptions = [];
+    }
+
+    /**
+     * Do entry in DB method for create/update operation on entry
+     *
+     * @private
+     * @param {string} entity Company uniquename
+     * @param {IUlist} item New item whose entry needs to be done
+     * @param {{ next: IUlist, previous: IUlist }} [fromInvalidState=null] Current and previous states
+     * @memberof PrimarySidebarComponent
+     */
+    private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null): void {
+        if (entity === 'menus') {
+            //this.selectedPage = item.name;
+            this.isLedgerAccSelected = false;
+        } else if (entity === 'accounts') {
+            this.isLedgerAccSelected = true;
+            this.selectedLedgerName = item.uniqueName;
+            //this.selectedPage = 'ledger - ' + item.name;
+        }
+
+        if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
+            let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
+            let branches = [];
+            this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+                branches = response || [];
+            });
+            this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
+                this.currentOrganizationType === OrganizationType.Company && branches.length > 1).then((res) => {
+                    this.findListFromDb(res);
+                }, (err: any) => {
+                    console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
+                });
+        }
+    }
+
+    /**
+    * Sets the organization details
+    *
+    * @private
+    * @param {OrganizationType} type Type of the organization
+    * @param {OrganizationDetails} branchDetails Branch details of an organization
+    * @memberof PrimarySidebarComponent
+    */
+    private setOrganizationDetails(type: OrganizationType, branchDetails: OrganizationDetails): void {
+        const organization: Organization = {
+            type, // Mode to which user is switched to
+            uniqueName: this.selectedCompanyDetails ? this.selectedCompanyDetails.uniqueName : '',
+            details: branchDetails
+        };
+        this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+    }
 }

@@ -1,5 +1,9 @@
 @import "../../../assets/css/color.scss";
 
+@mixin highlight-color($bgColor, $color) {
+    background-color: $bgColor !important;
+    color: $color !important;
+}
 .primary-sidebar {
     background-color: $solitude-new;
     .company-branch-block {
@@ -21,6 +25,10 @@
                     display: inline-block;
                     padding-left: 15px;
                     width: 90%;
+                    .text-ellipsis{
+                        white-space: normal;
+                        word-break: break-word;
+                    }
                 }
             }
         }
@@ -43,6 +51,8 @@
             .company-full-name {
                 margin-top: 5px;
                 height: 38px;
+                white-space: normal;
+                word-break: break-word;
             }
             img.company-icon {
                 width: 28px;
@@ -55,6 +65,14 @@
                 }
             }
             .branch-alice {
+                display: none !important;
+            }
+            .switch-branch{
+                display: flex !important;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .switch-branch-alice{
                 display: none;
             }
         }
@@ -108,8 +126,7 @@
                 }
             }
             .left-fixed-header > li a.active {
-                background: $lavender;
-                color: $cornflower-blue;
+                @include highlight-color($lavender, $cornflower-blue);
             }
         }
         p {
@@ -174,6 +191,9 @@
                                 margin-right: 10px;
                             }
                         }
+                        i.icon-right{
+                            transform: rotate(90deg);
+                        }
                     }
                     li {
                         .icon-arrow-down {
@@ -214,11 +234,13 @@
                                     font-size: 20px;
                                     margin-right: 10px;
                                 }
+                                &.active {
+                                    @include highlight-color($cornflower, $white);
+                                }
                             }
                             &:hover {
                                 a {
-                                    background-color: $cornflower !important;
-                                    color: $white !important;
+                                    @include highlight-color($cornflower, $white);
                                 }
                             }
                         }
@@ -279,8 +301,8 @@
             }
             .dropdown-menu {
                 left: auto !important;
-                right: -270px !important;
-                top: 17px !important;
+                 right: -286px !important;
+                 top: -2px !important;
                 transform: translateY(0px);
                 bottom: auto;
                 border: 1px solid $gainsboro;
@@ -357,15 +379,42 @@
                 justify-content: center;
                 .company-alice {
                     margin-right: 0;
-                    width: 34px;
-                    height: 34px;
+                    width: 36px;
+                    height: 36px;
+                }
+            }
+            .company-name{
+                .user-dropdown-header{
+                    right: -281px !important;
                 }
             }
             .current-branch-name {
                 margin-top: 0;
                 margin-left: 0;
                 .branch-name {
-                    display: none;
+                    .branch-name-full{
+                        display: none;
+                    }
+                    .switch-branch{
+                        display: none !important;
+                    }
+                    .switch-branch-alice{
+                        display: flex !important;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 0;
+                        margin-top: 15px;
+                        font-family: "opensans-semibold";
+                        letter-spacing: 0;
+                        font-size: 16px;
+                        height: 36px;
+                        width: 36px;
+                        min-width: 50px;
+                        i{
+                            top: 0;
+                        }
+                    }
+
                 }
                 .branch-alice {
                     display: flex !important;
@@ -374,6 +423,20 @@
                     padding: 0;
                     margin-top: 15px;
                     font-family: "opensans-semibold";
+                    letter-spacing: -2px;
+                    font-size: 16px;
+                    height: 36px;
+                    width: 36px;
+                }
+            }
+            .switch-branch-wrapper{
+                .switch-branch-section{
+                    width: 0;
+                }
+                .btn-group{
+                    .dropdown-menu{
+                        right: -281px !important;
+                    }
                 }
             }
         }
@@ -410,6 +473,7 @@
             .search-box {
                 margin-top: 15px !important;
                 .input-group {
+                    justify-content: center;
                     .input-group-prepend {
                         .input-group-text {
                             border-radius: 50%;
@@ -420,7 +484,7 @@
                             align-items: center;
                         }
                     }
-                    input {
+                    input , .input-group-append{
                         display: none;
                     }
                 }
@@ -446,9 +510,8 @@
                             display: flex;
                             justify-content: flex-start;
                             align-items: center;
-                            &:hover {
-                                background-color: $cornflower;
-                                color: $white;
+                            &:hover, &.active {
+                                @include highlight-color($cornflower, $white);
                             }
                             a.dropdown-toggle {
                                 padding: 0 10px;
@@ -467,12 +530,15 @@
                                 }
                             }
                             i {
-                                transform: rotate(-90deg);
                                 margin-left: 0;
                                 width: 15px;
                                 height: 10px;
                                 display: flex;
+                                &.icon-right{
+                                    transform: none;
+                                }
                             }
+
                         }
                         .sub-menu {
                             position: absolute !important;
@@ -503,12 +569,14 @@
             .account-block {
                 padding-left: 0 !important;
                 margin-top: 15px;
+                padding-right: 0 !important;
                 .account-collapse {
                     display: none;
                 }
                 .account-dropdown {
                     display: flex !important;
                     padding: 0 10px;
+                    justify-content: center;
                     a {
                         &.dropdown-toggle {
                             display: flex;
@@ -525,11 +593,16 @@
                         }
                         i {
                             font-size: 14px;
-                            transform: rotate(-90deg);
                             display: inline-flex;
                             color: $trout;
                             width: 16px;
                             height: 19px;
+                            justify-content: center;
+                            align-items: center;
+                            margin-left: 0;
+                            &.icon-right{
+                                margin-left: 3px;
+                            }
                         }
                     }
                 }
@@ -543,7 +616,7 @@
     }
 }
 /*responsive starts here*/
-@media (max-height: 800px) {
+@media (max-height: 950px) {
     .sidebar-collapse {
         .other-sub-menu-item {
             height: 200px;
@@ -556,4 +629,18 @@
     .wrap-menus {
         padding-bottom: 80px;
     }
+    .primary-sidebar{
+         .menu-item-wrapper{
+            ul{
+                .main-item{
+                    .sub-menu{
+                        overflow-y: auto;
+                        max-height: 285px;
+                    }
+                }
+            }
+        }
+    }
+
+
 }

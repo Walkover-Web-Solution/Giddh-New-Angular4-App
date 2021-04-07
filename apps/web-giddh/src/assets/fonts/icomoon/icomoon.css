@@ -28,6 +28,57 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-left:before {
+  content: "\e9e1";
+}
+.icon-right:before {
+  content: "\e9e2";
+}
+.icon-up:before {
+  content: "\e9e3";
+}
+.icon-security:before {
+  content: "\e9e0";
+}
+.icon-bill:before {
+  content: "\e9d3";
+}
+.icon-branch-transfer:before {
+  content: "\e9d4";
+}
+.icon-create-account:before {
+  content: "\e9d5";
+}
+.icon-gst-vat:before {
+  content: "\e9d6";
+}
+.icon-integration1:before {
+  content: "\e9d7";
+}
+.icon-invoice-management:before {
+  content: "\e9d8";
+}
+.icon-linked-account:before {
+  content: "\e9d9";
+}
+.icon-manufacturing1:before {
+  content: "\e9da";
+}
+.icon-permission1:before {
+  content: "\e9db";
+}
+.icon-purchase-management1:before {
+  content: "\e9dc";
+}
+.icon-subscription2:before {
+  content: "\e9dd";
+}
+.icon-tally-import1:before {
+  content: "\e9de";
+}
+.icon-warehouse1:before {
+  content: "\e9df";
+}
 .icon-calender-new:before {
   content: "\e9c9";
 }
