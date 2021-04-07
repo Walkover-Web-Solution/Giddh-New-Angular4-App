@@ -19,7 +19,7 @@
                 <h3 *ngIf="item?.link" [routerLink]="[item?.link]" class="cursor-pointer mr-b1 d-flex align-items-center"><i class="{{item?.icon}} mr-r1"></i> {{item?.label}} </h3>
                 <div class="sub-item-block">
                     <div class="row">
-                        <div class="col-xl-2 col-lg-4 col-md-3 col-sm-6 col-12" *ngFor="let menuItem of item?.items">
+                        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-12" *ngFor="let menuItem of item?.items">
                             <div *ngIf="menuItem.link" class="single-menu-item mr-b1" [routerLink]="[menuItem?.link]"
                                 [queryParams]="menuItem?.additional">
                                 <h4> <i class="{{menuItem?.icon}} mr-r1"></i> {{menuItem?.label}} </h4>
