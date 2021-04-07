@@ -188,7 +188,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         const queryParamsIndex = this.router.url.indexOf('?');
         const baseUrl = queryParamsIndex === -1 ? this.router.url :
             this.router.url.slice(0, queryParamsIndex);
-        return decodeURI(baseUrl) === decodeURI(routeUrl);
+        // For Trial balance module, strict comparison should be done
+        return routeUrl.includes('trial-balance-and-profit-loss') ? false : decodeURI(baseUrl) === decodeURI(routeUrl);
     }
 
     // CMD + G functionality

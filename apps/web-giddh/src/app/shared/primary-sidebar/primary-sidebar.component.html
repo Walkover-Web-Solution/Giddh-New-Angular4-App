@@ -101,7 +101,7 @@
                     <li><a (click)="showNavigationModal()" class="show-more cursor-pointer">Show more</a></li>
                 </ul>
             </div>
-            <div class="account-dropdown btn-group" dropdown [attr.container]="!isOpen ? 'body' : ''">
+            <div class="account-dropdown btn-group" dropdown #accountDropdown="bs-dropdown" [attr.container]="!isOpen ? 'body' : ''">
                 <a href="javascript:void(0);" id="button-basic-01"  dropdownToggle type="button" class="dropdown-toggle"
                     aria-controls="dropdown-basic-01">
                     <span tooltip="Accounts"><i class="icon-accounts-new"></i> </span>
@@ -111,7 +111,7 @@
                     class="dropdown-menu account-dropdown-collapse list-style-none sub-menu" role="menu"
                     aria-labelledby="button-basic-01">
                     <li *ngFor="let acc of accountItemsFromIndexDB">
-                        <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}" (click)="analyzeAccounts($event, acc)">{{acc.name}} A/c</a>
+                        <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}" (click)="analyzeAccounts($event, acc); accountDropdown?.hide();">{{acc.name}} A/c</a>
                     </li>
                     <li><a (click)="showNavigationModal()" class="show-more cursor-pointer">Show more</a></li>
                 </ul>
