@@ -38,6 +38,8 @@ export const ALL_ITEMS: AllItems[] = [
             { label: 'Group', link: '/pages/import/group', icon: 'icon-group-new', description: 'Import excel and CSV and update existing one' },
             { label: 'Import Data', link: '/pages/import/select-type', icon: 'icon-import', description: 'Import excel and CSV and update existing one' },
             { label: 'Invoice', link: '/pages/import/entries', icon: 'icon-invoice-new', description: 'Multicurrency, Recurring invoice, Cash invoice' },
+            { label: 'Import Inventory', link: '/pages/import/stock', icon: 'icon-inventory', description: 'Import/create stock, group & unit' },
+            { label: 'Import Trial Balance', link: '/pages/import/trial-balance', icon: 'icon-trial-balance-new', description: 'Import all credit & debit balances in CSV/PDF or Excel' },
             { label: 'TALLY Import', link: '/pages/tallysync', icon: 'icon-tally-import1', description: 'Check your synced Tally data online' },
         ]
     },
@@ -76,7 +78,7 @@ export const ALL_ITEMS: AllItems[] = [
     },
     {
         label: 'Reports',
-        icon: 'icon-voucher',
+        icon: 'icon-reports',
         items: [
             { label: 'Balance Sheet', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-balance-sheet-new', description: 'Download BS in Excel, multiple type of exports', additional: { tab: 'balance-sheet', tabIndex: 2 } },
             { label: 'Daybook', link: '/pages/daybook', icon: 'icon-daybook-new', description: 'Everyday entries, search with advanced settings, export' },
