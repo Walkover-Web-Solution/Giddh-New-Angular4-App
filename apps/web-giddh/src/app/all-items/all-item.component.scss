@@ -54,7 +54,7 @@
                         color: $grey-chateau;
                         font-size: 14px;
                     }
-                    &:hover{
+                    &:hover, &.active {
                         background-color: $cornflower;
                         h4, p{
                             color: $white;
