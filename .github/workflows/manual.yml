@@ -29,7 +29,6 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v2
-
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v2
         with:
@@ -37,9 +36,11 @@ jobs:
       - uses: bahmutov/npm-install@v1
         with:
           working-directory: .
+          useLockFile: false
       - uses: bahmutov/npm-install@v1
         with:
           working-directory: apps/electron-giddh/src
+          useLockFile: false
       - if: ${{ matrix.os == 'macos-latest' }}
         run: npm run package:mac
       - if: ${{ matrix.os == 'windows-latest' }}
