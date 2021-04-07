@@ -25,6 +25,10 @@
                     display: inline-block;
                     padding-left: 15px;
                     width: 90%;
+                    .text-ellipsis{
+                        white-space: normal;
+                        word-break: break-word;
+                    }
                 }
             }
         }
@@ -61,6 +65,14 @@
                 }
             }
             .branch-alice {
+                display: none !important;
+            }
+            .switch-branch{
+                display: flex !important;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .switch-branch-alice{
                 display: none;
             }
         }
@@ -178,6 +190,9 @@
                                 font-size: 20px;
                                 margin-right: 10px;
                             }
+                        }
+                        i.icon-right{
+                            transform: rotate(90deg);
                         }
                     }
                     li {
@@ -364,15 +379,42 @@
                 justify-content: center;
                 .company-alice {
                     margin-right: 0;
-                    width: 34px;
-                    height: 34px;
+                    width: 36px;
+                    height: 36px;
+                }
+            }
+            .company-name{
+                .user-dropdown-header{
+                    right: -281px !important;
                 }
             }
             .current-branch-name {
                 margin-top: 0;
                 margin-left: 0;
                 .branch-name {
-                    display: none;
+                    .branch-name-full{
+                        display: none;
+                    }
+                    .switch-branch{
+                        display: none !important;
+                    }
+                    .switch-branch-alice{
+                        display: flex !important;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 0;
+                        margin-top: 15px;
+                        font-family: "opensans-semibold";
+                        letter-spacing: 0;
+                        font-size: 16px;
+                        height: 36px;
+                        width: 36px;
+                        min-width: 50px;
+                        i{
+                            top: 0;
+                        }
+                    }
+
                 }
                 .branch-alice {
                     display: flex !important;
@@ -383,6 +425,18 @@
                     font-family: "opensans-semibold";
                     letter-spacing: -2px;
                     font-size: 16px;
+                    height: 36px;
+                    width: 36px;
+                }
+            }
+            .switch-branch-wrapper{
+                .switch-branch-section{
+                    width: 0;
+                }
+                .btn-group{
+                    .dropdown-menu{
+                        right: -281px !important;
+                    }
                 }
             }
         }
@@ -476,12 +530,15 @@
                                 }
                             }
                             i {
-                                transform: rotate(-90deg);
                                 margin-left: 0;
                                 width: 15px;
                                 height: 10px;
                                 display: flex;
+                                &.icon-right{
+                                    transform: none;
+                                }
                             }
+
                         }
                         .sub-menu {
                             position: absolute !important;
@@ -512,12 +569,14 @@
             .account-block {
                 padding-left: 0 !important;
                 margin-top: 15px;
+                padding-right: 0 !important;
                 .account-collapse {
                     display: none;
                 }
                 .account-dropdown {
                     display: flex !important;
                     padding: 0 10px;
+                    justify-content: center;
                     a {
                         &.dropdown-toggle {
                             display: flex;
@@ -534,11 +593,16 @@
                         }
                         i {
                             font-size: 14px;
-                            transform: rotate(-90deg);
                             display: inline-flex;
                             color: $trout;
                             width: 16px;
                             height: 19px;
+                            justify-content: center;
+                            align-items: center;
+                            margin-left: 0;
+                            &.icon-right{
+                                margin-left: 3px;
+                            }
                         }
                     }
                 }
@@ -565,4 +629,18 @@
     .wrap-menus {
         padding-bottom: 80px;
     }
+    .primary-sidebar{
+         .menu-item-wrapper{
+            ul{
+                .main-item{
+                    .sub-menu{
+                        overflow-y: auto;
+                        max-height: 285px;
+                    }
+                }
+            }
+        }
+    }
+
+
 }
