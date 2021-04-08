@@ -9152,11 +9152,11 @@ span#HW_badge_cont:nth-child(3) {
     }
 }
 
-.on-setting-page .nav-left-bar.open , .on-user-page .nav-left-bar.open on-user-page {
+.on-setting-page .nav-left-bar.open , .on-user-page .nav-left-bar.open  {
     left: -240px !important;
     display: none !important;
 }
-.setting-sidebar-open .nav-left-bar{
+.setting-sidebar-open .nav-left-bar, .on-user-page .nav-left-bar, .on-setting-page .nav-left-bar{
     display: none;
 }
 .menu_open aside-setting.setting-sidebar {
