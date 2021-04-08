@@ -39,6 +39,7 @@
                      padding: 15px;
                      white-space: normal;
                      word-break: break-word;
+                     min-height: 110px;
                     h4{
                         font-size: 14px;
                         margin-bottom: 5px;
@@ -53,7 +54,7 @@
                         color: $grey-chateau;
                         font-size: 14px;
                     }
-                    &:hover{
+                    &:hover, &.active {
                         background-color: $cornflower;
                         h4, p{
                             color: $white;
@@ -66,6 +67,19 @@
     }
 }
 /*responsive starts here*/
+@media(max-width:1440px){
+    .giddh-all-items-wrapper{
+        .all-item-block{
+            .main-item{
+                .sub-item-block{
+                    .single-menu-item{
+                       min-height: 140px;
+                    }
+                }
+            }
+        }
+    }
+}
 @media(max-width:768px){
     .giddh-all-items-wrapper{
         .all-item-block{
