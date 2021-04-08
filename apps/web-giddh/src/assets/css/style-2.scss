@@ -9146,11 +9146,11 @@ span#HW_badge_cont:nth-child(3) {
     }
 }
 
-.on-setting-page .nav-left-bar.open , .on-user-page .nav-left-bar.open on-user-page {
+.on-setting-page .nav-left-bar.open , .on-user-page .nav-left-bar.open on-user-page  {
     left: -240px !important;
     display: none !important;
 }
-.setting-sidebar-open .nav-left-bar{
+.setting-sidebar-open .nav-left-bar, .on-user-page .nav-left-bar, .on-setting-page .nav-left-bar{
     display: none;
 }
 .menu_open aside-setting.setting-sidebar {
@@ -9645,6 +9645,9 @@ input.mat-input-element{
 }
 .plan-wrapper.menu_open{
         padding-left: 240px !important;
+}
+.on-setting-page .plan-wrapper, .on-user-page .plan-wrapper{
+    padding-left: 0;
 }
 .invoice-modal-content{
     left: 60px !important;
