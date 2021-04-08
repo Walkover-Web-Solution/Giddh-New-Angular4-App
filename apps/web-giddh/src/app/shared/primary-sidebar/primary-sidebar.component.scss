@@ -173,9 +173,6 @@
                         align-items: center;
                         &.dropdown-toggle {
                             padding: 0 15px;
-                            &.active-menu{
-                                color: $cornflower-blue;
-                            }
                         }
                         span {
                             min-width: 140px;
