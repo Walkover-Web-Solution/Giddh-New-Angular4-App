@@ -3,15 +3,16 @@ export interface AllItem {
     link: string;
     icon: string;
     description: string;
-    additional?: any;
     alwaysPresent?: boolean;
+    additional?: any;
 }
 
 export interface AllItems {
     label: string;
     icon: string;
-    link?: string;
     items: AllItem[];
+    link?: string;
+    isActive?: boolean;
 }
 
 export const ALL_ITEMS: AllItems[] = [
@@ -79,7 +80,7 @@ export const ALL_ITEMS: AllItems[] = [
             { label: 'Balance Sheet', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-balance-sheet-new', description: 'Download BS in Excel, multiple type of exports', additional: { tab: 'balance-sheet', tabIndex: 2 } },
             { label: 'Daybook', link: '/pages/daybook', icon: 'icon-daybook-new', description: 'Everyday entries, search with advanced settings, export' },
             { label: 'E-way bill', link: '/pages/invoice/ewaybill', icon: 'icon-eway-bill-new', description: 'Generate directly from Giddh after Invoice generation' },
-            { label: 'Profit and Loss', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-proft-loss-new', description: 'Download data in Excel, project wise report', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
+            { label: 'Profit and Loss', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-proft-loss-new', description: 'Download data in Excel, project wise report', additional: { tab: 'profit-loss', tabIndex: 1 } },
             { label: 'Sales Bifurcation ', link: '/pages/new-vs-old-invoices', icon: 'icon-sale-bifurcation', description: 'Compare new versus old invoices' },
             { label: 'Reverse Charge', link: '/pages/reports/reverse-charge', icon: 'icon-reverse-charge', description: 'Report of total taxable value & total tax amount', alwaysPresent: true },
             { label: 'Trial balance', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-trial-balance-new', description: 'Download of all credit & debit balances in CSV/PDF or Excel', additional: { tab: 'trial-balance', tabIndex: 0 } },
