@@ -173,6 +173,9 @@
                         align-items: center;
                         &.dropdown-toggle {
                             padding: 0 15px;
+                            &.active-menu{
+                                color: $cornflower-blue;
+                            }
                         }
                         span {
                             min-width: 140px;
@@ -368,7 +371,6 @@
         .company-branch-block {
             padding: 0 10px !important;
             h3 {
-                justify-content: center;
                 .company-alice {
                     margin-right: 0;
                     width: 36px;
@@ -379,7 +381,29 @@
                 margin-top: 0;
                 margin-left: 0;
                 .branch-name {
-                    display: none;
+                    .branch-name-full{
+                        display: none;
+                    }
+                    .switch-branch{
+                        display: none !important;
+                    }
+                    .switch-branch-alice{
+                        display: flex !important;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 0;
+                        margin-top: 15px;
+                        font-family: "opensans-semibold";
+                        letter-spacing: 0;
+                        font-size: 16px;
+                        height: 36px;
+                        width: 36px;
+                        min-width: 45px;
+                        i{
+                            top: 0;
+                        }
+                    }
+
                 }
                 .branch-alice {
                     display: flex !important;
@@ -388,7 +412,7 @@
                     padding: 0;
                     margin-top: 15px;
                     font-family: "opensans-semibold";
-                    letter-spacing: -2px;
+                    letter-spacing: 0;
                     font-size: 16px;
                     height: 36px;
                     width: 36px;
@@ -428,7 +452,6 @@
             .search-box {
                 margin-top: 15px !important;
                 .input-group {
-                    justify-content: center;
                     .input-group-prepend {
                         .input-group-text {
                             border-radius: 50%;
@@ -584,12 +607,14 @@
     .wrap-menus {
         padding-bottom: 80px;
     }
-     .menu-item-wrapper{
-         ul{
-             .main-item{
-                 .sub-menu{
-                    overflow-y: auto;
-                    max-height: 285px;
+    .primary-sidebar.sidebar-collapse{
+         .menu-item-wrapper{
+            ul{
+                .main-item{
+                    .sub-menu{
+                        overflow-y: auto;
+                        max-height: 285px;
+                    }
                 }
              }
          }
