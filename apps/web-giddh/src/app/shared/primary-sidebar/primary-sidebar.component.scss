@@ -376,7 +376,6 @@
         .company-branch-block {
             padding: 0 10px !important;
             h3 {
-                justify-content: center;
                 .company-alice {
                     margin-right: 0;
                     width: 36px;
@@ -409,7 +408,7 @@
                         font-size: 16px;
                         height: 36px;
                         width: 36px;
-                        min-width: 50px;
+                        min-width: 45px;
                         i{
                             top: 0;
                         }
@@ -423,7 +422,7 @@
                     padding: 0;
                     margin-top: 15px;
                     font-family: "opensans-semibold";
-                    letter-spacing: -2px;
+                    letter-spacing: 0;
                     font-size: 16px;
                     height: 36px;
                     width: 36px;
@@ -473,7 +472,6 @@
             .search-box {
                 margin-top: 15px !important;
                 .input-group {
-                    justify-content: center;
                     .input-group-prepend {
                         .input-group-text {
                             border-radius: 50%;
@@ -629,7 +627,7 @@
     .wrap-menus {
         padding-bottom: 80px;
     }
-    .primary-sidebar{
+    .primary-sidebar.sidebar-collapse{
          .menu-item-wrapper{
             ul{
                 .main-item{
