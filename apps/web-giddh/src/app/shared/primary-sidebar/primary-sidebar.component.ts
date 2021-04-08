@@ -13,7 +13,7 @@ import {
     TemplateRef,
     ViewChild,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, RouteConfigLoadEnd, Router } from '@angular/router';
 import { createSelector, select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
@@ -39,7 +39,6 @@ import { GeneralService } from '../../services/general.service';
 import { AppState } from '../../store';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { ALL_ITEMS, AllItem, AllItems } from '../helpers/allItems';
-import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 
 @Component({
     selector: 'primary-sidebar',
@@ -190,7 +189,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         const baseUrl = queryParamsIndex === -1 ? this.router.url :
             this.router.url.slice(0, queryParamsIndex);
         // For Trial balance module, strict comparison should be done
-        return routeUrl.includes('trial-balance-and-profit-loss') ? false : decodeURI(baseUrl) === decodeURI(routeUrl);
+        return this.router.url.includes('trial-balance-and-profit-loss') ? false : decodeURI(baseUrl) === decodeURI(routeUrl);
     }
 
     // CMD + G functionality
@@ -334,6 +333,19 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 }
             });
         }
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
+                const queryParamsIndex = this.router.url.indexOf('?');
+                const baseUrl = queryParamsIndex === -1 ? this.router.url :
+                    this.router.url.slice(0, queryParamsIndex);
+                this.allItems.forEach(item => item.isActive = (item.link === decodeURI(baseUrl) || item?.items?.some((subItem: AllItem) => {
+                    if (subItem.link === decodeURI(baseUrl)) {
+                        return true;
+                    }
+                })));
+                this.changeDetectorRef.detectChanges();
+            }
+        });
     }
 
     /**
