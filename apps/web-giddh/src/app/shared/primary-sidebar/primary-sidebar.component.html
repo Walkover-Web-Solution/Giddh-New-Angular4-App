@@ -6,7 +6,7 @@
                     <img hidden src="../../../assets/images/logo-icon.svg" class="company-icon mr-r1">
                     <span  class="company-alice mr-r05">{{companyInitials}}</span>
                     <span class="d-flex justify-content-between w-100 company-full-name">{{selectedCompanyDetails?.name}}
-                        <span class="d-flex"> <i class="icon-right"></i> </span></span>
+                        <span class="d-flex"> <i class="icon-down-new"></i> </span></span>
                 </h3>
                 <ul class="dropdown-menu user-dropdown-header" role="menu" *dropdownMenu>
                     <ng-container *ngTemplateOutlet="headDropdownMenu"></ng-container>
@@ -18,11 +18,22 @@
 
                     <a id="button-basic" dropdownToggle href="javascript:void(0)"
                         class="dropdown-toggle cursor-pointer switch-branch-section font-14 branch-name">
-                        <ng-container *ngIf="currentBranch">{{currentBranch?.alias}} <i class="icon-down-new"></i>
+                        <ng-container *ngIf="currentBranch">
+                            <div class="branch-name-full w-100">
+                                {{currentBranch?.alias}} <i class="icon-down-new"></i>
+                            </div>
                         </ng-container>
-                        <ng-container *ngIf="!currentBranch">Switch Branch <i class="icon-down-new"></i></ng-container>
+                        <ng-container *ngIf="!currentBranch">
+                            <div class="switch-branch w-100">
+                                Switch Branch <i class="icon-down-new"></i>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="!currentBranch">
+                            <div tooltip="Switch Branch" class="switch-branch-alice w-100"> SB <i class="icon-right"></i> </div>
+                        </ng-container>
                     </a>
-
+                    <a href="javascript:void(0)" dropdownToggle *ngIf="branchInitials"
+                        class="font-14 dropdown-toggle branch-alice">{{branchInitials}}</a>
 
 
                     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
@@ -134,7 +145,7 @@
             <div class="menu-item-wrapper font-14">
                 <ul class="list-style-none giddh-primary-items">
                     <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems" dropdown [attr.container]="!isOpen ? 'body' : ''">
-                        <a href="javascript:void(0);" *ngIf="menu?.items?.length" id="button-basic-02"
+                        <a href="javascript:void(0);" tooltip="{{menu?.label}}" *ngIf="menu?.items?.length" id="button-basic-02"
                             dropdownToggle type="button" class="dropdown-toggle" aria-controls="dropdown-basic-02">
                             <span><i [ngClass]="menu?.icon"></i>
                                 <span class="item-name">{{menu?.label}}</span>

@@ -9654,7 +9654,24 @@ input.mat-input-element{
     left: 240px !important;
     width: calc(100% - 240px) !important;
 }
-
+ .primary-sidebar{
+    .giddh-primary-items{
+        .main-item{
+            .bs-tooltip-top {
+                display: none;
+            }
+        }
+    }
+    &.sidebar-collapse{
+        .giddh-primary-items{
+            .main-item{
+                .bs-tooltip-top {
+                    display: block;
+                }
+            }
+        }
+    }
+}
 /* responsive  starts here */
 @media (max-width: 1440px) {
     .font-xxlarge {
