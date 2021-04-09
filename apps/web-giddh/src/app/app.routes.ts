@@ -38,6 +38,7 @@ export const ROUTES: Routes = [
     { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
     { path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full' },
     { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
+
     { path: 'search', redirectTo: 'pages/search', pathMatch: 'full' },
     { path: 'permissions', redirectTo: 'pages/permissions', pathMatch: 'full' },
     { path: 'settings', redirectTo: 'pages/settings', pathMatch: 'full' },
@@ -84,13 +85,13 @@ export const ROUTES: Routes = [
                 path: 'purchase',
                 redirectTo: 'purchase-management'
             },
+
             { path: 'about', loadChildren: () => import('./about/about.module').then(module => module.AboutModule) },
             { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(module => module.InventoryModule), canActivate: [NeedsAuthorization] },
             { path: 'inventory-in-out', loadChildren: () => import('./inventory-in-out/inventory-in-out.module').then(module => module.InventoryInOutModule), canActivate: [NeedsAuthorization] },
             { path: 'search', loadChildren: () => import('./search/search.module').then(module => module.SearchModule) },
             { path: 'trial-balance-and-profit-loss', loadChildren: () => import('./tb-pl-bs/tb-pl-bs.module').then(module => module.TBPlBsModule), canActivate: [NeedsAuthentication, NeedsAuthorization] },
             { path: 'audit-logs', loadChildren: () => import('./audit-logs/audit-logs.module').then(module => module.AuditLogsModule), canActivate: [NeedsAuthorization] },
-            { path: 'all-modules', loadChildren: () => import('./all-modules/all-modules.module').then(module => module.AllModulesModule), canActivate: [NeedsAuthorization] },
             { path: 'create-advance-receipt', loadChildren: () => import('./create-advance-receipt/create-advance-receipt.module').then(module => module.CreateAdvanceReceiptModule), canActivate: [NeedsAuthorization] },
             { path: 'ledger', loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule), canActivate: [NeedsAuthorization] },
             { path: 'permissions', loadChildren: () => import('./permissions/permission.module').then(module => module.PermissionModule), canActivate: [NeedsAuthorization] },
@@ -113,6 +114,7 @@ export const ROUTES: Routes = [
             { path: 'mobile-home-sidebar', component: MobileHomeSidebarComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-search-company', component: MobileSearchCompanyComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-search-branch', component: MobileSearchBranchComponent, canActivate: [NeedsAuthorization] },
+            { path: 'giddh-all-items', loadChildren: () => import('./all-items/all-item.module').then(module => module.AllItemModule), canActivate: [NeedsAuthorization] },
             { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule), canActivate: [NeedsAuthorization] },
             { path: 'expenses-manager', loadChildren: () => import('./expenses/expenses.module').then(module => module.ExpensesModule), canActivate: [NeedsAuthorization] },
             { path: 'vat-report', loadChildren: () => import('./vat-report/vatReport.module').then(module => module.VatReportModule), canActivate: [NeedsAuthorization] },

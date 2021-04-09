@@ -1,6 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
@@ -37,16 +36,7 @@ export const KEYS = {
     ESC: 'Escape'
 };
 
-/** Vouchers that can be generated throught JV module */
-export const VOUCHERS = {
-    CONTRA: 'Contra',
-    PAYMENT: 'Payment',
-    RECEIPT: 'Receipt',
-    JOURNAL: 'Journal',
-    SALES: 'Sales',
-    CREDIT_NOTE: 'Credit note',
-    DEBIT_NOTE: 'Debit note'
-}
+
 
 /** Voucher page shortcut mapping */
 export const PAGE_SHORTCUT_MAPPING = [
@@ -153,7 +143,6 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private companyActions: CompanyActions,
         private tallyModuleService: TallyModuleService,
-        private accountService: AccountService,
         private sidebarAction: SidebarAction,
         private generalService: GeneralService
     ) {

@@ -2,7 +2,7 @@
 :host {
     position: fixed;
     left: auto;
-    top:61px;
+    top:46px;
     right: 0;
     bottom: 0;
     max-width: 330px;
@@ -19,16 +19,17 @@
         right: 50px;
         z-index: 1;
         transform: rotate(45deg);
+        display: none;
     }
 
 }
 :host.setting-sidebar{
     position: fixed;
-    top: 61px;
+    top: 0;
     bottom: 0;
     min-height: 100vh;
     background: $white;
-    width: 215px;
+    width: 240px;
     left: 0;
     z-index: 999;
     .aside-help-header{
@@ -157,11 +158,11 @@
 
 :host.setting-sidebar{
     position: fixed;
-    top: 61px;
+    top: 0;
     bottom: 0;
     min-height: 100vh;
     background:$white;
-    width: 215px;
+    width: 240px;
     left: 0;
     z-index: 999;
     box-shadow: -2px -2px 15px rgba(0,0,0,.2) !important;
@@ -230,7 +231,7 @@
     bottom: 0;
     min-height: 100vh;
     background: $white;
-    width: 215px;
+    width: 240px;
     left: 0;
     z-index: 999999;
     width: 270px;

@@ -626,7 +626,9 @@ input {
     max-height: 305px;
     overflow-y: scroll;
 }
-
+.nav-left-bar .sub-list.all-company-list{
+    overflow-y: unset;
+}
 ul.sub-list {
     margin-top: 5px;
 }
@@ -6353,7 +6355,6 @@ table td[class*=col-]:last-child {
 .universal-date {
     float: none !important;
     display: inline-block;
-    padding-top: 12px;
 }
 
 .divide-ico {
@@ -6838,7 +6839,7 @@ GST filing
 }
 
 .menu_open {
-    padding-left: 215px;
+    padding-left: 240px;
 }
 
 .navbar_open {
@@ -7675,10 +7676,11 @@ app-header {
     padding: 10px;
     box-shadow: 0 0px 6px rgba(0, 0, 0, 0.16);
     text-align: right !important;
+    padding-left: 60px;
 }
 
 .menu_open .sticky-footer.sticky-footer-sale-amount {
-    padding-left: 215px;
+    padding-left: 240px;
 }
 
 .sticky-footer-sale-amount .inner-content-footer {
@@ -7888,21 +7890,21 @@ div#getGroupModal {
     margin-top: 60px;
     position: fixed;
     width: 100%;
-    left: 0;
+    left:60px;
     bottom: 0;
     z-index: 3;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
 
 .menu_open .invoice-footer {
-    left: 215px;
+    left: 240px;
     display: flex;
     padding: 20px 15px;
     background: $white;
     margin-top: 60px;
     position: fixed;
     width: 100%;
-    left: 215px;
+    left: 240px;
     bottom: 0;
     z-index: 10;
 }
@@ -9022,10 +9024,11 @@ ngx-daterangepicker-material {
 .HW_badge_cont {
     visibility: visible !important;
     width: auto !important;
-    top: -25px;
+    top: 0;
     width: 30px !important;
     display: flex !important;
-    left: 28px !important;
+    left: 0 !important;
+    position: absolute !important;
 }
 
 .HW_badge {
@@ -9063,7 +9066,7 @@ span#HW_badge_cont:nth-child(3) {
 
 .mobile-home {
     background-color: $lavender;
-    .padding-top-fixed-mobile,
+    .fixed-padding,
     .padding-top-fixed,
     .desktop-header {
         display: none;
@@ -9087,7 +9090,7 @@ span#HW_badge_cont:nth-child(3) {
             padding-bottom: 5px;
         }
     }
-    .padding-top-fixed-mobile {
+    .fixed-padding {
         padding-top: 50px;
     }
 }
@@ -9144,26 +9147,30 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 .on-setting-page .nav-left-bar.open , .on-user-page .nav-left-bar.open on-user-page {
-    left: -215px !important;
+    left: -240px !important;
     display: none !important;
 }
-.setting-sidebar-open .nav-left-bar{
+.setting-sidebar-open .nav-left-bar, .on-user-page .nav-left-bar, .on-setting-page .nav-left-bar{
     display: none;
 }
 .menu_open aside-setting.setting-sidebar {
     left: 0 !important;
 }
 .on-setting-page aside-setting.setting-sidebar, .on-user-page aside-setting.setting-sidebar{
-    left: -225px;
+    left: -250px;
 }
 .setting-sidebar-open #content-wrapper.menu_open {
-    padding-left: -215px;
+    padding-left: -240px;
 }
+
 .setting-sidebar-open .desktop-header {
     padding-left: 0;
 }
 .setting-sidebar-open .desktop-header.menu_open {
-    padding-left: 215px;
+    padding-left: 240px !important;
+}
+.desktop-header.menu_open {
+    padding-left: 60px !important;
 }
 /*flex css start*/
 .flex-column {
@@ -9389,6 +9396,42 @@ span#HW_badge_cont:nth-child(3) {
         right:  7px !important;
     }
 }
+.inventory-footer, .create-group-footer, .stock-group-footer{
+    left: 0;
+}
+.menu_open .inventory-footer, .menu_open .create-group-footer, .menu_open .stock-group-footer{
+    left: 240px;
+    width: 100%;
+}
+.bulk-create-table sh-select input, .bulk-create-table .mat-form-field-wrapper input,
+ .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex{
+    border: none !important;
+    padding: 0 11px !important;
+}
+.bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex{
+      padding: 0 !important;
+}
+.hide-sub-sidebar .right-side-content {
+    padding-left: 0 !important;
+}
+.hide-sub-sidebar .sidebar-handle{
+    left: 210px !important;
+}
+
+.sub-detail-sidebar.fixed-sidebar-top {
+    top: 70px;
+}
+button#more-btn-inventory, #more-btn-inventory-mobile{
+    min-width: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 50px !important;
+
+}
+.menu_open .inventory-sidebar{
+ left: 0 !important;
+}
 .mobile-setting-sidebar {
     overflow-y: hidden;
 }
@@ -9588,6 +9631,52 @@ input.mat-input-element{
             }
         }
     }
+}
+#primary-new-header.primary-main-header.open{
+    padding-left: 240px !important;
+}
+.add-manage-group-acc{
+    .modal-header{
+        border-radius: 0 !important;
+    }
+}
+.plan-wrapper{
+    padding-left: 60px;
+}
+.plan-wrapper.menu_open{
+        padding-left: 240px !important;
+}
+.on-setting-page .plan-wrapper, .on-user-page .plan-wrapper{
+    padding-left: 0;
+}
+.invoice-modal-content{
+    left: 60px !important;
+    width: calc(100% - 60px) !important;
+}
+.menu_open .invoice-modal-content{
+    left: 240px !important;
+    width: calc(100% - 240px) !important;
+}
+ .primary-sidebar{
+    .giddh-primary-items{
+        .main-item{
+            .bs-tooltip-top {
+                display: none;
+            }
+        }
+    }
+    &.sidebar-collapse{
+        .giddh-primary-items{
+            .main-item{
+                .bs-tooltip-top {
+                    display: block;
+                }
+            }
+        }
+    }
+}
+.setting-sidebar-open #content-wrapper{
+    padding-left: 0;
 }
 /* responsive  starts here */
 @media (max-width: 1440px) {
@@ -10007,6 +10096,14 @@ input.mat-input-element{
 }
 
 @media (max-width: 767px) {
+    .invoice-modal-content{
+        left: 0 !important;
+        width: 100% !important;
+    }
+
+    .invoice-footer, .sticky-footer.sticky-footer-sale-amount {
+       left: 0;
+    }
     .invoice-control .nav.nav-tabs {
         margin-bottom: 15px;
         padding: 0 0px 0 15px !important;
@@ -10348,19 +10445,19 @@ input.mat-input-element{
     // .tabs-page .padding-top-fixed-mobile {
     //     padding-top: 126px;
     // }
-    .page-has-tabs .padding-top-fixed-mobile,
-    .on-user-page .padding-top-fixed-mobile {
-       padding-top: 135px !important;
-   }
-    .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile {
+    .page-has-tabs .fixed-padding,
+    .on-user-page .fixed-padding {
+        padding-top: 130px !important;
+    }
+    .page-has-tabs.setting-sidebar-open .fixed-padding {
         padding-top: 85px !important;
     }
-    .on-setting-page .padding-top-fixed-mobile {
-        padding-top: 95px !important;
+    .on-setting-page .fixed-padding {
+        padding-top: 90px !important;
     }
 
-     .padding-top-fixed-mobile {
-       padding-top: 95px;
+    .fixed-padding {
+        padding-top: 90px;
     }
     ngx-daterangepicker-material {
         position: fixed;
@@ -10428,6 +10525,7 @@ input.mat-input-element{
         left: auto !important;
         max-width: 320px;
         width: 100%;
+        top:40px !important;
     }
     .on-setting-page .setting-menu-icon,
     .on-user-page .setting-menu-icon {

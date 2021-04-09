@@ -27,6 +27,11 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
     public activeTab: string = 'trial-balance';
     /* This will hold active tab index */
     public activeTabIndex: number = 0;
+    /** True, when tabs are navigated with the help of routing, done to prevent redundant routing as
+     * tab changed event is triggered on setting any tab as active which leads to a second navigation to the
+     * same route which cancels the previous route with route ID and doesn't highlight the menu item
+     */
+    public preventTabChangeWithRoute: boolean;
 
     @ViewChild('staticTabsTBPL', {static: true}) public staticTabs: TabsetComponent;
 
@@ -58,6 +63,7 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
             if (val && val.tab && val.tabIndex) {
                 this.activeTab = val.tab;
                 this.activeTabIndex = val.tabIndex;
+                this.preventTabChangeWithRoute = true;
                 this.selectTab(val.tabIndex);
             }
         });
@@ -88,7 +94,9 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
      * @memberof TbPlBsComponent
      */
     public tabChanged(tab: string, tabIndex: number): void {
-        this.router.navigateByUrl('/pages/trial-balance-and-profit-loss?tab=' + tab + '&tabIndex=' + tabIndex);
+        if (!this.preventTabChangeWithRoute) {
+            this.router.navigate(['/pages/trial-balance-and-profit-loss'], {queryParams: {tab, tabIndex}});
+        }
         this.saveLastState(tab, tabIndex);
     }
 

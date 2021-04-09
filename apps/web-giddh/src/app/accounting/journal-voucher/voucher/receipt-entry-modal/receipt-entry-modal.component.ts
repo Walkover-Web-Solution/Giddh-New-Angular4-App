@@ -13,7 +13,8 @@ import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/default
 import * as moment from 'moment';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
-import { VOUCHERS, KEYS } from '../../journal-voucher.component';
+import { KEYS } from '../../journal-voucher.component';
+import { VOUCHERS } from '../../../constants/accounting.constant';
 
 @Component({
     selector: 'receipt-entry',
