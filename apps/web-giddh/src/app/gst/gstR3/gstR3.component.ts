@@ -16,6 +16,7 @@ import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.ac
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
+import { GstReport } from '../constants/gst.constant';
 
 
 @Component({
@@ -127,7 +128,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 
             this.gstr3BOverviewDataFetchedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe(bool => {
                 if (!bool && !this.dateSelected) {
-                    this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
+                    this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr3b, request));
                 }
             });
         });
@@ -220,7 +221,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             request.from = this.currentPeriod.from;
             request.to = this.currentPeriod.to;
             request.gstin = this.activeCompanyGstNumber;
-            this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
+            this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr3b, request));
         }
     }
 
@@ -253,5 +254,43 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Handles GST sidebar navigation event
+     *
+     * @param {string} type Type of report (gstr1, gstr2, gstr3b) to navigate to
+     * @memberof FileGstR3Component
+     */
+    public handleNavigation(type: string): void {
+        switch(type) {
+            case GstReport.Gstr1: case GstReport.Gstr2:
+                this.navigateToOverview(type);
+                break;
+            case GstReport.Gstr3b:
+                this.navigateTogstR3B(type);
+                break;
+            default: break;
+        }
+    }
+
+    /**
+     * Navigates to the overview or dashboard page
+     *
+     * @param {*} type Type of report (gstr1, gstr2, gstr3b)
+     * @memberof FileGstR3Component
+     */
+     public navigateToOverview(type): void {
+        this.router.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0, selectedGst: this.activeCompanyGstNumber } });
+    }
+
+    /**
+     * Navigates to GSTR 3B
+     *
+     * @param {*} type Type of report (gstr1, gstr2, gstr3b)
+     * @memberof FileGstR3Component
+     */
+    public navigateTogstR3B(type): void {
+        this.router.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: this.isCompany, selectedGst: this.activeCompanyGstNumber } });
     }
 }
