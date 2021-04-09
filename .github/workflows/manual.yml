@@ -44,8 +44,7 @@ jobs:
           useRollingCache: true
           working-directory: ./apps/electron-giddh/src/
       - name: Preparing build
-        run: npm run build.electron.giddh
-      - run: cd /dist/apps/web-giddh-prod
+        run: npm run build.electron.giddh && cd /dist/apps/web-giddh-prod
       - if: ${{ matrix.os == 'macos-latest' }}
         uses: samuelmeuli/action-electron-builder@v1
         with:
