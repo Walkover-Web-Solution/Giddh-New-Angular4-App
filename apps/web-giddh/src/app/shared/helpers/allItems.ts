@@ -75,7 +75,7 @@ export const ALL_ITEMS: AllItems[] = [
     },
     {
         label: 'Reports',
-        icon: 'icon-voucher',
+        icon: 'icon-reports',
         items: [
             { label: 'Balance Sheet', link: '/pages/trial-balance-and-profit-loss', icon: 'icon-balance-sheet-new', description: 'Download BS in Excel, multiple type of exports', additional: { tab: 'balance-sheet', tabIndex: 2 } },
             { label: 'Daybook', link: '/pages/daybook', icon: 'icon-daybook-new', description: 'Everyday entries, search with advanced settings, export' },
