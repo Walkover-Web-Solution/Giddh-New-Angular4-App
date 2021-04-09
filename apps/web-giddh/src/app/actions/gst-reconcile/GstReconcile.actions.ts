@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { saveAs } from 'file-saver';
 import { base64ToBlob } from '../../shared/helpers/helperFunctions';
+import { GstReport } from '../../gst/constants/gst.constant';
 
 @Injectable()
 export class GstReconcileActions {
@@ -327,13 +328,13 @@ export class GstReconcileActions {
      */
     public GetOverView(type, model: GstOverViewRequest) {
 
-        if (type === 'gstr1' || type === 'gstr2') {
+        if (type === GstReport.Gstr1 || type === GstReport.Gstr2) {
             return {
-                type: type === 'gstr1' ? GSTR_ACTIONS.GET_GSTR1_OVERVIEW : GSTR_ACTIONS.GET_GSTR2_OVERVIEW,
+                type: type === GstReport.Gstr1 ? GSTR_ACTIONS.GET_GSTR1_OVERVIEW : GSTR_ACTIONS.GET_GSTR2_OVERVIEW,
                 payload: { type, model }
             };
         }
-        if (type === 'gstr3b') {
+        if (type === GstReport.Gstr3b) {
             return {
                 type: GSTR_ACTIONS.GET_GSTR3B_OVERVIEW,
                 payload: { type, model }
@@ -345,7 +346,7 @@ export class GstReconcileActions {
     public GetOverViewResponse(res: BaseResponse<GstOverViewResult, GstOverViewRequest>) {
         let type = res.queryString.type;
         return {
-            type: type === 'gstr1' ? GSTR_ACTIONS.GET_GSTR1_OVERVIEW_RESPONSE : GSTR_ACTIONS.GET_GSTR2_OVERVIEW_RESPONSE,
+            type: type === GstReport.Gstr1 ? GSTR_ACTIONS.GET_GSTR1_OVERVIEW_RESPONSE : GSTR_ACTIONS.GET_GSTR2_OVERVIEW_RESPONSE,
             payload: res
         };
     }

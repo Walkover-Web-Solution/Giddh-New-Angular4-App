@@ -1,28 +1,29 @@
 /**
  * Created by kunalsaxena on 9/1/17.
  */
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NavigationStart, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
-import {InvoicePurchaseActions} from '../actions/purchase-invoice/purchase-invoice.action';
-import {select, Store} from '@ngrx/store';
-import {CompanyResponse, StateDetailsRequest} from '../models/api-models/Company';
-import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ToasterService} from '../services/toaster.service';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {CompanyActions} from '../actions/company.actions';
-import {BsDropdownDirective} from 'ngx-bootstrap/dropdown';
-import {AlertConfig} from 'ngx-bootstrap/alert';
-import {GIDDH_DATE_FORMAT} from '../shared/helpers/defaultDateFormat';
-import {Observable, of, ReplaySubject} from 'rxjs';
-import {AppState} from '../store';
-import {filter, take, takeUntil} from 'rxjs/operators';
-import {GstReconcileActions} from '../actions/gst-reconcile/GstReconcile.actions';
-import {NavigationStart, Router} from '@angular/router';
-import {GstOverViewRequest} from '../models/api-models/GstReconcile';
-import {createSelector} from 'reselect';
-import { IOption } from '../theme/ng-select/ng-select';
-import { GstReconcileService } from '../services/GstReconcile.service';
-import { GeneralService } from '../services/general.service';
+import { AlertConfig } from 'ngx-bootstrap/alert';
+import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { filter, take, takeUntil } from 'rxjs/operators';
+
+import { CompanyActions } from '../actions/company.actions';
+import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
+import { InvoicePurchaseActions } from '../actions/purchase-invoice/purchase-invoice.action';
+import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
+import { GstOverViewRequest } from '../models/api-models/GstReconcile';
 import { OrganizationType } from '../models/user-login-state';
+import { GeneralService } from '../services/general.service';
+import { GstReconcileService } from '../services/GstReconcile.service';
+import { ToasterService } from '../services/toaster.service';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { AppState } from '../store';
+import { IOption } from '../theme/ng-select/ng-select';
+import { GstReport } from './constants/gst.constant';
 
 
 @Component({
@@ -94,6 +95,10 @@ export class GstComponent implements OnInit, OnDestroy {
     public isTaxApiInProgress: boolean;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** Returns the enum to be used in template */
+    public get GstReport() {
+        return GstReport;
+    }
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This holds giddh date format */
@@ -241,12 +246,12 @@ export class GstComponent implements OnInit, OnDestroy {
 
             if (this.isMonthSelected) {
                 // get gstr1 and gstr2 summary
-                this.store.dispatch(this._gstAction.GetOverView('gstr1', request));
-                this.store.dispatch(this._gstAction.GetOverView('gstr2', request));
-                this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
+                this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr1, request));
+                this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr2, request));
+                this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr3b, request));
             } else {
                 // only get gstr1 data
-                this.store.dispatch(this._gstAction.GetOverView('gstr1', request));
+                this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr1, request));
             }
         } else {
             this._toasty.warningToast('Please add GSTIN in company');
@@ -333,10 +338,10 @@ export class GstComponent implements OnInit, OnDestroy {
 
     public handleNavigation(type: string): void {
         switch(type) {
-            case 'gstr1': case 'gstr2':
+            case GstReport.Gstr1: case GstReport.Gstr2:
                 this.navigateToOverview(type);
                 break;
-            case 'gstr3b':
+            case GstReport.Gstr3b:
                 this.navigateTogstR3B(type);
                 break;
             default: break;
@@ -374,9 +379,9 @@ export class GstComponent implements OnInit, OnDestroy {
             request.from = this.currentPeriod.from;
             request.to = this.currentPeriod.to;
             request.gstin = this.activeCompanyGstNumber;
-            this.store.dispatch(this._gstAction.GetOverView('gstr1', request));
-            this.store.dispatch(this._gstAction.GetOverView('gstr2', request));
-            this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
+            this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr1, request));
+            this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr2, request));
+            this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr3b, request));
         }
     }
 }

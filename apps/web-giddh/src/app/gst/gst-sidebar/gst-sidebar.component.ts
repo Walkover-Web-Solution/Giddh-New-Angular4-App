@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output, Input, ChangeDetectionStrategy } from '@angular/core';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Router } from '@angular/router';
+import { GstReport } from '../constants/gst.constant';
 @Component({
     selector: 'gstr-sidebar',
     templateUrl: './gst-sidebar.component.html',
@@ -10,6 +11,10 @@ import { Router } from '@angular/router';
 export class GstrSidebarComponent {
 
     public isMobileScreen: boolean = true;
+    /** Returns the enum to be used in template */
+    public get GstReport() {
+        return GstReport;
+    }
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public navigateEvent: EventEmitter<string> = new EventEmitter();
