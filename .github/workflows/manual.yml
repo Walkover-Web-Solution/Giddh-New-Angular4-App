@@ -55,4 +55,5 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           release: true
+          skip_build: true
           args: --config ./electron-sign/electron-builder.json --win --ia32 --x64
