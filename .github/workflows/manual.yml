@@ -43,7 +43,16 @@ jobs:
           useLockFile: false
           useRollingCache: true
           working-directory: ./apps/electron-giddh/src/
+      - name: Preparing build
+        run: npm run build.electron.giddh
       - if: ${{ matrix.os == 'macos-latest' }}
-        run: npm run package:mac
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          release: true
       - if: ${{ matrix.os == 'windows-latest' }}
-        run: npm run package:windows
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          release: true
+          args: --config ./electron-sign/electron-builder.json --win --ia32 --x64
