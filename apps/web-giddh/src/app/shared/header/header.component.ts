@@ -408,7 +408,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         this.generalService.isMobileSite.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.isMobileSite = s;
-            this.menuItemsFromIndexDB = DEFAULT_MENUS;
+           // this.menuItemsFromIndexDB = DEFAULT_MENUS;
             this.accountItemsFromIndexDB = DEFAULT_AC;
         });
         this.totalNumberOfcompanies$ = this.store.pipe(select(state => state.session.totalNumberOfcompanies), takeUntil(this.destroyed$));

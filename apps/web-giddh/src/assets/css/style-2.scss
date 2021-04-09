@@ -9675,6 +9675,9 @@ input.mat-input-element{
         }
     }
 }
+.setting-sidebar-open #content-wrapper{
+    padding-left: 0;
+}
 /* responsive  starts here */
 @media (max-width: 1440px) {
     .font-xxlarge {
@@ -9807,21 +9810,10 @@ input.mat-input-element{
     .form-bg {
         width: 100%;
     }
-<<<<<<< HEAD
     .grp-col {
         float: none !important;
         width: 100% !important;
         max-width: 100% !important;
-=======
-}
-@media (max-width: 767px) {
-    .invoice-modal-content{
-        left: 0 !important;
-        width: 100% !important;
-    }
-    .invoice-footer, .sticky-footer.sticky-footer-sale-amount {
-       left: 0;
->>>>>>> 1a164dd409... shalinee | TEST | correct preview page
     }
     .grp-list .list-item {
         display: inline-block;
@@ -10104,6 +10096,11 @@ input.mat-input-element{
 }
 
 @media (max-width: 767px) {
+    .invoice-modal-content{
+        left: 0 !important;
+        width: 100% !important;
+    }
+
     .invoice-footer, .sticky-footer.sticky-footer-sale-amount {
        left: 0;
     }

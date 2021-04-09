@@ -9,24 +9,29 @@
                     </span>
                 </div>
                 <input type="text" class="form-control" placeholder="Search" aria-label="Search"
-                    aria-describedby="addon-wrapping" #searchField [(ngModel)]="search" (click)="menuIndex = -1; itemIndex = -1;"
-                    (ngModelChange)="searchAllItems($event)">
+                    aria-describedby="addon-wrapping" #searchField [(ngModel)]="search"
+                    (click)="menuIndex = -1; itemIndex = -1;" (ngModelChange)="searchAllItems($event)">
             </div>
         </div>
         <div class="all-item-block">
             <div class="main-item" *ngFor="let item of (filteredItems$ | async); index as filteredMenuIndex">
-                <h3 *ngIf="!item?.link" class="mr-b1 d-flex align-items-center"><i class="{{item?.icon}} mr-r1"></i> {{item?.label}} </h3>
-                <h3 *ngIf="item?.link" [routerLink]="[item?.link]" class="cursor-pointer mr-b1 d-flex align-items-center"><i class="{{item?.icon}} mr-r1"></i> {{item?.label}} </h3>
+                <h3 *ngIf="!item?.link" class="mr-b1 d-flex align-items-center"><i class="{{item?.icon}} mr-r1"></i>
+                    {{item?.label}} </h3>
+                <h3 *ngIf="item?.link" [routerLink]="[item?.link]"
+                    class="cursor-pointer mr-b1 d-flex align-items-center"><i class="{{item?.icon}} mr-r1"></i>
+                    {{item?.label}} </h3>
                 <div class="sub-item-block">
                     <div class="row">
-                        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-12" *ngFor="let subItem of item?.items; index as subItemIndex">
+                        <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-12"
+                            *ngFor="let subItem of item?.items; index as subItemIndex">
                             <div *ngIf="subItem.link" class="single-menu-item mr-b1" [routerLink]="[subItem?.link]"
-                                [queryParams]="subItem?.additional" [class.active]="menuIndex === filteredMenuIndex && itemIndex === subItemIndex">
+                                [queryParams]="subItem?.additional"
+                                [class.active]="menuIndex === filteredMenuIndex && itemIndex === subItemIndex">
                                 <h4> <i class="{{subItem?.icon}} mr-r1"></i> {{subItem?.label}} </h4>
                                 <p>{{subItem?.description}}</p>
                             </div>
-                            <div *ngIf="!subItem.link" class="single-menu-item mr-b1"
-                                (click)="handleItemClick(subItem)" [class.active]="">
+                            <div *ngIf="!subItem.link" class="single-menu-item mr-b1" (click)="handleItemClick(subItem)"
+                                [class.active]="">
                                 <h4> <i class="{{subItem?.icon}} mr-r1"></i> {{subItem?.label}} </h4>
                                 <p>{{subItem?.description}}</p>
                             </div>

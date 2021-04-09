@@ -394,7 +394,8 @@
             .current-branch-name {
                 margin-top: 0;
                 margin-left: 0;
-                .branch-name-full{
+                .branch-name {
+                    .branch-name-full{
                         display: none;
                     }
                     .switch-branch{
@@ -416,6 +417,8 @@
                             top: 0;
                         }
                     }
+
+                }
                 .branch-alice {
                     display: flex !important;
                     justify-content: center;
@@ -428,14 +431,14 @@
                     height: 36px;
                     width: 36px;
                 }
-                .switch-branch-wrapper{
-                    .switch-branch-section{
-                        width: 0;
-                    }
-                    .btn-group{
-                        .dropdown-menu{
-                            right: -281px !important;
-                        }
+            }
+            .switch-branch-wrapper{
+                .switch-branch-section{
+                    width: 0;
+                }
+                .btn-group{
+                    .dropdown-menu{
+                        right: -281px !important;
                     }
                 }
             }
@@ -639,5 +642,5 @@
                 }
             }
         }
-     }
+    }
 }

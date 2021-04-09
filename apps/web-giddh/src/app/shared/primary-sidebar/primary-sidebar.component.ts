@@ -135,7 +135,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         private changeDetectorRef: ChangeDetectorRef,
         private generalService: GeneralService,
         private store: Store<AppState>,
-        private activeCompanyForDb: ICompAidata,
         private companyService: CompanyService,
         private companyActions: CompanyActions,
         private modalService: BsModalService,
