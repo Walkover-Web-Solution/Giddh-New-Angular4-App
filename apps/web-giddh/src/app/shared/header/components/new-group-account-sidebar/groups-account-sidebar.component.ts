@@ -478,9 +478,11 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         if (result !== null) {
             return result;
         }
-        for (let group of activeEntity.parentGroups) {
-            parentUniquenamePath.push(group.uniqueName);
-            parentPath.push(group.name);
+        if (activeEntity?.parentGroups) {
+            for (let group of activeEntity.parentGroups) {
+                parentUniquenamePath.push(group.uniqueName);
+                parentPath.push(group.name);
+            }
         }
         parentUniquenamePath.push(activeEntity.uniqueName);
         parentPath.push(activeEntity.name);
