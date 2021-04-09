@@ -42,7 +42,7 @@ jobs:
         with:
           useLockFile: false
           useRollingCache: true
-          working-directory: /apps/electron-giddh/src/
+          working-directory: ./apps/electron-giddh/src/
       - if: ${{ matrix.os == 'macos-latest' }}
         run: npm run package:mac
       - if: ${{ matrix.os == 'windows-latest' }}
