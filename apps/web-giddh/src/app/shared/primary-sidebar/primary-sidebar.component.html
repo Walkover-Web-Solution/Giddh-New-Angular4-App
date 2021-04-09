@@ -4,7 +4,7 @@
             <li class="company-name position-relative cursor-pointer" dropdown #companyDetailsDropDownWeb="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="companyDetailsDropDownWeb.hide()" [exclude]="'.company-name'">
                 <h3 class="font-16 d-flex" [checkPermission]="['MENU', 'MANAGE']" dropdownToggle>
                     <img hidden src="../../../assets/images/logo-icon.svg" class="company-icon mr-r1">
-                    <span  class="company-alice mr-r05">{{companyInitials}}</span>
+                    <span  class="company-alice mr-r05 text-uppercase">{{companyInitials}}</span>
                     <span class="d-flex justify-content-between w-100 company-full-name">{{selectedCompanyDetails?.name}}
                         <span class="d-flex"> <i class="icon-down-new"></i> </span></span>
                 </h3>
@@ -34,7 +34,7 @@
                         </ng-container>
                     </a>
 
-                    <a href="javascript:void(0)" dropdownToggle *ngIf="branchInitials" class="font-14 dropdown-toggle branch-alice">{{branchInitials}}</a>
+                    <a href="javascript:void(0)" dropdownToggle *ngIf="branchInitials" class="font-14 dropdown-toggle branch-alice text-uppercase">{{branchInitials}}</a>
 
 
                     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
