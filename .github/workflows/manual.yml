@@ -48,15 +48,15 @@ jobs:
       - name: Update app version in root package
         uses: MerthinTechnologies/edit-json-action@v1
         with:
-            filename: './package.json'
-            key: 'version'
-            value: ${{ secrets.APP_VERSION + 1}}
+          filename: './package.json'
+          key: 'version'
+          value: ${{ secrets.APP_VERSION + 1}}
       - name: Update app version in sub-package
         uses: MerthinTechnologies/edit-json-action@v1
         with:
-            filename: './apps/electron-giddh/src/package.json'
-            key: 'version'
-            value: ${{ secrets.APP_VERSION + 1}}
+          filename: './apps/electron-giddh/src/package.json'
+          key: 'version'
+          value: ${{ secrets.APP_VERSION + 1}}
       - name: Store current app version
         uses: hmanzur/actions-set-secret@v2.0.0
         with:
