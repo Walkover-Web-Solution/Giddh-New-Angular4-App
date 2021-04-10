@@ -57,6 +57,7 @@
     "package:mac": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && npx  electron-builder build --config ./../../../electron-sign/electron-builder.json  --macos --x64",
     "package:windows": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --ia32 --x64 ",
     "cy:ran": "cypress run",
+    "change-directory": "cd ./dist/apps/web-giddh-prod",
     "cy:verify": "cypress verify",
     "env:run": "npm run print-env && npm run cy:run",
     "env:run:record": "npm run print-env && npm run cy:run -- --record",
