@@ -29,23 +29,25 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v2
-      - name: Install Node.js, NPM and Yarn
+      - name: Install Node.js & NPM
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - uses: bahmutov/npm-install@v1
+      - name: Install root node packages
+        uses: bahmutov/npm-install@v1
         env:
           CYPRESS_INSTALL_BINARY: 0
         with:
           useLockFile: false
           useRollingCache: true
           working-directory: .
-      - uses: bahmutov/npm-install@v1
+      - name: Install Electron node packages
+        uses: bahmutov/npm-install@v1
         with:
           useLockFile: false
           useRollingCache: true
           working-directory: ./apps/electron-giddh/src/
-      - name: Preparing build
+      - name: Preparing build bundle
         run: npm run build.electron.giddh
       - if: ${{ matrix.os == 'macos-latest' }}
         uses: samuelmeuli/action-electron-builder@v1
@@ -53,10 +55,10 @@ jobs:
           github_token: ${{ secrets.github_token }}
           release: true
       - if: ${{ matrix.os == 'windows-latest' }}
+      - name: Starting Electron build
         uses: samuelmeuli/action-electron-builder@v1
         with:
           github_token: ${{ secrets.github_token }}
           release: true
-          skip_build: true
           build_script_name: change-directory
           args: --config ./electron-sign/electron-builder.json --ia32 --x64
