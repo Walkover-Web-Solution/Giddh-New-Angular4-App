@@ -50,19 +50,19 @@ jobs:
         with:
           filename: './package.json'
           key: 'version'
-          value: ${{ secrets.APP_VERSION }} + 1
+          value: ${{ secrets.APP_VERSION }} + 0.0.1
       - name: Update app version in sub-package
         uses: MerthinTechnologies/edit-json-action@v1
         with:
           filename: './apps/electron-giddh/src/package.json'
           key: 'version'
-          value: ${{ secrets.APP_VERSION }} + 1
+          value: ${{ secrets.APP_VERSION }} + 0.0.1
       - name: Store current app version
         uses: hmanzur/actions-set-secret@v2.0.0
         with:
           name: 'APP_VERSION'
-          value: ${{ secrets.APP_VERSION }} + 1
-          repository: hmanzur/actions-set-secret
+          value: ${{ secrets.APP_VERSION }} + 0.0.1
+          repository: Giddh-New-Angular4-App
           token: ${{ secrets.github_token }}
       - name: Preparing build bundle
         run: npm run build.electron.giddh
