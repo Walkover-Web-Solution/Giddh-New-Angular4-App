@@ -29,7 +29,7 @@ jobs:
     - name: Slack Notification
       uses: 8398a7/action-slack@v3
       with:
-        status: custom
+        status: ${{ job.status }}
         custom_payload: |
           {
             
