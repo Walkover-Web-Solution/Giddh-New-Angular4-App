@@ -33,13 +33,13 @@ jobs:
     steps:
       - name: Job status update
         if: ${{ always() }}
-        uses: edge/simple-slack-notify@master
+        uses: lazy-actions/slatify@master
         env:
-          channel: Prateek Mishra
-          status: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
+          channel: 'Prateek Mishra'
+          mention: 'channel'
+          type: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
           text: "Build download URL https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.exe"
-          success_text: "Giddh Electron build success :sunglasses:"
-          failure_text: "Giddh Electron build success :monocle_face:"
-          cancelled_text: "Giddh Electron build cancelled :confused:"
-          username: Giddh bot
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+          commit: true
+          job_name: 'Giddh Electron build'
+          token: ${{ secrets.github_token }}
+          url: ${{ secrets.SLACK_WEBHOOK }}
