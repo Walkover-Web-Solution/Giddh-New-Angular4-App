@@ -58,4 +58,4 @@ jobs:
           github_token: ${{ secrets.github_token }}
           release: true
           skip_build: true
-          args: --config ./electron-sign/electron-builder.json --ia32 --x64
+          args: --config ./electron-sign/electron-builder-test.json --ia32 --x64
