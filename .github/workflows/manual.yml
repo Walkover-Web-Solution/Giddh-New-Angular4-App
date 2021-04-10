@@ -58,4 +58,6 @@ jobs:
           github_token: ${{ secrets.github_token }}
           release: true
           skip_build: true
+          package_root: ./apps/electron-giddh/src/
+          app_root: ./dist/apps/web-giddh-prod/
           args: --config ./electron-sign/electron-builder-test.json --ia32 --x64
