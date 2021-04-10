@@ -53,7 +53,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           release: true
       - if: ${{ matrix.os == 'windows-latest' }}
-      - uses: samuelmeuli/action-electron-builder@v1
+        uses: samuelmeuli/action-electron-builder@v1
         with:
           github_token: ${{ secrets.github_token }}
           release: true
