@@ -8,12 +8,16 @@ on:
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
-      name:
+      card:
         # Friendly description to be shown in the UI instead of 'name'
         description: 'Card details'
         # Default value if no value is explicitly provided
         default: 'Electron build'
         # Input has to be provided for the workflow to run
+        required: true
+      version:
+        description: 'App version'
+        default: '8.0.8'
         required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -45,25 +49,20 @@ jobs:
           useLockFile: false
           useRollingCache: true
           working-directory: ./apps/electron-giddh/src/
+      - name: App version
+        run: echo "Provided version ${{ github.event.inputs.version }}"
       - name: Update app version in root package
         uses: MerthinTechnologies/edit-json-action@v1
         with:
           filename: './package.json'
           key: 'version'
-          value: ${{ secrets.APP_VERSION }} + 0.0.1
+          value: ${{ github.event.inputs.version }}
       - name: Update app version in sub-package
         uses: MerthinTechnologies/edit-json-action@v1
         with:
           filename: './apps/electron-giddh/src/package.json'
           key: 'version'
-          value: ${{ secrets.APP_VERSION }} + 0.0.1
-      - name: Store current app version
-        uses: hmanzur/actions-set-secret@v1.0.0
-        with:
-          name: 'APP_VERSION'
-          value: ${{ secrets.APP_VERSION }} + 0.0.1
-          repository: Giddh-New-Angular4-App
-          token: ${{ secrets.github_token }}
+          value: ${{ github.event.inputs.version }}
       - name: Preparing build bundle
         run: npm run build.electron.giddh
       - if: ${{ matrix.os == 'macos-latest' }}
