@@ -33,16 +33,14 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - name: Install root node packages
-        uses: bahmutov/npm-install@v1
+      - uses: bahmutov/npm-install@v1
         env:
           CYPRESS_INSTALL_BINARY: 0
         with:
           useLockFile: false
           useRollingCache: true
           working-directory: .
-      - name: Install Electron node packages
-        uses: bahmutov/npm-install@v1
+      - uses: bahmutov/npm-install@v1
         with:
           useLockFile: false
           useRollingCache: true
