@@ -57,4 +57,4 @@ jobs:
           release: true
           skip_build: true
           package_root: ./apps/electron-giddh/src/
-          args: --config ../../../electron-sign/electron-builder.json --win --ia32 --x64
+          args: --config ./../../../electron-sign/electron-builder.json --win --ia32 --x64
