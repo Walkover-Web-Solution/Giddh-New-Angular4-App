@@ -22,22 +22,66 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  slackNotification:
-    name: Slack Notification
-    runs-on: ubuntu-latest
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - name: Slack Notification
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        custom_payload: |
-          {
-            
-            fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-            attachments: [{
-              text: "Build download URL https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.exe"
-            }]
-          }
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-      if: always()
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+      - name: Install Node.js & NPM
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - uses: bahmutov/npm-install@v1
+        env:
+          CYPRESS_INSTALL_BINARY: 0
+        with:
+          useLockFile: false
+          useRollingCache: true
+          working-directory: .
+      - uses: bahmutov/npm-install@v1
+        with:
+          useLockFile: false
+          useRollingCache: true
+          working-directory: ./apps/electron-giddh/src/
+      - name: Update app version in root package
+        uses: MerthinTechnologies/edit-json-action@v1
+        with:
+          filename: './package.json'
+          key: 'version'
+          value: ${{ github.event.inputs.version }}
+      - name: Update app version in sub-package
+        uses: MerthinTechnologies/edit-json-action@v1
+        with:
+          filename: './apps/electron-giddh/src/package.json'
+          key: 'version'
+          value: ${{ github.event.inputs.version }}
+      - name: Preparing build bundle
+        run: npm run build.electron.giddh
+      - name: Creating Electron bundle
+        uses: samuelmeuli/action-electron-builder@v1
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        with:
+          github_token: ${{ secrets.github_token }}
+          release: true
+          skip_build: true
+          args: --config ./electron-sign/electron-builder-test.json --ia32 --x64
+      - name: Job status update
+        if: ${{ always() }}
+        uses: edge/simple-slack-notify@master
+        env:
+          channel: Prateek Mishra
+          status: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
+          text: "Build download URL https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.exe"
+          success_text: "Giddh Electron build success :sunglasses:"
+          failure_text: "Giddh Electron build success :monocle_face:"
+          cancelled_text: "Giddh Electron build cancelled :confused:"
+          username: Giddh bot
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
