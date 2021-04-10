@@ -38,6 +38,7 @@ jobs:
           useLockFile: false
           useRollingCache: true
           working-directory: .
+          install-command: CYPRESS_INSTALL_BINARY=0 npm install
       - uses: bahmutov/npm-install@v1
         with:
           useLockFile: false
