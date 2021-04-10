@@ -36,7 +36,7 @@ jobs:
         uses: edge/simple-slack-notify@master
         env:
           channel: Prateek Mishra
-          color: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
+          status: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
           text: "Build download URL https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.exe"
           success_text: "Giddh Electron build success :sunglasses:"
           failure_text: "Giddh Electron build success :monocle_face:"
