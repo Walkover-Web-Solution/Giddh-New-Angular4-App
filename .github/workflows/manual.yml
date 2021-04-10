@@ -57,5 +57,5 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           release: true
-          build_script_name: change-directory
+          skip_build: true
           args: --config ./electron-sign/electron-builder.json --ia32 --x64
