@@ -32,7 +32,7 @@ jobs:
       - name: Install Node.js & NPM
         uses: actions/setup-node@v2
         with:
-          node-version: '12'
+          node-version: '14'
       - uses: bahmutov/npm-install@v1
         env:
           CYPRESS_INSTALL_BINARY: 0
@@ -53,9 +53,4 @@ jobs:
           github_token: ${{ secrets.github_token }}
           release: true
       - if: ${{ matrix.os == 'windows-latest' }}
-        uses: samuelmeuli/action-electron-builder@v1
-        with:
-          github_token: ${{ secrets.github_token }}
-          release: true
-          build_script_name: change-directory
-          args: --config ./electron-sign/electron-builder.json --ia32 --x64
+        run: npm run package:windows
