@@ -73,15 +73,3 @@ jobs:
           release: true
           skip_build: true
           args: --config ./electron-sign/electron-builder-test.json --ia32 --x64
-      - name: Job status update
-        if: ${{ always() }}
-        uses: edge/simple-slack-notify@master
-        env:
-          channel: Prateek Mishra
-          status: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
-          text: "Build download URL https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.exe"
-          success_text: "Giddh Electron build success :sunglasses:"
-          failure_text: "Giddh Electron build success :monocle_face:"
-          cancelled_text: "Giddh Electron build cancelled :confused:"
-          username: Giddh bot
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
