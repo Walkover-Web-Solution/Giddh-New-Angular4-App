@@ -42,7 +42,9 @@
                             }
                             &.active {
                                 background-color: $cornflower !important;
-                                color: $white !important;
+                                span, span i{
+                                     color: $white !important;
+                                }
                             }
                         }
                     }
@@ -64,6 +66,10 @@
             margin-bottom: 0px;
             a {
                 cursor: pointer;
+                pointer-events: all;
+                &.disabled{
+                    pointer-events: none;
+                }
                 img {
                     margin-right: 12px;
                 }
