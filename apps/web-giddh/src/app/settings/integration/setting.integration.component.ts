@@ -311,7 +311,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                                     item.loginId = `${item.corpId}.${item.userId}`;
                                 }
                             }
-                            item.combinedUserNames = item.userNames?.join(', ');
+                            item.selectedUsers = this.usersList.filter(user => item.emailIds?.find(emailId => user.value === emailId)) ?? [];
                             this.getRegistrationStatus(item);
                             item.userAmountRanges.map(element => {
                                 if (typeof element.maxBankLimit === "boolean") {
@@ -1282,6 +1282,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public editRegisterForm(index: any, updateFormValue?: IntegratedBankList): void {
         this.isBankUpdateInEdit = index;
+        if (index === null) {
+            this.resetUserSelection();
+        } else {
+            this.setUserSelection();
+        }
         this.updateBankUrnNumber = null;
         this.addBankForm = this.createBankIntegrationForm();
         if (updateFormValue) {
@@ -1637,5 +1642,64 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if(event) {
             this.addBankForm.get('userNames').patchValue(event.map(ev => ev.label));
         }
+    }
+
+    /**
+     * Selects the users
+     *
+     * @param {*} user Selected user
+     * @param {*} event Select event
+     * @param {*} userIndex Current user index in list
+     * @memberof SettingIntegrationComponent
+     */
+    public selectUsers(user: any, event: any, userIndex): void {
+        if (event && user) {
+            if (event.target.checked) {
+                user.isSelected = event.target.checked;
+                this.usersList[userIndex].isSelected = true;
+            } else {
+                this.usersList[userIndex].isSelected = false;
+            }
+            this.addBankForm.get('userNames').patchValue(this.usersList.filter(ev => ev.isSelected && ev.label).map(user => user.label));
+            this.addBankForm.get('emailIds').patchValue(this.usersList.filter(ev => ev.isSelected && ev.value).map(user => user.value));
+        }
+        event.stopPropagation();
+    }
+
+    public removeUser(user: any, isUpdate?: boolean): void {
+        let i = 0;
+        let matchedIndex = -1;
+
+        for (i; i < this.usersList.length; i++) {
+            if (user === this.usersList[i].value) {
+                matchedIndex = i;
+                break;
+            }
+        }
+
+        let indx = -1;
+        if (isUpdate) {
+            indx = this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.findIndex(selectedUser => selectedUser.value === user.value);
+            this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.splice(indx, 1);
+        } else {
+            indx = this.usersList.findIndex(selectedUser => selectedUser.value === user.value);
+            this.usersList[indx].isSelected = false;
+        }
+
+        if (matchedIndex > -1) {
+            this.usersList[matchedIndex].isSelected = false;
+        }
+    }
+
+    public resetUserSelection(): void {
+        this.usersList.forEach(user => user.isSelected = false);
+    }
+
+    public setUserSelection(): void {
+        this.usersList.forEach(user => user.isSelected = this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.some(selectedUser => selectedUser.value === user.value));
+    }
+
+    public getSelectedItemCount(items: Array<any>): number {
+        return items?.filter(user => user.isSelected).length;
     }
 }

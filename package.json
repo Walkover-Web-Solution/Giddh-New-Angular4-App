@@ -55,7 +55,7 @@
     "package": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && npx  electron-builder build --config ./../../../electron-sign/electron-builder.json  -mw --x64",
     "package:linux": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && npx electron-builder  build --config ./../../../electron-sign/electron-builder.json  --linux --x64",
     "package:mac": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && npx  electron-builder build --config ./../../../electron-sign/electron-builder.json  --macos --x64",
-    "package:windows": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && cross-env AWS_ACCESS_KEY_ID=key_id AWS_SECRET_ACCESS_KEY=access_key npx electron-builder build  --config ./../../../electron-sign/electron-builder.json --win --ia32 --x64 ",
+    "package:windows": "npm run build.electron.giddh && cd dist/apps/web-giddh-prod && npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --ia32 --x64 ",
     "cy:ran": "cypress run",
     "cy:verify": "cypress verify",
     "env:run": "npm run print-env && npm run cy:run",
