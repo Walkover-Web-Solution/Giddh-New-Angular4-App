@@ -859,18 +859,15 @@ export class GeneralService {
      *
      * @param {Array<any>} apiItems List of permissible items obtained from API
      * @param {Array<AllItems>} itemList List of all the items of menu
-     * @param {boolean} isBranch True, if user is in branch mode
      * @returns {Array<AllItems>} Array of permissible menu items
      * @memberof GeneralService
      */
-    public getVisibleMenuItems(apiItems: Array<any>, itemList: Array<AllItems>, isBranch: boolean): Array<AllItems> {
+    public getVisibleMenuItems(apiItems: Array<any>, itemList: Array<AllItems>): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
         itemList.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
             menuItem.items.forEach(item => {
-                const isValidItem = isBranch ?
-                    apiItems.find(apiItem => (apiItem.uniqueName === item.link && !apiItem.notBranchViewable)) :
-                    apiItems.find(apiItem => (apiItem.uniqueName === item.link && !apiItem.notCompanyViewable));
+                const isValidItem = apiItems.find(apiItem => apiItem.uniqueName === item.link);
                 if (isValidItem || item.alwaysPresent) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
                     visibleMenuItems[menuIndex].items.push(item);

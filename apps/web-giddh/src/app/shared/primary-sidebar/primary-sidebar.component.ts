@@ -212,7 +212,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length) {
-            this.allItems = this.generalService.getVisibleMenuItems(changes.apiMenuItems.currentValue, ALL_ITEMS, this.generalService.currentOrganizationType === OrganizationType.Branch);
+            this.allItems = this.generalService.getVisibleMenuItems(changes.apiMenuItems.currentValue, ALL_ITEMS);
         }
     }
 
