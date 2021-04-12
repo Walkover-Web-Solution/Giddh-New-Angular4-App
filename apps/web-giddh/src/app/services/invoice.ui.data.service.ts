@@ -206,6 +206,14 @@ export class InvoiceUiDataService {
                             display: false,
                             width: null
                         };
+                    }
+                if (!selectedTemplate.sections['footer'].data['showMessage2']) {
+                    selectedTemplate.sections['footer'].data['showMessage2'] = defaultTemplate ?
+                        defaultTemplate.sections['footer'].data['showMessage2'] : {
+                            label: '',
+                            display: false,
+                            width: null
+                        };
                 }
 
                 this.BRToNewLine(selectedTemplate);
