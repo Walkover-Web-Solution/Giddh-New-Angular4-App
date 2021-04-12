@@ -698,7 +698,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="clearfix mr-t1">
+                    <div class="clearfix mr-t1" *ngIf="customTemplate?.type === 'invoice'">
                         <div>
                             <input type="checkbox" name="showNotesAtLastPage" [checked]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display" [(ngModel)]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show notes at the last page
                         </div>
@@ -719,16 +719,11 @@
                             </div>
                         </div>
                     </div>
-                <div class="clearfix mr-t1">
+                <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="clearfix mr-t1">
                     <div>
-                        <input type="checkbox" name="msg2" /> Note 2
-                    </div>
-                    <div class="form-group ml-3 clearfix">
-                        <div class="row">
-                            <div class="col-12">
-                                <textarea class="form-control" rows="3" placeholder="Enter any other text you would like in the footer. " name="msg12"></textarea>
-                            </div>
-                        </div>
+                        <input [checked]="customTemplate.sections.footer.data.showMessage2?.display"
+                            [(ngModel)]="customTemplate.sections['footer'].data['showMessage2'].display" type="checkbox" name="message2"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Note 2
                     </div>
                 </div>
                 <div *ngIf="fieldsAndVisibility.footer.thanks" class="clearfix mr-t1">

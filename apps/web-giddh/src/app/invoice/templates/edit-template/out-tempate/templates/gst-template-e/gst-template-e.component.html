@@ -440,6 +440,7 @@
             <i class="icon-edit-pencil"></i>
         </a>
         <p class="font-10" [ngStyle]="{ 'white-space': 'pre-line'}" *ngIf="fieldsAndVisibility.footer.showNotesAtLastPage?.display">{{fieldsAndVisibility.footer.message1?.label}}</p>
+        <p class="font-10" [ngStyle]="{ 'white-space': 'pre-line'}" *ngIf="voucherType==='sales' && fieldsAndVisibility.footer.showNotesAtLastPage?.display && fieldsAndVisibility.footer.showMessage2?.display">Notes provided in the invoice will appear here</p>
         <table class="subfooter">
             <tbody>
                 <tr>
@@ -461,6 +462,9 @@
                         <ul class="note">
                             <li style="white-space:pre-line;" *ngIf="!fieldsAndVisibility.footer.showNotesAtLastPage?.display && fieldsAndVisibility.footer.message1?.display">
                                 {{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.'}}
+                            </li>
+                            <li *ngIf="voucherType==='sales' && !fieldsAndVisibility.footer.showNotesAtLastPage?.display && fieldsAndVisibility.footer.showMessage2?.display">
+                                Notes provided in the invoice will appear here
                             </li>
                         </ul>
                     </td>
