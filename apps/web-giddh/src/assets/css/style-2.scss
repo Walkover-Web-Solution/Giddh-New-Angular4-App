@@ -9715,21 +9715,25 @@ input.mat-input-element{
             }
         }
     }
-    .gst-sidebar-open  .menu_open .gst-sidebar{
-        left: 0 !important;
-    }
-    .gst-sidebar-open  .gst-sidebar{
-        left: -250px !important;
-    }
-    .gst-sidebar-open .menu_open #content-wrapper {
-           padding-left: 240px;
-    }
-    .gst-sidebar-open #content-wrapper{
-        padding-left: 0;
-    }
-    .gst-sidebar-open .nav-left-bar{
-        display: none;
-    }
+    .gst-sidebar-open {
+         .gst-sidebar{
+            left: -250px !important;
+         }
+         #content-wrapper{
+            padding-left: 0;
+        }
+        .nav-left-bar{
+            display: none;
+        }
+        .menu_open{
+            .gst-sidebar{
+                left: 0 !important;
+            }
+            #content-wrapper {
+                padding-left: 240px;
+            }
+        }
+     }
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {
