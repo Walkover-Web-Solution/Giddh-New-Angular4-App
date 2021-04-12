@@ -698,7 +698,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="clearfix mr-t1">
+                    <div class="clearfix mr-t1" *ngIf="customTemplate?.type === 'invoice'">
                         <div>
                             <input type="checkbox" name="showNotesAtLastPage" [checked]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display" [(ngModel)]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show notes at the last page
                         </div>
@@ -719,16 +719,23 @@
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="fieldsAndVisibility.footer.thanks" class="clearfix mr-t1">
-                        <div class="mb-0 form-group thanks-input-group">
-                            <input type="checkbox" name="ty" [(ngModel)]="customTemplate.sections['footer'].data['thanks'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
-                            <input type="text" [class.error-box]="contentForm?.controls['thanks']?.errors?.maxlength" class="form-control thanks-input-inline" hasFocus #thanks="hasFocus" [disabled]="!fieldsAndVisibility.footer.thanks?.display" (keyup)='onFieldChange(null, null, null)' [(ngModel)]="customTemplate.sections['footer'].data['thanks'].label" placeholder="Thank You for your business"
-                                maxlength="30" name="thanks"/>
-                        </div>
-                        <div class="form-group ml-3 clearfix" *ngIf="thanks?.isFocused || contentForm?.controls['thanks']?.errors?.maxlength">
-                            <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(30 - customTemplate.sections['footer'].data['thanks'].label.length)}}</span>
-                        </div>
+                <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="clearfix mr-t1">
+                    <div>
+                        <input [checked]="customTemplate.sections.footer.data.showMessage2?.display"
+                            [(ngModel)]="customTemplate.sections['footer'].data['showMessage2'].display" type="checkbox" name="message2"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Note 2
                     </div>
+                </div>
+                <div *ngIf="fieldsAndVisibility.footer.thanks" class="clearfix mr-t1">
+                    <div class="mb-0 form-group thanks-input-group">
+                        <input type="checkbox" name="ty" [(ngModel)]="customTemplate.sections['footer'].data['thanks'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
+                        <input type="text" [class.error-box]="contentForm?.controls['thanks']?.errors?.maxlength" class="form-control thanks-input-inline" hasFocus #thanks="hasFocus" [disabled]="!fieldsAndVisibility.footer.thanks?.display" (keyup)='onFieldChange(null, null, null)' [(ngModel)]="customTemplate.sections['footer'].data['thanks'].label" placeholder="Thank You for your business"
+                            maxlength="30" name="thanks"/>
+                    </div>
+                    <div class="form-group ml-3 clearfix" *ngIf="thanks?.isFocused || contentForm?.controls['thanks']?.errors?.maxlength">
+                        <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(30 - customTemplate.sections['footer'].data['thanks'].label.length)}}</span>
+                    </div>
+                </div>
                     <!-- <div *ngIf="fieldsAndVisibility.footer.slogan" class="clearfix">
                 <div>
                     <input type="checkbox" name="msg2" [(ngModel)]="customTemplate.sections['footer'].data['slogan'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Signature

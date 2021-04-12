@@ -95,6 +95,11 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
+                    showMessage2: {
+                        label: '',
+                        display: true,
+                        width: null
+                    },
                      tcs: { // this is for template a
                         label: 'TCS',
                         display: true,

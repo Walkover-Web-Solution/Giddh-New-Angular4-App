@@ -732,6 +732,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         });
         this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             defaultTemplate = ss.defaultTemplate;
+            defaultTemplate.type = this.templateType;
             if (this.templateType === 'voucher') {
                 defaultTemplate = ss.sampleTemplates[9];
             }
@@ -817,8 +818,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.fontDefault = data.fontSize;
                 data.fontMedium = data.fontSize - 2;
             }
-            if (data.sections['footer'].data['message1'].display && !data?.sections['footer']?.data['message1']?.label ||
-                !data.sections['footer'].data['message1'].display && data?.sections['footer']?.data['message1']?.label) {
+            if (!data.sections['footer'].data['message1'].display || !data?.sections['footer']?.data['message1']?.label) {
                 // If user checks the checkbox but didn't provide label then remove the selection
                 data.sections['footer'].data['message1'].display = false;
                 data.sections['footer'].data['message1'].label = '';
