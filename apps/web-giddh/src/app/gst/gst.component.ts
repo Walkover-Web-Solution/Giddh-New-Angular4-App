@@ -335,7 +335,12 @@ export class GstComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
         this.loadTaxReport();
     }
-
+    /**
+     * this is handle navigation of menu item
+     *
+     *
+     * @memberof GstComponent
+     */
     public handleNavigation(type: string): void {
         switch(type) {
             case GstReport.Gstr1: case GstReport.Gstr2:

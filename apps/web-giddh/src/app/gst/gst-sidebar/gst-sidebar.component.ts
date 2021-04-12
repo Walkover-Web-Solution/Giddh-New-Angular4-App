@@ -9,7 +9,7 @@ import { GstReport } from '../constants/gst.constant';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GstrSidebarComponent {
-
+    /** this is store mobile screen boolean value */
     public isMobileScreen: boolean = true;
     /** Returns the enum to be used in template */
     public get GstReport() {
@@ -17,7 +17,9 @@ export class GstrSidebarComponent {
     }
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+    /** this is store navigate event */
     @Output() public navigateEvent: EventEmitter<string> = new EventEmitter();
+    /** this is store actvie company gst number */
     @Input() public activeCompanyGstNumber: EventEmitter<boolean> = new EventEmitter(true);
     /** Stores the selected GST module */
     @Input() public selectedGstModule: string = 'dashboard';
@@ -31,7 +33,7 @@ export class GstrSidebarComponent {
     * This will close the settings popup if clicked outside and is mobile screen
     *
     * @param {*} [event]
-    * @memberof AsideSettingComponent
+    * @memberof GstrSidebarComponent
     */
     public closeAsidePaneIfMobile(event?): void {
         if (this.isMobileScreen && event && event.target.className !== "icon-bar") {
@@ -41,7 +43,7 @@ export class GstrSidebarComponent {
     /**
     * This will navigate the user to previous page
     *
-    * @memberof AsideSettingComponent
+    * @memberof GstrSidebarComponent
     */
     public goToPreviousPage(): void {
         if (this.generalService.getSessionStorage("previousPage") && !this.router.url.includes("/dummy")) {
@@ -52,7 +54,9 @@ export class GstrSidebarComponent {
     }
 
     /**
-    * navigateToOverview
+    * This is navigate menu item
+    *
+    * @memberof GstrSidebarComponent
     */
     public navigate(type) {
         this.selectedGstModule = type;
