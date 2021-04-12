@@ -36,13 +36,13 @@
 
                     <div class="relative form-group" *ngIf="selectedField === 'dueDate'">
                         <input name="lastInvoiceDate" required [placeholder]="commonLocaleData?.app_select_date" type="text" autocomplete="off" [bsConfig]="{dateInputFormat: giddhDateFormat}" [(ngModel)]="updateDueDatesRequest.dueDate" class="form-control" bsDatepicker required>
-                        <i class="fa fa-calendar text-light-2 inpute-date"></i>
+                        <i class="fa fa-calendar text-light-2 date-input"></i>
                     </div>
                 </div>
             </div>
 
             <div class="width-100">
-                <div *ngIf="selectedField === 'signature' && signatureOptions === 'image'" class="uplode-logo">
+                <div *ngIf="selectedField === 'signature' && signatureOptions === 'image'" class="upload-logo">
                     <div class="form-group">
                         <label [hidden]="isSignatureAttached">
                             <input type="file" class="d-none" name="bulkUploadfileInput"
