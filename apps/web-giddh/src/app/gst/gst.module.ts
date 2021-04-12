@@ -39,6 +39,7 @@ import { ConfirmModalModule } from '../theme/confirm-modal';
 import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
 import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { GstrSidebarComponent } from './gst-sidebar/gst-sidebar.component';
 
 @NgModule({
     declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component,
@@ -46,7 +47,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
         ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
         OverviewSummaryComponent, TransactionSummaryComponent,
         PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent,
-        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent],
+        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, GstrSidebarComponent],
     imports: [
         GstRoutingModule,
         CollapseModule,
@@ -69,13 +70,14 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
         CurrencyModule,
         ConfirmModalModule,
         SharedModule,
-        ShSelectModule
+        ShSelectModule,
+
     ],
     providers: [],
     entryComponents: [
         PaginationComponent
     ],
-    exports: [ViewTransactionsComponent]
+    exports: [ViewTransactionsComponent, GstrSidebarComponent]
 })
 export class GstModule {
 }
