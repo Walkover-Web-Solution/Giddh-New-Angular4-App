@@ -20,7 +20,7 @@
             margin-bottom: 0;
         }
         .help-aside-body {
-            .inventory-items {
+            .gst-menu-items {
                 ul {
                     li {
                         padding: 0px;
@@ -54,7 +54,7 @@
     }
 }
 
-.inventory-items {
+.gst-menu-items {
     padding: 15px 0 0;
     ul {
         padding: 0;
@@ -96,7 +96,7 @@
         }
     }
 }
-.inventory-items ul li:hover a span i {
+.gst-menu-items ul li:hover a span i {
     color: $nero !important;
 }
 @media (max-width: 767px) {
