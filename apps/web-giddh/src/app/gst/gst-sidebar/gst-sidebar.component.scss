@@ -40,6 +40,10 @@
                                     color: $gray !important;
                                 }
                             }
+                            &.active {
+                                background-color: $cornflower !important;
+                                color: $white !important;
+                            }
                         }
                     }
                 }
