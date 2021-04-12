@@ -76,7 +76,12 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         });
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
     }
-    /* Aside pane toggle fixed class */
+    /**
+    * Aside pane toggle fixed clas
+    *
+    *
+    * @memberof FileGstR3Component
+    */
     public toggleBodyClass(): void {
         if (this.asideMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');
@@ -88,7 +93,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
       * This will toggle the settings popup
       *
       * @param {*} [event]
-      * @memberof SettingsComponent
+      * @memberof FileGstR3Component
       */
     public toggleSettingPane(event?): void {
         this.toggleBodyClass();
