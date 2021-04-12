@@ -19,7 +19,12 @@ export class FileGstR2Component implements OnInit {
     constructor() {
         //
     }
-    /* Aside pane toggle fixed class */
+    /**
+     * Aside pane toggle fixed clas
+     *
+     *
+     * @memberof FileGstR2Component
+     */
     public toggleBodyClass(): void {
         if (this.asideMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');
@@ -31,7 +36,7 @@ export class FileGstR2Component implements OnInit {
       * This will toggle the settings popup
       *
       * @param {*} [event]
-      * @memberof SettingsComponent
+      * @memberof FileGstR2Component
       */
     public toggleSettingPane(event?): void {
         this.toggleBodyClass();
