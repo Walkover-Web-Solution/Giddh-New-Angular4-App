@@ -120,7 +120,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(items => {
             if (items) {
-                const allItems = this.generalService.getVisibleMenuItems(items, ALL_ITEMS, this.generalService.currentOrganizationType === OrganizationType.Branch);
+                const allItems = this.generalService.getVisibleMenuItems(items, ALL_ITEMS);
                 this.allItems$ = of(allItems);
                 this.filteredItems$ = of(allItems);
                 this.changeDetectorRef.detectChanges();
