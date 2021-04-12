@@ -14,6 +14,7 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
 import { CompanyActions } from '../actions/company.actions';
+import { GeneralActions } from '../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { OrganizationType } from '../models/user-login-state';
@@ -48,6 +49,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
         private changeDetectorRef: ChangeDetectorRef,
         private companyActions: CompanyActions,
         private generalService: GeneralService,
+        private generalActions: GeneralActions,
         private groupWithAction: GroupWithAccountsAction,
         private router: Router,
         private store: Store<AppState>
@@ -118,6 +120,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      * @memberof AllGiddhItemComponent
      */
     public ngOnInit(): void {
+        this.store.dispatch(this.generalActions.getSideMenuItems());
         this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(items => {
             if (items) {
                 const allItems = this.generalService.getVisibleMenuItems(items, ALL_ITEMS);
