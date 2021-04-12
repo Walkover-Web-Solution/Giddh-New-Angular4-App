@@ -1,7 +1,6 @@
-<ng-container appTranslate [file]="'purchase-order'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="modal-header">
-        <h4 class="modal-title pull-left">{{localeData?.po_preview_heading}}</h4>
-        <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close" (click)="hideModal()">
+        <h4 class="modal-title pull-left">Purchase Order Preview</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -13,7 +12,7 @@
                 </div>
                 <div class="error" [hidden]="!pdfPreviewHasError">
                     <span>
-                        {{localeData?.po_preview_unavailable}}
+                        Purchase Order Preview is not available right now! Please try again..
                     </span>
                 </div>
                 <div class="pdf-preview preview-1">
@@ -22,4 +21,3 @@
             </div>
         </div>
     </div>
-</div>
