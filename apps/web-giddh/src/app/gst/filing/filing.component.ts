@@ -77,8 +77,13 @@ export class FilingComponent implements OnInit, OnDestroy {
             }
         });
 	}
+    /**
+     * Aside pane toggle fixed class
+     *
+     *
+     * @memberof fillingComponent
+     */
 
-    /* Aside pane toggle fixed class */
     public toggleBodyClass(): void {
         if (this.asideMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');
