@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import {
     Gstr3bOverviewResult,
@@ -26,7 +26,7 @@ import { GstReport } from '../constants/gst.constant';
 })
 export class FileGstR3Component implements OnInit, OnDestroy {
     /* This will hold the value out/in to open/close setting sidebar popup */
-    public asideInventorySidebarMenuState: string = 'in';
+    public asideGstSidebarMenuState: string = 'in';
     /* Aside pane state*/
     public asideMenuState: string = 'out';
     /* this will check mobile screen size */
@@ -77,16 +77,16 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
     }
     /**
-    * Aside pane toggle fixed clas
+    * Aside pane toggle fixed class
     *
     *
     * @memberof FileGstR3Component
     */
     public toggleBodyClass(): void {
-        if (this.asideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
+        if (this.asideGstSidebarMenuState === 'in') {
+            document.querySelector('body').classList.add('gst-sidebar-open');
         } else {
-            document.querySelector('body').classList.remove('fixed');
+            document.querySelector('body').classList.remove('gst-sidebar-open');
         }
     }
     /**
@@ -95,16 +95,16 @@ export class FileGstR3Component implements OnInit, OnDestroy {
       * @param {*} [event]
       * @memberof FileGstR3Component
       */
-    public toggleSettingPane(event?): void {
+    public toggleGstPane(event?): void {
         this.toggleBodyClass();
 
-        if (this.isMobileScreen && event && this.asideInventorySidebarMenuState === 'in') {
-            this.asideInventorySidebarMenuState = "out";
+        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
+            this.asideGstSidebarMenuState = "out";
         }
     }
 
     public ngOnInit(): void {
-
+        this.toggleGstPane();
         this.activatedRoute.queryParams.pipe(take(1)).subscribe(params => {
             this.currentPeriod = {
                 from: params['from'],
@@ -256,10 +256,15 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             this.userEmail = '';
         }
     }
-
+    /**
+    * Unsubscribes from subscription
+    *
+    * @memberof GstComponent
+    */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('gst-sidebar-open');
     }
 
     /**

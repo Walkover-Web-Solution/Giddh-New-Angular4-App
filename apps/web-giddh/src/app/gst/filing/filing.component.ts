@@ -22,7 +22,7 @@ import { GstReport } from '../constants/gst.constant';
 export class FilingComponent implements OnInit, OnDestroy {
 	@ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
     /* This will hold the value out/in to open/close setting sidebar popup */
-    public asideInventorySidebarMenuState: string = 'in';
+    public asideGstSidebarMenuState: string = 'in';
     /* Aside pane state*/
     public asideMenuState: string = 'out';
     /* this will check mobile screen size */
@@ -81,31 +81,31 @@ export class FilingComponent implements OnInit, OnDestroy {
      * Aside pane toggle fixed class
      *
      *
-     * @memberof fillingComponent
+     * @memberof FilingComponent
      */
-
     public toggleBodyClass(): void {
-        if (this.asideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
+        if (this.asideGstSidebarMenuState === 'in') {
+            document.querySelector('body').classList.add('gst-sidebar-open');
         } else {
-            document.querySelector('body').classList.remove('fixed');
+            document.querySelector('body').classList.remove('gst-sidebar-open');
         }
     }
     /**
       * This will toggle the settings popup
       *
       * @param {*} [event]
-      * @memberof SettingsComponent
+      * @memberof FilingComponent
       */
-    public toggleSettingPane(event?): void {
+    public toggleGstPane(event?): void {
         this.toggleBodyClass();
 
-        if (this.isMobileScreen && event && this.asideInventorySidebarMenuState === 'in') {
-            this.asideInventorySidebarMenuState = "out";
+        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
+            this.asideGstSidebarMenuState = "out";
         }
     }
 
 	public ngOnInit() {
+        this.toggleGstPane();
 		this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
 			this.currentPeriod = {
 				from: params['from'],
@@ -176,6 +176,7 @@ export class FilingComponent implements OnInit, OnDestroy {
 	public ngOnDestroy(): void {
 		this.destroyed$.next(true);
 		this.destroyed$.complete();
+        document.querySelector('body').classList.remove('gst-sidebar-open');
     }
 
     /**
