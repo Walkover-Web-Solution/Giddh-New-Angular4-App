@@ -19,6 +19,8 @@ export class GstrSidebarComponent {
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public navigateEvent: EventEmitter<string> = new EventEmitter();
     @Input() public activeCompanyGstNumber: EventEmitter<boolean> = new EventEmitter(true);
+    /** Stores the selected GST module */
+    @Input() public selectedGstModule: string = 'dashboard';
 
     constructor(
         private router: Router,
@@ -53,6 +55,7 @@ export class GstrSidebarComponent {
     * navigateToOverview
     */
     public navigate(type) {
+        this.selectedGstModule = type;
         this.navigateEvent.emit(type);
     }
 
