@@ -846,7 +846,16 @@ export class GeneralService {
         if (name) {
             let nameArray = name.split(delimiter || " ");
             if (nameArray?.length > 1) {
-                return `${nameArray[0][0]} ${nameArray[1][0]}`;
+                // Check if "" is not present at 0th and 1st index
+                let count = 0;
+                let initials = '';
+                nameArray.forEach(word => {
+                    if (word && count < 2) {
+                        initials += ` ${word[0]}`;
+                        count++;
+                    }
+                })
+                return initials;
             } else if (nameArray?.length === 1) {
                 return nameArray[0][0];
             }
