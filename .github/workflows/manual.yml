@@ -31,6 +31,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - id: electron-build
       - name: Check out Git repository
         uses: actions/checkout@v2
       - name: Install Node.js & NPM
@@ -73,13 +74,15 @@ jobs:
           release: true
           skip_build: true
           args: --config ./electron-sign/electron-builder-test.json --ia32 --x64
+    outputs:
+      status: ${{ job.status }}
   notify:
     if: always()
     needs: release
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
-    - if: ${{ success() }}
+    - if: ${{ startsWith(needs.release.outputs.status, 'success') }}
       name: Slack Notification
       uses: rtCamp/action-slack-notify@v2
       env:
@@ -89,7 +92,7 @@ jobs:
         SLACK_MESSAGE: "Build download URL https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.exe"
         SLACK_TITLE: Giddh Electron build
         SLACK_USERNAME: Giddh bot
-    - if: ${{ failure() || cancelled() }}
+    - if: ${{ startsWith(needs.release.outputs.status, 'failure') || startsWith(needs.release.outputs.status, 'cancelled') }}
       name: Slack Notification
       uses: rtCamp/action-slack-notify@v2
       env:
