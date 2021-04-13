@@ -208,12 +208,12 @@ export class InvoiceUiDataService {
                     }
                 }
                 if (!selectedTemplate.sections['header'].data['showCompanyAddress']) {
-                    selectedTemplate.sections['header'].data['showCompanyAddress'] = defaultTemplate ?
-                        defaultTemplate.sections['header'].data['showCompanyAddress'] : {
-                            label: '',
-                            display: true,
-                            width: null
-                        };
+                    // Assign the default value based on value of warehouseAddress
+                    selectedTemplate.sections['header'].data['showCompanyAddress'] = {
+                        label: '',
+                        display: selectedTemplate.sections['header'].data['warehouseAddress'].display,
+                        width: null
+                    };
                 }
                 if (!selectedTemplate.sections['footer'].data['showNotesAtLastPage']) {
                     selectedTemplate.sections['footer'].data['showNotesAtLastPage'] = defaultTemplate ?
