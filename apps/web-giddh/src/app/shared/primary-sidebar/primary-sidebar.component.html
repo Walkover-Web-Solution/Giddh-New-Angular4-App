@@ -1,6 +1,9 @@
 <div class="primary-sidebar py-3 position-relative" [ngClass]="{'sidebar-collapse': !isOpen}">
     <div class="company-branch-block px-3 position-relative">
-        <ul class="list-style-none">
+        <ul class="list-style-none branch-connection">
+            <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
+                <span class="inner-span"></span>
+            </span>
             <li class="company-name position-relative cursor-pointer" dropdown #companyDetailsDropDownWeb="bs-dropdown"
                 [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="companyDetailsDropDownWeb.hide()"
                 [exclude]="'.company-name'">
@@ -84,9 +87,6 @@
                 </li> -->
             </ul>
         </ul>
-        <div *ngIf="(currentCompanyBranches$ | async)?.length > 1" class="branch-connection">
-            <i class="icon-branch-connection"></i>
-        </div>
     </div>
     <div class="search-block mr-b1 px-3">
         <div class="search-box position-relative mr-t2">
