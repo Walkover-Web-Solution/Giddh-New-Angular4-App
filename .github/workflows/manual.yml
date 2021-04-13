@@ -67,7 +67,18 @@ jobs:
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
+    - if: ${{ success() }}
     - name: Slack Notification
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
+        SLACK_COLOR: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
+        SLACK_MESSAGE: "Build download URL https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.exe"
+        SLACK_TITLE: Giddh Electron build
+        SLACK_USERNAME: Giddh bot
+    - if: ${{ failure() || cancelled() }}
+      name: Slack Notification
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
