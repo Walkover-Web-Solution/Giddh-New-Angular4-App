@@ -215,6 +215,14 @@ export class InvoiceUiDataService {
                         width: null
                     };
                 }
+                if (!selectedTemplate.sections['footer'].data['textUnderSlogan']) {
+                    // Assign the default value based of company name if not present
+                    selectedTemplate.sections['footer'].data['textUnderSlogan'] = {
+                        label: this.companyName,
+                        display: true,
+                        width: null
+                    };
+                }
                 if (!selectedTemplate.sections['footer'].data['showNotesAtLastPage']) {
                     selectedTemplate.sections['footer'].data['showNotesAtLastPage'] = defaultTemplate ?
                         defaultTemplate.sections['footer'].data['showNotesAtLastPage'] : {
