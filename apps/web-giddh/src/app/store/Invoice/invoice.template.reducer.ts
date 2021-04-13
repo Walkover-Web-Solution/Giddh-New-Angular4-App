@@ -264,6 +264,11 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
+                    showCompanyAddress: {
+                        label: '',
+                        display: true,
+                        width: null
+                    },
                 }
             },
             table: {
