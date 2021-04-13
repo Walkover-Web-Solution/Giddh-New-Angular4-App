@@ -207,6 +207,14 @@ export class InvoiceUiDataService {
                         selectedTemplate.sections.footer.data.message1.label = `We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.`;
                     }
                 }
+                if (!selectedTemplate.sections['header'].data['showCompanyAddress']) {
+                    selectedTemplate.sections['header'].data['showCompanyAddress'] = defaultTemplate ?
+                        defaultTemplate.sections['header'].data['showCompanyAddress'] : {
+                            label: '',
+                            display: true,
+                            width: null
+                        };
+                }
                 if (!selectedTemplate.sections['footer'].data['showNotesAtLastPage']) {
                     selectedTemplate.sections['footer'].data['showNotesAtLastPage'] = defaultTemplate ?
                         defaultTemplate.sections['footer'].data['showNotesAtLastPage'] : {
