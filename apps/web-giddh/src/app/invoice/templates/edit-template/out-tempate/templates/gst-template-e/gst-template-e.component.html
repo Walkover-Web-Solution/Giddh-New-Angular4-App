@@ -476,10 +476,10 @@
                                     {{fieldsAndVisibility.footer.slogan?.label }}
                                 </small>
                             </strong>
-                            <p class="bd-rb"></p>
-                            <strong>
-                                <small *ngIf="fieldsAndVisibility.header.companyName?.label">
-                                    {{fieldsAndVisibility.header.companyName?.label}}
+                            <p *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label" class="bd-rb"></p>
+                            <strong *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display">
+                                <small>
+                                    {{fieldsAndVisibility.footer.textUnderSlogan?.label}}
                                 </small>
                             </strong>
                         </ng-container>
@@ -488,10 +488,10 @@
                         <ng-container>
                             <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="max-width-180" alt=""
                                 style="min-width: 60px;height: 60px;" />
-                            <p class="bd-rb"></p>
-                            <strong>
-                                <small *ngIf="fieldsAndVisibility.header.companyName?.label">
-                                    {{fieldsAndVisibility.header.companyName?.label}}
+                            <p *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label" class="bd-rb"></p>
+                            <strong *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display">
+                                <small>
+                                    {{fieldsAndVisibility.footer.textUnderSlogan?.label}}
                                 </small>
                             </strong>
                         </ng-container>
