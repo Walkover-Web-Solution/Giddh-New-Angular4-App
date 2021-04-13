@@ -7,6 +7,43 @@
 .primary-sidebar {
     background-color: $solitude-new;
     .company-branch-block {
+        .branch-connection {
+            span.outer-span {
+                width: 12px;
+                height: calc(100% - 54px);
+                border: 2px solid $grey-chateau;
+                max-height: 100%;
+                min-height: 33px;
+                display: block;
+                border-top: none;
+                border-right: none;
+                position: absolute;
+                left: 23px;
+                top: 40px;
+                &:after {
+                    position: absolute;
+                    width: 7px;
+                    height: 7px;
+                    display: block;
+                    background-color: $grey-chateau;
+                    border-radius: 50%;
+                    content: '';
+                    left: -4px;
+                }
+                &:before{
+                    position: absolute;
+                    width: 7px;
+                    height: 7px;
+                    display: block;
+                    background-color: $grey-chateau;
+                    border-radius: 50%;
+                    content: '';
+                    bottom: -4px;
+                    right: -4px;
+
+                }
+            }
+        }
         .company-name {
             .head-nav {
                 background: $white-smoke;
@@ -50,9 +87,9 @@
             }
             .company-full-name {
                 margin-top: 5px;
-                height: 38px;
                 white-space: normal;
                 word-break: break-word;
+                min-height: 38px;
             }
             img.company-icon {
                 width: 28px;
@@ -76,13 +113,7 @@
                 display: none;
             }
         }
-        .branch-connection {
-            position: absolute;
-            top: 36px;
-            font-size: 30px;
-            left: 15px;
-            color: $grey-chateau;
-        }
+
     }
     .search-box {
         .input-group-text {
@@ -285,6 +316,12 @@
                 justify-content: space-between;
                 word-break: break-word;
                 white-space: inherit;
+                .branch-name-full{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                }
                 i {
                     position: relative;
                     top: 2px;
@@ -379,6 +416,11 @@
         }
         .company-branch-block {
             padding: 0 10px !important;
+            .branch-connection {
+                .outer-span{
+                    display: none;
+                }
+            }
             h3 {
                 .company-alice {
                     margin-right: 0;
@@ -467,9 +509,6 @@
                     }
                 }
             }
-        }
-        .branch-connection {
-            display: none;
         }
         .search-block {
             padding: 0 10px !important;
