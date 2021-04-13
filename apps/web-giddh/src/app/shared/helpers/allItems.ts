@@ -108,8 +108,9 @@ export const ALL_ITEMS: AllItems[] = [
         icon: 'icon-vendor',
         items: [
             { label: 'Debit Note', link: '/pages/invoice/preview/debit note', icon: 'icon-debit-note-new', description: 'Record debit note & update A/c' },
-            { label: 'Purchase Bill', link: '/pages/purchase-management/purchase/bill', icon: 'icon-invoice-new', description: 'Purchase request, purchase bill, modify PO' },
-            { label: 'Purchase Order', link: '/pages/purchase-management/purchase/order', icon: 'icon-purchase-order', description: 'Purchase request, purchase bill, modify PO' },
+            { label: 'Purchase Bill', link: '/pages/proforma-invoice/invoice/purchase', icon: 'icon-invoice-new', description: 'Purchase request, purchase bill, modify PO' },
+            { label: 'Purchase Management', link: '/pages/purchase-management/purchase/bill', icon: 'icon-purchase-management1', description: 'Purchase request, purchase bill, modify PO' },
+            { label: 'Purchase Order', link: '/pages/purchase-management/purchase-order/new', icon: 'icon-purchase-order', description: 'Purchase request, purchase bill, modify PO' },
             { label: 'Purchase Register', link: '/pages/reports/purchase-register', icon: 'icon-register-new', description: 'Net & cumulative purchases weekly/monthly/quarterly' },
             { label: 'Vendor', link: '/pages/contact/vendor', icon: 'icon-vendor', description: 'Send Bulk SMS/Emails, Set reminders, filter by date/name' },
         ]

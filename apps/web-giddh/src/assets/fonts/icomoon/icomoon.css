@@ -21,13 +21,14 @@
     text-transform: none;
     line-height: 1;
     stroke-width: thin;
-    -webkit-text-stroke-width: thin;
-
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-vendor:before {
+  content: "\e908";
+}
 .icon-left:before {
   content: "\e9e1";
 }
@@ -129,6 +130,9 @@
 }
 .icon-trial-balance-new:before {
   content: "\e9b9";
+}
+.icon-tax1:before {
+  content: "\e9e4";
 }
 .icon-tally-import:before {
   content: "\e9ba";
@@ -238,9 +242,6 @@
 }
 .icon-search:before {
   content: "\e907";
-}
-.icon-vendor:before {
-  content: "\e908";
 }
 .icon-voucher:before {
   content: "\e909";
