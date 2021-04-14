@@ -873,7 +873,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public trackItems(index: number, item: AllItem): string {
         return item.link;
     }
-
     /**
      * Returns the readable format name of menu item
      *
