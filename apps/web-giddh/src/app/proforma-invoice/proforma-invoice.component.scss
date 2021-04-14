@@ -628,6 +628,10 @@ textarea:focus {
     height: 34px !important;
 }
 
+textarea.form-control {
+    height: auto !important;
+}
+
 form label {
     font-size: 14px;
 }
@@ -1047,7 +1051,7 @@ section.newtable {
 }
 
 .cash-invoice-tip-img.search-arrow-image {
-    max-width: 215px;
+    max-width: 240px;
 }
 
 .tax-incurrency {

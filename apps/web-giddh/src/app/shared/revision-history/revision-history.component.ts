@@ -40,6 +40,12 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
 
     constructor(public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, private generalService: GeneralService, public purchaseRecordService: PurchaseRecordService, private cdRef: ChangeDetectorRef) {
 
@@ -135,12 +141,18 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
 
         if (change.optType === "CREATE") {
             if (type === "po") {
-                message += "Purchase Order created for " + change.newValue;
+                let poCreated = this.localeData?.po_created;
+                poCreated = poCreated.replace("[VALUE]", change.newValue);
+                message += poCreated;
             } else {
-                message += "Purchase Bill created for " + change.newValue;
+                let pbCreated = this.localeData?.pb_created;
+                pbCreated = pbCreated.replace("[VALUE]", change.newValue);
+                message += pbCreated;
             }
         } else {
-            message += revisionField + " updated to " + change.newValue;
+            let valueChanged = this.localeData?.value_changed;
+            valueChanged = valueChanged.replace("[FIELD]", revisionField).replace("[VALUE]", change.newValue);
+            message += valueChanged;
         }
 
         return message;
@@ -216,5 +228,30 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof RevisionHistoryComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.translationLoaded = true;
+        }
+    }
+
+    /**
+     * This will return the by user text
+     *
+     * @param {*} user
+     * @returns {string}
+     * @memberof RevisionHistoryComponent
+     */
+    public getByUserText(user: any): string {
+        let byUser = this.localeData?.by_user;
+        byUser = byUser.replace("[USER]", user);
+        return byUser;
     }
 }

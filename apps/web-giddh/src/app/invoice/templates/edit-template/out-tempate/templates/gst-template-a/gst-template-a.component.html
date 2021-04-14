@@ -133,10 +133,10 @@
                 </ng-container>
             </header>
             <table class="warehouse-table" cellspacing="0" cellpadding="0"
-                *ngIf="fieldsAndVisibility?.header?.warehouseAddress?.display">
+                *ngIf="fieldsAndVisibility?.header?.warehouseAddress?.display || fieldsAndVisibility?.header?.showCompanyAddress?.display">
                 <tbody>
                     <tr>
-                        <td>
+                        <td *ngIf="fieldsAndVisibility?.header?.showCompanyAddress?.display">
                             <p>Company Details:</p>
                             <p><strong>Walkover Web Solutions Pvt</strong></p>
                             <p>Ltd. 405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, Near Greater Kailash Hospital,
@@ -144,7 +144,7 @@
                             <p>GSTIN:23AAAAAA000A1Z0</p>
                         </td>
 
-                        <td>
+                        <td *ngIf="fieldsAndVisibility?.header?.warehouseAddress?.display">
                             <p>Shipped From:</p>
                             <p><strong>Walkover Web Solutions Pvt</strong></p>
                             <p>405 Agrawal Traders, 10/2, Old Palasia, MG Road, Ujjain 456001 (M. P.)</p>
@@ -651,14 +651,6 @@
                                     <th class="text-right "
                                         [ngStyle]="{ 'background-color': inputTemplate.tableColor} ">SGST Amt.</th>
                                 </ng-container>
-                                <ng-container>
-                                    <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} "
-                                        *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
-                                        IGST %</th>
-                                    <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} "
-                                        *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
-                                        IGST Amt.</th>
-                                </ng-container>
                                 <th class="text-right " [ngStyle]="{ 'background-color': inputTemplate.tableColor} "
                                     *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
                                     Total Amt.</th>
@@ -704,10 +696,6 @@
                                 <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'" class="text-right ">162.00
                                 </td>
                                 <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
-                                    18%</td>
-                                <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
-                                    100.00</td>
-                                <td *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label === 'taxRateBifurcation'">
                                     2124.00</td>
                             </tr>
                         </tbody>
@@ -722,11 +710,6 @@
                                 <th class="text-right ">162.00</th>
                                 <th></th>
                                 <th class="text-right ">162.00</th>
-                                <th *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label==='taxRateBifurcation' ">
-                                </th>
-                                <th class="text-right "
-                                    *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label==='taxRateBifurcation' ">
-                                    600.00</th>
                                 <th class="text-right "
                                     *ngIf="fieldsAndVisibility?.footer?.taxBifurcation?.label==='taxRateBifurcation' ">
                                     2124</th>
@@ -742,6 +725,7 @@
                 </a>
                 <aside>
                     <p class="pd-1" [ngStyle]="{ 'font-size' : inputTemplate.fontMedium + 'px', 'white-space': 'pre-line'}" *ngIf="fieldsAndVisibility.footer.showNotesAtLastPage?.display">{{fieldsAndVisibility.footer.message1?.label}}</p>
+                    <p class="pd-1" [ngStyle]="{ 'font-size' : inputTemplate.fontMedium + 'px', 'white-space': 'pre-line'}" *ngIf="voucherType==='sales' && fieldsAndVisibility.footer.showNotesAtLastPage?.display && fieldsAndVisibility.footer.showMessage2?.display">Notes provided in the invoice will appear here</p>
                     <table cellpadding="0" cellspacing="0" class="subfooter">
                         <tbody>
                             <tr>
@@ -758,18 +742,31 @@
                                             </span>
                                         </p>
                                     </ng-container>
+                                    <p *ngIf="voucherType==='sales' && !fieldsAndVisibility.footer.showNotesAtLastPage?.display && fieldsAndVisibility.footer.showMessage2?.display">
+                                        <span><br>
+                                            <strong>Notes 2</strong> <br>
+                                            <span class="notes2-default-text">
+                                                Notes provided in the invoice will appear here
+                                            </span>
+                                        </span>
+                                    </p>
                                     <!--<p *ngIf="fieldsAndVisibility.footer.thanks?.display " style="white-space:pre-line; " [innerHTML]="fieldsAndVisibility.footer.thanks?.label "></p>-->
                                 </td>
                                 <td>&nbsp;</td>
                                 <td class="text-center "
                                     [ngStyle]="{ 'font-size': inputTemplate.fontMedium, 'vertical-align': 'bottom', 'width': '35%' } "
                                     *ngIf="!showImageSignature ">
-                                    <hr *ngIf="fieldsAndVisibility.footer.slogan?.label ">
-                                    <ng-container *ngIf="fieldsAndVisibility.footer.slogan?.display ">
-                                        <strong class="slogan-pre-line ">
-                                            <small
-                                                *ngIf="fieldsAndVisibility.footer.slogan?.label || fieldsAndVisibility.footer.slogan?.label==='' ">
-                                                {{fieldsAndVisibility.footer.slogan?.label }}
+                                    <strong class="slogan-pre-line">
+                                        <small
+                                            *ngIf="fieldsAndVisibility.footer.slogan?.label || fieldsAndVisibility.footer.slogan?.label==='' ">
+                                            {{fieldsAndVisibility.footer.slogan?.label }}
+                                        </small>
+                                    </strong>
+                                    <hr *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label">
+                                    <ng-container *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display">
+                                        <strong>
+                                            <small>
+                                                {{fieldsAndVisibility.footer.textUnderSlogan?.label}}
                                             </small>
                                         </strong>
                                     </ng-container>
@@ -779,6 +776,12 @@
                                     <ng-container>
                                         <img [hidden]="!showImageSignature " [src]="imageSignatureSrc"
                                             class="inner-img-signature" alt=" " />
+                                        <hr *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label">
+                                        <strong *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display">
+                                            <small>
+                                                {{fieldsAndVisibility.footer.textUnderSlogan?.label}}
+                                            </small>
+                                        </strong>
                                     </ng-container>
                                 </td>
                             </tr>

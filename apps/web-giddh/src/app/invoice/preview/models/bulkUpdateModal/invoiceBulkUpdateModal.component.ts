@@ -18,6 +18,7 @@ import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { ModalOptions, ModalDirective } from 'ngx-bootstrap/modal';
+import { CustomTemplateState } from 'apps/web-giddh/src/app/store/Invoice/invoice.template.reducer';
 
 @Component({
     selector: 'invoice-bulk-update-modal-component',
@@ -28,22 +29,16 @@ import { ModalOptions, ModalDirective } from 'ngx-bootstrap/modal';
 export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public voucherType: string = '';
     @Input() public selectedInvoices;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChild('bulkUpdateForm', {static: true}) public bulkUpdateForm: NgForm;
     @ViewChild('bulkUpdateImageSlogan', {static: true}) public bulkUpdateImageSlogan: ModalDirective;
 
-    public fieldOptions: IOption[] = [
-        { label: 'PDF Template', value: 'pdfTemplate' },
-        { label: 'Notes', value: 'notes' },
-        { label: 'Signature', value: 'signature' },
-        { label: 'Due Date', value: 'dueDate' },
-        // { label: 'Shipping Address', value: 'shippingDetails' }, TODO: Under discussion
-        { label: 'Custom Fields', value: 'customFields' }
-    ];
-    public templateSignaturesOptions: IOption[] = [
-        { label: 'Image', value: 'image' },
-        { label: 'Slogan', value: 'slogan' },
-    ];
+    public fieldOptions: IOption[] = [];
+    public templateSignaturesOptions: IOption[] = [];
     public signatureOptions: string = 'image'
     public selectedField: string = ''
     public allTemplates$: Observable<CustomTemplateResponse[]>;
@@ -74,7 +69,8 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
         backdrop: 'static',
         ignoreBackdropClick: true
     };
-
+    /** True, if user has opted to show notes at the last page of sales invoice */
+    public showNotesAtLastPage: boolean;
     public isDefaultTemplateSignatureImage: boolean;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -94,7 +90,15 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
     public ngOnInit() {
         this.uploadInput = new EventEmitter<UploadInput>();
         this.getTemplates();
-
+        this.store.pipe(select(appState => appState.invoiceTemplate), takeUntil(this.destroyed$)).subscribe((templateData: CustomTemplateState) => {
+            if (templateData && templateData.customCreatedTemplates) {
+                const defaultTemplate = templateData.customCreatedTemplates.find(template => (template.isDefault || template.isDefaultForVoucher));
+                const sections = defaultTemplate.sections;
+                if (sections?.footer?.data) {
+                    this.showNotesAtLastPage = sections.footer.data.showNotesAtLastPage?.display;
+                }
+            }
+        });
     }
 
     /**
@@ -131,7 +135,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                     this.updateImageSignatureRequest.imageSignatureUniqueName = output.file.response.body.uniqueName;
                 }
                 // this.isFileUploading = false;
-                this._toaster.successToast('file uploaded successfully');
+                this._toaster.successToast(this.localeData?.file_uploaded);
             } else {
                 // this.isFileUploading = false;
                 this._toaster.errorToast(output.file.response.message);
@@ -251,12 +255,25 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
      */
     public ngOnChanges(simpleChanges: SimpleChanges): void {
 
+        this.fieldOptions = [
+            { label: this.localeData?.bulk_update_fields?.pdf_template, value: 'pdfTemplate' },
+            { label: this.localeData?.bulk_update_fields?.notes, value: 'notes' },
+            { label: this.localeData?.bulk_update_fields?.signature, value: 'signature' },
+            { label: this.localeData?.bulk_update_fields?.due_date, value: 'dueDate' },
+            { label: this.localeData?.bulk_update_fields?.custom_fields, value: 'customFields' }
+        ];
+
+        this.templateSignaturesOptions = [
+            { label: this.localeData?.image, value: 'image' },
+            { label: this.localeData?.slogan, value: 'slogan' },
+        ];
+
         if (simpleChanges) {
             if (simpleChanges.voucherType && simpleChanges.voucherType.currentValue) {
 
                 this.voucherType = simpleChanges.voucherType.currentValue;
                 if (this.voucherType === "credit note" || this.voucherType === "debit note") {
-                    this.fieldOptions = this.fieldOptions.filter(item => item.value !== 'dueDate' && item.label !== 'Due Date');
+                    this.fieldOptions = this.fieldOptions.filter(item => item.value !== 'dueDate' && item.label !== this.localeData?.bulk_update_fields?.due_date);
                 }
             } else if (simpleChanges.selectedInvoices && simpleChanges.selectedInvoices.currentValue) {
 
@@ -334,7 +351,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
             if (this.updateImageSignatureRequest.imageSignatureUniqueName) {
                 this.bulkUpdateRequest(this.updateImageSignatureRequest, 'imagesignature');
             } else {
-                this._toaster.infoToast('Please upload file');
+                this._toaster.infoToast(this.localeData?.file_required_error);
             }
         } else if (this.signatureOptions === 'slogan') {
             this.bulkUpdateRequest(this.updateSloganRequest, 'slogan');
