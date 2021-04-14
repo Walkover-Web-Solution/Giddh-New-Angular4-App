@@ -14,6 +14,10 @@
     vertical-align: top;
 }
 
+body{
+    overflow: auto;
+}
+
 .strong {
     font-weight: bold;
 }
@@ -73,7 +77,6 @@ p {
     box-sizing: border-box;
     font-size: 12px;
     margin: 0 auto;
-    overflow: hidden;
     padding: 0.1in;
     letter-spacing: 0;
     width: 100%;
@@ -192,7 +195,8 @@ header img {
 }
 
 #default .table-item{
-    overflow-x: auto;
+    overflow-x: scroll;
+    width: 100%;
 }
 
 .text-right {
