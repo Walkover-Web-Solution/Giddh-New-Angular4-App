@@ -29,9 +29,12 @@
 .icon-template:before {
   content: "\e9b8";
 }
+<<<<<<< HEAD
 .icon-GSTR:before {
   content: "\e9cd";
 }
+=======
+>>>>>>> 6fcc28e47a... correct image path
 .icon-settings-cog:before {
   content: "\e9e5";
 }

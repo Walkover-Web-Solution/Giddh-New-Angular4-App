@@ -28,7 +28,11 @@ export const ALL_ITEMS: AllItems[] = [
             { label: 'Receipt', link: '/pages/reports/receipt', icon: 'icon-reciept-new', description: 'Advance, normal, total, & unused receipts' },
             { label: 'Sales Invoice', link: '/pages/proforma-invoice/invoice/sales', icon: 'icon-invoice-new', description: 'Generate sales invoice' },
             { label: 'Sales Order', link: '/pages/invoice/preview/estimates', icon: 'icon-sales-order1', description: 'Final sales order' },
+<<<<<<< HEAD
             { label: 'Sales Register', link: '/pages/reports/sales-register', icon: 'icon-register-new', description: 'Net & cumulative sales' },
+=======
+            { label: 'Sales Register', link: '/pages/reports/sales-register', icon: 'icon-register-new', description: 'Net & cumulative sales weekly/monthly/quarterly' },
+>>>>>>> 6fcc28e47a... correct image path
             { label: 'Template', link: '/pages/invoice/preview/templates/sales', icon: 'icon-template', description: 'Edit design & content of the template', alwaysPresent: true }
         ]
     },
