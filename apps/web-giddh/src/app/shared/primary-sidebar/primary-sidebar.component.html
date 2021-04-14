@@ -158,7 +158,7 @@
             <div class="menu-item-wrapper font-14">
                 <ul class="list-style-none giddh-primary-items">
 
-                    <li class="main-item btn-group"  (click)="addClass = !addClass" *ngFor="let menu of allItems; trackBy: trackItems" dropdown
+                    <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems" dropdown
                         [attr.container]="!isOpen ? 'body' : ''">
                         <a href="javascript:void(0);" tooltip="{{menu?.label}}" *ngIf="menu?.items?.length"
                             id="button-basic-02" dropdownToggle type="button" class="dropdown-toggle"
