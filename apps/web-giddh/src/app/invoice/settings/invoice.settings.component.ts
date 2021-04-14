@@ -1,5 +1,4 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
 import { takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
@@ -12,15 +11,9 @@ import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
-
-const PaymentGateway = [
-    { value: 'razorpay', label: 'razorpay' },
-    { value: 'cashfree', label: 'cashfree' }
-];
 
 @Component({
     selector: 'app-invoice-setting',
@@ -60,7 +53,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public moment = moment;
     public isAutoPaidOn: boolean;
     public companyCashFreeSettings: CompanyCashFreeSettings = new CompanyCashFreeSettings();
-    public paymentGatewayList: IOption[] = PaymentGateway;
+    public paymentGatewayList: IOption[] = [];
     public isLockDateSet: boolean = false;
     public lockDate: Date = new Date();
     public isGmailIntegrated: boolean;
@@ -69,6 +62,10 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     shouldShowGmailIntegration: boolean;
     private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private cdr: ChangeDetectorRef,
@@ -184,7 +181,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         webhook['entity'] = entityType;
         let objToSave = _.cloneDeep(webhook);
         if (!objToSave.url || !objToSave.triggerAt) {
-            this._toasty.warningToast("Last row can't be blank.");
+            this._toasty.warningToast(this.localeData?.webhook_required_error);
             return false;
         } else if (objToSave.url && objToSave.triggerAt) {
             this.validateWebhook(objToSave);
@@ -272,7 +269,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.razorpayObj.autoCapturePayment = true;
         this.razorpayObj.companyName = '';
         if (form.createPaymentEntry && (!this.razorpayObj.userName || !this.razorpayObj.account)) {
-            this._toasty.warningToast('Please Enter Valid Key Or Uncheck Razorpay Option.');
+            this._toasty.warningToast(this.localeData?.razorpay_error);
             return false;
         }
         let razorpayObj = _.cloneDeep(this.razorpayObj);
@@ -306,7 +303,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public validateWebhook(webhook) {
         let url = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,5}[.]{0,1}/;
         if (!url.test(webhook.url)) {
-            this._toasty.warningToast('Invalid Webhook URL.');
+            this._toasty.warningToast(this.localeData?.invalid_webhook_url);
         } else {
             this.webhookIsValidate = true;
         }
@@ -340,7 +337,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         if (email.test(emailId)) {
             this.store.dispatch(this.invoiceActions.updateInvoiceEmail(emailId));
         } else {
-            this._toasty.warningToast('Invalid Email Address.');
+            this._toasty.warningToast(this.localeData?.invalid_email);
             return false;
         }
     }
@@ -440,7 +437,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         };
         this._authenticationService.saveGmailAuthCode(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === 'success') {
-                this._toasty.successToast('Gmail account added successfully.', 'Success');
+                this._toasty.successToast(this.localeData?.gmail_account_added, 'Success');
             } else {
                 this._toasty.errorToast(res.message, res.code);
             }
@@ -474,4 +471,18 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof InvoiceSettingComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.paymentGatewayList = [
+                { value: 'razorpay', label: this.localeData?.razorpay },
+                { value: 'cashfree', label: this.localeData?.cashfree }
+            ];
+        }
+    }
 }

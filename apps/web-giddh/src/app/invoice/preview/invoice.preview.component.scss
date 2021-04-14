@@ -580,7 +580,13 @@ span.icon-export-icon {
                justify-content: flex-start !important;
            }
         }
-
+        .invoice-modal-content{
+            left: 60px;
+            width: 100%;
+        }
+        .invoice-modal-content:after{
+            display: none;
+        }
     }
     .status-mobile{
         display: flex !important;
@@ -709,9 +715,13 @@ span.icon-export-icon {
     .mobile-search .input-container input {
         font-size: 13px;
     }
-    .invoice-modal-content:after,
     .invoice-modal-content {
         top: 131px;
+        left: 0;
+        &:after{
+            top: 131px;
+            left: 0;
+        }
     }
     .invoice-footer .font-xxlarge {
         font-size: 16px;
@@ -846,6 +856,19 @@ span.icon-export-icon {
         min-width:40px;
         .check-img{
             width:20px;
+        }
+    }
+}
+@media(max-width:360px){
+    .input-grp-date-range-picker{
+        .form-group{
+            margin-right: 0 !important;
+            justify-content: space-between;
+        }
+        .search-icon-block{
+            position: absolute;
+            right: 0;
+            bottom: -40px;
         }
     }
 }

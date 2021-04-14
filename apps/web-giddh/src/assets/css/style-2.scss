@@ -162,9 +162,6 @@
         padding: 5px 10px 5px 53% !important;
     }
 }
-.text-right{
-    text-align: right;
-}
 .table-cell{
     display: table-cell;
 }
@@ -213,23 +210,6 @@ body{
 .border-none {
     border: none !important;
 }
-
-.pt-0 {
-    padding-top: 0px !important;
-}
-
-.pb-0 {
-    padding-bottom: 0px !important;
-}
-
-.pr-0 {
-    padding-right: 0px !important;
-}
-
-.pl-0 {
-    padding-left: 0px !important;
-}
-
 .pd-1 {
     padding: 10px !important;
 }
@@ -587,7 +567,7 @@ input {
     padding: 0 15px;
 }
 
-.custom-tooltipe {
+.custom-tooltip {
     position: absolute;
     top: -22px;
     z-index: 99;
@@ -641,7 +621,9 @@ input {
     max-height: 305px;
     overflow-y: scroll;
 }
-
+.nav-left-bar .sub-list.all-company-list{
+    overflow-y: unset;
+}
 ul.sub-list {
     margin-top: 5px;
 }
@@ -675,9 +657,7 @@ ul.sub-list {
 }
 
 .company-list .input-group .form-control {
-    /* border-bottom: 1px solid #e8e8e8 !important; */
     border: 0px solid !important;
-    /* border-bottom: 1px solid #e8e8e8 !important; */
 }
 
 .company-list .input-group .input-group-addon {
@@ -933,11 +913,6 @@ ul.sub-list {
     margin-bottom: 0px;
     background: $white !important;
 }
-
-.d-none {
-    display: none;
-}
-
 .aging-checkbox {
     visibility: hidden;
     opacity: 0;
@@ -1146,7 +1121,9 @@ ul.sub-list {
 .h-100{
     height:100% !important;
 }
-
+.width-100 {
+    width: 100% !important;
+}
 .width-150 {
     width: 150px;
 }
@@ -1422,11 +1399,6 @@ modal-container.modal {
 .pd-t85 {
     padding-top: 85px !important;
 }
-
-.mb-0 {
-    margin-bottom: 0px;
-}
-
 .overlay-cal {
     .modal-body {
         max-width: 1120px !important;
@@ -2942,7 +2914,7 @@ li.no-click {
     right: 11px;
     top: 22px;
     font-size: 8px;
-    color: $davy-grey
+    color: $davy-grey;
 }
 
 .ranges li {
@@ -3253,11 +3225,11 @@ a.btn.btn-xs.btn-link.pull-right {
     top: -4px;
 }
 
-.mutliple_unit {
+.multiple-unit {
     position: relative;
 }
 
-.mutliple_unit button {
+.multiple-unit button {
     padding: 0;
     border: 0;
     background: 0 0;
@@ -3267,7 +3239,7 @@ a.btn.btn-xs.btn-link.pull-right {
     cursor: pointer;
 }
 
-.mutliple_unit button + button {
+.multiple-unit button + button {
     margin-left: 22px;
 }
 
@@ -3412,7 +3384,7 @@ a.btn.btn-xs.btn-link.pull-right {
     align-items: center;
 }
 
-.stock_info {
+.stock-info {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -4813,12 +4785,12 @@ label {
     margin-left: 255px;
 }
 
-.grp_col::-webkit-scrollbar-track {
+.grp-col::-webkit-scrollbar-track {
     background: $white-smoke;
     margin-left: 255px;
 }
 
-.grp_col::-webkit-scrollbar-thumb {
+.grp-col::-webkit-scrollbar-thumb {
     background-color: $nobel;
     outline: 1px solid $gray;
     margin-left: 255px;
@@ -5240,7 +5212,7 @@ a {
     margin-bottom: 0;
 }
 
-#customInvoice .template-editor .custom-field span {
+#customInvoice .template-editor .custom-field span:not(.max-character-label) {
     display: inline-block;
     float: right;
     width: calc(100% - 30px);
@@ -5701,7 +5673,7 @@ input[type="checkbox"][disabled]:after {
     padding-left: 7px !important;
 }
 
-.table-container .profitLoss section div > div {
+.table-container .profit-loss section div > div {
     border-right: 0;
 }
 
@@ -6106,7 +6078,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     background-color: $alice-blue-light;
 }
 
-.ledg-head table td.pdR25imp {
+.ledg-head table td.pd-r25 {
     padding-right: 25px !important;
 }
 
@@ -6123,7 +6095,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     position: relative;
 }
 
-.ledg-head.entry-popup table td.pdR25imp {
+.ledg-head.entry-popup table td.pd-r25 {
     padding-right: 25px !important;
 }
 
@@ -6216,7 +6188,7 @@ table td[class*=col-]:last-child {
     font-weight: 400;
 }
 
-.pdR25imp {
+.pd-r25 {
     padding-right: 25px !important;
 }
 
@@ -6345,7 +6317,6 @@ table td[class*=col-]:last-child {
 .universal-date {
     float: none !important;
     display: inline-block;
-    padding-top: 12px;
 }
 
 .divide-ico {
@@ -6830,7 +6801,7 @@ GST filing
 }
 
 .menu_open {
-    padding-left: 215px;
+    padding-left: 240px;
 }
 
 .navbar_open {
@@ -7615,7 +7586,7 @@ app-header {
 }
 
 .error-box {
-    border: 2px solid $red;
+    border: 2px solid $red !important;
 }
 
 .text-warning {
@@ -7667,10 +7638,11 @@ app-header {
     padding: 10px;
     box-shadow: 0 0px 6px rgba(0, 0, 0, 0.16);
     text-align: right !important;
+    padding-left: 60px;
 }
 
 .menu_open .sticky-footer.sticky-footer-sale-amount {
-    padding-left: 215px;
+    padding-left: 240px;
 }
 
 .sticky-footer-sale-amount .inner-content-footer {
@@ -7748,11 +7720,11 @@ app-header {
     white-space: initial;
 }
 
-footer#footer.absoulte-footer {
+footer#footer.absolute-footer {
     padding-left: 15px;
 }
 
-.menu_open footer#footer.absoulte-footer {
+.menu_open footer#footer.absolute-footer {
     padding-left: 230px;
 }
 
@@ -7760,7 +7732,7 @@ footer#footer.absoulte-footer {
     position: relative;
 }
 
-.inventory-page footer#footer.absoulte-footer {
+.inventory-page footer#footer.absolute-footer {
     bottom: -60px;
     background-color: transparent !important;
 }
@@ -7880,21 +7852,21 @@ div#getGroupModal {
     margin-top: 60px;
     position: fixed;
     width: 100%;
-    left: 0;
+    left:60px;
     bottom: 0;
     z-index: 3;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
 
 .menu_open .invoice-footer {
-    left: 215px;
+    left: 240px;
     display: flex;
     padding: 20px 15px;
     background: $white;
     margin-top: 60px;
     position: fixed;
     width: 100%;
-    left: 215px;
+    left: 240px;
     bottom: 0;
     z-index: 10;
 }
@@ -7952,7 +7924,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 .create-select .menu{
-    width: 142px !important; 
+    width: 142px !important;
 }
 
 .select-caret:after,
@@ -8435,7 +8407,7 @@ button.btn.btn-filter {
     transform: translate(0);
 }
 
-.dropdown-container .dropdown-menu li label.checkbox.oh.custom-item span {
+.dropdown-container .dropdown-menu li label.checkbox.overflow-hidden.custom-item span {
     max-width: calc(100% - 35px);
     line-height: initial;
 }
@@ -9018,10 +8990,11 @@ ngx-daterangepicker-material {
 .HW_badge_cont {
     visibility: visible !important;
     width: auto !important;
-    top: -25px;
+    top: 0;
     width: 30px !important;
     display: flex !important;
-    left: 28px !important;
+    left: 0 !important;
+    position: absolute !important;
 }
 
 .HW_badge {
@@ -9057,7 +9030,7 @@ span#HW_badge_cont:nth-child(3) {
 
 .mobile-home {
     background-color: $lavender;
-    .padding-top-fixed-mobile,
+    .fixed-padding,
     .padding-top-fixed,
     .desktop-header {
         display: none;
@@ -9081,7 +9054,7 @@ span#HW_badge_cont:nth-child(3) {
             padding-bottom: 5px;
         }
     }
-    .padding-top-fixed-mobile {
+    .fixed-padding {
         padding-top: 50px;
     }
 }
@@ -9137,26 +9110,30 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 .on-setting-page .nav-left-bar.open , .on-user-page .nav-left-bar.open on-user-page {
-    left: -215px !important;
+    left: -240px !important;
     display: none !important;
 }
-.setting-sidebar-open .nav-left-bar{
+.setting-sidebar-open .nav-left-bar, .on-user-page .nav-left-bar, .on-setting-page .nav-left-bar{
     display: none;
 }
 .menu_open aside-setting.setting-sidebar {
     left: 0 !important;
 }
 .on-setting-page aside-setting.setting-sidebar, .on-user-page aside-setting.setting-sidebar{
-    left: -225px;
+    left: -250px;
 }
 .setting-sidebar-open #content-wrapper.menu_open {
-    padding-left: -215px;
+    padding-left: -240px;
 }
+
 .setting-sidebar-open .desktop-header {
     padding-left: 0;
 }
 .setting-sidebar-open .desktop-header.menu_open {
-    padding-left: 215px;
+    padding-left: 240px !important;
+}
+.desktop-header.menu_open {
+    padding-left: 60px !important;
 }
 /*flex css start*/
 .flex-column {
@@ -9372,7 +9349,15 @@ span#HW_badge_cont:nth-child(3) {
         background-color: $whisper-light !important;
     }
 }
-
+.max-character-label {
+    padding-left: 6px;
+    font-size: 11px;
+    color: $gray;
+}
+.max-character-value {
+    width: auto !important;
+    float: none !important;
+}
 
 #update-ledger-voucher-type-default.disabled-ledger, #update-ledger-assign-tag.disabled-ledger{
     .sh-select-disabled{
@@ -9393,7 +9378,7 @@ span#HW_badge_cont:nth-child(3) {
     left: 0;
 }
 .menu_open .inventory-footer, .menu_open .create-group-footer, .menu_open .stock-group-footer{
-    left: 215px;
+    left: 240px;
     width: 100%;
 }
 .bulk-create-table sh-select input, .bulk-create-table .mat-form-field-wrapper input,
@@ -9667,6 +9652,94 @@ input.mat-input-element{
             }
         }
     }
+    #primary-new-header.primary-main-header.open{
+        padding-left: 15px !important;
+    }
+    .add-manage-group-acc{
+        .modal-header{
+            border-radius: 0 !important;
+        }
+    }
+    .plan-wrapper{
+        padding-left: 60px;
+    }
+    .on-setting-page .plan-wrapper, .on-user-page .plan-wrapper{
+        padding-left: 0;
+    }
+    .plan-wrapper.menu_open{
+            padding-left: 240px !important;
+    }
+    .setting-sidebar-open #content-wrapper{
+        padding-left: 0;
+    }
+    .share-grp.account-share-modal, .group-share-modal{
+        .add-mailer{
+            .input-group{
+                input {
+                    min-width: 230px;
+                    max-width: 230px;
+                    margin-right: 10px;
+                }
+                .selected-permission{
+                    margin-left: 0 !important;
+                }
+                .btn-share{
+                    width: 110px;
+                }
+            }
+        }
+    }
+    .invoice-modal-content{
+        left: 60px !important;
+        width: calc(100% - 60px) !important;
+    }
+    .menu_open .invoice-modal-content{
+        left: 240px !important;
+        width: calc(100% - 240px) !important;
+    }
+    .primary-sidebar{
+        .giddh-primary-items{
+            .main-item{
+                .bs-tooltip-top {
+                    display: none;
+                }
+            }
+        }
+        &.sidebar-collapse{
+            .giddh-primary-items{
+                .main-item{
+                    .bs-tooltip-top {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+    .gst-sidebar-open {
+         .gst-sidebar{
+            left: -250px !important;
+         }
+         #content-wrapper{
+            padding-left: 0;
+        }
+        .nav-left-bar{
+            display: none;
+        }
+        .plan-wrapper{
+            padding-left: 0;
+        }
+        .menu_open{
+            .gst-sidebar{
+                left: 0 !important;
+            }
+            #content-wrapper {
+                padding-left: 240px;
+            }
+            .plan-wrapper{
+                padding-left: 60px;
+            }
+        }
+     }
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {
@@ -10087,6 +10160,13 @@ input.mat-input-element{
     }
 }
 @media (max-width: 767px) {
+    .invoice-modal-content{
+        left: 0 !important;
+        width: 100% !important;
+    }
+    .invoice-footer, .sticky-footer.sticky-footer-sale-amount {
+       left: 0;
+    }
     .custom-tabs.create-item-tab .nav-tabs{
         display: inline-block;
         white-space: nowrap;
@@ -10483,18 +10563,18 @@ input.mat-input-element{
         .panel-block .card-body {
             min-height: auto;
         }
-        .page-has-tabs .padding-top-fixed-mobile,
-        .on-user-page .padding-top-fixed-mobile {
+        .page-has-tabs .fixed-padding,
+        .on-user-page .fixed-padding {
             padding-top: 130px !important;
         }
-        .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile {
+        .page-has-tabs.setting-sidebar-open .fixed-padding {
             padding-top: 85px !important;
         }
-        .on-setting-page .padding-top-fixed-mobile {
+        .on-setting-page .fixed-padding {
             padding-top: 90px !important;
         }
 
-        .padding-top-fixed-mobile {
+        .fixed-padding {
             padding-top: 90px;
         }
         ngx-daterangepicker-material {
@@ -10564,6 +10644,7 @@ input.mat-input-element{
             left: auto !important;
             max-width: 320px;
             width: 100%;
+            top:40px !important;
         }
         .on-setting-page .setting-menu-icon,
         .on-user-page .setting-menu-icon {

@@ -1,0 +1,36 @@
+{
+    "interval_options": {
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "quarterly": "Quarterly",
+        "halfyearly": "Halfyearly",
+        "yearly": "Yearly"
+    },
+    "time_options": {
+        "first": "1st",
+        "second": "2nd",
+        "third": "3rd",
+        "fourth": "4th",
+        "fifth": "5th"
+    },
+    "recurring_date_error": "Date should be greater than today",
+    "recurring_all_field_required": "All * fields should be valid and filled",
+    "recurring_account": "Recurring Account",
+    "never_expire": "Never expire",
+    "interval": "Interval",
+    "select_interval": "Select Interval",
+    "type_to_search": "Type to search...",
+    "search_here": "Search here...",
+    "invoice_type": "Invoice Type",
+    "last_invoice_date": "Last Invoice Date",
+    "search_invoice_no": "Search Invoice No.",
+    "search_customer_name": "Search Customer Name",
+    "bulk_note": "Bulk Note",
+    "generate_eway_bill": "Generate E-way Bill",
+    "next_invoice_date": "Next Invoice Date",
+    "invoice_amount": "Invoice Amt",
+    "no_vouchers_found": "No Recurring Vouchers Found!",
+    "search_field": "Search [FIELD]",
+    "active": "Active",
+    "inactive": "InActive"
+}

@@ -209,8 +209,13 @@ tfoot.table-details tr th {
     vertical-align: baseline;
 }
 
-#royal .vertical-align-middle {
-    vertical-align: middle;
+#royal {
+    .vertical-align-middle {
+        vertical-align: middle;
+    }
+    .vertical-align-top {
+        vertical-align: top;
+    }
 }
 
 #royal .note {
@@ -381,4 +386,7 @@ header.bottom-border {
 .tax-table {
     padding-right: 0px !important;
     padding-left: 0px !important;
+}
+.date-text {
+    color: $zambezi;
 }

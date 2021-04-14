@@ -33,6 +33,10 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @Input() public purchaseOrderUniqueName: any;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     @Input() public isCompany: boolean;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /* Search element */
     @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
     /* Confirm box */
@@ -362,7 +366,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                 }
             });
         } else {
-            this.toaster.errorToast("Invalid Purchase Order");
+            this.toaster.errorToast(this.localeData?.invalid_po);
         }
     }
 
@@ -479,7 +483,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
             return;
         }
-        saveAs(this.attachedDocumentBlob, 'purchaseorder.pdf');
+        saveAs(this.attachedDocumentBlob, this.localeData?.download_po_filename);
     }
 
     /**

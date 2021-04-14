@@ -85,7 +85,22 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
+                    textUnderSlogan: {
+                        label: '',
+                        display: true,
+                        width: null
+                    },
+                    showNotesAtLastPage: {
+                        label: '',
+                        display: false,
+                        width: null
+                    },
                     message1: {
+                        label: '',
+                        display: true,
+                        width: null
+                    },
+                    showMessage2: {
                         label: '',
                         display: true,
                         width: null
@@ -250,6 +265,11 @@ export const initialState: CustomTemplateState = {
                         width: null
                     },
                     warehouseAddress: {
+                        label: '',
+                        display: true,
+                        width: null
+                    },
+                    showCompanyAddress: {
                         label: '',
                         display: true,
                         width: null
