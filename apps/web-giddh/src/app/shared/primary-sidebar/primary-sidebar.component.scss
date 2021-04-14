@@ -156,7 +156,7 @@
                 }
             }
             .left-fixed-header > li a.active {
-                @include highlight-color($lavender, $cornflower-blue);
+                @include highlight-color($white, $cornflower);
             }
         }
         p {
@@ -194,7 +194,7 @@
                 justify-content: space-between;
                 span {
                     .icon-arrow-down {
-                        transform: rotate(-85deg);
+                        transform: rotate(0deg);
                     }
                 }
             }
@@ -206,6 +206,11 @@
                     display: flex;
                     align-items: flex-start;
                     flex-direction: column;
+                    &.open{
+                         i.icon-right{
+                                transform: rotate(270deg) !important;
+                            }
+                    }
                     a {
                         color: $trout;
                         font-family: "opensans-semibold";
@@ -223,6 +228,7 @@
                             color: $cornflower !important;
                             background-color: transparent;
                         }
+
                         span {
                             min-width: 140px;
                             display: flex;
@@ -246,6 +252,7 @@
                             display: flex;
                             font-family: "opensans-regular";
                         }
+
                     }
                     .sub-menu {
                         &.show {
@@ -281,7 +288,7 @@
                             }
                             &:hover {
                                 a {
-                                    @include highlight-color($cornflower, $white);
+                                    @include highlight-color($link-water, $night-rider);
                                 }
                             }
                         }

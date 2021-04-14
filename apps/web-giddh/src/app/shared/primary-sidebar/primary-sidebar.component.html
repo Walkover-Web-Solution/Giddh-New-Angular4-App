@@ -147,8 +147,7 @@
         <div class="menu-block">
             <div class="menu-item  px-3 mr-b1">
                 <p class="font-12">
-                    <span [routerLink]="['/pages/giddh-all-items']"
-                        class="d-inline-flex align-items-center cursor-pointer">
+                    <span [routerLink]="['/pages/giddh-all-items']" class="d-inline-flex align-items-center cursor-pointer">
                         Menu
                         <i class="icon-down-new mr-l05"></i> </span>
                     <span class="text-gray cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
@@ -158,7 +157,8 @@
             </div>
             <div class="menu-item-wrapper font-14">
                 <ul class="list-style-none giddh-primary-items">
-                    <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems" dropdown
+
+                    <li class="main-item btn-group"  (click)="addClass = !addClass" *ngFor="let menu of allItems; trackBy: trackItems" dropdown
                         [attr.container]="!isOpen ? 'body' : ''">
                         <a href="javascript:void(0);" tooltip="{{menu?.label}}" *ngIf="menu?.items?.length"
                             id="button-basic-02" dropdownToggle type="button" class="dropdown-toggle"
