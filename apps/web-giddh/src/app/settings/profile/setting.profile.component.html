@@ -26,7 +26,6 @@
                         <div class="custom-select position-relative">
                             <input type="text" placeholder="Currency" class="form-control" disabled [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" />
                         </div>
-
                     </div>
                     <div class="form-group col-sm-8">
                         <div class="checkbox pd-t26 no-margin">
@@ -40,7 +39,6 @@
                         </div>
                     </div>
                 </div> -->
-
             <!--</div>
             <div class="row">
                 <div class="form-group col-lg-4 col-md-12 col-sm-12">
@@ -98,10 +96,7 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
-
             <div class="row mr-b1">
                 <div class="col-sm-12" *ngIf="formFields['taxName'] !== undefined">
                     <hr>
@@ -123,7 +118,6 @@
                                                     <div class="input-group-addon">
                                                         <input id="checkbox-{{i}}" class="checkbox-custom" (click)="setGstAsDefault(i, $event)" [(ngModel)]="gst.isDefault" name="isDefault+{{i}}" tooltip="Default {{formFields['taxName'].label}}" placement="bottom" (change)="checkGstDetails()" type="checkbox">
                                                         <label for="checkbox-{{i}}" class="checkbox-custom-label"></label>
-
                                                     </div>
                                                     <input type="text" placeholder="{{formFields['taxName'].label}}" class="form-control" (keyup)="setChildState(gstNumberField, i);" #gstNumberField (blur)="setChildState(gstNumberField, i); checkGstNumValidation(gstNumberField);gstKeyDownSubject$.next($event)"
                                                         [(ngModel)]="gst.taxNumber" name="newgstNumber+{{i}}" />
@@ -162,7 +156,6 @@
     </div>
 </div> -->
 <giddh-page-loader *ngIf="(getCompanyProfileInProgress$ | async)"></giddh-page-loader>
-
 <!--Tabs of Company Profile-->
 <div class="settings-profile-tabs">
     <tabset #staticTabs class="profile-tab-container">
