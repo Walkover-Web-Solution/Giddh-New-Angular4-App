@@ -108,6 +108,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         });
         this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
             this.customTemplate = _.cloneDeep(template);
+            this.assignImageSignature();
         });
 
         this._invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
@@ -132,6 +133,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         if (changes['content'] && changes['content'].currentValue !== changes['content'].previousValue) {
             this.signatureImgAttached = false;
             this.signatureSrc = '';
+            this.assignImageSignature();
         }
     }
 
@@ -205,7 +207,6 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
             this.isSignatureUploadInProgress = true;
         } else if (output.type === 'done') {
             if (output.file.response.status === 'success') {
-                this.imageSignatureId = output.file.id;
                 this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
                 this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;
                 this.onChangeFieldVisibility(null, null, null);
@@ -258,11 +259,12 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         this.uploadInput.emit({ type: 'cancel', id });
     }
 
-    public removeFile(id: string): void {
-        this.uploadInput.emit({ type: 'remove', id });
+    public removeFile(): void {
         this.invoiceService.removeSignature(this.customTemplate.sections.footer.data.imageSignature.label).subscribe((response) => {
             if (response?.status === 'success') {
                 this.signatureImgAttached = false;
+                this.customTemplate.sections.footer.data.imageSignature.label = '';
+                this._invoiceUiDataService.setCustomTemplate(this.customTemplate);
                 this._toasty.successToast(response.body);
             } else {
                 this._toasty.errorToast(response.message);
@@ -343,5 +345,15 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
      */
     public changeInvoiceHeader(event: boolean): void {
         this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
+    }
+
+    public assignImageSignature(): void {
+        if (this.customTemplate?.sections?.footer?.data?.imageSignature?.label) {
+            this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
+            this.signatureImgAttached = true;
+        } else {
+            this.signatureSrc = '';
+            this.signatureImgAttached = false;
+        }
     }
 }
