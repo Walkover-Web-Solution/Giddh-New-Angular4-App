@@ -347,6 +347,11 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
     }
 
+    /**
+     * Assigns image signature for CREATE and UPDATE flow
+     *
+     * @memberof ContentFilterComponent
+     */
     public assignImageSignature(): void {
         if (this.customTemplate?.sections?.footer?.data?.imageSignature?.label) {
             this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
