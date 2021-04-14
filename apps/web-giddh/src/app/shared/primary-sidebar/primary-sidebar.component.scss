@@ -156,7 +156,7 @@
                 }
             }
             .left-fixed-header > li a.active {
-                @include highlight-color($lavender, $cornflower-blue);
+                @include highlight-color($white, $cornflower);
             }
         }
         p {
@@ -223,6 +223,7 @@
                             color: $cornflower !important;
                             background-color: transparent;
                         }
+
                         span {
                             min-width: 140px;
                             display: flex;
@@ -246,6 +247,7 @@
                             display: flex;
                             font-family: "opensans-regular";
                         }
+
                     }
                     .sub-menu {
                         &.show {
@@ -281,7 +283,7 @@
                             }
                             &:hover {
                                 a {
-                                    @include highlight-color($cornflower, $white);
+                                    @include highlight-color($link-water, $night-rider);
                                 }
                             }
                         }
