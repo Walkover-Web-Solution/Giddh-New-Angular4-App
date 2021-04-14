@@ -749,7 +749,7 @@
 
                                 <td class="img-signature" *ngIf="showImageSignature">
                                     <ng-container>
-                                        <img [hidden]="!showImageSignature " [src]="imageSignatureSrc"
+                                        <img [hidden]="!showImageSignature || !imageSignatureSrc" [src]="imageSignatureSrc"
                                             class="inner-img-signature" alt=" " />
                                     </ng-container>
                                 </td>
