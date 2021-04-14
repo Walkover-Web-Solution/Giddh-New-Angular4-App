@@ -217,9 +217,6 @@
                         Total before Dis.
                     </th>
                     <th [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">
-                        Total Before Discount
-                    </th>
-                    <th [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right">
                         {{(fieldsAndVisibility.table.discount?.label?.length > 0) ? fieldsAndVisibility.table.discount?.label : 'Disc.'}}
                     </th>
                     <th [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right">{{(fieldsAndVisibility.table.taxableValue?.label?.length > 0) ? fieldsAndVisibility.table.taxableValue?.label : 'Taxable Amt.'}}</th>

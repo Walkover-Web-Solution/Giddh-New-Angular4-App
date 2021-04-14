@@ -192,7 +192,8 @@ header img {
 }
 
 #default .table-item{
-    overflow-x: auto;
+    overflow-x: scroll;
+    width: 100%;
 }
 
 .text-right {
