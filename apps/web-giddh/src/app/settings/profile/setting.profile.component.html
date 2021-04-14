@@ -172,7 +172,7 @@
                 [profileData]="companyProfileObj" [organizationType]="currentOrganizationType">
             </personal-information>
         </tab>
-        <tab [active]="this.currentTab === 'address'" (selectTab)="handleTabChanged('address')" heading="{{companyProfileObj?.taxType ? ('Address/' + companyProfileObj?.taxType) : 'Address/es' }}" [id]="(currentTab === 'address') ? 'giddh-page-heading': ''">
+        <tab [active]="this.currentTab === 'address'" (selectTab)="handleTabChanged('address')"  heading="{{companyProfileObj?.taxType ? ('Address/' + companyProfileObj?.taxType) : 'Address/es' }}" [id]="(currentTab === 'address') ? 'giddh-page-heading': ''">
             <address-settings *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'address'" [addresses]="addresses"
                 [(isAddressChangeInProgress)]="isAddressChangeInProgress" [(closeSidePane)]="closeAddressSidePane"
                 [currentOrganizationUniqueName]="currentOrganizationUniqueName"

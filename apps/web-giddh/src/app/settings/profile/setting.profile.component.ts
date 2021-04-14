@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import * as _ from '../../lodash-optimized';
@@ -64,6 +64,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public countryCurrency: any[] = [];
     /** Stores the current company details */
     public currentCompanyDetails: any;
+    
     /** Stores the current branch details */
     public currentBranchDetails: any;
     /** Stores the company profile details */
@@ -765,7 +766,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             } else {
                 this.patchProfile({ ...value });
             }
-        } else if (this.currentOrganizationType === OrganizationType.Branch) {
+        } else if (this.currentOrganizationType === OrganizationType.Branch ) {
             this.updateBranchProfile();
         }
     }
@@ -791,7 +792,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 }
             });
     }
-
+    
     /**
      * Handles tab changes
      *
@@ -799,6 +800,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public handleTabChanged(tabName: string): void {
+       
         this.currentTab = tabName;
         if (tabName === 'address') {
             this.loadAddresses('GET');
@@ -808,6 +810,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
             }
         }
+        
         this.router.navigateByUrl('/pages/settings/profile/' + tabName);
     }
 
