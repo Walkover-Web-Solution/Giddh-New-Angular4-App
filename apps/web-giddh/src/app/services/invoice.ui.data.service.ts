@@ -210,6 +210,15 @@ export class InvoiceUiDataService {
                         width: null
                     };
                 }
+                if (!selectedTemplate.sections['header'].data['gstComposition']) {
+                    // Assign the default value based on value of warehouseAddress
+                    selectedTemplate.sections['header'].data['gstComposition'] = defaultTemplate ?
+                    defaultTemplate.sections['header'].data['gstComposition'] : {
+                        label: '',
+                        display: true,
+                        width: null
+                    };
+                }
                 if (!selectedTemplate.sections['footer'].data['textUnderSlogan']) {
                     // Assign the default value based of company name if not present
                     selectedTemplate.sections['footer'].data['textUnderSlogan'] = {
