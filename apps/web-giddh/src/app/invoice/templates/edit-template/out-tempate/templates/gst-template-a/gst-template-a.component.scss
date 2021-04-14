@@ -191,6 +191,10 @@ header img {
     font-weight: bold;
 }
 
+#default .table-item{
+    overflow-x: auto;
+}
+
 .text-right {
     text-align: right;
 }
