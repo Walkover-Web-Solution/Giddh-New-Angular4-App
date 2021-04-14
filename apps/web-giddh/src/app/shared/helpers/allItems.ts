@@ -21,15 +21,15 @@ export const ALL_ITEMS: AllItems[] = [
         icon: 'icon-customer',
         items: [
             { label: 'Aging Report', link: '/pages/contact/aging-report', icon: 'icon-aging-report-new', description: 'Amount Due in previous days & upcoming', additional: { tab: 'aging-report', tabIndex: 1 } },
-            { label: 'Cash Invoice', link: '/pages/proforma-invoice/invoice/cash', icon: 'icon-cash-invoice', description: 'Generate cash invoice' },
+            { label: 'Cash Invoice', link: '/pages/proforma-invoice/invoice/cash', icon: 'icon-invoice-new', description: 'Generate cash invoice' },
             { label: 'Credit Note', link: '/pages/invoice/preview/credit note', icon: 'icon-credit-note-new', description: 'Generate credit note & update A/c' },
             { label: 'Customer', link: '/pages/contact/customer', icon: 'icon-customer', description: 'Manage customers, send reminders via SMS/Email', additional: { tab: 'customer', tabIndex: 0 } },
             { label: 'Invoice', link: '/pages/invoice/preview/sales', icon: 'icon-invoice-new', description: 'Multicurrency, Recurring invoice, Cash invoice' },
             { label: 'Receipt', link: '/pages/reports/receipt', icon: 'icon-reciept-new', description: 'Advance, normal, total, & unused receipts' },
-            { label: 'Sales Invoice', link: '/pages/proforma-invoice/invoice/sales', icon: 'icon-cash-invoice', description: 'Generate sales invoice' },
+            { label: 'Sales Invoice', link: '/pages/proforma-invoice/invoice/sales', icon: 'icon-invoice-new', description: 'Generate sales invoice' },
             { label: 'Sales Order', link: '/pages/invoice/preview/estimates', icon: 'icon-sales-order1', description: 'Final sales order' },
             { label: 'Sales Register', link: '/pages/reports/sales-register', icon: 'icon-register-new', description: 'Net & cumulative sales weekly/monthly/quarterly' },
-            { label: 'Template', link: '/pages/invoice/preview/templates/sales', icon: 'icon-template-new', description: 'Edit design & content of the template', alwaysPresent: true }
+            { label: 'Template', link: '/pages/invoice/preview/templates/sales', icon: 'icon-template', description: 'Edit design & content of the template', alwaysPresent: true }
         ]
     },
     {
@@ -69,7 +69,7 @@ export const ALL_ITEMS: AllItems[] = [
             { label: 'Onboarding', link: '/pages/onboarding', icon: 'icon-onboarding-new', description: 'Import data from Tally, CSV/Excel' },
             { label: 'Petty Cash', link: '/pages/expenses-manager', icon: 'icon-petty-cash', description: 'Manage petty cash & approve and reject transaction', additional: { tab: 'pending', tabIndex: 0 } },
             { label: 'Search', link: '/pages/search', icon: 'icon-search-new', description: 'Select group and search for a time span' },
-            { label: 'Settings', link: '/pages/settings', icon: 'icon-settings-new', description: 'Add & manage various taxes' },
+            { label: 'Settings', link: '/pages/settings', icon: 'icon-settings-cog', description: 'Add & manage various taxes' },
             { label: 'VAT Report', link: '/pages/vat-report', icon: 'icon-vat', description: 'File & review VAT' },
         ]
     },

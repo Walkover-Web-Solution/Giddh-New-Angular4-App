@@ -1,7 +1,6 @@
 @import "../../assets/css/color.scss";
 
 .giddh-all-items-wrapper{
-    background-color: $white;
     .search-any-item{
         max-width: 530px;
         width: 100%;
@@ -52,7 +51,7 @@
                     }
                     p{
                         color: $grey-chateau;
-                        font-size: 14px;
+                        font-size: 12px;
                     }
                     &:hover, &.active {
                         background-color: $cornflower;
