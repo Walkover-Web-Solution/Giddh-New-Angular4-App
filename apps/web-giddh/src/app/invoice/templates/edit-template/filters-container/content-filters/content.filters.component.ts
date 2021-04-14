@@ -367,6 +367,11 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         this.onChangeFieldVisibility(null,null,null);
     }
 
+    /**
+     * Assigns image signature for CREATE and UPDATE flow
+     *
+     * @memberof ContentFilterComponent
+     */
     public assignImageSignature(): void {
         if (this.customTemplate?.sections?.footer?.data?.imageSignature?.label) {
             this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
