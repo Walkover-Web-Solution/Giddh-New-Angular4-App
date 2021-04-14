@@ -13,6 +13,7 @@ import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput }
 // import {ViewChild, ElementRef} from '@angular/core';
 import { INVOICE_API } from 'apps/web-giddh/src/app/services/apiurls/invoice';
 import { CurrentCompanyState } from 'apps/web-giddh/src/app/store/Company/company.reducer';
+import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -56,8 +57,12 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     /** Ng form instance of content filter component */
     @ViewChild(NgForm) contentForm: NgForm;
 
-    constructor(private store: Store<AppState>, private _invoiceUiDataService: InvoiceUiDataService,
-        private _activatedRoute: ActivatedRoute, private _toasty: ToasterService
+    constructor(
+        private store: Store<AppState>,
+        private _invoiceUiDataService: InvoiceUiDataService,
+        private _activatedRoute: ActivatedRoute,
+        private _toasty: ToasterService,
+        private invoiceService: InvoiceService
     ) {
         let companies = null;
         let defaultTemplate = null;
@@ -110,6 +115,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
                 this._invoiceUiDataService.setContentForm(this.contentForm);
             }
             this.customTemplate = _.cloneDeep(template);
+            this.assignImageSignature();
         });
 
         this._invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
@@ -134,6 +140,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         if (changes['content'] && changes['content'].currentValue !== changes['content'].previousValue) {
             this.signatureImgAttached = false;
             this.signatureSrc = '';
+            this.assignImageSignature();
             this._invoiceUiDataService.setContentForm(this.contentForm);
         }
     }
@@ -205,8 +212,6 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     }
 
     public ngOnDestroy() {
-        // this._invoiceUiDataService.customTemplate.unsubscribe();
-        // this._invoiceUiDataService.selectedSection.unsubscribe();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -273,8 +278,17 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         this.uploadInput.emit({ type: 'cancel', id });
     }
 
-    public removeFile(id: string): void {
-        this.uploadInput.emit({ type: 'remove', id });
+    public removeFile(): void {
+        this.invoiceService.removeSignature(this.customTemplate.sections.footer.data.imageSignature.label).subscribe((response) => {
+            if (response?.status === 'success') {
+                this.signatureImgAttached = false;
+                this.customTemplate.sections.footer.data.imageSignature.label = '';
+                this._invoiceUiDataService.setCustomTemplate(this.customTemplate);
+                this._toasty.successToast(response.body);
+            } else {
+                this._toasty.errorToast(response.message);
+            }
+        });
     }
 
     public removeAllFiles(): void {
@@ -351,5 +365,20 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public changeInvoiceHeader(event: boolean): void {
         this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
         this.onChangeFieldVisibility(null,null,null);
+    }
+
+    /**
+     * Assigns image signature for CREATE and UPDATE flow
+     *
+     * @memberof ContentFilterComponent
+     */
+    public assignImageSignature(): void {
+        if (this.customTemplate?.sections?.footer?.data?.imageSignature?.label) {
+            this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
+            this.signatureImgAttached = true;
+        } else {
+            this.signatureSrc = '';
+            this.signatureImgAttached = false;
+        }
     }
 }
