@@ -740,7 +740,7 @@
                     </div>
                 </div>
                 <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="clearfix mr-t1 form-group">
-                    <input type="checkbox" name="textUnderSloganCheckbox" [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Text under slogan
+                    <input type="checkbox" name="textUnderSloganCheckbox" [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Text under Image Signature / Slogan
                     <div class="mb-0 form-group ml-3">
                         <input type="text" [class.error-box]="contentForm?.controls['textUnderSlogan']?.errors?.maxlength" class="form-control" hasFocus #textUnderSlogan="hasFocus" [disabled]="!fieldsAndVisibility.footer.textUnderSlogan?.display" (keyup)='onFieldChange(null, null, null)' [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].label" placeholder="Text under slogan"
                             maxlength="30" name="textUnderSlogan"/>
