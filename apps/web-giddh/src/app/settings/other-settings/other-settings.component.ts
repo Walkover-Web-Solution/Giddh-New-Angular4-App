@@ -96,12 +96,14 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
-            this.commonLocaleData = response;
+            if(response) {
+                this.commonLocaleData = response;
 
-            if(this.showLanguageChangeMessage) {
-                this.toasterService.clearAllToaster();
-                this.toasterService.successToast(this.commonLocaleData?.app_language_selected);
-                this.showLanguageChangeMessage = false;
+                if(this.showLanguageChangeMessage) {
+                    this.toasterService.clearAllToaster();
+                    this.toasterService.successToast(this.commonLocaleData?.app_language_selected);
+                    this.showLanguageChangeMessage = false;
+                }
             }
         });
     }

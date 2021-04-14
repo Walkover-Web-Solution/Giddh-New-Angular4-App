@@ -1,5 +1,5 @@
 <div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
-    <h3 class="modal-title bg" id="modal-title">Print Voucher </h3>
+    <h3 class="modal-title bg" id="modal-title">{{localeData?.print_voucher}} </h3>
     <i aria-hidden="true" class="icon-cross text-right close-modal" (click)="cancelEvent.emit()"></i>
 </div>
 
@@ -11,7 +11,7 @@
 
         <div *ngIf="isVoucherDownloadError && !isVoucherDownloading" class="error">
             <span>
-                Invoice Preview is not available right now!Please try again..
+                {{localeData?.invoice_preview_unavailable}}
             </span>
         </div>
 

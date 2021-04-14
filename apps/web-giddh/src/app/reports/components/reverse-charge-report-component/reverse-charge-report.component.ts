@@ -190,11 +190,11 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
 
         setTimeout(() => {
             if (this.inlineSearch === 'suppliersName') {
-                this.suppliersNameField.nativeElement.focus();
+                this.suppliersNameField?.nativeElement.focus();
             } else if (this.inlineSearch === 'invoiceNumber') {
-                this.invoiceNumberField.nativeElement.focus();
+                this.invoiceNumberField?.nativeElement.focus();
             } else if (this.inlineSearch === 'supplierCountry') {
-                this.supplierCountryField.nativeElement.focus();
+                this.supplierCountryField?.nativeElement.focus();
             }
         }, 200);
     }

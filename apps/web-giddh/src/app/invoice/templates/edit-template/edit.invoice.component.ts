@@ -634,8 +634,26 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     public showtemplateModal: boolean = false;
     public templateType: any;
 
-    constructor(private _toasty: ToasterService, private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _activatedRoute: ActivatedRoute, private _invoiceUiDataService: InvoiceUiDataService) {
+    constructor(
+        private _toasty: ToasterService,
+        private store: Store<AppState>,
+        private invoiceActions: InvoiceActions,
+        private _invoiceTemplatesService: InvoiceTemplatesService,
+        private _activatedRoute: ActivatedRoute,
+        private _invoiceUiDataService: InvoiceUiDataService
+    ) {
         this.store.dispatch(this.invoiceActions.getTemplateState());
+    }
+
+    /**
+     * Returns the content filter form invalid status
+     *
+     * @readonly
+     * @type {boolean} True, if form is invalid
+     * @memberof EditInvoiceComponent
+     */
+    public get isFormInValid(): boolean {
+        return this._invoiceUiDataService.contentForm?.invalid;
     }
 
     public ngOnInit() {
@@ -714,6 +732,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         });
         this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             defaultTemplate = ss.defaultTemplate;
+            defaultTemplate.type = this.templateType;
             if (this.templateType === 'voucher') {
                 defaultTemplate = ss.sampleTemplates[9];
             }
@@ -799,9 +818,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.fontDefault = data.fontSize;
                 data.fontMedium = data.fontSize - 2;
             }
-            if (data.sections['footer'].data['message1'].display && !data?.sections['footer']?.data['message1']?.label) {
+            if (!data.sections['footer'].data['message1'].display || !data?.sections['footer']?.data['message1']?.label) {
                 // If user checks the checkbox but didn't provide label then remove the selection
                 data.sections['footer'].data['message1'].display = false;
+                data.sections['footer'].data['message1'].label = '';
             }
             data = this.newLineToBR(data);
             this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {

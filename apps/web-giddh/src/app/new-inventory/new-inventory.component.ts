@@ -196,3 +196,4 @@ export class NewInventoryComponent implements OnInit {
         this.destroyed$.complete();
     }
 }
+

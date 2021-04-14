@@ -7,8 +7,9 @@ import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import * as moment from 'moment';
-import { find } from '../lodash-optimized';
+import { cloneDeep, find } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
+import { AllItems } from '../shared/helpers/allItems';
 
 @Injectable()
 export class GeneralService {
@@ -735,23 +736,23 @@ export class GeneralService {
      * @returns {ConfirmationModalConfiguration}
      * @memberof GeneralService
      */
-    public getDateChangeConfiguration(isVoucherDateSelected: boolean): ConfirmationModalConfiguration {
+    public getDateChangeConfiguration(localeData: any, commonLocaleData: any, isVoucherDateSelected: boolean): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
-            text: 'Yes',
+            text: commonLocaleData?.app_yes,
             cssClass: 'btn btn-success'
         },
         {
-            text: 'No',
+            text: commonLocaleData?.app_no,
             cssClass: 'btn btn-danger'
         }];
-        const headerText: string = 'Date Change Confirmation';
+        const headerText: string = localeData?.date_change_confirmation_heading;
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1 text-light';
         const footerCssClass: string = 'mr-b1';
         return (isVoucherDateSelected) ? {
             headerText,
             headerCssClass,
-            messageText: `Do you want to change the entry date as well?`,
+            messageText: localeData?.change_single_entry_date,
             messageCssClass,
             footerText: '',
             footerCssClass,
@@ -759,7 +760,7 @@ export class GeneralService {
         } : {
                 headerText,
                 headerCssClass,
-                messageText: `Do you want to change the all entries date with this date?`,
+                messageText: localeData?.change_all_entry_dates,
                 messageCssClass,
                 footerText: '',
                 footerCssClass,
@@ -830,6 +831,82 @@ export class GeneralService {
             return accountGroupTaxes;
         } else {
             return [];
+        }
+    }
+
+    /**
+     * Returns the string initials upto 2 letters/characters
+     *
+     * @param {string} name String whose intials are required
+     * @param {string} [delimiter] Delimiter to break the strings
+     * @return {*} {string} Initials of string
+     * @memberof GeneralService
+     */
+    public getInitialsFromString(name: string, delimiter?: string): string {
+        if (name) {
+            let nameArray = name.split(delimiter || " ");
+            if (nameArray?.length > 1) {
+                // Check if "" is not present at 0th and 1st index
+                let count = 0;
+                let initials = '';
+                nameArray.forEach(word => {
+                    if (word && count < 2) {
+                        initials += ` ${word[0]}`;
+                        count++;
+                    }
+                })
+                return initials;
+            } else if (nameArray?.length === 1) {
+                return nameArray[0][0];
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Returns the visible menu items to be shown for menu panel (as per permission)
+     *
+     * @param {Array<any>} apiItems List of permissible items obtained from API
+     * @param {Array<AllItems>} itemList List of all the items of menu
+     * @returns {Array<AllItems>} Array of permissible menu items
+     * @memberof GeneralService
+     */
+    public getVisibleMenuItems(apiItems: Array<any>, itemList: Array<AllItems>): Array<AllItems> {
+        const visibleMenuItems = cloneDeep(itemList);
+        itemList.forEach((menuItem, menuIndex) => {
+            visibleMenuItems[menuIndex].items = [];
+            menuItem.items.forEach(item => {
+                const isValidItem = apiItems.find(apiItem => apiItem.uniqueName === item.link);
+                if (isValidItem || item.alwaysPresent) {
+                    // If items returned from API have the current item which can be shown in branch/company mode, add it
+                    visibleMenuItems[menuIndex].items.push(item);
+                }
+            });
+        });
+        return visibleMenuItems;
+    }
+
+    /**
+     * Validates the bank details: Bank Name, Account number, IFSC code.
+     * If either of them is provided then the rest two fields are also mandatory
+     * as all the 3 values are required for payment purpose. If none of them is provided,
+     * then also it is valid. It is invalid when anyone of them is missing and rest
+     * are provided
+     *
+     * @returns {boolean} True, if bank details are valid
+     * @memberof GeneralService
+     */
+     public checkForValidBankDetails(bankDetails: any, countryCode: string): boolean {
+        const fieldsWithValue = bankDetails;
+        const keys = countryCode === 'AE' ?
+            ['beneficiaryName', 'bankName', 'branchName', 'bankAccountNo', 'swiftCode'] :
+            ['bankName', 'bankAccountNo', 'ifsc'];
+        let isValid = true;
+        if (fieldsWithValue) {
+            isValid = keys.every(key => Boolean(fieldsWithValue[key])) || keys.every(key => !Boolean(fieldsWithValue[key]));
+            return isValid;
+        } else {
+            return isValid;
         }
     }
 }

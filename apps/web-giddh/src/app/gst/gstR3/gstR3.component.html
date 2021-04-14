@@ -1,3 +1,6 @@
+<div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
+    <gstr-sidebar (navigateEvent)="handleNavigation($event)" [activeCompanyGstNumber]="activeCompanyGstNumber" [selectedGstModule]="selectedGstr" class="gst-sidebar"></gstr-sidebar>
+</div>
 <hamburger-menu [pageHeading]="'GST'"></hamburger-menu>
 <div class="column content-column gst-filing-container navs-list">
     <div class="tax-engine">
@@ -327,7 +330,7 @@
                                 <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
                                     <!-- {{(gstr3BData?.sup_details?.osup_nongst?.txval?gstr3BData?.sup_details?.osup_nongst?.txval: 0 )| giddhCurrency}} -->
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="(gstr3BData?.sup_details?.osup_nongst?.txval?gstr3BData?.sup_details?.osup_nongst?.txval: 0 )"
+                                        <amount-field [amount]="(gstr3BData?.sup_details?.osup_nongst?.txval ? gstr3BData?.sup_details?.osup_nongst?.txval : 0 )"
                                             [currencySymbol]="false" [currencyCode]="false">
                                         </amount-field>
                                     </span>
@@ -740,7 +743,7 @@
                                     <td class="text-right "><i class="icon-rupees font-11"></i>
                                         <!-- {{(gstr3BData?.itc_elg?.itc_net?.csamt? gstr3BData?.itc_elg?.itc_net?.csamt: 0) | giddhCurrency}} -->
                                         <span class="d-inline-flex">
-                                            <amount-field [amount]="(gstr3BData?.itc_elg?.itc_net?.csamt? gstr3BData?.itc_elg?.itc_net?.csamt: 0)" [currencySymbol]="false" [currencyCode]="false">
+                                            <amount-field [amount]="(gstr3BData?.itc_elg?.itc_net?.csamt ? gstr3BData?.itc_elg?.itc_net?.csamt : 0)" [currencySymbol]="false" [currencyCode]="false">
                                             </amount-field>
                                         </span>
                                     </td>

@@ -38,6 +38,7 @@ import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ESCAPE } from '@angular/cdk/keycodes';
+import { isEqual } from '../../lodash-optimized';
 
 export declare const gapi: any;
 
@@ -165,6 +166,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public activeUrn: any;
     /** Beneficiary aside pan status */
     public beneficiaryAsideState: string = "out";
+    /** This will hold users list */
+    public usersList: any[] = [];
 
     constructor(
         private router: Router,
@@ -287,25 +290,36 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && o.account) {
-                this.registeredAccount = o.account;
-                if (this.registeredAccount && this.registeredAccount.length === 0) {
-                    this.openNewRegistration = true;
-                }
-                if (this.registeredAccount && this.registeredAccount.length) {
-                    this.registeredAccount.map(item => {
-                        if (item && !item.userAmountRanges) {
-                            item.userAmountRanges = [this.getBlankAmountRangeRow()]
-                        }
-                    });
-                }
-                if (this.registeredAccount) {
-                    this.registeredAccount.map(item => {
-                        item.userAmountRanges.map(element => {
-                            if (typeof element.maxBankLimit === "boolean") {
-                                element.maxBankLimit = element.maxBankLimit ? 'max' : 'custom';
+                if(!isEqual(this.registeredAccount, o.account)) {
+                    this.registeredAccount = o.account;
+                    if (this.registeredAccount && this.registeredAccount.length === 0) {
+                        this.openNewRegistration = true;
+                    }
+                    if (this.registeredAccount && this.registeredAccount.length) {
+                        this.registeredAccount.map(item => {
+                            if (item && !item.userAmountRanges) {
+                                item.userAmountRanges = [this.getBlankAmountRangeRow()]
                             }
+                            if (!item.loginId) {
+                                /* Login ID is not present, create it:
+                                   Login ID = (Corporate ID).(User ID) or
+                                   Login ID = Alias ID
+                                */
+                                if (item.aliasId) {
+                                    item.loginId = item.aliasId
+                                } else if (item.corpId && item.userId) {
+                                    item.loginId = `${item.corpId}.${item.userId}`;
+                                }
+                            }
+                            item.selectedUsers = this.usersList.filter(user => item.emailIds?.find(emailId => user.value === emailId)) ?? [];
+                            this.getRegistrationStatus(item);
+                            item.userAmountRanges.map(element => {
+                                if (typeof element.maxBankLimit === "boolean") {
+                                    element.maxBankLimit = element.maxBankLimit ? 'max' : 'custom';
+                                }
+                            });
                         });
-                    });
+                    }
                 }
                 if (this.addBankForm) {
                     this.addBankForm.reset();
@@ -372,7 +386,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.isBankUpdateInEdit = null;
                 this.updateBankUrnNumber = null;
             }
-        })
+        });
+
+        this.store.pipe(select(state => state.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.usersList = [];
+                response.forEach(user => {
+                    this.usersList.push({ label: user.userName, value: user.emailId });
+                });
+            }
+        });
     }
 
     public ngAfterViewInit() {
@@ -721,7 +744,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         let requestData = {
             URN: this.updateBankUrnNumber,
             accountUniqueName: registeredAccountObj.accountUniqueName,
-            userAmountRanges: registeredAccountObj.userAmountRanges
+            userAmountRanges: registeredAccountObj.userAmountRanges,
+            userNames: registeredAccountObj.userNames,
+            emailIds: registeredAccountObj.emailIds
         }
         this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentInfo(requestData));
         this.paymentFormObj = new PaymentClass();
@@ -1107,6 +1132,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public clearForm(): void {
         this.paymentFormObj = new PaymentClass();
         this.paymentFormObj.corpId = "";
+        this.paymentFormObj.loginId = "";
         this.paymentFormObj.userId = "";
         this.paymentFormObj.accountNo = "";
         this.paymentFormObj.aliasId = "";
@@ -1144,10 +1170,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public createBankIntegrationForm(): FormGroup {
         return this._fb.group({
-            corpId: [null, Validators.compose([Validators.required])],
-            userId: [null, Validators.compose([Validators.required])],
+            loginId: [null, Validators.compose([Validators.required])],
             accountNo: [null, Validators.compose([Validators.required])],
-            aliasId: [null, Validators.compose([])],
             accountUniqueName: [null, Validators.compose([Validators.required])],
             userAmountRanges: this._fb.array([
                 this._fb.group({
@@ -1157,6 +1181,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     approvalUniqueName: [''],
                 })
             ]),
+            userNames: [[]],
+            emailIds: [[]]
         });
     }
 
@@ -1256,6 +1282,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public editRegisterForm(index: any, updateFormValue?: IntegratedBankList): void {
         this.isBankUpdateInEdit = index;
+        if (index === null) {
+            this.resetUserSelection();
+        } else {
+            this.setUserSelection();
+        }
         this.updateBankUrnNumber = null;
         this.addBankForm = this.createBankIntegrationForm();
         if (updateFormValue) {
@@ -1289,7 +1320,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public checkFormValidations(item: IntegratedBankList): boolean {
         let valid = false;
         if (item) {
-            valid = (item.corpId && item.userId && item.accountUniqueName && item.accountNo && item.userAmountRanges &&
+            valid = (item.loginId && item.accountUniqueName && item.accountNo && item.userAmountRanges &&
                 item.userAmountRanges.length) ? true : false;
             if (valid) {
                 valid = item.userAmountRanges.every((rangeData: any) => {
@@ -1574,7 +1605,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public hideBeneficiaryModal(event?: any): void {
-        this.activeUrn = ''; 
+        this.activeUrn = '';
         this.beneficiaryAsideState = 'out'
     }
 
@@ -1583,5 +1614,92 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (event.keyCode === ESCAPE) {
             this.hideBeneficiaryModal();
         }
+    }
+
+    /**
+     * This will get the account registration status
+     *
+     * @param {*} account
+     * @memberof SettingIntegrationComponent
+     */
+    public getRegistrationStatus(account: any): void {
+        this.settingsIntegrationService.getRegistrationStatus(account.URN).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.body) {
+                account.registrationStatus = response?.body?.Status;
+            } else {
+                account.registrationStatus = "";
+            }
+        });
+    }
+
+    /**
+     * Callback for user selected
+     *
+     * @param {*} event
+     * @memberof SettingIntegrationComponent
+     */
+    public selectUser(event: any): void {
+        if(event) {
+            this.addBankForm.get('userNames').patchValue(event.map(ev => ev.label));
+        }
+    }
+
+    /**
+     * Selects the users
+     *
+     * @param {*} user Selected user
+     * @param {*} event Select event
+     * @param {*} userIndex Current user index in list
+     * @memberof SettingIntegrationComponent
+     */
+    public selectUsers(user: any, event: any, userIndex): void {
+        if (event && user) {
+            if (event.target.checked) {
+                user.isSelected = event.target.checked;
+                this.usersList[userIndex].isSelected = true;
+            } else {
+                this.usersList[userIndex].isSelected = false;
+            }
+            this.addBankForm.get('userNames').patchValue(this.usersList.filter(ev => ev.isSelected && ev.label).map(user => user.label));
+            this.addBankForm.get('emailIds').patchValue(this.usersList.filter(ev => ev.isSelected && ev.value).map(user => user.value));
+        }
+        event.stopPropagation();
+    }
+
+    public removeUser(user: any, isUpdate?: boolean): void {
+        let i = 0;
+        let matchedIndex = -1;
+
+        for (i; i < this.usersList.length; i++) {
+            if (user === this.usersList[i].value) {
+                matchedIndex = i;
+                break;
+            }
+        }
+
+        let indx = -1;
+        if (isUpdate) {
+            indx = this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.findIndex(selectedUser => selectedUser.value === user.value);
+            this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.splice(indx, 1);
+        } else {
+            indx = this.usersList.findIndex(selectedUser => selectedUser.value === user.value);
+            this.usersList[indx].isSelected = false;
+        }
+
+        if (matchedIndex > -1) {
+            this.usersList[matchedIndex].isSelected = false;
+        }
+    }
+
+    public resetUserSelection(): void {
+        this.usersList.forEach(user => user.isSelected = false);
+    }
+
+    public setUserSelection(): void {
+        this.usersList.forEach(user => user.isSelected = this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.some(selectedUser => selectedUser.value === user.value));
+    }
+
+    public getSelectedItemCount(items: Array<any>): number {
+        return items?.filter(user => user.isSelected).length;
     }
 }

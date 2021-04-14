@@ -18,7 +18,7 @@
 							<span class="position-relative form-group">
 								<select class="form-control" formControlName="queryType" required>
 									<option value="">{{commonLocaleData?.app_select_type}}</option>
-									<option *ngFor="let queryType of queryTypes" value="{{queryType.uniqueName}}">
+									<option *ngFor="let queryType of queryTypes" value="{{queryType?.uniqueName}}">
 										{{queryType.name}}</option>
 								</select>
 							</span>

@@ -15,6 +15,7 @@ import { DownloadOrSendInvoiceOnMailComponent } from '../../../../../invoice/pre
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { saveAs } from 'file-saver';
+import { GstReport } from '../../../../constants/gst.constant';
 
 export const Gstr1TransactionType = [
     { label: 'Invoices', value: 'invoices' },
@@ -108,6 +109,10 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     public base64Data: string;
     /** selected Invoice object */
     public selectedInvoice: GstTransactionSummary;
+    /** Returns the enum to be used in template */
+    public get GstReport() {
+        return GstReport;
+    }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private modalService: BsModalService,
@@ -202,7 +207,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
 
     public mapFilters() {
         let filters = _.cloneDeep(this.filterParam);
-        if (this.selectedGst === 'gstr1') {
+        if (this.selectedGst === GstReport.Gstr1) {
             let selected = _.find(Gstr1TransactionType, o => o.value === filters.entityType);
             if (selected) {
                 this.selectedFilter.entityType = selected.label;
@@ -223,7 +228,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
 
         if (this.filterParam.type) {
             let selected;
-            if (this.selectedGst === 'gstr1') {
+            if (this.selectedGst === GstReport.Gstr1) {
                 if (this.filterParam.entityType === 'advance-receipt') {
                     selected = _.find(Entitytype, o => o.value === filters.type)
                 } else {

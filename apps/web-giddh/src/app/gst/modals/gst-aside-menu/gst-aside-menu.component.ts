@@ -7,6 +7,7 @@ import { GstSaveGspSessionRequest, VerifyOtpRequest } from '../../../models/api-
 import { AppState } from '../../../store';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
 import { ToasterService } from '../../../services/toaster.service';
+import { GstReport } from '../../constants/gst.constant';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -49,6 +50,10 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
     public gstReturnInProcess = false;
     public isTaxproAuthenticated = false;
     public isVayanaAuthenticated = false;
+    /** Returns the enum to be used in template */
+    public get GstReport() {
+        return GstReport;
+    }
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

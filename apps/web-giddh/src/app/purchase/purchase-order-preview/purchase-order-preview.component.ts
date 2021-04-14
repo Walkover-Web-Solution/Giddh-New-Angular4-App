@@ -33,6 +33,10 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @Input() public purchaseOrderUniqueName: any;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     @Input() public isCompany: boolean;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /* Search element */
     @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
     /* Confirm box */
@@ -186,8 +190,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public ngAfterViewInit(): void {
-        this.searchElement.nativeElement.focus();
-        fromEvent(this.searchElement.nativeElement, 'input')
+        this.searchElement?.nativeElement.focus();
+        fromEvent(this.searchElement?.nativeElement, 'input')
             .pipe(
                 debounceTime(500),
                 distinctUntilChanged(),
@@ -362,7 +366,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                 }
             });
         } else {
-            this.toaster.errorToast("Invalid Purchase Order");
+            this.toaster.errorToast(this.localeData?.invalid_po);
         }
     }
 
@@ -479,7 +483,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
             return;
         }
-        saveAs(this.attachedDocumentBlob, 'purchaseorder.pdf');
+        saveAs(this.attachedDocumentBlob, this.localeData?.download_po_filename);
     }
 
     /**
@@ -507,7 +511,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                 || 0;
             const left = (windowWidth / 2) - 450;
             const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
-            printWindow.document.write((this.attachedDocumentPreview.nativeElement as HTMLElement).innerHTML);
+            printWindow.document.write((this.attachedDocumentPreview?.nativeElement as HTMLElement).innerHTML);
             printWindow.document.close();
             printWindow.focus();
             printWindow.print();
