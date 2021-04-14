@@ -52,8 +52,6 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold the value if Gst Composition will show/hide */
     public showGstComposition: boolean = false;
-    /** Stores the image signature ID */
-    public imageSignatureId: string;
     /** Stores the active company name */
     public activeCompanyName: string;
     /** Ng form instance of content filter component */
@@ -117,6 +115,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
                 this._invoiceUiDataService.setContentForm(this.contentForm);
             }
             this.customTemplate = _.cloneDeep(template);
+            this.assignImageSignature();
         });
 
         this._invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
@@ -141,6 +140,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         if (changes['content'] && changes['content'].currentValue !== changes['content'].previousValue) {
             this.signatureImgAttached = false;
             this.signatureSrc = '';
+            this.assignImageSignature();
             this._invoiceUiDataService.setContentForm(this.contentForm);
         }
     }
@@ -226,7 +226,6 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
             this.isSignatureUploadInProgress = true;
         } else if (output.type === 'done') {
             if (output.file.response.status === 'success') {
-                this.imageSignatureId = output.file.id;
                 this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
                 this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;
                 this.onChangeFieldVisibility(null, null, null);
@@ -279,11 +278,12 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         this.uploadInput.emit({ type: 'cancel', id });
     }
 
-    public removeFile(id: string): void {
-        this.uploadInput.emit({ type: 'remove', id });
+    public removeFile(): void {
         this.invoiceService.removeSignature(this.customTemplate.sections.footer.data.imageSignature.label).subscribe((response) => {
             if (response?.status === 'success') {
                 this.signatureImgAttached = false;
+                this.customTemplate.sections.footer.data.imageSignature.label = '';
+                this._invoiceUiDataService.setCustomTemplate(this.customTemplate);
                 this._toasty.successToast(response.body);
             } else {
                 this._toasty.errorToast(response.message);
@@ -365,5 +365,15 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public changeInvoiceHeader(event: boolean): void {
         this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
         this.onChangeFieldVisibility(null,null,null);
+    }
+
+    public assignImageSignature(): void {
+        if (this.customTemplate?.sections?.footer?.data?.imageSignature?.label) {
+            this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
+            this.signatureImgAttached = true;
+        } else {
+            this.signatureSrc = '';
+            this.signatureImgAttached = false;
+        }
     }
 }
