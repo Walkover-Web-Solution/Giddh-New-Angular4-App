@@ -740,6 +740,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
         if (defaultTemplate && defaultTemplate.sections && defaultTemplate.sections.footer && defaultTemplate.sections.footer.data && defaultTemplate.sections.footer.data.companyName) { // slogan default company on new template creation
             defaultTemplate.sections.footer.data.slogan.label = defaultTemplate.sections.footer.data.companyName.label;
+            defaultTemplate.sections.footer.data.textUnderSlogan.label = defaultTemplate.sections.footer.data.companyName.label;
         }
         this._invoiceUiDataService.setLogoPath('');
         this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
@@ -778,6 +779,11 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.fontSmall = data.fontSize - 4;
                 data.fontDefault = data.fontSize;
                 data.fontMedium = data.fontSize - 2;
+            }
+            if (!data.sections['footer'].data['textUnderSlogan'].display || !data?.sections['footer']?.data['textUnderSlogan']?.label) {
+                // If user checks the checkbox but didn't provide label then remove the selection
+                data.sections['footer'].data['textUnderSlogan'].display = false;
+                data.sections['footer'].data['textUnderSlogan'].label = '';
             }
             delete data['uniqueName'];
 
@@ -822,6 +828,11 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 // If user checks the checkbox but didn't provide label then remove the selection
                 data.sections['footer'].data['message1'].display = false;
                 data.sections['footer'].data['message1'].label = '';
+            }
+            if (!data.sections['footer'].data['textUnderSlogan'].display || !data?.sections['footer']?.data['textUnderSlogan']?.label) {
+                // If user checks the checkbox but didn't provide label then remove the selection
+                data.sections['footer'].data['textUnderSlogan'].display = false;
+                data.sections['footer'].data['textUnderSlogan'].label = '';
             }
             data = this.newLineToBR(data);
             this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
