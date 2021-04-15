@@ -211,7 +211,7 @@ export class InvoiceUiDataService {
                     // Assign the default value based on value of warehouseAddress
                     selectedTemplate.sections['header'].data['showCompanyAddress'] = {
                         label: '',
-                        display: selectedTemplate.sections['header'].data['warehouseAddress'].display,
+                        display: selectedTemplate.sections['header'].data['warehouseAddress']?.display,
                         width: null
                     };
                 }
