@@ -117,7 +117,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public companyList: CompanyResponse[] = [];
     /** Stores all the menu items to be shown */
     public allItems: AllItems[] = [];
-
     /** True, if sidebar needs to be shown */
     @Input() public isOpen: boolean = false;
     /** API menu items, required to show permissible items only in the menu */
