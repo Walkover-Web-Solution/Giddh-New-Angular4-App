@@ -226,8 +226,12 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
             this.isSignatureUploadInProgress = true;
         } else if (output.type === 'done') {
             if (output.file.response.status === 'success') {
+                if (this._invoiceUiDataService.unusedImageSignature) {
+                    this.removeFileFromServer();
+                }
                 this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
                 this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;
+                this._invoiceUiDataService.unusedImageSignature = output.file.response.body.uniqueName;
                 this.onChangeFieldVisibility(null, null, null);
                 this._toasty.successToast('file uploaded successfully.');
                 this.startUpload();
@@ -279,16 +283,18 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     }
 
     public removeFile(): void {
-        this.invoiceService.removeSignature(this.customTemplate.sections.footer.data.imageSignature.label).subscribe((response) => {
-            if (response?.status === 'success') {
-                this.signatureImgAttached = false;
-                this.customTemplate.sections.footer.data.imageSignature.label = '';
-                this._invoiceUiDataService.setCustomTemplate(this.customTemplate);
-                this._toasty.successToast(response.body);
-            } else {
-                this._toasty.errorToast(response.message);
-            }
-        });
+        this.signatureImgAttached = false;
+        this.customTemplate.sections.footer.data.imageSignature.label = '';
+        this._invoiceUiDataService.setCustomTemplate(this.customTemplate);
+    }
+
+    /**
+     * Permanently removes the file from the server
+     *
+     * @memberof ContentFilterComponent
+     */
+    public removeFileFromServer(): void {
+        this.invoiceService.removeSignature(this._invoiceUiDataService.unusedImageSignature).subscribe(() => {});
     }
 
     public removeAllFiles(): void {
