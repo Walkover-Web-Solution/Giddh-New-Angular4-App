@@ -143,7 +143,14 @@
                                         <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);getStateCode(gst, states);" name="gstNumber" formControlName="gstNumber" [placeholder]="taxNamePlaceholder" />
                                     </div>
                                 </div>
-
+                                <!-- static code added for the pincode -->
+                                <div class="col-sm-4">
+                                    <div class="form-group mr-b05">
+                                        <label for="pinCodeNum" class="d-block">Pincode</label>
+                                        <input type="text" class="form-control" autocomplete="false" autocomplete="false" name="pinCodeNum" />
+                                    </div>
+                                </div>
+                                <!-- end -->
                                 <ng-container *ngIf="companyCountry ==='IN'">
                                     <div class="col-sm-4">
                                         <div class="form-group">
