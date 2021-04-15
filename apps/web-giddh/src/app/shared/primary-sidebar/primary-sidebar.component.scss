@@ -212,6 +212,15 @@
         }
         .menu-item-wrapper {
             line-height: 40px;
+            position: static;
+            box-shadow: none;
+            border: none;
+            min-width: auto;
+            background-color: transparent;
+            float: none;
+            border-radius: 0;
+            margin: 0;
+            padding: 0;
             ul {
                 .main-item {
                     display: flex;

@@ -139,10 +139,11 @@
 
 
         </div>
-        <div class="menu-block">
-            <div class="menu-item  pd-l2 pd-r2 mr-b1">
+        <div class="menu-block" dropdown [autoClose]="false">
+            <div class="menu-item pd-l2 pd-r2 mr-b1 dropdown-toggle" dropdownToggle type="button"
+          aria-controls="dropdown-basic">
                 <p class="font-12">
-                    <span [routerLink]="['/pages/giddh-all-items']"  class="d-inline-flex align-items-center cursor-pointer">
+                    <span  class="d-inline-flex align-items-center cursor-pointer">
                         Menu
                         <i class="icon-down-new mr-l05"></i> </span>
                     <span class="text-gray cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
@@ -150,7 +151,8 @@
                     </span>
                 </p>
             </div>
-            <div class="menu-item-wrapper font-14">
+            <div  id="dropdown-basic" *dropdownMenu class="dropdown-menu menu-item-wrapper font-14"
+      role="menu" aria-labelledby="button-basic">
                 <ul class="list-style-none giddh-primary-items">
                     <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems" dropdown
                         [attr.container]="!isOpen ? 'body' : ''">
