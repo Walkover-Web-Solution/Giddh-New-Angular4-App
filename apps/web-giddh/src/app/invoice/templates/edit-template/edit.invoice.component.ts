@@ -782,6 +782,11 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.fontDefault = data.fontSize;
                 data.fontMedium = data.fontSize - 2;
             }
+            if (!data.sections['footer'].data['textUnderSlogan'].display || !data?.sections['footer']?.data['textUnderSlogan']?.label) {
+                // If user checks the checkbox but didn't provide label then remove the selection
+                data.sections['footer'].data['textUnderSlogan'].display = false;
+                data.sections['footer'].data['textUnderSlogan'].label = '';
+            }
             delete data['uniqueName'];
 
             this._invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -825,6 +830,11 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 // If user checks the checkbox but didn't provide label then remove the selection
                 data.sections['footer'].data['message1'].display = false;
                 data.sections['footer'].data['message1'].label = '';
+            }
+            if (!data.sections['footer'].data['textUnderSlogan'].display || !data?.sections['footer']?.data['textUnderSlogan']?.label) {
+                // If user checks the checkbox but didn't provide label then remove the selection
+                data.sections['footer'].data['textUnderSlogan'].display = false;
+                data.sections['footer'].data['textUnderSlogan'].label = '';
             }
             data = this.newLineToBR(data);
             this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
