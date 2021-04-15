@@ -90,7 +90,7 @@
                     <label>
                         Address/es
                     </label>
-                    <div class="address-dropdown form-group">
+                    <div class="address-dropdown form-group mb-0">
                         <sales-sh-select [options]="addresses" formControlName="address" name="particulars"
                             [notFoundLink]="true" [isFilterEnabled]="true" placeholder="Select Address"
                             class="linked-add create" (noResultsClicked)="handleShortcutPress()">
@@ -120,6 +120,16 @@
                         </sales-sh-select>
                     </div>
                 </div>
+                <!-- static code added for the pincode -->
+                <div class="warehouse-form-field">
+                    <label>
+                        Pincode
+                    </label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" autocomplete="false" autocomplete="false" name="pinCodeNum" />
+                    </div>
+                </div>
+                <!-- end -->
             </div>
             <div class="footer-btn row">
                 <div class="button-group">
