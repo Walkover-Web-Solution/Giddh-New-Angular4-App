@@ -31,7 +31,7 @@
                 <table class="mr-b05" cellspacing="0" cellpadding="0">
                     <tbody>
                         <tr class="header-table">
-                            <td>
+                            <td class="pd-b05">
                                 <figure *ngIf="fieldsAndVisibility.header.companyName?.display">
                                     <strong *ngIf="fieldsAndVisibility.header.companyName?.display">
                                         <h2
@@ -58,9 +58,13 @@
                             <td class="pull-right">
                                 <table>
                                     <tbody>
+                                        <tr>
+                                        <td class="align-bottom pd-b05">
+                                            <table class="w-100">
+                                                <tbody>
                                         <ng-container *ngIf="voucherType==='sales'">
                                             <tr *ngIf="fieldsAndVisibility.header.invoiceDate?.display">
-                                                <td>
+                                                <td class="pull-left">
                                                     <strong>{{(fieldsAndVisibility.header.invoiceDate?.label?.length > 0) ? fieldsAndVisibility.header.invoiceDate?.label
                       : 'Invoice Date'}}</strong>
                                                 </td>
@@ -69,10 +73,10 @@
                                                 </td>
                                             </tr>
                                             <tr *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">
-                                                <td>
+                                                <td class="pull-left">
                                                     <strong>{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Invoice No.'}}</strong>
                                                 </td>
-                                                <td>20170911-1</td>
+                                                <td class="invoice-head">20170911-1</td>
                                             </tr>
                                         </ng-container>
                                         <!-- <tr *ngIf="fieldsAndVisibility.header.dueDate?.display">
@@ -97,6 +101,15 @@
                                                 <td>20170911-1</td>
                                             </tr>
                                         </ng-container>
+                                        </tbody>
+                                        </table>
+                                        </td>
+                                        <td class="width-40">
+                                        <div class="qr-image">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"/>
+                                        </div>
+                                        </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </td>
