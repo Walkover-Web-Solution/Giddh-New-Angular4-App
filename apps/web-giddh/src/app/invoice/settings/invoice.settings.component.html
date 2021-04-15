@@ -669,6 +669,32 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="clearfix pd-t1">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-3">
+                                    <input type="checkbox"
+                                        class="show-on-mobile" />
+                                    <label>E-invoicing Authentication</label>
+                                </div>
+                                <div class="col-sm-12 col-md-9 form-group user-authenticate">
+                                    <input type="checkbox" class="hide-on-mobile"/>
+                                    <div class="d-inline-flex">
+                                        <div class="d-inline-flex position-relative mr-l15">
+                                            <label>Username</label>
+                                            <input type="text" class="form-control" name="userName">
+                                        </div>
+                                        <div class="d-inline-flex position-relative mr-l15">
+                                            <label>Password</label>
+                                            <input type="password" class="form-control" name="password">
+                                        </div>
+                                        <div class="d-inline-flex position-relative mr-l15">
+                                            <label>GSTIN</label>
+                                            <input type="text" class="form-control" name="gstin">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                     </div>
