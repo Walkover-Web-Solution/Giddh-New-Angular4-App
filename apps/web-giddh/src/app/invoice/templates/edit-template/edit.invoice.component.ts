@@ -13,6 +13,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceTemplateModalComponent } from './modals/template-modal/template-modal.component';
 import { VoucherTypeEnum } from '../../../models/api-models/Sales';
+import { InvoiceService } from '../../../services/invoice.service';
 
 /**
  * Created by kunalsaxena on 6/29/17.
@@ -640,6 +641,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         private invoiceActions: InvoiceActions,
         private _invoiceTemplatesService: InvoiceTemplatesService,
         private _activatedRoute: ActivatedRoute,
+        private invoiceService: InvoiceService,
         private _invoiceUiDataService: InvoiceUiDataService
     ) {
         this.store.dispatch(this.invoiceActions.getTemplateState());
@@ -845,6 +847,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                     this.templateModal.hide();
                     this._invoiceUiDataService.resetCustomTemplate();
                     this._invoiceUiDataService.setLogoPath('');
+                    this._invoiceUiDataService.unusedImageSignature = '';
                     if (this.invoiceTemplateModalComponent && this.invoiceTemplateModalComponent.editFiltersComponent) {
                         this.invoiceTemplateModalComponent.editFiltersComponent.openTab('design');
                     }
@@ -939,10 +942,14 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             if (this.invoiceTemplateModalComponent && this.invoiceTemplateModalComponent.editFiltersComponent) {
                 this.invoiceTemplateModalComponent.editFiltersComponent.openTab('design');
             }
+            if (this._invoiceUiDataService.unusedImageSignature) {
+                this.invoiceService.removeSignature(this._invoiceUiDataService.unusedImageSignature).subscribe(() => {});
+            }
             this._invoiceUiDataService.resetCustomTemplate();
             this._invoiceUiDataService.setLogoPath('');
             this.templateModal.hide();
             this.showtemplateModal = false;
+            this._invoiceUiDataService.unusedImageSignature = '';
         }
         this.customTemplateConfirmationModal.hide();
     }
