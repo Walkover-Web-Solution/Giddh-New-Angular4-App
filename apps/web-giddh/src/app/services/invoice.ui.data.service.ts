@@ -27,6 +27,11 @@ export class InvoiceUiDataService {
     public fieldsAndVisibility: BehaviorSubject<any> = new BehaviorSubject(null);
     public templateVoucherType: BehaviorSubject<string> = new BehaviorSubject(null);
 
+    /** Stores the image uniquename, if signature image got uploaded to the server but not updated with invoice, used
+     * to avoid unused uploading of images on the server
+    */
+    public unusedImageSignature: string;
+
     private companyName: string;
     private companyAddress: string;
     private _: any;
