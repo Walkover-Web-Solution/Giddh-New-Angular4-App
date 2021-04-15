@@ -74,6 +74,7 @@
             .company-alice {
                 width: 30px;
                 height: 30px;
+                min-width: 30px;
                 border: 2px solid $black-pearl;
                 padding: 5px;
                 border-radius: 50px;
@@ -194,7 +195,17 @@
                 justify-content: space-between;
                 span {
                     .icon-arrow-down {
-                        transform: rotate(-85deg);
+                        transform: rotate(0deg);
+                    }
+                    &.rotate-180{
+                        i.icon-down-new{
+                             transform: rotate(180deg);
+                        }
+                    }
+                    &.rotate-0{
+                        i.icon-down-new{
+                             transform: rotate(0deg);
+                        }
                     }
                 }
             }
@@ -217,7 +228,7 @@
                             color: $cornflower;
                         }
                         &.dropdown-toggle {
-                            padding: 0 15px;
+                            padding: 0 20px;
                         }
                         &.active {
                             color: $cornflower !important;
@@ -235,6 +246,13 @@
                         }
                         i.icon-right{
                             transform: rotate(90deg);
+                        }
+                    }
+                    &.open{
+                        a{
+                            i.icon-right{
+                            transform: rotate(270deg);
+                            }
                         }
                     }
                     li {
@@ -556,7 +574,7 @@
                     .main-item {
                         margin-bottom: 0;
                         a {
-                            padding: 10px 10px !important;
+                            padding: 10px 8px 10px 20px !important;
                             display: flex;
                             justify-content: flex-start;
                             align-items: center;
@@ -581,11 +599,12 @@
                             }
                             i {
                                 margin-left: 0;
-                                width: 15px;
-                                height: 10px;
+                                width: 14px;
+                                height: 14px;
                                 display: flex;
                                 &.icon-right{
                                     transform: none;
+                                    opacity: 0.5;
                                 }
                             }
 
@@ -625,7 +644,7 @@
                 }
                 .account-dropdown {
                     display: flex !important;
-                    padding: 0 10px;
+                    padding: 8px 8px 8px 22px;
                     justify-content: center;
                     a {
                         &.dropdown-toggle {
@@ -645,13 +664,14 @@
                             font-size: 14px;
                             display: inline-flex;
                             color: $trout;
-                            width: 16px;
-                            height: 19px;
+                            width: 14px;
+                            height: 14px;
                             justify-content: center;
                             align-items: center;
                             margin-left: 0;
                             &.icon-right{
                                 margin-left: 3px;
+                                opacity: 0.5;
                             }
                         }
                     }

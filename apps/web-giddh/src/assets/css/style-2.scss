@@ -169,6 +169,8 @@ body{
     font-family: "opensans-regular";
     font-display: block;
     -webkit-font-smoothing: auto;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 /* table css need to removed at last (finish)*/
 .modal-header .close{
