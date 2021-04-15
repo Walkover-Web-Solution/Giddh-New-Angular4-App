@@ -233,6 +233,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
     }
+    
 
     public ngAfterViewInit() {
         this.isTaxableGroup$ = this.store.pipe(select(state => {
@@ -485,6 +486,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                     });
                 });
             }
+            else{
+                t.inheritedTaxes.forEach(tt => {
+                    tt.applicableTaxes.forEach(ttt => {
+                        data.taxes.pop();
+                    });
+                });
+            }
         });
         data.taxes.push.apply(data.taxes, this.taxGroupForm.value.taxes);
         data.uniqueName = activeGroup.uniqueName;
@@ -577,7 +585,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isTaxesSaveDisable$ = of(false);
         }
     }
-
     /**
      * To check discount list updated
      *
