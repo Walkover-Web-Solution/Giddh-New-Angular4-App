@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import * as _ from '../../lodash-optimized';
@@ -23,7 +23,6 @@ import { CommonService } from '../../services/common.service';
 import { CompanyService } from '../../services/companyService.service';
 import { GeneralService } from '../../services/general.service';
 import { Router, ActivatedRoute } from '@angular/router';
-
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -31,7 +30,6 @@ export interface IGstObj {
     newaddress: string;
     isDefault: boolean;
 }
-
 @Component({
     selector: 'setting-profile',
     templateUrl: './setting.profile.component.html',
@@ -112,7 +110,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public selectedState: any = '';
     public stateGstCode: any[] = [];
     public formFields: any[] = [];
-
     /** Observer to track get company profile API call in process */
     public getCompanyProfileInProgress$: Observable<boolean>;
     /** Stores the current organization type */
@@ -148,11 +145,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public isAddressChangeInProgress: boolean;
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
-
     public imgPath: string = '';
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
     constructor(
         private commonService: CommonService,
         private companyService: CompanyService,
@@ -169,10 +163,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private router: Router,
         public route: ActivatedRoute
     ) {
-
         this.getCountry();
         this.getCurrency();
-
         currencyNumberSystems.map(currency => {
             this.numberSystemSource.push({ value: currency.value, label: `${currency.name}`, additional: currency });
         });
@@ -180,7 +172,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             this.decimalDigitSource.push({ value: decimal.value, label: decimal.name });
         });
         this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress),takeUntil(this.destroyed$));
-
     }
 
     public ngOnInit() {
@@ -279,7 +270,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.isMobileNumberValid = true;
 
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
-
         this.store.pipe(select(p => p.settings.inventory), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
                 let inventorySetting = _.cloneDeep(o);
@@ -347,7 +337,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         } else {
             isValid = true;
         }
-
         if (isValid) {
             let companyDetails = _.cloneDeep(this.companyProfileObj);
             let newGstObj = {
@@ -377,7 +366,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public updateProfile(data) {
-
         let dataToSave = _.cloneDeep(data);
         if (dataToSave.addresses.length > 0) {
             for (let entry of dataToSave.addresses) {
@@ -395,7 +383,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
 
         this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
-
     }
 
     public updateInventorySetting(data) {
@@ -459,7 +446,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
-
         if (ele.value) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
@@ -495,7 +481,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         if (gstVal.length >= 2) {
             this.statesSource$.pipe(take(1)).subscribe(state => {
                 let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
-
                 let s = state.find(st => st.value === stateCode);
                 _.uniqBy(s, 'value');
                 if (s) {
@@ -674,13 +659,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public getStates(countryCode) {
         this.store.dispatch(this._generalActions.resetStatesList());
-
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.states = [];
                 this.statesInBackground = [];
                 this.statesSourceCompany = [];
-
                 Object.keys(res.stateList).forEach(key => {
                     this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
                     this.statesInBackground.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
@@ -734,9 +717,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             }
         });
     }
-
-
-
     /**
      * This will return the state code/name if available
      *
@@ -765,7 +745,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             } else {
                 this.patchProfile({ ...value });
             }
-        } else if (this.currentOrganizationType === OrganizationType.Branch) {
+        } else if (this.currentOrganizationType === OrganizationType.Branch ) {
             this.updateBranchProfile();
         }
     }
@@ -791,14 +771,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 }
             });
     }
-
+    
     /**
      * Handles tab changes
      *
      * @param {string} tabName Current tab name
      * @memberof SettingProfileComponent
      */
-    public handleTabChanged(tabName: string): void {
+    public handleTabChanged(tabName: string): void { 
         this.currentTab = tabName;
         if (tabName === 'address') {
             this.loadAddresses('GET');
@@ -808,12 +788,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
             }
         }
+        
         this.router.navigateByUrl('/pages/settings/profile/' + tabName);
     }
 
     /**
      * Loads all the entities of an company
-     *
      * @memberof SettingProfileComponent
      */
     public loadLinkedEntities(): void {
@@ -831,7 +811,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     /**
      * Loads all the states of a country
-     *
      * @param {string} countryCode Country code
      * @memberof SettingProfileComponent
      */
@@ -1087,7 +1066,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             if (profileObj.countryV2 !== undefined && profileObj.countryV2.alpha2CountryCode !== undefined) {
                 profileObj.country = profileObj.countryV2.alpha2CountryCode;
             }
-
             this.companyProfileObj = {
                 ...this.companyProfileObj,
                 name: profileObj.name,
