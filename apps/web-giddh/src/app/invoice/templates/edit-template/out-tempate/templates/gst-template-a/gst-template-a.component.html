@@ -17,21 +17,22 @@
                 <i class="icon-edit-pencil"></i>
             </a>
             <header>
-                <figure class="clearfix">
-                    <div class="row d-flex align-items-center">
-                        <div class="col-md-12 col-sm-12">
-                            <img [hidden]='!showLogo' [src]="logoSrc" class="pull-left" alt=""
-                                [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
-                        </div>
-                        <!--<div class="col-md-6 col-sm-6" *ngIf="voucherType==='sales'">
-                            <img src="assets/images/duplicate.svg" class="pull-right" alt="">
-                        </div>-->
-                    </div>
-                </figure>
+               
                 <table class="mr-b05" cellspacing="0" cellpadding="0">
                     <tbody>
                         <tr class="header-table">
                             <td class="pd-b05">
+                             <figure class="clearfix">
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-md-12 col-sm-12">
+                                        <img [hidden]='!showLogo' [src]="logoSrc" class="pull-left" alt=""
+                                        [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
+                                    </div>
+                                    <!--<div class="col-md-6 col-sm-6" *ngIf="voucherType==='sales'">
+                                        <img src="assets/images/duplicate.svg" class="pull-right" alt="">
+                                        </div>-->
+                                    </div>
+                                </figure>
                                 <figure *ngIf="fieldsAndVisibility.header.companyName?.display">
                                     <strong *ngIf="fieldsAndVisibility.header.companyName?.display">
                                         <h2
