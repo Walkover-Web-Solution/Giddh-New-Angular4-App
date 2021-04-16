@@ -13,6 +13,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceTemplateModalComponent } from './modals/template-modal/template-modal.component';
 import { VoucherTypeEnum } from '../../../models/api-models/Sales';
+import { InvoiceService } from '../../../services/invoice.service';
 
 /**
  * Created by kunalsaxena on 6/29/17.
@@ -640,6 +641,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         private invoiceActions: InvoiceActions,
         private _invoiceTemplatesService: InvoiceTemplatesService,
         private _activatedRoute: ActivatedRoute,
+        private invoiceService: InvoiceService,
         private _invoiceUiDataService: InvoiceUiDataService
     ) {
         this.store.dispatch(this.invoiceActions.getTemplateState());
@@ -740,6 +742,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
         if (defaultTemplate && defaultTemplate.sections && defaultTemplate.sections.footer && defaultTemplate.sections.footer.data && defaultTemplate.sections.footer.data.companyName) { // slogan default company on new template creation
             defaultTemplate.sections.footer.data.slogan.label = defaultTemplate.sections.footer.data.companyName.label;
+            defaultTemplate.sections.footer.data.textUnderSlogan.label = defaultTemplate.sections.footer.data.companyName.label;
         }
         this._invoiceUiDataService.setLogoPath('');
         this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
@@ -778,6 +781,11 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.fontSmall = data.fontSize - 4;
                 data.fontDefault = data.fontSize;
                 data.fontMedium = data.fontSize - 2;
+            }
+            if (!data.sections['footer'].data['textUnderSlogan'].display || !data?.sections['footer']?.data['textUnderSlogan']?.label) {
+                // If user checks the checkbox but didn't provide label then remove the selection
+                data.sections['footer'].data['textUnderSlogan'].display = false;
+                data.sections['footer'].data['textUnderSlogan'].label = '';
             }
             delete data['uniqueName'];
 
@@ -823,6 +831,11 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.sections['footer'].data['message1'].display = false;
                 data.sections['footer'].data['message1'].label = '';
             }
+            if (!data.sections['footer'].data['textUnderSlogan'].display || !data?.sections['footer']?.data['textUnderSlogan']?.label) {
+                // If user checks the checkbox but didn't provide label then remove the selection
+                data.sections['footer'].data['textUnderSlogan'].display = false;
+                data.sections['footer'].data['textUnderSlogan'].label = '';
+            }
             data = this.newLineToBR(data);
             this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
@@ -834,6 +847,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                     this.templateModal.hide();
                     this._invoiceUiDataService.resetCustomTemplate();
                     this._invoiceUiDataService.setLogoPath('');
+                    this._invoiceUiDataService.unusedImageSignature = '';
                     if (this.invoiceTemplateModalComponent && this.invoiceTemplateModalComponent.editFiltersComponent) {
                         this.invoiceTemplateModalComponent.editFiltersComponent.openTab('design');
                     }
@@ -928,10 +942,14 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             if (this.invoiceTemplateModalComponent && this.invoiceTemplateModalComponent.editFiltersComponent) {
                 this.invoiceTemplateModalComponent.editFiltersComponent.openTab('design');
             }
+            if (this._invoiceUiDataService.unusedImageSignature) {
+                this.invoiceService.removeSignature(this._invoiceUiDataService.unusedImageSignature).subscribe(() => {});
+            }
             this._invoiceUiDataService.resetCustomTemplate();
             this._invoiceUiDataService.setLogoPath('');
             this.templateModal.hide();
             this.showtemplateModal = false;
+            this._invoiceUiDataService.unusedImageSignature = '';
         }
         this.customTemplateConfirmationModal.hide();
     }
