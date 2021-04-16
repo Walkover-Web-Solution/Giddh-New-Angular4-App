@@ -49,14 +49,28 @@
                         <!--<td class="text-center img-duplicate" *ngIf="voucherType==='sales'">
                             <img src="assets/images/duplicate.svg" alt="">
                         </td>-->
-                        <td class="text-right" *ngIf="showLogo">
-                            <figure class="col-xs-12">
-                                <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt=""
-                                    [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
-                            </figure>
-                            <p *ngIf="fieldsAndVisibility.header.companyName?.display" class="bold">{{fieldsAndVisibility.header.companyName?.label}}</p>
+                        <td>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-right" *ngIf="showLogo">
+                                                <figure class="col-xs-12">
+                                                        <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt=""
+                                                            [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
+                                                    </figure>
+                                                    <p *ngIf="fieldsAndVisibility.header.companyName?.display" class="bold">{{fieldsAndVisibility.header.companyName?.label}}</p>
+                                        </td>
+                                        <td class="text-right width-40">
+                                                <div class="qr-image">
+                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"/>
+                                                </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                             <!-- <p class="font-12" *ngIf="(fieldsAndVisibility.header.customField1?.display && fieldsAndVisibility.header.customField2?.display && fieldsAndVisibility.header.customField3?.display && fieldsAndVisibility.header.dueDate?.display )">{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due on '}} 30/08/2017</p> -->
                         </td>
+                       
                     </tr>
                 </tbody>
             </table>
