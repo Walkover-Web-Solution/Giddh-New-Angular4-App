@@ -48,7 +48,11 @@
                                                 <a class="dropdown-item">
                                                     <input type="checkbox" name="field_filter.state" (ngModelChange)="columnFilter($event, 'state')" [(ngModel)]="showFieldFilter.state" /> {{commonLocaleData?.app_state}}</a>
                                             </li>
-
+                                            <li role="menuitem">
+                                                <a class="dropdown-item">
+                                                    <input type="checkbox"> Pincode
+                                                </a>
+                                            </li>
                                             <li *ngIf="shouldShowTaxFilter" role="menuitem">
                                                 <a class="dropdown-item">
                                                     <input type="checkbox" name="field_filter.gstin" (ngModelChange)="columnFilter($event, 'gstin')" [(ngModel)]="showFieldFilter.gstin" /> {{commonLocaleData?.app_tax_number}}</a>
@@ -431,6 +435,14 @@
                                 </ng-container>
                             </div>
                         </th>
+                        <!-- static pincode -->
+                        <th>
+                            <div class="d-flex align-items-center ">Pincode
+                                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'state'}">
+                                </ng-container>
+                            </div>
+                        </th>
+                        <!-- static pincode -->
 
                         <th *ngIf="showFieldFilter.comment" class="comment-field">{{localeData?.comment}}</th>
                         <ng-container *ngFor="let item of (companyCustomFields$ | async)">
@@ -588,6 +600,9 @@
                                 {{account.gstIn || '-' }}</td>
                             <td class="word-wrap" *ngIf="showFieldFilter.state" [attr.data-title]="commonLocaleData?.app_state">
                                 {{account?.state?.name || '-'}}</td>
+                            <!-- static pincode  -->
+                            <td class="word-wrap"> 000000 </td>
+                            <!-- static pincode  -->
                             <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx' [attr.data-title]="localeData?.comment" class="commentField">
                                 <ng-container *ngIf='updateCommentIdx != idx'>
                                     {{account.comment}}

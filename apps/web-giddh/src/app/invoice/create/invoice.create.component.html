@@ -259,8 +259,7 @@
                                                             </sales-sh-select>
 
                                                         </div>
-                                                        <div class="col-sm-12 pd mr-b1">
-
+                                                        <div class="col-sm-6 pd mr-b1">
                                                             <input maxLength="15" type="text"
                                                                 name="gstNumber"
                                                                 class="form-control input-custom"
@@ -268,6 +267,13 @@
                                                                 (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
                                                                 placeholder="GSTIN" />
                                                         </div>
+                                                        <!-- static pin code  -->
+                                                        <div class="col-sm-6 pd mr-b1">
+                                                            <div class="form-group mr-b05">
+                                                                <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum" placeholder="Pincode" />
+                                                            </div>
+                                                        </div>
+                                                        <!-- static pin code end-->
                                                     </div>
                                                 </div>
                                             </div>
@@ -306,8 +312,7 @@
                                                                     [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode">
                                                                 </sales-sh-select>
                                                             </div>
-                                                            <div class="col-sm-12 pd mr-b1">
-
+                                                            <div class="col-sm-6 pd mr-b1">
                                                                 <input [readonly]="autoFillShipping" maxLength="15"
                                                                     type="text" name="shippingDetails.gstNumber"
                                                                     class="form-control input-custom"
@@ -315,6 +320,14 @@
                                                                     (keyup)="getStateCode('shippingDetails', statesShipping)"
                                                                     placeholder="GSTIN" />
                                                             </div>
+                                                            <!-- static pin code  -->
+                                                            <div class="col-sm-6 pd mr-b1">
+                                                                <div class="form-group mr-b05">
+                                                                    <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
+                                                                        placeholder="Pincode" />
+                                                                </div>
+                                                            </div>
+                                                            <!-- static pin code end-->
                                                         </div>
                                                     </div>
                                                 </div>
