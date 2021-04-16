@@ -284,7 +284,7 @@
                                                                             </sales-sh-select>
                                                                         </div>
 
-                                                                        <div class="col-sm-12"
+                                                                        <div class="col-sm-6 col-md-6"
                                                                             *ngIf="shouldShowTrnGstField">
                                                                             <input maxLength="15" autocomplete="None"
                                                                                 type="text" name="billingDetails.gstNumber"
@@ -301,6 +301,14 @@
                                                                                 (change)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
                                                                                 [placeholder]="commonLocaleData?.app_trn" />
                                                                         </div>
+                                                                        <!-- static pin code  -->
+                                                                        <div class="col-sm-6 col-md-6">
+                                                                            <div class="form-group mr-b05">
+                                                                                <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
+                                                                                    placeholder="Pincode" />
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- static pin code end-->
                                                                     </div>
 
                                                                 </div>
@@ -372,7 +380,7 @@
                                                                                 </sales-sh-select>
                                                                             </div>
 
-                                                                            <div class="col-sm-12"
+                                                                            <div class="col-sm-6"
                                                                                 *ngIf="shouldShowTrnGstField">
                                                                                 <input [readonly]="autoFillShipping"
                                                                                     autocomplete="None" maxLength="15"
@@ -394,7 +402,14 @@
                                                                                     (change)="getStateCode('shippingDetails', statesShipping);"
                                                                                     [placeholder]="commonLocaleData?.app_trn" />
                                                                             </div>
-
+                                                                            <!-- static pin code  -->
+                                                                            <div class="col-sm-6">
+                                                                                <div class="form-group mr-b05">
+                                                                                    <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
+                                                                                        placeholder="Pincode" />
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- static pin code end-->
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -570,7 +585,7 @@
                                                                             [(ngModel)]="purchaseBillCompany.billingDetails.state.code">
                                                                         </sales-sh-select>
                                                                     </div>
-                                                                    <div class="col-sm-12"
+                                                                    <div class="col-sm-6 col-md-6"
                                                                         *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
                                                                         <input maxlength="15" autocomplete="None" type="text"
                                                                             name="companyBillingDetailsTax"
@@ -580,6 +595,14 @@
                                                                             (change)="getStateCodeCompany('billingDetails')"
                                                                             [placeholder]="(showGSTINNo) ? commonLocaleData?.app_gstin : commonLocaleData?.app_trn">
                                                                     </div>
+                                                                    <!-- static pin code  -->
+                                                                    <div class="col-sm-6 col-md-6">
+                                                                        <div class="form-group mr-b05">
+                                                                            <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
+                                                                                placeholder="Pincode" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- static pin code end-->
                                                                 </div>
 
                                                             </div>
@@ -628,7 +651,7 @@
                                                                                 [(ngModel)]="purchaseBillCompany.shippingDetails.state.code">
                                                                             </sales-sh-select>
                                                                         </div>
-                                                                        <div class="col-sm-12"
+                                                                        <div class="col-sm-6 col-md-6"
                                                                             *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
                                                                             <input maxLength="15" autocomplete="None" type="text"
                                                                                 name="companyShippingDetailsTax"
@@ -637,6 +660,14 @@
                                                                                 (change)="getStateCodeCompany('shippingDetails')"
                                                                                 [placeholder]="(showGSTINNo) ? commonLocaleData?.app_gstin : commonLocaleData?.app_trn">
                                                                         </div>
+                                                                        <!-- static pin code  -->
+                                                                        <div class="col-sm-6 col-md-6">
+                                                                            <div class="form-group mr-b05">
+                                                                                <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
+                                                                                    placeholder="Pincode" />
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- static pin code end-->
                                                                     </div>
                                                                 </div>
                                                             </div>
