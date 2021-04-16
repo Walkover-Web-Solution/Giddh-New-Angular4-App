@@ -134,7 +134,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="!(isOnBoardingInProgress && isWarehouse) && !isBranch" class="col-12 mr-b2 selectBox">
+                        <!-- static pincode start -->
+                        <div class="col-12 mr-b2 select-box">
+                            <div>
+                                <label for="pinCodeNum">Pincode <span class="red-text">*</span></label>
+                                <div>
+                                    <input type="text" class="form-control" autocomplete="false" placeholder="Enter Pincode" autocomplete="false" name="pinCodeNum" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- static pincode end -->
+                        <div *ngIf="!(isOnBoardingInProgress && isWarehouse) && !isBranch" class="col-12 mr-b2 select-box">
                             <div class="">
                                 <label for="taxes-dd">Applicable Tax</label>
                                 <div class="btn-group btn-block select-caret invoice-btn" dropdown>

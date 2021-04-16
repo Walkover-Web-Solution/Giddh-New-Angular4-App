@@ -286,7 +286,7 @@
                                                                         </sales-sh-select>
                                                                     </div>
 
-                                                                    <div class="col-sm-12"
+                                                                    <div class="col-sm-6 col-md-6"
                                                                         *ngIf="shouldShowTrnGstField">
                                                                         <!-- <label>GSTIN</label> -->
                                                                         <input maxLength="15" autocomplete="None"
@@ -304,6 +304,14 @@
                                                                             (change)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
                                                                             placeholder="TRN" />
                                                                     </div>
+                                                                    <!-- static pin code  -->
+                                                                    <div class="col-sm-6 col-md-6">
+                                                                        <div class="form-group mr-b05">
+                                                                            <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
+                                                                                placeholder="Pincode" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- static pin code end-->
                                                                 </div>
 
                                                             </div>
@@ -399,7 +407,14 @@
                                                                                 (change)="getStateCode('shippingDetails', statesShipping);"
                                                                                 placeholder="TRN" />
                                                                         </div>
-
+                                                                         <!-- static pin code  -->
+                                                                         <div class="col-sm-6">
+                                                                            <div class="form-group mr-b05">
+                                                                                <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
+                                                                                    placeholder="Pincode" />
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- static pin code end-->
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -585,6 +600,14 @@
                                                                         (change)="getStateCodeCompany('billingDetails')"
                                                                         placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                 </div>
+                                                                <!-- static pin code  -->
+                                                                <div class="col-sm-6 col-md-6">
+                                                                    <div class="form-group mr-b05">
+                                                                        <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
+                                                                            placeholder="Pincode" />
+                                                                    </div>
+                                                                </div>
+                                                                <!-- static pin code end-->
                                                             </div>
 
                                                         </div>
@@ -643,6 +666,14 @@
                                                                             (change)="getStateCodeCompany('shippingDetails')"
                                                                             placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                     </div>
+                                                                    <!-- static pin code  -->
+                                                                    <div class="col-sm-6 col-md-6">
+                                                                        <div class="form-group mr-b05">
+                                                                            <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
+                                                                                placeholder="Pincode" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- static pin code end-->
                                                                 </div>
                                                             </div>
                                                         </div>

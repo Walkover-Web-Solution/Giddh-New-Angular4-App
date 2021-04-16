@@ -128,7 +128,7 @@
                                                                         </sales-sh-select>
                                                                     </div>
 
-                                                                    <div class="col-sm-12"
+                                                                    <div class="col-sm-12 col-md-6"
                                                                         *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
                                                                         <input maxLength="15" autocomplete="None"
                                                                             type="text" name="vendorBillingDetailsTax"
@@ -138,6 +138,14 @@
                                                                             (change)="getStateCode('billingDetails', 'vendor')"
                                                                             placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                     </div>
+                                                                    <!-- static pin code  -->
+                                                                    <div class="col-sm-12 col-md-6">
+                                                                        <div class="form-group mr-b05">
+                                                                            <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
+                                                                                placeholder="Pincode" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- static pin code end-->
                                                                 </div>
 
                                                             </div>
@@ -200,7 +208,7 @@
                                                                             [(ngModel)]="purchaseOrder.account.shippingDetails.state.code">
                                                                         </sales-sh-select>
                                                                     </div>
-                                                                    <div class="col-sm-12"
+                                                                    <div class="col-sm-12 col-md-6"
                                                                         *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
                                                                         <input maxLength="15" autocomplete="None"
                                                                             type="text" name="vendorShippingDetailsTax"
@@ -209,7 +217,14 @@
                                                                             (change)="getStateCode('shippingDetails', 'vendor')"
                                                                             placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                     </div>
-
+                                                                    <!-- static pin code  -->
+                                                                    <div class="col-sm-12 col-md-6">
+                                                                        <div class="form-group mr-b05">
+                                                                            <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
+                                                                                placeholder="Pincode" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- static pin code end-->
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -311,6 +326,14 @@
                                                                 (change)="getStateCode('billingDetails', 'company')"
                                                                 placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                         </div>
+                                                        <!-- static pin code  -->
+                                                        <div class="col-sm-12 col-md-6">
+                                                            <div class="form-group mr-b05">
+                                                                <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
+                                                                    placeholder="Pincode" />
+                                                            </div>
+                                                        </div>
+                                                        <!-- static pin code end-->
                                                     </div>
 
                                                 </div>
@@ -368,6 +391,14 @@
                                                                     (change)="getStateCode('shippingDetails', 'company')"
                                                                     placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                             </div>
+                                                            <!-- static pin code  -->
+                                                            <div class="col-sm-12 col-md-6">
+                                                                <div class="form-group mr-b05">
+                                                                    <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
+                                                                        placeholder="Pincode" />
+                                                                </div>
+                                                            </div>
+                                                            <!-- static pin code end-->
                                                         </div>
                                                     </div>
                                                 </div>
