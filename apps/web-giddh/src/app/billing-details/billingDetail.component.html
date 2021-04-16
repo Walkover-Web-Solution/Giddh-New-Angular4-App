@@ -57,6 +57,12 @@
                                 [disabled]="disableState" [defaultValue]="selectedState" class="w-100"
                                 [(ngModel)]="billingDetailsObj.stateCode" id="stateCode" name="stateCode"></sh-select>
                         </div>
+                        <!-- static pincode start -->
+                        <div class="form-group">
+                            <label for="pinCodeNum">Pincode <span class="red-text">*</span></label>
+                            <input type="text" class="form-control" autocomplete="false" autocomplete="false" name="pinCodeNum" />
+                        </div>
+                        <!-- static pincode end -->
                         <div class="form-group">
                             <label>Address</label>
                             <textarea class="form-control" name="address" id="address"
