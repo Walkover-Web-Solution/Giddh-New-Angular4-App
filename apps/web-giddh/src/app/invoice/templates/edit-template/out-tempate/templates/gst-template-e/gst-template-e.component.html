@@ -60,7 +60,7 @@
                                                     </figure>
                                                     <p *ngIf="fieldsAndVisibility.header.companyName?.display" class="bold">{{fieldsAndVisibility.header.companyName?.label}}</p>
                                         </td>
-                                        <td class="text-right width-40">
+                                        <td *ngIf="voucherType === 'sales' && fieldsAndVisibility.header.showQrCode?.display" class="text-right width-40">
                                                 <div class="qr-image">
                                                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"/>
                                                 </div>
@@ -70,7 +70,7 @@
                             </table>
                             <!-- <p class="font-12" *ngIf="(fieldsAndVisibility.header.customField1?.display && fieldsAndVisibility.header.customField2?.display && fieldsAndVisibility.header.customField3?.display && fieldsAndVisibility.header.dueDate?.display )">{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due on '}} 30/08/2017</p> -->
                         </td>
-                       
+
                     </tr>
                 </tbody>
             </table>
