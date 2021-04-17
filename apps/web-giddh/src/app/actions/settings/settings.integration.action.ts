@@ -89,7 +89,7 @@ export class SettingsIntegrationActions {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.store.dispatch(this._companyAction.getAllRegistrations());
-                    this.toasty.successToast(data.message || data?.body?.message);
+                    this.toasty.successToast(data.message || data?.body?.Message);
                 }
                 return { type: 'EmptyAction' };
             })));
