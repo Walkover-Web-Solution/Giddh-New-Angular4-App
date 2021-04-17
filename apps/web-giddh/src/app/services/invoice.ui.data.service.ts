@@ -214,6 +214,15 @@ export class InvoiceUiDataService {
                         width: null
                     };
                 }
+                if (!selectedTemplate.sections['header'].data['showQrCode']) {
+                    // Assign the default value based on value of warehouseAddress
+                    selectedTemplate.sections['header'].data['showQrCode'] = defaultTemplate ?
+                        defaultTemplate.sections['header'].data['showQrCode'] : {
+                            label: '',
+                            display: false,
+                            width: null
+                        };
+                }
                 if (!selectedTemplate.sections['header'].data['gstComposition']) {
                     // Assign the default value based on value of warehouseAddress
                     selectedTemplate.sections['header'].data['gstComposition'] = defaultTemplate ?
@@ -238,7 +247,7 @@ export class InvoiceUiDataService {
                             display: false,
                             width: null
                         };
-                    }
+                }
                 if (!selectedTemplate.sections['footer'].data['showMessage2']) {
                     selectedTemplate.sections['footer'].data['showMessage2'] = defaultTemplate ?
                         defaultTemplate.sections['footer'].data['showMessage2'] : {
