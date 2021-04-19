@@ -686,6 +686,13 @@
     }
 }
 /*responsive starts here*/
+@media (min-height: 800px) and (max-height:1000px) {
+    .primary-sidebar{
+        .wrap-menus {
+            padding-bottom: 104px;
+        }
+    }
+}
 @media (max-height: 950px) {
     .sidebar-collapse {
         .other-sub-menu-item {
@@ -695,9 +702,6 @@
     }
     .menu-block {
         padding-bottom: 40px;
-    }
-    .wrap-menus {
-        padding-bottom: 80px;
     }
     .primary-sidebar.sidebar-collapse{
          .menu-item-wrapper{
@@ -711,6 +715,12 @@
             }
         }
     }
-
-
+}
+@media (max-height: 799px) {
+    .primary-sidebar {
+        .wrap-menus {
+            padding-bottom: 80px;
+            height: calc(100vh - 160px);
+        }
+    }
 }
