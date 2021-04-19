@@ -65,6 +65,9 @@
                                 </ng-container>
                             </div>
                         </div>
+                        <div *ngIf="voucherType === 'sales' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="form-group">
+                            <input type="checkbox" name="showQrCodeCheckbox" [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show QR code
+                        </div>
                     </div>
                     <!--   .....this is for other voucher type -->
                     <ng-container *ngIf="voucherType!='sales'">

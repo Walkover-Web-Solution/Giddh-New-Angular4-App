@@ -189,6 +189,11 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
+                    showQrCode: {
+                        label: '',
+                        display: false,
+                        width: null
+                    },
                     voucherDate: {
                         label: 'Voucher Date',
                         display: true,
