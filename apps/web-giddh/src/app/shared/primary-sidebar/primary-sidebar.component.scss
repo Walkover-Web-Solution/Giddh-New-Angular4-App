@@ -90,6 +90,7 @@
                 white-space: normal;
                 word-break: break-word;
                 min-height: 38px;
+                font-size: 14px;
             }
             img.company-icon {
                 width: 28px;
@@ -144,9 +145,11 @@
         }
     }
     .wrap-menus {
-        height: 700px;
+        min-height: calc(100vh - 200px);
+        max-height: calc(100vh - 200px);
         overflow-y: auto;
         overflow-x: hidden;
+        padding-bottom: 90px;
     }
     .account-block {
         .account-collapse {
@@ -348,6 +351,7 @@
                     align-items: flex-start;
                     width: 100%;
                     padding-left: 6px;
+                    font-size: 14px;
                 }
                 i {
                     position: relative;
@@ -689,7 +693,10 @@
 @media (min-height: 800px) and (max-height:1000px) {
     .primary-sidebar{
         .wrap-menus {
-            padding-bottom: 104px;
+            height: 100vh;
+            max-height: calc(100vh - 230px);
+            overflow-y: auto;
+            overflow-x: hidden;
         }
     }
 }
@@ -713,14 +720,6 @@
                     }
                 }
             }
-        }
-    }
-}
-@media (max-height: 799px) {
-    .primary-sidebar {
-        .wrap-menus {
-            padding-bottom: 80px;
-            height: calc(100vh - 160px);
         }
     }
 }
