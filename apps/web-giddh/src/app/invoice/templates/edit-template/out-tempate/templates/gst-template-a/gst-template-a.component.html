@@ -714,6 +714,7 @@
                 </a>
                 <aside>
                     <p class="pd-1" [ngStyle]="{ 'font-size' : inputTemplate.fontMedium + 'px', 'white-space': 'pre-line'}" *ngIf="fieldsAndVisibility.footer.showNotesAtLastPage?.display">{{fieldsAndVisibility.footer.message1?.label}}</p>
+                    <p class="pd-1" [ngStyle]="{ 'font-size' : inputTemplate.fontMedium + 'px', 'white-space': 'pre-line'}" *ngIf="voucherType==='sales' && fieldsAndVisibility.footer.showNotesAtLastPage?.display && fieldsAndVisibility.footer.showMessage2?.display">Notes provided in the invoice will appear here</p>
                     <table cellpadding="0" cellspacing="0" class="subfooter">
                         <tbody>
                             <tr>
@@ -730,6 +731,14 @@
                                             </span>
                                         </p>
                                     </ng-container>
+                                    <p *ngIf="voucherType==='sales' && !fieldsAndVisibility.footer.showNotesAtLastPage?.display && fieldsAndVisibility.footer.showMessage2?.display">
+                                        <span><br>
+                                            <strong>Notes 2</strong> <br>
+                                            <span class="notes2-default-text">
+                                                Notes provided in the invoice will appear here
+                                            </span>
+                                        </span>
+                                    </p>
                                     <!--<p *ngIf="fieldsAndVisibility.footer.thanks?.display " style="white-space:pre-line; " [innerHTML]="fieldsAndVisibility.footer.thanks?.label "></p>-->
                                 </td>
                                 <td>&nbsp;</td>
