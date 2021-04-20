@@ -647,6 +647,17 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this.store.dispatch(this.invoiceActions.getTemplateState());
     }
 
+    /**
+     * Returns the content filter form invalid status
+     *
+     * @readonly
+     * @type {boolean} True, if form is invalid
+     * @memberof EditInvoiceComponent
+     */
+    public get isFormInValid(): boolean {
+        return this._invoiceUiDataService.contentForm?.invalid;
+    }
+
     public ngOnInit() {
         this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(route => {
             if(route && route.selectedType) {
