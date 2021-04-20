@@ -3644,6 +3644,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private handleUpdateInvoiceForm(invoiceForm: NgForm): void {
         let requestObject: any = this.prepareDataForApi();
+        document.querySelector('body').classList.add('update-scroll-hidden');
         if (!requestObject) {
             this.startLoader(false);
             return;
@@ -4440,6 +4441,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnDestroy() {
+        // document.querySelector('body').classList.remove('fixed');
         if (!this.isProformaInvoice && !this.isEstimateInvoice && this.isPendingVoucherType) {
             this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
         } else {
