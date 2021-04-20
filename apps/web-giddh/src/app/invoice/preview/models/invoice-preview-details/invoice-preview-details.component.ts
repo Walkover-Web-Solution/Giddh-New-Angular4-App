@@ -307,6 +307,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.performActionAfterClose();
         this.invoiceSearchEvent.emit("");
         this.closeEvent.emit(true);
+        document.querySelector('body').classList.remove('update-scroll-hidden');
     }
 
     public toggleBodyClass() {
