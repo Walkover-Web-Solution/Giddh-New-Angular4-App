@@ -3644,6 +3644,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private handleUpdateInvoiceForm(invoiceForm: NgForm): void {
         let requestObject: any = this.prepareDataForApi();
+        document.querySelector('body').classList.add('update-scroll-hidden');
         if (!requestObject) {
             this.startLoader(false);
             return;
