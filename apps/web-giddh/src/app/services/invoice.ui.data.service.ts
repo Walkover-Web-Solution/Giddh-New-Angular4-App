@@ -3,6 +3,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { CustomTemplateResponse } from '../models/api-models/Invoice';
 import { CompanyResponse } from '../models/api-models/Company';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { NgForm } from '@angular/forms';
 
 export class TemplateContentUISectionVisibility {
     public header: boolean = true;
@@ -26,6 +27,8 @@ export class InvoiceUiDataService {
     public companyPAN: BehaviorSubject<string> = new BehaviorSubject(null);
     public fieldsAndVisibility: BehaviorSubject<any> = new BehaviorSubject(null);
     public templateVoucherType: BehaviorSubject<string> = new BehaviorSubject(null);
+    /** Stores the content form instance  */
+    public contentForm: NgForm;
 
     /** Stores the image uniquename, if signature image got uploaded to the server but not updated with invoice, used
      * to avoid unused uploading of images on the server
@@ -233,6 +236,18 @@ export class InvoiceUiDataService {
             };
 
             this.customTemplate.next(_.cloneDeep(selectedTemplate));
+        }
+    }
+
+    /**
+     * Sets the content form instance for carrying out validation
+     *
+     * @param {NgForm} form Content form instance
+     * @memberof InvoiceUiDataService
+     */
+    public setContentForm(form: NgForm): void {
+        if (form) {
+            this.contentForm = form;
         }
     }
 }
