@@ -1,6 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import * as _ from '../../lodash-optimized';
@@ -16,6 +15,7 @@ import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccou
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { CommonActions } from '../../actions/common.actions';
 
 const PaymentGateway = [
     { value: 'razorpay', label: 'razorpay' },
@@ -69,8 +69,13 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     shouldShowGmailIntegration: boolean;
     private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Stores the active company information */
+    public activeCompany$: Observable<any> = null;
+    /** Stores the form fields of onboard form API, required for GST validation in E-Invoice */
+    public formFields: any[] = [];
 
     constructor(
+        private commonActions: CommonActions,
         private cdr: ChangeDetectorRef,
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
@@ -86,7 +91,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-
+        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
             this.isGmailIntegrated = result;
         });
@@ -95,6 +100,32 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val.code) {
                 this.saveGmailAuthCode(val.code);
+            }
+        });
+
+        this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                if (res.fields) {
+                    this.formFields = [];
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
+            } else {
+                let companyCountry;
+                this.activeCompany$.pipe(take(1)).subscribe((response: any) => {
+                    companyCountry = response.countryV2?.alpha2CountryCode;
+                });
+                if (companyCountry === 'IN') {
+                    const requestObject = {
+                        formName: 'onboarding',
+                        country: companyCountry
+                    };
+                    this.store.dispatch(this.commonActions.GetOnboardingForm(requestObject));
+                }
             }
         });
     }
@@ -243,6 +274,26 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         if (this.formToSave.invoiceSettings.lockDate instanceof Date) {
             this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
         }
+        if (this.formToSave?.invoiceSettings?.gstEInvoiceEnable) {
+            const invoiceSettings = this.formToSave.invoiceSettings;
+            if (!invoiceSettings.gstEInvoiceUserName || !invoiceSettings.gstEInvoiceUserPassword || !invoiceSettings.gstEInvoiceGstin) {
+                this._toasty.errorToast('All fields are required for E-invoicing Authentication');
+                return;
+            }
+            if (this.formFields['taxName'] && this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
+                let isValid = false;
+                for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+                    let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                    if (regex.test(invoiceSettings.gstEInvoiceGstin)) {
+                        isValid = true;
+                    }
+                }
+                if (!isValid) {
+                    this._toasty.errorToast('Please provide a valid GSTIN');
+                    return;
+                }
+            }
+        }
 
         if (this.formToSave.invoiceSettings.autoPaid) {
             this.formToSave.invoiceSettings.autoPaid = 'runtime';
@@ -257,10 +308,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         if (!_.isEqual(this.razorpayObj, razorpayObj) && form && form.createPaymentEntry) {
             this.saveRazorPay(this.razorpayObj, form);
         }
-        // } else {
-        //   this._toasty.warningToast('No changes made.');
-        //   return false;
-        // }
     }
 
     /**
@@ -474,4 +521,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         }
     }
 
+    public handleEInvoiceChange(event: any): void {
+        if (!event) {
+            // E-Invoice unchecked reset the credentials
+            this.invoiceSetting.gstEInvoiceGstin = '';
+            this.invoiceSetting.gstEInvoiceUserName = '';
+            this.invoiceSetting.gstEInvoiceUserPassword = '';
+        }
+    }
 }
