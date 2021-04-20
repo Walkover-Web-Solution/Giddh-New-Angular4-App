@@ -328,6 +328,9 @@ header img {
 
 #default .subfooter {
     padding: 10px 10px 0px 10px;
+    .notes2-default-text {
+        white-space:pre-line;
+    }
 }
 
 #default .subfooter hr {
