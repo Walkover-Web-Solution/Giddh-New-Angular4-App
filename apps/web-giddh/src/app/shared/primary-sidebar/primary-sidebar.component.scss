@@ -17,7 +17,7 @@
                 border-top: none;
                 border-right: none;
                 position: absolute;
-                left: 28px;
+                left: 32px;
                 top: 40px;
                 &:after {
                     position: absolute;
@@ -196,6 +196,7 @@
             p {
                 display: flex;
                 justify-content: space-between;
+                line-height: 20px;
                 span {
                     .icon-arrow-down {
                         transform: rotate(0deg);
