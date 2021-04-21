@@ -9742,6 +9742,10 @@ input.mat-input-element{
      body.update-scroll-hidden{
          overflow-y: hidden;
      }
+     .e-waybill-tabs.custom-tabs .nav-tabs{
+        position: static !important;
+        padding-left: 15px !important;
+    }
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {
@@ -10162,6 +10166,9 @@ input.mat-input-element{
     }
 }
 @media (max-width: 767px) {
+    .e-waybill-tabs.custom-tabs .nav-tabs{
+        position: fixed !important;
+    }
     .invoice-modal-content{
         left: 0 !important;
         width: 100% !important;
