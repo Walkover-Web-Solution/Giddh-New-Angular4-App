@@ -679,14 +679,12 @@
                             </td>
 
                             <!-- open account details on double click on customer name -->
-                            <td width="25%" [attr.data-title]="commonLocaleData?.app_customer" (dblclick)="modalUniqueName = item.uniqueName"
-                                class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''">
+                            <td width="25%" [attr.data-title]="commonLocaleData?.app_customer" (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''">
                                 {{item?.account?.customerName || item?.account?.name}}
-                                <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
-                                    [accountUniqueName]="item.account.uniqueName" [voucherType]="selectedVoucher" [from]="invoiceSearchRequest.from"
-                                    [to]="invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
-                                </div>
-                                </div>
+                                    <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
+                                        [accountUniqueName]="item.account.uniqueName" [voucherType]="selectedVoucher" [from]="invoiceSearchRequest.from"
+                                        [to]="invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
+                                    </div>
                             </td>
                     </tr>
                     <tr>
