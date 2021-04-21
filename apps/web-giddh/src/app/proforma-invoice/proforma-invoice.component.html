@@ -410,7 +410,7 @@
                                                                          <!-- static pin code  -->
                                                                          <div [ngClass]="{'col-sm-6': (showGSTINNo || showTRNNo), 'col-sm-12': !(showGSTINNo || showTRNNo)}">
                                                                             <div class="form-group mr-b05">
-                                                                                <input type="number" class="form-control input-custom" autocomplete="false" autocomplete="false" name="shippingPinCode"
+                                                                                <input type="number" class="form-control input-custom" autocomplete="false" name="shippingPinCode"
                                                                                     placeholder="PIN Code" [(ngModel)]="invFormData.accountDetails.shippingDetails.pincode" />
                                                                             </div>
                                                                         </div>
@@ -603,7 +603,7 @@
                                                                 <!-- static pin code  -->
                                                                 <div [ngClass]="{'col-sm-6 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
                                                                     <div class="form-group mr-b05">
-                                                                        <input type="number" class="form-control input-custom" autocomplete="false" autocomplete="false" name="purchaseBillBillingPinCode"
+                                                                        <input type="number" class="form-control input-custom" autocomplete="false" name="purchaseBillBillingPinCode"
                                                                             placeholder="PIN Code" [(ngModel)]="purchaseBillCompany.billingDetails.pincode" (change)="autoFillShippingDetails()" />
                                                                     </div>
                                                                 </div>
@@ -669,7 +669,7 @@
                                                                     <!-- static pin code  -->
                                                                     <div [ngClass]="{'col-sm-6 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
                                                                         <div class="form-group mr-b05">
-                                                                            <input type="number" class="form-control input-custom" autocomplete="false" autocomplete="false" name="purchaseBillShippingPinCode"
+                                                                            <input type="number" class="form-control input-custom" autocomplete="false" name="purchaseBillShippingPinCode"
                                                                                 placeholder="PIN Code" [(ngModel)]="purchaseBillCompany.shippingDetails.pincode" />
                                                                         </div>
                                                                     </div>
