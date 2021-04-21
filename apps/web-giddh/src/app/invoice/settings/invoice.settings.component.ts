@@ -524,6 +524,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handler for E-invoice authentication change
+     *
+     * @param {*} event Checkbox (ngModelChange) event
+     * @memberof InvoiceSettingComponent
+     */
     public handleEInvoiceChange(event: any): void {
         if (!event) {
             // E-Invoice unchecked reset the credentials
