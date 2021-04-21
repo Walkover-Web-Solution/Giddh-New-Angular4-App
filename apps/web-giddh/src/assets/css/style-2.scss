@@ -9448,8 +9448,8 @@ ul.dropdown-menu.action-dropdown {
     max-width: 170px;
 }
 .collapse-pane  .mat-form-field{
-    min-width: 147px;
-    max-width: 147px;
+    min-width: 100%;
+    max-width: 100%;
 }
 .mat-form-field{
     min-width: 170px;
@@ -9714,7 +9714,10 @@ input.mat-input-element{
             }
         }
     }
-
+    .e-waybill-tabs.custom-tabs .nav-tabs{
+        position: static !important;
+        padding-left: 15px !important;
+    }
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {
@@ -10105,7 +10108,7 @@ input.mat-input-element{
             }
         }
         .on-setting-page aside-setting.setting-sidebar {
-            left: -230px;
+            left: -250px;
         }
         .setting-sidebar-open .desktop-header {
             padding-left: 0;
@@ -10135,6 +10138,9 @@ input.mat-input-element{
     }
 }
 @media (max-width: 767px) {
+    .e-waybill-tabs.custom-tabs .nav-tabs{
+        position: fixed !important;
+    }
     .invoice-modal-content{
         left: 0 !important;
         width: 100% !important;

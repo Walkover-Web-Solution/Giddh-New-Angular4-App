@@ -116,7 +116,7 @@
             <!-- Invoice E-way bill, export to excel for a single selected item along with
                 New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
             <div class="row">
-                <div class="col-12 d-flex w-100 align-items-center pt-1 pb-1">
+                <div class="col-12 d-flex w-100 align-items-center pt-3 pb-2">
                     <div class="export-button-wrap">
                         <button class="btn btn-primary" [disabled]="((selectedInvoices && selectedInvoices.length > 0) ? selectedInvoices.length : voucherData && voucherData.totalItems) === 0"  (click)="openModal(bulkExport)">Export</button>
                     </div>
@@ -336,7 +336,7 @@
             title: 'Customer'}"></ng-container>
                         </th>
 
-                        <th>
+                        <th width="10%">
                             <div class="d-flex">
                                 <div class="">Date</div>
                                 <div class="icon-pointer">
@@ -570,7 +570,7 @@
                         </td>
 
                         <!-- open account details on double click on customer name -->
-                        <td data-title="Customer" (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
+                        <td width="25%" data-title="Customer" (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
                             (clickOutside)="modalUniqueName = ''">
                             <!-- Customer -->
                             {{item?.account?.customerName || item?.account?.name}}
