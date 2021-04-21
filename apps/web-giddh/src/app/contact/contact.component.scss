@@ -560,8 +560,8 @@ button.btn.btn-filter span.icon-cross {
                 margin-left: 50px;
             }
             .header-left{
-                width: 100%;
-                margin-left: 0;
+                width: calc(100% - 50px);
+                margin-left: 45px;
                 &.on-company{
                     width: calc(100% - 50px);
                     margin-left: 45px;
