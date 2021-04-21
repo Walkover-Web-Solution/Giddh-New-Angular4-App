@@ -9447,8 +9447,8 @@ ul.dropdown-menu.action-dropdown {
     max-width: 170px;
 }
 .collapse-pane  .mat-form-field{
-    min-width: 147px;
-    max-width: 147px;
+    min-width: 100%;
+    max-width: 100%;
 }
 .mat-form-field{
     min-width: 170px;
@@ -10104,7 +10104,7 @@ input.mat-input-element{
             }
         }
         .on-setting-page aside-setting.setting-sidebar {
-            left: -230px;
+            left: -250px;
         }
         .setting-sidebar-open .desktop-header {
             padding-left: 0;
