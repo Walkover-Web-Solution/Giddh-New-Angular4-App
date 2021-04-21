@@ -16,6 +16,8 @@ import { SettingsIntegrationActions } from '../../actions/settings/settings.inte
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonActions } from '../../actions/common.actions';
+import { GeneralService } from '../../services/general.service';
+import { OrganizationType } from '../../models/user-login-state';
 
 const PaymentGateway = [
     { value: 'razorpay', label: 'razorpay' },
@@ -82,7 +84,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         private _toasty: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions,
         private _authenticationService: AuthenticationService,
         public _route: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private generalService: GeneralService
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
@@ -527,6 +530,38 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             this.invoiceSetting.gstEInvoiceGstin = '';
             this.invoiceSetting.gstEInvoiceUserName = '';
             this.invoiceSetting.gstEInvoiceUserPassword = '';
+        } else {
+            this.fetchCompanyGstDetails();
         }
+    }
+
+    /**
+     * Auto-fills the GST number field for E-invoice
+     *
+     * @private
+     * @memberof InvoiceSettingComponent
+     */
+    private fetchCompanyGstDetails(): void {
+        let branches = [];
+        let currentBranch;
+        this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+            if (response && response.length) {
+                branches = response;
+
+                if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    // Find the current checked out branch
+                    currentBranch = branches.find(branch => branch.uniqueName === this.generalService.currentBranchUniqueName);
+                } else {
+                    // Find the HO branch
+                    currentBranch =  branches.find(branch => !branch.parentBranch);
+                }
+                if (currentBranch && currentBranch.addresses) {
+                    const defaultAddress = currentBranch.addresses.find(address => (address && address.isDefault));
+                    if(defaultAddress) {
+                        this.invoiceSetting.gstEInvoiceGstin = defaultAddress.taxNumber;
+                    }
+                }
+            }
+        });
     }
 }
