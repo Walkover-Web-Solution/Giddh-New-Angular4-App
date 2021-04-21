@@ -541,14 +541,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             state: {code: '', name: ''},
             gstNumber: '',
             stateName: '',
-            stateCode: ''
+            stateCode: '',
+            pincode: ''
         },
         shippingDetails: {
             address: [],
             state: {code: '', name: ''},
             gstNumber: '',
             stateName: '',
-            stateCode: ''
+            stateCode: '',
+            pincode: ''
         }
     };
     /* This will hold autofill state of company billing/shipping */
@@ -4839,6 +4841,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         voucherClassConversion.accountDetails.billingDetails = new GstDetailsClass();
         voucherClassConversion.accountDetails.billingDetails.panNumber = result.account.billingDetails.panNumber;
+        voucherClassConversion.accountDetails.billingDetails.pincode = result.account.billingDetails.pincode;
         voucherClassConversion.accountDetails.billingDetails.address = cloneDeep(result?.account?.billingDetails?.address);
         voucherClassConversion.accountDetails.billingDetails.gstNumber = result.account.billingDetails.gstNumber;
         voucherClassConversion.accountDetails.billingDetails.state.code = this.getNewStateCode(result.account.billingDetails.stateCode);
@@ -4847,6 +4850,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
         voucherClassConversion.accountDetails.shippingDetails.panNumber = result.account.shippingDetails.panNumber;
+        voucherClassConversion.accountDetails.shippingDetails.pincode = result.account.shippingDetails.pincode;
         voucherClassConversion.accountDetails.shippingDetails.address = cloneDeep(result?.account?.shippingDetails?.address);
         voucherClassConversion.accountDetails.shippingDetails.gstNumber = result.account.shippingDetails.gstNumber;
         voucherClassConversion.accountDetails.shippingDetails.state.code = this.getNewStateCode(result.account.shippingDetails.stateCode);
@@ -6562,14 +6566,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     state: {code: company?.billingDetails?.stateCode, name: company?.billingDetails?.stateName},
                     gstNumber: company?.billingDetails?.gstNumber,
                     stateName: company?.billingDetails?.stateName,
-                    stateCode: company?.billingDetails?.stateCode
+                    stateCode: company?.billingDetails?.stateCode,
+                    pincode: company?.billingDetails?.pincode
                 },
                 shippingDetails: {
                     address: company?.shippingDetails?.address,
                     state: {code: company?.shippingDetails?.stateCode, name: company?.shippingDetails?.stateName},
                     gstNumber: company?.shippingDetails?.gstNumber,
                     stateName: company?.shippingDetails?.stateName,
-                    stateCode: company?.shippingDetails?.stateCode
+                    stateCode: company?.shippingDetails?.stateCode,
+                    pincode: company?.shippingDetails?.pincode
                 }
             }
 
@@ -6902,7 +6908,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             data.state.code = (isCompanyAddress) ? address.stateCode : (address.state) ? address.state.code : "";
             data.gstNumber = (isCompanyAddress) ? address.taxNumber : address.gstNumber;
-
+            data.pincode = address.pincode;
             if(isCompanyAddress) {
                 this.autoFillCompanyShippingDetails();
             } else {

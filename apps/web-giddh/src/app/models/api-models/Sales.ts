@@ -114,6 +114,7 @@ export class GstDetailsClass {
     * */
     public stateCode?: string;
     public stateName?: string;
+    public pincode?: string;
 
     constructor() {
         this.address = [];
