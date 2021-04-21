@@ -54,7 +54,7 @@
                     <label>
                         Address/es
                     </label>
-                    <div class="address-dropdown form-group">
+                    <div class="address-dropdown form-group mb-0">
                         <sales-sh-select [options]="addresses" formControlName="address" name="particulars"
                             [notFoundLink]="true" (clearSingleItem)="handleFinalSelection($event)"
                             [isFilterEnabled]="true" [multiple]="true" placeholder="Select Address/es"
@@ -94,6 +94,16 @@
                         </sales-sh-select>
                     </div>
                 </div>
+                <!-- static pincode start -->
+                <div class="branch-form-field">
+                    <label>
+                        Pincode
+                    </label>
+                    <div class="from-group w-100">
+                        <input type="text" class="form-control" value="000000" disabled>
+                    </div>
+                </div>
+                <!-- static pincode end -->
                 <!-- <div class="branch-form-field">
                     <label>
                         Parent <span class="red-text">*</span>

@@ -475,6 +475,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     }
 
                     this.purchaseOrder.account.billingDetails.panNumber = "";
+                    this.purchaseOrder.account.billingDetails.pincode = billingDetails.pincode;
 
                     let shippingDetails = this.purchaseOrderDetails.account.shippingDetails;
 
@@ -492,6 +493,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         this.purchaseOrder.account.shippingDetails.stateName = "";
                     }
                     this.purchaseOrder.account.shippingDetails.panNumber = "";
+                    this.purchaseOrder.account.shippingDetails.pincode = shippingDetails.pincode;
                     this.copiedAccountDetails = true;
                 }
                 this.loadTaxesAndDiscounts(0);
@@ -667,11 +669,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             this.purchaseOrder.account.billingDetails.state.code = (defaultAddress.state) ? (defaultAddress.state.code) ? defaultAddress.state.code : defaultAddress.state.stateGstCode : defaultAddress.stateCode;
                             this.purchaseOrder.account.billingDetails.stateCode = this.purchaseOrder.account.billingDetails.state.code;
                             this.purchaseOrder.account.billingDetails.stateName = defaultAddress.state.name;
+                            this.purchaseOrder.account.billingDetails.pincode = defaultAddress.state.pincode;
                         } else {
                             this.purchaseOrder.account.billingDetails.state.name = "";
                             this.purchaseOrder.account.billingDetails.state.code = "";
                             this.purchaseOrder.account.billingDetails.stateCode = "";
                             this.purchaseOrder.account.billingDetails.stateName = "";
+                            this.purchaseOrder.account.billingDetails.pincode = "";
                         }
 
                         this.purchaseOrder.account.billingDetails.panNumber = "";
@@ -684,6 +688,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             this.purchaseOrder.account.shippingDetails.state.code = (defaultAddress.state) ? (defaultAddress.state.code) ? defaultAddress.state.code : defaultAddress.state.stateGstCode : defaultAddress.stateCode;
                             this.purchaseOrder.account.shippingDetails.stateCode = this.purchaseOrder.account.shippingDetails.state.code;
                             this.purchaseOrder.account.shippingDetails.stateName = defaultAddress.state.name;
+                            this.purchaseOrder.account.billingDetails.pincode = defaultAddress.state.pincode;
                         } else {
                             this.purchaseOrder.account.shippingDetails.state.name = "";
                             this.purchaseOrder.account.shippingDetails.state.code = "";
@@ -1015,6 +1020,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.company.shippingDetails.state.name = defaultAddress.stateName;
                     this.purchaseOrder.company.shippingDetails.stateName = defaultAddress.stateName;
                     this.purchaseOrder.company.shippingDetails.gstNumber = defaultAddress.taxNumber;
+                    this.purchaseOrder.company.shippingDetails.pincode = defaultAddress.pincode;
                 } else {
                     this.resetShippingAddress();
                 }
@@ -1039,6 +1045,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.purchaseOrder.company.shippingDetails.state.name = "";
         this.purchaseOrder.company.shippingDetails.stateName = "";
         this.purchaseOrder.company.shippingDetails.gstNumber = "";
+        this.purchaseOrder.company.shippingDetails.pincode = "";
     }
 
     /**
@@ -2372,6 +2379,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             this.purchaseOrder.company.billingDetails.stateCode = defaultAddress ? defaultAddress.stateCode : '';
             this.purchaseOrder.company.billingDetails.stateName = defaultAddress ? defaultAddress.stateName : '';
             this.purchaseOrder.company.billingDetails.gstNumber = defaultAddress ? defaultAddress.taxNumber : '';
+            this.purchaseOrder.company.billingDetails.pincode = defaultAddress ? defaultAddress.pincode : '';
         }
     }
 
@@ -2937,6 +2945,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
             data.state.code = (isCompanyAddress) ? address.stateCode : (address.state) ? address.state.code : "";
             data.gstNumber = (isCompanyAddress) ? address.taxNumber : address.gstNumber;
+            data.pincode = address.pincode;
 
             if(isCompanyAddress) {
                 this.autoFillShippingDetails('company');
