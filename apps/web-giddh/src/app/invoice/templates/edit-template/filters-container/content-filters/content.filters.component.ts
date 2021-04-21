@@ -1,7 +1,7 @@
 import { ToasterService } from '../../../../../services/toaster.service';
 import { ActivatedRoute } from '@angular/router';
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, DoCheck, EventEmitter, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
 import * as _ from '../../../../../lodash-optimized';
@@ -14,6 +14,7 @@ import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput }
 import { INVOICE_API } from 'apps/web-giddh/src/app/services/apiurls/invoice';
 import { CurrentCompanyState } from 'apps/web-giddh/src/app/store/Company/company.reducer';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
     selector: 'content-selector',
@@ -21,7 +22,7 @@ import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service'
     styleUrls: ['content.filters.component.scss']
 })
 
-export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
+export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDestroy {
 
     @Input() public content: boolean;
     public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
@@ -53,6 +54,8 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
     public showGstComposition: boolean = false;
     /** Stores the image signature ID */
     public imageSignatureId: string;
+    /** Ng form instance of content filter component */
+    @ViewChild(NgForm) contentForm: NgForm;
 
     constructor(
         private store: Store<AppState>,
@@ -107,6 +110,9 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
             this.voucherType = _.cloneDeep(voucherType);
         });
         this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
+            if (this.contentForm) {
+                this._invoiceUiDataService.setContentForm(this.contentForm);
+            }
             this.customTemplate = _.cloneDeep(template);
             this.assignImageSignature();
         });
@@ -134,7 +140,17 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
             this.signatureImgAttached = false;
             this.signatureSrc = '';
             this.assignImageSignature();
+            this._invoiceUiDataService.setContentForm(this.contentForm);
         }
+    }
+
+    /**
+     * Stores the form instance for validation
+     *
+     * @memberof ContentFilterComponent
+     */
+    public ngDoCheck(): void {
+        this._invoiceUiDataService.setContentForm(this.contentForm);
     }
 
     /**
@@ -142,6 +158,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onFieldChange(sectionName: string, fieldName: string, value: string) {
         let template = _.cloneDeep(this.customTemplate);
+        this._invoiceUiDataService.setContentForm(this.contentForm);
         this._invoiceUiDataService.setCustomTemplate(template);
     }
 
@@ -182,6 +199,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onChangeFieldVisibility(sectionName: string, fieldName: string, value: boolean) {
         let template = _.cloneDeep(this.customTemplate);
+        this._invoiceUiDataService.setContentForm(this.contentForm);
         this._invoiceUiDataService.setCustomTemplate(template);
     }
 

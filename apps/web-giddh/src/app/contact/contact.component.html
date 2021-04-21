@@ -93,7 +93,7 @@
                                         </sh-select>
                                     </div>
                                 </div>
-                                <!-- On company class will show only if we are on company mode and branches length will be less than equal 2 -->
+                                <!-- On company class will show only if we are on company mode and branches length will greater or equal to 2 -->
                                 <div class="pull-left header-left" [ngClass]="{'on-company': currentCompanyBranches?.length >= 2 }">
                                     <div class="form-group max-width-250 search-field" *ngIf="activeTab !== 'aging'">
                                         <input type="text" [placeholder]="localeData?.name_email_mobile" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
