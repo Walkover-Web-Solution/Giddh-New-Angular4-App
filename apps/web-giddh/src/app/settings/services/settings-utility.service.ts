@@ -64,6 +64,7 @@ export class SettingsUtilityService {
             formattedCompanyAddresses.push({
                 taxType: address.taxType,
                 stateCode: address.stateCode,
+                pincode: address.pincode,
                 stateName: address.stateName,
                 taxNumber: address.taxNumber,
                 address: address.address,
@@ -89,6 +90,7 @@ export class SettingsUtilityService {
                 formattedCompanyAddresses.push({
                     stateCode: address.stateCode,
                     stateName: address.stateName,
+                    pincode: address.pincode,
                     taxNumber: address.taxNumber,
                     taxType: address.taxType,
                     address: address.address,
