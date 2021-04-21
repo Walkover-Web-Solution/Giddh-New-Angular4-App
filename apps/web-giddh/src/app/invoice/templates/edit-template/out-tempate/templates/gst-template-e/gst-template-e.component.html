@@ -495,7 +495,7 @@
                                     {{fieldsAndVisibility.footer.slogan?.label }}
                                 </small>
                             </strong>
-                            <p *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label" class="bd-rb"></p>
+                            <hr *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label">
                             <strong *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display">
                                 <small>
                                     {{fieldsAndVisibility.footer.textUnderSlogan?.label}}
@@ -505,9 +505,8 @@
                     </td>
                     <td class="text-center" style="vertical-align: bottom; width: 35%;" *ngIf="showImageSignature">
                         <ng-container>
-                            <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="max-width-180" alt=""
-                                style="min-width: 60px;height: 60px;" />
-                            <p *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label" class="bd-rb"></p>
+                            <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="inner-img-signature" alt="" />
+                            <hr *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label">
                             <strong *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display">
                                 <small>
                                     {{fieldsAndVisibility.footer.textUnderSlogan?.label}}

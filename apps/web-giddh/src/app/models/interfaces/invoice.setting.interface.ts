@@ -150,4 +150,8 @@ export class InvoiceSettings {
 	sendInvLinkOnSms: boolean;
     smsContent?: any;
     autoDeleteEntries?: any;
+    gstEInvoiceEnable?: boolean;
+    gstEInvoiceGstin?: string;
+    gstEInvoiceUserName?: string;
+    gstEInvoiceUserPassword?: string;
 }
