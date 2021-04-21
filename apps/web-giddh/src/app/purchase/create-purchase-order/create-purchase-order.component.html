@@ -139,10 +139,10 @@
                                                                                 [placeholder]="showGSTINNo ? commonLocaleData?.app_gstin : commonLocaleData?.app_trn">
                                                                         </div>
                                                                         <!-- static pin code  -->
-                                                                        <div class="col-sm-12 col-md-6">
+                                                                        <div [ngClass]="{'col-sm-12 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
                                                                             <div class="form-group mr-b05">
-                                                                                <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
-                                                                                    placeholder="Pincode" />
+                                                                                <input type="number" class="form-control input-custom" autocomplete="false" autocomplete="false" name="accountBillingPinCode"
+                                                                                    [placeholder]="commonLocaleData?.app_pin_code" [(ngModel)]="purchaseOrder.account.billingDetails.pincode" />
                                                                             </div>
                                                                         </div>
                                                                         <!-- static pin code end-->
@@ -216,10 +216,10 @@
                                                                                 [placeholder]="showGSTINNo ? commonLocaleData?.app_gstin : commonLocaleData?.app_trn">
                                                                         </div>
                                                                         <!-- static pin code  -->
-                                                                        <div class="col-sm-12 col-md-6">
+                                                                        <div [ngClass]="{'col-sm-12 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
                                                                             <div class="form-group mr-b05">
-                                                                                <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
-                                                                                    placeholder="Pincode" />
+                                                                                <input type="number" class="form-control input-custom" autocomplete="false" autocomplete="false" name="accountShippingPinCode"
+                                                                                    [placeholder]="commonLocaleData?.app_pin_code" [(ngModel)]="purchaseOrder.account.shippingDetails.pincode"/>
                                                                             </div>
                                                                         </div>
                                                                         <!-- static pin code end-->
@@ -314,7 +314,7 @@
                                                                     [(ngModel)]="purchaseOrder.company.billingDetails.state.code">
                                                                 </sales-sh-select>
                                                             </div>
-                                                            <div class="col-sm-12"
+                                                            <div class="col-sm-12 col-md-6"
                                                                 *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
                                                                 <input maxlength="15" autocomplete="None" type="text"
                                                                     name="companyBillingDetailsTax"
@@ -325,10 +325,10 @@
                                                                     [placeholder]="showGSTINNo ? commonLocaleData?.app_gstin : commonLocaleData?.app_trn">
                                                             </div>
                                                             <!-- static pin code  -->
-                                                            <div class="col-sm-12 col-md-6">
+                                                            <div [ngClass]="{'col-sm-12 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
                                                                 <div class="form-group mr-b05">
-                                                                    <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
-                                                                        placeholder="Pincode" />
+                                                                    <input type="number" class="form-control input-custom" autocomplete="false" autocomplete="false" name="companyBillingPinCode"
+                                                                        [placeholder]="commonLocaleData?.app_pin_code" [(ngModel)]="purchaseOrder.company.billingDetails.pincode" />
                                                                 </div>
                                                             </div>
                                                             <!-- static pin code end-->
@@ -389,10 +389,10 @@
                                                                         [placeholder]="showGSTINNo ? commonLocaleData?.app_gstin : commonLocaleData?.app_trn">
                                                                 </div>
                                                                 <!-- static pin code  -->
-                                                                <div class="col-sm-12 col-md-6">
+                                                                <div [ngClass]="{'col-sm-12 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
                                                                     <div class="form-group mr-b05">
-                                                                        <input type="text" class="form-control input-custom" autocomplete="false" autocomplete="false" name="pinCodeNum"
-                                                                            placeholder="Pincode" />
+                                                                        <input type="number" class="form-control input-custom" autocomplete="false" autocomplete="false" name="companyShippingPinCode"
+                                                                            [placeholder]="commonLocaleData?.app_pin_code" [(ngModel)]="purchaseOrder.company.shippingDetails.pincode" />
                                                                     </div>
                                                                 </div>
                                                                 <!-- static pin code end-->
