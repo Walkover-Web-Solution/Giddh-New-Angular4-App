@@ -68,7 +68,7 @@
                         </div>
                         <div class="col-md-7">
                             <div class="row">
-                                <div class="pr-0 col-sm-3 col-4">
+                                <div class="pr-0 col-sm-3 col-12 switch-wrapper">
                                     <div class="checkbox square-switch">
                                         <input type="checkbox" id="includeParticulars" formControlName="includeParticulars" />
                                         <label for="includeParticulars">
@@ -79,7 +79,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-sm-9 col-8 col-9">
+                                <div class="col-sm-9 col-8 col-12">
                                     <div class="form-group">
                                         <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear( 'particulars')" formControlName="particulars" [isFilterEnabled]="true" [multiple]="true
                                     " [placeholder]="commonLocaleData?.app_select_accounts" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
@@ -101,7 +101,7 @@
                         </div>
                         <div class="col-md-7">
                             <div class="row">
-                                <div class="pr-0 col-sm-3 col-4">
+                                <div class="pr-0 col-sm-3 col-12 switch-wrapper">
                                     <div class="checkbox square-switch">
                                         <input type="checkbox" id="includeVouchers" formControlName="includeVouchers" />
                                         <label for="includeVouchers">
@@ -112,7 +112,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-sm-9 col-8 col-9">
+                                <div class="col-sm-9 col-8 col-12">
                                     <div class="form-group">
                                         <sh-select [options]="voucherTypeList | async" name="particulars" (onClear)="onDDClear( 'vouchers')" formControlName="vouchers" [isFilterEnabled]="true" [multiple]="true
                                     " [placeholder]="commonLocaleData?.app_select_accounts"></sh-select>
@@ -181,7 +181,7 @@
                                 </div>
                                 <div class="col-sm-7" formGroupName="inventory">
                                     <div class="row">
-                                        <div class="pr-0 col-sm-3 col-4">
+                                        <div class="pr-0 col-sm-3 col-12 switch-wrapper">
 
                                             <div class="checkbox square-switch">
                                                 <input type="checkbox" id="includeInventory" formControlName="includeInventory" />
@@ -193,7 +193,7 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="col-sm-9 col-8">
+                                        <div class="col-sm-9 col-12">
                                             <div class="form-group">
                                                 <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear( 'inventory')" formControlName="inventories" [isFilterEnabled]="true" [multiple]="true
                                                 " [placeholder]="commonLocaleData?.app_select_accounts" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
