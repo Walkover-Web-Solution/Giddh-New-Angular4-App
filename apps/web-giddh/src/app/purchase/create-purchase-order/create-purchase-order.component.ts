@@ -726,16 +726,15 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             this.purchaseOrder.account.billingDetails.state.code = (defaultAddress.state) ? (defaultAddress.state.code) ? defaultAddress.state.code : defaultAddress.state.stateGstCode : defaultAddress.stateCode;
                             this.purchaseOrder.account.billingDetails.stateCode = this.purchaseOrder.account.billingDetails.state.code;
                             this.purchaseOrder.account.billingDetails.stateName = defaultAddress.state.name;
-                            this.purchaseOrder.account.billingDetails.pincode = defaultAddress.state.pincode;
                         } else {
                             this.purchaseOrder.account.billingDetails.state.name = "";
                             this.purchaseOrder.account.billingDetails.state.code = "";
                             this.purchaseOrder.account.billingDetails.stateCode = "";
                             this.purchaseOrder.account.billingDetails.stateName = "";
-                            this.purchaseOrder.account.billingDetails.pincode = "";
                         }
 
                         this.purchaseOrder.account.billingDetails.panNumber = "";
+                        this.purchaseOrder.account.billingDetails.pincode = defaultAddress.pincode;
 
                         this.purchaseOrder.account.shippingDetails.address = [];
                         this.purchaseOrder.account.shippingDetails.address.push(defaultAddress.address);
@@ -745,13 +744,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             this.purchaseOrder.account.shippingDetails.state.code = (defaultAddress.state) ? (defaultAddress.state.code) ? defaultAddress.state.code : defaultAddress.state.stateGstCode : defaultAddress.stateCode;
                             this.purchaseOrder.account.shippingDetails.stateCode = this.purchaseOrder.account.shippingDetails.state.code;
                             this.purchaseOrder.account.shippingDetails.stateName = defaultAddress.state.name;
-                            this.purchaseOrder.account.billingDetails.pincode = defaultAddress.state.pincode;
                         } else {
                             this.purchaseOrder.account.shippingDetails.state.name = "";
                             this.purchaseOrder.account.shippingDetails.state.code = "";
                             this.purchaseOrder.account.shippingDetails.stateCode = "";
                             this.purchaseOrder.account.shippingDetails.stateName = "";
                         }
+                        this.purchaseOrder.account.shippingDetails.pincode = defaultAddress.pincode;
                         this.purchaseOrder.account.shippingDetails.panNumber = "";
                     }
                 });
