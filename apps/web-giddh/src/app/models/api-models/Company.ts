@@ -56,6 +56,7 @@ export class Addresses {
     public taxNumber: string;
     public name?: string;
     public taxType?: string;
+    public pincode?: string;
 }
 
 export class CompanyTotals {
