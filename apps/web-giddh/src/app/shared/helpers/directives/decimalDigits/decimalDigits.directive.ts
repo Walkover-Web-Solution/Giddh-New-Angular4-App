@@ -13,6 +13,8 @@ export class DecimalDigitsDirective implements OnDestroy {
     @Input() public DecimalPlaces: string;
     @Input() public minValue: string;
     @Input() public maxValue: string;
+    /** True if decimal "." needs to prevented */
+    @Input() public preventDecimal: boolean;
 
     private giddhDecimalPlaces: number = 2;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -58,11 +60,14 @@ export class DecimalDigitsDirective implements OnDestroy {
                 (e.key === 'c' && e.metaKey === true) || // Allow: Cmd+C (Mac)
                 (e.key === 'v' && e.metaKey === true) || // Allow: Cmd+V (Mac)
                 (e.key === 'x' && e.metaKey === true) || // Allow: Cmd+X (Mac)
-                (e.key === '.')  // Allow: .
+                (e.key === '.' && !this.preventDecimal)  // Allow: .
             ) {
                 // let it happen, don't do anything
                 return;
+            } else if (e.key === '.' && this.preventDecimal) {
+                e.preventDefault();
             }
+
             // Ensure that it is a number and stop the keypress
             if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
                 e.preventDefault();

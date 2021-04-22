@@ -313,6 +313,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             stateName: chosenState ? chosenState.stateName : '',
             address: addressDetails.formValue.address,
             name: addressDetails.formValue.name,
+            pincode: addressDetails.formValue.pincode,
             linkEntity
         };
 

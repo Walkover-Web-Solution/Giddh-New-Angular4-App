@@ -141,8 +141,8 @@
                                                                     <!-- static pin code  -->
                                                                     <div [ngClass]="{'col-sm-12 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
                                                                         <div class="form-group mr-b05">
-                                                                            <input type="number" class="form-control input-custom" autocomplete="false" name="accountBillingPinCode"
-                                                                                placeholder="PIN Code" [(ngModel)]="purchaseOrder.account.billingDetails.pincode" />
+                                                                            <input type="number" class="form-control input-custom" autocomplete="false" name="accountBillingPinCode" (blur)="autoFillShippingDetails('vendor')"
+                                                                                placeholder="PIN Code" [(ngModel)]="purchaseOrder.account.billingDetails.pincode" decimalDigitsDirective [preventDecimal]="true" />
                                                                         </div>
                                                                     </div>
                                                                     <!-- static pin code end-->
@@ -221,7 +221,7 @@
                                                                     <div [ngClass]="{'col-sm-12 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
                                                                         <div class="form-group mr-b05">
                                                                             <input type="number" class="form-control input-custom" autocomplete="false" name="accountShippingPinCode"
-                                                                                placeholder="PIN Code" [(ngModel)]="purchaseOrder.account.shippingDetails.pincode"/>
+                                                                                placeholder="PIN Code" [(ngModel)]="purchaseOrder.account.shippingDetails.pincode" decimalDigitsDirective [preventDecimal]="true" />
                                                                         </div>
                                                                     </div>
                                                                     <!-- static pin code end-->
@@ -329,8 +329,8 @@
                                                         <!-- static pin code  -->
                                                         <div [ngClass]="{'col-sm-12 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
                                                             <div class="form-group mr-b05">
-                                                                <input type="number" class="form-control input-custom" autocomplete="false" name="companyBillingPinCode"
-                                                                    placeholder="PIN Code" [(ngModel)]="purchaseOrder.company.billingDetails.pincode" />
+                                                                <input type="number" class="form-control input-custom" autocomplete="false" name="companyBillingPinCode" (blur)="autoFillShippingDetails('company')"
+                                                                    placeholder="PIN Code" [(ngModel)]="purchaseOrder.company.billingDetails.pincode" decimalDigitsDirective [preventDecimal]="true" />
                                                             </div>
                                                         </div>
                                                         <!-- static pin code end-->
@@ -395,7 +395,7 @@
                                                             <div [ngClass]="{'col-sm-12 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
                                                                 <div class="form-group mr-b05">
                                                                     <input type="number" class="form-control input-custom" autocomplete="false" name="companyBillingPinCode"
-                                                                        placeholder="PIN Code" [(ngModel)]="purchaseOrder.company.shippingDetails.pincode" />
+                                                                        placeholder="PIN Code" [(ngModel)]="purchaseOrder.company.shippingDetails.pincode" decimalDigitsDirective [preventDecimal]="true" />
                                                                 </div>
                                                             </div>
                                                             <!-- static pin code end-->
