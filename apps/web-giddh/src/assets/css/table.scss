@@ -48,6 +48,9 @@
         font-family: 'opensans-regular';
         border-bottom: none !important;
         white-space: nowrap !important;
+        &.text-break{
+            white-space: normal !important;
+        }
     }
     thead > tr > th:first-child,
     tbody > tr > td:first-child {
@@ -191,6 +194,7 @@
             white-space: inherit;
             font-size: 14px !important;
             margin-bottom: 14px;
+            width: 100%;
             &:last-child{
                 border-right: none !important;
             }

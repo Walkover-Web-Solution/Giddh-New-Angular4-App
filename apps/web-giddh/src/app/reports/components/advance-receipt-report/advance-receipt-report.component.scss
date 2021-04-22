@@ -160,6 +160,12 @@
         position: relative;
         margin-top: 10px;
         margin-left: 0;
+        .total-due-sale-wrap{
+            padding-left: 0 !important;
+            .total-due-sale{
+                margin-bottom: 15px;
+            }
+        }
     }
     .total-due-sale {
         margin-bottom: 15px;
