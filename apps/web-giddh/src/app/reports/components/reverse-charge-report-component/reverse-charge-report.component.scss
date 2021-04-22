@@ -99,3 +99,12 @@
         min-width: initial;
     }
 }
+@media screen and (max-width:575px) {
+    .invoice-footer{
+        display: block;
+        .total-due-sale-wrap{
+            display: block !important;
+            padding: 0 !important;
+        }
+    }
+}

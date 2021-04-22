@@ -32,6 +32,11 @@
                     </ng-template>
                 </sh-select>
             </div>
+            <div class="xs-mb-1 inner-button">
+                <sh-select [options]="financialOptions" [isFilterEnabled]="true" [placeholder]="activeFinacialYr?.uniqueName"
+                    name="currentActiveFinacialYear" [(ngModel)]='currentActiveFinacialYear.value' [showClear]="false"
+                    (selected)="selectFinancialYearOption($event)" [ItemHeight]="33"></sh-select>
+            </div>
             <div class="inner-button xs-mb-1 pr-5 xs-pr-0" dropdown placement="bottom left">
                 <div class="btn-group xs-pr-0" dropdown [autoClose]="true" container="body">
                     <button id="button-nested" dropdownToggle type="button" class="btn text-capitalize dropdown-toggle"
