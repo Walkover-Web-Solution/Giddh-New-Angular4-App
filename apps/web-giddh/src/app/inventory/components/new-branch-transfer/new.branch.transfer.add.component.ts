@@ -650,7 +650,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     this.branchTransfer[type][index].warehouse.name = res.body.name;
                     if (res.body.addresses && res.body.addresses.length) {
                         const defaultAddress = res.body.addresses.find(address => address.isDefault);
-                        this.branchTransfer[type][index].warehouse.address = defaultAddress ? defaultAddress.address : '';
+                        this.branchTransfer[type][index].warehouse.address = defaultAddress ? `${defaultAddress.address}${defaultAddress?.pincode ? '\n' + 'PIN: ' + defaultAddress?.pincode : ''}` : '';
                         this.branchTransfer[type][index].warehouse.taxNumber = defaultAddress ? defaultAddress.taxNumber : '';
                     } else {
                         this.branchTransfer[type][index].warehouse.address = '';
@@ -1008,6 +1008,20 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.branchTransfer.transporterDetails.dispatchedDate = moment(this.tempDateParams.dispatchedDate).format(GIDDH_DATE_FORMAT);
         }
 
+        this.branchTransfer.sources.forEach(source => {
+            if (source?.warehouse) {
+                const [address, pin] = source.warehouse.address.split('\nPIN: ');
+                source.warehouse.address = address;
+                source.warehouse.pincode = pin;
+            }
+        });
+        this.branchTransfer.destinations.forEach(destination => {
+            if (destination?.warehouse) {
+                const [address, pin] = destination.warehouse.address.split('\nPIN: ');
+                destination.warehouse.address = address;
+                destination.warehouse.pincode = pin;
+            }
+        });
         this.branchTransfer.entity = this.branchTransferMode;
         this.branchTransfer.transferType = this.transferType;
 
@@ -1130,6 +1144,22 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branchTransfer.destinations = response.body.destinations;
                 this.branchTransfer.products = response.body.products;
 
+                this.branchTransfer.sources.forEach(source => {
+                    if (source?.warehouse?.address) {
+                        const pin = source.warehouse.pincode;
+                        if (pin) {
+                            source.warehouse.address = `${source.warehouse.address}${'\n' + 'PIN: ' + pin}`;
+                        }
+                    }
+                });
+                this.branchTransfer.destinations.forEach(destination => {
+                    if (destination?.warehouse?.address) {
+                        const pin = destination.warehouse.pincode;
+                        if (pin) {
+                            destination.warehouse.address = `${destination.warehouse.address}${'\n' + 'PIN: ' + pin}`;
+                        }
+                    }
+                });
                 if(this.branchTransfer.products?.length > 0) {
                     this.branchTransfer.products.forEach(product => {
                         if(product.hsnNumber) {
