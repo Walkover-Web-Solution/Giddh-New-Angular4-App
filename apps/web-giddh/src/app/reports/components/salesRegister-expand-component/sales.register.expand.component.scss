@@ -262,9 +262,6 @@ table th {
 .table-middle th .d-flex {
     align-items: center;
 }
-.sales-register-table {
-    padding-bottom: 170px;
-}
 .expand-collapse-btn{
     margin-bottom: 0 !important;
 }
@@ -338,14 +335,45 @@ table th {
         }
     }
 }
-@media (max-width: 1019px) {
+.giddh-table{
+    tbody{
+        tr{
+            td.voucher-number-td{
+                white-space: normal !important;
+                word-break: break-all;
+            }
+        }
+    }
+}
+@media(max-width:1019px){
     .sales-register {
         width: 100%;
     }
 }
-@media (max-width: 991px) {
-    .sales-register-table {
-        padding-bottom: 50px;
+@media screen and (max-width:991px) {
+    .sales-register {
+        display: block;
+        position: relative;
+    }
+    .main-sale-register-box {
+        justify-content: start;
+        text-align: left;
+        .sale-register-box {
+            margin: 10px 0;
+            text-align: left !important;
+            width: 48%;
+        }
+    }
+}
+@media screen and (max-width:768px) {
+    .giddh-table{
+        tbody{
+            tr{
+                td.voucher-number-td{
+                    width: 100%;
+                }
+            }
+        }
     }
 }
 @media (max-width: 767px) {
@@ -363,16 +391,11 @@ table th {
             }
         }
     }
-    .sales-register {
-        display: flex;
-        position: relative;
-    }
+}
+@media screen and (max-width:575px) {
     .main-sale-register-box {
-        justify-content: start;
-        text-align: left;
         .sale-register-box {
-            margin: 10px 20px 10px 0px;
-            text-align: left;
+            width: 100%;
         }
     }
 }

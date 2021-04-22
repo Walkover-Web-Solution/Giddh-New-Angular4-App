@@ -160,10 +160,10 @@
                 <tbody *ngIf="!isLoading">
                     <tr *ngFor="let receipt of allReceipts; let i = index">
                         <td data-title="#">{{ i + 1 }}</td>
-                        <td data-title="{{localeData?.receipt_no_label}}">{{ receipt?.receiptNumber }}</td>
+                        <td width="13%" class="text-break"  data-title="{{localeData?.receipt_no_label}}">{{ receipt?.receiptNumber }}</td>
                         <td class="entry-date" data-title="{{localeData?.entry_date}}">{{ receipt?.date }}</td>
                         <td data-title="{{localeData?.suppliers_name}}">{{ receipt?.type }}</td>
-                        <td data-title="{{commonLocaleData?.app_voucher_type}}">{{ receipt?.baseAccountName }}</td>
+                        <td width="13%" class="text-break"  data-title="{{commonLocaleData?.app_voucher_type}}">{{ receipt?.baseAccountName }}</td>
                         <td data-title="{{localeData?.payment_mode_label}}">
                             <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
                                 {{ paymentMode }}
@@ -172,7 +172,7 @@
                         <td *ngIf="receipt?.invoices" data-title="{{localeData?.invoice_no_label}}">
                             <div *ngFor="let invoice of receipt?.invoices?.split(',')">{{ invoice }}</div>
                         </td>
-                        <td data-title="{{localeData?.invoice_no_label}}" *ngIf="!receipt?.invoices">-</td>
+                        <td width="13%" class="text-break"  data-title="{{localeData?.invoice_no_label}}" *ngIf="!receipt?.invoices">-</td>
                         <td data-title="{{commonLocaleData?.app_total_amount}}">
                             {{ receipt?.totalAmount?.symbol }}{{ receipt?.totalAmount.amount | giddhCurrency}}
                         </td>
