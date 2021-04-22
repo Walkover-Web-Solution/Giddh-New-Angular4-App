@@ -562,7 +562,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     private loadAddresses(method: string, successCallback: Function): void {
-        this.settingsProfileService.getCompanyAddresses(method).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.settingsProfileService.getCompanyAddresses(method, { count: 0 }).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body && response.status === 'success') {
                 this.addressConfiguration.linkedEntities = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
                     {

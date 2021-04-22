@@ -82,6 +82,7 @@ export class NewBranchTransferWarehouse {
 	public taxNumber: any;
 	public address: string;
 	public stockDetails: NewBranchTransferProductStockDetails;
+	public pincode?: string;
 }
 
 export class NewBranchTransferSourceDestination {
