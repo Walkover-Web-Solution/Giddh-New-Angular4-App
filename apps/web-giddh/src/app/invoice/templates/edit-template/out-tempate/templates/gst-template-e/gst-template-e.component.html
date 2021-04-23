@@ -19,7 +19,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <h1 [ngStyle]="{'font-size' : inputTemplate.fontSize-1+28 +'px'}">hello</h1>
+                            <h1 [ngStyle]="{'font-size' : inputTemplate.fontSize-1+24 +'px'}">hello</h1>
                             <h4 class="sub_head" *ngIf="fieldsAndVisibility.header.formNameTaxInvoice?.display">This is
                                 your
                                 <strong
@@ -49,27 +49,21 @@
                         <!--<td class="text-center img-duplicate" *ngIf="voucherType==='sales'">
                             <img src="assets/images/duplicate.svg" alt="">
                         </td>-->
-                        <td>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-right" *ngIf="showLogo">
-                                                <figure class="col-xs-12">
-                                                        <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt=""
-                                                            [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
-                                                    </figure>
-                                                    <p *ngIf="fieldsAndVisibility.header.companyName?.display" class="bold">{{fieldsAndVisibility.header.companyName?.label}}</p>
-                                        </td>
-                                        <td *ngIf="voucherType === 'sales' && fieldsAndVisibility.header.showQrCode?.display" class="text-right width-40">
-                                                <div class="qr-image">
-                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"/>
-                                                </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <!-- <p class="font-12" *ngIf="(fieldsAndVisibility.header.customField1?.display && fieldsAndVisibility.header.customField2?.display && fieldsAndVisibility.header.customField3?.display && fieldsAndVisibility.header.dueDate?.display )">{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due on '}} 30/08/2017</p> -->
+                        <td class="text-center" *ngIf="showLogo">
+                            <div class="col-12">
+                                <figure>
+                                        <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt=""
+                                            [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
+                                </figure>
+                                <p *ngIf="fieldsAndVisibility.header.companyName?.display" class="bold pd-l05">{{fieldsAndVisibility.header.companyName?.label}}</p>
+                            </div>
+                        </td>  
+                        <td *ngIf="voucherType === 'sales' && fieldsAndVisibility.header.showQrCode?.display" class="text-right">
+                            <div class="qr-image">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"/>
+                            </div>
                         </td>
+                            <!-- <p class="font-12" *ngIf="(fieldsAndVisibility.header.customField1?.display && fieldsAndVisibility.header.customField2?.display && fieldsAndVisibility.header.customField3?.display && fieldsAndVisibility.header.dueDate?.display )">{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due on '}} 30/08/2017</p> -->
 
                     </tr>
                 </tbody>
