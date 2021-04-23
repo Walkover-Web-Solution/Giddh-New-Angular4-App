@@ -781,6 +781,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Resets the adjustment except linked adjustments
+     *
+     * @private
+     * @return {*}  {Adjustment[]} New adjustments array
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
     private resetAdjustments(): Adjustment[] {
         const linkedAdjustments = this.adjustVoucherForm.adjustments.filter(adjustment => adjustment.linkingAdjustment);
         return [
