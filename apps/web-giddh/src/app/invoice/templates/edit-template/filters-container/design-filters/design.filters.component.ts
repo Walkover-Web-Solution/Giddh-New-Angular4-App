@@ -148,8 +148,8 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
 
                 this._invoiceUiDataService.setFieldsAndVisibility(op);
                 if (this.customTemplate.logoSize) {
-                    this.defaultImageSize = this.customTemplate.logoSize === '60' ? 'L' :
-                        this.customTemplate.logoSize === '50' ? 'M' : 'S';
+                    this.defaultImageSize = this.customTemplate.logoSize === '100' ? 'L' :
+                        this.customTemplate.logoSize === '80' ? 'M' : 'S';
                 }
                 if (this.customTemplate.logoUniqueName) {
                     this.showDeleteButton = true;
