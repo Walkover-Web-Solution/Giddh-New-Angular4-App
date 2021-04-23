@@ -476,7 +476,7 @@
                                     {{fieldsAndVisibility.footer.slogan?.label }}
                                 </small>
                             </strong>
-                            <p class="bd-rb"></p>
+                            <hr/>
                             <strong>
                                 <small *ngIf="fieldsAndVisibility.header.companyName?.label">
                                     {{fieldsAndVisibility.header.companyName?.label}}
@@ -486,9 +486,8 @@
                     </td>
                     <td class="text-center" style="vertical-align: bottom; width: 35%;" *ngIf="showImageSignature">
                         <ng-container>
-                            <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="max-width-180" alt=""
-                                style="min-width: 60px;height: 60px;" />
-                            <p class="bd-rb"></p>
+                            <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="inner-img-signature" alt="" />
+                            <hr/>
                             <strong>
                                 <small *ngIf="fieldsAndVisibility.header.companyName?.label">
                                     {{fieldsAndVisibility.header.companyName?.label}}
