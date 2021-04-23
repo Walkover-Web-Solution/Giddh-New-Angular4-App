@@ -1375,7 +1375,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.isAdjustReceiptSelected = false;
                 }
                 this.isAdjustVoucherSelected = false;
-                this.blankLedger.generateInvoice = false;
             }
         }
 
@@ -1396,7 +1395,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.isAdjustReceiptSelected = false;
             }
             this.isAdjustVoucherSelected = false;
-            this.blankLedger.generateInvoice = false;
         }
         this.adjustPaymentModal.hide();
     }
