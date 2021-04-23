@@ -6467,7 +6467,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.purchaseBillCompany.billingDetails.stateCode = defaultAddress.stateCode;
                         this.purchaseBillCompany.billingDetails.stateName = defaultAddress.stateName;
                         this.purchaseBillCompany.billingDetails.gstNumber = defaultAddress.taxNumber;
-                        this.purchaseBillCompany.billingDetails.pincode = defaultAddress.taxNumber;
+                        this.purchaseBillCompany.billingDetails.pincode = defaultAddress.pincode;
                         this.isDeliverAddressFilled = true;
                     }
                 }
