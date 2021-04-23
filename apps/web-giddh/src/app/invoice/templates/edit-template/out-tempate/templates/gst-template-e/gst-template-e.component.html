@@ -69,6 +69,9 @@
                 </tbody>
             </table>
         </header>
+        <ng-container *ngIf="fieldsAndVisibility?.header?.showIrnNumber?.display">
+            <div class="meta"><strong>IRN:</strong>&nbsp;<span>def01b2b4b08ba07e92556896bb0e5a6c5b80428f756ae902ab57db0b60781c3</span></div>
+        </ng-container>
         <table class="warehouse-table" cellspacing="0" cellpadding="0"
             *ngIf="fieldsAndVisibility?.header?.warehouseAddress?.display || fieldsAndVisibility?.header?.showCompanyAddress?.display">
             <tbody>
