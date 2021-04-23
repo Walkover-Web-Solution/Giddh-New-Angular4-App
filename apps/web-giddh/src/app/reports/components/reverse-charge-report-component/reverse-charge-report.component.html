@@ -2,20 +2,11 @@
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="reverse-table-report">
         <div class="container-fluid">
-<<<<<<< HEAD
             <div class="mr-t15 mr-b15 input-grp-date-range-picker d-flex flex-sm-row flex-column">
-                <div class="input-group mr-b15">
+                <div class="input-group flex-nowrap mr-b15 mb-0">
                     <div class="form-group linked-entities mr-r15" *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
                         <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true" [placeholder]="commonLocaleData?.app_select_entity" [fixedValue]="currentBranch?.alias"
                             class="entity-dropdown">
-=======
-            <div class="mr-t15 input-grp-date-range-picker d-flex flex-sm-row flex-column">
-                <div class="input-group flex-nowrap mr-b15">
-                    <div class="form-group linked-entities mr-r15 mb-0" *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
-                        <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
-                            [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
-                            [placeholder]="commonLocaleData?.app_select_entity" [fixedValue]="currentBranch?.alias" class="entity-dropdown">
->>>>>>> 8c891bc265... shalinee | TEST | report module responsiv work
                             <ng-template #optionTemplate let-option="option">
                                 <ng-container>
                                     <a href="javascript:void(0)" class="list-item d-flex">
