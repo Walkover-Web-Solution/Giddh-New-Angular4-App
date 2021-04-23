@@ -2,11 +2,20 @@
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="reverse-table-report">
         <div class="container-fluid">
+<<<<<<< HEAD
             <div class="mr-t15 mr-b15 input-grp-date-range-picker d-flex flex-sm-row flex-column">
                 <div class="input-group mr-b15">
                     <div class="form-group linked-entities mr-r15" *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
                         <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true" [placeholder]="commonLocaleData?.app_select_entity" [fixedValue]="currentBranch?.alias"
                             class="entity-dropdown">
+=======
+            <div class="mr-t15 input-grp-date-range-picker d-flex flex-sm-row flex-column">
+                <div class="input-group flex-nowrap mr-b15">
+                    <div class="form-group linked-entities mr-r15 mb-0" *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
+                        <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
+                            [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
+                            [placeholder]="commonLocaleData?.app_select_entity" [fixedValue]="currentBranch?.alias" class="entity-dropdown">
+>>>>>>> 8c891bc265... shalinee | TEST | report module responsiv work
                             <ng-template #optionTemplate let-option="option">
                                 <ng-container>
                                     <a href="javascript:void(0)" class="list-item d-flex">
@@ -31,13 +40,15 @@
                             <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
                         </div>
                     </div>
+
                     <div *ngIf="checkIfFiltersApplied() && isMobileScreen">
-                        <button class="btn btn-filter" (click)="resetFilters()"><span class="icon-cross"></span>{{commonLocaleData?.app_clear_filter}}</button>
+                        <button class="btn btn-filter mr-l15" (click)="resetFilters()"><span class="icon-cross"></span>{{commonLocaleData?.app_clear_filter}}</button>
                     </div>
                 </div>
-                <div class="clear-filter mr-b15 width-100 align-items-baseline d-flex justify-content-start"
+                <div class="clear-filter mr-b15 w-100 align-items-baseline d-flex justify-content-start"
                     *ngIf="checkIfFiltersApplied() && !isMobileScreen">
-                    <button class="btn btn-filter" (click)="resetFilters()"><span class="icon-cross"></span>{{commonLocaleData?.app_clear_filter}}</button>
+                    <button class="btn btn-filter" (click)="resetFilters()"><span
+                            class="icon-cross"></span>{{commonLocaleData?.app_clear_filter}}</button>
                 </div>
             </div>
             <div class="invoice-preview  table-responsive">

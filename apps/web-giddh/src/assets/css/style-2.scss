@@ -8624,7 +8624,7 @@ p.remvBrnchName {
     background-color: transparent;
     z-index: 9;
     position: relative !important;
-    top: -4px;
+    top: -4px !important;
     margin-bottom: 10px;
 }
 
@@ -9713,7 +9713,23 @@ input.mat-input-element{
             }
         }
     }
-
+     body.update-scroll-hidden{
+         overflow-y: hidden;
+     }
+     .e-waybill-tabs.custom-tabs .nav-tabs{
+        position: static !important;
+        padding-left: 15px !important;
+    }
+    .e-waybill-tabs.custom-tabs .nav-tabs{
+        position: static !important;
+        padding-left: 15px !important;
+    }
+    .sales-register{
+        width: calc(100% - 60px) !important;
+    }
+    .menu_open .sales-register{
+        width: calc(100% - 240px) !important;
+    }
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {
@@ -9965,6 +9981,9 @@ input.mat-input-element{
     }
 
   @media (max-width: 768px) {
+        .sales-register{
+            width: 100% !important;
+        }
           .bulk-create-table sh-select input, .bulk-create-table .mat-form-field-wrapper input,
           .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex{
                 border: 1px solid $gainsboro !important;
