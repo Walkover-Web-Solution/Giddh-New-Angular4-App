@@ -49,7 +49,7 @@
                         <!--<td class="text-center img-duplicate" *ngIf="voucherType==='sales'">
                             <img src="assets/images/duplicate.svg" alt="">
                         </td>-->
-                        <td class="text-center" *ngIf="showLogo">
+                        <td [ngClass]="{'text-center': fieldsAndVisibility.header.showQrCode?.display, 'text-right': !fieldsAndVisibility.header.showQrCode?.display}" *ngIf="showLogo">
                             <div class="col-12">
                                 <figure>
                                         <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt=""
@@ -57,7 +57,7 @@
                                 </figure>
                                 <p *ngIf="fieldsAndVisibility.header.companyName?.display" class="bold pd-l05">{{fieldsAndVisibility.header.companyName?.label}}</p>
                             </div>
-                        </td>  
+                        </td>
                         <td *ngIf="voucherType === 'sales' && fieldsAndVisibility.header.showQrCode?.display" class="text-right">
                             <div class="qr-image">
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"/>
