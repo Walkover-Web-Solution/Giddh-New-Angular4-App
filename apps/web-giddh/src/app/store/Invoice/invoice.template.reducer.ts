@@ -129,6 +129,11 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
+                    showIrnNumber: {
+                        label: '',
+                        display: false,
+                        width: null
+                    },
                     customField1: {
                         label: '',
                         display: true,
