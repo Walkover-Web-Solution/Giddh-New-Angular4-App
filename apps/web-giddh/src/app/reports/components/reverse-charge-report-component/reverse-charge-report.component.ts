@@ -16,6 +16,7 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'reverse-charge-report',
@@ -90,6 +91,8 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
 
+    public isMobileScreen: boolean = true;
+
     constructor(
         private store: Store<AppState>,
         private toasty: ToasterService,
@@ -99,7 +102,8 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         private generalActions: GeneralActions,
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private breakPointObservar: BreakpointObserver,
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -110,6 +114,13 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public ngOnInit(): void {
+
+        this.breakPointObservar.observe([
+            '(max-width: 575px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (!this.activeCompany && activeCompany) {
