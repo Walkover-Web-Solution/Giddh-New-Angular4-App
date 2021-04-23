@@ -1647,8 +1647,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             if (adjustments) {
                 adjustments.forEach(adjustment => {
-                    adjustment.adjustmentAmount = adjustment.balanceDue;
-                    adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
+                    if (!adjustment.linkingAdjustment) {
+                        adjustment.adjustmentAmount = adjustment.balanceDue;
+                        adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
+                    }
                 });
 
                 this.vm.selectedLedger.voucherAdjustments = {
