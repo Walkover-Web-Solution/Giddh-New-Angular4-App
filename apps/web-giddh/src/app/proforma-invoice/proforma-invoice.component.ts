@@ -5788,7 +5788,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let totalAmount = 0;
             if (adjustments) {
                 adjustments.forEach((item) => {
-                    totalAmount += Number(item.balanceDue ? item.balanceDue.amountForAccount : 0);
+                    if (!item.linkingAdjustment) {
+                        totalAmount += Number(item.balanceDue ? item.balanceDue.amountForAccount : 0);
+                    }
                 });
             }
             this.totalAdvanceReceiptsAdjustedAmount = totalAmount;

@@ -1194,7 +1194,7 @@
             <div class="modal-content">
                 <advance-receipt-adjustment-component *ngIf="adjustPaymentModal.isShown"
                     #advanceReceiptComponent [adjustedVoucherType]="vm.selectedLedger.voucher.shortCode"
-                    [invoiceFormDetails]="adjustVoucherConfiguration"
+                    [invoiceFormDetails]="adjustVoucherConfiguration" [isUpdateMode]="true"
                     [advanceReceiptAdjustmentUpdatedData]="vm.selectedLedger.voucherAdjustments" (closeModelEvent)="closeAdjustmentModal($event)"
                     (submitClicked)="getAdjustedPaymentData($event)">
                 </advance-receipt-adjustment-component>
