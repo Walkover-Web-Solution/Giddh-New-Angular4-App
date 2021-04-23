@@ -1797,7 +1797,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // If currency of item is null or undefined then treat it to be equivalent of company currency
         item.currency = item.currency || this.companyCurrency;
         this.isMulticurrencyAccount = item.currency !== this.companyCurrency;
-
+        if (item.addresses && item.addresses.length > 0) {
+            item.addresses.forEach(address => {
+                if (address && address.isDefault) {
+                    const defaultAddress: any = address;
+                    this.invFormData.accountDetails.billingDetails.pincode = defaultAddress.pincode;
+                    this.invFormData.accountDetails.shippingDetails.pincode = defaultAddress.pincode;
+                }
+            });
+        }
         if (this.isMulticurrencyAccount) {
             this.customerCurrencyCode = item.currency;
             this.companyCurrencyName = item.currency;
@@ -6457,6 +6465,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.purchaseBillCompany.billingDetails.stateCode = defaultAddress.stateCode;
                         this.purchaseBillCompany.billingDetails.stateName = defaultAddress.stateName;
                         this.purchaseBillCompany.billingDetails.gstNumber = defaultAddress.taxNumber;
+                        this.purchaseBillCompany.billingDetails.pincode = defaultAddress.taxNumber;
                         this.isDeliverAddressFilled = true;
                     }
                 }
@@ -6483,6 +6492,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.purchaseBillCompany.shippingDetails.stateCode = defaultAddress.stateCode;
                     this.purchaseBillCompany.shippingDetails.stateName = defaultAddress.stateName;
                     this.purchaseBillCompany.shippingDetails.gstNumber = defaultAddress.taxNumber;
+                    this.purchaseBillCompany.shippingDetails.pincode = defaultAddress.pincode;
                 } else {
                     this.resetShippingAddress();
                 }
