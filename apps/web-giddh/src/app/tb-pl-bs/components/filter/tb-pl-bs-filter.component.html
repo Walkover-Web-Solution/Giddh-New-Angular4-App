@@ -4,79 +4,82 @@
             <div class="col-xl-9 col-lg-12 col-md-12">
                 <form [formGroup]="filterForm" (submit)="filterData()" class="form-inline financial-select-year"
                     name="fromToDateForm" novalidate>
-                    <div class="form-group mr-r15 linked-entities"
-                        *ngIf="showLabels && currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
-                        <div class="form-group">
-                            <sh-select [options]="currentCompanyBranches" formControlName="branchUniqueName"
-                                class="company-branch-dropdown" [showClear]="false" [ItemHeight]="33" width="100%"
-                                (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
-                                [placeholder]="commonLocaleData?.app_select_entity" [fixedValue]="currentBranch?.alias">
-                                <ng-template #optionTemplate let-option="option">
-                                    <ng-container>
-                                        <a href="javascript:void(0)" class="list-item d-flex">
-                                            <span class="entity-icon">
-                                                <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
-                                                    tooltip="{{commonLocaleData?.app_branch}}"></i>
-                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
-                                                    tooltip="{{commonLocaleData?.app_company}}"></i>
-                                            </span>
-                                            <span class="entity-details">
-                                                <div class="item giddh-limit single-line-clamp">{{ option.label ||
-                                                    '-' }}</div>
-                                                <div class="item-unique giddh-limit single-line-clamp">
-                                                    {{ option.name || '-' }}
-                                                </div>
-                                            </span>
-                                        </a>
-                                    </ng-container>
-                                </ng-template>
-                            </sh-select>
+                    <div class="d-flex">
+                        <div class="form-group mr-r15 linked-entities"
+                            *ngIf="showLabels && currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
+                            <div class="form-group">
+                                <sh-select [options]="currentCompanyBranches" formControlName="branchUniqueName"
+                                    class="company-branch-dropdown" [showClear]="false" [ItemHeight]="33" width="100%"
+                                    (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
+                                    [placeholder]="commonLocaleData?.app_select_entity" [fixedValue]="currentBranch?.alias">
+                                    <ng-template #optionTemplate let-option="option">
+                                        <ng-container>
+                                            <a href="javascript:void(0)" class="list-item d-flex">
+                                                <span class="entity-icon">
+                                                    <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
+                                                        tooltip="{{commonLocaleData?.app_branch}}"></i>
+                                                    <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
+                                                        tooltip="{{commonLocaleData?.app_company}}"></i>
+                                                </span>
+                                                <span class="entity-details">
+                                                    <div class="item giddh-limit single-line-clamp">{{ option.label ||
+                                                        '-' }}</div>
+                                                    <div class="item-unique giddh-limit single-line-clamp">
+                                                        {{ option.name || '-' }}
+                                                    </div>
+                                                </span>
+                                            </a>
+                                        </ng-container>
+                                    </ng-template>
+                                </sh-select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group mr-r15" *ngIf="showLabels">
-                        <div class="form-group">
-                            <sh-select [options]="dateOptions" (selected)="dateOptionIsSelected($event)"
-                                class="company-branch-dropdown" formControlName="selectedDateOption" [isFilterEnabled]="true"
-                                [placeholder]="commonLocaleData?.app_select_option" [showClear]="false" [ItemHeight]="33"
-                                width="100%">
-                            </sh-select>
+                        <div class="form-group mr-r15" *ngIf="showLabels">
+                            <div class="form-group">
+                                <sh-select [options]="dateOptions" (selected)="dateOptionIsSelected($event)"
+                                    class="company-branch-dropdown" formControlName="selectedDateOption" [isFilterEnabled]="true"
+                                    [placeholder]="commonLocaleData?.app_select_option" [showClear]="false" [ItemHeight]="33"
+                                    width="100%">
+                                </sh-select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group mr-r15" *ngIf="filterForm.get('selectedDateOption').value == '0'">
-                        <div class="form-group">
-                            <sh-select [options]="financialOptions" formControlName="selectedFinancialYearOption"
-                                [isFilterEnabled]="true" [placeholder]="commonLocaleData?.app_select_option" [showClear]="false"
-                                (selected)="selectFinancialYearOption($event)" [ItemHeight]="33"></sh-select>
+                        <div class="form-group mr-r15" *ngIf="filterForm.get('selectedDateOption').value == '0'">
+                            <div class="form-group">
+                                <sh-select [options]="financialOptions" formControlName="selectedFinancialYearOption"
+                                    [isFilterEnabled]="true" [placeholder]="commonLocaleData?.app_select_option" [showClear]="false"
+                                    (selected)="selectFinancialYearOption($event)" [ItemHeight]="33"></sh-select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group relative mr-r15 datepicker-field"
-                        *ngIf="filterForm.get('selectedDateOption').value == '1'">
-                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                            <i class="icon-calender calendar-addon"></i>
-                            <input type="text" name="selectedDateRange"
-                                [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                                class="giddh-datepicker date-range-picker" />
+                        <div class="form-group relative mr-r15 datepicker-field"
+                            *ngIf="filterForm.get('selectedDateOption').value == '1'">
+                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <i class="icon-calender calendar-addon"></i>
+                                <input type="text" name="selectedDateRange"
+                                    [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group" *ngIf="!(showLoader)">
-                        <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="(tags$ | async)?.length">
-                            <i class="glyphicon glyphicon-triangle-bottom"></i>
-                            <sh-select [options]="tags$ | async" name="selectedTag" formControlName="tagName"
-                                [isFilterEnabled]="true" (selected)="onTagSelected($event)"
-                                [placeholder]="commonLocaleData?.app_select_tag" [ItemHeight]="35" [notFoundLink]="false"
-                                (noResultsClicked)="toggleTagsModal()" [showNotFoundLinkAsDefault]="false" [width]="'170px'">
-                            </sh-select>
-                        </div>
-                        <!-- Filter by Tag -->
-                        <div class="form-group pull-left">
-                            <a class="cp expand-icon" (click)="emitExpand()" data-placement="top"
-                                tooltip="{{commonLocaleData?.app_expand_all}}" *ngIf="!expand">
-                                <span class="icon-expandIcon"></span>
-                            </a>
-                            <a class="cp expand-icon" (click)="emitExpand()" data-placement="top"
-                                tooltip="{{commonLocaleData?.app_collapse_all}}" *ngIf="expand">
-                                <span class="icon-collapse"></span>
-                            </a>
+
+                        <div class="form-group" *ngIf="!(showLoader)">
+                            <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="(tags$ | async)?.length">
+                                <i class="glyphicon glyphicon-triangle-bottom"></i>
+                                <sh-select [options]="tags$ | async" name="selectedTag" formControlName="tagName"
+                                    [isFilterEnabled]="true" (selected)="onTagSelected($event)"
+                                    [placeholder]="commonLocaleData?.app_select_tag" [ItemHeight]="35" [notFoundLink]="false"
+                                    (noResultsClicked)="toggleTagsModal()" [showNotFoundLinkAsDefault]="false" [width]="'170px'">
+                                </sh-select>
+                            </div>
+                            <!-- Filter by Tag -->
+                            <div class="form-group pull-left">
+                                <a class="cp expand-icon" (click)="emitExpand()" data-placement="top"
+                                    tooltip="{{commonLocaleData?.app_expand_all}}" *ngIf="!expand">
+                                    <span class="icon-expandIcon"></span>
+                                </a>
+                                <a class="cp expand-icon" (click)="emitExpand()" data-placement="top"
+                                    tooltip="{{commonLocaleData?.app_collapse_all}}" *ngIf="expand">
+                                    <span class="icon-collapse"></span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </form>
