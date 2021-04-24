@@ -18,7 +18,7 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
-
+import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({
     selector: 'tb-pl-bs-filter',  // <home></home>
     templateUrl: './tb-pl-bs-filter.component.html',
@@ -63,6 +63,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
+    /** */
+    public isMobileScreen: boolean = true;
 
     @Input() public showLoader: boolean = true;
 
@@ -109,6 +111,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
                 private _settingsTagActions: SettingsTagActions,
                 private generalService: GeneralService,
                 private modalService: BsModalService,
+                private breakPointObservar: BreakpointObserver,
                 private settingsBranchAction: SettingsBranchActions) {
         this.filterForm = this.fb.group({
             from: [''],
@@ -155,6 +158,13 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.imgPath = (isElectron|| isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         if (!this.showLabels) {
@@ -477,7 +487,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     public translationComplete(event: boolean): void {
         if(event) {
             this.dateOptions = [
-                {label: this.commonLocaleData?.app_date_range, value: '1'}, 
+                {label: this.commonLocaleData?.app_date_range, value: '1'},
                 {label: this.commonLocaleData?.app_financial_year, value: '0'}
             ];
         }
