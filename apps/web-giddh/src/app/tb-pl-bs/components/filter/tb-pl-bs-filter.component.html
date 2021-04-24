@@ -51,12 +51,6 @@
                                 <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
                             </div>
                         </div>
-                        <div class="form-group relative mr-r15 datepicker-field" *ngIf="filterForm.get('selectedDateOption').value == '1'">
-                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <i class="icon-calender calendar-addon"></i>
-                                <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
-                            </div>
-                        </div>
                         <div class="form-group" *ngIf="!(showLoader)">
                             <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="(tags$ | async)?.length">
                                 <i class="glyphicon glyphicon-triangle-bottom"></i>
@@ -79,7 +73,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -232,3 +226,5 @@
         </div>
     </ng-template>
 </ng-container>
+
+
