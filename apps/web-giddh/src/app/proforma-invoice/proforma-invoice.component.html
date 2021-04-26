@@ -318,9 +318,9 @@
                                                         <div class="form-group p-0 width-100">
                                                             <div class="d-flex align-items-center pb-1">
                                                                 <span class="pb-0 pd-r15">
-                                                                    <input type="checkbox" autocomplete="None"
+                                                                    <input type="checkbox"
                                                                         (change)="autoFillShippingDetails()"
-                                                                        name="autoFillShipping"
+                                                                        name="autoFillShipping" [ngModelOptions]="{standalone: true}"
                                                                         [(ngModel)]="autoFillShipping"> Shipping Address
                                                                     Same as
                                                                     Billing
