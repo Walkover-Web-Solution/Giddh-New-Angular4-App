@@ -386,7 +386,7 @@
                                                                             </sales-sh-select>
                                                                         </div>
 
-                                                                        <div class="col-sm-12"
+                                                                        <div class="col-sm-6"
                                                                             *ngIf="shouldShowTrnGstField">
                                                                             <input [readonly]="autoFillShipping"
                                                                                 autocomplete="None" maxLength="15"
@@ -590,7 +590,7 @@
                                                                         [(ngModel)]="purchaseBillCompany.billingDetails.state.code">
                                                                     </sales-sh-select>
                                                                 </div>
-                                                                <div class="col-sm-12"
+                                                                <div class="col-sm-6 col-md-6"
                                                                     *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
                                                                     <input maxlength="15" autocomplete="None" type="text"
                                                                         name="companyBillingDetailsTax"
@@ -657,7 +657,7 @@
                                                                             [(ngModel)]="purchaseBillCompany.shippingDetails.state.code">
                                                                         </sales-sh-select>
                                                                     </div>
-                                                                    <div class="col-sm-12"
+                                                                    <div class="col-sm-6 col-md-6"
                                                                         *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
                                                                         <input maxLength="15" autocomplete="None" type="text"
                                                                             name="companyShippingDetailsTax"
