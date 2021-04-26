@@ -63,7 +63,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
-    /** stores tthe mobile screen value */
+    /** True, if mobile screen size is detected */
     public isMobileScreen: boolean = true;
 
     @Input() public showLoader: boolean = true;
