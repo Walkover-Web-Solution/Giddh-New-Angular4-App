@@ -65,7 +65,7 @@
                                                 <tbody>
                                         <ng-container *ngIf="voucherType==='sales'">
                                             <tr *ngIf="fieldsAndVisibility.header.invoiceDate?.display">
-                                                <td [class.pull-left]="fieldsAndVisibility.header.showQrCode?.display">
+                                                <td [class.pull-left]="fieldsAndVisibility.header.showQrCode?.display" class="word-break">
                                                     <strong>{{(fieldsAndVisibility.header.invoiceDate?.label?.length > 0) ? fieldsAndVisibility.header.invoiceDate?.label
                       : 'Invoice Date'}}</strong>
                                                 </td>
@@ -74,7 +74,7 @@
                                                 </td>
                                             </tr>
                                             <tr *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">
-                                                <td [class.pull-left]="fieldsAndVisibility.header.showQrCode?.display">
+                                                <td [class.pull-left]="fieldsAndVisibility.header.showQrCode?.display" class="word-break">
                                                     <strong>{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label : 'Invoice No.'}}</strong>
                                                 </td>
                                                 <td class="invoice-head">20170911-1</td>
@@ -86,7 +86,7 @@
               </tr> -->
                                         <ng-container *ngIf="voucherType==='credit note' || voucherType==='debit note'">
                                             <tr *ngIf="fieldsAndVisibility.header.voucherDate?.display">
-                                                <td>
+                                                <td class="word-break">
                                                     <strong>{{(fieldsAndVisibility.header.voucherDate?.label?.length > 0) ? fieldsAndVisibility.header.voucherDate?.label
                       : 'Voucher Date'}}</strong>
                                                 </td>
@@ -95,7 +95,7 @@
                                                 </td>
                                             </tr>
                                             <tr *ngIf="fieldsAndVisibility.header.voucherNumber?.display">
-                                                <td>
+                                                <td class="word-break">
                                                     <strong>{{(fieldsAndVisibility.header.voucherNumber?.label?.length > 0) ? fieldsAndVisibility.header.voucherNumber?.label
                       : 'Voucher No.'}}</strong>
                                                 </td>
