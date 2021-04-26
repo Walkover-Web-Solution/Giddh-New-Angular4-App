@@ -2024,8 +2024,9 @@ table.borderless th {
 
 .table-container section {
     min-width: 100%;
-    overflow: hidden;
     cursor: pointer;
+    display: table;
+    width: 100%;
 }
 
 .table-container > section > div.row > div:first-child {
@@ -5067,6 +5068,48 @@ form#groupDetailForm {
     }
 }
 @media only screen and (max-width: 767px) {
+    .table-container.trial-balance{
+        .table-responsive{
+            display: table;
+        }
+        section {
+            div{
+                div{
+                    &:first-child{
+                        white-space: normal !important;
+                        word-break: break-word;
+                        width: 20% !important;
+                        max-width: 20% !important;
+                        min-width: 150px;
+                    }
+                    white-space: nowrap !important;
+                    width: 30% !important;
+                    max-width: 30% !important;
+                    min-width: 150px;
+
+                }
+            }
+        }
+        .table-footer {
+            th{
+                &:first-child{
+                    white-space: normal !important;
+                    word-break: break-word;
+                    width: 20% !important;
+                    max-width: 20% !important;
+                    min-width: 150px;
+                }
+                white-space: nowrap;
+                width: 30% !important;
+                max-width: 30% !important;
+                min-width: 150px;
+            }
+        }
+        .row{
+            flex-wrap: nowrap;
+        }
+    }
+
     .mobile-header {
         display: block;
         position: fixed !important;
