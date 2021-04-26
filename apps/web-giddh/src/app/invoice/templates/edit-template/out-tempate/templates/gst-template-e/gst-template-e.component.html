@@ -476,21 +476,21 @@
                                     {{fieldsAndVisibility.footer.slogan?.label }}
                                 </small>
                             </strong>
-                            <hr/>
-                            <strong>
-                                <small *ngIf="fieldsAndVisibility.header.companyName?.label">
-                                    {{fieldsAndVisibility.header.companyName?.label}}
+                            <hr *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label" />
+                            <strong *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display">
+                                <small>
+                                    {{fieldsAndVisibility.footer.textUnderSlogan?.label}}
                                 </small>
                             </strong>
                         </ng-container>
                     </td>
                     <td class="text-center" style="vertical-align: bottom; width: 35%;" *ngIf="showImageSignature">
                         <ng-container>
-                            <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="inner-img-signature" alt="" />
-                            <hr/>
-                            <strong>
-                                <small *ngIf="fieldsAndVisibility.header.companyName?.label">
-                                    {{fieldsAndVisibility.header.companyName?.label}}
+                            <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="inner-img-signature" alt=""/>
+                            <hr *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label" />
+                            <strong *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display">
+                                <small>
+                                    {{fieldsAndVisibility.footer.textUnderSlogan?.label}}
                                 </small>
                             </strong>
                         </ng-container>

@@ -85,6 +85,11 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
+                    textUnderSlogan: {
+                        label: '',
+                        display: true,
+                        width: null
+                    },
                     showNotesAtLastPage: {
                         label: '',
                         display: false,
