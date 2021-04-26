@@ -735,9 +735,6 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             defaultTemplate = ss.defaultTemplate;
             defaultTemplate.type = this.templateType;
-            if (this.templateType === 'voucher') {
-                defaultTemplate = ss.sampleTemplates[9];
-            }
         });
 
         if (defaultTemplate && defaultTemplate.sections && defaultTemplate.sections.footer && defaultTemplate.sections.footer.data && defaultTemplate.sections.footer.data.companyName) { // slogan default company on new template creation
