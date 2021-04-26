@@ -105,10 +105,10 @@
                                         </tbody>
                                         </table>
                                         </td>
-                                        <td class="width-40">
-                                        <div *ngIf="voucherType === 'sales' && fieldsAndVisibility.header.showQrCode?.display" class="qr-image">
-                                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"/>
-                                        </div>
+                                        <td *ngIf="showGstComposition && fieldsAndVisibility.header.showQrCode?.display" class="width-40">
+                                            <div class="qr-image">
+                                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"/>
+                                            </div>
                                         </td>
                                         </tr>
                                     </tbody>
@@ -146,7 +146,7 @@
                     </ng-container>
                 </ng-container>
             </header>
-            <ng-container *ngIf="fieldsAndVisibility?.header?.showIrnNumber?.display">
+            <ng-container *ngIf="fieldsAndVisibility?.header?.showIrnNumber?.display && showGstComposition">
                 <div class="meta"><strong>IRN:</strong>&nbsp;<span>def01b2b4b08ba07e92556896bb0e5a6c5b80428f756ae902ab57db0b60781c3</span></div>
             </ng-container>
             <table class="warehouse-table" cellspacing="0" cellpadding="0"

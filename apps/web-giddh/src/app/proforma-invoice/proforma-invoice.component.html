@@ -304,7 +304,7 @@
                                                                         <!-- static pin code  -->
                                                                         <div [ngClass]="{'col-sm-6 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
                                                                             <div class="form-group mr-b05">
-                                                                                <input type="number" class="form-control input-custom" autocomplete="false" name="billingPinCode" (change)="autoFillShippingDetails()"
+                                                                                <input type="number" class="form-control input-custom" autocomplete="false" name="billingPinCode" (blur)="autoFillShippingDetails()"
                                                                                     [placeholder]="commonLocaleData?.app_pin_code" [(ngModel)]="invFormData.accountDetails.billingDetails.pincode" decimalDigitsDirective [preventDecimal]="true" />
                                                                             </div>
                                                                         </div>
@@ -599,7 +599,7 @@
                                                                     <div [ngClass]="{'col-sm-6 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
                                                                         <div class="form-group mr-b05">
                                                                             <input type="number" class="form-control input-custom" autocomplete="false" name="purchaseBillBillingPinCode"
-                                                                                [placeholder]="commonLocaleData?.app_pin_code" [(ngModel)]="purchaseBillCompany.billingDetails.pincode" (change)="autoFillCompanyShippingDetails()" decimalDigitsDirective [preventDecimal]="true" />
+                                                                                [placeholder]="commonLocaleData?.app_pin_code" [(ngModel)]="purchaseBillCompany.billingDetails.pincode" (blur)="autoFillCompanyShippingDetails()" decimalDigitsDirective [preventDecimal]="true" />
                                                                         </div>
                                                                     </div>
                                                                     <!-- static pin code end-->
