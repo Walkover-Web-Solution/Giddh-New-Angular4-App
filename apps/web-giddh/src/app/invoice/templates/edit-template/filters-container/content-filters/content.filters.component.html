@@ -701,35 +701,35 @@
                             </div>
                         </div>
                     </div>
-                <div class="clearfix mr-t1" *ngIf="customTemplate?.type === 'invoice'">
-                    <div>
-                        <input type="checkbox" name="showNotesAtLastPage" [checked]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display" [(ngModel)]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show notes at the last page
+                    <div class="clearfix mr-t1 form-group" *ngIf="customTemplate?.type === 'invoice'">
+                        <div>
+                            <input type="checkbox" name="showNotesAtLastPage" [checked]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display" [(ngModel)]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show notes at the last page
+                        </div>
                     </div>
-                </div>
-                <div class="clearfix mr-t1">
-                    <div *ngIf="fieldsAndVisibility.footer.message1">
-                        <input type="checkbox" name="msg1" [(ngModel)]="customTemplate.sections['footer'].data['message1'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Note 1
-                    </div>
-                    <div *ngIf="fieldsAndVisibility.footer.message1" class="form-group ml-3 clearfix">
-                        <div class="row">
-                            <div class="col-12">
-                                <!-- No limit on characters in Notes 1 & 2 if user has opted to show notes at last page -->
-                                <textarea class="form-control" rows="3" [class.error-box]="contentForm?.controls['msg11']?.errors?.maxlength" [maxlength]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display ? null : 200" hasFocus #message1="hasFocus" placeholder="Enter any other text you would like in the footer. " [(ngModel)]="customTemplate.sections['footer'].data['message1'].label" name="msg11" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['message1'].display"></textarea>
-                                <ng-container *ngIf="(message1?.isFocused || contentForm?.controls['msg11']?.errors?.maxlength) && !customTemplate.sections['footer'].data['showNotesAtLastPage'].display">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(200 - customTemplate.sections['footer'].data['message1'].label.length)}}</span>
-                                </ng-container>
+                    <div class="clearfix mr-t1 form-group">
+                        <div *ngIf="fieldsAndVisibility.footer.message1">
+                            <input type="checkbox" name="msg1" [(ngModel)]="customTemplate.sections['footer'].data['message1'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Note 1
+                        </div>
+                        <div *ngIf="fieldsAndVisibility.footer.message1" class="form-group ml-3 mb-0 clearfix">
+                            <div class="row">
+                                <div class="col-12">
+                                    <!-- No limit on characters in Notes 1 & 2 if user has opted to show notes at last page -->
+                                    <textarea class="form-control" rows="3" [class.error-box]="contentForm?.controls['msg11']?.errors?.maxlength" [maxlength]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display ? null : 200" hasFocus #message1="hasFocus" placeholder="Enter any other text you would like in the footer. " [(ngModel)]="customTemplate.sections['footer'].data['message1'].label" name="msg11" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['message1'].display"></textarea>
+                                    <ng-container *ngIf="(message1?.isFocused || contentForm?.controls['msg11']?.errors?.maxlength) && !customTemplate.sections['footer'].data['showNotesAtLastPage'].display">
+                                        <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(200 - customTemplate.sections['footer'].data['message1'].label.length)}}</span>
+                                    </ng-container>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="clearfix mr-t1">
+                <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="clearfix mr-t1 form-group">
                     <div>
                         <input [checked]="customTemplate.sections.footer.data.showMessage2?.display"
                         [(ngModel)]="customTemplate.sections['footer'].data['showMessage2'].display" type="checkbox" name="message2"
                         (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Note 2
                     </div>
                 </div>
-                <div *ngIf="fieldsAndVisibility.footer.thanks" class="clearfix mr-t1">
+                <div *ngIf="fieldsAndVisibility.footer.thanks" class="clearfix mr-t2">
                     <div class="mb-0 form-group thanks-input-group">
                         <input type="checkbox" name="ty" [(ngModel)]="customTemplate.sections['footer'].data['thanks'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
                         <input type="text" [class.error-box]="contentForm?.controls['thanks']?.errors?.maxlength" class="form-control thanks-input-inline" hasFocus #thanks="hasFocus" [disabled]="!fieldsAndVisibility.footer.thanks?.display" (keyup)='onFieldChange(null, null, null)' [(ngModel)]="customTemplate.sections['footer'].data['thanks'].label" placeholder="Thank You for your business"
@@ -739,7 +739,17 @@
                         <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(30 - customTemplate.sections['footer'].data['thanks'].label.length)}}</span>
                     </div>
                 </div>
-                        <!-- <div *ngIf="fieldsAndVisibility.footer.slogan" class="clearfix">
+                <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="clearfix mr-t1 form-group">
+                    <input type="checkbox" name="textUnderSloganCheckbox" [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Text under Image Signature / Slogan
+                    <div class="mb-0 form-group ml-3">
+                        <input type="text" [class.error-box]="contentForm?.controls['textUnderSlogan']?.errors?.maxlength" class="form-control" hasFocus #textUnderSlogan="hasFocus" [disabled]="!fieldsAndVisibility.footer.textUnderSlogan?.display" (keyup)='onFieldChange(null, null, null)' [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].label" placeholder="Text under slogan"
+                            maxlength="30" name="textUnderSlogan"/>
+                    </div>
+                    <div class="form-group ml-3 clearfix" *ngIf="textUnderSlogan?.isFocused || contentForm?.controls['textUnderSlogan']?.errors?.maxlength">
+                        <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(30 - customTemplate.sections['footer'].data['textUnderSlogan'].label.length)}}</span>
+                    </div>
+                </div>
+                    <!-- <div *ngIf="fieldsAndVisibility.footer.slogan" class="clearfix">
                 <div>
                     <input type="checkbox" name="msg2" [(ngModel)]="customTemplate.sections['footer'].data['slogan'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Signature
                 </div>
