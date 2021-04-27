@@ -5758,7 +5758,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // this.invFormData.voucherDetails.balanceDue = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
         if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
             this.advanceReceiptAdjustmentData.adjustments.forEach(adjustment => {
-                adjustment.adjustmentAmount = adjustment.balanceDue;
                 adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
             });
         }
@@ -5788,9 +5787,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let totalAmount = 0;
             if (adjustments) {
                 adjustments.forEach((item) => {
-                    if (!item.linkingAdjustment) {
-                        totalAmount += Number(item.balanceDue ? item.balanceDue.amountForAccount : 0);
-                    }
+                    totalAmount += Number(item.adjustmentAmount ? item.adjustmentAmount.amountForAccount : 0);
                 });
             }
             this.totalAdvanceReceiptsAdjustedAmount = totalAmount;
