@@ -652,11 +652,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 }
             });
         }
-        if (selectedVoucherOptions && selectedVoucherPreAdjusted && selectedVoucherOptions.additional.adjustmentAmount && selectedVoucherPreAdjusted.adjustmentAmount) {
-            excessAmount = selectedVoucherOptions.additional.adjustmentAmount.amountForAccount + selectedVoucherPreAdjusted.adjustmentAmount.amountForAccount;
+        if (selectedVoucherOptions && selectedVoucherPreAdjusted && selectedVoucherOptions.additional.balanceDue && selectedVoucherPreAdjusted.adjustmentAmount) {
+            excessAmount = selectedVoucherOptions.additional.balanceDue.amountForAccount + selectedVoucherPreAdjusted.adjustmentAmount.amountForAccount;
         } else {
-            if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.adjustmentAmount) {
-                excessAmount = selectedVoucherOptions.additional.adjustmentAmount.amountForAccount;
+            if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.balanceDue) {
+                excessAmount = selectedVoucherOptions.additional.balanceDue.amountForAccount;
             }
         }
         // To restrict user to enter amount less or equal selected voucher amount
@@ -827,17 +827,5 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    /**
-     * Track by function for adjusted vouchers
-     *
-     * @param {number} index Index of voucher
-     * @param {*} item Voucher instance
-     * @return {*}  {string} Voucher uniquename
-     * @memberof AdvanceReceiptAdjustmentComponent
-     */
-    public trackAdjustment(index: number, item: any): string {
-        return item.uniqueName;
     }
 }
