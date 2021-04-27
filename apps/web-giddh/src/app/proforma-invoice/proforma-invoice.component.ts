@@ -2253,7 +2253,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (adjustments) {
                         adjustments.forEach(adjustment => {
                             if (adjustment.balanceDue !== undefined) {
-                                adjustment.adjustmentAmount = adjustment.balanceDue;
                                 delete adjustment.balanceDue;
                             }
                         });
@@ -5600,7 +5599,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // this.invFormData.voucherDetails.balanceDue = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
         if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
             this.advanceReceiptAdjustmentData.adjustments.forEach(adjustment => {
-                adjustment.adjustmentAmount = adjustment.balanceDue;
                 adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
             });
         }
@@ -5630,9 +5628,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let totalAmount = 0;
             if (adjustments) {
                 adjustments.forEach((item) => {
-                    if (!item.linkingAdjustment) {
-                        totalAmount += Number(item.balanceDue ? item.balanceDue.amountForAccount : 0);
-                    }
+                    totalAmount += Number(item.adjustmentAmount ? item.adjustmentAmount.amountForAccount : 0);
                 });
             }
             this.totalAdvanceReceiptsAdjustedAmount = totalAmount;
@@ -5672,7 +5668,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             };
             this.salesService.getAllAdvanceReceiptVoucher(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res && res.status === 'success') {
-                    this.voucherForAdjustment = res.body;
+                    this.voucherForAdjustment = res.body.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue.amountForAccount, amountForCompany: result.balanceDue.amountForCompany } }));;
                     if (res.body && res.body.length) {
                         this.isAccountHaveAdvanceReceipts = true;
                     } else {
