@@ -69,16 +69,15 @@
                             </div>
                         </div>
                     </div>
-
                     <ng-container
-                        *ngFor="let entry of adjustVoucherForm?.adjustments; let entryIdx = index; let first = first; let last = last">
+                        *ngFor="let entry of adjustVoucherForm?.adjustments; let entryIdx = index; let first = first; let last = last; trackBy: trackAdjustment">
                         <div class="row voucher-form pb-1">
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <div class="select-error select-caret relative">
                                         <sh-select
                                             [disabled]="(shouldDisableEdit(entry) || entry.linkingAdjustment) ? 'disabled' : null"
-                                            class="text-left" name="voucherName{{entryIdx}}"
+                                            class="text-left" name="voucherName{{entry.uniqueName}}"
                                             [defaultValue]="entry.voucherNumber" [fixedValue]="entry.voucherNumber"
                                             (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm);" required
                                             [placeholder]="localeData?.select_voucher"
@@ -111,17 +110,10 @@
 
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <input *ngIf="!entry.linkingAdjustment"
-                                        [disabled]="shouldDisableEdit(entry) ? 'disabled' : null"
+                                    <input
+                                        [disabled]="(shouldDisableEdit(entry) || entry.linkingAdjustment) ? 'disabled' : null"
                                         required decimalDigitsDirective type="text" class="form-control"
-                                        [placeholder]="localeData?.enter_amount" name="amount{{entryIdx}}"
-                                        [(ngModel)]="entry.balanceDue.amountForAccount"
-                                        (ngModelChange)="calculateTax(entry, entryIdx);" [prefix]="currencySymbol"
-                                        [mask]="inputMaskFormat">
-                                    <input *ngIf="entry.linkingAdjustment"
-                                        disabled
-                                        required decimalDigitsDirective type="text" class="form-control"
-                                        [placeholder]="localeData?.enter_amount" name="amount{{entryIdx}}"
+                                        [placeholder]="localeData?.enter_amount" name="amount{{entry.uniqueName}}"
                                         [(ngModel)]="entry.adjustmentAmount.amountForAccount"
                                         (ngModelChange)="calculateTax(entry, entryIdx);" [prefix]="currencySymbol"
                                         [mask]="inputMaskFormat">
@@ -134,8 +126,8 @@
                                 <div class="form-group">
                                     <input
                                         *ngIf="entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'"
-                                        id="name_{{entryIdx}}" type="text" class="form-control"
-                                        name="calculatedTaxAmount_{{entryIdx}}" decimalDigitsDirective
+                                        id="name_{{entry.uniqueName}}" type="text" class="form-control"
+                                        name="calculatedTaxAmount_{{entry.uniqueName}}" decimalDigitsDirective
                                         [(ngModel)]="entry.calculatedTaxAmount"
                                         [placeholder]="commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero+'.'+commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero"
                                         disabled>
