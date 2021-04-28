@@ -1409,7 +1409,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public handleBranchChange(selectedEntity: any): void {
-        this.currentBranch.name = selectedEntity.label;
+        this.currentBranch.name = selectedEntity?.label;
         if (this.activeTab === 'customer') {
             this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
         } else {
