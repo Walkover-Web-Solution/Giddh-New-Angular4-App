@@ -129,6 +129,11 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
+                    showIrnNumber: {
+                        label: '',
+                        display: false,
+                        width: null
+                    },
                     customField1: {
                         label: '',
                         display: true,
@@ -187,6 +192,11 @@ export const initialState: CustomTemplateState = {
                     invoiceNumber: {
                         label: 'Invoice No.',
                         display: true,
+                        width: null
+                    },
+                    showQrCode: {
+                        label: '',
+                        display: false,
                         width: null
                     },
                     voucherDate: {
