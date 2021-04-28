@@ -138,7 +138,7 @@
                                             </ul>
 
                                             <label class="labeled text-capitalize">
-                                                {{ selectedItem.voucherStatus }}
+                                                {{ selectedItem?.voucherStatus }}
                                             </label>
                                         </div>
                                         <!-- endregion -->
@@ -146,13 +146,13 @@
                                         <!-- region for invoice -->
                                         <div [class.disabled-change-status]="isCompany" class="btn-group change-status-dropdown pull-right" dropdown
                                              *ngIf="!isCompany && !only4ProformaEstimates && selectedItem?.voucherType !== 'purchase'">
-                                            <label *ngIf="selectedItem.voucherStatus === 'cancel'" class="labeled">
-                                                {{ selectedItem.voucherStatus }}
+                                            <label *ngIf="selectedItem?.voucherStatus === 'cancel'" class="labeled">
+                                                {{ selectedItem?.voucherStatus }}
                                             </label>
 
                                             <button id="button-basic2" dropdownToggle type="button"
                                                     class="btn btn-sky-blue dropdown-toggle" aria-controls="dropdown-basic2"
-                                                    *ngIf="selectedItem.voucherStatus !== 'cancel'">Change Status <span
+                                                    *ngIf="selectedItem?.voucherStatus !== 'cancel'">Change Status <span
                                                 class="caret"></span>
                                             </button>
 
@@ -267,7 +267,7 @@
                             <div class="row">
 
                                 <div class="col-md-4 col-12" *ngIf="!isCompany && (selectedItem?.voucherType !== 'credit note' && selectedItem?.voucherType !== 'debit note') &&
-                                    (selectedItem.voucherStatus !== 'paid' && selectedItem.voucherStatus !== 'cancel')">
+                                    (selectedItem?.voucherStatus !== 'paid' && selectedItem?.voucherStatus !== 'cancel')">
                                     <div class="single-payment-detail clearfix pr-4">
                                         <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
                                         <p class="payment-content"> Receive payments in cash/check and record payments
