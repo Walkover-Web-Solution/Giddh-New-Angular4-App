@@ -52,8 +52,8 @@ export class FilterListComponent implements OnInit, OnChanges, OnDestroy {
 	public getDateToDMY(selecteddate) {
 		let date = selecteddate.split('-');
 		if (date.length === 3) {
-			let month = this.monthNames[parseInt(date[1]) - 1].substr(0, 3);
-			let year = date[2].substr(0, 4);
+			let month = this.monthNames[parseInt(date[1]) - 1]?.substr(0, 3);
+			let year = date[2]?.substr(0, 4);
 			return date[0] + ' ' + month + ' ' + year;
 		} else {
 			return selecteddate;
