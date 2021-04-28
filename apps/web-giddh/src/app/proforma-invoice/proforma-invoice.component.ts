@@ -1886,12 +1886,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.startLoader(false);
                 if (fieldName) {
                     let invalidTax = this.localeData?.invalid_tax_field;
-                    invalidTax = invalidTax.replace("[TAX_NAME]", this.formFields['taxName']?.label);
-                    invalidTax = invalidTax.replace("[FIELD_NAME]", fieldName);
+                    invalidTax = invalidTax?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
+                    invalidTax = invalidTax?.replace("[FIELD_NAME]", fieldName);
                     this._toasty.errorToast(invalidTax);
                 } else {
                     let invalidTax = this.localeData?.invalid_tax_field;
-                    invalidTax = invalidTax.replace("[TAX_NAME]", this.formFields['taxName']?.label);
+                    invalidTax = invalidTax?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
                     this._toasty.errorToast(invalidTax);
                 }
             }
@@ -2061,7 +2061,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
 
                 let dueDateError = this.localeData?.due_date_error;
-                dueDateError = dueDateError.replace("[INVOICE_TYPE]", dateText);
+                dueDateError = dueDateError?.replace("[INVOICE_TYPE]", dateText);
                 this._toasty.errorToast(dueDateError);
                 return;
             }
@@ -3919,7 +3919,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
 
                 let dueDateError = this.localeData?.due_date_error;
-                dueDateError = dueDateError.replace("[INVOICE_TYPE]", dateText);
+                dueDateError = dueDateError?.replace("[INVOICE_TYPE]", dateText);
                 this._toasty.errorToast(dueDateError);
                 return;
             }
