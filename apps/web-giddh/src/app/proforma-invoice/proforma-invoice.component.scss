@@ -628,6 +628,10 @@ textarea:focus {
     height: 34px !important;
 }
 
+textarea.form-control {
+    height: auto !important;
+}
+
 form label {
     font-size: 14px;
 }
