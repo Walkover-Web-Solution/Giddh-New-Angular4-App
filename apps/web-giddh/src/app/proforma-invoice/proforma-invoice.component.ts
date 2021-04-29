@@ -541,14 +541,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             state: {code: '', name: ''},
             gstNumber: '',
             stateName: '',
-            stateCode: ''
+            stateCode: '',
+            pincode: ''
         },
         shippingDetails: {
             address: [],
             state: {code: '', name: ''},
             gstNumber: '',
             stateName: '',
-            stateCode: ''
+            stateCode: '',
+            pincode: ''
         }
     };
     /* This will hold autofill state of company billing/shipping */
@@ -607,6 +609,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public showBulkLoader: boolean;
     /** This will hold how many linked po items added */
     public linkedPoItemsAdded: number = 0;
+    /** True, if user has opted to show notes at the last page of sales invoice */
+    public showNotesAtLastPage: boolean;
+
+    /**
+     * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
+     * need to apply max characters limit on Notes/notes2/messsage2
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof ProformaInvoiceComponent
+     */
+    public get shouldApplyMaxLengthOnNotes(): boolean {
+        return (this.isSalesInvoice || this.isProformaInvoice || this.isEstimateInvoice);
+    }
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -1949,7 +1965,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // If currency of item is null or undefined then treat it to be equivalent of company currency
         item.currency = item.currency || this.companyCurrency;
         this.isMulticurrencyAccount = item.currency !== this.companyCurrency;
-
+        if (item.addresses && item.addresses.length > 0) {
+            item.addresses.forEach(address => {
+                if (address && address.isDefault) {
+                    const defaultAddress: any = address;
+                    this.invFormData.accountDetails.billingDetails.pincode = defaultAddress.pincode;
+                    this.invFormData.accountDetails.shippingDetails.pincode = defaultAddress.pincode;
+                }
+            });
+        }
         if (this.isMulticurrencyAccount) {
             this.customerCurrencyCode = item.currency;
             this.companyCurrencyName = item.currency;
@@ -4825,6 +4849,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         voucherClassConversion.accountDetails.billingDetails = new GstDetailsClass();
         voucherClassConversion.accountDetails.billingDetails.panNumber = result.account.billingDetails.panNumber;
+        voucherClassConversion.accountDetails.billingDetails.pincode = result.account.billingDetails.pincode;
         voucherClassConversion.accountDetails.billingDetails.address = cloneDeep(result?.account?.billingDetails?.address);
         voucherClassConversion.accountDetails.billingDetails.gstNumber = result.account.billingDetails.gstNumber;
         voucherClassConversion.accountDetails.billingDetails.state.code = this.getNewStateCode(result.account.billingDetails.stateCode);
@@ -4833,6 +4858,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
         voucherClassConversion.accountDetails.shippingDetails.panNumber = result.account.shippingDetails.panNumber;
+        voucherClassConversion.accountDetails.shippingDetails.pincode = result.account.shippingDetails.pincode;
         voucherClassConversion.accountDetails.shippingDetails.address = cloneDeep(result?.account?.shippingDetails?.address);
         voucherClassConversion.accountDetails.shippingDetails.gstNumber = result.account.shippingDetails.gstNumber;
         voucherClassConversion.accountDetails.shippingDetails.state.code = this.getNewStateCode(result.account.shippingDetails.stateCode);
@@ -6114,6 +6140,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         trackingNumber
                     };
                 }
+                if (sections?.footer?.data) {
+                    this.showNotesAtLastPage = sections.footer.data.showNotesAtLastPage?.display;
+                }
             }
         }
     }
@@ -6545,14 +6574,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     state: {code: company?.billingDetails?.stateCode, name: company?.billingDetails?.stateName},
                     gstNumber: company?.billingDetails?.gstNumber,
                     stateName: company?.billingDetails?.stateName,
-                    stateCode: company?.billingDetails?.stateCode
+                    stateCode: company?.billingDetails?.stateCode,
+                    pincode: company?.billingDetails?.pincode
                 },
                 shippingDetails: {
                     address: company?.shippingDetails?.address,
                     state: {code: company?.shippingDetails?.stateCode, name: company?.shippingDetails?.stateName},
                     gstNumber: company?.shippingDetails?.gstNumber,
                     stateName: company?.shippingDetails?.stateName,
-                    stateCode: company?.shippingDetails?.stateCode
+                    stateCode: company?.shippingDetails?.stateCode,
+                    pincode: company?.shippingDetails?.pincode
                 }
             }
 
@@ -6590,6 +6621,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.purchaseBillCompany.billingDetails.stateCode = defaultAddress.stateCode;
                         this.purchaseBillCompany.billingDetails.stateName = defaultAddress.stateName;
                         this.purchaseBillCompany.billingDetails.gstNumber = defaultAddress.taxNumber;
+                        this.purchaseBillCompany.billingDetails.pincode = defaultAddress.pincode;
                         this.isDeliverAddressFilled = true;
                     }
                 }
@@ -6616,6 +6648,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.purchaseBillCompany.shippingDetails.stateCode = defaultAddress.stateCode;
                     this.purchaseBillCompany.shippingDetails.stateName = defaultAddress.stateName;
                     this.purchaseBillCompany.shippingDetails.gstNumber = defaultAddress.taxNumber;
+                    this.purchaseBillCompany.shippingDetails.pincode = defaultAddress.pincode;
                 } else {
                     this.resetShippingAddress();
                 }
@@ -6885,7 +6918,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             data.state.code = (isCompanyAddress) ? address.stateCode : (address.state) ? address.state.code : "";
             data.gstNumber = (isCompanyAddress) ? address.taxNumber : address.gstNumber;
-
+            data.pincode = address.pincode;
             if(isCompanyAddress) {
                 this.autoFillCompanyShippingDetails();
             } else {

@@ -18,6 +18,7 @@ export class Address {
     public stateName: string;
     public stateCode: string;
     public panNumber: string;
+    public pincode?: string;
 }
 
 export class Transaction {

@@ -140,7 +140,7 @@
     cursor: pointer;
 }
 .invoice-table.desktop-table.giddh-table {
-    td{
+    td.no-dbl-click-select{
         white-space: normal !important;
         word-break: break-word !important;
     }
@@ -579,7 +579,13 @@ span.icon-export-icon {
                justify-content: flex-start !important;
            }
         }
-
+        .invoice-modal-content{
+            left: 60px;
+            width: 100%;
+        }
+        .invoice-modal-content:after{
+            display: none;
+        }
     }
     .status-mobile{
         display: flex !important;
@@ -708,9 +714,13 @@ span.icon-export-icon {
     .mobile-search .input-container input {
         font-size: 13px;
     }
-    .invoice-modal-content:after,
     .invoice-modal-content {
         top: 131px;
+        left: 0;
+        &:after{
+            top: 131px;
+            left: 0;
+        }
     }
     .invoice-footer .font-xxlarge {
         font-size: 16px;

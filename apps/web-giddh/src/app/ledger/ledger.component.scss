@@ -764,7 +764,7 @@ sh-select:focus {
 }
 .ledger-head {
     position: sticky;
-    top: 60px;
+    top: 45px;
     z-index: 1;
     background-color: $alice-blue-light;
     padding-left: 5px;
@@ -988,7 +988,7 @@ sh-select:focus {
         }
         .single-search-box {
             position: relative;
-            width: calc(100% - 215px);
+            width: calc(100% - 240px);
             margin-right: 13px;
             .full-width-input {
                 width: 100%;
@@ -1156,7 +1156,7 @@ sh-select:focus {
     .ledger-section {
         padding-top: 0;
         .transactions-page {
-            margin-top: 18px !important;
+            margin-top: 5px !important;
         }
     }
 }
