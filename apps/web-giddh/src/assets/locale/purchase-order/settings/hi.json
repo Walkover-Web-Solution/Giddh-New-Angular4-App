@@ -11,7 +11,7 @@
     "pur_order": "क्रय आदेश",
     "purchase_order": "क्रय आदेश",
     "default_expiry_days": "डिफ़ॉल्ट समाप्ति के दिन",
-    "auto_change_status": "ऑटो परिवर्तन की स्थिति(on expiry)",
+    "auto_change_status": "ऑटो परिवर्तन की स्थिति (समाप्ति पर)",
     "enable_po_sms": "एसएमएस के जरिए पीओ भेजने में सक्षम करें",
     "custom_po_number": "कस्टम खरीद आदेश#",
     "initial_number": "प्रारंभिक संख्या",
