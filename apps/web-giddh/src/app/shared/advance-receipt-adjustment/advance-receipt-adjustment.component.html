@@ -221,7 +221,7 @@
                                 </amount-field>
                             </span>
 
-                            <i class="icon-info pointer" tooltip="localeData?.adjustment_amount_error"></i>
+                            <i class="icon-info pointer" [tooltip]="localeData?.adjustment_amount_error"></i>
                         </span>
                         <div class="note-message mt-3" *ngIf="isVoucherModule">
                             <p>{{commonLocaleData?.app_note}}:</p>
