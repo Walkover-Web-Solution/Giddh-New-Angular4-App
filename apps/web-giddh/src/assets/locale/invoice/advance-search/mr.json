@@ -1,9 +1,9 @@
 {
-    "invoice_date_range" : "Invoice Date Range",
-    "invoice_total_amt" : "Invoice Total Amt",
-    "due_date_range" : "Due Date Range",
-    "due_amount" : "Due Amount",
-    "description" : "Description",
-    "expiry_date" : "Expiry Date",
-    "total_amt" : "Total Amt"
+    "invoice_date_range" : "बीजक तारीख श्रेणी",
+    "invoice_total_amt" : "बीजक एकूण रक्कम",
+    "due_date_range" : "देय तारीख श्रेणी",
+    "due_amount" : "देय रक्कम",
+    "description" : "वर्णन",
+    "expiry_date" : "कालबाह्यता तारीख",
+    "total_amt" : "एकूण रक्कम"
 }
