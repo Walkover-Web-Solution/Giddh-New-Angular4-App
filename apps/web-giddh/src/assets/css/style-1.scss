@@ -426,7 +426,7 @@ aside-menu-account .container-fluid {
 }
 
 .pd-b05 {
-    padding-bottom: 5px;
+    padding-bottom: 5px !important;
 }
 
 .pd-l05 {
@@ -5048,6 +5048,9 @@ form#groupDetailForm {
 @media only screen and (max-width: 1024px) {
     .modal-dialog.universal_modal .shortcuts {
         display: none;
+    }
+    .pd-t1-md{
+        padding-top: 10px;
     }
 }
 @media(max-width:1024px){

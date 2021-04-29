@@ -328,6 +328,9 @@ header img {
 
 #default .subfooter {
     padding: 10px 10px 0px 10px;
+    .notes2-default-text {
+        white-space:pre-line;
+    }
 }
 
 #default .subfooter hr {
@@ -397,6 +400,14 @@ header img {
     z-index: 0;
 }
 
+#default header .qr-image img { 
+    width: 160px;
+    height: 100%;
+    float: right !important;
+    margin-bottom: 0px !important;
+    max-width: 100% !important;
+}
+
 .docTitle hr {
     position: absolute;
     height: 2px;
@@ -407,6 +418,15 @@ header img {
 
 strong {
     font-weight: bold;
+}
+
+.invoice-head{
+    width: 50%;
+    word-break: break-word;
+}
+
+.width-40{
+    width: 40%;
 }
 
 /* common template css  */

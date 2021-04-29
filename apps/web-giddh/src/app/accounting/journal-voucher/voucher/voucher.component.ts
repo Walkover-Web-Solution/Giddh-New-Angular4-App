@@ -41,7 +41,7 @@ import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-select/option.interface';
 import { QuickAccountComponent } from '../../../theme/quick-account-component/quickAccount.component';
 import { KeyboardService } from '../../keyboard.service';
-import { KEYS, VOUCHERS } from '../journal-voucher.component';
+import { KEYS } from '../journal-voucher.component';
 import { adjustmentTypes, AdjustmentTypesEnum } from "../../../shared/helpers/adjustmentTypes";
 import { SalesService } from '../../../services/sales.service';
 import { CompanyActions } from '../../../actions/company.actions';
@@ -49,6 +49,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { IForceClear } from '../../../models/api-models/Sales';
 import { PAGINATION_LIMIT, SubVoucher } from '../../../app.constant';
 import { SearchService } from '../../../services/search.service';
+import { VOUCHERS } from '../../constants/accounting.constant';
 
 const CustomShortcode = [
     { code: 'F9', route: 'purchase' }
