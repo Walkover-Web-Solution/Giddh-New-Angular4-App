@@ -11,7 +11,7 @@
     "pur_order": "खरेदी ऑर्डर",
     "purchase_order": "खरेदी ऑर्डर",
     "default_expiry_days": "डीफॉल्ट कालबाह्यता दिवस",
-    "auto_change_status": "स्वयं बदलाची स्थिती (on expiry)",
+    "auto_change_status": "स्वयं बदलाची स्थिती (मुदत संपल्यावर)",
     "enable_po_sms": "एसएमएसद्वारे पीओ पाठविणे सक्षम करा",
     "custom_po_number": "सानुकूल खरेदी ऑर्डर#",
     "initial_number": "आरंभिक क्र.",
