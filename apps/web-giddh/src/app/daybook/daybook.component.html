@@ -94,7 +94,7 @@
 
                             <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);"
                                 class="daybook-table-tbody">
-                                <tr>
+                                <tr (dblclick)="showUpdateLedgerModal(entry)" (keydown.enter)="showUpdateLedgerModal(entry)">
                                     <td [attr.data-title]="commonLocaleData?.app_date">{{ entry.entryDate }}</td>
                                     <td [attr.data-title]="commonLocaleData?.app_particular">{{ entry.particular.name }}</td>
                                     <td [attr.data-title]="localeData?.voucher_name">{{ entry.voucherName }}</td>
@@ -223,3 +223,24 @@
         </div>
     </ng-template>
 </ng-container>
+
+<!-- update ladger entry popup -->
+<div bsModal #updateLedgerModal="bs-modal" class="modal fade update-ledger-modal" role="dialog"
+    [config]="{keyboard: true}" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-ledger">
+        <div class="modal-content">
+            <update-ledger-entry-panel [isPettyCash]="false" (closeUpdateLedgerModal)="hideUpdateLedgerModal()" (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"></update-ledger-entry-panel>
+        </div>
+    </div>
+    <div class="show-if-update-ledger-open"></div>
+</div>
+
+<!-- aside menu section -->
+<div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
+<app-aside-menu-sales-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'"
+    [class]="asideMenuStateForOtherTaxes" [taxes]="companyTaxesList"
+    [otherTaxesModal]="updateLedgerComponent.vm.selectedLedger.otherTaxModal"
+    [commonLocaleData]="commonLocaleData" [@slideInOut]="asideMenuStateForOtherTaxes"
+    (closeModal)="toggleOtherTaxesAsidePane(null)"
+    (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(null);">
+</app-aside-menu-sales-other-taxes>
