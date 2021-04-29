@@ -30,7 +30,7 @@
                         <div class="form-group" formGroupName="country">
                             <label>{{commonLocaleData?.app_country}} <sup class="text-danger">*</sup> </label>
                             <sh-select [options]="countrySource" [isFilterEnabled]="true"
-                                (viewInitEvent)="onViewReady($event)" formControlName="countryCode"
+                                (viewInitEvent)="onViewReady($event)" formControlName="countryCode" [defaultValue]="accountCountryName"
                                 (selected)="selectCountry($event)" [useInBuiltFilterForIOptionTypeItems]="true"
                                 [isRequired]="true"></sh-select>
                         </div>
