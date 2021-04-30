@@ -633,7 +633,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             stateCode: [{ value: '', disabled: false }, (this.isStateRequired) ? Validators.required : ""],
             isDefault: [false],
             isComposite: [false],
-            partyType: ['NOT APPLICABLE']
+            partyType: ['NOT APPLICABLE'],
+            pincode: ['']
         });
 
         if (val) {

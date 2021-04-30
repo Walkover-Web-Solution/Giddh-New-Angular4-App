@@ -54,6 +54,8 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public showGstComposition: boolean = false;
     /** Stores the image signature ID */
     public imageSignatureId: string;
+    /** Stores the active company name */
+    public activeCompanyName: string;
     /** Ng form instance of content filter component */
     @ViewChild(NgForm) contentForm: NgForm;
 
@@ -93,6 +95,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
             } else {
                 this.showGstComposition = false;
             }
+            this.activeCompanyName = activeCompany?.name;
         });
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
