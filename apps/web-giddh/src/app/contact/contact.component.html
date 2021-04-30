@@ -48,7 +48,6 @@
                                                 <a class="dropdown-item">
                                                     <input type="checkbox" name="field_filter.state" (ngModelChange)="columnFilter($event, 'state')" [(ngModel)]="showFieldFilter.state" /> {{commonLocaleData?.app_state}}</a>
                                             </li>
-
                                             <li *ngIf="shouldShowTaxFilter" role="menuitem">
                                                 <a class="dropdown-item">
                                                     <input type="checkbox" name="field_filter.gstin" (ngModelChange)="columnFilter($event, 'gstin')" [(ngModel)]="showFieldFilter.gstin" /> {{commonLocaleData?.app_tax_number}}</a>
@@ -82,9 +81,9 @@
                                                             <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="{{commonLocaleData?.app_company}}"></i>
                                                         </span>
                                                         <span class="entity-details">
-                                                            <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                                            <div class="item giddh-limit single-line-clamp">{{ option?.label || '-' }}</div>
                                                             <div class="item-unique giddh-limit single-line-clamp">
-                                                                {{ option.name || '-' }}
+                                                                {{ option?.name || '-' }}
                                                             </div>
                                                         </span>
                                                     </a>

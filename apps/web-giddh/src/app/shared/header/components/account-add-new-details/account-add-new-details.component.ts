@@ -443,7 +443,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             stateCode: [{value: '', disabled: false}, (this.isStateRequired) ? Validators.required : ""],
             isDefault: [false],
             isComposite: [false],
-            partyType: ['NOT APPLICABLE']
+            partyType: ['NOT APPLICABLE'],
+            pincode: ['']
         });
         return gstFields;
     }

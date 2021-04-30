@@ -330,7 +330,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
     public handleBranchChange(selectedEntity: any): void {
-        this.currentBranch.name = selectedEntity.label;
+        this.currentBranch.name = selectedEntity?.label;
         this.getDueReport();
     }
 
