@@ -9736,17 +9736,6 @@ input.mat-input-element{
     }
 
     @media (max-width: 1024px) {
-        /* bs-datepicker-container{
-                position: absolute !important;
-                left: 15px !important;
-                top: 40px !important;
-                transform: none !important;
-        }
-        .payment-date{
-            bs-datepicker-container{
-                top: 60px !important;
-            }
-        }*/
         .users-last-list {
             .cdk-virtual-scroll-content-wrapper {
                 position: relative;
@@ -9836,13 +9825,24 @@ input.mat-input-element{
         }
     }
 
-@media(max-width:1019px){
-    .hide-sub-sidebar .sidebar-handle{
-        left: 0 !important;
+    @media(max-width:1019px){
+        .hide-sub-sidebar .sidebar-handle{
+            left: 0 !important;
+        }
     }
-}
 
     @media (max-width: 991px) {
+        .menu_open{
+            .reverse-table-report {
+                .input-grp-date-range-picker {
+                    flex-direction: column !important;
+                    .clear-filter {
+                        width: 50%;
+                        margin-left: 0;
+                    }
+                }
+            }
+        }
         .setting-tab-data li.nav-item {
             display: inline-block;
         }
@@ -9978,11 +9978,13 @@ input.mat-input-element{
     }
 
   @media (max-width: 768px) {
-        .sales-register{
-            width: calc(100% - 60px) !important;
-        }
         .menu_open .sales-register{
-            width: calc(100% - 240px) !important;
+            width: 100% !important;
+            padding-right: 0 !important;
+        }
+        .sales-register{
+            width: 100% !important;
+            padding-right: 0 !important;
         }
 
           .bulk-create-table sh-select input, .bulk-create-table .mat-form-field-wrapper input,

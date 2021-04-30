@@ -73,11 +73,6 @@
 .entity-dropdown {
     width: 200px;
 }
-@media screen and (max-width:1199px) {
-    .clear-filter{
-        margin-left: 15px;
-    }
-}
 @media(max-width:1280px){
     .invoice-footer {
         h1 {
@@ -85,13 +80,14 @@
         }
     }
 }
-
+@media screen and (max-width:1199px) {
+    .clear-filter{
+        margin-left: 15px;
+    }
+}
 @media(max-width:991px){
     .invoice-footer{
         padding: 15px 0;
-    }
-    .clear-filter{
-        width: 50%;
     }
 }
 @media only screen and (max-width: 767px) {
