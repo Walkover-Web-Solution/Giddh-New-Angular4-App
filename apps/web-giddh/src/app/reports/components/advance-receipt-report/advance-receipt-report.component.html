@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <div class="mr-t15 mr-b15 input-grp-date-range-picker d-flex" [ngClass]="{'clear-filter-applicable': showClearFilter}">
                 <!-- Invoice filter section -->
-                <div class="mr-r1 d-flex w-100 flex-sm-row flex-column">
+                <div class="mr-r1 d-flex flex-sm-row flex-column">
                     <div class="input-group linked-entities mr-r15" *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
                         <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
                             [ItemHeight]="33" class="entity-dropdown" width="100%" (selected)="handleBranchChange($event)"
@@ -36,9 +36,12 @@
                             <span class="icon-advance-filter"></span>
                         </div>
                     </div>
-                    <div class="clear-filter mr-b15 align-items-center d-flex justify-content-xl-center justify-content-lg-start w-100" *ngIf="showClearFilter">
-                        <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()"><span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}</button>
-                    </div>
+
+                </div>
+                <div class="clear-filter mr-b15 align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
+                    *ngIf="showClearFilter">
+                    <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()"><span class="icon-cross"></span>
+                        {{commonLocaleData?.app_clear_filter}}</button>
                 </div>
                 <!-- Invoice filter section ends -->
 

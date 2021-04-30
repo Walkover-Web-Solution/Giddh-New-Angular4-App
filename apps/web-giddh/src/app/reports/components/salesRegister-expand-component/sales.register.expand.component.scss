@@ -206,6 +206,7 @@ ul.list-unstyled li a {
 
 ul#dropdown-nested {
     min-width: 254px;
+    z-index: 1;
 }
 
 ul#dropdown-nested li .caret {
