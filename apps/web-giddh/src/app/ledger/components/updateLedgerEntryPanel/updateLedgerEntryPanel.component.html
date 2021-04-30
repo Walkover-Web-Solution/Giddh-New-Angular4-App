@@ -121,6 +121,7 @@
                                                         (click)="addBlankTrx('DEBIT', txn, $event)"
                                                         [fixedValue]="txn.particular.name"
                                                         (selected)="selectAccount($event,txn, dbtSelect)"
+                                                        (onClear)="selectAccount($event,txn, dbtSelect)"
                                                         [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
                                                         [ItemHeight]="67" (onShow)="dbs.hide()"
                                                         [defaultValue]="txn.particular.name"
