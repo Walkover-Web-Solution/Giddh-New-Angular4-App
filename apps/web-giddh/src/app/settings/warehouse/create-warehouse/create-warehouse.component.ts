@@ -222,7 +222,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         // }));
         const requestObj = {
             name: this.warehouseForm.value.name,
-            linkAddresses: this.addresses.filter(address => this.warehouseForm.value.address.includes(address.uniqueName)).map(filteredAddress => ({
+            linkAddresses: this.addresses?.filter(address => this.warehouseForm.value.address.includes(address.uniqueName))?.map(filteredAddress => ({
                 uniqueName: filteredAddress.uniqueName,
                 isDefault: filteredAddress.isDefault
             })),
@@ -306,6 +306,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
             stateName: chosenState ? chosenState.stateName : '',
             address: addressDetails.formValue.address,
             name: addressDetails.formValue.name,
+            pincode: addressDetails.formValue.pincode,
             linkEntity
         };
 

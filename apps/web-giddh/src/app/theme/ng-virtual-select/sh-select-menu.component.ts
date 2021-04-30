@@ -108,7 +108,9 @@ export class ShSelectMenuComponent implements OnChanges {
      */
     public autoSelectIfSingleValueAvailable(): void {
         if(this.isRequired && this._rows && this._rows.length === 1 && !this.filter) {
-            this.toggleSelected(this._rows[0]);
+            setTimeout(() => {
+                this.toggleSelected(this._rows[0]);
+            }, 150);
         }
     }
 }

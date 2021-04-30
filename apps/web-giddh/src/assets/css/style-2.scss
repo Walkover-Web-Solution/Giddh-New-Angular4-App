@@ -9717,12 +9717,15 @@ input.mat-input-element{
         position: static !important;
         padding-left: 15px !important;
     }
-    .sales-register{
-        width: calc(100% - 60px) !important;
-    }
-    .menu_open .sales-register{
-        width: calc(100% - 240px) !important;
-    }
+
+     body.update-scroll-hidden{
+         overflow-y: hidden;
+     }
+     .wrap-billing-address.clearfix {
+        .bottom-border-only{
+            padding-left: 0 !important;
+        }
+     }
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {
@@ -9975,7 +9978,10 @@ input.mat-input-element{
 
   @media (max-width: 768px) {
         .sales-register{
-            width: 100% !important;
+            width: calc(100% - 60px) !important;
+        }
+        .menu_open .sales-register{
+            width: calc(100% - 240px) !important;
         }
           .bulk-create-table sh-select input, .bulk-create-table .mat-form-field-wrapper input,
           .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex{
@@ -10409,7 +10415,7 @@ input.mat-input-element{
     > .nav.nav-tabs , .invoice-control .nav.nav-tabs, .setting-page ul.nav.nav-tabs{
             position: fixed !important;
             width: 100%;
-            top: 91px !important;
+            top: 90px !important;
         }
         #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
             top: 88px;
