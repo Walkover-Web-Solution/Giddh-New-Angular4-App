@@ -551,34 +551,38 @@ ul#dropdown-menu {
 }
 
 .bg-thead{
-    background-color: $whisper; 
+    background-color: $whisper;
     color: $black;
 }
 
 .bg-thead-dark{
-    background: $alice-blue-light; 
+    background: $alice-blue-light;
     color: $black;
 }
 
 .pointer-none{
     pointer-events:none !important;
 }
-
+.summary-content {
+    table{
+        th, td{
+            white-space: nowrap !important;
+            word-break: break-all !important;
+        }
+    }
+}
 @media(max-width:991px){
     .gstr-summary-head{
         height: auto;
         .dropdown{
-            float: right;
+            float: none;
         }
         .download-authenticate-btn{
             text-align: right;
             display: flex;
             align-items: flex-end;
             justify-content: flex-end;
-            width: 100%;
             margin-bottom: 0;
-            padding-top: 15px;
-            float: none;
             .list-middle{
                 .dropdown-menu{
                     left: 0;
@@ -593,5 +597,29 @@ ul#dropdown-menu {
     }
     .gstr3b-header{
         margin-top: 0 !important;
+    }
+}
+
+@media screen and (max-width:575px) {
+    .gstr-summary-head{
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        .wrap-gst-date{
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            padding-bottom: 15px;
+            .font-xlarge{
+                font-size: 16px;
+            }
+            .dropdown{
+                margin-left: 15px;
+            }
+        }
+        span{
+            margin-bottom: 10px;
+            padding-right: 0;
+        }
     }
 }

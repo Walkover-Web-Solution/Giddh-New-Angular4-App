@@ -75,7 +75,7 @@ svg.icon.icon-xxlg-md {
             margin: 3px auto;
         }
     }
-} 
+}
 
 .text-middle {
     vertical-align: middle;
@@ -473,12 +473,12 @@ hr {
         padding-left: 5px;
     }
 }
-.tax-heading {
-    max-width: 10%;
-}
-.tax-dropdown {
-    max-width: 30%;
-}
+// .tax-heading {
+//     max-width: 10%;
+// }
+// .tax-dropdown {
+//     max-width: 30%;
+// }
 
 @keyframes loading {
     from {
@@ -528,5 +528,17 @@ hr {
         float: none !important;
         display: block;
         margin-top: 10px;
+    }
+}
+
+/*rersponsive start here*/
+@media screen and (max-width:1024px){
+    .return-content{
+        .return-top {
+            .font-xlarge{
+                margin: 3px 0;
+                margin-left: 1% !important;
+            }
+        }
     }
 }

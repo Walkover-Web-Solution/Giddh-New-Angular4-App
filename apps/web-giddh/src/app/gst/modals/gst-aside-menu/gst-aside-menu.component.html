@@ -24,7 +24,7 @@
                         <div class="form-group" *ngIf="selectedService === 'TAXPRO' || selectedService === 'VAYANA' ">
 
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-sm-6 col-12">
 
                                     <div class="form-group">
 
@@ -48,7 +48,7 @@
 
                             <div class="row">
 
-                                <div class="col-6">
+                                <div class="col-sm-6 col-12">
 
                                     <div class="form-group">
                                         <label for="tax_pro_username">Username:</label>
@@ -59,7 +59,7 @@
 
                                 </div>
 
-                                <div class="col-6">
+                                <div class="col-sm-6 col-12">
 
                                     <div class="form-group">
                                         <label for="tax_pro_gst_number">GSTIN:</label>
@@ -115,7 +115,7 @@
 
                                     <ng-container *ngIf="!(reconcileOtpSuccess$ | async)">
 
-                                        <div class="col-6">
+                                        <div class="col-sm-6 col-12">
 
                                             <div class="form-group">
                                                 <label for="tax_pro_username">Username:</label>
@@ -129,7 +129,7 @@
 
                                     <ng-container *ngIf="(reconcileOtpSuccess$ | async)">
 
-                                        <div class="col-6" *ngIf="(reconcileOtpSuccess$ | async)">
+                                        <div class="col-sm-6 col-12" *ngIf="(reconcileOtpSuccess$ | async)">
                                             <div class="form-group">
                                                 <label for="reconcile_otp">OTP:</label>
                                                 <input autocomplete="off" type="text" name="otp" class="form-control"
@@ -141,7 +141,7 @@
 
                                     <ng-container>
 
-                                        <div class="col-6" *ngIf="activeCompanyGstNumber">
+                                        <div class="col-sm-6 col-12" *ngIf="activeCompanyGstNumber">
                                             <div class="form-group">
                                                 <label for="reconcile_otp">GSTN:</label>
                                                 <input autocomplete="off" type="text" name="otp" class="form-control"
