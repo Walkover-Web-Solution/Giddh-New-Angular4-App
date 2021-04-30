@@ -317,7 +317,7 @@
                                                         [options]="searchResults" #crdSelect
                                                         (click)="addBlankTrx('CREDIT', txn, $event)"
                                                         (selected)="selectAccount($event,txn, crdSelect)"
-                                                        (onClear)="selectAccount($event,txn, dbtSelect)"
+                                                        (onClear)="selectAccount($event,txn, crdSelect)"
                                                         [fixedValue]="txn.particular.name"
                                                         (onShow)="cbs.hide()" [showClear]="false"
                                                         [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
