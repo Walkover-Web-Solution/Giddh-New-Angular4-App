@@ -129,6 +129,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Stores the instance of company detail dropdown */
     @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
+    /** Search company name */
+    public searchCmp: string = '';
+    /** Holds if company refresh is in progress */
+    public isCompanyRefreshInProcess$: Observable<boolean>;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -151,6 +155,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         this.activeAccount$ = this.store.pipe(select(appStore => appStore.ledger.account), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(appStore => appStore.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
+        this.isCompanyRefreshInProcess$ = this.store.pipe(select(state => state.session.isRefreshing), takeUntil(this.destroyed$));
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
             if (organization && organization.details && organization.details.branchDetails) {
                 this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
@@ -963,5 +968,17 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             details: branchDetails
         };
         this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+    }
+
+    /**
+     * Refreshes the company list
+     *
+     * @param {Event} event
+     * @memberof PrimarySidebarComponent
+     */
+    public refreshCompanies(event: Event): void {
+        event.stopPropagation();
+        event.preventDefault();
+        this.store.dispatch(this.companyActions.RefreshCompanies());
     }
 }

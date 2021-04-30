@@ -9720,15 +9720,16 @@ input.mat-input-element{
         position: static !important;
         padding-left: 15px !important;
     }
-    .e-waybill-tabs.custom-tabs .nav-tabs{
-        position: static !important;
-        padding-left: 15px !important;
-    }
     .sales-register{
         width: calc(100% - 60px) !important;
     }
     .menu_open .sales-register{
         width: calc(100% - 240px) !important;
+    }
+    .wrap-billing-address.clearfix {
+        .bottom-border-only{
+            padding-left: 0 !important;
+        }
     }
     /* responsive  starts here*/
 

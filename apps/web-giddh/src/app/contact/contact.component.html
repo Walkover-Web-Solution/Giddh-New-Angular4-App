@@ -48,7 +48,6 @@
                                                 <a class="dropdown-item">
                                                     <input type="checkbox" name="field_filter.state" (ngModelChange)="columnFilter($event, 'state')" [(ngModel)]="showFieldFilter.state" /> {{commonLocaleData?.app_state}}</a>
                                             </li>
-
                                             <li *ngIf="shouldShowTaxFilter" role="menuitem">
                                                 <a class="dropdown-item">
                                                     <input type="checkbox" name="field_filter.gstin" (ngModelChange)="columnFilter($event, 'gstin')" [(ngModel)]="showFieldFilter.gstin" /> {{commonLocaleData?.app_tax_number}}</a>

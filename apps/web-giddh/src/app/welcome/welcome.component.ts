@@ -89,7 +89,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         baseCurrency: '',
         isMultipleCurrency: false,
         city: '',
-        pincode: '',
         email: '',
         taxes: [],
         userBillingDetails: {
@@ -112,7 +111,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         address: '',
         isDefault: false,
         stateName: '',
-        taxNumber: ''
+        taxNumber: '',
+        pincode: ''
     };
 
     public subscriptionPlan: CreateCompanyUsersPlan = {
@@ -378,7 +378,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }
             let gstDetails = this.prepareGstDetail(this.companyProfileObj);
-            if (gstDetails.taxNumber || gstDetails.address || gstDetails.stateCode) {
+            if (gstDetails.taxNumber || gstDetails.address || gstDetails.stateCode || gstDetails.pincode) {
                 this.createNewCompanyPreparedObj.addresses.push(gstDetails);
             } else {
                 this.createNewCompanyPreparedObj.addresses = [];
@@ -449,6 +449,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.addressesObj.taxNumber = obj.taxNumber || '';
         this.addressesObj.stateCode = obj.state || '';
         this.addressesObj.address = obj.address || '';
+        this.addressesObj.pincode = obj.pincode;
         this.addressesObj.isDefault = false;
         this.addressesObj.stateName = this.selectedstateName ? this.selectedstateName.split('-')[1] : '';
         return this.addressesObj;
@@ -525,6 +526,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.companyProfileObj.taxType = '';
             this.companyProfileObj.selectedState = '';
             this.companyProfileObj.state = '';
+            this.companyProfileObj.pincode = '';
             this.forceClear$ = observableOf({ status: true });
             this.isTaxNumberSameAsHeadQuarter = 0;
 
