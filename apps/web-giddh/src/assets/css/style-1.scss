@@ -5065,7 +5065,7 @@ form#groupDetailForm {
         }
     }
 }
-@media only screen and (max-width: 767px) {
+@media screen and (max-width:768px) {
     .table-container.trial-balance{
         .table-responsive{
             display: table;
@@ -5101,13 +5101,15 @@ form#groupDetailForm {
                 width: 30% !important;
                 max-width: 30% !important;
                 min-width: 150px;
+                border-right: none !important;
             }
         }
         .row{
             flex-wrap: nowrap;
         }
     }
-
+}
+@media only screen and (max-width: 767px) {
     .mobile-header {
         display: block;
         position: fixed !important;
