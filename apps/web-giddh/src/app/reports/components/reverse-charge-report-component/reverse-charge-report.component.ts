@@ -90,7 +90,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-
+    /* True, if mobile screen size is detected **/
     public isMobileScreen: boolean = true;
 
     constructor(
