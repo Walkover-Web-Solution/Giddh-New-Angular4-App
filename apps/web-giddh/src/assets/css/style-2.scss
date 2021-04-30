@@ -9713,7 +9713,19 @@ input.mat-input-element{
             }
         }
     }
+    .e-waybill-tabs.custom-tabs .nav-tabs{
+        position: static !important;
+        padding-left: 15px !important;
+    }
 
+     body.update-scroll-hidden{
+         overflow-y: hidden;
+     }
+     .wrap-billing-address.clearfix {
+        .bottom-border-only{
+            padding-left: 0 !important;
+        }
+     }
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {
