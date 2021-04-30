@@ -19,7 +19,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <h1 [ngStyle]="{'font-size' : inputTemplate.fontSize-1+28 +'px'}">hello</h1>
+                            <h1 [ngStyle]="{'font-size' : inputTemplate.fontSize-1+20 +'px'}">hello</h1>
                             <h4 class="sub_head" *ngIf="fieldsAndVisibility.header.formNameTaxInvoice?.display">This is
                                 your
                                 <strong
@@ -27,7 +27,7 @@
                                 <strong
                                     *ngIf="(!fieldsAndVisibility.header.formNameInvoice?.label && fieldsAndVisibility.header.formNameTaxInvoice?.label) || (fieldsAndVisibility.header.formNameInvoice?.label && fieldsAndVisibility.header.formNameTaxInvoice?.label)">{{fieldsAndVisibility.header.formNameTaxInvoice?.label}}</strong>
                             </h4>
-                            <p class="mr-t05" *ngIf="showGstComposition && fieldsAndVisibility.header.gstComposition?.display">{{(fieldsAndVisibility.header.gstComposition?.label) ? fieldsAndVisibility.header.gstComposition?.label : "Registered under Composition Scheme"}}</p>
+                            <p class="mr-t05 word-break" *ngIf="showGstComposition && fieldsAndVisibility.header.gstComposition?.display">{{(fieldsAndVisibility.header.gstComposition?.label) ? fieldsAndVisibility.header.gstComposition?.label : "Registered under Composition Scheme"}}</p>
                             <p class="mr-t05">
                                 <ng-container *ngIf="voucherType==='sales'">
                                     <span class="d-block" *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
@@ -49,18 +49,29 @@
                         <!--<td class="text-center img-duplicate" *ngIf="voucherType==='sales'">
                             <img src="assets/images/duplicate.svg" alt="">
                         </td>-->
-                        <td class="text-right" *ngIf="showLogo">
-                            <figure class="col-xs-12">
-                                <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt=""
-                                    [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
-                            </figure>
-                            <p *ngIf="fieldsAndVisibility.header.companyName?.display" class="bold">{{fieldsAndVisibility.header.companyName?.label}}</p>
-                            <!-- <p class="font-12" *ngIf="(fieldsAndVisibility.header.customField1?.display && fieldsAndVisibility.header.customField2?.display && fieldsAndVisibility.header.customField3?.display && fieldsAndVisibility.header.dueDate?.display )">{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due on '}} 30/08/2017</p> -->
+                        <td [ngClass]="{'text-center': fieldsAndVisibility.header.showQrCode?.display, 'text-right': !fieldsAndVisibility.header.showQrCode?.display}" *ngIf="showLogo">
+                            <div class="col-12">
+                                <figure>
+                                        <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt=""
+                                            [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
+                                </figure>
+                                <p *ngIf="fieldsAndVisibility.header.companyName?.display" class="bold pd-l05">{{fieldsAndVisibility.header.companyName?.label}}</p>
+                            </div>
                         </td>
+                        <td *ngIf="showGstComposition && fieldsAndVisibility.header.showQrCode?.display" class="text-right">
+                            <div class="qr-image">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"/>
+                            </div>
+                        </td>
+                            <!-- <p class="font-12" *ngIf="(fieldsAndVisibility.header.customField1?.display && fieldsAndVisibility.header.customField2?.display && fieldsAndVisibility.header.customField3?.display && fieldsAndVisibility.header.dueDate?.display )">{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due on '}} 30/08/2017</p> -->
+
                     </tr>
                 </tbody>
             </table>
         </header>
+        <ng-container *ngIf="fieldsAndVisibility?.header?.showIrnNumber?.display && showGstComposition">
+            <div class="meta"><strong>IRN:</strong>&nbsp;<span>def01b2b4b08ba07e92556896bb0e5a6c5b80428f756ae902ab57db0b60781c3</span></div>
+        </ng-container>
         <table class="warehouse-table" cellspacing="0" cellpadding="0"
             *ngIf="fieldsAndVisibility?.header?.warehouseAddress?.display || fieldsAndVisibility?.header?.showCompanyAddress?.display">
             <tbody>
@@ -476,21 +487,21 @@
                                     {{fieldsAndVisibility.footer.slogan?.label }}
                                 </small>
                             </strong>
-                            <hr/>
-                            <strong>
-                                <small *ngIf="fieldsAndVisibility.header.companyName?.label">
-                                    {{fieldsAndVisibility.header.companyName?.label}}
+                            <hr *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label" />
+                            <strong *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display">
+                                <small>
+                                    {{fieldsAndVisibility.footer.textUnderSlogan?.label}}
                                 </small>
                             </strong>
                         </ng-container>
                     </td>
                     <td class="text-center" style="vertical-align: bottom; width: 35%;" *ngIf="showImageSignature">
                         <ng-container>
-                            <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="inner-img-signature" alt="" />
-                            <hr/>
-                            <strong>
-                                <small *ngIf="fieldsAndVisibility.header.companyName?.label">
-                                    {{fieldsAndVisibility.header.companyName?.label}}
+                            <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="inner-img-signature" alt=""/>
+                            <hr *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label" />
+                            <strong *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display">
+                                <small>
+                                    {{fieldsAndVisibility.footer.textUnderSlogan?.label}}
                                 </small>
                             </strong>
                         </ng-container>

@@ -110,7 +110,7 @@ input.form-control.send-alert {
     display: inline-flex;
 }
 
-.custom-estimation {
+.custom-estimation, .user-authenticate{
     label {
         position: absolute;
         top: -24px;
@@ -217,7 +217,7 @@ span.viasocket a {
     .hide-on-mobile {
         display: none;
     }
-        .custom-estimation {
+     .custom-estimation , .user-authenticate{
         margin-top: 30px;
     }
         .single-tab-block .col-sm-3{
