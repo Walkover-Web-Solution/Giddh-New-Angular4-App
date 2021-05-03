@@ -220,7 +220,28 @@ button.toast-close-button {
 .toast-message{
     color: #333333;
 }
+.toast-title {
+    word-break: break-word;
+    max-width: 150px;
+    min-width: 60px;
+}
 /*Responsive Design*/
+@media screen and (max-width:767px) {
+    #toast-container{
+        width: 100%;
+        max-width: 100%;
+        right: 0;
+    }
+    #toast-container .toast{
+         max-width: 100%;
+         flex-direction: column;
+         width: calc(100% - 20px);
+    }
+    .toast-title {
+        max-width: 100%;
+        min-width: 100%;
+    }
+}
 @media all and (max-width: 240px) {
     #toast-container .toast.div {
         padding: 8px 8px 8px 50px;
@@ -228,7 +249,6 @@ button.toast-close-button {
     }
     #toast-container .toast-close-button {
         right: -0.2em;
-        top: -0.2em;
     }
 }
 @media all and (min-width: 241px) and (max-width: 480px) {
@@ -238,7 +258,6 @@ button.toast-close-button {
     }
     #toast-container .toast-close-button {
         right: -0.2em;
-        top: -0.2em;
     }
     .toast-title {
         font-size: 14px;
@@ -253,11 +272,5 @@ button.toast-close-button {
 @media all and (max-width: 480px) {
     #toast-container .toast-close-button {
         right: 10px !important;
-        top: -0.2em;
     }
-}
-.toast-title {
-    word-break: break-word;
-    max-width: 150px;
-    min-width: 60px;
 }
