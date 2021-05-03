@@ -367,7 +367,9 @@ ng-select.splSales {
     border: 1px solid $gainsboro;
     padding: 5px;
     width: 100%;
-    // max-width: 150px;
+    &.other-taxes-input {
+        width: 85%;
+    }
 }
 
 .create-purchase-order-table table.basic td {
@@ -1082,6 +1084,47 @@ ul.change-address-dropdown{
         }
     }
 }
+.switch-currency {
+    font-size: 14px;
+    color: $night-rider;
+    max-width: 1000px;
+    text-align: right;
+    margin-bottom: 10px;
+    width: 100%;
+    .switch-icon {
+        padding: 0 10px;
+        cursor: pointer;
+    }
+    input.form-control.edit-currency {
+        display: inline-block;
+        width: 80px;
+        height: 26px !important;
+    }
+    span.edit-icon {
+        line-height: 17px;
+        position: relative;
+        top: -2px;
+    }
+}
+.differ-currency {
+    color: $nobel;
+    font-size: 14px;
+    text-align: right;
+    bottom: 3px;
+    right: 8px;
+    white-space: nowrap;
+    padding-left: 2px;
+    align-self: flex-end;
+    justify-self: flex-end;
+    span.icon-rupees {
+        font-size: 11px;
+    }
+}
+
+.item-discount , .item-tax, .delete-btn-absolute {
+    height: 1px;
+}
+
 /* responsive */
 @media(max-width:1199px){
     .bill-add {

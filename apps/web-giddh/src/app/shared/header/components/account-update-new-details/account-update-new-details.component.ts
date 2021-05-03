@@ -154,8 +154,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public accountInheritedDiscounts: any[] = [];
     /** company custom fields list */
     public companyCustomFields: any[] = [];
-    /** This will handle if we need to disable currency selection */
-    public disableCurrencySelection: boolean = false;
     /** To check applied taxes modified  */
     public isTaxesSaveDisable$: Observable<boolean> = observableOf(true);
     /** To check applied discounts modified  */
@@ -931,12 +929,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.store.dispatch(this.commonActions.resetOnboardingForm());
             let phoneCode = event.additional;
             this.addAccountForm.get('mobileCode').setValue(phoneCode);
-
-            if(!this.disableCurrencyIfSundryCreditor()) {
-                let currencyCode = this.countryCurrency[event.value];
-                this.addAccountForm.get('currency').setValue(currencyCode);
-            }
-
+            let currencyCode = this.countryCurrency[event.value];
+            this.addAccountForm.get('currency').setValue(currencyCode);
             this.getStates(event.value);
             this.getOnboardingForm(event.value);
             this.toggleStateRequired();
@@ -1101,11 +1095,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     if (res.country.currency) {
                         this.selectedCountryCurrency = res.country.currency.code;
                         this.selectedAccountCallingCode = res.country.callingCode;
-                        if(selectedAcountCurrency && !this.disableCurrencyIfSundryCreditor()) {
-                            this.addAccountForm.get('currency')?.patchValue(selectedAcountCurrency);
+                        if(selectedAcountCurrency) {
+                            this.addAccountForm.get('currency').patchValue(selectedAcountCurrency);
                             this.selectedCurrency = selectedAcountCurrency;
-                        } else if(!this.disableCurrencyIfSundryCreditor()) {
-                            this.addAccountForm.get('currency')?.patchValue(this.selectedCountryCurrency);
+                        } else {
+                            this.addAccountForm.get('currency').patchValue(this.selectedCountryCurrency);
                             this.selectedCurrency = this.selectedCountryCurrency;
                         }
                         if (!this.addAccountForm.get('mobileCode').value) {
@@ -1552,32 +1546,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectedBooleanCustomField(isChecked: string, index: number): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
         customField.controls[index].get('value').setValue(isChecked);
-    }
-
-    /**
-     * This will disable currency field if selected group or parent group is sundry creditor
-     *
-     * @param {string} [groupName]
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    public get disableCurrency(): boolean {
-        return this.disableCurrencyIfSundryCreditor();
-    }
-
-    /**
-     * This will disable currency field if selected group or parent group is sundry creditor
-     *
-     * @returns {boolean}
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    public disableCurrencyIfSundryCreditor(): boolean {
-        let groupName = (this.addAccountForm && this.addAccountForm.get('activeGroupUniqueName')) ? this.addAccountForm.get('activeGroupUniqueName').value : "";
-        if(groupName === "sundrycreditors" || this.activeParentGroup === "sundrycreditors") {
-            this.addAccountForm.get('currency').setValue(this.companyCurrency);
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**
