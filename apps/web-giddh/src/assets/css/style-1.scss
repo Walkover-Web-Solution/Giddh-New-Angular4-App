@@ -5066,6 +5066,14 @@ form#groupDetailForm {
             }
         }
     }
+    .no-data{
+        height: 60vh;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        margin: 0 !important;
+    }
 }
 @media screen and (max-width:768px) {
     .table-container.trial-balance{
