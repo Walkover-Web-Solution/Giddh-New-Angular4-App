@@ -43,7 +43,7 @@
             <div class="pagination-wrapper" *ngIf="vatReportTransactions.totalPages > 1">
                 <pagination [totalItems]="vatReportTransactions.totalPages" [(ngModel)]="vatReportTransactions.page"
                     [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
-                    (pageChanged)="pageChanged($event)"></pagination>
+                    (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
             </div>
         </div>
     </div>

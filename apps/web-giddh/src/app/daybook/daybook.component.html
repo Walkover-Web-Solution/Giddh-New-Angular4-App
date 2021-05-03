@@ -182,7 +182,7 @@
 
             <!-- pagination -->
             <div class="mt-1">
-                <pagination [totalItems]="daybookData?.totalItems" [(ngModel)]="daybookData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="daybookData?.count" [rotate]="false" (pageChanged)="pageChanged($event)">
+                <pagination [totalItems]="daybookData?.totalItems" [(ngModel)]="daybookData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="daybookData?.count" [rotate]="false" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
                 </pagination>
             </div>
             <!-- pagination -->
