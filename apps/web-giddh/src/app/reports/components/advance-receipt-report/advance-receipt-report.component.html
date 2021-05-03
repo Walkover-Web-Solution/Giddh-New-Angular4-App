@@ -53,212 +53,186 @@
             </div>
 
 
-        <div class="invoice-preview table-responsive">
-            <table class="table basic giddh-table on-mobile-view">
-                <thead class="thead-background1">
-                    <tr>
-                        <th>#</th>
-                        <th #receiptNumberParent width="13%" class="bd-rr bd-rb td-search-box">
-                            <div [hidden]="showReceiptSearchBar">
-                                <span>{{localeData?.receipt_no_label}}</span>
-                                <i class="icon-search" (click)="searchBy(null, 'receipt', true)"></i>
-                            </div>
-                            <div class="input-container" [hidden]="!showReceiptSearchBar">
-                                <input #receiptNumber
-                                    (clickOutside)="(showReceiptSearchBar) ? searchBy($event, 'receipt', false) : ''"
-                                    [(ngModel)]="searchQueryParams.receiptNumber" type="text"
-                                    [placeholder]="localeData?.receipt_no_placeholder" class="w100" />
-                            </div>
-                        </th>
-
-                        <th class="td-search-box">
-                            <div class="d-flex align-items-center">
-                                {{commonLocaleData?.app_date}}
-                                <div class="icon-pointer pl-1 pointer">
-                                    <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'RECEIPT_DATE'}">
-                                    </ng-container>
+            <div class="invoice-preview table-responsive">
+                <table class="table basic giddh-table on-mobile-view">
+                    <thead class="thead-background1">
+                        <tr>
+                            <th>#</th>
+                            <th #receiptNumberParent width="13%" class="bd-rr bd-rb td-search-box">
+                                <div [hidden]="showReceiptSearchBar">
+                                    <span>{{localeData?.receipt_no_label}}</span>
+                                    <i class="icon-search" (click)="searchBy(null, 'receipt', true)"></i>
                                 </div>
-                            </div>
-                        </th>
-
-                        <th width="15%">
-                            {{commonLocaleData?.app_type}}
-                            <div class="voucher-type-dropdown pull-right">
-                                <div class="btn-group d-inline-block" dropdown container="body"
-                                    placement="bottom right">
-                                    <a href="javascript:void(0)" id="button-basic" dropdownToggle
-                                        class="btn dropdown-toggle text-light-2" aria-controls="dropdown-alignment">
-                                        <i class="fa fa-ellipsis-v"></i>
-                                    </a>
-                                    <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
-                                        role="menu" aria-labelledby="button-alignment">
-                                        <li *ngFor="let type of receiptType" role="menuitem"><a class="dropdown-item"
-                                                href="javascript:;"
-                                                (click)="onReceiptTypeChanged(type.value);">{{type.label}}</a></li>
-                                    </ul>
+                                <div class="input-container" [hidden]="!showReceiptSearchBar">
+                                    <input #receiptNumber
+                                        (clickOutside)="(showReceiptSearchBar) ? searchBy($event, 'receipt', false) : ''"
+                                        [(ngModel)]="searchQueryParams.receiptNumber" type="text"
+                                        [placeholder]="localeData?.receipt_no_placeholder" class="w100" />
                                 </div>
-                            </div>
-                        </th>
+                            </th>
 
-                        <th #customerNameParent width="13%" class="bd-rr bd-rb td-search-box">
-                            <div [hidden]="showCustomerSearchBar">
-                                <span>{{localeData?.customer_name_label}}</span>
-                                <i class="icon-search" (click)="searchBy(null, 'customerName', true);"></i>
-                            </div>
-                            <div class="input-container" [hidden]="!showCustomerSearchBar">
-                                <input #customerName
-                                    (clickOutside)="(showCustomerSearchBar) ? searchBy($event, 'customerName', false) : ''"
-                                    [(ngModel)]="searchQueryParams.baseAccountName" type="text"
-                                    [placeholder]="localeData?.customer_name_placeholder" class="w100" #customerNameField name="customerName" />
-                            </div>
-                        </th>
-
-                        <th #paymentModeParent width="13%" class="bd-rr bd-rb td-search-box">
-                            <div [hidden]="showPaymentSearchBar">
-                                <span>{{localeData?.payment_mode_label}}</span>
-                                <i class="icon-search" (click)="searchBy(null, 'paymentMode', true)"></i>
-                            </div>
-                            <div class="input-container" [hidden]="!showPaymentSearchBar">
-                                <input #paymentMode
-                                    (clickOutside)="(showPaymentSearchBar) ? searchBy($event, 'paymentMode', false) : ''"
-                                    [(ngModel)]="searchQueryParams.particularName" type="text"
-                                    [placeholder]="localeData?.payment_mode_placeholder" class="w100" #paymentModeField />
-                            </div>
-                        </th>
-
-                        <th #invoiceNumberParent width="13%" class="bd-rr bd-rb td-search-box">
-                            <div [hidden]="showInvoiceSearchBar">
-                                <span>{{localeData?.invoice_no_label}}</span>
-                                <i class="icon-search" (click)="searchBy(null, 'invoiceNumber', true)"></i>
-                            </div>
-                            <div class="input-container" [hidden]="!showInvoiceSearchBar">
-                                <input #invoiceNumber
-                                    (clickOutside)="(showInvoiceSearchBar) ? searchBy($event, 'invoiceNumber', false) : ''"
-                                    [(ngModel)]="searchQueryParams.invoiceNumber" type="text"
-                                    [placeholder]="localeData?.invoice_no_placeholder" class="w100" #paymentModeField />
-                            </div>
-                        </th>
-
-                        <th>
-                            <div class="d-flex align-items-center">
-                                {{commonLocaleData?.app_total_amount}}
-                                <div class="icon-pointer pl-1 pointer">
-                                    <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'TOTAL_AMOUNT'}">
-                                    </ng-container>
+                            <th class="td-search-box">
+                                <div class="d-flex align-items-center">
+                                    {{commonLocaleData?.app_date}}
+                                    <div class="icon-pointer pl-1 pointer">
+                                        <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'RECEIPT_DATE'}">
+                                        </ng-container>
+                                    </div>
                                 </div>
-                            </div>
-                        </th>
+                            </th>
 
-                        <th>
-                            <div class="d-flex align-items-center">
-                                {{localeData?.unused_amount}}
-                                <div class="icon-pointer pl-1 pointer">
-                                    <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'UNUSED_AMOUNT'}">
-                                    </ng-container>
+                            <th width="15%">
+                                {{commonLocaleData?.app_type}}
+                                <div class="voucher-type-dropdown pull-right">
+                                    <div class="btn-group d-inline-block" dropdown container="body"
+                                        placement="bottom right">
+                                        <a href="javascript:void(0)" id="button-basic" dropdownToggle
+                                            class="btn dropdown-toggle text-light-2" aria-controls="dropdown-alignment">
+                                            <i class="fa fa-ellipsis-v"></i>
+                                        </a>
+                                        <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+                                            role="menu" aria-labelledby="button-alignment">
+                                            <li *ngFor="let type of receiptType" role="menuitem"><a class="dropdown-item"
+                                                    href="javascript:;"
+                                                    (click)="onReceiptTypeChanged(type.value);">{{type.label}}</a></li>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody *ngIf="!isLoading">
-                    <tr *ngFor="let receipt of allReceipts; let i = index">
-                        <td data-title="#">{{ i + 1 }}</td>
-                        <td width="13%" class="text-break" data-title="{{localeData?.receipt_no_label}}">{{ receipt?.receiptNumber }}</td>
-                        <td class="entry-date" data-title="{{localeData?.entry_date}}">{{ receipt?.date }}</td>
-                        <td data-title="{{localeData?.suppliers_name}}">{{ receipt?.type }}</td>
-                        <td width="13%" class="text-break" data-title="{{commonLocaleData?.app_voucher_type}}">{{ receipt?.baseAccountName }}</td>
-                        <td data-title="{{localeData?.payment_mode_label}}">
-                            <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
-                                {{ paymentMode }}
-                            </div>
-                        </td>
-                        <td width="13%" class="text-break"  *ngIf="receipt?.invoices" data-title="{{localeData?.invoice_no_label}}">
-                            <div *ngFor="let invoice of receipt?.invoices?.split(',')">{{ invoice }}</div>
-                        </td>
-                        <td data-title="{{localeData?.invoice_no_label}}" *ngIf="!receipt?.invoices">-</td>
-                        <td data-title="{{commonLocaleData?.app_total_amount}}">
-                            {{ receipt?.totalAmount?.symbol }}{{ receipt?.totalAmount.amount | giddhCurrency}}
-                        </td>
-                        <td data-title="{{localeData?.unused_amount}}">
-                            {{ receipt?.unusedAmount?.symbol }}{{ receipt?.unusedAmount.amount | giddhCurrency}}</td>
-                    </tr>
-                    <tr *ngIf="!allReceipts?.length">
-                        <td colspan="10" align="center" class="no-entries">{{commonLocaleData?.app_no_records_found}}</td>
-                    </tr>
-                </tbody>
-                <tbody *ngIf="isLoading">
-                    <tr>
-                        <td colspan="10">
-                            <giddh-page-loader></giddh-page-loader>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            </th>
+
+                            <th #customerNameParent width="13%" class="bd-rr bd-rb td-search-box">
+                                <div [hidden]="showCustomerSearchBar">
+                                    <span>{{localeData?.customer_name_label}}</span>
+                                    <i class="icon-search" (click)="searchBy(null, 'customerName', true);"></i>
+                                </div>
+                                <div class="input-container" [hidden]="!showCustomerSearchBar">
+                                    <input #customerName
+                                        (clickOutside)="(showCustomerSearchBar) ? searchBy($event, 'customerName', false) : ''"
+                                        [(ngModel)]="searchQueryParams.baseAccountName" type="text"
+                                        [placeholder]="localeData?.customer_name_placeholder" class="w100" #customerNameField name="customerName" />
+                                </div>
+                            </th>
+
+                            <th #paymentModeParent width="13%" class="bd-rr bd-rb td-search-box">
+                                <div [hidden]="showPaymentSearchBar">
+                                    <span>{{localeData?.payment_mode_label}}</span>
+                                    <i class="icon-search" (click)="searchBy(null, 'paymentMode', true)"></i>
+                                </div>
+                                <div class="input-container" [hidden]="!showPaymentSearchBar">
+                                    <input #paymentMode
+                                        (clickOutside)="(showPaymentSearchBar) ? searchBy($event, 'paymentMode', false) : ''"
+                                        [(ngModel)]="searchQueryParams.particularName" type="text"
+                                        [placeholder]="localeData?.payment_mode_placeholder" class="w100" #paymentModeField />
+                                </div>
+                            </th>
+
+                            <th #invoiceNumberParent width="13%" class="bd-rr bd-rb td-search-box">
+                                <div [hidden]="showInvoiceSearchBar">
+                                    <span>{{localeData?.invoice_no_label}}</span>
+                                    <i class="icon-search" (click)="searchBy(null, 'invoiceNumber', true)"></i>
+                                </div>
+                                <div class="input-container" [hidden]="!showInvoiceSearchBar">
+                                    <input #invoiceNumber
+                                        (clickOutside)="(showInvoiceSearchBar) ? searchBy($event, 'invoiceNumber', false) : ''"
+                                        [(ngModel)]="searchQueryParams.invoiceNumber" type="text"
+                                        [placeholder]="localeData?.invoice_no_placeholder" class="w100" #paymentModeField />
+                                </div>
+                            </th>
+
+                            <th>
+                                <div class="d-flex align-items-center">
+                                    {{commonLocaleData?.app_total_amount}}
+                                    <div class="icon-pointer pl-1 pointer">
+                                        <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'TOTAL_AMOUNT'}">
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </th>
+
+                            <th>
+                                <div class="d-flex align-items-center">
+                                    {{localeData?.unused_amount}}
+                                    <div class="icon-pointer pl-1 pointer">
+                                        <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'UNUSED_AMOUNT'}">
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="!isLoading">
+                        <tr *ngFor="let receipt of allReceipts; let i = index">
+                            <td data-title="#">{{ i + 1 }}</td>
+                            <td width="13%" class="text-break" data-title="{{localeData?.receipt_no_label}}">{{ receipt?.receiptNumber }}</td>
+                            <td class="entry-date" data-title="{{localeData?.entry_date}}">{{ receipt?.date }}</td>
+                            <td data-title="{{localeData?.suppliers_name}}">{{ receipt?.type }}</td>
+                            <td width="13%" class="text-break" data-title="{{commonLocaleData?.app_voucher_type}}">{{ receipt?.baseAccountName }}</td>
+                            <td data-title="{{localeData?.payment_mode_label}}">
+                                <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
+                                    {{ paymentMode }}
+                                </div>
+                            </td>
+                            <td width="13%" class="text-break"  *ngIf="receipt?.invoices" data-title="{{localeData?.invoice_no_label}}">
+                                <div *ngFor="let invoice of receipt?.invoices?.split(',')">{{ invoice }}</div>
+                            </td>
+                            <td data-title="{{localeData?.invoice_no_label}}" *ngIf="!receipt?.invoices">-</td>
+                            <td data-title="{{commonLocaleData?.app_total_amount}}">
+                                {{ receipt?.totalAmount?.symbol }}{{ receipt?.totalAmount.amount | giddhCurrency}}
+                            </td>
+                            <td data-title="{{localeData?.unused_amount}}">
+                                {{ receipt?.unusedAmount?.symbol }}{{ receipt?.unusedAmount.amount | giddhCurrency}}</td>
+                        </tr>
+                        <tr *ngIf="!allReceipts?.length">
+                            <td colspan="10" align="center" class="no-entries">{{commonLocaleData?.app_no_records_found}}</td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="isLoading">
+                        <tr>
+                            <td colspan="10">
+                                <giddh-page-loader></giddh-page-loader>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div [hidden]="isLoading" *ngIf="pageConfiguration.totalItems > paginationLimit" class="pagination-wrapper">
+                <pagination [totalItems]="pageConfiguration.totalItems" [(ngModel)]="pageConfiguration.currentPage" [maxSize]="5"
+                    class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false"
+                    previousText="&#9668;" nextText="&#9658;" (pageChanged)="onPageChanged($event)">
+                </pagination>
+            </div>
+
         </div>
 
-<<<<<<< HEAD
-        <div [hidden]="isLoading" *ngIf="pageConfiguration.totalItems > paginationLimit" class="pagination-wrapper">
-            <pagination [totalItems]="pageConfiguration.totalItems" [(ngModel)]="pageConfiguration.currentPage"
-                [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit"
-                [rotate]="false" previousText="&#9668;" nextText="&#9658;" (pageChanged)="onPageChanged($event)">
-            </pagination>
-        </div>
-    </div>
+            <div class="mt-5 invoice-footer invoice-footer row">
+                <div class="col-lg-10 col-md-8 col-sm-12 col-12 total-due-sale-wrap">
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
+                            <h3>{{localeData?.advanced_receipts}}</h3>
+                            <h1>{{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount | giddhCurrency}}/-
+                            </h1>
+                        </div>
 
-    <div class="mt-5 invoice-footer invoice-footer row">
-        <div class="col-lg-10 col-md-8 col-sm-12 col-xs-12 total-due-sale-wrap">
-            <div class="row">
-                <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
-                    <h3>{{localeData?.advanced_receipts}}</h3>
-                    <h1>{{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount | giddhCurrency}}/-
-                    </h1>
-                </div>
-                <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
-                    <h3>{{localeData?.normal_receipts}}</h3>
-                    <h1>{{receiptsSummaryData?.normal?.symbol}}{{receiptsSummaryData?.normal?.amount | giddhCurrency}}/-
-                    </h1>
-                </div>
+                        <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
+                            <h3>{{localeData?.normal_receipts}}</h3>
+                            <h1>{{receiptsSummaryData?.normal?.symbol}}{{receiptsSummaryData?.normal?.amount | giddhCurrency}}/-
+                            </h1>
+                        </div>
 
-                <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
-                    <h3>{{localeData?.total_receipts}}</h3>
-                    <h1>{{receiptsSummaryData?.total?.symbol}}{{receiptsSummaryData?.total?.amount | giddhCurrency}}/-</h1>
-                </div>
+                        <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
+                            <h3>{{localeData?.total_receipts}}</h3>
+                            <h1>{{receiptsSummaryData?.total?.symbol}}{{receiptsSummaryData?.total?.amount | giddhCurrency}}/-</h1>
+                        </div>
 
-                <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
-                    <h3>{{localeData?.unused_receipts}}</h3>
-                    <h1>{{receiptsSummaryData?.unUsed?.symbol}}{{receiptsSummaryData?.unUsed?.amount | giddhCurrency}}/-
-                    </h1>
-=======
-        <div class="mt-5 invoice-footer invoice-footer row">
-            <div class="col-lg-10 col-md-8 col-sm-12 col-12 total-due-sale-wrap">
-                <div class="row">
-                    <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
-                        <h3>{{localeData?.advanced_receipts}}</h3>
-                        <h1>{{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount | giddhCurrency}}/-
-                        </h1>
+                        <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
+                            <h3>{{localeData?.unused_receipts}}</h3>
+                            <h1>{{receiptsSummaryData?.unUsed?.symbol}}{{receiptsSummaryData?.unUsed?.amount | giddhCurrency}}/-
+                            </h1>
+                        </div>
                     </div>
-
-                    <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
-                        <h3>{{localeData?.normal_receipts}}</h3>
-                        <h1>{{receiptsSummaryData?.normal?.symbol}}{{receiptsSummaryData?.normal?.amount | giddhCurrency}}/-
-                        </h1>
-                    </div>
-
-                    <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
-                        <h3>{{localeData?.total_receipts}}</h3>
-                        <h1>{{receiptsSummaryData?.total?.symbol}}{{receiptsSummaryData?.total?.amount | giddhCurrency}}/-</h1>
-                    </div>
-
-                    <div class="col-xl-3 col-md-6 col-sm-12 total-due-sale">
-                        <h3>{{localeData?.unused_receipts}}</h3>
-                        <h1>{{receiptsSummaryData?.unUsed?.symbol}}{{receiptsSummaryData?.unUsed?.amount | giddhCurrency}}/-
-                        </h1>
-                    </div>
->>>>>>> 8c891bc265... shalinee | TEST | report module responsiv work
                 </div>
             </div>
-        </div>
-    </div>
     </div>
 
     <!-- Adjust Payment modal start -->
@@ -306,3 +280,4 @@
         </div>
     </ng-template>
 </ng-container>
+
