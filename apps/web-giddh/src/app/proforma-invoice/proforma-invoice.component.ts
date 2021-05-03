@@ -1765,7 +1765,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isGenDtlCollapsed = false;
         this.isMlngAddrCollapsed = false;
         this.isOthrDtlCollapsed = false;
-        if (this.isMultiCurrencyModule() || this.isPurchaseInvoice) {
+        if (this.isMultiCurrencyModule()) {
             this.initializeWarehouse();
         }
 
@@ -2287,6 +2287,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 account: data.accountDetails,
                 number: this.invFormData.voucherDetails.voucherNumber || '',
                 entries: data.entries,
+                exchangeRate: exRate,
                 date: data.voucherDetails.voucherDate,
                 dueDate: data.voucherDetails.dueDate,
                 type: this.invoiceType,
@@ -3049,7 +3050,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             transaction.stockDetails = _.omit(o.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
             // Stock item, show the warehouse drop down if it is hidden
-            if ((this.isMultiCurrencyModule() || this.isPurchaseInvoice) && !this.shouldShowWarehouse) {
+            if ((this.isMultiCurrencyModule()) && !this.shouldShowWarehouse) {
                 this.shouldShowWarehouse = true;
                 this.selectedWarehouse = String(this.defaultWarehouse);
             }
@@ -3818,6 +3819,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     entries: data.entries,
                     date: data.voucherDetails.voucherDate,
                     dueDate: data.voucherDetails.dueDate,
+                    exchangeRate: exRate,
                     type: this.invoiceType,
                     attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
                     templateDetails: data.templateDetails,
@@ -4743,7 +4745,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.voucherDetails = voucherDetails;
         voucherClassConversion.templateDetails = (result.templateDetails) ? result.templateDetails : new TemplateDetailsClass();
 
-        if (!this.isLastInvoiceCopied) {
+        if (!this.isLastInvoiceCopied && !this.isPurchaseInvoice) {
             this.isMulticurrencyAccount = result.multiCurrency;
             this.customerCountryName = result.account.billingDetails.countryName;
         }
@@ -4848,15 +4850,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.originalExchangeRate = rate;
                     this.exchangeRate = rate;
                     this._cdr.detectChanges();
-                    if (this.isPurchaseInvoice && this.isUpdateMode) {
-                        // TODO: Remove this code once purchase invoice supports multicurrency
-                        this.calculateSubTotal();
-                        this.calculateTotalDiscount();
-                        this.calculateTotalTaxSum();
-                        this.calculateGrandTotal();
-                        this.calculateBalanceDue();
-                    }
-                    if (from !== to && !this.isPurchaseInvoice) {
+                    if (from !== to) {
                         // Multi currency case
                         this.recalculateEntriesTotal();
                     }
@@ -5272,7 +5266,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private isMultiCurrencyModule(): boolean {
-        return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash, VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate].includes(this.invoiceType);
+        return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash, VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.purchase].includes(this.invoiceType);
     }
 
     /**
@@ -7028,5 +7022,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 label: ''
             }
         ];
+    }
+
+    /**
+     * Recalculates the converted total amount for each entry when
+     * the grand total amount in company currency is updated
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public recalculateConvertedTotal(): void {
+        if (this.invFormData.entries && this.invFormData.entries.length) {
+            this.invFormData.entries.forEach(entry => {
+                const transaction = entry.transactions[0];
+                this.calculateConvertedTotal(entry, transaction);
+            });
+        }
     }
 }
