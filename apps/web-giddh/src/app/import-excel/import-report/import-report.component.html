@@ -58,7 +58,7 @@
             <div class="pagination-wrap" [hidden]="importRequestStatus === 7" *ngIf="importStatusResponse.totalItems > 10">
                 <pagination [totalItems]="importStatusResponse.totalItems" [(ngModel)]="importPaginatedRequest.page"
                     [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="importStatusResponse.count"
-                    [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                    [rotate]="false" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
             </div>
             <giddh-page-loader *ngIf="importRequestStatus === 7" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
         </div>

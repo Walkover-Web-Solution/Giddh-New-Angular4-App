@@ -47,7 +47,7 @@
     </div>
     <columnar-report-table-component [columnarReportResponse]="columnarReportResponse" [isBalanceTypeAsSign]="isBalanceTypeAsSign" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></columnar-report-table-component>
     <div class="pagination-wrapper" *ngIf="columnarReportResponse && columnarReportResponse?.totalPages > 1">
-        <pagination [totalItems]="columnarReportResponse.totalItems" [(ngModel)]="columnarReportResponse.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" [itemsPerPage]="paginationCount" (pageChanged)="pageChanged($event)"></pagination>
+        <pagination [totalItems]="columnarReportResponse.totalItems" [(ngModel)]="columnarReportResponse.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" [itemsPerPage]="paginationCount" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
     </div>
     <div *ngIf="isLoading && isShowColumnarReport">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
