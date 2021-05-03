@@ -81,21 +81,63 @@
         }
     }
 }
-@media(min-width:1020px) and (max-width:1199px){
+@media screen and (max-width:1199px) {
     .clear-filter{
-        width: 80%;
+        margin-left: 15px;
     }
 }
 @media(max-width:991px){
     .invoice-footer{
         padding: 15px 0;
     }
-    .clear-filter{
-        width: 50%;
-    }
 }
 @media only screen and (max-width: 767px) {
     .basic > thead > tr > th {
         min-width: initial;
     }
+}
+@media screen and (max-width:575px) {
+    .invoice-footer{
+        display: block;
+        .total-due-sale-wrap{
+            display: block !important;
+            padding: 0 !important;
+        }
+    }
+
+    .input-grp-date-range-picker{
+        .input-group.flex-nowrap{
+            flex-wrap: wrap !important;
+        }
+        .entity-dropdown{
+            display: flex;
+            width: 100%;
+        }
+        .linked-entities{
+            display: flex;
+            width: 100%;
+            margin-bottom: 15px !important;
+        }
+        .input-grp-date-range-picker{
+            margin-right: 15px;
+        }
+    }
+}
+@media screen and (max-width:399px) {
+     .input-grp-date-range-picker{
+        width: 100%;
+        .custom-datepicker{
+            width: 100%;
+            display: flex;
+            input{
+                width: 100% !important;
+                max-width: 100% !important;
+                text-align: left;
+                padding-left: 40px !important;
+            }
+        }
+      .btn-filter{
+          margin-top: 15px;
+      }
+     }
 }

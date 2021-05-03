@@ -38,7 +38,7 @@
                     (selected)="selectFinancialYearOption($event)" [ItemHeight]="33"></sh-select>
             </div>
             <div class="inner-button xs-mb-1 pr-5 xs-pr-0">
-                <div class="btn-group xs-pr-0" dropdown [autoClose]="true" container="body">
+                <div class="btn-group xs-pr-0" dropdown [autoClose]="true" >
                     <button id="button-nested" dropdownToggle type="button" class="btn text-capitalize dropdown-toggle"
                         aria-controls="dropdown-nested"> {{selectedType}}<span class="caret"></span>
                     </button>
@@ -54,7 +54,7 @@
                         </li>
                         <li role="menuitem" dropdown placement="right" container="body">
                             <a dropdownToggle class="dropdown-item dropdown-toggle cursor-pointer" (click)="false">{{commonLocaleData?.app_duration?.weekly}} <span class="caret"></span></a>
-                            <ul class="dropdown-menu reportDropdown" role="menu">
+                            <ul class="dropdown-menu report-dropdown" role="menu">
                                 <li role="menuitem" *ngFor="let month of monthNames"><a (click)="populateRecords('weekly', month)"
                                         class="dropdown-item">{{month | slice:0:3}}</a></li>
                             </ul>
@@ -64,5 +64,5 @@
             </div>
         </div>
         <purchase-register-table-component [currentBranchUniqueName]="currentBranch?.uniqueName" [reportRespone]="reportRespone" [purchaseRegisterTotal]="purchaseRegisterTotal"></purchase-register-table-component>
-    </div>    
+    </div>
 </ng-container>
