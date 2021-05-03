@@ -4745,8 +4745,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.voucherDetails = voucherDetails;
         voucherClassConversion.templateDetails = (result.templateDetails) ? result.templateDetails : new TemplateDetailsClass();
 
-        if (!this.isLastInvoiceCopied && !this.isPurchaseInvoice) {
-            this.isMulticurrencyAccount = result.multiCurrency;
+        if (!this.isLastInvoiceCopied) {
+            if (!this.isPurchaseInvoice) {
+                this.isMulticurrencyAccount = result.multiCurrency;
+            }
             this.customerCountryName = result.account.billingDetails.countryName;
         }
 
