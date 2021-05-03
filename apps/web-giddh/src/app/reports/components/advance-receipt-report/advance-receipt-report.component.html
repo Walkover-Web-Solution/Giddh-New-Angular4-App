@@ -197,9 +197,9 @@
             </div>
 
             <div [hidden]="isLoading" *ngIf="pageConfiguration.totalItems > paginationLimit" class="pagination-wrapper">
-                <pagination [totalItems]="pageConfiguration.totalItems" [(ngModel)]="pageConfiguration.currentPage" [maxSize]="5"
-                    class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false"
-                    previousText="&#9668;" nextText="&#9658;" (pageChanged)="onPageChanged($event)">
+                <pagination [totalItems]="pageConfiguration.totalItems" [(ngModel)]="pageConfiguration.currentPage"
+                [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit"
+                [rotate]="false" (pageChanged)="onPageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
                 </pagination>
             </div>
 

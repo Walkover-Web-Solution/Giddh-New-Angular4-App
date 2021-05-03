@@ -791,15 +791,15 @@
 
         <div colspan="100%" class="xs-pl-0 pagination-wrapper">
             <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && totalCustomers>=paginationLimit">
-                <div class="text-center  ">
-                    <pagination [totalItems]="sundryDebtorsAccountsBackup.totalItems" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="sundryDebtorsAccountsBackup.count" [rotate]="false" (pageChanged)="pageChanged($event)">
+                <div class="text-center">
+                    <pagination [totalItems]="sundryDebtorsAccountsBackup.totalItems" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="sundryDebtorsAccountsBackup.count" [rotate]="false" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
                     </pagination>
                 </div>
             </div>
 
             <div *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && totalVendors>=paginationLimit">
-                <div class="text-center ">
-                    <pagination [totalItems]="sundryCreditorsAccountsBackup.totalItems" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="sundryCreditorsAccountsBackup.count" [rotate]="false" (pageChanged)="pageChanged($event)">
+                <div class="text-center">
+                    <pagination [totalItems]="sundryCreditorsAccountsBackup.totalItems" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="sundryCreditorsAccountsBackup.count" [rotate]="false" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
                     </pagination>
                 </div>
             </div>

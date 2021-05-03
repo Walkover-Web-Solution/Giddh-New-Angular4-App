@@ -449,7 +449,12 @@
                             <div class="text-center mr-t2 page-count position-absolute">
                                 <span class="grey ng-binding">{{ bankTransactionsResponse?.totalItems }} {{localeData?.transactions}}, </span>
                                 <span class="black ng-binding">{{ bankTransactionsResponse?.totalPages }} {{localeData?.pages}}</span>
-                                <pagination [totalItems]="(bankTransactionsResponse?.countPerPage)*(bankTransactionsResponse?.totalPages)" [itemsPerPage]="bankTransactionsResponse?.countPerPage" [maxSize]="5" class="pagination-sm" [(ngModel)]="bankTransactionsResponse.page" (pageChanged)="bankTransactionPageChanged($event)" [boundaryLinks]="true"></pagination>
+                                <pagination
+                                    [totalItems]="(bankTransactionsResponse?.countPerPage)*(bankTransactionsResponse?.totalPages)"
+                                    [itemsPerPage]="bankTransactionsResponse?.countPerPage" [maxSize]="5"
+                                    class="pagination-sm" [(ngModel)]="bankTransactionsResponse.page"
+                                    (pageChanged)="bankTransactionPageChanged($event)" [boundaryLinks]="true" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
+                                </pagination>
                             </div>
                             <table class="w-100">
                                 <tr>

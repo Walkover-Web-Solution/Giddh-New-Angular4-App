@@ -389,7 +389,7 @@
             <div class="text-center mt-4 mb-4" *ngIf="transporterListDetails">
                 <pagination [totalItems]="transporterListDetails.totalPages" [(ngModel)]="transporterListDetails.page"
                     [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
-                    (pageChanged)="pageChanged($event)"></pagination>
+                    (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
             </div>
 
         </div>
