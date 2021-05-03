@@ -41,7 +41,6 @@ import { CurrentCompanyState } from '../../store/Company/company.reducer';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
-import { GeneralActions } from '../../actions/general/general.actions';
 import { InvoiceService } from '../../services/invoice.service';
 import { PURCHASE_ORDER_STATUS } from '../../shared/helpers/purchaseOrderStatus';
 import { INameUniqueName } from '../../models/api-models/Inventory';
@@ -52,6 +51,7 @@ import { OrganizationType } from '../../models/user-login-state';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SearchService } from '../../services/search.service';
 import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
+import { LedgerService } from '../../services/ledger.service';
 
 const THEAD_ARR_READONLY = [
     {
@@ -252,6 +252,22 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public exchangeRate = 1;
     /* This will hold grand total */
     public grandTotalMulDum: any;
+    /** True, when user wants to see switched currency rate */
+    public showSwitchedCurr = false;
+    /** If true, then shows the company currency in currency switcher as main currency of conversion*/
+    public showCurrencyValue: boolean = false;
+    /** If true, will show save icon on exchange rate switcher */
+    public autoSaveIcon: boolean = false;
+    /** Stores the previous exchange rate of previous debtor */
+    public previousExchangeRate = 1;
+    /** Holds the reversed exchange rate edited by the user */
+    public reverseExchangeRate: number;
+    /** Holds the original reverse exchange rate */
+    public originalReverseExchangeRate: number;
+    /** Stores the company currency name for exchange rate switcher */
+    public companyCurrencyName: string;
+    /** Stores the account currency name for exchange rate switcher */
+    public customerCurrencyCode: string;
     /* This will hold entries list before applying tax */
     private entriesListBeforeTax: SalesEntryClass[];
     /* True, if the entry contains RCM applicable taxes */
@@ -260,8 +276,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public universalDate: any;
     /* moment object */
     public moment = moment;
-    /* This will hold if multicurrency is supported */
-    public isMultiCurrencySupported: boolean = false;
     /* This will hold currency symbol of company */
     public baseCurrencySymbol: string = '';
     /* Object for selected vendor */
@@ -394,7 +408,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         private loaderService: LoaderService,
         private route: ActivatedRoute,
         private router: Router,
-        private generalActions: GeneralActions,
+        private ledgerService: LedgerService,
         private invoiceService: InvoiceService,
         private modalService: BsModalService,
         private settingsBranchAction: SettingsBranchActions,
@@ -691,6 +705,20 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     public updateVendorDetails(accountDetails: any): void {
         if (accountDetails) {
+            accountDetails.currency = accountDetails.currency || this.companyCurrency;
+            this.isMulticurrencyAccount = accountDetails.currency !== this.companyCurrency;
+            if (this.isMulticurrencyAccount) {
+                this.customerCurrencyCode = accountDetails.currency;
+                this.companyCurrencyName = accountDetails.currency;
+                this.getCurrencyRate(this.companyCurrency, accountDetails.currency,
+                    moment(this.purchaseOrder.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
+            } else {
+                this.customerCurrencyCode = this.companyCurrency;
+                this.previousExchangeRate = this.exchangeRate;
+                this.originalExchangeRate = 1;
+                this.exchangeRate = 1;
+                this.recalculateEntriesTotal();
+            }
             this.purchaseOrder.voucherDetails.customerUniquename = accountDetails.uniqueName;
             this.purchaseOrder.voucherDetails.customerName = accountDetails.name;
             this.purchaseOrder.account.uniqueName = accountDetails.uniqueName;
@@ -1603,12 +1631,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public calculateEntryTotal(entry: SalesEntryClass, trx: SalesTransactionItemClass): void {
-        if (this.excludeTax) {
-            trx.total = giddhRoundOff((trx.amount - entry.discountSum), 2);
-        } else {
-            trx.total = giddhRoundOff((trx.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
-        }
-
+        this.calculateConvertedTotal(entry, trx);
         this.calculateSubTotal();
         this.calculateTotalDiscount();
         this.calculateTotalTaxSum();
@@ -2537,7 +2560,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         this.getAccountInProgress = true;
                         this.getAccountDetails(this.purchaseOrderDetails.account.uniqueName);
                     }
-
                     this.interval = setInterval(() => {
                         if (this.purchaseOrderDetails && this.purchaseOrderDetails.entries && this.vendorAccountsLoaded && !entriesUpdated && this.copiedAccountDetails) {
                             entriesUpdated = true;
@@ -2760,6 +2782,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             convertedEntries.push(salesEntryClass);
             this.activeIndex++;
         });
+        this.exchangeRate = this.purchaseOrderDetails.exchangeRate;
+        this.originalExchangeRate = this.exchangeRate;
+        this.previousExchangeRate = this.exchangeRate;
 
         return convertedEntries;
     }
@@ -2980,7 +3005,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     public onUpdateOrderDate(): void {
         this.isOrderDateChanged = true;
-
+        if (this.isMulticurrencyAccount && this.purchaseOrder.voucherDetails.voucherDate) {
+            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(this.purchaseOrder.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
+        }
         if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
             setTimeout(() => {
                 this.assignDueDate();
@@ -3360,7 +3387,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             if(this.inventorySettings?.manageInventory) {
                 transaction.hsnNumber = transaction.stockDetails.hsnNumber;
                 transaction.hsnOrSac = 'hsn';
-                transaction.showCodeType = "hsn"; 
+                transaction.showCodeType = "hsn";
             } else {
                 transaction.sacNumber = transaction.stockDetails.sacNumber;
                 transaction.sacNumberExists = true;
@@ -3536,5 +3563,134 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 description?.nativeElement?.focus();
             }
         }, 200);
+    }
+
+    /**
+     * Fetches the currency exchange rate between two countries
+     *
+     * @param {*} to Converted to currency symbol
+     * @param {*} from Converted from currency symbol
+     * @param {string} [date=moment().format(GIDDH_DATE_FORMAT)] Date on which currency rate is required, default is today's date
+     * @memberof CreatePurchaseOrderComponent
+     */
+     public getCurrencyRate(to, from, date = moment().format(GIDDH_DATE_FORMAT)): void {
+        if (from && to) {
+            this.ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                let rate = response.body;
+                if (rate) {
+                    this.previousExchangeRate = this.exchangeRate;
+                    this.originalExchangeRate = rate;
+                    this.exchangeRate = rate;
+                    if (from !== to) {
+                        // Multi currency case
+                        this.recalculateEntriesTotal();
+                    }
+                }
+            }, (error => {}));
+        }
+    }
+
+    /**
+     * Updates the value of stocks in entries according to the changed ER (Exchange Rate)
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+     public updateStockEntries(): void {
+        if (this.purchaseOrder.entries && this.purchaseOrder.entries.length) {
+            this.purchaseOrder.entries.forEach(entry => {
+                const transaction = entry.transactions[0];
+                if (transaction.isStockTxn) {
+                    const rate = this.previousExchangeRate >= 1 ? transaction.rate * this.previousExchangeRate : Number((transaction.rate / this.previousExchangeRate).toFixed(this.highPrecisionRate));
+                    transaction.rate = Number((rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                    this.calculateStockEntryAmount(transaction);
+                    this.calculateWhenTrxAltered(entry, transaction)
+                } else {
+                    this.calculateConvertedTotal(entry, transaction);
+                }
+            });
+        }
+    }
+
+    /**
+     * Switch currency handler
+     *
+     * @param {*} switchCurr True, if currency exchange should be reversed
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public switchCurrencyImg(switchCurr): void {
+        this.showSwitchedCurr = switchCurr;
+        if (switchCurr) {
+            this.reverseExchangeRate = this.exchangeRate ? 1 / this.exchangeRate : 0;
+            this.originalReverseExchangeRate = this.reverseExchangeRate;
+        } else {
+            this.exchangeRate = this.reverseExchangeRate ? 1 / this.reverseExchangeRate : 0;
+            this.originalExchangeRate = this.exchangeRate;
+        }
+    }
+
+    /**
+     * Saves the edited exchange rate
+     *
+     * @param {*} toSave True, if need to save the updated rate
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public saveCancelExcRate(toSave): void {
+        if (toSave) {
+            if (this.showSwitchedCurr) {
+                this.exchangeRate = this.reverseExchangeRate ? 1 / this.reverseExchangeRate : 0;
+            } else {
+                this.originalExchangeRate = this.exchangeRate;
+            }
+            this.autoSaveIcon = !this.autoSaveIcon;
+            this.showCurrencyValue = !this.showCurrencyValue;
+            this.originalReverseExchangeRate = this.reverseExchangeRate;
+            this.calculateGrandTotal();
+        } else {
+            this.showCurrencyValue = !this.showCurrencyValue;
+            this.autoSaveIcon = !this.autoSaveIcon;
+            this.exchangeRate = this.originalExchangeRate;
+            this.reverseExchangeRate = this.originalReverseExchangeRate;
+        }
+    }
+
+    /**
+     * Recalculates the entries total value
+     *
+     * @private
+     * @memberof CreatePurchaseOrderComponent
+     */
+     private recalculateEntriesTotal(): void {
+        this.updateStockEntries();
+        this.loadTaxesAndDiscounts(0);
+        this.calculateSubTotal();
+        this.calculateTotalDiscount();
+        this.calculateTotalTaxSum();
+        this.calculateGrandTotal();
+    }
+
+    /**
+     * Calculates converted total
+     *
+     * @private
+     * @param {SalesEntryClass} entry Entry instance
+     * @param {SalesTransactionItemClass} transaction Transaction instance
+     * @memberof CreatePurchaseOrderComponent
+     */
+     private calculateConvertedTotal(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+        if (this.excludeTax) {
+            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum), 2);
+            if (transaction.isStockTxn) {
+                transaction.convertedTotal = giddhRoundOff((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum, 2);
+            } else {
+                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+            }
+        } else {
+            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+            if (transaction.isStockTxn) {
+                transaction.convertedTotal = giddhRoundOff(((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+            } else {
+                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+            }
+        }
     }
 }
