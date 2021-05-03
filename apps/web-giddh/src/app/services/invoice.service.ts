@@ -746,4 +746,20 @@ export class InvoiceService {
     set VoucherType(val) {
         this.voucherType = val;
     }
+
+    /**
+     * Removes the image signature
+     *
+     * @param {string} signatureUniqueName Unique name of the signature to be removed
+     * @return {*} {Observable<BaseResponse<any, any>>} To carry out further operation
+     * @memberof InvoiceService
+     */
+    public removeSignature(signatureUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.delete(this.config.apiUrl +
+            INVOICE_API.REMOVE_IMAGE_SIGNATURE
+            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            .replace(':imgUniqueName', signatureUniqueName)).pipe(
+            catchError((error) => this.errorHandler.HandleCatch<string, any>(error)));
+    }
 }

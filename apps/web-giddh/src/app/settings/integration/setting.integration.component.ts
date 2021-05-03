@@ -396,6 +396,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 });
             }
         });
+
     }
 
     public ngAfterViewInit() {

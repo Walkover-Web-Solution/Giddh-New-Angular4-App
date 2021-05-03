@@ -771,14 +771,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 }
             });
     }
-    
+
     /**
      * Handles tab changes
      *
      * @param {string} tabName Current tab name
      * @memberof SettingProfileComponent
      */
-    public handleTabChanged(tabName: string): void { 
+    public handleTabChanged(tabName: string): void {
         this.currentTab = tabName;
         if (tabName === 'address') {
             this.loadAddresses('GET');
@@ -788,7 +788,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
             }
         }
-        
+
         this.router.navigateByUrl('/pages/settings/profile/' + tabName);
     }
 
@@ -911,6 +911,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             stateName: chosenState ? chosenState.stateName : '',
             address: addressDetails.formValue.address,
             name: addressDetails.formValue.name,
+            pincode: addressDetails.formValue.pincode,
             linkEntity
         };
 
@@ -954,6 +955,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             stateName: chosenState ? chosenState.stateName : '',
             address: addressDetails.formValue.address,
             name: addressDetails.formValue.name,
+            pincode: addressDetails.formValue.pincode,
             uniqueName: addressDetails.formValue.uniqueName,
             linkEntity
         };

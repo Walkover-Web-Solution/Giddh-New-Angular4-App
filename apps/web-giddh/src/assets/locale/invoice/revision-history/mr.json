@@ -1,7 +1,7 @@
 {
-    "page_heading": "Revision History",
-    "by_user": "by [USER]",
-    "po_created": "Purchase Order created for [VALUE]",
-    "pb_created": "Purchase Bill created for [VALUE]",
-    "value_changed": "[FIELD] updated to [VALUE]"
+    "page_heading": "पुनरावृत्ती इतिहास",
+    "by_user": "[USER] द्वारा",
+    "po_created": "[VALUE] साठी खरेदी ऑर्डर तयार केली",
+    "pb_created": "खरेदी बिल तयार केले [VALUE]",
+    "value_changed": "[FIELD] वर अद्यतनित केले [VALUE]"
 }

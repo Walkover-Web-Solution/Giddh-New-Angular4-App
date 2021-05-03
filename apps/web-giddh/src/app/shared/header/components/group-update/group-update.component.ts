@@ -100,7 +100,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public searchedGroups: IOption[];
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    
+
     constructor(
         private _fb: FormBuilder,
         private store: Store<AppState>,
@@ -133,7 +133,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isUpdateGroupSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.isUpdateGroupSuccess), takeUntil(this.destroyed$));
         this.discountList$ = this.store.pipe(select(state => state.settings.discount.discountList),takeUntil(this.destroyed$));
     }
-   
+
     public ngOnInit() {
         this.taxPopOverTemplate = '<div class="popover-content"><label>'+this.localeData?.tax_inherited+':</label><ul><li>@inTax.name</li></ul></div>';
         this.groupDetailForm = this._fb.group({
@@ -148,9 +148,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
         this.taxGroupForm = this._fb.group({
             taxes: ['']
-            // taxes: ['this.taxGroupForm.value']
         });
-        
+
         this.activeGroup$.subscribe((activeGroup) => {
             if (activeGroup) {
                 this.selectedDiscounts = [];
@@ -234,7 +233,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
     }
-    
 
     public ngAfterViewInit() {
         this.isTaxableGroup$ = this.store.pipe(select(state => {
@@ -466,9 +464,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         }
     }
-    
-    public applyTax($event) {
-        $event.preventDefault();
+
+    public applyTax() {
         let activeAccount: AccountResponseV2 = null;
         let activeGroup: GroupResponse = null;
         this.store.pipe(take(1)).subscribe(s => {
@@ -488,15 +485,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                     });
                 });
             }
-        }
-        ); 
+        });
         data.taxes.push.apply(data.taxes, this.taxGroupForm.value.taxes);
         data.uniqueName = activeGroup.uniqueName;
         this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
         this.showEditTaxSection = false;
     }
-    
-    
+
     public getAccountFromGroup(activeGroup: GroupResponse, result: boolean): boolean {
         this.isDebtorCreditorGroups = this.isDebtorCreditorGroup(activeGroup);
         if (activeGroup.category === 'income' || activeGroup.category === 'expenses' || this.isDebtorCreditorGroups) {
@@ -582,6 +577,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isTaxesSaveDisable$ = of(false);
         }
     }
+
     /**
      * To check discount list updated
      *

@@ -101,6 +101,7 @@ export class GroupWithAccountsAction {
                 return this.getTaxHierarchy(grouName);
             })));
 
+
     public SetActiveGroup$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.SET_ACTIVE_GROUP),

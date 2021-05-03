@@ -25,8 +25,14 @@
                             </ng-container>
                         </div>
                     </div>
+                    <div class="form-group" *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && showGstComposition">
+                        <input type="checkbox" name="irnCheckbox" [(ngModel)]="customTemplate.sections['header'].data['showIrnNumber'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show IRN number
+                    </div>
                     <div class="form-group" *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
-                        <input type="checkbox" name="companyWarehouseAddressCheckbox" [(ngModel)]="customTemplate.sections['header'].data['warehouseAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company/Warehouse Address
+                        <input type="checkbox" name="companyAddressCheckbox" [(ngModel)]="customTemplate.sections['header'].data['showCompanyAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Address
+                    </div>
+                    <div class="form-group" *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
+                        <input type="checkbox" name="warehouseAddressCheckbox" [(ngModel)]="customTemplate.sections['header'].data['warehouseAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Warehouse Address
                     </div>
                     <div *ngIf="fieldsAndVisibility.header.gstin && customTemplate?.templateType !== 'gst_template_e'" class="form-group">
                         <input type="checkbox" name="gstinCheckbox" [(ngModel)]="customTemplate.sections['header'].data['gstin'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> GSTIN
@@ -62,6 +68,9 @@
                                 </ng-container>
                             </div>
                         </div>
+                        <div *ngIf="showGstComposition && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="form-group">
+                            <input type="checkbox" name="showQrCodeCheckbox" [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show QR code
+                        </div>
                     </div>
                     <!--   .....this is for other voucher type -->
                     <ng-container *ngIf="voucherType!='sales'">
@@ -84,6 +93,9 @@
                                     <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['voucherNumber'].label.length)}}</span>
                                 </ng-container>
                             </div>
+                        </div>
+                        <div *ngIf="showGstComposition && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="form-group">
+                            <input type="checkbox" name="showQrCodeCheckbox" [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show QR code
                         </div>
                     </ng-container>
                     <div *ngIf="fieldsAndVisibility.header.dueDate" class="form-group">
@@ -698,16 +710,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="clearfix mr-t1" *ngIf="customTemplate?.type === 'invoice'">
+                    <div class="clearfix mr-t1 form-group" *ngIf="customTemplate?.type === 'invoice'">
                         <div>
                             <input type="checkbox" name="showNotesAtLastPage" [checked]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display" [(ngModel)]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show notes at the last page
                         </div>
                     </div>
-                    <div class="clearfix mr-t1">
+                    <div class="clearfix mr-t1 form-group">
                         <div *ngIf="fieldsAndVisibility.footer.message1">
                             <input type="checkbox" name="msg1" [(ngModel)]="customTemplate.sections['footer'].data['message1'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Note 1
                         </div>
-                        <div *ngIf="fieldsAndVisibility.footer.message1" class="form-group ml-3 clearfix">
+                        <div *ngIf="fieldsAndVisibility.footer.message1" class="form-group ml-3 mb-0 clearfix">
                             <div class="row">
                                 <div class="col-12">
                                     <!-- No limit on characters in Notes 1 & 2 if user has opted to show notes at last page -->
@@ -719,14 +731,14 @@
                             </div>
                         </div>
                     </div>
-                <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="clearfix mr-t1">
+                <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="clearfix mr-t1 form-group">
                     <div>
                         <input [checked]="customTemplate.sections.footer.data.showMessage2?.display"
                             [(ngModel)]="customTemplate.sections['footer'].data['showMessage2'].display" type="checkbox" name="message2"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Note 2
                     </div>
                 </div>
-                <div *ngIf="fieldsAndVisibility.footer.thanks" class="clearfix mr-t1">
+                <div *ngIf="fieldsAndVisibility.footer.thanks" class="clearfix mr-t2">
                     <div class="mb-0 form-group thanks-input-group">
                         <input type="checkbox" name="ty" [(ngModel)]="customTemplate.sections['footer'].data['thanks'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
                         <input type="text" [class.error-box]="contentForm?.controls['thanks']?.errors?.maxlength" class="form-control thanks-input-inline" hasFocus #thanks="hasFocus" [disabled]="!fieldsAndVisibility.footer.thanks?.display" (keyup)='onFieldChange(null, null, null)' [(ngModel)]="customTemplate.sections['footer'].data['thanks'].label" placeholder="Thank You for your business"
@@ -734,6 +746,16 @@
                     </div>
                     <div class="form-group ml-3 clearfix" *ngIf="thanks?.isFocused || contentForm?.controls['thanks']?.errors?.maxlength">
                         <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(30 - customTemplate.sections['footer'].data['thanks'].label.length)}}</span>
+                    </div>
+                </div>
+                <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="clearfix mr-t1 form-group">
+                    <input type="checkbox" name="textUnderSloganCheckbox" [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Text under Image Signature / Slogan
+                    <div class="mb-0 form-group ml-3">
+                        <input type="text" [class.error-box]="contentForm?.controls['textUnderSlogan']?.errors?.maxlength" class="form-control" hasFocus #textUnderSlogan="hasFocus" [disabled]="!fieldsAndVisibility.footer.textUnderSlogan?.display" (keyup)='onFieldChange(null, null, null)' [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].label" placeholder="Text under slogan"
+                            maxlength="30" name="textUnderSlogan"/>
+                    </div>
+                    <div class="form-group ml-3 clearfix" *ngIf="textUnderSlogan?.isFocused || contentForm?.controls['textUnderSlogan']?.errors?.maxlength">
+                        <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(30 - customTemplate.sections['footer'].data['textUnderSlogan'].label.length)}}</span>
                     </div>
                 </div>
                     <!-- <div *ngIf="fieldsAndVisibility.footer.slogan" class="clearfix">
@@ -775,6 +797,8 @@
                                         <span><b>Uploading...</b></span>
                                 </label>
                                 </span>
+                                <button *ngIf="signatureImgAttached" (click)="removeFile()" type="button" class="mt-2 start-upload-btn btn btn-danger"
+                                    tooltip="Clicking on this, will delete image from server">Delete</button>
                             </div>
                         </div>
                         <div class="clearfix" class="col-lg-6 col-md-12">

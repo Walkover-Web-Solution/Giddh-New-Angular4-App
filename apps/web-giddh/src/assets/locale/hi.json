@@ -500,5 +500,7 @@
     "app_company_currency": "Company Currency:",
     "app_tag": "Tag",
     "app_select_date": "Select Date",
-    "app_bulk_export": "Bulk Export"
+    "app_bulk_export": "Bulk Export",
+    "app_pin_code": "PIN Code",
+    "app_enter_pin_code": "पिन कोड दर्ज करें"
 }

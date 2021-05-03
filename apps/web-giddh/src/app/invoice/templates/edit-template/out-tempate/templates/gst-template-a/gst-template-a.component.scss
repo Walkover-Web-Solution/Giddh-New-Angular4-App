@@ -73,7 +73,6 @@ p {
     box-sizing: border-box;
     font-size: 12px;
     margin: 0 auto;
-    overflow: hidden;
     padding: 0.1in;
     letter-spacing: 0;
     width: 100%;
@@ -191,6 +190,11 @@ header img {
     font-weight: bold;
 }
 
+#default .table-item{
+    overflow-x: scroll;
+    width: 100%;
+}
+
 .text-right {
     text-align: right;
 }
@@ -199,6 +203,9 @@ header img {
     text-align: left;
 }
 
+.word-break{
+    word-break: break-word;
+}
 /* table items */
 
 #default table.item {
@@ -400,6 +407,14 @@ header img {
     z-index: 0;
 }
 
+#default header .qr-image img { 
+    width: 160px;
+    height: 100%;
+    float: right !important;
+    margin-bottom: 0px !important;
+    max-width: 100% !important;
+}
+
 .docTitle hr {
     position: absolute;
     height: 2px;
@@ -410,6 +425,15 @@ header img {
 
 strong {
     font-weight: bold;
+}
+
+.invoice-head{
+    width: 50%;
+    word-break: break-word;
+}
+
+.width-40{
+    width: 40%;
 }
 
 /* common template css  */

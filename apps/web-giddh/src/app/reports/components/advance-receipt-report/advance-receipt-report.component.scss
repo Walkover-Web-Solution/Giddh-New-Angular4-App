@@ -138,6 +138,26 @@
 .entity-dropdown {
     width: 200px;
 }
+@media screen and (max-width:1199px) {
+    .invoice-footer {
+        h1{
+            font-size: 18px;
+        }
+        h3{
+            margin-right: 0;
+            margin-bottom: 3px;
+        }
+    }
+    .total-due-sale {
+        margin-bottom: 15px !important;
+    }
+    .clear-filter{
+        margin-left: 15px;
+    }
+    .reverse-table-report{
+        margin-bottom: 100px;
+    }
+}
 @media(max-width:991px){
     .total-due-sale{
         &:nth-child(1),
@@ -160,15 +180,25 @@
         position: relative;
         margin-top: 10px;
         margin-left: 0;
-    }
-    .total-due-sale {
-        margin-bottom: 15px;
+        left: 0;
+        .total-due-sale-wrap{
+            padding-left: 0 !important;
+            .total-due-sale{
+                margin-bottom: 15px;
+            }
+        }
     }
     .total-due-sale:last-child {
         margin-bottom: 0px;
     }
     .entry-date {
         padding: 5px 10px 5px 50% !important;
+    }
+    .input-grp-date-range-picker{
+        flex-direction: column;
+        .clear-filter{
+            margin-left: 0;
+        }
     }
 }
 @media(max-width:575px){
@@ -207,6 +237,7 @@
         }
         .clear-filter{
             justify-content: end !important;
+            margin-left: 0;
         }
     }
 

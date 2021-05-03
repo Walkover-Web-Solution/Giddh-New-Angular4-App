@@ -204,6 +204,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     };
     /** Stores the active account group */
     public activeAccountGroup: IOption[] | INameUniqueName[] = [];
+    /** This holds account country name */
+    public accountCountryName: string = "";
 
     constructor(
         private _fb: FormBuilder,
@@ -325,6 +327,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this.addAccountForm.get('currency').patchValue(this.selectedCurrency);
                 }
                 if (accountDetails.country) {
+                    this.accountCountryName = acc?.country?.countryCode + " - " + acc?.country?.countryName;
                     if (accountDetails.country.countryCode) {
                         this.getStates(accountDetails.country.countryCode, accountDetails.currency);
                         this.getOnboardingForm(accountDetails.country.countryCode);
@@ -627,7 +630,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             stateCode: [{ value: '', disabled: false }, (this.isStateRequired) ? Validators.required : ""],
             isDefault: [false],
             isComposite: [false],
-            partyType: ['NOT APPLICABLE']
+            partyType: ['NOT APPLICABLE'],
+            pincode: ['']
         });
 
         if (val) {
@@ -919,6 +923,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public selectCountry(event: IOption) {
         if (event) {
+            this.accountCountryName = event.label;
             this.addAccountForm.get('accountBankDetails').reset();
             this.store.dispatch(this._generalActions.resetStatesList());
             this.store.dispatch(this.commonActions.resetOnboardingForm());

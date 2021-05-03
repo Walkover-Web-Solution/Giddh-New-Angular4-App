@@ -113,7 +113,7 @@
                 <!-- Invoice E-way bill, export to excel for a single selected item along with
                     New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
                 <div class="row">
-                    <div class="col-12 d-flex w-100 align-items-center pt-1 pb-1">
+                    <div class="col-12 d-flex w-100 align-items-center pt-3 pb-2">
                         <div class="export-button-wrap">
                             <button class="btn btn-primary" [disabled]="((selectedInvoices && selectedInvoices.length > 0) ? selectedInvoices.length : voucherData && voucherData.totalItems) === 0"  (click)="openModal(bulkExport)">{{commonLocaleData?.app_export}}</button>
                         </div>
@@ -328,7 +328,7 @@
                 title: commonLocaleData?.app_customer}"></ng-container>
                             </th>
 
-                            <th>
+                            <th width="10%">
                                 <div class="d-flex">
                                     <div class="">{{commonLocaleData?.app_date}}</div>
                                     <div class="icon-pointer">
@@ -467,7 +467,7 @@
                                                 class="dropdown-menu dropdown-menu-right width-150" role="menu"
                                                 aria-labelledby="edit-model-basic">
                                                 <ul class="select-action-dropdown">
-                                                    <li (click)="onPerformAction(item, 'paid') & toggleItem(item, false)">
+                                                    <li (click)="onPerformAction(item, 'paid')">
                                                         <a class="cp" href="javascript:void(0)">{{commonLocaleData?.app_payment_status?.paid}}</a>
                                                     </li>
                                                     <li *ngIf="selectedVoucher === 'sales'"
@@ -481,7 +481,7 @@
                                                         <a class="cp" href="javascript:void(0)">{{commonLocaleData?.app_payment_status?.hold}}</a>
                                                     </li>
                                                     <li (click)="onPerformAction(item, 'cancel')">
-                                                        <a class="cp" href="javascript:void(0)" >{{commonLocaleData?.app_payment_status?.cancel}}</a>
+                                                        <a class="cp" href="javascript:void(0)">{{commonLocaleData?.app_payment_status?.cancel}}</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -548,7 +548,7 @@
                             </td>
 
                             <!-- open account details on double click on customer name -->
-                            <td [attr.data-title]="commonLocaleData?.app_customer" (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
+                            <td width="25%" [attr.data-title]="commonLocaleData?.app_customer" (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
                                 (clickOutside)="modalUniqueName = ''">
                                 <!-- Customer -->
                                 {{item?.account?.customerName || item?.account?.name}}
