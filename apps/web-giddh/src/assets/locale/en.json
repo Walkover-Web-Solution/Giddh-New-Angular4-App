@@ -505,5 +505,9 @@
     "app_select_date": "Select Date",
     "app_bulk_export": "Bulk Export",
     "app_pin_code": "PIN Code",
-    "app_enter_pin_code": "Enter PIN Code"
+    "app_enter_pin_code": "Enter PIN Code",
+    "app_cmd_g": "Cmd + G",
+    "app_esc": "esc",
+    "app_escape": "Escape",
+    "app_master": "Master"
 }
