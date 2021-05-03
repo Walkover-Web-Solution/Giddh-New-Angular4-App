@@ -129,8 +129,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public companyCustomFields: any[] = [];
     /** Observable for selected active group  */
     private activeGroup$: Observable<any>;
-    /** This will handle if we need to disable currency selection */
-    public disableCurrencySelection: boolean = false;
     /** This will hold active parent group */
     public activeParentGroup: string = "";
 
@@ -712,10 +710,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.getOnboardingForm(event.value);
             let phoneCode = event.additional;
             this.addAccountForm.get('mobileCode').setValue(phoneCode);
-            if(!this.disableCurrencyIfSundryCreditor()) {
-                let currencyCode = this.countryCurrency[event.value];
-                this.addAccountForm.get('currency').setValue(currencyCode);
-            }
+            let currencyCode = this.countryCurrency[event.value];
+            this.addAccountForm.get('currency').setValue(currencyCode);
             this.getStates(event.value);
             this.toggleStateRequired();
             this.resetGstStateForm();
@@ -1134,32 +1130,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public selectedBooleanCustomField(isChecked: string, index: number): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
         customField.controls[index].get('value').setValue(isChecked);
-    }
-
-    /**
-     * This will disable currency field if selected group or parent group is sundry creditor
-     *
-     * @param {string} [groupName]
-     * @memberof AccountAddNewDetailsComponent
-     */
-    public get disableCurrency(): boolean {
-        return this.disableCurrencyIfSundryCreditor();
-    }
-
-    /**
-     * This will disable currency field if selected group or parent group is sundry creditor
-     *
-     * @returns {boolean}
-     * @memberof AccountAddNewDetailsComponent
-     */
-    public disableCurrencyIfSundryCreditor(): boolean {
-        let groupName = (this.addAccountForm && this.addAccountForm.get('activeGroupUniqueName')) ? this.addAccountForm.get('activeGroupUniqueName').value : "";
-        if(groupName === "sundrycreditors" || this.activeParentGroup === "sundrycreditors") {
-            this.addAccountForm.get('currency').setValue(this.companyCurrency);
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**
