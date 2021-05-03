@@ -38,10 +38,12 @@ export class InprogressComponent implements OnInit, OnDestroy {
         type: ''
     };
     public paginationRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
-    /** Subject to release subscription memory */
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if api call in progress */
     public isLoading: boolean = false;
 

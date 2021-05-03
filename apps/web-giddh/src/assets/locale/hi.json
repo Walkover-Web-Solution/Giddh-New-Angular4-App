@@ -517,5 +517,8 @@
         "f9": "F9"
     },
     "app_optional": "Optional",
-    "app_success": "Success"
+    "app_success": "Success",
+    "app_first": "प्रथम",
+    "app_last": "अंतिम",
+    "app_previous": "पिछला"
 }

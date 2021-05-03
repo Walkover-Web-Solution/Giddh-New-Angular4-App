@@ -152,7 +152,7 @@
             <div class="pagination-wrapper" [hidden]="isLoading" *ngIf="reverseChargeReportResults.totalPages > 1">
                 <pagination [totalItems]="reverseChargeReportResults.totalItems"
                     [(ngModel)]="reverseChargeReportResults.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true"
-                    [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                    [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
             </div>
         </div>
         <div class="mt-5 invoice-footer">
