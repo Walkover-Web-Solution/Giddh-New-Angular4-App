@@ -99,13 +99,15 @@
     <ng-container *ngIf="showTaxes">
         <div class="col-xs-12 col-sm-12">
 
-            <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
-                <div class="tax-label">
+            <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax($event)">
+                <div class="tax-label" >
                     <label>{{localeData?.all_applicable_taxes_label}}</label>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="localeData?.all_applicable_taxes_placeholder" (selected)="taxesSelected($event);" [options]="companyTaxDropDown" [multiple]="true">
+                        <sh-select formControlName="taxes" class="all-taxes" 
+                        [placeholder]="localeData?.all_applicable_taxes_placeholder" 
+                        (selected)="taxesSelected($event);" [options]="companyTaxDropDown" [multiple]="true">
                         </sh-select>
                         <span class="input-group-btn pd-l2"> <button type="submit" [disabled]="(isTaxesSaveDisable$ | async)"
                                 class="btn btn-success">{{commonLocaleData?.app_save}}</button></span>

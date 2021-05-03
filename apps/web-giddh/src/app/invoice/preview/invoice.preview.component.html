@@ -467,7 +467,7 @@
                                                 class="dropdown-menu dropdown-menu-right width-150" role="menu"
                                                 aria-labelledby="edit-model-basic">
                                                 <ul class="select-action-dropdown">
-                                                    <li (click)="onPerformAction(item, 'paid')">
+                                                    <li (click)="onPerformAction(item, 'paid') & toggleItem(item, false)">
                                                         <a class="cp" href="javascript:void(0)">{{commonLocaleData?.app_payment_status?.paid}}</a>
                                                     </li>
                                                     <li *ngIf="selectedVoucher === 'sales'"
@@ -481,7 +481,7 @@
                                                         <a class="cp" href="javascript:void(0)">{{commonLocaleData?.app_payment_status?.hold}}</a>
                                                     </li>
                                                     <li (click)="onPerformAction(item, 'cancel')">
-                                                        <a class="cp" href="javascript:void(0)">{{commonLocaleData?.app_payment_status?.cancel}}</a>
+                                                        <a class="cp" href="javascript:void(0)" >{{commonLocaleData?.app_payment_status?.cancel}}</a>
                                                     </li>
                                                 </ul>
                                             </div>
