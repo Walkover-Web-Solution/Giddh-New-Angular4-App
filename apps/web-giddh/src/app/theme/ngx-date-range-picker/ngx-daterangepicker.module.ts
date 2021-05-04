@@ -8,7 +8,7 @@ import { LOCALE_CONFIG, LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { TranslateDirective } from '../translate/translate.directive';
+import { TranslateDirectiveModule } from '../translate/translate.directive.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: false,
@@ -18,8 +18,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @NgModule({
     declarations: [
         NgxDaterangepickerComponent,
-        NgxDaterangepickerDirective,
-        TranslateDirective
+        NgxDaterangepickerDirective
     ],
     imports: [
         CommonModule,
@@ -27,7 +26,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ReactiveFormsModule,
         NgxMaskModule.forRoot(),
         PerfectScrollbarModule,
-        ModalModule
+        ModalModule,
+        TranslateDirectiveModule
     ],
     providers: [{
         provide: PERFECT_SCROLLBAR_CONFIG,
