@@ -264,8 +264,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public reverseExchangeRate: number;
     /** Holds the original reverse exchange rate */
     public originalReverseExchangeRate: number;
-    /** Stores the company currency name for exchange rate switcher */
-    public companyCurrencyName: string;
     /** Stores the account currency name for exchange rate switcher */
     public customerCurrencyCode: string;
     /* This will hold entries list before applying tax */
@@ -709,7 +707,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             this.isMulticurrencyAccount = accountDetails.currency !== this.companyCurrency;
             if (this.isMulticurrencyAccount) {
                 this.customerCurrencyCode = accountDetails.currency;
-                this.companyCurrencyName = accountDetails.currency;
                 this.getCurrencyRate(this.companyCurrency, accountDetails.currency,
                     moment(this.purchaseOrder.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
             } else {
@@ -3568,12 +3565,12 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     /**
      * Fetches the currency exchange rate between two countries
      *
-     * @param {*} to Converted to currency symbol
-     * @param {*} from Converted from currency symbol
+     * @param {string} to Converted to currency symbol
+     * @param {string} from Converted from currency symbol
      * @param {string} [date=moment().format(GIDDH_DATE_FORMAT)] Date on which currency rate is required, default is today's date
      * @memberof CreatePurchaseOrderComponent
      */
-     public getCurrencyRate(to, from, date = moment().format(GIDDH_DATE_FORMAT)): void {
+     public getCurrencyRate(to: string, from: string, date = moment().format(GIDDH_DATE_FORMAT)): void {
         if (from && to) {
             this.ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
@@ -3614,10 +3611,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     /**
      * Switch currency handler
      *
-     * @param {*} switchCurr True, if currency exchange should be reversed
+     * @param {boolean} switchCurr True, if currency exchange should be reversed
      * @memberof CreatePurchaseOrderComponent
      */
-    public switchCurrencyImg(switchCurr): void {
+    public switchCurrencyImg(switchCurr: boolean): void {
         this.showSwitchedCurr = switchCurr;
         if (switchCurr) {
             this.reverseExchangeRate = this.exchangeRate ? 1 / this.exchangeRate : 0;
@@ -3631,10 +3628,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     /**
      * Saves the edited exchange rate
      *
-     * @param {*} toSave True, if need to save the updated rate
+     * @param {boolean} toSave True, if need to save the updated rate
      * @memberof CreatePurchaseOrderComponent
      */
-    public saveCancelExcRate(toSave): void {
+    public saveCancelExcRate(toSave: boolean): void {
         if (toSave) {
             if (this.showSwitchedCurr) {
                 this.exchangeRate = this.reverseExchangeRate ? 1 / this.reverseExchangeRate : 0;
