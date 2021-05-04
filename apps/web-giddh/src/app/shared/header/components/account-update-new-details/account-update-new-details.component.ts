@@ -316,13 +316,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     accountDetails.customFields = [];
                 }
 
-                this.addAccountForm.patchValue(accountDetails);
+                this.addAccountForm?.patchValue(accountDetails);
                 if (accountDetails.currency) {
                     this.selectedCurrency = accountDetails.currency;
-                    this.addAccountForm.get('currency').patchValue(this.selectedCurrency);
+                    this.addAccountForm.get('currency')?.patchValue(this.selectedCurrency);
                 } else {
                     this.selectedCurrency = this.companyCurrency;
-                    this.addAccountForm.get('currency').patchValue(this.selectedCurrency);
+                    this.addAccountForm.get('currency')?.patchValue(this.selectedCurrency);
                 }
                 if (accountDetails.country) {
                     if (accountDetails.country.countryCode) {
@@ -356,24 +356,24 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
                 // hsn/sac enable disable
                 if (acc.hsnNumber) {
-                    this.addAccountForm.get('hsnOrSac').patchValue('hsn');
+                    this.addAccountForm.get('hsnOrSac')?.patchValue('hsn');
                 } else if (acc.sacNumber) {
-                    this.addAccountForm.get('hsnOrSac').patchValue('sac');
+                    this.addAccountForm.get('hsnOrSac')?.patchValue('sac');
                 }
                 this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
-                this.addAccountForm.patchValue(accountDetails);
+                this.addAccountForm?.patchValue(accountDetails);
                 if (accountDetails.mobileNo) {
                     if (accountDetails.mobileNo.indexOf('-') > -1) {
                         let mobileArray = accountDetails.mobileNo.split('-');
-                        this.addAccountForm.get('mobileCode').patchValue(mobileArray[0]);
-                        this.addAccountForm.get('mobileNo').patchValue(mobileArray[1]);
+                        this.addAccountForm.get('mobileCode')?.patchValue(mobileArray[0]);
+                        this.addAccountForm.get('mobileNo')?.patchValue(mobileArray[1]);
                     } else {
-                        this.addAccountForm.get('mobileNo').patchValue(accountDetails.mobileNo);
-                        this.addAccountForm.get('mobileCode').patchValue(accountDetails.mobileCode);
+                        this.addAccountForm.get('mobileNo')?.patchValue(accountDetails.mobileNo);
+                        this.addAccountForm.get('mobileCode')?.patchValue(accountDetails.mobileCode);
                     }
                 } else {
-                    this.addAccountForm.get('mobileNo').patchValue('');
-                    this.addAccountForm.get('mobileCode').patchValue(this.selectedAccountCallingCode);  // if mobile no null then country calling cade will assign
+                    this.addAccountForm.get('mobileNo')?.patchValue('');
+                    this.addAccountForm.get('mobileCode')?.patchValue(this.selectedAccountCallingCode);  // if mobile no null then country calling cade will assign
                 }
 
                 this.toggleStateRequired();
@@ -395,9 +395,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
         this.addAccountForm.get('openingBalance').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
-                this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
+                this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
-                this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
+                this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
             }
         });
 
@@ -417,15 +417,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         //     this.isAccountNameAvailable$.subscribe(a => {
         //       if (a !== null && a !== undefined) {
         //         if (a) {
-        //           this.addAccountForm.patchValue({ uniqueName: val });
+        //           this.addAccountForm?.patchValue({ uniqueName: val });
         //         } else {
         //           let num = 1;
-        //           this.addAccountForm.patchValue({ uniqueName: val + num });
+        //           this.addAccountForm?.patchValue({ uniqueName: val + num });
         //         }
         //       }
         //     });
         //   } else {
-        //     this.addAccountForm.patchValue({ uniqueName: '' });
+        //     this.addAccountForm?.patchValue({ uniqueName: '' });
         //   }
         // });
 
@@ -639,7 +639,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         if (val) {
             val.stateCode = val.state ? (val.state.code ? val.state.code : val.stateCode) : val.stateCode;
-            gstFields.patchValue(val);
+            gstFields?.patchValue(val);
         }
         return gstFields;
     }
@@ -649,8 +649,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
-            control.get('stateCode').patchValue(null);
-            control.get('state').get('code').patchValue(null);
+            control.get('stateCode')?.patchValue(null);
+            control.get('state').get('code')?.patchValue(null);
             control.get('gstNumber').setValue("");
         }
     }
@@ -658,12 +658,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public resetBankDetailsForm() {
         let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
         for (let control of accountBankDetails.controls) {
-            control.get('bankName').patchValue(null);
-            control.get('bankAccountNo').patchValue(null);
-            control.get('beneficiaryName').patchValue(null);
-            control.get('branchName').patchValue(null);
-            control.get('swiftCode').patchValue(null);
-            control.get('ifsc').patchValue("");
+            control.get('bankName')?.patchValue(null);
+            control.get('bankAccountNo')?.patchValue(null);
+            control.get('beneficiaryName')?.patchValue(null);
+            control.get('branchName')?.patchValue(null);
+            control.get('swiftCode')?.patchValue(null);
+            control.get('ifsc')?.patchValue("");
         }
     }
 
@@ -706,9 +706,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (val) {
             let addresses = this.addAccountForm.get('addresses') as FormArray;
             for (let control of addresses.controls) {
-                control.get('isDefault').patchValue(false);
+                control.get('isDefault')?.patchValue(false);
             }
-            addresses.controls[i].get('isDefault').patchValue(true);
+            addresses.controls[i].get('isDefault')?.patchValue(true);
         }
     }
 
@@ -726,15 +726,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
                     let currentState = state.find(st => st.value === stateCode);
                     if (currentState) {
-                        gstForm.get('stateCode').patchValue(currentState.value);
-                        gstForm.get('state').get('code').patchValue(currentState.value);
+                        gstForm.get('stateCode')?.patchValue(currentState.value);
+                        gstForm.get('state').get('code')?.patchValue(currentState.value);
 
                     } else {
                         this._toaster.clearAllToaster();
                         if (this.formFields['taxName'] && !gstForm.get('gstNumber')?.valid) {
                             if (this.isIndia) {
-                                gstForm.get('stateCode').patchValue(null);
-                                gstForm.get('state').get('code').patchValue(null);
+                                gstForm.get('stateCode')?.patchValue(null);
+                                gstForm.get('state').get('code')?.patchValue(null);
                             }
 
                             let invalidTaxName = this.commonLocaleData?.app_invalid_tax_name;
@@ -748,8 +748,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             //     if (this.isIndia) {
             //         statesEle.forceClearReactive.status = true;
             //         statesEle.clear();
-            //         gstForm.get('stateCode').patchValue(null);
-            //         gstForm.get('state').get('code').patchValue(null);
+            //         gstForm.get('stateCode')?.patchValue(null);
+            //         gstForm.get('state').get('code')?.patchValue(null);
             //     }
             // }
         }
@@ -763,7 +763,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public openingBalanceTypeChnaged(type: string) {
         if (Number(this.addAccountForm.get('openingBalance').value) > 0) {
-            this.addAccountForm.get('openingBalanceType').patchValue(type);
+            this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
     }
 
@@ -810,7 +810,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addAccountForm.get('openingBalance').setValue('0');
         }
         if (!this.addAccountForm.get('foreignOpeningBalance').value) {
-            this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
+            this.addAccountForm.get('foreignOpeningBalance')?.patchValue('0');
         }
         if (this.showBankDetail) {
             const bankDetails = _.cloneDeep(this.addAccountForm.get('accountBankDetails')?.value);
@@ -890,7 +890,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         if (!accountRequest.currency) {
             this.selectedCurrency = this.companyCurrency;
-            this.addAccountForm.get('currency').patchValue(this.selectedCurrency, { onlySelf: true });
+            this.addAccountForm.get('currency')?.patchValue(this.selectedCurrency, { onlySelf: true });
             accountRequest.currency = this.selectedCurrency;
         }
 
@@ -905,7 +905,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public closingBalanceTypeChanged(type: string) {
         if (Number(this.addAccountForm.get('closingBalanceTriggerAmount').value) > 0) {
-            this.addAccountForm.get('closingBalanceTriggerAmountType').patchValue(type);
+            this.addAccountForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
     }
 
@@ -947,8 +947,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public selectedState(gstForm: FormGroup, event) {
         if (gstForm && event.label) {
-            gstForm.get('stateCode').patchValue(event.value);
-            gstForm.get('state').get('code').patchValue(event.value);
+            gstForm.get('stateCode')?.patchValue(event.value);
+            gstForm.get('state').get('code')?.patchValue(event.value);
 
         }
 
@@ -1102,14 +1102,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         this.selectedCountryCurrency = res.country.currency.code;
                         this.selectedAccountCallingCode = res.country.callingCode;
                         if(selectedAcountCurrency && !this.disableCurrencyIfSundryCreditor()) {
-                            this.addAccountForm.get('currency').patchValue(selectedAcountCurrency);
+                            this.addAccountForm.get('currency')?.patchValue(selectedAcountCurrency);
                             this.selectedCurrency = selectedAcountCurrency;
                         } else if(!this.disableCurrencyIfSundryCreditor()) {
-                            this.addAccountForm.get('currency').patchValue(this.selectedCountryCurrency);
+                            this.addAccountForm.get('currency')?.patchValue(this.selectedCountryCurrency);
                             this.selectedCurrency = this.selectedCountryCurrency;
                         }
                         if (!this.addAccountForm.get('mobileCode').value) {
-                            this.addAccountForm.get('mobileCode').patchValue(this.selectedAccountCallingCode);
+                            this.addAccountForm.get('mobileCode')?.patchValue(this.selectedAccountCallingCode);
                         }
                     }
                 }
@@ -1384,9 +1384,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetail.controls) {
                 if (type === 'bankAccountNo') {
-                    control.get('bankAccountNo').patchValue(trim);
+                    control.get('bankAccountNo')?.patchValue(trim);
                 } else if (type === 'swiftCode') {
-                    control.get('swiftCode').patchValue(trim);
+                    control.get('swiftCode')?.patchValue(trim);
                 }
             }
         }
@@ -1525,7 +1525,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             value: [''],
         });
         if (value) {
-            customFields.patchValue(value);
+            customFields?.patchValue(value);
         }
         return customFields;
     }
