@@ -426,8 +426,7 @@
 
                                     <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page"
                                         [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20"
-                                        [rotate]="false" previousText="&#9668;" nextText="&#9658;"
-                                        (pageChanged)="pageChanged($event)"></pagination>
+                                        [rotate]="false" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
                                 </div>
                             </td>
                         </tr>

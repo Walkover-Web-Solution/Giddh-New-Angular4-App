@@ -167,37 +167,49 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
 
 export const GIDDH_DATE_RANGE_PICKER_RANGES = [
     {
-        name: DatePickerDefaultRangeEnum.ThisMonth, value: [moment().startOf('month'), moment().endOf('month')]
+        name: DatePickerDefaultRangeEnum.ThisMonth,
+        value: [moment().startOf('month'), moment().endOf('month')],
+        key: "ThisMonth"
     },
     {
-        name: DatePickerDefaultRangeEnum.LastMonth, value: [
+        name: DatePickerDefaultRangeEnum.LastMonth, 
+        value: [
             moment().subtract(1, 'month').startOf('month'),
             moment().subtract(1, 'month').endOf('month')
-        ]
+        ],
+        key: "LastMonth"
     },
     {
-        name: DatePickerDefaultRangeEnum.ThisQuarterToDate, value: [
+        name: DatePickerDefaultRangeEnum.ThisQuarterToDate, 
+        value: [
             moment().quarter(moment().quarter()).startOf('quarter'),
             moment()
-        ]
+        ],
+        key: "ThisQuarterToDate"
     },
     {
-        name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate, value: [
+        name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate, 
+        value: [
             moment().startOf('year').subtract(9, 'year'),
             moment()
-        ]
+        ],
+        key: "ThisFinancialYearToDate"
     },
     {
-        name: DatePickerDefaultRangeEnum.LastQuarter, value: [
+        name: DatePickerDefaultRangeEnum.LastQuarter, 
+        value: [
             moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
             moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-        ]
+        ],
+        key: "LastQuarter"
     },
     {
-        name: DatePickerDefaultRangeEnum.AllTime, value: [
+        name: DatePickerDefaultRangeEnum.AllTime, 
+        value: [
             moment().startOf('year').subtract(10, 'year'),
             moment()
-        ]
+        ],
+        key: "AllTime"
     }
 ];
 

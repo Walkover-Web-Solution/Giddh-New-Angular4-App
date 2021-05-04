@@ -505,5 +505,45 @@
     "app_select_date": "Select Date",
     "app_bulk_export": "Bulk Export",
     "app_pin_code": "PIN Code",
-    "app_enter_pin_code": "Enter PIN Code"
+    "app_enter_pin_code": "Enter PIN Code",
+    "app_cmd_g": "Cmd + G",
+    "app_esc": "esc",
+    "app_escape": "Escape",
+    "app_master": "Master",
+    "app_type_filter": "Type to filter",
+    "app_keys": {
+        "f4": "F4",
+        "f5": "F5",
+        "f6": "F6",
+        "f7": "F7",
+        "f8": "F8",
+        "f9": "F9"
+    },
+    "app_optional": "Optional",
+    "app_success": "Success",
+    "app_first": "First",
+    "app_last": "Last",
+    "app_previous": "Previous",
+    "app_ok": "Ok",
+    "app_datepicker": {
+        "select_financial_year": "Select Financial Year",
+        "days_upto_today": "days up to today",
+        "cancel": "Cancel",
+        "done": "Done",
+        "am": "AM",
+        "pm": "PM",
+        "enter_dmy": "Enter a day, month and year",
+        "invalid_date": "Invalid date",
+        "date_error": "Start date must not be greater than End date",
+        "ranges": {
+            "ThisMonth": "This Month",
+            "LastMonth": "Last Month",
+            "ThisQuarterToDate": "This Quarter to Date",
+            "ThisFinancialYearToDate": "This Financial Year to Date",
+            "LastQuarter": "Last Quarter",
+            "AllTime": "All Time"
+        },
+        "weekdays": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+        "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    }
 }
