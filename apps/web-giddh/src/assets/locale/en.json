@@ -523,5 +523,27 @@
     "app_success": "Success",
     "app_first": "First",
     "app_last": "Last",
-    "app_previous": "Previous"
+    "app_previous": "Previous",
+    "app_ok": "Ok",
+    "app_datepicker": {
+        "select_financial_year": "Select Financial Year",
+        "days_upto_today": "days up to today",
+        "cancel": "Cancel",
+        "done": "Done",
+        "am": "AM",
+        "pm": "PM",
+        "enter_dmy": "Enter a day, month and year",
+        "invalid_date": "Invalid date",
+        "date_error": "Start date must not be greater than End date",
+        "ranges": {
+            "ThisMonth": "This Month",
+            "LastMonth": "Last Month",
+            "ThisQuarterToDate": "This Quarter to Date",
+            "ThisFinancialYearToDate": "This Financial Year to Date",
+            "LastQuarter": "Last Quarter",
+            "AllTime": "All Time"
+        },
+        "weekdays": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+        "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    }
 }
