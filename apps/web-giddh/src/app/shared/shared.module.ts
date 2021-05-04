@@ -91,8 +91,9 @@ import { AmountFieldComponent } from './amount-field/amount-field.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TranslateDirective } from '../theme/translate/translate.directive';
 import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.component';
-
 import { ScheduleNowComponent } from './schedule-now/schedule-now.component';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
 
@@ -183,8 +184,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         PurchaseSendEmailModalComponent,
         HamburgerMenuComponent,
         GiddhDaterangepickerComponent,
-        AmountFieldComponent,
-        TranslateDirective,
         GiddhPageLoaderComponent,
         AmountFieldComponent,
         ScheduleNowComponent,
@@ -230,7 +229,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatFormFieldModule,
         MatNativeDateModule,
         MatInputModule,
-        CurrencyModule
+        CurrencyModule,
+        TranslateDirectiveModule
     ],
     exports: [
         CommonModule,
@@ -283,12 +283,12 @@ export class PickDateAdapter extends NativeDateAdapter {
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
         HamburgerMenuComponent,
+        GiddhPageLoaderComponent,
         AmountFieldComponent,
         CurrencyModule,
-        TranslateDirective,
+        PrimarySidebarComponent,
         ScheduleNowComponent,
-        GiddhPageLoaderComponent,
-        PrimarySidebarComponent
+        TranslateDirectiveModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
