@@ -1117,9 +1117,13 @@ ul.change-address-dropdown{
         font-size: 11px;
     }
 }
-
 .item-discount , .item-tax, .delete-btn-absolute {
     height: 1px;
+}
+.left-currency, .right-currency {
+   .currency-digits {
+        display: inline-block;
+    }
 }
 
 /* responsive */
