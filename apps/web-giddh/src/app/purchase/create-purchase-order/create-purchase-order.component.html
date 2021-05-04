@@ -478,7 +478,7 @@
         <section *ngIf="!isMobileScreen"
             class="static-purchase-table create-purchase-order-table clearfix mb-2 bg-white container-fluid">
             <div class="switch-currency" *ngIf="isMulticurrencyAccount && !showSwitchedCurr">
-                <span class="left-currency">{{commonLocaleData?.app_numbers?.one}} {{companyCurrencyName}}</span>
+                <span class="left-currency">{{commonLocaleData?.app_numbers?.one}} {{customerCurrencyCode}}</span>
                 <img class="switch-icon" src="assets/images/switch-icon.svg" alt="switch-icon"
                     (click)="switchCurrencyImg(true)">
                 <span class="right-currency">
@@ -493,7 +493,7 @@
                 <span class="edit-icon cp">
                     <img src="assets/images/edit-pencilicon.svg" class="edit-pencil" *ngIf="!autoSaveIcon"
                         (click)="showCurrencyValue = !showCurrencyValue ; autoSaveIcon = !autoSaveIcon; exchangeRate = originalExchangeRate">
-                    <img src=" assets/images/autosave.svg" class="edit-pencil"
+                    <img src="assets/images/autosave.svg" class="edit-pencil"
                         (click)="originalExchangeRate = exchangeRate; previousExchangeRate = exchangeRate; autoSaveIcon = !autoSaveIcon; showCurrencyValue= !showCurrencyValue; updateStockEntries(); calculateGrandTotal()"
                         *ngIf="autoSaveIcon">
                 </span>
@@ -509,13 +509,13 @@
                     </span>
                     <input type="number" name="exchangeRate" [(ngModel)]="reverseExchangeRate"
                         *ngIf="showCurrencyValue" class="form-control edit-currency">
-                    {{companyCurrencyName}}
+                    {{customerCurrencyCode}}
                 </span>
 
                 <span class="edit-icon cp">
                     <img *ngIf="!autoSaveIcon" src="assets/images/edit-pencilicon.svg" class="edit-pencil"
                         (click)="saveCancelExcRate(false)">
-                    <img src=" assets/images/autosave.svg" class="edit-pencil"
+                    <img src="assets/images/autosave.svg" class="edit-pencil"
                         (click)="saveCancelExcRate(true)" *ngIf="autoSaveIcon">
                 </span>
             </div>
