@@ -149,7 +149,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
         });
 
         if (this.filterForm.get('selectedDateOption').value === '0' && value.activeFinancialYear) {
-            this.filterForm.patchValue({
+            this.filterForm?.patchValue({
                 to: value.activeFinancialYear.financialYearEnds,
                 from: value.activeFinancialYear.financialYearStarts,
                 selectedFinancialYearOption: value.activeFinancialYear.uniqueName
@@ -168,7 +168,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.imgPath = (isElectron|| isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         if (!this.showLabels) {
-            this.filterForm.patchValue({selectedDateOption: '0'});
+            this.filterForm?.patchValue({selectedDateOption: '0'});
         }
         this.accountSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
@@ -199,7 +199,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
                     // assign dates
                     // this.assignStartAndEndDateForDateRangePicker(date[0], date[1]);
 
-                    this.filterForm.patchValue({
+                    this.filterForm?.patchValue({
                         from: moment(a[0]).format(GIDDH_DATE_FORMAT),
                         to: moment(a[1]).format(GIDDH_DATE_FORMAT)
                     });
@@ -207,7 +207,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
 
                 // if filter type is not date picker then set filter as datepicker
                 if (this.filterForm.get('selectedDateOption').value === '0') {
-                    this.filterForm.patchValue({
+                    this.filterForm?.patchValue({
                         selectedDateOption: '1'
                     });
                 }
@@ -286,7 +286,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
                     // };
 
                     // assign dates
-                    this.filterForm.patchValue({
+                    this.filterForm?.patchValue({
                         from: moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day').format(GIDDH_DATE_FORMAT),
                         to: moment().format(GIDDH_DATE_FORMAT)
                     });
@@ -315,14 +315,14 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
             let financialYear = this._selectedCompany.financialYears.find(p => p.uniqueName === v.value);
             let index = this._selectedCompany.financialYears.findIndex(p => p.uniqueName === v.value);
             if (financialYear) {
-                this.filterForm.patchValue({
+                this.filterForm?.patchValue({
                     to: financialYear.financialYearEnds,
                     from: financialYear.financialYearStarts,
                     fy: index === 0 ? 0 : index * -1
                 });
             }
         } else {
-            this.filterForm.patchValue({
+            this.filterForm?.patchValue({
                 to: '',
                 from: '',
                 fy: ''
@@ -351,7 +351,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
         if (selectedFY) {
             let inx = this._selectedCompany.financialYears.findIndex(p => p.uniqueName === selectedFY);
             if (inx !== -1) {
-                this.filterForm.patchValue({
+                this.filterForm?.patchValue({
                     fy: inx === 0 ? 0 : inx * -1
                 });
             }
@@ -379,8 +379,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
 
     public onTagSelected(ev) {
         this.selectedTag = ev.value;
-        this.filterForm.get('tagName').patchValue(ev.value);
-        this.filterForm.get('refresh').patchValue(true);
+        this.filterForm.get('tagName')?.patchValue(ev.value);
+        this.filterForm.get('refresh')?.patchValue(true);
         this.onPropertyChanged.emit(this.filterForm.value);
     }
 
@@ -389,7 +389,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
             if (ev.value === '0') {
                 this.selectFinancialYearOption(this.financialOptions[0]);
             } else {
-                this.filterForm.patchValue({
+                this.filterForm?.patchValue({
                     from: moment(this.datePickerOption.startDate).format(GIDDH_DATE_FORMAT),
                     to: moment(this.datePickerOption.endDate).format(GIDDH_DATE_FORMAT)
                 });
@@ -419,7 +419,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     private assignStartAndEndDateForDateRangePicker(from, to) {
         from = from || moment().subtract(30, 'd');
         to = to || moment();
-        this.filterForm.get('selectedDateRange').patchValue({
+        this.filterForm.get('selectedDateRange')?.patchValue({
             startDate: moment(from, GIDDH_DATE_FORMAT),
             endDate: moment(to, GIDDH_DATE_FORMAT)
         });
