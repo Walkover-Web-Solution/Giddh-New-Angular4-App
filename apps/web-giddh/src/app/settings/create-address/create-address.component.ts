@@ -56,6 +56,10 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     /** Stores the current organization uniqueName
      * (required for checking the entity same as the organization in create-address link-entity field) */
     @Input() public currentOrganizationUniqueName: string;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     constructor(
         private formBuilder: FormBuilder,
@@ -234,7 +238,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         this.addressForm.get('state')?.patchValue(null);
                         this.addressForm.get('state').enable();
                         if (this.addressConfiguration?.tax?.name && !this.addressForm.get('taxNumber')?.valid) {
-                            this.toasterService.errorToast(`Invalid ${this.addressConfiguration.tax.name}`);
+                            let message = this.commonLocaleData?.app_invalid_tax_name;
+                            message = message?.replace("[TAX_NAME]", this.addressConfiguration.tax.name);
+                            this.toasterService.errorToast(message);
                         }
                     }
                 } else {
@@ -302,5 +308,44 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 entity.isDefault = false;
             }
         });
+    }
+
+    /**
+     * Returns the information save text
+     *
+     * @param {*} companyName
+     * @returns {string}
+     * @memberof CreateAddressComponent
+     */
+    public getInformationSaveText(companyName: any): string {
+        let text = this.localeData?.all_information_save;
+        text = text?.replace("[COMPANY_NAME]", companyName);
+        return text;
+    }
+
+    /**
+     * Returns enter tax text
+     *
+     * @param {*} taxName
+     * @returns {string}
+     * @memberof CreateAddressComponent
+     */
+    public getEnterTaxText(taxName: any): string {
+        let text = this.localeData?.enter_tax;
+        text = text?.replace("[TAX_NAME]", taxName);
+        return text;
+    }
+
+    /**
+     * Returns the branch of company text
+     *
+     * @param {*} companyName
+     * @returns {string}
+     * @memberof CreateAddressComponent
+     */
+    public getBranchOfText(companyName: any): string {
+        let text = this.localeData?.branch_of_company;
+        text = text?.replace("[COMPANY_NAME]", companyName);
+        return text;
     }
 }
