@@ -180,7 +180,7 @@
         [companyName]="organizationType === 'BRANCH' ? profileData?.companyName : ''"
         [currentOrganizationUniqueName]="currentOrganizationUniqueName" [showLoader]="isAddressChangeInProgress"
         (saveAddress)="saveAddress($event)" (updateAddress)="updateAddress($event)" [addressToUpdate]="addressToUpdate"
-        (closeAsideEvent)="toggleAccountAsidePane()" [addressConfiguration]="addressConfiguration">
+        (closeAsideEvent)="toggleAccountAsidePane()" [addressConfiguration]="addressConfiguration" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
     </create-address>
 </div>
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
