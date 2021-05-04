@@ -520,5 +520,27 @@
     "app_success": "Success",
     "app_first": "प्रथम",
     "app_last": "अंतिम",
-    "app_previous": "पिछला"
+    "app_previous": "पिछला",
+    "app_ok": "Ok",
+    "app_datepicker": {
+        "select_financial_year": "वित्तीय वर्ष का चयन करें",
+        "days_upto_today": "आज तक दिन",
+        "cancel": "रद्द करना",
+        "done": "लागू",
+        "am": "AM",
+        "pm": "PM",
+        "enter_dmy": "Enter a day, month and year",
+        "invalid_date": "Invalid date",
+        "date_error": "Start date must not be greater than End date",
+        "ranges": {
+            "ThisMonth": "इस महीने",
+            "LastMonth": "पिछले महीने",
+            "ThisQuarterToDate": "यह क्वार्टर टू डेट",
+            "ThisFinancialYearToDate": "यह वित्तीय वर्ष टू डेट",
+            "LastQuarter": "पिछला चौथाई",
+            "AllTime": "पूरे समय"
+        },
+        "weekdays": ["रवि", "सोम", "मंग", "बुध", "गुरू", "शुक्र", "शनि"],
+        "months": ["जनवरी", "फ़रवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"]
+    }
 }
