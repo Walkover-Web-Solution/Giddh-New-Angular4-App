@@ -288,7 +288,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             if (a && !this.addStock) {
                 this.stockUniqueName = a.uniqueName;
                 this.isUpdatingStockForm = true;
-                this.addStockForm.patchValue({
+                this.addStockForm?.patchValue({
                     name: a.name, uniqueName: a.uniqueName,
                     stockUnitCode: a.stockUnit ? a.stockUnit.code : '', openingQuantity: a.openingQuantity,
                     openingAmount: a.openingAmount,
@@ -314,37 +314,37 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
                 const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
                 if (a.purchaseAccountDetails) {
-                    this.addStockForm.patchValue({ purchaseAccountUniqueName: a.purchaseAccountDetails.accountUniqueName });
+                    this.addStockForm?.patchValue({ purchaseAccountUniqueName: a.purchaseAccountDetails.accountUniqueName });
 
                     // render purchase unit rates
                     a.purchaseAccountDetails.unitRates.map((item, i) => {
                         this.addPurchaseUnitRates(i, item);
                     });
                     purchaseUnitRatesControls.enable();
-                    this.addStockForm.controls['enablePurchase'].patchValue(true);
+                    this.addStockForm.controls['enablePurchase']?.patchValue(true);
                 } else {
-                    this.addStockForm.controls['enablePurchase'].patchValue(false);
+                    this.addStockForm.controls['enablePurchase']?.patchValue(false);
                     purchaseUnitRatesControls.disable();
                 }
 
                 const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
                 if (a.salesAccountDetails) {
-                    this.addStockForm.patchValue({ salesAccountUniqueName: a.salesAccountDetails.accountUniqueName });
+                    this.addStockForm?.patchValue({ salesAccountUniqueName: a.salesAccountDetails.accountUniqueName });
 
                     // render sale unit rates
                     a.salesAccountDetails.unitRates.map((item, i) => {
                         this.addSaleUnitRates(i, item);
                     });
                     saleUnitRatesControls.enable();
-                    this.addStockForm.controls['enableSales'].patchValue(true);
+                    this.addStockForm.controls['enableSales']?.patchValue(true);
                 } else {
                     saleUnitRatesControls.disable();
-                    this.addStockForm.controls['enableSales'].patchValue(false);
+                    this.addStockForm.controls['enableSales']?.patchValue(false);
                 }
 
                 // if manufacturingDetails is avilable
                 if (a.manufacturingDetails) {
-                    this.addStockForm.patchValue({
+                    this.addStockForm?.patchValue({
                         isFsStock: true,
                         manufacturingDetails: {
                             manufacturingQuantity: a.manufacturingDetails.manufacturingQuantity,
@@ -355,7 +355,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                         this.addItemInLinkedStocks(item, i, a.manufacturingDetails.linkedStocks.length - 1);
                     });
                 } else {
-                    this.addStockForm.patchValue({ isFsStock: false });
+                    this.addStockForm?.patchValue({ isFsStock: false });
                 }
 
                 this.companyTaxesList$.subscribe((tax) => {
@@ -388,7 +388,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         this.createStockSuccess$.subscribe(s => {
             if (s) {
                 this.resetStockForm();
-                this.addStockForm.get('taxes').patchValue('');
+                this.addStockForm.get('taxes')?.patchValue('');
                 this.store.dispatch(this.inventoryAction.resetCreateStockFlags());
                 this.closeAsidePane();
             }
@@ -399,7 +399,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                 this.activeGroup = s;
                 this.groupUniqueName = s.uniqueName;
                 this.activeGroup.uniqueName = s.uniqueName;
-                this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
+                this.addStockForm.get('parentGroup')?.patchValue(this.activeGroup.uniqueName);
             } else {
                 this.activeGroup = null;
             }
@@ -411,8 +411,8 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             }
         });
         setTimeout(() => {
-            this.addStockForm.controls['enableSales'].patchValue(false);
-            this.addStockForm.controls['enablePurchase'].patchValue(false);
+            this.addStockForm.controls['enableSales']?.patchValue(false);
+            this.addStockForm.controls['enablePurchase']?.patchValue(false);
         }, 100);
 
         this.manageInProcess$.subscribe(s => {
@@ -447,13 +447,13 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public removeCustomField(type?: string, index?: number) {
         if (type === 'remove' && index === 1) {
             this.customField1 = false;
-            this.addStockForm.get('customField1Value').patchValue('');
-            this.addStockForm.get('customField1Heading').patchValue('');
+            this.addStockForm.get('customField1Value')?.patchValue('');
+            this.addStockForm.get('customField1Heading')?.patchValue('');
         }
         if (type === 'remove' && index === 2) {
             this.customField2 = false;
-            this.addStockForm.get('customField2Value').patchValue('');
-            this.addStockForm.get('customField2Heading').patchValue('');
+            this.addStockForm.get('customField2Value')?.patchValue('');
+            this.addStockForm.get('customField2Heading')?.patchValue('');
         }
     }
 
@@ -474,11 +474,11 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         // add purchaseUnitRates to the list
         if (item) {
             if (control.controls[i]) {
-                control.controls[i].patchValue(item);
+                control.controls[i]?.patchValue(item);
             } else {
                 control.push(this.initUnitAndRates());
                 setTimeout(() => {
-                    control.controls[i].patchValue(item);
+                    control.controls[i]?.patchValue(item);
                 }, 200);
             }
         } else {
@@ -507,11 +507,11 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         // add saleUnitRates to the list
         if (item) {
             if (control.controls[i]) {
-                control.controls[i].patchValue(item);
+                control.controls[i]?.patchValue(item);
             } else {
                 control.push(this.initUnitAndRates());
                 setTimeout(() => {
-                    control.controls[i].patchValue(item);
+                    control.controls[i]?.patchValue(item);
                 }, 200);
             }
         } else {
@@ -558,15 +558,15 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             this.isStockNameAvailable$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
                 if (a !== null && a !== undefined) {
                     if (a) {
-                        this.addStockForm.patchValue({ uniqueName: val });
+                        this.addStockForm?.patchValue({ uniqueName: val });
                     } else {
                         let num = 1;
-                        this.addStockForm.patchValue({ uniqueName: val + num });
+                        this.addStockForm?.patchValue({ uniqueName: val + num });
                     }
                 }
             });
         } else {
-            this.addStockForm.patchValue({ uniqueName: '' });
+            this.addStockForm?.patchValue({ uniqueName: '' });
         }
     }
 
@@ -576,9 +576,9 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         let amount = this.addStockForm.value.openingAmount;
 
         if (quantity && amount) {
-            this.addStockForm.patchValue({ stockRate: (amount / quantity).toFixed(4) });
+            this.addStockForm?.patchValue({ stockRate: (amount / quantity).toFixed(4) });
         } else if (!quantity || !amount) {
-            this.addStockForm.controls['stockRate'].patchValue('');
+            this.addStockForm.controls['stockRate']?.patchValue('');
         }
     }
 
@@ -607,7 +607,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             } else {
                 let isValid = this.validateLinkedStock(item);
                 if (isValid) {
-                    frmgrp.patchValue(item);
+                    frmgrp?.patchValue(item);
                     control.controls[i] = frmgrp;
                 } else {
                     return this._toasty.errorToast('All fields are required.');
@@ -633,7 +633,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public updateItemInLinkedStocks(item: FormGroup, i: any) {
         const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
         const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
-        control.controls[i].patchValue(item);
+        control.controls[i]?.patchValue(item);
         this.editLinkedStockIdx = null;
         this.editModeForLinkedStokes = false;
         let last = control.controls.length;
@@ -701,7 +701,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
         if (activeStock && !this.addStock) {
             this.isUpdatingStockForm = true;
-            this.addStockForm.patchValue({
+            this.addStockForm?.patchValue({
                 name: activeStock.name,
                 uniqueName: activeStock.uniqueName,
                 stockUnitCode: activeStock.stockUnit ? activeStock.stockUnit.code : '',
@@ -710,7 +710,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             });
 
             if (activeStock.purchaseAccountDetails) {
-                this.addStockForm.patchValue({ purchaseAccountUniqueName: activeStock.purchaseAccountDetails.accountUniqueName });
+                this.addStockForm?.patchValue({ purchaseAccountUniqueName: activeStock.purchaseAccountDetails.accountUniqueName });
 
                 // render unit rates
                 activeStock.purchaseAccountDetails.unitRates.map((item, i) => {
@@ -719,7 +719,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             }
 
             if (activeStock.salesAccountDetails) {
-                this.addStockForm.patchValue({ salesAccountUniqueName: activeStock.salesAccountDetails.accountUniqueName });
+                this.addStockForm?.patchValue({ salesAccountUniqueName: activeStock.salesAccountDetails.accountUniqueName });
 
                 // render unit rates
                 activeStock.salesAccountDetails.unitRates.map((item, i) => {
@@ -729,7 +729,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
             // if manufacturingDetails is avilable
             if (activeStock.manufacturingDetails) {
-                this.addStockForm.patchValue({
+                this.addStockForm?.patchValue({
                     isFsStock: true,
                     manufacturingDetails: {
                         manufacturingQuantity: activeStock.manufacturingDetails.manufacturingQuantity,
@@ -740,7 +740,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                     this.addItemInLinkedStocks(item, i, activeStock.manufacturingDetails.linkedStocks.length - 1);
                 });
             } else {
-                this.addStockForm.patchValue({ isFsStock: false });
+                this.addStockForm?.patchValue({ isFsStock: false });
             }
         }
     }
@@ -750,7 +750,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         let stockObj = new CreateStockRequest();
         let uniqueName = this.addStockForm.get('uniqueName');
         if(uniqueName.value) {
-            uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+            uniqueName?.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
         }
         this.addStockForm.get('uniqueName').enable();
 
@@ -875,7 +875,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         this.groupsData$.subscribe(p => {
             let selected = p.find(q => q.value === this.groupUniqueName);
             if (selected) {
-                this.addStockForm.get('parentGroup').patchValue({
+                this.addStockForm.get('parentGroup')?.patchValue({
                     label: selected.label,
                     value: selected.value
                 });
@@ -969,7 +969,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         if (!isOk) {
             let val = this.addStockForm.get('skuCode').value;
             val = val.substr(0, (val.length - 1));
-            this.addStockForm.get('skuCode').patchValue(val);
+            this.addStockForm.get('skuCode')?.patchValue(val);
             return;
         }
     }
@@ -984,13 +984,13 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                 this.forceClear$ = of({ status: true });
                 this.addStockForm.controls['parentGroup'].enable();
                 if (this.activeGroup) {
-                    this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
+                    this.addStockForm.get('parentGroup')?.patchValue(this.activeGroup.uniqueName);
                 } else {
                     this.groupsData$.subscribe(p => {
                         if (p) {
                             let defaultGrpisExist = p.findIndex(q => q.value === 'maingroup') > -1;
                             if (defaultGrpisExist) {
-                                this.addStockForm.get('parentGroup').patchValue('maingroup');
+                                this.addStockForm.get('parentGroup')?.patchValue('maingroup');
                             }
                         }
                     });
@@ -1064,7 +1064,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             }
         }
 
-        this.addStockForm.get('taxes').patchValue(this.taxTempArray.map(m => m.uniqueName));
+        this.addStockForm.get('taxes')?.patchValue(this.taxTempArray.map(m => m.uniqueName));
     }
 
     /**
@@ -1203,14 +1203,14 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         this.showOtherDetails = !this.showOtherDetails;
 
         if(this.addStockForm.get("hsnNumber").value) {
-            this.addStockForm.get("showCodeType").patchValue("hsn");
+            this.addStockForm.get("showCodeType")?.patchValue("hsn");
         } else if(this.addStockForm.get("sacNumber").value) {
-            this.addStockForm.get("showCodeType").patchValue("sac");
+            this.addStockForm.get("showCodeType")?.patchValue("sac");
         } else {
             if(this.inventorySettings?.manageInventory) {
-                this.addStockForm.get("showCodeType").patchValue("hsn");
+                this.addStockForm.get("showCodeType")?.patchValue("hsn");
             } else {
-                this.addStockForm.get("showCodeType").patchValue("sac");
+                this.addStockForm.get("showCodeType")?.patchValue("sac");
             }
         }
     }

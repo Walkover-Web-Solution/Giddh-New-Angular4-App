@@ -162,7 +162,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.selectedDiscounts.push(element.uniqueName)
                     });
                 }
-                this.groupDetailForm.patchValue({ name: activeGroup.name, uniqueName: activeGroup.uniqueName, description: activeGroup.description, closingBalanceTriggerAmount: activeGroup.closingBalanceTriggerAmount, closingBalanceTriggerAmountType: activeGroup.closingBalanceTriggerAmountType });
+                this.groupDetailForm?.patchValue({ name: activeGroup.name, uniqueName: activeGroup.uniqueName, description: activeGroup.description, closingBalanceTriggerAmount: activeGroup.closingBalanceTriggerAmount, closingBalanceTriggerAmountType: activeGroup.closingBalanceTriggerAmountType });
                 if (activeGroup.fixed) {
                     this.groupDetailForm.get('name').disable();
                     this.groupDetailForm.get('uniqueName').disable();
@@ -252,7 +252,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         }), takeUntil(this.destroyed$));
 
         this.activeGroupSelected$.subscribe((p) => {
-            this.taxGroupForm.patchValue({ taxes: p });
+            this.taxGroupForm?.patchValue({ taxes: p });
         });
         this.activeGroupTaxHierarchy$.subscribe((a) => {
             let activeAccount: AccountResponseV2 = null;
@@ -440,7 +440,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public updateGroup() {
         let activeGroupUniqueName: string;
         let uniqueName = this.groupDetailForm.get('uniqueName');
-        uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+        uniqueName?.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
 
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroupUniqueName = a);
         this.store.dispatch(this.groupWithAccountsAction.updateGroup(this.groupDetailForm.value, activeGroupUniqueName));
@@ -505,7 +505,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public closingBalanceTypeChanged(type: string) {
         if (Number(this.groupDetailForm.get('closingBalanceTriggerAmount').value) > 0) {
-            this.groupDetailForm.get('closingBalanceTriggerAmountType').patchValue(type);
+            this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
     }
 

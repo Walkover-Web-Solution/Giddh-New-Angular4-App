@@ -140,9 +140,9 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         // get openingblance value changes
         this.addAccountForm.get('openingBalance').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
-                this.addAccountForm.get('openingBalanceType').patchValue('');
+                this.addAccountForm.get('openingBalanceType')?.patchValue('');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
-                this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
+                this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
             }
         });
 
@@ -167,15 +167,15 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         //     this.isAccountNameAvailable$.subscribe(a => {
         //       if (a !== null && a !== undefined) {
         //         if (a) {
-        //           this.addAccountForm.patchValue({ uniqueName: val });
+        //           this.addAccountForm?.patchValue({ uniqueName: val });
         //         } else {
         //           let num = 1;
-        //           this.addAccountForm.patchValue({ uniqueName: val + num });
+        //           this.addAccountForm?.patchValue({ uniqueName: val + num });
         //         }
         //       }
         //     });
         //   } else {
-        //     this.addAccountForm.patchValue({ uniqueName: '' });
+        //     this.addAccountForm?.patchValue({ uniqueName: '' });
         //   }
         // });
 
@@ -216,16 +216,16 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     public setCountryByCompany(company: CompanyResponse) {
         let result: IContriesWithCodes = contriesWithCodes.find((c) => c.countryName === company.country);
         if (result) {
-            this.addAccountForm.get('country').get('countryCode').patchValue(result.countryflag);
-            this.addAccountForm.get('mobileCode').patchValue(result.value);
+            this.addAccountForm.get('country').get('countryCode')?.patchValue(result.countryflag);
+            this.addAccountForm.get('mobileCode')?.patchValue(result.value);
             let stateObj = this.getStateGSTCode(this.stateList, result.countryflag)
-            this.addAccountForm.get('currency').patchValue(company.baseCurrency);
+            this.addAccountForm.get('currency')?.patchValue(company.baseCurrency);
             this.getOnboardingForm(result.countryflag);
             this.companyCountry = result.countryflag;
         } else {
-            this.addAccountForm.get('country').get('countryCode').patchValue('IN');
-            this.addAccountForm.get('mobileCode').patchValue('91');
-            this.addAccountForm.get('currency').patchValue('IN');
+            this.addAccountForm.get('country').get('countryCode')?.patchValue('IN');
+            this.addAccountForm.get('mobileCode')?.patchValue('91');
+            this.addAccountForm.get('currency')?.patchValue('IN');
             this.companyCountry = 'IN';
             this.getOnboardingForm('IN');
         }
@@ -287,8 +287,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
 
         let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
-            control.get('stateCode').patchValue(null);
-            control.get('state').get('code').patchValue(null);
+            control.get('stateCode')?.patchValue(null);
+            control.get('state').get('code')?.patchValue(null);
             control.get('gstNumber').setValue("");
         }
     }
@@ -320,9 +320,9 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         if (val) {
             let addresses = this.addAccountForm.get('addresses') as FormArray;
             for (let control of addresses.controls) {
-                control.get('isDefault').patchValue(false);
+                control.get('isDefault')?.patchValue(false);
             }
-            addresses.controls[i].get('isDefault').patchValue(true);
+            addresses.controls[i].get('isDefault')?.patchValue(true);
         }
     }
 
@@ -340,12 +340,12 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
                 let s = state.find(st => st.value === stateCode);
                 statesEle.setDisabledState(false);
                 if (s) {
-                    gstForm.get('stateCode').patchValue(s.value);
-                    gstForm.get('state').get('code').patchValue(s.value);
+                    gstForm.get('stateCode')?.patchValue(s.value);
+                    gstForm.get('state').get('code')?.patchValue(s.value);
                     statesEle.setDisabledState(true);
                 } else {
-                    gstForm.get('stateCode').patchValue(null);
-                    gstForm.get('state').get('code').patchValue(null);
+                    gstForm.get('stateCode')?.patchValue(null);
+                    gstForm.get('state').get('code')?.patchValue(null);
                     statesEle.setDisabledState(false);
                     this._toaster.clearAllToaster();
                     this._toaster.warningToast('Invalid GSTIN.');
@@ -353,8 +353,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             });
         } else {
             statesEle.setDisabledState(false);
-            gstForm.get('stateCode').patchValue(null);
-            gstForm.get('state').get('code').patchValue(null);
+            gstForm.get('stateCode')?.patchValue(null);
+            gstForm.get('state').get('code')?.patchValue(null);
 
         }
     }
@@ -373,7 +373,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
 
     public openingBalanceTypeChnaged(type: string) {
         if (Number(this.addAccountForm.get('openingBalance').value) > 0) {
-            this.addAccountForm.get('openingBalanceType').patchValue(type);
+            this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
     }
 
@@ -468,7 +468,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
 
     public closingBalanceTypeChanged(type: string) {
         if (Number(this.addAccountForm.get('closingBalanceTriggerAmount').value) > 0) {
-            this.addAccountForm.get('closingBalanceTriggerAmountType').patchValue(type);
+            this.addAccountForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
     }
 
@@ -502,8 +502,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     public selectedState(gstForm: FormGroup, event) {
         if (gstForm && event.label) {
             let obj = this.getStateGSTCode(this.stateList, event.value)
-            gstForm.get('stateCode').patchValue(event.value);
-            gstForm.get('state').get('code').patchValue(event.value);
+            gstForm.get('stateCode')?.patchValue(event.value);
+            gstForm.get('state').get('code')?.patchValue(event.value);
         }
 
     }
