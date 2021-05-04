@@ -152,7 +152,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public imgPath: string = '';
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    
     constructor(
         private commonService: CommonService,
         private companyService: CompanyService,
