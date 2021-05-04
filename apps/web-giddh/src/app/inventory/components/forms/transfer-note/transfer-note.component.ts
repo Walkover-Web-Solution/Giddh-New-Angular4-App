@@ -100,7 +100,7 @@ export class TransferNoteComponent implements OnChanges, OnInit {
 	public stockChanged(option: IOption) {
 		const stockItem = this.stockList.find(p => p.uniqueName === option.value);
 		const stockUnit = stockItem ? stockItem.stockUnit.code : null;
-		this.form.patchValue({ ...this.form.value, stockUnit });
+		this.form?.patchValue({ ...this.form.value, stockUnit });
 	}
 
 	public save() {
