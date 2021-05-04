@@ -2363,6 +2363,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         return isValidDate;
     }
 
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof NgxDaterangepickerComponent
+     */
     public translationComplete(event: any): void {
         if(event) {
             this.getFinancialYears();
