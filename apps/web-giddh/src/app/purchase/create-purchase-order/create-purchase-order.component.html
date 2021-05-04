@@ -504,7 +504,9 @@
                 (click)="switchCurrencyImg(true)">
             <span class="right-currency">
                 <span class="currency-digits"
-                    *ngIf="!showCurrencyValue">{{originalExchangeRate | giddhCurrency}}</span>
+                    *ngIf="!showCurrencyValue">
+                    <amount-field [amount]="originalExchangeRate"></amount-field>
+                </span>
                 <input type="number" name="exchangeRate" [(ngModel)]="exchangeRate"
                     *ngIf="showCurrencyValue" class="form-control edit-currency"> {{companyCurrency}}
             </span>
@@ -523,7 +525,9 @@
                 (click)="switchCurrencyImg(false)">
             <span class="right-currency">
                 <span class="currency-digits"
-                    *ngIf="!showCurrencyValue">{{originalReverseExchangeRate | giddhCurrency}}</span>
+                    *ngIf="!showCurrencyValue">
+                    <amount-field [amount]="originalReverseExchangeRate"></amount-field>
+                </span>
                 <input type="number" name="exchangeRate" [(ngModel)]="reverseExchangeRate"
                     *ngIf="showCurrencyValue" class="form-control edit-currency">
                 {{companyCurrencyName}}
