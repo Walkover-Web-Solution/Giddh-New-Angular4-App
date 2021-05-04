@@ -120,7 +120,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
     public modeChanged(mode: 'sender' | 'product') {
         this.mode = mode;
         this.form.reset();
-        this.inventoryEntryDate.patchValue(moment().format(GIDDH_DATE_FORMAT));
+        this.inventoryEntryDate?.patchValue(moment().format(GIDDH_DATE_FORMAT));
         this.transactions.controls = this.transactions.controls.filter(trx => false);
 
         if (this.mode === 'sender') {
@@ -184,12 +184,12 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
 
         if (index >= 0) {
             const control = items.at(index);
-            control.patchValue({
+            control?.patchValue({
                 ...control.value,
                 inventoryUser
             });
         } else {
-            items.controls.forEach(c => c.patchValue({ ...c.value, inventoryUser }));
+            items.controls.forEach(c => c?.patchValue({ ...c.value, inventoryUser }));
         }
     }
 
@@ -209,9 +209,9 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
 
                 if (stockDetails.body && stockDetails.body.manufacturingDetails) {
                     let mfd = stockDetails.body.manufacturingDetails;
-                    this.isManufactured.patchValue(true);
+                    this.isManufactured?.patchValue(true);
 
-                    this.manufacturingDetails.patchValue({
+                    this.manufacturingDetails?.patchValue({
                         manufacturingQuantity: mfd.manufacturingQuantity,
                         manufacturingUnitCode: mfd.manufacturingUnitCode
                     });
@@ -221,7 +221,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
                     });
 
                 } else {
-                    this.isManufactured.patchValue(false);
+                    this.isManufactured?.patchValue(false);
                 }
 
             } catch (e) {
@@ -234,9 +234,9 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
 
         if (index >= 0) {
             const control = items.at(index);
-            control.patchValue({ ...control.value, stock, stockUnit });
+            control?.patchValue({ ...control.value, stock, stockUnit });
         } else {
-            items.controls.forEach(c => c.patchValue({ ...c.value, stock, stockUnit }));
+            items.controls.forEach(c => c?.patchValue({ ...c.value, stock, stockUnit }));
         }
     }
 
@@ -260,7 +260,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             const stockItem = this.stockList.find(p => p.uniqueName === uniqueName);
             const stockUnit = stockItem ? stockItem.stockUnit.code : null;
-            control.at(i).get('stockUnitCode').patchValue(stockUnit);
+            control.at(i).get('stockUnitCode')?.patchValue(stockUnit);
             this.disableStockButton = false;
         }
     }
@@ -281,7 +281,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 let isValid = this.validateLinkedStock(item);
                 if (isValid) {
-                    frmgrp.patchValue(item);
+                    frmgrp?.patchValue(item);
                     control.controls[i] = frmgrp;
                 } else {
                     return this._toasty.errorToast('All fields are required.');

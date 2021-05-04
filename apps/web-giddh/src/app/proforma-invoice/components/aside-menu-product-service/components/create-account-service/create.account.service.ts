@@ -126,14 +126,14 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
             this._store.dispatch(this._accountsAction.getAccountUniqueName(val));
             this.isAccountNameAvailable$.subscribe(a => {
                 if (a) {
-                    this.addAcForm.patchValue({ uniqueName: val });
+                    this.addAcForm?.patchValue({ uniqueName: val });
                 } else {
                     let num = 1;
-                    this.addAcForm.patchValue({ uniqueName: val + num });
+                    this.addAcForm?.patchValue({ uniqueName: val + num });
                 }
             });
         } else {
-            this.addAcForm.patchValue({ uniqueName: null });
+            this.addAcForm?.patchValue({ uniqueName: null });
         }
 
     }
