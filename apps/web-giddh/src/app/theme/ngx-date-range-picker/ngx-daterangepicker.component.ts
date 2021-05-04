@@ -5,7 +5,7 @@ import { Moment } from 'moment';
 import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { takeUntil, debounceTime, filter } from 'rxjs/operators';
+import { takeUntil, debounceTime } from 'rxjs/operators';
 import { ReplaySubject, Subject } from 'rxjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
@@ -74,6 +74,7 @@ export class CalendarVariables {
 }
 
 export interface DateRangesInterface {
+    key?: string;
     name: string;
     value: any[];
     ranges: any[];
@@ -244,6 +245,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public noOfDaysAllowed: number = 0;
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private settingsFinancialYearActions: SettingsFinancialYearActions) {
         this.choosedDate = new EventEmitter();
@@ -265,7 +268,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             }
         });
 
-        this.getFinancialYears();
         this.updateMonthsInView();
     }
 
@@ -318,25 +320,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         });
 
         this._buildLocale();
-        const daysOfWeek = [...this.locale.daysOfWeek];
-        if (this.locale.firstDay !== 0) {
-            let iterator = this.locale.firstDay;
-
-            while (iterator > 0) {
-                daysOfWeek.push(daysOfWeek.shift());
-                iterator--;
-            }
-        }
-        this.locale.daysOfWeek = daysOfWeek;
         this.renderRanges();
         this.emptyWeekRowClass = 'hideMe';
-        if (this.locale.firstDay !== 0) {
-            let iterator = this.locale.firstDay;
-            while (iterator > 0) {
-                this.locale.daysOfWeek.push(this.locale.daysOfWeek.shift());
-                iterator--;
-            }
-        }
+        
         if (this.inline) {
             this._old.start = this.startDate.clone();
             this._old.end = this.endDate.clone();
@@ -750,7 +736,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.invalidStartDate = "";
 
         if (!moment(startDate, this.locale.format, true).isValid()) {
-            this.invalidStartDate = "Enter a day, month and year";
+            this.invalidStartDate = this.commonLocaleData?.app_datepicker?.enter_dmy;
             return;
         }
 
@@ -786,7 +772,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.invalidEndDate = "";
 
         if (!moment(endDate, this.locale.format, true).isValid()) {
-            this.invalidEndDate = "Enter a day, month and year";
+            this.invalidEndDate = this.commonLocaleData?.app_datepicker?.enter_dmy;
             return;
         }
 
@@ -944,22 +930,22 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.invalidEndDate = "";
 
         if(this.startDate.isAfter(this.maxDate, 'day')) {
-            this.invalidStartDate = "Invalid date";
+            this.invalidStartDate = this.commonLocaleData?.app_datepicker?.invalid_date;
             return;
         }
 
         if(this.startDate.isAfter(this.endDate, 'day')) {
-            this.invalidEndDate = "Invalid date";
+            this.invalidEndDate = this.commonLocaleData?.app_datepicker?.invalid_date;
             return;
         }
 
         if(this.startDate.isBefore(this.minDate, 'day')) {
-            this.invalidStartDate = "Invalid date";
+            this.invalidStartDate = this.commonLocaleData?.app_datepicker?.invalid_date;
             return;
         }
 
         if(this.endDate.isAfter(this.maxDate, 'day')) {
-            this.invalidEndDate = "Invalid date";
+            this.invalidEndDate = this.commonLocaleData?.app_datepicker?.invalid_date;
             return;
         }
 
@@ -1857,6 +1843,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                         }
                     });
 
+                    this.ranges.forEach(key => {
+                        key.name = this.commonLocaleData?.app_datepicker?.ranges[key.key];
+                    });
+
                     this.ranges = ranges;
                 }
             }
@@ -2007,19 +1997,19 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if (event.target.name === "inlineStartDate") {
             document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("focus-start-date");
             this.invalidInlineStartDate = "";
-            if (inlineDate.format("dddd") !== "Invalid date") {
+            if (inlineDate.format("dddd") !== this.commonLocaleData?.app_datepicker?.invalid_date) {
                 this.inlineStartDate = inlineDate;
             } else {
-                this.invalidInlineStartDate = "Invalid date";
+                this.invalidInlineStartDate = this.commonLocaleData?.app_datepicker?.invalid_date;
             }
         }
         if (event.target.name === "inlineEndDate") {
             document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("focus-start-date");
             this.invalidInlineEndDate = "";
-            if (inlineDate.format("dddd") !== "Invalid date") {
+            if (inlineDate.format("dddd") !== this.commonLocaleData?.app_datepicker?.invalid_date) {
                 this.inlineEndDate = inlineDate;
             } else {
-                this.invalidInlineEndDate = "Invalid date";
+                this.invalidInlineEndDate = this.commonLocaleData?.app_datepicker?.invalid_date;
             }
         }
     }
@@ -2038,7 +2028,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 this.clickApply();
             }
         } else {
-            this.invalidInlineDate = "Start date must not be greater than End date";
+            this.invalidInlineDate = this.commonLocaleData?.app_datepicker?.date_error;
         }
     }
 
@@ -2371,5 +2361,31 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
 
         return isValidDate;
+    }
+
+    public translationComplete(event: any): void {
+        if(event) {
+            this.getFinancialYears();
+
+            this.locale.monthNames = this.commonLocaleData?.app_datepicker?.months;
+
+            const daysOfWeek = [...this.commonLocaleData?.app_datepicker?.weekdays];
+            if (this.locale.firstDay !== 0) {
+                let iterator = this.locale.firstDay;
+
+                while (iterator > 0) {
+                    daysOfWeek.push(daysOfWeek.shift());
+                    iterator--;
+                }
+            }
+            this.locale.daysOfWeek = daysOfWeek;
+            if (this.locale.firstDay !== 0) {
+                let iterator = this.locale.firstDay;
+                while (iterator > 0) {
+                    this.locale.daysOfWeek.push(this.locale.daysOfWeek.shift());
+                    iterator--;
+                }
+            }
+        }
     }
 }
