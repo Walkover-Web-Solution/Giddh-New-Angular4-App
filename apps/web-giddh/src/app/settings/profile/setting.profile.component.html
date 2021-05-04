@@ -181,7 +181,7 @@
             <tab [active]="this.currentTab === 'other'" (selectTab)="handleTabChanged('other')" [heading]="localeData?.other"
             [id]="(currentTab === 'other') ? 'giddh-page-heading': ''">
                 <other-settings [organizationType]="currentOrganizationType" (saveProfile)="handleSaveProfile($event)"
-                    [profileData]="companyProfileObj" *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'other'"></other-settings>
+                    [profileData]="companyProfileObj" *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'other'" [localeData]="localeData"></other-settings>
             </tab>
         </tabset>
     </div>
