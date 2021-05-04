@@ -176,10 +176,10 @@
                 <div class="return-content"
                     [ngClass]="{'content-disabled': !activeCompanyGstNumber || (gstr1OverviewDataInProgress$ | async)}">
                     <div class="d-flex">
-                            <div class="d-flex w-100 justify-content-sm-start justify-content-between align-items-sm-center flex-row">
-                                <img src="{{imgPath}}cart.svg" class="icon gstr-icon text-middle" />
-                                <div class="return-top text-middle d-flex align-items-sm-center flex-sm-row">
+                            <div class="d-flex w-100 justify-content-between align-items-sm-center flex-sm-row flex-column">
 
+                                <div class="return-top text-middle d-flex align-items-sm-center flex-sm-row ml-0">
+                                    <img src="{{imgPath}}cart.svg" class="icon gstr-icon text-middle mr-3" />
                                     <div class="font-xlarge">
 
                                         <b class="text-middle">GSTR-1

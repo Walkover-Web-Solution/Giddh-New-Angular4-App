@@ -607,15 +607,19 @@ ul#dropdown-menu {
         justify-content: space-between;
         .wrap-gst-date{
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             width: 100%;
             padding-bottom: 15px;
             .font-xlarge{
                 font-size: 16px;
             }
             .dropdown{
-                margin-left: 15px;
+                margin-left: 0;
             }
+        }
+        .download-authenticate-btn {
+            align-items: flex-start;
+            justify-content: flex-start;
         }
         span{
             margin-bottom: 10px;
