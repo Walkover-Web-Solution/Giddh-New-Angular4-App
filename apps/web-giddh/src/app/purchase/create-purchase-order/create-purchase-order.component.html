@@ -884,7 +884,8 @@
                                     <textarea rows="3" type="text" [placeholder]="localeData?.add_description"
                                         name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description"
                                         [maxlength]="entryDescriptionLength" #description></textarea>
-                                    <p class="font-12">Characters Left: {{entryDescriptionLength - transaction.description?.length}}</p>
+                                    <p class="font-12">{{commonLocaleData?.app_characters_left}}: {{entryDescriptionLength -
+                                        transaction.description?.length}}</p>
                                     <p class="small text-muted sku-and-customfields" *ngIf="transaction.sku_and_customfields">
                                         {{transaction.sku_and_customfields}}</p>
                                 </div>
@@ -1617,7 +1618,7 @@
                                                     [placeholder]="localeData?.add_description" #description
                                                     name="transaction.description_{{entryIdx}}" class="form-control"
                                                     [(ngModel)]="transaction.description" [maxlength]="entryDescriptionLength"></textarea>
-                                                <p class="font-12">Characters Left: {{entryDescriptionLength - transaction.description?.length}}</p>    
+                                                <p class="font-12">{{commonLocaleData?.app_characters_left}}: {{entryDescriptionLength - transaction.description?.length}}</p>    
                                                 <p class="small text-muted sku-and-customfields"
                                                     *ngIf="transaction.sku_and_customfields">
                                                     {{transaction.sku_and_customfields}}</p>
