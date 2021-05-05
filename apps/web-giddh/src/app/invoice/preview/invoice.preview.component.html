@@ -579,7 +579,7 @@
                                 </span>
                             </td>
                             <!-- E-invoice status -->
-                            <td *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales')" data-title="E-Invoice Status" width="10%">
+                            <td *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales')" [attr.data-title]="localeData.e_invoice_status" width="10%">
                                 <div class="e-invoice-status font-14">
                                     <strong class="d-flex" [tooltip]="item.eInvoiceStatusTooltip">{{item.status || '-'}}</strong>
                                 </div>
