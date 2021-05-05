@@ -7,7 +7,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 export class DeleteTaxConfirmationModelComponent {
 
-	@Input() public message: string;
+    @Input() public message: string;
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 	@Output() public userConfirmationEvent: EventEmitter<boolean> = new EventEmitter(false);
 
 	public onConfirmation() {
