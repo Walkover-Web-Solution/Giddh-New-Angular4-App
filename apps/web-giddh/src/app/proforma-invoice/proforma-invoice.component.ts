@@ -2744,10 +2744,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public calculateSubTotal() {
         let count: number = 0;
-        this.invFormData.entries.forEach(f => {
-            count += f.transactions.reduce((pv, cv) => {
-                return pv + Number(cv.amount);
-            }, 0);
+        this.invFormData.entries.forEach(entry => {
+            entry.transactions.forEach(transaction => {
+                count = Number((count + transaction.amount).toFixed(HIGH_RATE_FIELD_PRECISION));
+            });
         });
 
         if (isNaN(count)) {
@@ -2780,9 +2780,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public calculateGrandTotal() {
 
         let calculatedGrandTotal = 0;
-        calculatedGrandTotal = this.invFormData.voucherDetails.grandTotal = this.invFormData.entries.reduce((pv, cv) => {
-            return pv + cv.transactions.reduce((pvt, cvt) => pvt + cvt.total, 0);
-        }, 0);
+        this.invFormData.entries.forEach(entry => {
+            entry.transactions.forEach(transaction => {
+                calculatedGrandTotal = Number((calculatedGrandTotal + transaction.total).toFixed(HIGH_RATE_FIELD_PRECISION));
+            });
+        });
+        this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
 
         if (isNaN(calculatedGrandTotal)) {
             calculatedGrandTotal = 0;
