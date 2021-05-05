@@ -1,10 +1,9 @@
-import { debounceTime, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import * as isCidr from 'is-cidr';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
-
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -37,15 +36,19 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
      * as the radio button doesn't work in ngx-bootstrap modal
      */
     @Input() public isOpenedInModal: boolean;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Output() public onSubmitForm: EventEmitter<any> = new EventEmitter(null);
 
     public showTimeSpan: boolean = false;
     public showIPWrap: boolean = false;
     public permissionForm: FormGroup;
     public allRoles: object[] = [];
-    public selectedTimeSpan: string = 'Date Range';
+    public selectedTimeSpan: string = '';
     // Selected Type of IP range
-    public selectedIPRange: string = 'CIDR Range';
+    public selectedIPRange: string = '';
     public createPermissionInProcess$: Observable<boolean>;
     public dateRangePickerValue: Date[] = [];
     /** Default range format */
@@ -82,6 +85,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.selectedTimeSpan = this.commonLocaleData?.app_date_range;
+        this.selectedIPRange = this.localeData?.cidr_range;
         this._accountsAction.resetShareEntity();
 
         if (this.userdata) {
@@ -143,9 +148,9 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
     public toggleIpOptVal(val: string) {
         if (val === IP_ADDR) {
-            this.selectedIPRange = 'IP Address';
+            this.selectedIPRange = this.localeData?.ip_address;
         } else if (val === CIDR_RANGE) {
-            this.selectedIPRange = 'CIDR Range';
+            this.selectedIPRange = this.localeData?.cidr_range;
         }
     }
 
@@ -159,9 +164,9 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
     public togglePeriodOptionsVal(val: string) {
         if (val === DATE_RANGE) {
-            this.selectedTimeSpan = 'Date Range';
+            this.selectedTimeSpan = this.commonLocaleData?.app_date_range;
         } else if (val === PAST_PERIOD) {
-            this.selectedTimeSpan = 'Past Period';
+            this.selectedTimeSpan = this.localeData?.past_period;
             this.dateRangePickerValue = [];
             if (this.permissionForm) {
                 this.permissionForm?.patchValue({ from: null, to: null });
@@ -246,8 +251,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             let allowedCidrs = this.permissionForm.get('allowedCidrs') as FormArray;
             allowedCidrs.push(this.initRangeForm());
             allowedIps.push(this.initRangeForm());
-            this.selectedTimeSpan = 'Date Range';
-            this.selectedIPRange = 'CIDR Range';
+            this.selectedTimeSpan = this.commonLocaleData?.app_date_range;
+            this.selectedIPRange = this.localeData?.cidr_range;
             this.permissionRoleClear$ = observableOf({ status: true });
         }
     }
@@ -280,19 +285,19 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             if (type === 'allowedIps') {
                 if (!this.validateIPaddress(val)) {
                     errFound = true;
-                    msg = 'Invalid IP Address';
+                    msg = this.localeData?.invalid_ip_error;
                 }
             }
             // match cidr
             if (type === 'allowedCidrs') {
                 if (!isCidr(val)) {
                     errFound = true;
-                    msg = 'Invalid CIDR Range';
+                    msg = this.localeData?.invalid_cidr_range;
                 }
             }
         }
         if (errFound) {
-            this._toasty.warningToast(msg || 'Field Cannot be empty');
+            this._toasty.warningToast(msg || this.localeData?.field_required_error);
         } else {
             arow.push(this.initRangeForm());
         }
@@ -329,7 +334,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         form.allowedCidrs = CidrArr;
         form.allowedIps = IpArr;
 
-        if (this.selectedTimeSpan === 'Past Period') {
+        if (this.selectedTimeSpan === this.localeData?.past_period) {
             if (form.duration) {
                 form.period = 'day';
             } else {
@@ -349,14 +354,14 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             this.store.dispatch(this._accountsAction.shareEntity(form, form.roleUniqueName));
             this.onSubmitForm.emit(obj);
         } else if (obj.action === 'update') {
-            if ((obj.data.from && obj.data.from) === 'Invalid date' || (obj.data.to && obj.data.to) === 'Invalid date') {
+            if ((obj.data.from && obj.data.from) === this.localeData?.invalid_date || (obj.data.to && obj.data.to) === this.localeData?.invalid_date) {
                 delete obj.data.from;
                 delete obj.data.to;
                 obj.data.periodOptions = null;
             }
             this._settingsPermissionService.UpdatePermission(form).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
-                    this._toasty.successToast('Permission Updated Successfully!');
+                    this._toasty.successToast(this.localeData?.permission_updated_success);
                 } else {
                     this._toasty.warningToast(res.message, res.code);
                 }
