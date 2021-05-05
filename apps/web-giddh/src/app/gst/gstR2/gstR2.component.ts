@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 declare var jquery: any;
 declare var $: any;
@@ -8,12 +8,45 @@ declare var $: any;
     templateUrl: './gstR2.component.html',
     styleUrls: ['gstR2.component.scss'],
 })
-export class FileGstR2Component implements OnInit {
+export class FileGstR2Component implements OnInit, OnDestroy {
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
+    /* this will check mobile screen size */
+    public isMobileScreen: boolean = false;
+
     constructor() {
         //
     }
+    /**
+     * Aside pane toggle fixed class
+     *
+     *
+     * @memberof FileGstR2Component
+     */
+    public toggleBodyClass(): void {
+        if (this.asideGstSidebarMenuState === 'in') {
+            document.querySelector('body').classList.add('gst-sidebar-open');
+        } else {
+            document.querySelector('body').classList.remove('gst-sidebar-open');
+        }
+    }
+    /**
+     * This will toggle the settings popup
+     *
+     * @param {*} [event]
+     * @memberof FileGstR2Component
+     */
+    public toggleGstPane(event?): void {
+        this.toggleBodyClass();
 
+        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
+            this.asideGstSidebarMenuState = "out";
+        }
+    }
     public ngOnInit() {
+        this.toggleGstPane();
         $('.tabs-new a').on('click', function (event) {
             event.preventDefault();
 
@@ -106,5 +139,13 @@ export class FileGstR2Component implements OnInit {
             $('#tab1, #tab3, #tabs4').hide();
 
         });
+    }
+    /**
+     * Unsubscribes from subscription
+     *
+     * @memberof FileGstR2Component
+     */
+    public ngOnDestroy(){
+        document.querySelector('body').classList.remove('gst-sidebar-open');
     }
 }

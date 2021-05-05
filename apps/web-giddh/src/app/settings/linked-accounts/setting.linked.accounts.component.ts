@@ -140,7 +140,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             if (data.status === 'success') {
                 if (data.body.user) {
                     let token = _.cloneDeep(data.body.user.accessTokens[0]);
-                    this.yodleeForm.patchValue({
+                    this.yodleeForm?.patchValue({
                         rsession: data.body.rsession,
                         app: token.appId,
                         redirectReq: true,

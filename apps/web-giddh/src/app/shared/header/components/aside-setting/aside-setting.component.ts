@@ -1,5 +1,4 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { settingsPageTabs } from "../../../helpers/pageTabs";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Router } from '@angular/router';
@@ -28,6 +27,10 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = true;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>) {
 
@@ -46,26 +49,6 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         });
 
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        if (settingsPageTabs) {
-            let loop = 0;
-            let organizationIndex = 0;
-            this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), take(1)).subscribe((organization: Organization) => {
-                if(organization) {
-                    if (organization.type === OrganizationType.Branch) {
-                        organizationIndex = 1;
-                    } else if (organization.type === OrganizationType.Company || !organization.type) {
-                        organizationIndex = 0;
-                    }
-                }
-                Object.keys(settingsPageTabs[organizationIndex]).forEach(key => {
-                    this.settingsPageTabs[loop] = [];
-                    this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]];
-                    loop++;
-                });
-            });
-            this.filteredSettingsPageTabs = this.settingsPageTabs;
-        }
-
         this.searchField?.nativeElement.focus();
     }
 
@@ -140,5 +123,37 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof AsideSettingComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            let settingsPageTabs = this.localeData?.tabs;
+
+            if (settingsPageTabs) {
+                let loop = 0;
+                let organizationIndex = 0;
+                this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), take(1)).subscribe((organization: Organization) => {
+                    if(organization) {
+                        if (organization.type === OrganizationType.Branch) {
+                            organizationIndex = 1;
+                        } else if (organization.type === OrganizationType.Company || !organization.type) {
+                            organizationIndex = 0;
+                        }
+                    }
+                    Object.keys(settingsPageTabs[organizationIndex]).forEach(key => {
+                        this.settingsPageTabs[loop] = [];
+                        this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]];
+                        loop++;
+                    });
+                });
+                this.filteredSettingsPageTabs = this.settingsPageTabs;
+            }
+        }
     }
 }

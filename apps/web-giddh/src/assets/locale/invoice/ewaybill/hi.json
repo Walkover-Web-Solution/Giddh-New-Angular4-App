@@ -1,7 +1,8 @@
 {
+    "page_heading": "E-way Bill",
     "customer_gstin" : "CUSTOMER GSTIN",
-    "ewaybill_no" : "E-WAY BILL#",
-    "ewaybill_date" : "E-WAY BILL DATE",
+    "ewaybill_no" : "E-way Bill#",
+    "ewaybill_date" : "E-way Bill Date",
     "total" : "TOTAL",
     "manually_generated" : "MANUALLY GENERATED",
     "add_vehicle_details" : "Add vehicle details",
@@ -90,7 +91,10 @@
         "credit_notes" : "Credit Notes",
         "delivery_challan" : "Delivery Challan"
     },
-    "ewaybill_page_title" : "Invoice > E-way bill",
-    "remove_invoice" : "Are you sure want to remove invoice {{VOUCHER_NUMBER}} ?",
-    "tab_generated_bills" : "Generated Bills"
+    "remove_invoice" : "Are you sure want to remove invoice [VOUCHER_NUMBER] ?",
+    "tab_generated_bills" : "Generated Bills",
+    "search_eway": "Search E-way",
+    "search_particular": "Search Particular",
+    "download_eway_bill": "Download E-way Bill",
+    "mode_of_transportation": "Mode of Transportation"
 }

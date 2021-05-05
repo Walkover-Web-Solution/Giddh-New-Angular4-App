@@ -126,6 +126,7 @@ export class LedgerResponse {
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
     public voucherAdjustments?: VoucherAdjustments;
     public unitRates?: Array<any>;
+    public entryVoucherTotals?: any;
 }
 /** Model for Ledger Advance receipts for invoices */
 export class VoucherAdjustmentsForInvoice {

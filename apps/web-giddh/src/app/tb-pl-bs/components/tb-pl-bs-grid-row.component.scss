@@ -57,11 +57,6 @@ ul.list-unstyled li {
 ul.list-unstyled li a {
     color: $black;
 }
-
-::ng-deep.table-container section {
-    overflow: unset !important;
-}
-
 .no-select {
     -moz-user-select: none;
     -webkit-user-select: none;

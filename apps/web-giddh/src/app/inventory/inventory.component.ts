@@ -201,6 +201,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             if (s instanceof NavigationEnd) {
                 this.saveLastState();
+                this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : this.router.url.indexOf('inventory/report') > -1 ? 3 : 0;
             }
         });
     }

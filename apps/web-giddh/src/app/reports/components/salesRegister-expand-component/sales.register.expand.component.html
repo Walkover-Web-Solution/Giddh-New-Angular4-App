@@ -65,7 +65,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="form-group expand-collapse-btn mr-1 d-inline-block">
+            <div class="form-group expand-collapse-btn mr-1 mb-0 d-inline-block">
                 <a class="cp" (click)="emitExpand()" data-toggle="tooltip" data-placement="top" title="{{commonLocaleData?.app_expand_all}}"
                     *ngIf="!expand">
                     <span class="icon-expandIcon"></span>
@@ -79,7 +79,7 @@
     </div>
 
     <ng-container *ngIf="(isGetSalesDetailsSuccess$ | async)">
-        <div class="clearfix sales-register-table">
+        <div class="clearfix sales-register-table mb-5">
             <div class="responsive table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
                     <thead>
@@ -113,7 +113,7 @@
                                     </div>
                                 </div>
                             </th>
-                            <th *ngIf="showFieldFilter.voucherNo" class="td-search-box nowrap"
+                            <th *ngIf="showFieldFilter.voucherNo" class="td-search-box nowrap" width="20%"
                                 #searchInvoiceContainer (clickOutside)="clickedOutsideEvent()">
                                 <div [hidden]="showSearchInvoiceNo">
                                     <span>{{commonLocaleData?.app_voucher_no}}</span>
@@ -239,7 +239,7 @@
                             <td [attr.data-title]="commonLocaleData?.app_voucher_type" *ngIf="showFieldFilter.voucherType" class="verticle-align-top">
                                 {{ item.voucherType }}
                             </td>
-                            <td [attr.data-title]="commonLocaleData?.app_voucher_no" *ngIf="showFieldFilter.voucherNo" class="verticle-align-top">
+                            <td width="20%" [attr.data-title]="commonLocaleData?.app_voucher_no" *ngIf="showFieldFilter.voucherNo" class="verticle-align-top voucher-number-td">
                                 {{ item.voucherNumber }}
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_sales" *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal"
@@ -295,8 +295,7 @@
             </div>
 
             <div class="text-center " *ngIf="(salesRegisteDetailedResponse$ | async).totalItems > paginationLimit">
-                <pagination [totalItems]="(salesRegisteDetailedResponse$ | async).totalItems" [(ngModel)]="getDetailedsalesRequestFilter.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" previousText="&#9668; "
-                    nextText="&#9658; " (pageChanged)="pageChanged($event)"></pagination>
+                <pagination [totalItems]="(salesRegisteDetailedResponse$ | async).totalItems" [(ngModel)]="getDetailedsalesRequestFilter.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
             </div>
         </div>
         <div class="no-data" *ngIf="
@@ -308,13 +307,13 @@
         </div>
 
         <div class="clearfix sales-register">
-            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12 pl-0">
-                <p>{{localeData?.transaction_count}}</p>
+            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 pl-0 d-flex flex-lg-column flex-md-row transaction-count-data">
+                <p class="mr-r15">{{localeData?.transaction_count}}</p>
                 <p>
                     {{ (salesRegisteDetailedResponse$ | async).totalItems }}
                 </p>
             </div>
-            <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-12">
+            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12 pl-0">
                 <div *ngIf="SalesRegisteDetailedItems" class="clearfix main-sale-register-box">
                     <div *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class="sale-register-box text-right">
                         <p>{{commonLocaleData?.app_sales}}</p>

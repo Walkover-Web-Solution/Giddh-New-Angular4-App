@@ -1,15 +1,16 @@
-import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
-import { select, Store } from '@ngrx/store';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GstDatePeriod, GstOverViewRequest } from '../../models/api-models/GstReconcile';
-import { Observable, of, ReplaySubject } from 'rxjs';
+import { select, Store } from '@ngrx/store';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { AppState } from '../../store';
-import { createSelector } from 'reselect';
-import { GeneralService } from '../../services/general.service';
+
+import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
+import { GstDatePeriod, GstOverViewRequest } from '../../models/api-models/GstReconcile';
 import { OrganizationType } from '../../models/user-login-state';
+import { GeneralService } from '../../services/general.service';
+import { AppState } from '../../store';
+import { GstReport } from '../constants/gst.constant';
 
 @Component({
 	// tslint:disable-next-line:component-selector
@@ -20,7 +21,12 @@ import { OrganizationType } from '../../models/user-login-state';
 })
 export class FilingComponent implements OnInit, OnDestroy {
 	@ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
-
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
+    /* this will check mobile screen size */
+    public isMobileScreen: boolean = false;
 	public currentPeriod: GstDatePeriod = null;
 	public selectedGst: string = null;
 	public gstNumber: string = null;
@@ -41,6 +47,10 @@ export class FilingComponent implements OnInit, OnDestroy {
 
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** Returns the enum to be used in template */
+    public get GstReport() {
+        return GstReport;
+    }
 
 	private gstr1OverviewDataFetchedSuccessfully$: Observable<boolean>;
 	private gstr2OverviewDataFetchedSuccessfully$: Observable<boolean>;
@@ -67,8 +77,35 @@ export class FilingComponent implements OnInit, OnDestroy {
             }
         });
 	}
+    /**
+     * Aside pane toggle fixed class
+     *
+     *
+     * @memberof FilingComponent
+     */
+    public toggleBodyClass(): void {
+        if (this.asideGstSidebarMenuState === 'in') {
+            document.querySelector('body').classList.add('gst-sidebar-open');
+        } else {
+            document.querySelector('body').classList.remove('gst-sidebar-open');
+        }
+    }
+    /**
+      * This will toggle the settings popup
+      *
+      * @param {*} [event]
+      * @memberof FilingComponent
+      */
+    public toggleGstPane(event?): void {
+        this.toggleBodyClass();
+
+        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
+            this.asideGstSidebarMenuState = "out";
+        }
+    }
 
 	public ngOnInit() {
+        this.toggleGstPane();
 		this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
 			this.currentPeriod = {
 				from: params['from'],
@@ -100,18 +137,18 @@ export class FilingComponent implements OnInit, OnDestroy {
 			request.to = this.currentPeriod.to;
 			request.gstin = this.activeCompanyGstNumber;
 
-			if (this.selectedGst === 'gstr1') {
+			if (this.selectedGst === GstReport.Gstr1) {
 				this.gstr1OverviewDataFetchedSuccessfully$.pipe(take(1)).subscribe(bool => {
 					if (!bool) {
 						// it means no gstr1 data available or error occurred or user directly navigated to this tab
-						this.store.dispatch(this._gstAction.GetOverView('gstr1', request));
+						this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr1, request));
 					}
 				});
 			} else {
 				this.gstr2OverviewDataFetchedSuccessfully$.pipe(take(1)).subscribe(bool => {
 					if (!bool) {
 						// it means no gstr2 data available or error occurred or user directly navigated to this tab
-						this.store.dispatch(this._gstAction.GetOverView('gstr2', request));
+						this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr2, request));
 					}
 				});
 			}
@@ -139,6 +176,7 @@ export class FilingComponent implements OnInit, OnDestroy {
 	public ngOnDestroy(): void {
 		this.destroyed$.next(true);
 		this.destroyed$.complete();
+        document.querySelector('body').classList.remove('gst-sidebar-open');
     }
 
     /**
@@ -159,5 +197,43 @@ export class FilingComponent implements OnInit, OnDestroy {
     public handleBackButton(): void {
         this.showHsn = false;
         this.selectTab('', false, '1. Overview');
+    }
+
+    /**
+     * Navigates to the overview or dashboard page
+     *
+     * @param {*} type Type of report (gstr1, gstr2, gstr3b)
+     * @memberof FilingComponent
+     */
+    public navigateToOverview(type) {
+        this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0, selectedGst: this.activeCompanyGstNumber } });
+    }
+
+    /**
+     * Navigates to GSTR 3B
+     *
+     * @param {*} type Type of report (gstr1, gstr2, gstr3b)
+     * @memberof FilingComponent
+     */
+    public navigateTogstR3B(type) {
+        this._route.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: this.isCompany, selectedGst: this.activeCompanyGstNumber } });
+    }
+
+    /**
+     * Handles navigation to other GST reports
+     *
+     * @param {string} type Type of report (gstr1, gstr2, gstr3b)
+     * @memberof FilingComponent
+     */
+    public handleNavigation(type: string): void {
+        switch(type) {
+            case GstReport.Gstr1: case GstReport.Gstr2:
+                this.navigateToOverview(type);
+                break;
+            case GstReport.Gstr3b:
+                this.navigateTogstR3B(type);
+                break;
+            default: break;
+        }
     }
 }

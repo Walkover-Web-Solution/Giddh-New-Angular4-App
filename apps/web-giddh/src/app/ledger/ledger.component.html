@@ -630,7 +630,7 @@
                                     [totalItems]="(bankTransactionsResponse?.countPerPage)*(bankTransactionsResponse?.totalPages)"
                                     [itemsPerPage]="bankTransactionsResponse?.countPerPage" [maxSize]="5"
                                     class="pagination-sm" [(ngModel)]="bankTransactionsResponse.page"
-                                    (pageChanged)="bankTransactionPageChanged($event)" [boundaryLinks]="true">
+                                    (pageChanged)="bankTransactionPageChanged($event)" [boundaryLinks]="true" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
                                 </pagination>
                             </div>
                             <table class="w-100">

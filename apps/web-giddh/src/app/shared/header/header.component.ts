@@ -100,7 +100,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public activeFinancialYear: ActiveFinancialYear;
     public sideMenu: { isopen: boolean } = { isopen: false };
     public companyMenu: { isopen: boolean } = { isopen: false };
-    public isCompanyRefreshInProcess$: Observable<boolean>;
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     public companies$: Observable<CompanyResponse[]>;
     public selectedCompany: Observable<CompanyResponse>;
@@ -126,7 +125,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public selectedLedgerName: string;
     public companyList: CompanyResponse[] = [];
     public companyListForFilter: CompanyResponse[] = [];
-    public searchCmp: string = '';
     public loadAPI: Promise<any>;
     public hoveredIndx: number;
     public activeAccount$: Observable<AccountResponse>;
@@ -348,7 +346,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
 
-        this.isCompanyRefreshInProcess$ = this.store.pipe(select(state => state.session.isRefreshing), takeUntil(this.destroyed$));
         this.store.pipe(select(state => state.settings.updateProfileSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if(response) {
                 this.getCurrentCompanyData();
@@ -1015,12 +1012,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.addCompanyModal.hide();
         this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         this.manageGroupsAccountsModal.show();
-    }
-
-    public refreshCompanies(e: Event) {
-        e.stopPropagation();
-        e.preventDefault();
-        this.store.dispatch(this.companyActions.RefreshCompanies());
     }
 
     public onHide() {

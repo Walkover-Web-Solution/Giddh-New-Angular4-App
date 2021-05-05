@@ -1,30 +1,25 @@
 <div class="aside-pane" [keyboardShortcut]="'esc'" (onShortcutPress)="closeEvent.emit()">
-
-
-
     <div class="form-header">
-        <h3 class="aside-title">{{ tax && tax.uniqueName ? 'Update ' : 'Create New ' }}Tax</h3>
+        <h3 class="aside-title">{{ tax && tax.uniqueName ? localeData?.update_tax : localeData?.create_new_tax }}</h3>
     </div>
-
-    <button id="close" class="" (click)="closeEvent.emit()"><i class="icon-cross"></i></button>
-
+    <button id="close" (click)="closeEvent.emit()"><i class="icon-cross"></i></button>
     <div class="aside-body aside-create-tax-component">
         <div class="aside-pane-form">
             <div class="form-group">
 
-                <form class="" #taxForm="ngForm" (ngSubmit)="onSubmit()">
+                <form #taxForm="ngForm" (ngSubmit)="onSubmit()">
                     <div class="row">
 
                         <div class="form-group col-sm-6 col-xs-12">
-                            <label>Select Tax <span class="text-danger">*</span> </label><br>
+                            <label>{{localeData?.select_tax}} <span class="text-danger">*</span> </label><br>
                             <sh-select [options]="taxListSource$ | async" name="taxType" [(ngModel)]="newTaxObj.taxType"
-                                [defaultValue]="selectedTax" [placeholder]="'Select Tax'" required [isRequired]="true" [ItemHeight]="33"
+                                [defaultValue]="selectedTax" [placeholder]="localeData?.select_tax" required [isRequired]="true" [ItemHeight]="33"
                                 (selected)="selectTax($event)"></sh-select>
                         </div>
 
 
                         <div class="form-group col-sm-6 col-xs-12">
-                            <label>Tax Percent <span class="text-danger">*</span> </label><br>
+                            <label>{{localeData?.tax_percent}} <span class="text-danger">*</span> </label><br>
                             <input type="number" [(ngModel)]="newTaxObj.taxValue" name="taxValue" required
                                 class="form-control" min="-100" max="100" />
                         </div>
@@ -34,22 +29,22 @@
                     <div class="row">
 
                         <div class="form-group col-sm-6 col-xs-12">
-                            <label>Name <span class="text-danger">*</span> </label><br>
-                            <input type="text" placeholder="Name" [(ngModel)]="newTaxObj.name" name="name"
+                            <label>{{commonLocaleData?.app_name}} <span class="text-danger">*</span> </label><br>
+                            <input type="text" [placeholder]="commonLocaleData?.app_name" [(ngModel)]="newTaxObj.name" name="name"
                                 class="form-control" required (ngModelChange)="genUniqueName()" />
                         </div>
 
                         <div class="form-group col-sm-6 col-xs-12">
-                            <label>Unique No. </label><br>
+                            <label>{{localeData?.unique_no}} </label><br>
                             <input type="text" [(ngModel)]="newTaxObj.taxNumber" name="taxNumber"
-                                placeholder="Unique Number" required class="form-control" />
+                                [placeholder]="localeData?.unique_number" required class="form-control" />
                         </div>
 
                         <div class="form-group col-sm-6 col-xs-12"
                             *ngIf="newTaxObj.taxType === 'tds' || newTaxObj.taxType === 'tcs'">
-                            <label>Select Type <span class="text-danger">*</span> </label><br>
+                            <label>{{commonLocaleData?.app_select_type}} <span class="text-danger">*</span> </label><br>
                             <sh-select [options]="taxNameTypesMapping[newTaxObj.taxType]" name="tdsTcsTaxSubTypes"
-                                [(ngModel)]="newTaxObj.tdsTcsTaxSubTypes" [defaultValue]="selectedTaxType" placeholder="{{selectedTaxType ? selectedTaxType : 'Select Type'}}" [ngClass]="{'placeholder-black': selectedTaxType}"
+                                [(ngModel)]="newTaxObj.tdsTcsTaxSubTypes" [defaultValue]="selectedTaxType" placeholder="{{selectedTaxType ? selectedTaxType : commonLocaleData?.app_select_type}}" [ngClass]="{'placeholder-black': selectedTaxType}"
                                 [ItemHeight]="33" required [isRequired]="true" [forceClearReactive]="forceClear$ | async" [disabled]="checkIfTdsOrTcs"></sh-select>
                         </div>
 
@@ -58,14 +53,14 @@
                     <div class="row">
 
                         <div class="form-group col-sm-6 col-xs-12" *ngIf="newTaxObj.taxType === 'cess'">
-                            <label>Link Tax</label><br>
+                            <label>{{localeData?.link_tax}}</label><br>
                             <sh-select [options]="allTaxes" name="linkTax" [(ngModel)]="newTaxObj.taxType"
-                                [placeholder]="'Link Tax'" [ItemHeight]="33"></sh-select>
+                                [placeholder]="localeData?.link_tax" [ItemHeight]="33"></sh-select>
                         </div>
 
                         <div class="form-group col-sm-6 col-xs-12" *ngIf="newTaxObj.taxType === 'others' && !tax">
-                            <label>Linked Account <span class="text-danger">*</span></label><br>
-                            <sh-select [customFilter]="customAccountFilter" placeholder="Select Account" name="account"
+                            <label>{{localeData?.linked_account}} <span class="text-danger">*</span></label><br>
+                            <sh-select [customFilter]="customAccountFilter" [placeholder]="commonLocaleData?.app_select_account" name="account"
                                 [(ngModel)]="newTaxObj.account" [options]="linkedAccountsOption"></sh-select>
                         </div>
 
@@ -73,7 +68,7 @@
                     </div>
                     <div *ngIf="tax" class="row">
                         <div class="col-sm-12">
-                            Linked Account
+                            {{localeData?.linked_account}}
                             <div class="custom-tags">
                                 <span *ngFor="let acc of newTaxObj.accounts">
                                     {{ acc.name }}
@@ -84,16 +79,16 @@
 
 
                     <div *ngIf="newTaxObj.taxType === 'cess'">
-                        <input type="checkbox" /> Is any other tax linked to it
+                        <input type="checkbox" /> {{localeData?.is_other_tax_linked}}
                     </div>
 
                     <div class="row">
 
                         <div class="form-group col-sm-4 col-xs-12">
-                            <label>Apply Tax From</label>
+                            <label>{{localeData?.apply_tax_from}}</label>
                             <div class="input-group">
 
-                                <input name="lastInvoiceDate" placeholder="Daterangepicker" [(ngModel)]="newTaxObj.date"
+                                <input name="lastInvoiceDate" [placeholder]="commonLocaleData?.app_select_date" [(ngModel)]="newTaxObj.date"
                                     type="text" [bsConfig]="{dateInputFormat: giddhDateFormat, showWeekNumbers: false}"
                                     class="form-control" [outsideClick]="true" bsDatepicker required>
                             </div>
@@ -101,14 +96,14 @@
                         </div>
 
                         <div class="form-group col-sm-4 col-xs-12 ">
-                            <label>Tax Duration <span class="text-danger">*</span> </label><br>
-                            <sh-select placeholder="Select Duration" name="duration" required [isRequired]="true"
+                            <label>{{localeData?.tax_duration}} <span class="text-danger">*</span> </label><br>
+                            <sh-select [placeholder]="localeData?.select_duration" name="duration" required [isRequired]="true"
                                 [(ngModel)]="newTaxObj.duration" [options]="duration" [ItemHeight]="33"></sh-select>
                         </div>
 
                         <div class="form-group col-sm-4 col-xs-12">
-                            <label>Filing Date <span class="text-danger">*</span> </label>
-                            <sh-select placeholder="Select Date" [customSorting]="customDateSorting" name="taxFileDate"
+                            <label>{{localeData?.filing_date}} <span class="text-danger">*</span> </label>
+                            <sh-select [placeholder]="commonLocaleData?.app_select_date" [customSorting]="customDateSorting" name="taxFileDate"
                                 [(ngModel)]="newTaxObj.taxFileDate" required [isRequired]="true" [options]="days" [ItemHeight]="33">
                             </sh-select>
                         </div>
@@ -119,14 +114,14 @@
 
                         <div class="col-sm-12 mt-5">
                             <button type="submit" class="btn btn-success" *ngIf="!tax" [disabled]="taxForm.invalid"
-                                [ladda]="isTaxCreateInProcess">Create
+                                [ladda]="isTaxCreateInProcess">{{commonLocaleData?.app_create}}
                             </button>
 
                             <button type="submit" class="btn btn-success" *ngIf="tax && tax.uniqueName"
-                                [disabled]="taxForm.invalid" [ladda]="isUpdateTaxInProcess">Update
+                                [disabled]="taxForm.invalid" [ladda]="isUpdateTaxInProcess">{{commonLocaleData?.app_update}}
                             </button>
 
-                            <button type="button" (click)="closeEvent.emit()" class="btn btn-danger">Cancel</button>
+                            <button type="button" (click)="closeEvent.emit()" class="btn btn-danger">{{commonLocaleData?.app_cancel}}</button>
                         </div>
 
                     </div>

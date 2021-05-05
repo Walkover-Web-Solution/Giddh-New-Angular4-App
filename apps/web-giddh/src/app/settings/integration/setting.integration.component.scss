@@ -93,6 +93,22 @@
         height: 36px;
     }
 }
+.custom-multi-select{
+    width: 250px;
+    li {
+        background: $white-smoke;
+        color: $white;
+        margin: 4px;
+        padding: 2px 10px;
+        font-size: 14px;
+        border-radius: 3px;
+        cursor: pointer;
+        display: inline-block;
+        a{
+            color: $gray;
+        }
+    }
+}
 
 @media(max-width:1199px){
     .edit-save-button{

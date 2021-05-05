@@ -162,9 +162,6 @@
         padding: 5px 10px 5px 53% !important;
     }
 }
-.text-right{
-    text-align: right;
-}
 .table-cell{
     display: table-cell;
 }
@@ -172,6 +169,8 @@ body{
     font-family: "opensans-regular";
     font-display: block;
     -webkit-font-smoothing: auto;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 /* table css need to removed at last (finish)*/
 .modal-header .close{
@@ -213,23 +212,6 @@ body{
 .border-none {
     border: none !important;
 }
-
-.pt-0 {
-    padding-top: 0px !important;
-}
-
-.pb-0 {
-    padding-bottom: 0px !important;
-}
-
-.pr-0 {
-    padding-right: 0px !important;
-}
-
-.pl-0 {
-    padding-left: 0px !important;
-}
-
 .pd-1 {
     padding: 10px !important;
 }
@@ -587,7 +569,7 @@ input {
     padding: 0 15px;
 }
 
-.custom-tooltipe {
+.custom-tooltip {
     position: absolute;
     top: -22px;
     z-index: 99;
@@ -641,7 +623,9 @@ input {
     max-height: 305px;
     overflow-y: scroll;
 }
-
+.nav-left-bar .sub-list.all-company-list{
+    overflow-y: unset;
+}
 ul.sub-list {
     margin-top: 5px;
 }
@@ -931,11 +915,6 @@ ul.sub-list {
     margin-bottom: 0px;
     background: $white !important;
 }
-
-.d-none {
-    display: none;
-}
-
 .aging-checkbox {
     visibility: hidden;
     opacity: 0;
@@ -1144,7 +1123,9 @@ ul.sub-list {
 .h-100{
     height:100% !important;
 }
-
+.width-100 {
+    width: 100% !important;
+}
 .width-150 {
     width: 150px;
 }
@@ -1420,11 +1401,6 @@ modal-container.modal {
 .pd-t85 {
     padding-top: 85px !important;
 }
-
-.mb-0 {
-    margin-bottom: 0px;
-}
-
 .overlay-cal {
     .modal-body {
         max-width: 1120px !important;
@@ -2940,7 +2916,7 @@ li.no-click {
     right: 11px;
     top: 22px;
     font-size: 8px;
-    color: $davy-grey
+    color: $davy-grey;
 }
 
 .ranges li {
@@ -3251,11 +3227,11 @@ a.btn.btn-xs.btn-link.pull-right {
     top: -4px;
 }
 
-.mutliple_unit {
+.multiple-unit {
     position: relative;
 }
 
-.mutliple_unit button {
+.multiple-unit button {
     padding: 0;
     border: 0;
     background: 0 0;
@@ -3265,7 +3241,7 @@ a.btn.btn-xs.btn-link.pull-right {
     cursor: pointer;
 }
 
-.mutliple_unit button + button {
+.multiple-unit button + button {
     margin-left: 22px;
 }
 
@@ -3410,7 +3386,7 @@ a.btn.btn-xs.btn-link.pull-right {
     align-items: center;
 }
 
-.stock_info {
+.stock-info {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -4811,12 +4787,12 @@ label {
     margin-left: 255px;
 }
 
-.grp_col::-webkit-scrollbar-track {
+.grp-col::-webkit-scrollbar-track {
     background: $white-smoke;
     margin-left: 255px;
 }
 
-.grp_col::-webkit-scrollbar-thumb {
+.grp-col::-webkit-scrollbar-thumb {
     background-color: $nobel;
     outline: 1px solid $gray;
     margin-left: 255px;
@@ -5699,7 +5675,7 @@ input[type="checkbox"][disabled]:after {
     padding-left: 7px !important;
 }
 
-.table-container .profitLoss section div > div {
+.table-container .profit-loss section div > div {
     border-right: 0;
 }
 
@@ -6104,7 +6080,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     background-color: $alice-blue-light;
 }
 
-.ledg-head table td.pdR25imp {
+.ledg-head table td.pd-r25 {
     padding-right: 25px !important;
 }
 
@@ -6121,7 +6097,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     position: relative;
 }
 
-.ledg-head.entry-popup table td.pdR25imp {
+.ledg-head.entry-popup table td.pd-r25 {
     padding-right: 25px !important;
 }
 
@@ -6214,7 +6190,7 @@ table td[class*=col-]:last-child {
     font-weight: 400;
 }
 
-.pdR25imp {
+.pd-r25 {
     padding-right: 25px !important;
 }
 
@@ -7746,11 +7722,11 @@ app-header {
     white-space: initial;
 }
 
-footer#footer.absoulte-footer {
+footer#footer.absolute-footer {
     padding-left: 15px;
 }
 
-.menu_open footer#footer.absoulte-footer {
+.menu_open footer#footer.absolute-footer {
     padding-left: 230px;
 }
 
@@ -7758,7 +7734,7 @@ footer#footer.absoulte-footer {
     position: relative;
 }
 
-.inventory-page footer#footer.absoulte-footer {
+.inventory-page footer#footer.absolute-footer {
     bottom: -60px;
     background-color: transparent !important;
 }
@@ -8433,7 +8409,7 @@ button.btn.btn-filter {
     transform: translate(0);
 }
 
-.dropdown-container .dropdown-menu li label.checkbox.oh.custom-item span {
+.dropdown-container .dropdown-menu li label.checkbox.overflow-hidden.custom-item span {
     max-width: calc(100% - 35px);
     line-height: initial;
 }
@@ -8649,7 +8625,7 @@ p.remvBrnchName {
     background-color: transparent;
     z-index: 9;
     position: relative !important;
-    top: -4px;
+    top: -4px !important;
     margin-bottom: 10px;
 }
 
@@ -9139,7 +9115,7 @@ span#HW_badge_cont:nth-child(3) {
     left: -240px !important;
     display: none !important;
 }
-.setting-sidebar-open .nav-left-bar{
+.setting-sidebar-open .nav-left-bar, .on-user-page .nav-left-bar, .on-setting-page .nav-left-bar{
     display: none;
 }
 .menu_open aside-setting.setting-sidebar {
@@ -9472,8 +9448,8 @@ ul.dropdown-menu.action-dropdown {
     max-width: 170px;
 }
 .collapse-pane  .mat-form-field{
-    min-width: 147px;
-    max-width: 147px;
+    min-width: 100%;
+    max-width: 100%;
 }
 .mat-form-field{
     min-width: 170px;
@@ -9679,7 +9655,7 @@ input.mat-input-element{
         }
     }
     #primary-new-header.primary-main-header.open{
-        padding-left: 240px !important;
+        padding-left: 15px !important;
     }
     .add-manage-group-acc{
         .modal-header{
@@ -9688,6 +9664,9 @@ input.mat-input-element{
     }
     .plan-wrapper{
         padding-left: 60px;
+    }
+    .on-setting-page .plan-wrapper, .on-user-page .plan-wrapper{
+        padding-left: 0;
     }
     .plan-wrapper.menu_open{
             padding-left: 240px !important;
@@ -9712,6 +9691,71 @@ input.mat-input-element{
             }
         }
     }
+    .invoice-modal-content{
+        left: 0 !important;
+        width: 100% !important;
+        z-index: 991 !important;
+    }
+    .primary-sidebar{
+        .giddh-primary-items{
+            .main-item{
+                .bs-tooltip-top {
+                    display: none;
+                }
+            }
+        }
+        &.sidebar-collapse{
+            .giddh-primary-items{
+                .main-item{
+                    .bs-tooltip-top {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+    .gst-sidebar-open {
+         .gst-sidebar{
+            left: -250px !important;
+         }
+         #content-wrapper{
+            padding-left: 0;
+        }
+        .nav-left-bar{
+            display: none;
+        }
+        .plan-wrapper{
+            padding-left: 0;
+        }
+        .menu_open{
+            .gst-sidebar{
+                left: 0 !important;
+            }
+            #content-wrapper {
+                padding-left: 240px;
+            }
+            .plan-wrapper{
+                padding-left: 60px;
+            }
+        }
+     }
+     body.update-scroll-hidden{
+         overflow-y: hidden;
+     }
+     .e-waybill-tabs.custom-tabs .nav-tabs{
+        position: static !important;
+        padding-left: 15px !important;
+    }
+    .e-waybill-tabs.custom-tabs .nav-tabs{
+        position: static !important;
+        padding-left: 15px !important;
+    }
+    .sales-register{
+        width: calc(100% - 60px) !important;
+    }
+    .menu_open .sales-register{
+        width: calc(100% - 240px) !important;
+    }
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {
@@ -9721,17 +9765,6 @@ input.mat-input-element{
     }
 
     @media (max-width: 1024px) {
-        /* bs-datepicker-container{
-                position: absolute !important;
-                left: 15px !important;
-                top: 40px !important;
-                transform: none !important;
-        }
-        .payment-date{
-            bs-datepicker-container{
-                top: 60px !important;
-            }
-        }*/
         .users-last-list {
             .cdk-virtual-scroll-content-wrapper {
                 position: relative;
@@ -9821,13 +9854,24 @@ input.mat-input-element{
         }
     }
 
-@media(max-width:1019px){
-    .hide-sub-sidebar .sidebar-handle{
-        left: 0 !important;
+    @media(max-width:1019px){
+        .hide-sub-sidebar .sidebar-handle{
+            left: 0 !important;
+        }
     }
-}
 
     @media (max-width: 991px) {
+        .menu_open{
+            .reverse-table-report {
+                .input-grp-date-range-picker {
+                    flex-direction: column !important;
+                    .clear-filter {
+                        width: 50%;
+                        margin-left: 0;
+                    }
+                }
+            }
+        }
         .setting-tab-data li.nav-item {
             display: inline-block;
         }
@@ -9963,6 +10007,14 @@ input.mat-input-element{
     }
 
   @media (max-width: 768px) {
+        .menu_open .sales-register{
+            width: 100% !important;
+            padding-right: 0 !important;
+        }
+        .sales-register{
+            width: 100% !important;
+            padding-right: 0 !important;
+        }
           .bulk-create-table sh-select input, .bulk-create-table .mat-form-field-wrapper input,
           .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex{
                 border: 1px solid $gainsboro !important;
@@ -10102,7 +10154,7 @@ input.mat-input-element{
             }
         }
         .on-setting-page aside-setting.setting-sidebar {
-            left: -230px;
+            left: -250px;
         }
         .setting-sidebar-open .desktop-header {
             padding-left: 0;
@@ -10132,6 +10184,13 @@ input.mat-input-element{
     }
 }
 @media (max-width: 767px) {
+    .e-waybill-tabs.custom-tabs .nav-tabs{
+        position: fixed !important;
+    }
+    .invoice-modal-content{
+        left: 0 !important;
+        width: 100% !important;
+    }
     .invoice-footer, .sticky-footer.sticky-footer-sale-amount {
        left: 0;
     }
@@ -10388,7 +10447,7 @@ input.mat-input-element{
     > .nav.nav-tabs , .invoice-control .nav.nav-tabs, .setting-page ul.nav.nav-tabs{
             position: fixed !important;
             width: 100%;
-            top: 91px !important;
+            top: 90px !important;
         }
         #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
             top: 88px;

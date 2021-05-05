@@ -254,11 +254,11 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
         // add addInputRow to the list
         if (item) {
             if (control.controls[i]) {
-                control.controls[i].patchValue(item);
+                control.controls[i]?.patchValue(item);
             } else {
                 control.push(this.rowArray());
                 setTimeout(() => {
-                    control.controls[i].patchValue(item);
+                    control.controls[i]?.patchValue(item);
                 }, 200);
             }
         } else {
@@ -388,7 +388,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
      */
     public createLoginForm(response) {
         this.loginForm = this.initLoginForm();
-        this.loginForm.patchValue({
+        this.loginForm?.patchValue({
             id: response.id,
             forgotPasswordUrL: response.forgotPasswordUrL,
             loginHelp: response.loginHelp,

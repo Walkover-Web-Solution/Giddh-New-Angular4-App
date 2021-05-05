@@ -420,7 +420,19 @@
                                     <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                         <label>User</label>
                                         <br>
-                                        <sh-select [options]="usersList" name="usersList" formControlName="emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select>
+                                        <div class="btn-group btn-block select-caret invoice-btn" dropdown>
+                                            <button dropdownToggle type="button"
+                                                class="form-control text-left btn-block dropdown-toggle">{{ getSelectedItemCount(usersList) || 'Select User' }}<span
+                                                    class="select-drop pull-right mr-t1"></span></button>
+                                            <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
+                                                <li *ngIf="usersList.length==0">No results found</li>
+                                                <li *ngFor="let user of usersList; index as userIndex">
+                                                    <input type="checkbox" (click)="selectUsers(user, $event, userIndex)"
+                                                        [checked]="user.isSelected" /> {{user.label}}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <!-- <sh-select [options]="usersList" name="usersList" [multiple]="true" formControlName="emailIds" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select> -->
                                     </div>
                                 </div>
                                 <!-- <ng-container formArrayName="userAmountRanges">
@@ -544,7 +556,19 @@
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                     <label>User</label>
                                     <br>
-                                    <sh-select [disabled]="isBankUpdateInEdit !== parentIndex" [options]="usersList" name="usersList" [defaultValue]="regAcc?.userName" [(ngModel)]="regAcc.emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off"   (selected)="selectUser($event)"></sh-select>
+                                    <div class="btn-group btn-block select-caret invoice-btn">
+                                        <button disabled type="button"
+                                            class="form-control text-left btn-block dropdown-toggle"> {{regAcc?.selectedUsers?.length || 'Select User'}} <span
+                                                class="select-drop pull-right mr-t1"></span></button>
+                                        <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
+                                            <li *ngIf="usersList.length==0">No results found</li>
+                                            <li *ngFor="let user of usersList; index as userIndex">
+                                                <input type="checkbox" (click)="selectUsers(user, $event, userIndex)"
+                                                    [checked]="user.isSelected" /> {{user.label}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- <sh-select [disabled]="isBankUpdateInEdit !== parentIndex" [options]="usersList" name="usersList" [defaultValue]="regAcc?.combinedUserNames" [(ngModel)]="regAcc.emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off"   (selected)="selectUser($event)"></sh-select> -->
                                 </div>
                             </div>
                             <!-- Added this new row make it dynamic -->
@@ -636,7 +660,7 @@
                         </div> -->
                         <a href="javascript:;" class="text-right btn btn-primary" (click)="showBeneficiaryModal(regAcc.URN)"> List Beneficiary </a>
                     </div>
-                    <br *ngIf="parentIndex !== (registeredAccount?.length - 1)" />
+                    <br *ngIf="parentIndex !== (registeredAccount?.length - 1) || openNewRegistration" />
                 </div>
                 <!-- <div *ngIf="openNewRegistration && !(isPaymentAdditionSuccess$ | async)" class="box clearfix">
                     <h3 class="font-20 bold mb-2">ICICI Bank</h3>
@@ -788,7 +812,19 @@
                             <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                 <label>User</label>
                                 <br>
-                                <sh-select [options]="usersList" name="usersList" formControlName="emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select>
+                                <div class="btn-group btn-block select-caret invoice-btn" dropdown>
+                                    <button dropdownToggle type="button"
+                                        class="form-control text-left btn-block dropdown-toggle">{{ getSelectedItemCount(usersList) || 'Select User' }}<span
+                                            class="select-drop pull-right mr-t1"></span></button>
+                                    <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
+                                        <li *ngIf="usersList.length==0">No results found</li>
+                                        <li *ngFor="let user of usersList; index as userIndex">
+                                            <input type="checkbox" (click)="selectUsers(user, $event, userIndex)"
+                                                [checked]="user.isSelected" /> {{user.label}}
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- <sh-select [options]="usersList" name="usersList" formControlName="emailIds" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select> -->
                             </div>
                         </div>
                         <!-- <ng-container formArrayName="userAmountRanges">
@@ -884,11 +920,11 @@
                     </form>
                     <div *ngIf="(isPaymentAdditionSuccess$ | async)">
                         <div class="clearfix d-inline-block">
-                            <div>Congratulations!! A request has been sent to your account, go to <a class="btn-link" href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
+                            <div>Congratulations!! A request has been sent to your account, go to <a class="btn-link" href="https://cibnext.icicibank.com/corp/AuthenticationController?FORMSGROUP_ID__=AuthenticationFG&__START_TRAN_FLAG__=Y&FG_BUTTONS__=LOAD&ACTION.LOAD=Y&AuthenticationFG.LOGIN_FLAG=1&BANK_ID=ICI&ITM=nli_corp_primer_login_btn_desk" target="_blank">ICICI bank portal</a> and accept it.
                             </div>
                         </div>
                         <div class="clearfix">
-                            <div class="payment-text">Once it is done you can link your ICICI account/s and make payment directly through GIDDH.
+                            <div class="payment-text">Once it is done you can link your ICICI bank account/s and make payment directly through GIDDH.
                             </div>
                         </div>
                     </div>

@@ -21,13 +21,32 @@
     text-transform: none;
     line-height: 1;
     stroke-width: thin;
-    -webkit-text-stroke-width: thin;
-
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-template:before {
+  content: "\e9b8";
+}
+.icon-GSTR:before {
+  content: "\e9cd";
+}
+.icon-settings-cog:before {
+  content: "\e9e5";
+}
+.icon-vendor:before {
+  content: "\e908";
+}
+.icon-left:before {
+  content: "\e9e1";
+}
+.icon-right:before {
+  content: "\e9e2";
+}
+.icon-up:before {
+  content: "\e9e3";
+}
 .icon-security:before {
   content: "\e9e0";
 }
@@ -76,9 +95,6 @@
 .icon-question-new:before {
   content: "\e9cb";
 }
-.icon-settings-new:before {
-  content: "\e9cd";
-}
 .icon-bell-new:before {
   content: "\e9c8";
 }
@@ -120,6 +136,9 @@
 }
 .icon-trial-balance-new:before {
   content: "\e9b9";
+}
+.icon-tax1:before {
+  content: "\e9e4";
 }
 .icon-tally-import:before {
   content: "\e9ba";
@@ -212,9 +231,6 @@
 .icon-tax-new:before {
   content: "\e9b7";
 }
-.icon-template-new:before {
-  content: "\e9b8";
-}
 .icon-import:before {
   content: "\e903";
 }
@@ -229,9 +245,6 @@
 }
 .icon-search:before {
   content: "\e907";
-}
-.icon-vendor:before {
-  content: "\e908";
 }
 .icon-voucher:before {
   content: "\e909";

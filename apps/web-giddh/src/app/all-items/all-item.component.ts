@@ -3,20 +3,21 @@ import {
     ChangeDetectorRef,
     Component,
     ElementRef,
+    HostListener,
     OnDestroy,
     OnInit,
     ViewChild,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-
 import { CompanyActions } from '../actions/company.actions';
+import { GeneralActions } from '../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
-import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
-import { ALL_ITEMS, AllItem } from '../shared/helpers/allItems';
+import { AllItem } from '../shared/helpers/allItems';
 import { AppState } from '../store';
 
 @Component({
@@ -35,17 +36,84 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     public filteredItems$: Observable<any[]> = of([]);
     /** This will hold search string */
     public search: any;
+    /** Stores the current focused menu item index (on press of Tab key) */
+    public menuIndex: number = -1;
+    /** Stores the current focused sub-item index (on press of Tab key) */
+    public itemIndex: number = -1;
     /** Subject to unsubscribe from listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private companyActions: CompanyActions,
         private generalService: GeneralService,
+        private generalActions: GeneralActions,
         private groupWithAction: GroupWithAccountsAction,
+        private router: Router,
         private store: Store<AppState>
     ) {
 
+    }
+
+    /**
+     * Listens to tab and enter key event to focus the items and navigate
+     *
+     * @param {KeyboardEvent} event Keyboard event
+     * @returns
+     * @memberof AllGiddhItemComponent
+     */
+    @HostListener('document:keydown', ['$event'])
+    public handleKeyboardUpEvent(event: KeyboardEvent) {
+        let items = [];
+        this.filteredItems$.pipe(take(1)).subscribe(filteredItems => {
+            if (filteredItems) {
+                items = filteredItems;
+            }
+        });
+        if (event.key === 'Tab') {
+            if (this.menuIndex === -1 || this.itemIndex === -1) {
+                this.menuIndex = 0;
+                this.itemIndex = 0;
+                return;
+            }
+            if (event.shiftKey) {
+                if (items.length) {
+                    if (items[this.menuIndex].items[this.itemIndex - 1]) {
+                        this.itemIndex -= 1;
+                    } else {
+                        this.menuIndex = items[this.menuIndex - 1] ? this.menuIndex - 1 : 0;
+                        this.itemIndex = items[this.menuIndex].items.length - 1;
+                    }
+                } else {
+                    this.menuIndex = 0;
+                    this.itemIndex = 0;
+                }
+            } else {
+                if (items.length) {
+                    if (items[this.menuIndex].items[this.itemIndex + 1]) {
+                        this.itemIndex += 1;
+                    } else {
+                        this.menuIndex = items[this.menuIndex + 1] ? this.menuIndex + 1 : 0;
+                        this.itemIndex = 0;
+                    }
+                } else {
+                    this.menuIndex = 0;
+                    this.itemIndex = 0;
+                }
+            }
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        if (event.key === 'Enter' && this.menuIndex !== -1 && this.itemIndex !== -1) {
+            const currentFocusedItem = items[this.menuIndex]?.items[this.itemIndex];
+            if (currentFocusedItem) {
+                this.router.navigate([currentFocusedItem.link], { queryParams: currentFocusedItem.additional});
+            }
+        }
     }
 
     /**
@@ -54,14 +122,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      * @memberof AllGiddhItemComponent
      */
     public ngOnInit(): void {
-        this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(items => {
-            if (items) {
-                const allItems = this.generalService.getVisibleMenuItems(items, ALL_ITEMS, this.generalService.currentOrganizationType === OrganizationType.Branch);
-                this.allItems$ = of(allItems);
-                this.filteredItems$ = of(allItems);
-                this.changeDetectorRef.detectChanges();
-            }
-        });
+        this.store.dispatch(this.generalActions.getSideMenuItems());
         this.searchField?.nativeElement?.focus();
         this.saveLastState();
     }
@@ -133,7 +194,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      * @memberof AllGiddhItemComponent
      */
     public handleItemClick(item: AllItem): void {
-        if (item.label === 'Master') {
+        if (item.label === this.commonLocaleData?.app_master) {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
         }
     }
@@ -151,5 +212,24 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
         stateDetailsRequest.lastState = `/pages/${state}`;
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof AllGiddhItemComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(items => {
+                if (items) {
+                    const allItems = this.generalService.getVisibleMenuItems(items, this.localeData?.items);
+                    this.allItems$ = of(allItems);
+                    this.filteredItems$ = of(allItems);
+                    this.changeDetectorRef.detectChanges();
+                }
+            });
+        }
     }
 }

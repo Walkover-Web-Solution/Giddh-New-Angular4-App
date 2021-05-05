@@ -741,7 +741,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (transaction.voucherAdjustments && transaction.voucherAdjustments.adjustments && transaction.voucherAdjustments.adjustments.length > 0) {
                 transaction.voucherAdjustments.adjustments.forEach((adjustment: any) => {
                     if (adjustment.balanceDue !== undefined) {
-                        adjustment.adjustmentAmount = adjustment.balanceDue;
                         delete adjustment.balanceDue;
                     }
                 });
@@ -868,12 +867,20 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public deleteAttachedFile() {
-        this.blankLedger.attachedFile = '';
-        this.blankLedger.attachedFileName = '';
-        this.hideDeleteAttachedFileModal();
-        if (this.webFileInput && this.webFileInput.nativeElement) {
-            this.webFileInput.nativeElement.value = '';
-        }
+        this._ledgerService.removeAttachment(this.blankLedger.attachedFile).subscribe((response) => {
+            if (response?.status === 'success') {
+                this.blankLedger.attachedFile = '';
+                this.blankLedger.attachedFileName = '';
+                this.hideDeleteAttachedFileModal();
+                if (this.webFileInput && this.webFileInput.nativeElement) {
+                    this.webFileInput.nativeElement.value = '';
+                }
+                this.detectChanges();
+                this._toasty.successToast(this.localeData?.remove_file);
+            } else {
+                this._toasty.errorToast(response?.message)
+            }
+        });
     }
 
     public ngOnDestroy(): void {
@@ -1341,7 +1348,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             if(adjustments && adjustments.length > 0) {
                 adjustments.forEach(adjustment => {
-                    adjustment.adjustmentAmount = adjustment.balanceDue;
                     adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
                 });
             }
@@ -1360,7 +1366,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.isAdjustReceiptSelected = false;
                 }
                 this.isAdjustVoucherSelected = false;
-                this.blankLedger.generateInvoice = false;
             }
         }
 
@@ -1381,7 +1386,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.isAdjustReceiptSelected = false;
             }
             this.isAdjustVoucherSelected = false;
-            this.blankLedger.generateInvoice = false;
         }
         this.adjustPaymentModal.hide();
     }

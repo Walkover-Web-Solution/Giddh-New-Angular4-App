@@ -628,6 +628,10 @@ textarea:focus {
     height: 34px !important;
 }
 
+textarea.form-control {
+    height: auto !important;
+}
+
 form label {
     font-size: 14px;
 }
@@ -994,6 +998,12 @@ section.static-invoice-table {
 .wrap-billing-address.clearfix {
     margin-top: 15px;
     margin-bottom: 5px;
+    input, .sales-country-label, sales-sh-select input{
+        padding: 0 !important;
+    }
+    .bottom-border-only{
+        padding-left: 0 !important;
+    }
 }
 
 .customer-invoice-table.bg-white {

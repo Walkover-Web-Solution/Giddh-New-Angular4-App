@@ -56,6 +56,10 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     /** Stores the current organization uniqueName
      * (required for checking the entity same as the organization in create-address link-entity field) */
     @Input() public currentOrganizationUniqueName: string;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     constructor(
         private formBuilder: FormBuilder,
@@ -77,12 +81,13 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     taxNumber: ['', (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
                     state: ['', Validators.required],
                     address: [''],
-                    linkedEntity: [[]]
+                    linkedEntity: [[]],
+                    pincode: []
                 });
                 if (this.currentOrganizationUniqueName && this.addressConfiguration && this.addressConfiguration.linkedEntities
                     && this.addressConfiguration.linkedEntities.some(entity => entity.uniqueName === this.currentOrganizationUniqueName)) {
                         // This will by default show the current organization unique name as selected linked entity
-                        this.addressForm.get('linkedEntity').patchValue([`${this.currentOrganizationUniqueName}`]);
+                        this.addressForm.get('linkedEntity')?.patchValue([`${this.currentOrganizationUniqueName}`]);
                 }
             } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress) {
                 if (this.addressToUpdate) {
@@ -92,7 +97,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
                         state: [{value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, Validators.required],
                         address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' ? [Validators.required] : []],
-                        linkedEntity: [this.addressToUpdate.linkedEntities.map(entity => entity.uniqueName)]
+                        linkedEntity: [this.addressToUpdate.linkedEntities.map(entity => entity.uniqueName)],
+                        pincode: [this.addressToUpdate.pincode]
                     });
                     const linkedEntity = [...this.addressToUpdate.linkedEntities];
                     while (linkedEntity.length) {
@@ -226,25 +232,27 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 if (gstVal.length >= 2) {
                     let currentState = this.addressConfiguration.stateList.find(state => state.code === gstVal.substring(0, 2));
                     if (currentState) {
-                        this.addressForm.get('state').patchValue(currentState.value);
+                        this.addressForm.get('state')?.patchValue(currentState.value);
                         this.addressForm.get('state').disable();
                     } else {
-                        this.addressForm.get('state').patchValue(null);
+                        this.addressForm.get('state')?.patchValue(null);
                         this.addressForm.get('state').enable();
                         if (this.addressConfiguration?.tax?.name && !this.addressForm.get('taxNumber')?.valid) {
-                            this.toasterService.errorToast(`Invalid ${this.addressConfiguration.tax.name}`);
+                            let message = this.commonLocaleData?.app_invalid_tax_name;
+                            message = message?.replace("[TAX_NAME]", this.addressConfiguration.tax.name);
+                            this.toasterService.errorToast(message);
                         }
                     }
                 } else {
                     statesEle.forceClearReactive.status = true;
                     statesEle.clear();
-                    this.addressForm.get('state').patchValue(null);
+                    this.addressForm.get('state')?.patchValue(null);
                     this.addressForm.get('state').enable();
                 }
             } else {
                 statesEle.forceClearReactive.status = true;
                 statesEle.clear();
-                this.addressForm.get('state').patchValue(null);
+                this.addressForm.get('state')?.patchValue(null);
                 this.addressForm.get('state').enable();
             }
         }
@@ -269,7 +277,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         }
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
-            this.addressForm.get('linkedEntity').patchValue([
+            this.addressForm.get('linkedEntity')?.patchValue([
                 ...this.addressForm.get('linkedEntity').value,
                 option.value
             ]);
@@ -300,5 +308,44 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 entity.isDefault = false;
             }
         });
+    }
+
+    /**
+     * Returns the information save text
+     *
+     * @param {*} companyName
+     * @returns {string}
+     * @memberof CreateAddressComponent
+     */
+    public getInformationSaveText(companyName: any): string {
+        let text = this.localeData?.all_information_save;
+        text = text?.replace("[COMPANY_NAME]", companyName);
+        return text;
+    }
+
+    /**
+     * Returns enter tax text
+     *
+     * @param {*} taxName
+     * @returns {string}
+     * @memberof CreateAddressComponent
+     */
+    public getEnterTaxText(taxName: any): string {
+        let text = this.localeData?.enter_tax;
+        text = text?.replace("[TAX_NAME]", taxName);
+        return text;
+    }
+
+    /**
+     * Returns the branch of company text
+     *
+     * @param {*} companyName
+     * @returns {string}
+     * @memberof CreateAddressComponent
+     */
+    public getBranchOfText(companyName: any): string {
+        let text = this.localeData?.branch_of_company;
+        text = text?.replace("[COMPANY_NAME]", companyName);
+        return text;
     }
 }

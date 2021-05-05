@@ -16,7 +16,7 @@
 }
 .invoice-detail-header {
     padding-top: 25px;
-    width: calc(100% - 240px);
+    width: 100%;
 }
 .relative {
     height: 100% !important;
@@ -25,7 +25,7 @@
 .invoice-modal-content {
     padding: 0;
     position: fixed;
-    top: 46px;
+    top: 57px;
     width: 100%;
     background-color: $white;
     margin: 0 0;

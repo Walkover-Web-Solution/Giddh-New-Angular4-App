@@ -53,6 +53,9 @@ export interface ReceiptItem {
     purchaseOrderNumbers?: number;
     grandTotalTooltipText?: string;
     balanceDueTooltipText?: string;
+    status?: string;
+    errorMessage?: string;
+    eInvoiceStatusTooltip?: string;
 }
 
 export interface ReciptResponse {

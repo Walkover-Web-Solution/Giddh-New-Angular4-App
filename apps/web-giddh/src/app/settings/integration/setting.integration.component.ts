@@ -261,7 +261,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
             if (o.amazonSeller && o.amazonSeller.length) {
                 this.amazonSellerRes = _.cloneDeep(o.amazonSeller);
-                this.amazonSellerForm.controls['sellers'].patchValue(this.amazonSellerRes);
+                this.amazonSellerForm.controls['sellers']?.patchValue(this.amazonSellerRes);
                 // this.amazonSellerForm.controls['sellers'].disable();
                 this.addAmazonSellerRow();
             }
@@ -311,10 +311,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                                     item.loginId = `${item.corpId}.${item.userId}`;
                                 }
                             }
-                        });
-                    }
-                    if (this.registeredAccount) {
-                        this.registeredAccount.map(item => {
+                            item.selectedUsers = this.usersList.filter(user => item.emailIds?.find(emailId => user.value === emailId)) ?? [];
                             this.getRegistrationStatus(item);
                             item.userAmountRanges.map(element => {
                                 if (typeof element.maxBankLimit === "boolean") {
@@ -399,6 +396,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 });
             }
         });
+
     }
 
     public ngAfterViewInit() {
@@ -630,14 +628,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         const control = this.amazonSellerForm.controls['sellers'] as FormArray;
         if (item) {
             if (control.controls[i]) {
-                control.controls[i].patchValue(item);
+                control.controls[i]?.patchValue(item);
                 if (control.controls[i].value.sellerId) {
                     control.controls[i].disable();
                 }
             } else {
                 control.push(this.initAmazonReseller());
                 setTimeout(() => {
-                    control.controls[i].patchValue(item);
+                    control.controls[i]?.patchValue(item);
                     if (control.controls[i].value.sellerId) {
                         control.controls[i].disable();
                     }
@@ -748,8 +746,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             URN: this.updateBankUrnNumber,
             accountUniqueName: registeredAccountObj.accountUniqueName,
             userAmountRanges: registeredAccountObj.userAmountRanges,
-            userName: registeredAccountObj.userName,
-            emailId: registeredAccountObj.emailId
+            userNames: registeredAccountObj.userNames,
+            emailIds: registeredAccountObj.emailIds
         }
         this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentInfo(requestData));
         this.paymentFormObj = new PaymentClass();
@@ -865,24 +863,24 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         if (!isUpdate) {
             let userAmountRanges = this.addBankForm.get('userAmountRanges') as FormArray;
-            userAmountRanges.controls[index].get('amount').patchValue(null);
+            userAmountRanges.controls[index].get('amount')?.patchValue(null);
             if (event.value === 'max') {
-                userAmountRanges.controls[index].get('maxBankLimit').patchValue('max');
-                userAmountRanges.controls[index].get('amount').patchValue(null);
+                userAmountRanges.controls[index].get('maxBankLimit')?.patchValue('max');
+                userAmountRanges.controls[index].get('amount')?.patchValue(null);
                 userAmountRanges.controls[index].get('amount').clearValidators();
                 userAmountRanges.controls[index].get('amount').reset();
 
                 if (this.checkIsMaxBankLimitSelectedField(userAmountRanges, index)) {
-                    userAmountRanges.controls[index].get('maxBankLimit').patchValue('custom');
-                    userAmountRanges.controls[index].get('amount').patchValue(null);
+                    userAmountRanges.controls[index].get('maxBankLimit')?.patchValue('custom');
+                    userAmountRanges.controls[index].get('amount')?.patchValue(null);
                     userAmountRanges.controls[index].get('amount').setErrors({ 'incorrect': true });
                     userAmountRanges.controls[index].get('amount').setValidators(Validators.compose([Validators.required]));
                     this.toasty.infoToast('You can not select max bank limit more than 1');
                 }
             } else {
-                userAmountRanges.controls[index].get('maxBankLimit').patchValue('custom');
+                userAmountRanges.controls[index].get('maxBankLimit')?.patchValue('custom');
                 userAmountRanges.controls[index].get('amount').setValidators(Validators.compose([Validators.required]));
-                userAmountRanges.controls[index].get('amount').patchValue(null);
+                userAmountRanges.controls[index].get('amount')?.patchValue(null);
             }
         }
         if (isUpdate && this.registeredAccount && this.registeredAccount[parentIndex].userAmountRanges) {
@@ -1117,7 +1115,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             } else {
                 transactions.controls[index].get('approvalUniqueName').clearValidators();
             }
-            transactions.controls[index].get('approvalUniqueName').patchValue(null)
+            transactions.controls[index].get('approvalUniqueName')?.patchValue(null)
         } else if (event && this.registeredAccount && this.registeredAccount[parentIndex].userAmountRanges && isUpdate) {
             this.registeredAccount[parentIndex].userAmountRanges[index].approvalUniqueName = null;
             this.registeredAccount[parentIndex].userAmountRanges[index].approvalDetails = null;
@@ -1184,8 +1182,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     approvalUniqueName: [''],
                 })
             ]),
-            userName: [null],
-            emailId: [null]
+            userNames: [[]],
+            emailIds: [[]]
         });
     }
 
@@ -1203,7 +1201,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             approvalUniqueName: [''],
         });
         if (value) {
-            transactionsFields.patchValue(value);
+            transactionsFields?.patchValue(value);
         }
         return transactionsFields;
     }
@@ -1264,7 +1262,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (!isUpdate) {
             const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
             if (Number(amount) <= 0) {
-                transactions.controls[index].get('amount').patchValue(null);
+                transactions.controls[index].get('amount')?.patchValue(null);
             } else {
                 transactions.controls[index].get('amount').setErrors(null);
             }
@@ -1285,6 +1283,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public editRegisterForm(index: any, updateFormValue?: IntegratedBankList): void {
         this.isBankUpdateInEdit = index;
+        if (index === null) {
+            this.resetUserSelection();
+        } else {
+            this.setUserSelection();
+        }
         this.updateBankUrnNumber = null;
         this.addBankForm = this.createBankIntegrationForm();
         if (updateFormValue) {
@@ -1293,7 +1296,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 updateFormValue.accountUniqueName = updateFormValue.account.uniqueName;
             }
             this.openNewRegistration = false;
-            this.addBankForm.patchValue(updateFormValue);
+            this.addBankForm?.patchValue(updateFormValue);
             updateFormValue.userAmountRanges.forEach((item, indexAmount) => {
                 if (indexAmount) {
                     this.filledAmountRangesForm(item);
@@ -1638,8 +1641,66 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public selectUser(event: any): void {
         if(event) {
-            this.addBankForm.get('userName').patchValue(event.label);
-            this.addBankForm.get('emailId').patchValue(event.value);
+            this.addBankForm.get('userNames')?.patchValue(event.map(ev => ev.label));
         }
+    }
+
+    /**
+     * Selects the users
+     *
+     * @param {*} user Selected user
+     * @param {*} event Select event
+     * @param {*} userIndex Current user index in list
+     * @memberof SettingIntegrationComponent
+     */
+    public selectUsers(user: any, event: any, userIndex): void {
+        if (event && user) {
+            if (event.target.checked) {
+                user.isSelected = event.target.checked;
+                this.usersList[userIndex].isSelected = true;
+            } else {
+                this.usersList[userIndex].isSelected = false;
+            }
+            this.addBankForm.get('userNames')?.patchValue(this.usersList.filter(ev => ev.isSelected && ev.label).map(user => user.label));
+            this.addBankForm.get('emailIds')?.patchValue(this.usersList.filter(ev => ev.isSelected && ev.value).map(user => user.value));
+        }
+        event.stopPropagation();
+    }
+
+    public removeUser(user: any, isUpdate?: boolean): void {
+        let i = 0;
+        let matchedIndex = -1;
+
+        for (i; i < this.usersList.length; i++) {
+            if (user === this.usersList[i].value) {
+                matchedIndex = i;
+                break;
+            }
+        }
+
+        let indx = -1;
+        if (isUpdate) {
+            indx = this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.findIndex(selectedUser => selectedUser.value === user.value);
+            this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.splice(indx, 1);
+        } else {
+            indx = this.usersList.findIndex(selectedUser => selectedUser.value === user.value);
+            this.usersList[indx].isSelected = false;
+        }
+
+        if (matchedIndex > -1) {
+            this.usersList[matchedIndex].isSelected = false;
+        }
+    }
+
+    public resetUserSelection(): void {
+        this.usersList.forEach(user => user.isSelected = false);
+    }
+
+    public setUserSelection(): void {
+        this.usersList.forEach(user => user.isSelected = this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.some(selectedUser => selectedUser.value === user.value));
+    }
+
+    public getSelectedItemCount(items: Array<any>): number {
+        return items?.filter(user => user.isSelected).length;
     }
 }

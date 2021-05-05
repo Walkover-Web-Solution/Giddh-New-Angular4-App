@@ -29,6 +29,10 @@ export class InvoiceUiDataService {
     public templateVoucherType: BehaviorSubject<string> = new BehaviorSubject(null);
     /** Stores the content form instance  */
     public contentForm: NgForm;
+    /** Stores the image uniquename, if signature image got uploaded to the server but not updated with invoice, used
+     * to avoid unused uploading of images on the server
+    */
+    public unusedImageSignature: string;
 
     private companyName: string;
     private companyAddress: string;
@@ -202,9 +206,60 @@ export class InvoiceUiDataService {
                         selectedTemplate.sections.footer.data.message1.label = `We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.`;
                     }
                 }
+                if (!selectedTemplate.sections['header'].data['showCompanyAddress']) {
+                    // Assign the default value based on value of warehouseAddress
+                    selectedTemplate.sections['header'].data['showCompanyAddress'] = {
+                        label: '',
+                        display: selectedTemplate.sections['header'].data['warehouseAddress']?.display,
+                        width: null
+                    };
+                }
+                if (!selectedTemplate.sections['header'].data['showQrCode']) {
+                    // Assign the default value based on value of warehouseAddress
+                    selectedTemplate.sections['header'].data['showQrCode'] = defaultTemplate ?
+                        defaultTemplate.sections['header'].data['showQrCode'] : {
+                            label: '',
+                            display: false,
+                            width: null
+                        };
+                }
+                if (!selectedTemplate.sections['header'].data['showIrnNumber']) {
+                    // Assign the default value based on value of warehouseAddress
+                    selectedTemplate.sections['header'].data['showIrnNumber'] = defaultTemplate ?
+                        defaultTemplate.sections['header'].data['showIrnNumber'] : {
+                            label: '',
+                            display: false,
+                            width: null
+                        };
+                }
+                if (!selectedTemplate.sections['header'].data['gstComposition']) {
+                    // Assign the default value based on value of warehouseAddress
+                    selectedTemplate.sections['header'].data['gstComposition'] = defaultTemplate ?
+                    defaultTemplate.sections['header'].data['gstComposition'] : {
+                        label: '',
+                        display: true,
+                        width: null
+                    };
+                }
+                if (!selectedTemplate.sections['footer'].data['textUnderSlogan']) {
+                    // Assign the default value based of company name if not present
+                    selectedTemplate.sections['footer'].data['textUnderSlogan'] = {
+                        label: this.companyName,
+                        display: true,
+                        width: null
+                    };
+                }
                 if (!selectedTemplate.sections['footer'].data['showNotesAtLastPage']) {
                     selectedTemplate.sections['footer'].data['showNotesAtLastPage'] = defaultTemplate ?
                         defaultTemplate.sections['footer'].data['showNotesAtLastPage'] : {
+                            label: '',
+                            display: false,
+                            width: null
+                        };
+                }
+                if (!selectedTemplate.sections['footer'].data['showMessage2']) {
+                    selectedTemplate.sections['footer'].data['showMessage2'] = defaultTemplate ?
+                        defaultTemplate.sections['footer'].data['showMessage2'] : {
                             label: '',
                             display: false,
                             width: null

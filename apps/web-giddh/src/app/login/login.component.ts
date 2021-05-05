@@ -461,7 +461,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public forgotPassword(userId) {
-        this.resetPasswordForm.patchValue({ uniqueKey: userId });
+        this.resetPasswordForm?.patchValue({ uniqueKey: userId });
         this.userUniqueKey = userId;
         this.store.dispatch(this.loginAction.forgotPasswordRequest(userId));
     }

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil} from 'rxjs/operators';
 
 import { OrganizationType } from '../../models/user-login-state';
 import { OrganizationProfile } from '../constants/settings.constant';
@@ -10,6 +10,7 @@ import { OrganizationProfile } from '../constants/settings.constant';
     templateUrl: './personal-information.component.html',
     styleUrls: ['./personal-information.component.scss']
 })
+
 export class PersonalInformationComponent implements OnInit, OnDestroy {
 
     /** Decides when to emit the value for UPDATE operation */
@@ -39,6 +40,10 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /** Emits the saved value */
     @Output() public saveProfile: EventEmitter<any> = new EventEmitter();
 
@@ -53,11 +58,11 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      * @memberof PersonalInformationComponent
      */
     public ngOnInit(): void {
-        this.saveProfileSubject.pipe(debounceTime(5000), takeUntil(this.destroyed$)).subscribe(() => {
+        this.saveProfileSubject.pipe(debounceTime(2000), takeUntil(this.destroyed$)).subscribe(() => {
             this.saveProfile.emit(this.updatedData);
         });
+        
     }
-
     /**
      * Unsubscribes from listeners
      *

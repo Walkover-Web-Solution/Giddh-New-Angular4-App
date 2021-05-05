@@ -1,7 +1,6 @@
 @import "../../assets/css/color.scss";
 
 .giddh-all-items-wrapper{
-    background-color: $white;
     .search-any-item{
         max-width: 530px;
         width: 100%;
@@ -35,8 +34,11 @@
             }
             .sub-item-block{
                 .single-menu-item{
-                    cursor: pointer;
+                     cursor: pointer;
                      padding: 15px;
+                     white-space: normal;
+                     word-break: break-word;
+                     min-height: 90px;
                     h4{
                         font-size: 14px;
                         margin-bottom: 5px;
@@ -49,9 +51,9 @@
                     }
                     p{
                         color: $grey-chateau;
-                        font-size: 14px;
+                        font-size: 12px;
                     }
-                    &:hover{
+                    &:hover, &.active {
                         background-color: $cornflower;
                         h4, p{
                             color: $white;
@@ -64,6 +66,32 @@
     }
 }
 /*responsive starts here*/
+@media(max-width:1440px){
+    .giddh-all-items-wrapper{
+        .all-item-block{
+            .main-item{
+                .sub-item-block{
+                    .single-menu-item{
+                       min-height: 100px;
+                    }
+                }
+            }
+        }
+    }
+}
+@media(max-width:768px){
+    .giddh-all-items-wrapper{
+        .all-item-block{
+            .main-item{
+                .sub-item-block{
+                    .single-menu-item{
+                        padding: 15px 10px;
+                    }
+                }
+            }
+        }
+    }
+}
 @media(max-width:767px){
     .giddh-all-items-wrapper{
         padding-top: 15px;

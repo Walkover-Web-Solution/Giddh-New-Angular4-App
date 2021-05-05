@@ -167,7 +167,8 @@ export class LedgerService {
     public GetReconcile(accountUniqueName: string = '', from: string = '', to: string = '', chequeNumber: string = ''): Observable<BaseResponse<ReconcileResponse[], string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + LEDGER_API.RECONCILE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from).replace(':to', to).replace(':chequeNumber', chequeNumber)).pipe(map((res) => {
+        const url = this.config.apiUrl + LEDGER_API.RECONCILE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from).replace(':to', to).replace(':chequeNumber', chequeNumber);
+        return this._http.post(url, {}).pipe(map((res) => {
             let data: BaseResponse<ReconcileResponse[], string> = res;
             data.queryString = { accountUniqueName, from, to, chequeNumber };
             return data;
@@ -554,4 +555,17 @@ export class LedgerService {
 			return data;
 		}), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
 	}
+
+    /**
+     * Removes the attachment
+     *
+     * @param {string} attachmentUniqueName Unique name of the attachment
+     * @return {*}  {Observable<BaseResponse<any, any>>} Observable to carry out further operations
+     * @memberof LedgerService
+     */
+    public removeAttachment(attachmentUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        const url = `${this.config.apiUrl}${LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))}/${attachmentUniqueName}`;
+        return this._http.delete(url).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error)));
+    }
 }

@@ -119,7 +119,15 @@ ul.list-unstyled li a {
     color: $gray;
     margin-bottom: 5px;
 }
-
+.sale-register {
+     .transaction-count-data {
+         p {
+            &:first-child{
+                min-width: 140px;
+            }
+        }
+     }
+}
 .main-sale-register-box .sale-register-box {
     margin-left: 30px;
 }
@@ -185,17 +193,18 @@ ul.list-unstyled li a {
     vertical-align: middle;
 }
 
-.reportDropdown li {
+.report-dropdown li {
     float: left;
     width: 51px;
 }
 
-.reportDropdown {
+.report-dropdown {
     min-width: 210px;
 }
 
 ul#dropdown-nested {
     min-width: 254px;
+    z-index: 1;
 }
 
 ul#dropdown-nested li .caret {
@@ -203,7 +212,7 @@ ul#dropdown-nested li .caret {
     margin-top: 8px;
 }
 
-.reportDropdown {
+.report-dropdown {
     left: 100% !important;
 }
 
@@ -259,9 +268,6 @@ table th {
 }
 .table-middle th .d-flex {
     align-items: center;
-}
-.sales-register-table {
-    padding-bottom: 170px;
 }
 .expand-collapse-btn a {
     display: flex;
@@ -332,14 +338,48 @@ table th {
         }
     }
 }
+.giddh-table{
+    tbody{
+        tr{
+            td.voucher-number-td{
+                white-space: normal !important;
+                word-break: break-all;
+            }
+        }
+    }
+}
 @media(max-width:1019px){
     .sales-register {
         width: 100%;
     }
 }
-@media (max-width: 991px) {
-    .sales-register-table {
-        padding-bottom: 50px;
+@media screen and (max-width:991px) {
+    .sales-register {
+        display: block;
+        width: 100%;
+    }
+    .main-sale-register-box {
+        justify-content: start;
+        text-align: left;
+        .sale-register-box {
+            margin: 10px 0;
+            text-align: left !important;
+            width: 48%;
+        }
+    }
+}
+@media screen and (max-width:768px) {
+    .giddh-table{
+        tbody{
+            tr{
+                td.voucher-number-td{
+                    width: 100%;
+                }
+            }
+        }
+    }
+    .sales-register {
+       position: relative;
     }
 }
 @media (max-width: 767px) {
@@ -357,16 +397,11 @@ table th {
             }
         }
     }
-    .sales-register {
-        display: flex;
-        position: relative;
-    }
+}
+@media screen and (max-width:575px) {
     .main-sale-register-box {
-        justify-content: start;
-        text-align: left;
         .sale-register-box {
-            margin: 10px 20px 10px 0px;
-            text-align: left;
+            width: 100%;
         }
     }
 }

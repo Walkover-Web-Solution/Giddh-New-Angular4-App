@@ -13,7 +13,7 @@ import {
     TemplateRef,
     ViewChild,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, RouteConfigLoadEnd, Router } from '@angular/router';
 import { createSelector, select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
@@ -38,8 +38,7 @@ import { DbService } from '../../services/db.service';
 import { GeneralService } from '../../services/general.service';
 import { AppState } from '../../store';
 import { AuthService } from '../../theme/ng-social-login-module';
-import { ALL_ITEMS, AllItem, AllItems } from '../helpers/allItems';
-import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
+import { AllItem, AllItems } from '../helpers/allItems';
 
 @Component({
     selector: 'primary-sidebar',
@@ -118,7 +117,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public companyList: CompanyResponse[] = [];
     /** Stores all the menu items to be shown */
     public allItems: AllItems[] = [];
-
     /** True, if sidebar needs to be shown */
     @Input() public isOpen: boolean = false;
     /** API menu items, required to show permissible items only in the menu */
@@ -130,7 +128,15 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** Stores the instance of CMD+K dropdown */
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Stores the instance of company detail dropdown */
-    @ViewChild('companyDetailsDropDownWeb', {static: true}) public companyDetailsDropDownWeb: BsDropdownDirective;
+    @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
+    /** Search company name */
+    public searchCmp: string = '';
+    /** Holds if company refresh is in progress */
+    public isCompanyRefreshInProcess$: Observable<boolean>;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -153,6 +159,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         this.activeAccount$ = this.store.pipe(select(appStore => appStore.ledger.account), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(appStore => appStore.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
+        this.isCompanyRefreshInProcess$ = this.store.pipe(select(state => state.session.isRefreshing), takeUntil(this.destroyed$));
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
             if (organization && organization.details && organization.details.branchDetails) {
                 this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
@@ -177,6 +184,21 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
+    /**
+     * Returns true, if route with query params is activated
+     *
+     * @param {string} routeUrl Route URL without params
+     * @returns {boolean} True, if passed route is activated
+     * @memberof PrimarySidebarComponent
+     */
+    public isRouteWithParamsActive(routeUrl: string): boolean {
+        const queryParamsIndex = this.router.url.indexOf('?');
+        const baseUrl = queryParamsIndex === -1 ? this.router.url :
+            this.router.url.slice(0, queryParamsIndex);
+        // For Trial balance module, strict comparison should be done
+        return this.router.url.includes('trial-balance-and-profit-loss') ? false : decodeURI(baseUrl) === decodeURI(routeUrl);
+    }
+
     // CMD + G functionality
     @HostListener('document:keydown', ['$event'])
     public handleKeyboardUpEvent(event: KeyboardEvent) {
@@ -197,8 +219,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length) {
-            this.allItems = this.generalService.getVisibleMenuItems(changes.apiMenuItems.currentValue, ALL_ITEMS, this.generalService.currentOrganizationType === OrganizationType.Branch);
+        if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length && this.localeData?.page_heading) {
+            this.allItems = this.generalService.getVisibleMenuItems(changes.apiMenuItems.currentValue, this.localeData?.items);
         }
     }
 
@@ -318,6 +340,19 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 }
             });
         }
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
+                const queryParamsIndex = this.router.url.indexOf('?');
+                const baseUrl = queryParamsIndex === -1 ? this.router.url :
+                    this.router.url.slice(0, queryParamsIndex);
+                this.allItems.forEach(item => item.isActive = (item.link === decodeURI(baseUrl) || item?.items?.some((subItem: AllItem) => {
+                    if (subItem.link === decodeURI(baseUrl)) {
+                        return true;
+                    }
+                })));
+                this.changeDetectorRef.detectChanges();
+            }
+        });
     }
 
     /**
@@ -412,23 +447,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.currentCompanyBranches = branches;
         }
-    }
-
-    /**
-    * Sets the organization details
-    *
-    * @private
-    * @param {OrganizationType} type Type of the organization
-    * @param {OrganizationDetails} branchDetails Branch details of an organization
-    * @memberof PrimarySidebarComponent
-    */
-    private setOrganizationDetails(type: OrganizationType, branchDetails: OrganizationDetails): void {
-        const organization: Organization = {
-            type, // Mode to which user is switched to
-            uniqueName: this.selectedCompanyDetails ? this.selectedCompanyDetails.uniqueName : '',
-            details: branchDetails
-        };
-        this.store.dispatch(this.companyActions.setCompanyBranch(organization));
     }
 
     /**
@@ -573,40 +591,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Do entry in DB method for create/update operation on entry
-     *
-     * @private
-     * @param {string} entity Company uniquename
-     * @param {IUlist} item New item whose entry needs to be done
-     * @param {{ next: IUlist, previous: IUlist }} [fromInvalidState=null] Current and previous states
-     * @memberof PrimarySidebarComponent
-     */
-    private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null): void {
-        if (entity === 'menus') {
-            //this.selectedPage = item.name;
-            this.isLedgerAccSelected = false;
-        } else if (entity === 'accounts') {
-            this.isLedgerAccSelected = true;
-            this.selectedLedgerName = item.uniqueName;
-            //this.selectedPage = 'ledger - ' + item.name;
-        }
-
-        if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
-            let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
-            let branches = [];
-            this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
-                branches = response || [];
-            });
-            this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
-                this.currentOrganizationType === OrganizationType.Company && branches.length > 1).then((res) => {
-                    this.findListFromDb(res);
-                }, (err: any) => {
-                    console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
-                });
-        }
-    }
-
-    /**
      * Creates a new group entry
      *
      * @param {IUlist} item
@@ -661,19 +645,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
             this.doEntryInDb(entity, item, fromInvalidState);
         }, 200);
-    }
-
-    /**
-     * Unsubscribes from all the listeners
-     *
-     * @private
-     * @memberof PrimarySidebarComponent
-     */
-    private unsubscribe(): void {
-        this.subscriptions.forEach((subscription: Subscription) => {
-            subscription.unsubscribe();
-        });
-        this.subscriptions = [];
     }
 
     /**
@@ -885,11 +856,31 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public handleItemClick(item: AllItem): void {
-        if (item.label === 'Master') {
+        if (item.label === this.commonLocaleData?.app_master) {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
         }
     }
 
+    /**
+     * Opens new company modal
+     *
+     * @memberof PrimarySidebarComponent
+     */
+    public createNewCompany(): void {
+        this.newCompany.emit();
+    }
+
+    /**
+     * Track by for menu items
+     *
+     * @param {number} index Index of current item
+     * @param {AllItem} item Item instance
+     * @returns {string} Item unique link
+     * @memberof PrimarySidebarComponent
+     */
+    public trackItems(index: number, item: AllItem): string {
+        return item.link;
+    }
     /**
      * Returns the readable format name of menu item
      *
@@ -902,16 +893,16 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         let name = '';
         switch (url) {
             case 'SETTINGS?TAB=PERMISSION&TABINDEX=5':
-                name = 'Settings > Permission';
+                name = this.localeData?.settings_permission;
                 break;
             case 'user-details/profile':
-                name = 'User Details';
+                name = this.localeData?.user_details;
                 break;
             case 'inventory-in-out':
-                name = 'Inventory In/Out';
+                name = this.localeData?.inventory_inout;
                 break;
             case 'import/select-type':
-                name = 'Import Data';
+                name = this.localeData?.import_data;
                 break;
             default:
                 name = url;
@@ -920,11 +911,90 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Opens new company modal
+     * Unsubscribes from all the listeners
      *
+     * @private
      * @memberof PrimarySidebarComponent
      */
-     public createNewCompany(): void {
-        this.newCompany.emit();
-     }
+    private unsubscribe(): void {
+        this.subscriptions.forEach((subscription: Subscription) => {
+            subscription.unsubscribe();
+        });
+        this.subscriptions = [];
+    }
+
+    /**
+     * Do entry in DB method for create/update operation on entry
+     *
+     * @private
+     * @param {string} entity Company uniquename
+     * @param {IUlist} item New item whose entry needs to be done
+     * @param {{ next: IUlist, previous: IUlist }} [fromInvalidState=null] Current and previous states
+     * @memberof PrimarySidebarComponent
+     */
+    private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null): void {
+        if (entity === 'menus') {
+            //this.selectedPage = item.name;
+            this.isLedgerAccSelected = false;
+        } else if (entity === 'accounts') {
+            this.isLedgerAccSelected = true;
+            this.selectedLedgerName = item.uniqueName;
+            //this.selectedPage = 'ledger - ' + item.name;
+        }
+
+        if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
+            let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
+            let branches = [];
+            this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+                branches = response || [];
+            });
+            this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
+                this.currentOrganizationType === OrganizationType.Company && branches.length > 1).then((res) => {
+                    this.findListFromDb(res);
+                }, (err: any) => {
+                    console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
+                });
+        }
+    }
+
+    /**
+    * Sets the organization details
+    *
+    * @private
+    * @param {OrganizationType} type Type of the organization
+    * @param {OrganizationDetails} branchDetails Branch details of an organization
+    * @memberof PrimarySidebarComponent
+    */
+    private setOrganizationDetails(type: OrganizationType, branchDetails: OrganizationDetails): void {
+        const organization: Organization = {
+            type, // Mode to which user is switched to
+            uniqueName: this.selectedCompanyDetails ? this.selectedCompanyDetails.uniqueName : '',
+            details: branchDetails
+        };
+        this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+    }
+
+    /**
+     * Refreshes the company list
+     *
+     * @param {Event} event
+     * @memberof PrimarySidebarComponent
+     */
+    public refreshCompanies(event: Event): void {
+        event.stopPropagation();
+        event.preventDefault();
+        this.store.dispatch(this.companyActions.RefreshCompanies());
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof PrimarySidebarComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.allItems = this.generalService.getVisibleMenuItems(this.apiMenuItems, this.localeData?.items);
+        }
+    }
 }

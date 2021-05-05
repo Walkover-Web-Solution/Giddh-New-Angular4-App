@@ -61,7 +61,7 @@
                 </table>
             </div>
             <div class="pagination-wrapper" *ngIf="reportResponse && reportResponse?.totalPages > 1">
-                <pagination [totalItems]="reportResponse.totalItems" [(ngModel)]="reportResponse.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                <pagination [totalItems]="reportResponse.totalItems" [(ngModel)]="reportResponse.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
             </div>
         </div>
     </div>
