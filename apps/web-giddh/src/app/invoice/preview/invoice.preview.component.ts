@@ -55,7 +55,7 @@ import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
-const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote];
+const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase];
 
 const COMPARISON_FILTER = [
     { label: 'Greater Than', value: 'greaterThan' },
