@@ -183,6 +183,13 @@ export class GstComponent implements OnInit, OnDestroy {
                 this.loadTaxReport();
             }
         });
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (shouldOpen) {
+                this.asideGstSidebarMenuState = 'in';
+            } else {
+                this.asideGstSidebarMenuState = 'out';
+            }
+        });
     }
     /**
      * Aside pane toggle fixed class

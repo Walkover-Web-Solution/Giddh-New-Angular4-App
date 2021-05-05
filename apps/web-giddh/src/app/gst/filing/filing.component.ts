@@ -156,6 +156,13 @@ export class FilingComponent implements OnInit, OnDestroy {
 			// get session details
 			this.store.dispatch(this._gstAction.GetGSPSession(this.activeCompanyGstNumber));
 		});
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (shouldOpen) {
+                this.asideGstSidebarMenuState = 'in';
+            } else {
+                this.asideGstSidebarMenuState = 'out';
+            }
+        });
 	}
 
 	public selectTab(e, val, tabHeading) {

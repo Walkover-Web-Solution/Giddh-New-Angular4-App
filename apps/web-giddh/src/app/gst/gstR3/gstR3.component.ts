@@ -212,6 +212,14 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (shouldOpen) {
+                this.asideGstSidebarMenuState = 'in';
+            } else {
+                this.asideGstSidebarMenuState = 'out';
+            }
+        });
     }
 
     public periodChanged(ev) {
