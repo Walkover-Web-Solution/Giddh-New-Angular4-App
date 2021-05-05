@@ -314,3 +314,6 @@ export enum EInvoiceStatus {
     MarkedAsCancelled = 'marked as cancelled',
     Failed = 'failed'
 }
+
+/** Length of entry description on vouchers */
+export const ENTRY_DESCRIPTION_LENGTH = 100;
