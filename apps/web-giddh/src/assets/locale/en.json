@@ -196,7 +196,7 @@
     "app_tax_types": {
         "gst": "GST",
         "input_gst": "InputGST",
-        "others": "others"
+        "others": "Others"
     },
     "app_duration": {
         "monthly": "Monthly",
