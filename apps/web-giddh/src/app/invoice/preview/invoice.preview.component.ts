@@ -1955,7 +1955,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 return this.localeData.e_invoice_statuses.mark_as_cancelled;
             case EInvoiceStatus.Failed:
                 return item.errorMessage ?? this.localeData.e_invoice_statuses.failed;
-            default: return '-';
+            default: return '';
         }
     }
 }
