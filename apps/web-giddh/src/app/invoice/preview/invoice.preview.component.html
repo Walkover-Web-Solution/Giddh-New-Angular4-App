@@ -49,7 +49,7 @@
                                         {{localeData?.generate_eway_bill}}</a>
                                 </li>
                                 <li *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales')">
-                                    <a class="dropdown-item cp" href="javascript:void(0)" (click)="createBulkEInvoice()"> Create E-invoice </a>
+                                    <a class="dropdown-item cp" href="javascript:void(0)" (click)="createBulkEInvoice()"> {{localeData?.create_e_invoice}} </a>
                                 </li>
                                 <li role="menuitem"
                                     *ngIf="selectedVoucher !== 'purchase' || (selectedItems.length === 1 && selectedVoucher === 'purchase')">
@@ -276,7 +276,7 @@
                             </th>
                             <th *ngIf="gstEInvoiceEnable && (selectedVoucher === 'sales')" width="10%">
                                 <div class="d-flex">
-                                    <div class="flex-fill">E-invoice Status</div>
+                                    <div class="flex-fill">{{ localeData?.e_invoice_status }}</div>
                                 </div>
                             </th>
                             <th [attr.data-title]="commonLocaleData?.app_status" width="10%">
@@ -350,7 +350,7 @@
                             <!-- E-invoice status -->
                             <th *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" width="10%">
                                 <div class="d-flex">
-                                    <div class="flex-fill">E-invoice Status</div>
+                                    <div class="flex-fill">{{ localeData?.e_invoice_status }}</div>
                                 </div>
                             </th>
 
@@ -433,7 +433,7 @@
                             <!-- Due Date -->
                             <td width="12%" [attr.data-title]="localeData?.due_date">{{item.dueDate ? item.dueDate : '-' }}</td>
                             <!-- E-invoice status -->
-                            <td *ngIf="gstEInvoiceEnable && (selectedVoucher === 'sales')" data-title="E-Invoice Status" width="10%">
+                            <td *ngIf="gstEInvoiceEnable && (selectedVoucher === 'sales')" [attr.data-title]="localeData?.e_invoice_status" width="10%">
                                 <div class="e-invoice-status font-14">
                                     <strong class="d-flex" [tooltip]="item.eInvoiceStatusTooltip">{{item.status || '-'}}</strong>
                                 </div>

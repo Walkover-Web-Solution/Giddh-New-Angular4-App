@@ -1944,17 +1944,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private getEInvoiceTooltipText(item: ReceiptItem): string {
         switch (item.status?.toLowerCase()) {
             case EInvoiceStatus.YetToBePushed:
-                return 'The transaction is yet to be pushed to the IRP for e-Invoicing.';
+                return this.localeData.e_invoice_statuses.yet_to_be_pushed;
             case EInvoiceStatus.Pushed:
-                return 'The transaction was pushed to the IRP successfully, and a QR code and IRN has been generated for it.';
+                return this.localeData.e_invoice_statuses.pushed;
             case EInvoiceStatus.PushInitiated:
-                return 'The transaction is being pushed to the IRP as part of a bulk push action.';
+                return this.localeData.e_invoice_statuses.push_initiated;
             case EInvoiceStatus.Cancelled:
-                return 'The e-Invoiced transaction has been cancelled in both Giddh and the IRP. The IRN associated with it is no longer valid.';
+                return this.localeData.e_invoice_statuses.cancelled;
             case EInvoiceStatus.MarkedAsCancelled:
-                return 'The e-Invoiced transaction has been marked as cancelled in Giddh Books alone. You’ll have to cancel it in the GST portal to make the IRN invalid.';
+                return this.localeData.e_invoice_statuses.mark_as_cancelled;
             case EInvoiceStatus.Failed:
-                return item.errorMessage ?? 'The transaction could not be pushed to the IRP.';
+                return item.errorMessage ?? this.localeData.e_invoice_statuses.failed;
             default: return '-';
         }
     }
