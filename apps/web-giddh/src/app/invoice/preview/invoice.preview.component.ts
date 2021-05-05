@@ -1912,7 +1912,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             case EInvoiceStatus.Cancelled:
                 return 'The e-Invoiced transaction has been cancelled in both Giddh and the IRP. The IRN associated with it is no longer valid.';
             case EInvoiceStatus.MarkedAsCancelled:
-                return 'The e-Invoiced transaction has been marked as cancelled in Zoho Books alone. You’ll have to cancel it in the GST portal to make the IRN invalid.';
+                return 'The e-Invoiced transaction has been marked as cancelled in Giddh Books alone. You’ll have to cancel it in the GST portal to make the IRN invalid.';
             case EInvoiceStatus.Failed:
                 return item.errorMessage ?? 'The transaction could not be pushed to the IRP.';
             default: return '-';
