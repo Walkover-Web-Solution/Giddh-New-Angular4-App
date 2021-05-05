@@ -69,12 +69,12 @@ export class InventoryUserComponent implements OnChanges, OnInit {
 		const inventoryUser = user ? { uniqueName: user.uniqueName } : null;
 		if (index >= 0) {
 			const control = items.at(index);
-			control.patchValue({
+			control?.patchValue({
 				...control.value,
 				inventoryUser
 			});
 		} else {
-			items.controls.forEach(c => c.patchValue({ ...c.value, inventoryUser }));
+			items.controls.forEach(c => c?.patchValue({ ...c.value, inventoryUser }));
 		}
 	}
 
@@ -85,15 +85,15 @@ export class InventoryUserComponent implements OnChanges, OnInit {
 		const stockUnit = stockItem ? { code: stockItem.stockUnit.code } : null;
 		if (index >= 0) {
 			const control = items.at(index);
-			control.patchValue({ ...control.value, stock, stockUnit });
+			control?.patchValue({ ...control.value, stock, stockUnit });
 		} else {
-			items.controls.forEach(c => c.patchValue({ ...c.value, stock, stockUnit }));
+			items.controls.forEach(c => c?.patchValue({ ...c.value, stock, stockUnit }));
 		}
 	}
 
 	public quantityChanged(event) {
 		const items = this.form.get('transactions') as FormArray;
-		items.controls.forEach(c => c.patchValue({ ...c.value, quantity: event.target.value }));
+		items.controls.forEach(c => c?.patchValue({ ...c.value, quantity: event.target.value }));
 
 	}
 

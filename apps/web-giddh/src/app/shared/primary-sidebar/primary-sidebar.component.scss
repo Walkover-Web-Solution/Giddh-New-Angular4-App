@@ -17,7 +17,7 @@
                 border-top: none;
                 border-right: none;
                 position: absolute;
-                left: 28px;
+                left: 32px;
                 top: 40px;
                 &:after {
                     position: absolute;
@@ -90,6 +90,7 @@
                 white-space: normal;
                 word-break: break-word;
                 min-height: 38px;
+                font-size: 14px;
             }
             img.company-icon {
                 width: 28px;
@@ -144,9 +145,11 @@
         }
     }
     .wrap-menus {
-        height: 700px;
+        min-height: calc(100vh - 200px);
+        max-height: calc(100vh - 200px);
         overflow-y: auto;
         overflow-x: hidden;
+        padding-bottom: 90px;
     }
     .account-block {
         .account-collapse {
@@ -193,6 +196,7 @@
             p {
                 display: flex;
                 justify-content: space-between;
+                line-height: 20px;
                 span {
                     .icon-arrow-down {
                         transform: rotate(0deg);
@@ -348,6 +352,7 @@
                     align-items: flex-start;
                     width: 100%;
                     padding-left: 6px;
+                    font-size: 14px;
                 }
                 i {
                     position: relative;
@@ -686,10 +691,14 @@
     }
 }
 /*responsive starts here*/
-@media (min-height: 800px) and (max-height:1000px) {
+@media (min-height: 800px) and (max-height:1024px) {
     .primary-sidebar{
         .wrap-menus {
-            padding-bottom: 104px;
+            height: 100vh;
+            max-height: calc(100vh - 240px);
+            min-height: calc(100vh - 240px);
+            overflow-y: auto;
+            overflow-x: hidden;
         }
     }
 }
@@ -713,14 +722,6 @@
                     }
                 }
             }
-        }
-    }
-}
-@media (max-height: 799px) {
-    .primary-sidebar {
-        .wrap-menus {
-            padding-bottom: 80px;
-            height: calc(100vh - 160px);
         }
     }
 }

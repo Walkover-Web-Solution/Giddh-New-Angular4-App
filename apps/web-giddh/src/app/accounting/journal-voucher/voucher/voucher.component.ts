@@ -83,6 +83,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @Input() public currentDate: string;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     @Input() public isCompany: boolean;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 
     @ViewChild('quickAccountComponent', {static: true}) public quickAccountComponent: ElementViewContainerRef;
@@ -189,15 +193,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     /* Will check if form is valid */
     public isValidForm: boolean = false;
     /* Error message for amount comparision with transaction amount */
-    public amountErrorMessage: string = "Total Amount must be equal to Credit Amount";
+    public amountErrorMessage: string = "";
     /* Error message for comparision of adjusted amount with invoice */
-    public invoiceAmountErrorMessage: string = "Amount can't be greater than Invoice Balance Due";
+    public invoiceAmountErrorMessage: string = "";
     /* Error message for invalid adjustment amount */
-    public invalidAmountErrorMessage: string = "Please enter valid amount";
+    public invalidAmountErrorMessage: string = "";
     /* Error message for invalid adjustment amount */
-    public invoiceErrorMessage: string = "Please select invoice";
+    public invoiceErrorMessage: string = "";
     /* Error message for amount comparision with transaction amount */
-    public entryAmountErrorMessage: string = "Amount must be equal to Credit Amount";
+    public entryAmountErrorMessage: string = "";
     /* This will hold list of tax */
     public taxList: any[] = [];
     /* Observable for list of tax */
@@ -290,7 +294,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data) {
                 this.currentVoucher = data.page;
-                this.setCurrentPageTitle(this.currentVoucher);
                 switch (this.currentVoucher) {
                     case VOUCHERS.CONTRA:
                         // Contra allows cash or bank so selecting default category as currentassets
@@ -362,7 +365,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         this.store.pipe(select(p => p.ledger.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
             if (s) {
-                this._toaster.successToast('Entry created successfully', 'Success');
+                this._toaster.successToast(this.localeData?.entry_created, this.commonLocaleData?.app_success);
                 this.refreshEntry();
                 this.store.dispatch(this._ledgerActions.ResetLedger());
                 this.requestObj.description = '';
@@ -400,6 +403,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.searchedAccountQuery.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((event: any) => {
             this.searchAccount(event, event.target.value);
         });
+
+        this.amountErrorMessage = this.localeData?.total_amount_error;
+        this.invoiceAmountErrorMessage = this.localeData?.invoice_amount_error;
+        this.invalidAmountErrorMessage = this.localeData?.invalid_amount_error;
+        this.invoiceErrorMessage = this.localeData?.invoice_error;
+        this.entryAmountErrorMessage = this.localeData?.entry_amount_error;
     }
 
     public ngOnChanges(c: SimpleChanges) {
@@ -480,7 +489,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public selectEntryType(transactionObj, val, idx) {
         val = val.trim();
         if (val.length === 2 && (val.toLowerCase() !== 'to' && val.toLowerCase() !== 'by')) {
-            this._toaster.errorToast("Spell error, you can only use 'To/By'");
+            this._toaster.errorToast(this.localeData?.entry_type_error);
             transactionObj.type = 'to';
         } else {
             transactionObj.type = val;
@@ -633,7 +642,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     this.deleteRow(idx);
                 }
             } else {
-                this._toaster.infoToast('Foreign currency accounts are not allowed from here, please visit ledger or voucher module to create entry');
+                this._toaster.infoToast(this.localeData?.foreign_account_error);
                 this.requestObj.transactions[this.selectedIdx] = {
                     amount: null,
                     particular: '',
@@ -758,7 +767,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 }, 100);
             }
         } else {
-            this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
+            this._toaster.errorToast(this.localeData?.credit_debit_equal_error, this.commonLocaleData?.app_error);
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
     }
@@ -779,17 +788,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const foundSalesAndBankEntry: boolean = this.validateForSalesAndPurchaseEntry(data);
 
         if (foundContraEntry && data.voucherType !== 'Contra') {
-            this._toaster.errorToast('Contra entry (Cash + Bank), not allowed in ' + data.voucherType, 'Error');
+            let message = this.localeData?.contra_entry_notallowed;
+            message = message?.replace("[VOUCHER_TYPE]", data.voucherType);
+            this._toaster.errorToast(message, this.commonLocaleData?.app_error);
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
         if (!foundContraEntry && data.voucherType === 'Contra') {
-            this._toaster.errorToast('There should be Cash and Bank entry in contra.', 'Error');
+            this._toaster.errorToast(this.localeData?.contra_entry_error, this.commonLocaleData?.app_error);
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
 
         // This suggestion was given by Sandeep
         if (foundSalesAndBankEntry && data.voucherType === 'Journal') {
-            this._toaster.errorToast('Sales and Purchase entry not allowed in journal.', 'Error');
+            this._toaster.errorToast(this.localeData?.sales_purchase_entry_error, this.commonLocaleData?.app_error);
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
 
@@ -879,11 +890,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
             } else {
                 const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
-                this._toaster.errorToast('Please select at least one cash or bank account in ' + byOrTo.toUpperCase(), 'Error');
+                let message = this.localeData?.blank_account_error;
+                message = message?.replace("[BY_TO]", byOrTo.toUpperCase());
+                this._toaster.errorToast(message, this.commonLocaleData?.app_error);
                 setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
             }
         } else {
-            this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
+            this._toaster.errorToast(this.localeData?.credit_debit_equal_error, this.commonLocaleData?.app_error);
             setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
     }
@@ -974,11 +987,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         setTimeout(() => {
             this.isNoAccFound = false;
         }, 3000);
-        setTimeout(() => {
-            if (this.currentVoucher) {
-                this.setCurrentPageTitle(this.currentVoucher);
-            }
-        }, 200);
     }
 
     /**
@@ -1042,7 +1050,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (entryIsValid) {
             return validEntry;
         } else {
-            this._toaster.errorToast("Particular can't be blank");
+            this._toaster.errorToast(this.localeData?.blank_particular_error);
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
 
@@ -1203,7 +1211,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 return;
             }
             if (transactionObj.selectedAccount.account !== transactionObj.selectedAccount.name) {
-                this._toaster.errorToast('No account found with name ' + transactionObj.selectedAccount.account);
+                let message = this.localeData?.no_account_found;
+                message = message?.replace("[ACCOUNT]", transactionObj.selectedAccount.account);
+                this._toaster.errorToast(message);
                 ev.preventDefault();
                 return;
             }
@@ -1548,31 +1558,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * This function will set the page heading
-     *
-     * @param {string} voucherType Currently selected voucher type
-     * @memberof InvoiceComponent
-     */
-    private setCurrentPageTitle(voucherType: string): void {
-        let currentPageObj = new CurrentPage();
-        switch (this.currentVoucher) {
-            case VOUCHERS.CONTRA:
-                currentPageObj.name = `Journal Voucher * > ${voucherType}`;
-                currentPageObj.url = '/pages/journal-voucher/contra';
-                break;
-            case VOUCHERS.RECEIPT:
-                currentPageObj.name = `Journal Voucher * > ${voucherType}`;
-                currentPageObj.url = '/pages/journal-voucher/receipt';
-                break;
-            default:
-                currentPageObj.name = 'Journal Voucher *';
-                currentPageObj.url = '/pages/journal-voucher';
-                break;
-        }
-        this.store.dispatch(this.generalAction.setPageTitle(currentPageObj));
-    }
-
-    /**
      * Callback for adjusment popup close event
      *
      * @param {*} event
@@ -1627,7 +1612,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     this.pendingInvoiceList[response.body.results[key].uniqueName] = [];
                     this.pendingInvoiceList[response.body.results[key].uniqueName] = response.body.results[key];
 
-                    pendingInvoiceList.push({ label: response.body.results[key].voucherNumber + ", " + response.body.results[key].voucherDate + ", " + response.body.results[key].balanceDue.amountForAccount + " cr.", value: response.body.results[key].uniqueName });
+                    pendingInvoiceList.push({ label: response.body.results[key].voucherNumber + ", " + response.body.results[key].voucherDate + ", " + response.body.results[key].balanceDue.amountForAccount + " " + this.commonLocaleData?.app_cr, value: response.body.results[key].uniqueName });
                 });
                 this.pendingInvoiceListSource$ = observableOf(pendingInvoiceList);
             }
@@ -1673,7 +1658,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             entry.invoice = {
                 number: this.pendingInvoiceList[event.value].voucherNumber,
                 date: this.pendingInvoiceList[event.value].voucherDate,
-                amount: this.pendingInvoiceList[event.value].balanceDue.amountForAccount + " cr.",
+                amount: this.pendingInvoiceList[event.value].balanceDue.amountForAccount + " " + this.commonLocaleData?.app_cr,
                 uniqueName: event.value,
                 type: this.pendingInvoiceList[event.value].voucherType
             };

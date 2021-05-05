@@ -48,7 +48,7 @@
                                             formControlName="taxNumber"
                                             [attr.placeholder]="'Enter '+ addressConfiguration?.tax?.name">
                                     </div>
-                                    <div class="col-sm-8 form-group">
+                                    <div class="col-sm-4 form-group">
                                         <label>State <sup>*</sup></label>
                                         <sh-select #states
                                             [disabled]="addressConfiguration?.type === 'editAddress' && addressToUpdate?.taxNumber && addressConfiguration?.tax?.name && addressConfiguration?.tax?.name === 'GSTIN'"
@@ -56,6 +56,14 @@
                                             [useInBuiltFilterForIOptionTypeItems]="true" [forceClearReactive]="forceClear$ | async">
                                         </sh-select>
                                     </div>
+                                    <!-- static code added for the pincode -->
+                                    <div class="col-sm-4">
+                                        <div class="form-group mr-b05">
+                                            <label for="pinCodeNum" class="d-block">PIN Code</label>
+                                            <input type="text" class="form-control" autocomplete="false" name="pinCodeNum" placeholder="Enter PIN Code" formControlName="pincode" decimalDigitsDirective [preventDecimal]="true" />
+                                        </div>
+                                    </div>
+                                    <!-- end -->
                                 </div>
 
                                 <div class="clearfix row">

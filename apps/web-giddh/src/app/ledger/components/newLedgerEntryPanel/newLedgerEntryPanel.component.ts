@@ -741,7 +741,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (transaction.voucherAdjustments && transaction.voucherAdjustments.adjustments && transaction.voucherAdjustments.adjustments.length > 0) {
                 transaction.voucherAdjustments.adjustments.forEach((adjustment: any) => {
                     if (adjustment.balanceDue !== undefined) {
-                        adjustment.adjustmentAmount = adjustment.balanceDue;
                         delete adjustment.balanceDue;
                     }
                 });
@@ -1349,7 +1348,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             if(adjustments && adjustments.length > 0) {
                 adjustments.forEach(adjustment => {
-                    adjustment.adjustmentAmount = adjustment.balanceDue;
                     adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
                 });
             }
@@ -1368,7 +1366,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.isAdjustReceiptSelected = false;
                 }
                 this.isAdjustVoucherSelected = false;
-                this.blankLedger.generateInvoice = false;
             }
         }
 
@@ -1389,7 +1386,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.isAdjustReceiptSelected = false;
             }
             this.isAdjustVoucherSelected = false;
-            this.blankLedger.generateInvoice = false;
         }
         this.adjustPaymentModal.hide();
     }

@@ -16,6 +16,9 @@ import { ExportDaybookComponent } from './export-daybook/export-daybook.componen
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { SharedModule } from '../shared/shared.module';
+import { SettingsServiceModule } from '../settings/settings-service.module';
+import { LedgerModule } from '../ledger/ledger.module';
+import { SalesModule } from '../sales/sales.module';
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
     providers: [],
@@ -33,6 +36,9 @@ import { SharedModule } from '../shared/shared.module';
         CurrencyModule,
         SharedModule,
         NgxMaskModule.forRoot(),
+        SettingsServiceModule,
+        LedgerModule,
+        SalesModule
     ],
     entryComponents: [
         PaginationComponent

@@ -46,11 +46,10 @@ export const ALL_ITEMS: AllItems[] = [
     },
     {
         label: 'Tax',
-        icon: 'icon-security',
+        icon: 'icon-tax-new',
         items: [
             { label: 'E-way bill', link: '/pages/invoice/ewaybill', icon: 'icon-eway-bill-new', description: 'Generate directly from Giddh after' },
             { label: 'GSTR', link: '/pages/gstfiling', icon: 'icon-GSTR', description: 'File & view GSTR1, GSTR2 & GSTR3B' },
-            { label: 'Permissions', link: '/pages/settings/permission', icon: 'icon-permission1', description: 'Select role, pages, CIDR range' },
             { label: 'Reverse Charge', link: '/pages/reports/reverse-charge', icon: 'icon-reverse-charge', description: 'Report of total taxable value & total tax amount', alwaysPresent: true },
             { label: 'VAT Report', link: '/pages/vat-report', icon: 'icon-vat', description: 'File & review VAT' }
         ]

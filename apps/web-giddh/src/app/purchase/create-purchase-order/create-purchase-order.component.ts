@@ -41,7 +41,6 @@ import { CurrentCompanyState } from '../../store/Company/company.reducer';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
-import { GeneralActions } from '../../actions/general/general.actions';
 import { InvoiceService } from '../../services/invoice.service';
 import { PURCHASE_ORDER_STATUS } from '../../shared/helpers/purchaseOrderStatus';
 import { INameUniqueName } from '../../models/api-models/Inventory';
@@ -52,6 +51,7 @@ import { OrganizationType } from '../../models/user-login-state';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SearchService } from '../../services/search.service';
 import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
+import { LedgerService } from '../../services/ledger.service';
 
 /** Type of search: vendor and item (product/service) search */
 const SEARCH_TYPE = {
@@ -217,6 +217,20 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public exchangeRate = 1;
     /* This will hold grand total */
     public grandTotalMulDum: any;
+    /** True, when user wants to see switched currency rate */
+    public showSwitchedCurr = false;
+    /** If true, then shows the company currency in currency switcher as main currency of conversion*/
+    public showCurrencyValue: boolean = false;
+    /** If true, will show save icon on exchange rate switcher */
+    public autoSaveIcon: boolean = false;
+    /** Stores the previous exchange rate of previous debtor */
+    public previousExchangeRate = 1;
+    /** Holds the reversed exchange rate edited by the user */
+    public reverseExchangeRate: number;
+    /** Holds the original reverse exchange rate */
+    public originalReverseExchangeRate: number;
+    /** Stores the account currency name for exchange rate switcher */
+    public customerCurrencyCode: string;
     /* This will hold entries list before applying tax */
     private entriesListBeforeTax: SalesEntryClass[];
     /* True, if the entry contains RCM applicable taxes */
@@ -225,8 +239,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public universalDate: any;
     /* moment object */
     public moment = moment;
-    /* This will hold if multicurrency is supported */
-    public isMultiCurrencySupported: boolean = false;
     /* This will hold currency symbol of company */
     public baseCurrencySymbol: string = '';
     /* Object for selected vendor */
@@ -365,7 +377,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         private loaderService: LoaderService,
         private route: ActivatedRoute,
         private router: Router,
-        private generalActions: GeneralActions,
+        private ledgerService: LedgerService,
         private invoiceService: InvoiceService,
         private modalService: BsModalService,
         private settingsBranchAction: SettingsBranchActions,
@@ -475,6 +487,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     }
 
                     this.purchaseOrder.account.billingDetails.panNumber = "";
+                    this.purchaseOrder.account.billingDetails.pincode = billingDetails.pincode;
 
                     let shippingDetails = this.purchaseOrderDetails.account.shippingDetails;
 
@@ -492,6 +505,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         this.purchaseOrder.account.shippingDetails.stateName = "";
                     }
                     this.purchaseOrder.account.shippingDetails.panNumber = "";
+                    this.purchaseOrder.account.shippingDetails.pincode = shippingDetails.pincode;
+                    this.checkForAutoFillShippingAddress('account');
                     this.copiedAccountDetails = true;
                 }
                 this.loadTaxesAndDiscounts(0);
@@ -632,6 +647,19 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     public updateVendorDetails(accountDetails: any): void {
         if (accountDetails) {
+            accountDetails.currency = accountDetails.currency || this.companyCurrency;
+            this.isMulticurrencyAccount = accountDetails.currency !== this.companyCurrency;
+            if (this.isMulticurrencyAccount) {
+                this.customerCurrencyCode = accountDetails.currency;
+                this.getCurrencyRate(this.companyCurrency, accountDetails.currency,
+                    moment(this.purchaseOrder.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
+            } else {
+                this.customerCurrencyCode = this.companyCurrency;
+                this.previousExchangeRate = this.exchangeRate;
+                this.originalExchangeRate = 1;
+                this.exchangeRate = 1;
+                this.recalculateEntriesTotal();
+            }
             this.purchaseOrder.voucherDetails.customerUniquename = accountDetails.uniqueName;
             this.purchaseOrder.voucherDetails.customerName = accountDetails.name;
             this.purchaseOrder.account.uniqueName = accountDetails.uniqueName;
@@ -675,6 +703,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         }
 
                         this.purchaseOrder.account.billingDetails.panNumber = "";
+                        this.purchaseOrder.account.billingDetails.pincode = defaultAddress.pincode;
 
                         this.purchaseOrder.account.shippingDetails.address = [];
                         this.purchaseOrder.account.shippingDetails.address.push(defaultAddress.address);
@@ -690,12 +719,12 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             this.purchaseOrder.account.shippingDetails.stateCode = "";
                             this.purchaseOrder.account.shippingDetails.stateName = "";
                         }
+                        this.purchaseOrder.account.shippingDetails.pincode = defaultAddress.pincode;
                         this.purchaseOrder.account.shippingDetails.panNumber = "";
                     }
                 });
             }
-
-            this.autoFillVendorShipping = isEqual(this.purchaseOrder.account.billingDetails, this.purchaseOrder.account.shippingDetails);
+            this.checkForAutoFillShippingAddress('account');
         }
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
     }
@@ -991,9 +1020,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.autoFillWarehouseAddress(warehouse);
         this.autoFillCompanyShipping = false;
 
-        if(this.purchaseOrder.company && this.purchaseOrder.company.billingDetails && this.purchaseOrder.company.shippingDetails && (this.purchaseOrder.company.billingDetails.address && this.purchaseOrder.company.billingDetails.address[0]) === (this.purchaseOrder.company.shippingDetails.address && this.purchaseOrder.company.shippingDetails.address[0]) && this.purchaseOrder.company.billingDetails.stateCode === this.purchaseOrder.company.shippingDetails.stateCode && this.purchaseOrder.company.billingDetails.gstNumber === this.purchaseOrder.company.shippingDetails.gstNumber) {
-            this.autoFillCompanyShipping = true;
-        }
+        this.checkForAutoFillShippingAddress('company');
     }
 
     /**
@@ -1015,6 +1042,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.company.shippingDetails.state.name = defaultAddress.stateName;
                     this.purchaseOrder.company.shippingDetails.stateName = defaultAddress.stateName;
                     this.purchaseOrder.company.shippingDetails.gstNumber = defaultAddress.taxNumber;
+                    this.purchaseOrder.company.shippingDetails.pincode = defaultAddress.pincode;
                 } else {
                     this.resetShippingAddress();
                 }
@@ -1039,6 +1067,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.purchaseOrder.company.shippingDetails.state.name = "";
         this.purchaseOrder.company.shippingDetails.stateName = "";
         this.purchaseOrder.company.shippingDetails.gstNumber = "";
+        this.purchaseOrder.company.shippingDetails.pincode = "";
     }
 
     /**
@@ -1545,12 +1574,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public calculateEntryTotal(entry: SalesEntryClass, trx: SalesTransactionItemClass): void {
-        if (this.excludeTax) {
-            trx.total = giddhRoundOff((trx.amount - entry.discountSum), 2);
-        } else {
-            trx.total = giddhRoundOff((trx.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
-        }
-
+        this.calculateConvertedTotal(entry, trx);
         this.calculateSubTotal();
         this.calculateTotalDiscount();
         this.calculateTotalTaxSum();
@@ -2372,6 +2396,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             this.purchaseOrder.company.billingDetails.stateCode = defaultAddress ? defaultAddress.stateCode : '';
             this.purchaseOrder.company.billingDetails.stateName = defaultAddress ? defaultAddress.stateName : '';
             this.purchaseOrder.company.billingDetails.gstNumber = defaultAddress ? defaultAddress.taxNumber : '';
+            this.purchaseOrder.company.billingDetails.pincode = defaultAddress ? defaultAddress.pincode : '';
         }
     }
 
@@ -2481,7 +2506,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         this.getAccountInProgress = true;
                         this.getAccountDetails(this.purchaseOrderDetails.account.uniqueName);
                     }
-
                     this.interval = setInterval(() => {
                         if (this.purchaseOrderDetails && this.purchaseOrderDetails.entries && this.vendorAccountsLoaded && !entriesUpdated && this.copiedAccountDetails) {
                             entriesUpdated = true;
@@ -2511,7 +2535,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.company.shippingDetails.state.code = this.purchaseOrderDetails.company.shippingDetails.stateCode;
                     this.purchaseOrder.company.shippingDetails.state.name = this.purchaseOrderDetails.company.shippingDetails.stateName;
 
-                    this.autoFillCompanyShipping = isEqual(this.purchaseOrder.company.billingDetails, this.purchaseOrder.company.shippingDetails);
+                    this.checkForAutoFillShippingAddress('company');
 
                     if(this.isUpdateMode) {
                         this.purchaseOrder.voucherDetails.voucherDate = this.purchaseOrderDetails.date;
@@ -2704,6 +2728,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             convertedEntries.push(salesEntryClass);
             this.activeIndex++;
         });
+        this.exchangeRate = this.purchaseOrderDetails.exchangeRate;
+        this.originalExchangeRate = this.exchangeRate;
+        this.previousExchangeRate = this.exchangeRate;
 
         return convertedEntries;
     }
@@ -2911,7 +2938,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     public onUpdateOrderDate(): void {
         this.isOrderDateChanged = true;
-
+        if (this.isMulticurrencyAccount && this.purchaseOrder.voucherDetails.voucherDate) {
+            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(this.purchaseOrder.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
+        }
         if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
             setTimeout(() => {
                 this.assignDueDate();
@@ -2937,6 +2966,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
             data.state.code = (isCompanyAddress) ? address.stateCode : (address.state) ? address.state.code : "";
             data.gstNumber = (isCompanyAddress) ? address.taxNumber : address.gstNumber;
+            data.pincode = address.pincode;
 
             if(isCompanyAddress) {
                 this.autoFillShippingDetails('company');
@@ -3540,6 +3570,164 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             ];
 
             this.vendorNotFoundText = this.localeData?.add_vendor;
+        }
+    }
+
+    /**
+     * Fetches the currency exchange rate between two countries
+     *
+     * @param {string} to Converted to currency symbol
+     * @param {string} from Converted from currency symbol
+     * @param {string} [date=moment().format(GIDDH_DATE_FORMAT)] Date on which currency rate is required, default is today's date
+     * @memberof CreatePurchaseOrderComponent
+     */
+     public getCurrencyRate(to: string, from: string, date = moment().format(GIDDH_DATE_FORMAT)): void {
+        if (from && to) {
+            this.ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                let rate = response.body;
+                if (rate) {
+                    this.previousExchangeRate = this.exchangeRate;
+                    this.originalExchangeRate = rate;
+                    this.exchangeRate = rate;
+                    if (from !== to) {
+                        // Multi currency case
+                        this.recalculateEntriesTotal();
+                    }
+                }
+            }, (error => {}));
+        }
+    }
+
+    /**
+     * Updates the value of stocks in entries according to the changed ER (Exchange Rate)
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+     public updateStockEntries(): void {
+        if (this.purchaseOrder.entries && this.purchaseOrder.entries.length) {
+            this.purchaseOrder.entries.forEach(entry => {
+                const transaction = entry.transactions[0];
+                if (transaction.isStockTxn) {
+                    const rate = this.previousExchangeRate >= 1 ? transaction.rate * this.previousExchangeRate : Number((transaction.rate / this.previousExchangeRate).toFixed(this.highPrecisionRate));
+                    transaction.rate = Number((rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                    this.calculateStockEntryAmount(transaction);
+                    this.calculateWhenTrxAltered(entry, transaction)
+                } else {
+                    this.calculateConvertedTotal(entry, transaction);
+                }
+            });
+        }
+    }
+
+    /**
+     * Switch currency handler
+     *
+     * @param {boolean} switchCurr True, if currency exchange should be reversed
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public switchCurrencyImg(switchCurr: boolean): void {
+        this.showSwitchedCurr = switchCurr;
+        if (switchCurr) {
+            this.reverseExchangeRate = this.exchangeRate ? 1 / this.exchangeRate : 0;
+            this.originalReverseExchangeRate = this.reverseExchangeRate;
+        } else {
+            this.exchangeRate = this.reverseExchangeRate ? 1 / this.reverseExchangeRate : 0;
+            this.originalExchangeRate = this.exchangeRate;
+        }
+    }
+
+    /**
+     * Saves the edited exchange rate
+     *
+     * @param {boolean} toSave True, if need to save the updated rate
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public saveCancelExcRate(toSave: boolean): void {
+        if (toSave) {
+            if (this.showSwitchedCurr) {
+                this.exchangeRate = this.reverseExchangeRate ? 1 / this.reverseExchangeRate : 0;
+            } else {
+                this.originalExchangeRate = this.exchangeRate;
+            }
+            this.autoSaveIcon = !this.autoSaveIcon;
+            this.showCurrencyValue = !this.showCurrencyValue;
+            this.originalReverseExchangeRate = this.reverseExchangeRate;
+            this.calculateGrandTotal();
+        } else {
+            this.showCurrencyValue = !this.showCurrencyValue;
+            this.autoSaveIcon = !this.autoSaveIcon;
+            this.exchangeRate = this.originalExchangeRate;
+            this.reverseExchangeRate = this.originalReverseExchangeRate;
+        }
+    }
+
+    /**
+     * Recalculates the entries total value
+     *
+     * @private
+     * @memberof CreatePurchaseOrderComponent
+     */
+     private recalculateEntriesTotal(): void {
+        this.updateStockEntries();
+        this.loadTaxesAndDiscounts(0);
+        this.calculateSubTotal();
+        this.calculateTotalDiscount();
+        this.calculateTotalTaxSum();
+        this.calculateGrandTotal();
+    }
+
+    /**
+     * Calculates converted total
+     *
+     * @private
+     * @param {SalesEntryClass} entry Entry instance
+     * @param {SalesTransactionItemClass} transaction Transaction instance
+     * @memberof CreatePurchaseOrderComponent
+     */
+     private calculateConvertedTotal(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+        if (this.excludeTax) {
+            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum), 2);
+            if (transaction.isStockTxn) {
+                transaction.convertedTotal = giddhRoundOff((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum, 2);
+            } else {
+                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+            }
+        } else {
+            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+            if (transaction.isStockTxn) {
+                transaction.convertedTotal = giddhRoundOff(((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+            } else {
+                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+            }
+        }
+    }
+
+    /**
+     * Checks for auto fill shipping address for account and company shipping address
+     *
+     * @private
+     * @param {string} sectionName Section name: company/account
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private checkForAutoFillShippingAddress(sectionName: string): void {
+        if (sectionName === 'account') {
+            if (this.purchaseOrder?.account?.billingDetails?.address[0] === this.purchaseOrder?.account?.shippingDetails?.address[0] &&
+                this.purchaseOrder?.account?.billingDetails?.stateCode === this.purchaseOrder?.account?.shippingDetails?.stateCode &&
+                this.purchaseOrder?.account?.billingDetails?.gstNumber === this.purchaseOrder?.account?.shippingDetails?.gstNumber &&
+                this.purchaseOrder?.account?.billingDetails?.pincode === this.purchaseOrder?.account?.shippingDetails?.pincode) {
+                this.autoFillVendorShipping = true;
+            } else {
+                this.autoFillVendorShipping = false;
+            }
+        } else if (sectionName === 'company') {
+            if (this.purchaseOrder?.company?.billingDetails?.address[0] === this.purchaseOrder?.company?.shippingDetails?.address[0] &&
+                this.purchaseOrder?.company?.billingDetails?.stateCode === this.purchaseOrder?.company?.shippingDetails?.stateCode &&
+                this.purchaseOrder?.company?.billingDetails?.gstNumber === this.purchaseOrder?.company?.shippingDetails?.gstNumber &&
+                this.purchaseOrder?.company?.billingDetails?.pincode === this.purchaseOrder?.company?.shippingDetails?.pincode) {
+                this.autoFillCompanyShipping = true;
+            } else {
+                this.autoFillCompanyShipping = false;
+            }
         }
     }
 }

@@ -100,7 +100,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                         currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                     }
                 }
-                this.branchForm.get('name').patchValue(this.companyDetails.name);
+                this.branchForm.get('name')?.patchValue(this.companyDetails.name);
                 if (!this.addressConfiguration.stateList.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
@@ -214,7 +214,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         }
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
-            this.branchForm.get('address').patchValue([
+            this.branchForm.get('address')?.patchValue([
                 ...(this.branchForm.get('address').value || []),
                 option.value
             ]);
@@ -313,6 +313,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             stateName: chosenState ? chosenState.stateName : '',
             address: addressDetails.formValue.address,
             name: addressDetails.formValue.name,
+            pincode: addressDetails.formValue.pincode,
             linkEntity
         };
 

@@ -71,7 +71,10 @@
                                 <div>
                                     <p class="address-row">{{address.address}}</p>
                                     <ng-container *ngIf="address.taxType && address.taxNumber">
-                                        {{address.taxType}} : {{address.taxNumber}}
+                                        {{address.taxType}} : {{address.taxNumber}}&nbsp;
+                                    </ng-container>
+                                    <ng-container *ngIf="address.pincode">
+                                        PIN: {{address.pincode}}
                                     </ng-container>
                                 </div>
                             </td>
@@ -127,8 +130,16 @@
                                 </p>
                             </div>
                             <div class="col-md-4 mb-1">
-                                <label>State:</label>
-                                <p>{{address.stateCode}} - {{address.stateName}}</p>
+                                <div>
+                                    <label>State:</label>
+                                    <p>{{address.stateCode}} - {{address.stateName}}</p>
+                                </div>
+                                <!-- static pincode  -->
+                                <div *ngIf="address.pincode">
+                                    <label>PIN:</label>
+                                    <p>{{address.pincode}}</p>
+                                </div>
+                                <!-- static pincode  -->
                             </div>
                             <div class="col-md-4">
                                 <div class="set-default">

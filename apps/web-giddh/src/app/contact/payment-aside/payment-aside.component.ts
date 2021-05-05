@@ -616,9 +616,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             vendorUniqueName: [''],
         });
         if (val) {
-            transactionsFields.get('remarks').patchValue('');
-            transactionsFields.get('amount').patchValue(val.closingBalanceAmount);
-            transactionsFields.get('vendorUniqueName').patchValue(val.uniqueName);
+            transactionsFields.get('remarks')?.patchValue('');
+            transactionsFields.get('amount')?.patchValue(val.closingBalanceAmount);
+            transactionsFields.get('vendorUniqueName')?.patchValue(val.uniqueName);
         }
         return transactionsFields;
     }

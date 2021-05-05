@@ -62,17 +62,17 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 			const end = moment(cronEndDate, cronEndDate instanceof Date ? null : GIDDH_DATE_FORMAT);
 			const next = moment(p);
 			if (end.isValid() && next.isAfter(end)) {
-				this.form.controls.cronEndDate.patchValue('');
+				this.form.controls.cronEndDate?.patchValue('');
 			}
 		});
 	}
 
 	public ngOnChanges(changes: SimpleChanges): void {
 		if (changes.voucherNumber) {
-			this.form.controls.voucherNumber.patchValue(this.voucherNumber);
+			this.form.controls.voucherNumber?.patchValue(this.voucherNumber);
 		}
 		if (this.invoice) {
-			this.form.patchValue({
+			this.form?.patchValue({
 				voucherNumber: this.invoice.voucherNumber,
 				duration: this.invoice.duration.toLowerCase(),
 				nextCronDate: this.invoice.nextCronDate && moment(this.invoice.nextCronDate, GIDDH_DATE_FORMAT).toDate(),
