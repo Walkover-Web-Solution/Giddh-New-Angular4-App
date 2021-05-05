@@ -5235,17 +5235,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }, 200);
         } else {
-            setTimeout(() => {
-                let firstElementToFocus: any = document.getElementsByClassName('firstElementToFocus');
-                if (firstElementToFocus[0]) {
-                    firstElementToFocus[0].focus();
-                    if (this.customerNameDropDown && !this.isUpdateMode) {
-                        this.customerNameDropDown.show();
+            if(!this.isPendingVoucherType) {
+                setTimeout(() => {
+                    let firstElementToFocus: any = document.getElementsByClassName('firstElementToFocus');
+                    if (firstElementToFocus[0]) {
+                        firstElementToFocus[0].focus();
+                        if (this.customerNameDropDown && !this.isUpdateMode) {
+                            this.customerNameDropDown.show();
+                        }
                     }
-                }
-            }, 200);
+                }, 200);
+            }
         }
-
     }
 
     /**
