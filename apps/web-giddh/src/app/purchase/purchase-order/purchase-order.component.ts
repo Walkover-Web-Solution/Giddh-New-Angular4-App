@@ -296,6 +296,14 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                         if(purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0) {
                             purchaseOrders.items.map(item => {
                                 item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedPo, item.uniqueName);
+                                let grandTotalConversionRate = 0, grandTotalAmountForCompany, grandTotalAmountForAccount;
+                                grandTotalAmountForCompany = Number(item?.grandTotal?.amountForCompany) || 0;
+                                grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
+
+                                if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
+                                    grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+                                }
+                                item.grandTotalTooltipText = `In ${item.grandTotal?.currencyForCompany?.code}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
                                 return item;
                             });
                         }

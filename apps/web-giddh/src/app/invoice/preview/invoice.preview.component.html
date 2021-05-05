@@ -444,7 +444,7 @@
 
                         <!-- Total Amt. -->
                         <td width="10%" data-title="Total Amount"
-                            [tooltip]="(selectedVoucher !== 'purchase') ? grandTotalPopupTemplate : ''" container="body"
+                            [tooltip]="grandTotalPopupTemplate" container="body"
                             containerClass="invoice-preview">
                             <span class="justify-content-end d-flex">
                                 <amount-field [amount]="item.grandTotal?.amountForAccount"
