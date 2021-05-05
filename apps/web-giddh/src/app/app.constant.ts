@@ -314,3 +314,6 @@ export enum EInvoiceStatus {
     Failed = 'failed',
     NA = 'na',
 }
+
+/** Length of entry description on vouchers */
+export const ENTRY_DESCRIPTION_LENGTH = 100;
