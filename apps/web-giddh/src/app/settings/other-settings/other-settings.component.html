@@ -2,7 +2,7 @@
     <div *ngIf="organizationType === 'BRANCH'" class="row">
         <div class="col-md-12">
             <div class="border-bottom font-14">
-                <p class="pd-b15"> {{getInformationSaveText(profileData?.companyName)}}</p>
+                <p class="pd-b15" [innerHTML]="getInformationSaveText(profileData?.companyName)"></p>
                 <!-- branch profile element start -->
                 <div class="other-detail-section">
                     <div class="mr-b15">
