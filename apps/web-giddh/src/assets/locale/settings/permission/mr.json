@@ -22,7 +22,7 @@
     "cidr_example" : "192.168.1.0/24",
     "ip_example" : "192.168.1.0",
     "create_user_permission" : "Create User Permission",
-    "past_period_duration": "Past &nbsp;[DURATION] &nbsp; [PERIOD]S",
+    "past_period_duration": "Past [DURATION] [PERIOD]S",
     "invalid_date": "Invalid date",
     "add_custom_role": "+ Custom Role"
 }
