@@ -43,7 +43,7 @@ import { saveAs } from 'file-saver';
 import { ReceiptService } from "../../services/receipt.service";
 import { InvoicePaymentModelComponent } from './models/invoicePayment/invoice.payment.model.component';
 import { PurchaseRecordService } from '../../services/purchase-record.service';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
+import { EInvoiceStatus, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
 import { PurchaseRecordUpdateModel } from '../../purchase/purchase-record/constants/purchase-record.interface';
 import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.service';
 import { PurchaseRecordActions } from '../../actions/purchase-record/purchase-record.action';
@@ -285,6 +285,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True, if user has enable GST E-invoice */
+    public gstEInvoiceEnable: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -531,7 +533,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             });
 
         this.store.pipe(select(s => s.invoice.settings), takeUntil(this.destroyed$)).subscribe(settings => {
-            this.invoiceSetting = settings;
+            if (settings) {
+                this.invoiceSetting = settings;
+                this.gstEInvoiceEnable = settings.invoiceSettings?.gstEInvoiceEnable;
+            } else {
+                this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+            }
         });
 
         //--------------------- Refresh report data according to universal date--------------------------------
@@ -735,6 +742,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if(response) {
                 this.isAccountUpdated = true;
                 this.store.dispatch(this.commonActions.accountUpdated(false));
+            }
+        });
+
+        this.store.pipe(select(state => state.invoice.isGenerateBulkInvoiceCompleted), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.getVoucher(this.isUniversalDateApplicable);
+                this.store.dispatch(this.invoiceActions.resetBulkEInvoice());
             }
         });
     }
@@ -1595,7 +1609,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
             item['grandTotalTooltipText'] = `In ${this.baseCurrency}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
             item['balanceDueTooltipText'] = `In ${this.baseCurrency}: ${balanceDueAmountForCompany}<br />(Conversion Rate: ${balanceDueAmountConversionRate})`;
-
+            if (this.gstEInvoiceEnable) {
+                item.eInvoiceStatusTooltip = this.getEInvoiceTooltipText(item);
+            }
         } catch (error) {
         }
         return item;
@@ -1899,5 +1915,47 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         let searchField = this.localeData?.search_field;
         searchField = searchField?.replace("[FIELD]", title);
         return searchField;
+    }
+
+    /**
+     * Creates the E-invoice in bulk
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public createBulkEInvoice(): void {
+        const requestObject = {
+            model: {
+                voucherNumbers: this.selectedInvoicesList.map(item => item.voucherNumber),
+                voucherType: this.selectedVoucher
+            },
+            actionType: 'einvoice'
+        };
+        this.store.dispatch(this.invoiceActions.generateBulkEInvoice(requestObject));
+    }
+
+    /**
+     * Returns the E-invoice tooltip text
+     *
+     * @private
+     * @param {ReceiptItem} item Current item
+     * @return {string} E-invoice status
+     * @memberof InvoicePreviewComponent
+     */
+    private getEInvoiceTooltipText(item: ReceiptItem): string {
+        switch (item.status?.toLowerCase()) {
+            case EInvoiceStatus.YetToBePushed:
+                return this.localeData.e_invoice_statuses.yet_to_be_pushed;
+            case EInvoiceStatus.Pushed:
+                return this.localeData.e_invoice_statuses.pushed;
+            case EInvoiceStatus.PushInitiated:
+                return this.localeData.e_invoice_statuses.push_initiated;
+            case EInvoiceStatus.Cancelled:
+                return this.localeData.e_invoice_statuses.cancelled;
+            case EInvoiceStatus.MarkedAsCancelled:
+                return this.localeData.e_invoice_statuses.mark_as_cancelled;
+            case EInvoiceStatus.Failed:
+                return item.errorMessage ?? this.localeData.e_invoice_statuses.failed;
+            default: return '';
+        }
     }
 }

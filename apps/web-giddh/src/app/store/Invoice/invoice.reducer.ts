@@ -33,8 +33,8 @@ export interface InvoiceState {
     exportInvoiceInprogress: boolean;
     exportInvoicebase64Data: any,
     // To check get all ledgr data API call in progress
-    isGetAllLedgerDataInProgress: boolean
-
+    isGetAllLedgerDataInProgress: boolean,
+    isGenerateBulkInvoiceCompleted: boolean
 }
 
 export const initialState: InvoiceState = {
@@ -56,7 +56,8 @@ export const initialState: InvoiceState = {
     invoiceActionUpdated: false,
     exportInvoiceInprogress: false,
     exportInvoicebase64Data: null,
-    isGetAllLedgerDataInProgress: false
+    isGetAllLedgerDataInProgress: false,
+    isGenerateBulkInvoiceCompleted: false
 };
 
 export function InvoiceReducer(state = initialState, action: CustomActions): InvoiceState {
@@ -545,6 +546,21 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                 ...state,
                 ledgers: null
             };
+        case INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE:
+            return {
+                ...state,
+                isGenerateBulkInvoiceCompleted: false
+            }
+        case INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE_RESPONSE:
+            return {
+                ...state,
+                isGenerateBulkInvoiceCompleted: true
+            }
+        case INVOICE_ACTIONS.RESET_BULK_E_INVOICE_RESPONSE:
+            return {
+                ...state,
+                isGenerateBulkInvoiceCompleted: false
+            }
         default: {
             return state;
         }
