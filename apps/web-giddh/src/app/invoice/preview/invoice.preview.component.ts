@@ -1915,6 +1915,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 return 'The e-Invoiced transaction has been marked as cancelled in Giddh Books alone. You’ll have to cancel it in the GST portal to make the IRN invalid.';
             case EInvoiceStatus.Failed:
                 return item.errorMessage ?? 'The transaction could not be pushed to the IRP.';
+            case EInvoiceStatus.NA:
+                // When invoice is B2C or B2B cancelled invoice
+                return item.errorMessage ?? 'e-Invoice creation is not applicable for this transaction.';
             default: return '';
         }
     }
