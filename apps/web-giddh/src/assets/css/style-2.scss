@@ -9716,7 +9716,7 @@ input.mat-input-element{
     }
     .gst-sidebar-open {
          .gst-sidebar{
-            left: -250px !important;
+            left: 0 !important;
          }
          #content-wrapper{
             padding-left: 0;
@@ -10189,6 +10189,19 @@ input.mat-input-element{
     }
 }
 @media (max-width: 767px) {
+    .gst-sidebar-wrapper{
+        &:after{
+            position: absolute;
+            content: "";
+            background-color: $black;
+            width: 100%;
+            height: 100vh;
+            z-index: 999;
+            top: -10px;
+            left: 0;
+            opacity: 0.5;
+        }
+    }
     .tax-engine .transactions-list .filter-row .name {
         min-width: 120px;
     }
