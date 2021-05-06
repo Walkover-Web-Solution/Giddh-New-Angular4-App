@@ -262,6 +262,14 @@ export class InvoiceUiDataService {
                             width: null
                         };
                 }
+                if (!selectedTemplate.sections['table'].data['showDescriptionInRows']) {
+                    selectedTemplate.sections['table'].data['showDescriptionInRows'] = defaultTemplate ? 
+                        defaultTemplate.sections['table'].data['showDescriptionInRows'] : {
+                            label: '',
+                            display: false,
+                            width: null
+                        };
+                }
 
                 this.BRToNewLine(selectedTemplate);
                 this.customTemplate.next(_.cloneDeep(selectedTemplate));
