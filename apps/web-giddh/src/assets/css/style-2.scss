@@ -10184,6 +10184,9 @@ input.mat-input-element{
     }
 }
 @media (max-width: 767px) {
+     #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs{
+        display: inline-block;
+    }
     .e-waybill-tabs.custom-tabs .nav-tabs{
         position: fixed !important;
     }
@@ -11006,7 +11009,7 @@ input.mat-input-element{
             display: none;
         }
         .modal-dialog {
-            max-width: 600px !important;
+            max-width: 650px !important;
             margin: 30px auto;
             padding: 0 10px;
         }

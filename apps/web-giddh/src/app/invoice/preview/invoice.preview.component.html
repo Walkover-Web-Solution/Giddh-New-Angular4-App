@@ -48,7 +48,7 @@
                                         *ngIf="selectedVoucher === 'sales'">
                                         {{localeData?.generate_eway_bill}}</a>
                                 </li>
-                                <li *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales')">
+                                <li *ngIf="gstEInvoiceEnable && (selectedVoucher === 'sales')">
                                     <a class="dropdown-item cp" href="javascript:void(0)" (click)="createBulkEInvoice()"> {{localeData?.create_e_invoice}} </a>
                                 </li>
                                 <li role="menuitem"
@@ -348,11 +348,11 @@
                                 </div>
                             </th>
                             <!-- E-invoice status -->
-                            <th *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" width="10%">
+                            <!-- <th *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" width="10%">
                                 <div class="d-flex">
                                     <div class="flex-fill">{{ localeData?.e_invoice_status }}</div>
                                 </div>
-                            </th>
+                            </th> -->
 
                         </tr>
                     </thead>
@@ -579,11 +579,11 @@
                                 </span>
                             </td>
                             <!-- E-invoice status -->
-                            <td *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales')" [attr.data-title]="localeData.e_invoice_status" width="10%">
+                            <!-- <td *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales')" [attr.data-title]="localeData.e_invoice_status" width="10%">
                                 <div class="e-invoice-status font-14">
                                     <strong class="d-flex" [tooltip]="item.eInvoiceStatusTooltip">{{item.status || '-'}}</strong>
                                 </div>
-                            </td>
+                            </td> -->
                         </tr>
                     </tbody>
                     <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
@@ -595,7 +595,8 @@
                     </tbody>
                 </table>
             </div>
-            <ng-container *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && (selectedVoucher === 'sales' || selectedVoucher === 'purchase') && isMobileView">
+
+            <ng-container *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && (selectedVoucher === 'sales' || selectedVoucher === 'purchase') && !isMobileView">
                 <div class="card mobile-table mr-t15" *ngFor="let item of voucherData?.items; let i = index">
                     <table class="table basic table-bordered invoice-table" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
                         <tbody>
