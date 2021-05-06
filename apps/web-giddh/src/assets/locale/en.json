@@ -196,7 +196,7 @@
     "app_tax_types": {
         "gst": "GST",
         "input_gst": "InputGST",
-        "others": "others"
+        "others": "Others"
     },
     "app_duration": {
         "monthly": "Monthly",
@@ -545,5 +545,6 @@
         },
         "weekdays": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
         "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    }
+    },
+    "app_characters_left": "Characters Left"
 }

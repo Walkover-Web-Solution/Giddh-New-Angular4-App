@@ -172,7 +172,7 @@ export const GIDDH_DATE_RANGE_PICKER_RANGES = [
         key: "ThisMonth"
     },
     {
-        name: DatePickerDefaultRangeEnum.LastMonth, 
+        name: DatePickerDefaultRangeEnum.LastMonth,
         value: [
             moment().subtract(1, 'month').startOf('month'),
             moment().subtract(1, 'month').endOf('month')
@@ -180,7 +180,7 @@ export const GIDDH_DATE_RANGE_PICKER_RANGES = [
         key: "LastMonth"
     },
     {
-        name: DatePickerDefaultRangeEnum.ThisQuarterToDate, 
+        name: DatePickerDefaultRangeEnum.ThisQuarterToDate,
         value: [
             moment().quarter(moment().quarter()).startOf('quarter'),
             moment()
@@ -188,7 +188,7 @@ export const GIDDH_DATE_RANGE_PICKER_RANGES = [
         key: "ThisQuarterToDate"
     },
     {
-        name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate, 
+        name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate,
         value: [
             moment().startOf('year').subtract(9, 'year'),
             moment()
@@ -196,7 +196,7 @@ export const GIDDH_DATE_RANGE_PICKER_RANGES = [
         key: "ThisFinancialYearToDate"
     },
     {
-        name: DatePickerDefaultRangeEnum.LastQuarter, 
+        name: DatePickerDefaultRangeEnum.LastQuarter,
         value: [
             moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
             moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
@@ -204,7 +204,7 @@ export const GIDDH_DATE_RANGE_PICKER_RANGES = [
         key: "LastQuarter"
     },
     {
-        name: DatePickerDefaultRangeEnum.AllTime, 
+        name: DatePickerDefaultRangeEnum.AllTime,
         value: [
             moment().startOf('year').subtract(10, 'year'),
             moment()
@@ -304,3 +304,16 @@ export const SETTING_INTEGRATION_TABS = {
     E_COMMERCE: { LABEL: 'ecommerce', VALUE: 3 },
     PAYMENT: { LABEL: 'payment', VALUE: 4 }
 };
+
+/** E-invoice statuses */
+export enum EInvoiceStatus {
+    YetToBePushed = 'yet-to-be pushed',
+    Pushed = 'pushed',
+    PushInitiated = 'push initiated',
+    Cancelled = 'cancelled',
+    MarkedAsCancelled = 'marked as cancelled',
+    Failed = 'failed'
+}
+
+/** Length of entry description on vouchers */
+export const ENTRY_DESCRIPTION_LENGTH = 100;

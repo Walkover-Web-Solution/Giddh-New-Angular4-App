@@ -1271,7 +1271,8 @@
                                                 </div>
 
                                                 <div class="description">
-                                                    <textarea type="text" rows="3" [placeholder]="localeData?.add_description" name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description" #description></textarea>
+                                                    <textarea type="text" rows="3" [placeholder]="localeData?.add_description" name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description" [maxlength]="entryDescriptionLength" #description></textarea>
+                                                    <p class="font-12">{{commonLocaleData?.app_characters_left}}: {{entryDescriptionLength - transaction.description?.length}}</p>
                                                     <p class="small text-muted sku-and-custom-fields" *ngIf="transaction.sku_and_customfields">
                                                         {{transaction.sku_and_customfields}}</p>
                                                 </div>
@@ -2228,8 +2229,9 @@
                                                         <div class="description">
                                                             <textarea type="text" rows="3" [placeholder]="localeData?.add_description" #description
                                                                 name="transaction.description_{{entryIdx}}" class="form-control"
-                                                                [(ngModel)]="transaction.description">
+                                                                [(ngModel)]="transaction.description" [maxlength]="entryDescriptionLength">
                                                             </textarea>
+                                                            <p class="font-12">{{commonLocaleData?.app_characters_left}}: {{entryDescriptionLength - transaction.description?.length}}</p>
                                                             <p class="small text-muted sku-and-custom-fields"
                                                                 *ngIf="transaction.sku_and_customfields">
                                                                 {{transaction.sku_and_customfields}}</p>

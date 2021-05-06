@@ -155,39 +155,41 @@
         </form>
     </div>
 </div> -->
-<giddh-page-loader *ngIf="(getCompanyProfileInProgress$ | async)"></giddh-page-loader>
-<!--Tabs of Company Profile-->
-<div class="settings-profile-tabs">
-    <tabset #staticTabs class="profile-tab-container">
-        <tab [active]="this.currentTab === 'personal'"  (selectTab)="handleTabChanged('personal')" heading="Personal Information"
-        [id]="(currentTab === 'personal') ? 'giddh-page-heading': ''" >
-            <personal-information *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'personal'" (saveProfile)="handleSaveProfile($event)"
-                [profileData]="companyProfileObj" [organizationType]="currentOrganizationType">
-            </personal-information>
-        </tab>
-        <tab [active]="this.currentTab === 'address'" (selectTab)="handleTabChanged('address')"  heading="{{companyProfileObj?.taxType ? ('Address/' + companyProfileObj?.taxType) : 'Address/es' }}" [id]="(currentTab === 'address') ? 'giddh-page-heading': ''">
-            <address-settings *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'address'" [addresses]="addresses"
-                [(isAddressChangeInProgress)]="isAddressChangeInProgress" [(closeSidePane)]="closeAddressSidePane"
-                [currentOrganizationUniqueName]="currentOrganizationUniqueName"
-                (searchAddress)="handleSearchInAddress($event)" (pageChanged)="handlePageChanged($event)"
-                [addressConfiguration]="addressConfiguration" (saveNewAddress)="createNewAddress($event)"
-                (updatedAddress)="updateAddress($event)" (deleteAddress)="handleDeleteAddress($event)"
-                (unLinkAddress)="handleAddressUnlinking($event)" (setDefaultAddress)="handleDefaultAddress($event)"
-                [profileData]="companyProfileObj" [shouldShowLoader]="shouldShowAddressLoader"
-                [paginationConfig]="addressTabPaginationData" [paginationLimit]="20"
-                [organizationType]="currentOrganizationType"></address-settings>
-        </tab>
-        <tab [active]="this.currentTab === 'other'" (selectTab)="handleTabChanged('other')" heading="Other"
-        [id]="(currentTab === 'other') ? 'giddh-page-heading': ''">
-            <other-settings [organizationType]="currentOrganizationType" (saveProfile)="handleSaveProfile($event)"
-                [profileData]="companyProfileObj" *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'other'"></other-settings>
-        </tab>
-    </tabset>
-</div>
-<br>
-<br>
-<br>
-<br>
-<div class="branch-vector">
-    <img src="{{ imgPath }}" alt="branch-image">
-</div>
+<ng-container appTranslate [file]="'settings/profile'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+    <giddh-page-loader *ngIf="(getCompanyProfileInProgress$ | async)"></giddh-page-loader>
+    <!--Tabs of Company Profile-->
+    <div class="settings-profile-tabs">
+        <tabset #staticTabs class="profile-tab-container">
+            <tab [active]="this.currentTab === 'personal'" (selectTab)="handleTabChanged('personal')" [heading]="localeData?.personal_information"
+            [id]="(currentTab === 'personal') ? 'giddh-page-heading': ''">
+                <personal-information *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'personal'" (saveProfile)="handleSaveProfile($event)"
+                    [profileData]="companyProfileObj" [organizationType]="currentOrganizationType" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+                </personal-information>
+            </tab>
+            <tab [active]="this.currentTab === 'address'" (selectTab)="handleTabChanged('address')" [heading]="companyProfileObj?.taxType ? (localeData?.address + companyProfileObj?.taxType) : localeData?.addresses" [id]="(currentTab === 'address') ? 'giddh-page-heading': ''">
+                <address-settings *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'address'" [addresses]="addresses"
+                    [(isAddressChangeInProgress)]="isAddressChangeInProgress" [(closeSidePane)]="closeAddressSidePane"
+                    [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+                    (searchAddress)="handleSearchInAddress($event)" (pageChanged)="handlePageChanged($event)"
+                    [addressConfiguration]="addressConfiguration" (saveNewAddress)="createNewAddress($event)"
+                    (updatedAddress)="updateAddress($event)" (deleteAddress)="handleDeleteAddress($event)"
+                    (unLinkAddress)="handleAddressUnlinking($event)" (setDefaultAddress)="handleDefaultAddress($event)"
+                    [profileData]="companyProfileObj" [shouldShowLoader]="shouldShowAddressLoader"
+                    [paginationConfig]="addressTabPaginationData" [paginationLimit]="20"
+                    [organizationType]="currentOrganizationType" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></address-settings>
+            </tab>
+            <tab [active]="this.currentTab === 'other'" (selectTab)="handleTabChanged('other')" [heading]="localeData?.other"
+            [id]="(currentTab === 'other') ? 'giddh-page-heading': ''">
+                <other-settings [organizationType]="currentOrganizationType" (saveProfile)="handleSaveProfile($event)"
+                    [profileData]="companyProfileObj" *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'other'" [localeData]="localeData"></other-settings>
+            </tab>
+        </tabset>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="branch-vector">
+        <img src="{{ imgPath }}" alt="branch-image">
+    </div>
+</ng-container>

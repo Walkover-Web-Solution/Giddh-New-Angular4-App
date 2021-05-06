@@ -83,7 +83,7 @@ import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-sele
 import { EMAIL_REGEX_PATTERN } from '../shared/helpers/universalValidations';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES } from '../app.constant';
+import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
@@ -584,6 +584,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public translationLoaded: boolean = false;
     /** True, if user has opted to show notes at the last page of sales invoice */
     public showNotesAtLastPage: boolean;
+    /** Length of entry description */
+    public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -2742,10 +2744,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public calculateSubTotal() {
         let count: number = 0;
-        this.invFormData.entries.forEach(f => {
-            count += f.transactions.reduce((pv, cv) => {
-                return pv + Number(cv.amount);
-            }, 0);
+        this.invFormData.entries.forEach(entry => {
+            entry.transactions.forEach(transaction => {
+                count = Number((count + transaction.amount).toFixed(HIGH_RATE_FIELD_PRECISION));
+            });
         });
 
         if (isNaN(count)) {
@@ -2778,9 +2780,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public calculateGrandTotal() {
 
         let calculatedGrandTotal = 0;
-        calculatedGrandTotal = this.invFormData.voucherDetails.grandTotal = this.invFormData.entries.reduce((pv, cv) => {
-            return pv + cv.transactions.reduce((pvt, cvt) => pvt + cvt.total, 0);
-        }, 0);
+        this.invFormData.entries.forEach(entry => {
+            entry.transactions.forEach(transaction => {
+                calculatedGrandTotal = Number((calculatedGrandTotal + transaction.total).toFixed(HIGH_RATE_FIELD_PRECISION));
+            });
+        });
+        this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
 
         if (isNaN(calculatedGrandTotal)) {
             calculatedGrandTotal = 0;
@@ -5073,17 +5078,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }, 200);
         } else {
-            setTimeout(() => {
-                let firstElementToFocus: any = document.getElementsByClassName('firstElementToFocus');
-                if (firstElementToFocus[0]) {
-                    firstElementToFocus[0].focus();
-                    if (this.customerNameDropDown && !this.isUpdateMode) {
-                        this.customerNameDropDown.show();
+            if(!this.isPendingVoucherType) {
+                setTimeout(() => {
+                    let firstElementToFocus: any = document.getElementsByClassName('firstElementToFocus');
+                    if (firstElementToFocus[0]) {
+                        firstElementToFocus[0].focus();
+                        if (this.customerNameDropDown && !this.isUpdateMode) {
+                            this.customerNameDropDown.show();
+                        }
                     }
-                }
-            }, 200);
+                }, 200);
+            }
         }
-
     }
 
     /**
