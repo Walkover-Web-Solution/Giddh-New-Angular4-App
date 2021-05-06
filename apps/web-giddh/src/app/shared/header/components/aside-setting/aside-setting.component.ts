@@ -112,6 +112,8 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public closeAsidePaneIfMobile(event?): void {
         if(this.isMobileScreen && event && event.target.className !== "icon-bar") {
             this.closeAsideEvent.emit(event);
+        } else if(!this.isMobileScreen) {
+            this.closeAsideEvent.emit(event);
         }
     }
 
