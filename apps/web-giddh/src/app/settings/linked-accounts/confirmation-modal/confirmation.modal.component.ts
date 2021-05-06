@@ -8,6 +8,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class SettingLinkedAccountsConfirmationModalComponent {
 
     @Input() public message: string;
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
     public onConfirmation() {
