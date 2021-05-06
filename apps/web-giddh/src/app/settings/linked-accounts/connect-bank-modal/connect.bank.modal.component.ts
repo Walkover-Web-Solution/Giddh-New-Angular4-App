@@ -44,9 +44,11 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     @Input() public providerId: string = '';
     @Input() public isRefreshWithCredentials: boolean = true;
     @Input() public providerAccountId: number = null;
-
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public url: SafeResourceUrl = null;
-
     public iframeSrc: string = '';
     public isIframeLoading: boolean = false;
     public dataSource: any;
@@ -68,7 +70,6 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     public base64StringForModel: SafeResourceUrl = '';
     /** Force clear for drop down */
     public forceClearReactive$: Observable<IForceClear> = of({ status: false });
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public click$ = new Subject<string>();
 
@@ -341,7 +342,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
         let status = provider.status.toLowerCase();
         if (status === 'success' || status === 'failed') {
             if (status === 'failed') {
-                this._toaster.errorToast('Authentication Failed');
+                this._toaster.errorToast(this.localeData?.authentication_failed);
             }
             this.bankSyncInProgress = false;
             this.onCancel();
