@@ -61,19 +61,11 @@ jobs:
           filename: "./apps/electron-giddh/src/package.json"
           key: "version"
           value: ${{ github.event.inputs.version }}
-      - name: Preparing build bundle
-        run: npm run build.electron.giddh
       - name: Creating Electron bundle
-        uses: samuelmeuli/action-electron-builder@v1
+        run: npm run package:windows
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        with:
-          github_token: ${{ secrets.github_token }}
-          release: true
-          skip_build: true
-          app_root: ./dist/apps/web-giddh-prod/
-          args: build --config ./electron-sign/electron-builder-test.json --ia32 --x64
   notify-success:
     if: ${{ success() }}
     needs: release
@@ -88,7 +80,7 @@ jobs:
           SLACK_COLOR: "#009688" # or a specific color like 'green' or '#ff00ff'
           SLACK_MESSAGE: "Build download URL https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.exe"
           SLACK_TITLE: Giddh Electron build
-          SLACK_USERNAME: Giddh bot
+          SLACK_USERNAME: Giddh Electron build
           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
   notify-failure:
     if: ${{ failure() }}
@@ -104,5 +96,5 @@ jobs:
           SLACK_COLOR: "#f44336" # or a specific color like 'green' or '#ff00ff'
           SLACK_MESSAGE: "Build failed"
           SLACK_TITLE: Giddh Electron build
-          SLACK_USERNAME: Giddh bot
+          SLACK_USERNAME: Giddh Electron build
           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
