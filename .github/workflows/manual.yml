@@ -76,7 +76,7 @@ jobs:
           app_root: ./dist/apps/web-giddh-prod/
           args: build --config ./electron-sign/electron-builder-test.json --ia32 --x64
   notify-success:
-    if: success()
+    if: ${{ success() }}
     needs: release
     name: Slack Notification Success
     runs-on: ubuntu-latest
@@ -92,7 +92,7 @@ jobs:
         SLACK_USERNAME: Giddh bot
         SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
   notify-failure:
-    if: failure()
+    if: ${{ failure() }}
     needs: release
     name: Slack Notification Failure
     runs-on: ubuntu-latest
