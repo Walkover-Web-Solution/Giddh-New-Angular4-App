@@ -75,14 +75,13 @@ jobs:
           skip_build: true
           app_root: ./dist/apps/web-giddh-prod/
           args: build --config ./electron-sign/electron-builder-test.json --ia32 --x64
-  notify:
-    if: always()
+  notify-success:
+    if: success()
     needs: release
-    name: Slack Notification
+    name: Slack Notification Success
     runs-on: ubuntu-latest
     steps:
     - name: Slack Notification Success
-    - if: ${{ success() }}
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -92,8 +91,13 @@ jobs:
         SLACK_TITLE: Giddh Electron build
         SLACK_USERNAME: Giddh bot
         SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+  notify-failure:
+    if: failure()
+    needs: release
+    name: Slack Notification Failure
+    runs-on: ubuntu-latest
+    steps:
     - name: Slack Notification Failure
-    - if: ${{ failure() }}
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
