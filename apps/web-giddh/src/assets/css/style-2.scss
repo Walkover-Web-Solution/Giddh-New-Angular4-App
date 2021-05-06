@@ -9716,7 +9716,7 @@ input.mat-input-element{
     }
     .gst-sidebar-open {
          .gst-sidebar{
-            left: 0 !important;
+            left: -250px !important;
          }
          #content-wrapper{
             padding-left: 0;
@@ -10189,6 +10189,12 @@ input.mat-input-element{
     }
 }
 @media (max-width: 767px) {
+    .gst-sidebar-open{
+        .gst-sidebar{
+            left: 0 !important;
+        }
+    }
+
     .gst-sidebar-wrapper{
         &:after{
             position: absolute;
