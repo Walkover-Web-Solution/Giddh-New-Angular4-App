@@ -299,5 +299,6 @@ export enum EInvoiceStatus {
     PushInitiated = 'push initiated',
     Cancelled = 'cancelled',
     MarkedAsCancelled = 'marked as cancelled',
-    Failed = 'failed'
+    Failed = 'failed',
+    NA = 'na',
 }
