@@ -11,7 +11,7 @@
         "buildResources": "resources",
         "output": "./../electrongiddh-packages"
     },
-    "afterSign": "./electron-sign/notarize.js",
+    "afterSign": "./../../../electron-sign/notarize.js",
     "mac": {
         "category": "public.app-category.finance",
         "target": [
