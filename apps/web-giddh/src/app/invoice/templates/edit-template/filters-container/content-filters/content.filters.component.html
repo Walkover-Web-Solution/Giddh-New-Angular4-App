@@ -1,6 +1,6 @@
 <div id="contentTab" class="design-tab-content mr-t2 template-editor" *ngIf="content && customTemplate && customTemplate.sections">
     <!-- start header -->
-    <form #contentForm="ngForm" (ngSubmit)="save()" novalidate>
+    <form #contentForm="ngForm" novalidate>
         <div id="headerDiv" [hidden]="!templateUISectionVisibility.header">
             <h2>Header</h2>
             <div class="scroll-auto">
@@ -372,6 +372,15 @@
                                 <ng-container *ngIf="item?.isFocused || contentForm?.controls['it1']?.errors?.maxlength">
                                     <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(12 - customTemplate.sections['table'].data['item'].label.length)}}</span>
                                 </ng-container>
+                            </td>
+                        </tr>
+                        <tr *ngIf="customTemplate.sections['table'].data['item'].display">
+                            <td class="pb-3" colspan="2">
+                                <label>
+                                    <input type="checkbox" name="showDescriptionInRows"
+                                        [(ngModel)]="customTemplate.sections['table'].data['showDescriptionInRows'].display"
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show description as a new row
+                                </label>
                             </td>
                         </tr>
                         <tr *ngIf="fieldsAndVisibility.table.hsnSac">
