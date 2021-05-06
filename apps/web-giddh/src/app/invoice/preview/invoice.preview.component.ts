@@ -1956,6 +1956,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             case EInvoiceStatus.Failed:
                 return item.errorMessage ?? this.localeData.e_invoice_statuses.failed;
             case EInvoiceStatus.NA:
+                // When invoice is B2C or B2B cancelled invoice
                 return item.errorMessage ?? this.localeData.e_invoice_statuses.na;
             default: return '';
         }
