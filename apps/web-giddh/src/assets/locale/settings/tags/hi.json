@@ -1,5 +1,5 @@
 {
-    "remove_tag" : "Are you sure you want to delete <b>{{TAG_NAME}}</b>?",
+    "remove_tag" : "Are you sure you want to delete <b>[TAG_NAME]</b>?",
     "create_tag" : "Create Tag",
     "tag_name_placeholder" : "Tag Name",
     "tag_description_placeholder" : "Tag Description (optional)",

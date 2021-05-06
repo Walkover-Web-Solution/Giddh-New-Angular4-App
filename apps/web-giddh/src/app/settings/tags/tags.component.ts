@@ -4,7 +4,6 @@ import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
-import { ToasterService } from '../../services/toaster.service';
 import { createSelector } from 'reselect';
 import { SettingsTagActions } from '../../actions/settings/tag/settings.tag.actions';
 import { TagRequest } from '../../models/api-models/settingsTags';
@@ -28,6 +27,10 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
 	constructor(
 		private store: Store<AppState>,
@@ -70,8 +73,10 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
 	}
 
 	public deleteTag(tag: TagRequest) {
-		this.newTag = tag;
-		this.confirmationMessage = `Are you sure you want to delete <b>${tag.name}</b>?`;
+        this.newTag = tag;
+        let message = this.localeData?.remove_tag;
+        message = message?.replace("[TAG_NAME]", tag.name);
+		this.confirmationMessage = message;
 		this.confirmationModal.show();
 	}
 
