@@ -53,7 +53,7 @@
                                     *ngIf="selectedVoucher === 'sales'">
                                     Generate E-way Bill</a>
                             </li>
-                            <li *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales')">
+                            <li *ngIf="gstEInvoiceEnable && (selectedVoucher === 'sales')">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="createBulkEInvoice()"> Create E-invoice </a>
                             </li>
                             <li role="menuitem"
@@ -376,11 +376,11 @@
                             </div>
                         </th>
                         <!-- E-invoice status -->
-                        <th *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" width="10%">
+                        <!-- <th *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" width="10%">
                             <div class="d-flex">
                                 <div class="flex-fill">E-invoice Status</div>
                             </div>
-                        </th>
+                        </th> -->
                     </tr>
                 </thead>
 
@@ -615,11 +615,11 @@
                         <td data-title="Amount" *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" class="text-right"
                             >{{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
                         <!-- E-invoice status -->
-                        <td *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales')" data-title="E-Invoice Status" width="10%">
+                        <!-- <td *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales')" data-title="E-Invoice Status" width="10%">
                             <div class="e-invoice-status font-14">
                                 <strong class="d-flex" [tooltip]="item.eInvoiceStatusTooltip">{{item.status || '-'}}</strong>
                             </div>
-                        </td>
+                        </td> -->
                     </tr>
                 </tbody>
 
