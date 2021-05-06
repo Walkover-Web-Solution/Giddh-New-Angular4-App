@@ -2,6 +2,7 @@
  * Created by kunalsaxena on 9/1/17.
  */
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -111,7 +112,8 @@ export class GstComponent implements OnInit, OnDestroy {
         private _toasty: ToasterService,
         private _cdRf: ChangeDetectorRef,
         private gstReconcileService: GstReconcileService,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private breakpointObserver: BreakpointObserver
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstr1TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr1OverViewData.count), takeUntil(this.destroyed$));
@@ -132,6 +134,15 @@ export class GstComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.breakpointObserver
+            .observe(['(max-width: 768px)'])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((state: BreakpointState) => {
+                this.isMobileScreen = state.matches;
+                if (!this.isMobileScreen) {
+                    this.asideGstSidebarMenuState = 'in';
+                }
+            });
         this.toggleGstPane();
         this.loadTaxDetails();
         let companyUniqueName = null;
@@ -184,10 +195,12 @@ export class GstComponent implements OnInit, OnDestroy {
             }
         });
         this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
-            if (shouldOpen) {
-                this.asideGstSidebarMenuState = 'in';
-            } else {
-                this.asideGstSidebarMenuState = 'out';
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+                }
             }
         });
     }

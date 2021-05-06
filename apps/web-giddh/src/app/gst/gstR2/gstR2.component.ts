@@ -1,3 +1,4 @@
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
@@ -23,7 +24,8 @@ export class FileGstR2Component implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private store: Store<AppState>
+        private store: Store<AppState>,
+        private breakpointObserver: BreakpointObserver
     ) {
         //
     }
@@ -54,6 +56,15 @@ export class FileGstR2Component implements OnInit, OnDestroy {
         }
     }
     public ngOnInit() {
+        this.breakpointObserver
+            .observe(['(max-width: 768px)'])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((state: BreakpointState) => {
+                this.isMobileScreen = state.matches;
+                if (!this.isMobileScreen) {
+                    this.asideGstSidebarMenuState = 'in';
+                }
+            });
         this.toggleGstPane();
         $('.tabs-new a').on('click', function (event) {
             event.preventDefault();
@@ -148,12 +159,13 @@ export class FileGstR2Component implements OnInit, OnDestroy {
 
         });
         this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
-            if (shouldOpen) {
-                this.asideGstSidebarMenuState = 'in';
-            } else {
-                this.asideGstSidebarMenuState = 'out';
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+                }
             }
-            this.toggleBodyClass();
         });
     }
     /**

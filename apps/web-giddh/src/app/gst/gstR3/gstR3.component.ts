@@ -17,6 +17,7 @@ import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReport } from '../constants/gst.constant';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 
 @Component({
@@ -63,6 +64,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private _gstAction: GstReconcileActions,
         private activatedRoute: ActivatedRoute,
         private _invoicePurchaseActions: InvoicePurchaseActions,
+        private breakpointObserver: BreakpointObserver
     ) {
         //
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
@@ -104,6 +106,15 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.breakpointObserver
+            .observe(['(max-width: 768px)'])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((state: BreakpointState) => {
+                this.isMobileScreen = state.matches;
+                if (!this.isMobileScreen) {
+                    this.asideGstSidebarMenuState = 'in';
+                }
+            });
         this.toggleGstPane();
         this.activatedRoute.queryParams.pipe(take(1)).subscribe(params => {
             this.currentPeriod = {
@@ -212,12 +223,13 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 }
             }
         });
-
         this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
-            if (shouldOpen) {
-                this.asideGstSidebarMenuState = 'in';
-            } else {
-                this.asideGstSidebarMenuState = 'out';
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+                }
             }
         });
     }

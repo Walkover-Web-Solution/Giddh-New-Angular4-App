@@ -1,3 +1,4 @@
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -61,7 +62,8 @@ export class FilingComponent implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private store: Store<AppState>,
         private _gstAction: GstReconcileActions,
-        private generalService: GeneralService) {
+        private generalService: GeneralService,
+        private breakpointObserver: BreakpointObserver) {
 		this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
 		this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
 		this.gstr1OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
@@ -105,6 +107,15 @@ export class FilingComponent implements OnInit, OnDestroy {
     }
 
 	public ngOnInit() {
+        this.breakpointObserver
+            .observe(['(max-width: 768px)'])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((state: BreakpointState) => {
+                this.isMobileScreen = state.matches;
+                if (!this.isMobileScreen) {
+                    this.asideGstSidebarMenuState = 'in';
+                }
+            });
         this.toggleGstPane();
 		this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
 			this.currentPeriod = {
@@ -157,10 +168,12 @@ export class FilingComponent implements OnInit, OnDestroy {
 			this.store.dispatch(this._gstAction.GetGSPSession(this.activeCompanyGstNumber));
 		});
         this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
-            if (shouldOpen) {
-                this.asideGstSidebarMenuState = 'in';
-            } else {
-                this.asideGstSidebarMenuState = 'out';
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+                }
             }
         });
 	}
@@ -241,6 +254,13 @@ export class FilingComponent implements OnInit, OnDestroy {
                 this.navigateTogstR3B(type);
                 break;
             default: break;
+        }
+    }
+
+    hello(event) {
+        console.log('triggerred');
+        if (this.isMobileScreen) {
+            this.asideGstSidebarMenuState = 'out';
         }
     }
 }
