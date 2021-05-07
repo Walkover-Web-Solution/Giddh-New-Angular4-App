@@ -327,7 +327,7 @@
             </div>
         </div>
     </div>
-    <purchase-order-preview *ngIf="purchaseOrderUniqueName" [purchaseOrders]="purchaseOrders"
+    <purchase-order-preview *ngIf="purchaseOrderUniqueName && translationLoaded" [purchaseOrders]="purchaseOrders"
         [companyUniqueName]="purchaseOrderGetRequest.companyUniqueName" [purchaseOrderUniqueName]="purchaseOrderUniqueName"
         [isCompany]="isCompany" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
     </purchase-order-preview>

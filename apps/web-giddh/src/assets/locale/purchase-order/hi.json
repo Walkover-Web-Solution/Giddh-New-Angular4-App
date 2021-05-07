@@ -67,5 +67,6 @@
     "po_created": "वाउचर नंबर के साथ रसीद की खरीद आदेश - [PO_NUMBER]",
     "po_updated": "खरीद आदेश सफलतापूर्वक अपडेट किया गया",
     "custom_field1": "कस्टम फील्ड् 1",
-    "custom_field2": "कस्टम फील्ड् 2"
+    "custom_field2": "कस्टम फील्ड् 2",
+    "currency_conversion": "[BASE_CURRENCY] में: [AMOUNT] <br /> (रूपांतरण दर: [CONVERSION_RATE]) "
 }
