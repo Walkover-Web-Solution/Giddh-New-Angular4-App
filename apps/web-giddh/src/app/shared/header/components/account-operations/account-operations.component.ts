@@ -603,7 +603,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public showDeleteMergedAccountModal(merge: string) {
-        merge = merge.trim();
+        merge = merge?.trim();
         this.deleteMergedAccountModalBody = this.localeData?.delete_merged_account_content.replace("[MERGE]", merge);
         this.selectedAccountForDelete = merge;
         this.deleteMergedAccountModal?.show();

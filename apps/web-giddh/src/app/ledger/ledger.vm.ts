@@ -230,9 +230,9 @@ export class LedgerVM {
             let underStandingTextData = localeData?.text_data;
 
             if (isReverseChargeAccount) {
-                data = _.cloneDeep(underStandingTextData.find(p => p.accountType === "ReverseCharge"));
+                data = _.cloneDeep(underStandingTextData?.find(p => p.accountType === "ReverseCharge"));
             } else {
-                data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
+                data = _.cloneDeep(underStandingTextData?.find(p => p.accountType === selectedLedgerAccountType));
             }
 
             if (data) {
