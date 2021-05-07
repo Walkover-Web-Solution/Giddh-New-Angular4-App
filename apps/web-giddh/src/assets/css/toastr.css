@@ -232,6 +232,7 @@ button.toast-close-button {
          max-width: 100%;
          flex-direction: column;
          width: calc(100% - 20px);
+         min-width: 450px;
     }
     .toast-title {
         max-width: 100%;
@@ -269,4 +270,7 @@ button.toast-close-button {
     #toast-container .toast-close-button {
         right: 10px !important;
     }
+     #toast-container .toast{
+         min-width: auto;
+     }
 }
