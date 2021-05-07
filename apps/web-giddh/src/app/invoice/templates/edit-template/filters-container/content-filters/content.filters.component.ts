@@ -1,7 +1,7 @@
 import { ToasterService } from '../../../../../services/toaster.service';
 import { ActivatedRoute } from '@angular/router';
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, DoCheck, EventEmitter, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
 import * as _ from '../../../../../lodash-optimized';
@@ -13,6 +13,8 @@ import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput }
 // import {ViewChild, ElementRef} from '@angular/core';
 import { INVOICE_API } from 'apps/web-giddh/src/app/services/apiurls/invoice';
 import { CurrentCompanyState } from 'apps/web-giddh/src/app/store/Company/company.reducer';
+import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
     selector: 'content-selector',
@@ -20,7 +22,7 @@ import { CurrentCompanyState } from 'apps/web-giddh/src/app/store/Company/compan
     styleUrls: ['content.filters.component.scss']
 })
 
-export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
+export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDestroy {
 
     @Input() public content: boolean;
     public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
@@ -50,9 +52,19 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold the value if Gst Composition will show/hide */
     public showGstComposition: boolean = false;
+    /** Stores the image signature ID */
+    public imageSignatureId: string;
+    /** Stores the active company name */
+    public activeCompanyName: string;
+    /** Ng form instance of content filter component */
+    @ViewChild(NgForm) contentForm: NgForm;
 
-    constructor(private store: Store<AppState>, private _invoiceUiDataService: InvoiceUiDataService,
-        private _activatedRoute: ActivatedRoute, private _toasty: ToasterService
+    constructor(
+        private store: Store<AppState>,
+        private _invoiceUiDataService: InvoiceUiDataService,
+        private _activatedRoute: ActivatedRoute,
+        private _toasty: ToasterService,
+        private invoiceService: InvoiceService
     ) {
         let companies = null;
         let defaultTemplate = null;
@@ -83,6 +95,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 this.showGstComposition = false;
             }
+            this.activeCompanyName = activeCompany?.name;
         });
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
@@ -100,7 +113,11 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
             this.voucherType = _.cloneDeep(voucherType);
         });
         this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
+            if (this.contentForm) {
+                this._invoiceUiDataService.setContentForm(this.contentForm);
+            }
             this.customTemplate = _.cloneDeep(template);
+            this.assignImageSignature();
         });
 
         this._invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
@@ -125,7 +142,18 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         if (changes['content'] && changes['content'].currentValue !== changes['content'].previousValue) {
             this.signatureImgAttached = false;
             this.signatureSrc = '';
+            this.assignImageSignature();
+            this._invoiceUiDataService.setContentForm(this.contentForm);
         }
+    }
+
+    /**
+     * Stores the form instance for validation
+     *
+     * @memberof ContentFilterComponent
+     */
+    public ngDoCheck(): void {
+        this._invoiceUiDataService.setContentForm(this.contentForm);
     }
 
     /**
@@ -133,6 +161,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onFieldChange(sectionName: string, fieldName: string, value: string) {
         let template = _.cloneDeep(this.customTemplate);
+        this._invoiceUiDataService.setContentForm(this.contentForm);
         this._invoiceUiDataService.setCustomTemplate(template);
     }
 
@@ -173,27 +202,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onChangeFieldVisibility(sectionName: string, fieldName: string, value: boolean) {
         let template = _.cloneDeep(this.customTemplate);
-
-        // if (sectionName && fieldName && value) {
-        //   let sectionIndx = template.sections.findIndex((sect) => sect.sectionName === sectionName);
-        //   if (sectionIndx > -1) {
-        //     template.sections[sectionIndx].content[fieldName] = value;
-        //     let fieldIndx = template.sections[sectionIndx].content.findIndex((fieldObj) => fieldObj.field === fieldName);
-        //     if (fieldIndx > -1) {
-        //       template.sections[sectionIndx].content[fieldIndx].display = value;
-        //     }
-        //   }
-        // }
-
-        // if (!template.sections[0].content[14].display) {
-        //   template.sections[0].content[13].display = false;
-        //   template.sections[0].content[15].display = false;
-        // }
-
-        // if (!template.sections[0].content[16].display) {
-        //   template.sections[0].content[17].display = false;
-        //   template.sections[0].content[18].display = false;
-        // }
+        this._invoiceUiDataService.setContentForm(this.contentForm);
         this._invoiceUiDataService.setCustomTemplate(template);
     }
 
@@ -205,8 +214,6 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnDestroy() {
-        // this._invoiceUiDataService.customTemplate.unsubscribe();
-        // this._invoiceUiDataService.selectedSection.unsubscribe();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -221,8 +228,12 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
             this.isSignatureUploadInProgress = true;
         } else if (output.type === 'done') {
             if (output.file.response.status === 'success') {
+                if (this._invoiceUiDataService.unusedImageSignature) {
+                    this.removeFileFromServer();
+                }
                 this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
                 this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;
+                this._invoiceUiDataService.unusedImageSignature = output.file.response.body.uniqueName;
                 this.onChangeFieldVisibility(null, null, null);
                 this._toasty.successToast('file uploaded successfully.');
                 this.startUpload();
@@ -273,8 +284,19 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         this.uploadInput.emit({ type: 'cancel', id });
     }
 
-    public removeFile(id: string): void {
-        this.uploadInput.emit({ type: 'remove', id });
+    public removeFile(): void {
+        this.signatureImgAttached = false;
+        this.customTemplate.sections.footer.data.imageSignature.label = '';
+        this._invoiceUiDataService.setCustomTemplate(this.customTemplate);
+    }
+
+    /**
+     * Permanently removes the file from the server
+     *
+     * @memberof ContentFilterComponent
+     */
+    public removeFileFromServer(): void {
+        this.invoiceService.removeSignature(this._invoiceUiDataService.unusedImageSignature).subscribe(() => {});
     }
 
     public removeAllFiles(): void {
@@ -350,5 +372,20 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
      */
     public changeInvoiceHeader(event: boolean): void {
         this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
+    }
+
+    /**
+     * Assigns image signature for CREATE and UPDATE flow
+     *
+     * @memberof ContentFilterComponent
+     */
+    public assignImageSignature(): void {
+        if (this.customTemplate?.sections?.footer?.data?.imageSignature?.label) {
+            this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
+            this.signatureImgAttached = true;
+        } else {
+            this.signatureSrc = '';
+            this.signatureImgAttached = false;
+        }
     }
 }

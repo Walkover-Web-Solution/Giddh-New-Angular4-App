@@ -286,7 +286,7 @@
                                                                         </sales-sh-select>
                                                                     </div>
 
-                                                                    <div class="col-sm-12"
+                                                                    <div class="col-sm-6 col-md-6"
                                                                         *ngIf="shouldShowTrnGstField">
                                                                         <!-- <label>GSTIN</label> -->
                                                                         <input maxLength="15" autocomplete="None"
@@ -304,6 +304,14 @@
                                                                             (change)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
                                                                             placeholder="TRN" />
                                                                     </div>
+                                                                    <!-- static pin code  -->
+                                                                    <div [ngClass]="{'col-sm-6 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
+                                                                        <div class="form-group mr-b05">
+                                                                            <input type="number" class="form-control input-custom" autocomplete="false" name="billingPinCode" (blur)="autoFillShippingDetails()"
+                                                                                placeholder="PIN Code" [(ngModel)]="invFormData.accountDetails.billingDetails.pincode" decimalDigitsDirective [preventDecimal]="true" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- static pin code end-->
                                                                 </div>
 
                                                             </div>
@@ -318,9 +326,9 @@
                                                         <div class="form-group p-0 width-100">
                                                             <div class="d-flex align-items-center pb-1">
                                                                 <span class="pb-0 pd-r15">
-                                                                    <input type="checkbox" autocomplete="None"
+                                                                    <input type="checkbox"
                                                                         (change)="autoFillShippingDetails()"
-                                                                        name="autoFillShipping"
+                                                                        name="autoFillShipping" [ngModelOptions]="{standalone: true}"
                                                                         [(ngModel)]="autoFillShipping"> Shipping Address
                                                                     Same as
                                                                     Billing
@@ -378,7 +386,7 @@
                                                                             </sales-sh-select>
                                                                         </div>
 
-                                                                        <div class="col-sm-12"
+                                                                        <div class="col-sm-6"
                                                                             *ngIf="shouldShowTrnGstField">
                                                                             <input [readonly]="autoFillShipping"
                                                                                 autocomplete="None" maxLength="15"
@@ -399,7 +407,14 @@
                                                                                 (change)="getStateCode('shippingDetails', statesShipping);"
                                                                                 placeholder="TRN" />
                                                                         </div>
-
+                                                                         <!-- static pin code  -->
+                                                                         <div [ngClass]="{'col-sm-6': (showGSTINNo || showTRNNo), 'col-sm-12': !(showGSTINNo || showTRNNo)}">
+                                                                            <div class="form-group mr-b05">
+                                                                                <input type="number" class="form-control input-custom" autocomplete="false" name="shippingPinCode"
+                                                                                    placeholder="PIN Code" [(ngModel)]="invFormData.accountDetails.shippingDetails.pincode" decimalDigitsDirective [preventDecimal]="true" />
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- static pin code end-->
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -575,7 +590,7 @@
                                                                         [(ngModel)]="purchaseBillCompany.billingDetails.state.code">
                                                                     </sales-sh-select>
                                                                 </div>
-                                                                <div class="col-sm-12"
+                                                                <div class="col-sm-6 col-md-6"
                                                                     *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
                                                                     <input maxlength="15" autocomplete="None" type="text"
                                                                         name="companyBillingDetailsTax"
@@ -585,6 +600,14 @@
                                                                         (change)="getStateCodeCompany('billingDetails')"
                                                                         placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                 </div>
+                                                                <!-- static pin code  -->
+                                                                <div [ngClass]="{'col-sm-6 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
+                                                                    <div class="form-group mr-b05">
+                                                                        <input type="number" class="form-control input-custom" autocomplete="false" name="purchaseBillBillingPinCode"
+                                                                            placeholder="PIN Code" [(ngModel)]="purchaseBillCompany.billingDetails.pincode" (blur)="autoFillCompanyShippingDetails()" decimalDigitsDirective [preventDecimal]="true" />
+                                                                    </div>
+                                                                </div>
+                                                                <!-- static pin code end-->
                                                             </div>
 
                                                         </div>
@@ -634,7 +657,7 @@
                                                                             [(ngModel)]="purchaseBillCompany.shippingDetails.state.code">
                                                                         </sales-sh-select>
                                                                     </div>
-                                                                    <div class="col-sm-12"
+                                                                    <div class="col-sm-6 col-md-6"
                                                                         *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
                                                                         <input maxLength="15" autocomplete="None" type="text"
                                                                             name="companyShippingDetailsTax"
@@ -643,6 +666,14 @@
                                                                             (change)="getStateCodeCompany('shippingDetails')"
                                                                             placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                     </div>
+                                                                    <!-- static pin code  -->
+                                                                    <div [ngClass]="{'col-sm-6 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
+                                                                        <div class="form-group mr-b05">
+                                                                            <input type="number" class="form-control input-custom" autocomplete="false" name="purchaseBillShippingPinCode"
+                                                                                placeholder="PIN Code" [(ngModel)]="purchaseBillCompany.shippingDetails.pincode" decimalDigitsDirective [preventDecimal]="true" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- static pin code end-->
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1249,7 +1280,7 @@
                                             </div>
 
                                             <div class="description">
-                                                <textarea type="text" placeholder="Add Description" name="transaction.description_{{entryIdx}}"
+                                                <textarea type="text" rows="3" placeholder="Add Description" name="transaction.description_{{entryIdx}}"
                                                     class="form-control" [(ngModel)]="transaction.description" #description>
                                                                         </textarea>
                                                 <p class="small text-muted sku-and-custom-fields" *ngIf="transaction.sku_and_customfields">
@@ -1620,9 +1651,14 @@
 
                                             <label class="mr-b1">Note</label>
                                             <textarea class="form-control textarea-height"
-                                                name="message2"
+                                                hasFocus #message2="hasFocus"
+                                                [class.error-box]="invoiceForm?.controls['message2']?.errors?.maxlength"
+                                                name="message2" [maxlength]="shouldApplyMaxLengthOnNotes && !showNotesAtLastPage ? 200 : null"
                                                 [(ngModel)]="invFormData.templateDetails.other.message2">
                                              </textarea>
+                                             <ng-container *ngIf="shouldApplyMaxLengthOnNotes && invFormData?.templateDetails?.other?.message2?.length && !showNotesAtLastPage && (message2?.isFocused || invoiceForm?.controls['message2']?.errors?.maxlength)">
+                                                <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(200 - invFormData?.templateDetails?.other?.message2?.length)}}</span>
+                                            </ng-container>
                                         </div>
                                         <!-- endregion -->
 
@@ -2210,7 +2246,7 @@
                                                     </div>
 
                                                     <div class="description">
-                                                        <textarea type="text" placeholder="Add Description" #description
+                                                        <textarea type="text" rows="3" placeholder="Add Description" #description
                                                             name="transaction.description_{{entryIdx}}" class="form-control"
                                                             [(ngModel)]="transaction.description">
                                                           </textarea>
@@ -2623,7 +2659,7 @@
 
                             <div class="pd-t1 pl-0 max-width-600" *ngIf="!isPurchaseInvoice">
                                 <label class="mr-b1">Note</label>
-                                <textarea rows="3" class="form-control" name="message2"
+                                <textarea rows="3" class="form-control" name="message2" [maxlength]="shouldApplyMaxLengthOnNotes && !showNotesAtLastPage ? 200 : null"
                                     [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                             </div>
 
@@ -2889,7 +2925,7 @@
                                 <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
                             class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
                         </button> -->
-                                <button *ngIf="!isCompany" type="button" [disabled]="isFileUploading || !hasVoucherEntry"
+                                <button *ngIf="!isCompany" type="button" [disabled]="isFileUploading || !hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength"
                                     (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                                     class="btn btn-default">Save
                                 </button>
@@ -2900,7 +2936,7 @@
                             <span class="d-inline-block v-align-middle"
                                 *ngIf="!isPurchaseInvoice && (!isProformaInvoice  && !isEstimateInvoice)">
 
-                                <button type="button" [disabled]="!hasVoucherEntry"
+                                <button type="button" [disabled]="!hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength"
                                     (click)="triggerSubmitInvoiceForm(invoiceForm, true)" class="btn btn-default"
                                     *ngIf="!isCompany && isCustomerSelected && !isPendingVoucherType">Generate
                                     <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
@@ -2908,8 +2944,8 @@
                                     </span> &amp; Update A/c
                                 </button>
 
-                                <div *ngIf="!isCompany" class="btn-group" [dropup]="isDropup" dropdown  [isDisabled]="!hasVoucherEntry">
-                                    <button type="button" [disabled]="!hasVoucherEntry"
+                                <div *ngIf="!isCompany" class="btn-group" [dropup]="isDropup" dropdown  [isDisabled]="!hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength">
+                                    <button type="button" [disabled]="!hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength"
                                         (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default generate-invoice">Generate
                                         <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
@@ -2947,9 +2983,9 @@
                             <!-- region proforma/estimates -->
                             <span class="d-inline-block v-align-middle" *ngIf="!isCompany && (isProformaInvoice || isEstimateInvoice)">
 
-                                <div class="btn-group" dropdown [dropup]="isDropup" [isDisabled]="!hasVoucherEntry">
+                                <div class="btn-group" dropdown [dropup]="isDropup" [isDisabled]="!hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength">
 
-                                    <button *ngIf="!isCompany" type="button" [disabled]="!hasVoucherEntry"
+                                    <button *ngIf="!isCompany" type="button" [disabled]="!hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength"
                                         (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default">Create
                                     </button>
@@ -2985,7 +3021,7 @@
                             </button>
 
                             <button *ngIf="!isCompany" type="button" class="btn btn-default"
-                                [disabled]="isFileUploading || !hasVoucherEntry"
+                                [disabled]="isFileUploading || !hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength"
                                 (click)="submitUpdateForm(invoiceForm)">
                                 Update
                                 <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">

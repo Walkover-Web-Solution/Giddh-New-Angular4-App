@@ -9,13 +9,14 @@
 
 .nav-left-bar {
     position: fixed;
-    top: 0;
+    top: 57px;
     bottom: 0;
     min-height: 100vh;
-    background-color: $solitude-new;
+    background-color: $white;
     width: 60px;
     left: 0;
     z-index: 991;
+    box-shadow: -2px -2px 15px rgba(0,0,0,.2)!important;
 }
 /*
 Comment for now
@@ -409,6 +410,7 @@ a[vr-item]:focus {
 
 .menu-wrapper {
     max-height: 100%;
+    height: 100%;
 }
 
 .left-sub-menu.open {
@@ -478,7 +480,7 @@ a[vr-item]:focus {
 .calendar-addon {
     padding: 9px 8px 9px 10px;
     vertical-align: bottom;
-    font-size: 14px;
+    font-size: 18px;
     border-radius: 2px 0 0 2px;
     display: inline-flex;
     top: 1px;
@@ -488,7 +490,7 @@ a[vr-item]:focus {
     border:0px !important;
     .calendar-addon {
         position: absolute;
-        left:4px;
+        left:7px;
         margin:auto;
     }
     .input-date{
@@ -896,11 +898,11 @@ ul.sub-list {
 }
 .not-today{
     .today-date.input-date{
-        width: 90px;
+        width: 94px;
         padding-left: 5px !important;
         input{
             text-align: left !important;
-            padding-left: 25px !important;
+            padding-left: 28px !important;
         }
     }
 }
@@ -910,16 +912,18 @@ ul.sub-list {
 
 /*new header css starts*/
 .fixed-padding{
-    padding-top: 46px;
+    padding-top: 58px;
 }
 #primary-new-header.primary-main-header{
-    padding-left: 60px;
+    padding-left: 15px;
     border-bottom: 1px solid $gainsboro;
     position: fixed;
     width: 100%;
     top: 0;
-    background-color: $alice-blue-light;
+    background-color: $midnight-blue;
     z-index: 990;
+    padding-top: 12px;
+    padding-bottom: 12px;
     .universal-date{
         color:$persian-blue !important;
         display: flex;
@@ -936,7 +940,7 @@ ul.sub-list {
             }
         }
         .icon-bell-new, .icon-calender, .icon-plus , i, .btn-link{
-            color: $persian-blue !important;
+            color: $white !important;
             position: static !important;
         }
         .notification{
@@ -946,15 +950,15 @@ ul.sub-list {
         }
         .not-today{
             .calendar-addon{
-                padding: 7px 7px 7px 8px;
+                padding: 6px 7px 7px 8px;
             }
             .input-date{
-                height: 29px;
+                height: 32px;
             }
         }
         .input-date{
-            background-color: $solitude-light;
-            border-radius: 0 !important;
+            background-color: $white;
+            border-radius: 3px !important;
             border: none;
             input{
                 color:$persian-blue !important;
@@ -963,15 +967,17 @@ ul.sub-list {
         }
         #add-manage{
             color:$persian-blue !important;
-            padding: 4px 6px;
-            background-color: $solitude-light;
+            padding: 6px 8px;
+            background-color: $white;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 14px;
+            border-radius: 3px;
             i{
                 padding: 0 5px !important;
                 padding-left: 0 !important;
+                color: $persian-blue !important;
             }
         }
         .header-utility-icons{
@@ -1037,7 +1043,7 @@ ul.sub-list {
     .fixed-padding{
         padding-top: 90px;
         #primary-new-header.primary-main-header{
-            background-color: $white;
+            background-color: $midnight-blue;
             position: fixed;
             top: 0;
             width: 100%;
@@ -1047,9 +1053,12 @@ ul.sub-list {
             align-items: flex-start;
             justify-content: space-between;
             z-index: 999;
+            .logo-wrapper{
+                display: none;
+            }
             .hamburger-menu{
                 i{
-                    color: $persian-blue;
+                    color: $white;
                 }
             }
             .universal-date{

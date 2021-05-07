@@ -12,7 +12,7 @@ import { ChildGroup } from '../../../../models/api-models/Search';
     <div class="col-4  bd-rl group pull-right" *ngIf="!groupDetail.level1">
         <!-- {{groupDetail.closingBalance | recType}} -->
         <div class="row">
-            <span class="col-6 text-right"
+            <span class="col-sm-6 col-12 text-right"
                 [ngClass]="{'invisible': groupDetail.isOpen && (groupDetail.accounts.length || groupDetail.childGroups.length)}">
                 <span
                     *ngIf="groupDetail.category === 'income' && groupDetail.closingBalance.type === 'DEBIT' && groupDetail.closingBalance.amount !== 0">-</span>
@@ -26,7 +26,7 @@ import { ChildGroup } from '../../../../models/api-models/Search';
                     </amount-field>
                 </span>
             </span>
-            <span class="col-6 invisible">
+            <span class="col-sm-6 col-12 invisible">
                 <!-- {{groupDetail.closingBalance.amount | giddhCurrency}}  -->
                 <span class="d-inline-flex">
                     <amount-field [amount]="groupDetail.closingBalance.amount" [currencySymbol]="false" [currencyCode]="false">
@@ -48,14 +48,14 @@ import { ChildGroup } from '../../../../models/api-models/Search';
             <div class="col-4 bd-rl text-left pull-right">
                 <div class="row d-flex">
                     <!-- {{account.closingBalance | recType}} -->
-                    <span class="col-6 text-right">
+                    <span class="col-sm-6 col-12 text-right">
                         <!-- {{account.closingBalance.amount | giddhCurrency}}  -->
                         <span class="d-inline-flex">
                             <amount-field [amount]="account.closingBalance.amount" [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </span>
                     </span>
-                    <span class="col-6 invisible">
+                    <span class="col-sm-6 col-12 invisible">
                         <!-- {{account.closingBalance.amount | giddhCurrency}}  -->
                         <span class="d-inline-flex">
                             <amount-field [amount]="account.closingBalance.amount" [currencySymbol]="false" [currencyCode]="false">

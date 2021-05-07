@@ -59,9 +59,9 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 			let val: string = name;
 			val = uniqueNameInvalidStringReplace(val);
 			if (val) {
-                this.groupDetailForm.patchValue({ uniqueName: val });
+                this.groupDetailForm?.patchValue({ uniqueName: val });
 			} else {
-				this.groupDetailForm.patchValue({ uniqueName: '' });
+				this.groupDetailForm?.patchValue({ uniqueName: '' });
 			}
 		});
 		setTimeout(() => {
@@ -72,7 +72,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 	public addNewGroup() {
 		let activeGrpUniqueName: string;
 		let uniqueName = this.groupDetailForm.get('uniqueName');
-		uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+		uniqueName?.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
 
 		this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGrpUniqueName = a);
 
@@ -87,7 +87,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 
 	public closingBalanceTypeChanged(type: string) {
 		if (Number(this.groupDetailForm.get('closingBalanceTriggerAmount').value) > 0) {
-			this.groupDetailForm.get('closingBalanceTriggerAmountType').patchValue(type);
+			this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
 		}
 	}
 

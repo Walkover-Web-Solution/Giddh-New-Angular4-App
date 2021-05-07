@@ -1,6 +1,9 @@
 <div class="primary-sidebar py-3 position-relative" [ngClass]="{'sidebar-collapse': !isOpen}">
-    <div class="company-branch-block px-3 position-relative">
-        <ul class="list-style-none">
+    <div class="company-branch-block pd-l2 pd-r2 position-relative">
+        <ul class="list-style-none branch-connection">
+            <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
+                <span class="inner-span"></span>
+            </span>
             <li class="company-name position-relative cursor-pointer" dropdown #companyDetailsDropDownWeb="bs-dropdown"
                 [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="companyDetailsDropDownWeb.hide()"
                 [exclude]="'.company-name'">
@@ -89,11 +92,8 @@
                 </li> -->
             </ul>
         </ul>
-        <div *ngIf="(currentCompanyBranches$ | async)?.length > 1" class="branch-connection">
-            <i class="icon-branch-connection"></i>
-        </div>
     </div>
-    <div class="search-block mr-b1 px-3">
+    <div class="search-block mr-b1 pd-l2 pd-r2">
         <div class="search-box position-relative mr-t2">
             <div class="input-group flex-nowrap">
                 <div class="input-group-prepend" (click)="showNavigationModal()">
@@ -110,7 +110,7 @@
         </div>
     </div>
     <div class="wrap-menus">
-        <div class="account-block mr-t2 mr-b2 px-3">
+        <div class="account-block mr-t2 mr-b2 pd-l2 pd-r2">
             <div class="account-collapse">
                 <p class="font-12 d-flex justify-content-between">Accounts <i class="icon-add-new cursor-pointer"
                         (click)="showManageGroupsModal()"></i> </p>
@@ -145,18 +145,17 @@
 
         </div>
         <div class="menu-block">
-            <div class="menu-item  px-3 mr-b1">
-                <p class="font-12">
-                    <span [routerLink]="['/pages/giddh-all-items']"
-                        class="d-inline-flex align-items-center cursor-pointer">
-                        Menu
-                        <i class="icon-down-new mr-l05"></i> </span>
-                    <span class="text-gray cursor-pointer" (click)="showNavigationModal()">
-                        <i class="icon-go font-18"></i>
-                    </span>
-                </p>
-            </div>
             <div class="menu-item-wrapper font-14">
+                <div class="menu-item  pd-l2 pd-r2">
+                    <p class="font-12">
+                        <span [routerLink]="['/pages/giddh-all-items']" class="d-inline-flex align-items-center cursor-pointer">
+                            Menu
+                            <i class="icon-down-new mr-l05"></i> </span>
+                        <span class="text-gray cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
+                            <i class="icon-go font-18"></i>
+                        </span>
+                    </p>
+                </div>
                 <ul class="list-style-none giddh-primary-items">
                     <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems" dropdown
                         [attr.container]="!isOpen ? 'body' : ''">

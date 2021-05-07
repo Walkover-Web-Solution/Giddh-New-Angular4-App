@@ -112,6 +112,11 @@
             }
         }
     }
+    .address-list-top{
+        .search-container{
+            width: calc(100% - 120px);
+        }
+    }
 }
 
 @media(max-width:767px){
@@ -133,7 +138,6 @@
 }
 
 @media (max-width: 445px) {
-
     .giddh-table {
         tr {
             td {

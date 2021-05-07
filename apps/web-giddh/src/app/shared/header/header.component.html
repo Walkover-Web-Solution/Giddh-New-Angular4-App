@@ -20,7 +20,7 @@
 
 <!-- New header starts -->
 <div class="fixed-padding" >
-    <div class="primary-main-header py-2" id="primary-new-header" [ngClass]="{'open': sideMenu.isopen, 'unvisible': companyList.length===0 }">
+    <div class="primary-main-header" id="primary-new-header" [ngClass]="{'open': sideMenu.isopen, 'unvisible': companyList.length===0 }">
         <div *ngIf="isMobileScreen">
             <ul class="list-style-none">
                 <li class="hamburger-menu cursor-pointer pull-left">
@@ -32,8 +32,12 @@
                 </li>
             </ul>
         </div>
-        <div class="d-flex justify-content-end align-items-end">
-            <ul class="nav universal-date mr-r15" *ngIf="(selectedCompany | async)">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="logo-wrapper">
+                <img src="{{imgPath}}giddh-white-logo.svg" alt="giddh-logo">
+            </div>
+            <ul class="nav universal-date mr-r1" *ngIf="(selectedCompany | async)">
                 <li class="border-none pd-r15 notification" [ngClass]="{'mr-0':isTodaysDateSelected}">
                     <i class="icon-bell-new"></i>
                 </li>
@@ -53,7 +57,7 @@
                         (click)="showManageGroupsModal()"><i class="icon-master-new1"></i> Master</a>
                 </li>
                 <li *ngIf="!isMobileScreen" class="header-utility-icons" (click)="toggleSidebarPane(true, false)">
-                    <a href="javascript:void(0);" ><i class="icon-settings-new"></i></a>
+                    <a href="javascript:void(0);" ><i class="icon-settings-cog"></i></a>
                 </li>
                 <li class="header-utility-icons">
                     <a href="javascript:void(0);" (click)="toggleHelpSupportPane(true)"><i class="icon-question-new"></i></a>
@@ -197,7 +201,7 @@
     <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
 </div>
 <!-- setting aside pane -->
-<div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'" (clickOutside)="closeSettingPaneOnOutsideClick()">
+<div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
     <perfect-scrollbar [scrollIndicators]="true">
         <aside-setting [ngClass]="{'setting-sidebar': isMobileSidebar}" (closeAsideEvent)="toggleSidebarPane(false, false)"></aside-setting>
     </perfect-scrollbar>

@@ -15,6 +15,7 @@ import { GstTemplateGComponent } from './edit-template/out-tempate/templates/gst
 import { GstTemplateHComponent } from './edit-template/out-tempate/templates/gst-template-h/gst-template-h.component';
 import { GstTemplateIComponent } from './edit-template/out-tempate/templates/gst-template-i/gst-template-i.component';
 import { NgxUploaderModule } from 'ngx-uploader';
+import { HasFocusDirectiveModule } from '../../shared/helpers/directives/has-focus/has-focus.module';
 
 @NgModule({
     imports: [
@@ -22,7 +23,8 @@ import { NgxUploaderModule } from 'ngx-uploader';
         FormsModule,
         ReactiveFormsModule,
         CollapseModule,
-        NgxUploaderModule
+        NgxUploaderModule,
+        HasFocusDirectiveModule
     ],
     declarations: [
         OutTemplateComponent,

@@ -44,10 +44,18 @@
     label {
         line-height: 2.3;
     }
+    .form-group{
+        margin-bottom: 0;
+    }
 }
 .img-size {
     color: $gray;
 }
 .container-fluid {
     padding-left: 0;
+}
+@media(max-width:767px){
+    label{
+        line-height: 2.3;
+    }
 }

@@ -113,7 +113,7 @@ span.set-as-default {
     font-family: "opensans-semibold";
     width: 70px;
     color: $gray;
-    &.cursor-pointer {
+    &.cursor-pointer, &.pin-label {
         width: auto;
     }
 }

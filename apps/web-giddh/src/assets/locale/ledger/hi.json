@@ -195,5 +195,6 @@
     "import_goods": "माल का आयात",
     "import_services": "सेवाओं का आयात",
     "others": "अन्य",
-    "choose_file": "फाइलें चुनें"
+    "choose_file": "फाइलें चुनें",
+    "remove_file": "सफलतापूर्वक मिटाया गया"
 }
