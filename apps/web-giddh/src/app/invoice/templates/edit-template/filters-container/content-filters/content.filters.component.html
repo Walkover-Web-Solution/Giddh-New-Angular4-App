@@ -1,4 +1,4 @@
-<div id="contentTab" class="design-tab-content mr-t2 template-editor" *ngIf="content && customTemplate && customTemplate.sections">
+<div id="contentTab" class="design-tab-content mr-t2 template-editor" *ngIf="customTemplate?.uniqueName" [hidden]="!(content && customTemplate && customTemplate.sections)">
     <!-- start header -->
     <form #contentForm="ngForm" novalidate>
         <div id="headerDiv" [hidden]="!templateUISectionVisibility.header">
@@ -761,10 +761,10 @@
                     <input type="checkbox" name="textUnderSloganCheckbox" [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Text under Image Signature / Slogan
                     <div class="mb-0 form-group ml-3">
                         <input type="text" [class.error-box]="contentForm?.controls['textUnderSlogan']?.errors?.maxlength" class="form-control" hasFocus #textUnderSlogan="hasFocus" [disabled]="!fieldsAndVisibility.footer.textUnderSlogan?.display" (keyup)='onFieldChange(null, null, null)' [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].label" placeholder="Text under slogan"
-                            maxlength="30" name="textUnderSlogan"/>
+                            maxlength="50" name="textUnderSlogan"/>
                     </div>
                     <div class="form-group ml-3 clearfix" *ngIf="textUnderSlogan?.isFocused || contentForm?.controls['textUnderSlogan']?.errors?.maxlength">
-                        <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(30 - customTemplate.sections['footer'].data['textUnderSlogan'].label.length)}}</span>
+                        <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(50 - customTemplate.sections['footer'].data['textUnderSlogan'].label.length)}}</span>
                     </div>
                 </div>
                     <!-- <div *ngIf="fieldsAndVisibility.footer.slogan" class="clearfix">
