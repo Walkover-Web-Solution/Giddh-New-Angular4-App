@@ -197,14 +197,15 @@
                         <td [attr.data-title]="localeData?.vendor_name">
                             {{item.vendor?.name}}
                         </td>
-                        <td [attr.data-title]="localeData?.total_amount">
+                        <td [attr.data-title]="localeData?.total_amount" [tooltip]="grandTotalPopupTemplate" container="body">
                             <span class="d-flex justify-content-md-end">
-                                <amount-field [amount]="item.grandTotal?.amountForAccount" [currencySymbol]="false"
+                                <amount-field [amount]="item.grandTotal?.amountForAccount" [currencySymbol]="item.grandTotal?.currencyForAccount?.symbol"
                                     [currencyCode]="false">
                                 </amount-field>
                             </span>
-
                         </td>
+                        <ng-template #grandTotalPopupTemplate><span [innerHTML]="item.grandTotalTooltipText"></span>
+                        </ng-template>
                         <td [attr.data-title]="localeData?.expected_delivery">
                             <span [ngClass]="{'ontime-delivery': item.dueDays > 0, 'late-delivery': item.dueDays < 0}" *ngIf="item.dueDays && item.dueDays <= 7">{{item.dueDays > 0 ? 'Delivery in ' + item.dueDays + ((item.dueDays === 1) ? ' day ' : ' days') : 'Delayed by ' + formatNumber(item.dueDays) + ' days' }}</span>
                             <span *ngIf="item.dueDays && item.dueDays > 7">{{item.dueDate}}</span>
@@ -326,7 +327,7 @@
             </div>
         </div>
     </div>
-    <purchase-order-preview *ngIf="purchaseOrderUniqueName" [purchaseOrders]="purchaseOrders"
+    <purchase-order-preview *ngIf="purchaseOrderUniqueName && translationLoaded" [purchaseOrders]="purchaseOrders"
         [companyUniqueName]="purchaseOrderGetRequest.companyUniqueName" [purchaseOrderUniqueName]="purchaseOrderUniqueName"
         [isCompany]="isCompany" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
     </purchase-order-preview>
