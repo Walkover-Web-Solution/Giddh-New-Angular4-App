@@ -67,9 +67,16 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Install wget
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: brew install wget
+      - name: Fetching Provisioning profile
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: cd ./electron-sign && wget --no-check-certificate ${{ secrets.PROVISIONING_PROFILE_URL }} -O embedded.provisionprofile
       - name: Creating Electron bundle for Mac
         if: ${{ matrix.os == 'macos-latest' }}
-        run: npm run package:mac:test
+#         run: npm run package:mac:test
+        run: pwd
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
