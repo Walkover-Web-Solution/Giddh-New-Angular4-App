@@ -124,7 +124,7 @@
         </div>
         <div class="d-flex align-items-center justify-content-center">
             <pagination [totalItems]="totalPages" [(ngModel)]="page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
-                [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
         </div>
     </section>
     <!-- end pd div -->

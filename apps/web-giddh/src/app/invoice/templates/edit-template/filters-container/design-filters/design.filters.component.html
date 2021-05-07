@@ -102,13 +102,13 @@
                             <div class="d-block" [class.cursor-disable]="isFileUploaded">
                                 <p>Size</p>
                                 <input [(ngModel)]="defaultImageSize" name="chooseSize" type="radio" id="fontS" value="S" [disabled]="isFileUploaded"
-                                    (click)="onValueChange('logoSize', '40')" checked>
+                                    (click)="onValueChange('logoSize', '60')" checked>
                                 <label for="fontS">S</label>
                                 <input [(ngModel)]="defaultImageSize" name="chooseSize" type="radio" id="fontM" value="M" [disabled]="isFileUploaded"
-                                    (click)="onValueChange('logoSize', '50')">
+                                    (click)="onValueChange('logoSize', '80')">
                                 <label for="fontM">M</label>
                                 <input [(ngModel)]="defaultImageSize" name="chooseSize" type="radio" id="fontL" value="L" [disabled]="isFileUploaded"
-                                    (click)="onValueChange('logoSize', '60')">
+                                    (click)="onValueChange('logoSize', '100')">
                                 <label for="fontL">L</label>
                             </div>
                             <div class="d-block">

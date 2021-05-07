@@ -101,7 +101,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                         currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                     }
                 }
-                this.warehouseForm.get('name').patchValue(this.companyDetails.country.name);
+                this.warehouseForm.get('name')?.patchValue(this.companyDetails.country.name);
                 if (!this.addressConfiguration.stateList.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
@@ -136,7 +136,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                         currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                     }
                 }
-                this.warehouseForm.get('name').patchValue(this.companyDetails.country.name);
+                this.warehouseForm.get('name')?.patchValue(this.companyDetails.country.name);
                 if (!this.addressConfiguration.stateList.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
@@ -202,7 +202,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         }
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
-            this.warehouseForm.get('address').patchValue([
+            this.warehouseForm.get('address')?.patchValue([
                 ...(this.warehouseForm.get('address').value || []),
                 option.value
             ]);
@@ -222,7 +222,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         // }));
         const requestObj = {
             name: this.warehouseForm.value.name,
-            linkAddresses: this.addresses.filter(address => this.warehouseForm.value.address.includes(address.uniqueName)).map(filteredAddress => ({
+            linkAddresses: this.addresses?.filter(address => this.warehouseForm.value.address.includes(address.uniqueName))?.map(filteredAddress => ({
                 uniqueName: filteredAddress.uniqueName,
                 isDefault: filteredAddress.isDefault
             })),
@@ -306,6 +306,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
             stateName: chosenState ? chosenState.stateName : '',
             address: addressDetails.formValue.address,
             name: addressDetails.formValue.name,
+            pincode: addressDetails.formValue.pincode,
             linkEntity
         };
 

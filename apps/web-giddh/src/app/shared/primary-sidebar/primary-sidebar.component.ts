@@ -38,7 +38,7 @@ import { DbService } from '../../services/db.service';
 import { GeneralService } from '../../services/general.service';
 import { AppState } from '../../store';
 import { AuthService } from '../../theme/ng-social-login-module';
-import { ALL_ITEMS, AllItem, AllItems } from '../helpers/allItems';
+import { AllItem, AllItems } from '../helpers/allItems';
 
 @Component({
     selector: 'primary-sidebar',
@@ -117,7 +117,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public companyList: CompanyResponse[] = [];
     /** Stores all the menu items to be shown */
     public allItems: AllItems[] = [];
-
     /** True, if sidebar needs to be shown */
     @Input() public isOpen: boolean = false;
     /** API menu items, required to show permissible items only in the menu */
@@ -130,6 +129,14 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Stores the instance of company detail dropdown */
     @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
+    /** Search company name */
+    public searchCmp: string = '';
+    /** Holds if company refresh is in progress */
+    public isCompanyRefreshInProcess$: Observable<boolean>;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -152,6 +159,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         this.activeAccount$ = this.store.pipe(select(appStore => appStore.ledger.account), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(appStore => appStore.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
+        this.isCompanyRefreshInProcess$ = this.store.pipe(select(state => state.session.isRefreshing), takeUntil(this.destroyed$));
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
             if (organization && organization.details && organization.details.branchDetails) {
                 this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
@@ -211,8 +219,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length) {
-            this.allItems = this.generalService.getVisibleMenuItems(changes.apiMenuItems.currentValue, ALL_ITEMS, this.generalService.currentOrganizationType === OrganizationType.Branch);
+        if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length && this.localeData?.page_heading) {
+            this.allItems = this.generalService.getVisibleMenuItems(changes.apiMenuItems.currentValue, this.localeData?.items);
         }
     }
 
@@ -848,7 +856,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public handleItemClick(item: AllItem): void {
-        if (item.label === 'Master') {
+        if (item.label === this.commonLocaleData?.app_master) {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
         }
     }
@@ -873,7 +881,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public trackItems(index: number, item: AllItem): string {
         return item.link;
     }
-
     /**
      * Returns the readable format name of menu item
      *
@@ -886,16 +893,16 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         let name = '';
         switch (url) {
             case 'SETTINGS?TAB=PERMISSION&TABINDEX=5':
-                name = 'Settings > Permission';
+                name = this.localeData?.settings_permission;
                 break;
             case 'user-details/profile':
-                name = 'User Details';
+                name = this.localeData?.user_details;
                 break;
             case 'inventory-in-out':
-                name = 'Inventory In/Out';
+                name = this.localeData?.inventory_inout;
                 break;
             case 'import/select-type':
-                name = 'Import Data';
+                name = this.localeData?.import_data;
                 break;
             default:
                 name = url;
@@ -965,5 +972,29 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             details: branchDetails
         };
         this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+    }
+
+    /**
+     * Refreshes the company list
+     *
+     * @param {Event} event
+     * @memberof PrimarySidebarComponent
+     */
+    public refreshCompanies(event: Event): void {
+        event.stopPropagation();
+        event.preventDefault();
+        this.store.dispatch(this.companyActions.RefreshCompanies());
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof PrimarySidebarComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.allItems = this.generalService.getVisibleMenuItems(this.apiMenuItems, this.localeData?.items);
+        }
     }
 }

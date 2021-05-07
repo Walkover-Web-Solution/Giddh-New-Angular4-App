@@ -166,6 +166,16 @@
                     <div class="col-12 mr-b2 select-box">
                         <!-- Show the section if the company/branch is Registered or onboarding of warehouse is going on -->
                         <div *ngIf="selectedBusinesstype || isWarehouse" class="clearfix">
+                            <!-- static pincode start -->
+                                <div *ngIf="!isWarehouse" class="mr-b2 select-box">
+                                    <div>
+                                        <label for="pinCodeNum">PIN Code</label>
+                                        <div>
+                                            <input type="text" class="form-control" autocomplete="false" placeholder="Enter PIN Code" autocomplete="false" name="pinCodeNum" decimalDigitsDirective [preventDecimal]="true" [(ngModel)]="companyProfileObj.pincode" />
+                                        </div>
+                                    </div>
+                                </div>
+                            <!-- static pincode end -->
                             <ng-container
                                 *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemAddress">
                                 <label for="address" class="d-block">{{isBranch ? 'Branch' : 'Company'}} Address <sup

@@ -1,5 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import * as _ from '../../lodash-optimized';
@@ -14,6 +14,9 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { CommonActions } from '../../actions/common.actions';
+import { GeneralService } from '../../services/general.service';
+import { OrganizationType } from '../../models/user-login-state';
 
 @Component({
     selector: 'app-invoice-setting',
@@ -66,15 +69,21 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the active company information */
+    public activeCompany$: Observable<any> = null;
+    /** Stores the form fields of onboard form API, required for GST validation in E-Invoice */
+    public formFields: any[] = [];
 
     constructor(
+        private commonActions: CommonActions,
         private cdr: ChangeDetectorRef,
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
         private _toasty: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions,
         private _authenticationService: AuthenticationService,
         public _route: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private generalService: GeneralService
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
@@ -83,7 +92,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-
+        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
             this.isGmailIntegrated = result;
         });
@@ -92,6 +101,32 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val.code) {
                 this.saveGmailAuthCode(val.code);
+            }
+        });
+
+        this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                if (res.fields) {
+                    this.formFields = [];
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
+            } else {
+                let companyCountry;
+                this.activeCompany$.pipe(take(1)).subscribe((response: any) => {
+                    companyCountry = response.countryV2?.alpha2CountryCode;
+                });
+                if (companyCountry === 'IN') {
+                    const requestObject = {
+                        formName: 'onboarding',
+                        country: companyCountry
+                    };
+                    this.store.dispatch(this.commonActions.GetOnboardingForm(requestObject));
+                }
             }
         });
     }
@@ -240,6 +275,26 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         if (this.formToSave.invoiceSettings.lockDate instanceof Date) {
             this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
         }
+        if (this.formToSave?.invoiceSettings?.gstEInvoiceEnable) {
+            const invoiceSettings = this.formToSave.invoiceSettings;
+            if (!invoiceSettings.gstEInvoiceUserName || !invoiceSettings.gstEInvoiceUserPassword || !invoiceSettings.gstEInvoiceGstin) {
+                this._toasty.errorToast(this.localeData?.e_invoice_fields_required_error_message);
+                return;
+            }
+            if (this.formFields['taxName'] && this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
+                let isValid = false;
+                for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+                    let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                    if (regex.test(invoiceSettings.gstEInvoiceGstin)) {
+                        isValid = true;
+                    }
+                }
+                if (!isValid) {
+                    this._toasty.errorToast(this.localeData?.e_invoice_invalid_gstin_error_message);
+                    return;
+                }
+            }
+        }
 
         if (this.formToSave.invoiceSettings.autoPaid) {
             this.formToSave.invoiceSettings.autoPaid = 'runtime';
@@ -254,10 +309,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         if (!_.isEqual(this.razorpayObj, razorpayObj) && form && form.createPaymentEntry) {
             this.saveRazorPay(this.razorpayObj, form);
         }
-        // } else {
-        //   this._toasty.warningToast('No changes made.');
-        //   return false;
-        // }
     }
 
     /**
@@ -484,5 +535,52 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 { value: 'cashfree', label: this.localeData?.cashfree }
             ];
         }
+    }
+
+    /**
+     * Handler for E-invoice authentication change
+     *
+     * @param {*} event Checkbox (ngModelChange) event
+     * @memberof InvoiceSettingComponent
+     */
+    public handleEInvoiceChange(event: any): void {
+        if (!event) {
+            // E-Invoice unchecked reset the credentials
+            this.invoiceSetting.gstEInvoiceGstin = '';
+            this.invoiceSetting.gstEInvoiceUserName = '';
+            this.invoiceSetting.gstEInvoiceUserPassword = '';
+        } else {
+            this.fetchCompanyGstDetails();
+        }
+    }
+
+    /**
+     * Auto-fills the GST number field for E-invoice
+     *
+     * @private
+     * @memberof InvoiceSettingComponent
+     */
+    private fetchCompanyGstDetails(): void {
+        let branches = [];
+        let currentBranch;
+        this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+            if (response && response.length) {
+                branches = response;
+
+                if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    // Find the current checked out branch
+                    currentBranch = branches.find(branch => branch.uniqueName === this.generalService.currentBranchUniqueName);
+                } else {
+                    // Find the HO branch
+                    currentBranch =  branches.find(branch => !branch.parentBranch);
+                }
+                if (currentBranch && currentBranch.addresses) {
+                    const defaultAddress = currentBranch.addresses.find(address => (address && address.isDefault));
+                    if(defaultAddress) {
+                        this.invoiceSetting.gstEInvoiceGstin = defaultAddress.taxNumber;
+                    }
+                }
+            }
+        });
     }
 }

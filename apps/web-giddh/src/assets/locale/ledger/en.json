@@ -40,9 +40,9 @@
     "invalid_cheque_clearance_date": "Invalid Date Selected In Cheque Clearance Date. Please Select Valid Date",
     "select_one_entry": "Please select at least one entry.",
     "select_valid_action": "Please select a valid action.",
-    "file_uploaded": "file uploaded successfully",
+    "file_uploaded": "File uploaded successfully",
     "bank_transaction_deleted": "Bank transaction deleted Successfully",
-    "save_unfinished_entry": "please save unfinished entry first...",
+    "save_unfinished_entry": "Please save unfinished entry first...",
     "qty": "Qty",
     "price": "Price",
     "tax_on_advance": "Tax on Advance",
@@ -72,7 +72,7 @@
     "tax_compulsory": "Tax is compulsory",
     "transaction_available_ts": "Is this transaction applicable for Tourist Scheme?",
     "passport_number": "Passport Number",
-    "no_matching_entry_found": "no entry with matching amount found, please create a new entry with same amount as this transaction.",
+    "no_matching_entry_found": "No entry with matching amount found, please create a new entry with same amount as this transaction.",
     "map_cheque_bank_transaction": "Selected bank transaction will be mapped with cheque number [CHEQUE_NUMBER] Click yes to accept.",
     "entry_mapped": "Entry Mapped Successfully",
     "by_balance_cf": "By Balance C/F",
@@ -195,5 +195,6 @@
     "import_goods": "Import of goods",
     "import_services": "Import of services",
     "others": "Others",
-    "choose_file": "Choose File"
+    "choose_file": "Choose File",
+    "remove_file": "Deleted Successfully."
 }

@@ -69,7 +69,7 @@
                     <ng-template #optionTemplate let-option="option">
                         <ng-container>
                             <a href="javascript:void(0)" class="list-item d-flex">
-                                <span class="mwauto"><input type="checkbox" [checked]="copyTypes.includes(option.value)" [value]="option.value"></span>&nbsp;
+                                <span class="min-width-auto"><input type="checkbox" [checked]="copyTypes.includes(option.value)" [value]="option.value"></span>&nbsp;
                                 <span>
                                     <div class="item">{{ option.label }}</div>
                                 </span>
@@ -106,7 +106,7 @@
             </div>
             <div class="col-sm-12">
                 <!-- Email id could be mulitiple   -->
-                <textarea type="text" [placeholder]="localeData?.recipients_email" class="form-control mr-b15 mulitiple-email" name="recipients" [(ngModel)]="recipients"></textarea>
+                <textarea type="text" [placeholder]="localeData?.recipients_email" class="form-control mr-b15 multiple-email" name="recipients" [(ngModel)]="recipients"></textarea>
                 <button class="btn btn-success" [disabled]="!recipients || recipients.length === 0 || !copyTypes || copyTypes.length === 0 || isLoading" (click)="exportVouchers(true)">{{commonLocaleData?.app_send_email}}</button>
             </div>
         </div>

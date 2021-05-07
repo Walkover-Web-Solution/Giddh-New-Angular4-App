@@ -37,8 +37,8 @@
     color: $deep-sky-blue !important;
 }
 .inventory-control ::ng-deep.nav-tabs > ::ng-deep li.active > a,
-.nav-tabs > ::ng-deep li.active > a:focus,
-::ng-deep.nav-tabs > li.active > a:hover {
+.inventory-control .nav-tabs > ::ng-deep li.active > a:focus,
+.inventory-control ::ng-deep.nav-tabs > li.active > a:hover {
     color: $nero !important;
     border-bottom: 4px solid $deep-sky-blue !important;
     cursor: pointer !important;
@@ -56,7 +56,7 @@
     margin-bottom: 10px;
 }
 .inventory-control ::ng-deep.nav > li > a:focus,
-::ng-deep.nav > li > a:hover {
+.inventory-control ::ng-deep.nav > li > a:hover {
     background-color: unset !important;
 }
 

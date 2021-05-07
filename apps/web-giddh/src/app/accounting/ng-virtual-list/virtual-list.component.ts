@@ -26,14 +26,14 @@ const FLATTEN_SEARCH_TERM = 'flatten';
 })
 export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges {
     @Input() public idEl: string = '';
-    @Input() public placeholder: string = 'Type to filter';
+    @Input() public placeholder: string = '';
     @Input() public multiple: boolean = false;
     @Input() public mode: 'default' | 'inline' = 'default';
     @Input() public showClear: boolean = false;
     @Input() public forceClearReactive: IForceClear;
     @Input() public disabled: boolean;
-    @Input() public notFoundMsg: string = 'No results found';
-    @Input() public notFoundLinkText: string = 'Create New';
+    @Input() public notFoundMsg: string = '';
+    @Input() public notFoundLinkText: string = '';
     @Input() public notFoundLink: boolean = false;
     @Input() public isFilterEnabled: boolean = true;
     @Input() public width: string = 'auto';
@@ -51,6 +51,10 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     @Input() public keydownUpInput: KeyboardEvent;
     /** True when pagination should be enabled */
     @Input() isPaginationEnabled: boolean;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     @ViewChild('inputFilter', {static: false}) public inputFilter: ElementRef;
     @ViewChild('mainContainer', {static: true}) public mainContainer: ElementRef;
@@ -197,7 +201,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         if (this.filteredData.length === 0) {
             // this.noOptionsFound.emit(true);
             this.updateRows([{
-                label: 'Create new',
+                label: this.commonLocaleData?.app_create_new,
                 value: 'createnewitem'
             }]);
         } else {
