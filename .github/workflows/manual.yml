@@ -37,8 +37,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "14"
-    outputs:
-      os-name: ${{ steps.save-os.outputs.os-name }}
       - uses: bahmutov/npm-install@v1
         env:
           CYPRESS_INSTALL_BINARY: 0
