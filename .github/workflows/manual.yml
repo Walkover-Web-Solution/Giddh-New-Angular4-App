@@ -92,6 +92,7 @@ jobs:
     name: Slack Notification Success
     runs-on: ubuntu-latest
     steps:
+      - run: echo ${{ needs.release.outputs.os-name }}
       - name: Slack Notification Success for Windows
         if: ${{ needs.release.outputs.os-name == 'windows-latest' }}
         uses: rtCamp/action-slack-notify@v2
