@@ -546,5 +546,8 @@
         "weekdays": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
         "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     },
-    "app_characters_left": "Characters Left"
+    "app_characters_left": "Characters Left",
+    "app_pin" : "PIN",
+    "app_max_100_characters_allowed_limit": "Max. 100 characters allowed",
+    "app_max_50_characters_allowed_limit": "Max. 50 characters allowed"
 }
