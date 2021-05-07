@@ -26,7 +26,7 @@
                                             [placeholder]="localeData?.enter_name">
                                         <span class="danger"
                                             *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength">
-                                            {{localeData?.max_100_characters_allowed_limit}}
+                                            {{commonLocaleData?.app_max_100_characters_allowed_limit}}
                                         </span>
                                         <span class="danger"
                                             *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.required">
@@ -136,7 +136,7 @@
                                             type="text" formControlName="name" class="form-control" [placeholder]="localeData?.enter">
                                         <span class="danger"
                                             *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength">
-                                            {{localeData?.max_100_characters_allowed_limit}}
+                                            {{commonLocaleData?.app_max_100_characters_allowed_limit}}
                                         </span>
                                     </div>
                                 </div>
@@ -209,7 +209,7 @@
                                             [placeholder]="localeData?.enter_name" required>
                                         <span class="danger"
                                             *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength">
-                                            {{localeData?.max_100_characters_allowed_limit}}
+                                            {{commonLocaleData?.app_max_100_characters_allowed_limit}}
                                         </span>
                                     </div>
                                 </div>
