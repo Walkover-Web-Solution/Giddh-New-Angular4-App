@@ -30,10 +30,7 @@ import { SalesService } from '../../services/sales.service';
 
 export class DiscountComponent implements OnInit, OnDestroy {
     @ViewChild('discountConfirmationModel', {static: true}) public discountConfirmationModel: ModalDirective;
-    public discountTypeList: IOption[] = [
-        { label: 'As per value', value: 'FIX_AMOUNT' },
-        { label: 'As per percent', value: 'PERCENTAGE' }
-    ];
+    public discountTypeList: IOption[] = []
     public accounts: IOption[];
     public createRequest: CreateDiscountRequest = new CreateDiscountRequest();
     public deleteRequest: string = null;
@@ -49,6 +46,10 @@ export class DiscountComponent implements OnInit, OnDestroy {
 
     private createAccountIsSuccess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private _settingsDiscountAction: SettingsDiscountActions,
@@ -160,5 +161,20 @@ export class DiscountComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof DiscountComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.discountTypeList = [
+                { label: this.localeData?.discount_types?.as_per_value, value: 'FIX_AMOUNT' },
+                { label: this.localeData?.discount_types?.as_per_percent, value: 'PERCENTAGE' }
+            ];
+        }
     }
 }
