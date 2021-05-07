@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Manual workflow
+name: Desktop build workflow
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -87,15 +87,27 @@ jobs:
     name: Slack Notification Success
     runs-on: ubuntu-latest
     steps:
-      - name: Slack Notification Success
+      - name: Slack Notification Success for Windows
+        if: ${{ matrix.os == 'windows-latest' }}
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
           SLACK_COLOR: "#009688" # or a specific color like 'green' or '#ff00ff'
-          SLACK_MESSAGE: "Build download URL" + ${{ matrix.os == 'windows-latest' }} ? "https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+${{ github.event.inputs.version }}.exe" : "https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.dmg"
-          SLACK_TITLE: Giddh Electron build
-          SLACK_USERNAME: Giddh Electron build
+          SLACK_MESSAGE: "Build download URL https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+${{ github.event.inputs.version }}.exe"
+          SLACK_TITLE: Giddh Desktop Windows build
+          SLACK_USERNAME: Giddh Desktop Windows build
+          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+      - name: Slack Notification Success for Mac
+        if: ${{ matrix.os == 'macos-latest' }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
+          SLACK_COLOR: "#009688" # or a specific color like 'green' or '#ff00ff'
+          SLACK_MESSAGE: "Build download URL https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.dmg"
+          SLACK_TITLE: Giddh Desktop Mac build
+          SLACK_USERNAME: Giddh Desktop Mac build
           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
   notify-failure:
     if: ${{ failure() }}
@@ -104,12 +116,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Slack Notification Failure
+        if: ${{ matrix.os == 'windows-latest' }}
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
           SLACK_COLOR: "#f44336" # or a specific color like 'green' or '#ff00ff'
           SLACK_MESSAGE: "Build failed"
-          SLACK_TITLE: Giddh Electron build
-          SLACK_USERNAME: Giddh Electron build
+          SLACK_TITLE: Giddh Desktop Windows build
+          SLACK_USERNAME: Giddh Desktop Windows build
           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+      - name: Slack Notification Failure
+        if: ${{ matrix.os == 'macos-latest' }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
+          SLACK_COLOR: "#f44336" # or a specific color like 'green' or '#ff00ff'
+          SLACK_MESSAGE: "Build failed"
+          SLACK_TITLE: Giddh Desktop Windows build
+          SLACK_USERNAME: Giddh Desktop Windows build
+          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+
