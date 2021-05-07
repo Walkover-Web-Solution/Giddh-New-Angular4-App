@@ -231,7 +231,7 @@
 <div bsModal #updateLedgerModal="bs-modal" class="modal fade update-ledger-modal" role="dialog"
     [config]="{keyboard: true}" tabindex="-1">
     <div class="modal-dialog modal-xl modal-ledger">
-        <div class="modal-content">
+        <div class="modal-content" *ngIf="updateLedgerModal.isShown">
             <update-ledger-entry-panel [isPettyCash]="false" (closeUpdateLedgerModal)="hideUpdateLedgerModal()" (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"></update-ledger-entry-panel>
         </div>
     </div>
