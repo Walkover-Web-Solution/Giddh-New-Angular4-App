@@ -190,7 +190,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             const taxField = this.addressForm.get('taxNumber');
             if (taxField.value && taxField.valid && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN') {
                 // Tax is valid and has value then address is mandatory for GST taxes
-                const addresssValue = (this.addressForm.get('address').value || '').trim();
+                const addresssValue = (this.addressForm.get('address').value || '')?.trim();
                 this.addressForm.get('address').setValue(addresssValue);
                 if (!addresssValue) {
                     return;
@@ -225,7 +225,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             if (keyAvoid.findIndex(key => key === event.key) > -1) {
                 return;
             }
-            let gstVal: string = this.addressForm.get('taxNumber').value.trim();
+            let gstVal: string = this.addressForm.get('taxNumber').value?.trim();
             this.addressForm.get('taxNumber').setValue(gstVal);
             if (gstVal.length) {
 
