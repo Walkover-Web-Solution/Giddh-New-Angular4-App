@@ -543,5 +543,8 @@
         "weekdays": ["रवि", "सोम", "मंग", "बुध", "गुरू", "शुक्र", "शनि"],
         "months": ["जनवरी", "फ़रवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"]
     },
-    "app_characters_left": "वर्ण डावे"
+    "app_characters_left": "वर्ण डावे",
+    "app_pin" : "PIN",
+    "app_max_100_characters_allowed_limit": "Max. 100 characters allowed",
+    "app_max_50_characters_allowed_limit": "Max. 50 characters allowed"
 }

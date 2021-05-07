@@ -74,7 +74,7 @@
                                         {{address.taxType}} : {{address.taxNumber}}&nbsp;
                                     </ng-container>
                                     <ng-container *ngIf="address.pincode">
-                                        {{localeData?.pin}}: {{address.pincode}}
+                                        {{commonLocaleData?.pin}}: {{address.pincode}}
                                     </ng-container>
                                 </div>
                             </td>
@@ -136,7 +136,7 @@
                                 </div>
                                 <!-- static pincode  -->
                                 <div *ngIf="address.pincode">
-                                    <label>{{localeData?.pin}}:</label>
+                                    <label>{{commonLocaleData?.pin}}:</label>
                                     <p>{{address.pincode}}</p>
                                 </div>
                                 <!-- static pincode  -->
