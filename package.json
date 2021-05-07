@@ -2,9 +2,6 @@
     "name": "giddh-workspaces",
     "version": "8.0.8",
     "license": "MIT",
-    "description": "Accounting Software from Giddh.",
-    "main": "./dist/apps/web-giddh-prod/index.js",
-    "author": "Walkover Technologies<info@walkover.in>",
     "scripts": {
         "ng": "ng",
         "start": "npm run postinstall.web && ng serve web-giddh",

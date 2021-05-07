@@ -2,7 +2,7 @@
     "name": "giddh",
     "version": "8.0.8",
     "description": "Accounting Software from Giddh.",
-    "main": "../../../dist/apps/web-giddh-prod/index.js",
+    "main": "index.js",
     "author": "Walkover Technologies<info@walkover.in>",
     "homepage": "https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App",
     "repository": {
