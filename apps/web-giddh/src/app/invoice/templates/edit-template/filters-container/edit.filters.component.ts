@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { InvoiceUiDataService } from 'apps/web-giddh/src/app/services/invoice.ui.data.service';
 
 @Component({
     selector: 'edit-template-filters',
@@ -13,7 +14,20 @@ export class EditFiltersContainersComponent implements OnChanges {
     public ifContentSelected: boolean = false;
     public ifEmailSelected: boolean = false;
 
-    constructor() {
+    /**
+     * Returns the error count of fields
+     *
+     * @readonly
+     * @type {number} Error count
+     * @memberof EditFiltersContainersComponent
+     */
+    public get errorCount(): number {
+        return this.invoiceUiDataService.contentFormErrors;
+    }
+
+    constructor(
+        private invoiceUiDataService: InvoiceUiDataService
+    ) {
         this.openTab('design');
     }
 

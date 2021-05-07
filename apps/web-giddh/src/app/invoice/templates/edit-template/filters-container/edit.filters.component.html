@@ -2,8 +2,9 @@
     <button type="button" class="btn btn-default" [ngClass]="{'active-tab': ifDesignSelected, 'inactive-tab': ifContentSelected}" (click)="openTab('design')"
         id="defaultOpen">Design
     </button>
-    <button type="button" class="btn btn-default" [ngClass]="{'active-tab': ifContentSelected, 'inactive-tab': ifDesignSelected}" (click)="openTab('content')">
-        Content
+    <button type="button" class="btn btn-default content-tab" [ngClass]="{'active-tab': ifContentSelected, 'inactive-tab': ifDesignSelected}" (click)="openTab('content')">
+        <span>Content</span>
+        <span *ngIf="errorCount" class="badge">{{errorCount}}</span>
     </button>
     <!--<button type="button" class="btn btn-default" (click)="openTab('email')">Email</button>-->
 </div>
