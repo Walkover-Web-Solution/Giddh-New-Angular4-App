@@ -372,6 +372,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
 
                 this.toggleStateRequired();
+                setTimeout(() => {
+                    this.generalService.invokeEvent.next(["accountEditing", acc]);
+                }, 500);
             }
 
         });
