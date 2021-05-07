@@ -144,22 +144,22 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                     updGroupObj.isSubGroup = false;
                     this.forceClear$ = observableOf({ status: true });
                 }
-                this.addGroupForm.patchValue(updGroupObj);
+                this.addGroupForm?.patchValue(updGroupObj);
                 if (account.parentStockGroup) {
-                    this.addGroupForm.patchValue({ parentStockGroupUniqueName: account.parentStockGroup.uniqueName });
+                    this.addGroupForm?.patchValue({ parentStockGroupUniqueName: account.parentStockGroup.uniqueName });
                 }
 
                 if(account.hsnNumber) {
-                    this.addGroupForm.get("showCodeType").patchValue("hsn");
+                    this.addGroupForm.get("showCodeType")?.patchValue("hsn");
                 } else if(account.sacNumber) {
-                    this.addGroupForm.get("showCodeType").patchValue("sac");
+                    this.addGroupForm.get("showCodeType")?.patchValue("sac");
                 }
 
             } else {
                 if (account) {
-                    this.addGroupForm.patchValue({ isSubGroup: true, parentStockGroupUniqueName: account.uniqueName });
+                    this.addGroupForm?.patchValue({ isSubGroup: true, parentStockGroupUniqueName: account.uniqueName });
                 } else {
-                    this.addGroupForm.patchValue({ name: '', uniqueName: '', hsnNumber: '', sacNumber: '', isSubGroup: false });
+                    this.addGroupForm?.patchValue({ name: '', uniqueName: '', hsnNumber: '', sacNumber: '', isSubGroup: false });
                 }
                 this.parentStockSearchString = '';
             }
@@ -196,7 +196,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                             o.isDisabled = false;
                         });
                     });
-                    this.addGroupForm.get('taxes').patchValue('');
+                    this.addGroupForm.get('taxes')?.patchValue('');
                 }
             }
         });
@@ -281,9 +281,9 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         if unique name is not available then server will assign number suffix **/
 
         if (val) {
-            this.addGroupForm.patchValue({uniqueName: val});
+            this.addGroupForm?.patchValue({uniqueName: val});
         } else {
-            this.addGroupForm.patchValue({uniqueName: ''});
+            this.addGroupForm?.patchValue({uniqueName: ''});
         }
     }
 
@@ -291,13 +291,13 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         let stockRequest = new StockGroupRequest();
         let uniqueNameField = this.addGroupForm.get('uniqueName');
         if(uniqueNameField && uniqueNameField.value) {
-            uniqueNameField.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
+            uniqueNameField?.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
         }
 
         if(this.addGroupForm.get("showCodeType").value === "hsn") {
-            this.addGroupForm.get('sacNumber').patchValue("");
+            this.addGroupForm.get('sacNumber')?.patchValue("");
         } else {
-            this.addGroupForm.get('hsnNumber').patchValue("");
+            this.addGroupForm.get('hsnNumber')?.patchValue("");
         }
 
         stockRequest = this.addGroupForm.value as StockGroupRequest;
@@ -326,13 +326,13 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
 
         this.activeGroup$.pipe(take(1)).subscribe(a => activeGroup = a);
         if(uniqueNameField && uniqueNameField.value) {
-            uniqueNameField.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
+            uniqueNameField?.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
         }
 
         if(this.addGroupForm.get("showCodeType").value === "hsn") {
-            this.addGroupForm.get('sacNumber').patchValue("");
+            this.addGroupForm.get('sacNumber')?.patchValue("");
         } else {
-            this.addGroupForm.get('hsnNumber').patchValue("");
+            this.addGroupForm.get('hsnNumber')?.patchValue("");
         }
 
         stockRequest = this.addGroupForm.value as StockGroupRequest;
@@ -370,7 +370,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public validateUniqueName(unqName) {
         if (unqName) {
             let val = uniqueNameInvalidStringReplace(unqName);
-            this.addGroupForm.patchValue({ uniqueName: val });
+            this.addGroupForm?.patchValue({ uniqueName: val });
         }
     }
 
@@ -477,7 +477,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             }
         }
 
-        this.addGroupForm.get('taxes').patchValue(this.taxTempArray.map(taxTemp => taxTemp.uniqueName));
+        this.addGroupForm.get('taxes')?.patchValue(this.taxTempArray.map(taxTemp => taxTemp.uniqueName));
     }
 
     /**
@@ -518,9 +518,9 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
 
                 if(!this.addGroupForm.get("showCodeType").value) {
                     if(this.inventorySettings?.manageInventory) {
-                        this.addGroupForm.get("showCodeType").patchValue("hsn");
+                        this.addGroupForm.get("showCodeType")?.patchValue("hsn");
                     } else {
-                        this.addGroupForm.get("showCodeType").patchValue("sac");
+                        this.addGroupForm.get("showCodeType")?.patchValue("sac");
                     }
                 }
             }

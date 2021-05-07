@@ -305,7 +305,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public ngOnInit() {
 
-        
+
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -776,12 +776,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public deleteAttachedFile() {
-        this.vm.selectedLedger.attachedFile = '';
-        this.vm.selectedLedger.attachedFileName = '';
-        if(this.fileInputElement && this.fileInputElement.nativeElement) {
-            this.fileInputElement.nativeElement.value = '';
-        }
-        this.hideDeleteAttachedFileModal();
+        this.ledgerService.removeAttachment(this.vm.selectedLedger.attachedFile).subscribe((response) => {
+            if (response?.status === 'success') {
+                this.vm.selectedLedger.attachedFile = '';
+                this.vm.selectedLedger.attachedFileName = '';
+                if (this.fileInputElement && this.fileInputElement.nativeElement) {
+                    this.fileInputElement.nativeElement.value = '';
+                }
+                this.hideDeleteAttachedFileModal();
+                this._toasty.successToast(this.localeData?.remove_file);
+            } else {
+                this._toasty.errorToast(response?.message)
+            }
+        });
     }
 
     public saveLedgerTransaction() {
@@ -1643,7 +1650,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             if (adjustments) {
                 adjustments.forEach(adjustment => {
-                    adjustment.adjustmentAmount = adjustment.balanceDue;
                     adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
                 });
 
@@ -1728,7 +1734,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 tcsTotal: 0,
                 tdsTotal: 0,
                 balanceDue: this.vm.selectedLedger.total.amount,
-                grandTotal: this.vm.selectedLedger.total.amount,
+                grandTotal: this.vm.selectedLedger?.entryVoucherTotals?.amountForAccount,
                 customerName: this.vm.selectedLedger && this.vm.selectedLedger.particular? this.vm.selectedLedger.particular.name : '',
                 customerUniquename: customerUniqueName,
                 totalTaxableValue: this.vm.selectedLedger.actualAmount,

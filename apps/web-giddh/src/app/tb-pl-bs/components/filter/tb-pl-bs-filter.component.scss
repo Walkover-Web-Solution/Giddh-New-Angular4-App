@@ -98,7 +98,7 @@
 }
 .icon-calender {
     position: absolute;
-    z-index: 9;
+    z-index: 1;
     height: 32px;
     width: 36px;
     display: inline-flex;
@@ -147,4 +147,32 @@
      .download-data-icon{
         margin: 10px 0 2px;
      }
+}
+@media screen and (max-width:767px){
+    .tb-mobile-header{
+        .datepicker-field, .custom-datepicker{
+            min-width: 100% !important;
+            width: 100% !important;
+            input{
+                min-width: 100% !important;
+                width: 100% !important;
+                text-align: left;
+                padding-left: 40px !important;
+            }
+        }
+        .refresh-btn{
+            display: flex;
+            width: 36px;
+            height: 36px;
+            justify-content: center;
+            align-items: center;
+            background-color: $white;
+            font-size: 16px;
+            color: $midnight-blue !important;
+            border: 1px solid $gainsboro;
+        }
+    }
+    .list-inline > li{
+        font-size: 12px;
+    }
 }

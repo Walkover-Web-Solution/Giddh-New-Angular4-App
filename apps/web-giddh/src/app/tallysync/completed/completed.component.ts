@@ -141,7 +141,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.activeCompany = activeCompany;
-                this.filterForm.get('filterCompany').patchValue(activeCompany.uniqueName);
+                this.filterForm.get('filterCompany')?.patchValue(activeCompany.uniqueName);
             }
         });
     }
@@ -160,8 +160,8 @@ export class CompletedComponent implements OnInit, OnDestroy {
             }
         });
         // set initial Data
-        this.filterForm.get('filterDate').patchValue(moment(this.maxDate).format('D-MMM-YYYY'));
-        this.filterForm.get('filterTimeInterval').patchValue(this.timeInterval[5].value);
+        this.filterForm.get('filterDate')?.patchValue(moment(this.maxDate).format('D-MMM-YYYY'));
+        this.filterForm.get('filterTimeInterval')?.patchValue(this.timeInterval[5].value);
         this.filter.timeRange = this.timeInterval[5].value;
         this.filter.startDate = moment(this.maxDate).format(GIDDH_DATE_FORMAT);
         this.getReport();
@@ -178,7 +178,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
                 const hoBranch = response.find(branch => !branch.parentBranch);
                 const currentBranchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
                 this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
-                this.filterForm.get('branchUniqueName').patchValue(this.currentBranch.uniqueName);
+                this.filterForm.get('branchUniqueName')?.patchValue(this.currentBranch.uniqueName);
                 this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
             } else {
                 if (this.generalService.companyUniqueName) {
@@ -370,7 +370,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
                 const hoBranch = response.body.find(branch => !branch.parentBranch);
                 this.currentBranch = _.cloneDeep(hoBranch);
                 this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
-                this.filterForm.get('branchUniqueName').patchValue(this.currentBranch.uniqueName);
+                this.filterForm.get('branchUniqueName')?.patchValue(this.currentBranch.uniqueName);
                 this.filterForm.updateValueAndValidity();
                 this.changeDetectorRef.detectChanges();
             }

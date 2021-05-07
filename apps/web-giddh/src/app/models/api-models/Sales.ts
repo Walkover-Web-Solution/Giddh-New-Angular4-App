@@ -114,6 +114,7 @@ export class GstDetailsClass {
     * */
     public stateCode?: string;
     public stateName?: string;
+    public pincode?: string;
 
     constructor() {
         this.address = [];
@@ -177,6 +178,7 @@ export class AccountDetailsClass {
                     : attrs.addresses[0].stateCode;
                 this.billingDetails.state.name = attrs.addresses[0].stateName;
                 this.billingDetails.gstNumber = attrs.addresses[0].gstNumber;
+                this.billingDetails.pincode = attrs.addresses[0].pincode;
                 this.billingDetails.panNumber = '';
                 // set shipping
                 this.shippingDetails.address = [];
@@ -186,6 +188,7 @@ export class AccountDetailsClass {
                     : attrs.addresses[0].stateCode;
                 this.shippingDetails.state.name = attrs.addresses[0].stateName;
                 this.shippingDetails.gstNumber = attrs.addresses[0].gstNumber;
+                this.shippingDetails.pincode = attrs.addresses[0].pincode;
                 this.shippingDetails.panNumber = '';
             }
         } else {

@@ -56,7 +56,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
                 // coming from discount list set hardcoded discount list
                 if (this.comingFromDiscountList) {
                     // "uniqueName":"discount"
-                    this.newAccountForm.get('groupUniqueName').patchValue('discount');
+                    this.newAccountForm.get('groupUniqueName')?.patchValue('discount');
                 }
             }
         });
@@ -117,9 +117,9 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
                 i++;
             }
             unq = unqName + text;
-            uniqueControl.patchValue(unq);
+            uniqueControl?.patchValue(unq);
         } else {
-            uniqueControl.patchValue('');
+            uniqueControl?.patchValue('');
         }
     }
 
@@ -130,9 +130,9 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
                 let s = state.find(st => st.value === gstVal.substr(0, 2));
                 statesEle.disabled = true;
                 if (s) {
-                    gstForm.get('stateCode').patchValue(s.value);
+                    gstForm.get('stateCode')?.patchValue(s.value);
                 } else {
-                    gstForm.get('stateCode').patchValue(null);
+                    gstForm.get('stateCode')?.patchValue(null);
                     this._toaster.clearAllToaster();
                     if (!gstForm.get('gstNumber')?.valid) {
                         this._toaster.warningToast('Invalid GSTIN.');
@@ -141,7 +141,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
             });
         } else {
             statesEle.disabled = false;
-            gstForm.get('stateCode').patchValue(null);
+            gstForm.get('stateCode')?.patchValue(null);
         }
     }
 

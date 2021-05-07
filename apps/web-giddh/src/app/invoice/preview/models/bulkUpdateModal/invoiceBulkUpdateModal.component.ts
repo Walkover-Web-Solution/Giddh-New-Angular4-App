@@ -18,6 +18,7 @@ import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { ModalOptions, ModalDirective } from 'ngx-bootstrap/modal';
+import { CustomTemplateState } from 'apps/web-giddh/src/app/store/Invoice/invoice.template.reducer';
 
 @Component({
     selector: 'invoice-bulk-update-modal-component',
@@ -74,7 +75,8 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
         backdrop: 'static',
         ignoreBackdropClick: true
     };
-
+    /** True, if user has opted to show notes at the last page of sales invoice */
+    public showNotesAtLastPage: boolean;
     public isDefaultTemplateSignatureImage: boolean;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -94,7 +96,15 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
     public ngOnInit() {
         this.uploadInput = new EventEmitter<UploadInput>();
         this.getTemplates();
-
+        this.store.pipe(select(appState => appState.invoiceTemplate), takeUntil(this.destroyed$)).subscribe((templateData: CustomTemplateState) => {
+            if (templateData && templateData.customCreatedTemplates) {
+                const defaultTemplate = templateData.customCreatedTemplates.find(template => (template.isDefault || template.isDefaultForVoucher));
+                const sections = defaultTemplate.sections;
+                if (sections?.footer?.data) {
+                    this.showNotesAtLastPage = sections.footer.data.showNotesAtLastPage?.display;
+                }
+            }
+        });
     }
 
     /**

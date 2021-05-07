@@ -176,8 +176,8 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
             });
 
             this.transfers.controls.map((trn: AbstractControl) => {
-                trn.get('stockUnit').patchValue(_.get(this.selectedProduct, 'stockUnit.code'));
-                trn.get('rate').patchValue(_.get(this.selectedProduct, 'rate', 1));
+                trn.get('stockUnit')?.patchValue(_.get(this.selectedProduct, 'stockUnit.code'));
+                trn.get('rate')?.patchValue(_.get(this.selectedProduct, 'rate', 1));
                 this.valueChanged(trn);
             });
         } else {
@@ -188,8 +188,8 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
             const stockUnit = item.get('stockUnit');
             const rate = item.get('rate');
 
-            stockUnit.patchValue(_.get(selectedProduct, 'stockUnit.code'));
-            rate.patchValue(_.get(selectedProduct, 'rate', 1));
+            stockUnit?.patchValue(_.get(selectedProduct, 'stockUnit.code'));
+            rate?.patchValue(_.get(selectedProduct, 'rate', 1));
         }
     }
 
@@ -198,7 +198,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
         const rate = item.get('rate');
         const value = item.get('value');
 
-        value.patchValue(parseFloat(quantity.value) * parseFloat(rate.value));
+        value?.patchValue(parseFloat(quantity.value) * parseFloat(rate.value));
     }
 
     public deleteEntry(index: number) {

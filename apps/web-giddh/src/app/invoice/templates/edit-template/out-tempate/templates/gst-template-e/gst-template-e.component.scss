@@ -209,6 +209,13 @@ tfoot.table-details tr th {
     vertical-align: baseline;
 }
 
+#royal .subfooter hr {
+    width: 100%;
+    border-bottom: 1px solid $very-light-gray;
+    margin: 3px 0;
+    border-top: 0 !important;
+}
+
 #royal {
     .vertical-align-middle {
         vertical-align: middle;
@@ -386,4 +393,20 @@ header.bottom-border {
 .tax-table {
     padding-right: 0px !important;
     padding-left: 0px !important;
+}
+.date-text {
+    color: $zambezi;
+}
+
+.qr-image img{
+    width: 160px !important;
+}
+
+.width-40{
+    width: 40%;
+}
+
+.inner-img-signature {
+    height: 60px;
+    min-width: 60px;
 }

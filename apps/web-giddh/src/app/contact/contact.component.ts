@@ -436,7 +436,9 @@ export class ContactComponent implements OnInit, OnDestroy {
                         };
                     }
                     this.currentBranchData = _.cloneDeep(this.currentBranch);
-                    this.currentBranch.name = (this.currentBranch ? this.currentBranch.name : "") + (this.currentBranch && this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                    if (this.currentBranch) {
+                        this.currentBranch.name = this.currentBranch.name + (this.currentBranch && this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                    }
                 }
             } else {
                 if (this._generalService.companyUniqueName) {
@@ -1407,7 +1409,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public handleBranchChange(selectedEntity: any): void {
-        this.currentBranch.name = selectedEntity.label;
+        this.currentBranch.name = selectedEntity?.label;
         if (this.activeTab === 'customer') {
             this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
         } else {
