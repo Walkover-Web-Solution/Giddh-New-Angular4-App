@@ -24,7 +24,10 @@
                         <!-- <span> Note </span>
                         <textarea class="form-control" [(ngModel)]="updateNotesRequest.message1" name="message1"></textarea> -->
                         <!--  this note is come from template -->
-                        <textarea class="form-control" [(ngModel)]="updateNotesRequest.message2" name="message2"></textarea>
+                        <textarea hasFocus #message2="hasFocus" class="form-control" [maxlength]="!showNotesAtLastPage ? 200 : null" [(ngModel)]="updateNotesRequest.message2" name="message2"></textarea>
+                        <ng-container *ngIf="updateNotesRequest?.message2?.length && !showNotesAtLastPage && message2?.isFocused">
+                            <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(200 - updateNotesRequest?.message2?.length)}}</span>
+                        </ng-container>
                     </div>
 
                     <div class="form-group" *ngIf="selectedField === 'signature'">
@@ -33,13 +36,13 @@
 
                     <div class="relative form-group" *ngIf="selectedField === 'dueDate'">
                         <input name="lastInvoiceDate" required placeholder="Select Date" type="text" autocomplete="off" [bsConfig]="{dateInputFormat: giddhDateFormat}" [(ngModel)]="updateDueDatesRequest.dueDate" class="form-control" bsDatepicker required>
-                        <i class="fa fa-calendar text-light-2 input-date"></i>
+                        <i class="fa fa-calendar text-light-2 date-input"></i>
                     </div>
                 </div>
             </div>
 
             <div class="width-100">
-                <div *ngIf="selectedField === 'signature' && signatureOptions === 'image'" class="uplode-logo">
+                <div *ngIf="selectedField === 'signature' && signatureOptions === 'image'" class="upload-logo">
                     <div class="form-group">
                         <label [hidden]="isSignatureAttached">
                             <input type="file" class="d-none" name="bulkUploadfileInput"

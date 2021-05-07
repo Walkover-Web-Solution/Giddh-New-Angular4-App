@@ -57,6 +57,9 @@ ul#dropdown-nested li .caret {
     float: right;
     margin-top: 8px;
 }
+.report-dropdown {
+    left: 100% !important;
+}
 #dropdown-nested li .caret {
     float: right;
     margin-top: 8px;
@@ -103,6 +106,24 @@ ul#dropdown-nested li .caret {
             a{
                 color: $midnight-blue;
             }
+        }
+    }
+}
+@media (max-width: 991px) {
+    #dropdown-nested{
+        position: absolute;
+        left: -141px;
+        li{
+            .caret{
+                transform: rotate(0deg);
+            }
+        }
+        .report-dropdown{
+            left: 0 !important;
+            bottom: -65px;
+            width: 100%;
+            min-height: 120px;
+            top: 50px;
         }
     }
 }

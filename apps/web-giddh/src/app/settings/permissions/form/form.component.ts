@@ -153,7 +153,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         if (ev && ev.length) {
             let from = moment(ev[0]).format(GIDDH_DATE_FORMAT);
             let to = moment(ev[1]).format(GIDDH_DATE_FORMAT);
-            this.permissionForm.patchValue({ from, to });
+            this.permissionForm?.patchValue({ from, to });
         }
     }
 
@@ -164,7 +164,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             this.selectedTimeSpan = 'Past Period';
             this.dateRangePickerValue = [];
             if (this.permissionForm) {
-                this.permissionForm.patchValue({ from: null, to: null });
+                this.permissionForm?.patchValue({ from: null, to: null });
             }
         }
     }
@@ -398,7 +398,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
      * @memberof SettingPermissionFormComponent
      */
     public handleIpAddressChange(value: string): void {
-        this.permissionForm.get('ipOptions').patchValue(value, { onlySelf: true });
+        this.permissionForm.get('ipOptions')?.patchValue(value, { onlySelf: true });
     }
 
     /**
@@ -410,6 +410,6 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
      * @memberof SettingPermissionFormComponent
      */
     public handleTimeSpanChange(value: string): void {
-        this.permissionForm.get('periodOptions').patchValue(value, { onlySelf: true });
+        this.permissionForm.get('periodOptions')?.patchValue(value, { onlySelf: true });
     }
 }
