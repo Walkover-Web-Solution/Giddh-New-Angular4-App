@@ -41,7 +41,7 @@ jobs:
         id: save-os
         run: echo "::set-output name=os-name::$(echo ${matrix.os})"
     outputs:
-      foo1-output: ${{ steps.save-os.outputs.os-name }}
+      os-name: ${{ steps.save-os.outputs.os-name }}
 #       - uses: bahmutov/npm-install@v1
 #         env:
 #           CYPRESS_INSTALL_BINARY: 0
