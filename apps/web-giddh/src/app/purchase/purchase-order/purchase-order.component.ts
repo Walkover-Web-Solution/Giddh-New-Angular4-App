@@ -298,7 +298,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                                 item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedPo, item.uniqueName);
                                 let grandTotalConversionRate = 0, grandTotalAmountForCompany, grandTotalAmountForAccount;
                                 grandTotalAmountForCompany = Number(item?.grandTotal?.amountForCompany) || 0;
-                                grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
+                                grandTotalAmountForAccount = Number(item?.grandTotal?.amountForAccount) || 0;
 
                                 if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
                                     grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
