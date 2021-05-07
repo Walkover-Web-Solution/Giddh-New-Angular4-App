@@ -10,14 +10,14 @@ on:
     inputs:
       card:
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'Card details'
+        description: "Card details"
         # Default value if no value is explicitly provided
-        default: 'Electron build'
+        default: "Electron build"
         # Input has to be provided for the workflow to run
         required: true
       version:
-        description: 'App version'
-        default: '8.0.8'
+        description: "App version"
+        default: "8.0.8"
         required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -31,13 +31,12 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - id: electron-build
       - name: Check out Git repository
         uses: actions/checkout@v2
       - name: Install Node.js & NPM
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: "14"
       - uses: bahmutov/npm-install@v1
         env:
           CYPRESS_INSTALL_BINARY: 0
@@ -53,51 +52,49 @@ jobs:
       - name: Update app version in root package
         uses: MerthinTechnologies/edit-json-action@v1
         with:
-          filename: './package.json'
-          key: 'version'
+          filename: "./package.json"
+          key: "version"
           value: ${{ github.event.inputs.version }}
       - name: Update app version in sub-package
         uses: MerthinTechnologies/edit-json-action@v1
         with:
-          filename: './apps/electron-giddh/src/package.json'
-          key: 'version'
+          filename: "./apps/electron-giddh/src/package.json"
+          key: "version"
           value: ${{ github.event.inputs.version }}
-      - name: Preparing build bundle
-        run: npm run build.electron.giddh
       - name: Creating Electron bundle
-        uses: samuelmeuli/action-electron-builder@v1
+        run: npm run package:windows:test
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        with:
-          github_token: ${{ secrets.github_token }}
-          release: true
-          skip_build: true
-          args: --config ./electron-sign/electron-builder-test.json --ia32 --x64
-    outputs:
-      status: ${{ job.status }}
-  notify:
-    if: always()
+  notify-success:
+    if: ${{ success() }}
     needs: release
-    name: Slack Notification
+    name: Slack Notification Success
     runs-on: ubuntu-latest
     steps:
-    - if: ${{ startsWith(needs.release.outputs.status, 'success') }}
-      name: Slack Notification
-      uses: rtCamp/action-slack-notify@v2
-      env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
-        SLACK_COLOR: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
-        SLACK_MESSAGE: "Build download URL https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.exe"
-        SLACK_TITLE: Giddh Electron build
-        SLACK_USERNAME: Giddh bot
-    - if: ${{ startsWith(needs.release.outputs.status, 'failure') || startsWith(needs.release.outputs.status, 'cancelled') }}
-      name: Slack Notification
-      uses: rtCamp/action-slack-notify@v2
-      env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
-        SLACK_COLOR: ${{ job.status }} # or a specific color like 'green' or '#ff00ff'
-        SLACK_TITLE: Giddh Electron build
-        SLACK_USERNAME: Giddh bot
+      - name: Slack Notification Success
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
+          SLACK_COLOR: "#009688" # or a specific color like 'green' or '#ff00ff'
+          SLACK_MESSAGE: "Build download URL https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+${{ github.event.inputs.version }}.exe"
+          SLACK_TITLE: Giddh Electron build
+          SLACK_USERNAME: Giddh Electron build
+          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+  notify-failure:
+    if: ${{ failure() }}
+    needs: release
+    name: Slack Notification Failure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Slack Notification Failure
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
+          SLACK_COLOR: "#f44336" # or a specific color like 'green' or '#ff00ff'
+          SLACK_MESSAGE: "Build failed"
+          SLACK_TITLE: Giddh Electron build
+          SLACK_USERNAME: Giddh Electron build
+          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
