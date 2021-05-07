@@ -37,83 +37,70 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "14"
-      - name: Save OS
-        id: save-os
-        run: echo "::set-output name=os-name::$(echo ${matrix.os})"
     outputs:
       os-name: ${{ steps.save-os.outputs.os-name }}
-#       - uses: bahmutov/npm-install@v1
-#         env:
-#           CYPRESS_INSTALL_BINARY: 0
-#         with:
-#           useLockFile: false
-#           useRollingCache: true
-#           working-directory: .
-#       - uses: bahmutov/npm-install@v1
-#         with:
-#           useLockFile: false
-#           useRollingCache: true
-#           working-directory: ./apps/electron-giddh/src/
-#       - name: Update app version in root package
-#         uses: MerthinTechnologies/edit-json-action@v1
-#         with:
-#           filename: "./package.json"
-#           key: "version"
-#           value: ${{ github.event.inputs.version }}
-#       - name: Update app version in sub-package
-#         uses: MerthinTechnologies/edit-json-action@v1
-#         with:
-#           filename: "./apps/electron-giddh/src/package.json"
-#           key: "version"
-#           value: ${{ github.event.inputs.version }}
-#       - name: Creating Electron bundle for Windows
-#         if: ${{ matrix.os == 'windows-latest' }}
-#         run: npm run package:windows:test
-#         env:
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#       - name: Install wget
-#         if: ${{ matrix.os == 'macos-latest' }}
-#         run: brew install wget
-#       - name: Fetching Provisioning profile
-#         if: ${{ matrix.os == 'macos-latest' }}
-#         run: cd ./electron-sign && wget -q --no-check-certificate '${{ secrets.PROVISIONING_PROFILE_URL }}' -O embedded.provisionprofile
-#       - name: Creating Electron bundle for Mac
-#         if: ${{ matrix.os == 'macos-latest' }}
-#         run: npm run package:mac:test
-#         env:
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           CSC_LINK: ${{ secrets.CSC_LINK_MAC }}
-#           CSC_KEY_PASSWORD: ${{ secrets.CSC_LINK_MAC_PASS }}
+      - uses: bahmutov/npm-install@v1
+        env:
+          CYPRESS_INSTALL_BINARY: 0
+        with:
+          useLockFile: false
+          useRollingCache: true
+          working-directory: .
+      - uses: bahmutov/npm-install@v1
+        with:
+          useLockFile: false
+          useRollingCache: true
+          working-directory: ./apps/electron-giddh/src/
+      - name: Update app version in root package
+        uses: MerthinTechnologies/edit-json-action@v1
+        with:
+          filename: "./package.json"
+          key: "version"
+          value: ${{ github.event.inputs.version }}
+      - name: Update app version in sub-package
+        uses: MerthinTechnologies/edit-json-action@v1
+        with:
+          filename: "./apps/electron-giddh/src/package.json"
+          key: "version"
+          value: ${{ github.event.inputs.version }}
+      - name: Creating Electron bundle for Windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: npm run package:windows:test
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Install wget
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: brew install wget
+      - name: Fetching Provisioning profile
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: cd ./electron-sign && wget -q --no-check-certificate '${{ secrets.PROVISIONING_PROFILE_URL }}' -O embedded.provisionprofile
+      - name: Creating Electron bundle for Mac
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: npm run package:mac:test
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          CSC_LINK: ${{ secrets.CSC_LINK_MAC }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_LINK_MAC_PASS }}
+          NOTARIZE_EMAIL: ${{ secrets.NOTARIZE_EMAIL }}
+          NOTARIZE_PASS: ${{ secrets.NOTARIZE_PASS }}
   notify-success:
     if: ${{ success() }}
     needs: release
     name: Slack Notification Success
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ needs.release.outputs.os-name }}
-      - name: Slack Notification Success for Windows
+      - name: Slack Notification Success
         if: ${{ needs.release.outputs.os-name == 'windows-latest' }}
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
-          SLACK_COLOR: "#009688" # or a specific color like 'green' or '#ff00ff'
-          SLACK_MESSAGE: "Build download URL https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+${{ github.event.inputs.version }}.exe"
-          SLACK_TITLE: Giddh Desktop Windows build
-          SLACK_USERNAME: Giddh Desktop Windows build
-          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
-      - name: Slack Notification Success for Mac
-        if: ${{ needs.release.outputs.os-name == 'macos-latest' }}
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
-          SLACK_COLOR: "#009688" # or a specific color like 'green' or '#ff00ff'
-          SLACK_MESSAGE: "Build download URL https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.dmg"
-          SLACK_TITLE: Giddh Desktop Mac build
-          SLACK_USERNAME: Giddh Desktop Mac build
+          SLACK_COLOR: "#e53935" # or a specific color like 'green' or '#ff00ff'
+          SLACK_MESSAGE: "Build download URL: Windows - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+${{ github.event.inputs.version }}.exe | Mac - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.dmg"
+          SLACK_TITLE: Giddh Desktop build
+          SLACK_USERNAME: Giddh Desktop build
           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
   notify-failure:
     if: ${{ failure() }}
@@ -122,23 +109,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Slack Notification Failure
-        if: ${{ needs.release.outputs.os-name == 'windows-latest' }}
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
-          SLACK_COLOR: "#f44336" # or a specific color like 'green' or '#ff00ff'
-          SLACK_MESSAGE: "Build failed"
-          SLACK_TITLE: Giddh Desktop Windows build
-          SLACK_USERNAME: Giddh Desktop Windows build
-          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
-      - name: Slack Notification Failure
-        if: ${{ needs.release.outputs.os-name == 'macos-latest' }}
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
-          SLACK_COLOR: "#f44336" # or a specific color like 'green' or '#ff00ff'
+          SLACK_COLOR: "#43A047" # or a specific color like 'red' or '#ff00ff'
           SLACK_MESSAGE: "Build failed"
           SLACK_TITLE: Giddh Desktop Windows build
           SLACK_USERNAME: Giddh Desktop Windows build
