@@ -27,7 +27,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [windows-latest, macos-latest]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -61,11 +61,20 @@ jobs:
           filename: "./apps/electron-giddh/src/package.json"
           key: "version"
           value: ${{ github.event.inputs.version }}
-      - name: Creating Electron bundle
+      - name: Creating Electron bundle for Windows
+        if: ${{ matrix.os == 'windows-latest' }}
         run: npm run package:windows:test
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Creating Electron bundle for Mac
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: npm run package:mac:test
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          CSC_LINK: ${{ secrets.CSC_LINK_MAC }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_LINK_MAC_PASS }}
   notify-success:
     if: ${{ success() }}
     needs: release
