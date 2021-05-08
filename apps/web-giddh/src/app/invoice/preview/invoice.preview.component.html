@@ -53,6 +53,9 @@
                                     *ngIf="selectedVoucher === 'sales'">
                                     Generate E-way Bill</a>
                             </li>
+                            <li *ngIf="gstEInvoiceEnable && (selectedVoucher === 'sales')">
+                                <a class="dropdown-item cp" href="javascript:void(0)" (click)="createBulkEInvoice()"> Create E-invoice </a>
+                            </li>
                             <li role="menuitem"
                                 *ngIf="selectedVoucher !== 'purchase' || (selectedItems.length === 1 && selectedVoucher === 'purchase')">
                                 <a class="dropdown-item cp" href="javascript:void(0)"
@@ -255,11 +258,11 @@
                             (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
                             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: ((selectedVoucher === 'purchase') ? 'Bill No.' : 'Invoice No.'), fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
                         </th>
-                        <th data-title="Vendor" width="19%" class="td-search-box" #searchCustomerContainer
+                        <th data-title="Vendor" width="14%" class="td-search-box" #searchCustomerContainer
                             (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
                             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput, title: (selectedVoucher === 'purchase') ? 'Vendor' : 'Customer'}"></ng-container>
                         </th>
-                        <th width="10%" data-title="Bill Date">
+                        <th width="8%" data-title="Bill Date">
                             <div class="d-flex">
                                 <div>{{(selectedVoucher === 'purchase') ? "Bill Date" : "Invoice Date"}}</div>
                                 <div class="icon-pointer">
@@ -297,6 +300,11 @@
                                     <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'dueDate'}">
                                     </ng-container>
                                 </div>
+                            </div>
+                        </th>
+                        <th *ngIf="gstEInvoiceEnable && (selectedVoucher === 'sales')" width="10%">
+                            <div class="d-flex">
+                                <div class="flex-fill">E-invoice Status</div>
                             </div>
                         </th>
                         <th data-title="Status" width="10%">
@@ -367,7 +375,12 @@
                                 </div>
                             </div>
                         </th>
-
+                        <!-- E-invoice status -->
+                        <!-- <th *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" width="10%">
+                            <div class="d-flex">
+                                <div class="flex-fill">E-invoice Status</div>
+                            </div>
+                        </th> -->
                     </tr>
                 </thead>
 
@@ -412,7 +425,7 @@
                         </td>
                         <!-- <td>PO82479</td> -->
                         <!-- Customer -->
-                        <td width="19%" data-title="Customer" [ngClass]="{'cp': selectedVoucher !== 'purchase'}"
+                        <td width="14%" data-title="Customer" [ngClass]="{'cp': selectedVoucher !== 'purchase'}"
                             (dblclick)="(selectedVoucher !== 'purchase') ? modalUniqueName = item.uniqueName : ''"
                             class="no-dbl-click-select" (clickOutside)="modalUniqueName = ''">
                             <div dropdown container="body">
@@ -456,7 +469,12 @@
 
                         <!-- Due Date -->
                         <td width="12%" data-title="Due Date">{{item.dueDate ? item.dueDate : '-' }}</td>
-
+                        <!-- E-invoice status -->
+                        <td *ngIf="gstEInvoiceEnable && (selectedVoucher === 'sales')" data-title="E-Invoice Status" width="10%">
+                            <div class="e-invoice-status font-14">
+                                <strong class="d-flex" [tooltip]="item.eInvoiceStatusTooltip">{{item.status || '-'}}</strong>
+                            </div>
+                        </td>
                         <!-- Status -->
                         <!--for not cancelled status-->
                         <td width="10%" data-title="Status" class="cp" *ngIf="(selectedVoucher !== 'purchase') && item.balanceStatus !== 'cancel'">
@@ -596,12 +614,18 @@
                         <!-- Total Amount without multicurrency -->
                         <td data-title="Amount" *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" class="text-right"
                             >{{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
+                        <!-- E-invoice status -->
+                        <!-- <td *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales')" data-title="E-Invoice Status" width="10%">
+                            <div class="e-invoice-status font-14">
+                                <strong class="d-flex" [tooltip]="item.eInvoiceStatusTooltip">{{item.status || '-'}}</strong>
+                            </div>
+                        </td> -->
                     </tr>
                 </tbody>
 
                 <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
                     <tr>
-                        <td colspan="8">
+                        <td [attr.colspan]="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales') ? 9 : 8">
                             <giddh-page-loader></giddh-page-loader>
                         </td>
                     </tr>
