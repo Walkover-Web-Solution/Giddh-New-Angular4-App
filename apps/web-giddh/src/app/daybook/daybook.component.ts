@@ -93,6 +93,12 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    // aside menu properties
+    public asideMenuStateForOtherTaxes: string = 'out';
+    // aside menu properties
+    public asideMenuState: string = 'out';
+    /** True if initial api got called */
+    public initialApiCalled: boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -196,7 +202,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.daybookQueryRequest.branchUniqueName = (this.currentBranch) ? this.currentBranch.uniqueName : "";
-                this.initialRequest();
+                if (!this.initialApiCalled) {
+                    this.initialApiCalled = true;
+                    this.initialRequest();
+                }
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
