@@ -305,11 +305,11 @@
 
             <tab (selectTab)="loadEcommerceData($event); tabChanged('ecommerce');">
                 <ng-template tabHeading>
-                    <span class="icon-ecomm"></span> E-Comm
+                    <span class="icon-ecomm"></span> {{localeData?.ecommerce?.tab_heading}}
                 </ng-template>
 
                 <div class="box clearfix" *ngIf="false">
-                    <h3 class="font-20 bold mb-2">Amazon Seller</h3>
+                    <h3 class="font-20 bold mb-2">{{localeData?.ecommerce?.amazon_seller_form_heading}}</h3>
                     <form #formDiv name="amazonSellerForm" [formGroup]="amazonSellerForm" novalidate="" autocomplete="off">
                         <ng-container formArrayName="sellers">
                             <ng-container *ngFor="let item of amazonSellerForm.get('sellers')['controls']; let i=index;let f = first; let l = last">
@@ -321,23 +321,23 @@
                                     <div class="row">
                                         <div class="form-group col-xl-2 col-md-6 col-xs-12">
 
-                                            <label *ngIf="f">Seller Id<span class="required">*</span></label>
-                                            <input class="form-control" type="text" placeholder="Seller Id" required autocomplete="off" formControlName="sellerId" [disabled]="i !== amazonEditItemIdx" />
+                                            <label *ngIf="f">{{localeData?.ecommerce?.seller_id_label}}<span class="required">*</span></label>
+                                            <input class="form-control" type="text" [placeholder]="localeData?.ecommerce?.seller_id_placeholder" required autocomplete="off" formControlName="sellerId" [disabled]="i !== amazonEditItemIdx" />
 
                                         </div>
                                         <div class="form-group col-xl-2 col-md-6 col-xs-12">
-                                            <label *ngIf="f">Access Key<span class="required">*</span></label>
-                                            <input class="form-control" type="text" placeholder="Access key" required autocomplete="off" formControlName="accessKey" [disabled]="i !== amazonEditItemIdx" />
+                                            <label *ngIf="f">{{localeData?.ecommerce?.access_key_label}}<span class="required">*</span></label>
+                                            <input class="form-control" type="text" [placeholder]="localeData?.ecommerce?.access_key_placeholder" required autocomplete="off" formControlName="accessKey" [disabled]="i !== amazonEditItemIdx" />
                                         </div>
                                         <div class="form-group col-xl-3 col-md-6 col-xs-12">
-                                            <label *ngIf="f">AuthToken<span class="required">*</span></label>
-                                            <input class="form-control" type="text" placeholder="AuthToken key" required autocomplete="off" formControlName="mwsAuthToken" [disabled]="i !== amazonEditItemIdx" />
+                                            <label *ngIf="f">{{localeData?.ecommerce?.auth_token_label}}<span class="required">*</span></label>
+                                            <input class="form-control" type="text" [placeholder]="localeData?.ecommerce?.auth_token_placeholder" required autocomplete="off" formControlName="mwsAuthToken" [disabled]="i !== amazonEditItemIdx" />
                                         </div>
 
 
                                         <div class="form-group col-xl-3 col-md-6 col-xs-9">
-                                            <label *ngIf="f">Secret Key<span class="required">*</span></label>
-                                            <input class="form-control" type="text" placeholder="Secret key" required autocomplete="off" formControlName="secretKey" [disabled]="i !== amazonEditItemIdx" />
+                                            <label *ngIf="f">{{localeData?.ecommerce?.secret_key_label}}<span class="required">*</span></label>
+                                            <input class="form-control" type="text" [placeholder]="localeData?.ecommerce?.secret_key_placeholder" required autocomplete="off" formControlName="secretKey" [disabled]="i !== amazonEditItemIdx" />
                                         </div>
                                         <div class="pull-left edit-save-button">
                                             <label class="d-flex">&nbsp;</label>
@@ -362,23 +362,23 @@
                     <div class="row mt-1">
                         <div class="col-sm-12 form-group ">
                             <!-- <button class="btn btn-success" (click)="saveAmazonSeller()">Save</button> -->
-                            <button class="btn btn-success" (click)="addAmazonSellerRow()">Add more</button>
+                            <button class="btn btn-success" (click)="addAmazonSellerRow()">{{localeData?.ecommerce?.add_more}}</button>
                             <!-- <button class="btn btn-danger">Delete</button> -->
                         </div>
                     </div>
                 </div>
                 <div class="mr-t2 box clearfix">
-                    <h3 class="section-head mb-2">Shopify</h3>
-                    <span *ngIf="isEcommerceShopifyUserVerified">Your company is successfully connected with Shopify.</span>
+                    <h3 class="section-head mb-2">{{localeData?.ecommerce?.shopify_form_heading}}</h3>
+                    <span *ngIf="isEcommerceShopifyUserVerified">{{localeData?.ecommerce?.shopify_connected_message}}</span>
                     <a href="https://shopify.giddh.com/signup.php" target="_blank" *ngIf="!isEcommerceShopifyUserVerified">
-                        <span>Connect with Shopify</span></a>
+                        <span>{{localeData?.ecommerce?.connect_shopify}}</span></a>
                 </div>
 
             </tab>
             <tab (selectTab)="loadPaymentData($event); tabChanged('payment');" [hidden]="!isIndianCompany">
                 <div *ngIf="isIndianCompany">
                     <ng-template tabHeading>
-                        <span class="icon-payment"></span> Payment
+                        <span class="icon-payment"></span> {{localeData?.payment?.tab_heading}}
                     </ng-template>
                     <div class="mb-2">
                         <img src="assets/images/icici-logo.jpg" height="50" />
@@ -398,31 +398,31 @@
                                     <div class="row">
                                         <div class="form-group col-xl-2 col-md-6 payment-col pl-0">
                                             <div class="">
-                                                <label>Login ID <span class="required">*</span></label>
+                                                <label>{{localeData?.payment?.login_id_label}} <span class="required">*</span></label>
                                                 <br>
-                                                <input type="text" placeholder="Enter Login ID" class="form-control" disabled formControlName="loginId" name="loginId" autocomplete="off" />
+                                                <input type="text" [placeholder]="localeData?.payment?.login_id_placeholder" class="form-control" disabled formControlName="loginId" name="loginId" autocomplete="off" />
                                             </div>
                                         </div>
                                         <div class="form-group col-xl-2 col-md-6 payment-col">
-                                            <label>Account Number <span class="required">*</span></label>
+                                            <label>{{localeData?.payment?.account_number_label}} <span class="required">*</span></label>
                                             <br>
-                                            <input type="text" placeholder="Enter Account Number" class="form-control" disabled formControlName="accountNo" name="accountNo" autocomplete="off" />
+                                            <input type="text" [placeholder]="localeData?.payment?.account_number_placeholder" class="form-control" disabled formControlName="accountNo" name="accountNo" autocomplete="off" />
                                         </div>
                                         <div class="form-group col-xl-2 col-md-6 payment-col">
-                                            <label>Accounts <span class="required">*</span></label>
+                                            <label>{{localeData?.payment?.accounts}} <span class="required">*</span></label>
                                             <br>
-                                            <sh-select #paymentFormAccountName [options]="bankAccounts$ | async" name="accountUniqueName" formControlName="accountUniqueName" placeholder="Select Account" [ItemHeight]="33" autocomplete="off" [isRequired]="true">
+                                            <sh-select #paymentFormAccountName [options]="bankAccounts$ | async" name="accountUniqueName" formControlName="accountUniqueName" [placeholder]="commonLocaleData?.app_select_account" [ItemHeight]="33" autocomplete="off" [isRequired]="true">
                                             </sh-select>
                                         </div>
                                         <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                            <label>User</label>
+                                            <label>{{localeData?.payment?.user}}</label>
                                             <br>
                                             <div class="btn-group btn-block select-caret invoice-btn" dropdown>
                                                 <button dropdownToggle type="button"
-                                                    class="form-control text-left btn-block dropdown-toggle">{{ getSelectedItemCount(usersList) || 'Select User' }}<span
+                                                    class="form-control text-left btn-block dropdown-toggle">{{ getSelectedItemCount(usersList) || localeData?.payment?.select_user }}<span
                                                         class="select-drop pull-right mr-t1"></span></button>
                                                 <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
-                                                    <li *ngIf="usersList.length==0">No results found</li>
+                                                    <li *ngIf="usersList.length==0">{{commonLocaleData?.app_no_result_found}}</li>
                                                     <li *ngFor="let user of usersList; index as userIndex">
                                                         <input type="checkbox" (click)="selectUsers(user, $event, userIndex)"
                                                             [checked]="user.isSelected" /> {{user.label}}
@@ -522,7 +522,7 @@
                                                 {{regAcc.registrationStatus}}<br>
                                             </ng-container>
                                             <br>
-                                            <button type="submit" [disabled]="!addBankForm.valid || isUpdateInvalid" class="btn btn-success mr-r1">Update</button>
+                                            <button type="submit" [disabled]="!addBankForm.valid || isUpdateInvalid" class="btn btn-success mr-r1">{{commonLocaleData?.app_update}}</button>
                                         </div>
                                     </div>
                                 </form>
@@ -531,34 +531,34 @@
                             <form #paymentFormUpdate="ngForm" *ngIf="isBankUpdateInEdit !== parentIndex ">
                                 <div class="row">
                                     <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col pl-0">
-                                        <label>Login ID <span class="required">*</span></label>
+                                        <label>{{localeData?.payment?.login_id_label}} <span class="required">*</span></label>
                                         <br>
-                                        <input type="text" placeholder="Enter Login ID" required name="loginId" class="form-control" [(ngModel)]="regAcc.loginId" disabled />
+                                        <input type="text" [placeholder]="localeData?.payment?.login_id_placeholder" required name="loginId" class="form-control" [(ngModel)]="regAcc.loginId" disabled />
 
                                     </div>
                                     <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                        <label>Account Number <span class="required">*</span></label>
+                                        <label>{{localeData?.payment?.account_number_label}} <span class="required">*</span></label>
                                         <br>
 
-                                        <input type="text" placeholder="Enter Account Number" name="accountNo" required class="form-control" [(ngModel)]="regAcc.accountNo" disabled />
+                                        <input type="text" [placeholder]="localeData?.payment?.account_number_placeholder" name="accountNo" required class="form-control" [(ngModel)]="regAcc.accountNo" disabled />
 
                                     </div>
                                     <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col" *ngIf="bankAccounts$ && regAcc?.account?.uniqueName">
 
-                                        <label>Accounts <span class="required">*</span></label>
+                                        <label>{{localeData?.payment?.accounts}} <span class="required">*</span></label>
                                         <br>
                                         <sh-select *ngIf="bankAccounts$ && regAcc?.account?.uniqueName" [disabled]="isBankUpdateInEdit !== parentIndex" required [options]="bankAccounts$ | async" name="accountUniqueName" [defaultValue]="regAcc?.account?.name" [(ngModel)]="regAcc.account.uniqueName"
-                                            placeholder="Select Account" [ItemHeight]="33" autocomplete="off" [isRequired]="true"></sh-select>
+                                        [placeholder]="commonLocaleData?.app_select_account" [ItemHeight]="33" autocomplete="off" [isRequired]="true"></sh-select>
                                     </div>
                                     <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                        <label>User</label>
+                                        <label>{{localeData?.payment?.user}}</label>
                                         <br>
                                         <div class="btn-group btn-block select-caret invoice-btn">
                                             <button disabled type="button"
-                                                class="form-control text-left btn-block dropdown-toggle"> {{regAcc?.selectedUsers?.length || 'Select User'}} <span
+                                                class="form-control text-left btn-block dropdown-toggle"> {{regAcc?.selectedUsers?.length || localeData?.payment?.select_user}} <span
                                                     class="select-drop pull-right mr-t1"></span></button>
                                             <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
-                                                <li *ngIf="usersList.length==0">No results found</li>
+                                                <li *ngIf="usersList.length==0">{{commonLocaleData?.app_no_result_found}}</li>
                                                 <li *ngFor="let user of usersList; index as userIndex">
                                                     <input type="checkbox" (click)="selectUsers(user, $event, userIndex)"
                                                         [checked]="user.isSelected" /> {{user.label}}
@@ -640,7 +640,7 @@
                                             {{regAcc.registrationStatus}}<br>
                                         </ng-container>
                                         <ng-container *ngIf="isBankUpdateInEdit === parentIndex">
-                                            <button type="button" class="btn btn-success mr-r1" [disabled]="!paymentFormUpdate.form.valid" (click)="updateIciciDetails(regAcc, parentIndex)">Update</button>
+                                            <button type="button" class="btn btn-success mr-r1" [disabled]="!paymentFormUpdate.form.valid" (click)="updateIciciDetails(regAcc, parentIndex)">{{commonLocaleData?.app_update}}</button>
                                         </ng-container>
                                     </div>
                                 </div>
@@ -655,7 +655,7 @@
                                     </div>
                                 </div>
                             </div> -->
-                            <a href="javascript:;" class="text-right btn btn-primary" (click)="showBeneficiaryModal(regAcc.URN)"> List Beneficiary </a>
+                            <a href="javascript:;" class="text-right btn btn-primary" (click)="showBeneficiaryModal(regAcc.URN)"> {{localeData?.payment?.list_beneficiary}} </a>
                         </div>
                         <br *ngIf="parentIndex !== (registeredAccount?.length - 1) || openNewRegistration" />
                     </div>
@@ -790,31 +790,31 @@
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col amount-upto">
                                     <div>
-                                        <label>Login ID <span class="required">*</span></label>
+                                        <label>{{localeData?.payment?.login_id_label}} <span class="required">*</span></label>
                                         <br>
-                                        <input type="text" placeholder="Enter Login ID" class="form-control" formControlName="loginId" name="loginId" autocomplete="off" />
+                                        <input type="text" [placeholder]="localeData?.payment?.login_id_placeholder" class="form-control" formControlName="loginId" name="loginId" autocomplete="off" />
                                     </div>
                                 </div>
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                    <label>Account Number <span class="required">*</span></label>
+                                    <label>{{localeData?.payment?.account_number_label}} <span class="required">*</span></label>
                                     <br>
-                                    <input type="text" placeholder="Enter Account Number" class="form-control" formControlName="accountNo" name="accountNo" autocomplete="off" />
+                                    <input type="text" [placeholder]="localeData?.payment?.account_number_placeholder" class="form-control" formControlName="accountNo" name="accountNo" autocomplete="off" />
                                 </div>
                                 <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col">
-                                    <label>Accounts <span class="required">*</span></label>
+                                    <label>{{localeData?.payment?.accounts}} <span class="required">*</span></label>
                                     <br>
-                                    <sh-select #paymentFormAccountName [options]="bankAccounts$ | async" name="accountUniqueName" formControlName="accountUniqueName" [forceClearReactive]="forceClear$ | async" placeholder="Select Account" [ItemHeight]="33" autocomplete="off" [isRequired]="true">
+                                    <sh-select #paymentFormAccountName [options]="bankAccounts$ | async" name="accountUniqueName" formControlName="accountUniqueName" [forceClearReactive]="forceClear$ | async" [placeholder]="commonLocaleData?.app_select_account" [ItemHeight]="33" autocomplete="off" [isRequired]="true">
                                     </sh-select>
                                 </div>
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                    <label>User</label>
+                                    <label>{{localeData?.payment?.user}}</label>
                                     <br>
                                     <div class="btn-group btn-block select-caret invoice-btn" dropdown>
                                         <button dropdownToggle type="button"
-                                            class="form-control text-left btn-block dropdown-toggle">{{ getSelectedItemCount(usersList) || 'Select User' }}<span
+                                            class="form-control text-left btn-block dropdown-toggle">{{ getSelectedItemCount(usersList) || localeData?.payment?.select_user }}<span
                                                 class="select-drop pull-right mr-t1"></span></button>
                                         <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
-                                            <li *ngIf="usersList.length==0">No results found</li>
+                                            <li *ngIf="usersList.length==0">{{commonLocaleData?.app_no_result_found}}</li>
                                             <li *ngFor="let user of usersList; index as userIndex">
                                                 <input type="checkbox" (click)="selectUsers(user, $event, userIndex)"
                                                     [checked]="user.isSelected" /> {{user.label}}
@@ -911,23 +911,22 @@
                             <div class="form-group">
                                 <div class="empty-label">
                                     <br>
-                                    <button type="submit" [disabled]="addBankForm.invalid || isCreateInvalid" class="btn btn-success mr-r1">Submit</button>
+                                    <button type="submit" [disabled]="addBankForm.invalid || isCreateInvalid" class="btn btn-success mr-r1">{{commonLocaleData?.app_submit}}</button>
                                 </div>
                             </div>
                         </form>
                         <div *ngIf="(isPaymentAdditionSuccess$ | async)">
                             <div class="clearfix d-inline-block">
-                                <div>Congratulations!! A request has been sent to your account, go to <a class="btn-link" href="https://cibnext.icicibank.com/corp/AuthenticationController?FORMSGROUP_ID__=AuthenticationFG&__START_TRAN_FLAG__=Y&FG_BUTTONS__=LOAD&ACTION.LOAD=Y&AuthenticationFG.LOGIN_FLAG=1&BANK_ID=ICI&ITM=nli_corp_primer_login_btn_desk" target="_blank">ICICI bank portal</a> and accept it.
-                                </div>
+                                <div [innerHTML]="localeData?.payment?.connection_request_message"></div>
                             </div>
                             <div class="clearfix">
-                                <div class="payment-text">Once it is done you can link your ICICI bank account/s and make payment directly through GIDDH.
+                                <div class="payment-text">{{localeData?.payment?.note}}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p class="mt-2 mb-4 font-14"><a href="https://cadigital.icicibank.com/SmartFormWeb/apps/services/www/SmartFormWeb/desktopbrowser/default/index.html?source=BC-application-Giddh#/" target="_blank">Open a new current account</a></p>
-                    <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" class="btn btn-sky-blue mr-r1" (click)="openNewRegistartionForm()">Add More ID</button>
+                    <p class="mt-2 mb-4 font-14"><a href="https://cadigital.icicibank.com/SmartFormWeb/apps/services/www/SmartFormWeb/desktopbrowser/default/index.html?source=BC-application-Giddh#/" target="_blank">{{localeData?.payment?.open_new_current_account}}</a></p>
+                    <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" class="btn btn-sky-blue mr-r1" (click)="openNewRegistartionForm()">{{localeData?.payment?.add_more}}</button>
                 </div>
             </tab>
         </tabset>
