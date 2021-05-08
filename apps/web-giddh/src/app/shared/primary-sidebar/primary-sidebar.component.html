@@ -1,5 +1,3 @@
-<ng-container appTranslate [file]="'all-items'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="primary-sidebar py-3 position-relative" [ngClass]="{'sidebar-collapse': !isOpen}">
         <div class="company-branch-block pd-l2 pd-r2 position-relative">
             <ul class="list-style-none branch-connection">
@@ -17,8 +15,7 @@
                                 <span class="company-alice mr-r05 text-uppercase">{{companyInitials}}</span>
                                 <span class="d-flex justify-content-between w-100 company-full-name flex-column">
                                     <span class="company-ellipsis">{{selectedCompanyDetails?.name}}</span>
-                                    <span class="branch-ellipsis"
-                                        *ngIf="currentBranch"><span>{{currentBranch?.alias}}</span> </span>
+                                    <span class="branch-ellipsis"  *ngIf="currentBranch"><span>{{currentBranch?.alias}}</span> </span>
                                     <i class="icon-branch-connect" *ngIf="currentBranch"></i>
                                 </span>
                                 <span class="d-flex"> <i class="icon-down-new"></i> </span>
@@ -39,11 +36,10 @@
                             <i class="icon-search-new"></i>
                         </span>
                     </div>
-                    <input (click)="showNavigationModal()" type="text" class="form-control"
-                        [placeholder]="commonLocaleData?.app_search" [attr.aria-label]="commonLocaleData?.app_search"
-                        aria-describedby="addon-wrapping">
+                    <input (click)="showNavigationModal()" type="text" class="form-control" placeholder="Search"
+                         aria-label="Search"  aria-describedby="addon-wrapping">
                     <span class="input-group-append" (click)="showNavigationModal()">
-                        {{commonLocaleData?.app_cmd_g}}
+                        Cmd + G
                     </span>
                 </div>
             </div>
@@ -51,50 +47,41 @@
         <div class="wrap-menus">
             <div class="account-block mr-t2 mr-b2 pd-l2 pd-r2">
                 <div class="account-collapse">
-                    <p class="font-12 d-flex justify-content-between">{{localeData?.accounts}} <i
-                            class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i> </p>
+                    <p class="font-12 d-flex justify-content-between">Accounts<i class="icon-add-new cursor-pointer"
+                            (click)="showManageGroupsModal()"></i> </p>
                     <ul class="left-fixed-header list-style-none font-14 lh33 mr-t05">
                         <li *ngFor="let acc of accountItemsFromIndexDB">
                             <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}"
                                 [routerLinkActive]="['active']"
                                 [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName"
-                                (click)="analyzeAccounts($event, acc); companyDetailsDropDownWeb.hide();">{{acc.name}}
-                                {{commonLocaleData?.app_ac}}</a>
+                                (click)="analyzeAccounts($event, acc); companyDetailsDropDownWeb.hide();">{{acc.name}} A/c</a>
                         </li>
-                        <li><a (click)="showNavigationModal()"
-                                class="show-more cursor-pointer">{{localeData?.show_more}}</a></li>
+                        <li><a (click)="showNavigationModal()" class="show-more cursor-pointer">Show More</a></li>
                     </ul>
                 </div>
                 <div class="account-dropdown btn-group" dropdown #accountDropdown="bs-dropdown"
                     [attr.container]="!isOpen ? 'body' : ''">
-                    <a href="javascript:void(0);" id="button-basic-01" dropdownToggle type="button"
-                        class="dropdown-toggle" aria-controls="dropdown-basic-01">
-                        <span [tooltip]="localeData?.accounts"><i class="icon-accounts-new"></i> </span>
+                    <a href="javascript:void(0);" id="button-basic-01" dropdownToggle type="button" class="dropdown-toggle"
+                        aria-controls="dropdown-basic-01">
+                        <span tooltip="Accounts"><i class="icon-accounts-new"></i> </span>
                         <i class="icon-right mr-l1 font-14"></i>
                     </a>
-                    <ul id="dropdown-basic-01" *dropdownMenu
-                        class="dropdown-menu account-dropdown-collapse list-style-none sub-menu" role="menu"
-                        aria-labelledby="button-basic-01">
+                    <ul id="dropdown-basic-01" *dropdownMenu class="dropdown-menu account-dropdown-collapse list-style-none sub-menu"
+                        role="menu" aria-labelledby="button-basic-01">
                         <li *ngFor="let acc of accountItemsFromIndexDB">
                             <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}"
-                                (click)="analyzeAccounts($event, acc); accountDropdown?.hide();">{{acc.name}}
-                                {{commonLocaleData?.app_ac}}</a>
+                                (click)="analyzeAccounts($event, acc); accountDropdown?.hide();">{{acc.name}} A/C</a>
                         </li>
-                        <li><a (click)="showNavigationModal()"
-                                class="show-more cursor-pointer">{{localeData?.show_more}}</a></li>
+                        <li><a (click)="showNavigationModal()" class="show-more cursor-pointer">Show More</a></li>
                     </ul>
                 </div>
-
-
             </div>
             <div class="menu-block">
                 <div class="menu-item-wrapper font-14">
                     <div class="menu-item  pd-l2 pd-r2">
                         <p class="font-12">
-                            <span [routerLink]="['/pages/giddh-all-items']"
-                                class="d-inline-flex align-items-center cursor-pointer">
-                                {{localeData?.menu}}
-                                <i class="icon-down-new mr-l05"></i> </span>
+                            <span [routerLink]="['/pages/giddh-all-items']" class="d-inline-flex align-items-center cursor-pointer">
+                                Menu <i class="icon-down-new mr-l05"></i> </span>
                             <span class="text-gray cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
                                 <i class="icon-go font-18"></i>
                             </span>
@@ -103,36 +90,33 @@
                     <ul class="list-style-none giddh-primary-items">
                         <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems" dropdown
                             [attr.container]="!isOpen ? 'body' : ''">
-                            <a href="javascript:void(0);" tooltip="{{menu?.label}}" *ngIf="menu?.items?.length"
-                                id="button-basic-02" dropdownToggle type="button" class="dropdown-toggle"
-                                aria-controls="dropdown-basic-02" [class.active]="menu?.isActive">
+                            <a href="javascript:void(0);" tooltip="{{menu?.label}}" *ngIf="menu?.items?.length" id="button-basic-02"
+                                dropdownToggle type="button" class="dropdown-toggle" aria-controls="dropdown-basic-02"
+                                [class.active]="menu?.isActive">
                                 <span><i [ngClass]="menu?.icon"></i>
                                     <span class="item-name">{{menu?.label}}</span>
                                 </span>
                                 <i class="icon-right mr-l1 font-14"></i>
                             </a>
                             <a href="javascript:void(0);" *ngIf="menu?.items?.length === 0 && menu?.link"
-                                [routerLink]="[menu?.link]" [queryParams]="menu?.additional" id="button-basic-02"
-                                dropdownToggle type="button" class="dropdown-toggle" aria-controls="dropdown-basic-02">
+                                [routerLink]="[menu?.link]" [queryParams]="menu?.additional" id="button-basic-02" dropdownToggle
+                                type="button" class="dropdown-toggle" aria-controls="dropdown-basic-02">
                                 <span><i [ngClass]="menu?.icon"></i>
                                     <span class="item-name">{{menu?.label}}</span>
                                 </span>
                             </a>
                             <ng-container *ngIf="menu?.items?.length">
-                                <ul id="dropdown-basic-02" *dropdownMenu
-                                    class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
-                                    aria-labelledby="button-basic-02">
+                                <ul id="dropdown-basic-02" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu"
+                                    role="menu" aria-labelledby="button-basic-02">
                                     <li *ngFor="let item of menu?.items; trackBy: trackItems">
                                         <a *ngIf="item?.link" href="javascript:void(0);"
                                             [class.active]="rla?.isActive || isRouteWithParamsActive(item?.link)"
                                             [routerLink]="[item?.link]" routerLinkActive #rla="routerLinkActive"
-                                            [routerLinkActiveOptions]="{exact: true}"
-                                            [queryParams]="item?.additional"><i [ngClass]="item.icon"></i>
-                                            {{item?.label}}
+                                            [routerLinkActiveOptions]="{exact: true}" [queryParams]="item?.additional"><i
+                                                [ngClass]="item.icon"></i> {{item?.label}}
                                         </a>
-                                        <a *ngIf="!item?.link" href="javascript:void(0);"
-                                            (click)="handleItemClick(item)"><i [ngClass]="item.icon"></i>
-                                            {{item?.label}}
+                                        <a *ngIf="!item?.link" href="javascript:void(0);" (click)="handleItemClick(item)"><i
+                                                [ngClass]="item.icon"></i> {{item?.label}}
                                         </a>
                                     </li>
                                 </ul>
@@ -164,7 +148,7 @@
                     <div dropdown class="position-relative switch-company-btn mt-2" #subdropdown="bs-dropdown"
                         [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="subdropdown.isOpen = false">
                         <a href="javascript:void(0)" class="d-flex justify-content-between w-100" dropdownToggle>
-                            {{localeData?.switch_company}}
+                            Switch Company
                             <span class="icon-arrow-down"></span>
                         </a>
 
@@ -172,11 +156,10 @@
 
                             <div class="input-group" container="body">
 
-                                <input type="text" class="form-control" [placeholder]="localeData?.search_company"
-                                    [(ngModel)]="searchCmp" #searchCmpTextBox name="searchCompany"
-                                    (ngModelChange)="filterCompanyList($event)" autocomplete="off" />
+                                <input type="text" class="form-control" placeholder="Search Company here" [(ngModel)]="searchCmp"
+                                    #searchCmpTextBox name="searchCompany" (ngModelChange)="filterCompanyList($event)" autocomplete="off" />
 
-                                <span [tooltip]="commonLocaleData?.app_refresh" class="input-group-addon"
+                                <span tooltip="Refresh" class="input-group-addon"
                                     (click)="refreshCompanies($event)">
                                     <i class="icon-refresh cp"
                                         [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
@@ -226,7 +209,7 @@
 
                             <li class="create-company-btn">
                                 <button href="javascript:void(0)" (click)="createNewCompany()"
-                                    class="btn-link btn">{{localeData?.create_company}}</button>
+                                    class="btn-link btn">Create Company</button>
                             </li>
 
                         </ul>
@@ -256,24 +239,19 @@
                             </ng-container> -->
                             <ng-container>
                                 <div class="switch-branch w-100">
-                                    {{localeData?.switch_branch}} <i class="icon-arrow-down"></i>
+                                Switch Branch <i class="icon-arrow-down"></i>
                                 </div>
                             </ng-container>
-                            <!-- <ng-container>
-                                <div [tooltip]="localeData?.switch_branch" class="switch-branch-alice w-100  mt-2 a"> {{localeData?.sb}} <i
-                                        class="icon-right"></i> </div>
-                            </ng-container> -->
                         </a>
 
 
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                             aria-labelledby="button-basic">
                             <div class="input-group mr-b1" container="body">
-                                <input type="text" (ngModelChange)="filterBranch($event)"
-                                    [(ngModel)]="searchBranchQuery" class="form-control"
-                                    [placeholder]="localeData?.search_branch" autocomplete="off" />
-                                <span (click)="loadCompanyBranches()" [tooltip]="commonLocaleData?.app_refresh"
-                                    placement="left" class="input-group-addon">
+                                <input type="text" (ngModelChange)="filterBranch($event)" [(ngModel)]="searchBranchQuery"
+                                    class="form-control" placeholder="Search Branch here" autocomplete="off" />
+                                <span (click)="loadCompanyBranches()" tooltip="Refresh"  placement="left"
+                                    class="input-group-addon">
                                     <i class="icon-refresh cp"></i>
                                 </span>
                             </div>
@@ -287,16 +265,15 @@
                                         </a>
                                     </span>
                                     <span>
-                                        <i class="icon-branch-icon pull-right branch-icon-tooltip"
-                                            containerClass="branch-ho-tooltip"
-                                            [tooltip]="commonLocaleData?.app_branch"></i>
+                                        <i class="icon-branch-icon pull-right branch-icon-tooltip" containerClass="branch-ho-tooltip"
+                                            tooltip="Branch"></i>
                                     </span>
                                 </a>
                             </li>
                             <li class="divider dropdown-divider"></li>
                             <li *ngIf="currentBranch" (click)="goToCompany()" role="menuitem">
                                 <a class="dropdown-item go-to-company company-label"
-                                    href="javascript:void(0);">{{localeData?.goto_company}}
+                                    href="javascript:void(0);">Go to Company
                                     <p class="font-10 grey-color">({{selectedCompanyDetails?.name}})</p>
                                 </a>
                             </li>
@@ -304,7 +281,7 @@
                                 (click)="subBranchDropdown.hide(); companyDetailsDropDownWeb.hide();"
                                 [routerLink]="['/pages/settings/create-branch']" role="menuitem"><a
                                     class="dropdown-item go-to-company company-create"
-                                    href="javascript:void(0);">{{localeData?.create_branch}}</a>
+                                    href="javascript:void(0);">Create Branch</a>
                             </li>
                         </ul>
                     </li>
@@ -315,8 +292,7 @@
                 </ul>
             </div>
         <li class="mr-t05">
-            <a href="javascript:void(0)"
-                (click)="analyzeMenus($event, '/pages/company-import-export')">{{localeData?.import_export_backup}}</a>
+            <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/company-import-export')">Import/Export Data (Backup)</a>
         </li>
         <!-- #dropdown="bs-dropdown" -->
 
@@ -334,21 +310,21 @@
                     <img src="{{userAvatar}}" alt="" />
                 </span>
                 <div class="pull-left user-name-wrap text-ellipsis">{{ userFullName }}
-                    <small class="grey-color">{{localeData?.profile}}</small>
+                    <small class="grey-color">Profile</small>
                 </div>
             </a>
         </li>
         <li>
             <a href="javascript:void(0)"
-                (click)="analyzeMenus($event, '/pages/user-details/auth-key', { tab: 'api', tabIndex: 0 })">{{localeData?.user_profile}}</a>
+                (click)="analyzeMenus($event, '/pages/user-details/auth-key', { tab: 'api', tabIndex: 0 })">User Profile</a>
         </li>
         <li *ngIf="!isMobileSite">
             <a href="javascript:void(0)"
-                (click)="analyzeMenus($event, '/pages/user-details', { tab: 'api', tabIndex: 0 })">{{localeData?.api}}</a>
+                (click)="analyzeMenus($event, '/pages/user-details', { tab: 'api', tabIndex: 0 })">API</a>
         </li>
         <li role="separator" class="divider width-100"></li>
         <li class="pb-1">
-            <a href="javascript:void(0)" (click)="logout()">{{localeData?.logout}}</a>
+            <a href="javascript:void(0)" (click)="logout()">Logout</a>
         </li>
     </ng-template>
 
@@ -361,12 +337,9 @@
                 [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" (closeEmitter)="modelRef.hide()"></command-k>
 
             <div class="shortcuts">
-                <strong>↑</strong> <strong>↓</strong>&nbsp; {{localeData?.to_navigate}} <strong class="mr-l1"
-                    [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp; {{localeData?.to_select}} <strong
-                    class="mr-l1"
-                    [attr.aria-label]="commonLocaleData?.app_escape">{{commonLocaleData?.app_esc}}</strong>&nbsp;
-                {{localeData?.to_dismiss}}
+                <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mr-l1" aria-label="Return">↵</strong>&nbsp; to
+                select <strong class="mr-l1" aria-label="Escape">esc</strong>&nbsp; to dismiss
             </div>
         </div>
     </ng-template>
-</ng-container>
+
