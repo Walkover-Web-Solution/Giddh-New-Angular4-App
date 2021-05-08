@@ -1,165 +1,170 @@
-<ng-container *ngIf="warehouses">
-    <div class="warehouse-card-view">
-        <div class="row">
-            <div class="mr-b15 col-sm-12 mr-0 d-flex justify-content-between warehouse-header">
-                <div class="search-container">
-                    <div class="search-warehouse-box">
-                        <input #searchWarehouse type="text" [(ngModel)]="searchWarehouseQuery" class="form-control"
-                            placeholder="Search Warehouse" />
+<ng-container appTranslate [file]="'settings/warehouse'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+    <ng-container *ngIf="warehouses">
+        <div class="warehouse-card-view">
+            <div class="row">
+                <div class="mr-b15 col-sm-12 mr-0 d-flex justify-content-between warehouse-header">
+                    <div class="search-container">
+                        <div class="search-warehouse-box">
+                            <input #searchWarehouse type="text" [(ngModel)]="searchWarehouseQuery" class="form-control"
+                                [placeholder]="localeData?.search_warehouse" />
+                        </div>
+                        <a class="cp mr-l1 clear-filter-btn" *ngIf="searchWarehouseQuery" href="javascript:;"
+                            (click)="resetFilter()" [tooltip]="localeData?.reset_search">
+                            <i aria-hidden="true" class="icon-refresh"></i> {{commonLocaleData?.app_clear_filter}}
+                        </a>
                     </div>
-                    <a class="cp mr-l1 clear-filter-btn" *ngIf="searchWarehouseQuery" href="javascript:;"
-                        (click)="resetFilter()" tooltip="Reset Search">
-                        <i aria-hidden="true" class="icon-refresh"></i> Clear Filter
-                    </a>
+                    <button class="btn btn-sky-blue mr-0" [routerLink]="['/pages/settings/create-warehouse']">
+                        {{localeData?.create_warehouse}}
+                    </button>
                 </div>
-                <button class="btn btn-sky-blue mr-0" [routerLink]="['/pages/settings/create-warehouse']">
-                    Create Warehouse
-                </button>
             </div>
-        </div>
-        <div class="create-warehouse" *ngIf="showLoader">
-            <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
-        </div>
-        <div class="no-data" *ngIf="!warehouses.length && !showLoader">
-            <h1>No warehouse found within given criteria.</h1>
-        </div>
-        <div *ngIf="!showLoader" class="row warehouse-box">
-            <div *ngFor="let warehouse of warehouses; index as warehouseIndex" class="col-lg-12 col-md-12 col-sm-12">
-                <div class="warehouse-card">
-                    <div class="d-flex">
-                        <h3>{{ warehouse.name }}</h3>
-                        <div class="warehouse-options">
-                            <div class="btn-group" dropdown>
-                                <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
-                                    aria-controls="dropdown-basic">
-                                    <span class="icon-dots-three-vertical"></span>
-                                </button>
-                                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
-                                    aria-labelledby="button-basic">
-                                    <li role="menuitem" (click)="editWarehouse(warehouse)"><a
-                                            class="dropdown-item warehouse-options">Edit</a>
-                                    </li>
-                                    <!--
-                                        not in V1, Will use it V2, don't remove code
-                                    <li role="menuitem">
-                                        <a>Archive</a>
-                                    </li>
-                                    <li role="menuitem">
-                                        <a>Merge</a>
-                                    </li>
-                                    <li role="menuitem">
-                                        <a>Delete</a>
-                                    </li>
-                                -->
-                                </ul>
+            <div class="create-warehouse" *ngIf="showLoader">
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+            </div>
+            <div class="no-data" *ngIf="!warehouses.length && !showLoader">
+                <h1>{{localeData?.no_warehouse_found}}</h1>
+            </div>
+            <div *ngIf="!showLoader" class="row warehouse-box">
+                <div *ngFor="let warehouse of warehouses; index as warehouseIndex" class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="warehouse-card">
+                        <div class="d-flex">
+                            <h3>{{ warehouse.name }}</h3>
+                            <div class="warehouse-options">
+                                <div class="btn-group" dropdown>
+                                    <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+                                        aria-controls="dropdown-basic">
+                                        <span class="icon-dots-three-vertical"></span>
+                                    </button>
+                                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                        aria-labelledby="button-basic">
+                                        <li role="menuitem" (click)="editWarehouse(warehouse)"><a
+                                                class="dropdown-item warehouse-options">{{commonLocaleData?.app_edit}}</a>
+                                        </li>
+                                        <!--
+                                            not in V1, Will use it V2, don't remove code
+                                        <li role="menuitem">
+                                            <a>Archive</a>
+                                        </li>
+                                        <li role="menuitem">
+                                            <a>Merge</a>
+                                        </li>
+                                        <li role="menuitem">
+                                            <a>Delete</a>
+                                        </li>
+                                    -->
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="warehouse-details">
-                        <!--
-                                TODO: Integrate below code once the API is ready
-                            -->
-                        <!--
-                                <div class="clearfix about-warehouse">
-                                    <label>Linked with:</label>
-                                    <p>{{warehouse.uniqueName}}</p>
-                                </div>
-                            -->
+                        <div class="warehouse-details">
+                            <!--
+                                    TODO: Integrate below code once the API is ready
+                                -->
+                            <!--
+                                    <div class="clearfix about-warehouse">
+                                        <label>Linked with:</label>
+                                        <p>{{warehouse.uniqueName}}</p>
+                                    </div>
+                                -->
 
-                        <!--
-                                <div class="clearfix about-warehouse">
-                                    <label>Inventory Value:</label>
-                                    <p>22,000/-</p>
-                                </div>
-                            -->
-                        <div class="clearfix about-warehouse">
-                            <!-- <div class="col-xl-3 col-lg-4 col-md-6"> -->
-                                <div class="parent-branch pd-t1 pd-b1">Linked Address:</div>
-                                <div>
-                                    <div *ngFor="let address of warehouse?.addresses" class="linked-add">
-                                        <ng-container *ngIf="address">
-                                            <label class="cursor-pointer"
-                                                [popover]="popTemplate"
-                                                popoverTitle="{{address?.name}}" placement="right"
-                                                triggers="mouseenter:mouseleave">{{address?.name}}</label>
-                                            <ng-template #popTemplate>
-                                                {{address?.address}} {{address?.stateCode}}
-                                                <p *ngIf="address?.taxType && address?.taxNumber">
-                                                    {{ address?.taxType }} : {{ address?.taxNumber }}
-                                                </p>
-                                            </ng-template>
-                                        </ng-container>
-                                        <!-- static pin code  -->
-                                        <div *ngIf="address?.pincode">
-                                            <div>
-                                                <label class="pin-label">PIN:</label>&nbsp;<span>{{address?.pincode}}</span>
+                            <!--
+                                    <div class="clearfix about-warehouse">
+                                        <label>Inventory Value:</label>
+                                        <p>22,000/-</p>
+                                    </div>
+                                -->
+                            <div class="clearfix about-warehouse">
+                                <!-- <div class="col-xl-3 col-lg-4 col-md-6"> -->
+                                    <div class="parent-branch pd-t1 pd-b1">{{localeData?.linked_address}}:</div>
+                                    <div>
+                                        <div *ngFor="let address of warehouse?.addresses" class="linked-add">
+                                            <ng-container *ngIf="address">
+                                                <label class="cursor-pointer"
+                                                    [popover]="popTemplate"
+                                                    popoverTitle="{{address?.name}}" placement="right"
+                                                    triggers="mouseenter:mouseleave">{{address?.name}}</label>
+                                                <ng-template #popTemplate>
+                                                    {{address?.address}} {{address?.stateCode}}
+                                                    <p *ngIf="address?.taxType && address?.taxNumber">
+                                                        {{ address?.taxType }} : {{ address?.taxNumber }}
+                                                    </p>
+                                                </ng-template>
+                                            </ng-container>
+                                            <!-- static pin code  -->
+                                            <div *ngIf="address?.pincode">
+                                                <div>
+                                                    <label class="pin-label">{{commonLocaleData?.app_pin}}:</label>&nbsp;<span>{{address?.pincode}}</span>
+                                                </div>
                                             </div>
+                                            <!-- static pin code end-->
                                         </div>
-                                        <!-- static pin code end-->
+                                    </div>
+                                <!-- </div> -->
+                            </div>
+                            <!--<div class="row">
+                                <div class="col-sm-6">
+                                    <div class="linked-details">
+                                        <label>Linked Entity/ies:</label>
+                                        <ul>
+                                            <li><i class="icon-company-HO mr-r05"></i>Alias Company Name</li>
+                                            <li><i class="icon-branch-icon mr-r05"></i>Alias Branch Name</li>
+                                            <li><i class="icon-branch-icon mr-r05"></i>Alias Branch 3 Name</li>
+                                        </ul>
                                     </div>
                                 </div>
-                            <!-- </div> -->
+                                <div class="col-sm-6">
+                                    <div class="linked-details">
+                                        <label>Sub - Location:</label>
+                                        <ul>
+                                            <li><i class="icon-warehouse-icon mr-r05"></i>Floor 1, Floor 2, Floor 3</li>
+                                        </ul>
+                                    </div>
+                                </div> -->
                         </div>
-                        <!--<div class="row">
-                            <div class="col-sm-6">
-                                <div class="linked-details">
-                                    <label>Linked Entity/ies:</label>
-                                    <ul>
-                                        <li><i class="icon-company-HO mr-r05"></i>Alias Company Name</li>
-                                        <li><i class="icon-branch-icon mr-r05"></i>Alias Branch Name</li>
-                                        <li><i class="icon-branch-icon mr-r05"></i>Alias Branch 3 Name</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="linked-details">
-                                    <label>Sub - Location:</label>
-                                    <ul>
-                                        <li><i class="icon-warehouse-icon mr-r05"></i>Floor 1, Floor 2, Floor 3</li>
-                                    </ul>
-                                </div>
-                            </div> -->
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="warehouse-pagination">
-        <pagination #warehousePagination *ngIf="warehouses?.length && paginationConfig?.totalItems > paginationLimit"
-            [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count"
-            [boundaryLinks]="true" [rotate]="true" (pageChanged)="pageChanged($event)"></pagination>
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="branch-vector">
-        <img src="{{ imgPath2 }}" alt="branch-image">
-    </div>
-</ng-container>
+        <div class="warehouse-pagination">
+            <pagination #warehousePagination *ngIf="warehouses?.length && paginationConfig?.totalItems > paginationLimit"
+                [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count"
+                [boundaryLinks]="true" [rotate]="true" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="branch-vector">
+            <img src="{{ imgPath2 }}" [alt]="localeData?.branch_image">
+        </div>
+    </ng-container>
 
-<!-- Warehouse on boarding modal (Step 1) -->
-<div bsModal #warehouseOnBoardingModal="bs-modal" [config]="{ ignoreBackdropClick: 'true', keyboard: 'true'}"
-    tabindex="-1" class="modal fade open-popup" role="dialog" (onHidden)="onBoardingModalDismiss($event)">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <ng-template element-view-container-ref #onBoardingContainer="elementviewcontainerref">
-            </ng-template>
+    <!-- Warehouse on boarding modal (Step 1) -->
+    <div bsModal #warehouseOnBoardingModal="bs-modal" [config]="{ ignoreBackdropClick: 'true', keyboard: 'true'}"
+        tabindex="-1" class="modal fade open-popup" role="dialog" (onHidden)="onBoardingModalDismiss($event)">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <ng-template element-view-container-ref #onBoardingContainer="elementviewcontainerref">
+                </ng-template>
+            </div>
         </div>
     </div>
-</div>
-<div>
-    <div class="aside-overlay" *ngIf="asideEditWarehousePane === 'in'"></div>
-    <create-address [class]="asideEditWarehousePane" [@slideInOut]="asideEditWarehousePane"
-        [currentOrganizationUniqueName]="currentOrganizationUniqueName"
-        [warehouseToUpdate]="warehouseToUpdate" [showLoader]="isWarehouseUpdateInProgress"
-        (updateAddress)="updateWarehouseInfo($event)" [addressConfiguration]="addressConfiguration"
-        (closeAsideEvent)="toggleAsidePane($event)" *ngIf="asideEditWarehousePane === 'in'" >
-    </create-address>
-</div>
-<!-- Welcome component (Step 2) -->
-<ng-template #welcomeComponent>
-    <welcome-component [itemDetails]="selectedWarehouse" (backButtonClicked)="handleBackButtonClick(false)"
-        (nextButtonClicked)="handleFormSubmit($event)">
-    </welcome-component>
-</ng-template>
+    <div>
+        <div class="aside-overlay" *ngIf="asideEditWarehousePane === 'in'"></div>
+        <ng-container appTranslate [file]="'settings/profile'" (localeData)="profileLocaleData = $event" [requireCommonData]="false" *ngIf="asideEditWarehousePane === 'in'">
+            <create-address [class]="asideEditWarehousePane" [@slideInOut]="asideEditWarehousePane"
+                [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+                [warehouseToUpdate]="warehouseToUpdate" [showLoader]="isWarehouseUpdateInProgress"
+                (updateAddress)="updateWarehouseInfo($event)" [addressConfiguration]="addressConfiguration"
+                [localeData]="profileLocaleData" [commonLocaleData]="commonLocaleData"
+                (closeAsideEvent)="toggleAsidePane($event)" *ngIf="asideEditWarehousePane === 'in'">
+            </create-address>
+        </ng-container>
+    </div>
+    <!-- Welcome component (Step 2) -->
+    <ng-template #welcomeComponent>
+        <welcome-component [itemDetails]="selectedWarehouse" (backButtonClicked)="handleBackButtonClick(false)"
+            (nextButtonClicked)="handleFormSubmit($event)">
+        </welcome-component>
+    </ng-template>
+</ng-container>

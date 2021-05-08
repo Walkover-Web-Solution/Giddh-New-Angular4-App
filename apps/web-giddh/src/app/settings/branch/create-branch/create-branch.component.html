@@ -157,7 +157,7 @@
         </div>
     </div>
     <div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'"></div>
-    <ng-container appTranslate [file]="'settings/profile'" (localeData)="profileLocaleData = $event" [requireCommonData]="false">
+    <ng-container appTranslate [file]="'settings/profile'" (localeData)="profileLocaleData = $event" [requireCommonData]="false" *ngIf="addressAsideMenuState === 'in'">
         <create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState" [keyboardShortcut]="'esc'"
             (onShortcutPress)="toggleAddressAsidePane()"
             [currentOrganizationUniqueName]="currentOrganizationUniqueName" [showLoader]="isAddressChangeInProgress"

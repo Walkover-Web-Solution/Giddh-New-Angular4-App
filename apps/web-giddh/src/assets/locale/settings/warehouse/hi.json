@@ -1,5 +1,17 @@
 {
-    "new_warehouse" : "+ New Warehouse",
-    "set_default" : "Set as Default",
-    "address" : "Address"
+    "search_warehouse": "Search Warehouse",
+    "reset_search": "Reset Search",
+    "create_warehouse": "Create Warehouse",
+    "no_warehouse_found": "No warehouse found within given criteria.",
+    "linked_address": "Linked Address",
+    "branch_image": "Branch Image",
+    "warehouse_updated": "Warehouse updated successfully",
+    "warehouse_created": "Warehouse created successfully",
+    "create_warehouse_under": "Create Warehouse under",
+    "country_currency": "Country & Currency",
+    "warehouse_image": "Warehouse Image",
+    "warehouse_name": "Warehouse Name",
+    "addresses": "Address/es",
+    "select_address": "Select Address",
+    "add_address": "+Add Address"
 }
