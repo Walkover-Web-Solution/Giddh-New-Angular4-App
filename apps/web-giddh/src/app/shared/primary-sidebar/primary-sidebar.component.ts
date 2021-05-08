@@ -228,7 +228,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Initializes the component21
+     * Initializes the component
      *
      * @memberof PrimarySidebarComponent
      */
