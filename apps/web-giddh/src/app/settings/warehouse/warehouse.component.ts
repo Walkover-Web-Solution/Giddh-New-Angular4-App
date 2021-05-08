@@ -106,6 +106,12 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     private destroyed$: Subject<boolean> = new Subject();
     /** Stores the current visible on boarding modal instance */
     private welcomePageModalInstance: BsModalRef;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold profile JSON data */
+    public profileLocaleData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     /** Stores the address configuration */
     public addressConfiguration: SettingsAsideConfiguration = {
@@ -373,7 +379,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             if (response.status === 'success') {
                 this.asideEditWarehousePane = 'out';
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
-                this.toasterService.successToast('Warehouse updated successfully');
+                this.toasterService.successToast(this.localeData?.warehouse_updated);
             } else {
                 this.toasterService.errorToast(response.message);
             }
