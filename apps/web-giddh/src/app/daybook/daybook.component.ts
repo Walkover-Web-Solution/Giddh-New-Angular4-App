@@ -62,7 +62,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     /** Update ledger modal reference */
     @ViewChild('updateLedgerModal', {static: false}) public updateLedgerModal: ModalDirective;
     /** Update ledger component reference */
-    @ViewChild(UpdateLedgerEntryPanelComponent, {static: true}) public updateLedgerComponent: UpdateLedgerEntryPanelComponent;
+    @ViewChild(UpdateLedgerEntryPanelComponent, {static: false}) public updateLedgerComponent: UpdateLedgerEntryPanelComponent;
     /** True, if entry expanded (at least one entry) */
     public isEntryExpanded: boolean = false;
     /** Date format type */
@@ -499,6 +499,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.lc.selectedTxnUniqueName = txn.uniqueName;
         this.updateLedgerModal.show();
         document.querySelector('body').classList.add('update-ledger-overlay');
+
+        setTimeout(() => {
+            this.updateLedgerComponent.loadDefaultSearchSuggestions();
+        }, 20);
     }
 
     /**
