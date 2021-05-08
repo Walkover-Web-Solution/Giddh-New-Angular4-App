@@ -9765,17 +9765,6 @@ input.mat-input-element{
     }
 
     @media (max-width: 1024px) {
-        /* bs-datepicker-container{
-                position: absolute !important;
-                left: 15px !important;
-                top: 40px !important;
-                transform: none !important;
-        }
-        .payment-date{
-            bs-datepicker-container{
-                top: 60px !important;
-            }
-        }*/
         .users-last-list {
             .cdk-virtual-scroll-content-wrapper {
                 position: relative;
@@ -9865,16 +9854,27 @@ input.mat-input-element{
         }
     }
 
-@media(max-width:1019px){
-    .hide-sub-sidebar .sidebar-handle{
-        left: 0 !important;
+    @media(max-width:1019px){
+        .hide-sub-sidebar .sidebar-handle{
+            left: 0 !important;
+        }
     }
-}
 
     @media (max-width: 991px) {
         .transactions-overview{
             hr{
                 display: none;
+            }
+        }
+        .menu_open{
+            .reverse-table-report {
+                .input-grp-date-range-picker {
+                    flex-direction: column !important;
+                    .clear-filter {
+                        width: 50%;
+                        margin-left: 0;
+                    }
+                }
             }
         }
         .setting-tab-data li.nav-item {
@@ -10012,8 +10012,13 @@ input.mat-input-element{
     }
 
   @media (max-width: 768px) {
+        .menu_open .sales-register{
+            width: 100% !important;
+            padding-right: 0 !important;
+        }
         .sales-register{
             width: 100% !important;
+            padding-right: 0 !important;
         }
           .bulk-create-table sh-select input, .bulk-create-table .mat-form-field-wrapper input,
           .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex{
@@ -10207,6 +10212,9 @@ input.mat-input-element{
             left: 0;
             opacity: 0.5;
         }
+    }
+    #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs{
+        display: inline-block;
     }
     .tax-engine .transactions-list .filter-row .name {
         min-width: 120px;
@@ -10474,7 +10482,7 @@ input.mat-input-element{
     > .nav.nav-tabs , .invoice-control .nav.nav-tabs, .setting-page ul.nav.nav-tabs{
             position: fixed !important;
             width: 100%;
-            top: 91px !important;
+            top: 90px !important;
         }
         #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
             top: 88px;
@@ -11046,7 +11054,7 @@ input.mat-input-element{
             display: none;
         }
         .modal-dialog {
-            max-width: 600px !important;
+            max-width: 650px !important;
             margin: 30px auto;
             padding: 0 10px;
         }

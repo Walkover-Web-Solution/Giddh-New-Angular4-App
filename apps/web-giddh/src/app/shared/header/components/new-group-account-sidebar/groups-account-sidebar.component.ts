@@ -208,8 +208,8 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         this.groupService.GetGroupDetails(activeGroup.uniqueName).subscribe(group => {
             if(group && group.status === "success" && group.body) {
                 let groupDetails = group.body;
-                if(groupDetails && groupDetails.parentGroups && groupDetails.parentGroups.length > 0) {
-                    this.currentGroupIndex = groupDetails.parentGroups.length;
+                if(groupDetails && groupDetails.parentGroups && groupDetails.parentGroups?.length > 0) {
+                    this.currentGroupIndex = groupDetails.parentGroups?.length;
                 } else {
                     this.currentGroupIndex = 0;
                 }
@@ -263,7 +263,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         this.store.pipe(select(state => state.groupwithaccounts.activeGroup), take(1)).subscribe(a => activeGroup = a);
 
         if (this.isSearchingGroups) {
-            if (grps && grps.length > 0) {
+            if (grps && grps?.length > 0) {
                 let newCOL = new ColumnGroupsAccountVM(null);
                 let allGrps = [];
                 let allAccount = [];
@@ -273,20 +273,20 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
                         grp.isActive = true;
                         newCOL.IsCreateNewBtnShowable = true;
                     }
-                    if (grp.groups && grp.groups.length > 0) {
+                    if (grp.groups && grp.groups?.length > 0) {
                         allGrps.push(...grp.groups);
                     }
                 }
                 if (!activeGroup) {
                     for (let grp of grps) {
-                        if (grp.accounts && grp.accounts.length > 0) {
+                        if (grp.accounts && grp.accounts?.length > 0) {
                             allAccount.push(...grp.accounts);
                         }
                     }
                 } else {
                     for (let grp of grps) {
                         if (grp.uniqueName === activeGroup.uniqueName) {
-                            if (grp.accounts && grp.accounts.length > 0) {
+                            if (grp.accounts && grp.accounts?.length > 0) {
                                 allAccount.push(...grp.accounts);
                             }
                         }
@@ -561,7 +561,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
 
         this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
 
-        let listBckup = this.mc.activeGroupFromGroupListBackup(grpsBck, this.currentGroup.uniqueName, null);
+        let listBckup = this.mc.activeGroupFromGroupListBackup(grpsBck, this.currentGroup?.uniqueName, null);
         if (listBckup) {
             this.currentGroup.groups = listBckup.groups;
             this.currentGroup.accounts = listBckup.accounts;

@@ -34,11 +34,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     public currentCompanyName: string;
     public financialOptions = [];
     public yearOptions = [];
-    public FYPeriodOptions: IOption[] = [
-        { label: 'JAN-DEC', value: 'JAN-DEC' },
-        { label: 'APR-MAR', value: 'APR-MAR' },
-        { label: 'JULY-JULY', value: 'JULY-JULY' }
-    ];
+    public FYPeriodOptions: IOption[] = [];
     public selectedFYPeriod: string;
     public selectedFinancialYearOption: string;
     public selectedFinancialYearUN: string;
@@ -46,11 +42,15 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     public options: Select2Options = {
         multiple: false,
         width: '300px',
-        placeholder: 'Select Option',
+        placeholder: '',
         allowClear: true
     };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
@@ -160,5 +160,23 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof FinancialYearComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.options.placeholder = this.commonLocaleData?.app_select_option;
+
+            this.FYPeriodOptions = [
+                { label: this.localeData?.financial_year_period_options?.jan_dec, value: 'JAN-DEC' },
+                { label: this.localeData?.financial_year_period_options?.apr_mar, value: 'APR-MAR' },
+                { label: this.localeData?.financial_year_period_options?.july_july, value: 'JULY-JULY' }
+            ];
+        }
     }
 }

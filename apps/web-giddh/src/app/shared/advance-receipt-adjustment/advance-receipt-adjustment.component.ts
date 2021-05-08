@@ -105,7 +105,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         this.adjustVoucherForm = new VoucherAdjustments();
         this.onClear();
         if (this.advanceReceiptAdjustmentUpdatedData) {
-            this.formatAdjustmentData(this.advanceReceiptAdjustmentUpdatedData.adjustments);
             this.advanceReceiptAdjustmentPreUpdatedData = cloneDeep(this.advanceReceiptAdjustmentUpdatedData);
             this.adjustVoucherForm = this.advanceReceiptAdjustmentUpdatedData.adjustments.length ? cloneDeep(this.advanceReceiptAdjustmentUpdatedData) : this.adjustVoucherForm;
             if (this.advanceReceiptAdjustmentUpdatedData && this.advanceReceiptAdjustmentUpdatedData.adjustments && this.advanceReceiptAdjustmentUpdatedData.adjustments.length && this.advanceReceiptAdjustmentUpdatedData.tdsTaxUniqueName) {
@@ -146,7 +145,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             }
             this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response && response.body) {
-                    this.allAdvanceReceiptResponse = response.body.results;
+                    this.allAdvanceReceiptResponse = response.body.results.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue.amountForAccount, amountForCompany: result.balanceDue.amountForCompany } }));
                     this.adjustVoucherOptions = [];
                     if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
                         this.allAdvanceReceiptResponse.forEach(item => {
@@ -232,7 +231,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         // }
         if(this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
             this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.filter(item => {
-                return item.voucherNumber !== '' || item.balanceDue.amountForAccount > 0;
+                return item.voucherNumber !== '' || item.adjustmentAmount.amountForAccount > 0;
             });
         }
         this.closeModelEvent.emit({
@@ -398,7 +397,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             this.adjustVoucherForm.tdsTaxUniqueName = cloneDeep(event.value);
             this.adjustVoucherForm.tdsAmount.amountForAccount = cloneDeep(this.tdsAmount);
             this.changeTdsAmount(this.tdsAmount);
-            this.tdsTypeBox.nativeElement.classList.remove('error-box');
+            this.tdsTypeBox?.nativeElement?.classList?.remove('error-box');
         }
     }
 
@@ -494,25 +493,20 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             });
 
             this.adjustVoucherForm.adjustments.forEach((item, key) => {
-                if (!item.linkingAdjustment) {
-                    if (item.balanceDue && this.isVoucherModule) {
-                        item.adjustmentAmount = item.balanceDue;
+                if (!item.voucherNumber && item.adjustmentAmount.amountForAccount) {
+                    isValid = false;
+                    if(form.controls[`voucherName${key}`]) {
+                        form.controls[`voucherName${key}`].markAsTouched();
                     }
-                    if (!item.voucherNumber && item.balanceDue.amountForAccount) {
-                        isValid = false;
-                        if(form.controls[`voucherName${key}`]) {
-                            form.controls[`voucherName${key}`].markAsTouched();
-                        }
-                    } else if (item.voucherNumber && !item.balanceDue.amountForAccount) {
-                        isValid = false;
-                        if(form.controls[`amount${key}`]) {
-                            form.controls[`amount${key}`].markAsTouched();
-                        }
+                } else if (item.voucherNumber && !item.adjustmentAmount.amountForAccount) {
+                    isValid = false;
+                    if(form.controls[`amount${key}`]) {
+                        form.controls[`amount${key}`].markAsTouched();
                     }
                 }
             });
             this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.filter(item => {
-                return item.voucherNumber !== '' || item.balanceDue.amountForAccount > 0;
+                return item.voucherNumber !== '' || item.adjustmentAmount.amountForAccount > 0;
             });
         }
         if (this.isTaxDeducted) {
@@ -549,7 +543,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public selectVoucher(event: IOption, entry: Adjustment, index: number): void {
         if (event && entry && !this.isFormReset) {
             entry = cloneDeep(event.additional);
-            this.formatAdjustmentData([entry]);
             this.adjustVoucherForm.adjustments.splice(index, 1, entry);
             this.calculateTax(entry, index);
         }
@@ -570,7 +563,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             let selectedItem = this.newAdjustVoucherOptions.find(item => item.value === this.adjustVoucherForm.adjustments[index].uniqueName);
             if (selectedItem) {
                 delete selectedItem['isHilighted'];
-                this.formatAdjustmentData([selectedItem.additional]);
                 this.adjustVoucherOptions.splice(0, 0, { value: selectedItem.value, label: selectedItem.label, additional: selectedItem.additional })
             }
         }
@@ -599,7 +591,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
 
         for (let i = options.length - 1; i >= 0; i--) {
             for (let j = 0; j < adjustVoucherAdjustment.length; j++) {
-                if (options[i] && options[i].label && adjustVoucherAdjustment[j] && !adjustVoucherAdjustment[j].linkingAdjustment && adjustVoucherAdjustment[j].voucherNumber &&
+                if (options[i] && options[i].label && adjustVoucherAdjustment[j] && adjustVoucherAdjustment[j].voucherNumber &&
                     options[i].value && adjustVoucherAdjustment[j].uniqueName &&
                     ((options[i].label.trim() !== '-' && adjustVoucherAdjustment[j].voucherNumber.trim() !== '-' && options[i].label.trim() === adjustVoucherAdjustment[j].voucherNumber.trim()) ||
                     (options[i].label.trim() === '-' && adjustVoucherAdjustment[j].voucherNumber.trim() === '-' && options[i].value && adjustVoucherAdjustment[j].uniqueName && options[i].value.trim() === adjustVoucherAdjustment[j].uniqueName.trim()))) {
@@ -633,7 +625,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public calculateTax(entryData: Adjustment, index: number): void {
-        entryData.balanceDue.amountForCompany = entryData.balanceDue.amountForAccount;
+        entryData.adjustmentAmount.amountForCompany = entryData.adjustmentAmount.amountForAccount;
         let entry: Adjustment = cloneDeep(entryData);
         // Object of selected voucher
         let selectedVoucherOptions;
@@ -653,30 +645,28 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         }
         if (entryData && this.advanceReceiptAdjustmentPreUpdatedData && this.advanceReceiptAdjustmentPreUpdatedData.adjustments && this.advanceReceiptAdjustmentPreUpdatedData.adjustments.length) {
             selectedVoucherPreAdjusted = this.advanceReceiptAdjustmentPreUpdatedData.adjustments.find(item => {
-                if (!item.linkingAdjustment) {
-                    if (item.voucherNumber !== '-') {
-                        return item.voucherNumber === entryData.voucherNumber;
-                    } else {
-                        return item.uniqueName === entryData.uniqueName;
-                    }
+                if (item.voucherNumber !== '-') {
+                    return item.voucherNumber === entryData.voucherNumber;
+                } else {
+                    return item.uniqueName === entryData.uniqueName;
                 }
             });
         }
-        if (selectedVoucherOptions && selectedVoucherPreAdjusted && selectedVoucherOptions.additional.balanceDue && selectedVoucherPreAdjusted.balanceDue) {
-            excessAmount = selectedVoucherOptions.additional.balanceDue.amountForAccount + selectedVoucherPreAdjusted.balanceDue.amountForAccount;
+        if (selectedVoucherOptions && selectedVoucherPreAdjusted && selectedVoucherOptions.additional.balanceDue && selectedVoucherPreAdjusted.adjustmentAmount) {
+            excessAmount = selectedVoucherOptions.additional.balanceDue.amountForAccount + selectedVoucherPreAdjusted.adjustmentAmount.amountForAccount;
         } else {
             if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.balanceDue) {
                 excessAmount = selectedVoucherOptions.additional.balanceDue.amountForAccount;
             }
         }
         // To restrict user to enter amount less or equal selected voucher amount
-        if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.balanceDue && this.adjustVoucherForm.adjustments[index].balanceDue.amountForAccount > excessAmount) {
-            this.adjustVoucherForm.adjustments[index].balanceDue.amountForAccount = cloneDeep(excessAmount);
-            entry.balanceDue.amountForAccount = excessAmount;
+        if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.adjustmentAmount && this.adjustVoucherForm.adjustments[index].adjustmentAmount.amountForAccount > excessAmount) {
+            this.adjustVoucherForm.adjustments[index].adjustmentAmount.amountForAccount = cloneDeep(excessAmount);
+            entry.adjustmentAmount.amountForAccount = excessAmount;
             this.adjustVoucherForm.adjustments = cloneDeep(this.adjustVoucherForm.adjustments);
         }
-        if (entry && entry.taxRate && entry.balanceDue.amountForAccount) {
-            let taxAmount = this.calculateInclusiveTaxAmount(entry.balanceDue.amountForAccount, entry.taxRate);
+        if (entry && entry.taxRate && entry.adjustmentAmount.amountForAccount) {
+            let taxAmount = this.calculateInclusiveTaxAmount(entry.adjustmentAmount.amountForAccount, entry.taxRate);
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = Number(taxAmount);
         } else {
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = 0.0;
@@ -702,8 +692,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     }
                 } else {
                     // In create mode balance due holds the amount that could be adjusted
-                    if (item && item.balanceDue && item.balanceDue.amountForAccount) {
-                        totalAmount += Number(item.balanceDue.amountForAccount);
+                    if (item && item.balanceDue && item.adjustmentAmount.amountForAccount) {
+                        totalAmount += Number(item.adjustmentAmount.amountForAccount);
                     }
                 }
             });
@@ -735,12 +725,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public checkValidations(): void {
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
             this.adjustVoucherForm.adjustments.forEach((item, key) => {
-                if (!item.linkingAdjustment) {
-                    if ((!item.voucherNumber && item.balanceDue.amountForAccount) || (item.voucherNumber && !item.balanceDue.amountForAccount) || (!item.voucherNumber && !item.balanceDue.amountForAccount && key > 0)) {
-                        this.isInvalidForm = true;
-                    } else {
-                        this.isInvalidForm = false;
-                    }
+                if ((!item.voucherNumber && item.adjustmentAmount.amountForAccount) || (item.voucherNumber && !item.adjustmentAmount.amountForAccount) || (!item.voucherNumber && !item.adjustmentAmount.amountForAccount && key > 0)) {
+                    this.isInvalidForm = true;
+                } else {
+                    this.isInvalidForm = false;
                 }
             });
         }
@@ -770,12 +758,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     private formatAdjustmentData(adjustmentData: Array<Adjustment>): void {
         if (adjustmentData && adjustmentData.length) {
             adjustmentData.forEach(adjustment => {
-                if (!adjustment.linkingAdjustment) {
-                    if (adjustment && adjustment.adjustmentAmount && adjustment.adjustmentAmount.amountForAccount) {
-                        adjustment.balanceDue = adjustment.adjustmentAmount;
-                    } else if (adjustment && adjustment.balanceDue && adjustment.balanceDue.amountForAccount){
-                        adjustment.adjustmentAmount = adjustment.balanceDue;
-                    }
+                if (adjustment && adjustment.adjustmentAmount && adjustment.adjustmentAmount.amountForAccount) {
+                    adjustment.balanceDue = cloneDeep(adjustment.adjustmentAmount);
+                } else if (adjustment && adjustment.balanceDue && adjustment.balanceDue.amountForAccount){
+                    adjustment.adjustmentAmount = cloneDeep(adjustment.balanceDue);
                 }
             });
         }
@@ -789,21 +775,48 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     private resetAdjustments(): Adjustment[] {
-        const linkedAdjustments = this.adjustVoucherForm.adjustments.filter(adjustment => adjustment.linkingAdjustment);
-        return [
-            ...linkedAdjustments,
-            {
-                voucherNumber: '',
-                balanceDue: {
-                    amountForAccount: 0,
-                    amountForCompany: 0
-                },
-                voucherDate: '',
-                taxRate: 0,
-                uniqueName: '',
-                taxUniqueName: '',
-            }
-        ];
+        if (!this.isVoucherModule) {
+            // Operation performed in Ledger
+            const linkedAdjustments = this.adjustVoucherForm.adjustments.filter(adjustment => adjustment.linkingAdjustment);
+            return linkedAdjustments?.length ? linkedAdjustments : [
+                {
+                    voucherNumber: '',
+                    balanceDue: {
+                        amountForAccount: 0,
+                        amountForCompany: 0
+                    },
+                    adjustmentAmount: {
+                        amountForAccount: 0,
+                        amountForCompany: 0
+                    },
+                    voucherDate: '',
+                    taxRate: 0,
+                    uniqueName: '',
+                    taxUniqueName: '',
+                }
+            ];
+        } else {
+            // Find the adjustments that are not advance receipt adjustments and keep them on reset
+            // as these adjustments can't get adjusted from voucher module (invoice get all page and invoice update page)
+            const nonAdvanceReceiptAdjustments = this.adjustVoucherForm.adjustments.filter(adjustment => adjustment.voucherType && !(adjustment.voucherType === 'receipt' && adjustment.subVoucher === SubVoucher.AdvanceReceipt));
+            return nonAdvanceReceiptAdjustments?.length ? nonAdvanceReceiptAdjustments : [
+                {
+                    voucherNumber: '',
+                    balanceDue: {
+                        amountForAccount: 0,
+                        amountForCompany: 0
+                    },
+                    adjustmentAmount: {
+                        amountForAccount: 0,
+                        amountForCompany: 0
+                    },
+                    voucherDate: '',
+                    taxRate: 0,
+                    uniqueName: '',
+                    taxUniqueName: '',
+                }
+            ];
+        }
     }
 
     /**

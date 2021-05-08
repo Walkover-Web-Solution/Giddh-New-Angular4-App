@@ -14,7 +14,7 @@
                     <p>{{change.message}} <span class="text-gray">{{getByUserText(result.user?.name)}}</span></p>
                 </div>
             </ng-container>
-            <pagination *ngIf="purchaseVersions.totalPages > 1" class="pagination" [(ngModel)]="purchaseVersions.page" [totalItems]="purchaseVersions.totalItems" [itemsPerPage]="purchaseVersions.count" [maxSize]="5" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+            <pagination *ngIf="purchaseVersions.totalPages > 1" class="pagination" [(ngModel)]="purchaseVersions.page" [totalItems]="purchaseVersions.totalItems" [itemsPerPage]="purchaseVersions.count" [maxSize]="5" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
         </div>
         <div class="aside-pane-form" *ngIf="!isLoading && (!purchaseVersions || !purchaseVersions.results || purchaseVersions.results.length === 0)">
             {{commonLocaleData?.app_no_result_found}}

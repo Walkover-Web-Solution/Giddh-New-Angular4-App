@@ -1647,10 +1647,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             if (adjustments) {
                 adjustments.forEach(adjustment => {
-                    if (!adjustment.linkingAdjustment) {
-                        adjustment.adjustmentAmount = adjustment.balanceDue;
-                        adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
-                    }
+                    adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
                 });
 
                 this.vm.selectedLedger.voucherAdjustments = {
@@ -1734,7 +1731,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 tcsTotal: 0,
                 tdsTotal: 0,
                 balanceDue: this.vm.selectedLedger.total.amount,
-                grandTotal: this.vm.selectedLedger.total.amount,
+                grandTotal: this.vm.selectedLedger?.entryVoucherTotals?.amountForAccount,
                 customerName: this.vm.selectedLedger && this.vm.selectedLedger.particular? this.vm.selectedLedger.particular.name : '',
                 customerUniquename: customerUniqueName,
                 totalTaxableValue: this.vm.selectedLedger.actualAmount,
@@ -1787,10 +1784,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /**
      * Loads the default search suggestion when petty cash is opened
      *
-     * @private
+     * @public
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    private loadDefaultSearchSuggestions(): void {
+    public loadDefaultSearchSuggestions(): void {
         this.onSearchQueryChanged('', 1, false, (response) => {
             this.defaultSuggestions = response.map(result => {
                 return {

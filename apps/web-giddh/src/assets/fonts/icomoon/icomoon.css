@@ -26,6 +26,18 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-branch1:before {
+  content: "\e9e8";
+}
+.icon-company:before {
+  content: "\e9e9";
+}
+.icon-branch-connect:before {
+  content: "\e9e6";
+}
+.icon-save:before {
+  content: "\e9e7";
+}
 .icon-template:before {
   content: "\e9b8";
 }

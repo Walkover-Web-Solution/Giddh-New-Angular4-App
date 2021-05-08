@@ -323,7 +323,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             uniqueName: [null],
         });
         if (item) {
-            initCustomForm.patchValue(item);
+            initCustomForm?.patchValue(item);
         }
         return initCustomForm;
     }

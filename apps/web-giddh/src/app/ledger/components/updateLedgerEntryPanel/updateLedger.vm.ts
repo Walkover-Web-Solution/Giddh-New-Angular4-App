@@ -596,7 +596,7 @@ export class UpdateLedgerVm {
     public getUnderstandingText(selectedLedgerAccountType, accountName, localeData?: any) {
         let underStandingTextData = localeData?.text_data;
         if(underStandingTextData) {
-            let data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
+            let data = _.cloneDeep(underStandingTextData?.find(p => p.accountType === selectedLedgerAccountType));
             if (data) {
                 if(data.balanceText && data.balanceText.cr) {
                     data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);

@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -70,6 +70,12 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
 
     /** Unsubscribes from all the listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold profile JSON data */
+    public profileLocaleData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private commonService: CommonService,
@@ -100,7 +106,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                         currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                     }
                 }
-                this.branchForm.get('name').patchValue(this.companyDetails.name);
+                this.branchForm.get('name')?.patchValue(this.companyDetails.name);
                 if (!this.addressConfiguration.stateList.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
@@ -214,7 +220,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         }
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
-            this.branchForm.get('address').patchValue([
+            this.branchForm.get('address')?.patchValue([
                 ...(this.branchForm.get('address').value || []),
                 option.value
             ]);
@@ -238,7 +244,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         this.settingsProfileService.createNewBranch(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
-                    this.toastService.successToast('Branch created successfully');
+                    this.toastService.successToast(this.localeData?.branch_created);
                     this.branchForm.reset();
                     this.router.navigate(['/pages/settings/branch']);
                 } else {
@@ -325,7 +331,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     label: response.body.name,
                     value: response.body.uniqueName
                 })
-                this.toastService.successToast('Address created successfully');
+                this.toastService.successToast(this.localeData?.address_created);
             } else {
                 this.toastService.errorToast(response.message);
             }

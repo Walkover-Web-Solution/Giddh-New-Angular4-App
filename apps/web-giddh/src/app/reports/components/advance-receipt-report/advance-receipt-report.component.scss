@@ -154,6 +154,9 @@
     .clear-filter{
         margin-left: 15px;
     }
+    .reverse-table-report{
+        margin-bottom: 100px;
+    }
 }
 @media(max-width:991px){
     .total-due-sale{
@@ -177,6 +180,7 @@
         position: relative;
         margin-top: 10px;
         margin-left: 0;
+        left: 0;
         .total-due-sale-wrap{
             padding-left: 0 !important;
             .total-due-sale{
@@ -189,6 +193,12 @@
     }
     .entry-date {
         padding: 5px 10px 5px 50% !important;
+    }
+    .input-grp-date-range-picker{
+        flex-direction: column;
+        .clear-filter{
+            margin-left: 0;
+        }
     }
 }
 @media(max-width:575px){

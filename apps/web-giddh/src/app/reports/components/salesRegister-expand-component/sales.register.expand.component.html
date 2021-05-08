@@ -79,7 +79,7 @@
     </div>
 
     <ng-container *ngIf="(isGetSalesDetailsSuccess$ | async)">
-        <div class="clearfix sales-register-table">
+        <div class="clearfix sales-register-table mb-5">
             <div class="responsive table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
                     <thead>
@@ -295,8 +295,7 @@
             </div>
 
             <div class="text-center " *ngIf="(salesRegisteDetailedResponse$ | async).totalItems > paginationLimit">
-                <pagination [totalItems]="(salesRegisteDetailedResponse$ | async).totalItems" [(ngModel)]="getDetailedsalesRequestFilter.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" previousText="&#9668; "
-                    nextText="&#9658; " (pageChanged)="pageChanged($event)"></pagination>
+                <pagination [totalItems]="(salesRegisteDetailedResponse$ | async).totalItems" [(ngModel)]="getDetailedsalesRequestFilter.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
             </div>
         </div>
         <div class="no-data" *ngIf="

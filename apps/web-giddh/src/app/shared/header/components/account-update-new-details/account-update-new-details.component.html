@@ -25,13 +25,13 @@
                 <div class="col-sm-4">
                     <div class="form-group" formGroupName="country">
                         <label>{{commonLocaleData?.app_country}} <sup class="text-danger">*</sup> </label>
-                        <sh-select [options]="countrySource" [isFilterEnabled]="true" (viewInitEvent)="onViewReady($event)" formControlName="countryCode" (selected)="selectCountry($event)" [useInBuiltFilterForIOptionTypeItems]="true" [isRequired]="true"></sh-select>
+                        <sh-select [options]="countrySource" [isFilterEnabled]="true" (viewInitEvent)="onViewReady($event)" formControlName="countryCode" [defaultValue]="accountCountryName" (selected)="selectCountry($event)" [useInBuiltFilterForIOptionTypeItems]="true" [isRequired]="true"></sh-select>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label>{{localeData?.currency}}</label>
-                        <sh-select [options]="currencySource$ | async" defaultValue="{{selectedCurrency}}" formControlName="currency" [isFilterEnabled]="true" [disabled]="disableCurrency"></sh-select>
+                        <sh-select [options]="currencySource$ | async" defaultValue="{{selectedCurrency}}" formControlName="currency" [isFilterEnabled]="true"></sh-select>
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -147,7 +147,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group mr-b05">
                                         <label for="pinCodeNum" class="d-block">{{commonLocaleData?.app_pin_code}}</label>
-                                        <input type="number" class="form-control" autocomplete="false" name="pinCodeNum" formControlName="pincode" [placeholder]="commonLocaleData?.app_enter_pin_code" />
+                                        <input type="number" class="form-control" autocomplete="false" name="pinCodeNum" formControlName="pincode" [placeholder]="commonLocaleData?.app_enter_pin_code" decimalDigitsDirective [preventDecimal]="true" />
                                     </div>
                                 </div>
                                 <!-- end -->

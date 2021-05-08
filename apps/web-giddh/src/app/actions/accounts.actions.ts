@@ -321,6 +321,7 @@ export class AccountsAction {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
                 } else {
+                    this._generalServices.invokeEvent.next(["accountUpdated", resData]);
                     this._generalServices.eventHandler.next({ name: eventsConst.accountUpdated, payload: resData });
                     this._toasty.successToast('Account Updated Successfully');
 

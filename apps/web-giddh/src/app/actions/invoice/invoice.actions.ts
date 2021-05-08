@@ -33,6 +33,7 @@ import { saveAs } from 'file-saver';
 import { CustomActions } from '../../store/customActions';
 import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
 import { RecurringVoucherService } from '../../services/recurring-voucher.service';
+import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.service';
 
 @Injectable()
 export class InvoiceActions {
@@ -900,9 +901,20 @@ export class InvoiceActions {
                 true,
                 this.deleteRecurringInvoiceResponse(null)))));
 
+    public GenerateBulkEInvoice$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE),
+            switchMap((action: CustomActions) => this.bulkUpdateInvoice.bulkUpdateInvoice(action.payload.model, action.payload.actionType)),
+            map(res => this.validateResponse<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest>(res, {
+                type: INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE_RESPONSE
+            }, true, {
+                type: INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE_RESPONSE
+            }))));
+
     constructor(
         private action$: Actions,
         private _invoiceService: InvoiceService,
+        private bulkUpdateInvoice: InvoiceBulkUpdateService,
         private _recurringService: RecurringVoucherService,
         private _invoiceTemplatesService: InvoiceTemplatesService,
         private _toasty: ToasterService,
@@ -1884,6 +1896,31 @@ export class InvoiceActions {
     public resetPendingData(): CustomActions {
         return {
             type: INVOICE_ACTIONS.RESET_PENDING_DATA
+        };
+    }
+
+    /**
+     * Generates bullk e-invoice
+     *
+     * @returns {CustomActions} Generate bulk e-invoice action
+     * @memberof InvoiceActions
+     */
+    public generateBulkEInvoice(model: any): CustomActions {
+        return {
+            type: INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE,
+            payload: model
+        };
+    }
+
+    /**
+     * Resets the bulk e-invoice flag
+     *
+     * @returns {CustomActions} Resets bulk e-invoice action
+     * @memberof InvoiceActions
+     */
+    public resetBulkEInvoice(): CustomActions {
+        return {
+            type: INVOICE_ACTIONS.RESET_BULK_E_INVOICE_RESPONSE
         };
     }
 }

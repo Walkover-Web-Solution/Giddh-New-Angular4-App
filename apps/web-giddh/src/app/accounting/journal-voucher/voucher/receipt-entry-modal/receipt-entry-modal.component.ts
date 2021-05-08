@@ -31,6 +31,10 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     @Input() public activeCompany: any;
     /* Selected voucher date */
     @Input() public voucherDate: any;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /* Event emitter for the adjustment entries */
     @Output() public entriesList: EventEmitter<any> = new EventEmitter();
     /* List of adjustment entries */
@@ -48,15 +52,15 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     /* Will check if form is valid */
     public isValidForm: boolean = true;
     /* Error message for amount comparision with transaction amount */
-    public amountErrorMessage: string = "Total Amount must be equal to Credit Amount";
+    public amountErrorMessage: string = "";
     /* Error message for comparision of adjusted amount with invoice */
-    public invoiceAmountErrorMessage: string = "Amount can't be greater than Invoice Balance Due";
+    public invoiceAmountErrorMessage: string = "";
     /* Error message for invalid adjustment amount */
-    public invalidAmountErrorMessage: string = "Please enter valid amount";
+    public invalidAmountErrorMessage: string = "";
     /* Error message for invalid adjustment amount */
-    public invoiceErrorMessage: string = "Please select invoice";
+    public invoiceErrorMessage: string = "";
     /* Error message for amount comparision with transaction amount */
-    public entryAmountErrorMessage: string = "Amount must be equal to Credit Amount";
+    public entryAmountErrorMessage: string = "";
     /* This will hold list of tax */
     public taxList: any[] = [];
     /* Observable for list of tax */
@@ -81,6 +85,12 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
      * @memberof ReceiptEntryModalComponent
      */
     public ngOnInit(): void {
+        this.amountErrorMessage = this.localeData?.total_amount_error;
+        this.invoiceAmountErrorMessage = this.localeData?.invoice_amount_error;
+        this.invalidAmountErrorMessage = this.localeData?.invalid_amount_error;
+        this.invoiceErrorMessage = this.localeData?.invoice_error;
+        this.entryAmountErrorMessage = this.localeData?.entry_amount_error;
+
         if (this.transaction && this.transaction.selectedAccount) {
             if (this.transaction.voucherAdjustments) {
                 this.receiptEntries = this.transaction.voucherAdjustments;
@@ -279,7 +289,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
                     this.pendingInvoiceList[response.body.results[key].uniqueName] = [];
                     this.pendingInvoiceList[response.body.results[key].uniqueName] = response.body.results[key];
 
-                    pendingInvoiceList.push({ label: response.body.results[key].voucherNumber + ", " + response.body.results[key].voucherDate + ", " + response.body.results[key].balanceDue.amountForAccount + " cr.", value: response.body.results[key].uniqueName });
+                    pendingInvoiceList.push({ label: response.body.results[key].voucherNumber + ", " + response.body.results[key].voucherDate + ", " + response.body.results[key].balanceDue.amountForAccount + " " + this.commonLocaleData?.app_cr, value: response.body.results[key].uniqueName });
                 });
                 this.pendingInvoiceListSource$ = observableOf(pendingInvoiceList);
             }
@@ -325,7 +335,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
             entry.invoice = {
                 number: this.pendingInvoiceList[event.value].voucherNumber,
                 date: this.pendingInvoiceList[event.value].voucherDate,
-                amount: this.pendingInvoiceList[event.value].balanceDue.amountForAccount + " cr.",
+                amount: this.pendingInvoiceList[event.value].balanceDue.amountForAccount + " " + this.commonLocaleData?.app_cr,
                 uniqueName: event.value,
                 type: this.pendingInvoiceList[event.value].voucherType
             };

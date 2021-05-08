@@ -127,7 +127,10 @@ export class FilingComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
             }
 			this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
-			this.selectedGst = params['return_type'];
+            if (this.selectedGst !== params['return_type']) {
+                this.selectedGst = params['return_type'];
+                this.loadGstReport(this.activeCompanyGstNumber);
+            }
 			//
 			let tab = Number(params['tab']);
 			if (tab > -1) {
@@ -139,33 +142,7 @@ export class FilingComponent implements OnInit, OnDestroy {
 
 		// get activeCompany gst number
 		this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
-            if (result) {
-                this.activeCompanyGstNumber = result;
-            }
-
-			let request: GstOverViewRequest = new GstOverViewRequest();
-			request.from = this.currentPeriod.from;
-			request.to = this.currentPeriod.to;
-			request.gstin = this.activeCompanyGstNumber;
-
-			if (this.selectedGst === GstReport.Gstr1) {
-				this.gstr1OverviewDataFetchedSuccessfully$.pipe(take(1)).subscribe(bool => {
-					if (!bool) {
-						// it means no gstr1 data available or error occurred or user directly navigated to this tab
-						this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr1, request));
-					}
-				});
-			} else {
-				this.gstr2OverviewDataFetchedSuccessfully$.pipe(take(1)).subscribe(bool => {
-					if (!bool) {
-						// it means no gstr2 data available or error occurred or user directly navigated to this tab
-						this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr2, request));
-					}
-				});
-			}
-
-			// get session details
-			this.store.dispatch(this._gstAction.GetGSPSession(this.activeCompanyGstNumber));
+            this.loadGstReport(result);
 		});
         this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
             if (this.isMobileScreen) {
@@ -262,5 +239,41 @@ export class FilingComponent implements OnInit, OnDestroy {
         if (this.isMobileScreen) {
             this.asideGstSidebarMenuState = 'out';
         }
+    }
+    /**
+     * Loads the GST report for a GST number
+     *
+     * @private
+     * @param {string} gstNumber GST number
+     * @memberof FilingComponent
+     */
+    private loadGstReport(gstNumber: string): void {
+        if (gstNumber) {
+            this.activeCompanyGstNumber = gstNumber;
+        }
+
+        let request: GstOverViewRequest = new GstOverViewRequest();
+        request.from = this.currentPeriod.from;
+        request.to = this.currentPeriod.to;
+        request.gstin = this.activeCompanyGstNumber;
+
+        if (this.selectedGst === GstReport.Gstr1) {
+            this.gstr1OverviewDataFetchedSuccessfully$.pipe(take(1)).subscribe(bool => {
+                if (!bool) {
+                    // it means no gstr1 data available or error occurred or user directly navigated to this tab
+                    this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr1, request));
+                }
+            });
+        } else {
+            this.gstr2OverviewDataFetchedSuccessfully$.pipe(take(1)).subscribe(bool => {
+                if (!bool) {
+                    // it means no gstr2 data available or error occurred or user directly navigated to this tab
+                    this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr2, request));
+                }
+            });
+        }
+
+        // get session details
+        this.store.dispatch(this._gstAction.GetGSPSession(this.activeCompanyGstNumber));
     }
 }

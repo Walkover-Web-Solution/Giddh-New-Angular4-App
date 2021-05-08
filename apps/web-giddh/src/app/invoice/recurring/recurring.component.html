@@ -359,7 +359,7 @@
         <div class="pagination-wrapper" *ngIf="(recurringData$ | async)?.totalItems > 20" [hidden]="isLoading">
             <div class="text-center">
                 <pagination [maxSize]="5" [totalItems]="(recurringData$ | async)?.totalItems" [itemsPerPage]="20"
-                    (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false">
+                    (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
                 </pagination>
             </div>
         </div>
