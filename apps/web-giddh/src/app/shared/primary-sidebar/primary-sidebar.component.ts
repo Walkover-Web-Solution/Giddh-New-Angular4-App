@@ -118,6 +118,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** Stores all the menu items to be shown */
     public allItems: AllItems[] = [];
     /** True, if sidebar needs to be shown */
+    public subdropdown;
+
+    /** True, if sidebar needs to be shown */
     @Input() public isOpen: boolean = false;
     /** API menu items, required to show permissible items only in the menu */
     @Input() public apiMenuItems: Array<any> = [];
@@ -221,7 +224,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Initializes the component
+     * Initializes the component21
      *
      * @memberof PrimarySidebarComponent
      */
@@ -359,6 +362,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+
     }
 
     /**
