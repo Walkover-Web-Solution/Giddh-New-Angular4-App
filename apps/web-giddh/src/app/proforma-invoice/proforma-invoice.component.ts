@@ -926,7 +926,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }
 
-            this.loadDefaultSearchSuggestions();
+            if (!this.isPendingVoucherType) {
+                this.loadDefaultSearchSuggestions();
+            }
             this.getAllLastInvoices();
             this.fillDeliverToAddress();
         });
