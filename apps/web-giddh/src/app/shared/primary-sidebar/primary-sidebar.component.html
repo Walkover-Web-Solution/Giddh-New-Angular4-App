@@ -5,17 +5,17 @@
                 <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
                     <span class="inner-span"></span>
                 </span>
-                <li class="company-name position-relative cursor-pointer" dropdown #companyDetailsDropDownWeb="bs-dropdown"
+                <li class="company-name position-relative" dropdown #companyDetailsDropDownWeb="bs-dropdown"
                     [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="companyDetailsDropDownWeb.hide()"
                     [exclude]="'.company-name'">
-                    <h3 class="font-16 d-flex flex-column" [checkPermission]="['MENU', 'MANAGE']" dropdownToggle>
+                    <h3 class="font-16 d-flex flex-column cursor-pointer" [checkPermission]="['MENU', 'MANAGE']" dropdownToggle>
                         <div class="d-flex flex-column">
                             <div class="d-flex align-items-center">
                                 <img hidden src="../../../assets/images/logo-icon.svg" class="company-icon mr-r1">
                                 <span  class="company-alice mr-r05 text-uppercase">{{companyInitials}}</span>
                                 <span class="d-flex justify-content-between w-100 company-full-name flex-column">
                                     <span class="company-ellipsis">{{selectedCompanyDetails?.name}}</span>
-                                    <span class="branch-ellipsis"><span class="mr-t05">{{currentBranch?.alias}}</span> </span>
+                                    <span class="branch-ellipsis" *ngIf="currentBranch"><span>{{currentBranch?.alias}}</span> </span>
                                     <i class="icon-branch-connect" *ngIf="currentBranch"></i>
                                 </span>
                                 <span class="d-flex"> <i class="icon-down-new"></i> </span>
@@ -54,7 +54,7 @@
                             <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}"
                                 [routerLinkActive]="['active']"
                                 [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName"
-                                (click)="analyzeAccounts($event, acc)">{{acc.name}} {{commonLocaleData?.app_ac}}</a>
+                                (click)="analyzeAccounts($event, acc); companyDetailsDropDownWeb.hide();">{{acc.name}} {{commonLocaleData?.app_ac}}</a>
                         </li>
                         <li><a (click)="showNavigationModal()" class="show-more cursor-pointer">{{localeData?.show_more}}</a></li>
                     </ul>
@@ -208,7 +208,7 @@
             <div class="company-text head-nav"*ngIf="(currentCompanyBranches$ | async)?.length > 1">
 
                 <div class="unique-name-financial-year pd-l15">
-                    <span *ngIf="currentBranch" class="branch-ellipsis">
+                    <span *ngIf="currentBranch" class="branch-ellipsis pb-2 d-flex">
                         <i class="icon-branch1 mr-1 font-16"></i> {{currentBranch?.alias}} </span>
                 </div>
                 <ul *ngIf="(currentCompanyBranches$ | async)?.length > 1"
@@ -225,7 +225,7 @@
                                 </div>
                             </ng-container> -->
                             <ng-container >
-                                <div class="switch-branch w-100 pt-2">
+                                <div class="switch-branch w-100">
                                 {{localeData?.switch_branch}} <i class="icon-arrow-down"></i>
                                 </div>
                             </ng-container>
@@ -267,7 +267,7 @@
                                     <p class="font-10 grey-color">({{selectedCompanyDetails?.name}})</p>
                                 </a>
                             </li>
-                            <li *ngIf="!currentBranch" (click)="subBranchDropdown.hide()"
+                            <li *ngIf="!currentBranch" (click)="subBranchDropdown.hide(); companyDetailsDropDownWeb.hide();"
                                 [routerLink]="['/pages/settings/create-branch']" role="menuitem"><a
                                     class="dropdown-item go-to-company company-create"
                                     href="javascript:void(0);">{{localeData?.create_branch}}</a>
@@ -280,8 +280,7 @@
                                                                                         </li> -->
                 </ul>
             </div>
-
-        <li>
+        <li class="mr-t05">
             <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/company-import-export')">{{localeData?.import_export_backup}}</a>
         </li>
         <!-- #dropdown="bs-dropdown" -->
