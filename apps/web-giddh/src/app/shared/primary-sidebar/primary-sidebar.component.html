@@ -66,52 +66,72 @@
                         <span tooltip="Accounts"><i class="icon-accounts-new"></i> </span>
                         <i class="icon-right mr-l1 font-14"></i>
                     </a>
-                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
-                        aria-labelledby="button-basic">
-                        <div class="input-group mr-b1" container="body">
-                            <input type="text" (ngModelChange)="filterBranch($event)" [(ngModel)]="searchBranchQuery"
-                                class="form-control" placeholder="Search Branch here" autocomplete="off" />
-                            <span (click)="loadCompanyBranches()" tooltip="Refresh" placement="left"
-                                class="input-group-addon">
-                                <i class="icon-refresh cp"></i>
-                            </span>
-                        </div>
-                        <li *ngFor="let branch of currentCompanyBranches" role="menuitem">
-                            <a href="javascript:void(0);" class="dropdown-item"
-                                [class.active-branch]="currentBranch?.uniqueName === branch?.uniqueName"
-                                (click)="switchToBranch(branch?.uniqueName, $event)">
-                                <span class="branch-alias-name">
-                                    <a tooltip="{{branch?.alias}}" href="javascript:void(0);">
-                                        <span class="pr-3">{{branch?.alias}}</span>
-                                    </a>
-                                </span>
-                                <span>
-                                    <i class="icon-branch-icon pull-right branch-icon-tooltip"
-                                        containerClass="branch-ho-tooltip" tooltip="Branch"></i>
-                                </span>
-                            </a>
+                    <ul id="dropdown-basic-01" *dropdownMenu class="dropdown-menu account-dropdown-collapse list-style-none sub-menu"
+                        role="menu" aria-labelledby="button-basic-01">
+                        <li *ngFor="let acc of accountItemsFromIndexDB">
+                            <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}"
+                                (click)="analyzeAccounts($event, acc); accountDropdown?.hide();">{{acc.name}} A/c</a>
                         </li>
-                        <li class="divider dropdown-divider"></li>
-                        <li *ngIf="currentBranch" (click)="goToCompany()" role="menuitem">
-                            <a class="dropdown-item go-to-company company-label" href="javascript:void(0);">Go to
-                                company
-                                <p class="font-10 grey-color">({{selectedCompanyDetails?.name}})</p>
-                            </a>
-                        </li>
-                        <li *ngIf="!currentBranch" (click)="subBranchDropdown.hide()"
-                            [routerLink]="['/pages/settings/create-branch']" role="menuitem"><a
-                                class="dropdown-item go-to-company company-create" href="javascript:void(0);">Create
-                                Branch</a>
-                        </li>
+                        <li><a (click)="showNavigationModal()" class="show-more cursor-pointer">Show more</a></li>
                     </ul>
-
                 </div>
                 <!-- <li>
                     <a href="javascript:void(0)" *ngIf="branchInitials" class="font-14 branch-alice">{{branchInitials}}</a>
                 </li> -->
 
             </div>
+            <div class="menu-block">
+                <div class="menu-item-wrapper font-14">
+                    <div class="menu-item  pd-l2 pd-r2">
+                        <p class="font-12">
+                            <span [routerLink]="['/pages/giddh-all-items']" class="d-inline-flex align-items-center cursor-pointer">
+                                Menu
+                                <i class="icon-down-new mr-l05"></i> </span>
+                            <span class="text-gray cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
+                                <i class="icon-go font-18"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <ul class="list-style-none giddh-primary-items">
+                        <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems" dropdown
+                            [attr.container]="!isOpen ? 'body' : ''">
+                            <a href="javascript:void(0);" tooltip="{{menu?.label}}" *ngIf="menu?.items?.length" id="button-basic-02"
+                                dropdownToggle type="button" class="dropdown-toggle" aria-controls="dropdown-basic-02"
+                                [class.active]="menu?.isActive">
+                                <span><i [ngClass]="menu?.icon"></i>
+                                    <span class="item-name">{{menu?.label}}</span>
+                                </span>
+                                <i class="icon-right mr-l1 font-14"></i>
+                            </a>
+                            <a href="javascript:void(0);" *ngIf="menu?.items?.length === 0 && menu?.link"
+                                [routerLink]="[menu?.link]" [queryParams]="menu?.additional" id="button-basic-02" dropdownToggle
+                                type="button" class="dropdown-toggle" aria-controls="dropdown-basic-02">
+                                <span><i [ngClass]="menu?.icon"></i>
+                                    <span class="item-name">{{menu?.label}}</span>
+                                </span>
+                            </a>
+                            <ng-container *ngIf="menu?.items?.length">
+                                <ul id="dropdown-basic-02" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu"
+                                    role="menu" aria-labelledby="button-basic-02">
+                                    <li *ngFor="let item of menu?.items; trackBy: trackItems">
+                                        <a *ngIf="item?.link" href="javascript:void(0);"
+                                            [class.active]="rla?.isActive || isRouteWithParamsActive(item?.link)"
+                                            [routerLink]="[item?.link]" routerLinkActive #rla="routerLinkActive"
+                                            [routerLinkActiveOptions]="{exact: true}" [queryParams]="item?.additional"><i
+                                                [ngClass]="item.icon"></i> {{item?.label}}
+                                        </a>
+                                        <a *ngIf="!item?.link" href="javascript:void(0);" (click)="handleItemClick(item)"><i
+                                                [ngClass]="item.icon"></i> {{item?.label}}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </ng-container>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
+
     </div>
     <ng-template #headDropdownMenu>
 
