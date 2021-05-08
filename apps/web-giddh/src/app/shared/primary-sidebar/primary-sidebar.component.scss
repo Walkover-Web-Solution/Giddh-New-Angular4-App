@@ -8,7 +8,7 @@
     padding-top: 0 !important;
     .company-branch-block {
         background-color: $solitude-light;
-        padding: 10px 0;
+        padding: 14px 0;
         .branch-connection {
             span.outer-span {
                 width: 12px;
@@ -71,6 +71,16 @@
                     .text-ellipsis{
                         white-space: normal;
                         word-break: break-word;
+                    }
+                }
+                .unique-name-financial-year{
+                    .branch-ellipsis{
+                        white-space: normal;
+                        word-break: break-all;
+                        i.icon-branch1{
+                            position: relative;
+                            top: 3px;
+                        }
                     }
                 }
                 .switch-company-btn{
@@ -159,8 +169,9 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                     font-family: 'opensans-regular';
-                    font-size: 12px;
+                    font-size: 13px;
                     margin-left: 18px;
+                    margin-top: 7px;
                 }
             }
             img.company-icon {
