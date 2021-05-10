@@ -667,7 +667,7 @@
             </div>
 
             <ng-container
-                *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && (selectedVoucher === 'sales' || selectedVoucher === 'purchase') && !isMobileView">
+                *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && (selectedVoucher === 'sales' || selectedVoucher === 'purchase') && isMobileView">
                 <div class="card mobile-table mr-t15" *ngFor="let item of voucherData?.items; let i = index">
                     <table class="table basic table-bordered invoice-table"
                         *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
