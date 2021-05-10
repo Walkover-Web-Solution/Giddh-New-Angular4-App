@@ -204,6 +204,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public remainingSubscriptionDays: any = false;
     /** Menu items received from API */
     public apiMenuItems: Array<any> = [];
+    /** True, if GST side menu is opened in responsive mode */
+    public isGstSideMenuOpened: boolean = false;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -1797,5 +1799,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             }
         });
+    }
+
+    /**
+     * Opens the GST side menu in responsive mode
+     *
+     * @memberof HeaderComponent
+     */
+    public openGstSideMenu(): void {
+        this.isGstSideMenuOpened = !this.isGstSideMenuOpened;
+        this.store.dispatch(this._generalActions.openGstSideMenu(this.isGstSideMenuOpened));
     }
 }

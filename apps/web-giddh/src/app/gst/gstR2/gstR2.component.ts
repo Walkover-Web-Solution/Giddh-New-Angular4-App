@@ -1,4 +1,9 @@
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { AppState } from '../../store';
 
 declare var jquery: any;
 declare var $: any;
@@ -15,8 +20,13 @@ export class FileGstR2Component implements OnInit, OnDestroy {
     public asideMenuState: string = 'out';
     /* this will check mobile screen size */
     public isMobileScreen: boolean = false;
+    /** Subject to unsubscribe from listeners */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor() {
+    constructor(
+        private store: Store<AppState>,
+        private breakpointObserver: BreakpointObserver
+    ) {
         //
     }
     /**
@@ -46,6 +56,15 @@ export class FileGstR2Component implements OnInit, OnDestroy {
         }
     }
     public ngOnInit() {
+        this.breakpointObserver
+            .observe(['(max-width: 768px)'])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((state: BreakpointState) => {
+                this.isMobileScreen = state.matches;
+                if (!this.isMobileScreen) {
+                    this.asideGstSidebarMenuState = 'in';
+                }
+            });
         this.toggleGstPane();
         $('.tabs-new a').on('click', function (event) {
             event.preventDefault();
@@ -139,6 +158,15 @@ export class FileGstR2Component implements OnInit, OnDestroy {
             $('#tab1, #tab3, #tabs4').hide();
 
         });
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+                }
+            }
+        });
     }
     /**
      * Unsubscribes from subscription
@@ -147,5 +175,7 @@ export class FileGstR2Component implements OnInit, OnDestroy {
      */
     public ngOnDestroy(){
         document.querySelector('body').classList.remove('gst-sidebar-open');
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }
