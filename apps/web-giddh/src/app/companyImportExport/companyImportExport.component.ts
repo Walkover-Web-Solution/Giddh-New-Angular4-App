@@ -21,7 +21,7 @@ export class CompanyImportExportComponent implements OnInit {
     public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
-        
+
     }
 
     public ngOnInit() {

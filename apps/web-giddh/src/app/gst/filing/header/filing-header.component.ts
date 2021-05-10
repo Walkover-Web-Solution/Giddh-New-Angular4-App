@@ -49,7 +49,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public fileGstr3b: {} = { via: null };
     /** True if current organization is company */
     @Input() public isCompany: boolean;
-    @ViewChild('cancelConfirmationModel', {static: true}) public cancelConfirmationModel: ModalDirective;
+    @ViewChild('cancelConfirmationModel', { static: true }) public cancelConfirmationModel: ModalDirective;
 
     public gstAuthenticated$: Observable<boolean>;
     public GstAsidePaneState: string = 'out';
@@ -82,7 +82,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         this.companyGst$.subscribe(a => {
             if (a) {
                 this.activeCompanyGstNumber = a;
@@ -123,9 +123,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnChanges(s: SimpleChanges) {
         //if (s && s.selectedGst && s.selectedGst.currentValue === 'gstr2') {
-            // if (!this.gstAuthenticated && this.selectedGst === 'gstr2') {
-            //   this.toggleSettingAsidePane(null, 'RECONCILE');
-            // }
+        // if (!this.gstAuthenticated && this.selectedGst === 'gstr2') {
+        //   this.toggleSettingAsidePane(null, 'RECONCILE');
+        // }
         //}
 
         if (s && s.currentPeriod && s.currentPeriod.currentValue) {

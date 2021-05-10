@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -16,7 +16,7 @@ import { CreateDiscountRequest, IDiscountList } from '../../../models/api-models
 export class SettingsDiscountActions {
 
 
-    public GetDiscount$: Observable<Action> =createEffect( ()=>  this.action$
+    public GetDiscount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT),
             switchMap((action: CustomActions) => {
@@ -31,7 +31,7 @@ export class SettingsDiscountActions {
             })));
 
 
-    public CreateDiscount$: Observable<Action> =createEffect( ()=>  this.action$
+    public CreateDiscount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT),
             switchMap((action: CustomActions) => {
@@ -40,7 +40,7 @@ export class SettingsDiscountActions {
             })));
 
 
-    public CreateDiscountResponse$: Observable<Action> =createEffect( ()=>  this.action$
+    public CreateDiscountResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT_RESPONSE),
             map((response: CustomActions) => {
@@ -54,7 +54,7 @@ export class SettingsDiscountActions {
             })));
 
 
-    public UpdateDiscount$: Observable<Action> =createEffect( ()=>  this.action$
+    public UpdateDiscount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT),
             switchMap((action: CustomActions) => {
@@ -63,7 +63,7 @@ export class SettingsDiscountActions {
             })));
 
 
-    public UpdateDiscountResponse$: Observable<Action> =createEffect( ()=>  this.action$
+    public UpdateDiscountResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT_RESPONSE),
             map((response: CustomActions) => {
@@ -77,7 +77,7 @@ export class SettingsDiscountActions {
             })));
 
 
-    public DeleteDiscount$: Observable<Action> =createEffect( ()=>  this.action$
+    public DeleteDiscount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_DISCOUNT_ACTIONS.DELETE_DISCOUNT),
             switchMap((action: CustomActions) => {
@@ -86,7 +86,7 @@ export class SettingsDiscountActions {
             })));
 
 
-    public DeleteDiscountResponse$: Observable<Action> =createEffect( ()=>  this.action$
+    public DeleteDiscountResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_DISCOUNT_ACTIONS.DELETE_DISCOUNT_RESPONSE),
             map((response: CustomActions) => {

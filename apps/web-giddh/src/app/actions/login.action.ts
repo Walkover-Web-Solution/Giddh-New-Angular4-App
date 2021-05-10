@@ -1194,7 +1194,7 @@ export class LoginActions {
                 });
             }
             if (isQueryParams) {
-                this._router.navigate([route], {queryParams: parameter});
+                this._router.navigate([route], { queryParams: parameter });
             } else {
                 this._router.navigate([route], parameter);
             }

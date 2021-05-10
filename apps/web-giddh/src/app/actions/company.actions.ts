@@ -127,7 +127,7 @@ export class CompanyActions {
                     isNewUser = s.userLoginState === 2;
                     prevTab = s.lastState;
                 });
-                
+
                 if (isNewUser) {
                     this.store.dispatch({
                         type: 'SetLoginStatus',
@@ -692,7 +692,7 @@ export class CompanyActions {
      * @returns {CustomActions} Action to set the financial year
      * @memberof CompanyActions
      */
-    public setUserChosenFinancialYear(filterValues: {financialYear: string, branchUniqueName: string, timeFilter: string}): CustomActions {
+    public setUserChosenFinancialYear(filterValues: { financialYear: string, branchUniqueName: string, timeFilter: string }): CustomActions {
         return { type: CompanyActions.SET_USER_CHOSEN_FINANCIAL_YEAR, payload: filterValues };
     }
 

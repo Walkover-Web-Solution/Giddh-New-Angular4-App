@@ -115,7 +115,8 @@
 /> -->
                                     <sh-select class="sh-form-control" formControlName="countryCode"
                                         [options]="countrySource"
-                                        [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('countryCode').invalid }" [isRequired]="true">
+                                        [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('countryCode').invalid }"
+                                        [isRequired]="true">
                                     </sh-select>
                                 </div>
 
@@ -480,27 +481,32 @@ class="sales-tax"
                                 <section class="tabl-sec">
                                     <div class="table-row">
                                         <div class="table-cell">Total Amount</div>
-                                        <div class="table-cell figure-cell">{{CreateInvoiceForm.controls['uiCalculation'].get('subTotal').value | number:'1.2-2'}}
+                                        <div class="table-cell figure-cell">
+                                            {{CreateInvoiceForm.controls['uiCalculation'].get('subTotal').value |
+                                            number:'1.2-2'}}
                                         </div>
                                     </div>
                                     <div class="table-row">
                                         <div class="table-cell">Discount</div>
                                         <div class="table-cell figure-cell">
-                                            {{CreateInvoiceForm.controls['uiCalculation'].get('totalDiscount').value | number:'1.2-2'}}
+                                            {{CreateInvoiceForm.controls['uiCalculation'].get('totalDiscount').value |
+                                            number:'1.2-2'}}
                                         </div>
 
                                     </div>
                                     <div class="table-row">
                                         <div class="table-cell">Taxable Value</div>
                                         <div class="table-cell figure-cell">
-                                            {{CreateInvoiceForm.controls['uiCalculation'].get('totalTaxableValue').value | number:'1.2-2'}}
+                                            {{CreateInvoiceForm.controls['uiCalculation'].get('totalTaxableValue').value
+                                            | number:'1.2-2'}}
                                         </div>
 
                                     </div>
                                     <div class="table-row">
                                         <div class="table-cell">Tax</div>
                                         <div class="table-cell figure-cell">
-                                            {{CreateInvoiceForm.controls['uiCalculation'].get('gstTaxesTotal').value | number:'1.2-2'}}
+                                            {{CreateInvoiceForm.controls['uiCalculation'].get('gstTaxesTotal').value |
+                                            number:'1.2-2'}}
                                         </div>
                                     </div>
                                     <div class="table-row">
@@ -508,7 +514,8 @@ class="sales-tax"
                                             <strong>Total</strong>
                                         </div>
                                         <div class="table-cell figure-cell">
-                                            <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('grandTotal').value | number:'1.2-2'}}</strong>
+                                            <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('grandTotal').value
+                                                | number:'1.2-2'}}</strong>
                                         </div>
                                     </div>
                                     <div class="table-row">
@@ -523,7 +530,8 @@ class="sales-tax"
                                             <strong>Balance Due</strong>
                                         </div>
                                         <div class="table-cell figure-cell">
-                                            <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('balanceDue').value | number:'1.2-2'}}</strong>
+                                            <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('balanceDue').value
+                                                | number:'1.2-2'}}</strong>
                                         </div>
                                     </div>
                                 </section>

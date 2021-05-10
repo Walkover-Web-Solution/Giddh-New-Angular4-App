@@ -95,8 +95,8 @@
                                 <div class="col-12 mr-t1">
                                     <button class="btn btn-success"
                                         [ladda]="saveGspSessionInProcess || authorizeGspSessionOtpInProcess"
-                                        (click)="save()"
-                                        [disabled]="(!taxProForm.gstin || !taxProForm.userName)">{{ !otpSentSuccessFully ? 'Get Otp' : 'Verify Otp'}}
+                                        (click)="save()" [disabled]="(!taxProForm.gstin || !taxProForm.userName)">{{
+                                        !otpSentSuccessFully ? 'Get Otp' : 'Verify Otp'}}
                                     </button>
                                     <button class="btn btn-default"
                                         (click)="toggleCancelModel();resetLocalFlags()">Cancel</button>

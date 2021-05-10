@@ -109,7 +109,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
         if (event.key === 'Enter' && this.menuIndex !== -1 && this.itemIndex !== -1) {
             const currentFocusedItem = items[this.menuIndex]?.items[this.itemIndex];
             if (currentFocusedItem) {
-                this.router.navigate([currentFocusedItem.link], { queryParams: currentFocusedItem.additional});
+                this.router.navigate([currentFocusedItem.link], { queryParams: currentFocusedItem.additional });
             }
         }
     }
