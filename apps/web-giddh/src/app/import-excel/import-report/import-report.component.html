@@ -1,4 +1,5 @@
-<ng-container appTranslate [file]="'import-data'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'import-data'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="padd15">
         <div class="d-flex flex-column">
@@ -12,10 +13,9 @@
                 <div class="row import-data-row">
                     <div class="col-lg-6 col-md-12 mr-b15" *ngFor="let item of importStatusResponse.results">
                         <div class="import-card">
-                        <i class="hover-orange"
-                                (click)="downloadItem(item)">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="13.333" height="15" viewBox="0 0 13.333 15"
-                                    class="download-import">
+                            <i class="hover-orange" (click)="downloadItem(item)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13.333" height="15"
+                                    viewBox="0 0 13.333 15" class="download-import">
                                     <path
                                         d="M77.9,363.333H91.233V365H77.9Zm10-5-3.333,3.333-3.333-3.333h2.5V350H85.4v8.333Z"
                                         transform="translate(-77.9 -350)" />
@@ -47,18 +47,22 @@
                             </div>
                             <div class="row mt-1">
                                 <div class="col-3 col-sm-3">
-                                    <label class="text-gray">{{ item?.entity === 'entries' ? commonLocaleData?.app_branch : commonLocaleData?.app_company }}:</label>
+                                    <label class="text-gray">{{ item?.entity === 'entries' ?
+                                        commonLocaleData?.app_branch : commonLocaleData?.app_company }}:</label>
                                 </div>
-                                <div class="col-9 col-sm-9">{{ item?.entity === 'entries' ? item?.branch?.name || '-' : activeCompany?.name }}</div>
+                                <div class="col-9 col-sm-9">{{ item?.entity === 'entries' ? item?.branch?.name || '-' :
+                                    activeCompany?.name }}</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="pagination-wrap" [hidden]="importRequestStatus === 7" *ngIf="importStatusResponse.totalItems > 10">
+            <div class="pagination-wrap" [hidden]="importRequestStatus === 7"
+                *ngIf="importStatusResponse.totalItems > 10">
                 <pagination [totalItems]="importStatusResponse.totalItems" [(ngModel)]="importPaginatedRequest.page"
-                    [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="importStatusResponse.count"
-                    [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                    [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
+                    [itemsPerPage]="importStatusResponse.count" [rotate]="false" (pageChanged)="pageChanged($event)">
+                </pagination>
             </div>
             <giddh-page-loader *ngIf="importRequestStatus === 7" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
         </div>

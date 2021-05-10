@@ -37,11 +37,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     /** True, If advance search applied */
     public showAdvanceSearchIcon: boolean = false;
-    @ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
-    @ViewChild('exportDaybookModal', {static: true}) public exportDaybookModal: ModalDirective;
+    @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: ModalDirective;
+    @ViewChild('exportDaybookModal', { static: true }) public exportDaybookModal: ModalDirective;
     @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent, static: false }) public dateRangePickerCmp: DaterangePickerComponent;
     /** Daybook advance search component reference */
-    @ViewChild('daybookAdvanceSearch', {static: false}) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
+    @ViewChild('daybookAdvanceSearch', { static: false }) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
     /** True, if entry expanded (at least one entry) */
     public isEntryExpanded: boolean = false;
     /** Date format type */
@@ -142,7 +142,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     item.isExpanded = this.isAllExpanded;
                 });
 
-                if(this.todaySelected) {
+                if (this.todaySelected) {
                     this.daybookQueryRequest.from = moment(data.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                     this.daybookQueryRequest.to = moment(data.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
@@ -200,7 +200,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
             }
         });
@@ -265,7 +265,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
     public toggleExpand() {
         this.isAllExpanded = !this.isAllExpanded;
-        if(this.daybookData$) {
+        if (this.daybookData$) {
             this.daybookData$ = this.daybookData$.pipe(map(sc => {
                 sc.entries.map(e => e.isExpanded = this.isAllExpanded);
                 return sc;
@@ -289,7 +289,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
                 this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                     this.todaySelected = response;
-                    if(!response) {
+                    if (!response) {
                         this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
                         this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                         this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -309,7 +309,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public pageChanged(event: any): void {
-        if(this.daybookQueryRequest.page !== event.page) {
+        if (this.daybookQueryRequest.page !== event.page) {
             this.daybookQueryRequest.page = event.page;
             this.go(this.searchFilterData);
         }
@@ -370,7 +370,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public checkIsStockEntryAvailable(): any {
-        if(this.daybookData$) {
+        if (this.daybookData$) {
             this.daybookData$.pipe(takeUntil(this.destroyed$)).subscribe(item => {
                 this.isEntryExpanded = item.entries.some(entry => {
                     if (entry.isExpanded && entry.otherTransactions) {
@@ -421,7 +421,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }

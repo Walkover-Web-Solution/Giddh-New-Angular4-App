@@ -1,18 +1,21 @@
 <div class="container-fluid">
     <div class="top-bar aging-top-bar clearfix">
         <div class="aging-form-inline">
-            <div class="form-group mr-r15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
+            <div class="form-group mr-r15 pull-left linked-entities"
+                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
                 <div class="form-group">
-                    <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
-                        [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
-                        [placeholder]="commonLocaleData?.app_select_entity" [fixedValue]="currentBranch?.alias">
+                    <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
+                        [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
+                        [isFilterEnabled]="true" [placeholder]="commonLocaleData?.app_select_entity"
+                        [fixedValue]="currentBranch?.alias">
                         <ng-template #optionTemplate let-option="option">
                             <ng-container>
                                 <a href="javascript:void(0)" class="list-item d-flex">
                                     <span class="entity-icon">
                                         <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
                                             tooltip="{{commonLocaleData?.app_branch}}"></i>
-                                        <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="{{commonLocaleData?.app_company}}"></i>
+                                        <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
+                                            tooltip="{{commonLocaleData?.app_company}}"></i>
                                     </span>
                                     <span class="entity-details">
                                         <div class="item giddh-limit single-line-clamp">{{ option?.label || '-' }}</div>
@@ -28,19 +31,21 @@
             </div>
             <div class="pull-left d-flex wrap-searching-aging">
                 <div class="form-group search-field max-width-250" [ngClass]="{'default-width':isAdvanceSearchApplied}">
-                    <input type="text" [placeholder]="localeData?.name_amount" class="form-control name-width" [(ngModel)]="searchStr"
-                        (ngModelChange)="searchStr$.next($event)" />
+                    <input type="text" [placeholder]="localeData?.name_amount" class="form-control name-width"
+                        [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
                     <span class="input-addon">
                         <i class="icon-search"></i>
                     </span>
                 </div>
                 <div class="cp advance-clear-filter-icons d-flex">
-                    <div class="advance-icon" (click)="toggleAdvanceSearchPopup()" tooltip="{{commonLocaleData?.app_advance_search}}">
+                    <div class="advance-icon" (click)="toggleAdvanceSearchPopup()"
+                        tooltip="{{commonLocaleData?.app_advance_search}}">
                         <span class="icon-advance-filter"></span>
                     </div>
                     <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
                         <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()">
-                            <i aria-hidden="true" class="icon-refresh" tooltip="{{commonLocaleData?.app_reset_filter}}"></i>
+                            <i aria-hidden="true" class="icon-refresh"
+                                tooltip="{{commonLocaleData?.app_reset_filter}}"></i>
                         </a>
                     </span>
                 </div>
@@ -60,7 +65,8 @@
             <div *ngIf="isMobileScreen">
                 <div class="text-center top-aging-table-top pd-1">
                     <p (click)="openAgingDropDown()"><strong>{{localeData?.due_in_last_days}} </strong></p>
-                    <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></aging-dropdown>
+                    <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
+                        [localeData]="localeData" [commonLocaleData]="commonLocaleData"></aging-dropdown>
                 </div>
                 <ng-container *ngTemplateOutlet='mainTable'></ng-container>
             </div>
@@ -96,7 +102,10 @@
 <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <app-contact-advance-search-component *ngIf="advanceSearch.isShown" #agingReportAdvanceSearch [request]="commonRequest" [advanceSearch4]="'agingReport'" [localeData]="localeData" [commonLocaleData]="commonLocaleData" (applyAdvanceSearchEvent)="applyAdvanceSearch($event)" (closeModelEvent)="toggleAdvanceSearchPopup()">
+            <app-contact-advance-search-component *ngIf="advanceSearch.isShown" #agingReportAdvanceSearch
+                [request]="commonRequest" [advanceSearch4]="'agingReport'" [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData" (applyAdvanceSearchEvent)="applyAdvanceSearch($event)"
+                (closeModelEvent)="toggleAdvanceSearchPopup()">
             </app-contact-advance-search-component>
         </div>
     </div>
@@ -124,7 +133,8 @@
                 <td></td>
                 <td colspan="4" class="text-center top-aging-table-top">
                     <p><strong>{{localeData?.due_in_last_days}}</strong></p>
-                    <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></aging-dropdown>
+                    <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
+                        [localeData]="localeData" [commonLocaleData]="commonLocaleData"></aging-dropdown>
                 </td>
                 <td></td>
             </tr>
@@ -147,7 +157,8 @@
                 </th>
                 <th class="italic unbold underline text-right">
                     <div class="d-flex align-items-center justify-content-end"><span
-                            (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async)?.fourth}} {{commonLocaleData?.app_days}}</span>
+                            (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async)?.fourth}}
+                            {{commonLocaleData?.app_days}}</span>
                         <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range0'}">
                         </ng-container>
                     </div>
@@ -170,7 +181,8 @@
                 </th>
                 <th class="italic text-right unbold underline">
                     <div class="d-flex align-items-center justify-content-end"><span
-                            (click)="openAgingDropDown()">{{(agingDropDownoptions$| async)?.sixth + 1 }}+ {{commonLocaleData?.app_days}} </span>
+                            (click)="openAgingDropDown()">{{(agingDropDownoptions$| async)?.sixth + 1 }}+
+                            {{commonLocaleData?.app_days}} </span>
                         <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range3'}">
                         </ng-container>
                     </div>
@@ -188,19 +200,23 @@
                 <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
                     <td [attr.data-title]="commonLocaleData?.app_name">{{ entry.name }}</td>
                     <td [attr.data-title]="localeData?.group_name">{{ entry.groupName }}</td>
-                    <td [attr.data-title]="commonLocaleData?.app_due_amount" class="text-right">{{ entry.futureDueAmount |giddhCurrency}}</td>
-                    <td [attr.data-title]="'0 - ' + (agingDropDownoptions$| async)?.fourth + ' ' + commonLocaleData?.app_days" class="text-right">
+                    <td [attr.data-title]="commonLocaleData?.app_due_amount" class="text-right">{{ entry.futureDueAmount
+                        |giddhCurrency}}</td>
+                    <td [attr.data-title]="'0 - ' + (agingDropDownoptions$| async)?.fourth + ' ' + commonLocaleData?.app_days"
+                        class="text-right">
                         {{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
                     <td [attr.data-title]="(agingDropDownoptions$| async)?.fourth + 1 + ' - ' + ((agingDropDownoptions$| async)?.fifth) + ' ' + commonLocaleData?.app_days"
-                        class="text-right"> <span
-                            (click)="openAgingDropDown()">{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</span>
+                        class="text-right"> <span (click)="openAgingDropDown()">{{
+                            entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</span>
                     </td>
                     <td [attr.data-title]="((agingDropDownoptions$| async)?.fifth + 1) + ' - ' + ((agingDropDownoptions$| async)?.sixth) + ' ' +  commonLocaleData?.app_days"
                         class="text-right">
                         {{ entry.currentAndPastDueAmount[2].dueAmount |giddhCurrency}}</td>
-                    <td [attr.data-title]="((agingDropDownoptions$| async)?.sixth + 1) + ' ' + commonLocaleData?.app_days" class="text-right">
+                    <td [attr.data-title]="((agingDropDownoptions$| async)?.sixth + 1) + ' ' + commonLocaleData?.app_days"
+                        class="text-right">
                         {{ entry.currentAndPastDueAmount[3].dueAmount |giddhCurrency}}</td>
-                    <td [attr.data-title]="commonLocaleData?.app_total_amount" class="text-right"> {{ entry.totalDueAmount |giddhCurrency}}</td>
+                    <td [attr.data-title]="commonLocaleData?.app_total_amount" class="text-right"> {{
+                        entry.totalDueAmount |giddhCurrency}}</td>
                 </tr>
             </ng-container>
             <ng-container *ngIf="!(dueAmountReportData$ | async)?.results?.length">

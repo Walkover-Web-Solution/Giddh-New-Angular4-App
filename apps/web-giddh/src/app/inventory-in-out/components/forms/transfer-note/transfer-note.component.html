@@ -20,7 +20,8 @@
                 <div class="col-xs-6 form-group">
                     <label>Product Name <sup>*</sup></label>
                     <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                        (selected)="stockChanged($event)" [ItemHeight]="'33'" formControlName="stock" [isRequired]="true"></sh-select>
+                        (selected)="stockChanged($event)" [ItemHeight]="'33'" formControlName="stock"
+                        [isRequired]="true"></sh-select>
                     <!-- <span *ngIf="stock.invalid">
               <span *ngIf="stock?.errors && stock?.errors['required']" class="text-danger">Please select Product.</span>
                     </span> -->
@@ -42,7 +43,8 @@
                 <div class="col-xs-6 form-group">
                     <label>Receiver's Name <sup>*</sup></label>
                     <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Receiver'"
-                        (selected)="recieverUniqueName = $event.value" [ItemHeight]="'33'" [isRequired]="true"></sh-select>
+                        (selected)="recieverUniqueName = $event.value" [ItemHeight]="'33'" [isRequired]="true">
+                    </sh-select>
                     <!-- <span [hidden]="recieverUniqueName" class="text-danger">Please select Receiver.</span> -->
                 </div>
             </div>

@@ -1,6 +1,6 @@
-import {app, ipcMain} from "electron";
+import { app, ipcMain } from "electron";
 import setMenu from "./AppMenuManager";
-import {log} from "./util";
+import { log } from "./util";
 import WindowManager from "./WindowManager";
 import {
     AdditionalGoogleLoginParams,

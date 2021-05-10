@@ -53,9 +53,10 @@
                         </div>
                         <div class="form-group">
                             <label>State <span class="red-text">*</span></label>
-                            <sh-select #states [options]="statesSource$ | async" required [isRequired]="true" [isFilterEnabled]="true"
-                                [disabled]="disableState" [defaultValue]="selectedState" class="w-100"
-                                [(ngModel)]="billingDetailsObj.stateCode" id="stateCode" name="stateCode"></sh-select>
+                            <sh-select #states [options]="statesSource$ | async" required [isRequired]="true"
+                                [isFilterEnabled]="true" [disabled]="disableState" [defaultValue]="selectedState"
+                                class="w-100" [(ngModel)]="billingDetailsObj.stateCode" id="stateCode" name="stateCode">
+                            </sh-select>
                         </div>
                         <!-- static pincode start -->
                         <div class="form-group">

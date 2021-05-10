@@ -16,17 +16,20 @@
                     <th width="10%" class="td-search-box" #submittedBySearchContainer
                         (clickOutside)="clickedOutside($event, submittedBySearchContainer, 'submittedBy')">
                         <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSubmittedBySearch,
-          title: localeData?.submitted_by, fieldName: 'submittedBy', formControl: submittedBySearchInput}"></ng-container>
+          title: localeData?.submitted_by, fieldName: 'submittedBy', formControl: submittedBySearchInput}">
+                        </ng-container>
                     </th>
 
                     <th width="10%" class="td-search-box" #accountSearchContainer
                         (clickOutside)="clickedOutside($event, accountSearchContainer, 'account')">
                         <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showAccountSearch,
-                        title: commonLocaleData?.app_account, fieldName: 'account', formControl: accountSearchInput}"></ng-container>
+                        title: commonLocaleData?.app_account, fieldName: 'account', formControl: accountSearchInput}">
+                        </ng-container>
                     </th>
 
                     <th width="20%" class="pr-2 amount-arrow">
-                        <div class="d-flex align-items-center justify-content-end"><span>{{commonLocaleData?.app_amount}}</span>
+                        <div class="d-flex align-items-center justify-content-end">
+                            <span>{{commonLocaleData?.app_amount}}</span>
                             <ng-container class="d-inline-block "
                                 *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
                         </div>
@@ -70,7 +73,8 @@
                         </td>
 
                         <td [attr.data-title]="localeData?.payment_receipt">
-                            <span *ngIf="expenses.baseAccountCategory==='OTHER'" class="font-12 text-gray">{{commonLocaleData?.app_ac}}</span>
+                            <span *ngIf="expenses.baseAccountCategory==='OTHER'"
+                                class="font-12 text-gray">{{commonLocaleData?.app_ac}}</span>
                             <span *ngIf="expenses.baseAccountCategory==='BANK'"
                                 class="font-12 text-gray icon-atm-card"></span>
                             <span *ngIf="expenses.baseAccountCategory==='CASH'"
@@ -158,7 +162,8 @@
 <!-- region approve entry confirm -->
 <ng-template #ApproveConfirm>
     <petty-cash-approve-confirm-dialog [selectedEntryForApprove]="selectedEntryForApprove"
-        [approveEntryRequestInProcess]="approveEntryRequestInProcess" [localeData]="localeData" [commonLocaleData]="commonLocaleData" (approveEntry)="hideApproveConfirmPopup($event)">
+        [approveEntryRequestInProcess]="approveEntryRequestInProcess" [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData" (approveEntry)="hideApproveConfirmPopup($event)">
     </petty-cash-approve-confirm-dialog>
 </ng-template>
 <!-- endregion -->
@@ -169,7 +174,8 @@
     <div class="modal-header">
 
         <h3 class="modal-title pull-left">{{commonLocaleData?.app_filter}}</h3>
-        <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close" (click)="hideFilterModal()">
+        <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close"
+            (click)="hideFilterModal()">
             <span aria-hidden="true">&times;</span>
         </button>
 

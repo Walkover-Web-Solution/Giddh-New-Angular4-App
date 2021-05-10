@@ -1,7 +1,7 @@
 import { map, switchMap } from 'rxjs/operators';
 
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from './financial-year.const';
 import { CustomActions } from '../../../store/customActions';
@@ -17,7 +17,7 @@ import { ToasterService } from '../../../services/toaster.service';
 export class SettingsFinancialYearActions {
 
 
-    public GetAllFinancialYears$: Observable<Action> = createEffect( ()=> this.action$
+    public GetAllFinancialYears$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_ALL_FINANCIAL_YEARS),
             switchMap((action: CustomActions) => this._settingsFinancialYearService.GetAllFinancialYears()),
@@ -30,7 +30,7 @@ export class SettingsFinancialYearActions {
             }))));
 
 
-    public LockFinancialYear$: Observable<Action> = createEffect( ()=> this.action$
+    public LockFinancialYear$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.LOCK_FINANCIAL_YEAR),
             switchMap((action: CustomActions) => {
@@ -39,7 +39,7 @@ export class SettingsFinancialYearActions {
             })));
 
 
-    public LockFinancialYearResponse$: Observable<Action> = createEffect( ()=> this.action$
+    public LockFinancialYearResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.LOCK_FINANCIAL_YEAR_RESPONSE),
             map((response: CustomActions) => {
@@ -53,7 +53,7 @@ export class SettingsFinancialYearActions {
             })));
 
 
-    public UnlockFinancialYear$: Observable<Action> = createEffect( ()=> this.action$
+    public UnlockFinancialYear$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR),
             switchMap((action: CustomActions) => {
@@ -62,7 +62,7 @@ export class SettingsFinancialYearActions {
             })));
 
 
-    public UnlockFinancialYearResponse$: Observable<Action> = createEffect( ()=> this.action$
+    public UnlockFinancialYearResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR_RESPONSE),
             map((response: CustomActions) => {
@@ -76,7 +76,7 @@ export class SettingsFinancialYearActions {
             })));
 
 
-    public SwitchFinancialYear$: Observable<Action> = createEffect( ()=> this.action$
+    public SwitchFinancialYear$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR),
             switchMap((action: CustomActions) => {
@@ -85,7 +85,7 @@ export class SettingsFinancialYearActions {
             })));
 
 
-    public SwitchFinancialYearResponse$: Observable<Action> = createEffect( ()=> this.action$
+    public SwitchFinancialYearResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR_RESPONSE),
             map((response: CustomActions) => {
@@ -99,7 +99,7 @@ export class SettingsFinancialYearActions {
             })));
 
 
-    public UpdateFinancialYearPeriod$: Observable<Action> = createEffect( ()=> this.action$
+    public UpdateFinancialYearPeriod$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD),
             switchMap((action: CustomActions) => {
@@ -108,7 +108,7 @@ export class SettingsFinancialYearActions {
             })));
 
 
-    public UpdateFinancialYearPeriodResponse$: Observable<Action> = createEffect( ()=> this.action$
+    public UpdateFinancialYearPeriodResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD_RESPONSE),
             map((response: CustomActions) => {
@@ -122,7 +122,7 @@ export class SettingsFinancialYearActions {
             })));
 
 
-    public AddFinancialYear$: Observable<Action> = createEffect( ()=> this.action$
+    public AddFinancialYear$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR),
             switchMap((action: CustomActions) => this._settingsFinancialYearService.AddFinancialYear(action.payload)),
@@ -135,7 +135,7 @@ export class SettingsFinancialYearActions {
             }))));
 
 
-    public AddFutureFinancialYear$: Observable<Action> = createEffect( ()=> this.action$
+    public AddFutureFinancialYear$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FUTURE_FINANCIAL_YEAR),
             switchMap((action: CustomActions) => this._settingsFinancialYearService.addFutureFinancialYear(action.payload)),

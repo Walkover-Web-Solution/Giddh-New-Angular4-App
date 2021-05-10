@@ -125,11 +125,11 @@ a.connect-bank {
     justify-content: center;
     align-items: center;
     border-right: 1px solid $gainsboro;
-    color:$nero;
+    color: $nero;
 }
 .date-range-input input {
     padding-left: 35px !important;
-    color:$nero;
+    color: $nero;
 }
 .page-title h1 {
     color: $midnight-blue;
@@ -249,16 +249,16 @@ input:read-only:focus {
 .total-sales-header label {
     margin-bottom: 5px;
 }
-.panel-heading-inner-content{
+.panel-heading-inner-content {
     display: flex;
     justify-content: space-between;
 }
-.refresh-btn{
+.refresh-btn {
     align-items: center;
     display: flex;
     flex-direction: row-reverse;
 }
-@media(max-width:991px){
+@media (max-width: 991px) {
     .about-date {
         font-size: 16px;
         display: flex;
@@ -267,36 +267,36 @@ input:read-only:focus {
     .total-sales-tabs a {
         font-size: 14px;
     }
-    .total-income-wrap{
+    .total-income-wrap {
         flex-direction: column-reverse;
-        .page-title{
-            h1{
-            font-size: 16px;
-            line-height: 1.3;
+        .page-title {
+            h1 {
+                font-size: 16px;
+                line-height: 1.3;
             }
         }
-        .collapse-close{
+        .collapse-close {
             height: 20px;
             width: 20px;
             margin-left: 10px;
-            .icon-collapse-icon{
-                    font-size: 18px;
+            .icon-collapse-icon {
+                font-size: 18px;
             }
         }
     }
 }
-@media(max-width:767px){
-    .total-sale-detail{
+@media (max-width: 767px) {
+    .total-sale-detail {
         text-align: left;
         padding-right: 0;
-        .single-sale-detail{
+        .single-sale-detail {
             padding-top: 0;
             padding-bottom: 10px;
         }
-        p{
+        p {
             font-size: 14px;
         }
-        h3{
+        h3 {
             padding-top: 3px;
             font-size: 18px;
         }
@@ -311,10 +311,10 @@ input:read-only:focus {
         text-align: left;
         align-items: flex-start;
         position: relative;
-        .refresh-btn{
+        .refresh-btn {
             padding-left: 15px;
             padding-top: 10px;
-            .glyphicon-refresh{
+            .glyphicon-refresh {
                 margin-left: 10px !important;
                 position: absolute !important;
                 right: 0;
@@ -327,21 +327,21 @@ input:read-only:focus {
             top: 0;
         }
     }
-    .revenue-tabs{
+    .revenue-tabs {
         float: none !important;
         padding-top: 5px;
     }
-    .single-sale-data{
+    .single-sale-data {
         min-height: auto;
         margin-bottom: 15px;
-        p{
+        p {
             font-size: 14px;
         }
-        h3{
+        h3 {
             font-size: 18px;
         }
     }
-    .about-date{
+    .about-date {
         display: flex;
         font-size: 14px;
         flex-direction: column;
@@ -351,26 +351,26 @@ input:read-only:focus {
         padding-bottom: 10px;
         font-size: 14px;
     }
-    .page-title{
-        h1{
+    .page-title {
+        h1 {
             display: flex;
             float: left;
-            font-size: 20px
+            font-size: 20px;
         }
-        .collapse-close{
+        .collapse-close {
             height: 40px;
             width: 40px;
-            span.icon-collapse-icon{
+            span.icon-collapse-icon {
                 font-size: 20px;
             }
         }
     }
-    .total-sales-header{
+    .total-sales-header {
         padding: 15px 15px 0;
     }
 }
-@media(max-width:575px){
-     .about-date{
+@media (max-width: 575px) {
+    .about-date {
         float: none !important;
     }
 }

@@ -1,5 +1,6 @@
-<ng-container appTranslate [file]="'import-data'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
-    <hamburger-menu  [pageHeading]="localeData?.page_heading"></hamburger-menu>
+<ng-container appTranslate [file]="'import-data'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="row">
         <div class="col-12">
             <div class="pd-t2 mt-2">
