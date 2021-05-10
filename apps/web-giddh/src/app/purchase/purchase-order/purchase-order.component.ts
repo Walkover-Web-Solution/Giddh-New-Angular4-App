@@ -25,7 +25,7 @@ import { OrganizationType } from '../../models/user-login-state';
     styleUrls: ['./purchase-order.component.scss']
 })
 
-export class PurchaseOrderComponent implements OnInit, OnDestroy {
+export class PurchaseOrderComponent implements OnDestroy {
     /* Datepicker component */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /* Input element for column search */
@@ -156,7 +156,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      *
      * @memberof PurchaseOrderComponent
      */
-    public ngOnInit(): void {
+    public initPurchaseOrders(): void {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -198,7 +198,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         });
 
         this.selectedPo$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response && (this.pageUrl.includes('/purchase-orders/preview') || this.pageUrl.includes('/purchase-management/purchase'))) {
+            if (response && (this.pageUrl.includes('/purchase-orders/preview') || this.pageUrl.includes('/purchase-management/purchase'))) {
                 this.selectedPo = response;
             }
         });
@@ -295,9 +295,19 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
 
                         let purchaseOrders = _.cloneDeep(res.body);
 
-                        if(purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0) {
+                        if (purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0) {
                             purchaseOrders.items.map(item => {
                                 item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedPo, item.uniqueName);
+                                let grandTotalConversionRate = 0, grandTotalAmountForCompany, grandTotalAmountForAccount;
+                                grandTotalAmountForCompany = Number(item?.grandTotal?.amountForCompany) || 0;
+                                grandTotalAmountForAccount = Number(item?.grandTotal?.amountForAccount) || 0;
+
+                                if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
+                                    grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+                                }
+                                let currencyConversion = this.localeData?.currency_conversion;
+                                currencyConversion = currencyConversion?.replace("[BASE_CURRENCY]", item.grandTotal?.currencyForCompany?.code)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
+                                item.grandTotalTooltipText = currencyConversion;
                                 return item;
                             });
                         }
@@ -352,7 +362,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof PurchaseOrderComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -611,7 +621,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 if (res) {
                     if (res.status === 'success') {
 
-                        if(action === "create_purchase_bill") {
+                        if (action === "create_purchase_bill") {
                             this.refreshPurchaseBill.emit(true);
                         }
 
@@ -762,14 +772,14 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof PurchaseOrderComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.translationLoaded = true;
-
             this.bulkUpdateFields = [
                 { label: this.localeData?.order_date, value: BULK_UPDATE_FIELDS.purchasedate },
                 { label: this.localeData?.expected_delivery_date, value: BULK_UPDATE_FIELDS.duedate },
                 { label: this.commonLocaleData?.app_warehouse, value: BULK_UPDATE_FIELDS.warehouse }
             ];
+            this.initPurchaseOrders();
         }
     }
 }

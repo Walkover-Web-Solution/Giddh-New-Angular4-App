@@ -9,7 +9,7 @@
         color: $primary;
     }
     .select-product-type {
-        .form-body{
+        .form-body {
             background-color: transparent;
         }
         display: flex;
@@ -221,52 +221,51 @@
         }
     }
 }
-.final-product-recipe{
+.final-product-recipe {
     background-color: $white;
     padding: 15px;
     margin-bottom: 15px;
-    .variant-field{
-        .variant-name-field{
+    .variant-field {
+        .variant-name-field {
             min-width: 30%;
             padding-right: 30px;
             max-width: 30%;
         }
     }
-     .width-30-percent {
+    .width-30-percent {
         min-width: 30%;
         padding-right: 30px;
         max-width: 30%;
     }
-    .col-sm-1
-    {
+    .col-sm-1 {
         flex: 0 0 5.333333%;
         max-width: 5.333333%;
     }
-    .to-span{
+    .to-span {
         position: relative;
         right: 1%;
     }
-    .recipe-input-tab{
-        .col-sm-3{
+    .recipe-input-tab {
+        .col-sm-3 {
             flex: 0 0 27%;
             max-width: 27%;
         }
     }
-    .add-new-final-product{
+    .add-new-final-product {
         display: none;
     }
 }
 
 /* responsive */
-@media(max-width:1440px){
-.final-product-recipe{
+@media (max-width: 1440px) {
+    .final-product-recipe {
         .width-30-percent {
             min-width: 31%;
             padding-right: 15px;
             max-width: 31%;
         }
-        .variant-field{
-            .variant-name-field{
+        .variant-field {
+            .variant-name-field {
                 min-width: 31%;
                 padding-right: 15px;
                 max-width: 31%;
@@ -306,41 +305,42 @@
         max-width: 100%;
     }
 }
-@media (max-width:991px){
-    .addon-form, .variant-form{
-        input{
+@media (max-width: 991px) {
+    .addon-form,
+    .variant-form {
+        input {
             margin-bottom: 15px;
         }
     }
-    .d-none-mobile{
+    .d-none-mobile {
         display: none;
     }
-    .final-product-recipe{
-        input{
+    .final-product-recipe {
+        input {
             margin-bottom: 15px;
         }
-        .expense-form{
+        .expense-form {
             flex-direction: column !important;
             justify-content: flex-start;
             align-items: flex-start !important;
             text-align: left;
-            .width-30-percent{
+            .width-30-percent {
                 min-width: 100%;
                 padding-right: 0;
                 max-width: 100%;
             }
-            input{
+            input {
                 margin-bottom: 15px;
             }
-            .add-expense{
+            .add-expense {
                 margin-left: 0;
             }
-            span{
+            span {
                 padding: 0 15px;
                 margin-bottom: 11px;
             }
         }
-        .add-new-final-product{
+        .add-new-final-product {
             display: flex;
         }
         .width-30-percent {
@@ -348,8 +348,8 @@
             padding-right: 15px;
             max-width: 33.33%;
         }
-        .variant-field{
-            .variant-name-field{
+        .variant-field {
+            .variant-name-field {
                 min-width: 33.33%;
                 padding-right: 15px;
                 max-width: 33.33%;
@@ -431,20 +431,20 @@
             display: none;
         }
     }
-    .final-product-recipe{
+    .final-product-recipe {
         .width-30-percent {
             min-width: 100%;
             padding-right: 15px;
             max-width: 100%;
         }
-        .variant-field{
-            .variant-name-field{
+        .variant-field {
+            .variant-name-field {
                 min-width: 100%;
                 padding-right: 0;
                 max-width: 100%;
             }
         }
-        .hide-label-on-mobile{
+        .hide-label-on-mobile {
             display: none !important;
         }
     }

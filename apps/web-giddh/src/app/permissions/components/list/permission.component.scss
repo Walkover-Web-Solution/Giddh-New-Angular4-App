@@ -3,7 +3,7 @@
 .role {
     background: $lavender;
     border: 1px solid $lavender;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 .role ul {
@@ -107,7 +107,7 @@
     width: 25%;
     color: $nero;
     padding: 6px;
-    font-family: 'opensans-semibold';
+    font-family: "opensans-semibold";
     word-break: break-word;
 }
 
@@ -183,13 +183,13 @@
     align-items: center;
     flex-direction: column;
 }
-.new-box{
+.new-box {
     background-color: $white;
-    border:1px solid $chetwode-blue;
+    border: 1px solid $chetwode-blue;
 }
-@media(max-width:767px){
-    .role{
-        ul{
+@media (max-width: 767px) {
+    .role {
+        ul {
             padding: 15px 0;
             li {
                 display: block;
@@ -198,12 +198,12 @@
             }
         }
     }
-    .role-head{
-            min-height: 110px;
-        }
+    .role-head {
+        min-height: 110px;
+    }
 }
-@media(max-width:360px){
-  .role ul li {
+@media (max-width: 360px) {
+    .role ul li {
         width: 100%;
         float: none;
     }

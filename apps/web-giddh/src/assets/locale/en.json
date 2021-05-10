@@ -196,7 +196,7 @@
     "app_tax_types": {
         "gst": "GST",
         "input_gst": "InputGST",
-        "others": "others"
+        "others": "Others"
     },
     "app_duration": {
         "monthly": "Monthly",
@@ -400,13 +400,13 @@
     "app_entity": "Entity",
     "app_select_entity": "Select Entity",
     "app_select_option": "Select Option",
-    "app_select_tag" : "Select Tag",
+    "app_select_tag": "Select Tag",
     "app_assets": "Assets",
     "app_income": "Income",
     "app_expenses": "Expenses",
     "app_liabilities": "Liabilities",
-    "app_debit" : "Debit",
-    "app_credit" : "Credit",
+    "app_debit": "Debit",
+    "app_credit": "Credit",
     "app_schedule_now": "Schedule Now",
     "app_reset": "Reset",
     "app_download_csv": "Download CSV",
@@ -543,7 +543,32 @@
             "LastQuarter": "Last Quarter",
             "AllTime": "All Time"
         },
-        "weekdays": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
-        "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    }
+        "weekdays": [
+            "Su",
+            "Mo",
+            "Tu",
+            "We",
+            "Th",
+            "Fr",
+            "Sa"
+        ],
+        "months": [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+        ]
+    },
+    "app_characters_left": "Characters Left",
+    "app_pin": "PIN",
+    "app_max_100_characters_allowed_limit": "Max. 100 characters allowed",
+    "app_max_50_characters_allowed_limit": "Max. 50 characters allowed"
 }

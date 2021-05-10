@@ -131,7 +131,8 @@
                                                             </div>
                                                             <div class="mr-b15">
                                                                 <label>Opening Qty</label>
-                                                                <input type="text" id="purchase-open-qty" class="form-control" placeholder="Enter Qty">
+                                                                <input type="text" id="purchase-open-qty"
+                                                                    class="form-control" placeholder="Enter Qty">
                                                             </div>
                                                             <div class="d-flex align-items-center unit-rate-fields">
                                                                 <div class="unit mr-r15 mr-b15">
@@ -175,7 +176,8 @@
                                                             </div>
                                                             <div class="mr-b15">
                                                                 <label>Opening Qty</label>
-                                                                <input type="text" id="sales-open-qty" class="form-control" placeholder="Enter Qty">
+                                                                <input type="text" id="sales-open-qty"
+                                                                    class="form-control" placeholder="Enter Qty">
                                                             </div>
                                                             <div class="d-flex align-items-center unit-rate-fields">
                                                                 <div class="unit mr-r15 mr-b15">
@@ -318,15 +320,21 @@
                                             </div>
                                             <div class="col-sm-4 mr-b15">
                                                 <span class="p-0 mr-3" (click)="selectCode(true)">
-                                                    <input id="combo-hsn-code-option" class="radio-custom cp ml-0" type="radio" name="selectCode" [value]="">
-                                                    <label for="combo-hsn-code-option" class="radio-custom-label">HSN</label>
+                                                    <input id="combo-hsn-code-option" class="radio-custom cp ml-0"
+                                                        type="radio" name="selectCode" [value]="">
+                                                    <label for="combo-hsn-code-option"
+                                                        class="radio-custom-label">HSN</label>
                                                 </span>
                                                 <span class="p-0" (click)="selectCode(false)">
-                                                    <input id="combo-sac-code-option" class="radio-custom cp ml-0" type="radio" name="selectCode">
-                                                    <label for="combo-sac-code-option" class="radio-custom-label">SAC</label>
+                                                    <input id="combo-sac-code-option" class="radio-custom cp ml-0"
+                                                        type="radio" name="selectCode">
+                                                    <label for="combo-sac-code-option"
+                                                        class="radio-custom-label">SAC</label>
                                                 </span>
-                                                <input *ngIf="isHSN" id="product-name" class="form-control" type="text" placeholder="Enter HSN Code">
-                                                <input *ngIf="!isHSN" id="product-name" class="form-control" type="text" placeholder="Enter SAC Code">
+                                                <input *ngIf="isHSN" id="product-name" class="form-control" type="text"
+                                                    placeholder="Enter HSN Code">
+                                                <input *ngIf="!isHSN" id="product-name" class="form-control" type="text"
+                                                    placeholder="Enter SAC Code">
                                             </div>
 
                                             <div class="col-sm-4 mr-b15">
@@ -336,7 +344,8 @@
                                             </div>
                                             <div class="col-sm-4 mr-b15">
                                                 <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
-                                                <input id="bar-code" class="form-control" type="text" placeholder="Enter">
+                                                <input id="bar-code" class="form-control" type="text"
+                                                    placeholder="Enter">
                                             </div>
                                             <div class="col-sm-4 mr-b15">
                                                 <label>Custom Field</label>
@@ -348,7 +357,8 @@
                                 </tab>
                             </tabset>
                             <div class="button-group mt-5">
-                                <button id="clear-btn" class="btn btn-primary bdr-radius-50 min-width-100">Clear</button>
+                                <button id="clear-btn"
+                                    class="btn btn-primary bdr-radius-50 min-width-100">Clear</button>
                                 <button id="create-btn"
                                     class="btn btn-success bdr-radius-50 min-width-100">Create</button>
                             </div>

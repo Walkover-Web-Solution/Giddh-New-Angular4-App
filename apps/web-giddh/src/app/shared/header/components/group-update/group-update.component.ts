@@ -43,9 +43,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public needToReCalculate: BehaviorSubject<boolean>;
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
-    @ViewChild('discount', {static: true}) public discountControl: LedgerDiscountComponent;
-    @ViewChild('tax', {static: true}) public taxControll: TaxControlComponent;
-    @ViewChild('autoFocused', {static: true}) public autoFocus: ElementRef;
+    @ViewChild('discount', { static: true }) public discountControl: LedgerDiscountComponent;
+    @ViewChild('tax', { static: true }) public taxControll: TaxControlComponent;
+    @ViewChild('autoFocused', { static: true }) public autoFocus: ElementRef;
 
     public companyTaxDropDown: Array<IOption>;
     public groupDetailForm: FormGroup;
@@ -66,8 +66,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public showEditTaxSection: boolean = false;
     public accountList: any[];
     public showTaxes: boolean = false;
-    @ViewChild('deleteGroupModal', {static: true}) public deleteGroupModal: ModalDirective;
-    @ViewChild('moveToGroupDropDown', {static: true}) public moveToGroupDropDown: ShSelectComponent;
+    @ViewChild('deleteGroupModal', { static: true }) public deleteGroupModal: ModalDirective;
+    @ViewChild('moveToGroupDropDown', { static: true }) public moveToGroupDropDown: ShSelectComponent;
     /** To check is groups belongs to debtor or creditors type  */
     public isDebtorCreditorGroups: boolean = false;
     /** To check discount box show/hide */
@@ -131,11 +131,11 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.activeGroupTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupTaxHierarchy), takeUntil(this.destroyed$));
         this.isUpdateGroupInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.isUpdateGroupInProcess), takeUntil(this.destroyed$));
         this.isUpdateGroupSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.isUpdateGroupSuccess), takeUntil(this.destroyed$));
-        this.discountList$ = this.store.pipe(select(state => state.settings.discount.discountList),takeUntil(this.destroyed$));
+        this.discountList$ = this.store.pipe(select(state => state.settings.discount.discountList), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.taxPopOverTemplate = '<div class="popover-content"><label>'+this.localeData?.tax_inherited+':</label><ul><li>@inTax.name</li></ul></div>';
+        this.taxPopOverTemplate = '<div class="popover-content"><label>' + this.localeData?.tax_inherited + ':</label><ul><li>@inTax.name</li></ul></div>';
         this.groupDetailForm = this._fb.group({
             name: ['', Validators.required],
             uniqueName: ['', Validators.required],
@@ -222,7 +222,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                             });
                             // set value in tax group form
                             setTimeout(() => {
-                                this.taxGroupForm.setValue({ taxes: applicableTaxes});
+                                this.taxGroupForm.setValue({ taxes: applicableTaxes });
                             }, 200);
 
                         }
@@ -669,7 +669,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 

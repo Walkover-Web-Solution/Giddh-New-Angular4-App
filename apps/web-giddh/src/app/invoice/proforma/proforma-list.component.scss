@@ -100,7 +100,7 @@
     padding: 3px 6px;
     margin-bottom: 4px;
 
-    color:$orange;
+    color: $orange;
     cursor: pointer;
 }
 
@@ -136,7 +136,7 @@
 }
 .date-advance-search {
     justify-content: space-between;
-    .input-group{
+    .input-group {
         width: auto;
     }
 }
@@ -282,50 +282,51 @@ span.icon-advance-filter {
     height: 34px;
     color: $gray;
 }
-.checkbox-td, .index-no{
+.checkbox-td,
+.index-no {
     display: flex;
     justify-content: center;
 }
-.select-all-proformas-on-mobile-view{
+.select-all-proformas-on-mobile-view {
     display: none;
 }
 
-.btn-wrapper-more{
+.btn-wrapper-more {
     height: 30px;
 }
-.min-width-check{
-    min-width:50px !important;
+.min-width-check {
+    min-width: 50px !important;
 }
 .invoice-table.on-mobile-view {
-    td{
+    td {
         white-space: normal !important;
         word-break: break-word !important;
     }
 }
 // responsive
-@media(max-width:991px){
-    .invoice-preview-sidebar{
+@media (max-width: 991px) {
+    .invoice-preview-sidebar {
         display: none;
     }
 }
 @media (max-width: 768px) {
     .invoice-table.on-mobile-view {
-        td{
+        td {
             width: 100%;
-            span.justify-content-end{
+            span.justify-content-end {
                 justify-content: flex-start !important;
             }
         }
-}
-    .select-all-proformas-on-mobile-view{
+    }
+    .select-all-proformas-on-mobile-view {
         display: flex;
         align-items: center;
         margin-bottom: 0;
         line-height: 1;
         font-size: 14px;
         min-height: 20px;
-        .checkbox-img{
-            img{
+        .checkbox-img {
+            img {
                 max-height: 20px;
                 cursor: pointer;
             }
@@ -334,7 +335,8 @@ span.icon-advance-filter {
     .search-icon-block {
         display: flex !important;
     }
-    .checkbox-td, .index-no{
+    .checkbox-td,
+    .index-no {
         display: flex;
         justify-content: flex-start;
     }

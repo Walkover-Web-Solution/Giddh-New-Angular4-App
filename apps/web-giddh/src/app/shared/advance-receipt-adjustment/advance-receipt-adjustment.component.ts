@@ -43,8 +43,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     /** True, if form is reset, used to avoid calculation as required sh-select auto-fills the value if only single option is present  */
     public isFormReset: boolean;
 
-    @ViewChild('tdsTypeBox', {static: true}) public tdsTypeBox: ElementRef;
-    @ViewChild('tdsAmountBox', {static: true}) public tdsAmountBox: ElementRef;
+    @ViewChild('tdsTypeBox', { static: true }) public tdsTypeBox: ElementRef;
+    @ViewChild('tdsAmountBox', { static: true }) public tdsAmountBox: ElementRef;
 
     public adjustPayment: AdjustAdvancePaymentModal = {
         customerName: '',
@@ -229,7 +229,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         //     this.toaster.warningToast('The adjusted amount of the linked invoice\'s is more than this receipt due amount');
         //     return;
         // }
-        if(this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
+        if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
             this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.filter(item => {
                 return item.voucherNumber !== '' || item.adjustmentAmount.amountForAccount > 0;
             });
@@ -337,7 +337,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public addNewBlankAdjustVoucherRow(): any {
         if (this.getBalanceDue() >= 0) {
             let isAnyBlankEntry: boolean;
-            if(this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
+            if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
                 this.adjustVoucherForm.adjustments.forEach(item => {
                     if (!item.uniqueName || !item.voucherNumber) {
                         isAnyBlankEntry = true;
@@ -397,7 +397,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             this.adjustVoucherForm.tdsTaxUniqueName = cloneDeep(event.value);
             this.adjustVoucherForm.tdsAmount.amountForAccount = cloneDeep(this.tdsAmount);
             this.changeTdsAmount(this.tdsAmount);
-            this.tdsTypeBox.nativeElement.classList.remove('error-box');
+            this.tdsTypeBox?.nativeElement?.classList?.remove('error-box');
         }
     }
 
@@ -409,11 +409,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      */
     public changeTdsAmount(event): void {
         if (!Number(event) && this.adjustVoucherForm && this.adjustVoucherForm.tdsTaxUniqueName) {
-            if(this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
+            if (this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
                 this.tdsAmountBox.nativeElement.classList.add('error-box');
             }
         } else {
-            if(this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
+            if (this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
                 this.tdsAmountBox.nativeElement.classList.remove('error-box');
             }
         }
@@ -495,12 +495,12 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             this.adjustVoucherForm.adjustments.forEach((item, key) => {
                 if (!item.voucherNumber && item.adjustmentAmount.amountForAccount) {
                     isValid = false;
-                    if(form.controls[`voucherName${key}`]) {
+                    if (form.controls[`voucherName${key}`]) {
                         form.controls[`voucherName${key}`].markAsTouched();
                     }
                 } else if (item.voucherNumber && !item.adjustmentAmount.amountForAccount) {
                     isValid = false;
-                    if(form.controls[`amount${key}`]) {
+                    if (form.controls[`amount${key}`]) {
                         form.controls[`amount${key}`].markAsTouched();
                     }
                 }
@@ -554,7 +554,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public clickSelectVoucher(index: number, form: NgForm): any {
-        if(form.controls[`voucherName${index}`]) {
+        if (form.controls[`voucherName${index}`]) {
             form.controls[`voucherName${index}`].markAsTouched();
         }
 
@@ -594,7 +594,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 if (options[i] && options[i].label && adjustVoucherAdjustment[j] && adjustVoucherAdjustment[j].voucherNumber &&
                     options[i].value && adjustVoucherAdjustment[j].uniqueName &&
                     ((options[i].label.trim() !== '-' && adjustVoucherAdjustment[j].voucherNumber.trim() !== '-' && options[i].label.trim() === adjustVoucherAdjustment[j].voucherNumber.trim()) ||
-                    (options[i].label.trim() === '-' && adjustVoucherAdjustment[j].voucherNumber.trim() === '-' && options[i].value && adjustVoucherAdjustment[j].uniqueName && options[i].value.trim() === adjustVoucherAdjustment[j].uniqueName.trim()))) {
+                        (options[i].label.trim() === '-' && adjustVoucherAdjustment[j].voucherNumber.trim() === '-' && options[i].value && adjustVoucherAdjustment[j].uniqueName && options[i].value.trim() === adjustVoucherAdjustment[j].uniqueName.trim()))) {
                     options.splice(i, 1);
                 }
 
@@ -760,7 +760,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             adjustmentData.forEach(adjustment => {
                 if (adjustment && adjustment.adjustmentAmount && adjustment.adjustmentAmount.amountForAccount) {
                     adjustment.balanceDue = cloneDeep(adjustment.adjustmentAmount);
-                } else if (adjustment && adjustment.balanceDue && adjustment.balanceDue.amountForAccount){
+                } else if (adjustment && adjustment.balanceDue && adjustment.balanceDue.amountForAccount) {
                     adjustment.adjustmentAmount = cloneDeep(adjustment.balanceDue);
                 }
             });

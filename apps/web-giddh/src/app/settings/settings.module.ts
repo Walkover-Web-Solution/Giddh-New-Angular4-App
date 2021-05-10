@@ -13,7 +13,7 @@ import { GetBunchModalComponent } from './bunch/components-modal/get-companies/g
 import { DiscountComponent } from './discount/discount.component';
 import { FinancialYearComponent } from './financial-year/financial-year.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
-import { SettingLinkedAccountsConfirmationModalComponent} from './linked-accounts/confirmation-modal/confirmation.modal.component';
+import { SettingLinkedAccountsConfirmationModalComponent } from './linked-accounts/confirmation-modal/confirmation.modal.component';
 import { ConnectBankModalComponent } from './linked-accounts/connect-bank-modal/connect.bank.modal.component';
 import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
 import { SettingPermissionFormComponent } from './permissions/form/form.component';

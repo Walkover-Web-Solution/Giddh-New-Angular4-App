@@ -31,7 +31,7 @@ table.basic td {
     font-size: 16px;
     color: $charcoal;
 }
-.table thead th{
+.table thead th {
     vertical-align: bottom;
     border-bottom: 1px solid $gainsboro;
     border-top: none;
@@ -75,15 +75,15 @@ thead th {
     border-radius: 30px;
     border: 1px solid $gainsboro;
 }
-@media(max-width:768px){
+@media (max-width: 768px) {
     .debtors-table {
         margin-bottom: 30px;
     }
     table.basic td {
         border-bottom: none !important;
     }
-    table.on-mobile-view{
-        tbody td:before{
+    table.on-mobile-view {
+        tbody td:before {
             left: 10px;
         }
         tbody tr {

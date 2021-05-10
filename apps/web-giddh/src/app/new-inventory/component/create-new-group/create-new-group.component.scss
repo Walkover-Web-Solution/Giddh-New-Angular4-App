@@ -89,51 +89,51 @@
         }
     }
 }
-.create-new-block{
-        padding: 0 ;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: calc(100vh - 65px);
-        .create-product-wrapper {
-            .create-one-item {
-                padding: 15px 0 0;
-                &:hover {
-                    background-color: $lavender;
+.create-new-block {
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 65px);
+    .create-product-wrapper {
+        .create-one-item {
+            padding: 15px 0 0;
+            &:hover {
+                background-color: $lavender;
+            }
+            .wrapper-create-item {
+                border-bottom: 1px solid $gainsboro;
+                display: flex;
+                margin: 0 45px 0;
+                padding-bottom: 15px;
+                cursor: pointer;
+                .circle-icon {
+                    width: 80px;
+                    height: 80px;
+                    border: 1px solid $midnight-blue;
+                    background-color: $white;
+                    border-radius: 50%;
                 }
-                .wrapper-create-item {
-                    border-bottom: 1px solid $gainsboro;
-                    display: flex;
-                    margin: 0 45px 0;
-                    padding-bottom: 15px;
-                    cursor: pointer;
-                    .circle-icon {
-                        width: 80px;
-                        height: 80px;
-                        border: 1px solid $midnight-blue;
-                        background-color: $white;
-                        border-radius: 50%;
+                .create-item {
+                    max-width: 80%;
+                    margin-left: 15px;
+                    width: 100%;
+                    h4 {
+                        font-size: 16px;
+                        font-family: "opensans-semibold";
+                        margin-bottom: 20px;
                     }
-                    .create-item {
-                        max-width: 80%;
-                        margin-left: 15px;
-                        width: 100%;
-                        h4 {
-                            font-size: 16px;
-                            font-family: "opensans-semibold";
-                            margin-bottom: 20px;
-                        }
-                        p {
-                            font-size: 14px;
-                        }
-                    }
-                }
-                &:last-child {
-                    .wrapper-create-item {
-                        border-bottom: none;
+                    p {
+                        font-size: 14px;
                     }
                 }
             }
+            &:last-child {
+                .wrapper-create-item {
+                    border-bottom: none;
+                }
+            }
+        }
     }
 }
 

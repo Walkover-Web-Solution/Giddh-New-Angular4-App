@@ -109,20 +109,20 @@
         width: 100%;
         margin-top: 15px;
     }
-    .linked-entities{
+    .linked-entities {
         margin-bottom: 0 !important;
     }
 }
-@media(max-width:575px){
-    .daybook-filter{
+@media (max-width: 575px) {
+    .daybook-filter {
         clear: both;
     }
-    .linked-entities{
+    .linked-entities {
         width: 100%;
     }
-    .advance-icon{
+    .advance-icon {
         margin-left: 21px;
-        margin-right:0;
+        margin-right: 0;
     }
 }
 @media (min-width: 320px) {

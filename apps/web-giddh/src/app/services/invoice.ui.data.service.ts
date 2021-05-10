@@ -29,6 +29,8 @@ export class InvoiceUiDataService {
     public templateVoucherType: BehaviorSubject<string> = new BehaviorSubject(null);
     /** Stores the content form instance  */
     public contentForm: NgForm;
+    /** Stores the content form controls with errors  */
+    public contentFormErrors: number;
     /** Stores the image uniquename, if signature image got uploaded to the server but not updated with invoice, used
      * to avoid unused uploading of images on the server
     */
@@ -235,11 +237,11 @@ export class InvoiceUiDataService {
                 if (!selectedTemplate.sections['header'].data['gstComposition']) {
                     // Assign the default value based on value of warehouseAddress
                     selectedTemplate.sections['header'].data['gstComposition'] = defaultTemplate ?
-                    defaultTemplate.sections['header'].data['gstComposition'] : {
-                        label: '',
-                        display: true,
-                        width: null
-                    };
+                        defaultTemplate.sections['header'].data['gstComposition'] : {
+                            label: '',
+                            display: true,
+                            width: null
+                        };
                 }
                 if (!selectedTemplate.sections['footer'].data['textUnderSlogan']) {
                     // Assign the default value based of company name if not present
@@ -260,6 +262,14 @@ export class InvoiceUiDataService {
                 if (!selectedTemplate.sections['footer'].data['showMessage2']) {
                     selectedTemplate.sections['footer'].data['showMessage2'] = defaultTemplate ?
                         defaultTemplate.sections['footer'].data['showMessage2'] : {
+                            label: '',
+                            display: false,
+                            width: null
+                        };
+                }
+                if (!selectedTemplate.sections['table'].data['showDescriptionInRows']) {
+                    selectedTemplate.sections['table'].data['showDescriptionInRows'] = defaultTemplate ?
+                        defaultTemplate.sections['table'].data['showDescriptionInRows'] : {
                             label: '',
                             display: false,
                             width: null
@@ -290,6 +300,12 @@ export class InvoiceUiDataService {
     public setContentForm(form: NgForm): void {
         if (form) {
             this.contentForm = form;
+            this.contentFormErrors = 0;
+            Object.keys(form.controls).forEach(key => {
+                if (form.controls[key].errors) {
+                    this.contentFormErrors++;
+                }
+            });
         }
     }
 }

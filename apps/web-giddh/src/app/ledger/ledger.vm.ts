@@ -215,7 +215,7 @@ export class LedgerVM {
     }
 
     public getUnderstandingText(selectedLedgerAccountType, accountName, parentGroups, localeData?: any) {
-        if(localeData) {
+        if (localeData) {
             let data;
             let isReverseChargeAccount = false;
 
@@ -230,23 +230,23 @@ export class LedgerVM {
             let underStandingTextData = localeData?.text_data;
 
             if (isReverseChargeAccount) {
-                data = _.cloneDeep(underStandingTextData.find(p => p.accountType === "ReverseCharge"));
+                data = _.cloneDeep(underStandingTextData?.find(p => p.accountType === "ReverseCharge"));
             } else {
-                data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
+                data = _.cloneDeep(underStandingTextData?.find(p => p.accountType === selectedLedgerAccountType));
             }
 
             if (data) {
-                if(data.balanceText && data.balanceText.cr) {
+                if (data.balanceText && data.balanceText.cr) {
                     data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
                 }
-                if(data.balanceText && data.balanceText.dr) {
+                if (data.balanceText && data.balanceText.dr) {
                     data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
                 }
 
-                if(data.text && data.text.dr) {
+                if (data.text && data.text.dr) {
                     data.text.dr = data.text.dr.replace('<accountName>', accountName);
                 }
-                if(data.text && data.text.cr) {
+                if (data.text && data.text.cr) {
                     data.text.cr = data.text.cr.replace('<accountName>', accountName);
                 }
                 this.ledgerUnderStandingObj = _.cloneDeep(data);

@@ -46,7 +46,7 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.selectedCompany = cloneDeep(activeCompany);
                 let selectedCompanyArray = activeCompany.name.split(" ");
                 let companyInitials = [];
@@ -87,7 +87,7 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select((state: AppState) => state.session.user), takeUntil(this.destroyed$)).subscribe(user => {
-            if(user && user.user && user.user.email) {
+            if (user && user.user && user.user.email) {
                 this.userEmail = user.user.email;
             }
         });

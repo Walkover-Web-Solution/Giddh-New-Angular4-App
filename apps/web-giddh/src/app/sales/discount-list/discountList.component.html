@@ -19,8 +19,9 @@
                 <label class="mr-1 align-items-center d-flex max-width-50">Percent</label>
 
                 <div class="position-relative">
-                    <input type="text" class="form-control text-right cursor-pointer w100 pd-r2" [disabled]="!discountFromPer"
-                        decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="discountPercentageModal"
+                    <input type="text" class="form-control text-right cursor-pointer w100 pd-r2"
+                        [disabled]="!discountFromPer" decimalDigitsDirective [DecimalPlaces]="2"
+                        [(ngModel)]="discountPercentageModal"
                         (blur)="discountFromInput('PERCENTAGE', $event.target.value); discountInputBlur($event);"
                         name="discountFromPer">
                     <i class="fa fa-percent pos-abs"></i>
@@ -47,8 +48,9 @@
                 <ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
                     <li *ngIf="idx > 0" class="custom-item cp">
                         <label class="checkbox overflow-hidden width-100 m-0" (click)="$event.stopPropagation()">
-                            <input class="pull-left" id="{{'update-discount-checkbox-' + idx}}" name="tax_{{idx}}" type="checkbox" [(ngModel)]="discount.isActive"
-                                (change)="change()" (click)="$event.stopPropagation()" />
+                            <input class="pull-left" id="{{'update-discount-checkbox-' + idx}}" name="tax_{{idx}}"
+                                type="checkbox" [(ngModel)]="discount.isActive" (change)="change()"
+                                (click)="$event.stopPropagation()" />
                             <span class="pull-left text-ellipsis cp">{{discount.name}}</span>
                         </label>
                     </li>

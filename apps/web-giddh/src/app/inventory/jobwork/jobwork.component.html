@@ -45,7 +45,8 @@
                             <div class="pull-right">
                                 <div class="btn-group " dropdown placement="bottom right">
                                     <button id="buttonalignment" dropdownToggle type="button"
-                                        class="btn-link mr-b05 cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
+                                        class="btn-link mr-b05 cp mr-1 dropdown-toggle"
+                                        aria-controls="dropdown-alignment">
                                         <i class="icon-download"></i> Download
                                     </button>
                                     <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
@@ -124,7 +125,8 @@
                                                 <li role="menuitem dropdown-item" *ngFor="let item of VOUCHER_TYPES">
                                                     <label><input type="checkbox" [(ngModel)]="item.checked"
                                                             (click)="filterByCheck(item.value, $event.target.checked)" />
-                                                        {{item.label}}</label></li>
+                                                        {{item.label}}</label>
+                                                </li>
                                             </ul>
                                         </div>
                                     </th>

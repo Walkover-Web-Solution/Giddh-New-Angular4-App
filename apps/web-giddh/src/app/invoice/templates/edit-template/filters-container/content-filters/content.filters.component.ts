@@ -294,7 +294,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      * @memberof ContentFilterComponent
      */
     public removeFileFromServer(): void {
-        this.invoiceService.removeSignature(this._invoiceUiDataService.unusedImageSignature).subscribe(() => {});
+        this.invoiceService.removeSignature(this._invoiceUiDataService.unusedImageSignature).subscribe(() => { });
     }
 
     public removeAllFiles(): void {
@@ -324,7 +324,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      */
     public changeDisableQuantity(): void {
         let template = _.cloneDeep(this.customTemplate);
-        if(template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.totalQuantity) {
+        if (template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.totalQuantity) {
             if (!template.sections.table.data.quantity.display) {
                 template.sections.table.data.totalQuantity.display = false;
             } else {
@@ -370,7 +370,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      */
     public changeInvoiceHeader(event: boolean): void {
         this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
-        this.onChangeFieldVisibility(null,null,null);
+        this.onChangeFieldVisibility(null, null, null);
     }
 
     /**

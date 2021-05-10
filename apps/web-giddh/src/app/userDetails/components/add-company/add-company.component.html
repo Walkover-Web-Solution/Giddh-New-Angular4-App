@@ -3,17 +3,20 @@
     <h3>Add Company</h3>
 </div>
 <div id="my-frame" class="modal-body clearfix font-14">
-    <p class="mr-b15">Select the Company you want to add in <strong>{{activeCompany?.subscription?.planDetails?.name}}</strong> plan</p>
+    <p class="mr-b15">Select the Company you want to add in
+        <strong>{{activeCompany?.subscription?.planDetails?.name}}</strong> plan</p>
     <div class="row mr-b1">
         <div class="col-lg-6 col-md-12">
             <label class="font-14">Select Company<span class="text-danger">*</span></label>
             <div class="select-caret position-relative">
-                <sh-select placeholder="Select Company" name="selectedCompany" [options]="associatedCompaniesOption" [isFilterEnabled]="true" [(ngModel)]="selectedCompany" [isRequired]="true"></sh-select>
+                <sh-select placeholder="Select Company" name="selectedCompany" [options]="associatedCompaniesOption"
+                    [isFilterEnabled]="true" [(ngModel)]="selectedCompany" [isRequired]="true"></sh-select>
             </div>
         </div>
     </div>
 
     <div class="clearfix">
-        <button class="btn btn-primary mt-1 mb-2" (click)="addCompanyInNewPlan()" [disabled]="!selectedCompany">Add</button>
+        <button class="btn btn-primary mt-1 mb-2" (click)="addCompanyInNewPlan()"
+            [disabled]="!selectedCompany">Add</button>
     </div>
 </div>

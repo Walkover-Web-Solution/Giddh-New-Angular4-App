@@ -32,7 +32,7 @@ export class DeleteInvoiceConfirmationModelComponent {
      * @memberof DeleteInvoiceConfirmationModelComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.localeData?.confirmation_messages.map(c => {
                 this.confirmationMessages[c.module] = c;
             });

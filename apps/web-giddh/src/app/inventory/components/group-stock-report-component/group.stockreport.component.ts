@@ -50,15 +50,15 @@ import { GeneralService } from '../../../services/general.service';
 })
 
 export class InventoryGroupStockReportComponent implements OnChanges, OnInit, OnDestroy {
-    @ViewChild('dateRangePickerCmp', {static: true}) public dateRangePickerCmp: ElementRef;
-    @ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
-    @ViewChild("productName", {static: true}) productName: ElementRef;
-    @ViewChild("sourceName", {static: true}) sourceName: ElementRef;
-    @ViewChild('advanceSearchForm', {static: true}) formValues;
-    @ViewChild('shCategory', {static: false}) public shCategory: ShSelectComponent;
-    @ViewChild('shCategoryType', {static: false}) public shCategoryType: ShSelectComponent;
-    @ViewChild('shValueCondition', {static: false}) public shValueCondition: ShSelectComponent;
-    @ViewChild('template', {static: true}) public template: ElementRef;
+    @ViewChild('dateRangePickerCmp', { static: true }) public dateRangePickerCmp: ElementRef;
+    @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: ModalDirective;
+    @ViewChild("productName", { static: true }) productName: ElementRef;
+    @ViewChild("sourceName", { static: true }) sourceName: ElementRef;
+    @ViewChild('advanceSearchForm', { static: true }) formValues;
+    @ViewChild('shCategory', { static: false }) public shCategory: ShSelectComponent;
+    @ViewChild('shCategoryType', { static: false }) public shCategoryType: ShSelectComponent;
+    @ViewChild('shValueCondition', { static: false }) public shValueCondition: ShSelectComponent;
+    @ViewChild('template', { static: true }) public template: ElementRef;
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;
@@ -336,7 +336,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.selectedCmp = activeCompany;
                 this.getAllBranch();
             }
@@ -875,7 +875,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      * @memberof InventoryGroupStockReportComponent
      */
     public dateSelectedCallback(value?: any, from?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }

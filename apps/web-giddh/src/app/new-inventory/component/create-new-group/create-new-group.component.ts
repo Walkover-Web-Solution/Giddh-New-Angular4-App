@@ -11,9 +11,9 @@ export class CreateNewGroupComponent implements OnInit {
     /* Aside pane state*/
     public asideMenuState: string = 'out';
     /* store create group value */
-    public createGroupaside:boolean = true;
+    public createGroupaside: boolean = true;
     /*stor value of hide create field data*/
-    public hideCreateFieldData:boolean = false;
+    public hideCreateFieldData: boolean = false;
     /* this will store hsn boolean value */
     public isHSN: boolean = true;
 
@@ -29,7 +29,7 @@ export class CreateNewGroupComponent implements OnInit {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
     /* It will show/hide hsn code field */
-     public selectCode(isHSN: any): void {
+    public selectCode(isHSN: any): void {
         this.isHSN = isHSN;
     }
 }

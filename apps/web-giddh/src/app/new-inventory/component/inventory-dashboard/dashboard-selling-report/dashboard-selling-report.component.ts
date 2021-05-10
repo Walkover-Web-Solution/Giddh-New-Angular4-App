@@ -81,7 +81,7 @@ export class DashboardSellingReport implements OnInit {
         }
     }
 
-    public ngOnInit(){
+    public ngOnInit() {
 
     }
 }

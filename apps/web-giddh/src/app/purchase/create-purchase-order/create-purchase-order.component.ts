@@ -19,7 +19,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { ToasterService } from '../../services/toaster.service';
 import { OnboardingFormRequest, CurrentPage } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
-import { VAT_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SearchResultText } from '../../app.constant';
+import { VAT_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SearchResultText, ENTRY_DESCRIPTION_LENGTH } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, SalesEntryClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, AccountDetailsClass } from '../../models/api-models/Sales';
 import { TaxResponse } from '../../models/api-models/Company';
@@ -359,6 +359,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public commonLocaleData: any = {};
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** Length of entry description */
+    public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
 
     constructor(
         private store: Store<AppState>,
@@ -391,7 +393,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.store.dispatch(this.settingsDiscountAction.GetDiscount());
         this.store.dispatch(this.companyActions.getTax());
         this.store.dispatch(this.settingsBranchAction.resetAllBranches());
-        this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
 
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
         this.createdAccountDetails$ = this.store.pipe(select(state => state.sales.createdAccountDetails), takeUntil(this.destroyed$));
@@ -446,7 +448,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.selectedCompany = activeCompany;
                 this.companyAddressList = activeCompany.addresses;
                 if (this.urlParams['purchaseOrderUniqueName'] && !this.purchaseOrderUniqueName) {
@@ -629,7 +631,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public assignDates(): void {
-        if(!this.isOrderDateChanged) {
+        if (!this.isOrderDateChanged) {
             let date = _.cloneDeep(this.universalDate);
             this.purchaseOrder.voucherDetails.voucherDate = date;
 
@@ -1476,7 +1478,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false): void {
-        if(fromTransactionField && this.transactionAmount === trx.amount) {
+        if (fromTransactionField && this.transactionAmount === trx.amount) {
             this.transactionAmount = 0;
             return;
         }
@@ -2385,7 +2387,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             currentBranch = branches.find(branch => branch.uniqueName === this.generalService.currentBranchUniqueName);
         } else {
             // Find the HO branch
-            currentBranch =  branches.find(branch => !branch.parentBranch);
+            currentBranch = branches.find(branch => !branch.parentBranch);
         }
         if (currentBranch && currentBranch.addresses) {
             const defaultAddress = currentBranch.addresses.find(address => (address && address.isDefault));
@@ -2537,7 +2539,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
                     this.checkForAutoFillShippingAddress('company');
 
-                    if(this.isUpdateMode) {
+                    if (this.isUpdateMode) {
                         this.purchaseOrder.voucherDetails.voucherDate = this.purchaseOrderDetails.date;
                         this.purchaseOrder.voucherDetails.dueDate = this.purchaseOrderDetails.dueDate;
                     } else {
@@ -2855,7 +2857,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public getVendorPurchaseOrders(vendorName: any): void {
-        if(this.selectedCompany) {
+        if (this.selectedCompany) {
             let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, accountUniqueName: vendorName, page: 1, count: 10, sort: '', sortBy: '' };
             let purchaseOrderPostRequest = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyReceived, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
 
@@ -2957,10 +2959,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public selectAddress(data: any, address: any, isCompanyAddress: false): void {
-        if(data && address) {
+        if (data && address) {
             data.address[0] = address.address;
 
-            if(!data.state) {
+            if (!data.state) {
                 data.state = {};
             }
 
@@ -2968,7 +2970,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             data.gstNumber = (isCompanyAddress) ? address.taxNumber : address.gstNumber;
             data.pincode = address.pincode;
 
-            if(isCompanyAddress) {
+            if (isCompanyAddress) {
                 this.autoFillShippingDetails('company');
             } else {
                 this.autoFillShippingDetails('vendor');
@@ -3078,7 +3080,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             this.assignSearchResultToList(SEARCH_TYPE.ITEM);
                         }
                     }
-            });
+                });
         }
     }
 
@@ -3317,7 +3319,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         transaction.hsnNumber = null;
 
         if (transaction.stockDetails?.hsnNumber && transaction.stockDetails?.sacNumber) {
-            if(this.inventorySettings?.manageInventory) {
+            if (this.inventorySettings?.manageInventory) {
                 transaction.hsnNumber = transaction.stockDetails.hsnNumber;
                 transaction.hsnOrSac = 'hsn';
                 transaction.showCodeType = "hsn";
@@ -3337,7 +3339,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             transaction.hsnOrSac = 'sac';
             transaction.showCodeType = "sac";
         } else if (!transaction.stockDetails?.sacNumber && !transaction.stockDetails?.hsnNumber) {
-            if(this.inventorySettings?.manageInventory) {
+            if (this.inventorySettings?.manageInventory) {
                 transaction.hsnNumber = "";
                 transaction.hsnOrSac = 'hsn';
                 transaction.showCodeType = "hsn";
@@ -3349,8 +3351,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
         }
 
-        if(!additional.stock && additional.hsnNumber && additional.sacNumber) {
-            if(this.inventorySettings?.manageInventory) {
+        if (!additional.stock && additional.hsnNumber && additional.sacNumber) {
+            if (this.inventorySettings?.manageInventory) {
                 transaction.hsnNumber = additional.hsnNumber;
                 transaction.hsnOrSac = 'hsn';
                 transaction.showCodeType = "hsn";
@@ -3360,17 +3362,17 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 transaction.hsnOrSac = 'sac';
                 transaction.showCodeType = "sac";
             }
-        } else if(!additional.stock && additional.hsnNumber && !additional.sacNumber) {
+        } else if (!additional.stock && additional.hsnNumber && !additional.sacNumber) {
             transaction.hsnNumber = additional.hsnNumber;
             transaction.hsnOrSac = 'hsn';
             transaction.showCodeType = "hsn";
-        } else if(!additional.stock && !additional.hsnNumber && additional.sacNumber) {
+        } else if (!additional.stock && !additional.hsnNumber && additional.sacNumber) {
             transaction.sacNumber = additional.sacNumber;
             transaction.sacNumberExists = true;
             transaction.hsnOrSac = 'sac';
             transaction.showCodeType = "sac";
-        } else if(!additional.stock && !additional.hsnNumber && !additional.sacNumber) {
-            if(this.inventorySettings?.manageInventory) {
+        } else if (!additional.stock && !additional.hsnNumber && !additional.sacNumber) {
+            if (this.inventorySettings?.manageInventory) {
                 transaction.hsnNumber = "";
                 transaction.hsnOrSac = 'hsn';
                 transaction.showCodeType = "hsn";
@@ -3505,7 +3507,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.translationLoaded = true;
 
             // get tax list and assign values to local vars
@@ -3581,7 +3583,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @param {string} [date=moment().format(GIDDH_DATE_FORMAT)] Date on which currency rate is required, default is today's date
      * @memberof CreatePurchaseOrderComponent
      */
-     public getCurrencyRate(to: string, from: string, date = moment().format(GIDDH_DATE_FORMAT)): void {
+    public getCurrencyRate(to: string, from: string, date = moment().format(GIDDH_DATE_FORMAT)): void {
         if (from && to) {
             this.ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
@@ -3594,7 +3596,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         this.recalculateEntriesTotal();
                     }
                 }
-            }, (error => {}));
+            }, (error => { }));
         }
     }
 
@@ -3603,7 +3605,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      *
      * @memberof CreatePurchaseOrderComponent
      */
-     public updateStockEntries(): void {
+    public updateStockEntries(): void {
         if (this.purchaseOrder.entries && this.purchaseOrder.entries.length) {
             this.purchaseOrder.entries.forEach(entry => {
                 const transaction = entry.transactions[0];
@@ -3667,7 +3669,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @private
      * @memberof CreatePurchaseOrderComponent
      */
-     private recalculateEntriesTotal(): void {
+    private recalculateEntriesTotal(): void {
         this.updateStockEntries();
         this.loadTaxesAndDiscounts(0);
         this.calculateSubTotal();
@@ -3684,7 +3686,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @param {SalesTransactionItemClass} transaction Transaction instance
      * @memberof CreatePurchaseOrderComponent
      */
-     private calculateConvertedTotal(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+    private calculateConvertedTotal(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         if (this.excludeTax) {
             transaction.total = giddhRoundOff((transaction.amount - entry.discountSum), 2);
             if (transaction.isStockTxn) {

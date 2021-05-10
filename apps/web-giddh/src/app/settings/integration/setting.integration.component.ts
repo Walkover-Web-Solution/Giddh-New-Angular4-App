@@ -47,17 +47,17 @@ export declare const gapi: any;
     templateUrl: './setting.integration.component.html',
     styleUrls: ['./setting.integration.component.scss'],
     animations: [
-		trigger('slideInOut', [
-			state('in', style({
-				transform: 'translate3d(0, 0, 0)'
-			})),
-			state('out', style({
-				transform: 'translate3d(100%, 0, 0)'
-			})),
-			transition('in => out', animate('400ms ease-in-out')),
-			transition('out => in', animate('400ms ease-in-out'))
-		]),
-	]
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
@@ -102,10 +102,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isUpdateBankFormValid$: Observable<boolean> = of(false);
 
     @Input() private selectedTabParent: number;
-    @ViewChild('integrationTab', {static: true}) public integrationTab: TabsetComponent;
-    @ViewChild('removegmailintegration', {static: true}) public removegmailintegration: ModalDirective;
-    @ViewChild('paymentForm', {static: true}) paymentForm: NgForm;
-    @ViewChild('paymentFormAccountName', {static: true}) paymentFormAccountName: ShSelectComponent;
+    @ViewChild('integrationTab', { static: true }) public integrationTab: TabsetComponent;
+    @ViewChild('removegmailintegration', { static: true }) public removegmailintegration: ModalDirective;
+    @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
+    @ViewChild('paymentFormAccountName', { static: true }) paymentFormAccountName: ShSelectComponent;
 
 
     //variable holding account Info
@@ -168,6 +168,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public beneficiaryAsideState: string = "out";
     /** This will hold users list */
     public usersList: any[] = [];
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private router: Router,
@@ -290,7 +294,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && o.account) {
-                if(!isEqual(this.registeredAccount, o.account)) {
+                if (!isEqual(this.registeredAccount, o.account)) {
                     this.registeredAccount = o.account;
                     if (this.registeredAccount && this.registeredAccount.length === 0) {
                         this.openNewRegistration = true;
@@ -843,7 +847,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {number} index index number
      * @memberof SettingIntegrationComponent
      */
-    public selectedMaxOrCustom(index: number, isUpdate: boolean, parentIndex?: number, ): void {
+    public selectedMaxOrCustom(index: number, isUpdate: boolean, parentIndex?: number,): void {
         if (!isUpdate && this.paymentFormObj.userAmountRanges) {
             this.paymentFormObj.userAmountRanges[index].amount = null;
         }
@@ -1427,7 +1431,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     private loadTabData(): void {
-        switch(this.selectedTabParent) {
+        switch (this.selectedTabParent) {
             case SettingsIntegrationTab.Sms:
                 this.loadSmsData();
                 break;
@@ -1537,7 +1541,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -1625,7 +1629,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public getRegistrationStatus(account: any): void {
         this.settingsIntegrationService.getRegistrationStatus(account.URN).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response?.body) {
+            if (response?.body) {
                 account.registrationStatus = response?.body?.Status;
             } else {
                 account.registrationStatus = "";
@@ -1640,7 +1644,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public selectUser(event: any): void {
-        if(event) {
+        if (event) {
             this.addBankForm.get('userNames')?.patchValue(event.map(ev => ev.label));
         }
     }

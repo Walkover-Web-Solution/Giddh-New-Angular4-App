@@ -55,7 +55,8 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
-
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** List of supported locale */
@@ -96,10 +97,10 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
-            if(response) {
+            if (response) {
                 this.commonLocaleData = response;
 
-                if(this.showLanguageChangeMessage) {
+                if (this.showLanguageChangeMessage) {
                     this.toasterService.clearAllToaster();
                     this.toasterService.successToast(this.commonLocaleData?.app_language_selected);
                     this.showLanguageChangeMessage = false;
@@ -147,7 +148,20 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public selectLocale(event?: any): void {
-        this.store.dispatch(this.commonActions.setActiveLocale({label: event?.label, value: event?.value}));
+        this.store.dispatch(this.commonActions.setActiveLocale({ label: event?.label, value: event?.value }));
         this.showLanguageChangeMessage = true;
+    }
+
+    /**
+     * Returns the information save text
+     *
+     * @param {*} companyName
+     * @returns {string}
+     * @memberof OtherSettingsComponent
+     */
+    public getInformationSaveText(companyName: any): string {
+        let text = this.localeData?.all_information_save;
+        text = text?.replace("[COMPANY_NAME]", companyName);
+        return text;
     }
 }

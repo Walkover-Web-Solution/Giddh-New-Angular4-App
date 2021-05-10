@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener} from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 
 @Component({
     selector: 'inventory-group-list-sidebar',
@@ -7,11 +7,11 @@ import { Component, OnInit, HostListener} from '@angular/core';
 
 })
 
-export class InventoryGroupListSidebar  implements OnInit {
+export class InventoryGroupListSidebar implements OnInit {
     /*sub sidebar open*/
     public subSidebarOpen: boolean = true;
 
-    public openSubSidebar(){
+    public openSubSidebar() {
         this.subSidebarOpen = !this.subSidebarOpen;
         if (document.getElementsByClassName("right-side-content")) {
             document.querySelector('body').classList.toggle('hide-sub-sidebar');
@@ -23,7 +23,7 @@ export class InventoryGroupListSidebar  implements OnInit {
             document.documentElement.scrollTop > 10) {
             document.getElementById('inventory-sub-sidebar').classList.add('fixed-sidebar-top');
         }
-        else{
+        else {
             document.getElementById('inventory-sub-sidebar').classList.remove('fixed-sidebar-top');
         }
     }
@@ -32,7 +32,7 @@ export class InventoryGroupListSidebar  implements OnInit {
     public ngOnInit() {
 
     }
-    public ngOnDestroy(){
+    public ngOnDestroy() {
         document.querySelector('body').classList.remove('hide-sub-sidebar');
 
     }

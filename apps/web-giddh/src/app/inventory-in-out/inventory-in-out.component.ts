@@ -12,7 +12,7 @@ import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 export class InventoryInOutComponent implements OnInit {
 
     constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
-        
+
     }
 
     public ngOnInit() {

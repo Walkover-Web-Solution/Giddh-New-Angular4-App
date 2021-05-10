@@ -1,9 +1,9 @@
 @import "../../assets/css/color.scss";
-.tabs-dropdown{
+.tabs-dropdown {
     width: 100%;
-    button{
+    button {
         width: 100%;
-        text-align:left;
+        text-align: left;
         background-color: $white;
         border: none;
         border-bottom: 1px solid $gainsboro;
@@ -13,13 +13,12 @@
         z-index: 999;
         padding-left: 15px;
     }
-    ul{
+    ul {
         z-index: 99;
         margin-top: 38px;
         margin-left: 14px;
-        
     }
-    ul.show{
+    ul.show {
         display: inline-block !important;
     }
 }

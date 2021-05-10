@@ -21,12 +21,13 @@
                     </div>
                 </div>
                 <div class="row mt-2 d-flex" *ngFor="let data of dataModel">
-                    <div class="col-12 col-md-4 col-lg-6 d-flex align-items-center"><label>{{data.field.columnHeader}}</label></div>
+                    <div class="col-12 col-md-4 col-lg-6 d-flex align-items-center">
+                        <label>{{data.field.columnHeader}}</label></div>
                     <div class="col-12 col-md-5 col-lg-6">
-                        <sh-select [options]="data.options" class="pull-left mr-r1 select-field-width" [placeholder]="commonLocaleData?.app_select_field"
-                            [(ngModel)]="data.selected" (selected)="columnSelected($event,data)"
-                            (onClear)="clearSelected($event, data)" (previousChange)="clearSelected($event, data)"
-                            [showClear]="true"></sh-select>
+                        <sh-select [options]="data.options" class="pull-left mr-r1 select-field-width"
+                            [placeholder]="commonLocaleData?.app_select_field" [(ngModel)]="data.selected"
+                            (selected)="columnSelected($event,data)" (onClear)="clearSelected($event, data)"
+                            (previousChange)="clearSelected($event, data)" [showClear]="true"></sh-select>
                     </div>
                 </div>
             </div>
@@ -41,12 +42,15 @@
     <!-- filed mapping -->
     <div>
         <div>
-            <p class="right-head">{{localeData?.mandatory_fields}} <span class="text-or">{{ entity | titlecase }}</span> {{localeData?.in_giddh_are}}
+            <p class="right-head">{{localeData?.mandatory_fields}} <span class="text-or">{{ entity | titlecase }}</span>
+                {{localeData?.in_giddh_are}}
                 <span>
                     <span
                         [ngStyle]="{'color': mandatoryHeadersCount === mandatoryHeadersModel.length ? '#00b503' : '#adadad'}">
-                        {{ mandatoryHeadersCount }}</span>/{{ mandatoryHeadersModel.length }} {{localeData?.done}}</span>
-                &nbsp;<span *ngIf="mandatoryHeadersCount === mandatoryHeadersModel.length" class="success-label">{{localeData?.successful}}</span>
+                        {{ mandatoryHeadersCount }}</span>/{{ mandatoryHeadersModel.length }}
+                    {{localeData?.done}}</span>
+                &nbsp;<span *ngIf="mandatoryHeadersCount === mandatoryHeadersModel.length"
+                    class="success-label">{{localeData?.successful}}</span>
             </p>
         </div>
         <div class="row mt-2 d-flex" *ngFor="let manField of mandatoryHeadersModel">
@@ -60,9 +64,14 @@
     <!-- group mapping -->
     <div *ngIf="mandatoryGroupModel.length" class="group-model">
         <div>
-            <p>{{localeData?.minimum_fields_message}} <span class="text-or">{{ entity | titlecase }}</span> {{localeData?.in_giddh}} <span>
-                    <span [ngStyle]="{'color': mandatoryGroupHeadersCount === mandatoryGroupModel.length ? '#00b503' : '#adadad'}">{{  mandatoryGroupHeadersCount }}</span>/{{ mandatoryGroupModel.length }} {{localeData?.done}}</span>
-                &nbsp;<span *ngIf="mandatoryGroupHeadersCount === mandatoryGroupModel.length" class="success-label">{{localeData?.successful}}</span>
+            <p>{{localeData?.minimum_fields_message}} <span class="text-or">{{ entity | titlecase }}</span>
+                {{localeData?.in_giddh}} <span>
+                    <span
+                        [ngStyle]="{'color': mandatoryGroupHeadersCount === mandatoryGroupModel.length ? '#00b503' : '#adadad'}">{{
+                        mandatoryGroupHeadersCount }}</span>/{{ mandatoryGroupModel.length }}
+                    {{localeData?.done}}</span>
+                &nbsp;<span *ngIf="mandatoryGroupHeadersCount === mandatoryGroupModel.length"
+                    class="success-label">{{localeData?.successful}}</span>
             </p>
         </div>
         <div *ngFor="let grp of mandatoryGroupModel" class="group-card">

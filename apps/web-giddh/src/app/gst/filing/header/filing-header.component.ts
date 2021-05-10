@@ -50,7 +50,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public fileGstr3b: {} = { via: null };
     /** True if current organization is company */
     @Input() public isCompany: boolean;
-    @ViewChild('cancelConfirmationModel', {static: true}) public cancelConfirmationModel: ModalDirective;
+    @ViewChild('cancelConfirmationModel', { static: true }) public cancelConfirmationModel: ModalDirective;
 
     public gstAuthenticated$: Observable<boolean>;
     public GstAsidePaneState: string = 'out';
@@ -87,7 +87,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         this.companyGst$.subscribe(a => {
             if (a) {
                 this.activeCompanyGstNumber = a;

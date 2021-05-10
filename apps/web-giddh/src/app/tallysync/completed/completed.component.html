@@ -1,11 +1,13 @@
-<ng-container appTranslate [file]="'tallysync'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'tallysync'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <ng-container>
         <form (ngSubmit)="getReport()" [formGroup]="filterForm">
             <div class="row form">
                 <div class="col-lg-3 col-md-12 form-group company">
                     <label>{{localeData?.company}}</label>
-                    <sh-select [options]="CompanyList" [multiple]="false" [placeholder]="localeData?.select_company" #shCompany
-                        formControlName="filterCompany" (selected)="onDDElementCompanySelect($event)"></sh-select>
+                    <sh-select [options]="CompanyList" [multiple]="false" [placeholder]="localeData?.select_company"
+                        #shCompany formControlName="filterCompany" (selected)="onDDElementCompanySelect($event)">
+                    </sh-select>
                 </div>
                 <!-- Commented as currently the Tally plugin doesn't support branch wise import -->
                 <!-- <div *ngIf="currentCompanyBranches?.length" class="col-lg-3 col-md-12 form-group company linked-entities">
@@ -41,8 +43,9 @@
                 </div>
                 <div class="col-lg-3 col-md-12 form-group interval">
                     <label>{{commonLocaleData?.app_time}}</label>
-                    <sh-select [options]="timeInterval" [multiple]="false" [placeholder]="localeData?.select_interval" #shTimeInterval
-                        formControlName="filterTimeInterval" (selected)="onDDElementTimeRangeSelect($event)"></sh-select>
+                    <sh-select [options]="timeInterval" [multiple]="false" [placeholder]="localeData?.select_interval"
+                        #shTimeInterval formControlName="filterTimeInterval"
+                        (selected)="onDDElementTimeRangeSelect($event)"></sh-select>
                 </div>
                 <div class="col-lg-2 col-md-12 form-group">
                     <label class="d-block empty-label">&nbsp;</label>
@@ -55,10 +58,12 @@
             <h1>{{localeData?.no_entries_found}}</h1>
         </div>
 
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" *ngIf="!isLoading && completedData?.length">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"
+            *ngIf="!isLoading && completedData?.length">
             <div class="panel panel-default" *ngFor="let row of completedData;">
                 <div class="panel-heading">
-                    <span class="mr-r15">{{row.type === 'TALLY' ? localeData?.tally : row.type === 'COMPANY_JSON_IMPORT' ? localeData?.import_json : ''}} {{row.company.name}}</span>
+                    <span class="mr-r15">{{row.type === 'TALLY' ? localeData?.tally : row.type === 'COMPANY_JSON_IMPORT'
+                        ? localeData?.import_json : ''}} {{row.company.name}}</span>
                     <small class="mr-r15">{{localeData?.last_import}} {{row.dateString}}</small>
                     <small class="running"><i class="fa fa-circle"></i> {{row.status}}</small>
                 </div>
@@ -73,8 +78,9 @@
                                 <div class="col-sm-6 col-xs-8">
                                     <small><em>{{row.totalSavedGroups}}/{{row.totalTallyGroups}}</em></small>
                                     <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="row.totalSavedGroups"
-                                            aria-valuemin="0" aria-valuemax="100" [ngStyle]="{'width': row.groupsPercent}">>
+                                        <div class="progress-bar" role="progressbar"
+                                            aria-valuenow="row.totalSavedGroups" aria-valuemin="0" aria-valuemax="100"
+                                            [ngStyle]="{'width': row.groupsPercent}">>
                                             <span class="sr-only">{{row.groupsPercent}} {{localeData?.complete}}</span>
                                         </div>
                                     </div>
@@ -83,7 +89,8 @@
                                     <div class="status">
                                         <small class="mr-r1"><i class="fa fa-check"></i>{{row.groupsPercent}}
                                             {{localeData?.complete}}</small>
-                                        <small class="text-danger" *ngIf="row.tallyErrorGroups>0">{{row.groupsErrorPercent}}
+                                        <small class="text-danger"
+                                            *ngIf="row.tallyErrorGroups>0">{{row.groupsErrorPercent}}
                                             {{localeData?.error_occured}}
                                         </small>
                                     </div>
@@ -99,10 +106,11 @@
                                 <div class="col-sm-6 col-xs-8">
                                     <small><em>{{row.totalSavedAccounts}}/{{row.totalTallyAccounts}}</em></small>
                                     <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="row.totalSavedAccounts"
-                                            aria-valuemin="0" aria-valuemax="100"
+                                        <div class="progress-bar" role="progressbar"
+                                            aria-valuenow="row.totalSavedAccounts" aria-valuemin="0" aria-valuemax="100"
                                             [ngStyle]="{'width': row.accountsPercent}">
-                                            <span class="sr-only">{{row.accountsPercent}} {{localeData?.complete}}</span>
+                                            <span class="sr-only">{{row.accountsPercent}}
+                                                {{localeData?.complete}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -111,7 +119,8 @@
                                         <small class="mr-r1"><i class="fa fa-check"></i>{{row.accountsPercent}}
                                             {{localeData?.complete}}</small>
                                         <small class="text-danger"
-                                            *ngIf="row.tallyErrorAccounts>0">{{row.accountsErrorPercent}} {{localeData?.error_occured}}
+                                            *ngIf="row.tallyErrorAccounts>0">{{row.accountsErrorPercent}}
+                                            {{localeData?.error_occured}}
                                         </small>
                                     </div>
                                 </div>
@@ -126,17 +135,20 @@
                                 <div class="col-sm-6 col-xs-8">
                                     <small><em>{{row.totalSavedEntries}}/{{row.totalTallyEntries}}</em></small>
                                     <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="row.totalSavedEntries"
-                                            aria-valuemin="0" aria-valuemax="100" [ngStyle]="{'width': row.entriesPercent}">
+                                        <div class="progress-bar" role="progressbar"
+                                            aria-valuenow="row.totalSavedEntries" aria-valuemin="0" aria-valuemax="100"
+                                            [ngStyle]="{'width': row.entriesPercent}">
                                             <span class="sr-only">{{row.entriesPercent}} {{localeData?.complete}}</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4 col-xs-4 text-success">
                                     <div class="status">
-                                        <small class="mr-r1"><i class="fa fa-check"></i>{{row.entriesPercent}} {{localeData?.complete}}</small>
+                                        <small class="mr-r1"><i class="fa fa-check"></i>{{row.entriesPercent}}
+                                            {{localeData?.complete}}</small>
                                         <small class="text-danger"
-                                            *ngIf="row.tallyErrorEntries>0">{{row.entriesErrorPercent}} {{localeData?.error_occured}}
+                                            *ngIf="row.tallyErrorEntries>0">{{row.entriesErrorPercent}}
+                                            {{localeData?.error_occured}}
                                         </small>
                                     </div>
                                 </div>
@@ -147,14 +159,19 @@
                 <div class="panel-footer"
                     *ngIf="row.tallyErrorEntries>0 || row.tallyErrorAccounts>0 || row.tallyErrorGroups>0">
                     <span class="mr-r15">{{localeData?.error_report}}</span>
-                    <a href="javascript:;" class="running" (click)="downloadLog(row)">{{row.company.name}}-error-log.xlsx</a>
+                    <a href="javascript:;" class="running"
+                        (click)="downloadLog(row)">{{row.company.name}}-error-log.xlsx</a>
                 </div>
             </div>
         </div>
         <!-- pagination -->
-        <div class="text-center" [hidden]="isLoading" *ngIf="completedData?.length && completedtallySyncDataResponse.totalItems>paginationRequest?.count-1">
-            <pagination [maxSize]="5" [totalItems]="completedtallySyncDataResponse?.totalItems" [itemsPerPage]="completedtallySyncDataResponse.count" [(ngModel)]="paginationRequest.page" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"
-                        [rotate]="false" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
+        <div class="text-center" [hidden]="isLoading"
+            *ngIf="completedData?.length && completedtallySyncDataResponse.totalItems>paginationRequest?.count-1">
+            <pagination [maxSize]="5" [totalItems]="completedtallySyncDataResponse?.totalItems"
+                [itemsPerPage]="completedtallySyncDataResponse.count" [(ngModel)]="paginationRequest.page"
+                (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false"
+                [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
             </pagination>
         </div>
         <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>

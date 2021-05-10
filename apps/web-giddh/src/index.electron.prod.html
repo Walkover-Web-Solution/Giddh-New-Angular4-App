@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -14,61 +15,63 @@
     <link rel="icon" href="assets/images/favicons.png" type="image/png" sizes="16x16">
     <link href="assets/css/typography.css" rel="stylesheet">
     <script type="text/javascript">
-        window.onerror = function(msg, url, line, col, error) {
-           var extra = !col ? '' : '\ncolumn: ' + col;
-           extra += !error ? '' : '\nerror: ' + error;
-           console.error("Error: " + msg + "\nurl: " + url + "\nline: " + line + extra);
+        window.onerror = function (msg, url, line, col, error) {
+            var extra = !col ? '' : '\ncolumn: ' + col;
+            extra += !error ? '' : '\nerror: ' + error;
+            console.error("Error: " + msg + "\nurl: " + url + "\nline: " + line + extra);
         };
     </script>
     <script>
-        var HW_config = {    selector: ".notification", account:  "7eB4aJ"  };
+        var HW_config = { selector: ".notification", account: "7eB4aJ" };
         window.usingCordova = false;
         var jQuery = $ = window.$ = window.jQuery = require("jquery");
     </script>
     <script>
         try {
             if (true) {
-            !function () {
-                var analytics = window.analytics = window.analytics || [];
-                if (!analytics.initialize)
-                    if (analytics.invoked) window.console && console.error && console.error('Segment snippet included twice.');
-                    else {
-                        analytics.invoked = !0;
-                        analytics.methods = ['trackSubmit', 'trackClick', 'trackLink', 'trackForm', 'pageview', 'identify', 'reset', 'group', 'track', 'ready', 'alias', 'debug', 'page', 'once', 'off', 'on'];
-                        analytics.factory = function (t) {
-                            return function () {
-                                var e = Array.prototype.slice.call(arguments);
-                                e.unshift(t);
-                                analytics.push(e);
-                                return analytics;
+                !function () {
+                    var analytics = window.analytics = window.analytics || [];
+                    if (!analytics.initialize)
+                        if (analytics.invoked) window.console && console.error && console.error('Segment snippet included twice.');
+                        else {
+                            analytics.invoked = !0;
+                            analytics.methods = ['trackSubmit', 'trackClick', 'trackLink', 'trackForm', 'pageview', 'identify', 'reset', 'group', 'track', 'ready', 'alias', 'debug', 'page', 'once', 'off', 'on'];
+                            analytics.factory = function (t) {
+                                return function () {
+                                    var e = Array.prototype.slice.call(arguments);
+                                    e.unshift(t);
+                                    analytics.push(e);
+                                    return analytics;
+                                };
                             };
-                        };
-                        for (var t = 0; t < analytics.methods.length; t++) {
-                            var e = analytics.methods[t];
-                            analytics[e] = analytics.factory(e);
+                            for (var t = 0; t < analytics.methods.length; t++) {
+                                var e = analytics.methods[t];
+                                analytics[e] = analytics.factory(e);
+                            }
+                            analytics.load = function (t, e) {
+                                var n = document.createElement('script');
+                                n.type = 'text/javascript';
+                                n.async = !0;
+                                n.src = 'https://cdn.segment.com/analytics.js/v1/' + t + '/analytics.min.js';
+                                var a = document.getElementsByTagName('script')[0];
+                                a.parentNode.insertBefore(n, a);
+                                analytics._loadOptions = e;
+                            };
+                            analytics.SNIPPET_VERSION = '4.1.0';
+                            analytics.load('pwEAdSA97VnDhJ3j2DEJlm9JfLkv3CmU');
+                            analytics.page();
                         }
-                        analytics.load = function (t, e) {
-                            var n = document.createElement('script');
-                            n.type = 'text/javascript';
-                            n.async = !0;
-                            n.src = 'https://cdn.segment.com/analytics.js/v1/' + t + '/analytics.min.js';
-                            var a = document.getElementsByTagName('script')[0];
-                            a.parentNode.insertBefore(n, a);
-                            analytics._loadOptions = e;
-                        };
-                        analytics.SNIPPET_VERSION = '4.1.0';
-                        analytics.load('pwEAdSA97VnDhJ3j2DEJlm9JfLkv3CmU');
-                        analytics.page();
-                    }
-            }();
-        }
+                }();
+            }
         } catch (error) {
             console.error(error);
         }
     </script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
+
 <body class="unresponsive">
     <app-component></app-component>
 </body>
+
 </html>

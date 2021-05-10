@@ -23,23 +23,22 @@ import { WarehouseActions } from './warehouse/action/warehouse.action';
 import { PAGINATION_LIMIT, SETTING_INTEGRATION_TABS } from '../app.constant';
 import { HttpClient } from "@angular/common/http";
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { CurrentPage } from '../models/api-models/Common';
 
 @Component({
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
-    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('integrationComponent', {static: false}) public integrationComponent: SettingIntegrationComponent;
-    @ViewChild('profileComponent', {static: false}) public profileComponent: SettingProfileComponent;
-    @ViewChild('financialYearComp', {static: false}) public financialYearComp: FinancialYearComponent;
-    @ViewChild('eBankComp', {static: false}) public eBankComp: SettingLinkedAccountsComponent;
-    @ViewChild('permissionComp', {static: false}) public permissionComp: SettingPermissionComponent;
-    @ViewChild('tagComp', {static: false}) public tagComp: SettingsTagsComponent;
-    @ViewChild('bunchComp', {static: false}) public bunchComp: BunchComponent;
+    @ViewChild('integrationComponent', { static: false }) public integrationComponent: SettingIntegrationComponent;
+    @ViewChild('profileComponent', { static: false }) public profileComponent: SettingProfileComponent;
+    @ViewChild('financialYearComp', { static: false }) public financialYearComp: FinancialYearComponent;
+    @ViewChild('eBankComp', { static: false }) public eBankComp: SettingLinkedAccountsComponent;
+    @ViewChild('permissionComp', { static: false }) public permissionComp: SettingPermissionComponent;
+    @ViewChild('tagComp', { static: false }) public tagComp: SettingsTagsComponent;
+    @ViewChild('bunchComp', { static: false }) public bunchComp: BunchComponent;
 
     public isUserSuperAdmin: boolean = false;
     public isUpdateCompanyInProgress$: Observable<boolean>;
@@ -56,6 +55,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideSettingMenuState: string = 'in';
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
@@ -128,7 +131,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 }, 0);
             } else if (this.activeTab === "permission") {
                 setTimeout(() => {
-                    if(this.permissionComp) {
+                    if (this.permissionComp) {
                         this.permissionComp.getInitialData();
                     }
                 }, 0);
@@ -170,7 +173,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public selectTab(id: number) {
-        if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs.length) {
+        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs.length) {
             this.staticTabs.tabs[id].active = true;
         }
     }
@@ -266,7 +269,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
             this._authenticationService.saveGmailToken(dataToSave).pipe(take(1)).subscribe((res) => {
 
                 if (res.status === 'success') {
-                    this._toast.successToast('Gmail account added successfully.', 'Success');
+                    this._toast.successToast(this.localeData?.gmail_account_added, this.commonLocaleData?.app_success);
                 } else {
                     this._toast.errorToast(res.message, res.code);
                 }
@@ -358,18 +361,5 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.asideSettingMenuState = "out";
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    /**
-     * Sets the current page title
-     *
-     * @param {string} title Title of the page
-     * @memberof SettingsComponent
-     */
-    public setCurrentPageTitle(title: string): void {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = "Settings > " + title;
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 }

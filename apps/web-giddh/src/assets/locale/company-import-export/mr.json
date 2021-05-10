@@ -1,14 +1,14 @@
 {
     "page_heading": "कंपनी आयात / निर्यात",
-    "backup" : "बॅकअप",
+    "backup": "बॅकअप",
     "data": "डेटा",
-    "import_export_note" : "आपला खाते मास्टर डेटा आयात किंवा निर्यात करा",
-    "file_type" : "दस्तावेजाचा प्रकार",
-    "data_range" : "डेटा श्रेणी",
-    "select_file" : "फाईल सिलेक्ट करा",
-    "browse_file" : "फाईल ब्राउझ करा",
-    "file_types" : {
-        "accounting_entries" : "लेखा नोंदी",
-        "master" : "लेखा नोंदी वगळता मास्टर"
+    "import_export_note": "आपला खाते मास्टर डेटा आयात किंवा निर्यात करा",
+    "file_type": "दस्तावेजाचा प्रकार",
+    "data_range": "डेटा श्रेणी",
+    "select_file": "फाईल सिलेक्ट करा",
+    "browse_file": "फाईल ब्राउझ करा",
+    "file_types": {
+        "accounting_entries": "लेखा नोंदी",
+        "master": "लेखा नोंदी वगळता मास्टर"
     }
 }

@@ -229,7 +229,7 @@ export const VAT_SUPPORTED_COUNTRIES = [
     'QA', 'BH', 'AE', 'SA', 'OM', 'KW'
 ];
 
-export const API_POSTMAN_DOC_URL='https://apidoc.giddh.com/';
+export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
 
 /** Decimal point for rate field, irrespective of user profile preference
  * will be displayed up to 4 decimal places
@@ -312,5 +312,9 @@ export enum EInvoiceStatus {
     PushInitiated = 'push initiated',
     Cancelled = 'cancelled',
     MarkedAsCancelled = 'marked as cancelled',
-    Failed = 'failed'
+    Failed = 'failed',
+    NA = 'na',
 }
+
+/** Length of entry description on vouchers */
+export const ENTRY_DESCRIPTION_LENGTH = 100;

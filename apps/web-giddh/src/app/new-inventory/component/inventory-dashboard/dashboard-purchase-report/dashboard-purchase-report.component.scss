@@ -1,13 +1,12 @@
 @import "../../../../../assets/css/color.scss";
-.purchase-report-block{
+.purchase-report-block {
     .purchase-report-head {
-        h4{
-            font-family: 'opensans-semibold';
+        h4 {
+            font-family: "opensans-semibold";
         }
-        .custom-datepicker{
+        .custom-datepicker {
             min-width: 230px;
-            input
-            {
+            input {
                 width: 100% !important;
                 max-width: 100%;
                 text-align: left;
@@ -22,53 +21,53 @@
         align-items: center;
         flex-direction: column;
     }
-    .purchase-report-container{
+    .purchase-report-container {
         border-top: 1px solid $gainsboro;
-        .table-wrapper{
+        .table-wrapper {
             width: 80%;
-            .purchase-report-table{
+            .purchase-report-table {
                 font-size: 14px;
-                th{
+                th {
                     border-bottom: 1px solid $gainsboro !important;
                     border-top: none !important;
                     min-width: 150px;
                 }
-                tr{
-                    td{
-                        &:first-child{
+                tr {
+                    td {
+                        &:first-child {
                             border-left: none;
                         }
-                        &:last-child{
+                        &:last-child {
                             border-right: none;
                         }
                     }
                 }
             }
         }
-        .purchase-summary-wrapper{
+        .purchase-summary-wrapper {
             width: 20%;
             border-right: 1px solid $gainsboro;
-            .about-purchase-report{
-                .text-blue{
+            .about-purchase-report {
+                .text-blue {
                     font-size: 20px;
                 }
             }
         }
     }
 }
-@media(max-width:768px){
-    .purchase-report-block{
-        .purchase-report-container{
+@media (max-width: 768px) {
+    .purchase-report-block {
+        .purchase-report-container {
             flex-direction: column-reverse;
             border-top: none;
-            .table-wrapper{
+            .table-wrapper {
                 width: 100%;
             }
-            .purchase-summary-wrapper{
+            .purchase-summary-wrapper {
                 width: 100%;
                 border-right: none;
-                .about-purchase-report{
-                    .purchase-qty{
+                .about-purchase-report {
+                    .purchase-qty {
                         margin-top: 0 !important;
                         margin-bottom: 20px;
                     }
@@ -77,10 +76,10 @@
         }
     }
 }
-@media(max-width:575px){
+@media (max-width: 575px) {
     .purchase-report-block {
         .purchase-report-head {
-            .custom-datepicker{
+            .custom-datepicker {
                 margin-top: 15px;
             }
         }

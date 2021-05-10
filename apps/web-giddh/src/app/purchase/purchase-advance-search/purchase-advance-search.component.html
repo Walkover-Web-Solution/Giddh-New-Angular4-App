@@ -7,10 +7,10 @@
         <form name="purchaseOrderAdvanceSearch" novalidate autocomplete="off">
             <div class="modal-wrap mr-b2">
                 <div class="row">
-                    <div class="col-sm-4 col-xs-12">
+                    <div class="col-sm-4 col-12">
                         <label>{{localeData?.expected_delivery_date}}</label>
                     </div>
-                    <div class="col-sm-8 col-xs-12">
+                    <div class="col-sm-8 col-12 mr-b15">
                         <div>
                             <div>
                                 <input type="text" class="form-control" (click)="showGiddhDatepicker($event)"
@@ -19,19 +19,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-2 mb-2">
-                    <div class="col-sm-4 col-xs-12">
+                <div class="row">
+                    <div class="col-sm-4 col-12">
                         <label>{{localeData?.total_amount}}</label>
                     </div>
-                    <div class="col-sm-8 col-xs-12">
-                        <div class="total-amount row mr-0 ml-0">
-                            <div class="col-sm-8 col-xs-6 pl-0">
-                                <sh-select [placeholder]="commonLocaleData?.app_select_range" name="grandTotal" [options]="filtersForAmount"
+                    <div class="col-sm-8 col-12">
+                        <div class="total-amount row">
+                            <div class="col-sm-8 col-12 mr-b15">
+                                <sh-select [placeholder]="commonLocaleData?.app_select_range" name="grandTotal"
+                                    [options]="filtersForAmount"
                                     [(ngModel)]="purchaseOrderPostRequest.grandTotalOperation" [ItemHeight]="33"
                                     [defaultValue]="selectedGrandTotalOperator">
                                 </sh-select>
                             </div>
-                            <div class="col-sm-4 col-xs-6 pr-0">
+                            <div class="col-sm-4 col-12 mr-b15">
                                 <input class="form-control" placeholder="00" type="tel" name="grandTotal"
                                     [(ngModel)]="purchaseOrderPostRequest.grandTotal" decimalDigitsDirective
                                     [DecimalPlaces]="4">
@@ -39,20 +40,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-2 mb-2">
-                    <div class="col-sm-4 col-xs-12">
+                <div class="row">
+                    <div class="col-sm-4 col-12">
                         <label>{{localeData?.select_status}}</label>
                     </div>
-                    <div class="col-sm-8 col-xs-12">
-                        <sh-select [placeholder]="localeData?.select_status" name="statuses" [options]="filtersForStatus"
-                            [multiple]="true" [(ngModel)]="purchaseOrderPostRequest.statuses" [ItemHeight]="33">
+                    <div class="col-sm-8 col-12">
+                        <sh-select [placeholder]="localeData?.select_status" name="statuses"
+                            [options]="filtersForStatus" [multiple]="true"
+                            [(ngModel)]="purchaseOrderPostRequest.statuses" [ItemHeight]="33">
                         </sh-select>
                     </div>
                 </div>
             </div>
             <div class="pull-right">
-                <button type="submit" class="btn btn-md btn-success mr-r1" (click)="onSearch()">{{commonLocaleData?.app_search}}</button>
-                <button type="submit" class="btn btn-md btn-cancel" (click)="onCancel()">{{commonLocaleData?.app_cancel}}</button>
+                <button type="submit" class="btn btn-md btn-success mr-r1"
+                    (click)="onSearch()">{{commonLocaleData?.app_search}}</button>
+                <button type="submit" class="btn btn-md btn-cancel"
+                    (click)="onCancel()">{{commonLocaleData?.app_cancel}}</button>
             </div>
         </form>
     </div>
@@ -61,12 +65,12 @@
     <div class="datepicker-modal">
         <div class="modal-body">
             <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true"
-                [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true" [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true"
-                [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}"
+                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>
