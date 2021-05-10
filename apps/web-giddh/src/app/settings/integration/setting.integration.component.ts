@@ -103,16 +103,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isEcommerceShopifyUserVerified: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     /** List OTP type  */
-    public typeOTPList: IOption[] =
-        [
-            { label: "Bank OTP", value: "BANK" },
-            { label: "GIDDH OTP", value: "GIDDH" },
-        ];
-    public amountUpToList: IOption[] =
-        [
-            { label: "Max limit as per Bank", value: "max" },
-            { label: "Custom", value: "custom" },
-        ];
+    public typeOTPList: IOption[] = [];
+    public amountUpToList: IOption[] = [];
     public approvalNameList: IOption[] = [];
     public selectedCompanyUniqueName: string;
     public isCreateInvalid: boolean = false;
@@ -148,10 +140,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     };
     /** Stores the list of accounts */
     public accounts: IOption[];
-    /** This will hold urn for which beneficiary will open */
-    public activeUrn: any;
-    /** Beneficiary aside pan status */
-    public beneficiaryAsideState: string = "out";
     /** This will hold users list */
     public usersList: any[] = [];
     /* This will hold local JSON data */
@@ -190,7 +178,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.loggedInUserEmail = result.user.email;
             }
         });
-        this.setCurrentPageTitle();
     }
 
     public ngOnInit() {
@@ -465,7 +452,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             data.account.name = null;
             this.store.dispatch(this.settingsIntegrationActions.UpdateRazorPayDetails(data));
         } else {
-            this.toasty.warningToast('You don\'t have any account linked with Razorpay.');
+            this.toasty.warningToast(this.localeData?.collection?.unlink_razorpay_message);
         }
     }
 
@@ -719,13 +706,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.paymentFormObj = new PaymentClass();
     }
 
-    public setCurrentPageTitle() {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = "Settings > Integration";
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
-    }
-
     /**
      * API call to get know about ecommerce platform shopify connected or not
      *
@@ -760,7 +740,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this._authenticationService.saveGmailToken(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
 
                         if (res.status === 'success') {
-                            this.toasty.successToast('Gmail account added successfully.', 'Success');
+                            this.toasty.successToast(this.localeData?.email?.gmail_added_successfully, this.commonLocaleData?.app_success);
                         } else {
                             this.toasty.errorToast(res.message, res.code);
                         }
@@ -841,7 +821,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     userAmountRanges.controls[index].get('amount')?.patchValue(null);
                     userAmountRanges.controls[index].get('amount').setErrors({ 'incorrect': true });
                     userAmountRanges.controls[index].get('amount').setValidators(Validators.compose([Validators.required]));
-                    this.toasty.infoToast('You can not select max bank limit more than 1');
+                    this.toasty.infoToast(this.localeData?.payment?.max_limit_alert);
                 }
             } else {
                 userAmountRanges.controls[index].get('maxBankLimit')?.patchValue('custom');
@@ -870,7 +850,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             if (event === 'max' && this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRanges, index)) {
                 this.paymentFormObj.userAmountRanges[index].maxBankLimit = "custom";
                 this.paymentFormObj.userAmountRanges[index].amount = null;
-                this.toasty.infoToast('You can not select max bank limit more than 1');
+                this.toasty.infoToast(this.localeData?.payment?.max_limit_alert);
             } else {
                 this.paymentFormObj.userAmountRanges[index].amount = null;
             }
@@ -878,7 +858,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             if (event === 'max' && this.checkIsMaxBankLimitSelected(this.registeredAccount[parentIndex].userAmountRanges, index)) {
                 this.registeredAccount[parentIndex].userAmountRanges[index].maxBankLimit = "custom";
                 this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
-                this.toasty.infoToast('You can not select max bank limit more than 1');
+                this.toasty.infoToast(this.localeData?.payment?.max_limit_alert);
             } else {
                 this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
             }
@@ -1046,7 +1026,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.paymentFormObj.userAmountRanges.splice(itemIndx, 1);
                 }
             } else {
-                this.toasty.infoToast('At least 1 row is required');
+                this.toasty.infoToast(this.localeData?.payment?.row_delete_error);
             }
 
         }
@@ -1057,7 +1037,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.registeredAccount[indexUpdateList - 1].userAmountRanges.splice(itemIndxOfUpdate, 1);
                 }
             } else {
-                this.toasty.infoToast('At least 1 row is required');
+                this.toasty.infoToast(this.localeData?.payment?.row_delete_error);
             }
 
         }
@@ -1207,7 +1187,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (transactions.controls.length > 1) {
             transactions.removeAt(index);
         } else {
-            this.toasty.infoToast('At least 1 row is required');
+            this.toasty.infoToast(this.localeData?.payment?.row_delete_error);
         }
         this.isCreateInvalid = this.isUpdateInvalid = this.toCheckBankAmountCustomFieldValidation(transactions.value);
     }
@@ -1547,5 +1527,96 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for user selected
+     *
+     * @param {*} event
+     * @memberof SettingIntegrationComponent
+     */
+    public selectUser(event: any): void {
+        if (event) {
+            this.addBankForm.get('userNames')?.patchValue(event.map(ev => ev.label));
+        }
+    }
+
+    /**
+     * Selects the users
+     *
+     * @param {*} user Selected user
+     * @param {*} event Select event
+     * @param {*} userIndex Current user index in list
+     * @memberof SettingIntegrationComponent
+     */
+    public selectUsers(user: any, event: any, userIndex): void {
+        if (event && user) {
+            if (event.target.checked) {
+                user.isSelected = event.target.checked;
+                this.usersList[userIndex].isSelected = true;
+            } else {
+                this.usersList[userIndex].isSelected = false;
+            }
+            this.addBankForm.get('userNames')?.patchValue(this.usersList.filter(ev => ev.isSelected && ev.label).map(user => user.label));
+            this.addBankForm.get('emailIds')?.patchValue(this.usersList.filter(ev => ev.isSelected && ev.value).map(user => user.value));
+        }
+        event.stopPropagation();
+    }
+
+    public removeUser(user: any, isUpdate?: boolean): void {
+        let i = 0;
+        let matchedIndex = -1;
+
+        for (i; i < this.usersList.length; i++) {
+            if (user === this.usersList[i].value) {
+                matchedIndex = i;
+                break;
+            }
+        }
+
+        let indx = -1;
+        if (isUpdate) {
+            indx = this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.findIndex(selectedUser => selectedUser.value === user.value);
+            this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.splice(indx, 1);
+        } else {
+            indx = this.usersList.findIndex(selectedUser => selectedUser.value === user.value);
+            this.usersList[indx].isSelected = false;
+        }
+
+        if (matchedIndex > -1) {
+            this.usersList[matchedIndex].isSelected = false;
+        }
+    }
+
+    public resetUserSelection(): void {
+        this.usersList.forEach(user => user.isSelected = false);
+    }
+
+    public setUserSelection(): void {
+        this.usersList.forEach(user => user.isSelected = this.registeredAccount[this.isBankUpdateInEdit].selectedUsers.some(selectedUser => selectedUser.value === user.value));
+    }
+
+    public getSelectedItemCount(items: Array<any>): number {
+        return items?.filter(user => user.isSelected).length;
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof SettingIntegrationComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.typeOTPList = [
+                { label: this.localeData?.otp_types?.bank_otp, value: "BANK" },
+                { label: this.localeData?.otp_types?.giddh_otp, value: "GIDDH" },
+            ];
+
+            this.amountUpToList = [
+                { label: this.localeData?.amount_limit_types?.bank_limit, value: "max" },
+                { label: this.localeData?.amount_limit_types?.custom, value: "custom" },
+            ];
+        }
     }
 }
