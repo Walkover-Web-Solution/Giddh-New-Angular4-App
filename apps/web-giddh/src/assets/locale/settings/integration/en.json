@@ -19,7 +19,8 @@
         "auth_key_label": "Auth Key",
         "auth_key_placeholder": "Enter auth-key",
         "email_subject_label": "Email Subject",
-        "email_subject_placeholder": "Enter email subject"
+        "email_subject_placeholder": "Enter email subject",
+        "gmail_added_successfully": "Gmail account added successfully."
     },
     "collection": {
         "tab_heading": "Collection",
@@ -79,6 +80,24 @@
         "select_otp": "Select OTP",
         "approver_name": "Approver Name",
         "select_otp_tooltip": "The OTP will reach the person selected in Approver Name",
-        "open_new_current_account": "Open a new current account"
+        "open_new_current_account": "Open a new current account",
+        "otp_types": {
+            "bank_otp": "Bank OTP",
+            "giddh_otp": "GIDDH OTP"
+        },
+        "amount_limit_types": {
+            "bank_limit": "Max limit as per Bank",
+            "custom": "Custom"
+        },
+        "row_delete_error": "At least 1 row is required",
+        "beneficiary_validation_successful": "Beneficiary has been validated successfully.",
+        "beneficiary_validation_error": "There is some issue in beneficiary validation. Please try again.",
+        "account_number_error": "Account number must contain 9 to 18 characters.",
+        "beneficiary_list": "Beneficiary List",
+        "beneficiary_name": "Beneficiary Name",
+        "beneficiary_nick_name": "Beneficiary Nick Name",
+        "beneficiary_account_no": "Beneficiary Account No.",
+        "ifsc": "IFSC",
+        "add_beneficiary": "Add Beneficiary"
     }
 }

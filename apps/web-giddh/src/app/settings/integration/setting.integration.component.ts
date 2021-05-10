@@ -117,16 +117,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isEcommerceShopifyUserVerified: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     /** List OTP type  */
-    public typeOTPList: IOption[] =
-        [
-            { label: "Bank OTP", value: "BANK" },
-            { label: "GIDDH OTP", value: "GIDDH" },
-        ];
-    public amountUpToList: IOption[] =
-        [
-            { label: "Max limit as per Bank", value: "max" },
-            { label: "Custom", value: "custom" },
-        ];
+    public typeOTPList: IOption[] = [];
+    public amountUpToList: IOption[] = [];
     // public approvalNameList: IOption[] = [];
     public selectedCompanyUniqueName: string;
     public isCreateInvalid: boolean = false;
@@ -204,7 +196,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.loggedInUserEmail = result.user.email;
             }
         });
-        this.setCurrentPageTitle();
     }
 
     public ngOnInit() {
@@ -501,7 +492,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             data.account.name = null;
             this.store.dispatch(this.settingsIntegrationActions.UpdateRazorPayDetails(data));
         } else {
-            this.toasty.warningToast('You don\'t have any account linked with Razorpay.');
+            this.toasty.warningToast(this.localeData?.collection?.unlink_razorpay_message);
         }
     }
 
@@ -757,13 +748,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.paymentFormObj = new PaymentClass();
     }
 
-    public setCurrentPageTitle() {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = "Settings > Integration";
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
-    }
-
     /**
      * API call to get know about ecommerce platform shopify connected or not
      *
@@ -798,7 +782,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this._authenticationService.saveGmailToken(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
 
                         if (res.status === 'success') {
-                            this.toasty.successToast('Gmail account added successfully.', 'Success');
+                            this.toasty.successToast(this.localeData?.email?.gmail_added_successfully, this.commonLocaleData?.app_success);
                         } else {
                             this.toasty.errorToast(res.message, res.code);
                         }
@@ -879,7 +863,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     userAmountRanges.controls[index].get('amount')?.patchValue(null);
                     userAmountRanges.controls[index].get('amount').setErrors({ 'incorrect': true });
                     userAmountRanges.controls[index].get('amount').setValidators(Validators.compose([Validators.required]));
-                    this.toasty.infoToast('You can not select max bank limit more than 1');
+                    this.toasty.infoToast(this.localeData?.payment?.max_limit_alert);
                 }
             } else {
                 userAmountRanges.controls[index].get('maxBankLimit')?.patchValue('custom');
@@ -908,7 +892,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             if (event === 'max' && this.checkIsMaxBankLimitSelected(this.paymentFormObj.userAmountRanges, index)) {
                 this.paymentFormObj.userAmountRanges[index].maxBankLimit = "custom";
                 this.paymentFormObj.userAmountRanges[index].amount = null;
-                this.toasty.infoToast('You can not select max bank limit more than 1');
+                this.toasty.infoToast(this.localeData?.payment?.max_limit_alert);
             } else {
                 this.paymentFormObj.userAmountRanges[index].amount = null;
             }
@@ -916,7 +900,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             if (event === 'max' && this.checkIsMaxBankLimitSelected(this.registeredAccount[parentIndex].userAmountRanges, index)) {
                 this.registeredAccount[parentIndex].userAmountRanges[index].maxBankLimit = "custom";
                 this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
-                this.toasty.infoToast('You can not select max bank limit more than 1');
+                this.toasty.infoToast(this.localeData?.payment?.max_limit_alert);
             } else {
                 this.registeredAccount[parentIndex].userAmountRanges[index].amount = null;
             }
@@ -1084,7 +1068,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.paymentFormObj.userAmountRanges.splice(itemIndx, 1);
                 }
             } else {
-                this.toasty.infoToast('At least 1 row is required');
+                this.toasty.infoToast(this.localeData?.payment?.row_delete_error);
             }
 
         }
@@ -1095,7 +1079,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.registeredAccount[indexUpdateList - 1].userAmountRanges.splice(itemIndxOfUpdate, 1);
                 }
             } else {
-                this.toasty.infoToast('At least 1 row is required');
+                this.toasty.infoToast(this.localeData?.payment?.row_delete_error);
             }
 
         }
@@ -1246,7 +1230,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (transactions.controls.length > 1) {
             transactions.removeAt(index);
         } else {
-            this.toasty.infoToast('At least 1 row is required');
+            this.toasty.infoToast(this.localeData?.payment?.row_delete_error);
         }
         this.isCreateInvalid = this.isUpdateInvalid = this.toCheckBankAmountCustomFieldValidation(transactions.value);
     }
@@ -1706,5 +1690,25 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public getSelectedItemCount(items: Array<any>): number {
         return items?.filter(user => user.isSelected).length;
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof SettingIntegrationComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.typeOTPList = [
+                { label: this.localeData?.otp_types?.bank_otp, value: "BANK" },
+                { label: this.localeData?.otp_types?.giddh_otp, value: "GIDDH" },
+            ];
+
+            this.amountUpToList = [
+                { label: this.localeData?.amount_limit_types?.bank_limit, value: "max" },
+                { label: this.localeData?.amount_limit_types?.custom, value: "custom" },
+            ];
+        }
     }
 }

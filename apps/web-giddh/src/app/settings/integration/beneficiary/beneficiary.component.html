@@ -1,7 +1,7 @@
 <div class="aside-pane">
     <div class="form-header">
         <div>
-            <h3><span>Beneficiary List</span></h3>
+            <h3><span>{{localeData?.payment?.beneficiary_list}}</span></h3>
         </div>
     </div>
     <button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
@@ -10,31 +10,31 @@
             <form [formGroup]="addBeneficiaryForm" (ngSubmit)="saveBeneficiary()" *ngIf="isBeneficiaryFormVisible">
                 <div class="row">
                     <div class="form-group  col-sm-6">
-                        <label>Beneficiary Name <sup class="text-danger">*</sup></label>
-                        <input type="text" class="form-control" placeholder="Beneficiary" name="bnfName"
+                        <label>{{localeData?.payment?.beneficiary_name}} <sup class="text-danger">*</sup></label>
+                        <input type="text" class="form-control" [placeholder]="localeData?.payment?.beneficiary_name" name="bnfName"
                             formControlName="bnfName" />
                     </div>
                     <div class="form-group col-sm-6">
-                        <label>Beneficiary Nick Name <sup class="text-danger">*</sup></label>
-                        <input type="text" class="form-control" placeholder="Beneficiary Nick Name" name="bnfNickName"
+                        <label>{{localeData?.payment?.beneficiary_nick_name}} <sup class="text-danger">*</sup></label>
+                        <input type="text" class="form-control" [placeholder]="localeData?.payment?.beneficiary_nick_name" name="bnfNickName"
                             formControlName="bnfNickName" />
                     </div>
                     <div class="form-group col-sm-6">
-                        <label>Beneficiary Account No. <sup class="text-danger">*</sup></label>
-                        <input type="text" class="form-control" placeholder="Beneficiary Account No." name="bnfAccNo"
+                        <label>{{localeData?.payment?.beneficiary_account_no}} <sup class="text-danger">*</sup></label>
+                        <input type="text" class="form-control" [placeholder]="localeData?.payment?.beneficiary_account_no" name="bnfAccNo"
                             formControlName="bnfAccNo" [maxlength]="18" [minlength]="9" #accountNo
                             (blur)="validateAccountNo(accountNo)" />
                     </div>
                     <div class="form-group col-sm-6">
-                        <label>IFSC <sup class="text-danger">*</sup></label>
-                        <input type="text" class="form-control" placeholder="IFSC" name="ifsc" formControlName="ifsc" />
+                        <label>{{localeData?.payment?.ifsc}} <sup class="text-danger">*</sup></label>
+                        <input type="text" class="form-control" [placeholder]="localeData?.payment?.ifsc" name="ifsc" formControlName="ifsc" />
                     </div>
                     <div class="col-sm-12">
                         <div class="button-group">
                             <button class="btn btn-primary" [ladda]="isBeneficiaryRegistrationInProgress$ | async"
-                                [disabled]="addBeneficiaryForm.invalid">Save
+                                [disabled]="addBeneficiaryForm.invalid">{{commonLocaleData?.app_save}}
                             </button>
-                            <button type="button" class="btn btn-cancel" (click)="toggleBeneficiaryForm()">Cancel
+                            <button type="button" class="btn btn-cancel" (click)="toggleBeneficiaryForm()">{{commonLocaleData?.app_cancel}}
                             </button>
                         </div>
                     </div>
@@ -42,37 +42,37 @@
             </form>
             <a class="text-right btn btn-primary" href="javascript:;" *ngIf="!isBeneficiaryFormVisible"
                 (click)="toggleBeneficiaryForm()">
-                <i class="icon-plus"></i> Add Beneficiary
+                <i class="icon-plus"></i> {{localeData?.payment?.add_beneficiary}}
             </a>
             <div class="report-table table-responsive mr-t2">
                 <table class="table basic giddh-table on-mobile-view">
                     <thead>
                         <tr>
                             <th width="3%">#</th>
-                            <th width="27%">Name</th>
-                            <th width="15%">Nick Name</th>
-                            <th width="20%">Account No.</th>
-                            <th width="15%">IFSC</th>
-                            <th width="20%">Action</th>
+                            <th width="27%">{{localeData?.payment?.beneficiary_name}}</th>
+                            <th width="15%">{{localeData?.payment?.beneficiary_nick_name}}</th>
+                            <th width="20%">{{localeData?.payment?.beneficiary_account_no}}</th>
+                            <th width="15%">{{localeData?.payment?.ifsc}}</th>
+                            <th width="20%">{{commonLocaleData?.app_action}}</th>
                         </tr>
                     </thead>
                     <tbody *ngIf="!isLoading && accountBeneficiaries?.length > 0">
                         <tr *ngFor="let item of accountBeneficiaries; let i = index;">
                             <td data-title="#">{{ i+1 }}</td>
-                            <td data-title="Name">{{ item.BnfName }}</td>
-                            <td data-title="Nick Name">{{ item.BnfNickName }}</td>
-                            <td data-title="Account No.">{{ item.BnfAccNo }}</td>
-                            <td data-title="IFSC">{{ item.IFSC }}</td>
-                            <td data-title="Action">
+                            <td [attr.data-title]="localeData?.payment?.beneficiary_name">{{ item.BnfName }}</td>
+                            <td [attr.data-title]="localeData?.payment?.beneficiary_nick_name">{{ item.BnfNickName }}</td>
+                            <td [attr.data-title]="localeData?.payment?.beneficiary_account_no">{{ item.BnfAccNo }}</td>
+                            <td [attr.data-title]="localeData?.payment?.ifsc">{{ item.IFSC }}</td>
+                            <td [attr.data-title]="commonLocaleData?.app_action">
                                 <a href="javascript:;" class="btn btn-primary"
-                                    (click)="validateBeneficiary(item.BnfAccNo)">Validate</a>
+                                    (click)="validateBeneficiary(item.BnfAccNo)">{{commonLocaleData?.app_validate}}</a>
                             </td>
                         </tr>
                     </tbody>
                     <tbody class="on-mobile-view no-records"
                         *ngIf="!accountBeneficiaries || accountBeneficiaries.length === 0">
                         <tr>
-                            <td colspan="6" *ngIf="!isLoading" align="center">No records found.</td>
+                            <td colspan="6" *ngIf="!isLoading" align="center">{{commonLocaleData?.app_no_records_found}}</td>
                             <td colspan="6" *ngIf="isLoading">
                                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
                             </td>
