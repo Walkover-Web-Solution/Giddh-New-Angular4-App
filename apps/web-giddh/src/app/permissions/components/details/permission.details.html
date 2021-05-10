@@ -1,12 +1,14 @@
-<ng-container appTranslate [file]="'permissions'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'permissions'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <section id="single-role" *ngIf="roleObj && localeData?.page_heading">
         <div class="pd-1 bd-rb clearfix text-center mr-b15">
             <span class="lead">{{ newRole.name }}</span>
-            <button class="btn btn-md btn-primary pull-left" (click)="goToRoles()">{{commonLocaleData?.app_back}}</button>
+            <button class="btn btn-md btn-primary pull-left"
+                (click)="goToRoles()">{{commonLocaleData?.app_back}}</button>
             <button *ngIf="!newRole.isUpdateCase" class="btn btn-md btn-success pull-right mr-0"
                 (click)="addNewRole()">{{commonLocaleData?.app_save}}</button>
-            <button *ngIf="newRole.isUpdateCase" [disabled]="newRole.isFixed" class="btn btn-md btn-success pull-right mr-0"
-                (click)="updateRole()">{{commonLocaleData?.app_update}}
+            <button *ngIf="newRole.isUpdateCase" [disabled]="newRole.isFixed"
+                class="btn btn-md btn-success pull-right mr-0" (click)="updateRole()">{{commonLocaleData?.app_update}}
             </button>
         </div>
         <section class="px-3">
@@ -23,7 +25,8 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-success" (click)="addNewPage(pageName)" [disabled]="!pageName">{{commonLocaleData?.app_add}}</button>
+                        <button class="btn btn-success" (click)="addNewPage(pageName)"
+                            [disabled]="!pageName">{{commonLocaleData?.app_add}}</button>
                     </div>
                 </div>
             </div>
@@ -32,8 +35,8 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             {{ page.name }}
-                            <a class="close pull-right" href="javascript:void(0);" (click)="removePageFromScope(page.name)"
-                                *ngIf="!newRole.isFixed">×</a>
+                            <a class="close pull-right" href="javascript:void(0);"
+                                (click)="removePageFromScope(page.name)" *ngIf="!newRole.isFixed">×</a>
                         </div>
                         <div class="panel-body p-0">
                             <table class="table basic">
@@ -50,7 +53,8 @@
                                             <input id="{{page.name}}+_{{idx}}" [disabled]="newRole.isFixed"
                                                 name="{{page.name}}+_{{idx}}" (change)="toggleItems(page.name, $event)"
                                                 type="checkbox" [(ngModel)]="page.selectAll" />
-                                            <label for="{{page.name}}+_{{idx}}"> {{commonLocaleData?.app_select_all}}</label>
+                                            <label for="{{page.name}}+_{{idx}}">
+                                                {{commonLocaleData?.app_select_all}}</label>
                                         </td>
                                     </tr>
                                     <tr *ngFor="let item of page.permissions | mySortBy : ['code']; let i = index">

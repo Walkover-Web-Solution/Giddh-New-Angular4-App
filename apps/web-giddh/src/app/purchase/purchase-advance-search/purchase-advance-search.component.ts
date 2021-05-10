@@ -94,7 +94,7 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
             this.isMobileScreen = result.matches;
         });
 
-        if(this.purchaseOrderPostRequest && this.purchaseOrderPostRequest.dueFrom && this.purchaseOrderPostRequest.dueTo) {
+        if (this.purchaseOrderPostRequest && this.purchaseOrderPostRequest.dueFrom && this.purchaseOrderPostRequest.dueTo) {
             this.selectedDateRange = { startDate: moment(this.purchaseOrderPostRequest.dueFrom, GIDDH_DATE_FORMAT), endDate: moment(this.purchaseOrderPostRequest.dueTo, GIDDH_DATE_FORMAT) };
             this.selectedDateRangeUi = moment(this.purchaseOrderPostRequest.dueFrom, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.purchaseOrderPostRequest.dueTo, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
         }
@@ -135,7 +135,7 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
      * @memberof PurchaseAdvanceSearchComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }

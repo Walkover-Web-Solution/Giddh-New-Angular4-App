@@ -35,10 +35,11 @@
                 <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName"
                     (isGroupSelected)="isGroupSelected($event)" [fetchingAccUniqueName$]="fetchingAccUniqueName$"
                     [isAccountNameAvailable$]="isAccountNameAvailable$" [isFlattenRemoved]="true"
-                    [createAccountInProcess$]="createAccountInProcess$" [isDebtorCreditor]="isDebtorCreditor" [isBankAccount]="isBankAccount"
-                    [flatGroupsOptions]="flatAccountWGroupsList" (submitClicked)="addNewAcSubmit($event)"
-                    [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
-                    [showBankDetail]="showBankDetail" [isServiceCreation]="isServiceCreation" [isCustomerCreation]="isCustomerCreation">
+                    [createAccountInProcess$]="createAccountInProcess$" [isDebtorCreditor]="isDebtorCreditor"
+                    [isBankAccount]="isBankAccount" [flatGroupsOptions]="flatAccountWGroupsList"
+                    (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc"
+                    [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [showBankDetail]="showBankDetail"
+                    [isServiceCreation]="isServiceCreation" [isCustomerCreation]="isCustomerCreation">
                 </account-add-new-details>
             </ng-container>
 

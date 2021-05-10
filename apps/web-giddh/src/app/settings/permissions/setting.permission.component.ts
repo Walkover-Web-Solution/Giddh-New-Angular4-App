@@ -18,7 +18,7 @@ import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
 })
 export class SettingPermissionComponent implements OnInit, OnDestroy {
 
-    @ViewChild('editUserModal', {static: false}) public editUserModal: ModalDirective;
+    @ViewChild('editUserModal', { static: false }) public editUserModal: ModalDirective;
 
     public sharedWith: object[] = [];
     public usersList: any;
@@ -34,7 +34,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         backdrop: 'static',
         ignoreBackdropClick: true
     };
-    public isUpdtCase:boolean = false;
+    public isUpdtCase: boolean = false;
     private loggedInUserEmail: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

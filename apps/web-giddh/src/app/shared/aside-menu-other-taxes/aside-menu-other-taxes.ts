@@ -10,7 +10,7 @@ import { ReplaySubject } from 'rxjs';
     selector: 'app-aside-menu-other-taxes',
     templateUrl: './aside-menu-other-taxes.html',
     styleUrls: ['./aside-menu-other-taxes.scss'],
-    host: {'class': 'app-aside-menu-other-taxes'},
+    host: { 'class': 'app-aside-menu-other-taxes' },
 })
 
 export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {

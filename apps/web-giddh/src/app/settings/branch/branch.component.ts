@@ -55,10 +55,10 @@ export const IsyncData = [
 })
 
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
-    @ViewChild('branchModal', {static: false}) public branchModal: ModalDirective;
-    @ViewChild('addCompanyModal', {static: false}) public addCompanyModal: ModalDirective;
-    @ViewChild('companyadd', {static: false}) public companyadd: ElementViewContainerRef;
-    @ViewChild('confirmationModal', {static: false}) public confirmationModal: ModalDirective;
+    @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
+    @ViewChild('addCompanyModal', { static: false }) public addCompanyModal: ModalDirective;
+    @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
+    @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
         dateInputFormat: GIDDH_DATE_FORMAT,
@@ -94,7 +94,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public searchBranchQuery: string;
 
     /** Branch search field instance */
-    @ViewChild('branchSearch', {static: true}) public branchSearch: ElementRef;
+    @ViewChild('branchSearch', { static: true }) public branchSearch: ElementRef;
 
     /** Stores the address configuration */
     public addressConfiguration: SettingsAsideConfiguration = {
@@ -207,7 +207,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             this.changeBranchViewType('card')
         });
 
-        this.imgPath =  (isElectron|| isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
     /**
@@ -486,7 +486,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
                 this.closeAddressSidePane = 'out';
-                this.store.dispatch(this.settingsBranchActions.GetALLBranches({from: '', to: ''}));
+                this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
                 this.toasterService.successToast('Branch updated successfully');
             } else {
                 this.toasterService.errorToast(response.message);
@@ -537,7 +537,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             };
         }
         this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.store.dispatch(this.settingsBranchActions.GetALLBranches({from: '', to: ''}));
+            this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
         });
     }
 

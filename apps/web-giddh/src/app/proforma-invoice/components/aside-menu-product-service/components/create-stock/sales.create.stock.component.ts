@@ -40,28 +40,28 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public purchaseAccountsDropDown$: Observable<IOption[]>;
     public salesAccountsDropDown$: Observable<IOption[]>;
 
-    @ViewChild('formDiv', {static: true}) public formDiv: ElementRef;
-    @ViewChild('groupDDList', {static: true}) public groupDDList: any;
+    @ViewChild('formDiv', { static: true }) public formDiv: ElementRef;
+    @ViewChild('groupDDList', { static: true }) public groupDDList: any;
     public formDivBoundingRect: Subject<any> = new Subject<any>();
 
 
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
     @Output() public animateAside: EventEmitter<any> = new EventEmitter();
 
-    @ViewChild('uniqueName', {static: false}) public uniqueName: ElementRef;
-    @ViewChild('stockName', {static: false}) public stockName: ElementRef;
+    @ViewChild('uniqueName', { static: false }) public uniqueName: ElementRef;
+    @ViewChild('stockName', { static: false }) public stockName: ElementRef;
 
-    @ViewChild('purchaseAccountUniqueName', {static: false}) public purchaseAccountUniqueName: any;
-    @ViewChild('purchaseStockUnitCode', {static: false}) public purchaseStockUnitCode: any;
-    @ViewChild('purchaseRate', {static: false}) public purchaseRate: ElementRef;
+    @ViewChild('purchaseAccountUniqueName', { static: false }) public purchaseAccountUniqueName: any;
+    @ViewChild('purchaseStockUnitCode', { static: false }) public purchaseStockUnitCode: any;
+    @ViewChild('purchaseRate', { static: false }) public purchaseRate: ElementRef;
 
-    @ViewChild('salesAccountUniqueName', {static: false}) public salesAccountUniqueName: any;
-    @ViewChild('salesStockUnitCode', {static: false}) public salesStockUnitCode: any;
-    @ViewChild('salesRate', {static: false}) public salesRate: ElementRef;
+    @ViewChild('salesAccountUniqueName', { static: false }) public salesAccountUniqueName: any;
+    @ViewChild('salesStockUnitCode', { static: false }) public salesStockUnitCode: any;
+    @ViewChild('salesRate', { static: false }) public salesRate: ElementRef;
 
-    @ViewChild('manufacturingQuantity', {static: false}) public manufacturingQuantity: ElementRef;
-    @ViewChild('manufacturingStockUniqueName', {static: false}) public manufacturingStockUniqueName: any;
-    @ViewChild('manufacturingStockUnitCode', {static: false}) public manufacturingStockUnitCode; any;
+    @ViewChild('manufacturingQuantity', { static: false }) public manufacturingQuantity: ElementRef;
+    @ViewChild('manufacturingStockUniqueName', { static: false }) public manufacturingStockUniqueName: any;
+    @ViewChild('manufacturingStockUnitCode', { static: false }) public manufacturingStockUnitCode; any;
 
     public groupUniqueName: string;
     public stockUniqueName: string;
@@ -749,7 +749,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public submit() {
         let stockObj = new CreateStockRequest();
         let uniqueName = this.addStockForm.get('uniqueName');
-        if(uniqueName.value) {
+        if (uniqueName.value) {
             uniqueName?.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
         }
         this.addStockForm.get('uniqueName').enable();
@@ -1202,12 +1202,12 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public toggleOtherDetails(): void {
         this.showOtherDetails = !this.showOtherDetails;
 
-        if(this.addStockForm.get("hsnNumber").value) {
+        if (this.addStockForm.get("hsnNumber").value) {
             this.addStockForm.get("showCodeType")?.patchValue("hsn");
-        } else if(this.addStockForm.get("sacNumber").value) {
+        } else if (this.addStockForm.get("sacNumber").value) {
             this.addStockForm.get("showCodeType")?.patchValue("sac");
         } else {
-            if(this.inventorySettings?.manageInventory) {
+            if (this.inventorySettings?.manageInventory) {
                 this.addStockForm.get("showCodeType")?.patchValue("hsn");
             } else {
                 this.addStockForm.get("showCodeType")?.patchValue("sac");

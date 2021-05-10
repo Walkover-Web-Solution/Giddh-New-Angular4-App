@@ -29,7 +29,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
     public search: string;
     public from: string;
     public to: string;
-    @ViewChild('tbGrid', {static: true}) public tbGrid: TbGridComponent;
+    @ViewChild('tbGrid', { static: true }) public tbGrid: TbGridComponent;
     @Input() public isV2: boolean = false;
     @Input() public isDateSelected: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

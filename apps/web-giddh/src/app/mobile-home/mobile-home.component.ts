@@ -28,9 +28,9 @@ import { DOCUMENT } from '@angular/common';
 
 export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     /* This will hold the object of search field */
-    @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
+    @ViewChild('searchElement', { static: true }) public searchElement: ElementRef;
     /* This will hold the object of mobile home view element */
-    @ViewChild('mobileHomeView', {static: true}) public mobileHomeView: ElementRef;
+    @ViewChild('mobileHomeView', { static: true }) public mobileHomeView: ElementRef;
 
     /* This will make sure if load more is possible */
     public allowLoadMore: boolean = false;
@@ -107,7 +107,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.searchSubject.next("");
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.activeCompanyUniqueName = activeCompany.uniqueName;
                 let selectedCompanyArray = activeCompany.name.split(" ");
                 let companyInitials = [];
@@ -157,7 +157,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public openMobileSidebar(): void {
         document.querySelector('body').classList.add('mobile-sidebar-open');
         // setTimeout(() => {
-            this.sideNavOpen = true;
+        this.sideNavOpen = true;
         // }, 100);
     }
 

@@ -4,7 +4,8 @@
         <div class="d-inline-block pull-left mr-2 middle eway-bill-date">
             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                 <i class="icon-calender calendar-addon"></i>
-                <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
+                <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                    class="giddh-datepicker date-range-picker" />
             </div>
         </div>
     </div>
@@ -131,10 +132,12 @@
                                         </div>
                                     </td>
                                     <td data-title="E-way Bill Date" class="nowrap">{{item?.ewayBillDate}}</td>
-                                    <td data-title="Total" class="nowrap text-right pr-1"><i class="icon-rupees font-11"></i>
+                                    <td data-title="Total" class="nowrap text-right pr-1"><i
+                                            class="icon-rupees font-11"></i>
                                         <!-- {{item?.totalValue | giddhCurrency}} -->
                                         <span class="d-inline-flex">
-                                            <amount-field [amount]="item?.totalValue" [currencySymbol]="false" [currencyCode]="false">
+                                            <amount-field [amount]="item?.totalValue" [currencySymbol]="false"
+                                                [currencyCode]="false">
                                             </amount-field>
                                         </span>
                                     </td>
@@ -405,13 +408,10 @@
                         <ng-template #rt let-r="result" let-t="term">
                             <span>{{ r }}</span>
                         </ng-template> -->
-                        <sh-select [options]="searchResults" name="fromPlace" required [isRequired]="true" maxlength="50"
-                            [(ngModel)]="updateEwayVehicleform.fromPlace" autocomplete="off"
-                            (dynamicSearchedQuery)="onSearchQueryChanged($event)"
-                            [enableDynamicSearch]="true"
-                            placeholder="Enter city"
-                            [showClear]="false" [multiple]="false"
-                            [ItemHeight]="67">
+                        <sh-select [options]="searchResults" name="fromPlace" required [isRequired]="true"
+                            maxlength="50" [(ngModel)]="updateEwayVehicleform.fromPlace" autocomplete="off"
+                            (dynamicSearchedQuery)="onSearchQueryChanged($event)" [enableDynamicSearch]="true"
+                            placeholder="Enter city" [showClear]="false" [multiple]="false" [ItemHeight]="67">
                         </sh-select>
                     </div>
                 </div>
@@ -469,7 +469,7 @@
                     <div class="col-md-8 col-lg-6 col-sm-12 mr-t15 ">
                         <input placeholder="dd/mm/yyyy " name="transDocDate" required type="text " placement="top"
                             [bsConfig]="{dateInputFormat: 'DD/MM/YYYY', adaptivePosition: true}"
-                            [(ngModel)]="updateEwayVehicleform.transDocDate" class="form-control pd-r3" bsDatepicker/>
+                            [(ngModel)]="updateEwayVehicleform.transDocDate" class="form-control pd-r3" bsDatepicker />
                     </div>
                 </div>
 
@@ -508,9 +508,9 @@
                     <label class="pd-t07">Reason *</label>
                 </div>
                 <div class="col-md-8 col-lg-7 col-sm-12 mr-t15">
-                    <sh-select class=" input " [options]="ewayCancelReason" required [isRequired]="true" placeholder="select type"
-                        [isFilterEnabled]="true" name="cancelRsnCode" [(ngModel)]="cancelEwayRequest.cancelRsnCode"
-                        [ItemHeight]="33"></sh-select>
+                    <sh-select class=" input " [options]="ewayCancelReason" required [isRequired]="true"
+                        placeholder="select type" [isFilterEnabled]="true" name="cancelRsnCode"
+                        [(ngModel)]="cancelEwayRequest.cancelRsnCode" [ItemHeight]="33"></sh-select>
                 </div>
             </div>
             <div class="row">
@@ -622,9 +622,13 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
-                                    [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
-                                    [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}"
+                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

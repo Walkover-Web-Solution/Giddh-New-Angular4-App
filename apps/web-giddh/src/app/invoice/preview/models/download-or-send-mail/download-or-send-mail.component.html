@@ -88,6 +88,7 @@
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
     <div id="pdf-wrapper" *ngIf="showPdfWrap" class="w-100 pdf-height">
-        <iframe #pdfContainer *ngIf="sanitizedPdfFileUrl" width="100%" height="600px" [src]="sanitizedPdfFileUrl"></iframe>
+        <iframe #pdfContainer *ngIf="sanitizedPdfFileUrl" width="100%" height="600px"
+            [src]="sanitizedPdfFileUrl"></iframe>
     </div>
 </div>

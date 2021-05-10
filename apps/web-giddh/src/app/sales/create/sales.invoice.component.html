@@ -62,7 +62,9 @@
                                             </a>
                                         </ng-template>
                                         <ng-template #notFoundLinkTemplate>
-                                            <a href="javascript:void(0)" class="list-item width-100 d-flex justify-content-between" [keyboardShortcut]="'alt+c'"
+                                            <a href="javascript:void(0)"
+                                                class="list-item width-100 d-flex justify-content-between"
+                                                [keyboardShortcut]="'alt+c'"
                                                 (onShortcutPress)="toggleAccountAsidePane()">
                                                 <div class="item">Add Customer</div>
                                                 <div class="item">Alt+C</div>
@@ -116,130 +118,131 @@
 
                         </div>
                         <div class="row">
-                        <div class="col-sm-10 col-sm-offset-2">
-                            <ng-container>
-                                <section class="form-inline">
-                                    <div class="wrap-billing-address clearfix">
-                                        <ng-container *ngIf="isSalesInvoice || isPurchaseInvoice">
-                                            <img src="assets/images/new/search_customer.svg"
-                                                class="img-responsive search-arrow-image "
-                                                *ngIf="!invFormData.voucherDetails.customerName" />
-                                        </ng-container>
-                                        <ng-container *ngIf="isCashInvoice">
-                                            <img src="assets/images/new/search_customer_Cash Invoice.svg"
-                                                class="img-responsive search-arrow-image "
-                                                *ngIf="!invFormData.voucherDetails.customerName"
-                                                [ngClass]="{'cash-invoice-tip-img' : isCashInvoice}" />
-                                        </ng-container>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <label>Billing Address</label>
-                                                    <div class="billing-address clearfix">
-                                                        <textarea name="billingDetails.address"
-                                                            (keyup)="autoFillShippingDetails()" class="form-control"
-                                                            [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]"
-                                                            rows="3" autocomplete="off" autofocus="off"
-                                                            aria-autocomplete="none"></textarea>
-                                                        <div>
-                                                            <div class="col-sm-6 pd">
-                                                                <!-- <label>Country</label> -->
-
-                                                                <label class="sales-country-label">
-                                                                    {{ customerCountryName }}
-                                                                </label>
-
-                                                            </div>
-                                                            <div class="col-sm-6 pd state-field">
-                                                                <!-- <label>State</label> -->
-                                                                <!-- remove disabled after api changes -->
-                                                                <sales-sh-select [disabled]="isUpdateMode"
-                                                                    [placeholder]="'State'" class="select-bdr-bottom"
-                                                                    (selected)="autoFillShippingDetails()"
-                                                                    #statesBilling [showBottomBorderOnly]="true"
-                                                                    [options]="statesSource$ | async"
-                                                                    name="billingDetails.stateCode"
-                                                                    [(ngModel)]="invFormData.accountDetails.billingDetails.state.code">
-                                                                </sales-sh-select>
-                                                                <!-- <ng-select (selected)="autoFillShippingDetails()" #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async"
-[(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></ng-select> -->
-                                                            </div>
-                                                            <div class="col-sm-12 pd">
-                                                                <!-- <label>GSTIN</label> -->
-                                                                <!-- remove disabled after api changes -->
-                                                                <input [disabled]="isUpdateMode" maxLength="15"
-                                                                    type="text" name="billingDetails.gstNumber"
-                                                                    class="form-control input-custom"
-                                                                    [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber"
-                                                                    (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
-                                                                    placeholder="GSTIN" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group p-0 width-100">
-                                                    <label>
-                                                        <input type="checkbox" (change)="autoFillShippingDetails()"
-                                                            name="autoFillShipping" [attr.checked]="true"
-                                                            [(ngModel)]="autoFillShipping"> Shipping Address Same as
-                                                        Billing
-                                                        Address</label>
-                                                    <div class="billing-address"
-                                                        [ngClass]="{'disabled': autoFillShipping}">
-                                                        <textarea [readonly]="autoFillShipping"
-                                                            name="shippingDetails.address" class="form-control"
-                                                            [(ngModel)]="invFormData.accountDetails.shippingDetails.address[0]"
-                                                            rows="3" autocomplete="off"></textarea>
-                                                        <div class="clearfix">
-                                                            <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <ng-container>
+                                    <section class="form-inline">
+                                        <div class="wrap-billing-address clearfix">
+                                            <ng-container *ngIf="isSalesInvoice || isPurchaseInvoice">
+                                                <img src="assets/images/new/search_customer.svg"
+                                                    class="img-responsive search-arrow-image "
+                                                    *ngIf="!invFormData.voucherDetails.customerName" />
+                                            </ng-container>
+                                            <ng-container *ngIf="isCashInvoice">
+                                                <img src="assets/images/new/search_customer_Cash Invoice.svg"
+                                                    class="img-responsive search-arrow-image "
+                                                    *ngIf="!invFormData.voucherDetails.customerName"
+                                                    [ngClass]="{'cash-invoice-tip-img' : isCashInvoice}" />
+                                            </ng-container>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label>Billing Address</label>
+                                                        <div class="billing-address clearfix">
+                                                            <textarea name="billingDetails.address"
+                                                                (keyup)="autoFillShippingDetails()" class="form-control"
+                                                                [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]"
+                                                                rows="3" autocomplete="off" autofocus="off"
+                                                                aria-autocomplete="none"></textarea>
+                                                            <div>
                                                                 <div class="col-sm-6 pd">
-                                                                    <div class="form-group">
+                                                                    <!-- <label>Country</label> -->
 
-                                                                        <label class="sales-country-label">
-                                                                            {{ customerCountryName }}
-                                                                        </label>
-                                                                    </div>
+                                                                    <label class="sales-country-label">
+                                                                        {{ customerCountryName }}
+                                                                    </label>
+
                                                                 </div>
                                                                 <div class="col-sm-6 pd state-field">
                                                                     <!-- <label>State</label> -->
-                                                                    <!-- <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></ng-select> -->
-                                                                    <!-- (selected)="autoFillShippingDetails()" -->
-
-                                                                    <!-- use this after api changes [disabled]="autoFillShipping"  -->
+                                                                    <!-- remove disabled after api changes -->
                                                                     <sales-sh-select [disabled]="isUpdateMode"
                                                                         [placeholder]="'State'"
-                                                                        class="select-bdr-bottom" #statesShipping
-                                                                        [showBottomBorderOnly]="true"
+                                                                        class="select-bdr-bottom"
+                                                                        (selected)="autoFillShippingDetails()"
+                                                                        #statesBilling [showBottomBorderOnly]="true"
                                                                         [options]="statesSource$ | async"
-                                                                        name="shippingDetails.stateCode"
-                                                                        [(ngModel)]="invFormData.accountDetails.shippingDetails.state.code">
+                                                                        name="billingDetails.stateCode"
+                                                                        [(ngModel)]="invFormData.accountDetails.billingDetails.state.code">
                                                                     </sales-sh-select>
+                                                                    <!-- <ng-select (selected)="autoFillShippingDetails()" #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async"
+[(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></ng-select> -->
                                                                 </div>
                                                                 <div class="col-sm-12 pd">
                                                                     <!-- <label>GSTIN</label> -->
-                                                                    <!-- remove disabled after api changes and add [readonly]="autoFillShipping" -->
+                                                                    <!-- remove disabled after api changes -->
                                                                     <input [disabled]="isUpdateMode" maxLength="15"
-                                                                        type="text" name="shippingDetails.gstNumber"
+                                                                        type="text" name="billingDetails.gstNumber"
                                                                         class="form-control input-custom"
-                                                                        [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber"
-                                                                        (keyup)="getStateCode('shippingDetails', statesShipping)"
+                                                                        [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber"
+                                                                        (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
                                                                         placeholder="GSTIN" />
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="col-6">
+                                                    <div class="form-group p-0 width-100">
+                                                        <label>
+                                                            <input type="checkbox" (change)="autoFillShippingDetails()"
+                                                                name="autoFillShipping" [attr.checked]="true"
+                                                                [(ngModel)]="autoFillShipping"> Shipping Address Same as
+                                                            Billing
+                                                            Address</label>
+                                                        <div class="billing-address"
+                                                            [ngClass]="{'disabled': autoFillShipping}">
+                                                            <textarea [readonly]="autoFillShipping"
+                                                                name="shippingDetails.address" class="form-control"
+                                                                [(ngModel)]="invFormData.accountDetails.shippingDetails.address[0]"
+                                                                rows="3" autocomplete="off"></textarea>
+                                                            <div class="clearfix">
+                                                                <div class="form-group">
+                                                                    <div class="col-sm-6 pd">
+                                                                        <div class="form-group">
+
+                                                                            <label class="sales-country-label">
+                                                                                {{ customerCountryName }}
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-6 pd state-field">
+                                                                        <!-- <label>State</label> -->
+                                                                        <!-- <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></ng-select> -->
+                                                                        <!-- (selected)="autoFillShippingDetails()" -->
+
+                                                                        <!-- use this after api changes [disabled]="autoFillShipping"  -->
+                                                                        <sales-sh-select [disabled]="isUpdateMode"
+                                                                            [placeholder]="'State'"
+                                                                            class="select-bdr-bottom" #statesShipping
+                                                                            [showBottomBorderOnly]="true"
+                                                                            [options]="statesSource$ | async"
+                                                                            name="shippingDetails.stateCode"
+                                                                            [(ngModel)]="invFormData.accountDetails.shippingDetails.state.code">
+                                                                        </sales-sh-select>
+                                                                    </div>
+                                                                    <div class="col-sm-12 pd">
+                                                                        <!-- <label>GSTIN</label> -->
+                                                                        <!-- remove disabled after api changes and add [readonly]="autoFillShipping" -->
+                                                                        <input [disabled]="isUpdateMode" maxLength="15"
+                                                                            type="text" name="shippingDetails.gstNumber"
+                                                                            class="form-control input-custom"
+                                                                            [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber"
+                                                                            (keyup)="getStateCode('shippingDetails', statesShipping)"
+                                                                            placeholder="GSTIN" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
+
+
                                         </div>
 
-
-                                    </div>
-
-                                </section>
-                            </ng-container>
-                        </div>
+                                    </section>
+                                </ng-container>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-3 balance-due">
@@ -410,7 +413,9 @@
                                                                     <div class="hsn-code text-right">
                                                                         <label> HSN/SAC:</label>
                                                                         <span>
-                                                                            {{transaction.hsnOrSac === 'hsn' ? transaction.hsnNumber : transaction.sacNumber}}
+                                                                            {{transaction.hsnOrSac === 'hsn' ?
+                                                                            transaction.hsnNumber :
+                                                                            transaction.sacNumber}}
                                                                             <!--                            <span class="edit-icon">-->
                                                                             <!--                              <img src="assets/images/edit-pencilicon.svg">-->
                                                                             <!--                            </span>-->
@@ -506,7 +511,9 @@
                                                                                     {{ option.additional?.uniqueName }}
                                                                                 </div>
                                                                                 <div class="item-stock">Stock:
-                                                                                    {{ option.additional?.stock.uniqueName }}
+                                                                                    {{
+                                                                                    option.additional?.stock.uniqueName
+                                                                                    }}
                                                                                 </div>
                                                                             </a>
                                                                         </ng-container>
@@ -552,7 +559,8 @@
                                                                             </span>
 
                                                                             <span *ngIf="isUpdateMode">
-                                                                                {{ entry.entryDate | date: 'dd-MM-yyyy' }}
+                                                                                {{ entry.entryDate | date: 'dd-MM-yyyy'
+                                                                                }}
                                                                             </span>
 
                                                                         </div>
@@ -566,7 +574,9 @@
                                                                                     <!-- <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" maxLength="10" placeholder="HSN Number"
                               name="transaction.hsnNumber_{{entryIdx}}" class="form-control text-right"
                               [(ngModel)]="transaction.hsnNumber"/> -->
-                                                                                    {{transaction.hsnOrSac === 'hsn' ? transaction.hsnNumber : transaction.sacNumber }}
+                                                                                    {{transaction.hsnOrSac === 'hsn' ?
+                                                                                    transaction.hsnNumber :
+                                                                                    transaction.sacNumber }}
                                                                                     <span
                                                                                         *ngIf="!transaction.hsnNumber && !transaction.sacNumber"
                                                                                         class="update-text cp">Update
@@ -746,7 +756,7 @@
                                                                             aria-hidden="true"></span>
                                                                     </div>
                                                                 </div>
-                                                                </div>
+                                                            </div>
                                                             <div class="ico-head">Other Details</div>
                                                             <div [collapse]="isOthrDtlCollapsed"
                                                                 class="clearfix max-width-600 pd-l3 m-0">
@@ -811,17 +821,17 @@
                                                     </div>
                                                     <div class="pd-t1 pl-0 max-width-600" *ngIf="!isPurchaseInvoice">
                                                         <label class="mr-b1">Message</label>
-                                                        <textarea rows="3" class="form-control"
-                                                            name="message2"
+                                                        <textarea rows="3" class="form-control" name="message2"
                                                             [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                                                     </div>
                                                     <!-- commented due to presently attachfile key is not available in request
         -->
-                                                    <div class="pd-t1 pl-0 max-width-600 position-relative" *ngIf="isPurchaseInvoice">
-                                                        <label class="mr-b1"><i
-                                                                class="icon-file-path"></i>
+                                                    <div class="pd-t1 pl-0 max-width-600 position-relative"
+                                                        *ngIf="isPurchaseInvoice">
+                                                        <label class="mr-b1"><i class="icon-file-path"></i>
                                                             Attachment</label>
-                                                        <label class="custom-file-label form-control cp position-relative"
+                                                        <label
+                                                            class="custom-file-label form-control cp position-relative"
                                                             for="invoiceFile"> <em *ngIf="!selectedFileName">Drag/Drop
                                                                 file or click here</em> <em *ngIf="selectedFileName"
                                                                 class="text-success">{{selectedFileName}}</em>
@@ -847,27 +857,31 @@
                                                         <div class="table-row">
                                                             <div class="table-cell">Discount</div>
                                                             <div class="table-cell figure-cell">
-                                                                -{{invFormData.voucherDetails.totalDiscount | number:'1.2-2'}}
+                                                                -{{invFormData.voucherDetails.totalDiscount |
+                                                                number:'1.2-2'}}
                                                             </div>
                                                         </div>
                                                         <div class="table-row">
                                                             <div class="table-cell">Taxable Value</div>
                                                             <div class="table-cell figure-cell">
-                                                                {{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}
+                                                                {{invFormData.voucherDetails.totalTaxableValue |
+                                                                number:'1.2-2'}}
                                                             </div>
                                                         </div>
 
                                                         <div class="table-row">
                                                             <div class="table-cell">Tax</div>
                                                             <div class="table-cell figure-cell">
-                                                                {{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}
+                                                                {{invFormData.voucherDetails.gstTaxesTotal |
+                                                                number:'1.2-2'}}
                                                             </div>
                                                         </div>
 
                                                         <div class="table-row">
                                                             <div class="table-cell">CESS</div>
                                                             <div class="table-cell figure-cell">
-                                                                {{invFormData.voucherDetails.cessTotal | number:'1.2-2'}}
+                                                                {{invFormData.voucherDetails.cessTotal |
+                                                                number:'1.2-2'}}
                                                             </div>
                                                         </div>
 
@@ -876,7 +890,8 @@
                                                                 <strong>Total</strong>
                                                             </div>
                                                             <div class="table-cell figure-cell">
-                                                                <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
+                                                                <strong>{{invFormData.voucherDetails.grandTotal |
+                                                                    number:'1.2-2'}}</strong>
                                                             </div>
                                                         </div>
 
@@ -938,7 +953,8 @@
                                                                                                 <div class="item">
                                                                                                     {{ option.label }}
                                                                                                 </div>
-                                                                                                <div class="item-unique">
+                                                                                                <div
+                                                                                                    class="item-unique">
                                                                                                     {{ option.value }}
                                                                                                 </div>
                                                                                             </a>
@@ -962,14 +978,16 @@
                                                                                     [ngClass]='{"amount-filed-cash": isCashInvoice}' />
                                                                                 <span *ngIf="isCashInvoice"
                                                                                     class="amount-field pull-right max-width-100"
-                                                                                    [ngClass]='{"amount-filed-cash": isCashInvoice}'>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
+                                                                                    [ngClass]='{"amount-filed-cash": isCashInvoice}'>{{invFormData.voucherDetails.balanceDue
+                                                                                    | number:'1.2-2'}}</span>
 
                                                                                 <label class="pull-right">Amount</label>
                                                                             </li>
                                                                             <li *ngIf="toggleFieldForSales && !isCashInvoice"
                                                                                 class="clearfix mr-t1">
                                                                                 <strong
-                                                                                    class="pull-right balance-due-text">{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
+                                                                                    class="pull-right balance-due-text">{{invFormData.voucherDetails.balanceDue
+                                                                                    | number:'1.2-2'}}</strong>
                                                                                 <strong class="pull-right">Balance
                                                                                     Due</strong>
                                                                             </li>
@@ -1292,8 +1310,9 @@
                                         </a>
                                     </ng-template>
                                     <ng-template #notFoundLinkTemplate>
-                                        <a href="javascript:void(0)" class="list-item width-100 d-flex justify-content-between" [keyboardShortcut]="'alt+c'"
-                                            (onShortcutPress)="toggleAccountAsidePane()">
+                                        <a href="javascript:void(0)"
+                                            class="list-item width-100 d-flex justify-content-between"
+                                            [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAccountAsidePane()">
                                             <div class="item">Add Customer</div>
                                             <div class="item">Alt+C</div>
                                         </a>
@@ -1506,7 +1525,8 @@
                             <!--col-xs-3 -->
 
                             <input type="text" name="accountDetails.attention" placeholder="Attention to"
-                                class="form-control attention-to" [(ngModel)]="invFormData.accountDetails.attentionTo" />
+                                class="form-control attention-to"
+                                [(ngModel)]="invFormData.accountDetails.attentionTo" />
                         </div>
                     </td>
                     <td></td>

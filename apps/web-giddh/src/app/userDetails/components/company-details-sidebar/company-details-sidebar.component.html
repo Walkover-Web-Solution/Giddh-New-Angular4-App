@@ -12,7 +12,8 @@
                     <ul class="company-list font-14 mb-0">
                         <li>Plan: {{selectedCompany?.subscription?.planDetails?.name}}</li>
                         <li>ID: {{selectedCompany?.subscription?.subscriptionId}}</li>
-                        <li>Created on: {{moment(selectedCompany?.subscription?.createdAt, giddhDateFormat).format('DD/MM/YYYY')}}</li>
+                        <li>Created on: {{moment(selectedCompany?.subscription?.createdAt,
+                            giddhDateFormat).format('DD/MM/YYYY')}}</li>
                         <li>Total Transactions: {{selectedCompany?.subscription?.totalTransactions | number}}</li>
                     </ul>
                 </div>
@@ -32,9 +33,11 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td data-title="Consumptions">{{selectedCompany?.subscription?.totalTransactions | number}}</td>
+                                <td data-title="Consumptions">{{selectedCompany?.subscription?.totalTransactions |
+                                    number}}</td>
                                 <td data-title="Balance">{{selectedCompany?.subscription?.remainingTransactions}}</td>
-                                <td data-title="Additional Charges" class="text-right">{{selectedCompany?.subscription?.additionalCharges | number}}</td>
+                                <td data-title="Additional Charges" class="text-right">
+                                    {{selectedCompany?.subscription?.additionalCharges | number}}</td>
                             </tr>
                         </tbody>
                     </table>

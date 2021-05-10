@@ -5,44 +5,48 @@
                 <h1 class="section-head">Financial Year(s) - {{ currentCompanyName }}</h1>
                 <div class="row">
                     <div class="col-xl-7 col-md-12 col-xs-12">
-                     <div class="table-responsive">
-                        <table class="table-bordered basic table financial-year on-mobile-view">
-                            <thead>
-                                <tr>
-                                    <th>Sr. No.</th>
-                                    <th>From</th>
-                                    <th>To</th>
-                                    <th>Lock Status</th>
-                                </tr>
-                            </thead>
-                            <tbody *ngIf="financialYearObj && financialYearObj.financialYears">
-                                <tr *ngFor="let financialYear of financialYearObj.financialYears; let i = index">
-                                    <td data-title="#">{{i+1}}</td>
-                                    <td data-title="From">{{financialYear?.financialYearStarts}}</td>
-                                    <td data-title="#To">{{financialYear?.financialYearEnds}}</td>
-                                    <td data-title="Lock Status"
-                                        *ngIf="currentCompanyFinancialYearUN != financialYear?.uniqueName"
-                                        class="status">
-                                        <span *ngIf="financialYear?.isLocked"><span (click)="lockUnlockFinancialYear(financialYear);"><i class="fa fa-toggle-off fa-2x cp" aria-hidden="true"></i></span>
-                                            <label>Locked</label></span>
-                                        <span *ngIf="!financialYear?.isLocked"><span (click)="lockUnlockFinancialYear(financialYear);"><i class="fa fa-toggle-on fa-2x cp" aria-hidden="true"></i></span>
-                                            <label>Unlocked</label></span>
-                                    </td>
-                                    <td data-title="Lock Status"
-                                        *ngIf="currentCompanyFinancialYearUN == financialYear?.uniqueName">
-                                        Current Financial Year (can not be locked)
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tbody *ngIf="!financialYearObj || !financialYearObj.financialYears.length"
-                                class="on-mobile-view no-records">
-                                <tr>
-                                    <td colspan="4" class="text-center empty-table">
-                                        <h1>No Record Found !!</h1>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table-bordered basic table financial-year on-mobile-view">
+                                <thead>
+                                    <tr>
+                                        <th>Sr. No.</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Lock Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="financialYearObj && financialYearObj.financialYears">
+                                    <tr *ngFor="let financialYear of financialYearObj.financialYears; let i = index">
+                                        <td data-title="#">{{i+1}}</td>
+                                        <td data-title="From">{{financialYear?.financialYearStarts}}</td>
+                                        <td data-title="#To">{{financialYear?.financialYearEnds}}</td>
+                                        <td data-title="Lock Status"
+                                            *ngIf="currentCompanyFinancialYearUN != financialYear?.uniqueName"
+                                            class="status">
+                                            <span *ngIf="financialYear?.isLocked"><span
+                                                    (click)="lockUnlockFinancialYear(financialYear);"><i
+                                                        class="fa fa-toggle-off fa-2x cp" aria-hidden="true"></i></span>
+                                                <label>Locked</label></span>
+                                            <span *ngIf="!financialYear?.isLocked"><span
+                                                    (click)="lockUnlockFinancialYear(financialYear);"><i
+                                                        class="fa fa-toggle-on fa-2x cp" aria-hidden="true"></i></span>
+                                                <label>Unlocked</label></span>
+                                        </td>
+                                        <td data-title="Lock Status"
+                                            *ngIf="currentCompanyFinancialYearUN == financialYear?.uniqueName">
+                                            Current Financial Year (can not be locked)
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody *ngIf="!financialYearObj || !financialYearObj.financialYears.length"
+                                    class="on-mobile-view no-records">
+                                    <tr>
+                                        <td colspan="4" class="text-center empty-table">
+                                            <h1>No Record Found !!</h1>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

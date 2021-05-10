@@ -10,13 +10,18 @@
             <div class="row mr-b1 mt-2">
                 <div class="col-md-6 col-sm-6">
                     <div class="form-group">
-                        <sh-select placeholder="Select" [options]="fieldOptions" [isFilterEnabled]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedField" [forceClearReactive]="forceClear$ | async" [ItemHeight]="33" (selected)="onSelectEntryField($event)"></sh-select>
+                        <sh-select placeholder="Select" [options]="fieldOptions" [isFilterEnabled]="true"
+                            [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedField"
+                            [forceClearReactive]="forceClear$ | async" [ItemHeight]="33"
+                            (selected)="onSelectEntryField($event)"></sh-select>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-sm-6">
                     <div class="form-group" *ngIf="selectedField === 'pdfTemplate'">
-                        <sh-select placeholder="Select" [options]="allTemplatesOptions" autocomplete="off" required [isRequired]="true" [isFilterEnabled]="true" [ItemHeight]="33" name="templateUniqueName" [(ngModel)]="updateTemplatesRequest.templateUniqueName"></sh-select>
+                        <sh-select placeholder="Select" [options]="allTemplatesOptions" autocomplete="off" required
+                            [isRequired]="true" [isFilterEnabled]="true" [ItemHeight]="33" name="templateUniqueName"
+                            [(ngModel)]="updateTemplatesRequest.templateUniqueName"></sh-select>
                     </div>
 
                     <div class="form-group" *ngIf="selectedField === 'notes'">
@@ -24,18 +29,26 @@
                         <!-- <span> Note </span>
                         <textarea class="form-control" [(ngModel)]="updateNotesRequest.message1" name="message1"></textarea> -->
                         <!--  this note is come from template -->
-                        <textarea hasFocus #message2="hasFocus" class="form-control" [maxlength]="!showNotesAtLastPage ? 200 : null" [(ngModel)]="updateNotesRequest.message2" name="message2"></textarea>
-                        <ng-container *ngIf="updateNotesRequest?.message2?.length && !showNotesAtLastPage && message2?.isFocused">
-                            <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(200 - updateNotesRequest?.message2?.length)}}</span>
+                        <textarea hasFocus #message2="hasFocus" class="form-control"
+                            [maxlength]="!showNotesAtLastPage ? 200 : null" [(ngModel)]="updateNotesRequest.message2"
+                            name="message2"></textarea>
+                        <ng-container
+                            *ngIf="updateNotesRequest?.message2?.length && !showNotesAtLastPage && message2?.isFocused">
+                            <span class="max-character-label">Characters left:&nbsp;</span><span
+                                class="max-character-value">{{(200 - updateNotesRequest?.message2?.length)}}</span>
                         </ng-container>
                     </div>
 
                     <div class="form-group" *ngIf="selectedField === 'signature'">
-                        <sh-select placeholder="Select option" [options]="templateSignaturesOptions" autocomplete="off" required [isRequired]="true" [isFilterEnabled]="true" name="signatureOptions" [(ngModel)]="signatureOptions" [ItemHeight]="33"></sh-select>
+                        <sh-select placeholder="Select option" [options]="templateSignaturesOptions" autocomplete="off"
+                            required [isRequired]="true" [isFilterEnabled]="true" name="signatureOptions"
+                            [(ngModel)]="signatureOptions" [ItemHeight]="33"></sh-select>
                     </div>
 
                     <div class="relative form-group" *ngIf="selectedField === 'dueDate'">
-                        <input name="lastInvoiceDate" required placeholder="Select Date" type="text" autocomplete="off" [bsConfig]="{dateInputFormat: giddhDateFormat}" [(ngModel)]="updateDueDatesRequest.dueDate" class="form-control" bsDatepicker required>
+                        <input name="lastInvoiceDate" required placeholder="Select Date" type="text" autocomplete="off"
+                            [bsConfig]="{dateInputFormat: giddhDateFormat}" [(ngModel)]="updateDueDatesRequest.dueDate"
+                            class="form-control" bsDatepicker required>
                         <i class="fa fa-calendar text-light-2 date-input"></i>
                     </div>
                 </div>
@@ -45,9 +58,9 @@
                 <div *ngIf="selectedField === 'signature' && signatureOptions === 'image'" class="upload-logo">
                     <div class="form-group">
                         <label [hidden]="isSignatureAttached">
-                            <input type="file" class="d-none" name="bulkUploadfileInput"
-                                id="bulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect
-                                [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
+                            <input type="file" class="d-none" name="bulkUploadfileInput" id="bulkUploadfileInput"
+                                [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
+                                (uploadOutput)="onUploadOutput($event)">
                             <label class="cp font-16 text-gray font-14" for="bulkUploadfileInput">
                                 Upload your logo
                             </label>
@@ -57,13 +70,14 @@
                             <div class="signature-image"><img alt="" required id="signatureImage"
                                     [src]="signatureSrc" />
                             </div>
-                            <div class="d-flex mt-1 justify-content-center"> <button class="btn btn-danger" type="button"
-                                    (click)="clearImage()">clear</button></div>
+                            <div class="d-flex mt-1 justify-content-center"> <button class="btn btn-danger"
+                                    type="button" (click)="clearImage()">clear</button></div>
                         </label>
                     </div>
                 </div>
                 <div *ngIf="selectedField === 'signature' && signatureOptions === 'slogan'">
-                    <textarea class="form-control" required [(ngModel)]="updateSloganRequest.slogan" name="slogan"></textarea>
+                    <textarea class="form-control" required [(ngModel)]="updateSloganRequest.slogan"
+                        name="slogan"></textarea>
                 </div>
 
                 <!-- TODO: under discussion -->
@@ -78,7 +92,9 @@
 
                         <div class="col-md-6">
                             <div class="relative form-group">
-                                <sh-select placeholder="State" [options]="allTemplatesOptions" autocomplete="off" required [isRequired]="true" [isFilterEnabled]="true" [ItemHeight]="33" name="templateUniqueName">
+                                <sh-select placeholder="State" [options]="allTemplatesOptions" autocomplete="off"
+                                    required [isRequired]="true" [isFilterEnabled]="true" [ItemHeight]="33"
+                                    name="templateUniqueName">
                                 </sh-select>
                             </div>
                         </div>
@@ -87,7 +103,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <textarea name="" class="textarea form-control" placeholder="Address" rows="3"></textarea>
+                                <textarea name="" class="textarea form-control" placeholder="Address"
+                                    rows="3"></textarea>
                             </div>
                         </div>
                     </div>
@@ -97,31 +114,36 @@
                     <div class="col-md-4">
                         <div class="relative form-group">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Custom Field 1" name="customField1" [(ngModel)]="updateCustomfieldsRequest.customField1">
+                                <input type="text" class="form-control" placeholder="Custom Field 1" name="customField1"
+                                    [(ngModel)]="updateCustomfieldsRequest.customField1">
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Custom Field 2" name="customField2" [(ngModel)]="updateCustomfieldsRequest.customField2">
+                            <input type="text" class="form-control" placeholder="Custom Field 2" name="customField2"
+                                [(ngModel)]="updateCustomfieldsRequest.customField2">
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Custom Field 3" name="customField3" [(ngModel)]="updateCustomfieldsRequest.customField3">
+                            <input type="text" class="form-control" placeholder="Custom Field 3" name="customField3"
+                                [(ngModel)]="updateCustomfieldsRequest.customField3">
                         </div>
                     </div>
                 </div>
             </div>
 
             <div>
-                <small>Note: All the selected invoices will be updated with new information and you cannot undo this.</small>
+                <small>Note: All the selected invoices will be updated with new information and you cannot undo
+                    this.</small>
             </div>
         </div>
         <div class="modal-footer d-flex justify-content-start">
-            <button class="btn btn-success" (click)="updateBulkInvoice();" [ladda]="updateInProcess" [disabled]="bulkUpdateForm.invalid">Update</button>
+            <button class="btn btn-success" (click)="updateBulkInvoice();" [ladda]="updateInProcess"
+                [disabled]="bulkUpdateForm.invalid">Update</button>
             <button class="btn btn-danger" (click)="onCancel()">Cancel</button>
         </div>
     </form>
@@ -135,15 +157,19 @@
             <div>
                 <div class="modal-header clearfix">
                     <h3 class="modal-title bg" id="modal-title">Confirmation</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancelBulkUpdateImageSloganModal()">×</span>
+                    <span aria-hidden="true" class="close" data-dismiss="modal"
+                        (click)="onCancelBulkUpdateImageSloganModal()">×</span>
                 </div>
                 <div class="model-body clearfix pd-2">
-                    <h3>The image / slogan will show only if the 'image / slogan' option is enabled from the invoice templates.
+                    <h3>The image / slogan will show only if the 'image / slogan' option is enabled from the invoice
+                        templates.
                     </h3>
                     <h4 class="mr-t2"><b> Do you want to proceed?</b></h4>
                     <div class="text-left mr-t2 clearfix">
-                        <button type="submit" class="btn btn-sm btn-success" (click)="onConfirmationUpdateImageSlogan()">Yes</button>
-                        <button type="submit" class="btn btn-sm btn-danger" (click)="onCancelBulkUpdateImageSloganModal()">No</button>
+                        <button type="submit" class="btn btn-sm btn-success"
+                            (click)="onConfirmationUpdateImageSlogan()">Yes</button>
+                        <button type="submit" class="btn btn-sm btn-danger"
+                            (click)="onCancelBulkUpdateImageSloganModal()">No</button>
                     </div>
                 </div>
             </div>

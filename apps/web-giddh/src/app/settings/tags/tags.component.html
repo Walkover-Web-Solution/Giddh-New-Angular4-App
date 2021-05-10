@@ -53,8 +53,8 @@
                                 </td>
                                 <td data-title="Tags Desciption">
                                     <div *ngIf="updateIndex !== i">{{tag.description}}</div>
-                                    <textarea *ngIf="updateIndex === i" class="form-control"
-                                        name="description_of_{{i}}" [(ngModel)]="tag.description"></textarea>
+                                    <textarea *ngIf="updateIndex === i" class="form-control" name="description_of_{{i}}"
+                                        [(ngModel)]="tag.description"></textarea>
                                 </td>
                                 <td class="icon-btn" data-title="Action">
                                     <button *ngIf="updateIndex !== i" (click)="setUpdateIndex(i);" type="button"
@@ -64,11 +64,9 @@
                                         class="btn btn-xs"><i class="fa fa-trash" aria-hidden="true"
                                             tooltip="Delete"></i></button>
                                     <button *ngIf="updateIndex === i" (click)="updateTag(tag, i);" type="button"
-                                        class="btn btn-xs"><i class="fa fa-check"
-                                            aria-hidden="true"></i></button>
-                                    <button *ngIf="updateIndex === i" (click)="resetUpdateIndex();"
-                                        type="button" class="btn btn-xs"><i class="icon-cross"
-                                            aria-hidden="true"></i></button>
+                                        class="btn btn-xs"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                    <button *ngIf="updateIndex === i" (click)="resetUpdateIndex();" type="button"
+                                        class="btn btn-xs"><i class="icon-cross" aria-hidden="true"></i></button>
                                 </td>
                             </tr>
                         </tbody>

@@ -56,13 +56,13 @@ import { ProformaListComponent } from '../../../proforma/proforma-list.component
 })
 
 export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-    @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
-    @ViewChild('showEmailSendModal', {static: true}) public showEmailSendModal: ModalDirective;
-    @ViewChild('downloadVoucherModal', {static: true}) public downloadVoucherModal: ModalDirective;
-    @ViewChild('invoiceDetailWrapper', {static: true}) invoiceDetailWrapperView: ElementRef;
-    @ViewChild('invoicedetail', {static: true}) invoiceDetailView: ElementRef;
+    @ViewChild('searchElement', { static: true }) public searchElement: ElementRef;
+    @ViewChild('showEmailSendModal', { static: true }) public showEmailSendModal: ModalDirective;
+    @ViewChild('downloadVoucherModal', { static: true }) public downloadVoucherModal: ModalDirective;
+    @ViewChild('invoiceDetailWrapper', { static: true }) invoiceDetailWrapperView: ElementRef;
+    @ViewChild('invoicedetail', { static: true }) invoiceDetailView: ElementRef;
     /** Attached document preview container instance */
-    @ViewChild('attachedDocumentPreview', {static: true}) attachedDocumentPreview: ElementRef;
+    @ViewChild('attachedDocumentPreview', { static: true }) attachedDocumentPreview: ElementRef;
     /** Instance of PDF container iframe */
     @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
 
@@ -190,7 +190,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     ngOnInit() {
         if (this.selectedItem) {
-            if(!this.isVoucherDownloading) {
+            if (!this.isVoucherDownloading) {
                 this.downloadVoucher('base64');
             }
             this.only4ProformaEstimates = [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType);
@@ -227,7 +227,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     return item.uniqueName === this.selectedItem.uniqueName;
                 })[0];
             }
-            if(this.invoiceSearch && this.searchElement && this.searchElement.nativeElement) {
+            if (this.invoiceSearch && this.searchElement && this.searchElement.nativeElement) {
                 this.searchElement.nativeElement.value = this.invoiceSearch;
                 this.filterVouchers(this.invoiceSearch);
             }
@@ -293,7 +293,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.store.dispatch(this._generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
         this.showEditMode = !this.showEditMode;
 
-        if(this.searchElement && this.searchElement.nativeElement && this.searchElement.nativeElement.value) {
+        if (this.searchElement && this.searchElement.nativeElement && this.searchElement.nativeElement.value) {
             this.filterVouchers(this.searchElement.nativeElement.value);
         }
     }
@@ -361,7 +361,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.isVoucherDownloadError = false;
 
         if ([VoucherTypeEnum.sales, VoucherTypeEnum.cash, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].includes(this.voucherType)) {
-            if(this.selectedItem) {
+            if (this.selectedItem) {
                 let model: DownloadVoucherRequest = {
                     voucherType: this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem.voucherType,
                     voucherNumber: [this.selectedItem.voucherNumber]
@@ -452,7 +452,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 }
             });
         } else {
-            if(this.selectedItem) {
+            if (this.selectedItem) {
                 let request: ProformaDownloadRequest = new ProformaDownloadRequest();
                 request.fileType = fileType;
                 request.accountUniqueName = this.selectedItem.account.uniqueName;

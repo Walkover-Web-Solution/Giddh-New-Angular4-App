@@ -28,7 +28,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
     styleUrls: [`./userDetails.component.scss`],
 })
 export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
     public userAuthKey: string = '';
     public expandLongCode: boolean = false;
     public twoWayAuth: boolean = false;
@@ -122,9 +122,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
 
-        if (!this.isCreateAndSwitchCompanyInProcess){
+        if (!this.isCreateAndSwitchCompanyInProcess) {
             document.querySelector('body').classList.add('tabs-page');
-        } else{
+        } else {
             document.querySelector('body').classList.remove('tabs-page');
         }
 
@@ -132,7 +132,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             if (params['type'] && this.activeTab !== params['type']) {
                 this.setStateDetails(params['type']);
                 this.activeTab = params['type'];
-                if(this.activeTab === "auth-key") {
+                if (this.activeTab === "auth-key") {
                     this.setCurrentPageTitle("Api");
                 }
             } else if (!params['type'] && !this.activeTab) {
@@ -143,14 +143,14 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if(params && params.tabIndex) {
-                if(params && params.tabIndex == "0") {
+            if (params && params.tabIndex) {
+                if (params && params.tabIndex == "0") {
                     this.activeTab = "auth-key";
-                } else if(params && params.tabIndex == "1") {
+                } else if (params && params.tabIndex == "1") {
                     this.activeTab = "mobile-number";
-                } else if(params && params.tabIndex == "2") {
+                } else if (params && params.tabIndex == "2") {
                     this.activeTab = "session";
-                } else if(params && params.tabIndex == "3") {
+                } else if (params && params.tabIndex == "3") {
                     this.activeTab = "subscription";
                 }
                 this.router.navigate(['pages/user-details/', this.activeTab], { replaceUrl: true });
@@ -217,7 +217,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
 
-        if(document.getElementsByClassName('nav-item') && document.getElementsByClassName('nav-item')[3]) {
+        if (document.getElementsByClassName('nav-item') && document.getElementsByClassName('nav-item')[3]) {
             document.getElementsByClassName('nav-item')[3].addEventListener('click', (event) => {
                 this.onTabChanged("subscription");
             });
@@ -265,7 +265,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public selectTab(id: number) {
-        if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
+        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
             this.staticTabs.tabs[id].active = true;
         }
     }

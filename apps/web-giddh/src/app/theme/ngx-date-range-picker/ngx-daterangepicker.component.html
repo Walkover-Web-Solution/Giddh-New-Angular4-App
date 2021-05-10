@@ -35,7 +35,8 @@
                     </li>
                     <li class="menu-li select-financial-year">
                         <button type="button" class="btn-angle-down" (click)="dropdownShow = !dropdownShow"
-                            [ngClass]="{'active': checkIfFinancialYearSelected(financialYears) || dropdownShow}">Select Financial Year
+                            [ngClass]="{'active': checkIfFinancialYearSelected(financialYears) || dropdownShow}">Select
+                            Financial Year
                             <span class="available prev angle-down"></span>
                         </button>
                         <ul class="sub-ranges-cal menu-drawer financial-year-dropdown"
@@ -129,21 +130,24 @@
                             <div class="relative" [ngClass]="{'focused-date' : ActiveDate ===0}">
                                 <span class="mr-2">
                                     <img src="assets/images/calender-icon.svg"> &nbsp; From &nbsp;
-                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
                                 </span>
                                 <span class="fa fa-search"></span>
-                                <input [ngClass]="{'invalid-date-input':invalidStartDate, 'w-100': true}" placeholder="start date"
-                                    #startDateElement [value]="startDateString" (blur)="isOnScrollActive = false; initialCalendarMonths = true; setStartDate($event.target.value)"
+                                <input [ngClass]="{'invalid-date-input':invalidStartDate, 'w-100': true}"
+                                    placeholder="start date" #startDateElement [value]="startDateString"
+                                    (blur)="isOnScrollActive = false; initialCalendarMonths = true; setStartDate($event.target.value)"
                                     (focus)="ActiveDate =0" [class]="ActiveDate ===0 ?ActiveSelectedDateClass :''">
 
-                                <span *ngIf="invalidStartDate" class="invalid-date error-msg">{{invalidStartDate}}</span>
+                                <span *ngIf="invalidStartDate"
+                                    class="invalid-date error-msg">{{invalidStartDate}}</span>
                             </div>
                             <div class="relative" [ngClass]="{'focused-date' : ActiveDate ===1}">
                                 <span class="mr-2"><img src="assets/images/calender-icon.svg"> &nbsp; To &nbsp;
-                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
                                 </span>
-                                <input [ngClass]="{'invalid-date-input':invalidEndDate, 'w-100': true}" placeholder="end date"
-                                    #endDateElement [value]="endDateString" (blur)="isOnScrollActive = false; initialCalendarMonths = true; setEndDate($event.target.value)"
+                                <input [ngClass]="{'invalid-date-input':invalidEndDate, 'w-100': true}"
+                                    placeholder="end date" #endDateElement [value]="endDateString"
+                                    (blur)="isOnScrollActive = false; initialCalendarMonths = true; setEndDate($event.target.value)"
                                     (focus)="ActiveDate =1" [class]="ActiveDate ===1 ?ActiveSelectedDateClass :''">
                                 <span *ngIf="invalidEndDate" class="invalid-date error-msg">{{invalidEndDate}}</span>
                             </div>
@@ -187,7 +191,8 @@
                                             </div>
                                             <div class="days-td" *ngFor="let dayofweek of locale.daysOfWeek"
                                                 class="th-div">
-                                                <span>{{dayofweek}}</span></div>
+                                                <span>{{dayofweek}}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -202,7 +207,8 @@
                 <!-- start date calendar container -->
                 <div (touchmove)="mouseUp($event)">
                     <div *ngFor="let calendarMonth of calendarMonths; let i = index;">
-                        <div class="calendar" *ngIf="calendarMonth && calendarMonth.start" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
+                        <div class="calendar" *ngIf="calendarMonth && calendarMonth.start"
+                            [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
                             <div class="calendar-table">
                                 <div class="table-condensed">
                                     <div class="d-flex justify-content-between" hidden>
@@ -253,10 +259,12 @@
                                     <div class="buttons bottom-botton">
                                         <div class="buttons-input">
                                             <!-- clear button -->
-                                            <button *ngIf="showClearButton" class="btn btn-default clear" type="button" (click)="clear()"
-                                                title="clear the date">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 -5 24 24">
-                                                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                                            <button *ngIf="showClearButton" class="btn btn-default clear" type="button"
+                                                (click)="clear()" title="clear the date">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                                    viewBox="0 -5 24 24">
+                                                    <path
+                                                        d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
                                                 </svg>
                                             </button>
                                             <!-- clear button -->
@@ -267,9 +275,11 @@
                                             <!-- cancel button -->
 
                                             <!-- apply button -->
-                                            <button class="btn btn-success" *ngIf="!isMobileScreen" [disabled]="applyBtn.disabled" type="button"
+                                            <button class="btn btn-success" *ngIf="!isMobileScreen"
+                                                [disabled]="applyBtn.disabled" type="button"
                                                 (click)="clickApply($event)">{{locale.applyLabel}}</button>
-                                            <button class="btn btn-success" *ngIf="isMobileScreen" [disabled]="applyBtn.disabled" type="button"
+                                            <button class="btn btn-success" *ngIf="isMobileScreen"
+                                                [disabled]="applyBtn.disabled" type="button"
                                                 (click)="clickApply($event); closeCalender();">{{locale.applyLabel}}</button>
                                             <!-- apply button -->
                                         </div>

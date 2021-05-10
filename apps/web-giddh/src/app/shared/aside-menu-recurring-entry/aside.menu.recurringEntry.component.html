@@ -1,55 +1,56 @@
 <div class="aside-pane account-aside-menu-state">
-	<div class="form-header">
-		<h3 class="aside-title">Recurring Account</h3>
-	</div>
-	<button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
-	<div class="aside-body">
+    <div class="form-header">
+        <h3 class="aside-title">Recurring Account</h3>
+    </div>
+    <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+    <div class="aside-body">
         <div class="aside-pane-form">
-		<form [formGroup]="form">
-			<div class="row">
-				<div class="col-xs-4 col-sm-4 form-group">
-					<label class="mr-b1">Start Date<span class="text-danger">*</span></label>
-					<input name="dateRange" formControlName="nextCronDate" type="text" autocomplete="off"
-						class="form-control" bsDatepicker [minDate]="today"
-						[bsConfig]=" {dateInputFormat: giddhDateFormat}">
-				</div>
+            <form [formGroup]="form">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-4 form-group">
+                        <label class="mr-b1">Start Date<span class="text-danger">*</span></label>
+                        <input name="dateRange" formControlName="nextCronDate" type="text" autocomplete="off"
+                            class="form-control" bsDatepicker [minDate]="today"
+                            [bsConfig]=" {dateInputFormat: giddhDateFormat}">
+                    </div>
 
-				<div class="col-xs-4 col-sm-4 form-group" *ngIf="!IsNotExpirable">
-					<label class="mr-b1">End Date<span class="text-danger">*</span></label>
-					<input name="dateRange" formControlName="cronEndDate" type="text" autocomplete="off"
-						[minDate]="maxEndDate" class="form-control" bsDatepicker
-						[bsConfig]="{dateInputFormat: giddhDateFormat}">
-				</div>
-			</div>
+                    <div class="col-xs-4 col-sm-4 form-group" *ngIf="!IsNotExpirable">
+                        <label class="mr-b1">End Date<span class="text-danger">*</span></label>
+                        <input name="dateRange" formControlName="cronEndDate" type="text" autocomplete="off"
+                            [minDate]="maxEndDate" class="form-control" bsDatepicker
+                            [bsConfig]="{dateInputFormat: giddhDateFormat}">
+                    </div>
+                </div>
 
-			<div class="form-group">
-				<input [checked]="IsNotExpirable" (change)="isExpirableChanged($event.target)" type="checkbox" /> Never
-				expire
-			</div>
+                <div class="form-group">
+                    <input [checked]="IsNotExpirable" (change)="isExpirableChanged($event.target)" type="checkbox" />
+                    Never
+                    expire
+                </div>
 
-			<div class="form-group ng-select-wrap select-list select-group">
-				<label class="mr-b1">Interval<span class="text-danger">*</span></label>
-				<ng-select placeholder="Select Interval" filterPlaceholder="Type to search..."
-					formControlName="duration" name="duration" [options]="intervalOptions" class="w-100">
-					<ng-template #optionTemplate let-option="option">
-						<div class="account-list-item">{{option?.label}}</div>
-						<div class="account-list-item font-12">{{option?.value}}</div>
-					</ng-template>
-				</ng-select>
-			</div>
+                <div class="form-group ng-select-wrap select-list select-group">
+                    <label class="mr-b1">Interval<span class="text-danger">*</span></label>
+                    <ng-select placeholder="Select Interval" filterPlaceholder="Type to search..."
+                        formControlName="duration" name="duration" [options]="intervalOptions" class="w-100">
+                        <ng-template #optionTemplate let-option="option">
+                            <div class="account-list-item">{{option?.label}}</div>
+                            <div class="account-list-item font-12">{{option?.value}}</div>
+                        </ng-template>
+                    </ng-select>
+                </div>
 
-			<div class="clearfix text-right" *ngIf="mode === 'create'">
-				<button class="btn btn-sm" (click)="closeAsidePane($event)">Cancel</button>
-				<button class="btn btn-success btn-sm" [ladda]="isLoading"
-					(click)="saveRecurringInvoice()">Save</button>
-			</div>
-			<div class="clearfix text-right" *ngIf="mode === 'update'">
-				<button *ngIf="!isCompany" class="btn btn-danger btn-sm" [ladda]="isDeleteLoading"
-					(click)="deleteInvoice()">Delete</button>
-				<button *ngIf="!isCompany" class="btn btn-success btn-sm" [ladda]="isLoading"
-					(click)="saveRecurringInvoice()">Update</button>
-			</div>
-        </form>
-      </div>
-	</div>
+                <div class="clearfix text-right" *ngIf="mode === 'create'">
+                    <button class="btn btn-sm" (click)="closeAsidePane($event)">Cancel</button>
+                    <button class="btn btn-success btn-sm" [ladda]="isLoading"
+                        (click)="saveRecurringInvoice()">Save</button>
+                </div>
+                <div class="clearfix text-right" *ngIf="mode === 'update'">
+                    <button *ngIf="!isCompany" class="btn btn-danger btn-sm" [ladda]="isDeleteLoading"
+                        (click)="deleteInvoice()">Delete</button>
+                    <button *ngIf="!isCompany" class="btn btn-success btn-sm" [ladda]="isLoading"
+                        (click)="saveRecurringInvoice()">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

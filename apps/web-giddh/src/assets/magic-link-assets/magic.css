@@ -35,8 +35,7 @@
     src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot");
     src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot?#iefix")
             format("embedded-opentype"),
-        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.svg")
-            format("svg"),
+        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.svg") format("svg"),
         url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.woff")
             format("woff"),
         url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.ttf")
@@ -227,7 +226,7 @@ body {
     padding-top: 10px !important;
 }
 
-.pd-t2{
+.pd-t2 {
     padding-top: 20px;
 }
 
@@ -295,7 +294,7 @@ body {
     padding-right: 40px;
 }
 
-.pd-t15{
+.pd-t15 {
     padding-top: 15px;
 }
 
@@ -423,11 +422,11 @@ body {
     margin-right: 40px;
 }
 
-.mr-0{
+.mr-0 {
     margin-right: 0 !important;
-} 
+}
 
-.ml-0{
+.ml-0 {
     margin-left: 0 !important;
 }
 
@@ -563,11 +562,11 @@ body {
     position: relative;
 }
 
-.w-100{
-    width:100% !important;
+.w-100 {
+    width: 100% !important;
 }
 
-.position-relative{
+.position-relative {
     position: relative !important;
 }
 
@@ -666,11 +665,11 @@ body {
     background: #1a237e;
 }
 
-.font-12{
+.font-12 {
     font-size: 12px;
 }
 
-.font-16{
+.font-16 {
     font-size: 16px;
 }
 
@@ -682,48 +681,48 @@ body {
     display: block !important;
 }
 
-.float-right{
-    float:right;
+.float-right {
+    float: right;
 }
 
-.float-left{
-    float:left;
+.float-left {
+    float: left;
 }
 
-.text-color{
-    color:#262626;
+.text-color {
+    color: #262626;
 }
 
-.head-block{
-    height:77px;
+.head-block {
+    height: 77px;
 }
 
-.head-block .vertical-center{
-    font-size:26px;
+.head-block .vertical-center {
+    font-size: 26px;
 }
 
-.ledger-account-name{
-    font-size:25px;
-    color:#6d6e70;
+.ledger-account-name {
+    font-size: 25px;
+    color: #6d6e70;
 }
 
-.currency-width{
+.currency-width {
     width: 150px !important;
 }
 
-.ledger-footer-1{
+.ledger-footer-1 {
     width: 50%;
     bottom: 0;
     left: 0;
 }
 
-.attachment-medium{
-    max-width: 100%; 
+.attachment-medium {
+    max-width: 100%;
     height: auto !important;
 }
 
-.ledger-footer-1:nth-child(2){
-    right:0 !important;
+.ledger-footer-1:nth-child(2) {
+    right: 0 !important;
 }
 
 .download-invoice-ledger {
@@ -765,8 +764,9 @@ table th[class*="col-"] {
     border: 0;
 }
 
-.table-bordered td, .table-bordered th {
- border:none;
+.table-bordered td,
+.table-bordered th {
+    border: none;
 }
 
 .pd-t350 {
@@ -783,19 +783,19 @@ table th[class*="col-"] {
     padding: 80px 0;
 }
 
-.ledger-footer-1.float-left{
-    width:50%;
-    left:0;
-    bottom:0;
+.ledger-footer-1.float-left {
+    width: 50%;
+    left: 0;
+    bottom: 0;
 }
 
-.ledger-footer-1.float-right{
-    width:50%;
-    bottom:0;
+.ledger-footer-1.float-right {
+    width: 50%;
+    bottom: 0;
     right: 0 !important;
 }
 
-.ledger-footer-1.float-right tbody td{
+.ledger-footer-1.float-right tbody td {
     border-right: 1px solid #d9d9d9;
 }
 
@@ -1039,18 +1039,19 @@ body {
     animation-delay: -0.9s;
 }
 
-
 .input-group {
     position: relative;
     display: table;
     border-collapse: separate;
 }
 
-.input-group .form-control:first-child{
+.input-group .form-control:first-child {
     border-bottom-right-radius: 0;
 }
 
-.input-group .form-control, .input-group-addon, .input-group-btn {
+.input-group .form-control,
+.input-group-addon,
+.input-group-btn {
     display: table-cell;
 }
 
@@ -1080,7 +1081,8 @@ body {
     border-radius: 4px;
 }
 
-.input-group-addon, .input-group-btn {
+.input-group-addon,
+.input-group-btn {
     width: 1%;
     white-space: nowrap;
     vertical-align: middle;
@@ -1230,7 +1232,7 @@ footer .menu-item a {
     height: 50px;
     line-height: 49px;
 }
-.tab-content>.tab-pane{
+.tab-content > .tab-pane {
     display: block;
 }
 /* small device */
@@ -1276,11 +1278,12 @@ footer .menu-item a {
         margin-bottom: -1px;
         display: inline-block !important;
     }
-    .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    .nav-tabs .nav-item.show .nav-link,
+    .nav-tabs .nav-link.active {
         background-color: #1a237e !important;
     }
     .wid-50 {
-        width:49.7% !important;
+        width: 49.7% !important;
     }
 }
 
@@ -1421,7 +1424,8 @@ div#transaction_table {
 #debit td {
     border-right: 0;
 }
-#debit td, #credit td{
+#debit td,
+#credit td {
     white-space: normal;
     word-break: break-all;
 }

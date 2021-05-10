@@ -15,7 +15,7 @@ TITLE:    Styles for giddh.com
 AUTHOR:   @THEMECHANIC
 VERSION:  1
 */
- @font-face {
+@font-face {
     font-family: "opensans-regular";
     src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot");
     src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot?#iefix")
@@ -51,8 +51,7 @@ VERSION:  1
     src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot");
     src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot?#iefix")
             format("embedded-opentype"),
-        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.svg")
-            format("svg"),
+        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.svg") format("svg"),
         url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.woff")
             format("woff"),
         url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.ttf")
@@ -519,7 +518,7 @@ aside-menu-account .container-fluid {
     padding-top: 10px;
 }
 
-.pd-t2{
+.pd-t2 {
     padding-top: 20px;
 }
 
@@ -1550,7 +1549,6 @@ li:last-child .angular-ui-tree-handle {
 }
 
 /*helpers*/
-
 
 .max-width-100 {
     max-width: 100px;
@@ -3231,7 +3229,7 @@ ul.pills li {
     height: 32px;
 }
 .compound-entry td,
-.compound-entry td input{
+.compound-entry td input {
     background-color: transparent !important;
 }
 
@@ -3751,7 +3749,7 @@ ul.pills li {
 #dashboard .panel-body {
     height: auto;
     overflow-y: auto;
-    width: 100%
+    width: 100%;
 }
 
 tr.db-bnk-account {

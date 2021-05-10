@@ -29,7 +29,7 @@ import { SalesService } from '../../services/sales.service';
 })
 
 export class DiscountComponent implements OnInit, OnDestroy {
-    @ViewChild('discountConfirmationModel', {static: true}) public discountConfirmationModel: ModalDirective;
+    @ViewChild('discountConfirmationModel', { static: true }) public discountConfirmationModel: ModalDirective;
     public discountTypeList: IOption[] = [
         { label: 'As per value', value: 'FIX_AMOUNT' },
         { label: 'As per percent', value: 'PERCENTAGE' }

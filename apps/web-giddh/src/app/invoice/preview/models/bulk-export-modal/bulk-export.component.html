@@ -65,11 +65,15 @@
                 <label>Select Copy</label>
             </div>
             <div class="col-sm-8">
-                <sh-select [options]="downloadCopyOptions" placeholder="Select Order" [multiple]="true" name="downloadCopy" [(ngModel)]="copyTypes" [isFilterEnabled]="true" [useInBuiltFilterForIOptionTypeItems]="true">
+                <sh-select [options]="downloadCopyOptions" placeholder="Select Order" [multiple]="true"
+                    name="downloadCopy" [(ngModel)]="copyTypes" [isFilterEnabled]="true"
+                    [useInBuiltFilterForIOptionTypeItems]="true">
                     <ng-template #optionTemplate let-option="option">
                         <ng-container>
                             <a href="javascript:void(0)" class="list-item d-flex">
-                                <span class="min-width-auto"><input type="checkbox" [checked]="copyTypes.includes(option.value)" [value]="option.value"></span>&nbsp;
+                                <span class="min-width-auto"><input type="checkbox"
+                                        [checked]="copyTypes.includes(option.value)"
+                                        [value]="option.value"></span>&nbsp;
                                 <span>
                                     <div class="item">{{ option.label }}</div>
                                 </span>
@@ -93,7 +97,8 @@
         </div> -->
         <div class="row mr-b15">
             <div class="col-sm-12">
-            <button class="btn btn-success" [disabled]="!copyTypes || copyTypes.length === 0 || isLoading" (click)="exportVouchers(false)">Download</button>
+                <button class="btn btn-success" [disabled]="!copyTypes || copyTypes.length === 0 || isLoading"
+                    (click)="exportVouchers(false)">Download</button>
                 <!-- <button class="btn btn-success">Print</button> -->
             </div>
         </div>
@@ -106,8 +111,11 @@
             </div>
             <div class="col-sm-12">
                 <!-- Email id could be mulitiple   -->
-                <textarea type="text" placeholder="Recipient Email Id's" class="form-control mr-b15 multiple-email" name="recipients" [(ngModel)]="recipients"></textarea>
-                <button class="btn btn-success" [disabled]="!recipients || recipients.length === 0 || !copyTypes || copyTypes.length === 0 || isLoading" (click)="exportVouchers(true)">Send Email</button>
+                <textarea type="text" placeholder="Recipient Email Id's" class="form-control mr-b15 multiple-email"
+                    name="recipients" [(ngModel)]="recipients"></textarea>
+                <button class="btn btn-success"
+                    [disabled]="!recipients || recipients.length === 0 || !copyTypes || copyTypes.length === 0 || isLoading"
+                    (click)="exportVouchers(true)">Send Email</button>
             </div>
         </div>
     </div>

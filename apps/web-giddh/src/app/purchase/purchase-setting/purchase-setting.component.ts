@@ -220,7 +220,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
         };
 
         this.authenticationService.saveGmailAuthCode(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if(res) {
+            if (res) {
                 if (res.status === 'success') {
                     this.toaster.successToast('Gmail account added successfully.', 'Success');
                 } else {

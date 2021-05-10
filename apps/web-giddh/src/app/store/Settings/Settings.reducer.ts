@@ -225,9 +225,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         // region profile
 
-       case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO: {
+        case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO: {
             return Object.assign({}, state, { getProfileInProgress: true });
-       }
+        }
 
         case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
@@ -753,7 +753,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return Object.assign({}, state, {});
         }
         case SETTINGS_BRANCH_ACTIONS.RESET_ALL_BRANCHES_RESPONSE: {
-            return Object.assign({}, state, {branches: null});
+            return Object.assign({}, state, { branches: null });
         }
 
         case SETTINGS_PROFILE_ACTIONS.FREE_PLAN_SUBSCRIBED: {
