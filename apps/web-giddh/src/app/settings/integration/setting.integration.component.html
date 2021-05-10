@@ -1,5 +1,5 @@
 <ng-container appTranslate [file]="'settings/integration'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="clearfix">
         <tabset [ngClass]="{'tab-integration': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab
             id="tab-integration">
@@ -1101,5 +1101,5 @@
     <div class="aside-overlay" *ngIf="beneficiaryAsideState === 'in'"></div>
     <beneficiary *ngIf="beneficiaryAsideState === 'in' && activeUrn" [urn]="activeUrn"
         (closeAsideEvent)="hideBeneficiaryModal($event)" [class]="beneficiaryAsideState"
-        [@slideInOut]="beneficiaryAsideState"></beneficiary>
+        [@slideInOut]="beneficiaryAsideState" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></beneficiary>
 </ng-container>
