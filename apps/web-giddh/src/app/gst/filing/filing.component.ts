@@ -233,13 +233,6 @@ export class FilingComponent implements OnInit, OnDestroy {
             default: break;
         }
     }
-
-    hello(event) {
-        console.log('triggerred');
-        if (this.isMobileScreen) {
-            this.asideGstSidebarMenuState = 'out';
-        }
-    }
     /**
      * Loads the GST report for a GST number
      *
