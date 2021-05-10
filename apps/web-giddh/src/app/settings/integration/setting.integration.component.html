@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 <ng-container appTranslate [file]="'settings/integration'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+=======
+<ng-container appTranslate [file]="'settings/integration'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+>>>>>>> 57768fbf26... Completed setting/integration
     <div class="clearfix">
         <tabset [ngClass]="{'tab-integration': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab id="tab-integration">
             <tab (selectTab)="loadSmsData($event); tabChanged('sms');">
@@ -655,7 +660,6 @@
                                     </div>
                                 </div>
                             </div> -->
-                            <a href="javascript:;" class="text-right btn btn-primary" (click)="showBeneficiaryModal(regAcc.URN)"> {{localeData?.payment?.list_beneficiary}} </a>
                         </div>
                         <br *ngIf="parentIndex !== (registeredAccount?.length - 1) || openNewRegistration" />
                     </div>
@@ -931,6 +935,4 @@
             </tab>
         </tabset>
     </div>
-    <div class="aside-overlay" *ngIf="beneficiaryAsideState === 'in'"></div>
-    <beneficiary *ngIf="beneficiaryAsideState === 'in' && activeUrn" [urn]="activeUrn" (closeAsideEvent)="hideBeneficiaryModal($event)" [class]="beneficiaryAsideState" [@slideInOut]="beneficiaryAsideState"></beneficiary>
 </ng-container>
