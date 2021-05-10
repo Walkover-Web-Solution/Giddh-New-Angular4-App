@@ -168,6 +168,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public beneficiaryAsideState: string = "out";
     /** This will hold users list */
     public usersList: any[] = [];
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private router: Router,
