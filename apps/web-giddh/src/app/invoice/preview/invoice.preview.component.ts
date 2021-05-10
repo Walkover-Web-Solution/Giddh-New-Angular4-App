@@ -287,6 +287,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public commonLocaleData: any = {};
     /** True, if user has enable GST E-invoice */
     public gstEInvoiceEnable: boolean;
+    /** True if selected items needs to be updated */
+    public updateSelectedItems: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -473,7 +475,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         });
                         res[0] = voucherData;
                     }
-                    this.selectedItems = [];
+                    this.selectedItems = (this.updateSelectedItems) ? this.selectedInvoices : [];
+                    this.updateSelectedItems = false;
                 }
 
                 // get voucherDetailsNo so we can open that voucher in details mode
@@ -1281,8 +1284,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         item.isSelected = action;
         if (action) {
             this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
+            this.selectedItems.push(item.uniqueName);
         } else {
             this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
+            this.selectedItems = this.selectedItems.filter(selectedItem => selectedItem !== item.uniqueName);
             this.allItemsSelected = false;
         }
         this.itemStateChanged(item);
@@ -1346,7 +1351,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public itemStateChanged(item: any, allSelected: boolean = false) {
-        let index = (this.selectedItems) ? this.selectedItems.findIndex(f => f === item.uniqueName) : -1;
         let indexInv = (this.selectedInvoicesList) ? this.selectedInvoicesList.findIndex(f => f.uniqueName === item.uniqueName) : -1;
 
         if (indexInv > -1 && !allSelected) {
@@ -1355,11 +1359,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.selectedInvoicesList.push(item);     // Array of checked seleted Items of the list
         }
 
-        if (index > -1 && !allSelected) {
-            this.selectedItems = this.selectedItems.filter(f => f !== item.uniqueName);
-        } else {
-            this.selectedItems.push(item.uniqueName);  // Array of checked seleted Items uniqueName of the list
-        }
         if (this.selectedInvoicesList.length === 1) {
             this.exportInvoiceType = this.selectedInvoicesList[0].account.uniqueName;
             this.isExported = true;
@@ -1463,6 +1462,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * it will call get all so we can have latest data every time someone updates invoice/ voucher
      */
     public invoicePreviewClosed() {
+        this.updateSelectedItems = true;
         this.selectedInvoice = null;
         this.selectedInvoiceForDetails = null;
         this.toggleBodyClass();
