@@ -27,12 +27,12 @@
     border-bottom: 1px solid $gainsboro !important;
     height: 80px;
 }
-.tax-engine{
-    .transactions-list{
-        .list-filter{
+.tax-engine {
+    .transactions-list {
+        .list-filter {
             .btn-toolbar {
                 margin-top: 2px;
-                .btn-link{
+                .btn-link {
                     border: 1px solid $gainsboro;
                 }
             }
@@ -327,14 +327,14 @@ address {
     white-space: nowrap;
     background-color: $white-smoke;
 }
-.tax-engine{
-    .sub-filter-nav-band{
+.tax-engine {
+    .sub-filter-nav-band {
         border-bottom: 1px solid $gainsboro;
-        ul{
+        ul {
             > li {
-            display: inline-block;
+                display: inline-block;
+            }
         }
-    }
     }
 }
 .tax-engine .sub-filter-nav-band ul > li > a {
@@ -514,18 +514,17 @@ svg.icon.icon-sm {
     padding: 0 72px 0 12px !important;
 }
 
-
-.return-detail-col{
+.return-detail-col {
     background-color: $whisper;
     width: 50%;
 }
 
-.failed-transaction{
+.failed-transaction {
     padding: 10px 25px;
     margin: 5px auto;
     border-left: 1px solid $gainsboro;
 }
 
-.zi-table-child{
+.zi-table-child {
     border-left: 1px solid $gainsboro;
 }

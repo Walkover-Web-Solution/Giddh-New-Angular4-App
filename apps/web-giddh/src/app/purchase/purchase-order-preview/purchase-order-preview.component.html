@@ -5,7 +5,8 @@
                 <div>
                     <div class="invoice-search-box">
                         <input type="text" [placeholder]="commonLocaleData?.app_search" #searchElement>
-                        <button *ngIf="!isCompany" class="btn btn-sky-blue" [routerLink]="['/pages/purchase-management/purchase-order/new']">{{localeData?.new_order}}</button>
+                        <button *ngIf="!isCompany" class="btn btn-sky-blue"
+                            [routerLink]="['/pages/purchase-management/purchase-order/new']">{{localeData?.new_order}}</button>
                     </div>
                     <ul class="invoice-sidebar">
                         <perfect-scrollbar *ngIf="filteredData && filteredData.length > 0">
@@ -30,8 +31,8 @@
                                         <div class="invoice-amount pull-right">
 
                                             <!-- {{row.grandTotal?.amountForAccount | giddhCurrency}} -->
-                                            <amount-field [amount]="row.grandTotal?.amountForAccount" [currencySymbol]="false"
-                                                [currencyCode]="false">
+                                            <amount-field [amount]="row.grandTotal?.amountForAccount"
+                                                [currencySymbol]="false" [currencyCode]="false">
                                             </amount-field>
                                         </div>
                                     </div>
@@ -67,7 +68,8 @@
                                             [routerLink]="['/pages/purchase-management/purchase']">
                                             <img src="assets/images/multiply.svg"></span>
 
-                                        <div *ngIf="!isCompany" class="btn-group change-status-dropdown pull-right" dropdown>
+                                        <div *ngIf="!isCompany" class="btn-group change-status-dropdown pull-right"
+                                            dropdown>
                                             <button id="button-basic" dropdownToggle type="button"
                                                 class="btn btn-sky-blue dropdown-toggle mr-0"
                                                 aria-controls="dropdown-basic">{{localeData?.change_status}}
@@ -77,7 +79,9 @@
                                             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                                 aria-labelledby="button-basic">
                                                 <li class="cp" role="menuitem" *ngIf="purchaseOrder.status === 'OPEN'">
-                                                    <a class="dropdown-item" (click)="convertToBill()">{{localeData?.convert_tobill}}</a></li>
+                                                    <a class="dropdown-item"
+                                                        (click)="convertToBill()">{{localeData?.convert_tobill}}</a>
+                                                </li>
                                                 <li class="cp" role="menuitem"><a class="dropdown-item"
                                                         [routerLink]="['/pages/purchase-management/purchase-order/new/'+purchaseOrderUniqueName]">{{commonLocaleData?.app_copy}}</a>
                                                 </li>
@@ -100,36 +104,42 @@
                                         <div class="wrap-edit-history-btn">
                                             <div class="edit-action-btn-groups pull-right">
                                                 <span *ngIf="!isCompany">
-                                                    <a  href="javascript:;" [tooltip]="commonLocaleData?.app_edit" placement="top"
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_edit"
+                                                        placement="top"
                                                         [routerLink]="['/pages/purchase-management/purchase-order/edit/'+purchaseOrderUniqueName]"><i
                                                             class="icon-edit-pencil"></i></a>
                                                 </span>
 
                                                 <span>
-                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_send_email" placement="top"
-                                                        (click)="openSendMailModal(sendEmailModal)"><i
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_send_email"
+                                                        placement="top" (click)="openSendMailModal(sendEmailModal)"><i
                                                             class="icon-envelope font-12"></i></a>
                                                 </span>
 
                                                 <span>
-                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_print" placement="top"
-                                                        (click)="printVoucher()"><i class="fa fa-print"></i></a>
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_print"
+                                                        placement="top" (click)="printVoucher()"><i
+                                                            class="fa fa-print"></i></a>
                                                 </span>
 
                                                 <span>
-                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_download" placement="top"
-                                                        (click)="downloadFile()"><i class="icon-file"></i></a>
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_download"
+                                                        placement="top" (click)="downloadFile()"><i
+                                                            class="icon-file"></i></a>
                                                 </span>
 
                                                 <span *ngIf="!isCompany">
-                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_delete" placement="top"
-                                                        (click)="confirmDelete()"><i class="icon-trash"></i></a>
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_delete"
+                                                        placement="top" (click)="confirmDelete()"><i
+                                                            class="icon-trash"></i></a>
                                                 </span>
                                             </div>
 
                                             <div class="history-btn">
-                                                <button class="btn btn-primary" (click)="toggleActivityHistoryAsidePane()">
-                                                    <i class="icon-history-icon font-12 pr-1"></i> {{commonLocaleData?.app_history}}</button>
+                                                <button class="btn btn-primary"
+                                                    (click)="toggleActivityHistoryAsidePane()">
+                                                    <i class="icon-history-icon font-12 pr-1"></i>
+                                                    {{commonLocaleData?.app_history}}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -149,7 +159,8 @@
                                 </span>
                             </div>
                             <div class="pdf-preview" #attachedDocumentPreview>
-                                <iframe #pdfContainer *ngIf="sanitizedPdfFileUrl && pdfPreviewLoaded" width="100%" height="100%" [src]="sanitizedPdfFileUrl"></iframe>
+                                <iframe #pdfContainer *ngIf="sanitizedPdfFileUrl && pdfPreviewLoaded" width="100%"
+                                    height="100%" [src]="sanitizedPdfFileUrl"></iframe>
                             </div>
                         </div>
                     </div>

@@ -1,40 +1,40 @@
 @import "../../../../../assets/css/color.scss";
 
-.item-product-block{
-    h4{
-        font-family: 'opensans-semibold';
+.item-product-block {
+    h4 {
+        font-family: "opensans-semibold";
     }
-    .product-stock-block{
-        .activity-box{
+    .product-stock-block {
+        .activity-box {
             width: 33.33%;
-            padding:26px 20px;
+            padding: 26px 20px;
             justify-content: center;
             align-items: center;
             display: flex;
             flex-direction: column;
             text-align: center;
-            &.less-stock{
+            &.less-stock {
                 background-color: $onahau;
-                p{
-                    &.value{
+                p {
+                    &.value {
                         color: $cinnabar-orange;
                         font-size: 20px;
                     }
                 }
             }
-            &.zero-stock{
+            &.zero-stock {
                 background-color: $chardon;
-                p{
-                    &.value{
-                        color:  $teal;
+                p {
+                    &.value {
+                        color: $teal;
                         font-size: 20px;
                     }
                 }
             }
-            &.negative-stock{
+            &.negative-stock {
                 background-color: $tutu;
-                p{
-                    &.value{
+                p {
+                    &.value {
                         color: $bright-pink;
                         font-size: 20px;
                     }
@@ -42,28 +42,28 @@
             }
         }
     }
-    .total-item-list{
+    .total-item-list {
         .total-item {
             font-size: 14px;
             justify-content: space-between;
             border-bottom: 1px solid $gainsboro;
             padding-bottom: 7px;
             margin-bottom: 7px;
-            &:last-child{
+            &:last-child {
                 border-bottom: none;
             }
-            i{
+            i {
                 color: gray;
             }
         }
     }
 }
 /*responsive*/
-@media(max-width:767px){
-    .item-product-block{
-        .product-stock-block{
+@media (max-width: 767px) {
+    .item-product-block {
+        .product-stock-block {
             flex-wrap: wrap;
-            .activity-box{
+            .activity-box {
                 width: 100%;
                 margin-bottom: 15px;
                 margin-right: 0 !important;

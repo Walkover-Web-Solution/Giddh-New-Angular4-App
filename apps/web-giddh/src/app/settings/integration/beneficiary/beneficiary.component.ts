@@ -28,12 +28,12 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if get all api call in progress */
     public isLoading: boolean = true;
-    
+
     constructor(
         private fb: FormBuilder,
         private toaster: ToasterService,
         private settingsIntegrationService: SettingsIntegrationService
-        ) {
+    ) {
 
     }
 
@@ -70,7 +70,7 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
     public getBeneficiaries(): void {
         this.isLoading = true;
         this.settingsIntegrationService.getBeneficiaries(this.urn).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response?.status === "success" && response?.body?.length > 0) {
+            if (response?.status === "success" && response?.body?.length > 0) {
                 this.accountBeneficiaries = response.body;
             }
             this.isLoading = false;
@@ -83,7 +83,7 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
      * @memberof BeneficiaryComponent
      */
     public saveBeneficiary(): void {
-        if(!this.addBeneficiaryForm.invalid) {
+        if (!this.addBeneficiaryForm.invalid) {
             this.isBeneficiaryRegistrationInProgress$ = observableOf(true);
 
             let beneficiaryDetails = {
@@ -97,7 +97,7 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
                 this.isBeneficiaryRegistrationInProgress$ = observableOf(false);
                 this.toaster.clearAllToaster();
 
-                if(response?.status === "success") {
+                if (response?.status === "success") {
                     this.toaster.successToast(response?.body?.Message);
                     this.addBeneficiaryForm.reset();
                     this.getBeneficiaries();
@@ -123,7 +123,7 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
         this.settingsIntegrationService.beneficiaryValidation(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toaster.clearAllToaster();
 
-            if(response?.status === "success" && response?.body?.Response === "SUCCESS") {
+            if (response?.status === "success" && response?.body?.Response === "SUCCESS") {
                 this.toaster.successToast("Beneficiary has been validated successfully.");
             } else {
                 this.toaster.errorToast("There is some issue in beneficiary validation. Please try again.");

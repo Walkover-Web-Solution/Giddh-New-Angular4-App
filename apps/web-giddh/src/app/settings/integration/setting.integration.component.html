@@ -1,6 +1,8 @@
-<ng-container appTranslate [file]="'settings/integration'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'settings/integration'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <div class="clearfix">
-        <tabset [ngClass]="{'tab-integration': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab id="tab-integration">
+        <tabset [ngClass]="{'tab-integration': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab
+            id="tab-integration">
             <tab (selectTab)="loadSmsData($event); tabChanged('sms');">
                 <ng-template tabHeading>
                     <span class="icon-chat2"></span> {{localeData?.sms?.tab_heading}}
@@ -15,19 +17,22 @@
 
                                     <label>{{localeData?.sms?.auth_key_label}}</label>
                                     <br>
-                                    <input type="text" [placeholder]="localeData?.sms?.auth_key_placeholder" class="form-control" [ngModel]="smsFormObj.authKey" name="authKey" required />
+                                    <input type="text" [placeholder]="localeData?.sms?.auth_key_placeholder"
+                                        class="form-control" [ngModel]="smsFormObj.authKey" name="authKey" required />
 
                                 </div>
                                 <div class="form-group col-md-5 col-lg-3">
                                     <label>{{localeData?.sms?.sender_id_label}}</label>
                                     <br>
-                                    <input type="text" [placeholder]="localeData?.sms?.sender_id_placeholder" class="form-control" [ngModel]="smsFormObj.senderId" name="senderId" required />
+                                    <input type="text" [placeholder]="localeData?.sms?.sender_id_placeholder"
+                                        class="form-control" [ngModel]="smsFormObj.senderId" name="senderId" required />
                                 </div>
                                 <div class="form-group col-md-2 col-lg-3">
                                     <div class="empty-label">
                                         <label>&nbsp;</label>
                                         <br>
-                                        <button type="submit" class="btn btn-success mr-r1" [disabled]="smsFormObjCtrl.invalid">{{commonLocaleData?.app_save}}</button>
+                                        <button type="submit" class="btn btn-success mr-r1"
+                                            [disabled]="smsFormObjCtrl.invalid">{{commonLocaleData?.app_save}}</button>
                                     </div>
                                 </div>
                             </div>
@@ -46,13 +51,17 @@
                     <div class="d-flex gmail-integration-message">
 
                         <ng-container *ngIf="!(isGmailIntegrated$ | async)">
-                            <a *ngIf="!isElectron " class="btn btn-primary" [href]="gmailAuthCodeUrl$ | async">{{localeData?.email?.connect_gmail}}</a>
+                            <a *ngIf="!isElectron " class="btn btn-primary"
+                                [href]="gmailAuthCodeUrl$ | async">{{localeData?.email?.connect_gmail}}</a>
 
-                            <a *ngIf="isElectron " class="btn btn-primary" href="javascript:void(0);" (click)="gmailIntegration('google')">{{localeData?.email?.connect_gmail}}</a>
+                            <a *ngIf="isElectron " class="btn btn-primary" href="javascript:void(0);"
+                                (click)="gmailIntegration('google')">{{localeData?.email?.connect_gmail}}</a>
                         </ng-container>
 
-                        <h4 *ngIf="(isGmailIntegrated$ | async)" class="text-success align-self-center">{{localeData?.email?.gmail_connected}}</h4>
-                        <button *ngIf="(isGmailIntegrated$ | async)" class="btn btn-danger mr-l2" (click)="removegmailintegration.toggle()">{{localeData?.email?.remove_account}}
+                        <h4 *ngIf="(isGmailIntegrated$ | async)" class="text-success align-self-center">
+                            {{localeData?.email?.gmail_connected}}</h4>
+                        <button *ngIf="(isGmailIntegrated$ | async)" class="btn btn-danger mr-l2"
+                            (click)="removegmailintegration.toggle()">{{localeData?.email?.remove_account}}
                         </button>
                     </div>
                 </div>
@@ -61,7 +70,11 @@
                 <div bsModal #removegmailintegration="bs-modal" class="modal fade" role="dialog">
                     <div class="modal-dialog modal-xl">
                         <div class="modal-content">
-                            <confirm-modal [title]="localeData?.email?.remove_account_title" [body]="localeData?.email?.remove_account_message" (cancelCallBack)="removegmailintegration.toggle()" (successCallBack)="removeGmailAccount();removegmailintegration.toggle()"></confirm-modal>
+                            <confirm-modal [title]="localeData?.email?.remove_account_title"
+                                [body]="localeData?.email?.remove_account_message"
+                                (cancelCallBack)="removegmailintegration.toggle()"
+                                (successCallBack)="removeGmailAccount();removegmailintegration.toggle()">
+                            </confirm-modal>
                         </div>
                     </div>
                 </div>
@@ -75,19 +88,22 @@
 
                                 <label>{{localeData?.email?.auth_key_label}}</label>
                                 <br>
-                                <input type="text" [placeholder]="localeData?.email?.auth_key_placeholder" class="form-control" [ngModel]="emailFormObj.authKey" name="authKey" required />
+                                <input type="text" [placeholder]="localeData?.email?.auth_key_placeholder"
+                                    class="form-control" [ngModel]="emailFormObj.authKey" name="authKey" required />
 
                             </div>
                             <div class="form-group col-md-5 col-lg-3">
                                 <label>{{localeData?.email?.email_subject_label}}</label>
                                 <br>
-                                <input type="text" [placeholder]="localeData?.email?.email_subject_placeholder" class="form-control" [ngModel]="emailFormObj.subject" name="subject" required />
+                                <input type="text" [placeholder]="localeData?.email?.email_subject_placeholder"
+                                    class="form-control" [ngModel]="emailFormObj.subject" name="subject" required />
                             </div>
                             <div class="form-group col-md-2 col-lg-3 empty-label">
 
                                 <label>&nbsp;</label>
                                 <br>
-                                <button type="submit" class="btn btn-success mr-r1" [disabled]="emailform.invalid">{{commonLocaleData?.app_save}}</button>
+                                <button type="submit" class="btn btn-success mr-r1"
+                                    [disabled]="emailform.invalid">{{commonLocaleData?.app_save}}</button>
 
                             </div>
                         </div>
@@ -112,14 +128,20 @@
                                 <label>{{localeData?.collection?.key_id_label}}
                                     <span class="required">*</span>
                                 </label>
-                                <input class="form-control" type="text" [placeholder]="localeData?.collection?.key_id_placeholder" name="razorPayObj.userName" [(ngModel)]="razorPayObj.userName" required autocomplete="off">
+                                <input class="form-control" type="text"
+                                    [placeholder]="localeData?.collection?.key_id_placeholder"
+                                    name="razorPayObj.userName" [(ngModel)]="razorPayObj.userName" required
+                                    autocomplete="off">
 
                             </div>
                             <div class="form-group col-lg-4 col-md-6 col-xs-12">
                                 <label>{{localeData?.collection?.secret_key_label}}
                                     <span class="required">*</span>
                                 </label>
-                                <input class="form-control" type="password" [placeholder]="localeData?.collection?.secret_key_placeholder" name="razorPayObj.password" [(ngModel)]="razorPayObj.password" required autocomplete="off">
+                                <input class="form-control" type="password"
+                                    [placeholder]="localeData?.collection?.secret_key_placeholder"
+                                    name="razorPayObj.password" [(ngModel)]="razorPayObj.password" required
+                                    autocomplete="off">
                             </div>
                         </div>
                         <div>
@@ -128,10 +150,19 @@
                                     <div>
                                         <label>{{localeData?.collection?.link_account_label}}</label>
                                         <div class="input-group">
-                                            <sh-select class="linked-account" [placeholder]="localeData?.collection?.link_account_placeholder" name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName" [options]="accounts$ | async" (selected)="selectAccount($event)" [forceClearReactive]="forceClearLinkAccount$ | async"
-                                            [enableDynamicSearch]="true" [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)" [fixedValue]="razorPayObj?.account?.name" [defaultValue]="razorPayObj?.account?.name">
+                                            <sh-select class="linked-account"
+                                                [placeholder]="localeData?.collection?.link_account_placeholder"
+                                                name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName"
+                                                [options]="accounts$ | async" (selected)="selectAccount($event)"
+                                                [forceClearReactive]="forceClearLinkAccount$ | async"
+                                                [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                                                (scrollEnd)="handleScrollEnd()"
+                                                (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                                                [fixedValue]="razorPayObj?.account?.name"
+                                                [defaultValue]="razorPayObj?.account?.name">
                                             </sh-select>
-                                            <div class="input-group-addon cp" *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name">
+                                            <div class="input-group-addon cp"
+                                                *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name">
                                                 <span (click)="unlinkAccountFromRazorPay()" class="icon-trash"></span>
                                             </div>
                                         </div>
@@ -140,7 +171,9 @@
                                 <div class="form-group col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label" id="inlnImg">
                                     <label>&nbsp;</label>
                                     <br>
-                                    <input type="checkbox" [(ngModel)]="razorPayObj.autoCapturePayment" name="autoCapturePayment" /> {{localeData?.collection?.automatic_capture_on_payment}}
+                                    <input type="checkbox" [(ngModel)]="razorPayObj.autoCapturePayment"
+                                        name="autoCapturePayment" />
+                                    {{localeData?.collection?.automatic_capture_on_payment}}
                                 </div>
                             </div>
                         </div>
@@ -148,11 +181,14 @@
 
                         <div class="row">
                             <div class="col-sm-12 form-group ">
-                                <button *ngIf="!updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid" (click)="saveRazorPayDetails()">{{commonLocaleData?.app_save}}
+                                <button *ngIf="!updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid"
+                                    (click)="saveRazorPayDetails()">{{commonLocaleData?.app_save}}
                                 </button>
-                                <button *ngIf="updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid" (click)="updateRazorPayDetails()">{{commonLocaleData?.app_update}}
+                                <button *ngIf="updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid"
+                                    (click)="updateRazorPayDetails()">{{commonLocaleData?.app_update}}
                                 </button>
-                                <button *ngIf="updateRazor" class="btn btn-danger" (click)="deleteRazorPayDetails()">{{commonLocaleData?.app_delete}}
+                                <button *ngIf="updateRazor" class="btn btn-danger"
+                                    (click)="deleteRazorPayDetails()">{{commonLocaleData?.app_delete}}
                                 </button>
                             </div>
                         </div>
@@ -173,14 +209,20 @@
                                     <label>{{localeData?.collection?.client_id_label}}
                                         <span class="required">*</span>
                                     </label>
-                                    <input class="form-control" type="text" [placeholder]="localeData?.collection?.client_id_placeholder" name="payoutForm.userName" [(ngModel)]="payoutObj.userName" required autocomplete="off">
+                                    <input class="form-control" type="text"
+                                        [placeholder]="localeData?.collection?.client_id_placeholder"
+                                        name="payoutForm.userName" [(ngModel)]="payoutObj.userName" required
+                                        autocomplete="off">
                                 </div>
 
                                 <div class="form-group col-lg-4 col-md-6 col-xs-12">
                                     <label>{{localeData?.collection?.client_secret_key_label}}
                                         <span class="required">*</span>
                                     </label>
-                                    <input class="form-control" type="password" [placeholder]="localeData?.collection?.client_secret_key_placeholder" name="payoutForm.password" [(ngModel)]="payoutObj.password" required autocomplete="off">
+                                    <input class="form-control" type="password"
+                                        [placeholder]="localeData?.collection?.client_secret_key_placeholder"
+                                        name="payoutForm.password" [(ngModel)]="payoutObj.password" required
+                                        autocomplete="off">
                                 </div>
                             </div>
                             <div>
@@ -188,14 +230,20 @@
                                     <div class="form-group col-lg-4 col-md-6 col-xs-12">
                                         <div>
                                             <label>{{localeData?.collection?.link_account_label}}</label>
-                                            <sh-select [placeholder]="localeData?.collection?.link_account_placeholder" name="payoutObj.account" [(ngModel)]="payoutObj.fakeAccObj" [options]="bankAccounts$ | async" (selected)="selectCashfreeAccount($event, payoutObj)">
+                                            <sh-select [placeholder]="localeData?.collection?.link_account_placeholder"
+                                                name="payoutObj.account" [(ngModel)]="payoutObj.fakeAccObj"
+                                                [options]="bankAccounts$ | async"
+                                                (selected)="selectCashfreeAccount($event, payoutObj)">
                                             </sh-select>
                                         </div>
                                     </div>
                                     <div class="form-group col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label">
                                         <label>&nbsp;</label>
                                         <br>
-                                        <input type="checkbox" [(ngModel)]="payoutObj.autoCapturePayment" name="payoutObj.autoCapturePayment" [checked]="autoCollectObj.account?.uniqueName" /> {{localeData?.collection?.automatic_capture_on_payment}}
+                                        <input type="checkbox" [(ngModel)]="payoutObj.autoCapturePayment"
+                                            name="payoutObj.autoCapturePayment"
+                                            [checked]="autoCollectObj.account?.uniqueName" />
+                                        {{localeData?.collection?.automatic_capture_on_payment}}
                                     </div>
 
                                 </div>
@@ -203,11 +251,14 @@
 
                             <div class="row">
                                 <div class="col-sm-12 form-group ">
-                                    <button *ngIf="!payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid" (click)="submitCashfreeDetail(payoutObj)">{{commonLocaleData?.app_save}}
+                                    <button *ngIf="!payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid"
+                                        (click)="submitCashfreeDetail(payoutObj)">{{commonLocaleData?.app_save}}
                                     </button>
-                                    <button *ngIf="payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid" (click)="updateCashfreeDetail(payoutObj)">{{commonLocaleData?.app_update}}
+                                    <button *ngIf="payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid"
+                                        (click)="updateCashfreeDetail(payoutObj)">{{commonLocaleData?.app_update}}
                                     </button>
-                                    <button *ngIf="payoutAdded" class="btn btn-danger" (click)="deleteCashFreeAccount()">{{commonLocaleData?.app_delete}}
+                                    <button *ngIf="payoutAdded" class="btn btn-danger"
+                                        (click)="deleteCashFreeAccount()">{{commonLocaleData?.app_delete}}
                                     </button>
                                     <!--  -->
                                 </div>
@@ -225,14 +276,20 @@
                                     <label>{{localeData?.collection?.client_id_label}}
                                         <span class="required">*</span>
                                     </label>
-                                    <input class="form-control" type="text" [placeholder]="localeData?.collection?.client_id_placeholder" name="autoCollectform.userName" [(ngModel)]="autoCollectObj.userName" required autocomplete="off">
+                                    <input class="form-control" type="text"
+                                        [placeholder]="localeData?.collection?.client_id_placeholder"
+                                        name="autoCollectform.userName" [(ngModel)]="autoCollectObj.userName" required
+                                        autocomplete="off">
 
                                 </div>
                                 <div class="form-group col-lg-4 col-md-6 col-xs-12">
                                     <label>{{localeData?.collection?.client_secret_key_label}}
                                         <span class="required">*</span>
                                     </label>
-                                    <input class="form-control" type="password" [placeholder]="localeData?.collection?.client_secret_key_placeholder" name="autoCollectform.password" [(ngModel)]="autoCollectObj.password" required autocomplete="off">
+                                    <input class="form-control" type="password"
+                                        [placeholder]="localeData?.collection?.client_secret_key_placeholder"
+                                        name="autoCollectform.password" [(ngModel)]="autoCollectObj.password" required
+                                        autocomplete="off">
                                 </div>
                             </div>
                             <div class="">
@@ -240,13 +297,19 @@
                                     <div class="form-group col-lg-4 col-md-6 col-xs-12">
                                         <div class="">
                                             <label>{{localeData?.collection?.link_account_label}}</label>
-                                            <sh-select [placeholder]="localeData?.collection?.link_account_placeholder" name="autoCollectObj.account" [(ngModel)]="autoCollectObj.fakeAccObj" [options]="bankAccounts$ | async" (selected)="selectCashfreeAccount($event, autoCollectObj)"></sh-select>
+                                            <sh-select [placeholder]="localeData?.collection?.link_account_placeholder"
+                                                name="autoCollectObj.account" [(ngModel)]="autoCollectObj.fakeAccObj"
+                                                [options]="bankAccounts$ | async"
+                                                (selected)="selectCashfreeAccount($event, autoCollectObj)"></sh-select>
                                         </div>
                                     </div>
                                     <div class="form-group col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label">
                                         <label>&nbsp;</label>
                                         <br>
-                                        <input type="checkbox" [(ngModel)]="autoCollectObj.autoCapturePayment" name="autoCollectObj.autoCapturePayment" [checked]="autoCollectObj.account?.uniqueName" /> {{localeData?.collection?.automatic_capture_on_payment}}
+                                        <input type="checkbox" [(ngModel)]="autoCollectObj.autoCapturePayment"
+                                            name="autoCollectObj.autoCapturePayment"
+                                            [checked]="autoCollectObj.account?.uniqueName" />
+                                        {{localeData?.collection?.automatic_capture_on_payment}}
                                     </div>
 
                                 </div>
@@ -254,11 +317,16 @@
 
                             <div class="row">
                                 <div class="col-sm-12 form-group ">
-                                    <button type="submit" *ngIf="!autoCollectAdded" class="btn btn-success" [disabled]="autoCollectform.invalid" (click)="submitAutoCollect(autoCollectObj)">{{commonLocaleData?.app_save}}
+                                    <button type="submit" *ngIf="!autoCollectAdded" class="btn btn-success"
+                                        [disabled]="autoCollectform.invalid"
+                                        (click)="submitAutoCollect(autoCollectObj)">{{commonLocaleData?.app_save}}
                                     </button>
-                                    <button type="submit" *ngIf="autoCollectAdded" class="btn btn-success" [disabled]="autoCollectform.invalid" (click)="updateAutoCollect(autoCollectObj)">{{commonLocaleData?.app_update}}
+                                    <button type="submit" *ngIf="autoCollectAdded" class="btn btn-success"
+                                        [disabled]="autoCollectform.invalid"
+                                        (click)="updateAutoCollect(autoCollectObj)">{{commonLocaleData?.app_update}}
                                     </button>
-                                    <button type="reset" *ngIf="autoCollectAdded" class="btn btn-danger" (click)="deleteAutoCollect()">{{commonLocaleData?.app_delete}}
+                                    <button type="reset" *ngIf="autoCollectAdded" class="btn btn-danger"
+                                        (click)="deleteAutoCollect()">{{commonLocaleData?.app_delete}}
                                     </button>
                                     <!--  -->
                                 </div>
@@ -276,23 +344,34 @@
                                     <label>{{localeData?.collection?.client_id_label}}
                                         <span class="required">*</span>
                                     </label>
-                                    <input class="form-control" type="text" [placeholder]="localeData?.collection?.client_id_placeholder" name="paymentGateway.userName" [(ngModel)]="paymentGateway.userName" required autocomplete="off">
+                                    <input class="form-control" type="text"
+                                        [placeholder]="localeData?.collection?.client_id_placeholder"
+                                        name="paymentGateway.userName" [(ngModel)]="paymentGateway.userName" required
+                                        autocomplete="off">
 
                                 </div>
                                 <div class="form-group col-lg-4 col-md-6 col-xs-12">
                                     <label>{{localeData?.collection?.client_secret_key_label}}
                                         <span class="required">*</span>
                                     </label>
-                                    <input class="form-control" type="password" [placeholder]="localeData?.collection?.client_secret_key_placeholder" name="paymentGateway.password" [(ngModel)]="paymentGateway.password" required autocomplete="off">
+                                    <input class="form-control" type="password"
+                                        [placeholder]="localeData?.collection?.client_secret_key_placeholder"
+                                        name="paymentGateway.password" [(ngModel)]="paymentGateway.password" required
+                                        autocomplete="off">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 form-group ">
-                                    <button *ngIf="!paymentGatewayAdded" class="btn btn-success" [disabled]="paymentGatewayForm.invalid" (click)="submitPaymentGateway(paymentGateway)">{{commonLocaleData?.app_save}}
+                                    <button *ngIf="!paymentGatewayAdded" class="btn btn-success"
+                                        [disabled]="paymentGatewayForm.invalid"
+                                        (click)="submitPaymentGateway(paymentGateway)">{{commonLocaleData?.app_save}}
                                     </button>
-                                    <button *ngIf="paymentGatewayAdded" class="btn btn-success" [disabled]="paymentGatewayForm.invalid" (click)="updatePaymentGateway(paymentGateway)">{{commonLocaleData?.app_update}}
+                                    <button *ngIf="paymentGatewayAdded" class="btn btn-success"
+                                        [disabled]="paymentGatewayForm.invalid"
+                                        (click)="updatePaymentGateway(paymentGateway)">{{commonLocaleData?.app_update}}
                                     </button>
-                                    <button *ngIf="paymentGatewayAdded" type="reset" class="btn btn-danger" (click)="deletePaymentGateway()">
+                                    <button *ngIf="paymentGatewayAdded" type="reset" class="btn btn-danger"
+                                        (click)="deletePaymentGateway()">
                                         {{commonLocaleData?.app_delete}}
                                     </button>
                                     <!-- *ngIf="autoCollectAdded" -->
@@ -310,9 +389,11 @@
 
                 <div class="box clearfix" *ngIf="false">
                     <h3 class="font-20 bold mb-2">{{localeData?.ecommerce?.amazon_seller_form_heading}}</h3>
-                    <form #formDiv name="amazonSellerForm" [formGroup]="amazonSellerForm" novalidate="" autocomplete="off">
+                    <form #formDiv name="amazonSellerForm" [formGroup]="amazonSellerForm" novalidate=""
+                        autocomplete="off">
                         <ng-container formArrayName="sellers">
-                            <ng-container *ngFor="let item of amazonSellerForm.get('sellers')['controls']; let i=index;let f = first; let l = last">
+                            <ng-container
+                                *ngFor="let item of amazonSellerForm.get('sellers')['controls']; let i=index;let f = first; let l = last">
                                 <div class="clearfix" [formGroupName]="i">
                                     <!-- <div class="mr-r1 pull-left" [ngClass]="{'mr-t3': f}">
                                 <input type="checkbox" />
@@ -321,34 +402,57 @@
                                     <div class="row">
                                         <div class="form-group col-xl-2 col-md-6 col-xs-12">
 
-                                            <label *ngIf="f">{{localeData?.ecommerce?.seller_id_label}}<span class="required">*</span></label>
-                                            <input class="form-control" type="text" [placeholder]="localeData?.ecommerce?.seller_id_placeholder" required autocomplete="off" formControlName="sellerId" [disabled]="i !== amazonEditItemIdx" />
+                                            <label *ngIf="f">{{localeData?.ecommerce?.seller_id_label}}<span
+                                                    class="required">*</span></label>
+                                            <input class="form-control" type="text"
+                                                [placeholder]="localeData?.ecommerce?.seller_id_placeholder" required
+                                                autocomplete="off" formControlName="sellerId"
+                                                [disabled]="i !== amazonEditItemIdx" />
 
                                         </div>
                                         <div class="form-group col-xl-2 col-md-6 col-xs-12">
-                                            <label *ngIf="f">{{localeData?.ecommerce?.access_key_label}}<span class="required">*</span></label>
-                                            <input class="form-control" type="text" [placeholder]="localeData?.ecommerce?.access_key_placeholder" required autocomplete="off" formControlName="accessKey" [disabled]="i !== amazonEditItemIdx" />
+                                            <label *ngIf="f">{{localeData?.ecommerce?.access_key_label}}<span
+                                                    class="required">*</span></label>
+                                            <input class="form-control" type="text"
+                                                [placeholder]="localeData?.ecommerce?.access_key_placeholder" required
+                                                autocomplete="off" formControlName="accessKey"
+                                                [disabled]="i !== amazonEditItemIdx" />
                                         </div>
                                         <div class="form-group col-xl-3 col-md-6 col-xs-12">
-                                            <label *ngIf="f">{{localeData?.ecommerce?.auth_token_label}}<span class="required">*</span></label>
-                                            <input class="form-control" type="text" [placeholder]="localeData?.ecommerce?.auth_token_placeholder" required autocomplete="off" formControlName="mwsAuthToken" [disabled]="i !== amazonEditItemIdx" />
+                                            <label *ngIf="f">{{localeData?.ecommerce?.auth_token_label}}<span
+                                                    class="required">*</span></label>
+                                            <input class="form-control" type="text"
+                                                [placeholder]="localeData?.ecommerce?.auth_token_placeholder" required
+                                                autocomplete="off" formControlName="mwsAuthToken"
+                                                [disabled]="i !== amazonEditItemIdx" />
                                         </div>
 
 
                                         <div class="form-group col-xl-3 col-md-6 col-xs-9">
-                                            <label *ngIf="f">{{localeData?.ecommerce?.secret_key_label}}<span class="required">*</span></label>
-                                            <input class="form-control" type="text" [placeholder]="localeData?.ecommerce?.secret_key_placeholder" required autocomplete="off" formControlName="secretKey" [disabled]="i !== amazonEditItemIdx" />
+                                            <label *ngIf="f">{{localeData?.ecommerce?.secret_key_label}}<span
+                                                    class="required">*</span></label>
+                                            <input class="form-control" type="text"
+                                                [placeholder]="localeData?.ecommerce?.secret_key_placeholder" required
+                                                autocomplete="off" formControlName="secretKey"
+                                                [disabled]="i !== amazonEditItemIdx" />
                                         </div>
                                         <div class="pull-left edit-save-button">
                                             <label class="d-flex">&nbsp;</label>
                                             <div class="button-wrapper">
-                                                <button type="button" class="btn btn-default" (click)="saveAmazonSeller(item)" *ngIf="l"><i
+                                                <button type="button" class="btn btn-default"
+                                                    (click)="saveAmazonSeller(item)" *ngIf="l"><i
                                                         class="fa fa-check"></i></button>
-                                                <button type="button" class="btn btn-default" (click)="updateAmazonSeller(item)" *ngIf="i === amazonEditItemIdx && !l"><i
+                                                <button type="button" class="btn btn-default"
+                                                    (click)="updateAmazonSeller(item)"
+                                                    *ngIf="i === amazonEditItemIdx && !l"><i
                                                         class="fa fa-check"></i></button>
-                                                <button type="button" class="btn btn-default" (click)="editAmazonSeller(i)" *ngIf="i !== amazonEditItemIdx && !l"><i
+                                                <button type="button" class="btn btn-default"
+                                                    (click)="editAmazonSeller(i)"
+                                                    *ngIf="i !== amazonEditItemIdx && !l"><i
                                                         class="fa fa-edit"></i></button>
-                                                <button type="button" class="btn btn-danger" (click)="deleteAmazonSeller(item.get('sellerId').value, i)" *ngIf="!l"><i class="icon-trash"></i></button>
+                                                <button type="button" class="btn btn-danger"
+                                                    (click)="deleteAmazonSeller(item.get('sellerId').value, i)"
+                                                    *ngIf="!l"><i class="icon-trash"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -362,15 +466,18 @@
                     <div class="row mt-1">
                         <div class="col-sm-12 form-group ">
                             <!-- <button class="btn btn-success" (click)="saveAmazonSeller()">Save</button> -->
-                            <button class="btn btn-success" (click)="addAmazonSellerRow()">{{localeData?.ecommerce?.add_more}}</button>
+                            <button class="btn btn-success"
+                                (click)="addAmazonSellerRow()">{{localeData?.ecommerce?.add_more}}</button>
                             <!-- <button class="btn btn-danger">Delete</button> -->
                         </div>
                     </div>
                 </div>
                 <div class="mr-t2 box clearfix">
                     <h3 class="section-head mb-2">{{localeData?.ecommerce?.shopify_form_heading}}</h3>
-                    <span *ngIf="isEcommerceShopifyUserVerified">{{localeData?.ecommerce?.shopify_connected_message}}</span>
-                    <a href="https://shopify.giddh.com/signup.php" target="_blank" *ngIf="!isEcommerceShopifyUserVerified">
+                    <span
+                        *ngIf="isEcommerceShopifyUserVerified">{{localeData?.ecommerce?.shopify_connected_message}}</span>
+                    <a href="https://shopify.giddh.com/signup.php" target="_blank"
+                        *ngIf="!isEcommerceShopifyUserVerified">
                         <span>{{localeData?.ecommerce?.connect_shopify}}</span></a>
                 </div>
 
@@ -388,30 +495,48 @@
                         <div class="box clearfix">
                             <div class="d-flex justify-content-between pull-right">
                                 <div class="ico-btn">
-                                    <button class="btn btn-xs" *ngIf="isBankUpdateInEdit !== parentIndex" (click)="editRegisterForm(parentIndex, regAcc)" type="button"><i class="icon-edit-pencil"></i></button>
-                                    <button class="btn btn-xs" *ngIf="isBankUpdateInEdit === parentIndex" (click)="editRegisterForm(null)" type="button"><i class="icon-edit-pencil"></i></button>
-                                    <button class="btn btn-xs mr-0" type="button" (click)="deRegisterForm(regAcc)"><i class="icon-trash"></i></button>
+                                    <button class="btn btn-xs" *ngIf="isBankUpdateInEdit !== parentIndex"
+                                        (click)="editRegisterForm(parentIndex, regAcc)" type="button"><i
+                                            class="icon-edit-pencil"></i></button>
+                                    <button class="btn btn-xs" *ngIf="isBankUpdateInEdit === parentIndex"
+                                        (click)="editRegisterForm(null)" type="button"><i
+                                            class="icon-edit-pencil"></i></button>
+                                    <button class="btn btn-xs mr-0" type="button" (click)="deRegisterForm(regAcc)"><i
+                                            class="icon-trash"></i></button>
                                 </div>
                             </div>
                             <div *ngIf="isBankUpdateInEdit === parentIndex ">
-                                <form [formGroup]="addBankForm" (ngSubmit)="updateIciciDetails(addBankForm.value, parentIndex)">
+                                <form [formGroup]="addBankForm"
+                                    (ngSubmit)="updateIciciDetails(addBankForm.value, parentIndex)">
                                     <div class="row">
                                         <div class="form-group col-xl-2 col-md-6 payment-col pl-0">
                                             <div class="">
-                                                <label>{{localeData?.payment?.login_id_label}} <span class="required">*</span></label>
+                                                <label>{{localeData?.payment?.login_id_label}} <span
+                                                        class="required">*</span></label>
                                                 <br>
-                                                <input type="text" [placeholder]="localeData?.payment?.login_id_placeholder" class="form-control" disabled formControlName="loginId" name="loginId" autocomplete="off" />
+                                                <input type="text"
+                                                    [placeholder]="localeData?.payment?.login_id_placeholder"
+                                                    class="form-control" disabled formControlName="loginId"
+                                                    name="loginId" autocomplete="off" />
                                             </div>
                                         </div>
                                         <div class="form-group col-xl-2 col-md-6 payment-col">
-                                            <label>{{localeData?.payment?.account_number_label}} <span class="required">*</span></label>
+                                            <label>{{localeData?.payment?.account_number_label}} <span
+                                                    class="required">*</span></label>
                                             <br>
-                                            <input type="text" [placeholder]="localeData?.payment?.account_number_placeholder" class="form-control" disabled formControlName="accountNo" name="accountNo" autocomplete="off" />
+                                            <input type="text"
+                                                [placeholder]="localeData?.payment?.account_number_placeholder"
+                                                class="form-control" disabled formControlName="accountNo"
+                                                name="accountNo" autocomplete="off" />
                                         </div>
                                         <div class="form-group col-xl-2 col-md-6 payment-col">
-                                            <label>{{localeData?.payment?.accounts}} <span class="required">*</span></label>
+                                            <label>{{localeData?.payment?.accounts}} <span
+                                                    class="required">*</span></label>
                                             <br>
-                                            <sh-select #paymentFormAccountName [options]="bankAccounts$ | async" name="accountUniqueName" formControlName="accountUniqueName" [placeholder]="commonLocaleData?.app_select_account" [ItemHeight]="33" autocomplete="off" [isRequired]="true">
+                                            <sh-select #paymentFormAccountName [options]="bankAccounts$ | async"
+                                                name="accountUniqueName" formControlName="accountUniqueName"
+                                                [placeholder]="commonLocaleData?.app_select_account" [ItemHeight]="33"
+                                                autocomplete="off" [isRequired]="true">
                                             </sh-select>
                                         </div>
                                         <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
@@ -419,12 +544,15 @@
                                             <br>
                                             <div class="btn-group btn-block select-caret invoice-btn" dropdown>
                                                 <button dropdownToggle type="button"
-                                                    class="form-control text-left btn-block dropdown-toggle">{{ getSelectedItemCount(usersList) || localeData?.payment?.select_user }}<span
-                                                        class="select-drop pull-right mr-t1"></span></button>
+                                                    class="form-control text-left btn-block dropdown-toggle">{{
+                                                    getSelectedItemCount(usersList) || localeData?.payment?.select_user
+                                                    }}<span class="select-drop pull-right mr-t1"></span></button>
                                                 <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
-                                                    <li *ngIf="usersList.length==0">{{commonLocaleData?.app_no_result_found}}</li>
+                                                    <li *ngIf="usersList.length==0">
+                                                        {{commonLocaleData?.app_no_result_found}}</li>
                                                     <li *ngFor="let user of usersList; index as userIndex">
-                                                        <input type="checkbox" (click)="selectUsers(user, $event, userIndex)"
+                                                        <input type="checkbox"
+                                                            (click)="selectUsers(user, $event, userIndex)"
                                                             [checked]="user.isSelected" /> {{user.label}}
                                                     </li>
                                                 </ul>
@@ -522,7 +650,8 @@
                                                 {{regAcc.registrationStatus}}<br>
                                             </ng-container>
                                             <br>
-                                            <button type="submit" [disabled]="!addBankForm.valid || isUpdateInvalid" class="btn btn-success mr-r1">{{commonLocaleData?.app_update}}</button>
+                                            <button type="submit" [disabled]="!addBankForm.valid || isUpdateInvalid"
+                                                class="btn btn-success mr-r1">{{commonLocaleData?.app_update}}</button>
                                         </div>
                                     </div>
                                 </form>
@@ -531,36 +660,52 @@
                             <form #paymentFormUpdate="ngForm" *ngIf="isBankUpdateInEdit !== parentIndex ">
                                 <div class="row">
                                     <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col pl-0">
-                                        <label>{{localeData?.payment?.login_id_label}} <span class="required">*</span></label>
+                                        <label>{{localeData?.payment?.login_id_label}} <span
+                                                class="required">*</span></label>
                                         <br>
-                                        <input type="text" [placeholder]="localeData?.payment?.login_id_placeholder" required name="loginId" class="form-control" [(ngModel)]="regAcc.loginId" disabled />
+                                        <input type="text" [placeholder]="localeData?.payment?.login_id_placeholder"
+                                            required name="loginId" class="form-control" [(ngModel)]="regAcc.loginId"
+                                            disabled />
 
                                     </div>
                                     <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                        <label>{{localeData?.payment?.account_number_label}} <span class="required">*</span></label>
+                                        <label>{{localeData?.payment?.account_number_label}} <span
+                                                class="required">*</span></label>
                                         <br>
 
-                                        <input type="text" [placeholder]="localeData?.payment?.account_number_placeholder" name="accountNo" required class="form-control" [(ngModel)]="regAcc.accountNo" disabled />
+                                        <input type="text"
+                                            [placeholder]="localeData?.payment?.account_number_placeholder"
+                                            name="accountNo" required class="form-control"
+                                            [(ngModel)]="regAcc.accountNo" disabled />
 
                                     </div>
-                                    <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col" *ngIf="bankAccounts$ && regAcc?.account?.uniqueName">
+                                    <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col"
+                                        *ngIf="bankAccounts$ && regAcc?.account?.uniqueName">
 
                                         <label>{{localeData?.payment?.accounts}} <span class="required">*</span></label>
                                         <br>
-                                        <sh-select *ngIf="bankAccounts$ && regAcc?.account?.uniqueName" [disabled]="isBankUpdateInEdit !== parentIndex" required [options]="bankAccounts$ | async" name="accountUniqueName" [defaultValue]="regAcc?.account?.name" [(ngModel)]="regAcc.account.uniqueName"
-                                        [placeholder]="commonLocaleData?.app_select_account" [ItemHeight]="33" autocomplete="off" [isRequired]="true"></sh-select>
+                                        <sh-select *ngIf="bankAccounts$ && regAcc?.account?.uniqueName"
+                                            [disabled]="isBankUpdateInEdit !== parentIndex" required
+                                            [options]="bankAccounts$ | async" name="accountUniqueName"
+                                            [defaultValue]="regAcc?.account?.name"
+                                            [(ngModel)]="regAcc.account.uniqueName"
+                                            [placeholder]="commonLocaleData?.app_select_account" [ItemHeight]="33"
+                                            autocomplete="off" [isRequired]="true"></sh-select>
                                     </div>
                                     <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                         <label>{{localeData?.payment?.user}}</label>
                                         <br>
                                         <div class="btn-group btn-block select-caret invoice-btn">
                                             <button disabled type="button"
-                                                class="form-control text-left btn-block dropdown-toggle"> {{regAcc?.selectedUsers?.length || localeData?.payment?.select_user}} <span
-                                                    class="select-drop pull-right mr-t1"></span></button>
+                                                class="form-control text-left btn-block dropdown-toggle">
+                                                {{regAcc?.selectedUsers?.length || localeData?.payment?.select_user}}
+                                                <span class="select-drop pull-right mr-t1"></span></button>
                                             <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
-                                                <li *ngIf="usersList.length==0">{{commonLocaleData?.app_no_result_found}}</li>
+                                                <li *ngIf="usersList.length==0">
+                                                    {{commonLocaleData?.app_no_result_found}}</li>
                                                 <li *ngFor="let user of usersList; index as userIndex">
-                                                    <input type="checkbox" (click)="selectUsers(user, $event, userIndex)"
+                                                    <input type="checkbox"
+                                                        (click)="selectUsers(user, $event, userIndex)"
                                                         [checked]="user.isSelected" /> {{user.label}}
                                                 </li>
                                             </ul>
@@ -640,7 +785,9 @@
                                             {{regAcc.registrationStatus}}<br>
                                         </ng-container>
                                         <ng-container *ngIf="isBankUpdateInEdit === parentIndex">
-                                            <button type="button" class="btn btn-success mr-r1" [disabled]="!paymentFormUpdate.form.valid" (click)="updateIciciDetails(regAcc, parentIndex)">{{commonLocaleData?.app_update}}</button>
+                                            <button type="button" class="btn btn-success mr-r1"
+                                                [disabled]="!paymentFormUpdate.form.valid"
+                                                (click)="updateIciciDetails(regAcc, parentIndex)">{{commonLocaleData?.app_update}}</button>
                                         </ng-container>
                                     </div>
                                 </div>
@@ -655,7 +802,9 @@
                                     </div>
                                 </div>
                             </div> -->
-                            <a href="javascript:;" class="text-right btn btn-primary" (click)="showBeneficiaryModal(regAcc.URN)"> {{localeData?.payment?.list_beneficiary}} </a>
+                            <a href="javascript:;" class="text-right btn btn-primary"
+                                (click)="showBeneficiaryModal(regAcc.URN)"> {{localeData?.payment?.list_beneficiary}}
+                            </a>
                         </div>
                         <br *ngIf="parentIndex !== (registeredAccount?.length - 1) || openNewRegistration" />
                     </div>
@@ -786,24 +935,35 @@
                     </div> -->
                     <!-- Create or add bank account end -->
                     <div *ngIf="openNewRegistration" class="box clearfix mb-2">
-                        <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm.value)" *ngIf="!(isPaymentAdditionSuccess$ | async)">
+                        <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm.value)"
+                            *ngIf="!(isPaymentAdditionSuccess$ | async)">
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col amount-upto">
                                     <div>
-                                        <label>{{localeData?.payment?.login_id_label}} <span class="required">*</span></label>
+                                        <label>{{localeData?.payment?.login_id_label}} <span
+                                                class="required">*</span></label>
                                         <br>
-                                        <input type="text" [placeholder]="localeData?.payment?.login_id_placeholder" class="form-control" formControlName="loginId" name="loginId" autocomplete="off" />
+                                        <input type="text" [placeholder]="localeData?.payment?.login_id_placeholder"
+                                            class="form-control" formControlName="loginId" name="loginId"
+                                            autocomplete="off" />
                                     </div>
                                 </div>
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                    <label>{{localeData?.payment?.account_number_label}} <span class="required">*</span></label>
+                                    <label>{{localeData?.payment?.account_number_label}} <span
+                                            class="required">*</span></label>
                                     <br>
-                                    <input type="text" [placeholder]="localeData?.payment?.account_number_placeholder" class="form-control" formControlName="accountNo" name="accountNo" autocomplete="off" />
+                                    <input type="text" [placeholder]="localeData?.payment?.account_number_placeholder"
+                                        class="form-control" formControlName="accountNo" name="accountNo"
+                                        autocomplete="off" />
                                 </div>
                                 <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col">
                                     <label>{{localeData?.payment?.accounts}} <span class="required">*</span></label>
                                     <br>
-                                    <sh-select #paymentFormAccountName [options]="bankAccounts$ | async" name="accountUniqueName" formControlName="accountUniqueName" [forceClearReactive]="forceClear$ | async" [placeholder]="commonLocaleData?.app_select_account" [ItemHeight]="33" autocomplete="off" [isRequired]="true">
+                                    <sh-select #paymentFormAccountName [options]="bankAccounts$ | async"
+                                        name="accountUniqueName" formControlName="accountUniqueName"
+                                        [forceClearReactive]="forceClear$ | async"
+                                        [placeholder]="commonLocaleData?.app_select_account" [ItemHeight]="33"
+                                        autocomplete="off" [isRequired]="true">
                                     </sh-select>
                                 </div>
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
@@ -811,10 +971,12 @@
                                     <br>
                                     <div class="btn-group btn-block select-caret invoice-btn" dropdown>
                                         <button dropdownToggle type="button"
-                                            class="form-control text-left btn-block dropdown-toggle">{{ getSelectedItemCount(usersList) || localeData?.payment?.select_user }}<span
+                                            class="form-control text-left btn-block dropdown-toggle">{{
+                                            getSelectedItemCount(usersList) || localeData?.payment?.select_user }}<span
                                                 class="select-drop pull-right mr-t1"></span></button>
                                         <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
-                                            <li *ngIf="usersList.length==0">{{commonLocaleData?.app_no_result_found}}</li>
+                                            <li *ngIf="usersList.length==0">{{commonLocaleData?.app_no_result_found}}
+                                            </li>
                                             <li *ngFor="let user of usersList; index as userIndex">
                                                 <input type="checkbox" (click)="selectUsers(user, $event, userIndex)"
                                                     [checked]="user.isSelected" /> {{user.label}}
@@ -911,7 +1073,8 @@
                             <div class="form-group">
                                 <div class="empty-label">
                                     <br>
-                                    <button type="submit" [disabled]="addBankForm.invalid || isCreateInvalid" class="btn btn-success mr-r1">{{commonLocaleData?.app_submit}}</button>
+                                    <button type="submit" [disabled]="addBankForm.invalid || isCreateInvalid"
+                                        class="btn btn-success mr-r1">{{commonLocaleData?.app_submit}}</button>
                                 </div>
                             </div>
                         </form>
@@ -925,12 +1088,18 @@
                             </div>
                         </div>
                     </div>
-                    <p class="mt-2 mb-4 font-14"><a href="https://cadigital.icicibank.com/SmartFormWeb/apps/services/www/SmartFormWeb/desktopbrowser/default/index.html?source=BC-application-Giddh#/" target="_blank">{{localeData?.payment?.open_new_current_account}}</a></p>
-                    <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" class="btn btn-sky-blue mr-r1" (click)="openNewRegistartionForm()">{{localeData?.payment?.add_more}}</button>
+                    <p class="mt-2 mb-4 font-14"><a
+                            href="https://cadigital.icicibank.com/SmartFormWeb/apps/services/www/SmartFormWeb/desktopbrowser/default/index.html?source=BC-application-Giddh#/"
+                            target="_blank">{{localeData?.payment?.open_new_current_account}}</a></p>
+                    <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)"
+                        class="btn btn-sky-blue mr-r1"
+                        (click)="openNewRegistartionForm()">{{localeData?.payment?.add_more}}</button>
                 </div>
             </tab>
         </tabset>
     </div>
     <div class="aside-overlay" *ngIf="beneficiaryAsideState === 'in'"></div>
-    <beneficiary *ngIf="beneficiaryAsideState === 'in' && activeUrn" [urn]="activeUrn" (closeAsideEvent)="hideBeneficiaryModal($event)" [class]="beneficiaryAsideState" [@slideInOut]="beneficiaryAsideState"></beneficiary>
+    <beneficiary *ngIf="beneficiaryAsideState === 'in' && activeUrn" [urn]="activeUrn"
+        (closeAsideEvent)="hideBeneficiaryModal($event)" [class]="beneficiaryAsideState"
+        [@slideInOut]="beneficiaryAsideState"></beneficiary>
 </ng-container>

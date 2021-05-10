@@ -54,7 +54,7 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             return state;
         }
         case PERMISSION_ACTIONS.CREATE_ROLE: {
-            return {...state, addUpdateRoleInProcess: true};
+            return { ...state, addUpdateRoleInProcess: true };
         }
         case PERMISSION_ACTIONS.CREATE_ROLE_RESPONSE: {
             let newState = _.cloneDeep(state);
@@ -63,19 +63,19 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             if (res.status === 'success') {
                 newState.roles.push(res.body);
             }
-            return {...state, ...newState};
+            return { ...state, ...newState };
         }
         case PERMISSION_ACTIONS.UPDATE_ROLE: {
-            return {...state, addUpdateRoleInProcess: true};
+            return { ...state, addUpdateRoleInProcess: true };
         }
         case PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE: {
             let newState = _.cloneDeep(state);
             let roleIndx = newState.roles.findIndex((role) => role.uniqueName === action.payload.roleUniqueName);
             if (roleIndx > -1) {
                 newState.roles[roleIndx] = action.payload;
-                return {...state, ...newState, addUpdateRoleInProcess: false};
+                return { ...state, ...newState, addUpdateRoleInProcess: false };
             } else {
-                return {...state, addUpdateRoleInProcess: false};
+                return { ...state, addUpdateRoleInProcess: false };
             }
         }
         case PERMISSION_ACTIONS.DELETE_ROLE: {
@@ -124,7 +124,7 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             return Object.assign({}, state, newState);
         }
         case AccountsAction.SHARE_ENTITY: {
-            return Object.assign({}, state, {createPermissionInProcess: true, createPermissionSuccess: false});
+            return Object.assign({}, state, { createPermissionInProcess: true, createPermissionSuccess: false });
         }
         case AccountsAction.SHARE_ENTITY_RESPONSE: {
             let res = action.payload;
@@ -139,7 +139,7 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             }
         }
         case AccountsAction.RESET_SHARE_ENTITY: {
-            return Object.assign({}, state, {createPermissionInProcess: false, createPermissionSuccess: false});
+            return Object.assign({}, state, { createPermissionInProcess: false, createPermissionSuccess: false });
         }
         default: {
             return state;

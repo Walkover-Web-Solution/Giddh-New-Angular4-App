@@ -27,7 +27,7 @@ export class GstrSidebarComponent {
     constructor(
         private router: Router,
         private generalService: GeneralService
-    ) {}
+    ) { }
 
     /**
     * This will close the settings popup if clicked outside and is mobile screen

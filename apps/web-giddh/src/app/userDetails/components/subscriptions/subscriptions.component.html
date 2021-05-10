@@ -5,21 +5,29 @@
                 <div class="form-group subscription-dropdown-wrapper mb-0">
                     <div class="btn-group d-block subscription-dropdown mb-0 open custom-input-search">
                         <i class="icon-search"></i>
-                        <input type="text" class="form-control" placeholder="Search Subscribed Plan" (focus)="showSubscribedPlansList = true;" (focusout)="showSubscribedPlansList = false;" [(ngModel)]="searchSubscribedPlan" (ngModelChange)="searchPlan($event)">
-                        <ul id="dropdown-basic" class="dropdown-menu" role="menu" aria-labelledby="button-basic" *ngIf="showSubscribedPlansList">
+                        <input type="text" class="form-control" placeholder="Search Subscribed Plan"
+                            (focus)="showSubscribedPlansList = true;" (focusout)="showSubscribedPlansList = false;"
+                            [(ngModel)]="searchSubscribedPlan" (ngModelChange)="searchPlan($event)">
+                        <ul id="dropdown-basic" class="dropdown-menu" role="menu" aria-labelledby="button-basic"
+                            *ngIf="showSubscribedPlansList">
                             <li *ngIf="subscriptions.length==0">No results found</li>
                             <li *ngFor="let item of subscriptions" [ngClass]="{'active': seletedUserPlans == item}"
-                            role="menuitem" class="cursor-pointer">
+                                role="menuitem" class="cursor-pointer">
                                 <a (click)="selectedSubscriptionPlan(item);">
                                     <div class="clearfix">
                                         <p><strong>{{item?.planDetails?.name}}</strong></p>
                                         <p *ngIf="item.subscriptionId">Subscription ID: {{item.subscriptionId}} </p>
-                                        <p>Subscribed on {{item.startedAt ? (formatDate(item.startedAt) | date: giddhDateFormatUI) : '-'}} </p>
-                                        <p>Companies: {{item?.totalCompanies | number}} out of {{item?.planDetails?.companiesLimit | number}} </p>
+                                        <p>Subscribed on {{item.startedAt ? (formatDate(item.startedAt) | date:
+                                            giddhDateFormatUI) : '-'}} </p>
+                                        <p>Companies: {{item?.totalCompanies | number}} out of
+                                            {{item?.planDetails?.companiesLimit | number}} </p>
                                     </div>
-                                    <span class="text-warning" *ngIf="item?.status==='trial'">{{item?.status | titlecase}}</span>
-                                    <span class="text-success" *ngIf="item?.status==='active'">{{item?.status | titlecase}}</span>
-                                    <span class="text-danger" *ngIf="item?.status==='expired'">{{item?.status | titlecase}}</span>
+                                    <span class="text-warning" *ngIf="item?.status==='trial'">{{item?.status |
+                                        titlecase}}</span>
+                                    <span class="text-success" *ngIf="item?.status==='active'">{{item?.status |
+                                        titlecase}}</span>
+                                    <span class="text-danger" *ngIf="item?.status==='expired'">{{item?.status |
+                                        titlecase}}</span>
                                 </a>
                             </li>
                         </ul>
@@ -69,7 +77,8 @@
 
                                         <!-- <button type="button" class="btn btn-primary" (click)="isPlanShow=true">Buy
                                             Transactions</button> -->
-                                        <button type="button" class="btn btn-success" *ngIf="seletedUserPlans?.planDetails?.uniqueName !== defaultTrialPlan"
+                                        <button type="button" class="btn btn-success"
+                                            *ngIf="seletedUserPlans?.planDetails?.uniqueName !== defaultTrialPlan"
                                             (click)="renewPlan()">Renew</button>
 
                                         <div class="btn-group d-inline-block custom-dropdown ml-1" dropdown
@@ -88,7 +97,8 @@
                                                     <a class="dropdown-item" href="javascript:void(0)"
                                                         (click)="isPlanShow=true">Upgrade Plan</a>
                                                 </li>
-                                                <li role="menuitem" *ngIf="seletedUserPlans?.planDetails?.uniqueName !== defaultTrialPlan">
+                                                <li role="menuitem"
+                                                    *ngIf="seletedUserPlans?.planDetails?.uniqueName !== defaultTrialPlan">
                                                     <a class="dropdown-item" href="javascript:void(0)"
                                                         (click)="isPlanShow=true">Downgrade Plan</a>
                                                 </li>
@@ -126,7 +136,10 @@
                                                 <td>
                                                     <!-- {{seletedUserPlans?.planDetails?.amount | number}} -->
                                                     <span class="d-inline-flex">
-                                                        <amount-field [amount]="(seletedUserPlans?.planDetails?.amount |  number)" [currencySymbol]="false" [currencyCode]="false" [useGiddhCurrencyPipe]="false">
+                                                        <amount-field
+                                                            [amount]="(seletedUserPlans?.planDetails?.amount |  number)"
+                                                            [currencySymbol]="false" [currencyCode]="false"
+                                                            [useGiddhCurrencyPipe]="false">
                                                         </amount-field>
                                                     </span>
                                                 </td>
@@ -150,7 +163,8 @@
                                 </div>
                             </div>
 
-                            <h2 class="section-head pb-0">{{seletedUserPlans?.planDetails?.name}} (Transactions Statement)</h2>
+                            <h2 class="section-head pb-0">{{seletedUserPlans?.planDetails?.name}} (Transactions
+                                Statement)</h2>
 
                             <div class="table-subscription mt-1 xs-mb-2">
                                 <div class="table-responsive">
@@ -166,9 +180,13 @@
                                         <tbody *ngIf="seletedUserPlans">
                                             <tr>
                                                 <!-- <td data-title="Date">{{ moment(transaction.from, giddhDateFormat).format('MMM - YY')}}</td> -->
-                                                <td data-title="Consumptions">{{ seletedUserPlans?.totalTransactions ? (seletedUserPlans?.totalTransactions | number) : 0 }}</td>
-                                                <td data-title="Balance">{{ seletedUserPlans?.remainingTransactions || 0 }}</td>
-                                                <td data-title="Additional Charges" class="text-right">{{ seletedUserPlans?.additionalCharges? (seletedUserPlans?.additionalCharges | number) : 0 }}</td>
+                                                <td data-title="Consumptions">{{ seletedUserPlans?.totalTransactions ?
+                                                    (seletedUserPlans?.totalTransactions | number) : 0 }}</td>
+                                                <td data-title="Balance">{{ seletedUserPlans?.remainingTransactions || 0
+                                                    }}</td>
+                                                <td data-title="Additional Charges" class="text-right">{{
+                                                    seletedUserPlans?.additionalCharges?
+                                                    (seletedUserPlans?.additionalCharges | number) : 0 }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -191,13 +209,16 @@
                             <div class="d-flex justify-content-between pl-2 pr-2 associated-company-heading">
                                 <h2 class="section-head pb-0">Associated Companies</h2>
                                 <div class="clearfix">
-                                    <div class="active d-inline-block middle" *ngIf="activeCompany?.subscription?.status === 'active' || calculateRemainingDays(activeCompany?.subscription?.expiry) === 'Active'">
+                                    <div class="active d-inline-block middle"
+                                        *ngIf="activeCompany?.subscription?.status === 'active' || calculateRemainingDays(activeCompany?.subscription?.expiry) === 'Active'">
                                         <span class="green-dote"> </span> Active
                                     </div>
-                                    <div class="text-warning font-14 d-inline-block middle" *ngIf="activeCompany?.subscription?.status === 'trial' && calculateRemainingDays(activeCompany?.subscription?.expiry) !== 'Active'">
+                                    <div class="text-warning font-14 d-inline-block middle"
+                                        *ngIf="activeCompany?.subscription?.status === 'trial' && calculateRemainingDays(activeCompany?.subscription?.expiry) !== 'Active'">
                                         <span class="orange-dote"> </span> Trial
                                     </div>
-                                    <div class="text-danger d-inline-block middle" *ngIf="activeCompany?.subscription?.status === 'expired'">
+                                    <div class="text-danger d-inline-block middle"
+                                        *ngIf="activeCompany?.subscription?.status === 'expired'">
                                         <span class="red-dot"> </span> Expired
                                     </div>
                                     <!-- <div class="btn-group d-inline-block custom-dropdown pd-t05 ml-1 middle" dropdown
@@ -223,26 +244,34 @@
                                 <div class="mr-t15 mr-b1 pl-2 pr-2 pr-1 search-company-here" *ngIf="subscriptions">
                                     <div class="form-group custom-input-search">
                                         <i class="icon-search"></i>
-                                        <input type="search" class="form-control" [(ngModel)]="searchString" (ngModelChange)="filterCompanyList($event)" placeholder="Search Company here">
+                                        <input type="search" class="form-control" [(ngModel)]="searchString"
+                                            (ngModelChange)="filterCompanyList($event)"
+                                            placeholder="Search Company here">
                                     </div>
                                 </div>
                                 <div class="associated-companies" *ngIf="subscriptions && activeTab === 'subscription'">
                                     <ul>
                                         <cdk-virtual-scroll-viewport [itemSize]="48">
-                                            <li *cdkVirtualFor="let company of companyListForFilter; let i = index" class="associated-companies-li">
-                                                <a href="javascript:void(0)" (click)="toggleCompanyDetailsAsidePane(company)">
+                                            <li *cdkVirtualFor="let company of companyListForFilter; let i = index"
+                                                class="associated-companies-li">
+                                                <a href="javascript:void(0)"
+                                                    (click)="toggleCompanyDetailsAsidePane(company)">
                                                     <span>{{i+1}}</span>
                                                     <div class="d-flex associated-company-name">
                                                         <p>
-                                                            <img src="assets/images/blue-check.svg" class="mr-r05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">
-                                                            {{company.name}} {{(company.alias) ? "(" + company.alias + ")" : ""}}
+                                                            <img src="assets/images/blue-check.svg" class="mr-r05"
+                                                                *ngIf="activeCompany?.uniqueName === company?.uniqueName">
+                                                            {{company.name}} {{(company.alias) ? "(" + company.alias +
+                                                            ")" : ""}}
                                                         </p>
-                                                        <p class="font-12 mr-t05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">(Current Company)</p>
+                                                        <p class="font-12 mr-t05"
+                                                            *ngIf="activeCompany?.uniqueName === company?.uniqueName">
+                                                            (Current Company)</p>
                                                     </div>
                                                 </a>
 
-                                                <div class="btn-group custom-dropdown"
-                                                    dropdown placement="bottom right" container="body">
+                                                <div class="btn-group custom-dropdown" dropdown placement="bottom right"
+                                                    container="body">
                                                     <button id="button-alignment" dropdownToggle type="button"
                                                         class="dropdown-toggle" aria-controls="dropdown-alignment">
                                                         <span class="icon-dots-three-vertical"></span>
@@ -251,7 +280,8 @@
                                                         class="dropdown-menu dropdown-menu-right" role="menu"
                                                         aria-labelledby="button-alignment">
                                                         <li role="menuitem">
-                                                            <a class="dropdown-item" (click)="openModalMove(MoveCompany, company)"
+                                                            <a class="dropdown-item"
+                                                                (click)="openModalMove(MoveCompany, company)"
                                                                 href="javascript:void(0)">Move Company </a>
                                                         </li>
                                                         <!-- <li role="menuitem">
@@ -267,7 +297,8 @@
                                 </div>
 
                                 <div class="pl-2 mt-3 buy-transactions">
-                                    <button class="btn btn-primary" type="button" (click)="openAddCompanyModal(AddCompany)">Add Company</button>
+                                    <button class="btn btn-primary" type="button"
+                                        (click)="openAddCompanyModal(AddCompany)">Add Company</button>
                                 </div>
                             </div>
                         </div>
@@ -349,18 +380,32 @@
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <p class="bold font-14">{{item?.planDetails?.name}}</p>
                         <ul class="list-inline plan-list font-14">
-                            <li *ngIf="item?.status==='expired'"><span>Expired On: </span><span>{{item.expiry ? (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </span></li>
-                            <li *ngIf="item.subscriptionId && item?.status !== 'expired'"><span>Subscription ID: </span> <span> {{item.subscriptionId}}</span> </li>
-                            <li *ngIf="item?.status!=='expired'"><span>Assigned On: </span> <span>{{item.createdAt ? (formatDate(item.createdAt) | date: giddhDateFormatUI) : '-'}} </span></li>
-                            <li *ngIf="item?.status!=='expired'"><span>Expiry Date: </span><span>{{item.expiry ? (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </span></li>
-                            <li *ngIf="item?.status!=='expired'"><span>No. of companies: </span> <span>{{item?.totalCompanies | number}}/{{item?.planDetails?.companiesLimit | number}}</span></li>
-                            <li *ngIf="item?.status!=='expired'"><span>Transaction Limit: </span> <span>{{item?.planDetails?.transactionLimit ? (item?.planDetails?.transactionLimit | number) : '0'}}</span></li>
+                            <li *ngIf="item?.status==='expired'"><span>Expired On: </span><span>{{item.expiry ?
+                                    (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </span></li>
+                            <li *ngIf="item.subscriptionId && item?.status !== 'expired'"><span>Subscription ID: </span>
+                                <span> {{item.subscriptionId}}</span> </li>
+                            <li *ngIf="item?.status!=='expired'"><span>Assigned On: </span> <span>{{item.createdAt ?
+                                    (formatDate(item.createdAt) | date: giddhDateFormatUI) : '-'}} </span></li>
+                            <li *ngIf="item?.status!=='expired'"><span>Expiry Date: </span><span>{{item.expiry ?
+                                    (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </span></li>
+                            <li *ngIf="item?.status!=='expired'"><span>No. of companies: </span>
+                                <span>{{item?.totalCompanies | number}}/{{item?.planDetails?.companiesLimit |
+                                    number}}</span></li>
+                            <li *ngIf="item?.status!=='expired'"><span>Transaction Limit: </span>
+                                <span>{{item?.planDetails?.transactionLimit ? (item?.planDetails?.transactionLimit |
+                                    number) : '0'}}</span></li>
                         </ul>
                     </div>
                     <div class="col-md-3 col-sm-3 col-xs-12 text-right trial-plan-state">
-                        <div class="font-14" [ngClass]="{'active': calculateRemainingDays(item?.expiry) === 'Active'}" *ngIf="item?.status==='trial'"><span class="font-26" *ngIf="calculateRemainingDays(item?.expiry) !== 'Active'">{{calculateRemainingDays(item?.expiry)}}</span> <span class="green-dote" *ngIf="calculateRemainingDays(item?.expiry) === 'Active'"></span> {{calculateRemainingDays(item?.expiry) === 'Active' ? 'Active' : ""}} </div>
-                        <div class="active font-14" *ngIf="item?.status==='active'"><span class="green-dote"></span> {{item?.status | titlecase}} </div>
-                        <div class="text-danger font-14" *ngIf="item?.status==='expired'"><span class="red-dot"></span> {{item?.status | titlecase}} </div>
+                        <div class="font-14" [ngClass]="{'active': calculateRemainingDays(item?.expiry) === 'Active'}"
+                            *ngIf="item?.status==='trial'"><span class="font-26"
+                                *ngIf="calculateRemainingDays(item?.expiry) !== 'Active'">{{calculateRemainingDays(item?.expiry)}}</span>
+                            <span class="green-dote" *ngIf="calculateRemainingDays(item?.expiry) === 'Active'"></span>
+                            {{calculateRemainingDays(item?.expiry) === 'Active' ? 'Active' : ""}} </div>
+                        <div class="active font-14" *ngIf="item?.status==='active'"><span class="green-dote"></span>
+                            {{item?.status | titlecase}} </div>
+                        <div class="text-danger font-14" *ngIf="item?.status==='expired'"><span class="red-dot"></span>
+                            {{item?.status | titlecase}} </div>
                     </div>
                 </div>
             </div>
@@ -415,7 +460,8 @@
 </ng-template> -->
 <!-- Modal end -->
 
-<subscriptions-plans *ngIf="isPlanShow" [subscriptions]="subscriptions" (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)"></subscriptions-plans>
+<subscriptions-plans *ngIf="isPlanShow" [subscriptions]="subscriptions"
+    (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)"></subscriptions-plans>
 
 <!-- activity-log-sidebar aside -->
 <!-- <div class="aside-overlay" *ngIf="activityLogAsideMenuState === 'in'"></div>
@@ -423,16 +469,20 @@
 
 <!-- activity-log-sidebar aside -->
 <div class="aside-overlay" *ngIf="companyDetailsAsideMenuState === 'in'"></div>
-<company-details-sidebar [class]="companyDetailsAsideMenuState" *ngIf="companyDetailsAsideMenuState === 'in' && selectedCompany" (closeEvent)="toggleCompanyDetailsAsidePane()" [selectedCompany]="selectedCompany" (closeEvent)="hideCompanyDetails($event);"></company-details-sidebar>
+<company-details-sidebar [class]="companyDetailsAsideMenuState"
+    *ngIf="companyDetailsAsideMenuState === 'in' && selectedCompany" (closeEvent)="toggleCompanyDetailsAsidePane()"
+    [selectedCompany]="selectedCompany" (closeEvent)="hideCompanyDetails($event);"></company-details-sidebar>
 
 <!-- MoveCompany Modal -->
 <ng-template #MoveCompany>
-    <move-company (moveCompany)="addOrMoveCompanyCallback($event)" [subscriptions]="subscriptions" [moveSelectedCompany]="selectedCompany"></move-company>
+    <move-company (moveCompany)="addOrMoveCompanyCallback($event)" [subscriptions]="subscriptions"
+        [moveSelectedCompany]="selectedCompany"></move-company>
 </ng-template>
 
 <!-- deactivate Company Modal -->
 <ng-template #AddCompany>
-    <add-company [allAssociatedCompanies]="allAssociatedCompanies" [activeCompany]="activeCompany" (addCompany)="addOrMoveCompanyCallback($event)"></add-company>
+    <add-company [allAssociatedCompanies]="allAssociatedCompanies" [activeCompany]="activeCompany"
+        (addCompany)="addOrMoveCompanyCallback($event)"></add-company>
 </ng-template>
 
 <!-- deactivate Company Modal -->

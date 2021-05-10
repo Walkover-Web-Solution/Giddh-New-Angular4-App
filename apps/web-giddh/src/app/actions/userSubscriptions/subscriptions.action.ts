@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { Router } from '@angular/router';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -22,28 +22,28 @@ export class SubscriptionsActions {
     public static SubscribedCompaniesListResponse = 'SubscribedCompaniesListResponse';
 
 
-    public SubscriptionsActions: Observable<Action> =createEffect( ()=>  this.actions$
+    public SubscriptionsActions: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(SubscriptionsActions.SubscribedCompanies),
             switchMap((action: CustomActions) => this.subscriptions.getSubScribedCompanies()),
             map(response => this.SubscribedCompaniesResponse(response))));
 
 
-    public SubscribedUserTransactions$: Observable<Action> =createEffect( ()=>  this.actions$
+    public SubscribedUserTransactions$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(SubscriptionsActions.SubscribedUserTransactions),
             switchMap((action: CustomActions) => this.subscriptions.GetSubScribedUserTransaction(action.payload)),
             map(response => this.SubscribedUserTransactionsResponse(response))));
 
 
-    public SubscribedCompanyTransactions$: Observable<Action> =createEffect( ()=>  this.actions$
+    public SubscribedCompanyTransactions$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(SubscriptionsActions.SubscribedCompanyTransactions),
             switchMap((action: CustomActions) => this.subscriptions.GetSubScribedCompanyTransaction(action.payload)),
             map(response => this.SubscribedCompanyTransactionsResponse(response))));
 
 
-    public SubscribedCompaniesList$: Observable<Action> =createEffect( ()=>  this.actions$
+    public SubscribedCompaniesList$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(SubscriptionsActions.SubscribedCompaniesList),
             switchMap((action: CustomActions) => this.subscriptions.GetSubscribedCompaniesList(action.payload)),

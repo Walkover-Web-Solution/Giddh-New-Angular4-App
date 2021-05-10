@@ -16,7 +16,7 @@
         margin-bottom: 10px;
         border-bottom: none !important;
     }
-    .custom-select{
+    .custom-select {
         width: 40%;
         border: 1px solid $gainsboro !important;
         select.form-control {
@@ -49,7 +49,7 @@
         display: flex;
         white-space: normal;
         word-break: break-all;
-        i{
+        i {
             position: relative;
             top: 3px;
         }
@@ -65,7 +65,7 @@
     }
 }
 
-.selected-permission{
+.selected-permission {
     width: calc(100% - 123px) !important;
     min-width: 200px;
     margin-right: 10px;

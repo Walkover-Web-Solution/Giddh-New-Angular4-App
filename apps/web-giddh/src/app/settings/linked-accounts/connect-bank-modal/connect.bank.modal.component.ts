@@ -206,7 +206,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
         this.cancelRequest = true;
         this.bankSyncInProgress = false;
         this.isRefreshWithCredentials = true;
-        this.forceClearReactive$ = of({status: true});
+        this.forceClearReactive$ = of({ status: true });
     }
 
     /**

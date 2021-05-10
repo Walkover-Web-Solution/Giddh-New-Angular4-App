@@ -71,7 +71,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
     @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
     @Output() public closeOtherPopupEvent: EventEmitter<boolean> = new EventEmitter();
-    @ViewChild('taxListUl', {static: true}) public taxListUl: ElementRef;
+    @ViewChild('taxListUl', { static: true }) public taxListUl: ElementRef;
 
     public taxList: ITaxList[] = [];
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

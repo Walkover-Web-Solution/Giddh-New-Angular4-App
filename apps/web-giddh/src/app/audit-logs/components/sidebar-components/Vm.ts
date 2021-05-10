@@ -6,33 +6,33 @@ import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWit
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 export class AuditLogsSidebarVM {
-	public user$: Observable<UserDetails>;
-	public accounts$: Observable<IOption[]>;
-	public groupsList$: Observable<GroupsWithAccountsResponse[]>;
-	public groups$: Observable<IOption[]>;
-	public users$: Observable<IOption[]>;
-	public options: Select2Options = {};
-	public moment = moment;
-	public maxDate: Date = moment().toDate();
-	public filters: IOption[];
-	public entities: IOption[];
-	public selectedCompany: Observable<CompanyResponse>;
-	public getLogsInprocess$: Observable<boolean>;
-	public dateOptions: IOption[];
-	public showLogDatePicker: boolean = false;
-	public canManageCompany: boolean = false;
-	public selectedOperation: string = '';
-	public selectedEntity: string = '';
-	public selectedUserUnq: string = '';
-	public selectedAccountUnq: string = '';
-	public selectedGroupUnq: string = '';
-	public selectedFromDate: Date;
-	public selectedToDate: Date;
-	public selectedLogDate: Date;
-	public selectedEntryDate: Date;
-	public logOrEntry: string = 'entryDate';
+    public user$: Observable<UserDetails>;
+    public accounts$: Observable<IOption[]>;
+    public groupsList$: Observable<GroupsWithAccountsResponse[]>;
+    public groups$: Observable<IOption[]>;
+    public users$: Observable<IOption[]>;
+    public options: Select2Options = {};
+    public moment = moment;
+    public maxDate: Date = moment().toDate();
+    public filters: IOption[];
+    public entities: IOption[];
+    public selectedCompany: Observable<CompanyResponse>;
+    public getLogsInprocess$: Observable<boolean>;
+    public dateOptions: IOption[];
+    public showLogDatePicker: boolean = false;
+    public canManageCompany: boolean = false;
+    public selectedOperation: string = '';
+    public selectedEntity: string = '';
+    public selectedUserUnq: string = '';
+    public selectedAccountUnq: string = '';
+    public selectedGroupUnq: string = '';
+    public selectedFromDate: Date;
+    public selectedToDate: Date;
+    public selectedLogDate: Date;
+    public selectedEntryDate: Date;
+    public logOrEntry: string = 'entryDate';
     public selectedDateOption: string = '0';
-    
+
     constructor(private localeData, private commonLocaleData) {
         this.options = {
             multiple: false,
@@ -71,19 +71,19 @@ export class AuditLogsSidebarVM {
         ];
     }
 
-	public reset() {
-		this.showLogDatePicker = false;
-		this.canManageCompany = false;
-		this.selectedOperation = '';
-		this.selectedEntity = '';
-		this.selectedUserUnq = '';
-		this.selectedAccountUnq = '';
-		this.selectedGroupUnq = '';
-		this.selectedFromDate = moment().toDate();
-		this.selectedToDate = moment().toDate();
-		this.selectedLogDate = moment().toDate();
-		this.selectedEntryDate = moment().toDate();
-		this.logOrEntry = 'entryDate';
-		this.selectedDateOption = '';
-	}
+    public reset() {
+        this.showLogDatePicker = false;
+        this.canManageCompany = false;
+        this.selectedOperation = '';
+        this.selectedEntity = '';
+        this.selectedUserUnq = '';
+        this.selectedAccountUnq = '';
+        this.selectedGroupUnq = '';
+        this.selectedFromDate = moment().toDate();
+        this.selectedToDate = moment().toDate();
+        this.selectedLogDate = moment().toDate();
+        this.selectedEntryDate = moment().toDate();
+        this.logOrEntry = 'entryDate';
+        this.selectedDateOption = '';
+    }
 }

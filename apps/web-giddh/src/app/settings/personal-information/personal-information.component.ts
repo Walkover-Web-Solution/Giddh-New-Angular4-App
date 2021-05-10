@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
-import { debounceTime, takeUntil} from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 
 import { OrganizationType } from '../../models/user-login-state';
 import { OrganizationProfile } from '../constants/settings.constant';
@@ -50,7 +50,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor() {}
+    constructor() { }
 
     /**
      * Initializes the component
@@ -61,7 +61,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
         this.saveProfileSubject.pipe(debounceTime(2000), takeUntil(this.destroyed$)).subscribe(() => {
             this.saveProfile.emit(this.updatedData);
         });
-        
+
     }
     /**
      * Unsubscribes from listeners

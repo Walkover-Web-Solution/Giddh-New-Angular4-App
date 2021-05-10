@@ -1,13 +1,17 @@
-<form class="horizontal-form ng-pristine ng-valid ng-valid-required manage-group-account-form" id="groupDetailForm" name="groupDetailForm" novalidate [formGroup]="groupDetailForm" (submit)="updateGroup()">
+<form class="horizontal-form ng-pristine ng-valid ng-valid-required manage-group-account-form" id="groupDetailForm"
+    name="groupDetailForm" novalidate [formGroup]="groupDetailForm" (submit)="updateGroup()">
     <div class="container-fluid mr-t1">
         <div class="row">
             <div class="form-group col-xs-12 col-sm-6">
                 <label>{{localeData?.group_name_label}}</label>
-                <input type="text" class="form-control" #autoFocused [placeholder]="localeData?.group_name_placeholder" formControlName="name">
+                <input type="text" class="form-control" #autoFocused [placeholder]="localeData?.group_name_placeholder"
+                    formControlName="name">
             </div>
             <div class="form-group col-xs-12 col-sm-6">
                 <label>{{commonLocaleData?.app_unique_name}}</label>
-                <input type="text" class="form-control" [control]="groupDetailForm.get('uniqueName')" textCaseChangeDirective UniqueNameDirective [placeholder]="commonLocaleData?.app_unique_name_placeholder" formControlName="uniqueName">
+                <input type="text" class="form-control" [control]="groupDetailForm.get('uniqueName')"
+                    textCaseChangeDirective UniqueNameDirective
+                    [placeholder]="commonLocaleData?.app_unique_name_placeholder" formControlName="uniqueName">
             </div>
         </div>
 
@@ -26,14 +30,20 @@
             <div class="form-group col-xs-12 col-sm-6" *ngIf="!((activeGroup$ | async)?.fixed)">
                 <label for="" class="some">{{localeData?.balance_for_trigger}}</label>
                 <div [ngClass]="{'input-group': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">
-                    <input type="number" min="0" class="form-control text-right" formControlName="closingBalanceTriggerAmount" [placeholder]="commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero+'.'+commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero" />
+                    <input type="number" min="0" class="form-control text-right"
+                        formControlName="closingBalanceTriggerAmount"
+                        [placeholder]="commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero+'.'+commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero" />
                     <div class="input-group-addon" (click)="closingBalanceTypeChanged('DEBIT')" [ngClass]="
             {'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
-            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}" *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0">{{commonLocaleData?.app_dr?.toUpperCase()}}
+            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}"
+                        *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0">
+                        {{commonLocaleData?.app_dr?.toUpperCase()}}
                     </div>
                     <div class="input-group-addon" (click)="closingBalanceTypeChanged('CREDIT')" [ngClass]="
             {'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
-            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}" *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0">{{commonLocaleData?.app_cr?.toUpperCase()}}
+            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}"
+                        *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0">
+                        {{commonLocaleData?.app_cr?.toUpperCase()}}
                     </div>
                 </div>
             </div>
@@ -42,15 +52,20 @@
 
         <div class="form-group clearfix">
             <label>{{localeData?.description_label}}</label>
-            <textarea maxlength="200" rows="5" cols="10" class="form-control" [placeholder]="localeData?.description_placeholder" formControlName="description"></textarea>
+            <textarea maxlength="200" rows="5" cols="10" class="form-control"
+                [placeholder]="localeData?.description_placeholder" formControlName="description"></textarea>
         </div>
 
         <div class="form-group text-right">
 
-            <button class="btn btn-danger" type="button" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed" (click)="showDeleteGroupModal()">{{commonLocaleData?.app_delete}}
+            <button class="btn btn-danger" type="button"
+                *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
+                (click)="showDeleteGroupModal()">{{commonLocaleData?.app_delete}}
             </button>
 
-            <button class="btn btn-primary mr-l1" type="submit" *ngIf="(showEditGroup$ | async)" [ladda]="isUpdateGroupInProcess$ | async" [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">{{commonLocaleData?.app_update}}
+            <button class="btn btn-primary mr-l1" type="submit" *ngIf="(showEditGroup$ | async)"
+                [ladda]="isUpdateGroupInProcess$ | async"
+                [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">{{commonLocaleData?.app_update}}
             </button>
 
         </div>
@@ -61,13 +76,16 @@
 
 
 <!--move group-->
-<div class="horizontal-form manage-group-account-form form-group mr-b1 clearfix" *ngIf="(activeGroup$ | async) && !(activeGroup$ | async)?.fixed">
-    <form name="moveGroupForm" class="col-xs-12 col-sm-12" novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
+<div class="horizontal-form manage-group-account-form form-group mr-b1 clearfix"
+    *ngIf="(activeGroup$ | async) && !(activeGroup$ | async)?.fixed">
+    <form name="moveGroupForm" class="col-xs-12 col-sm-12" novalidate (submit)="moveGroup()"
+        [formGroup]="moveGroupForm">
         <label class="d-block">{{localeData?.move_to_group}}</label>
         <span>
-            <sh-select #moveToGroupDropDown formControlName="moveto" [placeholder]="localeData?.group_name_label" [options]="searchedGroups"
-                [isFilterEnabled]="true" class="pull-left move-group-form" [enableDynamicSearch]="true" [isPaginationEnabled]="true"
-                (scrollEnd)="handleGroupScrollEnd()" (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)">
+            <sh-select #moveToGroupDropDown formControlName="moveto" [placeholder]="localeData?.group_name_label"
+                [options]="searchedGroups" [isFilterEnabled]="true" class="pull-left move-group-form"
+                [enableDynamicSearch]="true" [isPaginationEnabled]="true" (scrollEnd)="handleGroupScrollEnd()"
+                (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)">
                 <!--template for move group typeahead [customFilter]="customMoveGroupFilter"-->
                 <ng-template #optionTemplate let-option="option">
                     <a href="javascript:void(0)" class="list-item">
@@ -105,9 +123,12 @@
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="localeData?.all_applicable_taxes_placeholder" (selected)="taxesSelected($event);" [options]="companyTaxDropDown" [multiple]="true">
+                        <sh-select formControlName="taxes" class="all-taxes"
+                            [placeholder]="localeData?.all_applicable_taxes_placeholder"
+                            (selected)="taxesSelected($event);" [options]="companyTaxDropDown" [multiple]="true">
                         </sh-select>
-                        <span class="input-group-btn pd-l2"> <button type="submit" [disabled]="(isTaxesSaveDisable$ | async)"
+                        <span class="input-group-btn pd-l2"> <button type="submit"
+                                [disabled]="(isTaxesSaveDisable$ | async)"
                                 class="btn btn-success">{{commonLocaleData?.app_save}}</button></span>
                     </div>
                 </div>
@@ -120,12 +141,15 @@
                     </div>
                     <div *ngFor="let inTax of (activeGroupTaxHierarchy$ | async)?.inheritedTaxes">
                         <ng-template #popTemplate>
-                            <div *ngIf="taxPopOverTemplate" [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)"></div>
+                            <div *ngIf="taxPopOverTemplate"
+                                [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)"></div>
                         </ng-template>
-                        <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
+                        <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate"
+                            placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
                         </span>
                     </div>
-                    <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes.length">{{localeData?.no_inherited_taxes}}</p>
+                    <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes.length">
+                        {{localeData?.no_inherited_taxes}}</p>
                 </div>
             </div>
         </div>
@@ -139,10 +163,13 @@
             <label>{{localeData?.default_discounts}} <span class="primary-color"></span></label>
             <div class="clearfix">
                 <span>
-                    <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [multiple]="true" (selected)="discountSelected()" [(ngModel)]="selectedDiscounts" [placeholder]="localeData?.select_discounts"></sh-select>
+                    <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true"
+                        [multiple]="true" (selected)="discountSelected()" [(ngModel)]="selectedDiscounts"
+                        [placeholder]="localeData?.select_discounts"></sh-select>
                 </span>
                 <span class="pull-right">
-                    <button  class="btn btn-primary merge-btn"  [disabled]="(isDiscountSaveDisable$ | async)" (click)="applyDiscounts()">{{commonLocaleData?.app_apply}}</button>
+                    <button class="btn btn-primary merge-btn" [disabled]="(isDiscountSaveDisable$ | async)"
+                        (click)="applyDiscounts()">{{commonLocaleData?.app_apply}}</button>
                 </span>
             </div>
         </div>
@@ -161,7 +188,8 @@
                         </ul>
                     </div>
                 </ng-template>
-                <span class="tax-bullet" *ngFor="let inAppDiscount of item.applicableDiscounts" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppDiscount.name }}
+                <span class="tax-bullet" *ngFor="let inAppDiscount of item.applicableDiscounts" [popover]="popTemplate"
+                    placement="right" triggers="mouseenter:mouseleave">{{ inAppDiscount.name }}
                 </span>
             </div>
             <p *ngIf="!(activeGroup$ | async)?.inheritedDiscounts?.length">{{localeData?.no_inherited_discounts}}</p>
@@ -172,7 +200,8 @@
 <div bsModal #deleteGroupModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <confirm-modal [title]="localeData?.delete_group_title" [body]="localeData?.delete_group_content" (cancelCallBack)="hideDeleteGroupModal()" (successCallBack)="deleteGroup()">
+            <confirm-modal [title]="localeData?.delete_group_title" [body]="localeData?.delete_group_content"
+                (cancelCallBack)="hideDeleteGroupModal()" (successCallBack)="deleteGroup()">
             </confirm-modal>
         </div>
     </div>

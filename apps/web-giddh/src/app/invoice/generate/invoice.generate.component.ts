@@ -53,10 +53,10 @@ const COUNTS = [
 })
 
 export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
-    @ViewChild(ElementViewContainerRef, {static: true}) public elementViewContainerRef: ElementViewContainerRef;
-    @ViewChild(DaterangePickerComponent, {static: true}) public dp: DaterangePickerComponent;
-    @ViewChild('particularSearch', {static: true}) public particularSearch: ElementRef;
-    @ViewChild('accountUniqueNameSearch', {static: true}) public accountUniqueNameSearch: ElementRef;
+    @ViewChild(ElementViewContainerRef, { static: true }) public elementViewContainerRef: ElementViewContainerRef;
+    @ViewChild(DaterangePickerComponent, { static: true }) public dp: DaterangePickerComponent;
+    @ViewChild('particularSearch', { static: true }) public particularSearch: ElementRef;
+    @ViewChild('accountUniqueNameSearch', { static: true }) public accountUniqueNameSearch: ElementRef;
     @Input() public selectedVoucher: string = 'invoice';
 
     public moment = moment;
@@ -117,7 +117,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public baseCurrency: string = '';
     /** Selected account unique name */
     public selectedAccountUniqueName: string = '';
-     /** is get ledger data API call in progress */
+    /** is get ledger data API call in progress */
     public getLedgerDataInProcess$: Observable<boolean> = of(false);
     /** This will hold checked invoices */
     public selectedInvoices: any[] = [];
@@ -169,7 +169,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.isBulkInvoiceGeneratedWithoutErr$ = this.store.pipe(select(p => p.invoice.isBulkInvoiceGeneratedWithoutErrors), takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.voucherDetailsInProcess$ = this.store.pipe(select(p => p.receipt.voucherDetailsInProcess), takeUntil(this.destroyed$));
-        this.getLedgerDataInProcess$ = this.store.pipe(select(state => state.invoice.isGetAllLedgerDataInProgress),takeUntil(this.destroyed$));
+        this.getLedgerDataInProcess$ = this.store.pipe(select(state => state.invoice.isGetAllLedgerDataInProgress), takeUntil(this.destroyed$));
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -298,13 +298,13 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.showEditMode = false;
 
         this.store.pipe(select(state => state.common.isAccountUpdated), takeUntil(this.destroyed$)).subscribe(response => {
-            if(!response) {
-                if(this.isAccountUpdated) {
+            if (!response) {
+                if (this.isAccountUpdated) {
                     this.getLedgersOfInvoice();
                     this.isAccountUpdated = false;
                 }
             }
-            if(response) {
+            if (response) {
                 this.isAccountUpdated = true;
                 this.store.dispatch(this.commonActions.accountUpdated(false));
             }
@@ -531,7 +531,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public insertItemsIntoArr() {
-        if(this.ledgersData) {
+        if (this.ledgersData) {
             _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
                 let idx = _.indexOf(this.selectedLedgerItems, item.uniqueName);
                 if (item.isSelected) {
@@ -749,7 +749,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoiceGenerateComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -778,7 +778,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoiceGenerateComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.filtersForEntryTotal = [
                 { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
                 { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },

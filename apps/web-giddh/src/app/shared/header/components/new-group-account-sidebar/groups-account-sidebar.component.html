@@ -19,12 +19,16 @@
                         <li *cdkVirtualFor="let item of col.Items; let j = index;" class="list-item sidebarTooltip">
                             <ng-container *ngIf="item.isGroup">
                                 <a href="javascript:void(0);" id="subGrp_{{item.name}}" nav-vr-item class="list-item"
-                                    (click)="onGroupClick(item,i)" [ngClass]="{ 'isActive': (((activeGroupUniqueName$ | async) === item?.uniqueName) || (searchString && (i === (mc.columns?.length - 1) || (i === (mc.columns?.length - 2) && mc.columns[mc.columns?.length-1] && (!mc.columns[mc.columns?.length-1].Items || mc.columns[mc.columns?.length-1].Items?.length === 0))) && j === 0)) && !(activeAccount | async), 'isParent':item?.isOpen }" tooltip="{{item.synonyms}}" placement="bottom">
+                                    (click)="onGroupClick(item,i)"
+                                    [ngClass]="{ 'isActive': (((activeGroupUniqueName$ | async) === item?.uniqueName) || (searchString && (i === (mc.columns?.length - 1) || (i === (mc.columns?.length - 2) && mc.columns[mc.columns?.length-1] && (!mc.columns[mc.columns?.length-1].Items || mc.columns[mc.columns?.length-1].Items?.length === 0))) && j === 0)) && !(activeAccount | async), 'isParent':item?.isOpen }"
+                                    tooltip="{{item.synonyms}}" placement="bottom">
                                     {{ item.name }}
                                 </a>
                             </ng-container>
                             <ng-container *ngIf="!item.isGroup">
-                                <a href="javascript:void(0);" nav-vr-item class="list-item isAcc" [ngClass]="{ 'isActive': ((activeAccount | async)?.uniqueName === item?.uniqueName || (searchString && (i === (mc.columns?.length - 1)) && j === 0))}" id="acc_{{item.name}}" (click)="onAccountClick(item,i)">
+                                <a href="javascript:void(0);" nav-vr-item class="list-item isAcc"
+                                    [ngClass]="{ 'isActive': ((activeAccount | async)?.uniqueName === item?.uniqueName || (searchString && (i === (mc.columns?.length - 1)) && j === 0))}"
+                                    id="acc_{{item.name}}" (click)="onAccountClick(item,i)">
                                     {{ item.name }}
                                 </a>
                             </ng-container>

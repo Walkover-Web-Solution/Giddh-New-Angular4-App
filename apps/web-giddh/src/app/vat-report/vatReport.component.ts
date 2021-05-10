@@ -38,8 +38,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public fromDate: string = '';
     public toDate: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    @ViewChild('monthWise', {static: true}) public monthWise: BsDropdownDirective;
-    @ViewChild('periodDropdown', {static: true}) public periodDropdown;
+    @ViewChild('monthWise', { static: true }) public monthWise: BsDropdownDirective;
+    @ViewChild('periodDropdown', { static: true }) public periodDropdown;
     public isMonthSelected: boolean = true;
     public selectedMonth: any = null;
     public currentPeriod: any = {};
@@ -140,7 +140,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             } else {
                 if (this._generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
             }
         });
@@ -155,7 +155,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     }
 
     public getVatReport(event?: any) {
-        if(event && event.value) {
+        if (event && event.value) {
             this.taxNumber = event.value;
         }
 
@@ -168,7 +168,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             this.vatReport = [];
 
             this.vatService.getVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if(res) {
+                if (res) {
                     if (res.status === 'success') {
                         this.vatReport = res.body.sections;
                         this.cdRef.detectChanges();
@@ -248,7 +248,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.datepickerVisibility = visibility;
 
         setTimeout(() => {
-            if(this.datepickerVisibility === "hidden" && this.monthWise && this.monthWise.isOpen === false) {
+            if (this.datepickerVisibility === "hidden" && this.monthWise && this.monthWise.isOpen === false) {
                 this.hidePeriodDropdown();
             }
         }, 500);
@@ -261,7 +261,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
      */
     public checkIfDatepickerVisible() {
         setTimeout(() => {
-            if(this.datepickerVisibility === "hidden") {
+            if (this.datepickerVisibility === "hidden") {
                 this.hidePeriodDropdown();
             }
         }, 500);

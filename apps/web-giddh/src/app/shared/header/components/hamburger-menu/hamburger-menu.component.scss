@@ -1,29 +1,29 @@
-@import '../../../../../assets/css/color.scss';
+@import "../../../../../assets/css/color.scss";
 .hamburger-menu-icon {
     display: flex;
     align-items: flex-start;
     justify-content: center;
     padding: 2px 5px;
     width: 45px;
-    li{
+    li {
         display: flex;
         align-items: center;
         color: $midnight-blue;
-        button{
+        button {
             margin: 0;
             padding: 0;
             width: 40px;
             height: 40px;
-            i{
+            i {
                 color: $midnight-blue;
             }
         }
     }
-    &.page-has-heading{
+    &.page-has-heading {
         width: 100%;
         border-bottom: 1px solid $gainsboro;
-        h4{
-            font-family: 'opensans-semibold';
+        h4 {
+            font-family: "opensans-semibold";
             font-size: 20px;
         }
     }

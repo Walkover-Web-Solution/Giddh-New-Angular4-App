@@ -36,9 +36,9 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
 
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     // searching
-    @ViewChild('invoiceSearch', {static: true}) public invoiceSearch: ElementRef;
+    @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
     // @ViewChild('customerSearch') public customerSearch: ElementRef;
-    @ViewChild('filterDropDownList', {static: true}) public filterDropDownList: BsDropdownDirective;
+    @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
 
     public voucherNumberInput: FormControl = new FormControl();
     // public customerNameInput: FormControl = new FormControl();
@@ -68,7 +68,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.imgPath = (isElectron||isCordova)  ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         this.getDetailedsalesRequestFilter.page = 1;
         this.getDetailedsalesRequestFilter.count = 50;
         this.getDetailedsalesRequestFilter.q = '';
@@ -97,7 +97,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 });
                 if (this.voucherNumberInput.value) {
                     setTimeout(() => {
-                        if(this.invoiceSearch && this.invoiceSearch.nativeElement) {
+                        if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
                             this.invoiceSearch.nativeElement.focus();
                         }
                     }, 200);
@@ -233,7 +233,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             // this.showSearchCustomer = false;
 
             setTimeout(() => {
-                if(this.invoiceSearch && this.invoiceSearch.nativeElement) {
+                if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
                     this.invoiceSearch.nativeElement.focus();
                 }
             }, 200);
@@ -269,7 +269,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof SalesRegisterExpandComponent
      */
     public translationComplete(event: boolean): void {
-        if(event) {
+        if (event) {
             this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
             this.getCurrentMonthYear();
         }

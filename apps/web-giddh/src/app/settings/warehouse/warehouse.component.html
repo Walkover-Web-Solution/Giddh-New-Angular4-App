@@ -1,4 +1,5 @@
-<ng-container appTranslate [file]="'settings/warehouse'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'settings/warehouse'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <ng-container *ngIf="warehouses">
         <div class="warehouse-card-view">
             <div class="row">
@@ -25,7 +26,8 @@
                 <h1>{{localeData?.no_warehouse_found}}</h1>
             </div>
             <div *ngIf="!showLoader" class="row warehouse-box">
-                <div *ngFor="let warehouse of warehouses; index as warehouseIndex" class="col-lg-12 col-md-12 col-sm-12">
+                <div *ngFor="let warehouse of warehouses; index as warehouseIndex"
+                    class="col-lg-12 col-md-12 col-sm-12">
                     <div class="warehouse-card">
                         <div class="d-flex">
                             <h3>{{ warehouse.name }}</h3>
@@ -75,30 +77,30 @@
                                 -->
                             <div class="clearfix about-warehouse">
                                 <!-- <div class="col-xl-3 col-lg-4 col-md-6"> -->
-                                    <div class="parent-branch pd-t1 pd-b1">{{localeData?.linked_address}}:</div>
-                                    <div>
-                                        <div *ngFor="let address of warehouse?.addresses" class="linked-add">
-                                            <ng-container *ngIf="address">
-                                                <label class="cursor-pointer"
-                                                    [popover]="popTemplate"
-                                                    popoverTitle="{{address?.name}}" placement="right"
-                                                    triggers="mouseenter:mouseleave">{{address?.name}}</label>
-                                                <ng-template #popTemplate>
-                                                    {{address?.address}} {{address?.stateCode}}
-                                                    <p *ngIf="address?.taxType && address?.taxNumber">
-                                                        {{ address?.taxType }} : {{ address?.taxNumber }}
-                                                    </p>
-                                                </ng-template>
-                                            </ng-container>
-                                            <!-- static pin code  -->
-                                            <div *ngIf="address?.pincode">
-                                                <div>
-                                                    <label class="pin-label">{{commonLocaleData?.app_pin}}:</label>&nbsp;<span>{{address?.pincode}}</span>
-                                                </div>
+                                <div class="parent-branch pd-t1 pd-b1">{{localeData?.linked_address}}:</div>
+                                <div>
+                                    <div *ngFor="let address of warehouse?.addresses" class="linked-add">
+                                        <ng-container *ngIf="address">
+                                            <label class="cursor-pointer" [popover]="popTemplate"
+                                                popoverTitle="{{address?.name}}" placement="right"
+                                                triggers="mouseenter:mouseleave">{{address?.name}}</label>
+                                            <ng-template #popTemplate>
+                                                {{address?.address}} {{address?.stateCode}}
+                                                <p *ngIf="address?.taxType && address?.taxNumber">
+                                                    {{ address?.taxType }} : {{ address?.taxNumber }}
+                                                </p>
+                                            </ng-template>
+                                        </ng-container>
+                                        <!-- static pin code  -->
+                                        <div *ngIf="address?.pincode">
+                                            <div>
+                                                <label
+                                                    class="pin-label">{{commonLocaleData?.app_pin}}:</label>&nbsp;<span>{{address?.pincode}}</span>
                                             </div>
-                                            <!-- static pin code end-->
                                         </div>
+                                        <!-- static pin code end-->
                                     </div>
+                                </div>
                                 <!-- </div> -->
                             </div>
                             <!--<div class="row">
@@ -126,9 +128,12 @@
             </div>
         </div>
         <div class="warehouse-pagination">
-            <pagination #warehousePagination *ngIf="warehouses?.length && paginationConfig?.totalItems > paginationLimit"
+            <pagination #warehousePagination
+                *ngIf="warehouses?.length && paginationConfig?.totalItems > paginationLimit"
                 [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count"
-                [boundaryLinks]="true" [rotate]="true" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
+                [boundaryLinks]="true" [rotate]="true" (pageChanged)="pageChanged($event)"
+                [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
         </div>
         <br>
         <br>
@@ -151,13 +156,14 @@
     </div>
     <div>
         <div class="aside-overlay" *ngIf="asideEditWarehousePane === 'in'"></div>
-        <ng-container appTranslate [file]="'settings/profile'" (localeData)="profileLocaleData = $event" [requireCommonData]="false" *ngIf="asideEditWarehousePane === 'in'">
+        <ng-container appTranslate [file]="'settings/profile'" (localeData)="profileLocaleData = $event"
+            [requireCommonData]="false" *ngIf="asideEditWarehousePane === 'in'">
             <create-address [class]="asideEditWarehousePane" [@slideInOut]="asideEditWarehousePane"
-                [currentOrganizationUniqueName]="currentOrganizationUniqueName"
-                [warehouseToUpdate]="warehouseToUpdate" [showLoader]="isWarehouseUpdateInProgress"
-                (updateAddress)="updateWarehouseInfo($event)" [addressConfiguration]="addressConfiguration"
-                [localeData]="profileLocaleData" [commonLocaleData]="commonLocaleData"
-                (closeAsideEvent)="toggleAsidePane($event)" *ngIf="asideEditWarehousePane === 'in'">
+                [currentOrganizationUniqueName]="currentOrganizationUniqueName" [warehouseToUpdate]="warehouseToUpdate"
+                [showLoader]="isWarehouseUpdateInProgress" (updateAddress)="updateWarehouseInfo($event)"
+                [addressConfiguration]="addressConfiguration" [localeData]="profileLocaleData"
+                [commonLocaleData]="commonLocaleData" (closeAsideEvent)="toggleAsidePane($event)"
+                *ngIf="asideEditWarehousePane === 'in'">
             </create-address>
         </ng-container>
     </div>

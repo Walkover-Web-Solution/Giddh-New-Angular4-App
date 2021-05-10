@@ -400,13 +400,13 @@
     "app_entity": "अस्तित्व",
     "app_select_entity": "अस्तित्व निवडा",
     "app_select_option": "पर्याय निवडा",
-    "app_select_tag" : "टॅग निवडा",
+    "app_select_tag": "टॅग निवडा",
     "app_assets": "मालमत्ता",
     "app_income": "उत्पन्न",
     "app_expenses": "खर्च",
     "app_liabilities": "उत्तरदायित्व",
-    "app_debit" : "डेबिट",
-    "app_credit" : "जमा",
+    "app_debit": "डेबिट",
+    "app_credit": "जमा",
     "app_schedule_now": "आता वेळापत्रक",
     "app_reset": "रीसेट करा",
     "app_download_csv": "सीएसव्ही डाउनलोड करा",
@@ -540,11 +540,32 @@
             "LastQuarter": "Last Quarter",
             "AllTime": "All Time"
         },
-        "weekdays": ["रवि", "सोम", "मंग", "बुध", "गुरू", "शुक्र", "शनि"],
-        "months": ["जनवरी", "फ़रवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"]
+        "weekdays": [
+            "रवि",
+            "सोम",
+            "मंग",
+            "बुध",
+            "गुरू",
+            "शुक्र",
+            "शनि"
+        ],
+        "months": [
+            "जनवरी",
+            "फ़रवरी",
+            "मार्च",
+            "अप्रैल",
+            "मई",
+            "जून",
+            "जुलाई",
+            "अगस्त",
+            "सितंबर",
+            "अक्टूबर",
+            "नवंबर",
+            "दिसंबर"
+        ]
     },
     "app_characters_left": "वर्ण डावे",
-    "app_pin" : "PIN",
+    "app_pin": "PIN",
     "app_max_100_characters_allowed_limit": "Max. 100 characters allowed",
     "app_max_50_characters_allowed_limit": "Max. 50 characters allowed"
 }

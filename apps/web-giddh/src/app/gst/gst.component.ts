@@ -48,8 +48,8 @@ import { GstReport } from './constants/gst.constant';
 })
 
 export class GstComponent implements OnInit, OnDestroy {
-    @ViewChild('monthWise', {static: true}) public monthWise: BsDropdownDirective;
-    @ViewChild('periodDropdown', {static: true}) public periodDropdown;
+    @ViewChild('monthWise', { static: true }) public monthWise: BsDropdownDirective;
+    @ViewChild('periodDropdown', { static: true }) public periodDropdown;
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /* Aside pane state*/
@@ -176,7 +176,7 @@ export class GstComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
             }
         });
-        this.imgPath = (isElectron||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompanyGstNumber !== response) {
                 this.activeCompanyGstNumber = response;
@@ -206,7 +206,7 @@ export class GstComponent implements OnInit, OnDestroy {
     public toggleGstPane(event?): void {
         this.toggleBodyClass();
         if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
-          this.asideGstSidebarMenuState = "out";
+            this.asideGstSidebarMenuState = "out";
         }
     }
     /**
@@ -319,7 +319,7 @@ export class GstComponent implements OnInit, OnDestroy {
 
     public checkIfDatepickerVisible() {
         setTimeout(() => {
-            if(this.datepickerVisibility === "hidden") {
+            if (this.datepickerVisibility === "hidden") {
                 this.periodDropdown.hide();
             }
         }, 500);
@@ -332,7 +332,7 @@ export class GstComponent implements OnInit, OnDestroy {
      * @memberof GstComponent
      */
     public selectTax(event?: any): void {
-        if(event && event.value) {
+        if (event && event.value) {
             this.activeCompanyGstNumber = event.value;
         }
 
@@ -346,7 +346,7 @@ export class GstComponent implements OnInit, OnDestroy {
      * @memberof GstComponent
      */
     public handleNavigation(type: string): void {
-        switch(type) {
+        switch (type) {
             case GstReport.Gstr1: case GstReport.Gstr2:
                 this.navigateToOverview(type);
                 break;

@@ -64,14 +64,14 @@ export class BulkExportModal implements OnInit, OnDestroy {
      * @memberof BulkExportModal
      */
     public exportVouchers(event: boolean): void {
-        if(this.isLoading) {
+        if (this.isLoading) {
             return;
         }
 
         let getRequest: any = { from: "", to: "", type: "", mail: false, q: "" };
         let postRequest: any;
 
-        if(!this.advanceSearch.invoiceDate && !this.advanceSearch.dueDate) {
+        if (!this.advanceSearch.invoiceDate && !this.advanceSearch.dueDate) {
             getRequest.from = this.dateRange.from;
             getRequest.to = this.dateRange.to;
         }
@@ -93,9 +93,9 @@ export class BulkExportModal implements OnInit, OnDestroy {
         if (event && this.recipients) {
             let recipients = this.recipients.split(",");
             let validEmails = [];
-            if(recipients && recipients.length > 0) {
+            if (recipients && recipients.length > 0) {
                 recipients.forEach(email => {
-                    if(validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
+                    if (validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         this.toaster.clearAllToaster();
 
                         let invalidEmail = this.localeData?.invalid_email;
@@ -104,7 +104,7 @@ export class BulkExportModal implements OnInit, OnDestroy {
                         validRecipients = false;
                     }
 
-                    if(validRecipients && email.trim() && EMAIL_VALIDATION_REGEX.test(email.trim())) {
+                    if (validRecipients && email.trim() && EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         validEmails.push(email.trim());
                     }
                 });
@@ -112,7 +112,7 @@ export class BulkExportModal implements OnInit, OnDestroy {
             postRequest.sendTo = { recipients: validEmails };
         }
 
-        if(!validRecipients) {
+        if (!validRecipients) {
             return;
         }
 
@@ -121,10 +121,10 @@ export class BulkExportModal implements OnInit, OnDestroy {
         this.bulkVoucherExportService.bulkExport(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response.status === "success" && response.body) {
-                if(response.body.type === "base64") {
+                if (response.body.type === "base64") {
                     this.closeModal();
                     let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
-                    return saveAs(blob, this.type+`.zip`);
+                    return saveAs(blob, this.type + `.zip`);
                 } else {
                     this.toaster.clearAllToaster();
                     this.toaster.successToast(response.body.file);

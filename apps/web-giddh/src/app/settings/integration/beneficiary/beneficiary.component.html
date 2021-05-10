@@ -11,15 +11,19 @@
                 <div class="row">
                     <div class="form-group  col-sm-6">
                         <label>Beneficiary Name <sup class="text-danger">*</sup></label>
-                        <input type="text" class="form-control" placeholder="Beneficiary" name="bnfName" formControlName="bnfName" />
+                        <input type="text" class="form-control" placeholder="Beneficiary" name="bnfName"
+                            formControlName="bnfName" />
                     </div>
                     <div class="form-group col-sm-6">
                         <label>Beneficiary Nick Name <sup class="text-danger">*</sup></label>
-                        <input type="text" class="form-control" placeholder="Beneficiary Nick Name" name="bnfNickName" formControlName="bnfNickName" />
+                        <input type="text" class="form-control" placeholder="Beneficiary Nick Name" name="bnfNickName"
+                            formControlName="bnfNickName" />
                     </div>
                     <div class="form-group col-sm-6">
                         <label>Beneficiary Account No. <sup class="text-danger">*</sup></label>
-                        <input type="text" class="form-control" placeholder="Beneficiary Account No." name="bnfAccNo" formControlName="bnfAccNo" [maxlength]="18" [minlength]="9" #accountNo (blur)="validateAccountNo(accountNo)" />
+                        <input type="text" class="form-control" placeholder="Beneficiary Account No." name="bnfAccNo"
+                            formControlName="bnfAccNo" [maxlength]="18" [minlength]="9" #accountNo
+                            (blur)="validateAccountNo(accountNo)" />
                     </div>
                     <div class="form-group col-sm-6">
                         <label>IFSC <sup class="text-danger">*</sup></label>
@@ -27,7 +31,8 @@
                     </div>
                     <div class="col-sm-12">
                         <div class="button-group">
-                            <button class="btn btn-primary" [ladda]="isBeneficiaryRegistrationInProgress$ | async" [disabled]="addBeneficiaryForm.invalid">Save
+                            <button class="btn btn-primary" [ladda]="isBeneficiaryRegistrationInProgress$ | async"
+                                [disabled]="addBeneficiaryForm.invalid">Save
                             </button>
                             <button type="button" class="btn btn-cancel" (click)="toggleBeneficiaryForm()">Cancel
                             </button>
@@ -35,7 +40,8 @@
                     </div>
                 </div>
             </form>
-            <a class="text-right btn btn-primary" href="javascript:;" *ngIf="!isBeneficiaryFormVisible" (click)="toggleBeneficiaryForm()">
+            <a class="text-right btn btn-primary" href="javascript:;" *ngIf="!isBeneficiaryFormVisible"
+                (click)="toggleBeneficiaryForm()">
                 <i class="icon-plus"></i> Add Beneficiary
             </a>
             <div class="report-table table-responsive mr-t2">
@@ -58,11 +64,13 @@
                             <td data-title="Account No.">{{ item.BnfAccNo }}</td>
                             <td data-title="IFSC">{{ item.IFSC }}</td>
                             <td data-title="Action">
-                                <a href="javascript:;" class="btn btn-primary" (click)="validateBeneficiary(item.BnfAccNo)">Validate</a>
+                                <a href="javascript:;" class="btn btn-primary"
+                                    (click)="validateBeneficiary(item.BnfAccNo)">Validate</a>
                             </td>
                         </tr>
                     </tbody>
-                    <tbody class="on-mobile-view no-records" *ngIf="!accountBeneficiaries || accountBeneficiaries.length === 0">
+                    <tbody class="on-mobile-view no-records"
+                        *ngIf="!accountBeneficiaries || accountBeneficiaries.length === 0">
                         <tr>
                             <td colspan="6" *ngIf="!isLoading" align="center">No records found.</td>
                             <td colspan="6" *ngIf="isLoading">

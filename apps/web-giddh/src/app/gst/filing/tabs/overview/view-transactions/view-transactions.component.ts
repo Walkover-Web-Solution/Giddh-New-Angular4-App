@@ -81,9 +81,9 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isTransactionSummary: boolean;
     // @Input() public filterParam = filterTransaction;
 
-    @ViewChild('downloadOrSendMailModel', {static: true}) public downloadOrSendMailModel: ModalDirective;
-    @ViewChild('downloadOrSendMailComponent', {static: true}) public downloadOrSendMailComponent: ElementViewContainerRef;
-    @ViewChild('invoiceGenerateModel', {static: true}) public invoiceGenerateModel: ModalDirective;
+    @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: ModalDirective;
+    @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
+    @ViewChild('invoiceGenerateModel', { static: true }) public invoiceGenerateModel: ModalDirective;
 
     public viewTransaction$: Observable<GstTransactionResult> = of(null);
     public gstr1entityType = Gstr1TransactionType;
@@ -118,7 +118,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private modalService: BsModalService,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
-        private toaster: ToasterService, ) {
+        private toaster: ToasterService,) {
         this.viewTransaction$ = this.store.pipe(select(p => p.gstR.viewTransactionData), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
         this.viewTransactionInProgress$ = this.store.pipe(select(p => p.gstR.viewTransactionInProgress), takeUntil(this.destroyed$));

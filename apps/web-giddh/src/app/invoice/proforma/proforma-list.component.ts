@@ -48,10 +48,10 @@ const VOUCHER_TYPES = ['proformas', 'estimates'];
 })
 
 export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
-    @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
+    @ViewChild('advanceSearch', { static: true }) public advanceSearch: ModalDirective;
     /** Confirmation popup for delete operation */
-    @ViewChild('deleteConfirmationModel', {static: true}) public deleteConfirmationModel: ModalDirective;
-    @ViewChild(InvoiceAdvanceSearchComponent, {static: true}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
+    @ViewChild('deleteConfirmationModel', { static: true }) public deleteConfirmationModel: ModalDirective;
+    @ViewChild(InvoiceAdvanceSearchComponent, { static: true }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.proforma;
     public voucherData: ProformaResponse;
     public selectedDateRange: any;
@@ -455,7 +455,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 if (activeCompany.activeFinancialYear) {
                     this.datePickerOptions.ranges['This Financial Year to Date'] = [
                         moment(activeCompany.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'),
@@ -470,13 +470,13 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         });
 
         this.store.pipe(select(state => state.common.isAccountUpdated), takeUntil(this.destroyed$)).subscribe(response => {
-            if(!response) {
-                if(this.isAccountUpdated) {
+            if (!response) {
+                if (this.isAccountUpdated) {
                     this.getAll();
                     this.isAccountUpdated = false;
                 }
             }
-            if(response) {
+            if (response) {
                 this.isAccountUpdated = true;
                 this.store.dispatch(this.commonActions.accountUpdated(false));
             }
@@ -886,7 +886,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof ProformaListComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -902,8 +902,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
 
-             this.showResetAdvanceSearchIcon = true;
-            this.advanceSearchFilter.from =  this.fromDate;
+            this.showResetAdvanceSearchIcon = true;
+            this.advanceSearchFilter.from = this.fromDate;
             this.advanceSearchFilter.to = this.toDate;
             if (window.localStorage) {
                 if (this.voucherType === 'proformas') {
