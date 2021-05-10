@@ -80,7 +80,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     public razorpayAuthKey = 'rzp_live_4UTBGkTT0iZmMW';
 
     /** Form instance */
-    @ViewChild('billingForm', {static: true}) billingForm: NgForm;
+    @ViewChild('billingForm', { static: true }) billingForm: NgForm;
 
     private activeCompany;
 
@@ -96,7 +96,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getCurrentCompanyData();
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.activeCompany = activeCompany;
                 this.getStates();
                 this.reFillForm();
@@ -382,7 +382,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             this.createNewCompany.subscriptionRequest.userUniqueName = this.activeCompany.subscription ? this.activeCompany.subscription.userDetails.uniqueName : '';
 
             // assign state code to billing details object
-            if(this.activeCompany.state) {
+            if (this.activeCompany.state) {
                 this.billingDetailsObj.stateCode = this.activeCompany.state;
             } else {
                 let selectedState = this.activeCompany.addresses.find((address) => address.isDefault);

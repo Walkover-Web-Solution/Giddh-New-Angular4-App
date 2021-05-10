@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { CustomActions } from '../../store/customActions';
 import { ToasterService } from '../../services/toaster.service';
@@ -23,7 +23,7 @@ export class DaybookActions {
     public static readonly EXPORT_DAYBOOK_POST_REQUEST = 'EXPORT_DAYBOOK_POST_REQUEST';
     public static readonly EXPORT_DAYBOOK_POST_RESPONSE = 'EXPORT_DAYBOOK_POST_RESPONSE';
 
-     public GetDaybook$: Observable<Action> =createEffect( ()=> this.action$
+    public GetDaybook$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(DaybookActions.GET_DAYBOOK_REQUEST),
             switchMap((action: CustomActions) => {
@@ -37,14 +37,14 @@ export class DaybookActions {
                     })));
             })));
 
-     public ExportDaybook$: Observable<Action> = createEffect( ()=>this.action$
+    public ExportDaybook$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(DaybookActions.EXPORT_DAYBOOK_REQUEST),
             switchMap((action: CustomActions) => {
                 return this._daybookService.ExportDaybook(action.payload.request, action.payload.queryRequest).pipe(
                     map((res) => {
                         if (res.status === 'success') {
-                            if(res.body.type === "message") {
+                            if (res.body.type === "message") {
                                 this._toasty.successToast(res.body.file);
                             } else {
                                 let blob = this.base64ToBlob(res.body.file, res.queryString.requestType, 512);
@@ -59,14 +59,14 @@ export class DaybookActions {
                     }));
             })));
 
-    public ExportDaybookPost$: Observable<Action> =createEffect( ()=> this.action$
+    public ExportDaybookPost$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(DaybookActions.EXPORT_DAYBOOK_POST_REQUEST),
             switchMap((action: CustomActions) => {
                 return this._daybookService.ExportDaybookPost(action.payload.request, action.payload.queryRequest).pipe(
                     map((res) => {
                         if (res.status === 'success') {
-                            if(res.body.type === "message") {
+                            if (res.body.type === "message") {
                                 this._toasty.successToast(res.body.file);
                             } else {
                                 let blob = this.base64ToBlob(res.body.file, res.queryString.requestType, 512);

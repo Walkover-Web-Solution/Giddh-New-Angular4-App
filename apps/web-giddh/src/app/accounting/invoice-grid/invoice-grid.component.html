@@ -7,14 +7,15 @@
                     <span class="btn label isActive">{{data.voucherType}}</span>
 
                     <input type="text" [(ngModel)]="data.invoiceNumberAgainstVoucher" [disabled]="!isCustomInvoice"
-                        name="invoiceNumberAgainstVoucher" placeholder="Invoice No" class="text-center appearance-none invoice-width" />
+                        name="invoiceNumberAgainstVoucher" placeholder="Invoice No"
+                        class="text-center appearance-none invoice-width" />
                 </div>
 
                 <div class="pull-right text-right mr-b1">
                     <input type="text" onReturn #dateField [textMask]="{mask: dateMask, guide: true}"
                         [(ngModel)]="entryDate" name="entryDate" (blur)="dateEntered();" [placeholder]="giddhDateFormat"
                         class="form-control text-right invoice-date-field" /> {{ displayDay
-          }}
+                    }}
                 </div>
             </div>
 
@@ -23,7 +24,9 @@
                 <div class="max-width-350 form-group" [hidden]="isSalesInvoiceSelected">
                     <!-- decimalDigitsDirective -->
                     <label>{{ invoiceNoHeading }}:</label> <input type="text" placeholder="Invoice no."
-                        [(ngModel)]="data.invoiceNumberAgainstVoucher" class="form-control max-height28 appearance-none invoice-no-width" [disabled]="isSalesInvoiceSelected" />
+                        [(ngModel)]="data.invoiceNumberAgainstVoucher"
+                        class="form-control max-height28 appearance-none invoice-no-width"
+                        [disabled]="isSalesInvoiceSelected" />
                 </div>
 
                 <!-- key not available in request
@@ -245,6 +248,7 @@
 </div>
 
 <div class="aside-overlay" (click)="closeCreateStock($event)" *ngIf="asideMenuStateForProductService === 'in'"></div>
-<aside-inventory-stock-group *ngIf="asideMenuStateForProductService === 'in'" [autoFocus]="autoFocusStockGroupField" (closeAsideEvent)="closeCreateStock()"
-    [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService">
+<aside-inventory-stock-group *ngIf="asideMenuStateForProductService === 'in'" [autoFocus]="autoFocusStockGroupField"
+    (closeAsideEvent)="closeCreateStock()" [class]="asideMenuStateForProductService"
+    [@slideInOut]="asideMenuStateForProductService">
 </aside-inventory-stock-group>

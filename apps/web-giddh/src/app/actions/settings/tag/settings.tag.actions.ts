@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -15,7 +15,7 @@ import { TagRequest } from '../../../models/api-models/settingsTags';
 @Injectable()
 export class SettingsTagActions {
 
-    public GetAllTags$: Observable<Action> =createEffect( ()=> this.action$
+    public GetAllTags$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS),
             switchMap((action: CustomActions) => this.settingsTagService.GetAllTags()),
@@ -23,7 +23,7 @@ export class SettingsTagActions {
                 return { type: SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE, payload: res };
             })));
 
-    public GetAllTagsResponse$: Observable<Action> =createEffect(()=> this.action$
+    public GetAllTagsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE),
             map((response: CustomActions) => {
@@ -31,7 +31,7 @@ export class SettingsTagActions {
             })));
 
 
-    public CreateTag$: Observable<Action> =createEffect( ()=> this.action$
+    public CreateTag$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.CREATE_TAG),
             switchMap((action: CustomActions) => {
@@ -40,7 +40,7 @@ export class SettingsTagActions {
             })));
 
 
-    public CreateTagResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public CreateTagResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.CREATE_TAG_RESPONSE),
             map((response: CustomActions) => {
@@ -54,7 +54,7 @@ export class SettingsTagActions {
             })));
 
 
-    public UpdateTag$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateTag$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.UPDATE_TAG),
             switchMap((action: CustomActions) => {
@@ -63,7 +63,7 @@ export class SettingsTagActions {
             })));
 
 
-    public UpdateTagResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateTagResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.UPDATE_TAG_RESPONSE),
             map((response: CustomActions) => {
@@ -77,7 +77,7 @@ export class SettingsTagActions {
             })));
 
 
-    public DeleteTag$: Observable<Action> =createEffect( ()=> this.action$
+    public DeleteTag$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.DELETE_TAG),
             switchMap((action: CustomActions) => {
@@ -86,7 +86,7 @@ export class SettingsTagActions {
             })));
 
 
-    public DeleteTagResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public DeleteTagResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.DELETE_TAG_RESPONSE),
             map((response: CustomActions) => {
