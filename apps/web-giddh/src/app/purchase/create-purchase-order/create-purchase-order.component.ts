@@ -41,6 +41,7 @@ import { CurrentCompanyState } from '../../store/Company/company.reducer';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
+import { GeneralActions } from '../../actions/general/general.actions';
 import { InvoiceService } from '../../services/invoice.service';
 import { PURCHASE_ORDER_STATUS } from '../../shared/helpers/purchaseOrderStatus';
 import { INameUniqueName } from '../../models/api-models/Inventory';
@@ -406,6 +407,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         private loaderService: LoaderService,
         private route: ActivatedRoute,
         private router: Router,
+        private generalActions: GeneralActions,
         private ledgerService: LedgerService,
         private invoiceService: InvoiceService,
         private modalService: BsModalService,
