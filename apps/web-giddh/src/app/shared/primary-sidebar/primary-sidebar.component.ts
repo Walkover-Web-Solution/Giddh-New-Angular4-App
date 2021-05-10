@@ -13,7 +13,7 @@ import {
     TemplateRef,
     ViewChild,
 } from '@angular/core';
-import { NavigationEnd, RouteConfigLoadEnd, Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { createSelector, select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
@@ -351,6 +351,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 })));
                 this.changeDetectorRef.detectChanges();
+            }
+
+            if(event instanceof NavigationStart) {
+                if(this.companyDetailsDropDownWeb.isOpen) {
+                    this.companyDetailsDropDownWeb.hide();
+                }
             }
         });
     }
