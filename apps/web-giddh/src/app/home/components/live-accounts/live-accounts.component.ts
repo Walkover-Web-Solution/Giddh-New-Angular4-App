@@ -17,7 +17,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 export class LiveAccountsComponent implements OnInit, OnDestroy {
     public bankAccountsError$: Observable<string>;
     @Input() public refresh: boolean = false;
-    @ViewChild('refreshBankAccountModal', {static: true}) public refreshBankAccountModal: ModalDirective;
+    @ViewChild('refreshBankAccountModal', { static: true }) public refreshBankAccountModal: ModalDirective;
     public reconnectBankAccount$: Observable<RefreshBankAccountResponse>;
     public refreshBankAccount$: Observable<RefreshBankAccountResponse>;
     public bankAccounts$: Observable<BankAccountsResponse[]>;

@@ -17,7 +17,7 @@ import { CustomActions } from '../../store/customActions';
 @Injectable()
 export class AuditLogsActions {
 
-    public GET_LOGS$: Observable<Action> = createEffect( ()=> this.action$
+    public GET_LOGS$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(AUDIT_LOGS_ACTIONS.GET_LOGS),
             switchMap((action: CustomActions) => {
@@ -31,7 +31,7 @@ export class AuditLogsActions {
                     })));
             })));
 
-     public LoadMore$: Observable<Action> =  createEffect( ()=>this.action$
+    public LoadMore$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS),
             switchMap((action: CustomActions) => {

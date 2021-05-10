@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import {
     Gstr3bOverviewResult,
@@ -235,9 +235,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         this.selectedGstr3BTab = tabType;
     }
 
-	/**
-	 * onDownloadSheetGSTR
-	 */
+    /**
+     * onDownloadSheetGSTR
+     */
 
     public emailGSTR3bSheet(isDownloadDetailSheet: boolean) {
 
@@ -274,7 +274,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @memberof FileGstR3Component
      */
     public handleNavigation(type: string): void {
-        switch(type) {
+        switch (type) {
             case GstReport.Gstr1: case GstReport.Gstr2:
                 this.navigateToOverview(type);
                 break;
@@ -291,7 +291,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @param {*} type Type of report (gstr1, gstr2, gstr3b)
      * @memberof FileGstR3Component
      */
-     public navigateToOverview(type): void {
+    public navigateToOverview(type): void {
         this.router.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0, selectedGst: this.activeCompanyGstNumber } });
     }
 

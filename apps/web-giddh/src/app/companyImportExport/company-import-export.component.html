@@ -1,10 +1,12 @@
-<ng-container appTranslate [file]="'company-import-export'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'company-import-export'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid settings-bg">
         <div class="row">
             <div class="col-xs-12 col-sm-12">
                 <div class="backup-data">
-                    {{ (isFirstScreen ? localeData?.backup : (mode === 'export' ? commonLocaleData?.app_export : commonLocaleData?.app_import)) + ' ' + localeData?.data }}
+                    {{ (isFirstScreen ? localeData?.backup : (mode === 'export' ? commonLocaleData?.app_export :
+                    commonLocaleData?.app_import)) + ' ' + localeData?.data }}
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12" id="setting-tab">
@@ -42,7 +44,9 @@
                     </div>
                 </ng-container>
                 <ng-container *ngIf="!isFirstScreen">
-                    <company-import-export-form-component [mode]="mode" [localeData]="localeData" [commonLocaleData]="commonLocaleData" (backPressed)="back()"></company-import-export-form-component>
+                    <company-import-export-form-component [mode]="mode" [localeData]="localeData"
+                        [commonLocaleData]="commonLocaleData" (backPressed)="back()">
+                    </company-import-export-form-component>
                 </ng-container>
             </div>
         </div>

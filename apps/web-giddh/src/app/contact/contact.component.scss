@@ -1,12 +1,12 @@
 @import "../../assets/css/color.scss";
-.dropdown-menu{
-    >li{
-        >a {
+.dropdown-menu {
+    > li {
+        > a {
             padding: 2px 10px;
             white-space: normal;
             display: flex;
             word-break: break-word;
-            >input{
+            > input {
                 padding-right: 14px;
             }
         }
@@ -21,13 +21,13 @@
     padding: 5px;
 }
 
-.aging-table>tbody>tr input[type="checkbox"] {
+.aging-table > tbody > tr input[type="checkbox"] {
     position: absolute !important;
     opacity: 0;
     top: 0px;
 }
 
-.aging-table>tbody>tr:hover input[type="checkbox"] {
+.aging-table > tbody > tr:hover input[type="checkbox"] {
     position: relative !important;
     opacity: 1;
 }
@@ -123,7 +123,7 @@ ul.list-unstyled li a {
     min-width: 0px !important;
     min-height: 0px !important;
 }
-.dropdown-menu-right{
+.dropdown-menu-right {
     z-index: 1;
 }
 .model-position {
@@ -153,7 +153,7 @@ td.commentField {
     white-space: normal;
 }
 
-.date-range-picker{
+.date-range-picker {
     width: 250px !important;
 }
 //  my css
@@ -182,7 +182,8 @@ td.position-relative.word-wrap.customer-name.vendor-customer-name.cursor-pointer
 }
 
 tr:last-child td.position-relative.word-wrap.customer-name.cursor-pointer,
-tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer {
+tr:last-child
+    td.position-relative.word-wrap.vendor-customer-name.cursor-pointer {
     border-bottom: 1px solid $gainsboro !important;
 }
 
@@ -248,7 +249,7 @@ tr.aging-table-top td {
 
 .btn-primary.active,
 .btn-primary:active,
-.open>.dropdown-toggle.btn-primary {
+.open > .dropdown-toggle.btn-primary {
     color: $night-rider;
     background-color: $lavender;
     border-color: $lavender;
@@ -361,7 +362,7 @@ button.btn.btn-filter span.icon-cross {
     margin-right: 5px;
 }
 
-.customer-form-inline{
+.customer-form-inline {
     display: flex !important;
     justify-content: space-between !important;
 }
@@ -377,23 +378,23 @@ button.btn.btn-filter span.icon-cross {
     width: 200px;
 }
 /*responsive*/
-@media(max-width:1024px){
-    .customer-form-inline{
+@media (max-width: 1024px) {
+    .customer-form-inline {
         position: relative;
         display: flex;
         flex-direction: column;
         align-items: initial;
-        .wrap-search-entity{
+        .wrap-search-entity {
             display: flex;
         }
-        .linked-entities{
+        .linked-entities {
             width: 80%;
             margin-bottom: 0;
         }
         .header-left {
             width: calc(100% - 50px);
             margin-left: 45px;
-            &.on-company{
+            &.on-company {
                 width: 100%;
                 margin-left: 0;
                 margin-bottom: 0;
@@ -416,12 +417,12 @@ button.btn.btn-filter span.icon-cross {
         padding-top: 0;
         float: left !important;
     }
-    .customer-footer-box+.btn-group {
-        .btn{
+    .customer-footer-box + .btn-group {
+        .btn {
             margin-right: 0;
         }
     }
-    .customer-form-inline{
+    .customer-form-inline {
         flex-direction: column;
     }
     .customer-footer-box {
@@ -436,21 +437,22 @@ button.btn.btn-filter span.icon-cross {
     }
 }
 @media (max-width: 768px) {
-    button.btn.btn-filter{
+    button.btn.btn-filter {
         margin-left: auto;
         display: flex;
     }
-    .customer-form-inline{
+    .customer-form-inline {
         display: block;
     }
-    .aging-table>tbody>tr input[type="checkbox"] {
+    .aging-table > tbody > tr input[type="checkbox"] {
         top: 2px;
     }
     .customer-right-wrap h4.mr-b1.pd-r2 {
         margin-bottom: 0;
     }
     tr:last-child td.position-relative.word-wrap.customer-name.cursor-pointer,
-    tr:last-child td.position-relative.word-wrap.customer-name.vendor-customer-name.cursor-pointer {
+    tr:last-child
+        td.position-relative.word-wrap.customer-name.vendor-customer-name.cursor-pointer {
         border-bottom: none !important;
     }
     .table-responsive {
@@ -485,7 +487,8 @@ button.btn.btn-filter span.icon-cross {
         white-space: inherit;
         line-height: 1.5;
     }
-    .position-relative.word-wrap.vendor-customer-name .icon-dots-three-vertical {
+    .position-relative.word-wrap.vendor-customer-name
+        .icon-dots-three-vertical {
         position: relative;
         top: 0;
         line-height: 1 !important;
@@ -504,10 +507,10 @@ button.btn.btn-filter span.icon-cross {
     .aging-table .btn-small {
         min-width: auto;
     }
-    .top-aging-table-top{
+    .top-aging-table-top {
         margin-bottom: 8px;
     }
-    table.on-mobile-view tbody td:before{
+    table.on-mobile-view tbody td:before {
         left: 30px;
     }
     .aging-table span.justify-content-end {
@@ -546,35 +549,33 @@ button.btn.btn-filter span.icon-cross {
     .customer-name .icon-ellipse {
         top: 8px;
     }
-
 }
 
 @media (max-width: 575px) {
-    .customer-form-inline{
-        .wrap-search-entity{
+    .customer-form-inline {
+        .wrap-search-entity {
             flex-direction: column;
             .dis {
                 position: absolute;
                 left: 0;
                 top: 0;
             }
-            .linked-entities{
+            .linked-entities {
                 width: calc(100% - 50px);
                 margin-bottom: 15px;
                 margin-left: 50px;
             }
-            .header-left{
+            .header-left {
                 width: calc(100% - 50px);
                 margin-left: 45px;
-                &.on-company{
+                &.on-company {
                     width: calc(100% - 50px);
                     margin-left: 45px;
                 }
             }
         }
-
     }
-    .customer-footer-box+.btn-group {
+    .customer-footer-box + .btn-group {
         float: none !important;
         width: 100%;
         button {
