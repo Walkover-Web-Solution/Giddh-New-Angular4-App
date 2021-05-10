@@ -64,17 +64,21 @@
                         <div class="row mr-b15">
                             <div class="col-sm-6">
                                 <span class="p-0 mr-3" (click)="selectCode(true)">
-                                    <input id="group-hsn-code-option" class="radio-custom cp ml-0" type="radio" name="selectCode" [value]="">
+                                    <input id="group-hsn-code-option" class="radio-custom cp ml-0" type="radio"
+                                        name="selectCode" [value]="">
                                     <label for="group-hsn-code-option" class="radio-custom-label">HSN</label>
                                 </span>
                                 <span class="p-0" (click)="selectCode(false)">
-                                    <input id="group-sac-code-option" class="radio-custom cp ml-0" type="radio" name="selectCode" [value]="">
+                                    <input id="group-sac-code-option" class="radio-custom cp ml-0" type="radio"
+                                        name="selectCode" [value]="">
                                     <label for="group-sac-code-option" class="radio-custom-label">SAC</label>
                                 </span>
                             </div>
                             <div class="col-sm-6">
-                                <input *ngIf="isHSN" id="group-hsn-code" class="form-control" type="text" placeholder="Enter HSN Code">
-                                <input *ngIf="!isHSN" id="group-sac-code" class="form-control" type="text" placeholder="Enter SAC Code">
+                                <input *ngIf="isHSN" id="group-hsn-code" class="form-control" type="text"
+                                    placeholder="Enter HSN Code">
+                                <input *ngIf="!isHSN" id="group-sac-code" class="form-control" type="text"
+                                    placeholder="Enter SAC Code">
                                 <div>
                                     <input id="usb-group" type="checkbox"><span class="font-14 ml-1">Is it
                                         Sub-group?</span>

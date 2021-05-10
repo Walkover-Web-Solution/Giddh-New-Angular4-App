@@ -378,7 +378,7 @@ export class SettingsIntegrationService {
     public beneficiaryValidation(model: any): Observable<BaseResponse<any, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        
+
         const urn = model.urn;
         const bnfAccNo = model.bnfAccNo;
 

@@ -177,15 +177,15 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() itemDetails: any;
 
     /** States dropdown instance */
-    @ViewChild('states', {static: true}) statesDropdown: ShSelectComponent;
+    @ViewChild('states', { static: true }) statesDropdown: ShSelectComponent;
     /** GST number field */
-    @ViewChild('gstNumberField', {static: true}) gstNumberField: ElementRef<any>;
+    @ViewChild('gstNumberField', { static: true }) gstNumberField: ElementRef<any>;
     /** Contact number field */
-    @ViewChild('mobileNoEl', {static: true}) contactNumberField: ElementRef<any>;
+    @ViewChild('mobileNoEl', { static: true }) contactNumberField: ElementRef<any>;
     /** Address field */
-    @ViewChild('address', {static: true}) addressField: ElementRef<any>;
+    @ViewChild('address', { static: true }) addressField: ElementRef<any>;
     /** Form instance */
-    @ViewChild('welcomeForm', {static: true}) welcomeForm: NgForm;
+    @ViewChild('welcomeForm', { static: true }) welcomeForm: NgForm;
 
     /**
      * Returns true, if onboarding of Warehouse is going on
@@ -277,7 +277,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.subscriptionRequestObj.userUniqueName = (this.loggedInUser) ? this.loggedInUser.uniqueName : "";
 
         this.store.pipe(select(state => state.session.isCompanyCreated), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response) {
+            if (response) {
                 setTimeout(() => {
                     if (this._router.url.includes("welcome")) {
                         this._router.navigate(['/pages/onboarding']);
@@ -797,20 +797,20 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         try {
             let parsedNumber = parsePhoneNumberFromString('+' + this.createNewCompanyPreparedObj.phoneCode + contactNumberElement.value, this.company.country as CountryCode);
             if (parsedNumber.isValid()) {
-                if(contactNumberElement) {
+                if (contactNumberElement) {
                     contactNumberElement.classList.remove('error-box');
                 }
                 return true;
             } else {
                 this._toasty.errorToast('Invalid Contact number');
-                if(contactNumberElement) {
+                if (contactNumberElement) {
                     contactNumberElement.classList.add('error-box');
                 }
                 return false;
             }
         } catch (error) {
             this._toasty.errorToast('Invalid Contact number');
-            if(contactNumberElement) {
+            if (contactNumberElement) {
                 contactNumberElement.classList.add('error-box');
             }
             return false;

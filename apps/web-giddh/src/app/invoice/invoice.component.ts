@@ -13,12 +13,12 @@ import { CurrentPage } from '../models/api-models/Common';
 import { GeneralActions } from '../actions/general/general.actions';
 @Component({
     templateUrl: './invoice.component.html',
-    styleUrls:[`./invoice.component.scss`]
+    styleUrls: [`./invoice.component.scss`]
 })
 export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
 
-    public tabsDropdown:boolean = false;
+    public tabsDropdown: boolean = false;
     public selectedVoucherType: VoucherTypeEnum;
     public activeTab: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -68,7 +68,7 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                             }, 500);
                         }
                         this.tabChanged(queryParams.tab, null);
-                    } else if(queryParams.tab) {
+                    } else if (queryParams.tab) {
                         this.activeTab = queryParams.tab;
                     }
                 } else {
@@ -107,11 +107,11 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
             this.saveLastState(tab);
         }
 
-        if(tab === "pending") {
+        if (tab === "pending") {
             this.setCurrentPageTitle("Pending");
-        } else if(tab === "templates") {
+        } else if (tab === "templates") {
             this.setCurrentPageTitle("Templates");
-        } else if(tab === "settings") {
+        } else if (tab === "settings") {
             this.setCurrentPageTitle("Settings");
         }
     }
@@ -137,7 +137,7 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {string} title
      * @memberof InvoiceComponent
      */
-    public setCurrentPageTitle(title: string) : void {
+    public setCurrentPageTitle(title: string): void {
         let currentPageObj = new CurrentPage();
         currentPageObj.name = (this.selectedVoucherType !== 'debit note' && this.selectedVoucherType !== 'credit note') ? "Invoice > " + title : title;
         currentPageObj.url = this.router.url;

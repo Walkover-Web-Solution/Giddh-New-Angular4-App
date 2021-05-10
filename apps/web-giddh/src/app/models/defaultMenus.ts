@@ -123,31 +123,40 @@ export let HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['journal-voucher', 'inventory',
     'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
     'ledger'];
 export let DEFAULT_MENUS_ORIGINAL: IUlist[] = [
-    { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: { tab: 'customer', tabIndex: 0 }, isRemoved: false, pIndex: 3, hasTabs: true
+    {
+        type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: { tab: 'customer', tabIndex: 0 }, isRemoved: false, pIndex: 3, hasTabs: true
     },
-    { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling', isRemoved: false, pIndex: 5, hasTabs: false
+    {
+        type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling', isRemoved: false, pIndex: 5, hasTabs: false
     },
-    { type: 'MENU', name: 'Vat Report', uniqueName: '/pages/vat-report', isRemoved: false, pIndex: 5, hasTabs: false
+    {
+        type: 'MENU', name: 'Vat Report', uniqueName: '/pages/vat-report', isRemoved: false, pIndex: 5, hasTabs: false
     },
-    { type: 'MENU', name: 'Import', uniqueName: '/pages/import', isRemoved: false, pIndex: 10, hasTabs: false
+    {
+        type: 'MENU', name: 'Import', uniqueName: '/pages/import', isRemoved: false, pIndex: 10, hasTabs: false
     },
-    { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory', isRemoved: false, pIndex: 8, hasTabs: true
+    {
+        type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory', isRemoved: false, pIndex: 8, hasTabs: true
     },
-    { type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', isRemoved: false, pIndex: 2, additional: { tab: 'sales', tabIndex: 0 }, hasTabs: true
+    {
+        type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', isRemoved: false, pIndex: 2, additional: { tab: 'sales', tabIndex: 0 }, hasTabs: true
     },
-    { type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, pIndex: 1
+    {
+        type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, pIndex: 1
     },
-    { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report', isRemoved: false, pIndex: 9, hasTabs: true
+    {
+        type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report', isRemoved: false, pIndex: 9, hasTabs: true
     },
     {
         type: 'MENU', name: 'New Purchase Bill', uniqueName: '/pages/proforma-invoice/invoice/purchase', isRemoved: false, pIndex: 7, hasTabs: false
     },
-    { type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales', isRemoved: false, pIndex: 6, hasTabs: false
+    {
+        type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales', isRemoved: false, pIndex: 6, hasTabs: false
     },
     { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: { tab: 'vendor', tabIndex: 0 }, isRemoved: false, pIndex: 4, hasTabs: false },
     { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/aging-report', additional: { tab: 'aging-report', tabIndex: 1 }, isRemoved: false, pIndex: 11, hasTabs: true },
     { type: 'MENU', name: 'Settings', uniqueName: '/pages/settings', isRemoved: false, pIndex: 12, hasTabs: true },
-    { type: 'MENU', name: 'Settings > Warehouse', uniqueName: '/pages/settings/warehouse', additional: { tab: 'warehouse', tabIndex: 10 }, isRemoved: false, pIndex: 13, hasTabs: true},
+    { type: 'MENU', name: 'Settings > Warehouse', uniqueName: '/pages/settings/warehouse', additional: { tab: 'warehouse', tabIndex: 10 }, isRemoved: false, pIndex: 13, hasTabs: true },
     { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook', isRemoved: false, pIndex: 14, hasTabs: false },
     { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase', isRemoved: false, pIndex: 15, hasTabs: true },
     { type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details/mobile-number', additional: { tab: 'profile', tabIndex: 1 }, isRemoved: false, pIndex: 16, hasTabs: true },

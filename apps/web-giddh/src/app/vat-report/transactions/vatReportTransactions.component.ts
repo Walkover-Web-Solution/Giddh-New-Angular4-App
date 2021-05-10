@@ -28,9 +28,9 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
 })
 
 export class VatReportTransactionsComponent implements OnInit, OnDestroy {
-    @ViewChild('downloadOrSendMailModel', {static: true}) public downloadOrSendMailModel: ModalDirective;
-    @ViewChild('downloadOrSendMailComponent', {static: true}) public downloadOrSendMailComponent: ElementViewContainerRef;
-    @ViewChild('invoiceGenerateModel', {static: true}) public invoiceGenerateModel: ModalDirective;
+    @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: ModalDirective;
+    @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
+    @ViewChild('invoiceGenerateModel', { static: true }) public invoiceGenerateModel: ModalDirective;
 
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -163,7 +163,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public onSelectInvoice(invoice): void {
-        if(invoice.voucherType === VoucherTypeEnum.purchase) {
+        if (invoice.voucherType === VoucherTypeEnum.purchase) {
             this.router.navigate(['pages', 'purchase-management', 'purchase', invoice.accountUniqueName, invoice.purchaseRecordUniqueName]);
         } else {
             if (invoice.voucherNumber) {

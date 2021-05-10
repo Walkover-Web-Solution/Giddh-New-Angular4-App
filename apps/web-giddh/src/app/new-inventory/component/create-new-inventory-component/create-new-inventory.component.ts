@@ -28,7 +28,7 @@ export class CreateNewInventoryComponent implements OnInit {
 
     constructor(private fb: FormBuilder
 
-    ){}
+    ) { }
     public ngOnInit() {
         // add group form
         this.formGroupRadio = this.fb.group({
@@ -41,7 +41,7 @@ export class CreateNewInventoryComponent implements OnInit {
                 this.isService = false;
                 this.isCombo = false;
                 this.isBulkCreation = false;
-            } else if (value === 'service'){
+            } else if (value === 'service') {
                 this.isProduct = false;
                 this.isService = true;
                 this.isCombo = false;

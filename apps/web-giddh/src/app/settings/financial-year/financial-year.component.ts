@@ -169,7 +169,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
      * @memberof FinancialYearComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.options.placeholder = this.commonLocaleData?.app_select_option;
 
             this.FYPeriodOptions = [

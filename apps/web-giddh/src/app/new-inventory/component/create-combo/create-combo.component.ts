@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, EventEmitter, Output  } from '@angular/core';
+import { Component, OnInit, ViewChildren, EventEmitter, Output } from '@angular/core';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({

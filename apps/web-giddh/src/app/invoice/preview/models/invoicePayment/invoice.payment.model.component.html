@@ -20,8 +20,8 @@
                 <div class="col-6 form-group">
                     <label>{{commonLocaleData?.app_amount}} <sup>*</sup></label>
                     <input type="text" class="form-control" decimalDigitsDirective
-                        [(ngModel)]="paymentActionFormObj.amount" [placeholder]="localeData?.enter_amount" name="amount" #amountField
-                        autocomplete="off" required />
+                        [(ngModel)]="paymentActionFormObj.amount" [placeholder]="localeData?.enter_amount" name="amount"
+                        #amountField autocomplete="off" required />
                 </div>
 
             </div>
@@ -34,8 +34,9 @@
 
                     <sh-select name="accountUniqueName" [options]="paymentModes$ | async"
                         [(ngModel)]="paymentActionFormObj.accountUniqueName" (selected)="onSelectPaymentMode($event)"
-                        [placeholder]="commonLocaleData?.app_select_account" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
-                        [useInBuiltFilterForIOptionTypeItems]="true" class="text-left" required [isRequired]="true">
+                        [placeholder]="commonLocaleData?.app_select_account" [notFoundLink]="false" [multiple]="false"
+                        [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left" required
+                        [isRequired]="true">
 
                         <ng-template #optionTemplate1 let-option="option">
                             <a href="javascript:void(0)" class="list-item bb-1">
@@ -53,8 +54,8 @@
                     <label>{{commonLocaleData?.app_tag}}</label>
 
                     <sh-select [options]="tags" name="selectedTag" [(ngModel)]="paymentActionFormObj.tagUniqueName"
-                        [isFilterEnabled]="true" [placeholder]="commonLocaleData?.app_select_tag"
-                        [ItemHeight]="33"></sh-select>
+                        [isFilterEnabled]="true" [placeholder]="commonLocaleData?.app_select_tag" [ItemHeight]="33">
+                    </sh-select>
 
                 </div>
             </div>
@@ -63,8 +64,8 @@
 
                 <div class="col-6 form-group">
                     <label>{{localeData?.cheque_no}}</label>
-                    <input type="text" class="form-control" [placeholder]="localeData?.cheque_no_placeholder" decimalDigitsDirective
-                        [(ngModel)]="paymentActionFormObj.chequeNumber" name="chequeNumber" />
+                    <input type="text" class="form-control" [placeholder]="localeData?.cheque_no_placeholder"
+                        decimalDigitsDirective [(ngModel)]="paymentActionFormObj.chequeNumber" name="chequeNumber" />
                 </div>
 
                 <div class="col-6 form-group">
@@ -95,8 +96,8 @@
                         <span class="mr-1 middle">{{companyCurrencyName}}</span>
                     </span>
                     <span class="right-currency middle mt-1">
-                        <span class="currency-digits"
-                            *ngIf="!showCurrencyValue">{{originalExchangeRate | giddhCurrency}}</span>
+                        <span class="currency-digits" *ngIf="!showCurrencyValue">{{originalExchangeRate |
+                            giddhCurrency}}</span>
                         <input type="number" name="exchangeRate" [(ngModel)]="exchangeRate" *ngIf="showCurrencyValue"
                             class="form-control edit-currency">
                     </span>
@@ -118,8 +119,8 @@
                         <span class="mr-1 middle">{{accountCurrency}}</span>
                     </span>
                     <span class="right-currency middle mt-1">
-                        <span class="currency-digits"
-                            *ngIf="!showCurrencyValue">{{originalReverseExchangeRate | giddhCurrency}}</span>
+                        <span class="currency-digits" *ngIf="!showCurrencyValue">{{originalReverseExchangeRate |
+                            giddhCurrency}}</span>
                         <input type="number" name="exchangeRate" [(ngModel)]="reverseExchangeRate"
                             *ngIf="showCurrencyValue" class="form-control edit-currency">
                     </span>
@@ -137,8 +138,10 @@
             </div>
 
             <div class="pull-right">
-                <button type="submit" class="btn btn-success" [disabled]="f.invalid">{{commonLocaleData?.app_save}}</button>
-                <button type="button" class="btn btn-danger" (click)="onCancel()">{{commonLocaleData?.app_cancel}}</button>
+                <button type="submit" class="btn btn-success"
+                    [disabled]="f.invalid">{{commonLocaleData?.app_save}}</button>
+                <button type="button" class="btn btn-danger"
+                    (click)="onCancel()">{{commonLocaleData?.app_cancel}}</button>
             </div>
 
         </form>

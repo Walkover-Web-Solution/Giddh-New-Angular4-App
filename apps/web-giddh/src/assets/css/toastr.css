@@ -176,13 +176,13 @@ button.toast-close-button {
     background-color: #51a351;
 }
 .toast-error {
-    background-color: #E55B5B;
+    background-color: #e55b5b;
 }
 
 .toast-info {
     background-color: #2f96b4;
 }
-.toast-info .toast-title{
+.toast-info .toast-title {
     color: #ffffff;
     font-size: 13px;
     margin-right: 10px;
@@ -190,7 +190,7 @@ button.toast-close-button {
 .toast-warning {
     background-color: #f89406;
 }
-.toast-warning .toast-title{
+.toast-warning .toast-title {
     color: #ffffff;
     font-size: 13px;
     margin-right: 10px;
@@ -203,7 +203,7 @@ button.toast-close-button {
     background-color: #000000;
     opacity: 0.4;
 }
-.toast-error .toast-title{
+.toast-error .toast-title {
     font-size: 13px;
     margin-right: 10px;
     color: #ffffff;
@@ -213,7 +213,7 @@ button.toast-close-button {
     color: #ffffff;
     margin-right: 10px;
 }
-.toast-message{
+.toast-message {
     color: #ffffff;
 }
 .toast-title {
@@ -221,17 +221,17 @@ button.toast-close-button {
     margin-right: 5px;
 }
 /*Responsive Design*/
-@media screen and (max-width:767px) {
-    #toast-container{
+@media screen and (max-width: 767px) {
+    #toast-container {
         width: 100%;
         max-width: 100%;
         right: 0;
     }
-    #toast-container .toast{
-         max-width: 100%;
-         flex-direction: column;
-         width: calc(100% - 20px);
-         min-width: 450px;
+    #toast-container .toast {
+        max-width: 100%;
+        flex-direction: column;
+        width: calc(100% - 20px);
+        min-width: 450px;
     }
     .toast-title {
         max-width: 100%;
@@ -269,7 +269,7 @@ button.toast-close-button {
     #toast-container .toast-close-button {
         right: 10px !important;
     }
-     #toast-container .toast{
-         min-width: auto;
-     }
+    #toast-container .toast {
+        min-width: auto;
+    }
 }

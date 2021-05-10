@@ -1,7 +1,7 @@
 @import "../../../../../assets/css/color.scss";
 
 .selling-report-page {
-    .box{
+    .box {
         border: 1px solid $gainsboro;
     }
     .top-selling-header {
@@ -63,8 +63,8 @@
             }
         }
         .filter-top-selling {
-            .select-by-radio{
-                span{
+            .select-by-radio {
+                span {
                     display: block;
                     margin-bottom: 5px;
                 }
@@ -73,9 +73,9 @@
                 margin-top: 15px;
             }
         }
-        .top-sale-data{
+        .top-sale-data {
             margin-top: 15px !important;
-            .top-high-sale{
+            .top-high-sale {
                 border-left: none !important;
                 padding-left: 0 !important;
                 margin-top: 15px;

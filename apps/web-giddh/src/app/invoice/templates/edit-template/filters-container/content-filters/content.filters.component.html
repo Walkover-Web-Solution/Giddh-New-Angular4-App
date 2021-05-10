@@ -1,73 +1,138 @@
-<div id="contentTab" class="design-tab-content mr-t2 template-editor" *ngIf="customTemplate?.uniqueName" [hidden]="!(content && customTemplate && customTemplate.sections)">
+<div id="contentTab" class="design-tab-content mr-t2 template-editor" *ngIf="customTemplate?.uniqueName"
+    [hidden]="!(content && customTemplate && customTemplate.sections)">
     <!-- start header -->
     <form #contentForm="ngForm" novalidate>
         <div id="headerDiv" [hidden]="!templateUISectionVisibility.header">
             <h2>Header</h2>
             <div class="scroll-auto">
                 <div class="clearfix">
-                    <div *ngIf="fieldsAndVisibility.header.companyName && (customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d')" class="form-group">
-                        <input type="checkbox" name="companyNameCheckbox" [(ngModel)]="customTemplate.sections['header'].data['companyName'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Name
+                    <div *ngIf="fieldsAndVisibility.header.companyName && (customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d')"
+                        class="form-group">
+                        <input type="checkbox" name="companyNameCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['companyName'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Name
                     </div>
                     <div class="form-group" *ngIf="customTemplate?.templateType === 'gst_template_e'">
-                        <input type="checkbox" name="titleCheckbox" [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display" (ngModelChange)="changeInvoiceHeader($event);onChangeFieldVisibility(null, null, null)" checked /> Document Title: This is your
+                        <input type="checkbox" name="titleCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display"
+                            (ngModelChange)="changeInvoiceHeader($event);onChangeFieldVisibility(null, null, null)"
+                            checked /> Document Title: This is your
                         <div class="ml-3">
-                            <input type="text" hasFocus #formNameInvoice="hasFocus" [class.error-box]="contentForm?.controls['title']?.errors?.maxlength" maxlength="15" class="form-control" name="title" [(ngModel)]="customTemplate.sections['header'].data['formNameInvoice'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['formNameInvoice'].display"
-                            />
-                            <ng-container *ngIf="formNameInvoice?.isFocused || contentForm?.controls['title']?.errors?.maxlength">
-                                <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(15 - customTemplate.sections['header'].data['formNameInvoice'].label.length)}}</span>
+                            <input type="text" hasFocus #formNameInvoice="hasFocus"
+                                [class.error-box]="contentForm?.controls['title']?.errors?.maxlength" maxlength="15"
+                                class="form-control" name="title"
+                                [(ngModel)]="customTemplate.sections['header'].data['formNameInvoice'].label"
+                                (ngModelChange)='onFieldChange(null, null, null)'
+                                [disabled]="!customTemplate.sections['header'].data['formNameInvoice'].display" />
+                            <ng-container
+                                *ngIf="formNameInvoice?.isFocused || contentForm?.controls['title']?.errors?.maxlength">
+                                <span class="max-character-label">Characters left:&nbsp;</span><span
+                                    class="max-character-value">{{(15 -
+                                    customTemplate.sections['header'].data['formNameInvoice'].label.length)}}</span>
                             </ng-container>
                         </div>
                         <div class="ml-3">
-                            <input type="text" hasFocus #formNameTaxInvoice="hasFocus" [class.error-box]="contentForm?.controls['taxTitle']?.errors?.maxlength" maxlength="15" class="form-control" name="taxTitle" [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['formNameTaxInvoice'].display"
-                            />
-                            <ng-container *ngIf="formNameTaxInvoice?.isFocused || contentForm?.controls['taxTitle']?.errors?.maxlength">
-                                <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(15 - customTemplate.sections['header'].data['formNameTaxInvoice'].label.length)}}</span>
+                            <input type="text" hasFocus #formNameTaxInvoice="hasFocus"
+                                [class.error-box]="contentForm?.controls['taxTitle']?.errors?.maxlength" maxlength="15"
+                                class="form-control" name="taxTitle"
+                                [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].label"
+                                (ngModelChange)='onFieldChange(null, null, null)'
+                                [disabled]="!customTemplate.sections['header'].data['formNameTaxInvoice'].display" />
+                            <ng-container
+                                *ngIf="formNameTaxInvoice?.isFocused || contentForm?.controls['taxTitle']?.errors?.maxlength">
+                                <span class="max-character-label">Characters left:&nbsp;</span><span
+                                    class="max-character-value">{{(15 -
+                                    customTemplate.sections['header'].data['formNameTaxInvoice'].label.length)}}</span>
                             </ng-container>
                         </div>
                     </div>
-                    <div class="form-group" *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && showGstComposition">
-                        <input type="checkbox" name="irnCheckbox" [(ngModel)]="customTemplate.sections['header'].data['showIrnNumber'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show IRN number
+                    <div class="form-group"
+                        *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && showGstComposition">
+                        <input type="checkbox" name="irnCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['showIrnNumber'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show IRN number
                     </div>
-                    <div *ngIf="showGstComposition && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="form-group">
-                        <input type="checkbox" name="showQrCodeCheckbox" [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show QR code
+                    <div *ngIf="showGstComposition && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')"
+                        class="form-group">
+                        <input type="checkbox" name="showQrCodeCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show QR code
                     </div>
-                    <div class="form-group" *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
-                        <input type="checkbox" name="companyAddressCheckbox" [(ngModel)]="customTemplate.sections['header'].data['showCompanyAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Address
+                    <div class="form-group"
+                        *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
+                        <input type="checkbox" name="companyAddressCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['showCompanyAddress'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Address
                     </div>
-                    <div class="form-group" *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
-                        <input type="checkbox" name="warehouseAddressCheckbox" [(ngModel)]="customTemplate.sections['header'].data['warehouseAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Warehouse Address
+                    <div class="form-group"
+                        *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
+                        <input type="checkbox" name="warehouseAddressCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['warehouseAddress'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Warehouse Address
                     </div>
-                    <div *ngIf="fieldsAndVisibility.header.gstin && customTemplate?.templateType !== 'gst_template_e'" class="form-group">
-                        <input type="checkbox" name="gstinCheckbox" [(ngModel)]="customTemplate.sections['header'].data['gstin'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> GSTIN
+                    <div *ngIf="fieldsAndVisibility.header.gstin && customTemplate?.templateType !== 'gst_template_e'"
+                        class="form-group">
+                        <input type="checkbox" name="gstinCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['gstin'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> GSTIN
                     </div>
-                    <div class="form-group clearfix custom-field" *ngIf="showGstComposition === true && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
-                        <input type="checkbox" name="gstCompositionLabel" [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
+                    <div class="form-group clearfix custom-field"
+                        *ngIf="showGstComposition === true && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
+                        <input type="checkbox" name="gstCompositionLabel"
+                            [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
                         <span>
-                            <input class="form-control" [class.error-box]="contentForm?.controls['gstComposition']?.errors?.maxlength" maxlength="70" hasFocus #gstComposition="hasFocus" type="text" name="gstComposition" placeholder="Registered under Composition Scheme" [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].label" (ngModelChange)='onFieldChange(null, null, null)'>
-                            <ng-container *ngIf="gstComposition?.isFocused || contentForm?.controls['gstComposition']?.errors?.maxlength">
-                                <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(70 - customTemplate.sections['header'].data['gstComposition'].label.length)}}</span>
+                            <input class="form-control"
+                                [class.error-box]="contentForm?.controls['gstComposition']?.errors?.maxlength"
+                                maxlength="70" hasFocus #gstComposition="hasFocus" type="text" name="gstComposition"
+                                placeholder="Registered under Composition Scheme"
+                                [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].label"
+                                (ngModelChange)='onFieldChange(null, null, null)'>
+                            <ng-container
+                                *ngIf="gstComposition?.isFocused || contentForm?.controls['gstComposition']?.errors?.maxlength">
+                                <span class="max-character-label">Characters left:&nbsp;</span><span
+                                    class="max-character-value">{{(70 -
+                                    customTemplate.sections['header'].data['gstComposition'].label.length)}}</span>
                             </ng-container>
                         </span>
                     </div>
                     <!-- <div *ngIf="fieldsAndVisibility.header.pan" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[2].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> PAN</div> -->
                     <div *ngIf="voucherType==='sales'|| voucherType===''">
                         <div *ngIf="fieldsAndVisibility.header.invoiceDate" class="form-group">
-                            <input type="checkbox" name="invoiceDateCheckbox" [(ngModel)]="customTemplate.sections['header'].data['invoiceDate'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Invoice Date
+                            <input type="checkbox" name="invoiceDateCheckbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['invoiceDate'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Invoice Date
                             <div class="ml-3">
-                                <input type="text" hasFocus #invoiceDate="hasFocus" [class.error-box]="contentForm?.controls['invoiceDate']?.errors?.maxlength" maxlength="15" class="form-control" name="invoiceDate" [(ngModel)]="customTemplate.sections['header'].data['invoiceDate'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['invoiceDate'].display"
-                                />
-                                <ng-container *ngIf="invoiceDate?.isFocused || contentForm?.controls['invoiceDate']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['invoiceDate'].label.length)}}</span>
+                                <input type="text" hasFocus #invoiceDate="hasFocus"
+                                    [class.error-box]="contentForm?.controls['invoiceDate']?.errors?.maxlength"
+                                    maxlength="15" class="form-control" name="invoiceDate"
+                                    [(ngModel)]="customTemplate.sections['header'].data['invoiceDate'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['header'].data['invoiceDate'].display" />
+                                <ng-container
+                                    *ngIf="invoiceDate?.isFocused || contentForm?.controls['invoiceDate']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                        class="max-character-value">{{(15 -
+                                        customTemplate.sections['header'].data['invoiceDate'].label.length)}}</span>
                                 </ng-container>
                             </div>
                         </div>
                         <div *ngIf="fieldsAndVisibility.header.invoiceNumber" class="form-group">
-                            <input type="checkbox" name="invoiceNumberCheckbox" [(ngModel)]="customTemplate.sections['header'].data['invoiceNumber'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Invoice Number
+                            <input type="checkbox" name="invoiceNumberCheckbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['invoiceNumber'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Invoice Number
                             <div class="ml-3">
-                                <input type="text" hasFocus #invoiceNo="hasFocus" [class.error-box]="contentForm?.controls['invoiceNo']?.errors?.maxlength" maxlength="15" class="form-control" name="invoiceNo" [(ngModel)]="customTemplate.sections['header'].data['invoiceNumber'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['invoiceNumber'].display"
-                                />
-                                <ng-container *ngIf="invoiceNo?.isFocused || contentForm?.controls['invoiceNo']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['invoiceNumber'].label.length)}}</span>
+                                <input type="text" hasFocus #invoiceNo="hasFocus"
+                                    [class.error-box]="contentForm?.controls['invoiceNo']?.errors?.maxlength"
+                                    maxlength="15" class="form-control" name="invoiceNo"
+                                    [(ngModel)]="customTemplate.sections['header'].data['invoiceNumber'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['header'].data['invoiceNumber'].display" />
+                                <ng-container
+                                    *ngIf="invoiceNo?.isFocused || contentForm?.controls['invoiceNo']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                        class="max-character-value">{{(15 -
+                                        customTemplate.sections['header'].data['invoiceNumber'].label.length)}}</span>
                                 </ng-container>
                             </div>
                         </div>
@@ -75,36 +140,66 @@
                     <!--   .....this is for other voucher type -->
                     <ng-container *ngIf="voucherType!='sales'">
                         <div *ngIf="fieldsAndVisibility.header.voucherDate" class="form-group">
-                            <input type="checkbox" name="voucherDateCheckbox" [(ngModel)]="customTemplate.sections['header'].data['voucherDate'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Voucher Date
+                            <input type="checkbox" name="voucherDateCheckbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['voucherDate'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Voucher Date
                             <div class="ml-3">
-                                <input type="text" hasFocus #invoiceDate="hasFocus" [class.error-box]="contentForm?.controls['invoiceDate']?.errors?.maxlength" maxlength="15" class="form-control" name="invoiceDate" [(ngModel)]="customTemplate.sections['header'].data['voucherDate'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['voucherDate'].display"
-                                />
-                                <ng-container *ngIf="invoiceDate?.isFocused || contentForm?.controls['invoiceDate']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['voucherDate'].label.length)}}</span>
+                                <input type="text" hasFocus #invoiceDate="hasFocus"
+                                    [class.error-box]="contentForm?.controls['invoiceDate']?.errors?.maxlength"
+                                    maxlength="15" class="form-control" name="invoiceDate"
+                                    [(ngModel)]="customTemplate.sections['header'].data['voucherDate'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['header'].data['voucherDate'].display" />
+                                <ng-container
+                                    *ngIf="invoiceDate?.isFocused || contentForm?.controls['invoiceDate']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                        class="max-character-value">{{(15 -
+                                        customTemplate.sections['header'].data['voucherDate'].label.length)}}</span>
                                 </ng-container>
                             </div>
                         </div>
                         <div *ngIf="fieldsAndVisibility.header.voucherNumber" class="form-group">
-                            <input type="checkbox" name="voucherNumberCheckbox" [(ngModel)]="customTemplate.sections['header'].data['voucherNumber'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Voucher Number
+                            <input type="checkbox" name="voucherNumberCheckbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['voucherNumber'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Voucher Number
                             <div class="ml-3">
-                                <input type="text" hasFocus #voucherNo="hasFocus" [class.error-box]="contentForm?.controls['voucherNo']?.errors?.maxlength" maxlength="15" class="form-control" name="voucherNo" [(ngModel)]="customTemplate.sections['header'].data['voucherNumber'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['voucherNumber'].display"
-                                />
-                                <ng-container *ngIf="voucherNo?.isFocused || contentForm?.controls['voucherNo']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['voucherNumber'].label.length)}}</span>
+                                <input type="text" hasFocus #voucherNo="hasFocus"
+                                    [class.error-box]="contentForm?.controls['voucherNo']?.errors?.maxlength"
+                                    maxlength="15" class="form-control" name="voucherNo"
+                                    [(ngModel)]="customTemplate.sections['header'].data['voucherNumber'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['header'].data['voucherNumber'].display" />
+                                <ng-container
+                                    *ngIf="voucherNo?.isFocused || contentForm?.controls['voucherNo']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                        class="max-character-value">{{(15 -
+                                        customTemplate.sections['header'].data['voucherNumber'].label.length)}}</span>
                                 </ng-container>
                             </div>
                         </div>
-                        <div *ngIf="showGstComposition && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="form-group">
-                            <input type="checkbox" name="showQrCodeCheckbox" [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show QR code
+                        <div *ngIf="showGstComposition && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')"
+                            class="form-group">
+                            <input type="checkbox" name="showQrCodeCheckbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show QR code
                         </div>
                     </ng-container>
                     <div *ngIf="fieldsAndVisibility.header.dueDate" class="form-group">
-                        <input type="checkbox" name="dueDateCheckbox" [(ngModel)]="customTemplate.sections['header'].data['dueDate'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Due Date
+                        <input type="checkbox" name="dueDateCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['dueDate'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Due Date
                         <div class="ml-3">
-                            <input type="text" hasFocus #dueDate="hasFocus" [class.error-box]="contentForm?.controls['dueDate1']?.errors?.maxlength" maxlength="15" class="form-control" name="dueDate1" [(ngModel)]="customTemplate.sections['header'].data['dueDate'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['dueDate'].display"
-                            />
-                            <ng-container *ngIf="dueDate?.isFocused || contentForm?.controls['dueDate1']?.errors?.maxlength">
-                                <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['dueDate'].label.length)}}</span>
+                            <input type="text" hasFocus #dueDate="hasFocus"
+                                [class.error-box]="contentForm?.controls['dueDate1']?.errors?.maxlength" maxlength="15"
+                                class="form-control" name="dueDate1"
+                                [(ngModel)]="customTemplate.sections['header'].data['dueDate'].label"
+                                (ngModelChange)='onFieldChange(null, null, null)'
+                                [disabled]="!customTemplate.sections['header'].data['dueDate'].display" />
+                            <ng-container
+                                *ngIf="dueDate?.isFocused || contentForm?.controls['dueDate1']?.errors?.maxlength">
+                                <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                    class="max-character-value">{{(15 -
+                                    customTemplate.sections['header'].data['dueDate'].label.length)}}</span>
                             </ng-container>
                         </div>
                     </div>
@@ -136,11 +231,15 @@
                 </div>
             </div>
         </div> -->
-                <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e'">
+                <div class="clearfix"
+                    *ngIf="customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e'">
                     <h3>Form</h3>
                     <!-- *ngIf="fieldsAndVisibility.header.formNameTaxInvoice" -->
                     <div class="form-group">
-                        <input type="checkbox" name="documentTitleCheckbox" [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display" (ngModelChange)="changeInvoiceHeader($event);onChangeFieldVisibility(null, null, null);" checked /> Document Title
+                        <input type="checkbox" name="documentTitleCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display"
+                            (ngModelChange)="changeInvoiceHeader($event);onChangeFieldVisibility(null, null, null);"
+                            checked /> Document Title
                         <!-- <div class="ml-3 mr-t1">Invoice
                 <input type="text" maxlength="15" class="form-control" name="tl" [(ngModel)]='customTemplate.sections[0].content[22].label'
                     (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[23].display"
@@ -148,168 +247,291 @@
             </div> -->
 
                         <div class="ml-3"> Invoice
-                            <input type="text" hasFocus #formNameInvoice="hasFocus" [class.error-box]="contentForm?.controls['title']?.errors?.maxlength" maxlength="15" class="form-control" name="title" [(ngModel)]="customTemplate.sections['header'].data['formNameInvoice'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['formNameInvoice'].display"
-                            />
-                            <ng-container *ngIf="formNameInvoice?.isFocused || contentForm?.controls['title']?.errors?.maxlength">
-                                <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['formNameInvoice'].label.length)}}</span>
+                            <input type="text" hasFocus #formNameInvoice="hasFocus"
+                                [class.error-box]="contentForm?.controls['title']?.errors?.maxlength" maxlength="15"
+                                class="form-control" name="title"
+                                [(ngModel)]="customTemplate.sections['header'].data['formNameInvoice'].label"
+                                (ngModelChange)='onFieldChange(null, null, null)'
+                                [disabled]="!customTemplate.sections['header'].data['formNameInvoice'].display" />
+                            <ng-container
+                                *ngIf="formNameInvoice?.isFocused || contentForm?.controls['title']?.errors?.maxlength">
+                                <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                    class="max-character-value">{{(15 -
+                                    customTemplate.sections['header'].data['formNameInvoice'].label.length)}}</span>
                             </ng-container>
                         </div>
                         <div class="ml-3">Tax Invoice
-                            <input type="text" hasFocus #formNameTaxInvoice="hasFocus" [class.error-box]="contentForm?.controls['taxTitle']?.errors?.maxlength" maxlength="15" class="form-control" name="taxTitle" [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['formNameTaxInvoice'].display"
-                            />
-                            <ng-container *ngIf="formNameTaxInvoice?.isFocused || contentForm?.controls['taxTitle']?.errors?.maxlength">
-                                <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['formNameTaxInvoice'].label.length)}}</span>
+                            <input type="text" hasFocus #formNameTaxInvoice="hasFocus"
+                                [class.error-box]="contentForm?.controls['taxTitle']?.errors?.maxlength" maxlength="15"
+                                class="form-control" name="taxTitle"
+                                [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].label"
+                                (ngModelChange)='onFieldChange(null, null, null)'
+                                [disabled]="!customTemplate.sections['header'].data['formNameTaxInvoice'].display" />
+                            <ng-container
+                                *ngIf="formNameTaxInvoice?.isFocused || contentForm?.controls['taxTitle']?.errors?.maxlength">
+                                <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                    class="max-character-value">{{(15 -
+                                    customTemplate.sections['header'].data['formNameTaxInvoice'].label.length)}}</span>
                             </ng-container>
                         </div>
                     </div>
                 </div>
                 <div class="clearfix">
                     <h3>Customer Details</h3>
-                    <div *ngIf="fieldsAndVisibility.header.customerName && (customTemplate?.templateType !== 'gst_template_e' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_b')" class="form-group">
-                        <input type="checkbox" name="customerNameCheckbox" [(ngModel)]="customTemplate.sections['header'].data['customerName'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Customer Name
+                    <div *ngIf="fieldsAndVisibility.header.customerName && (customTemplate?.templateType !== 'gst_template_e' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_b')"
+                        class="form-group">
+                        <input type="checkbox" name="customerNameCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['customerName'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Customer Name
                     </div>
                     <div *ngIf="fieldsAndVisibility.header.attentionTo" class="form-group">
-                        <input type="checkbox" name="attentionToCheckbox" [(ngModel)]="customTemplate.sections['header'].data['attentionTo'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Attention To
+                        <input type="checkbox" name="attentionToCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['attentionTo'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Attention To
                     </div>
 
                     <div *ngIf="fieldsAndVisibility.header.customerEmail && (customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e' && customTemplate?.templateType !== 'gst_template_i'&& customTemplate?.templateType !== 'gst_template_h')"
                         class="form-group">
-                        <input type="checkbox" name="emailIdCheckbox" [(ngModel)]="customTemplate.sections['header'].data['customerEmail'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Email ID
+                        <input type="checkbox" name="emailIdCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['customerEmail'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Email ID
                     </div>
-                    <div *ngIf="fieldsAndVisibility.header.customerMobileNumber  && (customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e')" class="form-group">
-                        <input type="checkbox" name="mobileNumberCheckbox" [(ngModel)]="customTemplate.sections['header'].data['customerMobileNumber'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Mobile Number
+                    <div *ngIf="fieldsAndVisibility.header.customerMobileNumber  && (customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e')"
+                        class="form-group">
+                        <input type="checkbox" name="mobileNumberCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['customerMobileNumber'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Mobile Number
                     </div>
                 </div>
                 <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_d'">
                     <h3>Billing Details</h3>
                     <div *ngIf="fieldsAndVisibility.header.billingAddress" class="form-group">
-                        <input type="checkbox" name="billingAddressCheckbox" [(ngModel)]="customTemplate.sections['header'].data['billingAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableBilling();" /> Billing Address
+                        <input type="checkbox" name="billingAddressCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['billingAddress'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableBilling();" />
+                        Billing Address
                         <div class="ml-3">
-                            <input type="text" hasFocus #billingAddress="hasFocus" [class.error-box]="contentForm?.controls['bill']?.errors?.maxlength" maxlength="18" class="form-control" name="bill" [(ngModel)]="customTemplate.sections['header'].data['billingAddress'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['billingAddress'].display"
-                            />
-                            <ng-container *ngIf="billingAddress?.isFocused || contentForm?.controls['bill']?.errors?.maxlength">
-                                <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(18 - customTemplate.sections['header'].data['billingAddress'].label.length)}}</span>
+                            <input type="text" hasFocus #billingAddress="hasFocus"
+                                [class.error-box]="contentForm?.controls['bill']?.errors?.maxlength" maxlength="18"
+                                class="form-control" name="bill"
+                                [(ngModel)]="customTemplate.sections['header'].data['billingAddress'].label"
+                                (ngModelChange)='onFieldChange(null, null, null)'
+                                [disabled]="!customTemplate.sections['header'].data['billingAddress'].display" />
+                            <ng-container
+                                *ngIf="billingAddress?.isFocused || contentForm?.controls['bill']?.errors?.maxlength">
+                                <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                    class="max-character-value">{{(18 -
+                                    customTemplate.sections['header'].data['billingAddress'].label.length)}}</span>
                             </ng-container>
                         </div>
                     </div>
                     <div *ngIf="fieldsAndVisibility.header.billingState" class="form-group" [hidden]="true">
-                        <input type="checkbox" name="billingStateCheckbox" [disabled]="!customTemplate.sections['header'].data['billingAddress'].display" [(ngModel)]="customTemplate.sections['header'].data['billingState'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" />                    State
+                        <input type="checkbox" name="billingStateCheckbox"
+                            [disabled]="!customTemplate.sections['header'].data['billingAddress'].display"
+                            [(ngModel)]="customTemplate.sections['header'].data['billingState'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> State
                     </div>
                     <div *ngIf="fieldsAndVisibility.header.billingGstin" class="form-group">
-                        <input type="checkbox" name="billingGstinCheckbox" [disabled]="!customTemplate.sections['header'].data['billingAddress'].display" [(ngModel)]="customTemplate.sections['header'].data['billingGstin'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" />                    GSTIN
+                        <input type="checkbox" name="billingGstinCheckbox"
+                            [disabled]="!customTemplate.sections['header'].data['billingAddress'].display"
+                            [(ngModel)]="customTemplate.sections['header'].data['billingGstin'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> GSTIN
                         <div class="ml-3">
-                            <input type="text" hasFocus #billingGstin="hasFocus" [class.error-box]="contentForm?.controls['billingGstin']?.errors?.maxlength" maxlength="15" name="billingGstin" class="form-control" [(ngModel)]="customTemplate.sections['header'].data['billingGstin'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['billingAddress'].display || !customTemplate.sections['header'].data['billingGstin'].display"
-                            />
-                            <ng-container *ngIf="billingGstin?.isFocused || contentForm?.controls['billingGstin']?.errors?.maxlength">
-                                <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['billingGstin'].label.length)}}</span>
+                            <input type="text" hasFocus #billingGstin="hasFocus"
+                                [class.error-box]="contentForm?.controls['billingGstin']?.errors?.maxlength"
+                                maxlength="15" name="billingGstin" class="form-control"
+                                [(ngModel)]="customTemplate.sections['header'].data['billingGstin'].label"
+                                (ngModelChange)='onFieldChange(null, null, null)'
+                                [disabled]="!customTemplate.sections['header'].data['billingAddress'].display || !customTemplate.sections['header'].data['billingGstin'].display" />
+                            <ng-container
+                                *ngIf="billingGstin?.isFocused || contentForm?.controls['billingGstin']?.errors?.maxlength">
+                                <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                    class="max-character-value">{{(15 -
+                                    customTemplate.sections['header'].data['billingGstin'].label.length)}}</span>
                             </ng-container>
                         </div>
                     </div>
                 </div>
 
-                <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_h'">
+                <div class="clearfix"
+                    *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_h'">
                     <h3>Shipping Details</h3>
                     <div *ngIf="fieldsAndVisibility.header.shippingAddress" class="form-group">
-                        <input type="checkbox" name="shippingAddressCheckbox" [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableShipping();" checked /> Shipping Address
+                        <input type="checkbox" name="shippingAddressCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableShipping();"
+                            checked /> Shipping Address
                         <div class="ml-3">
-                            <input type="text" hasFocus #shippingAddress="hasFocus" [class.error-box]="contentForm?.controls['shpAd']?.errors?.maxlength" maxlength="18" class="form-control" name="shpAd" [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display"
-                            />
-                            <ng-container *ngIf="shippingAddress?.isFocused || contentForm?.controls['shpAd']?.errors?.maxlength">
-                                <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(18 - customTemplate.sections['header'].data['shippingAddress'].label.length)}}</span>
+                            <input type="text" hasFocus #shippingAddress="hasFocus"
+                                [class.error-box]="contentForm?.controls['shpAd']?.errors?.maxlength" maxlength="18"
+                                class="form-control" name="shpAd"
+                                [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].label"
+                                (ngModelChange)='onFieldChange(null, null, null)'
+                                [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display" />
+                            <ng-container
+                                *ngIf="shippingAddress?.isFocused || contentForm?.controls['shpAd']?.errors?.maxlength">
+                                <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                    class="max-character-value">{{(18 -
+                                    customTemplate.sections['header'].data['shippingAddress'].label.length)}}</span>
                             </ng-container>
                         </div>
                     </div>
                     <div *ngIf="fieldsAndVisibility.header.shippingState" class="form-group" [hidden]="true">
-                        <input type="checkbox" name="shippingStateCheckbox" [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display" [(ngModel)]="customTemplate.sections['header'].data['shippingState'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" />                    State
+                        <input type="checkbox" name="shippingStateCheckbox"
+                            [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display"
+                            [(ngModel)]="customTemplate.sections['header'].data['shippingState'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> State
                     </div>
                     <div *ngIf="fieldsAndVisibility.header.shippingGstin" class="form-group">
-                        <input type="checkbox" name="shippingGstinCheckbox" [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display" [(ngModel)]="customTemplate.sections['header'].data['shippingGstin'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" />                    GSTIN
+                        <input type="checkbox" name="shippingGstinCheckbox"
+                            [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display"
+                            [(ngModel)]="customTemplate.sections['header'].data['shippingGstin'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> GSTIN
                         <div class="ml-3">
-                            <input type="text" hasFocus #shippingGstin="hasFocus" name="shippingGstin" [class.error-box]="contentForm?.controls['shippingGstin']?.errors?.maxlength" maxlength="15" class="form-control" [(ngModel)]="customTemplate.sections['header'].data['shippingGstin'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display || !customTemplate.sections['header'].data['shippingGstin'].display"
-                            />
-                            <ng-container *ngIf="shippingGstin?.isFocused || contentForm?.controls['shippingGstin']?.errors?.maxlength">
-                                <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['shippingGstin'].label.length)}}</span>
+                            <input type="text" hasFocus #shippingGstin="hasFocus" name="shippingGstin"
+                                [class.error-box]="contentForm?.controls['shippingGstin']?.errors?.maxlength"
+                                maxlength="15" class="form-control"
+                                [(ngModel)]="customTemplate.sections['header'].data['shippingGstin'].label"
+                                (ngModelChange)='onFieldChange(null, null, null)'
+                                [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display || !customTemplate.sections['header'].data['shippingGstin'].display" />
+                            <ng-container
+                                *ngIf="shippingGstin?.isFocused || contentForm?.controls['shippingGstin']?.errors?.maxlength">
+                                <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                    class="max-character-value">{{(15 -
+                                    customTemplate.sections['header'].data['shippingGstin'].label.length)}}</span>
                             </ng-container>
                         </div>
                     </div>
                 </div>
-                <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_h'">
+                <div class="clearfix"
+                    *ngIf="customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_h'">
                     <h3>
-                        <i class="cp collapse-icons" aria-hidden="true" (click)="showTransportField = !showTransportField" [ngClass]="{'icon-minus': showTransportField, 'icon-plus': !showTransportField}"></i> Transport Details</h3>
+                        <i class="cp collapse-icons" aria-hidden="true"
+                            (click)="showTransportField = !showTransportField"
+                            [ngClass]="{'icon-minus': showTransportField, 'icon-plus': !showTransportField}"></i>
+                        Transport Details
+                    </h3>
                     <div class="clearfix" [collapse]="!showTransportField">
                         <div class="form-group" *ngIf="fieldsAndVisibility.header.shippingDate">
-                            <input type="checkbox" name="transportDetailsCheckbox" [(ngModel)]="customTemplate.sections['header'].data['shippingDate'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            /> Ship Date
+                            <input type="checkbox" name="transportDetailsCheckbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['shippingDate'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Ship Date
                             <div class="ml-3">
-                                <input type="text" hasFocus #shippingDate="hasFocus" [class.error-box]="contentForm?.controls['shippingDate']?.errors?.maxlength" maxlength="15" class="form-control" name="shippingDate" [(ngModel)]="customTemplate.sections['header'].data['shippingDate'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['shippingDate'].display"
-                                />
-                                <ng-container *ngIf="shippingDate?.isFocused || contentForm?.controls['shippingDate']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['shippingDate'].label.length)}}</span>
+                                <input type="text" hasFocus #shippingDate="hasFocus"
+                                    [class.error-box]="contentForm?.controls['shippingDate']?.errors?.maxlength"
+                                    maxlength="15" class="form-control" name="shippingDate"
+                                    [(ngModel)]="customTemplate.sections['header'].data['shippingDate'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['header'].data['shippingDate'].display" />
+                                <ng-container
+                                    *ngIf="shippingDate?.isFocused || contentForm?.controls['shippingDate']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                        class="max-character-value">{{(15 -
+                                        customTemplate.sections['header'].data['shippingDate'].label.length)}}</span>
                                 </ng-container>
                             </div>
                         </div>
                         <div class="form-group" *ngIf="fieldsAndVisibility.header.shippedVia">
-                            <input type="checkbox" name="shipViaCheckbox" [(ngModel)]="customTemplate.sections['header'].data['shippedVia'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                checked /> Ship Via
+                            <input type="checkbox" name="shipViaCheckbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['shippedVia'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Ship Via
                             <div class="ml-3">
-                                <input type="text" hasFocus #shippedVia="hasFocus" [class.error-box]="contentForm?.controls['shippedVia']?.errors?.maxlength" maxlength="15" class="form-control" name="shippedVia" [(ngModel)]="customTemplate.sections['header'].data['shippedVia'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['shippedVia'].display"
-                                />
-                                <ng-container *ngIf="shippedVia?.isFocused || contentForm?.controls['shippedVia']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['shippedVia'].label.length)}}</span>
+                                <input type="text" hasFocus #shippedVia="hasFocus"
+                                    [class.error-box]="contentForm?.controls['shippedVia']?.errors?.maxlength"
+                                    maxlength="15" class="form-control" name="shippedVia"
+                                    [(ngModel)]="customTemplate.sections['header'].data['shippedVia'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['header'].data['shippedVia'].display" />
+                                <ng-container
+                                    *ngIf="shippedVia?.isFocused || contentForm?.controls['shippedVia']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                        class="max-character-value">{{(15 -
+                                        customTemplate.sections['header'].data['shippedVia'].label.length)}}</span>
                                 </ng-container>
                             </div>
                         </div>
                         <div class="form-group" *ngIf="fieldsAndVisibility.header.trackingNumber">
-                            <input type="checkbox" name="trackingNumberCheckbox" [(ngModel)]="customTemplate.sections['header'].data['trackingNumber'].display"
+                            <input type="checkbox" name="trackingNumberCheckbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['trackingNumber'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Tracking No.
                             <div class="ml-3">
-                                <input type="text" hasFocus #trackingNumber="hasFocus" [class.error-box]="contentForm?.controls['trackingNumber']?.errors?.maxlength" maxlength="15" class="form-control" name="trackingNumber" [(ngModel)]="customTemplate.sections['header'].data['trackingNumber'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['trackingNumber'].display"
-                                />
-                                <ng-container *ngIf="trackingNumber?.isFocused || contentForm?.controls['trackingNumber']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['trackingNumber'].label.length)}}</span>
+                                <input type="text" hasFocus #trackingNumber="hasFocus"
+                                    [class.error-box]="contentForm?.controls['trackingNumber']?.errors?.maxlength"
+                                    maxlength="15" class="form-control" name="trackingNumber"
+                                    [(ngModel)]="customTemplate.sections['header'].data['trackingNumber'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['header'].data['trackingNumber'].display" />
+                                <ng-container
+                                    *ngIf="trackingNumber?.isFocused || contentForm?.controls['trackingNumber']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                        class="max-character-value">{{(15 -
+                                        customTemplate.sections['header'].data['trackingNumber'].label.length)}}</span>
                                 </ng-container>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="clearfix custom-field mr-b2" *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d'">
+                <div class="clearfix custom-field mr-b2"
+                    *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d'">
                     <h3>
-                        <i class="cp collapse-icons" aria-hidden="true" (click)="showCustomField = !showCustomField" [ngClass]="{'icon-minus': showCustomField, 'icon-plus': !showCustomField}"></i> Custom Field
+                        <i class="cp collapse-icons" aria-hidden="true" (click)="showCustomField = !showCustomField"
+                            [ngClass]="{'icon-minus': showCustomField, 'icon-plus': !showCustomField}"></i> Custom Field
                     </h3>
                     <div class="clearfix" [collapse]="!showCustomField">
                         <div *ngIf="fieldsAndVisibility.header.customField1" class="form-group clearfix">
-                            <input type="checkbox" name="customField1Checkbox" [(ngModel)]="customTemplate.sections['header'].data['customField1'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
+                            <input type="checkbox" name="customField1Checkbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['customField1'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
                             <span>
-                                <input type="text" hasFocus #customField1="hasFocus" [class.error-box]="contentForm?.controls['customField1']?.errors?.maxlength" maxlength="15" class="form-control" name="customField1"
+                                <input type="text" hasFocus #customField1="hasFocus"
+                                    [class.error-box]="contentForm?.controls['customField1']?.errors?.maxlength"
+                                    maxlength="15" class="form-control" name="customField1"
                                     [(ngModel)]="customTemplate.sections['header'].data['customField1'].label"
                                     (ngModelChange)='onFieldChange(null, null, null)'
                                     [disabled]="!customTemplate.sections['header'].data['customField1'].display" />
-                                <ng-container *ngIf="customField1?.isFocused || contentForm?.controls['customField1']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['customField1'].label.length)}}</span>
+                                <ng-container
+                                    *ngIf="customField1?.isFocused || contentForm?.controls['customField1']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                        class="max-character-value">{{(15 -
+                                        customTemplate.sections['header'].data['customField1'].label.length)}}</span>
                                 </ng-container>
                             </span>
                         </div>
                         <div *ngIf="fieldsAndVisibility.header.customField2" class="form-group clearfix">
-                            <input type="checkbox" name="customField2Checkbox" [(ngModel)]="customTemplate.sections['header'].data['customField2'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
+                            <input type="checkbox" name="customField2Checkbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['customField2'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
                             <span>
-                                <input type="text" hasFocus #customField2="hasFocus" [class.error-box]="contentForm?.controls['customField2']?.errors?.maxlength" maxlength="15" name="customField2" class="form-control"
+                                <input type="text" hasFocus #customField2="hasFocus"
+                                    [class.error-box]="contentForm?.controls['customField2']?.errors?.maxlength"
+                                    maxlength="15" name="customField2" class="form-control"
                                     [(ngModel)]="customTemplate.sections['header'].data['customField2'].label"
                                     (ngModelChange)='onFieldChange(null, null, null)'
                                     [disabled]="!customTemplate.sections['header'].data['customField2'].display" />
-                                <ng-container *ngIf="customField2?.isFocused || contentForm?.controls['customField2']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['customField2'].label.length)}}</span>
+                                <ng-container
+                                    *ngIf="customField2?.isFocused || contentForm?.controls['customField2']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                        class="max-character-value">{{(15 -
+                                        customTemplate.sections['header'].data['customField2'].label.length)}}</span>
                                 </ng-container>
                             </span>
                         </div>
                         <div *ngIf="fieldsAndVisibility.header.customField3" class="form-group clearfix">
-                            <input type="checkbox" name="customField3Checkbox" [(ngModel)]="customTemplate.sections['header'].data['customField3'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
+                            <input type="checkbox" name="customField3Checkbox"
+                                [(ngModel)]="customTemplate.sections['header'].data['customField3'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
                             <span>
-                                <input type="text" hasFocus #customField3="hasFocus" [class.error-box]="contentForm?.controls['customField3']?.errors?.maxlength" maxlength="15" class="form-control" name="customField3"
+                                <input type="text" hasFocus #customField3="hasFocus"
+                                    [class.error-box]="contentForm?.controls['customField3']?.errors?.maxlength"
+                                    maxlength="15" class="form-control" name="customField3"
                                     [(ngModel)]="customTemplate.sections['header'].data['customField3'].label"
                                     (ngModelChange)='onFieldChange(null, null, null)'
                                     [disabled]="!customTemplate.sections['header'].data['customField3'].display" />
-                                <ng-container *ngIf="customField3?.isFocused || contentForm?.controls['customField3']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['customField3'].label.length)}}</span>
+                                <ng-container
+                                    *ngIf="customField3?.isFocused || contentForm?.controls['customField3']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span> <span
+                                        class="max-character-value">{{(15 -
+                                        customTemplate.sections['header'].data['customField3'].label.length)}}</span>
                                 </ng-container>
                             </span>
                         </div>
@@ -329,7 +551,8 @@
                         </tr>
                     </thead>
                     <tbody *ngIf="customTemplate.sections['table']">
-                        <tr *ngIf="fieldsAndVisibility.table.sNo && (customTemplate?.templateType !== 'gst_template_c' && customTemplate?.templateType !== 'gst_template_f' && customTemplate?.templateType !== 'gst_template_g')">
+                        <tr
+                            *ngIf="fieldsAndVisibility.table.sNo && (customTemplate?.templateType !== 'gst_template_c' && customTemplate?.templateType !== 'gst_template_f' && customTemplate?.templateType !== 'gst_template_g')">
                             <td>
                                 <label>
                                     <input type="checkbox" name="sN"
@@ -338,9 +561,16 @@
                                     Number</label>
                             </td>
                             <td>
-                                <input type="text" hasFocus #sNo="hasFocus" maxlength="10" [class.error-box]="contentForm?.controls['ss']?.errors?.maxlength" class="form-control" name="ss" [(ngModel)]="customTemplate.sections['table'].data['sNo'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['sNo'].display" />
+                                <input type="text" hasFocus #sNo="hasFocus" maxlength="10"
+                                    [class.error-box]="contentForm?.controls['ss']?.errors?.maxlength"
+                                    class="form-control" name="ss"
+                                    [(ngModel)]="customTemplate.sections['table'].data['sNo'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['table'].data['sNo'].display" />
                                 <ng-container *ngIf="sNo?.isFocused || contentForm?.controls['ss']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(10 - customTemplate.sections['table'].data['sNo'].label.length)}}</span>
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span
+                                        class="max-character-value">{{(10 -
+                                        customTemplate.sections['table'].data['sNo'].label.length)}}</span>
                                 </ng-container>
                             </td>
                         </tr>
@@ -349,13 +579,21 @@
                                 <label>
                                     <input type="checkbox" name="dt"
                                         [(ngModel)]="customTemplate.sections['table'].data['date'].display"
-                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />Date</label>
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                        checked />Date</label>
                             </td>
                             <td>
-                                <input type="text" hasFocus #date="hasFocus" maxlength="10" [class.error-box]="contentForm?.controls['dt1']?.errors?.maxlength" class="form-control" name="dt1" [(ngModel)]="customTemplate.sections['table'].data['date'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['date'].display"
-                                />
-                                <ng-container *ngIf="date?.isFocused || contentForm?.controls['dt1']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(10 - customTemplate.sections['table'].data['date'].label.length)}}</span>
+                                <input type="text" hasFocus #date="hasFocus" maxlength="10"
+                                    [class.error-box]="contentForm?.controls['dt1']?.errors?.maxlength"
+                                    class="form-control" name="dt1"
+                                    [(ngModel)]="customTemplate.sections['table'].data['date'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['table'].data['date'].display" />
+                                <ng-container
+                                    *ngIf="date?.isFocused || contentForm?.controls['dt1']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span
+                                        class="max-character-value">{{(10 -
+                                        customTemplate.sections['table'].data['date'].label.length)}}</span>
                                 </ng-container>
                             </td>
                         </tr>
@@ -364,13 +602,21 @@
                                 <label>
                                     <input type="checkbox" name="it"
                                         [(ngModel)]="customTemplate.sections['table'].data['item'].display"
-                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Item</label>
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
+                                    Item</label>
                             </td>
                             <td>
-                                <input type="text" hasFocus #item="hasFocus" maxlength="12" [class.error-box]="contentForm?.controls['it1']?.errors?.maxlength" class="form-control" name="it1" [(ngModel)]="customTemplate.sections['table'].data['item'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['item'].display"
-                                />
-                                <ng-container *ngIf="item?.isFocused || contentForm?.controls['it1']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(12 - customTemplate.sections['table'].data['item'].label.length)}}</span>
+                                <input type="text" hasFocus #item="hasFocus" maxlength="12"
+                                    [class.error-box]="contentForm?.controls['it1']?.errors?.maxlength"
+                                    class="form-control" name="it1"
+                                    [(ngModel)]="customTemplate.sections['table'].data['item'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['table'].data['item'].display" />
+                                <ng-container
+                                    *ngIf="item?.isFocused || contentForm?.controls['it1']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span
+                                        class="max-character-value">{{(12 -
+                                        customTemplate.sections['table'].data['item'].label.length)}}</span>
                                 </ng-container>
                             </td>
                         </tr>
@@ -379,7 +625,8 @@
                                 <label>
                                     <input type="checkbox" name="showDescriptionInRows"
                                         [(ngModel)]="customTemplate.sections['table'].data['showDescriptionInRows'].display"
-                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show description as a new row
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show description
+                                    as a new row
                                 </label>
                             </td>
                         </tr>
@@ -392,10 +639,17 @@
                                     HSN/SAC</label>
                             </td>
                             <td>
-                                <input type="text" hasFocus #hsnSac="hasFocus" maxlength="8" [class.error-box]="contentForm?.controls['hsn1']?.errors?.maxlength" class="form-control" name="hsn1" [(ngModel)]="customTemplate.sections['table'].data['hsnSac'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['hsnSac'].display"
-                                />
-                                <ng-container *ngIf="hsnSac?.isFocused || contentForm?.controls['hsn1']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(8 - customTemplate.sections['table'].data['hsnSac'].label.length)}}</span>
+                                <input type="text" hasFocus #hsnSac="hasFocus" maxlength="8"
+                                    [class.error-box]="contentForm?.controls['hsn1']?.errors?.maxlength"
+                                    class="form-control" name="hsn1"
+                                    [(ngModel)]="customTemplate.sections['table'].data['hsnSac'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['table'].data['hsnSac'].display" />
+                                <ng-container
+                                    *ngIf="hsnSac?.isFocused || contentForm?.controls['hsn1']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span
+                                        class="max-character-value">{{(8 -
+                                        customTemplate.sections['table'].data['hsnSac'].label.length)}}</span>
                                 </ng-container>
                             </td>
                         </tr>
@@ -409,10 +663,17 @@
                                     Quantity</label>
                             </td>
                             <td>
-                                <input type="text" hasFocus #quantity="hasFocus" maxlength="6" [class.error-box]="contentForm?.controls['qt1']?.errors?.maxlength" class="form-control" name="qt1" [(ngModel)]="customTemplate.sections['table'].data['quantity'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['quantity'].display"
-                                />
-                                <ng-container *ngIf="quantity?.isFocused || contentForm?.controls['qt1']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(6 - customTemplate.sections['table'].data['quantity'].label.length)}}</span>
+                                <input type="text" hasFocus #quantity="hasFocus" maxlength="6"
+                                    [class.error-box]="contentForm?.controls['qt1']?.errors?.maxlength"
+                                    class="form-control" name="qt1"
+                                    [(ngModel)]="customTemplate.sections['table'].data['quantity'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['table'].data['quantity'].display" />
+                                <ng-container
+                                    *ngIf="quantity?.isFocused || contentForm?.controls['qt1']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span
+                                        class="max-character-value">{{(6 -
+                                        customTemplate.sections['table'].data['quantity'].label.length)}}</span>
                                 </ng-container>
                             </td>
                         </tr>
@@ -440,10 +701,17 @@
                                     Description</label>
                             </td>
                             <td>
-                                <input type="text" hasFocus #description="hasFocus" maxlength="10" [class.error-box]="contentForm?.controls['dsc1']?.errors?.maxlength" class="form-control" name="dsc1" [(ngModel)]="customTemplate.sections['table'].data['description'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['description'].display"
-                                />
-                                <ng-container *ngIf="description?.isFocused || contentForm?.controls['dsc1']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(10 - customTemplate.sections['table'].data['description'].label.length)}}</span>
+                                <input type="text" hasFocus #description="hasFocus" maxlength="10"
+                                    [class.error-box]="contentForm?.controls['dsc1']?.errors?.maxlength"
+                                    class="form-control" name="dsc1"
+                                    [(ngModel)]="customTemplate.sections['table'].data['description'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['table'].data['description'].display" />
+                                <ng-container
+                                    *ngIf="description?.isFocused || contentForm?.controls['dsc1']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span
+                                        class="max-character-value">{{(10 -
+                                        customTemplate.sections['table'].data['description'].label.length)}}</span>
                                 </ng-container>
                             </td>
                         </tr>
@@ -456,10 +724,17 @@
                                     Rate/Item</label>
                             </td>
                             <td>
-                                <input type="text" hasFocus #rate="hasFocus" maxlength="10" [class.error-box]="contentForm?.controls['rt1']?.errors?.maxlength" class="form-control" name="rt1" [(ngModel)]="customTemplate.sections['table'].data['rate'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['rate'].display"
-                                />
-                                <ng-container *ngIf="rate?.isFocused || contentForm?.controls['rt1']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(10 - customTemplate.sections['table'].data['rate'].label.length)}}</span>
+                                <input type="text" hasFocus #rate="hasFocus" maxlength="10"
+                                    [class.error-box]="contentForm?.controls['rt1']?.errors?.maxlength"
+                                    class="form-control" name="rt1"
+                                    [(ngModel)]="customTemplate.sections['table'].data['rate'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['table'].data['rate'].display" />
+                                <ng-container
+                                    *ngIf="rate?.isFocused || contentForm?.controls['rt1']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span
+                                        class="max-character-value">{{(10 -
+                                        customTemplate.sections['table'].data['rate'].label.length)}}</span>
                                 </ng-container>
                             </td>
                         </tr>
@@ -472,10 +747,17 @@
                                     Discount/Item</label>
                             </td>
                             <td>
-                                <input type="text" hasFocus #discount="hasFocus" maxlength="10" [class.error-box]="contentForm?.controls['ds1']?.errors?.maxlength" class="form-control" name="ds1" [(ngModel)]="customTemplate.sections['table'].data['discount'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['discount'].display"
-                                />
-                                <ng-container *ngIf="discount?.isFocused || contentForm?.controls['ds1']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(10 - customTemplate.sections['table'].data['discount'].label.length)}}</span>
+                                <input type="text" hasFocus #discount="hasFocus" maxlength="10"
+                                    [class.error-box]="contentForm?.controls['ds1']?.errors?.maxlength"
+                                    class="form-control" name="ds1"
+                                    [(ngModel)]="customTemplate.sections['table'].data['discount'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['table'].data['discount'].display" />
+                                <ng-container
+                                    *ngIf="discount?.isFocused || contentForm?.controls['ds1']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span
+                                        class="max-character-value">{{(10 -
+                                        customTemplate.sections['table'].data['discount'].label.length)}}</span>
                                 </ng-container>
                             </td>
                         </tr>
@@ -488,10 +770,17 @@
                                     Value</label>
                             </td>
                             <td>
-                                <input type="text" hasFocus #taxableValue="hasFocus" maxlength="12" [class.error-box]="contentForm?.controls['tv1']?.errors?.maxlength" class="form-control" name="tv1" [(ngModel)]="customTemplate.sections['table'].data['taxableValue'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['taxableValue'].display"
-                                />
-                                <ng-container *ngIf="taxableValue?.isFocused || contentForm?.controls['tv1']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(12 - customTemplate.sections['table'].data['taxableValue'].label.length)}}</span>
+                                <input type="text" hasFocus #taxableValue="hasFocus" maxlength="12"
+                                    [class.error-box]="contentForm?.controls['tv1']?.errors?.maxlength"
+                                    class="form-control" name="tv1"
+                                    [(ngModel)]="customTemplate.sections['table'].data['taxableValue'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['table'].data['taxableValue'].display" />
+                                <ng-container
+                                    *ngIf="taxableValue?.isFocused || contentForm?.controls['tv1']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span
+                                        class="max-character-value">{{(12 -
+                                        customTemplate.sections['table'].data['taxableValue'].label.length)}}</span>
                                 </ng-container>
                             </td>
                         </tr>
@@ -500,12 +789,20 @@
                                 <label>
                                     <input type="checkbox" name="ta"
                                         [(ngModel)]="customTemplate.sections['table'].data['tax'].display"
-                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Tax</label>
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
+                                    Tax</label>
                             </td>
                             <td>
-                                <input type="text" hasFocus #tax="hasFocus" maxlength="10" [class.error-box]="contentForm?.controls['t1']?.errors?.maxlength" class="form-control" name="t1" [(ngModel)]="customTemplate.sections['table'].data['tax'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['tax'].display" />
+                                <input type="text" hasFocus #tax="hasFocus" maxlength="10"
+                                    [class.error-box]="contentForm?.controls['t1']?.errors?.maxlength"
+                                    class="form-control" name="t1"
+                                    [(ngModel)]="customTemplate.sections['table'].data['tax'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['table'].data['tax'].display" />
                                 <ng-container *ngIf="tax?.isFocused || contentForm?.controls['t1']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(10 - customTemplate.sections['table'].data['tax'].label.length)}}</span>
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span
+                                        class="max-character-value">{{(10 -
+                                        customTemplate.sections['table'].data['tax'].label.length)}}</span>
                                 </ng-container>
                             </td>
                         </tr>
@@ -514,13 +811,21 @@
                                 <label>
                                     <input type="checkbox" name="tot"
                                         [(ngModel)]="customTemplate.sections['table'].data['total'].display"
-                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Total</label>
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
+                                    Total</label>
                             </td>
                             <td>
-                                <input type="text" hasFocus #total="hasFocus" maxlength="6" [class.error-box]="contentForm?.controls['tot1']?.errors?.maxlength" class="form-control" name="tot1" [(ngModel)]="customTemplate.sections['table'].data['total'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['total'].display"
-                                />
-                                <ng-container *ngIf="total?.isFocused || contentForm?.controls['tot1']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(6 - customTemplate.sections['table'].data['total'].label.length)}}</span>
+                                <input type="text" hasFocus #total="hasFocus" maxlength="6"
+                                    [class.error-box]="contentForm?.controls['tot1']?.errors?.maxlength"
+                                    class="form-control" name="tot1"
+                                    [(ngModel)]="customTemplate.sections['table'].data['total'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['table'].data['total'].display" />
+                                <ng-container
+                                    *ngIf="total?.isFocused || contentForm?.controls['tot1']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span
+                                        class="max-character-value">{{(6 -
+                                        customTemplate.sections['table'].data['total'].label.length)}}</span>
                                 </ng-container>
                             </td>
                         </tr>
@@ -533,10 +838,17 @@
                                     Due</label>
                             </td>
                             <td>
-                                <input type="text" hasFocus #previousDue="hasFocus" maxlength="14" [class.error-box]="contentForm?.controls['previousDue']?.errors?.maxlength" class="form-control" name="previousDue" [(ngModel)]="customTemplate.sections['table'].data['previousDue'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['previousDue'].display"
-                                />
-                                <ng-container *ngIf="previousDue?.isFocused || contentForm?.controls['previousDue']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(14 - customTemplate.sections['table'].data['previousDue'].label.length)}}</span>
+                                <input type="text" hasFocus #previousDue="hasFocus" maxlength="14"
+                                    [class.error-box]="contentForm?.controls['previousDue']?.errors?.maxlength"
+                                    class="form-control" name="previousDue"
+                                    [(ngModel)]="customTemplate.sections['table'].data['previousDue'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['table'].data['previousDue'].display" />
+                                <ng-container
+                                    *ngIf="previousDue?.isFocused || contentForm?.controls['previousDue']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span
+                                        class="max-character-value">{{(14 -
+                                        customTemplate.sections['table'].data['previousDue'].label.length)}}</span>
                                 </ng-container>
                             </td>
                         </tr>
@@ -556,7 +868,8 @@
                 />
             </td>
             </tr>-->
-                        <ng-container *ngIf="templateUISectionVisibility.table && customTemplate?.templateType === 'gst_template_e' && voucherType==='sales'">
+                        <ng-container
+                            *ngIf="templateUISectionVisibility.table && customTemplate?.templateType === 'gst_template_e' && voucherType==='sales'">
                             <tr *ngIf="isTcsTdsApplicable">
                                 <td>
                                     <label><input type="checkbox" name="tcsCheckbox"
@@ -565,9 +878,17 @@
                                         TCS </label>
                                 </td>
                                 <td>
-                                    <input type="text" maxlength="10" [class.error-box]="contentForm?.controls['tcs']?.errors?.maxlength" name="tcs" hasFocus #tcs="hasFocus" value="TCS" class="form-control" [(ngModel)]="customTemplate.sections['table'].data['tcs'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['tcs'].display" />
-                                    <ng-container *ngIf="tcs?.isFocused || contentForm?.controls['tcs']?.errors?.maxlength">
-                                        <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(10 - customTemplate.sections['table'].data['tcs'].label.length)}}</span>
+                                    <input type="text" maxlength="10"
+                                        [class.error-box]="contentForm?.controls['tcs']?.errors?.maxlength" name="tcs"
+                                        hasFocus #tcs="hasFocus" value="TCS" class="form-control"
+                                        [(ngModel)]="customTemplate.sections['table'].data['tcs'].label"
+                                        (ngModelChange)='onFieldChange(null, null, null)'
+                                        [disabled]="!customTemplate.sections['table'].data['tcs'].display" />
+                                    <ng-container
+                                        *ngIf="tcs?.isFocused || contentForm?.controls['tcs']?.errors?.maxlength">
+                                        <span class="max-character-label">Characters left:&nbsp;</span><span
+                                            class="max-character-value">{{(10 -
+                                            customTemplate.sections['table'].data['tcs'].label.length)}}</span>
                                     </ng-container>
                                 </td>
                             </tr>
@@ -579,9 +900,17 @@
                                         TDS</label>
                                 </td>
                                 <td>
-                                    <input type="text" value="TDS" name="tds" maxlength="10" [class.error-box]="contentForm?.controls['tds']?.errors?.maxlength" hasFocus #tds="hasFocus" class="form-control" [(ngModel)]="customTemplate.sections['table'].data['tds'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['tds'].display" />
-                                    <ng-container *ngIf="tds?.isFocused || contentForm?.controls['tds']?.errors?.maxlength">
-                                        <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(10 - customTemplate.sections['table'].data['tds'].label.length)}}</span>
+                                    <input type="text" value="TDS" name="tds" maxlength="10"
+                                        [class.error-box]="contentForm?.controls['tds']?.errors?.maxlength" hasFocus
+                                        #tds="hasFocus" class="form-control"
+                                        [(ngModel)]="customTemplate.sections['table'].data['tds'].label"
+                                        (ngModelChange)='onFieldChange(null, null, null)'
+                                        [disabled]="!customTemplate.sections['table'].data['tds'].display" />
+                                    <ng-container
+                                        *ngIf="tds?.isFocused || contentForm?.controls['tds']?.errors?.maxlength">
+                                        <span class="max-character-label">Characters left:&nbsp;</span><span
+                                            class="max-character-value">{{(10 -
+                                            customTemplate.sections['table'].data['tds'].label.length)}}</span>
                                     </ng-container>
                                 </td>
                             </tr>
@@ -593,14 +922,23 @@
                                         Due</label>
                                 </td>
                                 <td>
-                                    <input type="text" value="Total Due" name="totalDue" maxlength="40" [class.error-box]="contentForm?.controls['totalDue']?.errors?.maxlength" hasFocus #totalDue="hasFocus" class="form-control" [(ngModel)]="customTemplate.sections['table'].data['totalDue'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['totalDue'].display" />
-                                    <ng-container *ngIf="totalDue?.isFocused || contentForm?.controls['totalDue']?.errors?.maxlength">
-                                        <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(40 - customTemplate.sections['table'].data['totalDue'].label.length)}}</span>
+                                    <input type="text" value="Total Due" name="totalDue" maxlength="40"
+                                        [class.error-box]="contentForm?.controls['totalDue']?.errors?.maxlength"
+                                        hasFocus #totalDue="hasFocus" class="form-control"
+                                        [(ngModel)]="customTemplate.sections['table'].data['totalDue'].label"
+                                        (ngModelChange)='onFieldChange(null, null, null)'
+                                        [disabled]="!customTemplate.sections['table'].data['totalDue'].display" />
+                                    <ng-container
+                                        *ngIf="totalDue?.isFocused || contentForm?.controls['totalDue']?.errors?.maxlength">
+                                        <span class="max-character-label">Characters left:&nbsp;</span><span
+                                            class="max-character-value">{{(40 -
+                                            customTemplate.sections['table'].data['totalDue'].label.length)}}</span>
                                     </ng-container>
                                 </td>
                             </tr>
                         </ng-container>
-                        <tr *ngIf="fieldsAndVisibility.footer.totalInWords && (customTemplate?.templateType !== 'gst_template_a' && customTemplate?.templateType !== 'gst_template_c' && customTemplate?.templateType !== 'gst_template_f' && customTemplate?.templateType !== 'gst_template_g')">
+                        <tr
+                            *ngIf="fieldsAndVisibility.footer.totalInWords && (customTemplate?.templateType !== 'gst_template_a' && customTemplate?.templateType !== 'gst_template_c' && customTemplate?.templateType !== 'gst_template_f' && customTemplate?.templateType !== 'gst_template_g')">
                             <td class="pb-3">
                                 <label>
                                     <input type="checkbox" name="inword"
@@ -609,7 +947,8 @@
                                     Total(in words)</label>
                             </td>
                         </tr>
-                        <tr *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
+                        <tr
+                            *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
                             <td class="pb-3">
                                 <label>
                                     <input type="checkbox" name="totalQuantity" checked
@@ -619,19 +958,31 @@
                                     Quantity</label>
                             </td>
                         </tr>
-                        <div class="form-group" *ngIf="customTemplate?.templateType === 'gst_template_e' && voucherType==='sales'">
+                        <div class="form-group"
+                            *ngIf="customTemplate?.templateType === 'gst_template_e' && voucherType==='sales'">
                             <div class="form-group font-16">
-                                <input type="checkbox" name="taxBifurcationCheckbox" [(ngModel)]="customTemplate.sections['table'].data['taxBifurcation'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null); checkedTaxBifurcation('taxRateBifurcation', 'table')" /> Tax Bifurcation
+                                <input type="checkbox" name="taxBifurcationCheckbox"
+                                    [(ngModel)]="customTemplate.sections['table'].data['taxBifurcation'].display"
+                                    (ngModelChange)="onChangeFieldVisibility(null, null, null); checkedTaxBifurcation('taxRateBifurcation', 'table')" />
+                                Tax Bifurcation
                             </div>
                             <div class="ml-3" *ngIf="customTemplate.sections['table'].data['taxBifurcation'].display">
                                 <div class="clearfix mr-b05">
-                                    <input type="radio" class="radio-theme" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('taxRateBifurcation','table' )" [checked]="customTemplate.sections['table'].data['taxBifurcation'].label === 'taxRateBifurcation'"
-                                        [disabled]="!customTemplate.sections['table'].data['taxBifurcation'].display" /> Tax Rate
+                                    <input type="radio" class="radio-theme" name="tax-rate"
+                                        (ngModelChange)='onFieldChange(null, null, null)'
+                                        (change)="checkedTaxBifurcation('taxRateBifurcation','table' )"
+                                        [checked]="customTemplate.sections['table'].data['taxBifurcation'].label === 'taxRateBifurcation'"
+                                        [disabled]="!customTemplate.sections['table'].data['taxBifurcation'].display" />
+                                    Tax Rate
                                 </div>
 
                                 <div class="clearfix">
-                                    <input type="radio" class="radio-theme point" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('hsnSac', 'table')" [checked]="customTemplate.sections['table'].data['taxBifurcation'].label === 'hsnSac'"
-                                        [disabled]="!customTemplate.sections['table'].data['taxBifurcation'].display" /> HSN/SAC
+                                    <input type="radio" class="radio-theme point" name="tax-rate"
+                                        (ngModelChange)='onFieldChange(null, null, null)'
+                                        (change)="checkedTaxBifurcation('hsnSac', 'table')"
+                                        [checked]="customTemplate.sections['table'].data['taxBifurcation'].label === 'hsnSac'"
+                                        [disabled]="!customTemplate.sections['table'].data['taxBifurcation'].display" />
+                                    HSN/SAC
                                 </div>
                             </div>
                         </div>
@@ -645,128 +996,231 @@
                 <div class="clearfix bd-rb scroll-auto">
                     <ng-container *ngIf="customTemplate?.templateType === 'gst_template_a' && voucherType==='sales'">
                         <div *ngIf="isTcsTdsApplicable" class="form-group">
-                            <input type="checkbox" name="tcsCheckbox" checked [(ngModel)]="customTemplate.sections['footer'].data['tcs'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked="true" /> TCS
+                            <input type="checkbox" name="tcsCheckbox" checked
+                                [(ngModel)]="customTemplate.sections['footer'].data['tcs'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked="true" /> TCS
                             <div class="ml-3">
-                                <input type="text" value="TCS" name="tcs" [class.error-box]="contentForm?.controls['tcs']?.errors?.maxlength" maxlength="10" hasFocus #tcs="hasFocus" class="form-control" [(ngModel)]="customTemplate.sections['footer'].data['tcs'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['tcs'].display" />
+                                <input type="text" value="TCS" name="tcs"
+                                    [class.error-box]="contentForm?.controls['tcs']?.errors?.maxlength" maxlength="10"
+                                    hasFocus #tcs="hasFocus" class="form-control"
+                                    [(ngModel)]="customTemplate.sections['footer'].data['tcs'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['footer'].data['tcs'].display" />
                                 <ng-container *ngIf="tcs?.isFocused || contentForm?.controls['tcs']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(10 - customTemplate.sections['footer'].data['tcs'].label.length)}}</span>
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span
+                                        class="max-character-value">{{(10 -
+                                        customTemplate.sections['footer'].data['tcs'].label.length)}}</span>
                                 </ng-container>
                             </div>
                         </div>
                         <div *ngIf="isTcsTdsApplicable" class="form-group">
-                            <input type="checkbox" [value]="true" name="tdsCheckbox" checked [(ngModel)]="customTemplate.sections['footer'].data['tds'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> TDS
+                            <input type="checkbox" [value]="true" name="tdsCheckbox" checked
+                                [(ngModel)]="customTemplate.sections['footer'].data['tds'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> TDS
                             <div class="ml-3">
-                                <input type="text" value="TDS" name="tds" [class.error-box]="contentForm?.controls['tds']?.errors?.maxlength" maxlength="10" hasFocus #tds="hasFocus" class="form-control" [(ngModel)]="customTemplate.sections['footer'].data['tds'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['tds'].display" />
+                                <input type="text" value="TDS" name="tds"
+                                    [class.error-box]="contentForm?.controls['tds']?.errors?.maxlength" maxlength="10"
+                                    hasFocus #tds="hasFocus" class="form-control"
+                                    [(ngModel)]="customTemplate.sections['footer'].data['tds'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['footer'].data['tds'].display" />
                                 <ng-container *ngIf="tds?.isFocused || contentForm?.controls['tds']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(10 - customTemplate.sections['footer'].data['tds'].label.length)}}</span>
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span
+                                        class="max-character-value">{{(10 -
+                                        customTemplate.sections['footer'].data['tds'].label.length)}}</span>
                                 </ng-container>
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="checkbox" [attr.checked]="true" name="totalDues" [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Total Due
+                            <input type="checkbox" [attr.checked]="true" name="totalDues"
+                                [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Total Due
                             <div class="ml-3">
-                                <input type="text" value="Total Due (in INR)" name="totalDue" [class.error-box]="contentForm?.controls['totalDue']?.errors?.maxlength" maxlength="40" hasFocus #totalDue="hasFocus" class="form-control" [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['totalDue'].display"
-                                />
-                                <ng-container *ngIf="totalDue?.isFocused || contentForm?.controls['totalDue']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(40 - customTemplate.sections['footer'].data['totalDue'].label.length)}}</span>
+                                <input type="text" value="Total Due (in INR)" name="totalDue"
+                                    [class.error-box]="contentForm?.controls['totalDue']?.errors?.maxlength"
+                                    maxlength="40" hasFocus #totalDue="hasFocus" class="form-control"
+                                    [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].label"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [disabled]="!customTemplate.sections['footer'].data['totalDue'].display" />
+                                <ng-container
+                                    *ngIf="totalDue?.isFocused || contentForm?.controls['totalDue']?.errors?.maxlength">
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span
+                                        class="max-character-value">{{(40 -
+                                        customTemplate.sections['footer'].data['totalDue'].label.length)}}</span>
                                 </ng-container>
                             </div>
                         </div>
                     </ng-container>
                     <div *ngIf="fieldsAndVisibility.footer.companyName" class="form-group">
-                        <input type="checkbox" name="footerCompanyNameCheckbox" checked [(ngModel)]="customTemplate.sections['footer'].data['companyName'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Company Name
+                        <input type="checkbox" name="footerCompanyNameCheckbox" checked
+                            [(ngModel)]="customTemplate.sections['footer'].data['companyName'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Company Name
                     </div>
-                    <div *ngIf="fieldsAndVisibility.header.gstin && customTemplate?.templateType === 'gst_template_e'" class="form-group">
-                        <input type="checkbox" name="footerGstinCheckbox" [(ngModel)]="customTemplate.sections['header'].data['gstin'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> GSTIN
+                    <div *ngIf="fieldsAndVisibility.header.gstin && customTemplate?.templateType === 'gst_template_e'"
+                        class="form-group">
+                        <input type="checkbox" name="footerGstinCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['gstin'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> GSTIN
                     </div>
                     <div *ngIf="fieldsAndVisibility.footer.companyAddress" class="form-group">
-                        <input type="checkbox" name="cad" [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Address
+                        <input type="checkbox" name="cad"
+                            [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Address
                         <div class="ml-3">
-                            <textarea class="form-control" rows="3" [class.error-box]="contentForm?.controls['cmpAdd']?.errors?.maxlength" maxlength="124" hasFocus #companyAddress="hasFocus" placeholder="Company Address" [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].label" name="cmpAdd" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['companyAddress'].display"></textarea>
-                            <ng-container *ngIf="companyAddress?.isFocused || contentForm?.controls['cmpAdd']?.errors?.maxlength">
-                                <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(124 - customTemplate.sections['footer'].data['companyAddress'].label.length)}}</span>
+                            <textarea class="form-control" rows="3"
+                                [class.error-box]="contentForm?.controls['cmpAdd']?.errors?.maxlength" maxlength="124"
+                                hasFocus #companyAddress="hasFocus" placeholder="Company Address"
+                                [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].label"
+                                name="cmpAdd" (ngModelChange)='onFieldChange(null, null, null)'
+                                [disabled]="!customTemplate.sections['footer'].data['companyAddress'].display"></textarea>
+                            <ng-container
+                                *ngIf="companyAddress?.isFocused || contentForm?.controls['cmpAdd']?.errors?.maxlength">
+                                <span class="max-character-label">Characters left:&nbsp;</span><span
+                                    class="max-character-value">{{(124 -
+                                    customTemplate.sections['footer'].data['companyAddress'].label.length)}}</span>
                             </ng-container>
                         </div>
                     </div>
                     <!-- *ngIf="customTemplate?.templateType !== 'gst_template_c' && customTemplate?.templateType !== 'gst_template_f' && customTemplate?.templateType !== 'gst_template_g'" -->
-                    <div *ngIf="fieldsAndVisibility.footer.taxableAmount && (customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e')" class="form-group">
-                        <input type="checkbox" name="tam" [(ngModel)]="customTemplate.sections['footer'].data['taxableAmount'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Taxable Amount
+                    <div *ngIf="fieldsAndVisibility.footer.taxableAmount && (customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e')"
+                        class="form-group">
+                        <input type="checkbox" name="tam"
+                            [(ngModel)]="customTemplate.sections['footer'].data['taxableAmount'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Taxable Amount
                     </div>
                     <div *ngIf="fieldsAndVisibility.footer.totalTax" class="form-group" [hidden]="true">
-                        <input type="checkbox" name="ttx" [(ngModel)]="customTemplate.sections['footer'].data['totalTax'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Total Tax
+                        <input type="checkbox" name="ttx"
+                            [(ngModel)]="customTemplate.sections['footer'].data['totalTax'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Total Tax
                     </div>
                     <!--<div class="form-group">
                 <input type="checkbox" name="ded" [(ngModel)]="customTemplate.sections[2].content[2].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Other Deduction/Additions
             </div>-->
                     <div *ngIf="fieldsAndVisibility.footer.total" class="form-group">
-                        <input type="checkbox" name="itot" [(ngModel)]="customTemplate.sections['footer'].data['total'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Invoice Total
+                        <input type="checkbox" name="itot"
+                            [(ngModel)]="customTemplate.sections['footer'].data['total'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Invoice Total
                     </div>
-                    <div *ngIf="fieldsAndVisibility.footer.totalInWords && (customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e')" class="form-group">
-                        <input type="checkbox" name="itiw" [(ngModel)]="customTemplate.sections['footer'].data['totalInWords'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Invoice Total(in words)
+                    <div *ngIf="fieldsAndVisibility.footer.totalInWords && (customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e')"
+                        class="form-group">
+                        <input type="checkbox" name="itiw"
+                            [(ngModel)]="customTemplate.sections['footer'].data['totalInWords'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Invoice Total(in words)
                     </div>
-                    <div class="form-group" *ngIf="customTemplate?.templateType === 'gst_template_a' && voucherType==='sales'">
+                    <div class="form-group"
+                        *ngIf="customTemplate?.templateType === 'gst_template_a' && voucherType==='sales'">
                         <div class="form-group">
-                            <input type="checkbox" name="taxBifurcationCheckbox" [(ngModel)]="customTemplate.sections['footer'].data['taxBifurcation'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null); checkedTaxBifurcation('taxRateBifurcation', 'footer')" /> Tax Bifurcation
+                            <input type="checkbox" name="taxBifurcationCheckbox"
+                                [(ngModel)]="customTemplate.sections['footer'].data['taxBifurcation'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null); checkedTaxBifurcation('taxRateBifurcation', 'footer')" />
+                            Tax Bifurcation
                         </div>
                         <div class="ml-3" *ngIf="customTemplate.sections['footer'].data['taxBifurcation'].display">
                             <div class="clearfix mr-b05">
-                                <input type="radio" class="radio-theme" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('taxRateBifurcation','footer')" [checked]="customTemplate.sections['footer'].data['taxBifurcation'].label === 'taxRateBifurcation'"
-                                    [disabled]="!customTemplate.sections['footer'].data['taxBifurcation'].display" /> Tax Rate
+                                <input type="radio" class="radio-theme" name="tax-rate"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    (change)="checkedTaxBifurcation('taxRateBifurcation','footer')"
+                                    [checked]="customTemplate.sections['footer'].data['taxBifurcation'].label === 'taxRateBifurcation'"
+                                    [disabled]="!customTemplate.sections['footer'].data['taxBifurcation'].display" />
+                                Tax Rate
                             </div>
                             <div class="clearfix">
-                                <input type="radio" class="radio-theme point" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('hsnSac','footer')" [checked]="customTemplate.sections['footer'].data['taxBifurcation'].label === 'hsnSac'"
-                                    [disabled]="!customTemplate.sections['footer'].data['taxBifurcation'].display" /> HSN/SAC
+                                <input type="radio" class="radio-theme point" name="tax-rate"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    (change)="checkedTaxBifurcation('hsnSac','footer')"
+                                    [checked]="customTemplate.sections['footer'].data['taxBifurcation'].label === 'hsnSac'"
+                                    [disabled]="!customTemplate.sections['footer'].data['taxBifurcation'].display" />
+                                HSN/SAC
                             </div>
                         </div>
                     </div>
                     <div class="clearfix mr-t1 form-group" *ngIf="customTemplate?.type === 'invoice'">
                         <div>
-                            <input type="checkbox" name="showNotesAtLastPage" [checked]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display" [(ngModel)]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show notes at the last page
+                            <input type="checkbox" name="showNotesAtLastPage"
+                                [checked]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display"
+                                [(ngModel)]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show notes at the last
+                            page
                         </div>
                     </div>
                     <div class="clearfix mr-t1 form-group">
                         <div *ngIf="fieldsAndVisibility.footer.message1">
-                            <input type="checkbox" name="msg1" [(ngModel)]="customTemplate.sections['footer'].data['message1'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Note 1
+                            <input type="checkbox" name="msg1"
+                                [(ngModel)]="customTemplate.sections['footer'].data['message1'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Note 1
                         </div>
                         <div *ngIf="fieldsAndVisibility.footer.message1" class="form-group ml-3 mb-0 clearfix">
                             <div class="row">
                                 <div class="col-12">
                                     <!-- No limit on characters in Notes 1 & 2 if user has opted to show notes at last page -->
-                                    <textarea class="form-control" rows="3" [class.error-box]="contentForm?.controls['msg11']?.errors?.maxlength" [maxlength]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display ? null : 200" hasFocus #message1="hasFocus" placeholder="Enter any other text you would like in the footer. " [(ngModel)]="customTemplate.sections['footer'].data['message1'].label" name="msg11" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['message1'].display"></textarea>
-                                    <ng-container *ngIf="(message1?.isFocused || contentForm?.controls['msg11']?.errors?.maxlength) && !customTemplate.sections['footer'].data['showNotesAtLastPage'].display">
-                                        <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(200 - customTemplate.sections['footer'].data['message1'].label.length)}}</span>
+                                    <textarea class="form-control" rows="3"
+                                        [class.error-box]="contentForm?.controls['msg11']?.errors?.maxlength"
+                                        [maxlength]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display ? null : 200"
+                                        hasFocus #message1="hasFocus"
+                                        placeholder="Enter any other text you would like in the footer. "
+                                        [(ngModel)]="customTemplate.sections['footer'].data['message1'].label"
+                                        name="msg11" (ngModelChange)='onFieldChange(null, null, null)'
+                                        [disabled]="!customTemplate.sections['footer'].data['message1'].display"></textarea>
+                                    <ng-container
+                                        *ngIf="(message1?.isFocused || contentForm?.controls['msg11']?.errors?.maxlength) && !customTemplate.sections['footer'].data['showNotesAtLastPage'].display">
+                                        <span class="max-character-label">Characters left:&nbsp;</span><span
+                                            class="max-character-value">{{(200 -
+                                            customTemplate.sections['footer'].data['message1'].label.length)}}</span>
                                     </ng-container>
                                 </div>
                             </div>
                         </div>
                     </div>
-                <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="clearfix mr-t1 form-group">
-                    <div>
-                        <input [checked]="customTemplate.sections.footer.data.showMessage2?.display"
-                            [(ngModel)]="customTemplate.sections['footer'].data['showMessage2'].display" type="checkbox" name="message2"
-                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Note 2
+                    <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')"
+                        class="clearfix mr-t1 form-group">
+                        <div>
+                            <input [checked]="customTemplate.sections.footer.data.showMessage2?.display"
+                                [(ngModel)]="customTemplate.sections['footer'].data['showMessage2'].display"
+                                type="checkbox" name="message2"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Note 2
+                        </div>
                     </div>
-                </div>
-                <div *ngIf="fieldsAndVisibility.footer.thanks" class="clearfix mr-t2">
-                    <div class="mb-0 form-group thanks-input-group">
-                        <input type="checkbox" name="ty" [(ngModel)]="customTemplate.sections['footer'].data['thanks'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
-                        <input type="text" [class.error-box]="contentForm?.controls['thanks']?.errors?.maxlength" class="form-control thanks-input-inline" hasFocus #thanks="hasFocus" [disabled]="!fieldsAndVisibility.footer.thanks?.display" (keyup)='onFieldChange(null, null, null)' [(ngModel)]="customTemplate.sections['footer'].data['thanks'].label" placeholder="Thank You for your business"
-                            maxlength="30" name="thanks"/>
+                    <div *ngIf="fieldsAndVisibility.footer.thanks" class="clearfix mr-t2">
+                        <div class="mb-0 form-group thanks-input-group">
+                            <input type="checkbox" name="ty"
+                                [(ngModel)]="customTemplate.sections['footer'].data['thanks'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
+                            <input type="text" [class.error-box]="contentForm?.controls['thanks']?.errors?.maxlength"
+                                class="form-control thanks-input-inline" hasFocus #thanks="hasFocus"
+                                [disabled]="!fieldsAndVisibility.footer.thanks?.display"
+                                (keyup)='onFieldChange(null, null, null)'
+                                [(ngModel)]="customTemplate.sections['footer'].data['thanks'].label"
+                                placeholder="Thank You for your business" maxlength="30" name="thanks" />
+                        </div>
+                        <div class="form-group ml-3 clearfix"
+                            *ngIf="thanks?.isFocused || contentForm?.controls['thanks']?.errors?.maxlength">
+                            <span class="max-character-label">Characters left:&nbsp;</span><span
+                                class="max-character-value">{{(30 -
+                                customTemplate.sections['footer'].data['thanks'].label.length)}}</span>
+                        </div>
                     </div>
-                    <div class="form-group ml-3 clearfix" *ngIf="thanks?.isFocused || contentForm?.controls['thanks']?.errors?.maxlength">
-                        <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(30 - customTemplate.sections['footer'].data['thanks'].label.length)}}</span>
+                    <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')"
+                        class="clearfix mr-t1 form-group">
+                        <input type="checkbox" name="textUnderSloganCheckbox"
+                            [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Text under Image
+                        Signature / Slogan
+                        <div class="mb-0 form-group ml-3">
+                            <input type="text"
+                                [class.error-box]="contentForm?.controls['textUnderSlogan']?.errors?.maxlength"
+                                class="form-control" hasFocus #textUnderSlogan="hasFocus"
+                                [disabled]="!fieldsAndVisibility.footer.textUnderSlogan?.display"
+                                (keyup)='onFieldChange(null, null, null)'
+                                [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].label"
+                                placeholder="Text under slogan" maxlength="50" name="textUnderSlogan" />
+                        </div>
+                        <div class="form-group ml-3 clearfix"
+                            *ngIf="textUnderSlogan?.isFocused || contentForm?.controls['textUnderSlogan']?.errors?.maxlength">
+                            <span class="max-character-label">Characters left:&nbsp;</span><span
+                                class="max-character-value">{{(50 -
+                                customTemplate.sections['footer'].data['textUnderSlogan'].label.length)}}</span>
+                        </div>
                     </div>
-                </div>
-                <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="clearfix mr-t1 form-group">
-                    <input type="checkbox" name="textUnderSloganCheckbox" [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Text under Image Signature / Slogan
-                    <div class="mb-0 form-group ml-3">
-                        <input type="text" [class.error-box]="contentForm?.controls['textUnderSlogan']?.errors?.maxlength" class="form-control" hasFocus #textUnderSlogan="hasFocus" [disabled]="!fieldsAndVisibility.footer.textUnderSlogan?.display" (keyup)='onFieldChange(null, null, null)' [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].label" placeholder="Text under slogan"
-                            maxlength="50" name="textUnderSlogan"/>
-                    </div>
-                    <div class="form-group ml-3 clearfix" *ngIf="textUnderSlogan?.isFocused || contentForm?.controls['textUnderSlogan']?.errors?.maxlength">
-                        <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(50 - customTemplate.sections['footer'].data['textUnderSlogan'].label.length)}}</span>
-                    </div>
-                </div>
                     <!-- <div *ngIf="fieldsAndVisibility.footer.slogan" class="clearfix">
                 <div>
                     <input type="checkbox" name="msg2" [(ngModel)]="customTemplate.sections['footer'].data['slogan'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> Signature
@@ -782,44 +1236,63 @@
                     <div class="clearfix mr-t1 row">
                         <div class="clearfix" class="col-lg-6 col-md-12">
                             <div class="mb-4px">
-                                <input type="radio" class="radio-theme ml-0" name="signatureType" (change)="chooseSigntureType('image')" (ngModelChange)='onFieldChange(null, null, null)' [checked]="customTemplate.sections.footer.data.imageSignature.display"
-                                /> Image Signature
+                                <input type="radio" class="radio-theme ml-0" name="signatureType"
+                                    (change)="chooseSigntureType('image')"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [checked]="customTemplate.sections.footer.data.imageSignature.display" /> Image
+                                Signature
                             </div>
                             <div class="form-group mrL clearfix">
                                 <span class="clearfix">
-                                    <label class="upload-button" for="signatureImg-edit" [hidden]="signatureImgAttached">
+                                    <label class="upload-button" for="signatureImg-edit"
+                                        [hidden]="signatureImgAttached">
                                         <!--  -->
                                         <!--   -->
-                                        <input type="file" [disabled]="customTemplate.sections.footer.data.slogan.display"
+                                        <input type="file"
+                                            [disabled]="customTemplate.sections.footer.data.slogan.display"
                                             accept="image/png, image/jpeg" id="signatureImg-edit" ngFileSelect
                                             (uploadOutput)="onUploadFileOutput($event)" [options]="fileUploadOptions"
                                             [uploadInput]="uploadInput">
                                         <small>Upload Your Logo</small>
 
                                     </label>
-                                    <label for="signatureImg-edit" class="logo-preview" [hidden]="!signatureImgAttached">
+                                    <label for="signatureImg-edit" class="logo-preview"
+                                        [hidden]="!signatureImgAttached">
                                         <img [src]="signatureSrc" alt="" id="signatureImage"
                                             (ngModelChange)='onFieldChange(null, null, null)' />
                                     </label>
                                     <label *ngIf="isSignatureUploadInProgress" class="logo-preview"
                                         [hidden]="!signatureImgAttached">
                                         <span><b>Uploading...</b></span>
-                                </label>
+                                    </label>
                                 </span>
-                                <button *ngIf="signatureImgAttached" (click)="removeFile()" type="button" class="mt-2 start-upload-btn btn btn-danger"
+                                <button *ngIf="signatureImgAttached" (click)="removeFile()" type="button"
+                                    class="mt-2 start-upload-btn btn btn-danger"
                                     tooltip="Clicking on this, will delete image from server">Delete</button>
                             </div>
                         </div>
                         <div class="clearfix" class="col-lg-6 col-md-12">
                             <div>
-                                <input type="radio" class="radio-theme" name="signatureType" (change)="chooseSigntureType('slogan')" (ngModelChange)='onFieldChange(null, null, null)' [checked]="customTemplate.sections.footer.data.slogan.display" /> Slogan
+                                <input type="radio" class="radio-theme" name="signatureType"
+                                    (change)="chooseSigntureType('slogan')"
+                                    (ngModelChange)='onFieldChange(null, null, null)'
+                                    [checked]="customTemplate.sections.footer.data.slogan.display" /> Slogan
                             </div>
                             <div class="form-group ml-3 clearfix">
                                 <div>
                                     <div>
-                                        <textarea class="form-control" [class.error-box]="contentForm?.controls['slogan']?.errors?.maxlength" maxlength="30" hasFocus #slogan="hasFocus" [disabled]="customTemplate.sections.footer.data.imageSignature.display" name="slogan" [(ngModel)]="customTemplate.sections['footer'].data['slogan'].label" (ngModelChange)='onFieldChange(null, null, null)'>Note:Contact us for queries on these questions</textarea>
-                                        <ng-container *ngIf="slogan?.isFocused || contentForm?.controls['slogan']?.errors?.maxlength">
-                                            <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(30 - customTemplate.sections['footer'].data['slogan'].label.length)}}</span>
+                                        <textarea class="form-control"
+                                            [class.error-box]="contentForm?.controls['slogan']?.errors?.maxlength"
+                                            maxlength="30" hasFocus #slogan="hasFocus"
+                                            [disabled]="customTemplate.sections.footer.data.imageSignature.display"
+                                            name="slogan"
+                                            [(ngModel)]="customTemplate.sections['footer'].data['slogan'].label"
+                                            (ngModelChange)='onFieldChange(null, null, null)'>Note:Contact us for queries on these questions</textarea>
+                                        <ng-container
+                                            *ngIf="slogan?.isFocused || contentForm?.controls['slogan']?.errors?.maxlength">
+                                            <span class="max-character-label">Characters left:&nbsp;</span><span
+                                                class="max-character-value">{{(30 -
+                                                customTemplate.sections['footer'].data['slogan'].label.length)}}</span>
                                         </ng-container>
                                     </div>
                                 </div>

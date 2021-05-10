@@ -1,4 +1,5 @@
-<ng-container appTranslate [file]="'proforma-invoice/add-bulk-items'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'proforma-invoice/add-bulk-items'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <div class="add-bulk-item-modal">
 
         <div class="modal-dialog modal-xl">
@@ -20,7 +21,8 @@
                             <div class="left-content">
 
                                 <div class="search-box">
-                                    <input type="text" [placeholder]="localeData?.search_stock" #searchElement class="pr-1 pl-1 form-control">
+                                    <input type="text" [placeholder]="localeData?.search_stock" #searchElement
+                                        class="pr-1 pl-1 form-control">
                                 </div>
 
                                 <div class="product-list">
@@ -45,7 +47,8 @@
 
                             <div class="right-content">
 
-                                <h4>{{localeData?.selected_stocks}} <span class="selected-stock-number">({{ selectedItems.length }})</span></h4>
+                                <h4>{{localeData?.selected_stocks}} <span class="selected-stock-number">({{
+                                        selectedItems.length }})</span></h4>
                                 <hr>
 
                                 <div class="right-side-wrapper">
@@ -57,8 +60,12 @@
                                                     <div class="stock-name">
                                                         <p>{{ item.name }}</p>
                                                         <p>
-                                                            <span *ngIf="item?.additional?.skuCode" class="stockSku"><label>{{commonLocaleData?.app_sku}}: </label>{{item?.additional?.skuCode}}</span>
-                                                            <span [class.rate-stock]="item?.additional?.skuCode"><label>{{commonLocaleData?.app_rate}}:</label> </span>{{ item?.rate }}
+                                                            <span *ngIf="item?.additional?.skuCode"
+                                                                class="stockSku"><label>{{commonLocaleData?.app_sku}}:
+                                                                </label>{{item?.additional?.skuCode}}</span>
+                                                            <span
+                                                                [class.rate-stock]="item?.additional?.skuCode"><label>{{commonLocaleData?.app_rate}}:</label>
+                                                            </span>{{ item?.rate }}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -68,7 +75,8 @@
                                                     <div class="input-group add-item-btn">
 
                                                         <span class="input-group-btn">
-                                                            <button type="button" class="btn btn-default btn-number minus-btn"
+                                                            <button type="button"
+                                                                class="btn btn-default btn-number minus-btn"
                                                                 (click)="alterQuantity(item, 'minus')">
                                                                 <span class="fa fa-minus"></span>
                                                             </button>

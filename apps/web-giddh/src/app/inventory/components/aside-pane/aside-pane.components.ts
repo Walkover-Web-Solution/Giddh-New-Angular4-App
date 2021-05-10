@@ -54,7 +54,7 @@ export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
                 this.isAddGroupOpen = false;
             }
         });
-        
+
         this.asideClose = false;
     }
 

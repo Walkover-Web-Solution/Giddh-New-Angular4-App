@@ -260,7 +260,8 @@
                         </div>
                         <div class="form-group inline" *ngIf="selectedGstrType"> <br />
                             <button type="button" class="btn btn-success">GO</button>
-                            <a class="btn btn-link">Reset</a> </div>
+                            <a class="btn btn-link">Reset</a>
+                        </div>
                         <button (click)="onUpdate()" class="btn btn-generate pull-right"
                             [disabled]="!generateInvoiceArr.length">Generate <br />
                             Purchase Record</button>
@@ -339,7 +340,8 @@
                                     *ngIf="!(invoice.account.gstIn?.length >0 || ( invoice.igstAmount!='0' || invoice.cgstAmount!='0')) && !invoice.invoiceNumber">
                                     Reverse Charge</option>
                             </select>
-                            <span class="select-drop"> <i class="fa fa-caret-down"></i> </span> </div>
+                            <span class="select-drop"> <i class="fa fa-caret-down"></i> </span>
+                        </div>
                         <button
                             *ngIf="(timeCounter != 10 && selectedRowIndex == i && invoice.invoiceNumber) || (timeCounter != 10 && selectedRowIndex == i && !invoice.invoiceNumber)"
                             (click)="onUndoEntryTypeChange(i, invoice)" class="btn btn-link">Undo in
@@ -365,7 +367,8 @@
                                         <input type="checkbox" name="invoiceTax" class="invoiceTax"
                                             (click)="selectTax($event, tax, i)"
                                             [checked]="tax.uniqueName === invoice.taxes[0] || tax.uniqueName === invoice.taxes[1]">
-                                        {{ tax.name}} </label>
+                                        {{ tax.name}}
+                                    </label>
                                 </li>
                             </ul>
                         </div>
@@ -391,7 +394,8 @@
                                 aria-hidden="true" class="icon-edit-pencil"></i> </button>
                         <button class="btn btn-xs" type="button" (click)="updateEntry(invoice)"
                             *ngIf="selectedRowIndex == i && editMode"> <i aria-hidden="true" class="fa fa-check"></i>
-                        </button></td>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
             <tbody *ngIf="allPurchaseInvoices.count === 0">

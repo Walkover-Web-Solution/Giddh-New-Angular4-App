@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { GeneralService } from '../../../../services/general.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../../app.constant';

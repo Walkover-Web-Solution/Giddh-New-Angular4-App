@@ -178,7 +178,7 @@ export class GeneralService {
         let byteCharacters = atob(b64Data);
         let byteArrays = [];
         let offset = 0;
-        if(byteCharacters && byteCharacters.length > 0) {
+        if (byteCharacters && byteCharacters.length > 0) {
             while (offset < byteCharacters.length) {
                 let slice = byteCharacters.slice(offset, offset + sliceSize);
                 let byteNumbers = new Array(slice.length);
@@ -275,16 +275,16 @@ export class GeneralService {
             footerCssClass,
             buttons
         } : {
-                headerText,
-                headerCssClass,
-                messageText: (commonLocaleData) ? commonLocaleData?.app_rc_unselected_note : `Note: If you uncheck this transaction from Reverse Charge, applied
+            headerText,
+            headerCssClass,
+            messageText: (commonLocaleData) ? commonLocaleData?.app_rc_unselected_note : `Note: If you uncheck this transaction from Reverse Charge, applied
                 taxes will be considered as normal taxes and reverse
                 charge effect will be removed from tax report.`,
-                messageCssClass,
-                footerText: (commonLocaleData) ? commonLocaleData?.app_rs_unselected_footer_note : 'Are you sure you want to uncheck this transaction from Reverse Charge?',
-                footerCssClass,
-                buttons
-            };
+            messageCssClass,
+            footerText: (commonLocaleData) ? commonLocaleData?.app_rs_unselected_footer_note : 'Are you sure you want to uncheck this transaction from Reverse Charge?',
+            footerCssClass,
+            buttons
+        };
     }
 
     /**
@@ -456,7 +456,7 @@ export class GeneralService {
         const name = `${cookieName}=`;
         const decodedCookie = decodeURIComponent(document.cookie);
         const availableCookies = decodedCookie.split(';');
-        if(availableCookies && availableCookies.length > 0) {
+        if (availableCookies && availableCookies.length > 0) {
             for (let index = 0; index < availableCookies.length; index++) {
                 let cookie = availableCookies[index];
                 while (cookie.charAt(0) === ' ') {
@@ -758,14 +758,14 @@ export class GeneralService {
             footerCssClass,
             buttons
         } : {
-                headerText,
-                headerCssClass,
-                messageText: localeData?.change_all_entry_dates,
-                messageCssClass,
-                footerText: '',
-                footerCssClass,
-                buttons
-            };
+            headerText,
+            headerCssClass,
+            messageText: localeData?.change_all_entry_dates,
+            messageCssClass,
+            footerText: '',
+            footerCssClass,
+            buttons
+        };
     }
 
     /**
@@ -896,7 +896,7 @@ export class GeneralService {
      * @returns {boolean} True, if bank details are valid
      * @memberof GeneralService
      */
-     public checkForValidBankDetails(bankDetails: any, countryCode: string): boolean {
+    public checkForValidBankDetails(bankDetails: any, countryCode: string): boolean {
         const fieldsWithValue = bankDetails;
         const keys = countryCode === 'AE' ?
             ['beneficiaryName', 'bankName', 'branchName', 'bankAccountNo', 'swiftCode'] :

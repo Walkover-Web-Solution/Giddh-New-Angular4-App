@@ -25,25 +25,27 @@
                         <p>{{adjustedVoucherType === 'rcpt' ? commonLocaleData?.app_voucher_types?.receipt :
                             (adjustedVoucherType === 'advance-receipt') ?
                             commonLocaleData?.app_voucher_types?.advance_receipt : commonLocaleData?.app_invoice }}
-                            Total: <i
-                                class="font-10"></i>
-                                <!-- {{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment?.grandTotal
+                            Total: <i class="font-10"></i>
+                            <!-- {{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment?.grandTotal
                                  | giddhCurrency}} -->
 
-                                <span class="d-inline-flex justify-content-end">
-                                    <amount-field [amount]="adjustPayment?.grandTotal"
-                                        [currencySymbol]="invoiceFormDetails.accountDetails.currencySymbol"
-                                        [currencyCode]="invoiceFormDetails.accountDetails.currency?.code">
-                                    </amount-field>
-                                </span>
+                            <span class="d-inline-flex justify-content-end">
+                                <amount-field [amount]="adjustPayment?.grandTotal"
+                                    [currencySymbol]="invoiceFormDetails.accountDetails.currencySymbol"
+                                    [currencyCode]="invoiceFormDetails.accountDetails.currency?.code">
+                                </amount-field>
+                            </span>
                         </p>
                         <p>{{(adjustedVoucherType === 'rcpt' || adjustedVoucherType === 'advance-receipt') ?
-                            commonLocaleData?.app_balance : commonLocaleData?.app_due }} <span class="text-light">{{localeData?.post_adj}}</span> <span class="nowrap"><i class="font-10"></i>
+                            commonLocaleData?.app_balance : commonLocaleData?.app_due }} <span
+                                class="text-light">{{localeData?.post_adj}}</span> <span class="nowrap"><i
+                                    class="font-10"></i>
                                 <!-- {{invoiceFormDetails.accountDetails.currencySymbol}} {{ getBalanceDue() |
                                 giddhCurrency}} -->
                             </span>
                             <span class="d-inline-flex justify-content-end">
-                                <amount-field [amount]="getBalanceDue()" [currencySymbol]="invoiceFormDetails.accountDetails.currencySymbol"
+                                <amount-field [amount]="getBalanceDue()"
+                                    [currencySymbol]="invoiceFormDetails.accountDetails.currencySymbol"
                                     [currencyCode]="invoiceFormDetails.accountDetails.currency?.code">
                                 </amount-field>
                             </span>
@@ -80,8 +82,7 @@
                                             class="text-left" name="voucherName{{entry.uniqueName}}"
                                             [defaultValue]="entry.voucherNumber" [fixedValue]="entry.voucherNumber"
                                             (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm);" required
-                                            [placeholder]="localeData?.select_voucher"
-                                            [(ngModel)]="entry.uniqueName"
+                                            [placeholder]="localeData?.select_voucher" [(ngModel)]="entry.uniqueName"
                                             (selected)="selectVoucher($event, entry, entryIdx);"
                                             [options]="adjustVoucherOptions" [multiple]="false">
                                             <ng-template #optionTemplate let-option="option">
@@ -96,7 +97,9 @@
                                                             ({{commonLocaleData?.app_amount}}:
                                                             {{currencySymbol}}
                                                             <span class="d-inline-flex">
-                                                                <amount-field [amount]="option?.additional?.balanceDue?.amountForAccount"  [currencySymbol]="false" [currencyCode]="false">
+                                                                <amount-field
+                                                                    [amount]="option?.additional?.balanceDue?.amountForAccount"
+                                                                    [currencySymbol]="false" [currencyCode]="false">
                                                                 </amount-field>
                                                             </span>
                                                         </p>

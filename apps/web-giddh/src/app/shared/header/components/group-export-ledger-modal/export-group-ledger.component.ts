@@ -94,7 +94,7 @@ export class ExportGroupLedgerComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 
-    constructor(private store: Store<AppState>, private _permissionDataService: PermissionDataService,  private generalService: GeneralService, private modalService: BsModalService) {
+    constructor(private store: Store<AppState>, private _permissionDataService: PermissionDataService, private generalService: GeneralService, private modalService: BsModalService) {
         //
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -104,7 +104,7 @@ export class ExportGroupLedgerComponent implements OnInit {
         this.dateRange.from = moment(moment().subtract(30, 'days')).format(GIDDH_DATE_FORMAT);
         this.dateRange.to = moment(moment()).format(GIDDH_DATE_FORMAT);
 
-        if(this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {
+        if (this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {
             this._permissionDataService.getData.forEach(f => {
                 if (f.name === 'LEDGER') {
                     let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
@@ -136,12 +136,12 @@ export class ExportGroupLedgerComponent implements OnInit {
         this.dateRange.to = moment(ev.picker.endDate).format(GIDDH_DATE_FORMAT);
     }
 
-     /**
-     *To show the datepicker
-     *
-     * @param {*} element
-     * @memberof AuditLogsFormComponent
-     */
+    /**
+    *To show the datepicker
+    *
+    * @param {*} element
+    * @memberof AuditLogsFormComponent
+    */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
@@ -168,7 +168,7 @@ export class ExportGroupLedgerComponent implements OnInit {
      * @memberof AuditLogsFormComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }

@@ -18,7 +18,7 @@ import { ReplaySubject } from 'rxjs';
 export class AsideSettingComponent implements OnInit, OnDestroy {
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('searchField', {static: true}) public searchField: ElementRef;
+    @ViewChild('searchField', { static: true }) public searchField: ElementRef;
 
     public imgPath: string = '';
     public settingsPageTabs: any[] = [];
@@ -96,7 +96,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public goToPreviousPage(): void {
-        if(this.generalService.getSessionStorage("previousPage") && !this.router.url.includes("/dummy")) {
+        if (this.generalService.getSessionStorage("previousPage") && !this.router.url.includes("/dummy")) {
             this.router.navigateByUrl(this.generalService.getSessionStorage("previousPage"));
         } else {
             this.router.navigate(['/pages/home']);
@@ -110,9 +110,9 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public closeAsidePaneIfMobile(event?): void {
-        if(this.isMobileScreen && event && event.target.className !== "icon-bar") {
+        if (this.isMobileScreen && event && event.target.className !== "icon-bar") {
             this.closeAsideEvent.emit(event);
-        } else if(!this.isMobileScreen) {
+        } else if (!this.isMobileScreen) {
             this.closeAsideEvent.emit(event);
         }
     }
@@ -134,14 +134,14 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             let settingsPageTabs = this.localeData?.tabs;
 
             if (settingsPageTabs) {
                 let loop = 0;
                 let organizationIndex = 0;
                 this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), take(1)).subscribe((organization: Organization) => {
-                    if(organization) {
+                    if (organization) {
                         if (organization.type === OrganizationType.Branch) {
                             organizationIndex = 1;
                         } else if (organization.type === OrganizationType.Company || !organization.type) {

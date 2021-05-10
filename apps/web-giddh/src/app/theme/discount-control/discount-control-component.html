@@ -3,13 +3,16 @@
 
     <a id="discount">
         <div class="multi-select adjust">
-            <input type="text" decimalDigitsDirective name="" class="form-control text-right cursor-pointer pd-r2" (focus)="discountMenu = true;hideOtherPopups.emit(true)" [(ngModel)]="discountSum" [mask]="inputMaskFormat" [prefix]="prefixInput" [suffix]="suffixInput"
-                readonly (blur)="discountInputBlur($event)"/>
+            <input type="text" decimalDigitsDirective name="" class="form-control text-right cursor-pointer pd-r2"
+                (focus)="discountMenu = true;hideOtherPopups.emit(true)" [(ngModel)]="discountSum"
+                [mask]="inputMaskFormat" [prefix]="prefixInput" [suffix]="suffixInput" readonly
+                (blur)="discountInputBlur($event)" />
             <!-- <span class="caret cp no-select" (click)="discountMenu = true;hideOtherPopups.emit(true)"></span> -->
         </div>
     </a>
 
-    <div class="my-dropdown-menu pd-1" (click)="$event.stopPropagation()" [ngStyle]="{'display': discountMenu ? 'block': 'none'}" #disInptEle>
+    <div class="my-dropdown-menu pd-1" (click)="$event.stopPropagation()"
+        [ngStyle]="{'display': discountMenu ? 'block': 'none'}" #disInptEle>
 
         <div>
 
@@ -18,7 +21,10 @@
                 <label class="mr-1 align-items-center d-flex width-50">Percent</label>
 
                 <div class="position-relative">
-                    <input type="text" class="form-control text-right cursor-pointer w-100 percentage-width" [disabled]="!discountFromPer" decimalDigitsDirective [(ngModel)]="discountPercentageModal" (blur)="discountInputBlur($event)" (input)="discountFromInput('PERCENTAGE', $event)" [mask]="inputMaskFormat">
+                    <input type="text" class="form-control text-right cursor-pointer w-100 percentage-width"
+                        [disabled]="!discountFromPer" decimalDigitsDirective [(ngModel)]="discountPercentageModal"
+                        (blur)="discountInputBlur($event)" (input)="discountFromInput('PERCENTAGE', $event)"
+                        [mask]="inputMaskFormat">
                     <i class="fa fa-percent position-absolute"></i>
                 </div>
 
@@ -26,7 +32,9 @@
 
             <div class="d-flex mr-b1">
                 <label class="mr-1 align-items-center d-flex width-50">Value</label>
-                <input type="text" class="form-control text-right cursor-pointer value-width" [disabled]="!discountFromVal" decimalDigitsDirective [(ngModel)]="discountFixedValueModal" (input)="discountFromInput('FIX_AMOUNT', $event)" [mask]="inputMaskFormat">
+                <input type="text" class="form-control text-right cursor-pointer value-width"
+                    [disabled]="!discountFromVal" decimalDigitsDirective [(ngModel)]="discountFixedValueModal"
+                    (input)="discountFromInput('FIX_AMOUNT', $event)" [mask]="inputMaskFormat">
             </div>
 
         </div>
@@ -40,9 +48,11 @@
 
                 <ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
                     <li *ngIf="discount && discount.discountUniqueName && discount.name" class="custom-item pd mr-b05">
-                        <label class="checkbox overflow-hidden width-100 p-0 m-0 label-line" (click)="$event.stopPropagation()">
-                            <input class="pull-left" id="{{'discount-control-' + idx}}" name="tax_{{idx}}" type="checkbox" [(ngModel)]="discount.isActive"
-                                (change)="change(discount, $event)" (click)="$event.stopPropagation()" />
+                        <label class="checkbox overflow-hidden width-100 p-0 m-0 label-line"
+                            (click)="$event.stopPropagation()">
+                            <input class="pull-left" id="{{'discount-control-' + idx}}" name="tax_{{idx}}"
+                                type="checkbox" [(ngModel)]="discount.isActive" (change)="change(discount, $event)"
+                                (click)="$event.stopPropagation()" />
                             <span class="pull-left text-ellipsis">{{discount.name}}</span>
                         </label>
                     </li>

@@ -7,7 +7,7 @@
     padding: 2px 10px 2px 0;
 }
 
-.table-label{
+.table-label {
     border-color: $gainsboro;
     td {
         padding-top: 12px !important;
@@ -97,20 +97,21 @@ tr.fsstock td {
     margin-top: 15px;
 }
 
-.collapse-icons{
+.collapse-icons {
     font-size: 10px;
     border: 1px solid $chetwode-blue;
     border-radius: 4px;
     padding: 2px;
     top: 0 !important;
 }
-.output-row  sh-select , .output-row .form-group input{
+.output-row sh-select,
+.output-row .form-group input {
     min-width: 140px;
 }
-.section-head.bd-rb, .output-row span{
+.section-head.bd-rb,
+.output-row span {
     white-space: normal;
     word-break: break-word;
-
 }
 @media (max-width: 767px) {
     section.form-body table.no-hover td {
