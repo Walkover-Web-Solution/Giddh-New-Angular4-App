@@ -63,14 +63,14 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public moveAccountForm: FormGroup;
     public activeGroupSelected$: Observable<string[]>;
     public config: PerfectScrollbarConfigInterface = { suppressScrollX: true, suppressScrollY: false };
-    @ViewChild('shareGroupModal', {static: true}) public shareGroupModal: ModalDirective;
-    @ViewChild('shareAccountModal', {static: true}) public shareAccountModal: ModalDirective;
-    @ViewChild('shareAccountModalComp', {static: true}) public shareAccountModalComp: ShareAccountModalComponent;
-    @ViewChild('shareGroupModalComp', {static: true}) public shareGroupModalComp: ShareGroupModalComponent;
-    @ViewChild('deleteMergedAccountModal', {static: true}) public deleteMergedAccountModal: ModalDirective;
-    @ViewChild('moveMergedAccountModal', {static: true}) public moveMergedAccountModal: ModalDirective;
-    @ViewChild('deleteAccountModal', {static: true}) public deleteAccountModal: ModalDirective;
-    @ViewChild('groupExportLedgerModal', {static: true}) public groupExportLedgerModal: ModalDirective;
+    @ViewChild('shareGroupModal', { static: true }) public shareGroupModal: ModalDirective;
+    @ViewChild('shareAccountModal', { static: true }) public shareAccountModal: ModalDirective;
+    @ViewChild('shareAccountModalComp', { static: true }) public shareAccountModalComp: ShareAccountModalComponent;
+    @ViewChild('shareGroupModalComp', { static: true }) public shareGroupModalComp: ShareGroupModalComponent;
+    @ViewChild('deleteMergedAccountModal', { static: true }) public deleteMergedAccountModal: ModalDirective;
+    @ViewChild('moveMergedAccountModal', { static: true }) public moveMergedAccountModal: ModalDirective;
+    @ViewChild('deleteAccountModal', { static: true }) public deleteAccountModal: ModalDirective;
+    @ViewChild('groupExportLedgerModal', { static: true }) public groupExportLedgerModal: ModalDirective;
     @Input() public breadcrumbPath: string[] = [];
     @Input() public breadcrumbUniquePath: string[] = [];
     public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
@@ -110,14 +110,14 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public updateAccountInProcess$: Observable<boolean>;
     public updateAccountIsSuccess$: Observable<boolean>;
     public discountList$: Observable<IDiscountList[]>;
-//     public taxPopOverTemplate: string = `
-//   <div class="popover-content">
-//   <label>Tax being inherited from:</label>
-//     <ul>
-//     <li>@inTax.name</li>
-//     </ul>
-//   </div>
-//   `;
+    //     public taxPopOverTemplate: string = `
+    //   <div class="popover-content">
+    //   <label>Tax being inherited from:</label>
+    //     <ul>
+    //     <li>@inTax.name</li>
+    //     </ul>
+    //   </div>
+    //   `;
     public moveAccountSuccess$: Observable<boolean>;
     public showDeleteMove: boolean = false;
     public isGstEnabledAcc: boolean = false;
@@ -132,7 +132,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public flatGroupsOptions: IOption[];
     public isDebtorCreditor: boolean = false;
     public accountDetails: any = '';
-    @ViewChild('discountShSelect', {static: true}) public discountShSelect: ShSelectComponent;
+    @ViewChild('discountShSelect', { static: true }) public discountShSelect: ShSelectComponent;
     public selectedCompany: Observable<CompanyResponse>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -355,13 +355,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         });
 
         this.activeGroupSharedWith$.subscribe(response => {
-            if(response) {
+            if (response) {
                 this.groupSharedWith = this.localeData?.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
             }
         });
 
         this.activeAccountSharedWith$.subscribe(response => {
-            if(response) {
+            if (response) {
                 this.accountSharedWith = this.localeData?.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
             }
         });
@@ -662,8 +662,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public showMoveMergedAccountModal() {
         this.moveMergedAccountModalBody = this.localeData?.move_merged_account_content
-                                          .replace("[SOURCE_ACCOUNT]", this.setAccountForMove)
-                                          .replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
+            .replace("[SOURCE_ACCOUNT]", this.setAccountForMove)
+            .replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
         this.moveMergedAccountModal.show();
     }
 

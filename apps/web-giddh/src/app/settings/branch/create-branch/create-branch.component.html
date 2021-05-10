@@ -33,7 +33,8 @@
                     <label>
                         Branch Name <span class="red-text">*</span>
                     </label>
-                    <input maxlength="50" [class.error-box]="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.invalid"
+                    <input maxlength="50"
+                        [class.error-box]="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.invalid"
                         type="text" class="form-control" formControlName="alias" placeholder="Enter Name">
                     <span class="danger pl-1"
                         *ngIf="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.errors?.maxlength">
@@ -61,13 +62,14 @@
                             class="linked-add create" (noResultsClicked)="handleShortcutPress()">
                             <ng-template #optionTemplate let-option="option">
                                 <ng-container>
-                                    <a (click)="selectAddress(option)"
-                                        href="javascript:void(0)" class="list-item d-flex">
+                                    <a (click)="selectAddress(option)" href="javascript:void(0)"
+                                        class="list-item d-flex">
                                         <span><input type="checkbox"
                                                 [checked]="branchForm?.get('address')?.value?.includes(option.value)"
                                                 [value]="option.value"></span>&nbsp;
                                         <span class="entity-details">
-                                            <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                            <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}
+                                            </div>
                                             <div class="item-unique">
                                                 <p *ngIf="option.taxType && option.taxNumber">{{ option.taxType }} :
                                                     {{ option.taxNumber }}</p>
@@ -158,7 +160,7 @@
 </div>
 <div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'"></div>
 <create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState" [keyboardShortcut]="'esc'"
-    (onShortcutPress)="toggleAddressAsidePane()"
-    [currentOrganizationUniqueName]="currentOrganizationUniqueName" [showLoader]="isAddressChangeInProgress"
-    (saveAddress)="createNewAddress($event)" [addressConfiguration]="addressConfiguration"
-    (closeAsideEvent)="toggleAddressAsidePane($event)" *ngIf="addressAsideMenuState === 'in'"></create-address>
+    (onShortcutPress)="toggleAddressAsidePane()" [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+    [showLoader]="isAddressChangeInProgress" (saveAddress)="createNewAddress($event)"
+    [addressConfiguration]="addressConfiguration" (closeAsideEvent)="toggleAddressAsidePane($event)"
+    *ngIf="addressAsideMenuState === 'in'"></create-address>

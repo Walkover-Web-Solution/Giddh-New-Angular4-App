@@ -30,8 +30,8 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
     @Input() public voucherType: string = '';
     @Input() public selectedInvoices;
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('bulkUpdateForm', {static: true}) public bulkUpdateForm: NgForm;
-    @ViewChild('bulkUpdateImageSlogan', {static: true}) public bulkUpdateImageSlogan: ModalDirective;
+    @ViewChild('bulkUpdateForm', { static: true }) public bulkUpdateForm: NgForm;
+    @ViewChild('bulkUpdateImageSlogan', { static: true }) public bulkUpdateImageSlogan: ModalDirective;
 
     public fieldOptions: IOption[] = [
         { label: 'PDF Template', value: 'pdfTemplate' },

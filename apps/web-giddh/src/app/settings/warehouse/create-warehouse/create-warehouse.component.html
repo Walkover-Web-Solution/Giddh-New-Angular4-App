@@ -24,8 +24,7 @@
                 </div>
                 <div class="col-lg-2 col-sm-2">
                     <div class="warehouse-image ">
-                        <img class="warehouse-image m-15" src="{{ imgPath }}"
-                            alt="Warehouse image">
+                        <img class="warehouse-image m-15" src="{{ imgPath }}" alt="Warehouse image">
                     </div>
                 </div>
             </div>
@@ -36,7 +35,8 @@
                     <label>
                         Warehouse Name <span class="red-text">*</span>
                     </label>
-                    <input [class.error-box]="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.invalid"
+                    <input
+                        [class.error-box]="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.invalid"
                         type="text" maxlength="100" required formControlName="name" class="form-control">
                     <span class="danger pl-1"
                         *ngIf="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.errors?.maxlength">
@@ -96,10 +96,11 @@
                             class="linked-add create" (noResultsClicked)="handleShortcutPress()">
                             <ng-template #optionTemplate let-option="option">
                                 <ng-container>
-                                    <a (click)="selectAddress(option)"
-                                        href="javascript:void(0)" class="list-item d-flex">
+                                    <a (click)="selectAddress(option)" href="javascript:void(0)"
+                                        class="list-item d-flex">
                                         <span class="entity-details">
-                                            <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                            <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}
+                                            </div>
                                             <div class="item-unique">
                                                 <p *ngIf="option.taxType && option.taxNumber">{{ option.taxType }} :
                                                     {{ option.taxNumber }}</p>
@@ -143,11 +144,9 @@
 </div>
 <!-- aside pane for create address -->
 <div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'"></div>
-<create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState"
-    [keyboardShortcut]="'esc'"
-    (onShortcutPress)="toggleAddressAsidePane()"
-    [addressConfiguration]="addressConfiguration" [companyName]="companyDetails?.name"
-    [currentOrganizationUniqueName]="currentOrganizationUniqueName" (saveAddress)="createNewAddress($event)"
-    [showLoader]="isAddressChangeInProgress" (closeAsideEvent)="toggleAddressAsidePane($event)"
-    *ngIf="addressAsideMenuState === 'in'"></create-address>
+<create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState" [keyboardShortcut]="'esc'"
+    (onShortcutPress)="toggleAddressAsidePane()" [addressConfiguration]="addressConfiguration"
+    [companyName]="companyDetails?.name" [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+    (saveAddress)="createNewAddress($event)" [showLoader]="isAddressChangeInProgress"
+    (closeAsideEvent)="toggleAddressAsidePane($event)" *ngIf="addressAsideMenuState === 'in'"></create-address>
 <!-- aside pane for create address end -->

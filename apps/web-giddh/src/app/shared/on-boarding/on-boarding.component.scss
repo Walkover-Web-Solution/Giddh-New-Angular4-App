@@ -41,8 +41,8 @@ label .required {
     background-color: $alice-blue-light;
 }
 
-.welcome-select{
-    .select-caret{
+.welcome-select {
+    .select-caret {
         width: 85px;
         margin-right: 28px;
     }
@@ -81,7 +81,7 @@ label .required {
 } */
 }
 
-@media (max-width:767px) {
+@media (max-width: 767px) {
     .giddh-logo-welcome img {
         max-width: 150px;
         margin: 30px auto;

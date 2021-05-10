@@ -21,30 +21,33 @@
                                 <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 col-xs-12 select-customer-name">
                                     <div class="clearfix d-flex flex-column">
                                         <div class="d-flex flex-column">
-                                            <sales-sh-select #vendorNameDropDown name="vendor" class="select-customer-field"
-                                                [options]="vendorAcList$ | async"
+                                            <sales-sh-select #vendorNameDropDown name="vendor"
+                                                class="select-customer-field" [options]="vendorAcList$ | async"
                                                 [(ngModel)]="purchaseOrder.account.uniqueName"
                                                 [customFilter]="customMoveGroupFilter"
                                                 (selected)="onSelectVendor($event);" [placeholder]="'Select Vendor'"
-                                                [notFoundLink]="true" [doNotReset]="true"
-                                                [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('vendor')"
+                                                [notFoundLink]="true" [doNotReset]="true" [isPaginationEnabled]="true"
+                                                (scrollEnd)="handleScrollEnd('vendor')"
                                                 (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'vendor')"
                                                 [notFoundMsg]="noResultsFoundLabel" [enableDynamicSearch]="true"
                                                 [fixedValue]="purchaseOrder.account.name"
                                                 [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true"
                                                 (noResultsClicked)="addNewAccount()" [multiple]="false"
                                                 [ItemHeight]="67" [notFoundLinkText]="'Add Vendor'"
-                                                (keyup)="resetVendor($event)" (onClear)="resetVendor(null)" [isOpen]="!isUpdateMode && !purchaseOrder.account.uniqueName">
+                                                (keyup)="resetVendor($event)" (onClear)="resetVendor(null)"
+                                                [isOpen]="!isUpdateMode && !purchaseOrder.account.uniqueName">
 
                                                 <ng-template #optionTemplate let-option="option">
-                                                    <a href="javascript:void(0)" class="list-item flex-column border-none">
+                                                    <a href="javascript:void(0)"
+                                                        class="list-item flex-column border-none">
                                                         <div class="item">{{ option.label }}</div>
                                                         <div class="item-unique">{{ option.value }}</div>
                                                     </a>
                                                 </ng-template>
 
                                                 <ng-template #notFoundLinkTemplate>
-                                                    <a href="javascript:void(0)" class="list-item pd-l05 pd-r05 d-flex justify-content-between w-100 border-none"
+                                                    <a href="javascript:void(0)"
+                                                        class="list-item pd-l05 pd-r05 d-flex justify-content-between w-100 border-none"
                                                         [keyboardShortcut]="'alt+c'">
                                                         <div class="item">{{ vendorNotFoundText }}</div>
                                                         <div class="item">Alt+C</div>
@@ -55,8 +58,7 @@
                                             <!-- region Unregistered Business / vendor details -->
                                             <div class="d-flex aqua-color"
                                                 *ngIf="purchaseOrder.voucherDetails.customerName">
-                                                <span class="cp aqua-color"
-                                                    *ngIf="!isUpdateMode">
+                                                <span class="cp aqua-color" *ngIf="!isUpdateMode">
                                                     <a href="javascript:void(0)" (click)="getVendorDetails()">Vendor
                                                         Details</a>
                                                 </span>
@@ -64,7 +66,11 @@
                                             <!-- endregion -->
                                             <div *ngIf="purchaseOrders && purchaseOrders.length > 0">
                                                 <p><small>Pending Purchase order of selected vendor</small></p>
-                                                <p class="font-14"><a href="javascript:;" (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order.uniqueName, order.accountUniqueName)" *ngFor="let order of purchaseOrders; let i = index;">{{order.number}}<span *ngIf="checkIfPipeSymbolRequired(i)">&nbsp;|&nbsp;</span></a></p>
+                                                <p class="font-14"><a href="javascript:;"
+                                                        (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order.uniqueName, order.accountUniqueName)"
+                                                        *ngFor="let order of purchaseOrders; let i = index;">{{order.number}}<span
+                                                            *ngIf="checkIfPipeSymbolRequired(i)">&nbsp;|&nbsp;</span></a>
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -89,13 +95,26 @@
                                                         <div class="d-flex align-items-center pb-1">
                                                             <span class="pd-r15">Billing Address</span>
                                                             <span>
-                                                                <div class="btn-group btn-block" dropdown #billingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="billingAddressDropDownWeb.hide()" *ngIf="accountAddressList?.length > 1">
-                                                                    <a dropdownToggle type="button" class="dropdown-toggle">Change</a>
-                                                                    <ul *dropdownMenu class="dropdown-menu change-address-dropdown dropdown-menu-right" role="menu">
-                                                                        <li role="menuitem" *ngFor="let address of accountAddressList">
-                                                                            <a class="dropdown-item" (click)="selectAddress(purchaseOrder.account.billingDetails, address)">
-                                                                                {{address.address}} {{address.state?.name}}
-                                                                                <span class="d-block">{{ address.gstNumber ? (showGSTINNo ? 'GSTIN: ' : 'TRN: ') + address.gstNumber : "" }}
+                                                                <div class="btn-group btn-block" dropdown
+                                                                    #billingAddressDropDownWeb="bs-dropdown"
+                                                                    [attachOutsideOnClick]="true"
+                                                                    (clickOutside)="billingAddressDropDownWeb.hide()"
+                                                                    *ngIf="accountAddressList?.length > 1">
+                                                                    <a dropdownToggle type="button"
+                                                                        class="dropdown-toggle">Change</a>
+                                                                    <ul *dropdownMenu
+                                                                        class="dropdown-menu change-address-dropdown dropdown-menu-right"
+                                                                        role="menu">
+                                                                        <li role="menuitem"
+                                                                            *ngFor="let address of accountAddressList">
+                                                                            <a class="dropdown-item"
+                                                                                (click)="selectAddress(purchaseOrder.account.billingDetails, address)">
+                                                                                {{address.address}}
+                                                                                {{address.state?.name}}
+                                                                                <span class="d-block">{{
+                                                                                    address.gstNumber ? (showGSTINNo ?
+                                                                                    'GSTIN: ' : 'TRN: ') +
+                                                                                    address.gstNumber : "" }}
                                                                                 </span>
                                                                             </a>
                                                                         </li>
@@ -103,52 +122,61 @@
                                                                 </div>
                                                             </span>
                                                         </div>
-                                                            <div class="billing-address clearfix">
-                                                                <textarea name="vendorBillingDetailsAddress"
-                                                                    (keyup)="autoFillShippingDetails('vendor')"
-                                                                    [(ngModel)]="purchaseOrder.account.billingDetails.address[0]"
-                                                                    class="form-control" rows="3" autocomplete="off"
-                                                                    autofocus="off" aria-autocomplete="none"></textarea>
+                                                        <div class="billing-address clearfix">
+                                                            <textarea name="vendorBillingDetailsAddress"
+                                                                (keyup)="autoFillShippingDetails('vendor')"
+                                                                [(ngModel)]="purchaseOrder.account.billingDetails.address[0]"
+                                                                class="form-control" rows="3" autocomplete="off"
+                                                                autofocus="off" aria-autocomplete="none"></textarea>
 
-                                                                <div class="row">
-                                                                    <div class="col-sm-12 col-md-6">
-                                                                        <label class="sales-country-label">
-                                                                            {{vendorCountry}}
-                                                                        </label>
-                                                                    </div>
-
-                                                                    <div class="col-sm-12 col-md-6" #vendorBillingState>
-                                                                        <sales-sh-select [placeholder]="'State'"
-                                                                            class="select-border-bottom"
-                                                                            (selected)="fillShippingBillingDetails($event, true, 'vendor'); autoFillShippingDetails('vendor')"
-                                                                            #vendorStatesBilling [showBottomBorderOnly]="true"
-                                                                            [options]="statesSource"
-                                                                            name="vendorBillingDetailsStateCode"
-                                                                            [(ngModel)]="purchaseOrder.account.billingDetails.state.code">
-                                                                        </sales-sh-select>
-                                                                    </div>
-
-                                                                    <div class="col-sm-12 col-md-6"
-                                                                        *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
-                                                                        <input maxLength="15" autocomplete="None"
-                                                                            type="text" name="vendorBillingDetailsTax"
-                                                                            [(ngModel)]="purchaseOrder.account.billingDetails.gstNumber"
-                                                                            class="form-control input-custom"
-                                                                            (blur)="autoFillShippingDetails('vendor')"
-                                                                            (change)="getStateCode('billingDetails', 'vendor')"
-                                                                            placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
-                                                                    </div>
-                                                                    <!-- static pin code  -->
-                                                                    <div [ngClass]="{'col-sm-12 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
-                                                                        <div class="form-group mr-b05">
-                                                                            <input type="number" class="form-control input-custom" autocomplete="false" name="accountBillingPinCode" (blur)="autoFillShippingDetails('vendor')"
-                                                                                placeholder="PIN Code" [(ngModel)]="purchaseOrder.account.billingDetails.pincode" decimalDigitsDirective [preventDecimal]="true" />
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- static pin code end-->
+                                                            <div class="row">
+                                                                <div class="col-sm-12 col-md-6">
+                                                                    <label class="sales-country-label">
+                                                                        {{vendorCountry}}
+                                                                    </label>
                                                                 </div>
 
+                                                                <div class="col-sm-12 col-md-6" #vendorBillingState>
+                                                                    <sales-sh-select [placeholder]="'State'"
+                                                                        class="select-border-bottom"
+                                                                        (selected)="fillShippingBillingDetails($event, true, 'vendor'); autoFillShippingDetails('vendor')"
+                                                                        #vendorStatesBilling
+                                                                        [showBottomBorderOnly]="true"
+                                                                        [options]="statesSource"
+                                                                        name="vendorBillingDetailsStateCode"
+                                                                        [(ngModel)]="purchaseOrder.account.billingDetails.state.code">
+                                                                    </sales-sh-select>
+                                                                </div>
+
+                                                                <div class="col-sm-12 col-md-6"
+                                                                    *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
+                                                                    <input maxLength="15" autocomplete="None"
+                                                                        type="text" name="vendorBillingDetailsTax"
+                                                                        [(ngModel)]="purchaseOrder.account.billingDetails.gstNumber"
+                                                                        class="form-control input-custom"
+                                                                        (blur)="autoFillShippingDetails('vendor')"
+                                                                        (change)="getStateCode('billingDetails', 'vendor')"
+                                                                        placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
+                                                                </div>
+                                                                <!-- static pin code  -->
+                                                                <div
+                                                                    [ngClass]="{'col-sm-12 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
+                                                                    <div class="form-group mr-b05">
+                                                                        <input type="number"
+                                                                            class="form-control input-custom"
+                                                                            autocomplete="false"
+                                                                            name="accountBillingPinCode"
+                                                                            (blur)="autoFillShippingDetails('vendor')"
+                                                                            placeholder="PIN Code"
+                                                                            [(ngModel)]="purchaseOrder.account.billingDetails.pincode"
+                                                                            decimalDigitsDirective
+                                                                            [preventDecimal]="true" />
+                                                                    </div>
+                                                                </div>
+                                                                <!-- static pin code end-->
                                                             </div>
+
+                                                        </div>
                                                     </div>
 
                                                 </div>
@@ -160,20 +188,34 @@
                                                     <div class="form-group p-0 width-100">
                                                         <div class="d-flex align-items-center pb-1">
                                                             <span class="pd-r15">
-                                                            <input type="checkbox" autocomplete="None"
-                                                                name="autoFillVendorShipping"
-                                                                [(ngModel)]="autoFillVendorShipping"
-                                                                (change)="autoFillShippingDetails('vendor')"> Shipping
-                                                            Address
-                                                            Same as Billing Address
+                                                                <input type="checkbox" autocomplete="None"
+                                                                    name="autoFillVendorShipping"
+                                                                    [(ngModel)]="autoFillVendorShipping"
+                                                                    (change)="autoFillShippingDetails('vendor')">
+                                                                Shipping
+                                                                Address
+                                                                Same as Billing Address
                                                             </span>
                                                             <span>
-                                                                <div class="btn-group btn-block" dropdown #shippingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="shippingAddressDropDownWeb.hide()" *ngIf="accountAddressList?.length > 1 && !autoFillVendorShipping">
-                                                                    <a dropdownToggle type="button" class="dropdown-toggle">Change</a>
-                                                                    <ul *dropdownMenu class="dropdown-menu change-address-dropdown dropdown-menu-right" role="menu">
-                                                                        <li role="menuitem" *ngFor="let address of accountAddressList">
-                                                                            <a class="dropdown-item" (click)="selectAddress(purchaseOrder.account.shippingDetails, address)">
-                                                                                {{address.address}} {{address.state?.name}} {{ address.gstNumber ? (showGSTINNo ? 'GSTIN: ' : 'TRN: ') + address.gstNumber : "" }}
+                                                                <div class="btn-group btn-block" dropdown
+                                                                    #shippingAddressDropDownWeb="bs-dropdown"
+                                                                    [attachOutsideOnClick]="true"
+                                                                    (clickOutside)="shippingAddressDropDownWeb.hide()"
+                                                                    *ngIf="accountAddressList?.length > 1 && !autoFillVendorShipping">
+                                                                    <a dropdownToggle type="button"
+                                                                        class="dropdown-toggle">Change</a>
+                                                                    <ul *dropdownMenu
+                                                                        class="dropdown-menu change-address-dropdown dropdown-menu-right"
+                                                                        role="menu">
+                                                                        <li role="menuitem"
+                                                                            *ngFor="let address of accountAddressList">
+                                                                            <a class="dropdown-item"
+                                                                                (click)="selectAddress(purchaseOrder.account.shippingDetails, address)">
+                                                                                {{address.address}}
+                                                                                {{address.state?.name}} {{
+                                                                                address.gstNumber ? (showGSTINNo ?
+                                                                                'GSTIN: ' : 'TRN: ') + address.gstNumber
+                                                                                : "" }}
                                                                             </a>
                                                                         </li>
                                                                     </ul>
@@ -218,10 +260,17 @@
                                                                             placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                     </div>
                                                                     <!-- static pin code  -->
-                                                                    <div [ngClass]="{'col-sm-12 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
+                                                                    <div
+                                                                        [ngClass]="{'col-sm-12 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
                                                                         <div class="form-group mr-b05">
-                                                                            <input type="number" class="form-control input-custom" autocomplete="false" name="accountShippingPinCode"
-                                                                                placeholder="PIN Code" [(ngModel)]="purchaseOrder.account.shippingDetails.pincode" decimalDigitsDirective [preventDecimal]="true" />
+                                                                            <input type="number"
+                                                                                class="form-control input-custom"
+                                                                                autocomplete="false"
+                                                                                name="accountShippingPinCode"
+                                                                                placeholder="PIN Code"
+                                                                                [(ngModel)]="purchaseOrder.account.shippingDetails.pincode"
+                                                                                decimalDigitsDirective
+                                                                                [preventDecimal]="true" />
                                                                         </div>
                                                                     </div>
                                                                     <!-- static pin code end-->
@@ -277,21 +326,32 @@
                                         <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
 
                                             <div class="form-group">
-                                               <div class="d-flex align-items-center pb-1">
+                                                <div class="d-flex align-items-center pb-1">
                                                     <span class="pd-r15">Billing Address</span>
                                                     <span>
-                                                    <div class="btn-group btn-block" container="body" dropdown #companyBillingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="companyBillingAddressDropDownWeb.hide()" *ngIf="companyAddressList?.length > 1">
-                                                        <a dropdownToggle type="button" class="dropdown-toggle">Change</a>
-                                                        <ul *dropdownMenu class="dropdown-menu dropdown-menu-right change-address-dropdown" role="menu">
-                                                            <li role="menuitem" *ngFor="let address of companyAddressList">
-                                                                <a class="dropdown-item" (click)="selectAddress(purchaseOrder.company.billingDetails, address, true)">
-                                                                    {{address.address}} {{address.state?.name}} {{ address.taxNumber ? (showGSTINNo ? 'GSTIN: ' : 'TRN: ') + address.taxNumber : "" }}
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </span>
-                                            </div>
+                                                        <div class="btn-group btn-block" container="body" dropdown
+                                                            #companyBillingAddressDropDownWeb="bs-dropdown"
+                                                            [attachOutsideOnClick]="true"
+                                                            (clickOutside)="companyBillingAddressDropDownWeb.hide()"
+                                                            *ngIf="companyAddressList?.length > 1">
+                                                            <a dropdownToggle type="button"
+                                                                class="dropdown-toggle">Change</a>
+                                                            <ul *dropdownMenu
+                                                                class="dropdown-menu dropdown-menu-right change-address-dropdown"
+                                                                role="menu">
+                                                                <li role="menuitem"
+                                                                    *ngFor="let address of companyAddressList">
+                                                                    <a class="dropdown-item"
+                                                                        (click)="selectAddress(purchaseOrder.company.billingDetails, address, true)">
+                                                                        {{address.address}} {{address.state?.name}} {{
+                                                                        address.taxNumber ? (showGSTINNo ? 'GSTIN: ' :
+                                                                        'TRN: ') + address.taxNumber : "" }}
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </span>
+                                                </div>
                                                 <div class="billing-address clearfix">
                                                     <textarea name="companyBillingDetailsAddress"
                                                         (keyup)="autoFillShippingDetails('company')"
@@ -327,10 +387,15 @@
                                                                 placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                         </div>
                                                         <!-- static pin code  -->
-                                                        <div [ngClass]="{'col-sm-12 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
+                                                        <div
+                                                            [ngClass]="{'col-sm-12 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
                                                             <div class="form-group mr-b05">
-                                                                <input type="number" class="form-control input-custom" autocomplete="false" name="companyBillingPinCode" (blur)="autoFillShippingDetails('company')"
-                                                                    placeholder="PIN Code" [(ngModel)]="purchaseOrder.company.billingDetails.pincode" decimalDigitsDirective [preventDecimal]="true" />
+                                                                <input type="number" class="form-control input-custom"
+                                                                    autocomplete="false" name="companyBillingPinCode"
+                                                                    (blur)="autoFillShippingDetails('company')"
+                                                                    placeholder="PIN Code"
+                                                                    [(ngModel)]="purchaseOrder.company.billingDetails.pincode"
+                                                                    decimalDigitsDirective [preventDecimal]="true" />
                                                             </div>
                                                         </div>
                                                         <!-- static pin code end-->
@@ -350,7 +415,8 @@
                                                         <input type="checkbox" autocomplete="None"
                                                             name="autoFillCompanyShipping"
                                                             [(ngModel)]="autoFillCompanyShipping"
-                                                            (change)="autoFillShippingDetails('company')"> Shipping Address
+                                                            (change)="autoFillShippingDetails('company')"> Shipping
+                                                        Address
                                                         Same as Billing Address
                                                     </span>
                                                 </div>
@@ -392,10 +458,17 @@
                                                                     placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                             </div>
                                                             <!-- static pin code  -->
-                                                            <div [ngClass]="{'col-sm-12 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
+                                                            <div
+                                                                [ngClass]="{'col-sm-12 col-md-6': (showGSTINNo || showTRNNo), 'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)}">
                                                                 <div class="form-group mr-b05">
-                                                                    <input type="number" class="form-control input-custom" autocomplete="false" name="companyBillingPinCode"
-                                                                        placeholder="PIN Code" [(ngModel)]="purchaseOrder.company.shippingDetails.pincode" decimalDigitsDirective [preventDecimal]="true" />
+                                                                    <input type="number"
+                                                                        class="form-control input-custom"
+                                                                        autocomplete="false"
+                                                                        name="companyBillingPinCode"
+                                                                        placeholder="PIN Code"
+                                                                        [(ngModel)]="purchaseOrder.company.shippingDetails.pincode"
+                                                                        decimalDigitsDirective
+                                                                        [preventDecimal]="true" />
                                                                 </div>
                                                             </div>
                                                             <!-- static pin code end-->
@@ -419,29 +492,37 @@
                             </div>
                         </div>
                         <!-- region customer dropdown -->
-                        <div class="select-customer-name order-expected-delivery d-flex col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                        <div
+                            class="select-customer-name order-expected-delivery d-flex col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                             <!-- region if not cashinvoice show customer dropdown -->
 
                             <div class="col-sm-12 col-md-12 col-lg-6 pl-0">
                                 <div>
-                                <input type="text" class="form-control" name="purchaseOrderNumber"
-                                    [(ngModel)]="purchaseOrder.number" [disabled]="!invoiceSettings?.purchaseBillSettings?.useCustomPONumber || isUpdateMode" placeholder="Enter Order #" />
+                                    <input type="text" class="form-control" name="purchaseOrderNumber"
+                                        [(ngModel)]="purchaseOrder.number"
+                                        [disabled]="!invoiceSettings?.purchaseBillSettings?.useCustomPONumber || isUpdateMode"
+                                        placeholder="Enter Order #" />
                                 </div>
                             </div>
                             <!-- endregion -->
                             <div class="col-sm-6" *ngIf="!isMobileScreen">
                                 <div class="invoice-due-date">
-                                <div class="d-flex">
-                                    <label>Order Date<span class="red-text">*</span></label>
-                                    <input type="text" class="form-control" placeholder="Select Date" [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseOrderDate" [(ngModel)]="purchaseOrder.voucherDetails.voucherDate" bsDatepicker (ngModelChange)="onUpdateOrderDate()">
-                                </div>
-                                <div class="d-flex">
-                                    <label>Expected Delivery</label>
-                                    <input type="text" class="form-control" placeholder="Select Date" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                        name="purchaseDueDate" [(ngModel)]="purchaseOrder.voucherDetails.dueDate" bsDatepicker (ngModelChange)="onUpdateOrderDate()">
+                                    <div class="d-flex">
+                                        <label>Order Date<span class="red-text">*</span></label>
+                                        <input type="text" class="form-control" placeholder="Select Date"
+                                            [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseOrderDate"
+                                            [(ngModel)]="purchaseOrder.voucherDetails.voucherDate" bsDatepicker
+                                            (ngModelChange)="onUpdateOrderDate()">
+                                    </div>
+                                    <div class="d-flex">
+                                        <label>Expected Delivery</label>
+                                        <input type="text" class="form-control" placeholder="Select Date"
+                                            [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseDueDate"
+                                            [(ngModel)]="purchaseOrder.voucherDetails.dueDate" bsDatepicker
+                                            (ngModelChange)="onUpdateOrderDate()">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         </div>
                         <!-- endregion -->
                     </div>
@@ -451,10 +532,11 @@
                         </div>
                         <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                             <div class="row">
-                            <div class="col-md-10">
-                                <input type="text" class="form-control" placeholder="Select Date" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                    name="purchaseOrderDate" [(ngModel)]="purchaseOrder.voucherDetails.voucherDate" bsDatepicker>
-                            </div>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" placeholder="Select Date"
+                                        [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseOrderDate"
+                                        [(ngModel)]="purchaseOrder.voucherDetails.voucherDate" bsDatepicker>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -464,10 +546,11 @@
                         </div>
                         <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                             <div class="row">
-                            <div class="col-md-10">
-                                <input type="text" class="form-control" placeholder="Select Date" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                    name="purchaseDueDate" [(ngModel)]="purchaseOrder.voucherDetails.dueDate" bsDatepicker>
-                            </div>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" placeholder="Select Date"
+                                        [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseDueDate"
+                                        [(ngModel)]="purchaseOrder.voucherDetails.dueDate" bsDatepicker>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -501,9 +584,10 @@
         <table class="table table-custom-invoice  basic">
             <thead>
                 <tr>
-                    <th *ngFor="let item of theadArrReadOnly;" [hidden]="!item.display"
-                        class="thead-sales-invoice" [ngClass]="item.label">
-                        {{item.label}} <span *ngIf="item.label === 'Tax' && isRcmEntry">(RCM)<sup class="mandatory-asterisk">*</sup></span>
+                    <th *ngFor="let item of theadArrReadOnly;" [hidden]="!item.display" class="thead-sales-invoice"
+                        [ngClass]="item.label">
+                        {{item.label}} <span *ngIf="item.label === 'Tax' && isRcmEntry">(RCM)<sup
+                                class="mandatory-asterisk">*</sup></span>
                     </th>
                 </tr>
             </thead>
@@ -519,494 +603,501 @@
             </tbody>
             <ng-template #entry let-entry let-entryIdx="entryIdx" let-transaction="transaction">
                 <!-- <ng-container *ngFor="let transaction of entry.transactions;"> -->
-                    <tr (click)="setActiveIndex(entryIdx);$event.stopPropagation()" *ngIf="activeIndex !== entryIdx"
-                        class="entries-tr set-active"
-                        [ngClass]="{'is-other-tax' : entry.isOtherTaxApplicable && isMulticurrencyAccount}">
-                        <td>{{ entryIdx + 1 }}</td>
-                        <td>
-                            <div class="product-name">
-                                <label *ngIf="!transaction.accountName" class="select-account-label">Click to
-                                    Select
-                                    Account</label> {{transaction.accountName}}
-                                <span
-                                    *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}})</span>
-                            </div>
-                            <div class="description">
-                                {{transaction.description}}
-                            </div>
-                            <p class="small text-muted sku-and-custom-fields" *ngIf="transaction.sku_and_customfields">
-                                {{transaction.sku_and_customfields}}</p>
-                            <div class="date-hsn-code">
-                                <div>
-                                    <div class="col-xs-12" *ngIf="transaction.hsnNumber || transaction.sacNumber">
-                                        <div class="hsn-code">
-                                            <label>{{transaction.showCodeType === 'hsn' ? 'HSN': 'SAC'}}:</label>
-                                            <span class="d-flex justify-content-end">
-                                                {{transaction.showCodeType === 'hsn' ? transaction.hsnNumber : transaction.sacNumber}}
-                                                <span class="edit-icon cp">
-                                                    <img src="assets/images/edit-pencilicon.svg">
-                                                </span>
+                <tr (click)="setActiveIndex(entryIdx);$event.stopPropagation()" *ngIf="activeIndex !== entryIdx"
+                    class="entries-tr set-active"
+                    [ngClass]="{'is-other-tax' : entry.isOtherTaxApplicable && isMulticurrencyAccount}">
+                    <td>{{ entryIdx + 1 }}</td>
+                    <td>
+                        <div class="product-name">
+                            <label *ngIf="!transaction.accountName" class="select-account-label">Click to
+                                Select
+                                Account</label> {{transaction.accountName}}
+                            <span
+                                *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}})</span>
+                        </div>
+                        <div class="description">
+                            {{transaction.description}}
+                        </div>
+                        <p class="small text-muted sku-and-custom-fields" *ngIf="transaction.sku_and_customfields">
+                            {{transaction.sku_and_customfields}}</p>
+                        <div class="date-hsn-code">
+                            <div>
+                                <div class="col-xs-12" *ngIf="transaction.hsnNumber || transaction.sacNumber">
+                                    <div class="hsn-code">
+                                        <label>{{transaction.showCodeType === 'hsn' ? 'HSN': 'SAC'}}:</label>
+                                        <span class="d-flex justify-content-end">
+                                            {{transaction.showCodeType === 'hsn' ? transaction.hsnNumber :
+                                            transaction.sacNumber}}
+                                            <span class="edit-icon cp">
+                                                <img src="assets/images/edit-pencilicon.svg">
                                             </span>
-                                        </div>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
-                        </td>
-                        <td class="text-right stock-unit">
-                            <div class="wrap-td-data">
-                                {{transaction.quantity}} {{transaction.stockUnit}}
-                            </div>
-                        </td>
-                        <td class="text-right tra-rate item-rate">
-                            <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
-                                <div class="td-wrapper">
-                                    <div>
-                                        <div class="wrap-td-data">
-                                                <span class="d-flex justify-content-end">
-                                                    <amount-field [amount]="transaction.rate"
-                                                        [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                                        [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code : false" [ratePrecision]="true">
-                                                    </amount-field>
-                                                </span>
-                                        </div>
+                        </div>
+                    </td>
+                    <td class="text-right stock-unit">
+                        <div class="wrap-td-data">
+                            {{transaction.quantity}} {{transaction.stockUnit}}
+                        </div>
+                    </td>
+                    <td class="text-right tra-rate item-rate">
+                        <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
+                            <div class="td-wrapper">
+                                <div>
+                                    <div class="wrap-td-data">
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="transaction.rate"
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code : false"
+                                                [ratePrecision]="true">
+                                            </amount-field>
+                                        </span>
                                     </div>
                                 </div>
-                                <div *ngIf="isMulticurrencyAccount && isMultiCurrencySupported" class="differ-currency">
+                            </div>
+                            <div *ngIf="isMulticurrencyAccount && isMultiCurrencySupported" class="differ-currency">
+                                <span class="d-flex justify-content-end">
+                                    <amount-field
+                                        [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)"
+                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency"
+                                        [ratePrecision]="true">
+                                    </amount-field>
+                                </span>
+
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-right item-amount">
+                        <div class="td-wrapper">
+                            <div>
+                                <div class="wrap-td-data">
                                     <span class="d-flex justify-content-end">
-                                        <amount-field [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)"
-                                            [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="companyCurrency" [ratePrecision]="true">
+                                        <amount-field [amount]="transaction.amount"
+                                            [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                            [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code : false">
+                                        </amount-field>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
+                                    [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
+                                </amount-field>
+                            </span>
+                        </div>
+                    </td>
+                    <td class="item-discount">
+                        <div class=" text-right td-wrapper">
+                            <div>
+                                <div class="wrap-td-data">
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="entry.discountSum"
+                                            [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                            [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code : false">
                                         </amount-field>
                                     </span>
 
                                 </div>
                             </div>
-                        </td>
-                        <td class="text-right item-amount">
-                            <div class="td-wrapper">
-                                <div>
-                                    <div class="wrap-td-data">
-                                            <span class="d-flex justify-content-end">
-                                                <amount-field [amount]="transaction.amount"
-                                                    [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code : false">
-                                                </amount-field>
-                                            </span>
-                                    </div>
+                        </div>
+                        <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="entry.discountSum * exchangeRate"
+                                    [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
+                                </amount-field>
+                            </span>
+
+                        </div>
+                    </td>
+                    <td [class.error-box]="transaction.requiredTax" class="text-right item-tax"
+                        (focus)="transaction.requiredTax = false;">
+                        <div class="td-wrapper">
+                            <div>
+                                <div class="wrap-td-data">
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="entry.taxSum + entry.cessSum"
+                                            [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                            [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code: false">
+                                        </amount-field>
+                                    </span>
                                 </div>
                             </div>
-                            <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                <span class="d-flex justify-content-end">
-                                    <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
-                                        [currencySymbol]="baseCurrencySymbol"
-                                        [currencyCode]="companyCurrency">
-                                    </amount-field>
-                                </span>
-                            </div>
-                        </td>
-                        <td class="item-discount">
-                            <div class=" text-right td-wrapper">
-                                <div>
-                                    <div class="wrap-td-data">
+                        </div>
+                        <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
+                                    [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
+                                </amount-field>
+                            </span>
+                        </div>
+                    </td>
+                    <td class="text-right item-tax delete-btn-absolute">
+                        <div class="td-wrapper">
+                            <div>
+                                <div class="wrap-td-data">
+                                    <span>
                                         <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="entry.discountSum"
+                                            <amount-field [amount]="transaction.total"
                                                 [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code : false">
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code:false">
                                             </amount-field>
                                         </span>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                <span class="d-flex justify-content-end">
-                                    <amount-field [amount]="entry.discountSum * exchangeRate"
-                                        [currencySymbol]="baseCurrencySymbol"
-                                        [currencyCode]="companyCurrency">
-                                    </amount-field>
-                                </span>
-
-                            </div>
-                        </td>
-                        <td [class.error-box]="transaction.requiredTax" class="text-right item-tax"
-                            (focus)="transaction.requiredTax = false;">
-                            <div class="td-wrapper">
-                                <div>
-                                    <div class="wrap-td-data">
+                                    </span>
+                                    <br>
+                                    <span *ngIf="entry.isOtherTaxApplicable">
+                                        {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                                         <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="entry.taxSum + entry.cessSum"
-                                            [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                            <amount-field [amount]="entry.otherTaxSum"
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
                                                 [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code: false">
                                             </amount-field>
                                         </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                <span class="d-flex justify-content-end">
-                                    <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
-                                        [currencySymbol]="baseCurrencySymbol"
-                                        [currencyCode]="companyCurrency">
-                                    </amount-field>
-                                </span>
-                            </div>
-                        </td>
-                        <td class="text-right item-tax delete-btn-absolute">
-                            <div class="td-wrapper">
-                                <div>
-                                    <div class="wrap-td-data">
-                                        <span>
-                                            <span class="d-flex justify-content-end">
-                                                <amount-field [amount]="transaction.total"
-                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code:false">
-                                                </amount-field>
-                                            </span>
-                                        </span>
-                                        <br>
-                                        <span *ngIf="entry.isOtherTaxApplicable">
-                                            {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
-                                            <span class="d-flex justify-content-end">
-                                                <amount-field [amount]="entry.otherTaxSum"
-                                                    [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code: false">
-                                                </amount-field>
-                                            </span>
-                                        </span>
-                                    </div>
-                                    <div class="tax-in-currency"
-                                        *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && isMultiCurrencySupported">
-                                        {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
-                                        <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="entry.otherTaxSum * exchangeRate"
-                                                [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="companyCurrency">
-                                            </amount-field>
-                                        </span>
-
-                                    </div>
-                                </div>
-
-                                <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                    <span class="d-flex justify-content-end">
-                                        <amount-field [amount]="transaction.total * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="companyCurrency">
-                                        </amount-field>
                                     </span>
-
                                 </div>
-                            </div>
-
-                            <div class="trash-icon-delete" (click)="removeTransaction(entryIdx);$event.preventDefault();$event.stopPropagation()">
-                                <span class="cp">
-                                    <i class="icon-trash" aria-hidden="true"></i>
-                                </span>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- endregion -->
-
-                    <!-- region dynamic entries-->
-                    <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
-                    <tr *ngIf="activeIndex === entryIdx" class="entries-tr default-active"
-                        (click)="$event.stopPropagation();">
-                        <td>{{ entryIdx + 1 }}</td>
-                        <td>
-                            <div class="product-name">
-                                <div class="ng-select-wrap">
-                                    <sh-select [options]="salesAccounts$ | async" #selectAccount
-                                        [(ngModel)]="transaction.fakeAccForSelect2"
-                                        name="transaction.fakeAccForSelect2_{{entryIdx}}"
-                                        (selected)="onSelectSalesAccount($event, transaction, entry, false, entryIdx)"
-                                        [placeholder]="'Select A/c'" [notFoundLink]="true"
-                                        [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('item')"
-                                        (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
-                                        (onHide)="noResultsFoundLabel = 'Type to search a/c'"
-                                        [notFoundMsg]="noResultsFoundLabel" [enableDynamicSearch]="true"
-                                        [fixedValue]="(transaction.stockDetails && transaction.stockDetails.name) ? transaction.accountName+' ('+transaction.stockDetails?.name+')' : transaction.accountName"
-                                        [forceClearReactive]="forceClear$ | async"
-                                        [multiple]="false"
-                                        (noResultsClicked)="onNoResultsClicked(entryIdx)"
-                                        [ItemHeight]="67" (onClear)="onClearSalesAccount(transaction)"
-                                        [useInBuiltFilterForFlattenAc]="true">
-
-                                        <ng-template #optionTemplate let-option="option">
-                                            <ng-container *ngIf="!option.additional?.stock">
-                                                <a href="javascript:void(0)" class="list-item flex-column">
-                                                    <div class="item">{{ option.label }}</div>
-                                                    <div class="item-unique">
-                                                        {{ option.additional?.uniqueName }}</div>
-                                                </a>
-                                            </ng-container>
-                                            <ng-container *ngIf="option.additional?.stock">
-                                                <a href="javascript:void(0)" class="list-item flex-column">
-                                                    <div class="item">{{ option.label }}</div>
-                                                    <div class="item-unique">
-                                                        {{ option.additional?.uniqueName }}</div>
-                                                    <div class="item-stock">Stock:
-                                                        {{ option.additional?.stock.uniqueName }}</div>
-                                                </a>
-                                            </ng-container>
-                                        </ng-template>
-                                    </sh-select>
-                                </div>
-                            </div>
-
-                            <div *ngIf="transaction.fakeAccForSelect2">
-                                <div class="description mt-1">
-                                    <textarea type="text" placeholder="Add Description"
-                                        name="transaction.description_{{entryIdx}}" class="form-control"
-                                        [(ngModel)]="transaction.description" #description></textarea>
-                                    <p class="small text-muted sku-and-custom-fields"
-                                        *ngIf="transaction.sku_and_customfields">
-                                        {{transaction.sku_and_customfields}}</p>
-                                </div>
-
-                                <!-- region entry date/ hsncode -->
-                                <div class="date-hsn-code">
-                                    <div>
-                                        <div class="col-xs-12">
-                                            <div class="wrap-hsn-box d-flex justify-content-end text-right">
-                                                <div class="hsn-code"
-                                                    (click)="toggleHsnSacDropDown(transaction)">
-                                                    <label>{{transaction.showCodeType === 'hsn' ? 'HSN': 'SAC'}}:</label>
-                                                    <span>
-                                                        {{(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber }}
-                                                        <span *ngIf="!transaction.hsnNumber && !transaction.sacNumber"
-                                                            class="update-text">Update
-                                                        </span>
-                                                        <span class="edit-icon cp">
-                                                            <img src="assets/images/edit-pencilicon.svg">
-                                                        </span>
-                                                    </span>
-                                                </div>
-
-                                                <div class="hsn-code-dropdown" *ngIf="hsnSacDropdownShow">
-                                                    <div class="d-flex wrap-hsn-sac mb-2">
-                                                        <span>
-                                                            <input type="radio" class="radio-custom radio-theme" name="showCodeType{{entryIdx}}" id="hsnCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="hsn">
-                                                            <label for="hsnCodeType{{entryIdx}}" class="radio-custom-label">HSN Code</label>
-                                                        </span>
-                                                        <span>
-                                                            <input type="radio" class="radio-custom radio-theme" name="showCodeType{{entryIdx}}" id="sacCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="sac">
-                                                            <label for="sacCodeType{{entryIdx}}" class="radio-custom-label">SAC Code</label>
-                                                        </span>
-                                                    </div>
-                                                    <input type="text" maxLength="10" decimalDigitsDirective placeholder="HSN Number"
-                                                        name="transaction.hsnNumber_{{entryIdx}}"
-                                                        *ngIf="transaction.showCodeType === 'hsn'"
-                                                        [(ngModel)]="transaction.hsnNumber" />
-                                                    <input type="text" maxLength="10" decimalDigitsDirective placeholder="SAC Number"
-                                                        name="transaction.hsnNumber_{{entryIdx}}"
-                                                        *ngIf="transaction.showCodeType === 'sac'"
-                                                        [(ngModel)]="transaction.sacNumber" />
-
-                                                    <div class="btn-group mt-2 pt-1 d-flex">
-                                                        <button class="btn btn-sm btn-success" type="button"
-                                                            (click)="hsnSacDropdownShow=!hsnSacDropdownShow">Save
-                                                        </button>
-                                                        <button class="btn btn-sm btn-primary mr-0" type="button"
-                                                            (click)="hideHsnSacEditPopup(transaction)">
-                                                            Cancel
-                                                        </button>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <!-- endregion -->
-                            </div>
-                        </td>
-
-                        <td class="text-right stock-unit">
-                            <input type="text" [disabled]="!transaction.isStockTxn"
-                                (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity"
-                                decimalDigitsDirective name="transaction.quantity_{{entryIdx}}"
-                                class="form-control text-right" [(ngModel)]="transaction.quantity" />
-
-                            <select class="form-control" [disabled]="!transaction.isStockTxn"
-                                name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit"
-                                (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
-                                <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
-                                    {{stock.text}}
-                                </option>
-                            </select>
-                        </td>
-
-                        <td class="text-right item-rate">
-                            <div class="td-wrapper">
-                                <div>
-                                    <input type="text" [disabled]="!transaction.isStockTxn"
-                                        (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)"
-                                        placeholder="Rate" name="transaction.rate_{{entryIdx}}"
-                                        class="form-control transaction-rate text-right" [(ngModel)]="transaction.rate"
-                                        [prefix]="purchaseOrder.accountDetails.currencySymbol"
-                                        [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                                        [customDecimalPlaces]="highPrecisionRate" />
-                                </div>
-                                <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                   <span class="d-flex justify-content-end">
-                                        <amount-field [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)" [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="companyCurrency" [ratePrecision]="true">
-                                        </amount-field>
-                                    </span>
-
-                                </div>
-                            </div>
-                        </td>
-
-                        <td class="text-right item-amount">
-                            <div class="td-wrapper">
-                                <div>
-                                    <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
-                                        (click)="transactionAmountClicked(transaction)" placeholder="Amount"
-                                        name="transaction.amount_{{entryIdx}}" class="form-control text-right"
-                                        [(ngModel)]="transaction.amount" decimalDigitsDirective
-                                        [prefix]="purchaseOrder.accountDetails.currencySymbol"
-                                        [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
-                                </div>
-                                <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                <div class="tax-in-currency"
+                                    *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && isMultiCurrencySupported">
+                                    {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                                     <span class="d-flex justify-content-end">
-                                        <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
+                                        <amount-field [amount]="entry.otherTaxSum * exchangeRate"
                                             [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                         </amount-field>
                                     </span>
 
                                 </div>
                             </div>
-                        </td>
 
-                        <td class="item-discount">
-                            <div class="td-wrapper">
-                                <div class="text-right">
-                                    <discount-control-component #discountComponent [discountMenu]="false"
-                                        [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum"
-                                        [showHeaderText]="false" (hideOtherPopups)="closeTaxControlPopup()"
-                                        (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
-                                        [maskInput]="inputMaskFormat"
-                                        [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
-                                        [suffixInput]="selectedSuffixForCurrency">
-                                    </discount-control-component>
-                                </div>
-                                <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                    <span class="d-flex justify-content-end">
-                                        <amount-field [amount]="entry.discountSum * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="companyCurrency">
-                                        </amount-field>
-                                    </span>
+                            <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="transaction.total * exchangeRate"
+                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
+                                    </amount-field>
+                                </span>
 
-                                </div>
                             </div>
-                        </td>
+                        </div>
 
-                        <td class="position-relative dropdown-container item-tax">
-                            <div class="td-wrapper">
-                                <div class="text-right">
-                                    <tax-control [taxes]="companyTaxesList" [date]="purchaseOrder.voucherDetails.voucherDate"
-                                        [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue"
-                                        [applicableTaxes]="transaction.applicableTaxes"
-                                        [exceptTaxTypes]="exceptTaxTypes"
-                                        [allowedSelectionOfAType]="allowedSelectionOfAType" [showHeading]="false"
-                                        [rootClass]="'sales-invoice-table'" (selectedTaxEvent)="transaction.applicableTaxes = $event"
-                                        (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
-                                        (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat"
-                                        [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
-                                        [suffixInput]="selectedSuffixForCurrency">
-                                    </tax-control>
-                                </div>
+                        <div class="trash-icon-delete"
+                            (click)="removeTransaction(entryIdx);$event.preventDefault();$event.stopPropagation()">
+                            <span class="cp">
+                                <i class="icon-trash" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
 
-                                <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                    <span class="d-flex justify-content-end">
-                                        <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="companyCurrency">
-                                        </amount-field>
-                                    </span>
+                <!-- endregion -->
 
-                                </div>
+                <!-- region dynamic entries-->
+                <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
+                <tr *ngIf="activeIndex === entryIdx" class="entries-tr default-active"
+                    (click)="$event.stopPropagation();">
+                    <td>{{ entryIdx + 1 }}</td>
+                    <td>
+                        <div class="product-name">
+                            <div class="ng-select-wrap">
+                                <sh-select [options]="salesAccounts$ | async" #selectAccount
+                                    [(ngModel)]="transaction.fakeAccForSelect2"
+                                    name="transaction.fakeAccForSelect2_{{entryIdx}}"
+                                    (selected)="onSelectSalesAccount($event, transaction, entry, false, entryIdx)"
+                                    [placeholder]="'Select A/c'" [notFoundLink]="true" [isPaginationEnabled]="true"
+                                    (scrollEnd)="handleScrollEnd('item')"
+                                    (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
+                                    (onHide)="noResultsFoundLabel = 'Type to search a/c'"
+                                    [notFoundMsg]="noResultsFoundLabel" [enableDynamicSearch]="true"
+                                    [fixedValue]="(transaction.stockDetails && transaction.stockDetails.name) ? transaction.accountName+' ('+transaction.stockDetails?.name+')' : transaction.accountName"
+                                    [forceClearReactive]="forceClear$ | async" [multiple]="false"
+                                    (noResultsClicked)="onNoResultsClicked(entryIdx)" [ItemHeight]="67"
+                                    (onClear)="onClearSalesAccount(transaction)" [useInBuiltFilterForFlattenAc]="true">
+
+                                    <ng-template #optionTemplate let-option="option">
+                                        <ng-container *ngIf="!option.additional?.stock">
+                                            <a href="javascript:void(0)" class="list-item flex-column">
+                                                <div class="item">{{ option.label }}</div>
+                                                <div class="item-unique">
+                                                    {{ option.additional?.uniqueName }}</div>
+                                            </a>
+                                        </ng-container>
+                                        <ng-container *ngIf="option.additional?.stock">
+                                            <a href="javascript:void(0)" class="list-item flex-column">
+                                                <div class="item">{{ option.label }}</div>
+                                                <div class="item-unique">
+                                                    {{ option.additional?.uniqueName }}</div>
+                                                <div class="item-stock">Stock:
+                                                    {{ option.additional?.stock.uniqueName }}</div>
+                                            </a>
+                                        </ng-container>
+                                    </ng-template>
+                                </sh-select>
                             </div>
-                        </td>
+                        </div>
 
-                        <td class="text-right item-total delete-btn-absolute">
-                            <div class="td-wrapper">
+                        <div *ngIf="transaction.fakeAccForSelect2">
+                            <div class="description mt-1">
+                                <textarea type="text" placeholder="Add Description"
+                                    name="transaction.description_{{entryIdx}}" class="form-control"
+                                    [(ngModel)]="transaction.description" #description></textarea>
+                                <p class="small text-muted sku-and-custom-fields"
+                                    *ngIf="transaction.sku_and_customfields">
+                                    {{transaction.sku_and_customfields}}</p>
+                            </div>
 
+                            <!-- region entry date/ hsncode -->
+                            <div class="date-hsn-code">
                                 <div>
-                                    <input type="text" name="transaction.total_{{entryIdx}}"
-                                        class="form-control text-right" [(ngModel)]="transaction.total"
-                                        decimalDigitsDirective [prefix]="purchaseOrder.accountDetails.currencySymbol"
-                                        [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                                        (blur)="calculateTransactionValueInclusively(entry, transaction)" />
-
-                                    <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
-                                        <input type="checkbox" class="other-taxes-checkbox"
-                                            [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable"
-                                            (click)="tcsTdsIndex = entryIdx"
-                                            name="entry.isOtherTaxApplicable_{{entryIdx}}"
-                                            id="entry.isOtherTaxApplicable_{{entryIdx}}"
-                                            (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
-                                        <label for="entry.isOtherTaxApplicable_{{entryIdx}}"
-                                            *ngIf="!entry.isOtherTaxApplicable" class="other-tax-label">Other Tax?</label>
-                                    </div>
-                                    <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1">
-
-                                        <span>
-
-                                            <div>
-                                                <span class="mr-5">
-                                                    <a href="javascript: void 0"
-                                                        (click)="toggleOtherTaxesAsidePane(true, entryIdx)">
+                                    <div class="col-xs-12">
+                                        <div class="wrap-hsn-box d-flex justify-content-end text-right">
+                                            <div class="hsn-code" (click)="toggleHsnSacDropDown(transaction)">
+                                                <label>{{transaction.showCodeType === 'hsn' ? 'HSN': 'SAC'}}:</label>
+                                                <span>
+                                                    {{(inventorySettings?.manageInventory || !transaction.sacNumber) ?
+                                                    transaction.hsnNumber : transaction.sacNumber }}
+                                                    <span *ngIf="!transaction.hsnNumber && !transaction.sacNumber"
+                                                        class="update-text">Update
+                                                    </span>
+                                                    <span class="edit-icon cp">
                                                         <img src="assets/images/edit-pencilicon.svg">
-                                                    </a>
+                                                    </span>
                                                 </span>
-                                                <input class="text-right form-control other-taxes-input"
-                                                    disabled="disabled" [(ngModel)]="entry.otherTaxSum"
-                                                    [prefix]="purchaseOrder.accountDetails.currencySymbol"
-                                                    [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                                                    name="entry.otherTaxesSum_{{entryIdx}}" />
                                             </div>
 
-                                            <p>
-                                                {{ entry.otherTaxModal?.appliedOtherTax?.name}}</p>
-                                        </span>
+                                            <div class="hsn-code-dropdown" *ngIf="hsnSacDropdownShow">
+                                                <div class="d-flex wrap-hsn-sac mb-2">
+                                                    <span>
+                                                        <input type="radio" class="radio-custom radio-theme"
+                                                            name="showCodeType{{entryIdx}}" id="hsnCodeType{{entryIdx}}"
+                                                            [(ngModel)]="transaction.showCodeType" value="hsn">
+                                                        <label for="hsnCodeType{{entryIdx}}"
+                                                            class="radio-custom-label">HSN Code</label>
+                                                    </span>
+                                                    <span>
+                                                        <input type="radio" class="radio-custom radio-theme"
+                                                            name="showCodeType{{entryIdx}}" id="sacCodeType{{entryIdx}}"
+                                                            [(ngModel)]="transaction.showCodeType" value="sac">
+                                                        <label for="sacCodeType{{entryIdx}}"
+                                                            class="radio-custom-label">SAC Code</label>
+                                                    </span>
+                                                </div>
+                                                <input type="text" maxLength="10" decimalDigitsDirective
+                                                    placeholder="HSN Number" name="transaction.hsnNumber_{{entryIdx}}"
+                                                    *ngIf="transaction.showCodeType === 'hsn'"
+                                                    [(ngModel)]="transaction.hsnNumber" />
+                                                <input type="text" maxLength="10" decimalDigitsDirective
+                                                    placeholder="SAC Number" name="transaction.hsnNumber_{{entryIdx}}"
+                                                    *ngIf="transaction.showCodeType === 'sac'"
+                                                    [(ngModel)]="transaction.sacNumber" />
 
+                                                <div class="btn-group mt-2 pt-1 d-flex">
+                                                    <button class="btn btn-sm btn-success" type="button"
+                                                        (click)="hsnSacDropdownShow=!hsnSacDropdownShow">Save
+                                                    </button>
+                                                    <button class="btn btn-sm btn-primary mr-0" type="button"
+                                                        (click)="hideHsnSacEditPopup(transaction)">
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
-                                <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && isMultiCurrencySupported"
-                                    class="tax-in-currency">
-                                    {{ entry.otherTaxModal?.appliedOtherTax?.name }}
-                                    <span class="d-flex justify-content-end">
-                                        <amount-field [amount]="entry.otherTaxSum * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="companyCurrency">
-                                        </amount-field>
-                                    </span>
-
-                                </div>
-                                <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                    <span class="d-flex justify-content-end">
-                                        <amount-field [amount]="transaction.total * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="companyCurrency">
-                                        </amount-field>
-                                    </span>
-
-                                </div>
-
-
-                                <ng-container *ngTemplateOutlet="otherTaxesModal;context: {$implicit: entry }">
-                                </ng-container>
 
                             </div>
+                            <!-- endregion -->
+                        </div>
+                    </td>
 
-                            <div class="trash-icon-delete" (click)="removeTransaction(entryIdx);$event.preventDefault();$event.stopPropagation()">
-                                <span class="cp">
-                                    <i class="icon-trash" aria-hidden="true"></i>
+                    <td class="text-right stock-unit">
+                        <input type="text" [disabled]="!transaction.isStockTxn"
+                            (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity"
+                            decimalDigitsDirective name="transaction.quantity_{{entryIdx}}"
+                            class="form-control text-right" [(ngModel)]="transaction.quantity" />
+
+                        <select class="form-control" [disabled]="!transaction.isStockTxn"
+                            name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit"
+                            (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
+                            <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
+                                {{stock.text}}
+                            </option>
+                        </select>
+                    </td>
+
+                    <td class="text-right item-rate">
+                        <div class="td-wrapper">
+                            <div>
+                                <input type="text" [disabled]="!transaction.isStockTxn"
+                                    (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)"
+                                    placeholder="Rate" name="transaction.rate_{{entryIdx}}"
+                                    class="form-control transaction-rate text-right" [(ngModel)]="transaction.rate"
+                                    [prefix]="purchaseOrder.accountDetails.currencySymbol"
+                                    [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
+                                    [customDecimalPlaces]="highPrecisionRate" />
+                            </div>
+                            <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                <span class="d-flex justify-content-end">
+                                    <amount-field
+                                        [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)"
+                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency"
+                                        [ratePrecision]="true">
+                                    </amount-field>
                                 </span>
+
                             </div>
-                        </td>
-                    </tr>
-                    <!-- endregion -->
+                        </div>
+                    </td>
+
+                    <td class="text-right item-amount">
+                        <div class="td-wrapper">
+                            <div>
+                                <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
+                                    (click)="transactionAmountClicked(transaction)" placeholder="Amount"
+                                    name="transaction.amount_{{entryIdx}}" class="form-control text-right"
+                                    [(ngModel)]="transaction.amount" decimalDigitsDirective
+                                    [prefix]="purchaseOrder.accountDetails.currencySymbol"
+                                    [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
+                            </div>
+                            <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
+                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
+                                    </amount-field>
+                                </span>
+
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="item-discount">
+                        <div class="td-wrapper">
+                            <div class="text-right">
+                                <discount-control-component #discountComponent [discountMenu]="false"
+                                    [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum"
+                                    [showHeaderText]="false" (hideOtherPopups)="closeTaxControlPopup()"
+                                    (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
+                                    [maskInput]="inputMaskFormat"
+                                    [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
+                                    [suffixInput]="selectedSuffixForCurrency">
+                                </discount-control-component>
+                            </div>
+                            <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="entry.discountSum * exchangeRate"
+                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
+                                    </amount-field>
+                                </span>
+
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="position-relative dropdown-container item-tax">
+                        <div class="td-wrapper">
+                            <div class="text-right">
+                                <tax-control [taxes]="companyTaxesList"
+                                    [date]="purchaseOrder.voucherDetails.voucherDate" [taxRenderData]="entry.taxes"
+                                    [totalForTax]="transaction.taxableValue"
+                                    [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes"
+                                    [allowedSelectionOfAType]="allowedSelectionOfAType" [showHeading]="false"
+                                    [rootClass]="'sales-invoice-table'"
+                                    (selectedTaxEvent)="transaction.applicableTaxes = $event"
+                                    (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
+                                    (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat"
+                                    [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
+                                    [suffixInput]="selectedSuffixForCurrency">
+                                </tax-control>
+                            </div>
+
+                            <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
+                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
+                                    </amount-field>
+                                </span>
+
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="text-right item-total delete-btn-absolute">
+                        <div class="td-wrapper">
+
+                            <div>
+                                <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right"
+                                    [(ngModel)]="transaction.total" decimalDigitsDirective
+                                    [prefix]="purchaseOrder.accountDetails.currencySymbol"
+                                    [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
+                                    (blur)="calculateTransactionValueInclusively(entry, transaction)" />
+
+                                <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
+                                    <input type="checkbox" class="other-taxes-checkbox"
+                                        [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable"
+                                        (click)="tcsTdsIndex = entryIdx" name="entry.isOtherTaxApplicable_{{entryIdx}}"
+                                        id="entry.isOtherTaxApplicable_{{entryIdx}}"
+                                        (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
+                                    <label for="entry.isOtherTaxApplicable_{{entryIdx}}"
+                                        *ngIf="!entry.isOtherTaxApplicable" class="other-tax-label">Other Tax?</label>
+                                </div>
+                                <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1">
+
+                                    <span>
+
+                                        <div>
+                                            <span class="mr-5">
+                                                <a href="javascript: void 0"
+                                                    (click)="toggleOtherTaxesAsidePane(true, entryIdx)">
+                                                    <img src="assets/images/edit-pencilicon.svg">
+                                                </a>
+                                            </span>
+                                            <input class="text-right form-control other-taxes-input" disabled="disabled"
+                                                [(ngModel)]="entry.otherTaxSum"
+                                                [prefix]="purchaseOrder.accountDetails.currencySymbol"
+                                                [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
+                                                name="entry.otherTaxesSum_{{entryIdx}}" />
+                                        </div>
+
+                                        <p>
+                                            {{ entry.otherTaxModal?.appliedOtherTax?.name}}</p>
+                                    </span>
+
+                                </div>
+                            </div>
+                            <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && isMultiCurrencySupported"
+                                class="tax-in-currency">
+                                {{ entry.otherTaxModal?.appliedOtherTax?.name }}
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="entry.otherTaxSum * exchangeRate"
+                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
+                                    </amount-field>
+                                </span>
+
+                            </div>
+                            <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="transaction.total * exchangeRate"
+                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
+                                    </amount-field>
+                                </span>
+
+                            </div>
+
+
+                            <ng-container *ngTemplateOutlet="otherTaxesModal;context: {$implicit: entry }">
+                            </ng-container>
+
+                        </div>
+
+                        <div class="trash-icon-delete"
+                            (click)="removeTransaction(entryIdx);$event.preventDefault();$event.stopPropagation()">
+                            <span class="cp">
+                                <i class="icon-trash" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <!-- endregion -->
                 <!-- </ng-container> -->
             </ng-template>
             <!-- region add bulk items -->
@@ -1025,11 +1116,11 @@
                         <div>
                             <div class="collapse-pane clearfix">
 
-                                <div class="collapse-pane-heading"
-                                (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
+                                <div class="collapse-pane-heading" (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
                                     <div class="ico-box-wrap">
                                         <div class="ico-box">
-                                            <span aria-hidden="true" [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'"></span>
+                                            <span aria-hidden="true"
+                                                [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'"></span>
                                         </div>
                                     </div>
                                     <div class="ico-head">Other Details</div>
@@ -1037,9 +1128,11 @@
                                 <div [collapse]="isOthrDtlCollapsed" class="clearfix max-width-600 pd-l3 m-0">
                                     <div class="row">
                                         <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                                <giddh-datepicker #shippingDate="ngModel" placeholder="Ship Date" name="shippingDate"
-                                                    [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate" [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
-                                                </giddh-datepicker>
+                                            <giddh-datepicker #shippingDate="ngModel" placeholder="Ship Date"
+                                                name="shippingDate"
+                                                [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate"
+                                                [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
+                                            </giddh-datepicker>
                                             <p class="text-danger"
                                                 *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                                 Invalid Date
@@ -1079,12 +1172,12 @@
                                         {{purchaseOrder.accountDetails.currencySymbol}}</span>
                                         {{purchaseOrder.voucherDetails.subTotal | giddhCurrency}} -->
 
-                                        <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="purchaseOrder.voucherDetails.subTotal"
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="purchaseOrder.voucherDetails.subTotal"
                                             [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
-                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
-                                            </amount-field>
-                                        </span>
+                                            [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
+                                        </amount-field>
+                                    </span>
                                 </div>
                             </div>
 
@@ -1092,24 +1185,24 @@
                                 <div class="table-cell">Discount</div>
 
                                 <div class="table-cell figure-cell">
-                                        <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="purchaseOrder.voucherDetails.totalDiscount * -1"
-                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false">
-                                            </amount-field>
-                                        </span>
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="purchaseOrder.voucherDetails.totalDiscount * -1"
+                                            [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                            [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false">
+                                        </amount-field>
+                                    </span>
                                 </div>
                             </div>
 
                             <div class="table-row">
                                 <div class="table-cell">Taxable Value</div>
                                 <div class="table-cell figure-cell">
-                                        <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="purchaseOrder.voucherDetails.totalTaxableValue"
-                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
-                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
-                                            </amount-field>
-                                        </span>
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="purchaseOrder.voucherDetails.totalTaxableValue"
+                                            [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
+                                            [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
+                                        </amount-field>
+                                    </span>
 
                                 </div>
                             </div>
@@ -1117,12 +1210,12 @@
                             <div class="table-row" *ngIf="!excludeTax">
                                 <div class="table-cell">Tax</div>
                                 <div class="table-cell figure-cell">
-                                        <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="purchaseOrder.voucherDetails.gstTaxesTotal"
-                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
-                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
-                                            </amount-field>
-                                        </span>
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="purchaseOrder.voucherDetails.gstTaxesTotal"
+                                            [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
+                                            [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
+                                        </amount-field>
+                                    </span>
 
                                 </div>
                             </div>
@@ -1130,16 +1223,15 @@
                             <div class="table-row" *ngIf="!excludeTax">
                                 <div class="table-cell">CESS</div>
                                 <div class="table-cell figure-cell">
-                                        <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="purchaseOrder.voucherDetails.cessTotal"
-                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
-                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
-                                            </amount-field>
-                                        </span>
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="purchaseOrder.voucherDetails.cessTotal"
+                                            [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
+                                            [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
+                                        </amount-field>
+                                    </span>
                                 </div>
                             </div>
-                            <div class="table-row"
-                                *ngIf="(calculatedRoundOff > 0 || calculatedRoundOff < 0)">
+                            <div class="table-row" *ngIf="(calculatedRoundOff > 0 || calculatedRoundOff < 0)">
 
                                 <div class="table-cell">
                                     <strong>Round Off</strong>
@@ -1163,22 +1255,21 @@
 
                                 <div class="table-cell bigger-dollar">
                                     <strong>Total
-                                        <span
-                                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                        <span *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
                                             {{purchaseOrder.accountDetails.currencySymbol}}
                                         </span>
-                                        </strong>
+                                    </strong>
                                 </div>
 
                                 <div class="table-cell figure-cell">
                                     <strong>
-                                            <span class="d-flex justify-content-end">
-                                                <amount-field [amount]="purchaseOrder.voucherDetails.grandTotal"
-                                                    [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
-                                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false">
-                                                </amount-field>
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="purchaseOrder.voucherDetails.grandTotal"
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false">
+                                            </amount-field>
 
-                                            </span>
+                                        </span>
                                     </strong>
                                 </div>
 
@@ -1214,12 +1305,12 @@
                             <div class="table-row" *ngIf="purchaseOrder.voucherDetails.tdsTotal > 0">
                                 <div class="table-cell">TDS</div>
                                 <div class="table-cell figure-cell">
-                                        <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="purchaseOrder.voucherDetails.tdsTotal "
-                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false">
-                                            </amount-field>
-                                        </span>
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="purchaseOrder.voucherDetails.tdsTotal "
+                                            [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                            [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false">
+                                        </amount-field>
+                                    </span>
                                 </div>
                             </div>
                         </section>
@@ -1232,8 +1323,7 @@
     </section>
     <!-- region mobile view -->
     <div class="show-in-mobile" *ngIf="isMobileScreen">
-        <div class="card-invoice-table-wrapper"
-            *ngFor="let entry of purchaseOrder.entries; let entryIdx = index;">
+        <div class="card-invoice-table-wrapper" *ngFor="let entry of purchaseOrder.entries; let entryIdx = index;">
             <ng-container *ngFor="let transaction of entry.transactions;">
                 <div class="card-invoice-table" [hidden]="activeIndex === entryIdx">
                     <div class="row">
@@ -1257,11 +1347,11 @@
 
                                 <div class="date-hsn-code pr-0">
                                     <div class="row">
-                                        <div class="col-12"
-                                            *ngIf="transaction.hsnNumber || transaction.sacNumber">
+                                        <div class="col-12" *ngIf="transaction.hsnNumber || transaction.sacNumber">
                                             <div class="hsn-code text-right">
                                                 <label>{{transaction.showCodeType === 'hsn' ? 'HSN': 'SAC'}}:
-                                                    {{transaction.showCodeType === 'hsn' ? transaction.hsnNumber : transaction.sacNumber}}</label>
+                                                    {{transaction.showCodeType === 'hsn' ? transaction.hsnNumber :
+                                                    transaction.sacNumber}}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -1286,10 +1376,12 @@
                                 <div class="card-rate">
                                     <label class="card-label">Rate</label>
                                     <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
-                                         <p>
+                                        <p>
                                             <span>
                                                 <amount-field [amount]="transaction.rate"
-                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false" [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false" [ratePrecision]="true">
+                                                    [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false"
+                                                    [ratePrecision]="true">
                                                 </amount-field>
                                             </span>
 
@@ -1297,7 +1389,8 @@
                                         <div *ngIf="isMulticurrencyAccount && isMultiCurrencySupported"
                                             class="differ-currency">
                                             <span>
-                                                <amount-field [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)"
+                                                <amount-field
+                                                    [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)"
                                                     [currencySymbol]="baseCurrencySymbol"
                                                     [currencyCode]="companyCurrency" [ratePrecision]="true">
                                                 </amount-field>
@@ -1314,21 +1407,21 @@
                             <div class="single-card-row">
                                 <div class="card-amount">
                                     <label class="card-label">Amount</label>
-                                     <p>
-                                    <span>
-                                        <amount-field [amount]="transaction.amount"
-                                            [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                            [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false">
-                                        </amount-field>
-                                    </span>
+                                    <p>
+                                        <span>
+                                            <amount-field [amount]="transaction.amount"
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false">
+                                            </amount-field>
+                                        </span>
 
                                     </p>
 
-                                    <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                    <div class="differ-currency"
+                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
                                         <span>
                                             <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
-                                                [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="companyCurrency">
+                                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
 
@@ -1342,17 +1435,18 @@
                                 <div class="card-discount">
                                     <label class="card-label">Discount</label>
                                     <p>
-                                            <span>
-                                                <amount-field [amount]="entry.discountSum" [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code:false">
-                                                </amount-field>
-                                            </span>
+                                        <span>
+                                            <amount-field [amount]="entry.discountSum"
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code:false">
+                                            </amount-field>
+                                        </span>
                                     </p>
-                                    <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                    <div class="differ-currency"
+                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
                                         <span>
                                             <amount-field [amount]="entry.discountSum * exchangeRate"
-                                                [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="companyCurrency">
+                                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
 
@@ -1368,17 +1462,18 @@
                                 <div class="card-tax">
                                     <label class="card-label">Tax</label>
                                     <p>
-                                            <span>
-                                                <amount-field [amount]="entry.taxSum" [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false">
-                                                </amount-field>
-                                            </span>
+                                        <span>
+                                            <amount-field [amount]="entry.taxSum"
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false">
+                                            </amount-field>
+                                        </span>
                                     </p>
-                                    <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                    <div class="differ-currency"
+                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
                                         <span>
                                             <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
-                                                [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="companyCurrency">
+                                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
                                     </div>
@@ -1399,11 +1494,11 @@
                                         </span>
 
                                     </p>
-                                    <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                    <div class="differ-currency"
+                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
                                         <span>
                                             <amount-field [amount]="transaction.total * exchangeRate"
-                                                [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="companyCurrency">
+                                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
 
@@ -1415,7 +1510,8 @@
                     <div class="edit-card" (click)="setActiveIndex(entryIdx);$event.stopPropagation()">
                         <img src="assets/images/edit-pencilicon.svg">
                     </div>
-                    <div class="del-card" (click)="removeTransaction(entryIdx);$event.preventDefault();$event.stopPropagation()">
+                    <div class="del-card"
+                        (click)="removeTransaction(entryIdx);$event.preventDefault();$event.stopPropagation()">
                         <i class="icon-trash" aria-hidden="true"></i>
                     </div>
                 </div>
@@ -1435,8 +1531,7 @@
                                                 name="transaction.fakeAccForSelect2_{{entryIdx}}"
                                                 (selected)="onSelectSalesAccount($event,transaction, entry, false, entryIdx)"
                                                 [placeholder]="'Select A/cc'" [notFoundLink]="true"
-                                                [forceClearReactive]="forceClear$ | async"
-                                                [multiple]="false"
+                                                [forceClearReactive]="forceClear$ | async" [multiple]="false"
                                                 [ItemHeight]="67" (onClear)="onClearSalesAccount(transaction)"
                                                 [useInBuiltFilterForFlattenAc]="true">
 
@@ -1477,10 +1572,14 @@
                                             <div class="row">
                                                 <div class="col-xs-12 pl-0">
                                                     <div class="wrap-hsn-box">
-                                                        <div class="hsn-code text-right"  (click)="toggleHsnSacDropDown(transaction)">
-                                                            <label>{{transaction.showCodeType === 'hsn' ? 'HSN': 'SAC'}}:</label>
+                                                        <div class="hsn-code text-right"
+                                                            (click)="toggleHsnSacDropDown(transaction)">
+                                                            <label>{{transaction.showCodeType === 'hsn' ? 'HSN':
+                                                                'SAC'}}:</label>
                                                             <span>
-                                                                {{(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber }}
+                                                                {{(inventorySettings?.manageInventory ||
+                                                                !transaction.sacNumber) ? transaction.hsnNumber :
+                                                                transaction.sacNumber }}
                                                                 <span
                                                                     *ngIf="!transaction.hsnNumber && !transaction.sacNumber"
                                                                     class="update-text">Update
@@ -1493,19 +1592,31 @@
                                                         <div class="hsn-code-dropdown" *ngIf="hsnSacDropdownShow">
                                                             <div class="d-flex wrap-hsn-sac mb-2">
                                                                 <span>
-                                                                    <input type="radio" class="radio-custom radio-theme" name="showCodeType{{entryIdx}}" id="hsnCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="hsn">
-                                                                    <label for="hsnCodeType{{entryIdx}}" class="radio-custom-label">HSN Code</label>
+                                                                    <input type="radio" class="radio-custom radio-theme"
+                                                                        name="showCodeType{{entryIdx}}"
+                                                                        id="hsnCodeType{{entryIdx}}"
+                                                                        [(ngModel)]="transaction.showCodeType"
+                                                                        value="hsn">
+                                                                    <label for="hsnCodeType{{entryIdx}}"
+                                                                        class="radio-custom-label">HSN Code</label>
                                                                 </span>
                                                                 <span>
-                                                                    <input type="radio" class="radio-custom radio-theme" name="showCodeType{{entryIdx}}" id="sacCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="sac">
-                                                                    <label for="sacCodeType{{entryIdx}}" class="radio-custom-label">SAC Code</label>
+                                                                    <input type="radio" class="radio-custom radio-theme"
+                                                                        name="showCodeType{{entryIdx}}"
+                                                                        id="sacCodeType{{entryIdx}}"
+                                                                        [(ngModel)]="transaction.showCodeType"
+                                                                        value="sac">
+                                                                    <label for="sacCodeType{{entryIdx}}"
+                                                                        class="radio-custom-label">SAC Code</label>
                                                                 </span>
                                                             </div>
-                                                            <input type="text" maxLength="10" decimalDigitsDirective placeholder="HSN Number"
+                                                            <input type="text" maxLength="10" decimalDigitsDirective
+                                                                placeholder="HSN Number"
                                                                 name="transaction.hsnNumber_{{entryIdx}}"
                                                                 *ngIf="transaction.showCodeType === 'hsn'"
                                                                 [(ngModel)]="transaction.hsnNumber" />
-                                                            <input type="text" maxLength="10" decimalDigitsDirective placeholder="SAC Number"
+                                                            <input type="text" maxLength="10" decimalDigitsDirective
+                                                                placeholder="SAC Number"
                                                                 name="transaction.hsnNumber_{{entryIdx}}"
                                                                 *ngIf="transaction.showCodeType === 'sac'"
                                                                 [(ngModel)]="transaction.sacNumber" />
@@ -1514,7 +1625,8 @@
                                                                     (click)="hsnSacDropdownShow=!hsnSacDropdownShow">
                                                                     Save
                                                                 </button>
-                                                                <button class="btn btn-sm btn-primary mr-0" type="button"
+                                                                <button class="btn btn-sm btn-primary mr-0"
+                                                                    type="button"
                                                                     (click)="hideHsnSacEditPopup(transaction)">
                                                                     Cancel
                                                                 </button>
@@ -1586,10 +1698,13 @@
                                             [customDecimalPlaces]="highPrecisionRate" />
                                     </div>
                                     <!-- please add condition for show and hide -->
-                                    <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                    <div class="differ-currency"
+                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
                                         <span>
-                                            <amount-field [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)" [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="companyCurrency" [ratePrecision]="true">
+                                            <amount-field
+                                                [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)"
+                                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency"
+                                                [ratePrecision]="true">
                                             </amount-field>
                                         </span>
 
@@ -1618,7 +1733,8 @@
                                             [prefix]="purchaseOrder.accountDetails.currencySymbol"
                                             [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
                                     </div>
-                                    <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                    <div class="differ-currency"
+                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
                                         <span>
                                             <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
                                                 [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
@@ -1649,10 +1765,11 @@
                                         </discount-control-component>
 
                                     </div>
-                                    <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                    <div class="differ-currency"
+                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
                                         <span>
-                                            <amount-field [amount]="entry.discountSum * exchangeRate " [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="companyCurrency">
+                                            <amount-field [amount]="entry.discountSum * exchangeRate "
+                                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
 
@@ -1672,23 +1789,26 @@
                                     <label class="card-label text-right">Tax</label>
 
                                     <div class="text-right">
-                                        <tax-control [taxes]="companyTaxesList" [date]="purchaseOrder.voucherDetails.voucherDate"
+                                        <tax-control [taxes]="companyTaxesList"
+                                            [date]="purchaseOrder.voucherDetails.voucherDate"
                                             [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue"
                                             [applicableTaxes]="transaction.applicableTaxes"
                                             [exceptTaxTypes]="exceptTaxTypes"
                                             [allowedSelectionOfAType]="allowedSelectionOfAType" [showHeading]="false"
-                                            [rootClass]="'sales-invoice-table'" (selectedTaxEvent)="transaction.applicableTaxes = $event"
+                                            [rootClass]="'sales-invoice-table'"
+                                            (selectedTaxEvent)="transaction.applicableTaxes = $event"
                                             (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
                                             (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat"
                                             [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
                                             [suffixInput]="selectedSuffixForCurrency">
                                         </tax-control>
                                     </div>
-                                    <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                    <div class="differ-currency"
+                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
 
                                         <span>
-                                            <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="companyCurrency">
+                                            <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
+                                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
 
@@ -1712,8 +1832,7 @@
                                         <div class="wrap-other-tax" *ngIf="isTcsTdsApplicable">
                                             <input type="checkbox" class="other-taxes-checkbox"
                                                 [(ngModel)]="entry.isOtherTaxApplicable"
-                                                *ngIf="!entry.isOtherTaxApplicable"
-                                                (click)="tcsTdsIndex = entryIdx"
+                                                *ngIf="!entry.isOtherTaxApplicable" (click)="tcsTdsIndex = entryIdx"
                                                 name="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                 id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                 (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
@@ -1750,16 +1869,17 @@
                                     <div class="tax-in-currency text-right"
                                         *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && isMultiCurrencySupported">
                                         <span>
-                                            <amount-field [amount]="entry.otherTaxSum * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="companyCurrency">
+                                            <amount-field [amount]="entry.otherTaxSum * exchangeRate"
+                                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
 
                                     </div>
-                                    <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                    <div class="differ-currency"
+                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
                                         <span>
-                                            <amount-field [amount]="transaction.total * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="companyCurrency">
+                                            <amount-field [amount]="transaction.total * exchangeRate"
+                                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
 
@@ -1775,7 +1895,8 @@
                     <div class="save-card-data pointer" (click)="handleOutsideClick()">
                         <i class="fa fa-floppy-o" aria-hidden="true"></i>
                     </div>
-                    <div class="del-card pointer" (click)="removeTransaction(entryIdx);$event.preventDefault();$event.stopPropagation()">
+                    <div class="del-card pointer"
+                        (click)="removeTransaction(entryIdx);$event.preventDefault();$event.stopPropagation()">
                         <i class="icon-trash" aria-hidden="true"></i>
                     </div>
 
@@ -1806,7 +1927,9 @@
                         <div class="row">
 
                             <div class="form-group col-xs-4">
-                                <giddh-datepicker #shippingDate="ngModel" placeholder="Ship Date" name="shippingDate" [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate" [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty ||shippingDate.touched)">
+                                <giddh-datepicker #shippingDate="ngModel" placeholder="Ship Date" name="shippingDate"
+                                    [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate"
+                                    [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty ||shippingDate.touched)">
                                 </giddh-datepicker>
                                 <p class="text-danger"
                                     *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
@@ -1822,8 +1945,7 @@
                             <div class="form-group col-xs-4">
                                 <input type="text" name="trackingNumber"
                                     [(ngModel)]="purchaseOrder.templateDetails.other.trackingNumber"
-                                    class="form-control"
-                                    [placeholder]="'Tracking No.'" />
+                                    class="form-control" [placeholder]="'Tracking No.'" />
                             </div>
                         </div>
                     </div>
@@ -1848,7 +1970,7 @@
                     <div class="table-cell figure-cell">
                         <span class="d-flex justify-content-end">
                             <amount-field [amount]="purchaseOrder.voucherDetails.subTotal"
-                                 [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
                                 [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
                             </amount-field>
                         </span>
@@ -1860,12 +1982,12 @@
                     <div class="table-cell">Discount</div>
 
                     <div class="table-cell figure-cell">
-                            <span class="d-flex justify-content-end">
-                                <amount-field [amount]="purchaseOrder.voucherDetails.totalDiscount * -1"
-                                    [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false">
-                                </amount-field>
-                            </span>
+                        <span class="d-flex justify-content-end">
+                            <amount-field [amount]="purchaseOrder.voucherDetails.totalDiscount * -1"
+                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false">
+                            </amount-field>
+                        </span>
 
                     </div>
                 </div>
@@ -1873,24 +1995,24 @@
                 <div class="table-row">
                     <div class="table-cell">Taxable Value</div>
                     <div class="table-cell figure-cell">
-                            <span class="d-flex justify-content-end">
-                                <amount-field [amount]="purchaseOrder.voucherDetails.totalTaxableValue"
-                                    [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
-                                </amount-field>
-                            </span>
+                        <span class="d-flex justify-content-end">
+                            <amount-field [amount]="purchaseOrder.voucherDetails.totalTaxableValue"
+                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
+                            </amount-field>
+                        </span>
                     </div>
                 </div>
 
                 <div class="table-row">
                     <div class="table-cell">Tax</div>
                     <div class="table-cell figure-cell">
-                            <span class="d-flex justify-content-end">
-                                <amount-field [amount]="purchaseOrder.voucherDetails.gstTaxesTotal"
-                                    [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
-                                </amount-field>
-                            </span>
+                        <span class="d-flex justify-content-end">
+                            <amount-field [amount]="purchaseOrder.voucherDetails.gstTaxesTotal"
+                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
+                            </amount-field>
+                        </span>
 
                     </div>
                 </div>
@@ -1898,12 +2020,12 @@
                 <div class="table-row">
                     <div class="table-cell">CESS</div>
                     <div class="table-cell figure-cell">
-                            <span class="d-flex justify-content-end">
-                                <amount-field [amount]="purchaseOrder.voucherDetails.cessTotal"
-                                    [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
-                                </amount-field>
-                            </span>
+                        <span class="d-flex justify-content-end">
+                            <amount-field [amount]="purchaseOrder.voucherDetails.cessTotal"
+                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
+                            </amount-field>
+                        </span>
 
                     </div>
                 </div>
@@ -1937,12 +2059,12 @@
 
                     <div class="table-cell figure-cell">
                         <strong>
-                                <span class="d-flex justify-content-end">
-                                    <amount-field [amount]="purchaseOrder.voucherDetails.grandTotal"
-                                        [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                        [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
-                                    </amount-field>
-                                </span>
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="purchaseOrder.voucherDetails.grandTotal"
+                                    [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
+                                </amount-field>
+                            </span>
                         </strong>
                     </div>
                 </div>
@@ -1966,8 +2088,7 @@
                     <div class="table-cell">TCS</div>
                     <div class="table-cell figure-cell">
                         <span class="d-flex justify-content-end">
-                            <amount-field [amount]="purchaseOrder.voucherDetails.tcsTotal"
-                                [currencySymbol]="false"
+                            <amount-field [amount]="purchaseOrder.voucherDetails.tcsTotal" [currencySymbol]="false"
                                 [currencyCode]="false">
                             </amount-field>
                         </span>
@@ -1979,7 +2100,8 @@
                     <div class="table-cell">TDS</div>
                     <div class="table-cell figure-cell">
                         <span class="d-flex justify-content-end">
-                            <amount-field [amount]="purchaseOrder.voucherDetails.tdsTotal" [currencySymbol]="false" [currencyCode]="false">
+                            <amount-field [amount]="purchaseOrder.voucherDetails.tdsTotal" [currencySymbol]="false"
+                                [currencyCode]="false">
                             </amount-field>
                         </span>
                     </div>
@@ -2000,7 +2122,8 @@
 
             <!-- region generate mode -->
             <div class="pull-right pr update-mode" *ngIf="!isUpdateMode">
-                <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="resetForm()">Clear</button>
+                <button type="button" class="btn btn-danger d-inline-block v-align-middle"
+                    (click)="resetForm()">Clear</button>
 
                 <!-- region purchase invoice -->
                 <span class="d-inline-block v-align-middle">
@@ -2013,7 +2136,8 @@
 
             <!-- region update mode -->
             <div class="pull-right pr" *ngIf="isUpdateMode">
-                <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">Cancel</button>
+                <button type="button" class="btn btn-danger d-inline-block v-align-middle"
+                    (click)="cancelUpdate()">Cancel</button>
                 <button type="button" class="btn btn-default" (click)="savePurchaseOrder('update')">Update</button>
             </div>
             <!-- endregion -->
@@ -2057,5 +2181,8 @@
     </div>
 </ng-template>
 <ng-template #purchaseOrderPreviewModal>
-    <purchase-order-preview-modal [purchaseOrderUniqueName]="purchaseOrderPreviewUniqueName" [purchaseOrderAccountUniqueName]="purchaseOrderPreviewAccountUniqueName" [purchaseOrderCompanyUniqueName]="selectedCompany?.uniqueName" (closeModelEvent)="closePurchaseOrderPreviewPopup($event)"></purchase-order-preview-modal>
+    <purchase-order-preview-modal [purchaseOrderUniqueName]="purchaseOrderPreviewUniqueName"
+        [purchaseOrderAccountUniqueName]="purchaseOrderPreviewAccountUniqueName"
+        [purchaseOrderCompanyUniqueName]="selectedCompany?.uniqueName"
+        (closeModelEvent)="closePurchaseOrderPreviewPopup($event)"></purchase-order-preview-modal>
 </ng-template>

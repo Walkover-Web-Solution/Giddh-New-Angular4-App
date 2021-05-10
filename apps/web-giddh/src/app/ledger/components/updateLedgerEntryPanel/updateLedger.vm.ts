@@ -79,7 +79,7 @@ export class UpdateLedgerVm {
     public ratePrecision = RATE_FIELD_PRECISION;
 
     constructor() {
-        
+
     }
 
     public get stockTrxEntry(): ILedgerTransactionItem {
@@ -416,7 +416,7 @@ export class UpdateLedgerVm {
         } else {
 
             // update every transaction conversion rates for multi-currency
-            if(this.selectedLedger.transactions && this.selectedLedger.transactions.length > 0) {
+            if (this.selectedLedger.transactions && this.selectedLedger.transactions.length > 0) {
                 this.selectedLedger.transactions = this.selectedLedger.transactions.map(t => {
                     let category = this.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
 
@@ -595,20 +595,20 @@ export class UpdateLedgerVm {
 
     public getUnderstandingText(selectedLedgerAccountType, accountName, localeData?: any) {
         let underStandingTextData = localeData?.text_data;
-        if(underStandingTextData) {
+        if (underStandingTextData) {
             let data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
             if (data) {
-                if(data.balanceText && data.balanceText.cr) {
+                if (data.balanceText && data.balanceText.cr) {
                     data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
                 }
-                if(data.balanceText && data.balanceText.dr) {
+                if (data.balanceText && data.balanceText.dr) {
                     data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
                 }
 
-                if(data.text && data.text.dr) {
+                if (data.text && data.text.dr) {
                     data.text.dr = data.text.dr.replace('<accountName>', accountName);
                 }
-                if(data.text && data.text.cr) {
+                if (data.text && data.text.cr) {
                     data.text.cr = data.text.cr.replace('<accountName>', accountName);
                 }
                 this.ledgerUnderStandingObj = _.cloneDeep(data);

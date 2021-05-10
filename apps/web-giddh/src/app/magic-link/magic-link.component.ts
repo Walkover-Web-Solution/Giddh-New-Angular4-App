@@ -130,9 +130,9 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
         });
     }
 
-	/**
-	 * onDateRangeSelected
-	 */
+    /**
+     * onDateRangeSelected
+     */
     public onDateRangeSelected(value) {
         this.fromDate = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
         this.toDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
@@ -196,9 +196,9 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
         return new Blob(byteArrays, { type: contentType });
     }
 
-	/**
-	 * downloadPurchaseInvoice
-	 */
+    /**
+     * downloadPurchaseInvoice
+     */
     public downloadPurchaseInvoice(invoiceNumber) {
         this._toaster.errorToast('Invoice for ' + invoiceNumber + ' cannot be downloaded now.');
     }
@@ -215,9 +215,9 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
         }
     }
 
-	/**
-	 * calReckoningTotal
-	 */
+    /**
+     * calReckoningTotal
+     */
     public calReckoningTotal() {
         this.reckoningDebitTotal = this.ledgerData.ledgerTransactions.debitTotal;
         this.reckoningCreditTotal = this.ledgerData.ledgerTransactions.creditTotal;

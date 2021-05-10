@@ -84,7 +84,7 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
             let content = "";
             content += "<b>Name:</b>&nbsp;" + this.scheduleNowForm.get('name').value + "<br>";
             content += "<b>Email:</b>&nbsp;" + this.scheduleNowForm.get('email').value + "<br>";
-            content += "<b>Mobile Number:</b>&nbsp;+" + this.scheduleNowForm.get('phoneCode').value + "" +this.scheduleNowForm.get('mobileNo').value + "<br>";
+            content += "<b>Mobile Number:</b>&nbsp;+" + this.scheduleNowForm.get('phoneCode').value + "" + this.scheduleNowForm.get('mobileNo').value + "<br>";
             content += "<b>Description:</b>&nbsp;" + this.scheduleNowForm.get('description').value + "<br>";
             content += "<b>Date:</b>&nbsp;" + date + "<br>";
             content += "<b>Time:</b>&nbsp;" + this.scheduleNowForm.get('time').value + "<br>";
@@ -138,12 +138,12 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
         let end = moment("09:00 pm", 'hh:mm a');
 
         /** If the date is greater than or equals to tomorrow, we will start hours from 9 am */
-        if(selectedDate.format(GIDDH_DATE_FORMAT) >= tomorrow.format(GIDDH_DATE_FORMAT)) {
+        if (selectedDate.format(GIDDH_DATE_FORMAT) >= tomorrow.format(GIDDH_DATE_FORMAT)) {
             selectedDate = selectedDate.hours(9);
             selectedDate = selectedDate.minutes(0);
         } else {
             /** If the date is today, we will check current hours, if greater than 9, we will start from current time otherwise we will start from 9 am */
-            if(moment().hour() >= 9) {
+            if (moment().hour() >= 9) {
                 selectedDate.hours(moment().hour());
                 selectedDate.minutes(moment().minute());
             } else {
@@ -184,7 +184,7 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
             if (res) {
                 let countryPhoneCode = [];
                 Object.keys(res.callingCodes).forEach(key => {
-                    countryPhoneCode.push({label: res.callingCodes[key], value: res.callingCodes[key]});
+                    countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
                 });
                 this.callingCodes$ = observableOf(countryPhoneCode);
             } else {

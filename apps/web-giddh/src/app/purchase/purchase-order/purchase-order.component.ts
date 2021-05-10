@@ -196,7 +196,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         });
 
         this.selectedPo$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response && (this.pageUrl.includes('/purchase-orders/preview') || this.pageUrl.includes('/purchase-management/purchase'))) {
+            if (response && (this.pageUrl.includes('/purchase-orders/preview') || this.pageUrl.includes('/purchase-management/purchase'))) {
                 this.selectedPo = response;
             }
         });
@@ -293,7 +293,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
 
                         let purchaseOrders = _.cloneDeep(res.body);
 
-                        if(purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0) {
+                        if (purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0) {
                             purchaseOrders.items.map(item => {
                                 item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedPo, item.uniqueName);
                                 return item;
@@ -350,7 +350,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof PurchaseOrderComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -609,7 +609,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 if (res) {
                     if (res.status === 'success') {
 
-                        if(action === "create_purchase_bill") {
+                        if (action === "create_purchase_bill") {
                             this.refreshPurchaseBill.emit(true);
                         }
 

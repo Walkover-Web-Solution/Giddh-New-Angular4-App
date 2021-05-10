@@ -137,9 +137,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
                                 m.grandTotal.amountForAccount = result.body.voucherDetails.grandTotal;
                             }
 
-                            if(result && result.body && (result.body.type === VoucherTypeEnum.sales || result.body.type === VoucherTypeEnum.cash) && result.body.number == m.voucherNumber) {
+                            if (result && result.body && (result.body.type === VoucherTypeEnum.sales || result.body.type === VoucherTypeEnum.cash) && result.body.number == m.voucherNumber) {
                                 m.account = result.body.account;
-                            } else if(result && result.body && result.body.type === VoucherTypeEnum.purchase && result.body.uniqueName == m.uniqueName) {
+                            } else if (result && result.body && result.body.type === VoucherTypeEnum.purchase && result.body.uniqueName == m.uniqueName) {
                                 m.account = result.body.account;
                             }
                             return m;
@@ -224,7 +224,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             return state;
         }
 
-         case INVOICE_ACTIONS.PREVIEW_INVOICE: {
+        case INVOICE_ACTIONS.PREVIEW_INVOICE: {
             return {
                 ...state,
                 voucherDetailsInProcess: true

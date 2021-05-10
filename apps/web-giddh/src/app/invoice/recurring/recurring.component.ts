@@ -10,7 +10,7 @@ import * as moment from 'moment';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import {BsDatepickerDirective} from 'ngx-bootstrap/datepicker';
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
@@ -58,8 +58,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
         backdrop: 'static',
         ignoreBackdropClick: true
     };
-    @ViewChild('customerSearch', {static: true}) public customerSearch: ElementRef;
-    @ViewChild(BsDatepickerDirective, {static: true}) public bsd: BsDatepickerDirective;
+    @ViewChild('customerSearch', { static: true }) public customerSearch: ElementRef;
+    @ViewChild(BsDatepickerDirective, { static: true }) public bsd: BsDatepickerDirective;
 
     public showInvoiceNumberSearch = false;
     public showCustomerNameSearch = false;
@@ -83,7 +83,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
 
     constructor(private store: Store<AppState>,
         private generalService: GeneralService,
-        private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver , private modalService: BsModalService) {
+        private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver, private modalService: BsModalService) {
         this.recurringData$ = this.store.pipe(takeUntil(this.destroyed$), select(s => s.invoice.recurringInvoiceData.recurringInvoices));
         this.recurringData$.subscribe(p => {
             if (p && p.recurringVoucherDetails) {

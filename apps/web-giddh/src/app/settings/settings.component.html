@@ -3,8 +3,8 @@
     <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane($event)"></aside-setting>
 </div>
 
-<div class="container-fluid settings-bg setting-data" [keyboardShortcut]="['alt+right', 'alt+left']" [config]="{ignoreHost:true}"
-    (onShortcutPress)="selectTabByShortcut($event)">
+<div class="container-fluid settings-bg setting-data" [keyboardShortcut]="['alt+right', 'alt+left']"
+    [config]="{ignoreHost:true}" (onShortcutPress)="selectTabByShortcut($event)">
     <div class="row">
         <div class="invoice-control w-100">
             <div id="setting-tab">
@@ -32,10 +32,12 @@
                         <hamburger-menu></hamburger-menu>
                         <div class="setting-container">
                             <setting-profile #profileComponent></setting-profile>
-                            <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)" class="auto-save float-right">
+                            <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)"
+                                class="auto-save float-right">
                                 <i class="icon-refresh mr-r05 font-14 rotate"></i>Saving...
                             </span>
-                            <span *ngIf="isCompanyProfileUpdated && !(isUpdateCompanyInProgress$ | async)" class="auto-save float-right">
+                            <span *ngIf="isCompanyProfileUpdated && !(isUpdateCompanyInProgress$ | async)"
+                                class="auto-save float-right">
                                 <i class="glyphicon glyphicon-check mr-r05 font-14"></i>Saved
                             </span>
                         </div>
@@ -87,4 +89,3 @@
         </div>
     </div>
 </div>
-

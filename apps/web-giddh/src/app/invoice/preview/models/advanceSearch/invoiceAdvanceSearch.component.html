@@ -27,7 +27,8 @@
                             </div>
 
                             <div class="col-md-6 col-sm-6 col-12">
-                                <giddh-datepicker name="invoiceDateRange" [(ngModel)]="request.invoiceDate"></giddh-datepicker>
+                                <giddh-datepicker name="invoiceDateRange" [(ngModel)]="request.invoiceDate">
+                                </giddh-datepicker>
                             </div>
 
                         </div>
@@ -51,7 +52,8 @@
                             </div>
 
                             <div class="col-md-4 col-sm-6 col-6 pr-0">
-                                <input class="form-control" type="tel" placeholder="00" name="total" [(ngModel)]="request.total">
+                                <input class="form-control" type="tel" placeholder="00" name="total"
+                                    [(ngModel)]="request.total">
 
                             </div>
 
@@ -78,7 +80,8 @@
                             </div>
 
                             <div class="col-md-8 col-sm-6 col-6 pr-0">
-                                <giddh-datepicker name="invoiceDateRange" [(ngModel)]="request.dueDate"></giddh-datepicker>
+                                <giddh-datepicker name="invoiceDateRange" [(ngModel)]="request.dueDate">
+                                </giddh-datepicker>
                             </div>
 
                         </div>
@@ -197,8 +200,8 @@
                             </div>
 
                             <div class="col-sm-8 col-md-8 pr-0">
-                                <input type="text" name="invoiceDate" bsDatepicker class="form-control w-100" [(ngModel)]="request.invoiceDate"
-                                    [bsConfig]="{dateInputFormat: giddhDateFormat}" />
+                                <input type="text" name="invoiceDate" bsDatepicker class="form-control w-100"
+                                    [(ngModel)]="request.invoiceDate" [bsConfig]="{dateInputFormat: giddhDateFormat}" />
                             </div>
 
                         </div>
@@ -223,9 +226,10 @@
                             </div>
 
                             <div class="col-md-6 col-sm-6 col-6 pr-0">
-                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total" type="tel">
+                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total"
+                                    type="tel">
                             </div>
-                       </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -248,7 +252,9 @@
 
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                                 <i class="icon-calender calendar-addon"></i>
-                                <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker border-radius-2"/>
+                                <input type="text" name="selectedDateRange"
+                                    [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker border-radius-2" />
                             </div>
 
                         </div>
@@ -273,7 +279,8 @@
                             </div>
 
                             <div class="col-md-4 col-sm-6 col-6 pr-0">
-                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.amount" type="tel">
+                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.amount"
+                                    type="tel">
 
                             </div>
 
@@ -294,8 +301,8 @@
                     <div class="col-8">
                         <div class="row mr-0 ml-0">
                             <div class="col-5 pl-0 pr-0">
-                                <sh-select class="select-action" placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
-                                    (selected)="dateChanged($event, 'invoice')"></sh-select>
+                                <sh-select class="select-action" placeholder="Select Action" [options]="dateOptions"
+                                    [ItemHeight]="33" (selected)="dateChanged($event, 'invoice')"></sh-select>
                             </div>
                             <div class="col-7 pr-0">
                                 <input type="text" name="invoiceDate" bsDatepicker class="form-control w-100"
@@ -315,7 +322,8 @@
                                     (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
                             <div class="col-md-6 col-sm-12 pr-0">
-                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total" type="tel">
+                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total"
+                                    type="tel">
                             </div>
                         </div>
                     </div>
@@ -349,9 +357,13 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
-                                    [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
-                                    [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}"
+                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

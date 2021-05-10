@@ -148,7 +148,8 @@
             <div class="menu-item-wrapper font-14">
                 <div class="menu-item  pd-l2 pd-r2">
                     <p class="font-12">
-                        <span [routerLink]="['/pages/giddh-all-items']" class="d-inline-flex align-items-center cursor-pointer">
+                        <span [routerLink]="['/pages/giddh-all-items']"
+                            class="d-inline-flex align-items-center cursor-pointer">
                             Menu
                             <i class="icon-down-new mr-l05"></i> </span>
                         <span class="text-gray cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
@@ -293,7 +294,8 @@
 
     <li class="mr-b1" *ngIf="!isMobileSite">
         <a [tooltip]="userEmail" placement="top" href="javascript:void(0)"
-            (click)="analyzeMenus($event, '/pages/user-details', { tab: 'profile', tabIndex: 1 })" class="overflow-hidden d-flex">
+            (click)="analyzeMenus($event, '/pages/user-details', { tab: 'profile', tabIndex: 1 })"
+            class="overflow-hidden d-flex">
             <span class="user-circle pull-left" *ngIf="!userAvatar">
                 <span>{{userName | uppercase}}</span>
             </span>

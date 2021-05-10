@@ -26,8 +26,11 @@
                 <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
                     <div class="form-group mb-0">
                         <div class="input-group">
-                            <input *ngIf="organizationType === 'COMPANY'" [(ngModel)]="profileData.name" (ngModelChange)="profileUpdated('name')" type="text" placeholder="" name="companyName" class="form-control" />
-                            <input *ngIf="organizationType === 'BRANCH'" name="alias" [(ngModel)]="profileData.alias" (ngModelChange)="profileUpdated('alias')"  type="text" class="form-control">
+                            <input *ngIf="organizationType === 'COMPANY'" [(ngModel)]="profileData.name"
+                                (ngModelChange)="profileUpdated('name')" type="text" placeholder="" name="companyName"
+                                class="form-control" />
+                            <input *ngIf="organizationType === 'BRANCH'" name="alias" [(ngModel)]="profileData.alias"
+                                (ngModelChange)="profileUpdated('alias')" type="text" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -45,7 +48,8 @@
                     <label class="font-14">Parent:</label>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
-                    <div *ngIf="profileData?.parent?.name" class="font-14">{{profileData?.parent?.name}} ({{profileData?.parent?.businessType}})</div>
+                    <div *ngIf="profileData?.parent?.name" class="font-14">{{profileData?.parent?.name}}
+                        ({{profileData?.parent?.businessType}})</div>
                     <div *ngIf="!profileData?.parent?.name" class="font-14">{{profileData?.companyName}}</div>
                 </div>
             </div>
@@ -54,8 +58,10 @@
                     <label class="font-14">Country & Currency:</label>
                 </div>
                 <div class="country-info col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
-                    <img class="country-flag" src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{profileData?.country?.countryCode}}.svg">
-                    <div class="font-14">{{profileData?.country?.countryName}} - {{profileData?.country?.currencyCode}} {{profileData?.country?.currencyName}}</div>
+                    <img class="country-flag"
+                        src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{profileData?.country?.countryCode}}.svg">
+                    <div class="font-14">{{profileData?.country?.countryName}} - {{profileData?.country?.currencyCode}}
+                        {{profileData?.country?.currencyName}}</div>
                 </div>
             </div>
         </div>
@@ -67,23 +73,24 @@
                 <div class="form-group">
                     <label>Business Type</label>
                     <sh-select disabled placeholder="Select Business Type" name="businessType" id="businessType"
-                        autocomplete="false" [readonlyInput]="true"
-                        (selected)="profileUpdated('businessType')"
-                        [(ngModel)]="profileData.businessType" [options]="profileData.businessTypes"
-                        [ItemHeight]="33" [defaultValue]="profileData.businessType">
+                        autocomplete="false" [readonlyInput]="true" (selected)="profileUpdated('businessType')"
+                        [(ngModel)]="profileData.businessType" [options]="profileData.businessTypes" [ItemHeight]="33"
+                        [defaultValue]="profileData.businessType">
                     </sh-select>
                 </div>
             </div>
             <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
                 <div class="form-group">
                     <label>Company Alias</label>
-                    <input name="companyAlias" [(ngModel)]="profileData.nameAlias" (ngModelChange)="profileUpdated('nameAlias')"  type="text" class="form-control">
+                    <input name="companyAlias" [(ngModel)]="profileData.nameAlias"
+                        (ngModelChange)="profileUpdated('nameAlias')" type="text" class="form-control">
                 </div>
             </div>
             <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
                 <div class="form-group">
                     <label>Headquarter Name</label>
-                    <input name="headQuarterAlias" [(ngModel)]="profileData.headQuarterAlias" (ngModelChange)="profileUpdated('headQuarterAlias')"  type="text" class="form-control">
+                    <input name="headQuarterAlias" [(ngModel)]="profileData.headQuarterAlias"
+                        (ngModelChange)="profileUpdated('headQuarterAlias')" type="text" class="form-control">
                 </div>
             </div>
         </div>

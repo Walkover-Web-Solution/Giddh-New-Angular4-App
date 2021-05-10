@@ -35,14 +35,16 @@
                                                             {{defaultMultipleCompanyPlan?.planDetails?.amount}} /-</h3>
                                                         <p class="font-12">
                                                             {{defaultMultipleCompanyPlan?.planDetails?.duration}}
-                                                            {{defaultMultipleCompanyPlan?.planDetails?.durationUnit}}(s)</p>
+                                                            {{defaultMultipleCompanyPlan?.planDetails?.durationUnit}}(s)
+                                                        </p>
                                                     </div>
                                                     <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
                                                 </div>
                                                 <div class="clearfix">
                                                     <ul class="plan-list">
                                                         <li>Transactions Limit:
-                                                            {{defaultMultipleCompanyPlan?.planDetails?.transactionLimit | number}}
+                                                            {{defaultMultipleCompanyPlan?.planDetails?.transactionLimit
+                                                            | number}}
                                                             <div class="btn-group pull-right transactions-limit-box">
                                                                 <button type="button" class="dropdown-toggle close">
                                                                     <i class="icon-info"></i>
@@ -56,7 +58,8 @@
                                                             </div>
                                                         </li>
                                                         <li>Total Companies:
-                                                            {{defaultMultipleCompanyPlan?.planDetails?.companiesLimit | number}}
+                                                            {{defaultMultipleCompanyPlan?.planDetails?.companiesLimit |
+                                                            number}}
                                                         </li>
                                                         <li>Unlimited Users
                                                             <div class="btn-group pull-right transactions-limit-box">
@@ -78,7 +81,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mr-b1">Unlimited Customers/Vendors</p>
+                                                                    <p class="bold mr-b1">Unlimited Customers/Vendors
+                                                                    </p>
                                                                     <p class="font-12 text-gray mr-b1">
                                                                         {{unlimitedCustomersVendorsTooltipContent}}</p>
                                                                 </div>
@@ -100,12 +104,14 @@
                                                     </ul>
                                                 </div>
                                                 <div class="plan-footer">
-                                                    <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
+                                                    <p><a (click)="allFeaturesModal(AllFeatures)"
+                                                            href="javascript:void(0)"
                                                             class="color-primary font-14">Check all features</a></p>
                                                     <button class="btn success-btn btn-round"
                                                         [disabled]="showPlans === 'free' || showPlans === 'single'"
                                                         (click)="buyPlanClicked(defaultMultipleCompanyPlan)"
-                                                        [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
+                                                        [ladda]="this.isUpdateCompanyInProgress$ | async">Buy
+                                                        Plan</button>
                                                     <p class="font-12">*prices excluding Tax</p>
                                                 </div>
                                             </div>
@@ -147,13 +153,15 @@
                                                                 {{defaultSingleCompanyPlan?.planDetails?.durationUnit}}(s)
                                                             </p>
                                                         </div>
-                                                        <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
+                                                        <img class="guarantee-img" src="assets/images/guarantee.png"
+                                                            alt="">
                                                     </div>
                                                 </div>
                                                 <div class="clearfix">
                                                     <ul class="plan-list">
                                                         <li>Transactions Limit:
-                                                            {{defaultSingleCompanyPlan?.planDetails?.transactionLimit | number}}
+                                                            {{defaultSingleCompanyPlan?.planDetails?.transactionLimit |
+                                                            number}}
                                                             <div class="btn-group pull-right transactions-limit-box">
                                                                 <button type="button" class="dropdown-toggle close">
                                                                     <i class="icon-info"></i>
@@ -167,7 +175,8 @@
                                                             </div>
                                                         </li>
                                                         <li>Total Companies:
-                                                            {{defaultSingleCompanyPlan?.planDetails?.companiesLimit | number}}
+                                                            {{defaultSingleCompanyPlan?.planDetails?.companiesLimit |
+                                                            number}}
                                                         </li>
                                                         <li>Unlimited Users
                                                             <div class="btn-group pull-right transactions-limit-box">
@@ -189,7 +198,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mr-b1">Unlimited Customers/Vendors</p>
+                                                                    <p class="bold mr-b1">Unlimited Customers/Vendors
+                                                                    </p>
                                                                     <p class="font-12 text-gray mr-b1">
                                                                         {{unlimitedCustomersVendorsTooltipContent}}</p>
                                                                 </div>
@@ -211,12 +221,14 @@
                                                     </ul>
                                                 </div>
                                                 <div class="plan-footer">
-                                                    <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
+                                                    <p><a (click)="allFeaturesModal(AllFeatures)"
+                                                            href="javascript:void(0)"
                                                             class="color-primary font-14">Check all features</a></p>
                                                     <button class="btn success-btn btn-round"
                                                         [disabled]="showPlans === 'multiple' || showPlans === 'free'"
                                                         (click)="buyPlanClicked(defaultSingleCompanyPlan)"
-                                                        [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
+                                                        [ladda]="this.isUpdateCompanyInProgress$ | async">Buy
+                                                        Plan</button>
                                                     <p class="font-12">*prices excluding Tax</p>
                                                 </div>
                                             </div>
@@ -237,7 +249,8 @@
                                     <div class="overall-plans">
                                         <p class="bold total-price">Total Plans: {{totalFreePlans}}</p>
                                         <div class="your-account">
-                                            <div class="inner-your-account" [ngClass]="{'active': showPlans === 'free'}">
+                                            <div class="inner-your-account"
+                                                [ngClass]="{'active': showPlans === 'free'}">
                                                 <h3 class="plan-heading">{{defaultFreePlan?.planDetails?.name}}</h3>
                                                 <div>
                                                     <div class="plans-head-top">
@@ -287,7 +300,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mr-b1">Unlimited Customers/Vendors</p>
+                                                                    <p class="bold mr-b1">Unlimited Customers/Vendors
+                                                                    </p>
                                                                     <p class="font-12 text-gray mr-b1">
                                                                         {{unlimitedCustomersVendorsTooltipContent}}</p>
                                                                 </div>
@@ -309,12 +323,14 @@
                                                     </ul>
                                                 </div>
                                                 <div class="plan-footer">
-                                                    <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
+                                                    <p><a (click)="allFeaturesModal(AllFeatures)"
+                                                            href="javascript:void(0)"
                                                             class="color-primary font-14">Check all features</a></p>
                                                     <button class="btn success-btn btn-round"
                                                         [disabled]="showPlans === 'multiple' || showPlans === 'single'"
                                                         (click)="choosePlan(defaultFreePlan);"
-                                                        [ladda]="this.isUpdateCompanyInProgress$ | async">Buy Plan</button>
+                                                        [ladda]="this.isUpdateCompanyInProgress$ | async">Buy
+                                                        Plan</button>
                                                     <p class="font-12">*prices excluding Tax</p>
                                                 </div>
                                             </div>

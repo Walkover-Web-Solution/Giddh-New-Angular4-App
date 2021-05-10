@@ -559,11 +559,11 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                     currentBranch = branches.find(branch => branch.uniqueName === this.generalService.currentBranchUniqueName);
                 } else {
                     // Find the HO branch
-                    currentBranch =  branches.find(branch => !branch.parentBranch);
+                    currentBranch = branches.find(branch => !branch.parentBranch);
                 }
                 if (currentBranch && currentBranch.addresses) {
                     const defaultAddress = currentBranch.addresses.find(address => (address && address.isDefault));
-                    if(defaultAddress) {
+                    if (defaultAddress) {
                         this.invoiceSetting.gstEInvoiceGstin = defaultAddress.taxNumber;
                     }
                 }

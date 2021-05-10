@@ -14,15 +14,15 @@
     border-right: none !important;
 }
 
-@media(max-width:575px) {
-    .wrap-tab-content-pd-15{
-        form{
-            input{
+@media (max-width: 575px) {
+    .wrap-tab-content-pd-15 {
+        form {
+            input {
                 max-width: 100%;
                 margin-bottom: 15px;
                 width: 100%;
             }
-            .btn-success{
+            .btn-success {
                 width: 100%;
                 margin-left: 0;
             }

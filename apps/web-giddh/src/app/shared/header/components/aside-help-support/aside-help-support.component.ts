@@ -34,7 +34,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
-        this.imgPath = (isElectron||isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 
     /**

@@ -2,7 +2,7 @@ export enum AdjustmentTypesEnum {
     'receipt' = 'receipt',
     'advanceReceipt' = 'advanceReceipt',
     'againstReference' = 'againstReference'
-} 
+}
 
 export interface AdjustmentTypes {
     value: string;

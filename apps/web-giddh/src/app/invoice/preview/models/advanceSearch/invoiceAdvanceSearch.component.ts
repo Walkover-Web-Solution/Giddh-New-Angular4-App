@@ -317,7 +317,7 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
      * @memberof InvoiceAdvanceSearchComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
