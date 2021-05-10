@@ -17,16 +17,10 @@
                             src="{{r.favicon}}" /></span>
                     {{ r.name }} <label *ngIf="r.countryISOCode">({{r.countryISOCode}})</label></span>
             </ng-template> -->
-            <sh-select [options]="searchResults"
-                [(ngModel)]="selectedProvider.name"
-                [isPaginationEnabled]="true"
-                [forceClearReactive]="forceClearReactive$ | async"
-                (dynamicSearchedQuery)="onSearchQueryChanged($event)"
-                [enableDynamicSearch]="true"
-                (selected)="typeaheadOnSelect($event)"
-                placeholder="Search Provider"
-                [showClear]="false" [multiple]="false"
-                [ItemHeight]="67">
+            <sh-select [options]="searchResults" [(ngModel)]="selectedProvider.name" [isPaginationEnabled]="true"
+                [forceClearReactive]="forceClearReactive$ | async" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                [enableDynamicSearch]="true" (selected)="typeaheadOnSelect($event)" placeholder="Search Provider"
+                [showClear]="false" [multiple]="false" [ItemHeight]="67">
             </sh-select>
         </div>
         <button class="btn btn-success btn-sm" (click)="onSelectProvider()"

@@ -30,8 +30,8 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     // take voucher type from parent component
     @Input() public voucherType: VoucherTypeEnum;
 
-    @ViewChild('mailModal', {static: true}) public mailModal: ModalDirective;
-    @ViewChild('messageBox', {static: true}) public messageBox: ElementRef;
+    @ViewChild('mailModal', { static: true }) public mailModal: ModalDirective;
+    @ViewChild('messageBox', { static: true }) public messageBox: ElementRef;
 
     public messageBody = {
         header: {
@@ -244,9 +244,9 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = location.origin + location.pathname + `#./pages/${part}/${this.accountUniqueName}`;
             console.log(ipcRenderer.send('open-url', url));
-        } else if(isCordova){
+        } else if (isCordova) {
             // todo: go to routes
-        }else {
+        } else {
             (window as any).open(url);
         }
     }

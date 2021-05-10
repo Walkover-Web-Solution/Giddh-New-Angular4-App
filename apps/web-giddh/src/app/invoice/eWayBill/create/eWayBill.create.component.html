@@ -13,8 +13,8 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
                         <sh-select class=" input " #subgrp [options]="SubsupplyTypesList"
-                            (selected)="subTypeElementSelected($event)" required [isRequired]="true" placeholder="select type"
-                            [isFilterEnabled]="true" name="subSupplyType"
+                            (selected)="subTypeElementSelected($event)" required [isRequired]="true"
+                            placeholder="select type" [isFilterEnabled]="true" name="subSupplyType"
                             [(ngModel)]="generateEwayBillform.subSupplyType" [ItemHeight]="33"></sh-select>
 
                     </div>
@@ -27,8 +27,8 @@
                     <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
 
                         <!-- <input type="text " placeholder="Mention Number " class="form-control input " /> -->
-                        <sh-select class="input" #doctypes autocomplete="xyz" [options]="TransporterDocType" required [isRequired]="true"
-                            placeholder="select type" [isFilterEnabled]="true" name="docType"
+                        <sh-select class="input" #doctypes autocomplete="xyz" [options]="TransporterDocType" required
+                            [isRequired]="true" placeholder="select type" [isFilterEnabled]="true" name="docType"
                             [(ngModel)]="generateEwayBillform.docType" [ItemHeight]="33"></sh-select>
 
 
@@ -162,14 +162,15 @@
 
                         <span class="p-0 mr-r3">
                             <input id="regular" class="radio-custom cp ml-0" name="vehicleType" value="R"
-                            [(ngModel)]="generateEwayBillform.vehicleType" type="radio">
+                                [(ngModel)]="generateEwayBillform.vehicleType" type="radio">
                             <label for="regular" class="radio-custom-label">Regular</label>
                         </span>
 
 
                         <ng-container *ngIf="!isTransModeRoad">
                             <span class="p-0 mr-r3">
-                                <input id="dimensional" class="radio-custom cp ml-0" name="vehicleType" value="O" [(ngModel)]="generateEwayBillform.vehicleType" type="radio">
+                                <input id="dimensional" class="radio-custom cp ml-0" name="vehicleType" value="O"
+                                    [(ngModel)]="generateEwayBillform.vehicleType" type="radio">
                                 <label for="dimensional" class="radio-custom-label">Over
                                     Dimensional Cargo {{isTransModeRoad}}</label>
                             </span>
@@ -220,7 +221,8 @@
                         <div class="input position-relative">
                             <input name="transDocDate" placeholder="dd/mm/yyyy " type="text "
                                 [bsConfig]="{dateInputFormat: giddhDateFormat} "
-                                [(ngModel)]="generateEwayBillform.transDocDate" class="form-control pd-r3" bsDatepicker />
+                                [(ngModel)]="generateEwayBillform.transDocDate" class="form-control pd-r3"
+                                bsDatepicker />
                             <img class="text-light-2 position-absolute date-input-icon" src="assets/icon/date.svg " />
                         </div>
 

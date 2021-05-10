@@ -1,9 +1,10 @@
 <div class="recurring-container">
 
 
-    <form #recurringForm="ngForm" novalidate class="form-inline input-grp-date-range-picker position-relative" (ngSubmit)="submit()">
+    <form #recurringForm="ngForm" novalidate class="form-inline input-grp-date-range-picker position-relative"
+        (ngSubmit)="submit()">
 
-        <div class="d-flex search-icon-block mr-b15"  *ngIf="isMobileScreen">
+        <div class="d-flex search-icon-block mr-b15" *ngIf="isMobileScreen">
             <div (click)="openModal(template)">
                 <i class="icon-search"></i>
             </div>
@@ -47,7 +48,8 @@
                         <div class="form-group">
                             <label class="d-block">Last Invoice Date</label>
                             <div>
-                                <giddh-datepicker name="lastInvoiceDate" [(ngModel)]="filter.lastInvoiceDate" [placeholder]="'Select Date'"></giddh-datepicker>
+                                <giddh-datepicker name="lastInvoiceDate" [(ngModel)]="filter.lastInvoiceDate"
+                                    [placeholder]="'Select Date'"></giddh-datepicker>
                             </div>
                         </div>
                         <div class="form-group search-invoice-filed">
@@ -74,8 +76,8 @@
                         <div class="form-group">
                             <button class="btn btn-success btn-sm">Search</button>
                             <a class="cp" href="javascript: void 0">
-                                <i aria-hidden="true" class="icon-refresh"
-                                    tooltip="Reset Filter" *ngIf="showResetFilterButton" (click)="resetFilter()"></i>
+                                <i aria-hidden="true" class="icon-refresh" tooltip="Reset Filter"
+                                    *ngIf="showResetFilterButton" (click)="resetFilter()"></i>
                             </a>
                         </div>
                     </div>
@@ -117,7 +119,8 @@
                 <div class="form-group mr-r1">
                     <label class="d-block mr-r15">Last Invoice Date</label>
                     <div class="input-group">
-                        <giddh-datepicker name="lastInvoiceDate" [(ngModel)]="filter.lastInvoiceDate" [placeholder]="'Select Date'"></giddh-datepicker>
+                        <giddh-datepicker name="lastInvoiceDate" [(ngModel)]="filter.lastInvoiceDate"
+                            [placeholder]="'Select Date'"></giddh-datepicker>
                     </div>
                 </div>
 
@@ -125,8 +128,8 @@
                     <div class="search-invoice-no">
                         <label class="d-block">Search Invoice No.</label>
                         <div class="input-group">
-                            <input type="text" placeholder="Search Invoice No." class="w100" [formControl]="invoiceNumberInput"
-                                #invoiceSearch class="form-control" />
+                            <input type="text" placeholder="Search Invoice No." class="w100"
+                                [formControl]="invoiceNumberInput" #invoiceSearch class="form-control" />
                             <!--<i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>-->
                         </div>
                     </div>
@@ -153,7 +156,8 @@
             </div>
             <div class="d-flex mb-2">
                 <div class="more-dropdown" *ngIf="selectedItems.length < 0">
-                    <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()">
+                    <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown"
+                        (mouseleave)="dp.hide()">
 
                         <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                             aria-controls="dropdown-basic">
@@ -328,20 +332,19 @@
 
                     <td width="20%" data-title="Invoice Number">
                         <a *ngIf="!isMobileScreen" class="cp btn-link-2"
-                            (click)="col.status !== 'inactive' && openUpdatePanel(col)">{{ col.voucherNumber || '-'  }}</a>
-                        <a *ngIf="isMobileScreen" class="cp btn-link-2">{{ col.voucherNumber || '-'  }}</a>
+                            (click)="col.status !== 'inactive' && openUpdatePanel(col)">{{ col.voucherNumber || '-'
+                            }}</a>
+                        <a *ngIf="isMobileScreen" class="cp btn-link-2">{{ col.voucherNumber || '-' }}</a>
                     </td>
                     <td width="20%" data-title="Customer Name">{{ col.customerName || '-' }}</td>
-                    <td data-title="Interval">{{ col.duration || '-'  }}</td>
-                    <td data-title="Last Invoice Date">{{ col.lastInvoiceDate || '-'  }}</td>
-                    <td data-title="Next Invoice Date ">{{ col.nextCronDate || '-'  }}</td>
-                    <td data-title="Status">{{ col.status || '-' | titlecase  }}</td>
+                    <td data-title="Interval">{{ col.duration || '-' }}</td>
+                    <td data-title="Last Invoice Date">{{ col.lastInvoiceDate || '-' }}</td>
+                    <td data-title="Next Invoice Date ">{{ col.nextCronDate || '-' }}</td>
+                    <td data-title="Status">{{ col.status || '-' | titlecase }}</td>
                     <td data-title="Invoice Amt" class=" text-right">
                         <!-- {{ col.voucherTotal | giddhCurrency   }} -->
                         <span class="d-inline-flex">
-                            <amount-field [amount]="col.voucherTotal"
-                                [currencySymbol]="false"
-                                [currencyCode]="false">
+                            <amount-field [amount]="col.voucherTotal" [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </span>
                     </td>

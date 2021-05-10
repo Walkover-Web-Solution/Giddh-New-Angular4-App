@@ -183,10 +183,10 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         this.picker.opens = this.opens;
         this.localeDiffer = this.differs.find(this.locale).create();
 
-        if(this.inputStartDate) {
+        if (this.inputStartDate) {
             this.picker.startDate = this.inputStartDate;
         }
-        if(this.inputEndDate) {
+        if (this.inputEndDate) {
             this.picker.endDate = this.inputEndDate;
         }
     }
@@ -196,10 +196,10 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
             if (changes.hasOwnProperty(change)) {
                 if (this.notForChangesProperty.indexOf(change) === -1) {
                     this.picker[change] = changes[change].currentValue;
-                    if(change === "inputStartDate" && changes[change].currentValue) {
+                    if (change === "inputStartDate" && changes[change].currentValue) {
                         this.picker.startDate = changes[change].currentValue;
                     }
-                    if(change === "inputEndDate" && changes[change].currentValue) {
+                    if (change === "inputEndDate" && changes[change].currentValue) {
                         this.picker.endDate = changes[change].currentValue;
                     }
                 }
@@ -322,14 +322,14 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
      */
     setPosition() {
         const container = document.getElementsByTagName("ngx-daterangepicker-material")[0] as HTMLElement;
-        if(container) {
+        if (container) {
             const element = this._el?.nativeElement;
             let position = this.getPosition(element);
             let screenWidth = window.innerWidth;
             let totalWidth = container.offsetWidth + position.x;
             let positionX = position.x;
 
-            if(totalWidth > screenWidth) {
+            if (totalWidth > screenWidth) {
                 positionX = positionX - (totalWidth - screenWidth);
             }
 

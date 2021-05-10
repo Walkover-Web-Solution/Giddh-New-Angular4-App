@@ -72,8 +72,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         private _fb: FormBuilder,
         private generalService: GeneralService
     ) {
-        this.createPermissionInProcess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionInProcess),takeUntil(this.destroyed$));
-        this.createPermissionSuccess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionSuccess),takeUntil(this.destroyed$));
+        this.createPermissionInProcess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionInProcess), takeUntil(this.destroyed$));
+        this.createPermissionSuccess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnDestroy() {

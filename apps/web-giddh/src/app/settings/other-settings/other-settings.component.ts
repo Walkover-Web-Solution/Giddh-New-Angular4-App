@@ -96,10 +96,10 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
-            if(response) {
+            if (response) {
                 this.commonLocaleData = response;
 
-                if(this.showLanguageChangeMessage) {
+                if (this.showLanguageChangeMessage) {
                     this.toasterService.clearAllToaster();
                     this.toasterService.successToast(this.commonLocaleData?.app_language_selected);
                     this.showLanguageChangeMessage = false;
@@ -147,7 +147,7 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public selectLocale(event?: any): void {
-        this.store.dispatch(this.commonActions.setActiveLocale({label: event?.label, value: event?.value}));
+        this.store.dispatch(this.commonActions.setActiveLocale({ label: event?.label, value: event?.value }));
         this.showLanguageChangeMessage = true;
     }
 }

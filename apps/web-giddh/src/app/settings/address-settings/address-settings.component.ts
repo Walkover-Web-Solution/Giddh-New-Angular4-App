@@ -28,7 +28,7 @@ import { OrganizationProfile, SettingsAsideFormType } from '../constants/setting
 })
 export class AddressSettingsComponent implements OnInit, OnDestroy {
     /** Stores the confirmation modal instance */
-    @ViewChild('deleteAddressConfirmationModal', {static: true}) public deleteAddressConfirmationModal: ModalDirective;
+    @ViewChild('deleteAddressConfirmationModal', { static: true }) public deleteAddressConfirmationModal: ModalDirective;
 
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;

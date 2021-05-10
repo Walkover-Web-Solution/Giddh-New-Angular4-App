@@ -1,7 +1,7 @@
 {
-    "no_data_found" : "क्षमा करें, कोई डेटा नहीं मिला!",
-    "particular" : "विशेष",
-    "opening_balance" : "प्रारंभिक शेष",
-    "closing_balance" : "जमा शेष",
-    "grand_total" : "कुल योग"
+    "no_data_found": "क्षमा करें, कोई डेटा नहीं मिला!",
+    "particular": "विशेष",
+    "opening_balance": "प्रारंभिक शेष",
+    "closing_balance": "जमा शेष",
+    "grand_total": "कुल योग"
 }

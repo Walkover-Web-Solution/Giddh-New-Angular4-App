@@ -34,8 +34,7 @@
     src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot");
     src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot?#iefix")
             format("embedded-opentype"),
-        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.svg")
-            format("svg"),
+        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.svg") format("svg"),
         url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.woff")
             format("woff"),
         url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.ttf")
@@ -65,6 +64,7 @@
 // $opensans-semibold: "opensans-semibold";
 // $opensans-bold: "opensans-bold";
 // $opensans-extra-bold: "opensans-extra-bold"; */
-html, body{
-    font-family: 'opensans-regular';
+html,
+body {
+    font-family: "opensans-regular";
 }

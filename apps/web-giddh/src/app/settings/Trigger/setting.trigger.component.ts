@@ -57,7 +57,7 @@ const taxDuration = [
 
 export class SettingTriggerComponent implements OnInit, OnDestroy {
 
-    @ViewChild('triggerConfirmationModel', {static: true}) public triggerConfirmationModel: ModalDirective;
+    @ViewChild('triggerConfirmationModel', { static: true }) public triggerConfirmationModel: ModalDirective;
 
     public availableTriggers: any[] = [];
     public newTriggerObj: any = {};
@@ -271,9 +271,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         this.forceClearEntityList$ = observableOf({ status: true });
     }
 
-	/**
-	 * onSelectScope
-	 */
+    /**
+     * onSelectScope
+     */
     public onSelectScope(event) {
         if (event.value === 'closing balance') {
             this.onSelectClosingBalance();
@@ -431,7 +431,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -458,7 +458,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 

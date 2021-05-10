@@ -92,7 +92,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         if (changes['groups']) {
             this.resetData();
 
-            if(!this.isGroupMoved && !this.isGroupDeleted) {
+            if (!this.isGroupMoved && !this.isGroupDeleted) {
                 let activeGroup;
                 this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
                 if (this.currentGroup !== undefined) {
@@ -101,7 +101,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
                         this.currentGroup.uniqueName = activeGroup.uniqueName;
                         if (this.currentGroupIndex === 0) {
                             const currentUpdatedGroup = this.groups.find(group => this.currentGroup.uniqueName === group.uniqueName);
-                            if(currentUpdatedGroup) {
+                            if (currentUpdatedGroup) {
                                 this.currentGroup.groups = currentUpdatedGroup.groups;
                             }
                         }
@@ -159,14 +159,14 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         });
 
         this.isMoveGroupSuccess$.subscribe(response => {
-            if(response) {
+            if (response) {
                 this.isGroupMoved = true;
                 this.store.dispatch(this.groupWithAccountsAction.moveGroupComplete());
             }
         });
 
         this.isDeleteGroupSuccess$.subscribe(response => {
-            if(response) {
+            if (response) {
                 this.isGroupDeleted = true;
             }
         });
@@ -206,9 +206,9 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
 
         this.groupService.GetGroupDetails(activeGroup.uniqueName).subscribe(group => {
-            if(group && group.status === "success" && group.body) {
+            if (group && group.status === "success" && group.body) {
                 let groupDetails = group.body;
-                if(groupDetails && groupDetails.parentGroups && groupDetails.parentGroups.length > 0) {
+                if (groupDetails && groupDetails.parentGroups && groupDetails.parentGroups.length > 0) {
                     this.currentGroupIndex = groupDetails.parentGroups.length;
                 } else {
                     this.currentGroupIndex = 0;

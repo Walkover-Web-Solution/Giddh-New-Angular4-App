@@ -74,30 +74,29 @@
                             -->
                         <div class="clearfix about-warehouse">
                             <!-- <div class="col-xl-3 col-lg-4 col-md-6"> -->
-                                <div class="parent-branch pt-1 pb-1">Linked Address:</div>
-                                <div>
-                                    <div *ngFor="let address of warehouse?.addresses" class="linked-add">
-                                        <ng-container *ngIf="address">
-                                            <label class="cursor-pointer"
-                                                [popover]="popTemplate"
-                                                popoverTitle="{{address?.name}}" placement="right"
-                                                triggers="mouseenter:mouseleave">{{address?.name}}</label>
-                                            <ng-template #popTemplate>
-                                                {{address?.address}} {{address?.stateCode}}
-                                                <p *ngIf="address?.taxType && address?.taxNumber">
-                                                    {{ address?.taxType }} : {{ address?.taxNumber }}
-                                                </p>
-                                            </ng-template>
-                                        </ng-container>
-                                        <!-- static pin code  -->
-                                        <div *ngIf="address?.pincode">
-                                            <div>
-                                                <label class="pin-label">PIN:</label>&nbsp;<span>{{address?.pincode}}</span>
-                                            </div>
+                            <div class="parent-branch pt-1 pb-1">Linked Address:</div>
+                            <div>
+                                <div *ngFor="let address of warehouse?.addresses" class="linked-add">
+                                    <ng-container *ngIf="address">
+                                        <label class="cursor-pointer" [popover]="popTemplate"
+                                            popoverTitle="{{address?.name}}" placement="right"
+                                            triggers="mouseenter:mouseleave">{{address?.name}}</label>
+                                        <ng-template #popTemplate>
+                                            {{address?.address}} {{address?.stateCode}}
+                                            <p *ngIf="address?.taxType && address?.taxNumber">
+                                                {{ address?.taxType }} : {{ address?.taxNumber }}
+                                            </p>
+                                        </ng-template>
+                                    </ng-container>
+                                    <!-- static pin code  -->
+                                    <div *ngIf="address?.pincode">
+                                        <div>
+                                            <label class="pin-label">PIN:</label>&nbsp;<span>{{address?.pincode}}</span>
                                         </div>
-                                        <!-- static pin code end-->
                                     </div>
+                                    <!-- static pin code end-->
                                 </div>
+                            </div>
                             <!-- </div> -->
                         </div>
                         <!--<div class="row">
@@ -151,10 +150,10 @@
 <div>
     <div class="aside-overlay" *ngIf="asideEditWarehousePane === 'in'"></div>
     <create-address [class]="asideEditWarehousePane" [@slideInOut]="asideEditWarehousePane"
-        [currentOrganizationUniqueName]="currentOrganizationUniqueName"
-        [warehouseToUpdate]="warehouseToUpdate" [showLoader]="isWarehouseUpdateInProgress"
-        (updateAddress)="updateWarehouseInfo($event)" [addressConfiguration]="addressConfiguration"
-        (closeAsideEvent)="toggleAsidePane($event)" *ngIf="asideEditWarehousePane === 'in'" >
+        [currentOrganizationUniqueName]="currentOrganizationUniqueName" [warehouseToUpdate]="warehouseToUpdate"
+        [showLoader]="isWarehouseUpdateInProgress" (updateAddress)="updateWarehouseInfo($event)"
+        [addressConfiguration]="addressConfiguration" (closeAsideEvent)="toggleAsidePane($event)"
+        *ngIf="asideEditWarehousePane === 'in'">
     </create-address>
 </div>
 <!-- Welcome component (Step 2) -->

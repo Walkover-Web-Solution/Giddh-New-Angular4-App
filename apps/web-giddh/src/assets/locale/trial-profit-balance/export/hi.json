@@ -1,9 +1,9 @@
 {
-    "xls" : {
-        "main_group_report" : "मुख्य समूह की रिपोर्ट",
-        "all_group_report" : "सभी समूह की रिपोर्ट",
-        "all_account_report" : "सभी खाता रिपोर्ट",
-        "complete_report" : "पूरी रिपोर्ट",
+    "xls": {
+        "main_group_report": "मुख्य समूह की रिपोर्ट",
+        "all_group_report": "सभी समूह की रिपोर्ट",
+        "all_account_report": "सभी खाता रिपोर्ट",
+        "complete_report": "पूरी रिपोर्ट",
         "trial_balance": {
             "download_filename": "ट्रायलबैलेंस.xlsx"
         },
@@ -14,19 +14,19 @@
             "download_filename": "बैलेंसशीट.xlsx"
         }
     },
-    "csv" : {
-        "group_wise_report" : "ग्रुप वाइज रिपोर्ट",
+    "csv": {
+        "group_wise_report": "ग्रुप वाइज रिपोर्ट",
         "trial_balance_group_wise_report_file_name": "ट्रायल-बैलेंस_ग्रुप-वाइज.csv",
         "trial_balance_condensed_report_file_name": "ट्रायल-बैलेंस_संघनित.csv",
         "trial_balance_account_wise_report_file_name": "ट्रायल-बैलेंस_खाता-वार.csv",
-        "condensed_report" : "संघनित रिपोर्ट",
-        "account_wise_report" : "खाता वार रिपोर्ट",
+        "condensed_report": "संघनित रिपोर्ट",
+        "account_wise_report": "खाता वार रिपोर्ट",
         "trial_balance": {
-            "name" : "नाम",
-            "opening_balance" : "प्रारंभिक शेष",
-            "debit" : "डेबिट",
-            "credit" : "क्रेडिट",
-            "closing_balance" : "जमा शेष",
+            "name": "नाम",
+            "opening_balance": "प्रारंभिक शेष",
+            "debit": "डेबिट",
+            "credit": "क्रेडिट",
+            "closing_balance": "जमा शेष",
             "trial_balance": "शेष-परीक्षण:",
             "total": "संपूर्ण",
             "to": "से",
@@ -34,12 +34,12 @@
             "toDate": "toDate"
         }
     },
-    "pdf" : {
-        "group_wise_report" : "ग्रुप वाइज रिपोर्ट",
-        "condensed_report" : "संघनित रिपोर्ट",
-        "account_wise_report" : "खाता वार रिपोर्ट",
+    "pdf": {
+        "group_wise_report": "ग्रुप वाइज रिपोर्ट",
+        "condensed_report": "संघनित रिपोर्ट",
+        "account_wise_report": "खाता वार रिपोर्ट",
         "trial_balance": {
-            "group_wise" : {
+            "group_wise": {
                 "download_filename": "PdfGroupWise.pdf"
             },
             "condensed": {
@@ -48,11 +48,11 @@
             "account_wise": {
                 "download_filename": "PdfAccountWise.pdf"
             },
-            "particular" : "विशेष",
-            "opening_balance" : "प्रारंभिक शेष",
-            "debit" : "डेबिट",
-            "credit" : "क्रेडिट",
-            "closing_balance" : "जमा शेष",
+            "particular": "विशेष",
+            "opening_balance": "प्रारंभिक शेष",
+            "debit": "डेबिट",
+            "credit": "क्रेडिट",
+            "closing_balance": "जमा शेष",
             "trial_balance": "शेष-परीक्षण:",
             "total": "संपूर्ण",
             "to": "से"

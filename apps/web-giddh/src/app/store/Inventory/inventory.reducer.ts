@@ -462,7 +462,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
             if (updateStockResp.status === 'success') {
                 groupArray = _.cloneDeep(state.groupsWithStocks);
                 let activeGroupUniqueName = _.cloneDeep(updateStockResp.queryString.stockGroupUniqueName);
-                updateStockIteminGroupArray(groupArray,activeGroupUniqueName, updateStockResp);
+                updateStockIteminGroupArray(groupArray, activeGroupUniqueName, updateStockResp);
                 return Object.assign({}, state, {
                     groupsWithStocks: groupArray,
                     activeStock: updateStockResp.body,
@@ -573,7 +573,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT_RESPONSE:
             return Object.assign({}, state, {
                 stockUnits: state.stockUnits.map(unit => {
-                    if(unit.code === action.payload.code ) {
+                    if (unit.code === action.payload.code) {
                         return action.payload
                     }
                     return unit;

@@ -1,9 +1,9 @@
 <div class="clearfix">
     <div class="date-advance-search row">
         <div class="col-sm-12 mr-b15 branch-header d-flex justify-content-between">
-        <form class="form-inline input-group-date-range-picker pr d-flex flex-row mr-0">
-            <div class="mr-1 branch-header-content w-100">
-                <!-- <div class="btn-group advance-icon" dropdown>
+            <form class="form-inline input-group-date-range-picker pr d-flex flex-row mr-0">
+                <div class="mr-1 branch-header-content w-100">
+                    <!-- <div class="btn-group advance-icon" dropdown>
                         <button id="button-basic-icon" dropdownToggle type="button" class="btn dropdown-toggle mr-0 d-flex align-items-center" aria-controls="dropdown-basic-icon">
                                 <span class="icon-advance-search"></span>
                         </button>
@@ -31,16 +31,17 @@
                             </li>
                         </ul>
                     </div> -->
-                <div class="search-field form-top-fields w-100">
-                    <div class="search-branch-box">
-                        <input type="text" name="searchBranch" [(ngModel)]="searchBranchQuery" #branchSearch placeholder="Search branch" class="form-control" />
+                    <div class="search-field form-top-fields w-100">
+                        <div class="search-branch-box">
+                            <input type="text" name="searchBranch" [(ngModel)]="searchBranchQuery" #branchSearch
+                                placeholder="Search branch" class="form-control" />
+                        </div>
+                        <a class="cp mr-l1 clear-filter-btn" *ngIf="searchBranchQuery" href="javascript:;"
+                            (click)="resetFilter()" tooltip="Reset Search">
+                            <i aria-hidden="true" class="icon-refresh"></i> Clear Filter
+                        </a>
                     </div>
-                    <a class="cp mr-l1 clear-filter-btn" *ngIf="searchBranchQuery" href="javascript:;"
-                        (click)="resetFilter()" tooltip="Reset Search">
-                        <i aria-hidden="true" class="icon-refresh"></i> Clear Filter
-                    </a>
-                </div>
-                <!-- <div class="input-group form-top-fields">
+                    <!-- <div class="input-group form-top-fields">
                     <div class="form-group">
                         <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" readonly
                             placeholder="Select Date" class="form-control" #dp="bsDaterangepicker"
@@ -61,10 +62,10 @@
                         </span>
                     </div>
                 </div> -->
-            </div>
-        </form>
-        <button class="btn btn-sky-blue mr-0" (click)="openAddBranchModal()">Create Branch</button>
-    </div>
+                </div>
+            </form>
+            <button class="btn btn-sky-blue mr-0" (click)="openAddBranchModal()">Create Branch</button>
+        </div>
     </div>
     <!-- <div class="row select-branch">
         <div class="col-12 d-flex mr-b15 align-items-center">
@@ -121,20 +122,24 @@
                 <td data-title="Parent">{{branch?.parentBranch?.name || '-'}}</td>
                 <!-- <td data-title="Contact No.">{{branch.contactNo}}</td> -->
                 <td data-title="Total Sales" class="text-right"><span
-                        *ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">{{branch.companyTotals.sales.amount | giddhCurrency}}</span><span
+                        *ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">{{branch.companyTotals.sales.amount
+                        | giddhCurrency}}</span><span
                         *ngIf="!(branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount)">0</span>
                 </td>
                 <td class="text-right" data-title="Total Expenses"><span
-                        *ngIf="branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount">{{branch.companyTotals.expenses.amount | giddhCurrency}}</span><span
+                        *ngIf="branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount">{{branch.companyTotals.expenses.amount
+                        | giddhCurrency}}</span><span
                         *ngIf="!(branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount)">0</span>
                 </td>
                 <td class="text-right" data-title="Total Taxes"><span
-                        *ngIf="branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount">{{branch.companyTotals.taxes.amount | giddhCurrency}}</span><span
+                        *ngIf="branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount">{{branch.companyTotals.taxes.amount
+                        | giddhCurrency}}</span><span
                         *ngIf="!(branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount)">0</span>
                 </td>
                 <td data-title="Action" class="text-right unlink">
                     <!-- <a (click)="removeBranch(branch.uniqueName, branch.name)">Delink</a></td> -->
-                    <a (click)="updateBranch(branch)">Edit</a></td>
+                    <a (click)="updateBranch(branch)">Edit</a>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -148,8 +153,7 @@
                         <div class="clearfix">
                             <div class="pull-left d-flex">
                                 <!-- <input type="checkbox">&nbsp;&nbsp; -->
-                                <i class="cursor-pointer icon-branch-icon"
-                                    tooltip="Branch"></i>
+                                <i class="cursor-pointer icon-branch-icon" tooltip="Branch"></i>
                                 <div>
                                     <h2>{{branch.alias}}</h2>
                                 </div>
@@ -166,7 +170,8 @@
                                         </div> -->
 
                                     <a id="button-basic" dropdownToggle
-                                        class="icon-dots-three-vertical dropdown-toggle cp" aria-controls="dropdown-basic">
+                                        class="icon-dots-three-vertical dropdown-toggle cp"
+                                        aria-controls="dropdown-basic">
                                     </a>
                                     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                         aria-labelledby="button-basic">
@@ -409,13 +414,10 @@
     <!-- Edit branch -->
     <div *ngIf="closeAddressSidePane === 'in'">
         <div class="aside-overlay"></div>
-        <create-address [class]="closeAddressSidePane" [@slideInOut]="closeAddressSidePane"
-            [keyboardShortcut]="'esc'"
-            (onShortcutPress)="toggleAsidePane()"
-            [companyName]="currentBranch"
-            [branchToUpdate]="branchToUpdate" [showLoader]="isBranchChangeInProgress"
-            (updateAddress)="updateBranchInfo($event)" [addressConfiguration]="addressConfiguration"
-            (closeAsideEvent)="toggleAsidePane($event)">
+        <create-address [class]="closeAddressSidePane" [@slideInOut]="closeAddressSidePane" [keyboardShortcut]="'esc'"
+            (onShortcutPress)="toggleAsidePane()" [companyName]="currentBranch" [branchToUpdate]="branchToUpdate"
+            [showLoader]="isBranchChangeInProgress" (updateAddress)="updateBranchInfo($event)"
+            [addressConfiguration]="addressConfiguration" (closeAsideEvent)="toggleAsidePane($event)">
         </create-address>
     </div>
 

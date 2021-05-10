@@ -1,5 +1,5 @@
-import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import {
     AfterViewInit,
     Component,
@@ -12,21 +12,21 @@ import {
     Output,
     ViewChild
 } from '@angular/core';
-import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {digitsOnly} from '../../../helpers';
-import {AppState} from '../../../../store';
-import {select, Store} from '@ngrx/store';
-import {AccountRequestV2, CustomFieldsData} from '../../../../models/api-models/Account';
-import {ToasterService} from '../../../../services/toaster.service';
-import {CompanyResponse, StateList, StatesRequest} from '../../../../models/api-models/Company';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { digitsOnly } from '../../../helpers';
+import { AppState } from '../../../../store';
+import { select, Store } from '@ngrx/store';
+import { AccountRequestV2, CustomFieldsData } from '../../../../models/api-models/Account';
+import { ToasterService } from '../../../../services/toaster.service';
+import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
 import * as _ from '../../../../lodash-optimized';
-import {IOption} from '../../../../theme/ng-virtual-select/sh-options.interface';
-import {ShSelectComponent} from '../../../../theme/ng-virtual-select/sh-select.component';
-import {IForceClear} from "../../../../models/api-models/Sales";
-import {CountryRequest, OnboardingFormRequest} from "../../../../models/api-models/Common";
-import {CommonActions} from '../../../../actions/common.actions';
-import {GeneralActions} from "../../../../actions/general/general.actions";
-import {IFlattenGroupsAccountsDetail} from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
+import { IForceClear } from "../../../../models/api-models/Sales";
+import { CountryRequest, OnboardingFormRequest } from "../../../../models/api-models/Common";
+import { CommonActions } from '../../../../actions/common.actions';
+import { GeneralActions } from "../../../../actions/general/general.actions";
+import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
@@ -70,29 +70,29 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * So if isServiceCreation is true, then directly 'selectedGroupUniqueName' will be
      * used to fetch groups
     */
-   @Input() public isServiceCreation: boolean;
-   /** True, if new customer/vendor account is created through this component.
-    * Used to differentiate between new customer/vendor creation and service creation
-    * as they both need the groups to be shown in a particular category,
-    * for eg. If a new customer/vendor is created in Sales invoice then all the groups shown in the dropdown
-    * should be of category 'sundrydebtors'. Similarly, for PO/PB the group category should be
-    * 'sundrycreditors'.
-    * If a new service is created, then if the service is created in Invoice then it will have
-    * categroy 'revenuefromoperations' and if it is in PO/PB then category will be 'operatingcost'.
-    * So if isCustomerCreation is true, then directly 'selectedGrpUniqueName' will be
-    * used to fetch groups
-   */
-   @Input() public isCustomerCreation: boolean;
+    @Input() public isServiceCreation: boolean;
+    /** True, if new customer/vendor account is created through this component.
+     * Used to differentiate between new customer/vendor creation and service creation
+     * as they both need the groups to be shown in a particular category,
+     * for eg. If a new customer/vendor is created in Sales invoice then all the groups shown in the dropdown
+     * should be of category 'sundrydebtors'. Similarly, for PO/PB the group category should be
+     * 'sundrycreditors'.
+     * If a new service is created, then if the service is created in Invoice then it will have
+     * categroy 'revenuefromoperations' and if it is in PO/PB then category will be 'operatingcost'.
+     * So if isCustomerCreation is true, then directly 'selectedGrpUniqueName' will be
+     * used to fetch groups
+    */
+    @Input() public isCustomerCreation: boolean;
     /** True, if the module doesn't depend on flatten APIs */
     @Input() public isFlattenRemoved: boolean;
     /** True if bank category account is selected */
     @Input() public isBankAccount: boolean = true;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
-    @ViewChild('autoFocus', {static: true}) public autoFocus: ElementRef;
-    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
+    @ViewChild('autoFocus', { static: true }) public autoFocus: ElementRef;
+    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
 
-    public forceClear$: Observable<IForceClear> = observableOf({status: false});
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
@@ -171,7 +171,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private groupWithAccountsAction: GroupWithAccountsAction,
         private invoiceService: InvoiceService) {
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
-        this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup),takeUntil(this.destroyed$));
+        this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.getCountry();
         this.getCallingCodes();
         this.getPartyTypes();
@@ -268,7 +268,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         //     }
         // });
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.activeCompany = activeCompany;
                 if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
                     this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
@@ -338,7 +338,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 if (flattenGroups) {
                     let items: IOption[] = flattenGroups.filter(grps => {
                         return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-                    }).map((m: any) => ({value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups}));
+                    }).map((m: any) => ({ value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups }));
                     this.flatGroupsOptions = items;
                     if (this.flatGroupsOptions.length > 0 && this.activeGroupUniqueName) {
                         let selectedGroupDetails;
@@ -439,7 +439,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 name: [''],
                 stateGstCode: ['']
             }),
-            stateCode: [{value: '', disabled: false}, (this.isStateRequired) ? Validators.required : ""],
+            stateCode: [{ value: '', disabled: false }, (this.isStateRequired) ? Validators.required : ""],
             isDefault: [false],
             isComposite: [false],
             partyType: ['NOT APPLICABLE'],
@@ -449,7 +449,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public resetGstStateForm() {
-        this.forceClear$ = observableOf({status: true});
+        this.forceClear$ = observableOf({ status: true });
 
         let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
@@ -511,7 +511,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent, event: KeyboardEvent) {
-        const keyAvoid = ['Tab', 'ArrowLeft', 'ArrowUp' , 'ArrowRight', 'ArrowDown'];
+        const keyAvoid = ['Tab', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
         if (keyAvoid.findIndex(key => key === event.key) > -1) {
             return;
         }
@@ -522,7 +522,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 gstForm.get('partyType').reset('NOT APPLICABLE');
             }
 
-            if (gstVal.length >=2) {
+            if (gstVal.length >= 2) {
                 this.statesSource$.pipe(take(1)).subscribe(state => {
                     let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
@@ -634,7 +634,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (!accountRequest.mobileNo) {
             accountRequest.mobileCode = '';
         } else {
-            if(!this.isMobileNumberValid) {
+            if (!this.isMobileNumberValid) {
                 this._toaster.errorToast(this.localeData?.invalid_contact_number);
                 return false;
             }
@@ -710,7 +710,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.getOnboardingForm(event.value);
             let phoneCode = event.additional;
             this.addAccountForm.get('mobileCode').setValue(phoneCode);
-            if(!this.disableCurrencyIfSundryCreditor()) {
+            if (!this.disableCurrencyIfSundryCreditor()) {
                 let currencyCode = this.countryCurrency[event.value];
                 this.addAccountForm.get('currency').setValue(currencyCode);
             }
@@ -754,7 +754,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
 
-            if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+            if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
                 this.staticTabs.tabs[0].active = true;
             }
 
@@ -770,7 +770,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.showBankDetail = false;
             this.addAccountForm.get('addresses').reset();
 
-            if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+            if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
                 this.staticTabs.tabs[0].active = false;
             }
         }
@@ -811,7 +811,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
-                    this.currencies.push({label: res[key].code, value: res[key].code});
+                    this.currencies.push({ label: res[key].code, value: res[key].code });
                 });
 
                 this.currencySource$ = observableOf(this.currencies);
@@ -827,7 +827,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.callingCodes).forEach(key => {
-                    this.countryPhoneCode.push({label: res.callingCodes[key], value: res.callingCodes[key]});
+                    this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
                 });
                 this.callingCodesSource$ = observableOf(this.countryPhoneCode);
             } else {
@@ -1141,7 +1141,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public disableCurrencyIfSundryCreditor(): boolean {
         let groupName = (this.addAccountForm && this.addAccountForm.get('activeGroupUniqueName')) ? this.addAccountForm.get('activeGroupUniqueName').value : "";
-        if(groupName === "sundrycreditors" || this.activeParentGroup === "sundrycreditors") {
+        if (groupName === "sundrycreditors" || this.activeParentGroup === "sundrycreditors") {
             this.addAccountForm.get('currency').setValue(this.companyCurrency);
             return true;
         } else {
@@ -1257,7 +1257,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -1292,7 +1292,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 let invoiceSettings = _.cloneDeep(response.body);
                 this.inventorySettings = invoiceSettings.companyInventorySettings;
 
-                if(this.inventorySettings?.manageInventory) {
+                if (this.inventorySettings?.manageInventory) {
                     this.addAccountForm.get("hsnOrSac").patchValue("hsn");
                 } else {
                     this.addAccountForm.get("hsnOrSac").patchValue("sac");
@@ -1308,7 +1308,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public translationComplete(event: boolean): void {
-        if(event) {
+        if (event) {
             this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
                 if (res) {
                     if (res.fields) {

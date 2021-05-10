@@ -14,8 +14,8 @@ class PLAndBSPage {
     //     return  cy.xpath('//span[@class=\'ui-select-highlight\']')
     // }
 
-    searchAccountAmount(elementPath){
-        return cy.get(elementPath, {timeout: 50000}).should('be.visible')
+    searchAccountAmount(elementPath) {
+        return cy.get(elementPath, { timeout: 50000 }).should('be.visible')
     }
 
 }

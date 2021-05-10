@@ -61,6 +61,6 @@
     (noResultClicked)="onNoResultClicked()" (optionClicked)="onDropdownOptionClicked($event)"
     (optionsListClick)="onOptionsListClick()" (singleFilterClick)="onSingleFilterClick()"
     (singleFilterFocus)="onSingleFilterFocus()" (singleFilterInput)="onFilterInput($event)"
-    [isPaginationEnabled]="isPaginationEnabled" (scrollEnd)="reachedEnd()"
-    [enableDynamicSearch]="enableDynamicSearch" (dynamicSearchedQuery)="dynamicSearchedQuery.emit($event)"
-    (singleFilterKeydown)="onSingleFilterKeydown($event)"></select-dropdown>
+    [isPaginationEnabled]="isPaginationEnabled" (scrollEnd)="reachedEnd()" [enableDynamicSearch]="enableDynamicSearch"
+    (dynamicSearchedQuery)="dynamicSearchedQuery.emit($event)" (singleFilterKeydown)="onSingleFilterKeydown($event)">
+</select-dropdown>

@@ -28,7 +28,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
     @Output() public closeModelEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
     @ViewChildren(ShSelectComponent) public allShSelectComponents: QueryList<ShSelectComponent>;
-    @ViewChild('amountField', {static: true}) amountField;
+    @ViewChild('amountField', { static: true }) amountField;
     @Input() public selectedInvoiceForPayment: ReceiptItem;
 
     public paymentActionFormObj: InvoicePaymentRequest;

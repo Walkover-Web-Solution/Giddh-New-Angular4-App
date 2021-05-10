@@ -16,7 +16,7 @@ export class TbGridComponent implements OnInit, OnChanges, OnDestroy {
 
     public noData: boolean;
     public accountSearchControl: FormControl = new FormControl();
-    @ViewChild('searchInputEl', {static: true}) public searchInputEl: ElementRef;
+    @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
     public showClearSearch: boolean = false;
     @Input() public search: string = '';
     @Input() public from: string = '';
@@ -35,7 +35,7 @@ export class TbGridComponent implements OnInit, OnChanges, OnDestroy {
     public commonLocaleData: any = {};
 
     constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
-        
+
     }
 
     public ngOnInit() {
@@ -103,7 +103,7 @@ export class TbGridComponent implements OnInit, OnChanges, OnDestroy {
         this.showClearSearch = true;
 
         setTimeout(() => {
-            if(this.searchInputEl && this.searchInputEl.nativeElement) {
+            if (this.searchInputEl && this.searchInputEl.nativeElement) {
                 this.searchInputEl.nativeElement.focus();
             }
         }, 200);

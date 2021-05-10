@@ -14,7 +14,8 @@
                     <label>Payment Date <sup>*</sup></label>
 
                     <input type="text" name="invoiceDateRange" bsDatepicker class="form-control width-100"
-                        [(ngModel)]="paymentActionFormObj.paymentDate" [bsConfig]="{dateInputFormat: giddhDateFormat}" />
+                        [(ngModel)]="paymentActionFormObj.paymentDate"
+                        [bsConfig]="{dateInputFormat: giddhDateFormat}" />
                 </div>
 
                 <div class="col-6 form-group">
@@ -95,8 +96,8 @@
                         <span class="mr-1 middle">{{companyCurrencyName}}</span>
                     </span>
                     <span class="right-currency middle mt-1">
-                        <span class="currency-digits"
-                            *ngIf="!showCurrencyValue">{{originalExchangeRate | giddhCurrency}}</span>
+                        <span class="currency-digits" *ngIf="!showCurrencyValue">{{originalExchangeRate |
+                            giddhCurrency}}</span>
                         <input type="number" name="exchangeRate" [(ngModel)]="exchangeRate" *ngIf="showCurrencyValue"
                             class="form-control edit-currency">
                     </span>
@@ -118,8 +119,8 @@
                         <span class="mr-1 middle">{{accountCurrency}}</span>
                     </span>
                     <span class="right-currency middle mt-1">
-                        <span class="currency-digits"
-                            *ngIf="!showCurrencyValue">{{originalReverseExchangeRate | giddhCurrency}}</span>
+                        <span class="currency-digits" *ngIf="!showCurrencyValue">{{originalReverseExchangeRate |
+                            giddhCurrency}}</span>
                         <input type="number" name="exchangeRate" [(ngModel)]="reverseExchangeRate"
                             *ngIf="showCurrencyValue" class="form-control edit-currency">
                     </span>
