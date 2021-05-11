@@ -4761,7 +4761,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if ([VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].indexOf(this.invoiceType) > -1) {
             // Credit note and Debit note
             voucherDetails.voucherNumber = result.invoiceNumberAgainstVoucher || '';
-        } else {
+        } else if (!this.copyPurchaseBill) {
             voucherDetails.voucherNumber = result.number;
         }
         voucherDetails.subTotal = result.subTotal.amountForAccount;
