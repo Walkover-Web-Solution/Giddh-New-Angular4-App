@@ -94,9 +94,6 @@
                                 </ng-container>
                             </div>
                         </div>
-                        <div *ngIf="showGstComposition && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="form-group">
-                            <input type="checkbox" name="showQrCodeCheckbox" [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show QR code
-                        </div>
                     </ng-container>
                     <div *ngIf="fieldsAndVisibility.header.dueDate" class="form-group">
                         <input type="checkbox" name="dueDateCheckbox" [(ngModel)]="customTemplate.sections['header'].data['dueDate'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Due Date
@@ -479,10 +476,10 @@
                                     Value</label>
                             </td>
                             <td>
-                                <input type="text" hasFocus #taxableValue="hasFocus" maxlength="12" [class.error-box]="contentForm?.controls['tv1']?.errors?.maxlength" class="form-control" name="tv1" [(ngModel)]="customTemplate.sections['table'].data['taxableValue'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['taxableValue'].display"
+                                <input type="text" hasFocus #taxableValue="hasFocus" maxlength="14" [class.error-box]="contentForm?.controls['tv1']?.errors?.maxlength" class="form-control" name="tv1" [(ngModel)]="customTemplate.sections['table'].data['taxableValue'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['taxableValue'].display"
                                 />
                                 <ng-container *ngIf="taxableValue?.isFocused || contentForm?.controls['tv1']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(12 - customTemplate.sections['table'].data['taxableValue'].label.length)}}</span>
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(14 - customTemplate.sections['table'].data['taxableValue'].label.length)}}</span>
                                 </ng-container>
                             </td>
                         </tr>
