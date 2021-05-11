@@ -29,7 +29,7 @@ import { WarehouseActions } from '../../settings/warehouse/action/warehouse.acti
 })
 
 export class MfEditComponent implements OnInit, OnDestroy {
-    @ViewChild('manufacturingConfirmationModal', {static: true}) public manufacturingConfirmationModal: ModalDirective;
+    @ViewChild('manufacturingConfirmationModal', { static: true }) public manufacturingConfirmationModal: ModalDirective;
 
     public stockListDropDown$: Observable<IOption[]>;
     public allStocksDropDown$: Observable<IOption[]>;
@@ -683,7 +683,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
                         this.defaultExpenseAccountPaginationData.page = this.expenseAccountsSearchResultsPaginationData.page;
                         this.defaultExpenseAccountPaginationData.totalPages = this.expenseAccountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -767,7 +767,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
                         this.defaultLiabilitiesAssetAccountPaginationData.page = this.liabilitiesAssetAccountsSearchResultsPaginationData.page;
                         this.defaultLiabilitiesAssetAccountPaginationData.totalPages = this.liabilitiesAssetAccountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -782,7 +782,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
             this.warehouses = [];
             if (warehouses && warehouses.results) {
                 warehouses.results.forEach(warehouse => {
-                    this.warehouses.push({label: warehouse.name, value: warehouse.uniqueName, additional: warehouse});
+                    this.warehouses.push({ label: warehouse.name, value: warehouse.uniqueName, additional: warehouse });
                 });
             }
         });

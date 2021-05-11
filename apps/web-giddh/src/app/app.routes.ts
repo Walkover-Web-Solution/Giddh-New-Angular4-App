@@ -89,7 +89,7 @@ export const ROUTES: Routes = [
 
             { path: 'about', loadChildren: () => import('./about/about.module').then(module => module.AboutModule) },
             { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(module => module.InventoryModule), canActivate: [NeedsAuthorization] },
-            {path: 'new-inventory', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule),canActivate: [NeedsAuthorization]},
+            { path: 'new-inventory', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule), canActivate: [NeedsAuthorization] },
 
             { path: 'inventory-in-out', loadChildren: () => import('./inventory-in-out/inventory-in-out.module').then(module => module.InventoryInOutModule), canActivate: [NeedsAuthorization] },
             { path: 'search', loadChildren: () => import('./search/search.module').then(module => module.SearchModule) },

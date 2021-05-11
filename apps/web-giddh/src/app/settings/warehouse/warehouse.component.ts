@@ -92,20 +92,26 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public imgPath2: string = '';
 
     /** View container to carry out on boarding */
-    @ViewChild('onBoardingContainer', {static: true}) public onBoardingContainer: ElementViewContainerRef;
+    @ViewChild('onBoardingContainer', { static: true }) public onBoardingContainer: ElementViewContainerRef;
     /** Warehouse on boarding modal viewchild */
-    @ViewChild('warehouseOnBoardingModal', {static: true}) public warehouseOnBoardingModal: ModalDirective;
+    @ViewChild('warehouseOnBoardingModal', { static: true }) public warehouseOnBoardingModal: ModalDirective;
     /** Welcome component template ref for second step of warehouse on boarding */
-    @ViewChild('welcomeComponent', {static: true}) public welcomeComponentTemplate: TemplateRef<any>;
+    @ViewChild('welcomeComponent', { static: true }) public welcomeComponentTemplate: TemplateRef<any>;
     /** Warehouse pagination instance */
-    @ViewChild('warehousePagination', {static: true}) warehousePagination: PaginationComponent;
+    @ViewChild('warehousePagination', { static: true }) warehousePagination: PaginationComponent;
     /** Branch search field instance */
-    @ViewChild('searchWarehouse', {static: false}) public searchWarehouse: ElementRef;
+    @ViewChild('searchWarehouse', { static: false }) public searchWarehouse: ElementRef;
 
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: Subject<boolean> = new Subject();
     /** Stores the current visible on boarding modal instance */
     private welcomePageModalInstance: BsModalRef;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold profile JSON data */
+    public profileLocaleData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     /** Stores the address configuration */
     public addressConfiguration: SettingsAsideConfiguration = {
@@ -135,11 +141,11 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     public ngOnInit(): void {
-        this.imgPath = (isElectron ||isCordova)  ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();
 
-        this.imgPath2 =  (isElectron|| isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath2 = (isElectron || isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
     /**
@@ -373,7 +379,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             if (response.status === 'success') {
                 this.asideEditWarehousePane = 'out';
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
-                this.toasterService.successToast('Warehouse updated successfully');
+                this.toasterService.successToast(this.localeData?.warehouse_updated);
             } else {
                 this.toasterService.errorToast(response.message);
             }

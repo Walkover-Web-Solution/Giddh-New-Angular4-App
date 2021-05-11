@@ -30,7 +30,7 @@ import { TlPlService } from '../../../services/tl-pl.service';
 export class ProfitLossComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store modal reference */
@@ -78,7 +78,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
             }
         });
@@ -234,7 +234,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     * @memberof ProfitLossComponent
     */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -264,7 +264,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
      */
     public getProfitLossData(): void {
         this.tlPlService.GetProfitLoss(_.cloneDeep(this.plRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response?.status === "success" && response?.body) {
+            if (response?.status === "success" && response?.body) {
                 this.dataFound = true;
                 let data = _.cloneDeep(response.body) as ProfitLossData;
                 let revenue;

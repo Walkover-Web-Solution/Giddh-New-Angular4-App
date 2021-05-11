@@ -5,4 +5,4 @@ import { TranslateDirective } from "./translate.directive";
     declarations: [TranslateDirective],
     exports: [TranslateDirective]
 })
-export class TranslateDirectiveModule {}
+export class TranslateDirectiveModule { }

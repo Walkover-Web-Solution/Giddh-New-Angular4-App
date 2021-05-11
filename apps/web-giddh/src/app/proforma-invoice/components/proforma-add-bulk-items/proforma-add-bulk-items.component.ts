@@ -16,7 +16,7 @@ import { SearchService } from '../../../services/search.service';
 export class ProformaAddBulkItemsComponent implements OnInit, OnDestroy {
     @Input() public invoiceType: string;
 
-    @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
+    @ViewChild('searchElement', { static: true }) public searchElement: ElementRef;
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
     @Output() public saveItemsEvent: EventEmitter<SalesAddBulkStockItems[]> = new EventEmitter();
 
@@ -200,7 +200,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnDestroy {
                 this.selectedItems.push({ ...item });
                 this.changeDetectorRef.detectChanges();
             }
-        }, () => {});
+        }, () => { });
     }
 
     removeSelectedItem(uniqueName: string) {

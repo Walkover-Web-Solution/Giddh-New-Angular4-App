@@ -9,23 +9,23 @@
                 <div class="radio-btn-wrapper mr-t15">
                     <form [formGroup]="formGroupRadio" class="form-body">
                         <span class="p-0 mr-3">
-                            <input id="product-option" formControlName="radioType" class="radio-custom cp ml-0" type="radio" name="selectCreateOption"
-                                value="product">
+                            <input id="product-option" formControlName="radioType" class="radio-custom cp ml-0"
+                                type="radio" name="selectCreateOption" value="product">
                             <label for="product-option" class="radio-custom-label">Product</label>
                         </span>
                         <span class="p-0 mr-3">
-                            <input id="service-option" formControlName="radioType" class="radio-custom cp ml-0" type="radio" name="selectCreateOption"
-                                value="service">
+                            <input id="service-option" formControlName="radioType" class="radio-custom cp ml-0"
+                                type="radio" name="selectCreateOption" value="service">
                             <label for="service-option" class="radio-custom-label">Service</label>
                         </span>
                         <span class="p-0 mr-3">
-                            <input id="combo-option" formControlName="radioType"  class="radio-custom cp ml-0" type="radio" name="selectCreateOption"
-                                value="combo">
+                            <input id="combo-option" formControlName="radioType" class="radio-custom cp ml-0"
+                                type="radio" name="selectCreateOption" value="combo">
                             <label for="combo-option" class="radio-custom-label">Combo</label>
                         </span>
                         <span class="p-0 mr-3">
-                            <input id="bulk-creation-option" formControlName="radioType" class="radio-custom cp ml-0" type="radio"
-                                name="selectCreateOption" value="bulkCreation">
+                            <input id="bulk-creation-option" formControlName="radioType" class="radio-custom cp ml-0"
+                                type="radio" name="selectCreateOption" value="bulkCreation">
                             <label for="bulk-creation-option" class="radio-custom-label">Bulk Creation</label>
                         </span>
                     </form>
@@ -477,20 +477,23 @@
                                     <div class="row">
                                         <div class="col-sm-6 col-lg-6">
                                             <span class="p-0 mr-3" (click)="selectCode(true)">
-                                                <input id="hsn-code-option" class="radio-custom cp ml-0" type="radio" name="selectHsnCode"
-                                                    [value]="">
+                                                <input id="hsn-code-option" class="radio-custom cp ml-0" type="radio"
+                                                    name="selectHsnCode" [value]="">
                                                 <label for="hsn-code-option" class="radio-custom-label">HSN Code</label>
                                             </span>
                                             <span class="p-0" (click)="selectCode(false)">
-                                                <input id="sac-code-option" class="radio-custom cp ml-0" type="radio" name="selectHsnCode" [value]="">
+                                                <input id="sac-code-option" class="radio-custom cp ml-0" type="radio"
+                                                    name="selectHsnCode" [value]="">
                                                 <label for="sac-code-option" class="radio-custom-label">SAC Code</label>
                                             </span>
                                         </div>
                                         <div class="col-sm-6 col-lg-6" *ngIf="isHSN">
-                                            <input id="product-name" class="form-control" type="text" placeholder="Enter HSN Code">
+                                            <input id="product-name" class="form-control" type="text"
+                                                placeholder="Enter HSN Code">
                                         </div>
                                         <div class="col-sm-6 col-lg-6" *ngIf="!isHSN">
-                                            <input id="product-name" class="form-control" type="text" placeholder="Enter SAC Code">
+                                            <input id="product-name" class="form-control" type="text"
+                                                placeholder="Enter SAC Code">
                                         </div>
                                     </div>
                                 </div>
@@ -527,7 +530,8 @@
                                                 variant 1
                                             </label>
                                             <!-- vaiant will be auto fill and readonly view -->
-                                            <input type="text" id="variant-name" class="form-control" placeholder="Variant Name" readonly>
+                                            <input type="text" id="variant-name" class="form-control"
+                                                placeholder="Variant Name" readonly>
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
@@ -537,24 +541,28 @@
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
-                                               Opening Balance
+                                                Opening Balance
                                             </label>
-                                            <input type="text" id="variant-opening-balance" class="form-control" placeholder="Enter amount">
+                                            <input type="text" id="variant-opening-balance" class="form-control"
+                                                placeholder="Enter amount">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 Opening Qty
                                             </label>
-                                            <input type="text" id="variant-qty" class="form-control" placeholder="Enter Qty">
+                                            <input type="text" id="variant-qty" class="form-control"
+                                                placeholder="Enter Qty">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 Rate
                                             </label>
-                                            <input type="text" id="variant-rate" class="form-control" placeholder="Enter Rate">
+                                            <input type="text" id="variant-rate" class="form-control"
+                                                placeholder="Enter Rate">
                                         </div>
                                     </div>
-                                    <div><a href="javascript:void(0);" class="font-14 mr-t1 d-flex" id="add-more-variant"> + Add More</a></div>
+                                    <div><a href="javascript:void(0);" class="font-14 mr-t1 d-flex"
+                                            id="add-more-variant"> + Add More</a></div>
                                 </div>
                             </div>
                         </form>
@@ -568,41 +576,47 @@
                                             <label>
                                                 Item
                                             </label>
-                                            <input type="text" id="addon-item" class="form-control" placeholder="Add item">
+                                            <input type="text" id="addon-item" class="form-control"
+                                                placeholder="Add item">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 Quantity
                                             </label>
-                                            <input type="text" id="addon-qty" class="form-control" placeholder="Enter Quantity">
+                                            <input type="text" id="addon-qty" class="form-control"
+                                                placeholder="Enter Quantity">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 SKU
                                             </label>
-                                            <input type="text" id="addon-sku" class="form-control" placeholder="Enter SKU Number">
+                                            <input type="text" id="addon-sku" class="form-control"
+                                                placeholder="Enter SKU Number">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 Unit
                                             </label>
-                                            <input type="text" id="addon-unit" class="form-control" placeholder="eg. cm, kg, m, box">
+                                            <input type="text" id="addon-unit" class="form-control"
+                                                placeholder="eg. cm, kg, m, box">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 Rate
                                             </label>
-                                            <input type="text" id="addon-rate" class="form-control" placeholder="Enter Rate">
+                                            <input type="text" id="addon-rate" class="form-control"
+                                                placeholder="Enter Rate">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 Available on variant
                                             </label>
                                             <!-- All available variant list show with checkbox -->
-                                           <sh-select placeholder="" id="addon-available"></sh-select>
+                                            <sh-select placeholder="" id="addon-available"></sh-select>
                                         </div>
                                     </div>
-                                    <div><a href="javascript:void(0);" class="font-14 mr-t1 d-flex" id="add-more-addon"> + Add More</a></div>
+                                    <div><a href="javascript:void(0);" class="font-14 mr-t1 d-flex" id="add-more-addon">
+                                            + Add More</a></div>
                                 </div>
                             </div>
                         </form>
@@ -619,7 +633,8 @@
                                                         SKU
                                                     </label>
                                                     <!-- All variant list will show in dropdown -->
-                                                    <input type="text" id="variant-sku-number" class="form-control" placeholder="Enter SKU Number">
+                                                    <input type="text" id="variant-sku-number" class="form-control"
+                                                        placeholder="Enter SKU Number">
                                                 </div>
                                                 <!-- If we feel sku number variant name will auto fill if availble on list -->
                                                 <div class="variant-name-field mr-b15">
@@ -643,32 +658,37 @@
                                                     <label>
                                                         Final Product 1
                                                     </label>
-                                                    <input type="text" id="final-product-1" class="form-control" placeholder="Product 1">
+                                                    <input type="text" id="final-product-1" class="form-control"
+                                                        placeholder="Product 1">
                                                 </div>
                                                 <!-- final product 2 will be show if multiple product will generated by single recipe -->
                                                 <div class="width-30-percent" hidden>
                                                     <label>
                                                         Final Product 2
                                                     </label>
-                                                    <input type="text" id="final-product-2" class="form-control" placeholder="Product 2">
+                                                    <input type="text" id="final-product-2" class="form-control"
+                                                        placeholder="Product 2">
                                                 </div>
                                                 <div class="width-30-percent">
                                                     <label>
                                                         Output Qty
                                                     </label>
-                                                    <input type="text" id="recipe-output-qty" class="form-control" placeholder="Enter Qty">
+                                                    <input type="text" id="recipe-output-qty" class="form-control"
+                                                        placeholder="Enter Qty">
                                                 </div>
                                                 <div class="width-30-percent">
                                                     <label>
                                                         Output Unit
                                                     </label>
-                                                    <input type="text" id="recipe-output-unit" class="form-control" placeholder="eg. cm, kg, m, box">
+                                                    <input type="text" id="recipe-output-unit" class="form-control"
+                                                        placeholder="eg. cm, kg, m, box">
                                                 </div>
                                                 <div class="d-none-mobile pl-0 pr-0">
                                                     <label class="d-block">
                                                         &nbsp;
                                                     </label>
-                                                    <span><a href="javascript:void(0);" class="font-22 d-flex pd-l05 pd-r05">+</a></span>
+                                                    <span><a href="javascript:void(0);"
+                                                            class="font-22 d-flex pd-l05 pd-r05">+</a></span>
                                                 </div>
                                                 <div class="d-none-mobile px-3">
                                                     <label class="d-block">
@@ -677,24 +697,28 @@
                                                     <span class="font-22 d-flex"> = </span>
                                                 </div>
                                             </div>
-                                            <div class="col-xl-6 col-lg-12 d-flex recipe-input-tab mr-b1 flex-column flex-sm-row pr-0">
+                                            <div
+                                                class="col-xl-6 col-lg-12 d-flex recipe-input-tab mr-b1 flex-column flex-sm-row pr-0">
                                                 <div class="width-30-percent">
                                                     <label>
                                                         Attribute
                                                     </label>
-                                                    <input type="text" id="recipe-input-attribute" class="form-control" placeholder="Add item">
+                                                    <input type="text" id="recipe-input-attribute" class="form-control"
+                                                        placeholder="Add item">
                                                 </div>
                                                 <div class="width-30-percent">
                                                     <label>
                                                         Input Qty
                                                     </label>
-                                                    <input type="text" id="recipe-input-qty" class="form-control" placeholder="Enter Qty">
+                                                    <input type="text" id="recipe-input-qty" class="form-control"
+                                                        placeholder="Enter Qty">
                                                 </div>
                                                 <div class="width-30-percent">
                                                     <label>
                                                         Input Unit
                                                     </label>
-                                                    <input type="text" id="recipe-input-unit" class="form-control" placeholder="eg. cm, kg, m, box">
+                                                    <input type="text" id="recipe-input-unit" class="form-control"
+                                                        placeholder="eg. cm, kg, m, box">
                                                 </div>
                                                 <div class="d-none-mobile">
                                                     <label class="d-block">
@@ -707,30 +731,40 @@
                                     </div>
                                 </div>
                                 <div class="row flex-column mr-t15">
-                                    <div class="text-primary cursor-pointer px-3 d-flex justify-content-between mr-b1 font-14" (click)="toggleExpense()">
-                                        <a href="javascript:void(0);" class="text-primary font-14" id="add-expense-btn"> + Add Expense </a>
-                                        <a href="javascript:void(0);" class="text-primary font-14 text-right add-new-final-product" id="add-new-product-btn">+ Add New Row</a>
+                                    <div class="text-primary cursor-pointer px-3 d-flex justify-content-between mr-b1 font-14"
+                                        (click)="toggleExpense()">
+                                        <a href="javascript:void(0);" class="text-primary font-14" id="add-expense-btn">
+                                            + Add Expense </a>
+                                        <a href="javascript:void(0);"
+                                            class="text-primary font-14 text-right add-new-final-product"
+                                            id="add-new-product-btn">+ Add New Row</a>
                                     </div>
-                                    <div class="col-xl-6 d-flex flex-column flex-lg-row  align-items-center expense-form" *ngIf="!isExpense">
+                                    <div class="col-xl-6 d-flex flex-column flex-lg-row  align-items-center expense-form"
+                                        *ngIf="!isExpense">
 
-                                            <div class="width-30-percent">
-                                                <input type="text" id="expense-assets" class="form-control" placeholder="Liability/Asset A/c">
-                                            </div>
-                                            <span class="to-span"> to </span>
-                                            <div class="width-30-percent">
-                                                <input type="text" id="expense-account" class="form-control" placeholder="Expense A/c">
-                                            </div>
-                                            <div class="width-30-percent">
-                                                <input id="expense-amount" type="text" class="form-control" placeholder="Amount">
-                                            </div>
-                                            <div class="cursor-pointer add-expense d-flex justify-content-center align-items-center">
-                                                <span class="font-22 text-primary pd-l05 pd-r05">+</span>
-                                            </div>
+                                        <div class="width-30-percent">
+                                            <input type="text" id="expense-assets" class="form-control"
+                                                placeholder="Liability/Asset A/c">
+                                        </div>
+                                        <span class="to-span"> to </span>
+                                        <div class="width-30-percent">
+                                            <input type="text" id="expense-account" class="form-control"
+                                                placeholder="Expense A/c">
+                                        </div>
+                                        <div class="width-30-percent">
+                                            <input id="expense-amount" type="text" class="form-control"
+                                                placeholder="Amount">
+                                        </div>
+                                        <div
+                                            class="cursor-pointer add-expense d-flex justify-content-center align-items-center">
+                                            <span class="font-22 text-primary pd-l05 pd-r05">+</span>
+                                        </div>
 
                                     </div>
                                 </div>
                             </div>
-                            <a class="text-primary font-14" id="add-more-recipe-btn" href="javascript:void(0);">+ Add more recipe</a>
+                            <a class="text-primary font-14" id="add-more-recipe-btn" href="javascript:void(0);">+ Add
+                                more recipe</a>
                         </form>
                     </tab>
                 </tabset>
@@ -1191,34 +1225,40 @@
                                                 variant 1
                                             </label>
                                             <!-- vaiant will be auto fill and readonly view -->
-                                            <input type="text" id="service-variant-name" class="form-control" placeholder="Variant Name" readonly>
+                                            <input type="text" id="service-variant-name" class="form-control"
+                                                placeholder="Variant Name" readonly>
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 SKU
                                             </label>
-                                            <input type="text" id="service-variant-sku" class="form-control" placeholder="SKU">
+                                            <input type="text" id="service-variant-sku" class="form-control"
+                                                placeholder="SKU">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 Opening Balance
                                             </label>
-                                            <input type="text" id="service-variant-opening-balance" class="form-control" placeholder="Enter amount">
+                                            <input type="text" id="service-variant-opening-balance" class="form-control"
+                                                placeholder="Enter amount">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 Opening Qty
                                             </label>
-                                            <input type="text" id="service-variant-qty" class="form-control" placeholder="Enter Qty">
+                                            <input type="text" id="service-variant-qty" class="form-control"
+                                                placeholder="Enter Qty">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 Rate
                                             </label>
-                                            <input type="text" id="service-variant-rate" class="form-control" placeholder="Enter Rate">
+                                            <input type="text" id="service-variant-rate" class="form-control"
+                                                placeholder="Enter Rate">
                                         </div>
                                     </div>
-                                    <div><a href="javascript:void(0);" class="font-14 mr-t1 d-flex" id="service-add-more-variant"> + Add More</a>
+                                    <div><a href="javascript:void(0);" class="font-14 mr-t1 d-flex"
+                                            id="service-add-more-variant"> + Add More</a>
                                     </div>
                                 </div>
                             </div>
@@ -1233,31 +1273,36 @@
                                             <label>
                                                 Item
                                             </label>
-                                            <input type="text" id="service-addon-item" class="form-control" placeholder="Add item">
+                                            <input type="text" id="service-addon-item" class="form-control"
+                                                placeholder="Add item">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 Quantity
                                             </label>
-                                            <input type="text" id="service-addon-qty" class="form-control" placeholder="Enter Quantity">
+                                            <input type="text" id="service-addon-qty" class="form-control"
+                                                placeholder="Enter Quantity">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 SKU
                                             </label>
-                                            <input type="text" id="service-sku" class="form-control" placeholder="Enter SKU Number">
+                                            <input type="text" id="service-sku" class="form-control"
+                                                placeholder="Enter SKU Number">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 Unit
                                             </label>
-                                            <input type="text" id="addon-unit" class="form-control" placeholder="eg. cm, kg, m, box">
+                                            <input type="text" id="addon-unit" class="form-control"
+                                                placeholder="eg. cm, kg, m, box">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 Rate
                                             </label>
-                                            <input type="text" id="service-addon-rate" class="form-control" placeholder="Enter Rate">
+                                            <input type="text" id="service-addon-rate" class="form-control"
+                                                placeholder="Enter Rate">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
@@ -1267,7 +1312,8 @@
                                             <sh-select placeholder="" id="service-addon-available"></sh-select>
                                         </div>
                                     </div>
-                                    <div><a href="javascript:void(0);" class="font-14 mr-t1 d-flex" id="add-more-addon"> + Add More</a>
+                                    <div><a href="javascript:void(0);" class="font-14 mr-t1 d-flex" id="add-more-addon">
+                                            + Add More</a>
                                     </div>
                                 </div>
                             </div>
@@ -1285,7 +1331,8 @@
                                                         SKU
                                                     </label>
                                                     <!-- All variant list will show in dropdown -->
-                                                    <input type="text" id="variant-service-sku-number" class="form-control" placeholder="Enter SKU Number">
+                                                    <input type="text" id="variant-service-sku-number"
+                                                        class="form-control" placeholder="Enter SKU Number">
                                                 </div>
                                                 <!-- If we feel sku number variant name will auto fill if availble on list -->
                                                 <div class="variant-name-field mr-b15">
@@ -1309,33 +1356,37 @@
                                                     <label>
                                                         Final Product 1
                                                     </label>
-                                                    <input type="text" id="service-final-product-1" class="form-control" placeholder="Product 1">
+                                                    <input type="text" id="service-final-product-1" class="form-control"
+                                                        placeholder="Product 1">
                                                 </div>
                                                 <!-- final product 2 will be show if multiple product will generated by single recipe -->
                                                 <div class="width-30-percent" hidden>
                                                     <label>
                                                         Final Product 2
                                                     </label>
-                                                    <input type="text" id="service-final-product-2" class="form-control" placeholder="Product 2">
+                                                    <input type="text" id="service-final-product-2" class="form-control"
+                                                        placeholder="Product 2">
                                                 </div>
                                                 <div class="width-30-percent">
                                                     <label>
                                                         Output Qty
                                                     </label>
-                                                    <input type="text" id="service-recipe-output-qty" class="form-control" placeholder="Enter Qty">
+                                                    <input type="text" id="service-recipe-output-qty"
+                                                        class="form-control" placeholder="Enter Qty">
                                                 </div>
                                                 <div class="width-30-percent">
                                                     <label>
                                                         Output Unit
                                                     </label>
-                                                    <input type="text" id="service-recipe-output-unit" class="form-control"
-                                                        placeholder="eg. cm, kg, m, box">
+                                                    <input type="text" id="service-recipe-output-unit"
+                                                        class="form-control" placeholder="eg. cm, kg, m, box">
                                                 </div>
                                                 <div class="d-none-mobile pl-0 pr-0">
                                                     <label class="d-block">
                                                         &nbsp;
                                                     </label>
-                                                    <span><a href="javascript:void(0);" class="font-22 d-flex pd-l05 pd-r05">+</a></span>
+                                                    <span><a href="javascript:void(0);"
+                                                            class="font-22 d-flex pd-l05 pd-r05">+</a></span>
                                                 </div>
                                                 <div class="d-none-mobile px-3">
                                                     <label class="d-block">
@@ -1344,26 +1395,28 @@
                                                     <span class="font-22 d-flex"> = </span>
                                                 </div>
                                             </div>
-                                            <div class="col-xl-6 col-lg-12 d-flex recipe-input-tab mr-b1 flex-column flex-sm-row pr-0">
+                                            <div
+                                                class="col-xl-6 col-lg-12 d-flex recipe-input-tab mr-b1 flex-column flex-sm-row pr-0">
                                                 <div class="width-30-percent">
                                                     <label>
                                                         Attribute
                                                     </label>
-                                                    <input type="text" id="service-recipe-input-attribute" class="form-control"
-                                                        placeholder="Add item">
+                                                    <input type="text" id="service-recipe-input-attribute"
+                                                        class="form-control" placeholder="Add item">
                                                 </div>
                                                 <div class="width-30-percent">
                                                     <label>
                                                         Input Qty
                                                     </label>
-                                                    <input type="text" id="service-recipe-input-qty" class="form-control" placeholder="Enter Qty">
+                                                    <input type="text" id="service-recipe-input-qty"
+                                                        class="form-control" placeholder="Enter Qty">
                                                 </div>
                                                 <div class="width-30-percent">
                                                     <label>
                                                         Input Unit
                                                     </label>
-                                                    <input type="text" id="service-recipe-input-unit" class="form-control"
-                                                        placeholder="eg. cm, kg, m, box">
+                                                    <input type="text" id="service-recipe-input-unit"
+                                                        class="form-control" placeholder="eg. cm, kg, m, box">
                                                 </div>
                                                 <div class="d-none-mobile">
                                                     <label class="d-block">
@@ -1378,31 +1431,38 @@
                                 <div class="row flex-column mr-t15">
                                     <div class="text-primary cursor-pointer px-3 d-flex justify-content-between mr-b1 font-14"
                                         (click)="toggleExpense()">
-                                        <a href="javascript:void(0);" class="text-primary font-14" id="service-add-expense-btn"> + Add Expense </a>
-                                        <a href="javascript:void(0);" class="text-primary font-14 text-right add-new-final-product"
+                                        <a href="javascript:void(0);" class="text-primary font-14"
+                                            id="service-add-expense-btn"> + Add Expense </a>
+                                        <a href="javascript:void(0);"
+                                            class="text-primary font-14 text-right add-new-final-product"
                                             id="service-add-new-product-btn">+ Add New Row</a>
                                     </div>
                                     <div class="col-xl-6 d-flex flex-column flex-lg-row  align-items-center expense-form"
                                         *ngIf="!isExpense">
 
                                         <div class="width-30-percent">
-                                            <input type="text" id="service-expense-assets" class="form-control" placeholder="Liability/Asset A/c">
+                                            <input type="text" id="service-expense-assets" class="form-control"
+                                                placeholder="Liability/Asset A/c">
                                         </div>
                                         <span class="to-span"> to </span>
                                         <div class="width-30-percent">
-                                            <input type="text" id="service-expense-account" class="form-control" placeholder="Expense A/c">
+                                            <input type="text" id="service-expense-account" class="form-control"
+                                                placeholder="Expense A/c">
                                         </div>
                                         <div class="width-30-percent">
-                                            <input id="service-expense-amount" type="text" class="form-control" placeholder="Amount">
+                                            <input id="service-expense-amount" type="text" class="form-control"
+                                                placeholder="Amount">
                                         </div>
-                                        <div class="cursor-pointer add-expense d-flex justify-content-center align-items-center">
+                                        <div
+                                            class="cursor-pointer add-expense d-flex justify-content-center align-items-center">
                                             <span class="font-22 text-primary pd-l05 pd-r05">+</span>
                                         </div>
 
                                     </div>
                                 </div>
                             </div>
-                            <a class="text-primary font-14" id="service-add-more-recipe-btn" href="javascript:void(0);">+ Add more recipe</a>
+                            <a class="text-primary font-14" id="service-add-more-recipe-btn"
+                                href="javascript:void(0);">+ Add more recipe</a>
                         </form>
                     </tab>
                 </tabset>
@@ -1445,7 +1505,8 @@
                                         <label>Unique Name<span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-12 col-md-6 col-lg-6">
-                                    <input id="combo-unique-name" class="form-control" type="text" placeholder="EmtUniqueer Name">
+                                        <input id="combo-unique-name" class="form-control" type="text"
+                                            placeholder="EmtUniqueer Name">
                                     </div>
                                 </div>
                             </form>
@@ -1524,7 +1585,8 @@
                                                                     class="icon-info text-gray"></i></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <input id="inventory-account" class="form-control" type="text" value="">
+                                                            <input id="inventory-account" class="form-control"
+                                                                type="text" value="">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1534,7 +1596,8 @@
                                                             <label>Opening Qty <span class="red-text"></span></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <input id="opening-quantity" class="form-control" type="text" value="">
+                                                            <input id="opening-quantity" class="form-control"
+                                                                type="text" value="">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1560,7 +1623,8 @@
                                                                     class="icon-info text-gray"></i></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <input id="low-stock-report" class="form-control" type="text" value="">
+                                                            <input id="low-stock-report" class="form-control"
+                                                                type="text" value="">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1571,7 +1635,8 @@
                                                             <label>Amount <span class="red-text"></span></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <input id="amount" class="form-control" type="text" value="200">
+                                                            <input id="amount" class="form-control" type="text"
+                                                                value="200">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1597,8 +1662,8 @@
                                                             <label>Output Qty<span class="red-text">*</span> </label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <input id="stock-output-qty" class="form-control" type="text"
-                                                                placeholder="Enter Qty">
+                                                            <input id="stock-output-qty" class="form-control"
+                                                                type="text" placeholder="Enter Qty">
                                                         </div>
                                                     </div>
                                                     <div class="row mr-b15">
@@ -1626,7 +1691,8 @@
                                                     <label>&nbsp;</label>
                                                 </div>
                                                 <div class="qty-unit col-sm-6 col-lg-6 col-xl-4">
-                                                    <input type="text" id="enter-qty" class="form-control" placeholder="Enter Qty">
+                                                    <input type="text" id="enter-qty" class="form-control"
+                                                        placeholder="Enter Qty">
                                                     <sh-select id="select-stock-unit" placeholder="Select Unit">
                                                     </sh-select>
                                                     <i class="icon-plus pd cp"></i>
@@ -1654,7 +1720,8 @@
                                                             <label>Linked Account/s </label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
-                                                            <textarea type="text" id="linked-account" class="form-control"
+                                                            <textarea type="text" id="linked-account"
+                                                                class="form-control"
                                                                 placeholder="All Accounts Selected"></textarea>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
@@ -1671,17 +1738,21 @@
                                                         </div>
                                                         <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
                                                             <div class="row add-new-field mr-b15">
-                                                                <div class="col-sm-6 col-6"><input type="text" class="form-control"
-                                                                        id="select-unit" placeholder="Select Unit"></div>
-                                                                <div class="col-sm-6 col-6"><input type="text" class="form-control"
-                                                                        id="rate" placeholder="Rate"></div>
+                                                                <div class="col-sm-6 col-6"><input type="text"
+                                                                        class="form-control" id="select-unit"
+                                                                        placeholder="Select Unit"></div>
+                                                                <div class="col-sm-6 col-6"><input type="text"
+                                                                        class="form-control" id="rate"
+                                                                        placeholder="Rate"></div>
                                                                 <i class="icon-plus pd cursor-pointer"></i>
                                                             </div>
                                                             <div class="row add-new-field">
-                                                                <div class="col-sm-6 col-6"><input type="text" class="form-control"
-                                                                        id="select-unit" placeholder="Select Unit"></div>
-                                                                <div class="col-sm-6 col-6"><input type="text" class="form-control"
-                                                                        id="rate" placeholder="Rate"></div>
+                                                                <div class="col-sm-6 col-6"><input type="text"
+                                                                        class="form-control" id="select-unit"
+                                                                        placeholder="Select Unit"></div>
+                                                                <div class="col-sm-6 col-6"><input type="text"
+                                                                        class="form-control" id="rate"
+                                                                        placeholder="Rate"></div>
                                                                 <i class="icon-cross pd cursor-pointer"></i>
                                                             </div>
 
@@ -1703,14 +1774,16 @@
                                                             <label>Linked Account/s </label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
-                                                            <textarea type="text" id="sales-linked-account" class="form-control"
-                                                                placeholder="All Accounts Selected" disabled></textarea>
+                                                            <textarea type="text" id="sales-linked-account"
+                                                                class="form-control" placeholder="All Accounts Selected"
+                                                                disabled></textarea>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Applicable Tax </label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
-                                                            <sh-select id="sales-applicable-tax" placeholder="Select Tax" disabled>
+                                                            <sh-select id="sales-applicable-tax"
+                                                                placeholder="Select Tax" disabled>
                                                             </sh-select>
                                                             <p class="mt-1 font-14"><input id="sales-price-tax"
                                                                     type="checkbox">Price Inclusive of Tax ?</p>
@@ -1720,19 +1793,23 @@
                                                         </div>
                                                         <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
                                                             <div class="row add-new-field mr-b15">
-                                                                <div class="col-sm-6 col-6"><input type="text" class="form-control"
-                                                                        id="sales-select-unit" placeholder="Select Unit" disabled>
+                                                                <div class="col-sm-6 col-6"><input type="text"
+                                                                        class="form-control" id="sales-select-unit"
+                                                                        placeholder="Select Unit" disabled>
                                                                 </div>
-                                                                <div class="col-sm-6 col-6"><input type="text" class="form-control"
-                                                                        id="sales-rate" placeholder="Rate" disabled></div>
+                                                                <div class="col-sm-6 col-6"><input type="text"
+                                                                        class="form-control" id="sales-rate"
+                                                                        placeholder="Rate" disabled></div>
 
                                                             </div>
                                                             <div class="row add-new-field">
-                                                                <div class="col-sm-6 col-6"><input type="text" class="form-control"
-                                                                        id="sales-select-unit" placeholder="Select Unit" disabled>
+                                                                <div class="col-sm-6 col-6"><input type="text"
+                                                                        class="form-control" id="sales-select-unit"
+                                                                        placeholder="Select Unit" disabled>
                                                                 </div>
-                                                                <div class="col-sm-6 col-6"><input type="text" class="form-control"
-                                                                        id="sales-rate" placeholder="Rate" disabled></div>
+                                                                <div class="col-sm-6 col-6"><input type="text"
+                                                                        class="form-control" id="sales-rate"
+                                                                        placeholder="Rate" disabled></div>
 
                                                             </div>
 
@@ -1750,7 +1827,8 @@
                         <p class="mr-b15 font-14" hidden>
                             <span>
                                 <input type="checkbox" checked class="checkbox-custom" name="product-service"
-                                    id="product-service" /> <label for="product-service" class="checkbox-custom-label">Is the
+                                    id="product-service" /> <label for="product-service"
+                                    class="checkbox-custom-label">Is the
                                     Product/Service a manufactured entity?</label>
                             </span>
                         </p>
@@ -1770,7 +1848,8 @@
                                             <label>Combo Unit<span class="red-text">*</span></label>
                                         </div>
                                         <div class="col-sm-6 col-lg-6 mr-b15">
-                                            <input type="text" id="stock-unit" class="form-control" placeholder="Amount">
+                                            <input type="text" id="stock-unit" class="form-control"
+                                                placeholder="Amount">
                                         </div>
                                     </div>
 
@@ -1791,7 +1870,8 @@
                                             <label>Combo Qty.<span class="red-text">*</span></label>
                                         </div>
                                         <div class="col-sm-6 col-lg-6 mr-b15">
-                                            <input type="text" id="select-stock-qty" class="form-control" placeholder="Qty.">
+                                            <input type="text" id="select-stock-qty" class="form-control"
+                                                placeholder="Qty.">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -1809,15 +1889,15 @@
                         </form>
                         <p class="mr-b15 font-14">
                             <span>
-                                <input type="checkbox" class="checkbox-custom" name="stock" id="stock" /> <label for="stock"
-                                    class="checkbox-custom-label">Continue selling when out of
+                                <input type="checkbox" class="checkbox-custom" name="stock" id="stock" /> <label
+                                    for="stock" class="checkbox-custom-label">Continue selling when out of
                                     Combo?</label>
                             </span>
                         </p>
                         <p class="mr-b15 font-14">
                             <span>
-                                <input type="checkbox" class="checkbox-custom" name="return-policy" id="return-policy" /> <label
-                                    for="return-policy" class="checkbox-custom-label">Is
+                                <input type="checkbox" class="checkbox-custom" name="return-policy"
+                                    id="return-policy" /> <label for="return-policy" class="checkbox-custom-label">Is
                                     this Combo eligible for return
                                     policy?</label>
                             </span>
@@ -1840,7 +1920,8 @@
                                             <div class="row mr-b15">
                                                 <div class="col-sm-6 col-lg-4">
                                                     <label>Option 1</label>
-                                                    <input type="text" class="form-control" placeholder="Size" id="select-option">
+                                                    <input type="text" class="form-control" placeholder="Size"
+                                                        id="select-option">
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
                                                     <label>Category</label>
@@ -1850,8 +1931,8 @@
                                             </div>
                                             <div class="row mr-b15">
                                                 <div class="col-sm-6 col-lg-4">
-                                                    <input type="text" class="form-control" placeholder="Ex: Size, Color"
-                                                        id="select-size-color">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Ex: Size, Color" id="select-size-color">
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
                                                     <input type="text" class="form-control"
@@ -1883,20 +1964,25 @@
                                     <div class="row">
                                         <div class="col-sm-6 col-lg-6">
                                             <span class="p-0 mr-3" (click)="selectCode(true)">
-                                                <input id="combo-hsn-code-option" class="radio-custom cp ml-0" type="radio"
-                                                    name="selectCode" [value]="">
-                                                <label for="combo-hsn-code-option" class="radio-custom-label">HSN Code</label>
+                                                <input id="combo-hsn-code-option" class="radio-custom cp ml-0"
+                                                    type="radio" name="selectCode" [value]="">
+                                                <label for="combo-hsn-code-option" class="radio-custom-label">HSN
+                                                    Code</label>
                                             </span>
                                             <span class="p-0" (click)="selectCode(false)">
-                                                <input id="combo-sac-code-option" class="radio-custom cp ml-0" type="radio" name="selectCode">
-                                                <label for="combo-sac-code-option" class="radio-custom-label">SAC Code</label>
+                                                <input id="combo-sac-code-option" class="radio-custom cp ml-0"
+                                                    type="radio" name="selectCode">
+                                                <label for="combo-sac-code-option" class="radio-custom-label">SAC
+                                                    Code</label>
                                             </span>
                                         </div>
                                         <div class="col-sm-6 col-lg-6" *ngIf="isHSN">
-                                            <input id="product-name" class="form-control" type="text" placeholder="Enter HSN Code">
+                                            <input id="product-name" class="form-control" type="text"
+                                                placeholder="Enter HSN Code">
                                         </div>
                                         <div class="col-sm-6 col-lg-6" *ngIf="!isHSN">
-                                            <input id="product-name" class="form-control" type="text" placeholder="Enter SAC Code">
+                                            <input id="product-name" class="form-control" type="text"
+                                                placeholder="Enter SAC Code">
                                         </div>
                                     </div>
                                 </div>
@@ -1933,14 +2019,15 @@
                                                 variant 1
                                             </label>
                                             <!-- vaiant will be auto fill and readonly view -->
-                                            <input type="text" id="combo-variant-name" class="form-control" placeholder="Variant Name"
-                                                readonly>
+                                            <input type="text" id="combo-variant-name" class="form-control"
+                                                placeholder="Variant Name" readonly>
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 SKU
                                             </label>
-                                            <input type="text" id="combo-variant-sku" class="form-control" placeholder="SKU">
+                                            <input type="text" id="combo-variant-sku" class="form-control"
+                                                placeholder="SKU">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
@@ -1953,16 +2040,19 @@
                                             <label>
                                                 Opening Qty
                                             </label>
-                                            <input type="text" id="combo-variant-qty" class="form-control" placeholder="Enter Qty">
+                                            <input type="text" id="combo-variant-qty" class="form-control"
+                                                placeholder="Enter Qty">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 Rate
                                             </label>
-                                            <input type="text" id="combo-variant-rate" class="form-control" placeholder="Enter Rate">
+                                            <input type="text" id="combo-variant-rate" class="form-control"
+                                                placeholder="Enter Rate">
                                         </div>
                                     </div>
-                                    <div><a href="javascript:void(0);" class="font-14 mr-t1 d-flex" id="combo-add-more-variant"> + Add
+                                    <div><a href="javascript:void(0);" class="font-14 mr-t1 d-flex"
+                                            id="combo-add-more-variant"> + Add
                                             More</a>
                                     </div>
                                 </div>
@@ -1978,31 +2068,36 @@
                                             <label>
                                                 Item
                                             </label>
-                                            <input type="text" id="combo-addon-item" class="form-control" placeholder="Add item">
+                                            <input type="text" id="combo-addon-item" class="form-control"
+                                                placeholder="Add item">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 Quantity
                                             </label>
-                                            <input type="text" id="combo-addon-qty" class="form-control" placeholder="Enter Quantity">
+                                            <input type="text" id="combo-addon-qty" class="form-control"
+                                                placeholder="Enter Quantity">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 SKU
                                             </label>
-                                            <input type="text" id="combo-sku" class="form-control" placeholder="Enter SKU Number">
+                                            <input type="text" id="combo-sku" class="form-control"
+                                                placeholder="Enter SKU Number">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 Unit
                                             </label>
-                                            <input type="text" id="addon-unit" class="form-control" placeholder="eg. cm, kg, m, box">
+                                            <input type="text" id="addon-unit" class="form-control"
+                                                placeholder="eg. cm, kg, m, box">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
                                                 Rate
                                             </label>
-                                            <input type="text" id="combo-addon-rate" class="form-control" placeholder="Enter Rate">
+                                            <input type="text" id="combo-addon-rate" class="form-control"
+                                                placeholder="Enter Rate">
                                         </div>
                                         <div class="col-xl-2 col-md-6">
                                             <label>
@@ -2012,7 +2107,8 @@
                                             <sh-select placeholder="" id="combo-addon-available"></sh-select>
                                         </div>
                                     </div>
-                                    <div><a href="javascript:void(0);" class="font-14 mr-t1 d-flex" id="add-more-addon"> + Add More</a>
+                                    <div><a href="javascript:void(0);" class="font-14 mr-t1 d-flex" id="add-more-addon">
+                                            + Add More</a>
                                     </div>
                                 </div>
                             </div>
@@ -2030,7 +2126,8 @@
                                                         SKU
                                                     </label>
                                                     <!-- All variant list will show in dropdown -->
-                                                    <input type="text" id="combo-sku-number" class="form-control" placeholder="Enter SKU Number">
+                                                    <input type="text" id="combo-sku-number" class="form-control"
+                                                        placeholder="Enter SKU Number">
                                                 </div>
                                                 <div class="variant-name-field mr-b15">
                                                     <label>
@@ -2075,14 +2172,15 @@
                                                     <label>
                                                         Output Unit
                                                     </label>
-                                                    <input type="text" id="combo-recipe-output-unit" class="form-control"
-                                                        placeholder="eg. cm, kg, m, box">
+                                                    <input type="text" id="combo-recipe-output-unit"
+                                                        class="form-control" placeholder="eg. cm, kg, m, box">
                                                 </div>
                                                 <div class="d-none-mobile pl-0 pr-0">
                                                     <label class="d-block">
                                                         &nbsp;
                                                     </label>
-                                                    <span><a href="javascript:void(0);" class="font-22 d-flex pd-l05 pd-r05">+</a></span>
+                                                    <span><a href="javascript:void(0);"
+                                                            class="font-22 d-flex pd-l05 pd-r05">+</a></span>
                                                 </div>
                                                 <div class="d-none-mobile px-3">
                                                     <label class="d-block">
@@ -2091,13 +2189,14 @@
                                                     <span class="font-22 d-flex"> = </span>
                                                 </div>
                                             </div>
-                                            <div class="col-xl-6 col-lg-12 d-flex recipe-input-tab mr-b1 flex-column flex-sm-row pr-0">
+                                            <div
+                                                class="col-xl-6 col-lg-12 d-flex recipe-input-tab mr-b1 flex-column flex-sm-row pr-0">
                                                 <div class="width-30-percent">
                                                     <label>
                                                         Attribute
                                                     </label>
-                                                    <input type="text" id="combo-recipe-input-attribute" class="form-control"
-                                                        placeholder="Add item">
+                                                    <input type="text" id="combo-recipe-input-attribute"
+                                                        class="form-control" placeholder="Add item">
                                                 </div>
                                                 <div class="width-30-percent">
                                                     <label>
@@ -2126,9 +2225,11 @@
                                 <div class="row flex-column mr-t15">
                                     <div class="text-primary cursor-pointer px-3 d-flex justify-content-between mr-b1 font-14"
                                         (click)="toggleExpense()">
-                                        <a href="javascript:void(0);" class="text-primary font-14" id="combo-add-expense-btn"> + Add
+                                        <a href="javascript:void(0);" class="text-primary font-14"
+                                            id="combo-add-expense-btn"> + Add
                                             Expense </a>
-                                        <a href="javascript:void(0);" class="text-primary font-14 text-right add-new-final-product"
+                                        <a href="javascript:void(0);"
+                                            class="text-primary font-14 text-right add-new-final-product"
                                             id="combo-add-new-product-btn">+ Add New Row</a>
                                     </div>
                                     <div class="col-xl-6 d-flex flex-column flex-lg-row  align-items-center expense-form"
@@ -2140,19 +2241,23 @@
                                         </div>
                                         <span class="to-span"> to </span>
                                         <div class="width-30-percent">
-                                            <input type="text" id="combo-expense-account" class="form-control" placeholder="Expense A/c">
+                                            <input type="text" id="combo-expense-account" class="form-control"
+                                                placeholder="Expense A/c">
                                         </div>
                                         <div class="width-30-percent">
-                                            <input id="combo-expense-amount" type="text" class="form-control" placeholder="Amount">
+                                            <input id="combo-expense-amount" type="text" class="form-control"
+                                                placeholder="Amount">
                                         </div>
-                                        <div class="cursor-pointer add-expense d-flex justify-content-center align-items-center">
+                                        <div
+                                            class="cursor-pointer add-expense d-flex justify-content-center align-items-center">
                                             <span class="font-22 text-primary pd-l05 pd-r05">+</span>
                                         </div>
 
                                     </div>
                                 </div>
                             </div>
-                            <a class="text-primary font-14" id="combo-add-more-recipe-btn" href="javascript:void(0);">+ Add more
+                            <a class="text-primary font-14" id="combo-add-more-recipe-btn" href="javascript:void(0);">+
+                                Add more
                                 recipe</a>
                         </form>
                     </tab>
@@ -2303,14 +2408,14 @@
                             <tr>
                                 <td data-title="#" class="pd list-number">1</td>
                                 <td data-title="Stock Name">
-                                    <input type="text" class="from-control" id="stock-name-field"  readonly>
+                                    <input type="text" class="from-control" id="stock-name-field" readonly>
                                 </td>
                                 <td data-title="Unique Name">
                                     <input type="text" placeholder="Enter" class="from-control" id="stock-unique-name"
-                                         readonly>
+                                        readonly>
                                 </td>
                                 <td data-title="Inventory Type">
-                                    <sh-select placeholder="Select"  readonly></sh-select>
+                                    <sh-select placeholder="Select" readonly></sh-select>
                                 </td>
                                 <td data-title="Inventory Unit">
                                     <sh-select placeholder="Select"></sh-select>

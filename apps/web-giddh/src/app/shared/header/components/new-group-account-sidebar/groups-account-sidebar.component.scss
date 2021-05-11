@@ -1,4 +1,4 @@
-@import '../../../../../assets/css/color.scss';
+@import "../../../../../assets/css/color.scss";
 
 .list-item:focus,
 .list-item:focus .list-item {
@@ -11,14 +11,12 @@
     min-height: 300px;
 }
 
-
-@media (max-width:1024px){
+@media (max-width: 1024px) {
     .virtual-group-list {
         display: table-cell;
     }
 
-   .new-btn-ul{
-       padding-bottom:20px;
-   }
-
+    .new-btn-ul {
+        padding-bottom: 20px;
+    }
 }

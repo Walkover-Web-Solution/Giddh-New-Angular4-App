@@ -2,7 +2,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { CompanyActions } from '../../company.actions';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -17,7 +17,7 @@ import { CustomActions } from '../../../store/customActions';
 export class SettingsProfileActions {
 
 
-    public GetSMSKey$: Observable<Action> =createEffect( ()=> this.action$
+    public GetSMSKey$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO),
             switchMap((action: CustomActions) => this.settingsProfileService.GetProfileInfo()),
@@ -30,7 +30,7 @@ export class SettingsProfileActions {
             }))));
 
 
-    public UpdateProfile$: Observable<Action> = createEffect( ()=>this.action$
+    public UpdateProfile$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE),
             switchMap((action: CustomActions) => {
@@ -39,7 +39,7 @@ export class SettingsProfileActions {
             })));
 
 
-    public GetInventoryInfo$: Observable<Action> =createEffect( ()=> this.action$
+    public GetInventoryInfo$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_INFO),
             switchMap((action: CustomActions) => this.settingsProfileService.GetInventoryInfo()),
@@ -52,7 +52,7 @@ export class SettingsProfileActions {
             }))));
 
 
-    public UpdateInventory$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateInventory$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY),
             switchMap((action: CustomActions) => {
@@ -61,7 +61,7 @@ export class SettingsProfileActions {
             })));
 
 
-    public UpdateProfileResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateProfileResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE),
             map((response: CustomActions) => {
@@ -76,7 +76,7 @@ export class SettingsProfileActions {
             })));
 
 
-    public PatchProfile$: Observable<Action> =createEffect( ()=> this.action$
+    public PatchProfile$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE),
             switchMap((action: CustomActions) => {
@@ -85,7 +85,7 @@ export class SettingsProfileActions {
             })));
 
     //({ dispatch: false })
-    public PatchProfileResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public PatchProfileResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE),
             map((response: CustomActions) => {
@@ -95,7 +95,7 @@ export class SettingsProfileActions {
                 } else {
                     this.store.dispatch(this.companyActions.RefreshCompanies());
 
-                    if(data.request && data.request.paymentId) {
+                    if (data.request && data.request.paymentId) {
                         this.toasty.successToastWithHtml("Welcome onboard!<br>Accounting begins now...");
                     } else {
                         this.toasty.successToast('Profile Updated Successfully.');
@@ -111,7 +111,7 @@ export class SettingsProfileActions {
             })));
 
 
-    public UpdateInventoryResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateInventoryResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE),
             map((response: CustomActions) => {

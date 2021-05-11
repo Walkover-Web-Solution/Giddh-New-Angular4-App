@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 
 export class DashboardItemProductDetail implements OnInit {
 
-    public ngOnInit(){
+    public ngOnInit() {
 
     }
 

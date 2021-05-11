@@ -60,7 +60,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if ('ngModel' in changes) {
-            if(changes.ngModel.currentValue) {
+            if (changes.ngModel.currentValue) {
                 this.calendarDate = moment(changes.ngModel.currentValue, GIDDH_DATE_FORMAT).toDate();
             } else {
                 this.calendarDate = "";

@@ -156,7 +156,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
         });
         if (branchName) {
             this.currentCompanyBranches = branches.filter(branch => {
-                if(branch) {
+                if (branch) {
                     if (!branch.alias) {
                         return branch.name.toLowerCase().includes(branchName.toLowerCase());
                     } else {
@@ -177,7 +177,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
     public loadCompanyBranches(): void {
         if (this.generalService.companyUniqueName) {
             // Avoid API call if new user is onboarded
-            this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+            this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
         }
     }
 

@@ -1,4 +1,4 @@
-@import '../../../assets/css/color.scss';
+@import "../../../assets/css/color.scss";
 .mobile-home-sidebar-wrapper {
     max-width: 280px;
     width: 100%;
@@ -6,12 +6,12 @@
     color: $nero;
     height: 100vh;
     letter-spacing: 0;
-    .sidebar-header{
+    .sidebar-header {
         background-color: $midnight-blue;
         color: $white;
         padding: 15px;
         position: relative;
-        .company-name-alice{
+        .company-name-alice {
             width: 45px;
             height: 45px;
             background: $chetwode-blue;
@@ -23,7 +23,7 @@
             margin-top: 15px;
             margin-bottom: 20px;
         }
-        .close-btn{
+        .close-btn {
             position: absolute;
             top: 4px;
             right: 5px;
@@ -31,32 +31,32 @@
             font-size: 18px;
             background-color: transparent;
         }
-        .company-details{
-            p.company-name{
+        .company-details {
+            p.company-name {
                 white-space: normal;
                 word-break: break-word;
-                font-size:14px;
+                font-size: 14px;
             }
-            p{
-                line-height:18px;
+            p {
+                line-height: 18px;
             }
-            small{
-                font-size:12px;
+            small {
+                font-size: 12px;
             }
         }
     }
-    .sidebar-body{
+    .sidebar-body {
         padding: 15px 0;
-        ul{
+        ul {
             list-style: none;
-            li{
-                a{
+            li {
+                a {
                     padding: 10px 15px;
                     color: $nero;
-                    font-family: 'opensans-semibold';
+                    font-family: "opensans-semibold";
                     display: flex;
                     font-size: 14px;
-                    &:hover{
+                    &:hover {
                         background-color: $lavender;
                     }
                 }

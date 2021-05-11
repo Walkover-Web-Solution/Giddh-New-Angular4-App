@@ -53,7 +53,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() public isDateSelected: boolean = false;
 
     public search: string;
-    @ViewChild('plGrid', {static: true}) public plGrid: PlGridComponent;
+    @ViewChild('plGrid', { static: true }) public plGrid: PlGridComponent;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     private _selectedCompany: CompanyResponse;

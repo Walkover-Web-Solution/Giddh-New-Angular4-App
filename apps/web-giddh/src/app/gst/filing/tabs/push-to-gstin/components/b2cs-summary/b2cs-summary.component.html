@@ -68,7 +68,7 @@
                     <tr *ngFor="let item of brcsSummary">
                         <td data-title="Type"> {{item.typ ? item.typ : '-'}} </td>
                         <td data-title="Rate" class="text-right">
-                             <!-- {{item.rt | giddhCurrency}} -->
+                            <!-- {{item.rt | giddhCurrency}} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.rt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>

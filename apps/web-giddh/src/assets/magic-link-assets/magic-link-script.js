@@ -77,7 +77,7 @@ var app = new Vue({
                 ledgers: []
             }
         },
-        legderBalanceData : {
+        legderBalanceData: {
             forwardedBalance: {
                 amount: '',
                 type: ''
@@ -145,13 +145,13 @@ var app = new Vue({
                         this.$toaster.error(msg);
                     });
 
-                    if (from && to) {
-                        url = apiBaseUrl + 'magic-link-ledger-balance/' + id + '?from=' + from + '&to=' + to;
-                    } else {
-                        url = apiBaseUrl + 'magic-link-ledger-balance/' + id;
-                    }
+                if (from && to) {
+                    url = apiBaseUrl + 'magic-link-ledger-balance/' + id + '?from=' + from + '&to=' + to;
+                } else {
+                    url = apiBaseUrl + 'magic-link-ledger-balance/' + id;
+                }
 
-                    axios.get(url)
+                axios.get(url)
                     .then(response => {
                         if (response.data.status === 'success') {
                             this.legderBalanceData = response.data.body;
@@ -194,7 +194,7 @@ var app = new Vue({
                             msg = e.response.data.message;
                         }
 
-                        if((from && to) || (e && e.response && e.response.data && e.response.data.code !== "NOT_FOUND")) {
+                        if ((from && to) || (e && e.response && e.response.data && e.response.data.code !== "NOT_FOUND")) {
                             this.$toaster.error(msg);
                         }
                     });
@@ -215,7 +215,7 @@ var app = new Vue({
             var unq = ledger.uniqueName;
             ledger.isCompoundEntry = true;
             var ledgerData = this.ledgerData;
-            if( ledgerData && ledgerData.ledgersTransactions && ledgerData.ledgersTransactions.ledgers) {
+            if (ledgerData && ledgerData.ledgersTransactions && ledgerData.ledgersTransactions.ledgers) {
                 ledgerData.ledgersTransactions.ledgers.forEach(function (lgr) {
                     if (unq === lgr.uniqueName) {
                         lgr.isCompoundEntry = true;
@@ -234,7 +234,7 @@ var app = new Vue({
             let arrayList = [];
             arrayList.push(list);
 
-            if(!value) {
+            if (!value) {
                 value = "";
             }
 
@@ -290,15 +290,15 @@ var app = new Vue({
                 this.$toaster.error('Magic link ID not found.');
             }
         },
-        downloadAttachedFile: function (attachedFileUniqueName, attachedFileName ) {
+        downloadAttachedFile: function (attachedFileUniqueName, attachedFileName) {
             var id = this.getParameterByName('id');
             var apiBaseUrl = this.getApi();
             if (id) {
                 axios.get(apiBaseUrl + 'magic-link/' + id + '/ledger/upload/' + attachedFileUniqueName)
                     .then(response => {
                         // JSON responses are automatically parsed.
-                        if ( response && response.status === 200 && response.data.status === 'success') {
-                            var blobData = this.base64ToBlob(response.data.body.uploadedFile, 'image/'+response.data.body.fileType, 512);
+                        if (response && response.status === 200 && response.data.status === 'success') {
+                            var blobData = this.base64ToBlob(response.data.body.uploadedFile, 'image/' + response.data.body.fileType, 512);
                             return saveAs(blobData, response.data.body.name);
                         } else {
                             this.$toaster.error('Attachment ' + attachedFileName + ' cannot be downloaded now.');

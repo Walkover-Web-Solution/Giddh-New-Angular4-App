@@ -27,50 +27,66 @@
                                 <strong
                                     *ngIf="(!fieldsAndVisibility.header.formNameInvoice?.label && fieldsAndVisibility.header.formNameTaxInvoice?.label) || (fieldsAndVisibility.header.formNameInvoice?.label && fieldsAndVisibility.header.formNameTaxInvoice?.label)">{{fieldsAndVisibility.header.formNameTaxInvoice?.label}}</strong>
                             </h4>
-                            <p class="mr-t05 word-break" *ngIf="showGstComposition && fieldsAndVisibility.header.gstComposition?.display">{{(fieldsAndVisibility.header.gstComposition?.label) ? fieldsAndVisibility.header.gstComposition?.label : "Registered under Composition Scheme"}}</p>
+                            <p class="mr-t05 word-break"
+                                *ngIf="showGstComposition && fieldsAndVisibility.header.gstComposition?.display">
+                                {{(fieldsAndVisibility.header.gstComposition?.label) ?
+                                fieldsAndVisibility.header.gstComposition?.label : "Registered under Composition
+                                Scheme"}}</p>
                             <p class="mr-t05">
                                 <ng-container *ngIf="voucherType==='sales'">
-                                    <span class="d-block" *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
-                                    : 'Number'}}: 20170911-1</span>
+                                    <span class="d-block"
+                                        *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length
+                                        > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
+                                        : 'Number'}}: 20170911-1</span>
                                     <span class="d-block" *ngIf="fieldsAndVisibility.header.invoiceDate?.display"
-                                        [class.ml-0]="fieldsAndVisibility.header.invoiceNumber?.display">{{fieldsAndVisibility.header.invoiceDate?.label ? fieldsAndVisibility.header.invoiceDate?.label
-                                    : 'Date'}}: 11/09/2017</span>
+                                        [class.ml-0]="fieldsAndVisibility.header.invoiceNumber?.display">{{fieldsAndVisibility.header.invoiceDate?.label
+                                        ? fieldsAndVisibility.header.invoiceDate?.label
+                                        : 'Date'}}: 11/09/2017</span>
                                 </ng-container>
 
                                 <ng-container *ngIf="voucherType!='sales'">
-                                    <span class="d-block" *ngIf="fieldsAndVisibility.header.voucherNumber?.display">{{(fieldsAndVisibility.header.voucherNumber?.label?.length > 0) ? fieldsAndVisibility.header.voucherNumber?.label
-                                                : 'Voucher Number'}}: 20170911-1</span>
+                                    <span class="d-block"
+                                        *ngIf="fieldsAndVisibility.header.voucherNumber?.display">{{(fieldsAndVisibility.header.voucherNumber?.label?.length
+                                        > 0) ? fieldsAndVisibility.header.voucherNumber?.label
+                                        : 'Voucher Number'}}: 20170911-1</span>
                                     <span class="d-block" *ngIf="fieldsAndVisibility.header.voucherDate?.display"
-                                        [class.ml-0]="fieldsAndVisibility.header.voucherNumber?.display">{{fieldsAndVisibility.header.voucherDate?.label ? fieldsAndVisibility.header.voucherDate?.label
-                                                : 'Voucher Date'}}: 11/09/2017</span>
+                                        [class.ml-0]="fieldsAndVisibility.header.voucherNumber?.display">{{fieldsAndVisibility.header.voucherDate?.label
+                                        ? fieldsAndVisibility.header.voucherDate?.label
+                                        : 'Voucher Date'}}: 11/09/2017</span>
                                 </ng-container>
                             </p>
                         </td>
                         <!--<td class="text-center img-duplicate" *ngIf="voucherType==='sales'">
                             <img src="assets/images/duplicate.svg" alt="">
                         </td>-->
-                        <td [ngClass]="{'text-center': fieldsAndVisibility.header.showQrCode?.display, 'text-right': !fieldsAndVisibility.header.showQrCode?.display}" *ngIf="showLogo">
+                        <td [ngClass]="{'text-center': fieldsAndVisibility.header.showQrCode?.display, 'text-right': !fieldsAndVisibility.header.showQrCode?.display}"
+                            *ngIf="showLogo">
                             <div class="col-12">
                                 <figure>
-                                        <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt=""
-                                            [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
+                                    <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt=""
+                                        [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
                                 </figure>
-                                <p *ngIf="fieldsAndVisibility.header.companyName?.display" class="bold pd-l05">{{fieldsAndVisibility.header.companyName?.label}}</p>
+                                <p *ngIf="fieldsAndVisibility.header.companyName?.display" class="bold pd-l05">
+                                    {{fieldsAndVisibility.header.companyName?.label}}</p>
                             </div>
                         </td>
-                        <td *ngIf="showGstComposition && fieldsAndVisibility.header.showQrCode?.display" class="text-right">
+                        <td *ngIf="showGstComposition && fieldsAndVisibility.header.showQrCode?.display"
+                            class="text-right">
                             <div class="qr-image">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"/>
+                                <img
+                                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png" />
                             </div>
                         </td>
-                            <!-- <p class="font-12" *ngIf="(fieldsAndVisibility.header.customField1?.display && fieldsAndVisibility.header.customField2?.display && fieldsAndVisibility.header.customField3?.display && fieldsAndVisibility.header.dueDate?.display )">{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due on '}} 30/08/2017</p> -->
+                        <!-- <p class="font-12" *ngIf="(fieldsAndVisibility.header.customField1?.display && fieldsAndVisibility.header.customField2?.display && fieldsAndVisibility.header.customField3?.display && fieldsAndVisibility.header.dueDate?.display )">{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due on '}} 30/08/2017</p> -->
 
                     </tr>
                 </tbody>
             </table>
         </header>
         <ng-container *ngIf="fieldsAndVisibility?.header?.showIrnNumber?.display && showGstComposition">
-            <div class="meta"><strong>IRN:</strong>&nbsp;<span>def01b2b4b08ba07e92556896bb0e5a6c5b80428f756ae902ab57db0b60781c3</span></div>
+            <div class="meta">
+                <strong>IRN:</strong>&nbsp;<span>def01b2b4b08ba07e92556896bb0e5a6c5b80428f756ae902ab57db0b60781c3</span>
+            </div>
         </ng-container>
         <table class="warehouse-table" cellspacing="0" cellpadding="0"
             *ngIf="fieldsAndVisibility?.header?.warehouseAddress?.display || fieldsAndVisibility?.header?.showCompanyAddress?.display">
@@ -100,23 +116,29 @@
                                 <tr>
                                     <td class="align-top pd-r1 name-email">
                                         <figure>
-                                                <p class="pd-t05 pd-b05" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
-                                                <strong>Attention to: </strong><br/>
-                                                Alok Gangrade</p>
+                                            <p class="pd-t05 pd-b05"
+                                                *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                                <strong>Attention to: </strong><br />
+                                                Alok Gangrade
+                                            </p>
                                         </figure>
                                     </td>
                                     <td class="align-top pd-r1 name-email">
                                         <figure>
-                                                <p class="pd-t05 pd-b05" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
-                                                <strong>Email Id: </strong><br/>
-                                                aaaa@gmail.com</p>
+                                            <p class="pd-t05 pd-b05"
+                                                *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                                <strong>Email Id: </strong><br />
+                                                aaaa@gmail.com
+                                            </p>
                                         </figure>
                                     </td>
                                     <td class="align-top">
                                         <figure>
-                                                <p class="pd-t05 pd-b05" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
-                                                <strong>Mobile Number: </strong><br/>
-                                                9876543210</p>
+                                            <p class="pd-t05 pd-b05"
+                                                *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                                <strong>Mobile Number: </strong><br />
+                                                9876543210
+                                            </p>
                                         </figure>
                                     </td>
                                 </tr>
@@ -128,14 +150,16 @@
                     <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
 
                         <p *ngIf="fieldsAndVisibility.header.billingAddress?.display">
-                            <strong>{{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label
+                            <strong>{{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ?
+                                fieldsAndVisibility.header.billingAddress?.label
                                 : 'Billing Address'}}</strong>
                         </p>
                         <p *ngIf="fieldsAndVisibility.header.customerName?.display">Green Soft Solutions</p>
                         <p *ngIf="fieldsAndVisibility.header.billingAddress?.display" class="address">
                             24 Buidling Name <br /> 3rd Floor, 15 A.B. Road<br> Indore (M.P.) 452000</p>
                         <p *ngIf="fieldsAndVisibility.header.billingGstin?.display">
-                            {{fieldsAndVisibility.header.billingGstin?.label ? fieldsAndVisibility.header.billingGstin?.label : 'GSTIN'}}:
+                            {{fieldsAndVisibility.header.billingGstin?.label ?
+                            fieldsAndVisibility.header.billingGstin?.label : 'GSTIN'}}:
                             11AAAAAA000Z0A1
                         </p>
                     </td>
@@ -146,8 +170,10 @@
                         <p>Green Soft Solutions</p>
                         <p class="address">
                             24 Buidling Name <br /> 3rd Floor, 15 A.B. Road<br> Indore (M.P.) 452000</p>
-                        <p *ngIf="fieldsAndVisibility.header.shippingAddress?.display && fieldsAndVisibility.header.shippingGstin?.display">
-                            {{(fieldsAndVisibility.header.shippingGstin?.label?.length > 0) ? fieldsAndVisibility.header.shippingGstin?.label : 'GSTIN'}}:
+                        <p
+                            *ngIf="fieldsAndVisibility.header.shippingAddress?.display && fieldsAndVisibility.header.shippingGstin?.display">
+                            {{(fieldsAndVisibility.header.shippingGstin?.label?.length > 0) ?
+                            fieldsAndVisibility.header.shippingGstin?.label : 'GSTIN'}}:
                             11AAAAAA000Z0A1
                         </p>
                     </td>
@@ -157,27 +183,33 @@
                             <strong>Shipping Detail:</strong>
                         </p>
                         <p *ngIf="fieldsAndVisibility.header.shippingDate?.display">
-                            {{(fieldsAndVisibility.header.shippingDate?.label?.length > 0) ? fieldsAndVisibility.header.shippingDate?.label : 'Ship Date'}}:
+                            {{(fieldsAndVisibility.header.shippingDate?.label?.length > 0) ?
+                            fieldsAndVisibility.header.shippingDate?.label : 'Ship Date'}}:
                             30/09/2017
                         </p>
                         <p *ngIf="fieldsAndVisibility.header.shippedVia?.display">
-                            {{(fieldsAndVisibility.header.shippedVia?.label?.length > 0) ? fieldsAndVisibility.header.shippedVia?.label : 'Ship Via'}}:
+                            {{(fieldsAndVisibility.header.shippedVia?.label?.length > 0) ?
+                            fieldsAndVisibility.header.shippedVia?.label : 'Ship Via'}}:
                             FedEx
                         </p>
                         <p *ngIf="fieldsAndVisibility.header.trackingNumber?.display">
-                            {{(fieldsAndVisibility.header.trackingNumber?.label?.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label : 'Tracking No'}}:
+                            {{(fieldsAndVisibility.header.trackingNumber?.label?.length > 0) ?
+                            fieldsAndVisibility.header.trackingNumber?.label : 'Tracking No'}}:
                             123654
                         </p>
                         <p *ngIf="fieldsAndVisibility.header.customField1?.display">
-                            {{(fieldsAndVisibility.header.customField1?.label?.length > 0) ? fieldsAndVisibility.header.customField1?.label : 'Custom 1'}}
+                            {{(fieldsAndVisibility.header.customField1?.label?.length > 0) ?
+                            fieldsAndVisibility.header.customField1?.label : 'Custom 1'}}
                             :dummy
                         </p>
                         <p *ngIf="fieldsAndVisibility.header.customField2?.display">
-                            {{(fieldsAndVisibility.header.customField2?.label?.length > 0) ? fieldsAndVisibility.header.customField2?.label : 'Custom 2'}}
+                            {{(fieldsAndVisibility.header.customField2?.label?.length > 0) ?
+                            fieldsAndVisibility.header.customField2?.label : 'Custom 2'}}
                             :dummy
                         </p>
                         <p *ngIf="fieldsAndVisibility.header.customField3?.display">
-                            {{(fieldsAndVisibility.header.customField3?.label?.length > 0) ? fieldsAndVisibility.header.customField3?.label : 'Custom 3'}}:dummy
+                            {{(fieldsAndVisibility.header.customField3?.label?.length > 0) ?
+                            fieldsAndVisibility.header.customField3?.label : 'Custom 3'}}:dummy
                         </p>
                     </td>
 
@@ -189,7 +221,8 @@
                         <div class="total-amount" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
                             <h2 *ngIf="fieldsAndVisibility.table.totalDue?.display">7124.00/- </h2>
                             <span *ngIf="fieldsAndVisibility.header.dueDate?.display">
-                                {{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due on '}}
+                                {{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ?
+                                fieldsAndVisibility.header.dueDate?.label : 'Due on '}}
                                 30/08/2017</span>
                         </div>
                     </td>
@@ -208,32 +241,40 @@
             <thead>
                 <tr>
                     <th [hidden]="!fieldsAndVisibility.table.sNo?.display" class="text-left">
-                        {{(fieldsAndVisibility.table.sNo?.label?.length > 0) ? fieldsAndVisibility.table.sNo?.label : 'S No'}}
+                        {{(fieldsAndVisibility.table.sNo?.label?.length > 0) ? fieldsAndVisibility.table.sNo?.label : 'S
+                        No'}}
                     </th>
-                    <th *ngIf="fieldsAndVisibility.table.item?.display"
-                        class="text-left word-break">
-                        {{(fieldsAndVisibility.table.item?.display && fieldsAndVisibility.table.item?.label?.length > 0) ? fieldsAndVisibility.table.item?.label : 'Item'}}
+                    <th *ngIf="fieldsAndVisibility.table.item?.display" class="text-left word-break">
+                        {{(fieldsAndVisibility.table.item?.display && fieldsAndVisibility.table.item?.label?.length > 0)
+                        ? fieldsAndVisibility.table.item?.label : 'Item'}}
                     </th>
                     <th [hidden]="!fieldsAndVisibility.table.hsnSac?.display" class="text-right word-break">
-                        {{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ? fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}
+                        {{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ?
+                        fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}
                     </th>
                     <th [hidden]="!fieldsAndVisibility.table.taxes?.display" class="text-right word-break">Tax Rate</th>
                     <th [hidden]="!fieldsAndVisibility.table.quantity?.display" class="text-right word-break">
-                        {{(fieldsAndVisibility.table.quantity?.label?.length > 0) ? fieldsAndVisibility.table.quantity?.label : 'Qty.'}}
+                        {{(fieldsAndVisibility.table.quantity?.label?.length > 0) ?
+                        fieldsAndVisibility.table.quantity?.label : 'Qty.'}}
                     </th>
                     <th [hidden]="!fieldsAndVisibility.table.rate?.display" class="text-right word-break">
-                        {{(fieldsAndVisibility.table.rate?.label?.length > 0) ? fieldsAndVisibility.table.rate?.label : 'Rate'}}
+                        {{(fieldsAndVisibility.table.rate?.label?.length > 0) ? fieldsAndVisibility.table.rate?.label :
+                        'Rate'}}
                     </th>
                     <th *ngIf="voucherType==='sales'" class="text-right word-break">
                         Total before Dis.
                     </th>
                     <th [hidden]="!fieldsAndVisibility.table.discount?.display" class="text-right word-break">
-                        {{(fieldsAndVisibility.table.discount?.label?.length > 0) ? fieldsAndVisibility.table.discount?.label : 'Disc.'}}
+                        {{(fieldsAndVisibility.table.discount?.label?.length > 0) ?
+                        fieldsAndVisibility.table.discount?.label : 'Disc.'}}
                     </th>
-                    <th [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right word-break">{{(fieldsAndVisibility.table.taxableValue?.label?.length > 0) ? fieldsAndVisibility.table.taxableValue?.label : 'Taxable Amt.'}}</th>
+                    <th [hidden]="!fieldsAndVisibility.table.taxableValue?.display" class="text-right word-break">
+                        {{(fieldsAndVisibility.table.taxableValue?.label?.length > 0) ?
+                        fieldsAndVisibility.table.taxableValue?.label : 'Taxable Amt.'}}</th>
 
                     <th [hidden]="!fieldsAndVisibility.table.total?.display" class="text-right">
-                        {{(fieldsAndVisibility.table.total?.label?.length > 0) ? fieldsAndVisibility.table.total?.label : 'Total'}}
+                        {{(fieldsAndVisibility.table.total?.label?.length > 0) ? fieldsAndVisibility.table.total?.label
+                        : 'Total'}}
                     </th>
                 </tr>
             </thead>
@@ -241,7 +282,8 @@
                 <tr *ngIf="fieldsAndVisibility.table.previousDue?.display">
                     <td [attr.colspan]="columnsVisibled-2"></td>
                     <td>
-                        {{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ? fieldsAndVisibility.table.previousDue?.label : 'Previous Due'}}
+                        {{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ?
+                        fieldsAndVisibility.table.previousDue?.label : 'Previous Due'}}
                     </td>
                     <td>5000.00</td>
                 </tr>
@@ -325,7 +367,8 @@
 
                 <tr>
                     <td [attr.colspan]="columnsVisibled -2" class="text-left in-words">
-                        <p class="font-12" *ngIf="fieldsAndVisibility.footer.totalInWords?.display">Two Thousand One Hundred Twenty Four Rupees</p>
+                        <p class="font-12" *ngIf="fieldsAndVisibility.footer.totalInWords?.display">Two Thousand One
+                            Hundred Twenty Four Rupees</p>
                     </td>
                     <th class="text-right">
                         <strong>TOTAL</strong>
@@ -410,14 +453,16 @@
                     </td>
                     <td *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'hsnSac'" class="text-right ">9.00
                     </td>
-                    <td *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'" class="text-right ">162.00
+                    <td *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'"
+                        class="text-right ">162.00
                     </td>
                     <td>
                         <p>9%</p>
                     </td>
                     <td *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'hsnSac'" class="text-right ">9.00
                     </td>
-                    <td *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'" class="text-right ">162.00
+                    <td *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'"
+                        class="text-right ">162.00
                     </td>
                     <td *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'taxRateBifurcation'">2124.00
                     </td>
@@ -426,7 +471,8 @@
             <tfoot>
                 <tr>
                     <th class="text-right">
-                        <span *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'hsnSac'">Total</span></th>
+                        <span *ngIf="fieldsAndVisibility?.table?.taxBifurcation?.label === 'hsnSac'">Total</span>
+                    </th>
                     <th class=" text-right ">1800.00</th>
                     <th></th>
                     <th class="text-right ">162.00</th>
@@ -445,8 +491,12 @@
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
             <i class="icon-edit-pencil"></i>
         </a>
-        <p class="font-10" [ngStyle]="{ 'white-space': 'pre-line'}" *ngIf="fieldsAndVisibility.footer.showNotesAtLastPage?.display">{{fieldsAndVisibility.footer.message1?.label}}</p>
-        <p class="font-10" [ngStyle]="{ 'white-space': 'pre-line'}" *ngIf="voucherType==='sales' && fieldsAndVisibility.footer.showNotesAtLastPage?.display && fieldsAndVisibility.footer.showMessage2?.display">Notes provided in the invoice will appear here</p>
+        <p class="font-10" [ngStyle]="{ 'white-space': 'pre-line'}"
+            *ngIf="fieldsAndVisibility.footer.showNotesAtLastPage?.display">
+            {{fieldsAndVisibility.footer.message1?.label}}</p>
+        <p class="font-10" [ngStyle]="{ 'white-space': 'pre-line'}"
+            *ngIf="voucherType==='sales' && fieldsAndVisibility.footer.showNotesAtLastPage?.display && fieldsAndVisibility.footer.showMessage2?.display">
+            Notes provided in the invoice will appear here</p>
         <table class="subfooter">
             <tbody>
                 <tr>
@@ -466,10 +516,14 @@
                         </h4>
 
                         <ul class="note">
-                            <li style="white-space:pre-line;" *ngIf="!fieldsAndVisibility.footer.showNotesAtLastPage?.display && fieldsAndVisibility.footer.message1?.display">
-                                {{fieldsAndVisibility.footer.message1?.label ? fieldsAndVisibility.footer.message1?.label : 'We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.'}}
+                            <li style="white-space:pre-line;"
+                                *ngIf="!fieldsAndVisibility.footer.showNotesAtLastPage?.display && fieldsAndVisibility.footer.message1?.display">
+                                {{fieldsAndVisibility.footer.message1?.label ?
+                                fieldsAndVisibility.footer.message1?.label : 'We declare that this invoice shows the
+                                actual price of the services rendered and that all particulars are true and correct.'}}
                             </li>
-                            <li *ngIf="voucherType==='sales' && !fieldsAndVisibility.footer.showNotesAtLastPage?.display && fieldsAndVisibility.footer.showMessage2?.display">
+                            <li
+                                *ngIf="voucherType==='sales' && !fieldsAndVisibility.footer.showNotesAtLastPage?.display && fieldsAndVisibility.footer.showMessage2?.display">
                                 Notes provided in the invoice will appear here
                             </li>
                         </ul>
@@ -492,7 +546,8 @@
                                     {{fieldsAndVisibility.footer.slogan?.label }}
                                 </small>
                             </strong>
-                            <hr *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label">
+                            <hr
+                                *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label">
                             <strong *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display">
                                 <small>
                                     {{fieldsAndVisibility.footer.textUnderSlogan?.label}}
@@ -502,8 +557,10 @@
                     </td>
                     <td class="text-center" style="vertical-align: bottom; width: 35%;" *ngIf="showImageSignature">
                         <ng-container>
-                            <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="inner-img-signature" alt="" />
-                            <hr *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label">
+                            <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="inner-img-signature"
+                                alt="" />
+                            <hr
+                                *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label">
                             <strong *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display">
                                 <small>
                                     {{fieldsAndVisibility.footer.textUnderSlogan?.label}}
@@ -526,7 +583,9 @@
                     </td>
                     <td class="text-right gstinNoFooter">
                         <p>
-                            <span *ngIf="fieldsAndVisibility.header.gstin?.display">{{(fieldsAndVisibility.header.gstin?.label.length > 0) ? fieldsAndVisibility.header.gstin?.label
+                            <span
+                                *ngIf="fieldsAndVisibility.header.gstin?.display">{{(fieldsAndVisibility.header.gstin?.label.length
+                                > 0) ? fieldsAndVisibility.header.gstin?.label
                                 : 'GSTIN'}}: 22BBBBBB000A1Z0</span>
                         </p>
                     </td>

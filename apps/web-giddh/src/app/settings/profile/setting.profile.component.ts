@@ -34,7 +34,7 @@ export interface IGstObj {
     selector: 'setting-profile',
     templateUrl: './setting.profile.component.html',
     styleUrls: ['../../shared/header/components/company-add/company-add.component.scss', './setting.profile.component.scss'],
-    host: {'class': 'settings-profile'},
+    host: { 'class': 'settings-profile' },
     animations: [
         trigger('fadeInAndSlide', [
             transition(':enter', [
@@ -151,7 +151,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    
+
     constructor(
         private commonService: CommonService,
         private companyService: CompanyService,
@@ -176,7 +176,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         digitAfterDecimal.map(decimal => {
             this.decimalDigitSource.push({ value: decimal.value, label: decimal.name });
         });
-        this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress),takeUntil(this.destroyed$));
+        this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -242,7 +242,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
         });
 
-        this.imgPath =  (isElectron|| isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
     public getInitialProfileData() {
@@ -731,7 +731,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public getState(gst): string {
         let state = "";
-        if(gst.stateCode) {
+        if (gst.stateCode) {
             state = gst.stateCode + " - " + gst.stateName;
         }
         return state;
@@ -750,7 +750,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             } else {
                 this.patchProfile({ ...value });
             }
-        } else if (this.currentOrganizationType === OrganizationType.Branch ) {
+        } else if (this.currentOrganizationType === OrganizationType.Branch) {
             this.updateBranchProfile();
         }
     }
@@ -764,7 +764,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public updateBranchProfile(params?: any): void {
         this.currentBranchDetails.name = this.companyProfileObj.name;
         this.currentBranchDetails.alias = this.companyProfileObj.alias;
-        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(params? params : this.currentBranchDetails))
+        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(params ? params : this.currentBranchDetails))
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 if (response) {
@@ -820,7 +820,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public loadStates(countryCode: string): void {
-        this.companyService.getAllStates({country: countryCode}).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.companyService.getAllStates({ country: countryCode }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
                 this.addressConfiguration.stateList = [];

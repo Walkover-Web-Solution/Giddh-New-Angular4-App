@@ -29,7 +29,7 @@ import { SalesService } from '../../services/sales.service';
 })
 
 export class DiscountComponent implements OnInit, OnDestroy {
-    @ViewChild('discountConfirmationModel', {static: true}) public discountConfirmationModel: ModalDirective;
+    @ViewChild('discountConfirmationModel', { static: true }) public discountConfirmationModel: ModalDirective;
     public discountTypeList: IOption[] = []
     public accounts: IOption[];
     public createRequest: CreateDiscountRequest = new CreateDiscountRequest();
@@ -170,7 +170,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
      * @memberof DiscountComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.discountTypeList = [
                 { label: this.localeData?.discount_types?.as_per_value, value: 'FIX_AMOUNT' },
                 { label: this.localeData?.discount_types?.as_per_percent, value: 'PERCENTAGE' }

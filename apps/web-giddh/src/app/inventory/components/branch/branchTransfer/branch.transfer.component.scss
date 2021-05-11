@@ -7,7 +7,7 @@
     right: 0;
     bottom: 0;
     width: 100%;
-    max-width:580px;
+    max-width: 580px;
     z-index: 99999;
 }
 
@@ -32,7 +32,7 @@
 
 :host .aside-pane {
     width: 100%;
-    max-width:580px;
+    max-width: 580px;
     background: $white;
 }
 
@@ -64,25 +64,24 @@
     margin: 0 auto;
 }
 
-.destination-right{
+.destination-right {
     margin-right: 20% !important;
 }
 
-.product-right{
+.product-right {
     margin-right: 24% !important;
 }
 
-.quantity-right{
+.quantity-right {
     margin-right: 9% !important;
 }
 
-.unit-right{
+.unit-right {
     margin-right: 9% !important;
 }
 
-.form-items{
-    .form-group{
+.form-items {
+    .form-group {
         margin-right: 2% !important;
     }
 }
-
