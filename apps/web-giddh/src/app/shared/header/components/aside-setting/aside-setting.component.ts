@@ -8,6 +8,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { Organization } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { ReplaySubject } from 'rxjs';
+import { LocaleService } from 'apps/web-giddh/src/app/services/locale.service';
 
 @Component({
     selector: 'aside-setting',
@@ -31,8 +32,10 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This holds the active locale */
+    public activeLocale: string = "";
 
-    constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>) {
+    constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
 
     }
 
@@ -50,6 +53,15 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
 
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.searchField?.nativeElement.focus();
+
+        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            if(this.activeLocale && this.activeLocale !== response?.value) {
+                this.localeService.getLocale('aside-setting', response?.value).subscribe(response => {
+                    this.localeData = response;
+                });
+            }
+            this.activeLocale = response?.value;
+        });
     }
 
     /**

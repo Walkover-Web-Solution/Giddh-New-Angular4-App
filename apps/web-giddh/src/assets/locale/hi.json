@@ -550,5 +550,8 @@
     "app_active": "Active",
     "app_renew": "Renew",
     "app_buy_plan": "Buy Plan",
-    "app_settings": "Settings"
+    "app_settings": "Settings",
+    "app_to_navigate": "to navigate",
+    "app_to_select": "to select",
+    "app_to_dismiss": "to dismiss"
 }
