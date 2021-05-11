@@ -611,7 +611,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public linkedPoItemsAdded: number = 0;
     /** True, if user has opted to show notes at the last page of sales invoice */
     public showNotesAtLastPage: boolean;
-
+    /** This will hold account unique name which is in edit  */
+    public accountEditingUniqueName: string = "";
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
      * need to apply max characters limit on Notes/notes2/messsage2
@@ -926,7 +927,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }
 
-            this.loadDefaultSearchSuggestions();
+            if (!this.isPendingVoucherType) {
+                this.loadDefaultSearchSuggestions();
+            }
             this.getAllLastInvoices();
             this.fillDeliverToAddress();
         });
@@ -1602,6 +1605,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.setTemplatePlaceholder(templateData);
         });
         this.prepareInvoiceTypeFlags();
+
+        this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+            if(value && value[0] === "accountEditing") {
+                this.accountEditingUniqueName = value[1].uniqueName;
+            }
+            if(value && value[0] === "accountUpdated") {
+                if(this.accountEditingUniqueName === this.invFormData.voucherDetails.customerUniquename) {
+                    this.invFormData.voucherDetails.customerUniquename = value[1]?.body?.uniqueName;
+                    this.invFormData.voucherDetails.customerName = value[1]?.body?.name;
+
+                    this.invFormData.accountDetails.uniqueName = value[1]?.body?.uniqueName;
+                    this.invFormData.accountDetails.name = value[1]?.body?.name;
+                }
+                this.defaultCustomerSuggestions = [];
+                this.onSearchQueryChanged(value[1]?.body?.name, 1, 'customer');
+            }
+        });
     }
 
     /**
