@@ -30,6 +30,10 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     };
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService) {
 
@@ -116,5 +120,17 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * This will return move plan text
+     *
+     * @returns {string}
+     * @memberof MoveCompanyComponent
+     */
+    public getMovePlanText(): string {
+        let text = this.localeData?.subscription?.move_plan_note;
+        text = text?.replace("[COMPANY_NAME]", this.moveSelectedCompany?.name)?.replace("[PLAN_NAME]", this.moveSelectedCompany?.subscription?.planDetails?.name);
+        return text;
     }
 }
