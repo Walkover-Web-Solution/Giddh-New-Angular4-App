@@ -764,7 +764,7 @@
                                     Value</label>
                             </td>
                             <td>
-                                <input type="text" hasFocus #taxableValue="hasFocus" maxlength="12"
+                                <input type="text" hasFocus #taxableValue="hasFocus" maxlength="14"
                                     [class.error-box]="contentForm?.controls['tv1']?.errors?.maxlength"
                                     class="form-control" name="tv1"
                                     [(ngModel)]="customTemplate.sections['table'].data['taxableValue'].label"
@@ -773,7 +773,7 @@
                                 <ng-container
                                     *ngIf="taxableValue?.isFocused || contentForm?.controls['tv1']?.errors?.maxlength">
                                     <span class="max-character-label">Characters left:&nbsp;</span><span
-                                        class="max-character-value">{{(12 -
+                                        class="max-character-value">{{(14 -
                                         customTemplate.sections['table'].data['taxableValue'].label.length)}}</span>
                                 </ng-container>
                             </td>
