@@ -534,8 +534,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
                     const convertedTotal = (this.currentTxn.convertedAmount - this.currentTxn.convertedDiscount) || 0;
                     this.totalForTax = total;
-                    this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
-                    this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + this.currentTxn.convertedTax), this.giddhBalanceDecimalPlaces);
+                    const taxApplied = this.isRcmEntry ? 0 : this.currentTxn.tax;
+                    const convertedTaxApplied = this.isRcmEntry ? 0 : this.currentTxn.convertedTax;
+                    this.currentTxn.total = giddhRoundOff((total + taxApplied), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + convertedTaxApplied), this.giddhBalanceDecimalPlaces);
                 }
             } else {
                 // Amount is zero, set other parameters to zero
@@ -1280,6 +1282,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (action === this.commonLocaleData?.app_yes) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.isRcmEntry = !this.isRcmEntry;
+            this.calculateTotal();
         }
         this.currentTxn['subVoucher'] = this.isRcmEntry ? SubVoucher.ReverseCharge : '';
         if (this.rcmPopup) {

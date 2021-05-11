@@ -743,6 +743,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (action === CONFIRMATION_ACTIONS.YES) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.isRcmEntry = !this.isRcmEntry;
+            this.recalculateConvertedTotal();
+            this.calculateGrandTotal();
+            this.calculateBalanceDue();
         }
         if (this.rcmPopup) {
             this.rcmPopup.hide();
@@ -1068,27 +1071,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     obj.accountDetails.currencySymbol = acc.currencySymbol || '';
                                 }
                             });
-                        } else if (this.isPurchaseInvoice) {
-                            let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
-                            this.isRcmEntry = (results[0]) ? results[0].subVoucher === SubVoucher.ReverseCharge : false;
-                            obj = cloneDeep(convertedRes1) as VoucherClass;
-                            this.assignCompanyBillingShipping(obj.companyDetails);
-                            this.initializeWarehouse(results[0].warehouse);
+                            if (this.isPurchaseInvoice) {
+                                this.isRcmEntry = (results[0]) ? results[0].subVoucher === SubVoucher.ReverseCharge : false;
+                                this.assignCompanyBillingShipping(obj.companyDetails);
+                                if (this.copyPurchaseBill) {
+                                    if (obj && obj.entries) {
+                                        obj.entries.forEach((entry, index) => {
+                                            obj.entries[index].entryDate = this.universalDate || new Date();
+                                            obj.entries[index].uniqueName = "";
+                                        });
 
-                            if (this.copyPurchaseBill) {
-                                if (obj && obj.entries) {
-                                    obj.entries.forEach((entry, index) => {
-                                        obj.entries[index].entryDate = this.universalDate || new Date();
-                                        obj.entries[index].uniqueName = "";
-                                    });
+                                        obj.entries = obj.entries;
+                                    }
 
-                                    obj.entries = obj.entries;
+                                    let date = _.cloneDeep(this.universalDate);
+                                    obj.voucherDetails.voucherDate = date;
+                                    obj.voucherDetails.dueDate = date;
+                                    obj.voucherDetails.voucherNumber = "";
                                 }
-
-                                let date = _.cloneDeep(this.universalDate);
-                                obj.voucherDetails.voucherDate = date;
-                                obj.voucherDetails.dueDate = date;
-                                obj.voucherDetails.voucherNumber = "";
                             }
                         } else {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
@@ -6931,7 +6931,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private calculateConvertedTotal(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
-        if (this.excludeTax) {
+        if (this.excludeTax || this.isRcmEntry) {
             transaction.total = giddhRoundOff((transaction.amount - entry.discountSum), 2);
             if (transaction.isStockTxn) {
                 transaction.convertedTotal = giddhRoundOff((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum, 2);

@@ -1255,6 +1255,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (action === CONFIRMATION_ACTIONS.YES) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.isRcmEntry = !this.isRcmEntry;
+            this.vm.isRcmEntry = this.isRcmEntry;
+            this.vm.generateGrandTotal();
         }
         if (this.rcmPopup) {
             this.rcmPopup.hide();
