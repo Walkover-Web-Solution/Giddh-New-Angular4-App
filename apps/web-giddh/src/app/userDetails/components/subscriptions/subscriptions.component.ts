@@ -1,4 +1,4 @@
-import { takeUntil, take } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
@@ -17,6 +17,7 @@ import { CompanyActions } from '../../../actions/company.actions';
 import { GIDDH_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { DEFAULT_SIGNUP_TRIAL_PLAN } from '../../../app.constant';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
     selector: 'subscriptions',
@@ -30,6 +31,10 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
 
     /* This will have active tab value */
     @Input() public activeTab: string = '';
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     public subscriptions: SubscriptionsUser[] = [];
     public allSubscriptions: SubscriptionsUser[] = [];
@@ -72,7 +77,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
-    constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
+    constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions, private decimalPipe: DecimalPipe) {
         this.subscriptions$ = this.store.pipe(select(s => s.subscriptions.subscriptions), takeUntil(this.destroyed$));
         this.companies$ = this.store.pipe(select(cmp => cmp.session.companies), takeUntil(this.destroyed$));
     }
@@ -380,7 +385,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
             let currentDate = moment();
             let expiryDate = moment(expiry.split("-").reverse().join("-"));
             let difference = expiryDate.diff(currentDate, 'days');
-            return (difference <= 15) ? difference + " days remaining" : "Active"
+            return (difference <= 15) ? difference + this.localeData?.subscription?.days_remaining : this.commonLocaleData?.app_active
         } else {
             return "-";
         }
@@ -464,37 +469,34 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
         this.selectedCompany = {};
     }
 
-    // public getSubscriptionList() {
-    //   this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
-    //   this.store.pipe(select(s =>  s.subscriptions.subscriptions), takeUntil(this.destroyed$))
-    //     .subscribe(s => {
-    //       if (s && s.length) {
-    //         this.subscriptions = s;
-    //         this.store.dispatch(this._subscriptionsActions.SubscribedCompaniesList(s && s[0]));
-    //         this.store.dispatch(this._subscriptionsActions.SubscribedUserTransactions(s && s[0]));
-    //         this.store.pipe(select(s =>  s.subscriptions.transactions), takeUntil(this.destroyed$))
-    //           .subscribe(s => this.transactions = s);
-    //       }
-    //     });
-    // }
+    /**
+     * This will return companies limit text
+     *
+     * @param {*} item
+     * @returns {string}
+     * @memberof SubscriptionsComponent
+     */
+    public getSubscribedCompaniesCount(totalCompanies: any, companiesLimit): string {
+        let text = this.localeData?.subscription?.companies_limit;
+        text = text?.replace("[TOTAL_COMPANIES]", this.decimalPipe.transform(totalCompanies))?.replace("[PLAN_LIMIT]", this.decimalPipe.transform(companiesLimit));
+        return text;
+    }
 
-    // public getCompanyTransactions(companyName) {
-    //   if (this.subscriptions && this.subscriptions.length) {
-    //     this.store.dispatch(this._subscriptionsActions.SubscribedCompanyTransactions(this.subscriptions && this.subscriptions[0], companyName));
-    //   }
-    // }
+    /**
+     * This will return additional charges note
+     *
+     * @returns {string}
+     * @memberof SubscriptionsComponent
+     */
+    public getAdditionalChargesNote(): string {
+        let text = this.localeData?.subscription?.additional_charges_note;
+        text = text?.replace("[TRANSACTION_LIMIT]", this.decimalPipe.transform(this.seletedUserPlans?.planDetails?.transactionLimit))?.replace("[RATE_EXTRA_TRANSACTION]", this.decimalPipe.transform(this.seletedUserPlans?.planDetails?.ratePerExtraTransaction))?.replace("[CURRENCY]", this.activeCompany?.baseCurrency);
+        return text;
+    }
 
-    // public openModal(template: TemplateRef<any>, company, subscription) {
-    //    this.getCompanyTransactions(company.uniqueName);
-    //   this.modalRef = this.modalService.show(
-    //     template,
-    //     Object.assign({}, { class: 'subscription_modal' })
-    //   );
-    //   let cont = {
-    //     subscription,
-    //     company
-    //   }
-    //   this.modalRef.content = cont;
-    // }
-
+    public getPlanSubscribedText(): string {
+        let text = this.localeData?.subscription?.plan_subscribed_on;
+        text = text?.replace("[PLAN_NAME]", this.seletedUserPlans?.planDetails?.name)?.replace("[PLAN_STARTED_AT]", this.seletedUserPlans?.startedAt);
+        return text;
+    }
 }

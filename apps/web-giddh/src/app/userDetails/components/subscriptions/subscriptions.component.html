@@ -5,22 +5,21 @@
                 <div class="form-group subscription-dropdown-wrapper mb-0">
                     <div class="btn-group d-block subscription-dropdown mb-0 open custom-input-search">
                         <i class="icon-search"></i>
-                        <input type="text" class="form-control" placeholder="Search Subscribed Plan"
+                        <input type="text" class="form-control" [placeholder]="localeData?.subscription?.search_subscribed_plan"
                             (focus)="showSubscribedPlansList = true;" (focusout)="showSubscribedPlansList = false;"
                             [(ngModel)]="searchSubscribedPlan" (ngModelChange)="searchPlan($event)">
                         <ul id="dropdown-basic" class="dropdown-menu" role="menu" aria-labelledby="button-basic"
                             *ngIf="showSubscribedPlansList">
-                            <li *ngIf="subscriptions.length==0">No results found</li>
+                            <li *ngIf="subscriptions.length==0">{{commonLocaleData?.app_no_result_found}}</li>
                             <li *ngFor="let item of subscriptions" [ngClass]="{'active': seletedUserPlans == item}"
                                 role="menuitem" class="cursor-pointer">
                                 <a (click)="selectedSubscriptionPlan(item);">
                                     <div class="clearfix">
                                         <p><strong>{{item?.planDetails?.name}}</strong></p>
-                                        <p *ngIf="item.subscriptionId">Subscription ID: {{item.subscriptionId}} </p>
-                                        <p>Subscribed on {{item.startedAt ? (formatDate(item.startedAt) | date:
+                                        <p *ngIf="item.subscriptionId">{{localeData?.subscription?.subscription_id}}: {{item.subscriptionId}} </p>
+                                        <p>{{localeData?.subscription?.subscribed_on}}: {{item.startedAt ? (formatDate(item.startedAt) | date:
                                             giddhDateFormatUI) : '-'}} </p>
-                                        <p>Companies: {{item?.totalCompanies | number}} out of
-                                            {{item?.planDetails?.companiesLimit | number}} </p>
+                                        <p>{{localeData?.subscription?.companies}}: {{getSubscribedCompaniesCount(item?.totalCompanies, item?.planDetails?.companiesLimit)}} </p>
                                     </div>
                                     <span class="text-warning" *ngIf="item?.status==='trial'">{{item?.status |
                                         titlecase}}</span>
@@ -35,8 +34,8 @@
                 </div>
                 <div class="d-flex">
                     <button type="button" *ngIf="seletedUserPlans?.additionalCharges >0" (click)="goToBillingDetails();"
-                        class="btn btn-sky-blue">Pay Now</button>
-                    <button type="button" (click)="isPlanShow=true" class="btn btn-green mr-0">Buy New Plan</button>
+                        class="btn btn-sky-blue">{{commonLocaleData?.app_pay_now}}</button>
+                    <button type="button" (click)="isPlanShow=true" class="btn btn-green mr-0">{{commonLocaleData?.app_buy_new_plan}}</button>
                 </div>
             </div>
         </div>
@@ -79,7 +78,7 @@
                                             Transactions</button> -->
                                         <button type="button" class="btn btn-success"
                                             *ngIf="seletedUserPlans?.planDetails?.uniqueName !== defaultTrialPlan"
-                                            (click)="renewPlan()">Renew</button>
+                                            (click)="renewPlan()">{{commonLocaleData?.app_renew}}</button>
 
                                         <div class="btn-group d-inline-block custom-dropdown ml-1" dropdown
                                             placement="bottom right">
@@ -95,12 +94,12 @@
                                         </li> -->
                                                 <li role="menuitem">
                                                     <a class="dropdown-item" href="javascript:void(0)"
-                                                        (click)="isPlanShow=true">Upgrade Plan</a>
+                                                        (click)="isPlanShow=true">{{localeData?.subscription?.upgrade_plan}}</a>
                                                 </li>
                                                 <li role="menuitem"
                                                     *ngIf="seletedUserPlans?.planDetails?.uniqueName !== defaultTrialPlan">
                                                     <a class="dropdown-item" href="javascript:void(0)"
-                                                        (click)="isPlanShow=true">Downgrade Plan</a>
+                                                        (click)="isPlanShow=true">{{localeData?.subscription?.downgrade_plan}}</a>
                                                 </li>
                                                 <!-- <li role="menuitem">
                                             <a class="dropdown-item" href="javascript:void(0)">Cancel Subscription</a>
@@ -117,22 +116,22 @@
                                     <div class="table-responsive">
                                         <table class="table table-no-border mb-0 subscription-table-box">
                                             <tr>
-                                                <th>Subscription ID</th>
+                                                <th>{{localeData?.subscription?.subscription_id}}</th>
                                                 <td>{{seletedUserPlans?.subscriptionId}}</td>
                                             </tr>
 
                                             <tr>
-                                                <th>Subscribed On</th>
+                                                <th>{{localeData?.subscription?.subscribed_on}}</th>
                                                 <td>{{subscriptionDates?.startedAt | date: giddhDateFormatUI}}</td>
                                             </tr>
 
                                             <tr>
-                                                <th>Expiry Date</th>
+                                                <th>{{localeData?.subscription?.expiry_date}}</th>
                                                 <td>{{subscriptionDates?.expiry | date: giddhDateFormatUI}}</td>
                                             </tr>
 
                                             <tr>
-                                                <th>Subscription Price</th>
+                                                <th>{{localeData?.subscription?.subscription_price}}</th>
                                                 <td>
                                                     <!-- {{seletedUserPlans?.planDetails?.amount | number}} -->
                                                     <span class="d-inline-flex">
@@ -145,16 +144,15 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th>Total Companies</th>
-                                                <td>{{ seletedUserPlans?.totalCompanies | number}} out of
-                                                    {{ seletedUserPlans?.planDetails?.companiesLimit | number}}</td>
+                                                <th>{{localeData?.subscription?.total_companies}}</th>
+                                                <td>{{ getSubscribedCompaniesCount(seletedUserPlans?.totalCompanies, seletedUserPlans?.planDetails?.companiesLimit)}}</td>
                                             </tr>
                                             <tr>
-                                                <th>Transactions Limit</th>
+                                                <th>{{localeData?.subscription?.transactions_limit}}</th>
                                                 <td>{{seletedUserPlans?.planDetails?.transactionLimit | number}}</td>
                                             </tr>
                                             <tr>
-                                                <th>Validity</th>
+                                                <th>{{localeData?.subscription?.validity}}</th>
                                                 <td>{{seletedUserPlans?.planDetails?.duration}}
                                                     {{seletedUserPlans?.planDetails?.durationUnit}}</td>
                                             </tr>
@@ -163,8 +161,7 @@
                                 </div>
                             </div>
 
-                            <h2 class="section-head pb-0">{{seletedUserPlans?.planDetails?.name}} (Transactions
-                                Statement)</h2>
+                            <h2 class="section-head pb-0">{{seletedUserPlans?.planDetails?.name}} ({{localeData?.subscription?.transactions_statement}})</h2>
 
                             <div class="table-subscription mt-1 xs-mb-2">
                                 <div class="table-responsive">
@@ -172,19 +169,19 @@
                                         <thead>
                                             <tr>
                                                 <!-- <th>Date</th> -->
-                                                <th>Consumptions <span class="text-gray">(previous+current)</span></th>
-                                                <th>Balance</th>
-                                                <th class="text-right">Additional Charges</th>
+                                                <th>{{localeData?.subscription?.consumptions}} <span class="text-gray">{{localeData?.subscription?.previous_current}}</span></th>
+                                                <th>{{commonLocaleData?.app_balance}}</th>
+                                                <th class="text-right">{{localeData?.subscription?.additional_charges}}</th>
                                             </tr>
                                         </thead>
                                         <tbody *ngIf="seletedUserPlans">
                                             <tr>
                                                 <!-- <td data-title="Date">{{ moment(transaction.from, giddhDateFormat).format('MMM - YY')}}</td> -->
-                                                <td data-title="Consumptions">{{ seletedUserPlans?.totalTransactions ?
+                                                <td [attr.data-title]="localeData?.subscription?.consumptions">{{ seletedUserPlans?.totalTransactions ?
                                                     (seletedUserPlans?.totalTransactions | number) : 0 }}</td>
-                                                <td data-title="Balance">{{ seletedUserPlans?.remainingTransactions || 0
+                                                <td [attr.data-title]="commonLocaleData?.app_balance">{{ seletedUserPlans?.remainingTransactions || 0
                                                     }}</td>
-                                                <td data-title="Additional Charges" class="text-right">{{
+                                                <td [attr.data-title]="localeData?.subscription?.additional_charges" class="text-right">{{
                                                     seletedUserPlans?.additionalCharges?
                                                     (seletedUserPlans?.additionalCharges | number) : 0 }}</td>
                                             </tr>
@@ -194,12 +191,8 @@
 
                             </div>
                             <div class="mr-t05">
-                                <p><small>* Additional charges on transactions above
-                                        {{seletedUserPlans?.planDetails?.transactionLimit | number}} @
-                                        {{seletedUserPlans?.planDetails?.ratePerExtraTransaction | number}}
-                                        {{activeCompany?.baseCurrency}} per transaction</small>
-                                </p>
-                                <p><small>* Each month includes previous month's transactions</small></p>
+                                <p><small>{{getAdditionalChargesNote()}}</small></p>
+                                <p><small>{{localeData?.subscription?.transactions_note}}</small></p>
                             </div>
                         </div>
                     </div>
@@ -207,19 +200,19 @@
                     <div class="col-lg-5 col-md-12  col-sm-12 left-div">
                         <div class="main-associated-companies">
                             <div class="d-flex justify-content-between pl-2 pr-2 associated-company-heading">
-                                <h2 class="section-head pb-0">Associated Companies</h2>
+                                <h2 class="section-head pb-0">{{localeData?.subscription?.associated_companies}}</h2>
                                 <div class="clearfix">
                                     <div class="active d-inline-block middle"
-                                        *ngIf="activeCompany?.subscription?.status === 'active' || calculateRemainingDays(activeCompany?.subscription?.expiry) === 'Active'">
-                                        <span class="green-dote"> </span> Active
+                                        *ngIf="activeCompany?.subscription?.status === 'active' || calculateRemainingDays(activeCompany?.subscription?.expiry) === commonLocaleData?.app_active">
+                                        <span class="green-dote"> </span> {{commonLocaleData?.app_active}}
                                     </div>
                                     <div class="text-warning font-14 d-inline-block middle"
-                                        *ngIf="activeCompany?.subscription?.status === 'trial' && calculateRemainingDays(activeCompany?.subscription?.expiry) !== 'Active'">
-                                        <span class="orange-dote"> </span> Trial
+                                        *ngIf="activeCompany?.subscription?.status === 'trial' && calculateRemainingDays(activeCompany?.subscription?.expiry) !== commonLocaleData?.app_active">
+                                        <span class="orange-dote"> </span> {{localeData?.subscription?.trial}}
                                     </div>
                                     <div class="text-danger d-inline-block middle"
                                         *ngIf="activeCompany?.subscription?.status === 'expired'">
-                                        <span class="red-dot"> </span> Expired
+                                        <span class="red-dot"> </span> {{localeData?.subscription?.expired}}
                                     </div>
                                     <!-- <div class="btn-group d-inline-block custom-dropdown pd-t05 ml-1 middle" dropdown
                                         placement="bottom right">
@@ -246,7 +239,7 @@
                                         <i class="icon-search"></i>
                                         <input type="search" class="form-control" [(ngModel)]="searchString"
                                             (ngModelChange)="filterCompanyList($event)"
-                                            placeholder="Search Company here">
+                                            [placeholder]="localeData?.subscription?.search_company">
                                     </div>
                                 </div>
                                 <div class="associated-companies" *ngIf="subscriptions && activeTab === 'subscription'">
@@ -266,7 +259,7 @@
                                                         </p>
                                                         <p class="font-12 mr-t05"
                                                             *ngIf="activeCompany?.uniqueName === company?.uniqueName">
-                                                            (Current Company)</p>
+                                                            {{localeData?.subscription?.current_company}}</p>
                                                     </div>
                                                 </a>
 
@@ -282,7 +275,7 @@
                                                         <li role="menuitem">
                                                             <a class="dropdown-item"
                                                                 (click)="openModalMove(MoveCompany, company)"
-                                                                href="javascript:void(0)">Move Company </a>
+                                                                href="javascript:void(0)">{{localeData?.subscription?.move_company}} </a>
                                                         </li>
                                                         <!-- <li role="menuitem">
                                                             <a class="dropdown-item" href="javascript:void(0)"
@@ -298,7 +291,7 @@
 
                                 <div class="pl-2 mt-3 buy-transactions">
                                     <button class="btn btn-primary" type="button"
-                                        (click)="openAddCompanyModal(AddCompany)">Add Company</button>
+                                        (click)="openAddCompanyModal(AddCompany)">{{localeData?.subscription?.add_company}}</button>
                                 </div>
                             </div>
                         </div>
@@ -308,9 +301,9 @@
 
             <div class="clearfix mr-t2 relative">
                 <div class="transaction-popup mr-b1" *ngIf="seletedUserPlans?.additionalCharges >0">
-                    <p>You have crossed transactions limit of your </p>
-                    <p><strong>Professional Plan subscribed on {{seletedUserPlans?.startedAt}}!</strong></p>
-                    <p><small>Please renew your plan or pay now to continue subscription.</small></p>
+                    <p>{{localeData?.subscription?.crossed_transaction_limit}} </p>
+                    <p><strong>{{getPlanSubscribedText()}}</strong></p>
+                    <p><small>{{localeData?.subscription?.renew_plan_note}}</small></p>
                 </div>
 
                 <!-- <h2 class="subscription-title" *ngIf="subscriptions">{{seletedUserPlans?.planDetails?.name}} <span
@@ -380,28 +373,28 @@
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <p class="bold font-14">{{item?.planDetails?.name}}</p>
                         <ul class="list-inline plan-list font-14">
-                            <li *ngIf="item?.status==='expired'"><span>Expired On: </span><span>{{item.expiry ?
+                            <li *ngIf="item?.status==='expired'"><span>{{localeData?.subscription?.expired_on}}: </span><span>{{item.expiry ?
                                     (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </span></li>
-                            <li *ngIf="item.subscriptionId && item?.status !== 'expired'"><span>Subscription ID: </span>
+                            <li *ngIf="item.subscriptionId && item?.status !== 'expired'"><span>{{localeData?.subscription?.subscription_id}}: </span>
                                 <span> {{item.subscriptionId}}</span> </li>
-                            <li *ngIf="item?.status!=='expired'"><span>Assigned On: </span> <span>{{item.createdAt ?
+                            <li *ngIf="item?.status!=='expired'"><span>{{localeData?.subscription?.assigned_on}}: </span> <span>{{item.createdAt ?
                                     (formatDate(item.createdAt) | date: giddhDateFormatUI) : '-'}} </span></li>
-                            <li *ngIf="item?.status!=='expired'"><span>Expiry Date: </span><span>{{item.expiry ?
+                            <li *ngIf="item?.status!=='expired'"><span>{{localeData?.subscription?.expiry_date}}: </span><span>{{item.expiry ?
                                     (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </span></li>
-                            <li *ngIf="item?.status!=='expired'"><span>No. of companies: </span>
+                            <li *ngIf="item?.status!=='expired'"><span>{{localeData?.subscription?.no_of_companies}}: </span>
                                 <span>{{item?.totalCompanies | number}}/{{item?.planDetails?.companiesLimit |
                                     number}}</span></li>
-                            <li *ngIf="item?.status!=='expired'"><span>Transaction Limit: </span>
+                            <li *ngIf="item?.status!=='expired'"><span>{{localeData?.subscription?.transaction_limit}}: </span>
                                 <span>{{item?.planDetails?.transactionLimit ? (item?.planDetails?.transactionLimit |
                                     number) : '0'}}</span></li>
                         </ul>
                     </div>
                     <div class="col-md-3 col-sm-3 col-xs-12 text-right trial-plan-state">
-                        <div class="font-14" [ngClass]="{'active': calculateRemainingDays(item?.expiry) === 'Active'}"
+                        <div class="font-14" [ngClass]="{'active': calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active}"
                             *ngIf="item?.status==='trial'"><span class="font-26"
-                                *ngIf="calculateRemainingDays(item?.expiry) !== 'Active'">{{calculateRemainingDays(item?.expiry)}}</span>
-                            <span class="green-dote" *ngIf="calculateRemainingDays(item?.expiry) === 'Active'"></span>
-                            {{calculateRemainingDays(item?.expiry) === 'Active' ? 'Active' : ""}} </div>
+                                *ngIf="calculateRemainingDays(item?.expiry) !== commonLocaleData?.app_active">{{calculateRemainingDays(item?.expiry)}}</span>
+                            <span class="green-dote" *ngIf="calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active"></span>
+                            {{calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active ? commonLocaleData?.app_active : ""}} </div>
                         <div class="active font-14" *ngIf="item?.status==='active'"><span class="green-dote"></span>
                             {{item?.status | titlecase}} </div>
                         <div class="text-danger font-14" *ngIf="item?.status==='expired'"><span class="red-dot"></span>
@@ -460,8 +453,8 @@
 </ng-template> -->
 <!-- Modal end -->
 
-<subscriptions-plans *ngIf="isPlanShow" [subscriptions]="subscriptions"
-    (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)"></subscriptions-plans>
+<subscriptions-plans *ngIf="isPlanShow && localeData?.subscription" [subscriptions]="subscriptions"
+    (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></subscriptions-plans>
 
 <!-- activity-log-sidebar aside -->
 <!-- <div class="aside-overlay" *ngIf="activityLogAsideMenuState === 'in'"></div>
@@ -470,19 +463,19 @@
 <!-- activity-log-sidebar aside -->
 <div class="aside-overlay" *ngIf="companyDetailsAsideMenuState === 'in'"></div>
 <company-details-sidebar [class]="companyDetailsAsideMenuState"
-    *ngIf="companyDetailsAsideMenuState === 'in' && selectedCompany" (closeEvent)="toggleCompanyDetailsAsidePane()"
-    [selectedCompany]="selectedCompany" (closeEvent)="hideCompanyDetails($event);"></company-details-sidebar>
+    *ngIf="companyDetailsAsideMenuState === 'in' && selectedCompany" (closeEvent)="toggleCompanyDetailsAsidePane(); hideCompanyDetails($event);"
+    [selectedCompany]="selectedCompany" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></company-details-sidebar>
 
 <!-- MoveCompany Modal -->
 <ng-template #MoveCompany>
     <move-company (moveCompany)="addOrMoveCompanyCallback($event)" [subscriptions]="subscriptions"
-        [moveSelectedCompany]="selectedCompany"></move-company>
+        [moveSelectedCompany]="selectedCompany" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></move-company>
 </ng-template>
 
 <!-- deactivate Company Modal -->
 <ng-template #AddCompany>
     <add-company [allAssociatedCompanies]="allAssociatedCompanies" [activeCompany]="activeCompany"
-        (addCompany)="addOrMoveCompanyCallback($event)"></add-company>
+        (addCompany)="addOrMoveCompanyCallback($event)" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></add-company>
 </ng-template>
 
 <!-- deactivate Company Modal -->
