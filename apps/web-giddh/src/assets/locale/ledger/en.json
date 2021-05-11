@@ -68,7 +68,7 @@
     "add_to_cr": "Add to CR",
     "confirm_delete_file": "Are you sure you want to delete the attached file?",
     "map_bank_entry": "Map Bank Entry",
-    "transaction_available_rc": "Is this transaction applicable for <strong> Reverse Charge? </strong>",
+    "transaction_available_rc": "Is this transaction applicable for <strong>&nbsp;Reverse Charge? </strong>",
     "tax_compulsory": "Tax is compulsory",
     "transaction_available_ts": "Is this transaction applicable for Tourist Scheme?",
     "passport_number": "Passport Number",
