@@ -546,5 +546,9 @@
     "app_characters_left": "वर्ण डावे",
     "app_pin" : "PIN",
     "app_max_100_characters_allowed_limit": "Max. 100 characters allowed",
-    "app_max_50_characters_allowed_limit": "Max. 50 characters allowed"
+    "app_max_50_characters_allowed_limit": "Max. 50 characters allowed",
+    "app_active": "Active",
+    "app_renew": "Renew",
+    "app_buy_plan": "Buy Plan",
+    "app_settings": "Settings"
 }
