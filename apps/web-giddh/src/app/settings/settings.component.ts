@@ -23,6 +23,7 @@ import { WarehouseActions } from './warehouse/action/warehouse.action';
 import { PAGINATION_LIMIT, SETTING_INTEGRATION_TABS } from '../app.constant';
 import { HttpClient } from "@angular/common/http";
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { LocaleService } from '../services/locale.service';
 
 @Component({
     templateUrl: './settings.component.html',
@@ -59,6 +60,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This holds the active locale */
+    public activeLocale: string = "";
 
     constructor(
         private store: Store<AppState>,
@@ -72,7 +75,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private settingsIntegrationActions: SettingsIntegrationActions,
         private warehouseActions: WarehouseActions,
         private http: HttpClient,
-        private breakPointObservar: BreakpointObserver
+        private breakPointObservar: BreakpointObserver,
+        private localeService: LocaleService
     ) {
         this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
         this.isUpdateCompanyInProgress$ = this.store.pipe(select(state => state.settings.updateProfileInProgress), takeUntil(this.destroyed$));
@@ -156,6 +160,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
             if (yes) {
                 this.isCompanyProfileUpdated = true;
             }
+        });
+
+        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            if(this.activeLocale && this.activeLocale !== response?.value) {
+                this.localeService.getLocale('settings', response?.value).subscribe(response => {
+                    this.localeData = response;
+                });
+            }
+            this.activeLocale = response?.value;
         });
     }
 
