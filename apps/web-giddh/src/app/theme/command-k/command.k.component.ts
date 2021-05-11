@@ -66,6 +66,10 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         totalPages: 1,
         isMobile: false
     };
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,

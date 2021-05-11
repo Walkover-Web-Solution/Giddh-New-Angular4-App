@@ -1,5 +1,4 @@
 import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
-import { AuthService } from '../../theme/ng-social-login-module/index';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
@@ -23,7 +22,7 @@ import { createSelector } from 'reselect';
 import * as moment from 'moment/moment';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
-import { clone, cloneDeep, concat, orderBy, sortBy, map as lodashMap, slice, find } from '../../lodash-optimized';
+import { clone, cloneDeep, slice, find } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { CompAidataModel } from '../../models/db';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
@@ -43,6 +42,7 @@ import { SettingsBranchActions } from '../../actions/settings/branch/settings.br
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
+import { LocaleService } from '../../services/locale.service';
 
 @Component({
     selector: 'app-header',
@@ -92,10 +92,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public title: Observable<string>;
     public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
     public noGroups: boolean;
-    public languages: any[] = [
-        { name: 'ENGLISH', value: 'en' },
-        { name: 'DUTCH', value: 'nl' }
-    ];
     public activeFinancialYear: ActiveFinancialYear;
     public sideMenu: { isopen: boolean } = { isopen: false };
     public companyMenu: { isopen: boolean } = { isopen: false };
@@ -215,6 +211,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public remainingSubscriptionDays: any = false;
     /** Menu items received from API */
     public apiMenuItems: Array<any> = [];
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** This holds the active locale */
+    public activeLocale: string = "";
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -231,7 +233,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     constructor(
         private commonService: CommonService,
         private loginAction: LoginActions,
-        private socialAuthService: AuthService,
         private store: Store<AppState>,
         private companyActions: CompanyActions,
         private groupWithAccountsAction: GroupWithAccountsAction,
@@ -253,7 +254,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private settingsBranchAction: SettingsBranchActions,
         private accountsAction: AccountsAction,
         private ledgerAction: LedgerActions,
-        public location: Location
+        public location: Location,
+        private localeService: LocaleService
     ) {
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
@@ -652,6 +654,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             });
         }
+
+        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            if(this.activeLocale && this.activeLocale !== response?.value) {
+                this.localeService.getLocale('header', response?.value).subscribe(response => {
+                    this.localeData = response;
+                });
+            }
+            this.activeLocale = response?.value;
+        });
     }
 
     /**
@@ -748,8 +759,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (this.isTodaysDateSelected) {
                     let today = cloneDeep([moment(), moment()]);
                     this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-                    // this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                    this.selectedDateRangeUi = "Today";
+                    this.selectedDateRangeUi = this.commonLocaleData?.app_today;
                 } else {
                     this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                     this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -1415,16 +1425,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let name = '';
         switch (url) {
             case 'SETTINGS?TAB=PERMISSION&TABINDEX=5':
-                name = 'Settings > Permission';
+                name = this.localeData?.settings_permission;
                 break;
             case 'user-details/profile':
-                name = 'User Details';
+                name = this.localeData?.user_details;
                 break;
             case 'inventory-in-out':
-                name = 'Inventory In/Out';
+                name = this.localeData?.inventory_inout;
                 break;
             case 'import/select-type':
-                name = 'Import Data';
+                name = this.localeData?.import_data;
                 break;
             default:
                 name = url;
@@ -1481,7 +1491,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (this.isMobileSite) {
                     this.selectedPage = acc.name;
                 } else {
-                    this.selectedPage = 'ledger - ' + acc.name;
+                    this.selectedPage = this.localeData?.ledger_heading + acc.name;
                 }
                 return this.navigateToUser = false;
             }
@@ -1641,7 +1651,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
             // this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.selectedDateRangeUi = "Today";
+            this.selectedDateRangeUi = this.commonLocaleData?.app_today;
+
             let dates = {
                 fromDate: null,
                 toDate: null,
@@ -1802,5 +1813,65 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             }
         });
+    }
+
+    /**
+     * This will return plan end note
+     *
+     * @returns {string}
+     * @memberof HeaderComponent
+     */
+    public getSubscriptionEndNote(): string {
+        let text = this.localeData?.subscription_end_note;
+        text = text?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration)?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit)?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry);
+        return text;
+    }
+
+    /**
+     * This will return plan ended note
+     *
+     * @returns {string}
+     * @memberof HeaderComponent
+     */
+    public getSubscriptionEndedNote(): string {
+        let text = this.localeData?.subscription_ended_note;
+        text = text?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration)?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit)?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry);
+        return text;
+    }
+
+    /**
+     * This will return plan transactions ended note
+     *
+     * @returns {string}
+     * @memberof HeaderComponent
+     */
+    public getSubscriptionTransactionEndedNote(): string {
+        let text = this.localeData?.subscription_transaction_limit_ended;
+        text = text?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt);
+        return text;
+    }
+
+    /**
+     * This will return plan expired note
+     *
+     * @returns {string}
+     * @memberof HeaderComponent
+     */
+    public getPlanExpiredNote(): string {
+        let text = this.localeData?.plan_expired_note;
+        text = text?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration)?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase())?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry);
+        return text;
+    }
+
+    /**
+     * This will return transaction limit crossed note
+     *
+     * @returns {string}
+     * @memberof HeaderComponent
+     */
+    public getTransactionLimitCrossedNote(): string {
+        let text = this.localeData?.transaction_limit_crossed;
+        text = text?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt);
+        return text;
     }
 }
