@@ -929,7 +929,7 @@
 
         <!-- region invoice-preview-details -->
         <div *ngIf="selectedInvoiceForDetails">
-            <invoice-preview-details-component [selectedItem]="selectedInvoiceForDetails" [items]="itemsListForDetails"
+            <invoice-preview-details-component [(selectedItem)]="selectedInvoiceForDetails" [items]="itemsListForDetails"
                 [invoiceSetting]="invoiceSetting" [invoiceSearch]="invoiceSearch" (deleteVoucher)="deleteConfirmedInvoice($event)"
                 (sendEmail)="sendEmail($event)" (invoiceSearchEvent)="invoiceSearch = $event;" (closeEvent)="invoicePreviewClosed()"
                 (onOpenAdvanceReceiptModal)="openAdvanceReceiptModal($event)" [isCompany]="isCompany"
