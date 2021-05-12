@@ -1,5 +1,5 @@
 import { GstOverViewResult, GstOverViewSummary } from '../../../../../models/api-models/GstReconcile';
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable, of, ReplaySubject } from 'rxjs';
@@ -14,41 +14,22 @@ interface SequenceConfig {
     index: number;
 }
 
-export const GstR1SummarySequencing: SequenceConfig[] = [
-    { name: 'B2B Invoices', gstReturnType: 'b2b', index: 1 },
-    { name: 'B2C (Large) Invoices', gstReturnType: 'b2cl', index: 2 },
-    { name: 'Export Invoices', gstReturnType: 'export', index: 3 },
-    { name: 'B2C (Small) Invoices', gstReturnType: 'b2cs', index: 4 },
-    { name: 'Exempt', gstReturnType: 'nil', index: 5 },
-    { name: 'Credit / Debit Notes / Refund Vouchers', gstReturnType: 'CreditNote/DebitNote/RefundVouchers', index: 6 },
-    { name: 'Advance Receipt', gstReturnType: 'advance-receipt', index: 7 },
-    { name: 'Tax Paid', gstReturnType: 'taxPaid', index: 8 },
-    { name: 'HSN Summary', gstReturnType: 'hsnsac', index: 9 }
-];
-
-export const GstR2SummarySequencing: SequenceConfig[] = [
-    { name: 'B2B Invoices', gstReturnType: 'b2b', index: 1 },
-    { name: 'B2BUR Invoices', gstReturnType: 'b2bur', index: 2 },
-    { name: 'Credit/Debit Notes (Registered)', gstReturnType: 'cdnr', index: 3 },
-    { name: 'Credit/Debit Notes (Unregistered)', gstReturnType: 'cdnUr', index: 4 },
-    { name: 'Import of Goods / Capital Goods', gstReturnType: 'impg', index: 5 },
-    { name: 'Import of Services', gstReturnType: 'imps', index: 6 },
-    { name: 'Nil Rated Invoices', gstReturnType: 'nil', index: 7 },
-    { name: 'HSN / SAC Summary', gstReturnType: 'hsnsac', index: 8 },
-];
-
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'overview-summary',
     templateUrl: './summary.component.html',
     styleUrls: ['summary.component.css'],
 })
-export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class OverviewSummaryComponent implements OnInit, OnDestroy {
 
     @Input() public currentPeriod: any = null;
     @Input() public selectedGst: string = null;
     @Input() public activeCompanyGstNumber: string = null;
     @Input() public isTransactionSummary: boolean = false;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Output() public SelectTxn: EventEmitter<any> = new EventEmitter(null);
     /** Emits when HSN/SAC is selected */
     @Output() public hsnSacSelected: EventEmitter<void> = new EventEmitter();
@@ -124,14 +105,6 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
             status: 'all'
         };
         this._route.navigate(['pages', 'gstfiling', 'filing-return', 'transaction'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, type: param.type, entityType: param.entityType, status: param.status, selectedGst: this.activeCompanyGstNumber } });
-    }
-
-    public ngOnChanges(s: SimpleChanges) {
-        //
-    }
-
-    public ngAfterViewInit() {
-        //
     }
 
     public ngOnDestroy() {

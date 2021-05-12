@@ -4,7 +4,7 @@
             <a href="javascript:;">
                 <span (click)="goToPreviousPage()">
                     <i class="icon-back-arrow"></i>
-                    Back
+                    {{commonLocaleData?.app_back}}
                 </span>
             </a>
         </div>
@@ -13,25 +13,25 @@
                 <li>
                     <a class="d-block clearfix" routerLinkActive #rla="routerLinkActive" [class.active]="rla.isActive" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/pages/gstfiling']">
                         <span><i class="icon-dashboard-new"></i></span>
-                        <span>Dashboard</span>
+                        <span>{{localeData?.dashboard}}</span>
                     </a>
                 </li>
                 <li>
                     <a href="javascript:void(0);" [attr.disabled]="!activeCompanyGstNumber" [ngClass]="{'disabled': !activeCompanyGstNumber, 'active': selectedGstModule === GstReport.Gstr3b}" class="d-block clearfix"  (click)="navigate(GstReport.Gstr3b)">
                         <span><i class="icon-summary"></i></span>
-                        <span>GSTR 3B SUMMARY</span>
+                        <span>{{localeData?.gstr3b_summary}}</span>
                     </a>
                 </li>
                 <li>
                     <a href="javascript:void(0);" [ngClass]="{'disabled': !activeCompanyGstNumber, 'active': selectedGstModule === GstReport.Gstr1}" class="d-block clearfix" (click)="navigate(GstReport.Gstr1)">
                         <span><i class="icon-ecomm"></i></span>
-                        <span>GSTR-1</span>
+                        <span>{{localeData?.gstr1_label}}</span>
                     </a>
                 </li>
                 <li>
                     <a href="javascript:void(0);" [ngClass]="{'disabled': !activeCompanyGstNumber, 'active': selectedGstModule === GstReport.Gstr2}" class="d-block clearfix" (click)="navigate(GstReport.Gstr2)">
                         <span><i class="icon-gstr"></i></span>
-                        <span>GSTR-2</span>
+                        <span>{{localeData?.gstr2_label}}</span>
                     </a>
                 </li>
             </ul>

@@ -55,6 +55,10 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     private gstr3BOverviewDataFetchedInProgress$: Observable<boolean>;
     private gstr3BOverviewData$: Observable<Gstr3bOverviewResult2>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
@@ -244,15 +248,15 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public emailGSTR3bSheet(isDownloadDetailSheet: boolean) {
 
         if (!this.userEmail) {
-            return this._toasty.errorToast("Email Id can't be empty");
+            return this._toasty.errorToast(this.localeData?.email_required_error);
         }
         // Note:- appended ",1" with selectedMonth (July 2020) because "July 2020" format does not support for firefox browser and ("July 2020, 1") is valid format for chrome and firefox browser
         let convertValidDateFormatForMoment = this.selectedMonth + ',1';
         let monthToSend = moment(convertValidDateFormatForMoment).format("MM") + "-" + moment(convertValidDateFormatForMoment).format("YYYY");
         if (!monthToSend) {
-            this._toasty.errorToast('Please select a month');
+            this._toasty.errorToast(this.localeData?.month_required_error);
         } else if (!this.activeCompanyGstNumber) {
-            return this._toasty.errorToast('No GST Number found for selected company');
+            return this._toasty.errorToast(this.localeData?.gstin_unavailable_error);
         } else {
             this.store.dispatch(this._invoicePurchaseActions.SendGSTR3BEmail(monthToSend, this.activeCompanyGstNumber, isDownloadDetailSheet, this.userEmail));
             this.userEmail = '';
@@ -305,5 +309,17 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      */
     public navigateTogstR3B(type): void {
         this.router.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: this.isCompany, selectedGst: this.activeCompanyGstNumber } });
+    }
+
+    /**
+     * This will return gst return filed text
+     *
+     * @returns {string}
+     * @memberof FileGstR3Component
+     */
+    public getGstReturnFiledText(): string {
+        let text = this.localeData?.filing?.gst_filed_success;
+        text = text?.replace("[PERIOD_FROM]", this.currentPeriod?.from)?.replace("[PERIOD_TO]", this.currentPeriod.to);
+        return text;
     }
 }
