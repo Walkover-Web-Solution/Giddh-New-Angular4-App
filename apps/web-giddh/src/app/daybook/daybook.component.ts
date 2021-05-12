@@ -8,7 +8,7 @@ import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../actions/company.actions';
-import { StateDetailsRequest } from '../models/api-models/Company';
+import { StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { DayBookResponseModel } from '../models/api-models/Daybook';
 import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
@@ -18,11 +18,28 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 import { GeneralService } from '../services/general.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
+import { LedgerActions } from '../actions/ledger/ledger.actions';
+import { LedgerVM } from '../ledger/ledger.vm';
+import { SalesOtherTaxesModal } from '../models/api-models/Sales';
+import { UpdateLedgerEntryPanelComponent } from '../ledger/components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
     selector: 'daybook',
     templateUrl: './daybook.component.html',
-    styleUrls: [`./daybook.component.scss`]
+    styleUrls: [`./daybook.component.scss`],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 
 export class DaybookComponent implements OnInit, OnDestroy {
@@ -42,6 +59,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
     @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent, static: false }) public dateRangePickerCmp: DaterangePickerComponent;
     /** Daybook advance search component reference */
     @ViewChild('daybookAdvanceSearch', {static: false}) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
+    /** Update ledger modal reference */
+    @ViewChild('updateLedgerModal', {static: false}) public updateLedgerModal: ModalDirective;
+    /** Update ledger component reference */
+    @ViewChild(UpdateLedgerEntryPanelComponent, {static: false}) public updateLedgerComponent: UpdateLedgerEntryPanelComponent;
     /** True, if entry expanded (at least one entry) */
     public isEntryExpanded: boolean = false;
     /** Date format type */
@@ -93,9 +114,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    // aside menu properties
     public asideMenuStateForOtherTaxes: string = 'out';
     // aside menu properties
     public asideMenuState: string = 'out';
+    /** Ledger object */
+    public lc: LedgerVM;
+    /** Company taxes list */
+    public companyTaxesList: TaxResponse[] = [];
     /** True if initial api got called */
     public initialApiCalled: boolean = false;
 
@@ -106,7 +132,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private generalService: GeneralService,
         private modalService: BsModalService,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        private ledgerActions: LedgerActions
     ) {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
@@ -118,16 +145,16 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.searchFilterData = null;
         }
 
-        // this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-        //     if(activeCompany) {
-        //         this.companyName = activeCompany.name;
-        //     }
-        // });
-
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        this.lc = new LedgerVM();
+        // get company taxes
+        this.store.dispatch(this._companyActions.getTax());
+        this.store.pipe(select(s => s.company && s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+            this.companyTaxesList = res || [];
+        });
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
@@ -463,5 +490,67 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.currentBranch.name = selectedEntity.label;
         this.daybookQueryRequest.branchUniqueName = selectedEntity.value;
         this.go();
+    }
+
+    /**
+     * This will show update ledger modal
+     *
+     * @param {*} txn
+     * @memberof DaybookComponent
+     */
+    public showUpdateLedgerModal(txn: any): void {
+        this.store.dispatch(this.ledgerActions.setAccountForEdit(txn?.otherTransactions[0]?.particular?.uniqueName));
+        this.store.dispatch(this.ledgerActions.setTxnForEdit(txn.uniqueName));
+        this.lc.selectedTxnUniqueName = txn.uniqueName;
+        this.updateLedgerModal.show();
+        document.querySelector('body').classList.add('update-ledger-overlay');
+
+        setTimeout(() => {
+            this.updateLedgerComponent.loadDefaultSearchSuggestions();
+        }, 20);
+    }
+
+    /**
+     * Toggle's other taxes aside pan
+     *
+     * @memberof DaybookComponent
+     */
+    public toggleOtherTaxesAsidePane(): void {
+        this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
+    /**
+     * Toggle's fixed class in body
+     *
+     * @memberof DaybookComponent
+     */
+    public toggleBodyClass(): void {
+        if (this.asideMenuState === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+
+    /**
+     * Hide's update ledger modal
+     *
+     * @memberof DaybookComponent
+     */
+    public hideUpdateLedgerModal(): void {
+        this.updateLedgerModal.hide();
+        document.querySelector('body').classList.remove('update-ledger-overlay');
+        this.go(this.searchFilterData);
+    }
+
+    /**
+     * Calculate's other taxes
+     *
+     * @param {SalesOtherTaxesModal} modal
+     * @memberof DaybookComponent
+     */
+    public calculateOtherTaxes(modal: SalesOtherTaxesModal): void {
+        this.updateLedgerComponent.vm.calculateOtherTaxes(modal);
     }
 }
