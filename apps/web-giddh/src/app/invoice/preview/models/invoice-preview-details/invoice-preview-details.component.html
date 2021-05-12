@@ -504,8 +504,8 @@
             <!-- endregion -->
 
             <app-send-email-invoice-component [voucherType]="voucherType"
-                                              (successEvent)="sendEmail.emit($event);showEmailSendModal.hide()"
-                                              [selectedItem]='selectedItem' (cancelEvent)="showEmailSendModal.hide()">
+                (successEvent)="sendEmail.emit($event);showEmailSendModal.hide()" [selectedItem]="selectedItem"
+                (cancelEvent)="showEmailSendModal.hide()">
             </app-send-email-invoice-component>
 
         </div>
