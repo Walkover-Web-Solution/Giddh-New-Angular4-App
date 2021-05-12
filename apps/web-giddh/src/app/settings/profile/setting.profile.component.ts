@@ -23,6 +23,7 @@ import { CommonService } from '../../services/common.service';
 import { CompanyService } from '../../services/companyService.service';
 import { GeneralService } from '../../services/general.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { LocaleService } from '../../services/locale.service';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -151,6 +152,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This holds the active locale */
+    public activeLocale: string = "";
 
     constructor(
         private commonService: CommonService,
@@ -166,7 +169,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private settingsProfileService: SettingsProfileService,
         private settingsUtilityService: SettingsUtilityService,
         private router: Router,
-        public route: ActivatedRoute
+        public route: ActivatedRoute,
+        private localeService: LocaleService
     ) {
         this.getCountry();
         this.getCurrency();
@@ -243,6 +247,15 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
 
         this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+
+        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            if(this.activeLocale && this.activeLocale !== response?.value) {
+                this.localeService.getLocale('settings/profile', response?.value).subscribe(response => {
+                    this.localeData = response;
+                });
+            }
+            this.activeLocale = response?.value;
+        });
     }
 
     public getInitialProfileData() {
