@@ -1441,14 +1441,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     public sendEmail(obj: any) {
         if (obj.email) {
-            this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
+            this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoiceForDetails.account.uniqueName, {
                 emailId: obj.email.split(','),
-                voucherNumber: [obj.invoiceNumber || this.selectedInvoice.voucherNumber],
+                voucherNumber: [obj.invoiceNumber || this.selectedInvoiceForDetails.voucherNumber],
                 voucherType: this.selectedVoucher,
                 typeOfInvoice: obj.invoiceType ? obj.invoiceType : []
             }));
         } else {
-            this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {
+            this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoiceForDetails.account.uniqueName, {
                 numbers: obj.numbers.split(',')
             }, this.selectedVoucher));
         }
