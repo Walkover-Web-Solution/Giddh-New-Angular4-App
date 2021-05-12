@@ -29,17 +29,17 @@ export class FilingComponent implements OnInit, OnDestroy {
     public asideMenuState: string = 'out';
     /* this will check mobile screen size */
     public isMobileScreen: boolean = false;
-	public currentPeriod: GstDatePeriod = null;
-	public selectedGst: string = null;
-	public gstNumber: string = null;
-	public activeCompanyGstNumber: string = '';
-	public selectedTab: string = '1. Overview';
-	public gstAuthenticated$: Observable<boolean>;
-	public isTransactionSummary: boolean = false;
-	public showTaxPro: boolean = false;
-	public fileReturn: {} = { isAuthenticate: false };
-	public selectedTabId: number = null;
-	public gstFileSuccess$: Observable<boolean> = of(false);
+    public currentPeriod: GstDatePeriod = null;
+    public selectedGst: string = null;
+    public gstNumber: string = null;
+    public activeCompanyGstNumber: string = '';
+    public selectedTab: string = '';
+    public gstAuthenticated$: Observable<boolean>;
+    public isTransactionSummary: boolean = false;
+    public showTaxPro: boolean = false;
+    public fileReturn: {} = { isAuthenticate: false };
+    public selectedTabId: number = null;
+    public gstFileSuccess$: Observable<boolean> = of(false);
     public fileReturnSucces: boolean = false;
     /** True, if HSN tab needs to be opened by default (required if a user clicks on HSN data in GSTR1) */
     public showHsn: boolean;
@@ -56,7 +56,11 @@ export class FilingComponent implements OnInit, OnDestroy {
 
 	private gstr1OverviewDataFetchedSuccessfully$: Observable<boolean>;
 	private gstr2OverviewDataFetchedSuccessfully$: Observable<boolean>;
-	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     /** Stores the current period */
     public getCurrentPeriod$: Observable<any> = of(null);
     /** True, if month filter is selected */
@@ -155,10 +159,10 @@ export class FilingComponent implements OnInit, OnDestroy {
         });
     }
 
-	public selectTab(e, val, tabHeading) {
-		this.selectedTab = tabHeading;
-		this.isTransactionSummary = this.selectedTab !== '1. Overview';
-		this.showTaxPro = val;
+    public selectTab(e, val, tabHeading) {
+        this.selectedTab = tabHeading;
+        this.isTransactionSummary = this.selectedTab !== this.localeData?.filing?.tabs?.overview;
+        this.showTaxPro = val;
         this.fileReturnSucces = false;
 		// this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: this.selectedTabId}});
 	}
@@ -193,7 +197,7 @@ export class FilingComponent implements OnInit, OnDestroy {
      */
     public handleBackButton(): void {
         this.showHsn = false;
-        this.selectTab('', false, '1. Overview');
+        this.selectTab('', false, this.localeData?.filing?.tabs?.overview);
     }
 
     /**
@@ -269,5 +273,42 @@ export class FilingComponent implements OnInit, OnDestroy {
 
         // get session details
         this.store.dispatch(this._gstAction.GetGSPSession(this.activeCompanyGstNumber));
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof FilingComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.selectedTab = this.localeData?.filing?.tabs?.overview;
+        }
+    }
+
+    /**
+     * This will return gst return filed text
+     *
+     * @returns {string}
+     * @memberof FilingComponent
+     */
+    public getGstReturnFiledText(): string {
+        let text = this.localeData?.filing?.gst_filed_success;
+        text = text?.replace("[PERIOD_FROM]", this.currentPeriod?.from)?.replace("[PERIOD_TO]", this.currentPeriod.to);
+        return text;
+    }
+
+    /**
+     * This will return loading selected gst text
+     *
+     * @param {*} selectedGst
+     * @returns {string}
+     * @memberof FilingComponent
+     */
+    public getLoadingGstText(selectedGst: any): string {
+        let text = this.localeData?.loading_gst_data;
+        text = text?.replace("[SELECTED_GST]", selectedGst);
+        return text;
     }
 }
