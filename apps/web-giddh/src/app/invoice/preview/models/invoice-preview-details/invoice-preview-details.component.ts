@@ -68,6 +68,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     @Input() public items: InvoicePreviewDetailsVm[];
     @Input() public selectedItem: InvoicePreviewDetailsVm;
+    /** Emits the selected item to the parent for updating the current selected item in parent component */
+    @Output() public selectedItemChange: EventEmitter<InvoicePreviewDetailsVm> = new EventEmitter<InvoicePreviewDetailsVm>();
     @Input() public appSideMenubarIsOpen: boolean;
     @Input() public invoiceSetting: InvoiceSetting;
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
@@ -325,6 +327,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * @memberof InvoicePreviewDetailsComponent
      */
     public selectVoucher(item: InvoicePreviewDetailsVm): void {
+        this.selectedItemChange.emit(item);
         this.selectedItem = item;
         this.isAccountHaveAdvanceReceipts = false;
         this.downloadVoucher('base64');
