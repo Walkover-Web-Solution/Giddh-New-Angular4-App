@@ -118,6 +118,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public asideMenuStateForOtherTaxes: string = 'out';
     // aside menu properties
     public asideMenuState: string = 'out';
+    /** True if initial api got called */
+    public initialApiCalled: boolean = false;
     /** Ledger object */
     public lc: LedgerVM;
     /** Company taxes list */
@@ -226,7 +228,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.daybookQueryRequest.branchUniqueName = (this.currentBranch) ? this.currentBranch.uniqueName : "";
-                this.initialRequest();
+                if (!this.initialApiCalled) {
+                    this.initialApiCalled = true;
+                    this.initialRequest();
+                }
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
