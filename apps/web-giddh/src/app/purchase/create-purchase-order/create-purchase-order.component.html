@@ -499,7 +499,7 @@
     <section *ngIf="!isMobileScreen"
         class="static-purchase-table create-purchase-order-table clearfix mb-2 bg-white container-fluid">
         <div class="switch-currency" *ngIf="isMulticurrencyAccount && !showSwitchedCurr">
-            <span class="left-currency">{{commonLocaleData?.app_numbers?.one}} {{customerCurrencyCode}}</span>
+            <span class="left-currency">1 {{customerCurrencyCode}}</span>
             <img class="switch-icon" src="assets/images/switch-icon.svg" alt="switch-icon"
                 (click)="switchCurrencyImg(true)">
             <span class="right-currency">
@@ -520,7 +520,7 @@
             </span>
         </div>
         <div class="switch-currency" *ngIf="isMulticurrencyAccount && showSwitchedCurr">
-            <span class="left-currency">{{commonLocaleData?.app_numbers?.one}} {{companyCurrency}}</span>
+            <span class="left-currency">1 {{companyCurrency}}</span>
             <img class="switch-icon" src="assets/images/switch-icon.svg" alt="switch-icon"
                 (click)="switchCurrencyImg(false)">
             <span class="right-currency">
