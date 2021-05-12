@@ -1236,26 +1236,27 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     obj.accountDetails.currencySymbol = acc.currencySymbol || '';
                                 }
                             });
-                        } else if (this.isPurchaseInvoice) {
-                            let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
-                            this.isRcmEntry = (results[0]) ? results[0].subVoucher === SubVoucher.ReverseCharge : false;
-                            obj = cloneDeep(convertedRes1) as VoucherClass;
-                            this.assignCompanyBillingShipping(obj.companyDetails);
-                            this.initializeWarehouse(results[0].warehouse);
+                            if (this.isPurchaseInvoice) {
+                                let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
+                                this.isRcmEntry = (results[0]) ? results[0].subVoucher === SubVoucher.ReverseCharge : false;
+                                obj = cloneDeep(convertedRes1) as VoucherClass;
+                                this.assignCompanyBillingShipping(obj.companyDetails);
+                                this.initializeWarehouse(results[0].warehouse);
 
-                            if(this.copyPurchaseBill) {
-                                if(obj && obj.entries) {
-                                    obj.entries.forEach((entry, index) => {
-                                        obj.entries[index].entryDate = this.universalDate || new Date();
-                                        obj.entries[index].uniqueName = "";
-                                    });
-                                    obj.entries = obj.entries;
+                                if(this.copyPurchaseBill) {
+                                    if(obj && obj.entries) {
+                                        obj.entries.forEach((entry, index) => {
+                                            obj.entries[index].entryDate = this.universalDate || new Date();
+                                            obj.entries[index].uniqueName = "";
+                                        });
+                                        obj.entries = obj.entries;
+                                    }
+
+                                    let date = _.cloneDeep(this.universalDate);
+                                    obj.voucherDetails.voucherDate = date;
+                                    obj.voucherDetails.dueDate = date;
+                                    obj.voucherDetails.voucherNumber = "";
                                 }
-
-                                let date = _.cloneDeep(this.universalDate);
-                                obj.voucherDetails.voucherDate = date;
-                                obj.voucherDetails.dueDate = date;
-                                obj.voucherDetails.voucherNumber = "";
                             }
                         } else {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
