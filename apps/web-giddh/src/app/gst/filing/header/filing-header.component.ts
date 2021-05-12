@@ -48,6 +48,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isMonthSelected: boolean = false;
     @Input() public fileReturn: {} = { isAuthenticate: false };
     @Input() public fileGstr3b: {} = { via: null };
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /** True if current organization is company */
     @Input() public isCompany: boolean;
     @ViewChild('cancelConfirmationModel', { static: true }) public cancelConfirmationModel: ModalDirective;
@@ -198,7 +202,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
             this.store.dispatch(this._reconcileAction.DownloadGstrSheet(request));
         } else {
-            this._toasty.errorToast('GST number not found.');
+            this._toasty.errorToast(this.localeData?.filing?.gst_unavailable);
         }
     }
 
@@ -214,7 +218,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         if (this.activeCompanyGstNumber) {
             this.store.dispatch(this._invoicePurchaseActions.FileJioGstReturn(this.currentPeriod, this.activeCompanyGstNumber, Via));
         } else {
-            this._toasty.errorToast('GST number not found.');
+            this._toasty.errorToast(this.localeData?.filing?.gst_unavailable);
         }
     }
 
