@@ -1237,11 +1237,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 }
                             });
                             if (this.isPurchaseInvoice) {
-                                let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
                                 this.isRcmEntry = (results[0]) ? results[0].subVoucher === SubVoucher.ReverseCharge : false;
-                                obj = cloneDeep(convertedRes1) as VoucherClass;
                                 this.assignCompanyBillingShipping(obj.companyDetails);
-                                this.initializeWarehouse(results[0].warehouse);
 
                                 if(this.copyPurchaseBill) {
                                     if(obj && obj.entries) {
