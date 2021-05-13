@@ -1,20 +1,14 @@
-import { InvoicePurchaseActions } from '../../../../actions/purchase-invoice/purchase-invoice.action';
-import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { ToasterService } from '../../../../services/toaster.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ReconcileActionState } from '../../../../store/GstReconcile/GstReconcile.reducer';
-import { CompanyActions } from '../../../../actions/company.actions';
 import { AlertConfig } from 'ngx-bootstrap/alert';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { GstReconcileActionsEnum, GstReconcileInvoiceDetails, GstReconcileInvoiceRequest } from '../../../../models/api-models/GstReconcile';
 import { AppState } from '../../../../store';
 import { publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../../../../actions/gst-reconcile/GstReconcile.actions';
-import { Router } from '@angular/router';
-import { PurchaseInvoiceService } from '../../../../services/purchase-invoice.service';
 import { Observable, ReplaySubject } from 'rxjs';
-import { AccountService } from '../../../../services/account.service';
 
 @Component({
     selector: 'reconcile',
@@ -45,6 +39,10 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     @Input() public activeCompanyGstNumber: string = '';
     @Input() public selectedGst: string = '';
     @Input() public selectedTab: string = '';
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     public gstReconcileInvoiceRequestInProcess$: Observable<boolean>;
     public gstAuthenticated$: Observable<boolean>;
@@ -59,13 +57,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private router: Router,
         private store: Store<AppState>,
-        private invoicePurchaseActions: InvoicePurchaseActions,
-        private toasty: ToasterService,
-        private companyActions: CompanyActions,
-        private purchaseInvoiceService: PurchaseInvoiceService,
-        private accountService: AccountService,
         private _reconcileActions: GstReconcileActions,
     ) {
         this.gstReconcileInvoiceRequestInProcess$ = this.store.pipe(select(s => s.gstReconcile.isGstReconcileInvoiceInProcess), takeUntil(this.destroyed$));

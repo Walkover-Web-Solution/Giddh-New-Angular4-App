@@ -10,11 +10,11 @@
                             <path
                                 d="M367.5 433.7L189.8 256 367.5 78.3l22.6-22.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-223 223c-6 6-9.4 14.1-9.4 22.6 0 8.5 3.4 16.6 9.4 22.6l223 223c6.2 6.2 14.4 9.4 22.6 9.4s16.4-3.1 22.6-9.4c12.5-12.5 12.5-32.8 0-45.3l-22.5-22.6z">
                             </path>
-                        </svg> Back
+                        </svg> {{commonLocaleData?.app_back}}
                     </a>
                 </div>
                 <div class="filter-row">
-                    <div class="name">Transaction Type:</div>
+                    <div class="name">{{localeData?.filing?.transaction_type}}:</div>
                     <div class="btn-group filter d-inline-block" dropdown *ngIf="selectedGst === GstReport.Gstr1">
                         <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
                             aria-controls="dropdown-basic">
@@ -42,7 +42,7 @@
                 </div>
                 <div class="filter-row"
                     *ngIf="(filterParam.entityType !== 'invoices' && filterParam.entityType !== 'advance-receipt') && selectedGst === GstReport.Gstr1">
-                    <div class="name">{{selectedFilter?.entityType}} Type:</div>
+                    <div class="name">{{getFilterTypeText()}}:</div>
                     <div class="btn-group filter d-inline-block" dropdown>
                         <button id="button-basic3" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
                             aria-controls="dropdown-basic">
@@ -55,8 +55,9 @@
                         </ul>
                     </div>
                 </div>
-                <div class="filter-row" *ngIf="filterParam.entityType === 'invoices' && selectedGst === GstReport.Gstr1">
-                    <div class="name">{{selectedFilter?.entityType}} Type:</div>
+                <div class="filter-row"
+                    *ngIf="filterParam.entityType === 'invoices' && selectedGst === GstReport.Gstr1">
+                    <div class="name">{{getFilterTypeText()}}:</div>
                     <div class="btn-group filter d-inline-block" dropdown>
                         <button id="button-basic4" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
                             aria-controls="dropdown-basic">
@@ -70,8 +71,9 @@
                     </div>
                 </div>
                 <!--   -->
-                <div class="filter-row" *ngIf="filterParam.entityType === 'billsAndExpenses' && selectedGst == GstReport.Gstr2">
-                    <div class="name">{{selectedFilter?.entityType}} Type:</div>
+                <div class="filter-row"
+                    *ngIf="filterParam.entityType === 'billsAndExpenses' && selectedGst == GstReport.Gstr2">
+                    <div class="name">{{getFilterTypeText()}}:</div>
 
                     <div class="btn-group filter d-inline-block" dropdown>
                         <button id="button-basic5" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
@@ -122,85 +124,85 @@
                     <tr>
                         <th class="text-left">
                             <div class="relative">
-                                <div class="pull-left over-flow"> Invoice Date
+                                <div class="pull-left over-flow"> {{localeData?.filing?.invoice_date}}
                                 </div>
                             </div>
                         </th>
                         <th class="text-left">
                             <div class="relative">
-                                <div class="pull-left over-flow"> Invoice #
+                                <div class="pull-left over-flow"> {{localeData?.filing?.invoice_no}}
                                 </div>
                             </div>
                         </th>
                         <th class="text-left">
                             <div class="relative">
-                                <div class="pull-left over-flow"> Customer GSTIN
+                                <div class="pull-left over-flow"> {{commonLocaleData?.app_customer_gstin}}
                                 </div>
                             </div>
                         </th>
                         <th class="text-left">
                             <div class="relative">
-                                <div class="pull-left over-flow"> Customer Name
+                                <div class="pull-left over-flow"> {{commonLocaleData?.app_customer_name}}
                                 </div>
                             </div>
                         </th>
                         <th class="text-left">
                             <div class="relative">
-                                <div class="pull-left over-flow"> Status
+                                <div class="pull-left over-flow"> {{commonLocaleData?.app_status}}
                                 </div>
                             </div>
                         </th>
                         <th class="text-left">
                             <div class="relative">
-                                <div class="pull-left over-flow"> Action on GSTN
+                                <div class="pull-left over-flow"> {{localeData?.filing?.gstn_action}}
                                 </div>
                             </div>
                         </th>
                         <th class="text-left">
                             <div class="relative">
-                                <div class="pull-left over-flow"> Place of supply
+                                <div class="pull-left over-flow"> {{localeData?.filing?.place_supply}}
                                 </div>
                             </div>
                         </th>
                         <th class="text-left">
                             <div class="relative">
-                                <div class=" over-flow"> Reverse Charge
+                                <div class=" over-flow"> {{commonLocaleData?.app_reverse_charge}}
                                 </div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="relative">
-                                <div class=" over-flow"> Taxable Amount
+                                <div class=" over-flow"> {{localeData?.filing?.taxable_amount}}
                                 </div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="relative">
-                                <div class=" over-flow"> IGST
+                                <div class=" over-flow"> {{localeData?.filing?.igst}}
                                 </div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="relative">
-                                <div class=" over-flow"> CGST
+                                <div class=" over-flow"> {{localeData?.filing?.cgst}}
                                 </div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="relative">
-                                <div class=" over-flow"> SGST
+                                <div class=" over-flow"> {{localeData?.filing?.sgst}}
                                 </div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="relative">
-                                <div class=" over-flow"> CESS
+                                <div class=" over-flow"> {{commonLocaleData?.app_cess}}
                                 </div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="relative">
-                                <div class=" over-flow"> Total Amount
+                                <div class=" over-flow"> {{commonLocaleData?.app_total_amount}}
                                 </div>
                             </div>
                         </th>
@@ -286,14 +288,16 @@
         <div class="text-center" *ngIf="(viewTransaction$ | async)?.totalPages > 1">
             <pagination [maxSize]="6" [totalItems]="(viewTransaction$ | async)?.totalItems"
                 [itemsPerPage]="(viewTransaction$ | async)?.count" (pageChanged)="pageChanged($event)"
-                class="pagination-sm" [boundaryLinks]="true" [rotate]="false">
+                class="pagination-sm" [boundaryLinks]="true" [rotate]="false" [firstText]="commonLocaleData?.app_first"
+                [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
+                [lastText]="commonLocaleData?.app_last">
             </pagination>
         </div>
         <!-- no records -->
         <div class="filings-empty-state"
             *ngIf="!(viewTransactionInProgress$ | async) && !(viewTransaction$ | async)?.results?.length">
             <img src="{{imgPath}}nofound.svg" [style.max-width.px]="150" />
-            <div class="empty-msg"><span> No records found. </span></div>
+            <div class="empty-msg"><span> {{commonLocaleData?.app_no_records_found}} </span></div>
         </div>
     </div>
 </div>
@@ -305,7 +309,7 @@
         <div class="cube1"></div>
         <div class="cube2"></div>
     </div>
-    <div class="empty-msg"><span> Loading Data. </span></div>
+    <div class="empty-msg"><span> {{localeData?.filing?.loading_data}} </span></div>
 </div>
 
 <!-- Download or Send Invoice on mail -->
