@@ -10979,7 +10979,7 @@ input.mat-input-element{
         }
         .modal-dialog {
             max-width: 600px !important;
-            margin: 30px auto;
+            margin: 56px auto;
             padding: 0 10px;
         }
         .modal-dialog.modal-xl {
@@ -11210,6 +11210,9 @@ input.mat-input-element{
         min-height: 60px;
     }
 
-    .delete-icon-opacity {
-        opacity: 0.5;
-    }
+.delete-icon-opacity {
+    opacity: 0.5;
+}
+.sky-blue-bg {
+    background-color: $light-sky-blue;
+}
