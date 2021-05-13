@@ -3359,7 +3359,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             if (additional.stock && additional.stock.unitRates && additional.stock.unitRates.length) {
                 transaction.stockList = this.prepareUnitArr(additional.stock.unitRates);
                 transaction.stockUnit = transaction.stockList[0].id;
-                transaction.rate = transaction.stockList[0].rate;
+                transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             } else {
                 transaction.stockList.push(obj);
                 transaction.stockUnit = additional.stock.stockUnit.code;
