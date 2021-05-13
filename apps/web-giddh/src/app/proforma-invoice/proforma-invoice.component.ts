@@ -466,7 +466,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         gstTaxesTotal: 0,
         subTotal: 0,
         totalTaxableValue: 0,
-        totalAdjustedAmount: 0
+        totalAdjustedAmount: 0,
+        convertedTotalAdjustedAmount: 0
     }
     public applyRoundOff: boolean = true;
     public customerAccount: any = {email: ''};
