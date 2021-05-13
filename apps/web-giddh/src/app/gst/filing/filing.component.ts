@@ -1,10 +1,9 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-
 import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
 import { GstDatePeriod, GstOverViewRequest } from '../../models/api-models/GstReconcile';
 import { OrganizationType } from '../../models/user-login-state';
@@ -66,7 +65,7 @@ export class FilingComponent implements OnInit, OnDestroy {
     /** True, if month filter is selected */
     public isMonthSelected: boolean = true;
 
-    constructor(private _cdr: ChangeDetectorRef,
+    constructor(
         private _route: Router,
         private activatedRoute: ActivatedRoute,
         private store: Store<AppState>,

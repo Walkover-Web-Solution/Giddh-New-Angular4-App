@@ -5,7 +5,7 @@
             [selectedGstModule]="selectedGst" [isMonthSelected]="isMonthSelected" [localeData]="localeData" [commonLocaleData]="commonLocaleData" class="gst-sidebar"></gstr-sidebar>
     </div>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div class="column content-column gst-filing-container navs-list">
+    <div class="column content-column gst-filing-container navs-list" *ngIf="localeData?.page_heading">
         <div class="tax-engine">
 
             <div class="column list-column expanded-list-column transactions-list">
@@ -39,7 +39,7 @@
                             </ng-template>
                             <div *ngIf="selectedTab === localeData?.filing?.tabs?.reconcilation || selectedTabId === 1">
                                 <reconcile [activeCompanyGstNumber]="activeCompanyGstNumber" [currentPeriod]="currentPeriod"
-                                    [selectedGst]="selectedGst"></reconcile>
+                                    [selectedGst]="selectedGst" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></reconcile>
                             </div>
                         </tab>
 
@@ -52,7 +52,7 @@
                             <div *ngIf="selectedTab === 'pushToGstn' || selectedTabId === 1">
                                 <push-to-gstin [activeCompanyGstNumber]="activeCompanyGstNumber" [showHsn]="showHsn"
                                     (backClicked)="handleBackButton()" [currentPeriod]="currentPeriod"
-                                    [selectedGst]="selectedGst"></push-to-gstin>
+                                    [selectedGst]="selectedGst" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></push-to-gstin>
                             </div>
                         </tab>
 
