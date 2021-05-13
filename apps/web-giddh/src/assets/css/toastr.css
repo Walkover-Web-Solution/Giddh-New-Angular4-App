@@ -15,16 +15,30 @@
 }
 .toast-close-button {
     position: absolute;
-    right: 10px;
-    top: 2px;
+    right: 17px;
+    top: 6px;
     float: right;
-    font-size: 28px;
+    font-size: 25px;
     color: #ffffff;
     opacity: 1;
+    font-weight: normal;
+}
+.toast-close-button:after {
+    position: absolute;
+    content: "";
+    width: 26px;
+    height: 26px;
+    background-color: rgba(256,256,256,0.2);
+    top: 5px;
+    right: -6px;
+    border-radius: 50%;
+    text-align: center;
+    align-items: center;
+    display: flex;
 }
 .toast-close-button:hover,
 .toast-close-button:focus {
-    color: #000000;
+    color: #ffffff;
     text-decoration: none;
     cursor: pointer;
     opacity: 0.4;
@@ -71,7 +85,7 @@ button.toast-close-button {
     left: 12px;
 }
 .toast-top-right {
-    top: 22px;
+    top: 56px;
     right: 12px;
 }
 .toast-bottom-right {
@@ -123,10 +137,10 @@ button.toast-close-button {
     white-space: normal;
     word-break: break-word;
     flex-basis: auto;
-    max-width: 600px;
+    max-width: 400px;
     display: flex;
     flex-direction: row;
-    min-width: 600px;
+    min-width: 400px;
     width: 100%;
 }
 #toast-container .toast:hover {
@@ -139,22 +153,37 @@ button.toast-close-button {
 #toast-container .toast.toast-info {
     background-image: url("../images/info-white.svg") !important;
     background-size: 24px;
-    background-position: 12px 10px;
+    background-position: 12px 12px;
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
 }
 #toast-container .toast.toast-error {
-    background-image: url("../images/warning-white.svg") !important;
+    background-image: url("../images/failure.svg") !important;
     background-size: 24px;
-    background-position: 12px 10px;
+    background-position: 12px 12px;
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 #toast-container .toast.toast-success {
-    background-image: url("../images/tick-white.svg") !important;
+    background-image: url("../images/success.svg") !important;
     background-size: 24px;
-    background-position: 12px 10px;
+    background-position: 12px 12px;
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 #toast-container .toast.toast-warning {
     background-image: url("../images/exclamation-white.svg") !important;
     background-size: 24px;
-    background-position: 12px 10px;
+    background-position: 12px 12px;
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 #toast-container.toast-top-center .toast,
 #toast-container.toast-bottom-center .toast {
@@ -215,6 +244,8 @@ button.toast-close-button {
 }
 .toast-message {
     color: #ffffff;
+    position: relative;
+    top: -1px;
 }
 .toast-title {
     word-break: keep-all;
