@@ -35,6 +35,8 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild('disInptEle', { static: true }) public disInptEle: ElementRef;
 
     @Input() public discountMenu: boolean;
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /** Mask format for decimal number and comma separation  */
     public inputMaskFormat: string = '';
 
