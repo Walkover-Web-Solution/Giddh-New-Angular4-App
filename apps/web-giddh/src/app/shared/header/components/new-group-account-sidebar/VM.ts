@@ -181,8 +181,8 @@ export class GroupAccountSidebarVM {
             case eventsConst.accountDeleted: {
                 let resp: BaseResponse<string, any> = payload;
                 let columnsLength = this.columns.length;
-                this.columns[columnsLength - 1].Items = this.columns[columnsLength - 1].Items.filter(f => f.uniqueName !== resp.request.accountUniqueName);
-                this.columns[columnsLength - 2].accounts = this.columns[columnsLength - 1].accounts.filter(f => f.uniqueName !== resp.request.accountUniqueName);
+                this.columns[columnsLength - 1].Items = this.columns[columnsLength - 1].Items?.filter(f => f.uniqueName !== resp.request.accountUniqueName);
+                this.columns[columnsLength - 2].accounts = this.columns[columnsLength - 1].accounts?.filter(f => f.uniqueName !== resp.request.accountUniqueName);
             }
 
             case eventsConst.accountMoved: {
@@ -224,13 +224,13 @@ export class GroupAccountSidebarVM {
 
     public activeGroupFromGroupListBackup(groups: GroupsWithAccountsResponse[], uniqueName: string, result: GroupsWithAccountsResponse) {
         for (let grp of groups) {
-            if (grp.uniqueName === uniqueName) {
+            if (grp?.uniqueName === uniqueName) {
                 result = grp;
                 return result;
             }
 
-            if (grp.groups) {
-                result = this.activeGroupFromGroupListBackup(grp.groups, uniqueName, result);
+            if (grp?.groups) {
+                result = this.activeGroupFromGroupListBackup(grp?.groups, uniqueName, result);
                 if (result) {
                     return result;
                 }

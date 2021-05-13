@@ -258,14 +258,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         // get openingblance value changes
         this.addAccountForm.get('openingBalance').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => { // as disccused with back end team bydefault openingBalanceType will be CREDIT
             if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
-                this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
+                this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
-                this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
+                this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
             }
         });
         // this.addAccountForm.get('foreignOpeningBalance').valueChanges.subscribe(a => {
         //     if (!a) {
-        //         this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
+        //         this.addAccountForm.get('foreignOpeningBalance')?.patchValue('0');
         //     }
         // });
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -290,15 +290,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         //     this.isAccountNameAvailable$.subscribe(a => {
         //       if (a !== null && a !== undefined) {
         //         if (a) {
-        //           this.addAccountForm.patchValue({ uniqueName: val });
+        //           this.addAccountForm?.patchValue({ uniqueName: val });
         //         } else {
         //           let num = 1;
-        //           this.addAccountForm.patchValue({ uniqueName: val + num });
+        //           this.addAccountForm?.patchValue({ uniqueName: val + num });
         //         }
         //       }
         //     });
         //   } else {
-        //     this.addAccountForm.patchValue({ uniqueName: '' });
+        //     this.addAccountForm?.patchValue({ uniqueName: '' });
         //   }
         // });
 
@@ -454,8 +454,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
-            control.get('stateCode').patchValue(null);
-            control.get('state').get('code').patchValue(null);
+            control.get('stateCode')?.patchValue(null);
+            control.get('state').get('code')?.patchValue(null);
             control.get('gstNumber').setValue("");
         }
     }
@@ -463,11 +463,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public resetBankDetailsForm() {
         let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
         for (let control of accountBankDetails.controls) {
-            control.get('bankName').patchValue(null);
-            control.get('bankAccountNo').patchValue(null);
-            control.get('beneficiaryName').patchValue(null);
-            control.get('branchName').patchValue(null);
-            control.get('swiftCode').patchValue(null);
+            control.get('bankName')?.patchValue(null);
+            control.get('bankAccountNo')?.patchValue(null);
+            control.get('beneficiaryName')?.patchValue(null);
+            control.get('branchName')?.patchValue(null);
+            control.get('swiftCode')?.patchValue(null);
             control.get('ifsc').setValue("");
         }
     }
@@ -505,9 +505,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (val) {
             let addresses = this.addAccountForm.get('addresses') as FormArray;
             for (let control of addresses.controls) {
-                control.get('isDefault').patchValue(false);
+                control.get('isDefault')?.patchValue(false);
             }
-            addresses.controls[i].get('isDefault').patchValue(true);
+            addresses.controls[i].get('isDefault')?.patchValue(true);
         }
     }
 
@@ -516,8 +516,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (keyAvoid.findIndex(key => key === event.key) > -1) {
             return;
         }
-        let gstVal: string = gstForm.get('gstNumber').value.trim();
-        gstForm.get('gstNumber').setValue(gstVal.trim());
+        let gstVal: string = gstForm.get('gstNumber').value?.trim();
+        gstForm.get('gstNumber').setValue(gstVal?.trim());
         if (gstVal.length) {
             if (gstVal.length !== 15) {
                 gstForm.get('partyType').reset('NOT APPLICABLE');
@@ -529,14 +529,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
                     let currentState = state.find(st => st.value === stateCode);
                     if (currentState) {
-                        gstForm.get('stateCode').patchValue(currentState.value);
-                        gstForm.get('state').get('code').patchValue(currentState.value);
+                        gstForm.get('stateCode')?.patchValue(currentState.value);
+                        gstForm.get('state').get('code')?.patchValue(currentState.value);
                     } else {
                         this._toaster.clearAllToaster();
                         if (this.formFields['taxName'] && !gstForm.get('gstNumber')?.valid) {
                             if (this.isIndia) {
-                                gstForm.get('stateCode').patchValue(null);
-                                gstForm.get('state').get('code').patchValue(null);
+                                gstForm.get('stateCode')?.patchValue(null);
+                                gstForm.get('state').get('code')?.patchValue(null);
                             }
 
                             let invalidTaxName = this.commonLocaleData?.app_invalid_tax_name;
@@ -551,8 +551,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             //     if (this.isIndia) {
             //         statesEle.forceClearReactive.status = true;
             //         statesEle.clear();
-            //         gstForm.get('stateCode').patchValue(null);
-            //         gstForm.get('state').get('code').patchValue(null);
+            //         gstForm.get('stateCode')?.patchValue(null);
+            //         gstForm.get('state').get('code')?.patchValue(null);
             //     }
             // }
         }
@@ -566,7 +566,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public openingBalanceTypeChnaged(type: string) {
         if (Number(this.addAccountForm.get('openingBalance').value) > 0) {
-            this.addAccountForm.get('openingBalanceType').patchValue(type);
+            this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
     }
 
@@ -613,7 +613,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.addAccountForm.get('openingBalance').setValue('0');
         }
         if (!this.addAccountForm.get('foreignOpeningBalance').value) {
-            this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
+            this.addAccountForm.get('foreignOpeningBalance')?.patchValue('0');
         }
         if (this.showBankDetail) {
             const bankDetails = _.cloneDeep(this.addAccountForm.get('accountBankDetails')?.value);
@@ -682,7 +682,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public closingBalanceTypeChanged(type: string) {
         if (Number(this.addAccountForm.get('closingBalanceTriggerAmount').value) > 0) {
-            this.addAccountForm.get('closingBalanceTriggerAmountType').patchValue(type);
+            this.addAccountForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
     }
 
@@ -725,8 +725,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public selectedState(gstForm: FormGroup, event) {
         if (gstForm && event.label) {
             let obj = this.getStateGSTCode(this.stateList, event.value)
-            gstForm.get('stateCode').patchValue(event.value);
-            gstForm.get('state').get('code').patchValue(event.value);
+            gstForm.get('stateCode')?.patchValue(event.value);
+            gstForm.get('state').get('code')?.patchValue(event.value);
         }
 
     }
@@ -839,7 +839,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
-        if (ele.value.trim()) {
+        if (ele.value?.trim()) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
@@ -975,9 +975,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetail.controls) {
                 if (type === 'bankAccountNo') {
-                    control.get('bankAccountNo').patchValue(trim);
+                    control.get('bankAccountNo')?.patchValue(trim);
                 } else if (type === 'swiftCode') {
-                    control.get('swiftCode').patchValue(trim);
+                    control.get('swiftCode')?.patchValue(trim);
                 }
             }
         }
@@ -1095,7 +1095,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             value: [''],
         });
         if (value) {
-            customFields.patchValue(value);
+            customFields?.patchValue(value);
         }
         return customFields;
     }
