@@ -83,7 +83,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 if (this.currentOrganizationUniqueName && this.addressConfiguration && this.addressConfiguration.linkedEntities
                     && this.addressConfiguration.linkedEntities.some(entity => entity.uniqueName === this.currentOrganizationUniqueName)) {
                         // This will by default show the current organization unique name as selected linked entity
-                        this.addressForm.get('linkedEntity').patchValue([`${this.currentOrganizationUniqueName}`]);
+                        this.addressForm.get('linkedEntity')?.patchValue([`${this.currentOrganizationUniqueName}`]);
                 }
             } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress) {
                 if (this.addressToUpdate) {
@@ -186,7 +186,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             const taxField = this.addressForm.get('taxNumber');
             if (taxField.value && taxField.valid && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN') {
                 // Tax is valid and has value then address is mandatory for GST taxes
-                const addresssValue = (this.addressForm.get('address').value || '').trim();
+                const addresssValue = (this.addressForm.get('address').value || '')?.trim();
                 this.addressForm.get('address').setValue(addresssValue);
                 if (!addresssValue) {
                     return;
@@ -221,17 +221,17 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             if (keyAvoid.findIndex(key => key === event.key) > -1) {
                 return;
             }
-            let gstVal: string = this.addressForm.get('taxNumber').value.trim();
+            let gstVal: string = this.addressForm.get('taxNumber').value?.trim();
             this.addressForm.get('taxNumber').setValue(gstVal);
             if (gstVal.length) {
 
                 if (gstVal.length >= 2) {
                     let currentState = this.addressConfiguration.stateList.find(state => state.code === gstVal.substring(0, 2));
                     if (currentState) {
-                        this.addressForm.get('state').patchValue(currentState.value);
+                        this.addressForm.get('state')?.patchValue(currentState.value);
                         this.addressForm.get('state').disable();
                     } else {
-                        this.addressForm.get('state').patchValue(null);
+                        this.addressForm.get('state')?.patchValue(null);
                         this.addressForm.get('state').enable();
                         if (this.addressConfiguration?.tax?.name && !this.addressForm.get('taxNumber')?.valid) {
                             this.toasterService.errorToast(`Invalid ${this.addressConfiguration.tax.name}`);
@@ -240,13 +240,13 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 } else {
                     statesEle.forceClearReactive.status = true;
                     statesEle.clear();
-                    this.addressForm.get('state').patchValue(null);
+                    this.addressForm.get('state')?.patchValue(null);
                     this.addressForm.get('state').enable();
                 }
             } else {
                 statesEle.forceClearReactive.status = true;
                 statesEle.clear();
-                this.addressForm.get('state').patchValue(null);
+                this.addressForm.get('state')?.patchValue(null);
                 this.addressForm.get('state').enable();
             }
         }
@@ -271,7 +271,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         }
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
-            this.addressForm.get('linkedEntity').patchValue([
+            this.addressForm.get('linkedEntity')?.patchValue([
                 ...this.addressForm.get('linkedEntity').value,
                 option.value
             ]);

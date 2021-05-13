@@ -214,7 +214,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.signupVerifyEmail$.subscribe(a => {
             if (a) {
 
-                this.signupVerifyForm.get("email").patchValue(a);
+                this.signupVerifyForm.get("email")?.patchValue(a);
             }
         });
     }

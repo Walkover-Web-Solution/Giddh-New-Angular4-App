@@ -45,7 +45,7 @@ import { saveAs } from 'file-saver';
 import { ReceiptService } from "../../services/receipt.service";
 import { InvoicePaymentModelComponent } from './models/invoicePayment/invoice.payment.model.component';
 import { PurchaseRecordService } from '../../services/purchase-record.service';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
+import { EInvoiceStatus, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
 import { PurchaseRecordUpdateModel } from '../../purchase/purchase-record/constants/purchase-record.interface';
 import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.service';
 import { PurchaseRecordActions } from '../../actions/purchase-record/purchase-record.action';
@@ -283,6 +283,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public selectedRangeLabel: any = "";
     /** This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** True, if user has enable GST E-invoice */
+    public gstEInvoiceEnable: boolean;
+    /** True if selected items needs to be updated */
+    public updateSelectedItems: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -470,7 +474,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         });
                         res[0] = voucherData;
                     }
-                    this.selectedItems = [];
+                    this.selectedItems = (this.updateSelectedItems) ? this.selectedInvoices : [];
+                    this.updateSelectedItems = false;
                 }
 
                 // get voucherDetailsNo so we can open that voucher in details mode
@@ -529,7 +534,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             });
 
         this.store.pipe(select(s => s.invoice.settings), takeUntil(this.destroyed$)).subscribe(settings => {
-            this.invoiceSetting = settings;
+            if (settings) {
+                this.invoiceSetting = settings;
+                this.gstEInvoiceEnable = settings.invoiceSettings?.gstEInvoiceEnable;
+            } else {
+                this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+            }
         });
 
         //--------------------- Refresh report data according to universal date--------------------------------
@@ -733,6 +743,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if(response) {
                 this.isAccountUpdated = true;
                 this.store.dispatch(this.commonActions.accountUpdated(false));
+            }
+        });
+
+        this.store.pipe(select(state => state.invoice.isGenerateBulkInvoiceCompleted), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.getVoucher(this.isUniversalDateApplicable);
+                this.store.dispatch(this.invoiceActions.resetBulkEInvoice());
             }
         });
     }
@@ -1265,8 +1282,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         item.isSelected = action;
         if (action) {
             this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
+            this.selectedItems.push(item.uniqueName);
         } else {
             this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
+            this.selectedItems = this.selectedItems.filter(selectedItem => selectedItem !== item.uniqueName);
             this.allItemsSelected = false;
         }
         this.itemStateChanged(item);
@@ -1330,7 +1349,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public itemStateChanged(item: any, allSelected: boolean = false) {
-        let index = (this.selectedItems) ? this.selectedItems.findIndex(f => f === item.uniqueName) : -1;
         let indexInv = (this.selectedInvoicesList) ? this.selectedInvoicesList.findIndex(f => f.uniqueName === item.uniqueName) : -1;
 
         if (indexInv > -1 && !allSelected) {
@@ -1339,11 +1357,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.selectedInvoicesList.push(item);     // Array of checked seleted Items of the list
         }
 
-        if (index > -1 && !allSelected) {
-            this.selectedItems = this.selectedItems.filter(f => f !== item.uniqueName);
-        } else {
-            this.selectedItems.push(item.uniqueName);  // Array of checked seleted Items uniqueName of the list
-        }
         if (this.selectedInvoicesList.length === 1) {
             this.exportInvoiceType = this.selectedInvoicesList[0].account.uniqueName;
             this.isExported = true;
@@ -1428,14 +1441,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     public sendEmail(obj: any) {
         if (obj.email) {
-            this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
+            this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoiceForDetails.account.uniqueName, {
                 emailId: obj.email.split(','),
-                voucherNumber: [obj.invoiceNumber || this.selectedInvoice.voucherNumber],
+                voucherNumber: [obj.invoiceNumber || this.selectedInvoiceForDetails.voucherNumber],
                 voucherType: this.selectedVoucher,
                 typeOfInvoice: obj.invoiceType ? obj.invoiceType : []
             }));
         } else {
-            this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {
+            this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoiceForDetails.account.uniqueName, {
                 numbers: obj.numbers.split(',')
             }, this.selectedVoucher));
         }
@@ -1446,6 +1459,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * it will call get all so we can have latest data every time someone updates invoice/ voucher
      */
     public invoicePreviewClosed() {
+        this.updateSelectedItems = true;
         this.selectedInvoice = null;
         this.selectedInvoiceForDetails = null;
         this.toggleBodyClass();
@@ -1592,7 +1606,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
             item['grandTotalTooltipText'] = `In ${this.baseCurrency}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
             item['balanceDueTooltipText'] = `In ${this.baseCurrency}: ${balanceDueAmountForCompany}<br />(Conversion Rate: ${balanceDueAmountConversionRate})`;
-
+            if (this.gstEInvoiceEnable) {
+                item.eInvoiceStatusTooltip = this.getEInvoiceTooltipText(item);
+            }
         } catch (error) {
         }
         return item;
@@ -1858,6 +1874,51 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 localStorage.setItem('invoiceSelectedDate', JSON.stringify(this.invoiceSelectedDate));
             }
             this.getVoucher(this.isUniversalDateApplicable);
+        }
+    }
+
+    /**
+     * Creates the E-invoice in bulk
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public createBulkEInvoice(): void {
+        const requestObject = {
+            model: {
+                voucherNumbers: this.selectedInvoicesList.map(item => item.voucherNumber),
+                voucherType: this.selectedVoucher
+            },
+            actionType: 'einvoice'
+        };
+        this.store.dispatch(this.invoiceActions.generateBulkEInvoice(requestObject));
+    }
+
+    /**
+     * Returns the E-invoice tooltip text
+     *
+     * @private
+     * @param {ReceiptItem} item Current item
+     * @return {string} E-invoice status
+     * @memberof InvoicePreviewComponent
+     */
+    private getEInvoiceTooltipText(item: ReceiptItem): string {
+        switch (item.status?.toLowerCase()) {
+            case EInvoiceStatus.YetToBePushed:
+                return 'The transaction is yet to be pushed to the IRP for e-Invoicing.';
+            case EInvoiceStatus.Pushed:
+                return 'The transaction was pushed to the IRP successfully, and a QR code and IRN has been generated for it.';
+            case EInvoiceStatus.PushInitiated:
+                return 'The transaction is being pushed to the IRP as part of a bulk push action.';
+            case EInvoiceStatus.Cancelled:
+                return 'The e-Invoiced transaction has been cancelled in both Giddh and the IRP. The IRN associated with it is no longer valid.';
+            case EInvoiceStatus.MarkedAsCancelled:
+                return 'The e-Invoiced transaction has been marked as cancelled in Giddh Books alone. You’ll have to cancel it in the GST portal to make the IRN invalid.';
+            case EInvoiceStatus.Failed:
+                return item.errorMessage ?? 'The transaction could not be pushed to the IRP.';
+            case EInvoiceStatus.NA:
+                // When invoice is B2C or B2B cancelled invoice
+                return item.errorMessage ?? 'e-Invoice creation is not applicable for this transaction.';
+            default: return '';
         }
     }
 }

@@ -65,7 +65,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="form-group expand-collapse-btn mr-1 d-inline-block">
+            <div class="form-group expand-collapse-btn mr-1 mb-0 d-inline-block">
                 <a class="cp" (click)="emitExpand()" data-toggle="tooltip" data-placement="top" title="{{commonLocaleData?.app_expand_all}}"
                     *ngIf="!expand">
                     <span class="icon-expandIcon"></span>
@@ -79,7 +79,7 @@
         </div>
     </div>
     <ng-container *ngIf="(isGetPurchaseDetailsSuccess$ | async)">
-        <div class="clearfix sales-register-table">
+        <div class="clearfix sales-register-table mb-5">
             <div class="responsive table-responsive">
                 <table class="table basic giddh-table on-mobile-view">
                     <thead>
@@ -235,7 +235,7 @@
                                     </ng-container>
                                 </ng-container>
                             </td>
-                            <td [attr.data-title]="commonLocaleData?.app_voucher_type" *ngIf="showFieldFilter.voucherType" class="verticle-align-top">
+                            <td [attr.data-title]="commonLocaleData?.app_voucher_type" *ngIf="showFieldFilter.voucherType" class="verticle-align-top voucher-type-td">
                                 {{ item.voucherType }}
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_voucher_no" *ngIf="showFieldFilter.voucherNo" class="verticle-align-top">
@@ -307,8 +307,8 @@
         </div>
 
         <div class="clearfix sales-register">
-            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12 pl-0">
-                <p>{{localeData?.transaction_count}}</p>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12 pl-0 d-flex flex-lg-column flex-md-row transaction-count-data">
+                <p class="mr-r15">{{localeData?.transaction_count}}</p>
                 <p>
                     {{ (purchaseRegisteDetailedResponse$ | async).totalItems }}
                 </p>

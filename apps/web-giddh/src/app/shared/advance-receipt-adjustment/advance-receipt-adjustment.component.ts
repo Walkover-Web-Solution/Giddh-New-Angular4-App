@@ -397,7 +397,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             this.adjustVoucherForm.tdsTaxUniqueName = cloneDeep(event.value);
             this.adjustVoucherForm.tdsAmount.amountForAccount = cloneDeep(this.tdsAmount);
             this.changeTdsAmount(this.tdsAmount);
-            this.tdsTypeBox.nativeElement.classList.remove('error-box');
+            this.tdsTypeBox?.nativeElement?.classList?.remove('error-box');
         }
     }
 
