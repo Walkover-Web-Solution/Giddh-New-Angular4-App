@@ -41,7 +41,7 @@
         "gst_filed": "GST Return of April 2009 till date is filed successfully",
         "return_file_note": "Click below to file return of latest data",
         "return_file": "File your Return",
-        "clickto_proceed": "Click below to proceed",
+        "click_to_proceed": "Click below to proceed",
         "gst_filed_success": "Gst Return Of [PERIOD_FROM] - [PERIOD_TO] is Filed Successfully",
         "loading_gst_data": "Loading [SELECTED_GST] Data.",
         "download_sheet": "Download sheet",
