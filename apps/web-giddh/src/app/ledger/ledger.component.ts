@@ -1438,6 +1438,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.updateLedgerComponentInstance.defaultSuggestions = [...this.defaultSuggestions];
         this.updateLedgerComponentInstance.searchResultsPaginationData.page = this.defaultResultsPaginationData.page;
         this.updateLedgerComponentInstance.searchResultsPaginationData.totalPages = this.defaultResultsPaginationData.totalPages;
+        this.updateLedgerComponentInstance.activeCompany = this.activeCompany;
         componentInstance.toggleOtherTaxesAsideMenu.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.toggleOtherTaxesAsidePane(res);
         });
