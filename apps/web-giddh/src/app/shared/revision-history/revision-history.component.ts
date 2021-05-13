@@ -122,6 +122,7 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
                         this.toaster.errorToast(res.message);
                     }
                     this.isLoading = false;
+                    this.cdRef.detectChanges();
                 }
             });
         }
@@ -215,6 +216,7 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
                         this.toaster.errorToast(res.message);
                     }
                     this.isLoading = false;
+                    this.cdRef.detectChanges();
                 }
             });
         }
