@@ -56,6 +56,7 @@ export interface ReceiptItem {
     status?: string;
     errorMessage?: string;
     eInvoiceStatusTooltip?: string;
+    gainLoss?: number;
 }
 
 export interface ReciptResponse {
