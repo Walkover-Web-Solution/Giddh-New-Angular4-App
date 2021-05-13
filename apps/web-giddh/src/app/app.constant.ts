@@ -251,7 +251,12 @@ if (PRODUCTION_ENV || isElectron || isCordova) {
 export enum AdjustedVoucherType {
     Receipt = 'rcpt',
     AdvanceReceipt = 'advance-receipt',
-    Sales = 'sal'
+    Sales = 'sal',
+    Purchase = 'pur',
+    CreditNote = 'credit note',
+    DebitNote = 'debit note',
+    Payment = 'pay',
+    Journal = 'jr'
 }
 
 /** Collection of search field default text for empty results */

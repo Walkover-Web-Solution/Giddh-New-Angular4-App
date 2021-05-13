@@ -756,15 +756,32 @@
                                     </div>
                                     <div class="col-md-5 col-sm-5 pd-l05 pd-r05">
                                         <div class="form-group">
-                                            <label>{{commonLocaleData?.app_amount}}<span class="text-danger">*</span> <span *ngIf="item.voucherType === 'receipt' && isAdvanceReceipt" class="text-light font-12 mr-l05">({{commonLocaleData?.app_inclusive_tax}})</span></label>
-                                            <input id="update-ledger-inclusive-tax-edit-mode" type="text" class="form-control mr-b1" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective [(ngModel)]="item.adjustmentAmount.amountForAccount" disabled>
-                                            <input [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1" id="update-ledger-inclusive-tax" type="text" class="form-control mr-b1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedInvoiceAmountChange()" *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode" [(ngModel)]="item.adjustmentAmount.amountForAccount">
+                                            <label>{{commonLocaleData?.app_amount}}<span class="text-danger">*</span>
+                                                <span *ngIf="item.voucherType === 'receipt' && isAdvanceReceipt"
+                                                    class="text-light font-12 mr-l05">({{commonLocaleData?.app_inclusive_tax}})</span></label>
+                                            <input id="update-ledger-inclusive-tax-edit-mode" type="text"
+                                                class="form-control mr-b1"
+                                                *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
+                                                [mask]="vm.inputMaskFormat" [prefix]="item.accountCurrency?.symbol"
+                                                decimalDigitsDirective
+                                                [(ngModel)]="item.adjustmentAmount.amountForAccount" disabled>
+                                            <input
+                                                [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
+                                                id="update-ledger-inclusive-tax" type="text" class="form-control mr-b1"
+                                                decimalDigitsDirective [mask]="vm.inputMaskFormat"
+                                                [prefix]="item.accountCurrency?.symbol"
+                                                (blur)="adjustedInvoiceAmountChange()"
+                                                *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
+                                                [(ngModel)]="item.adjustmentAmount.amountForAccount">
                                         </div>
                                     </div>
                                     <div *ngIf="item.voucherType === 'receipt' && item.subVoucher === 'ADVANCE_RECEIPT'" class="col-sm-2 pd-l05">
                                         <div class="form-group">
                                             <label>{{commonLocaleData?.app_tax}}</label>
-                                            <input type="text" id="update-ledger-voucher-tax" class="form-control mr-b1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.calculatedTaxAmount" disabled>
+                                            <input type="text" id="update-ledger-voucher-tax" class="form-control mr-b1"
+                                                decimalDigitsDirective [mask]="vm.inputMaskFormat"
+                                                [prefix]="item.accountCurrency?.symbol"
+                                                [(ngModel)]="item.calculatedTaxAmount" disabled>
                                         </div>
                                     </div>
                                 </div>
