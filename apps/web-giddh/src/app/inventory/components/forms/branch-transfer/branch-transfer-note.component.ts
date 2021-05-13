@@ -144,7 +144,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
             if (this.currentCompany.uniqueName) {
                 this.InventoryEntryValue.source.uniqueName = this.currentCompany.uniqueName;
                 this.InventoryEntryValue.source.entity = 'company';
-                this.inventorySource.patchValue(this.currentCompany.uniqueName);
+                this.inventorySource?.patchValue(this.currentCompany.uniqueName);
             }
         });
     }
@@ -190,7 +190,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
         }
         this.mode = mode;
         this.form.reset();
-        this.transferDate.patchValue(moment().format(GIDDH_DATE_FORMAT));
+        this.transferDate?.patchValue(moment().format(GIDDH_DATE_FORMAT));
         this.transfers.controls = this.transfers.controls.filter(trx => false);
         this.setSource();
         if (this.mode === 'receiver') {
@@ -288,20 +288,20 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
             }
             if (index) {
                 const control = items.at(index);
-                control.patchValue({ ...control.value, entityDetails });
-                control.get('stockUnit').patchValue(this.stockUnitCode);
+                control?.patchValue({ ...control.value, entityDetails });
+                control.get('stockUnit')?.patchValue(this.stockUnitCode);
             } else {
-                items.controls.forEach(c => c.patchValue({ ...c.value, entityDetails }));
+                items.controls.forEach(c => c?.patchValue({ ...c.value, entityDetails }));
             }
         } else {
 
             if (index) {
                 const control = items.at(index);
-                control.patchValue({
+                control?.patchValue({
                     ...control.value
                 });
             } else {
-                items.controls.forEach(c => c.patchValue({ ...c.value }));
+                items.controls.forEach(c => c?.patchValue({ ...c.value }));
             }
         }
     }
@@ -333,9 +333,9 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
 
                 if (stockDetails.body && stockDetails.body.manufacturingDetails) {
                     let mfd = stockDetails.body.manufacturingDetails;
-                    this.isManufactured.patchValue(true);
+                    this.isManufactured?.patchValue(true);
 
-                    this.manufacturingDetails.patchValue({
+                    this.manufacturingDetails?.patchValue({
                         manufacturingQuantity: mfd.manufacturingQuantity,
                         manufacturingUnitCode: mfd.manufacturingUnitCode
                     });
@@ -345,7 +345,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
                     });
 
                 } else {
-                    this.isManufactured.patchValue(false);
+                    this.isManufactured?.patchValue(false);
                 }
 
             } catch (e) {
@@ -359,10 +359,10 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
 
         if (index || index === 0) {
             const control = items.at(index);
-            control.patchValue({ ...control.value, entityDetails });
-            control.get('stockUnit').patchValue(stockUnit);
+            control?.patchValue({ ...control.value, entityDetails });
+            control.get('stockUnit')?.patchValue(stockUnit);
         } else {
-            items.controls.forEach(c => c.patchValue({ ...c.value, entityDetails }));
+            items.controls.forEach(c => c?.patchValue({ ...c.value, entityDetails }));
         }
     }
 
@@ -386,7 +386,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
         } else {
             const stockItem = this.stockList.find(p => p.uniqueName === uniqueName);
             const stockUnit = stockItem ? stockItem.stockUnit.code : null;
-            control.at(i).get('stockUnitCode').patchValue(stockUnit);
+            control.at(i).get('stockUnitCode')?.patchValue(stockUnit);
             this.disableStockButton = false;
         }
     }
@@ -396,14 +396,14 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
         const items = this.transfers;
         const control = items.at(index);
         if (type === 'qty' && control.value.quantity) {
-            control.get('quantity').patchValue(this.removeExtraChar(control.value.quantity));
+            control.get('quantity')?.patchValue(this.removeExtraChar(control.value.quantity));
         }
         if (type === 'rate' && control.value.rate) {
-            control.get('rate').patchValue(this.removeExtraChar(control.value.rate));
+            control.get('rate')?.patchValue(this.removeExtraChar(control.value.rate));
         }
 
         if (control.value && control.value.quantity && control.value.rate) {
-            control.get('totalValue').patchValue((parseFloat(control.value.quantity) * parseFloat(control.value.rate)).toFixed(2));
+            control.get('totalValue')?.patchValue((parseFloat(control.value.quantity) * parseFloat(control.value.rate)).toFixed(2));
         }
     }
 
@@ -427,7 +427,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
             } else {
                 let isValid = this.validateLinkedStock(item);
                 if (isValid) {
-                    frmgrp.patchValue(item);
+                    frmgrp?.patchValue(item);
                     control.controls[i] = frmgrp;
                 } else {
                     return this._toasty.errorToast('All fields are required.');

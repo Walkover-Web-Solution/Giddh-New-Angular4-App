@@ -1787,10 +1787,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /**
      * Loads the default search suggestion when petty cash is opened
      *
-     * @private
+     * @public
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    private loadDefaultSearchSuggestions(): void {
+    public loadDefaultSearchSuggestions(): void {
         this.onSearchQueryChanged('', 1, false, (response) => {
             this.defaultSuggestions = response.map(result => {
                 return {
