@@ -5,7 +5,10 @@
     color: $color !important;
 }
 .primary-sidebar {
+    padding-top: 0 !important;
     .company-branch-block {
+        background-color: $solitude-light;
+        padding: 14px 0;
         .branch-connection {
             span.outer-span {
                 width: 12px;
@@ -19,6 +22,7 @@
                 position: absolute;
                 left: 32px;
                 top: 40px;
+                display: none;
                 &:after {
                     position: absolute;
                     width: 7px;
@@ -44,10 +48,14 @@
             }
         }
         .company-name {
+            .icon-down-new{
+                 position: relative;
+                right: 5px;
+            }
             .head-nav {
                 background: $white-smoke;
                 border-bottom: 1px solid $gainsboro;
-                margin-bottom: 5px;
+                margin-bottom: 0;
             }
             .user-dropdown-header {
                 left: auto !important;
@@ -55,15 +63,70 @@
                 top: 0 !important;
             }
             .company-text {
-                padding: 6px 8px 6px 0 !important;
-                overflow: hidden;
+                padding: 8px 8px 10px 0 !important;
                 .company-name-finance-year {
                     display: inline-block;
                     padding-left: 15px;
                     width: 90%;
                     .text-ellipsis{
                         white-space: normal;
-                        word-break: break-word;
+                        word-break: break-all;
+                    }
+                }
+                .unique-name-financial-year{
+                    .branch-ellipsis{
+                        white-space: normal;
+                        word-break: break-all;
+                        i.icon-branch1{
+                            position: relative;
+                            top: 3px;
+                        }
+                    }
+                }
+                .switch-company-btn{
+                    a{
+                        color: $night-rider;
+                        &:hover{
+                            background-color: transparent;
+                        }
+                    }
+                    .sub-menu-nav{
+                        left: 253px;
+                    }
+                    span.icon-arrow-down{
+                        font-size: 9px;
+                        float: right;
+                        transform: rotate(270deg );
+                        border: 2px solid $gray;
+                        padding: 3px;
+                        border-radius: 50%;
+                        justify-content: center;
+                        align-items: center;
+                        display: flex;
+                        color: $gray;
+                        width: 19px;
+                        height: 19px;
+                    }
+                }
+                .current-branch-name{
+                    a{
+                        &:hover{
+                            background-color: transparent;
+                        }
+                    }
+                    .switch-branch{
+                        .icon-arrow-down{
+                            font-size: 9px;
+                            float: right;
+                            transform: rotate(270deg);
+                            border: 2px solid $gray;
+                            padding: 3px;
+                            border-radius: 50%;
+                            justify-content: center;
+                            align-items: center;
+                            display: flex;
+                            color: $gray;
+                        }
                     }
                 }
             }
@@ -72,10 +135,10 @@
             font-family: "opensans-semibold";
             color: $black-pearl;
             .company-alice {
-                width: 30px;
-                height: 30px;
-                min-width: 30px;
-                border: 2px solid $black-pearl;
+                width: 26px;
+                height: 26px;
+                min-width: 26px;
+                border: 1px solid $black-pearl;
                 padding: 5px;
                 border-radius: 50px;
                 display: inline-flex;
@@ -86,11 +149,30 @@
                 font-size: 13px !important;
             }
             .company-full-name {
-                margin-top: 5px;
                 white-space: normal;
                 word-break: break-word;
-                min-height: 38px;
                 font-size: 14px;
+                padding-left: 5px;
+                .icon-branch-connect{
+                    position: absolute;
+                    bottom: 0;
+                }
+                .company-ellipsis{
+                    white-space: nowrap;
+                    width: 150px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .branch-ellipsis{
+                    white-space: nowrap;
+                    width: 140px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    font-family: 'opensans-regular';
+                    font-size: 13px;
+                    margin-left: 18px;
+                    margin-top: 7px;
+                }
             }
             img.company-icon {
                 width: 28px;
@@ -118,13 +200,14 @@
     }
     .search-box {
         .input-group-text {
-            background-color: $white;
+            background-color: $solitude-new;
             padding: 8px !important;
         }
         input {
             border-left: none;
             padding-left: 0 !important;
             border-right: none !important;
+            background-color: $solitude-new !important;
             &:focus {
                 border-color: $gainsboro !important;
             }
@@ -139,7 +222,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: $white;
+            background-color: $solitude-new;
             border: 1px solid $gainsboro;
             border-left: none;
         }
@@ -332,11 +415,10 @@
         }
     }
     .switch-branch-wrapper {
-        margin-top: 15px;
         .btn-group {
             display: flex;
             a.dropdown-toggle {
-                font-size: 16px;
+                font-size: 14px;
                 display: flex;
                 padding: 0;
                 font-family: "opensans-regular";
@@ -352,13 +434,13 @@
                     align-items: flex-start;
                     width: 100%;
                     padding-left: 6px;
-                    font-size: 14px;
+                    font-size: 13px;
                 }
                 i {
                     position: relative;
                     top: 3px;
                 }
-                span {
+                span.icon-down-new {
                     font-size: 9px;
                     float: right;
                     padding-top: 4px;
@@ -374,7 +456,7 @@
             }
             .dropdown-menu {
                 left: auto !important;
-                 right: -286px !important;
+                 right: -278px !important;
                  top: -2px !important;
                 transform: translateY(0px);
                 bottom: auto;
@@ -447,7 +529,7 @@
             display: none !important;
         }
         .company-branch-block {
-            padding: 0 10px !important;
+            padding:10px 10px !important;
             .branch-connection {
                 .outer-span{
                     display: none;
@@ -455,14 +537,19 @@
             }
             h3 {
                 .company-alice {
-                    margin-right: 0;
-                    width: 36px;
-                    height: 36px;
+                    margin-right: 7px;
+                    width: 26px;
+                    height: 26px;
+                    min-width: 26px;
                 }
             }
             .company-name{
                 .user-dropdown-header{
                     right: -281px !important;
+                }
+                .icon-down-new{
+                    right: 5px;
+                    transform: rotate(-90deg);
                 }
             }
             .current-branch-name {
@@ -473,7 +560,7 @@
                         display: none;
                     }
                     .switch-branch{
-                        display: none !important;
+
                     }
                     .switch-branch-alice{
                         display: flex !important;
@@ -508,12 +595,10 @@
             }
             .switch-branch-wrapper{
                 .switch-branch-section{
-                    width: 0;
+                    width: 100%;
                 }
                 .btn-group{
-                    .dropdown-menu{
-                        right: -281px !important;
-                    }
+                    width: 100%;
                 }
             }
         }

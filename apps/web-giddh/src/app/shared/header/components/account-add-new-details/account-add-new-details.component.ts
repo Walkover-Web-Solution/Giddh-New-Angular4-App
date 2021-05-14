@@ -514,8 +514,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (keyAvoid.findIndex(key => key === event.key) > -1) {
             return;
         }
-        let gstVal: string = gstForm.get('gstNumber').value.trim();
-        gstForm.get('gstNumber').setValue(gstVal.trim());
+        let gstVal: string = gstForm.get('gstNumber').value?.trim();
+        gstForm.get('gstNumber').setValue(gstVal?.trim());
         if (gstVal.length) {
             if (gstVal.length !== 15) {
                 gstForm.get('partyType').reset('NOT APPLICABLE');
@@ -835,7 +835,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
-        if (ele.value.trim()) {
+        if (ele.value?.trim()) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
