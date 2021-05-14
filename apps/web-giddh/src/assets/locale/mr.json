@@ -575,8 +575,6 @@
     "app_to_navigate": "to navigate",
     "app_to_select": "to select",
     "app_to_dismiss": "to dismiss",
-    "app_send_mail": "Send Mail",
-    "app_enter_email": "Enter email addresss",
-    "app_history": "History",
-    "app_irn": "IRN"
+    "app_company_name": "Company Name",
+    "app_currency": "Currency"
 }

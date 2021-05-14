@@ -578,5 +578,6 @@
     "app_to_navigate": "to navigate",
     "app_to_select": "to select",
     "app_to_dismiss": "to dismiss",
-    "app_irn": "IRN"
+    "app_company_name": "Company Name",
+    "app_currency": "Currency"
 }
