@@ -109,6 +109,10 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     public activeCompanyDetails: any;
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private socialAuthService: AuthService, private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private _generalService: GeneralService, private _toaster: ToasterService, private commonActions: CommonActions
     ) {
@@ -338,7 +342,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                     this.isMobileNumberValid = true;
                 } else {
                     this.isMobileNumberValid = false;
-                    this._toaster.errorToast('Invalid Contact number');
+                    this._toaster.errorToast(this.localeData?.invalid_contact_number_error);
                     ele.classList.add('error-box');
                     this.companyForm.form.controls['contactNo'].setErrors({ invalid: true });
                 }
@@ -348,7 +352,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             }
         } catch (error) {
             this.isMobileNumberValid = false;
-            this._toaster.errorToast('Invalid Contact number');
+            this._toaster.errorToast(this.localeData?.invalid_contact_number_error);
             ele.classList.add('error-box');
             this.companyForm.form.controls['contactNo'].setErrors({ invalid: true });
         }
@@ -468,5 +472,17 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.companyActions.removeCompanyCreateSession());
             this.closeCompanyModal.emit();
         });
+    }
+
+    /**
+     * This will return welcome user text
+     *
+     * @returns {string}
+     * @memberof CompanyAddNewUiComponent
+     */
+    public getWelcomeUserText(): string {
+        let text = this.localeData?.welcome_user;
+        text = text?.replace("[USER]", this.logedInuser.name);
+        return text;
     }
 }
