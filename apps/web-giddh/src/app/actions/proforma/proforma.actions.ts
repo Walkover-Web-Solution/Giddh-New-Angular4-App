@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
-import { Action, Store } from '@ngrx/store';
-import { AppState } from '../../store';
+import { Action } from '@ngrx/store';
 import { ProformaService } from '../../services/proforma.service';
 import { CustomActions } from '../../store/customActions';
 import { PROFORMA_ACTIONS } from './proforma.const';
@@ -11,6 +10,7 @@ import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ProformaFilter, ProformaGetAllVersionRequest, ProformaGetAllVersionsResponse, ProformaGetRequest, ProformaResponse, ProformaUpdateActionRequest } from '../../models/api-models/proforma';
+import { LocaleService } from '../../services/locale.service';
 
 @Injectable()
 export class ProformaActions {
@@ -33,7 +33,10 @@ export class ProformaActions {
                         default:
                             no = response.body.voucherDetails.voucherNumber;
                     }
-                    this._toasty.successToast(`Entry created successfully with Voucher No: ${no}`);
+
+                    let text = this.localeService.translate("app_messages.entry_created_with_voucher");
+                    text = text?.replace("[VOUCHER_NO]", no);
+                    this._toasty.successToast(text);
                 } else {
                     this._toasty.errorToast(response.message, response.code);
                 }
@@ -74,7 +77,7 @@ export class ProformaActions {
             switchMap((action: CustomActions) => this.proformaService.update(action.payload)),
             map((response) => {
                 if (response.status === 'success') {
-                    this._toasty.successToast(`Voucher updated Successfully`);
+                    this._toasty.successToast(this.localeService.translate("app_messages.voucher_updated"));
                 } else {
                     this._toasty.errorToast(response.message, response.code);
                 }
@@ -89,7 +92,7 @@ export class ProformaActions {
             switchMap((action: CustomActions) => this.proformaService.delete(action.payload.request, action.payload.voucherType)),
             map((response) => {
                 if (response.status === 'success') {
-                    this._toasty.successToast(`Voucher Deleted Successfully`);
+                    this._toasty.successToast(this.localeService.translate("app_messages.voucher_deleted"));
                 } else {
                     this._toasty.errorToast(response.message, response.code);
                 }
@@ -104,7 +107,7 @@ export class ProformaActions {
             switchMap((action: CustomActions) => this.proformaService.updateAction(action.payload.request, action.payload.voucherType)),
             map((response) => {
                 if (response.status === 'success') {
-                    this._toasty.successToast(`Status updated Successfully`);
+                    this._toasty.successToast(this.localeService.translate("app_messages.status_updated"));
                 } else {
                     this._toasty.errorToast(response.message, response.code);
                 }
@@ -146,7 +149,7 @@ export class ProformaActions {
                 if (response.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                 } else {
-                    this._toasty.successToast('Proforma Generated Successfully');
+                    this._toasty.successToast(this.localeService.translate("app_messages.proforma_generated"));
                 }
                 return this.generateProformaFromEstimateResponse(response);
             })
@@ -167,7 +170,7 @@ export class ProformaActions {
             })
         ));
 
-    constructor(private action$: Actions, private _toasty: ToasterService, private store: Store<AppState>,
+    constructor(private action$: Actions, private _toasty: ToasterService, private localeService: LocaleService,
         private proformaService: ProformaService) {
 
     }

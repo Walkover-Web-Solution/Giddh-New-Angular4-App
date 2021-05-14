@@ -1,19 +1,16 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
-import { SETTINGS_PROFILE_ACTIONS } from './settings.profile.const';
 import { GST_RETURN_ACTIONS, PURCHASE_INVOICE_ACTIONS } from './purchase-invoice.const';
-
 import { saveAs } from 'file-saver';
 import { CustomActions } from '../../store/customActions';
 import { IInvoicePurchaseItem, IInvoicePurchaseResponse, ITaxResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ToasterService } from '../../services/toaster.service';
-import { AppState } from '../../store/index';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
+import { LocaleService } from '../../services/locale.service';
 
 @Injectable()
 export class InvoicePurchaseActions {
@@ -71,7 +68,7 @@ export class InvoicePurchaseActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Purchase Invoice Updated Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.purchase_invoice_updated"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -95,7 +92,7 @@ export class InvoicePurchaseActions {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.downloadFile(data.body, data.queryString.reqObj.period, data.queryString.reqObj.gstNumber, data.queryString.reqObj.type, data.queryString.reqObj.gstType);
-                    this.toasty.successToast('Sheet Downloaded Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.sheet_downloaded"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -119,7 +116,7 @@ export class InvoicePurchaseActions {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.downloadFile(data.body, data.queryString.reqObj.period, data.queryString.reqObj.gstNumber, data.queryString.reqObj.type, data.queryString.reqObj.gstType);
-                    this.toasty.successToast('Error Sheet Downloaded Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.error_sheet_downloaded"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -171,7 +168,7 @@ export class InvoicePurchaseActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Entry Updated Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.entry_updated"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -200,7 +197,7 @@ export class InvoicePurchaseActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Entry Updated Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.entry_updated"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -405,8 +402,7 @@ export class InvoicePurchaseActions {
 
     constructor(private action$: Actions,
         private toasty: ToasterService,
-        private router: Router,
-        private store: Store<AppState>,
+        private localeService: LocaleService,
         private purchaseInvoiceService: PurchaseInvoiceService) {
     }
 
