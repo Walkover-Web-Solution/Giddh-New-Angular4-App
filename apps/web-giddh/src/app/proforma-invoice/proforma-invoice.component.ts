@@ -1237,26 +1237,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     obj.accountDetails.currencySymbol = acc.currencySymbol || '';
                                 }
                             });
-                        } else if (this.isPurchaseInvoice) {
-                            let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
-                            this.isRcmEntry = (results[0]) ? results[0].subVoucher === SubVoucher.ReverseCharge : false;
-                            obj = cloneDeep(convertedRes1) as VoucherClass;
-                            this.assignCompanyBillingShipping(obj.companyDetails);
-                            this.initializeWarehouse(results[0].warehouse);
+                            if (this.isPurchaseInvoice) {
+                                this.isRcmEntry = (results[0]) ? results[0].subVoucher === SubVoucher.ReverseCharge : false;
+                                this.assignCompanyBillingShipping(obj.companyDetails);
 
-                            if(this.copyPurchaseBill) {
-                                if(obj && obj.entries) {
-                                    obj.entries.forEach((entry, index) => {
-                                        obj.entries[index].entryDate = this.universalDate || new Date();
-                                        obj.entries[index].uniqueName = "";
-                                    });
-                                    obj.entries = obj.entries;
+                                if(this.copyPurchaseBill) {
+                                    if(obj && obj.entries) {
+                                        obj.entries.forEach((entry, index) => {
+                                            obj.entries[index].entryDate = this.universalDate || new Date();
+                                            obj.entries[index].uniqueName = "";
+                                        });
+                                        obj.entries = obj.entries;
+                                    }
+
+                                    let date = _.cloneDeep(this.universalDate);
+                                    obj.voucherDetails.voucherDate = date;
+                                    obj.voucherDetails.dueDate = date;
+                                    obj.voucherDetails.voucherNumber = "";
                                 }
-
-                                let date = _.cloneDeep(this.universalDate);
-                                obj.voucherDetails.voucherDate = date;
-                                obj.voucherDetails.dueDate = date;
-                                obj.voucherDetails.voucherNumber = "";
                             }
                         } else {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
@@ -1953,7 +1951,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isGenDtlCollapsed = false;
         this.isMlngAddrCollapsed = false;
         this.isOthrDtlCollapsed = false;
-        if (this.isMultiCurrencyModule() || this.isPurchaseInvoice) {
+        if (this.isMultiCurrencyModule()) {
             this.initializeWarehouse();
         }
 
@@ -2468,6 +2466,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 account: data.accountDetails,
                 number: this.invFormData.voucherDetails.voucherNumber || '',
                 entries: data.entries,
+                exchangeRate: exRate,
                 date: data.voucherDetails.voucherDate,
                 dueDate: data.voucherDetails.dueDate,
                 type: this.invoiceType,
@@ -3230,7 +3229,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             transaction.stockDetails = _.omit(o.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
             // Stock item, show the warehouse drop down if it is hidden
-            if ((this.isMultiCurrencyModule() || this.isPurchaseInvoice) && !this.shouldShowWarehouse) {
+            if ((this.isMultiCurrencyModule()) && !this.shouldShowWarehouse) {
                 this.shouldShowWarehouse = true;
                 this.selectedWarehouse = String(this.defaultWarehouse);
             }
@@ -3998,6 +3997,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     entries: data.entries,
                     date: data.voucherDetails.voucherDate,
                     dueDate: data.voucherDetails.dueDate,
+                    exchangeRate: exRate,
                     type: this.invoiceType,
                     attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
                     templateDetails: data.templateDetails,
@@ -4911,7 +4911,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if ([VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].indexOf(this.invoiceType) > -1) {
             // Credit note and Debit note
             voucherDetails.voucherNumber = result.invoiceNumberAgainstVoucher || '';
-        } else {
+        } else if (!this.copyPurchaseBill) {
             voucherDetails.voucherNumber = result.number;
         }
         voucherDetails.subTotal = result.subTotal.amountForAccount;
@@ -4922,7 +4922,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.templateDetails = (result.templateDetails) ? result.templateDetails : new TemplateDetailsClass();
 
         if (!this.isLastInvoiceCopied) {
-            this.isMulticurrencyAccount = result.multiCurrency;
+            if (!this.isPurchaseInvoice) {
+                this.isMulticurrencyAccount = result.multiCurrency;
+            }
             this.customerCountryName = result.account.billingDetails.countryName;
         }
 
@@ -5026,15 +5028,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.originalExchangeRate = rate;
                     this.exchangeRate = rate;
                     this._cdr.detectChanges();
-                    if (this.isPurchaseInvoice && this.isUpdateMode) {
-                        // TODO: Remove this code once purchase invoice supports multicurrency
-                        this.calculateSubTotal();
-                        this.calculateTotalDiscount();
-                        this.calculateTotalTaxSum();
-                        this.calculateGrandTotal();
-                        this.calculateBalanceDue();
-                    }
-                    if (from !== to && !this.isPurchaseInvoice) {
+                    if (from !== to) {
                         // Multi currency case
                         this.recalculateEntriesTotal();
                     }
@@ -5451,7 +5445,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private isMultiCurrencyModule(): boolean {
-        return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash, VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate].includes(this.invoiceType);
+        return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash, VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.purchase].includes(this.invoiceType);
     }
 
     /**
@@ -7099,6 +7093,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
             }
+        }
+    }
+
+    /**
+     * Recalculates the converted total amount for each entry when
+     * the grand total amount in company currency is updated
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public recalculateConvertedTotal(): void {
+        if (this.invFormData.entries && this.invFormData.entries.length) {
+            this.invFormData.entries.forEach(entry => {
+                const transaction = entry.transactions[0];
+                this.calculateConvertedTotal(entry, transaction);
+            });
         }
     }
 }
