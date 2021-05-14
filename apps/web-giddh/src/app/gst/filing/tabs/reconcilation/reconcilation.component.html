@@ -14,7 +14,7 @@
                         <tab (selectTab)="reconcileTabChanged('notfoundonportal')">
 
                             <ng-template tabHeading>
-                                Missing in GSTN <span class="count">{{'(' + (gstNotFoundOnPortalData$ | async)?.count +
+                                {{localeData?.filing?.missing_in_gstn}} <span class="count">{{'(' + (gstNotFoundOnPortalData$ | async)?.count +
                                     ')'}}</span>
                             </ng-template>
 
@@ -33,7 +33,9 @@
                                 <pagination [totalItems]="(gstNotFoundOnPortalData$ | async)?.data?.totalItems"
                                     [itemsPerPage]="(gstNotFoundOnPortalData$ | async)?.data?.count"
                                     [boundaryLinks]="true"
-                                    (pageChanged)="reconcilePageChanged($event, 'notfoundonportal')"></pagination>
+                                    (pageChanged)="reconcilePageChanged($event, 'notfoundonportal')" [firstText]="commonLocaleData?.app_first"
+                                    [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
+                                    [lastText]="commonLocaleData?.app_last"></pagination>
                             </div>
 
                         </tab>
@@ -42,7 +44,7 @@
                         <!-- region Missing in Giddh -->
                         <tab (selectTab)="reconcileTabChanged('notfoundongiddh')">
                             <ng-template tabHeading>
-                                Missing in Giddh <span class="count">{{'(' + (gstNotFoundOnGiddhData$ | async)?.count +
+                                {{localeData?.filing?.missing_in_giddh}} <span class="count">{{'(' + (gstNotFoundOnGiddhData$ | async)?.count +
                                     ')'}}</span>
                             </ng-template>
 
@@ -61,7 +63,9 @@
                                 <pagination [totalItems]="(gstNotFoundOnGiddhData$ | async)?.data?.totalItems"
                                     [itemsPerPage]="(gstNotFoundOnGiddhData$ | async)?.data?.count"
                                     [boundaryLinks]="true"
-                                    (pageChanged)="reconcilePageChanged($event, 'notfoundongiddh')"></pagination>
+                                    (pageChanged)="reconcilePageChanged($event, 'notfoundongiddh')" [firstText]="commonLocaleData?.app_first"
+                                    [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
+                                    [lastText]="commonLocaleData?.app_last"></pagination>
                             </div>
                         </tab>
                         <!-- endregion -->
@@ -70,7 +74,7 @@
                         <tab (selectTab)="reconcileTabChanged('partiallymatched')">
 
                             <ng-template tabHeading>
-                                Partially Matched <span class="count">{{'(' + (gstPartiallyMatchedData$ | async)?.count
+                                {{localeData?.filing?.partially_matched}} <span class="count">{{'(' + (gstPartiallyMatchedData$ | async)?.count
                                     + ')'}}</span>
                             </ng-template>
 
@@ -89,7 +93,9 @@
                                 <pagination [totalItems]="(gstPartiallyMatchedData$ | async)?.data?.totalItems"
                                     [itemsPerPage]="(gstPartiallyMatchedData$ | async)?.data?.count"
                                     [boundaryLinks]="true"
-                                    (pageChanged)="reconcilePageChanged($event, 'partiallymatched')"></pagination>
+                                    (pageChanged)="reconcilePageChanged($event, 'partiallymatched')" [firstText]="commonLocaleData?.app_first"
+                                    [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
+                                    [lastText]="commonLocaleData?.app_last"></pagination>
                             </div>
 
                         </tab>
@@ -99,7 +105,7 @@
                         <tab (selectTab)="reconcileTabChanged('matched')">
 
                             <ng-template tabHeading>
-                                Matched <span class="count">{{'(' + (gstMatchedData$ | async)?.count + ')'}}</span>
+                                {{localeData?.filing?.matched}} <span class="count">{{'(' + (gstMatchedData$ | async)?.count + ')'}}</span>
                             </ng-template>
 
                             <ng-container
@@ -116,7 +122,9 @@
                                 *ngIf="!(gstReconcileInvoiceRequestInProcess$ | async) && (gstMatchedData$ | async)?.count && (gstMatchedData$ | async)?.count > 20">
                                 <pagination [totalItems]="(gstMatchedData$ | async)?.data?.totalItems"
                                     [itemsPerPage]="(gstMatchedData$ | async)?.data?.count" [boundaryLinks]="true"
-                                    (pageChanged)="reconcilePageChanged($event, 'matched')"></pagination>
+                                    (pageChanged)="reconcilePageChanged($event, 'matched')" [firstText]="commonLocaleData?.app_first"
+                                    [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
+                                    [lastText]="commonLocaleData?.app_last"></pagination>
                             </div>
 
                         </tab>
@@ -186,64 +194,63 @@
 
         <th id="4" class="text-left width-vendor">
             <div class="positive-relative">
-                <div data-test-title="Vendor Details" title="Vendor Details" class="pull-left over-flow">
-                    Vendor
-                    Details
+                <div [attr.data-test-title]="localeData?.filing?.vendor_details" [attr.title]="localeData?.filing?.vendor_details" class="pull-left over-flow">
+                    {{localeData?.filing?.vendor_details}}
                 </div>
             </div>
         </th>
 
         <th class="text-left width-date">
             <div class="positive-relative">
-                <div data-test-title="Transaction Date" title="Transaction Date" class="pull-left over-flow">
-                    Transaction Date
+                <div [attr.data-test-title]="localeData?.filing?.transaction_date" [attr.title]="localeData?.filing?.transaction_date" class="pull-left over-flow">
+                    {{localeData?.filing?.transaction_date}}
                 </div>
             </div>
         </th>
 
         <th class="text-left width-supply">
             <div class="positive-relative">
-                <div data-test-title="Place of Supply" title="Place of Supply" class="pull-left over-flow">
-                    Place of Supply
+                <div [attr.data-test-title]="localeData?.filing?.place_supply" [attr.title]="localeData?.filing?.place_supply" class="pull-left over-flow">
+                    {{localeData?.filing?.place_supply}}
                 </div>
             </div>
         </th>
 
         <th class="text-right width-amount">
             <div class="positive-relative">
-                <div data-test-title="Taxable Amount" title="Taxable Amount" class="over-flow"> Taxable
-                    Amount
+                <div [attr.data-test-title]="localeData?.filing?.taxable_amount" [attr.title]="localeData?.filing?.taxable_amount" class="over-flow"> 
+                    {{localeData?.filing?.taxable_amount}}
                 </div>
             </div>
         </th>
 
         <th class="text-right">
             <div class="positive-relative">
-                <div data-test-title="IGST" title="IGST" class="over-flow"> IGST</div>
+                <div [attr.data-test-title]="localeData?.filing?.igst" [attr.title]="localeData?.filing?.igst" class="over-flow"> {{localeData?.filing?.igst}}</div>
             </div>
         </th>
 
         <th class="text-right">
             <div class="positive-relative">
-                <div data-test-title="CGST" title="CGST" class="over-flow"> CGST</div>
+                <div [attr.data-test-title]="localeData?.filing?.cgst" [attr.title]="localeData?.filing?.cgst" class="over-flow"> {{localeData?.filing?.cgst}}</div>
             </div>
         </th>
 
         <th class="text-right">
             <div class="positive-relative">
-                <div data-test-title="SGST" title="SGST" class="over-flow"> SGST</div>
+                <div [attr.data-test-title]="localeData?.filing?.sgst" [attr.title]="localeData?.filing?.sgst" class="over-flow"> {{localeData?.filing?.sgst}}</div>
             </div>
         </th>
 
         <th class="text-right">
             <div class="positive-relative">
-                <div data-test-title="Cess" title="Cess" class="over-flow"> Cess</div>
+                <div [attr.data-test-title]="localeData?.filing?.cess" [attr.title]="localeData?.filing?.cess" class="over-flow"> {{localeData?.filing?.cess}}</div>
             </div>
         </th>
 
         <th class="text-right">
             <div class="positive-relative">
-                <div data-test-title="Total Amount" title="Total Amount" class="over-flow"> Total Amount
+                <div [attr.data-test-title]="commonLocaleData?.app_total_amount" [attr.title]="commonLocaleData?.app_total_amount" class="over-flow"> {{commonLocaleData?.app_total_amount}}
                 </div>
             </div>
         </th>
@@ -718,7 +725,7 @@
 
         </div>
 
-        <div class="empty-msg"><span> Loading Data. </span></div>
+        <div class="empty-msg"><span> {{localeData?.filing?.loading_data}} </span></div>
     </div>
 </ng-template>
 <!--endregion-->
@@ -726,10 +733,8 @@
 <!--region common not found msg-->
 <ng-template #notFoundTmpl let-show>
     <div class="filings-empty-state" *ngIf="show">
-        <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" alt="nofound" />
-        <div class="empty-msg"><span>All transactions in Giddh Books whose vendor GSTIN, invoice number,&nbsp; invoice
-                date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this
-                section.</span>
+        <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
+        <div class="empty-msg"><span>{{localeData?.filing?.reconcilation_note}}</span>
         </div>
     </div>
 </ng-template>

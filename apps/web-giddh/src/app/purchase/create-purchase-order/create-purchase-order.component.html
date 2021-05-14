@@ -1035,7 +1035,8 @@
                                         (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
                                         [maskInput]="inputMaskFormat"
                                         [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
-                                        [suffixInput]="selectedSuffixForCurrency">
+                                        [suffixInput]="selectedSuffixForCurrency"
+                                        [commonLocaleData]="commonLocaleData">
                                     </discount-control-component>
                                 </div>
                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount">
@@ -1831,6 +1832,7 @@
                                                 [maskInput]="inputMaskFormat"
                                                 [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
                                                 [suffixInput]="selectedSuffixForCurrency">
+                                                [commonLocaleData]="commonLocaleData"
                                             </discount-control-component>
 
                                         </div>

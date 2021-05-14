@@ -137,5 +137,18 @@
         "mark_as_cancelled": "The e-Invoiced transaction has been marked as cancelled in Giddh Books alone. You’ll have to cancel it in the GST portal to make the IRN invalid.",
         "failed": "The transaction could not be pushed to the IRP.",
         "na": "e-Invoice creation is not applicable for this transaction."
-    }
+    },
+    "tabs": {
+        "estimates": "Estimates (Beta)",
+        "debit_note": "Debit Note",
+        "credit_note": "Credit Note",
+        "pending": "Pending",
+        "templates": "Templates",
+        "settings": "Settings",
+        "proformas": "Proformas",
+        "invoices": "Invoices",
+        "recurring": "Recurring"
+    },
+    "all_invoices": "All-invoices",
+    "no_advance_receipt": "There is no advanced receipt for adjustment."
 }
