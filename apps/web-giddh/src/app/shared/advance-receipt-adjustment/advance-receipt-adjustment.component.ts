@@ -323,6 +323,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                         if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
                             this.allAdvanceReceiptResponse.forEach(item => {
                                 if (item) {
+                                    if (!item.adjustmentAmount) {
+                                        item.adjustmentAmount = cloneDeep(item.balanceDue);
+                                    }
                                     item.voucherDate = item.voucherDate.replace(/-/g, '/');
                                     item.accountCurrency = item.accountCurrency ?? { symbol: this.baseCurrencySymbol, code: this.companyCurrency };
                                     this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
@@ -877,7 +880,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      public getAdjustVoucherType(): string {
         let adjustVoucher = this.localeData?.voucher_label;
         adjustVoucher = adjustVoucher?.replace("[VOUCHER_TYPE]",
-            (this.adjustedVoucherType === AdjustedVoucherType.Sales ? this.commonLocaleData?.app_invoice :
+            ((this.adjustedVoucherType === AdjustedVoucherType.Sales || this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice) ? this.commonLocaleData?.app_invoice :
             this.adjustedVoucherType === AdjustedVoucherType.Purchase ? this.commonLocaleData?.app_voucher_types.purchase :
             this.adjustedVoucherType === AdjustedVoucherType.CreditNote ? this.commonLocaleData?.app_voucher_types.credit_note :
             this.adjustedVoucherType === AdjustedVoucherType.DebitNote ? this.commonLocaleData?.app_voucher_types.debit_note :
