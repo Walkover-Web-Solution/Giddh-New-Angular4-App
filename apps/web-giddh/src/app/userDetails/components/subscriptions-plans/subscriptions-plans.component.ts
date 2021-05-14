@@ -214,7 +214,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 this.toasty.errorToast(response.message);
             } else {
                 this.store.dispatch(this.settingsProfileActions.handleFreePlanSubscribed(true));
-                this.toasty.successToastWithHtml(this.localeData?.subscription?.welcome_onboard);
+                this.toasty.successToastWithHtml(this.commonLocaleData?.app_messages?.welcome_onboard);
                 this.backClicked();
             }
         });

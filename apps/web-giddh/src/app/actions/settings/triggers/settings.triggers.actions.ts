@@ -1,15 +1,14 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
-import { Action, Store } from '@ngrx/store';
-import { AppState } from '../../../store/roots';
+import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { Router } from '@angular/router';
 import { SETTINGS_TRIGGERS_ACTIONS } from './settings.triggers.const';
 import { SettingsTriggersService } from '../../../services/settings.triggers.service';
 import { CustomActions } from '../../../store/customActions';
+import { LocaleService } from '../../../services/locale.service';
 
 @Injectable()
 export class SettingsTriggersActions {
@@ -32,7 +31,7 @@ export class SettingsTriggersActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Trigger Created Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.trigger_created"));
                     return this.GetTriggers();
                 }
                 return { type: 'EmptyAction' };
@@ -56,7 +55,7 @@ export class SettingsTriggersActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Trigger Updated Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.trigger_updated"));
                     return this.GetTriggers();
                 }
                 return { type: 'EmptyAction' };
@@ -80,7 +79,7 @@ export class SettingsTriggersActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Trigger Deleted Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.trigger_deleted"));
                     return this.GetTriggers();
                 }
                 return { type: 'EmptyAction' };
@@ -97,8 +96,7 @@ export class SettingsTriggersActions {
 
     constructor(private action$: Actions,
         private toasty: ToasterService,
-        private router: Router,
-        private store: Store<AppState>,
+        private localeService: LocaleService,
         private settingsTriggersService: SettingsTriggersService) {
     }
 

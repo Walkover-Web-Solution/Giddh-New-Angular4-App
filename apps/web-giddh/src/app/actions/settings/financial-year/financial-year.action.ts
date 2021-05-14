@@ -1,17 +1,15 @@
 import { map, switchMap } from 'rxjs/operators';
-
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from './financial-year.const';
 import { CustomActions } from '../../../store/customActions';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { IFinancialYearResponse, ILockFinancialYearRequest, SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
-import { Action, Store } from '@ngrx/store';
-import { Router } from '@angular/router';
-import { AppState } from '../../../store/index';
+import { Action } from '@ngrx/store';
 import { ActiveFinancialYear } from '../../../models/api-models/Company';
 import { ToasterService } from '../../../services/toaster.service';
+import { LocaleService } from '../../../services/locale.service';
 
 @Injectable()
 export class SettingsFinancialYearActions {
@@ -47,7 +45,7 @@ export class SettingsFinancialYearActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Financial Year Locked Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.financial_year_locked"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -70,7 +68,7 @@ export class SettingsFinancialYearActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Financial Year Unlocked Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.financial_year_unlocked"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -93,7 +91,7 @@ export class SettingsFinancialYearActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Financial Year Switched Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.financial_year_switched"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -116,7 +114,7 @@ export class SettingsFinancialYearActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, 'Error');
                 } else {
-                    this.toasty.successToast('Financial Year Period Updated.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.financial_year_period_updated"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -167,8 +165,7 @@ export class SettingsFinancialYearActions {
 
     constructor(private action$: Actions,
         private toasty: ToasterService,
-        private router: Router,
-        private store: Store<AppState>,
+        private localeService: LocaleService,
         private _settingsFinancialYearService: SettingsFinancialYearService) {
     }
 
