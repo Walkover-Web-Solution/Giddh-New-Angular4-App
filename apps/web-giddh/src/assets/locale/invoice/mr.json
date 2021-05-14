@@ -150,5 +150,8 @@
         "recurring": "Recurring"
     },
     "all_invoices": "All-invoices",
-    "no_advance_receipt": "There is no advanced receipt for adjustment."
+    "no_advance_receipt": "There is no advanced receipt for adjustment.",
+    "exchange_gain_loss_label": "In [BASE_CURRENCY]: [AMOUNT]<br />Exchange [PROFIT_TYPE]: ",
+    "exchange_gain": "gain",
+    "exchange_loss": "loss"
 }

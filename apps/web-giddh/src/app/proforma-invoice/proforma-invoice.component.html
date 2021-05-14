@@ -84,7 +84,7 @@
                                             <span class="sp-rupees d-flex justify-content-end"
                                                 *ngIf='isMulticurrencyAccount'>
                                                 <amount-field
-                                                    [amount]="invFormData.voucherDetails.balanceDue * exchangeRate"
+                                                    [amount]="isSalesInvoice ? getConvertedBalanceDue() : (invFormData.voucherDetails.balanceDue * exchangeRate)"
                                                     [currencySymbol]="baseCurrencySymbol"
                                                     [currencyCode]="companyCurrency">
                                                 </amount-field>
@@ -520,10 +520,11 @@
                                         </span>
 
                                         <!-- added multicurrency feature make it functional to change into appropriate currency -->
+                                        <span *ngIf="isSalesInvoice && isMulticurrencyAccount && adjustPaymentBalanceDueData === 0 && invFormData.voucherDetails.balanceDue === 0" class="balance-due">Exchange {{getConvertedBalanceDue() <= 0 ? 'gain' : 'loss'}}:&nbsp;</span>
                                         <span class="sp-rupees d-flex justify-content-end"
                                             *ngIf="isMulticurrencyAccount">
                                             <amount-field
-                                                [amount]="invFormData.voucherDetails.balanceDue * exchangeRate"
+                                                [amount]="isSalesInvoice && adjustPaymentBalanceDueData === 0 && invFormData.voucherDetails.balanceDue === 0 ? getConvertedBalanceDue(true) : (invFormData.voucherDetails.balanceDue * exchangeRate)"
                                                 [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
@@ -2137,8 +2138,10 @@
                                                                                             {{localeData?.advance_receipt}}
                                                                                         </p>
                                                                                         <p class="text-light">
-                                                                                            {{adjustPaymentData.totalAdjustedAmount
-                                                                                            | giddhCurrency}}
+                                                                                            <amount-field [amount]="adjustPaymentData.totalAdjustedAmount"
+                                                                                                [currencySymbol]="isMulticurrencyAccount ? invFormData.accountDetails?.currencySymbol:false"
+                                                                                                [currencyCode]="isMulticurrencyAccount ? invFormData.accountDetails?.currency?.code: false">
+                                                                                            </amount-field>
                                                                                         </p>
                                                                                     </span>
                                                                                     <a href="javascript:void(0)"
@@ -3576,9 +3579,9 @@
 
     <div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal"
         [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
-        <div class="modal-dialog modal-xl">
+        <div *ngIf="adjustPaymentModal?.isShown" class="modal-dialog modal-xl">
             <div class="modal-content">
-                <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent
+                <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent [adjustedVoucherType]="selectedVoucherType"
                     [isUpdateMode]="isUpdateMode" [depositAmount]="depositAmount" [invoiceFormDetails]="invFormData"
                     [isVoucherModule]="true" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
                     (closeModelEvent)="closeAdvanceReceiptModal()" (submitClicked)="getAdvanceReceiptAdjustData($event)"
