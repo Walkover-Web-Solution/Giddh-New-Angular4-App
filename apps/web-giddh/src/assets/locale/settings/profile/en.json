@@ -7,7 +7,7 @@
     "business_type_placeholder": "Select Business Type",
     "company_alias": "Company Alias",
     "headquarter_name": "Headquarter Name",
-    "personal_information": "Personal Information",
+    "personal_information": "[ENTITY] Information",
     "address": "Address/",
     "addresses": "Address/es",
     "other": "Other",

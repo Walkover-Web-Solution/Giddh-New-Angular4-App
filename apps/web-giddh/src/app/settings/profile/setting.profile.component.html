@@ -156,13 +156,13 @@
     </div>
 </div> -->
 <ng-container appTranslate [file]="'settings/profile'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <giddh-page-loader *ngIf="(getCompanyProfileInProgress$ | async)"></giddh-page-loader>
     <!--Tabs of Company Profile-->
     <div class="settings-profile-tabs">
         <tabset #staticTabs class="profile-tab-container">
             <tab [active]="this.currentTab === 'personal'" (selectTab)="handleTabChanged('personal')"
-                [heading]="localeData?.personal_information"
+                [heading]="personalInformationTabHeading"
                 [id]="(currentTab === 'personal') ? 'giddh-page-heading': ''">
                 <personal-information *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'personal'"
                     (saveProfile)="handleSaveProfile($event)" [profileData]="companyProfileObj"
