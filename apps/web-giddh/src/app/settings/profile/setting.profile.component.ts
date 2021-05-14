@@ -261,6 +261,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('settings/profile', response?.value).subscribe(response => {
                     this.localeData = response;
+                    this.translationComplete(true);
                 });
             }
             this.activeLocale = response?.value;
@@ -1211,18 +1212,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public translationComplete(event: any): void {
         if(event) {
             this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
-                let text = this.localeData?.personal_information;
                 if (organization) {
                     if (organization.type === OrganizationType.Branch) {
-                        text = text?.replace("[ENTITY]", this.commonLocaleData?.app_branch);
-                        this.personalInformationTabHeading = text;
+                        this.personalInformationTabHeading = this.localeData?.branch_information;
                     } else {
-                        text = text?.replace("[ENTITY]", this.commonLocaleData?.app_company);
-                        this.personalInformationTabHeading = text;
+                        this.personalInformationTabHeading = this.localeData?.company_information;
                     }
                 } else {
-                    text = text?.replace("[ENTITY]", this.commonLocaleData?.app_company);
-                    this.personalInformationTabHeading = text;
+                    this.personalInformationTabHeading = this.localeData?.company_information;
                 }
             });
         }
