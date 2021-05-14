@@ -493,6 +493,9 @@
     "app_end_date": "अंतिम तिथि",
     "app_send": "संदेश",
     "app_validate": "मान्य",
+    "app_send_mail": "Send Mail",
+    "app_enter_email": "Enter email addresss",
+    "app_history": "History",
     "app_prefix": "उपसर्ग",
     "app_submit": "प्रस्तुत",
     "app_download_pdf": "डाउनलोड पीडीऍफ़",
@@ -574,5 +577,7 @@
     "app_settings": "Settings",
     "app_to_navigate": "to navigate",
     "app_to_select": "to select",
-    "app_to_dismiss": "to dismiss"
+    "app_to_dismiss": "to dismiss",
+    "app_company_name": "Company Name",
+    "app_currency": "Currency"
 }

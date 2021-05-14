@@ -3267,6 +3267,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.asideMenuStateForRecurringEntry = this.asideMenuStateForRecurringEntry === 'out' ? 'in' : 'out';
         }
         this.toggleBodyClass();
+
+        if(toggle === 'out') {
+            this.showInvoicePending();
+        }
     }
 
     public addBlankRow(txn: SalesTransactionItemClass) {
@@ -4237,12 +4241,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.accountUniqueName = '';
         this.invoiceNo = '';
         this.sendEmailModal.hide();
+        this.showInvoicePending();
     }
 
     cancelPrintModal() {
         this.accountUniqueName = '';
         this.invoiceNo = '';
         this.printVoucherModal.hide();
+        this.showInvoicePending();
     }
 
     private getVoucherDetailsFromInputs() {
@@ -5466,7 +5472,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             /** For pending type need to navigate to get all module of voucher type   */
-            if (this.isPendingVoucherType) {
+            if (this.isPendingVoucherType && this.actionAfterGenerateORUpdate === 0) {
                 this.cancelUpdate();
             }
             this.postResponseAction(this.invoiceNo);
@@ -5475,7 +5481,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this._toasty.errorToast(response.message, response.code);
         }
         this.updateAccount = false;
-        this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+
+        if (!this.isPendingVoucherType || (this.isPendingVoucherType && this.actionAfterGenerateORUpdate === 0)) {
+            this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+        }
     }
 
     /**
@@ -7085,6 +7094,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 const transaction = entry.transactions[0];
                 this.calculateConvertedTotal(entry, transaction);
             });
+        }
+    }
+
+    /**
+     * This function will redirect to invoice pending after once after voucher process has been completed
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public showInvoicePending(): void {
+        if(this.isPendingVoucherType) {
+            this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+            this.cancelVoucherUpdate.emit(true);
+            this.router.navigate(['/pages', 'invoice', 'preview', 'pending', 'sales']);
         }
     }
 }

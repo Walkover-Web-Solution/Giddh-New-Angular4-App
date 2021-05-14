@@ -154,6 +154,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** This holds perforsonal information tab heading */
+    public personalInformationTabHeading: string = "";
 
     constructor(
         private commonService: CommonService,
@@ -252,6 +254,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             if(this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('settings/profile', response?.value).subscribe(response => {
                     this.localeData = response;
+                    this.translationComplete(true);
                 });
             }
             this.activeLocale = response?.value;
@@ -1180,4 +1183,25 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.addressTabPaginationData.count = response.count;
     }
 
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof SettingProfileComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+                if (organization) {
+                    if (organization.type === OrganizationType.Branch) {
+                        this.personalInformationTabHeading = this.localeData?.branch_information;
+                    } else {
+                        this.personalInformationTabHeading = this.localeData?.company_information;
+                    }
+                } else {
+                    this.personalInformationTabHeading = this.localeData?.company_information;
+                }
+            });
+        }
+    }
 }

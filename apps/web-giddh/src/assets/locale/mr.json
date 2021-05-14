@@ -493,6 +493,9 @@
     "app_end_date": "शेवटची तारीख",
     "app_send": "पाठवा",
     "app_validate": "प्रमाणित करा",
+    "app_send_mail": "Send Mail",
+    "app_enter_email": "Enter email addresss",
+    "app_history": "History",
     "app_prefix": "उपसर्ग",
     "app_submit": "प्रस्तुत करणे",
     "app_download_pdf": "पीडीएफ डाउनलोड करा",
@@ -574,5 +577,7 @@
     "app_settings": "Settings",
     "app_to_navigate": "to navigate",
     "app_to_select": "to select",
-    "app_to_dismiss": "to dismiss"
+    "app_to_dismiss": "to dismiss",
+    "app_company_name": "Company Name",
+    "app_currency": "Currency"
 }

@@ -57,14 +57,6 @@ import { CommonActions } from '../../actions/common.actions';
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
 const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase];
 
-const COMPARISON_FILTER = [
-    { label: 'Greater Than', value: 'greaterThan' },
-    { label: 'Less Than', value: 'lessThan' },
-    { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-    { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-    { label: 'Equals', value: 'equals' }
-];
-
 @Component({
     selector: 'app-invoice-preview',
     templateUrl: './invoice.preview.component.html',
@@ -289,6 +281,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public gstEInvoiceEnable: boolean;
     /** True if selected items needs to be updated */
     public updateSelectedItems: boolean = false;
+    public comparisionFilters: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -997,7 +990,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public downloadFile() {
         let blob = this.base64ToBlob(this.base64Data, 'application/pdf', 512);
-        return saveAs(blob, `Invoice-${this.selectedInvoice.account.uniqueName}.pdf`);
+        return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account.uniqueName}.pdf`);
     }
 
     public base64ToBlob(b64Data, contentType, sliceSize) {
@@ -1119,17 +1112,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         if (o.description) {
             model.description = o.description;
         }
-        if (o.entryTotalBy === COMPARISON_FILTER[0].value) {
+        if (o.entryTotalBy === this.comparisionFilters[0]?.value) {
             model.balanceMoreThan = true;
-        } else if (o.entryTotalBy === COMPARISON_FILTER[1].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[1]?.value) {
             model.balanceLessThan = true;
-        } else if (o.entryTotalBy === COMPARISON_FILTER[2].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[2]?.value) {
             model.balanceMoreThan = true;
             model.balanceEqual = true;
-        } else if (o.entryTotalBy === COMPARISON_FILTER[3].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[3]?.value) {
             model.balanceLessThan = true;
             model.balanceEqual = true;
-        } else if (o.entryTotalBy === COMPARISON_FILTER[4].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[4]?.value) {
             model.balanceEqual = true;
         }
 
@@ -1225,7 +1218,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
                     return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
                 } else {
-                    this._toaster.errorToast('Something went wrong! Please try again');
+                    this._toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 }
             });
     }
@@ -1516,7 +1509,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 if (res.status === 'success') {
                     let blob = this.base64ToBlob(res.body, 'application/xls', 512);
                     this.selectedInvoicesList = [];
-                    return saveAs(blob, `${dataTosend.accountUniqueName}All-invoices.xls`);
+                    return saveAs(blob, `${dataTosend.accountUniqueName}${this.localeData?.all_invoices}.xls`);
                 } else {
                     this._toaster.errorToast(res.message);
                 }
@@ -1608,12 +1601,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(2);
                 item.exchangeRate = balanceDueAmountConversionRate;
             }
-            item['grandTotalTooltipText'] = `In ${this.baseCurrency}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
-            if (item.gainLoss) {
-                item['balanceDueTooltipText'] = `In ${this.baseCurrency}: ${balanceDueAmountForCompany}<br />(Exchange ${item.gainLoss > 0 ? 'gain' : 'loss'}: ${Math.abs(item.gainLoss)})`;
-            } else {
-                item['balanceDueTooltipText'] = `In ${this.baseCurrency}: ${balanceDueAmountForCompany}<br />(Conversion Rate: ${balanceDueAmountConversionRate})`;
-            }
+
+            let text = this.localeData?.currency_conversion;
+            let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
+            let balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
+
+            item['grandTotalTooltipText'] = grandTotalTooltipText;
+            item['balanceDueTooltipText'] = balanceDueTooltipText;
             if (this.gstEInvoiceEnable) {
                 item.eInvoiceStatusTooltip = this.getEInvoiceTooltipText(item);
             }
@@ -1743,7 +1737,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.selectedPerformAdjustPaymentAction = false;
                     } else {
                         this.isAccountHaveAdvanceReceipts = false;
-                        this._toaster.warningToast('There is no advanced receipt for adjustment.');
+                        this._toaster.warningToast(this.localeData?.no_advance_receipt);
                     }
                 }
             });
@@ -1966,6 +1960,24 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 // When invoice is B2C or B2B cancelled invoice
                 return item.errorMessage ?? this.localeData.e_invoice_statuses.na;
             default: return '';
+        }
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof InvoicePreviewComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.comparisionFilters = [
+                { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
+                { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },
+                { label: this.commonLocaleData?.app_comparision_filters?.greater_than_equals, value: 'greaterThanOrEquals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.less_than_equals, value: 'lessThanOrEquals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' }
+            ];
         }
     }
 }
