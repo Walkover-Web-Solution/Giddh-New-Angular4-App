@@ -444,7 +444,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public ngOnInit() {
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.store.dispatch(this.commonActions.getCommonLocaleData(response.value));
+                if(this.activeLocale !== response?.value) {
+                    this.store.dispatch(this.commonActions.getCommonLocaleData(response.value));
+                }
             } else {
                 let supportedLocales = this.generalService.getSupportedLocales();
                 this.store.dispatch(this.commonActions.setActiveLocale(supportedLocales[0]));

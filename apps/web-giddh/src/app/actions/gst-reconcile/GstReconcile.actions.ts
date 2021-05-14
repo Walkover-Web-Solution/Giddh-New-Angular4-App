@@ -3,16 +3,16 @@ import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from './GstReconcile.const';
 import { FileGstr1Request, GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceRequest, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest, Gstr3bOverviewResult } from '../../models/api-models/GstReconcile';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Action } from '@ngrx/store';
 import { ToasterService } from '../../services/toaster.service';
-import { AppState } from '../../store';
 import { GstReconcileService } from '../../services/GstReconcile.service';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { saveAs } from 'file-saver';
 import { base64ToBlob } from '../../shared/helpers/helperFunctions';
 import { GstReport } from '../../gst/constants/gst.constant';
+import { LocaleService } from '../../services/locale.service';
 
 @Injectable()
 export class GstReconcileActions {
@@ -182,7 +182,7 @@ export class GstReconcileActions {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this.downloadFile(data);
-                    this._toasty.successToast('Sheet Downloaded Successfully.');
+                    this._toasty.successToast(this.localeService.translate("app_messages.sheet_downloaded"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -264,7 +264,7 @@ export class GstReconcileActions {
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,
-        private store: Store<AppState>,
+        private localeService: LocaleService,
         private _reconcileService: GstReconcileService) {
         //
     }

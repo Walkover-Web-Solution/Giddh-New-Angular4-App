@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
+import { LocaleService } from '../../../services/locale.service';
 import { SettingsTaxesService } from '../../../services/settings.taxes.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { CustomActions } from '../../../store/customActions';
@@ -33,7 +34,7 @@ export class SettingsTaxesActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Tax Created Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.tax_created"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -56,7 +57,7 @@ export class SettingsTaxesActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Tax Updated Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.tax_updated"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -84,7 +85,7 @@ export class SettingsTaxesActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Tax Deleted Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.tax_deleted"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -100,7 +101,7 @@ export class SettingsTaxesActions {
 
     constructor(private action$: Actions,
         private toasty: ToasterService,
-        private router: Router,
+        private localeService: LocaleService,
         private store: Store<AppState>,
         private generalActions: GeneralActions,
         private settingsTaxesService: SettingsTaxesService) {

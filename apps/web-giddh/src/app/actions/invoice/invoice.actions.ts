@@ -34,6 +34,7 @@ import { CustomActions } from '../../store/customActions';
 import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
 import { RecurringVoucherService } from '../../services/recurring-voucher.service';
 import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.service';
+import { LocaleService } from '../../services/locale.service';
 
 @Injectable()
 export class InvoiceActions {
@@ -186,7 +187,7 @@ export class InvoiceActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast('Invoice Deleted Successfully');
+                    this._toasty.successToast(this.localeService.translate("app_messages.invoice_deleted"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -210,7 +211,7 @@ export class InvoiceActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast('Invoice Successfully Updated.');
+                    this._toasty.successToast(this.localeService.translate("app_messages.invoice_updated"));
                 }
                 return { type: 'EmptyAction' }; // Refresh the list
             })));
@@ -491,7 +492,7 @@ export class InvoiceActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast('transporter added  successfully');
+                    this._toasty.successToast(this.localeService.translate("app_messages.transporter_added"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -512,7 +513,7 @@ export class InvoiceActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast('transporter updated  successfully');
+                    this._toasty.successToast(this.localeService.translate("app_messages.transporter_updated"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -586,7 +587,9 @@ export class InvoiceActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast('E-Way bill ' + data.body.ewayBillNo + 'generated successfully');
+                    let text = this.localeService.translate("app_messages.eway_bill_generated");
+                    text = text?.replace("[EWAY_BILL_NO]", data.body.ewayBillNo);
+                    this._toasty.successToast(text);
                     this._router.navigate(['/pages/invoice/ewaybill']);
                 }
                 return { type: 'EmptyAction' };
@@ -626,7 +629,9 @@ export class InvoiceActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast(`vehicle updated date ${data.body.vehUpdDate} and valid upto ${data.body.validUpto} `);
+                    let text = this.localeService.translate("app_messages.vehicle_data_updated");
+                    text = text?.replace("[VEHICLE_UPDATE_DATE]", data.body.vehUpdDate)?.replace("[VALID_UPTO]", data.body.validUpto);
+                    this._toasty.successToast(text);
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -658,7 +663,7 @@ export class InvoiceActions {
                     this._toasty.errorToast(data.message, data.code);
                 }
                 if (data && data.status === 'success' && data.body.results.length === 0) {
-                    this._toasty.errorToast('No entries found within given criteria.');
+                    this._toasty.errorToast(this.localeService.translate("app_no_entries_found"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -833,7 +838,7 @@ export class InvoiceActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast('Template successfully marked as default.');
+                    this._toasty.successToast(this.localeService.translate("app_messages.template_marked_default"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -876,7 +881,7 @@ export class InvoiceActions {
         .pipe(
             ofType(INVOICE.RECURRING.CREATE_RECURRING_INVOICE),
             switchMap((action: CustomActions) => this._recurringService.createRecurringVouchers(action.payload)),
-            map(res => this.validateResponse<RecurringInvoice, string>(res, this.createRecurringInvoiceResponse(res.body), true, this.createRecurringInvoiceResponse(res.body), 'Recurring Invoice Created.'))));
+            map(res => this.validateResponse<RecurringInvoice, string>(res, this.createRecurringInvoiceResponse(res.body), true, this.createRecurringInvoiceResponse(res.body), this.localeService.translate("app_messages.recurring_invoice_created")))));
 
     /**
      * UPDATE Recurring Vouchers
@@ -887,7 +892,7 @@ export class InvoiceActions {
             ofType(INVOICE.RECURRING.UPDATE_RECURRING_INVOICE),
             switchMap((action: CustomActions) => this._recurringService.updateRecurringVouchers(action.payload)),
             map(res => this.validateResponse<RecurringInvoice, string>(res, this.updateRecurringInvoiceResponse(res.body), true,
-                this.updateRecurringInvoiceResponse(null), 'Recurring Invoice Updated.'))));
+                this.updateRecurringInvoiceResponse(null), this.localeService.translate("app_messages.recurring_invoice_updated")))));
 
     /**
      * DELETE Recurring Vouchers
@@ -918,7 +923,8 @@ export class InvoiceActions {
         private _recurringService: RecurringVoucherService,
         private _invoiceTemplatesService: InvoiceTemplatesService,
         private _toasty: ToasterService,
-        private _router: Router
+        private _router: Router,
+        private localeService: LocaleService
     ) {
     }
 
