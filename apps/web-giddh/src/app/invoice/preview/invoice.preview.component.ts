@@ -1606,9 +1606,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
             if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
                 balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(2);
+                item.exchangeRate = balanceDueAmountConversionRate;
             }
             item['grandTotalTooltipText'] = `In ${this.baseCurrency}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
-            item['balanceDueTooltipText'] = `In ${this.baseCurrency}: ${balanceDueAmountForCompany}<br />(Conversion Rate: ${balanceDueAmountConversionRate})`;
+            if (item.gainLoss) {
+                item['balanceDueTooltipText'] = `In ${this.baseCurrency}: ${balanceDueAmountForCompany}<br />(Exchange ${item.gainLoss > 0 ? 'gain' : 'loss'}: ${Math.abs(item.gainLoss)})`;
+            } else {
+                item['balanceDueTooltipText'] = `In ${this.baseCurrency}: ${balanceDueAmountForCompany}<br />(Conversion Rate: ${balanceDueAmountConversionRate})`;
+            }
             if (this.gstEInvoiceEnable) {
                 item.eInvoiceStatusTooltip = this.getEInvoiceTooltipText(item);
             }
@@ -1632,8 +1637,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invFormData.voucherDetails.grandTotal = item.grandTotal.amountForAccount;
         this.invFormData.voucherDetails.customerName = item.account.name;
         this.invFormData.voucherDetails.customerUniquename = customerUniqueName;
-        this.invFormData.voucherDetails.voucherDate = item.voucherDate
-        this.invFormData.accountDetails.currencySymbol = item.accountCurrencySymbol;
+        this.invFormData.voucherDetails.voucherDate = item.voucherDate;
+        this.invFormData.voucherDetails.exchangeRate = item.exchangeRate ?? 1;
+        this.invFormData.accountDetails.currencyCode = item.account?.currency?.code ?? this.baseCurrency ?? '';
+        this.invFormData.accountDetails.currencySymbol = item.accountCurrencySymbol ?? this.baseCurrencySymbol ?? '';
         this.changeStatusInvoiceUniqueName = item.uniqueName;
         this.selectedPerformAdjustPaymentAction = true;
         // To clear receipts voucher store

@@ -151,7 +151,7 @@
                                             name="calculatedTaxAmount_{{entry.uniqueName}}" decimalDigitsDirective
                                             [(ngModel)]="entry.calculatedTaxAmount"  [prefix]="entry.accountCurrency?.symbol"
                                             [placeholder]="commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero+'.'+commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero"
-                                            disabled>
+                                            disabled [mask]="inputMaskFormat">
                                             <span *ngIf="isMultiCurrencyAccount && entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'" class="company-currency">
                                                 <amount-field [amount]="getConvertedCompanyAmount(entry.calculatedTaxAmount, entry.exchangeRate)" [currencySymbol]="baseCurrencySymbol"
                                                     [currencyCode]="companyCurrency">

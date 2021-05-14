@@ -1740,7 +1740,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 customerUniquename: customerUniqueName,
                 totalTaxableValue: this.vm.selectedLedger.actualAmount,
                 subTotal: this.vm.selectedLedger.total.amount,
-                exchangeRate: this.vm.selectedLedger.exchangeRate
+                exchangeRate: this.vm.selectedLedger.exchangeRate ?? 1
             },
             accountDetails: {
                 currencySymbol: this.vm.selectedLedger?.particular?.currency?.symbol ?? this.profileObj?.baseCurrencySymbol ?? '',
