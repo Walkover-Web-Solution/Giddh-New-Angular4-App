@@ -1,4 +1,4 @@
-import { combineLatest, Observable, of, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, of, ReplaySubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import {
     ChangeDetectorRef,
@@ -719,6 +719,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     } else {
                         if (response.account && response.date) {
                             this.getAllAdvanceReceipts(response.account.uniqueName, response.date);
+                            this.selectedPerformAdjustPaymentAction = false;
                         }
                     }
                 }
