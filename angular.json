@@ -269,12 +269,12 @@
                             "aot": true,
                             "extractLicenses": false,
                             "vendorChunk": true,
-                            "buildOptimizer": false,
+                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
                                     "maximumWarning": "2mb",
-                                    "maximumError": "100mb"
+                                    "maximumError": "10mb"
                                 }
                             ]
                         }
