@@ -3,8 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 // libs
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+// import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+// import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { throwIfAlreadyLoaded } from '@giddh-workspaces/utils';
 import {
     CoreModule,
@@ -25,9 +25,9 @@ export function platformLangFactory() {
     return browserLang.split('-')[0];
 }
 
-export function createTranslateLoader(http: HttpClient) {
-    return new TranslateHttpLoader(http, `./assets/i18n/`, '.json');
-}
+// export function createTranslateLoader(http: HttpClient) {
+//     return new TranslateHttpLoader(http, `./assets/i18n/`, '.json');
+// }
 
 @NgModule({
     imports: [
@@ -43,13 +43,13 @@ export function createTranslateLoader(http: HttpClient) {
                 useFactory: winFactory
             }
         ]),
-        TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: createTranslateLoader,
-                deps: [HttpClient]
-            }
-        })
+        // TranslateModule.forRoot({
+        //     loader: {
+        //         provide: TranslateLoader,
+        //         useFactory: createTranslateLoader,
+        //         deps: [HttpClient]
+        //     }
+        // })
     ]
 })
 export class FooCoreModule {

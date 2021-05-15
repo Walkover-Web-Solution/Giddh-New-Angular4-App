@@ -9,7 +9,7 @@ import { APP_BASE_HREF, CommonModule } from '@angular/common';
 
 // libs
 import { NxModule } from '@nrwl/nx';
-import { TranslateService } from '@ngx-translate/core';
+// import { TranslateService } from '@ngx-translate/core';
 import { throwIfAlreadyLoaded } from '@giddh-workspaces/utils';
 
 // app
@@ -47,11 +47,11 @@ export class CoreModule {
         @SkipSelf()
         parentModule: CoreModule,
         @Inject(PlatformLanguageToken) lang: string,
-        translate: TranslateService
+        // translate: TranslateService
     ) {
         throwIfAlreadyLoaded(parentModule, 'CoreModule');
 
         // ensure default platform language is set
-        translate.use(lang);
+        // translate.use(lang);
     }
 }

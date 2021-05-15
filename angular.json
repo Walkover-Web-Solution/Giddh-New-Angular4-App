@@ -80,7 +80,6 @@
                             "jspdf",
                             "jspdf-autotable",
                             "webfontloader",
-                            "ng2-order-pipe",
                             "jquery"
                         ],
                         "outputPath": "dist/apps/web-giddh",
