@@ -27,6 +27,7 @@ import { DOCUMENT } from "@angular/common";
 import { ToasterService } from "../services/toaster.service";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { GeneralService } from "../services/general.service";
+import { ToastNoAnimationModule } from "ngx-toastr";
 
 @Component({
     selector: "signup",
@@ -381,10 +382,17 @@ export class SignupComponent implements OnInit, OnDestroy {
     public SignupWithPasswd(model: FormGroup) {
         let ObjToSend = model.value;
         let pattern = /^(?=.*[a-z])(?=.*\d)[A-Za-z\d$@$!%*?&_]{8,20}$/g;
+        let patternNum= /^(?=.*[a-z])[A-Za-z\d$@$!%*?&_]{8,20}$/g;
         if (pattern.test(ObjToSend.password)) {
             this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
-        } else {
-            return this._toaster.errorToast("Password is weak");
+        }
+         else {
+             if(patternNum.test(ObjToSend.password)){
+                return (this._toaster.errorToast("The password should have minimum one number",'Giddh -',6000));
+             }
+             else {
+                return this._toaster.errorToast("Password is weak");
+             }
         }
     }
 
