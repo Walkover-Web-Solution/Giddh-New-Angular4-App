@@ -1,11 +1,9 @@
 import { map, switchMap } from 'rxjs/operators';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ToasterService } from '../../services/toaster.service';
-import { AppState } from '../../store';
-
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { CustomActions } from '../../store/customActions';
 import { CompanyImportExportService } from '../../services/companyImportExportService';
@@ -13,6 +11,7 @@ import { COMPANY_IMPORT_EXPORT_ACTIONS } from './company-import-export.const';
 import { CompanyImportExportFileTypes } from '../../models/interfaces/companyImportExport.interface';
 import { saveAs } from 'file-saver';
 import { GeneralService } from '../../services/general.service';
+import { LocaleService } from '../../services/locale.service';
 
 @Injectable()
 export class CompanyImportExportActions {
@@ -28,7 +27,7 @@ export class CompanyImportExportActions {
                                 let res = { body: response.body };
                                 let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
                                 saveAs(blob, `${action.payload.entityName}_Master_Except_Accounts_${action.payload.from}_${action.payload.to}_${this._generalService.companyUniqueName}` + '.json');
-                                this._toasty.successToast('data exported successfully');
+                                this._toasty.successToast(this.localeService.translate("app_messages.data_exported"));
                             } else {
                                 this._toasty.errorToast(response.message);
                             }
@@ -44,6 +43,7 @@ export class CompanyImportExportActions {
                                     let res = { body: response.body.file };
                                     let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
                                     saveAs(blob, `${action.payload.entityName}_Accounting_Entries_${action.payload.from}_${action.payload.to}_${this._generalService.companyUniqueName}` + '.json');
+                                    this._toasty.successToast(this.localeService.translate("app_messages.data_exported"));
                                 }
                             } else {
                                 this._toasty.errorToast(response.message);
@@ -83,7 +83,7 @@ export class CompanyImportExportActions {
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,
-        private store: Store<AppState>,
+        private localeService: LocaleService,
         private _companyImportExportService: CompanyImportExportService,
         private _generalService: GeneralService) {
     }
