@@ -27,7 +27,6 @@ import { DOCUMENT } from "@angular/common";
 import { ToasterService } from "../services/toaster.service";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { GeneralService } from "../services/general.service";
-import { ToastNoAnimationModule } from "ngx-toastr";
 
 @Component({
     selector: "signup",
