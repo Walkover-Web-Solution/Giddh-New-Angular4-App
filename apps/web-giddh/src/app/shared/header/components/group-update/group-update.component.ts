@@ -193,7 +193,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (taxes) {
                     if (activeGroup) {
                         let applicableTaxes = activeGroupTaxHierarchy.applicableTaxes.map(p => p.uniqueName);
-                        console.log(applicableTaxes);
                         if (activeGroupTaxHierarchy) {
                             // prepare drop down options
                             this.companyTaxDropDown = _.differenceBy(taxes.map(p => {
