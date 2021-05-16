@@ -123,7 +123,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             { label: this.localeData?.registered, value: 'registered' },
             { label: this.localeData?.unregistered, value: 'unregistered' }
         ];
-        
+
         this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         this.filterParam.from = this.currentPeriod.from;
         this.filterParam.to = this.currentPeriod.to;
@@ -186,7 +186,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         componentInstance.downloadInvoiceEvent.subscribe(e => this.ondownloadInvoiceEvent(e));
     }
 
-    public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
+    public closeDownloadOrSendMailPopup(userResponse: any) {
         this.downloadOrSendMailModel.hide();
         if (userResponse.action === 'update') {
             this.store.dispatch(this.invoiceActions.VisitToInvoiceFromPreview());
@@ -296,7 +296,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      * @param {{ action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }} userResponse API call object body
      * @memberof ViewTransactionsComponent
      */
-    public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }): void {
+    public onDownloadOrSendMailEvent(userResponse: any): void {
         if (userResponse.action === 'download') {
             this.downloadFile();
         } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {

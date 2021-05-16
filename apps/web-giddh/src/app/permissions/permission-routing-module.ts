@@ -16,7 +16,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedModule } from '../shared/shared.module';
 
 const PERMISSION_ROUTES: Routes = [
-    { path: '', redirectTo: 'pages/permissions/list', pathMatch: 'full', canActivate: [NeedsAuthentication] },
+    { path: '', redirectTo: 'pages/permissions/list', pathMatch: 'full' },
     {
         path: '',
         component: PermissionComponent,
