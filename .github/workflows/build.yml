@@ -35,6 +35,6 @@ jobs:
           useRollingCache: true
           working-directory: .
       - name: Creating bundle
+        run: npm run build-test
         env:
           NG_BUILD_IVY_LEGACY: 1
-        run: npm run build-test
