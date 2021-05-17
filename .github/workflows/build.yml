@@ -53,7 +53,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           aws s3 cp \
-            --recursive \
             --acl private \
             --region ap-south-1 \
             /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip s3://${{ secrets.UI_TEST_BUILD_S3_FOLDER }}
