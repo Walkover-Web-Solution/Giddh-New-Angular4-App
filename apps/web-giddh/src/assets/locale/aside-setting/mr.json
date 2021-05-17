@@ -30,7 +30,7 @@
                 {
                     "label": "Integration",
                     "link": "/pages/settings/integration",
-                    "icon": "<i class='icon-integration1 font-12'></i>"
+                    "icon": "<i class='icon-integration1'></i>"
                 },
                 {
                     "label": "linked Accounts",
@@ -52,7 +52,7 @@
                 {
                     "label": "Financial Year",
                     "link": "/pages/settings/financial-year",
-                    "icon": "<i class='icon-financial-year-newr'></i>"
+                    "icon": "<i class='icon-financial-year-new'></i>"
                 },
                 {
                     "label": "Branch",
@@ -120,7 +120,7 @@
                 {
                     "label": "Trigger",
                     "link": "/pages/settings/trigger",
-                    "icon": "<i class='icon-trigger'></i>"
+                    "icon": "<i class='icon-trigger-new'></i>"
                 }
             ],
             [
