@@ -343,7 +343,7 @@
                     [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true"
                     [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
                     [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                    [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)"
+                    (rangeClicked)="dateSelectedCallback($event)"
                     (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
                     [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
             </div>

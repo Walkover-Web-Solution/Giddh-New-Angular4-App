@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CompanyResponse, ICurrencyResponse, Organization, StateDetailsResponse } from '../models/api-models/Company';
-import { Action, Store, select, createSelector } from '@ngrx/store';
+import { Action, Store, select } from '@ngrx/store';
 import {
     LinkedInRequestModel,
     SignupwithEmaillModel,
@@ -22,18 +22,18 @@ import { AppState } from '../store';
 import { Injectable, NgZone } from '@angular/core';
 import { map, switchMap, take } from 'rxjs/operators';
 import { OrganizationType, userLoginStateEnum } from '../models/user-login-state';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { DbService } from '../services/db.service';
 import { CompanyService } from '../services/companyService.service';
 import { GeneralService } from '../services/general.service';
-import { Observable, ReplaySubject, zip as observableZip } from 'rxjs';
+import { Observable, zip as observableZip } from 'rxjs';
 import { CustomActions } from '../store/customActions';
 import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
 import { AuthenticationService } from '../services/authentication.service';
-import { AccountService } from '../services/account.service';
 import { Configuration } from '../app.constant';
 import { ROUTES } from '../routes-array';
 import { SettingsProfileActions } from "./settings/profile/settings.profile.action";
+import { LocaleService } from '../services/locale.service';
 
 @Injectable()
 export class LoginActions {
@@ -568,7 +568,7 @@ export class LoginActions {
             ofType(LoginActions.AddNewMobileNoResponse),
             map((action: CustomActions) => {
                 if (action.payload.status === 'success') {
-                    this._toaster.successToast('You will receive a verification code on your mobile shortly.');
+                    this._toaster.successToast(this.localeService.translate("app_messages.receive_otp"));
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
@@ -655,7 +655,7 @@ export class LoginActions {
             ofType(LoginActions.SignupWithPasswdResponse),
             map((action: CustomActions) => {
                 if (action.payload.status === 'success') {
-                    this._toaster.successToast('A verification code has been sent to your email account.');
+                    this._toaster.successToast(this.localeService.translate("app_messages.otp_sent_email"));
                     // this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     // this._router.navigate(['/pages/new-user']);
                     return { type: 'EmptyAction' };
@@ -757,8 +757,6 @@ export class LoginActions {
             ofType(LoginActions.AutoLoginWithPasswdResponse),
             map((action: CustomActions) => this.LoginSuccessByOtherUrl())));
 
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
     constructor(
         public _router: Router,
         private actions$: Actions,
@@ -773,7 +771,8 @@ export class LoginActions {
         private _generalAction: GeneralActions,
         private _dbService: DbService,
         private settingsProfileActions: SettingsProfileActions,
-        private zone: NgZone
+        private zone: NgZone,
+        private localeService: LocaleService
     ) {
     }
 
