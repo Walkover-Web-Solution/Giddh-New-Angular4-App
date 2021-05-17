@@ -1,8 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import * as _moment from 'moment';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { DateAdapter } from '@angular/material/core';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../store';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 const noop = () => { };
 const moment = _moment;
@@ -20,9 +25,9 @@ const moment = _moment;
     ]
 })
 
-export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, OnChanges {
+export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, OnChanges, OnDestroy {
     /** Taking placeholder as input */
-    @Input() public placeholder: any = "Select date";
+    @Input() public placeholder: any = "";
     /** Taking ngModel as input */
     @Input() public ngModel: any;
     /** Min date */
@@ -34,12 +39,14 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     private innerValue: any = '';
     /** This is used to show default date */
     public calendarDate: any = '';
+    /** Subject to release subscriptions */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     //Placeholders for the callbacks which are later provided by the Control Value Accessor
     private onTouchedCallback: () => void = noop;
     private onChangeCallback: (_: any) => void = noop;
 
-    constructor() {
+    constructor(private adapter: DateAdapter<any>, private store: Store<AppState>) {
 
     }
 
@@ -49,7 +56,11 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public ngOnInit(): void {
-
+        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.value) {
+                this.adapter.setLocale(response?.value);
+            }
+        });
     }
 
     /**
@@ -66,6 +77,16 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
                 this.calendarDate = "";
             }
         }
+    }
+
+    /**
+     * Releases the memory
+     *
+     * @memberof GiddhDatepickerComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     /**

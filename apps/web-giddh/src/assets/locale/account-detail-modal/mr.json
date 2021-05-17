@@ -1,0 +1,15 @@
+{
+    "enter_subject": "Enter Subject",
+    "enter_subject_placeholder": "Enter subject here",
+    "send_sms": "Send Sms",
+    "opening_balance": "Opening Balance",
+    "closing_balance": "Closing Balance",
+    "credit_total": "Credit Total",
+    "debit_total": "Debit Total",
+    "from_date": "From Date",
+    "to_date": "To Date",
+    "magic_link": "Magic Link",
+    "message_body_label": "Type message body",
+    "message_body_placeholder": "start typing your message here",
+    "message_body_note": "Tip: Click on the tabs below to insert data in your message body. Anything followed by '%s_' represents the position where actual data will be placed."
+}

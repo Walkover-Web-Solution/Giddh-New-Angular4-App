@@ -2,7 +2,7 @@ import { map, switchMap, take } from 'rxjs/operators';
 import { AppState } from '../store';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreateRequest, GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse, GroupUpateRequest, MoveGroupRequest, MoveGroupResponse, ShareGroupRequest } from '../models/api-models/Group';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Action, Store, select } from '@ngrx/store';
@@ -16,6 +16,7 @@ import { GeneralActions } from './general/general.actions';
 import { CustomActions } from '../store/customActions';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
+import { LocaleService } from '../services/locale.service';
 
 @Injectable()
 export class GroupWithAccountsAction {
@@ -183,7 +184,7 @@ export class GroupWithAccountsAction {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
                     this._generalService.eventHandler.next({ name: eventsConst.groupAdded, payload: action.payload });
-                    this._toasty.successToast('Sub group added successfully', 'Success');
+                    this._toasty.successToast(this.localeService.translate("app_messages.subgroup_added"), this.localeService.translate("app_success"));
                 }
                 return {
                     type: 'EmptyAction'
@@ -325,7 +326,7 @@ export class GroupWithAccountsAction {
                     let data = action.payload as BaseResponse<MoveGroupResponse, MoveGroupRequest>;
 
                     this._generalService.eventHandler.next({ name: eventsConst.groupMoved, payload: data });
-                    this._toasty.successToast('Group moved successfully', '');
+                    this._toasty.successToast(this.localeService.translate("app_messages.group_moved"), '');
                     return this.getGroupDetails(data.request.parentGroupUniqueName);
                 }
                 return {
@@ -375,7 +376,7 @@ export class GroupWithAccountsAction {
                     };
                 } else {
                     this._generalService.eventHandler.next({ name: eventsConst.groupUpdated, payload: action.payload });
-                    this._toasty.successToast('Group Updated Successfully');
+                    this._toasty.successToast(this.localeService.translate("app_messages.group_updated"));
                     return {
                         type: 'EmptyAction'
                     };
@@ -440,7 +441,8 @@ export class GroupWithAccountsAction {
         private _toasty: ToasterService,
         private store: Store<AppState>,
         private _generalActions: GeneralActions,
-        private _generalService: GeneralService) {
+        private _generalService: GeneralService,
+        private localeService: LocaleService) {
         //
     }
 
