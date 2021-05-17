@@ -371,7 +371,7 @@
 </div>
 
 <div class="aside-overlay" *ngIf="asideMenuStateForRecurringEntry === 'in'"></div>
-<app-aside-recurring-entry [invoice]="selectedInvoice" [class]="asideMenuStateForRecurringEntry"
+<app-aside-recurring-entry *ngIf="asideMenuStateForRecurringEntry === 'in'" [invoice]="selectedInvoice" [class]="asideMenuStateForRecurringEntry"
     [@slideInOut]="asideMenuStateForRecurringEntry" [mode]="'update'" [isCompany]="isCompany"
     (closeAsideEvent)="toggleRecurringAsidePane('out')">
 </app-aside-recurring-entry>
