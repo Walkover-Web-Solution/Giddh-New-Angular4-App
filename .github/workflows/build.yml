@@ -56,4 +56,4 @@ jobs:
             --recursive \
             --acl private \
             --region ap-south-1 \
-            public.zip s3://${{ secrets.UI_TEST_BUILD_S3_FOLDER }}
+            /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip s3://${{ secrets.UI_TEST_BUILD_S3_FOLDER }}
