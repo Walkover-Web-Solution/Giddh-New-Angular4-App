@@ -56,3 +56,13 @@ jobs:
             --acl private \
             --region ap-south-1 \
             /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip s3://${{ secrets.UI_TEST_BUILD_S3_FOLDER }}
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
+          SLACK_TITLE: Giddh UI Test build
+          SLACK_USERNAME: Giddh UI Test build
+          SLACK_FOOTER: ''
+          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
