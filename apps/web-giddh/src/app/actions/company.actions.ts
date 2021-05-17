@@ -20,6 +20,7 @@ import {
 import { IRegistration } from '../models/interfaces/registration.interface';
 import { OrganizationType } from '../models/user-login-state';
 import { CompanyService } from '../services/companyService.service';
+import { LocaleService } from '../services/locale.service';
 import { ToasterService } from '../services/toaster.service';
 import { CustomActions } from '../store/customActions';
 import { AppState } from '../store/roots';
@@ -104,7 +105,7 @@ export class CompanyActions {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
-                this._toasty.successToast('Company created successfully', 'Success');
+                this._toasty.successToast(this.localeService.translate("app_messages.company_created"), this.localeService.translate("app_success"));
 
                 // is brahch set
                 if (response.request.isBranch) {
@@ -171,7 +172,7 @@ export class CompanyActions {
                     type: 'USER_CAREATE_COMPANY',
                     payload: null
                 });
-                this._toasty.successToast('New company created successfully', 'Success');
+                this._toasty.successToast(this.localeService.translate("app_messages.new_company_created"), this.localeService.translate("app_success"));
 
                 // is brahch set
                 if (response.request.isBranch) {
@@ -329,7 +330,7 @@ export class CompanyActions {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 } else if (response.status === 'success') {
-                    this._toasty.successToast('Universal date updated successfully.', 'Success');
+                    this._toasty.successToast(this.localeService.translate("app_messages.universal_date_updated"), this.localeService.translate("app_success"));
                     return this.SeApplicationDateResponse(response);
                 }
             })));
@@ -433,7 +434,8 @@ export class CompanyActions {
         private _companyService: CompanyService,
         private _toasty: ToasterService,
         private store: Store<AppState>,
-        private _generalService: GeneralService
+        private _generalService: GeneralService,
+        private localeService: LocaleService
     ) {
     }
 

@@ -16,9 +16,10 @@ import { CustomActions } from '../store/customActions';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { Observable } from 'rxjs';
-import { ApplyDiscountRequest, AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
+import { AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
 import { IUpdateDbRequest } from "../models/interfaces/ulist.interface";
 import { CommonActions } from './common.actions';
+import { LocaleService } from '../services/locale.service';
 
 @Injectable()
 export class AccountsAction {
@@ -116,7 +117,7 @@ export class AccountsAction {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    this._toasty.successToast('Discount Linked Successfully', action.payload.status);
+                    this._toasty.successToast(this.localeService.translate("app_messages.discount_linked"), action.payload.status);
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -141,7 +142,7 @@ export class AccountsAction {
                         type: 'EmptyAction'
                     };
                 } else {
-                    this._toasty.successToast('Account Created Successfully');
+                    this._toasty.successToast(this.localeService.translate("app_messages.account_created"));
                 }
                 this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
                 let groupSearchString: string;
@@ -179,7 +180,7 @@ export class AccountsAction {
                     };
                 } else {
                     this._generalServices.eventHandler.next({ name: eventsConst.accountAdded, payload: action.payload });
-                    this._toasty.successToast('Account Created Successfully');
+                    this._toasty.successToast(this.localeService.translate("app_messages.account_created"));
                     // if (action.payload.body.errorMessageForCashFreeVirtualAccount) {
                     //     this._toasty.warningToast('Virtual account could not be created for Account "' + action.payload.body.name + '", ' + action.payload.body.errorMessageForCashFreeVirtualAccount);
                     // }
@@ -273,7 +274,7 @@ export class AccountsAction {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    this._toasty.successToast('Account Updated Successfully');
+                    this._toasty.successToast(this.localeService.translate("app_messages.account_updated"));
                     let groupSearchString: string;
                     this.store.pipe(take(1)).subscribe(a => {
                         groupSearchString = a.groupwithaccounts.groupAndAccountSearchString;
@@ -323,7 +324,7 @@ export class AccountsAction {
                 } else {
                     this._generalServices.invokeEvent.next(["accountUpdated", resData]);
                     this._generalServices.eventHandler.next({ name: eventsConst.accountUpdated, payload: resData });
-                    this._toasty.successToast('Account Updated Successfully');
+                    this._toasty.successToast(this.localeService.translate("app_messages.account_updated"));
 
                     setTimeout(() => {
                         this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
@@ -381,7 +382,7 @@ export class AccountsAction {
                     };
                 } else {
                     let data: BaseResponse<string, ShareAccountRequest> = action.payload;
-                    this._toasty.successToast('Shared successfully', '');
+                    this._toasty.successToast(this.localeService.translate("app_messages.account_shared"), '');
                     if (data.queryString.entity === 'account') {
                         return this.sharedAccountWith(data.queryString.entityUniqueName);
                     } else if (data.queryString.entity === 'group') {
@@ -452,7 +453,7 @@ export class AccountsAction {
                         type: 'EmptyAction'
                     };
                 } else {
-                    this._toasty.successToast('Role updated successfully.', '');
+                    this._toasty.successToast(this.localeService.translate("app_messages.role_updated"), '');
                     return {
                         type: 'EmptyAction'
                     };
@@ -538,7 +539,7 @@ export class AccountsAction {
                 } else {
                     let data: BaseResponse<string, AccountMoveRequest> = action.payload;
                     this._generalServices.eventHandler.next({ name: eventsConst.accountMoved, payload: data });
-                    this._toasty.successToast('Account moved successfully', '');
+                    this._toasty.successToast(this.localeService.translate("app_messages.account_moved"), '');
                     this.groupWithAccountsAction.getGroupDetails(data.request.uniqueName);
                 }
                 return {
@@ -670,7 +671,7 @@ export class AccountsAction {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else if (action.payload.status === 'success') {
-                    this._toasty.successToast('Discount Linked Successfully', action.payload.status);
+                    this._toasty.successToast(this.localeService.translate("app_messages.discount_linked"), action.payload.status);
                 }
                 return { type: 'EmptyAction' };
             }));
@@ -681,7 +682,8 @@ export class AccountsAction {
         private groupWithAccountsAction: GroupWithAccountsAction,
         private _generalActions: GeneralActions,
         private _generalServices: GeneralService,
-        private commonActions: CommonActions) {
+        private commonActions: CommonActions,
+        private localeService: LocaleService) {
     }
 
     public createAccount(value: string, account: AccountRequest): CustomActions {

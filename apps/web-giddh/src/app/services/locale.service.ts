@@ -9,6 +9,7 @@ import { Observable } from "rxjs";
     providedIn: 'root'
 })
 export class LocaleService {
+    /** This will hold the common locale json */
     public commonLocale: any = {};
 
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService) {

@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { LoaderService } from '../loader/loader.service';
 import { GeneralService } from './general.service';
 import { OrganizationType } from '../models/user-login-state';
+import { LocaleService } from './locale.service';
 
 @Injectable()
 export class GiddhHttpInterceptor implements HttpInterceptor {
@@ -14,7 +15,8 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
     constructor(
         private _toasterService: ToasterService,
         private loadingService: LoaderService,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private localeService: LocaleService
     ) {
         window.addEventListener('online', () => {
             this.isOnline = true;
@@ -32,7 +34,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
             return next.handle(request);
         } else {
             setTimeout(() => {
-                this._toasterService.warningToast('Please check your internet connection.', 'Internet disconnected');
+                this._toasterService.warningToast(this.localeService.translate("app_messages.internet_error"), this.localeService.translate("app_messages.internet_disconnected"));
             }, 100);
             this.loadingService.hide();
             if (request.body && request.body.handleNetworkDisconnection) {
@@ -52,7 +54,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
      * @memberof GiddhHttpInterceptor
      */
     private addBranchUniqueName(request: HttpRequest<any>): HttpRequest<any> {
-        if (!request.params.has('branchUniqueName') && !request.url.includes('branchUniqueName')) {
+        if (!request.params.has('branchUniqueName') && !request.url.includes('branchUniqueName') && !request.url.includes('.json')) {
             request = request.clone({
                 params: request.params.append('branchUniqueName', encodeURIComponent(this.generalService.currentBranchUniqueName))
             });

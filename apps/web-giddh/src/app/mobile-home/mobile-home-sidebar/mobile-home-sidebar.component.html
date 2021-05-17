@@ -17,36 +17,19 @@
     <div class="sidebar-body">
         <ul>
             <li>
-                <a href="javascript:;" hidden>Import/Export Data (Backup)</a>
+                <a href="https://changelog.giddh.com/" target="_blank">{{localeData?.changelog}}</a>
             </li>
             <li>
-                <a href="https://changelog.giddh.com/" target="_blank">Changelog</a>
+                <a href="javascript:;" [routerLink]="['/pages/mobile-search-company']">{{localeData?.switch_company}}</a>
             </li>
             <li>
-                <a href="javascript:;" [routerLink]="['/pages/mobile-search-company']">Switch Company</a>
-            </li>
-            <li>
-                <a *ngIf="!currentBranch" href="javascript:;" [routerLink]="['/pages/mobile-search-branch']">Switch
-                    Branch</a>
+                <a *ngIf="!currentBranch" href="javascript:;" [routerLink]="['/pages/mobile-search-branch']">{{localeData?.switch_branch}}</a>
                 <a *ngIf="currentBranch" href="javascript:;"
                     [routerLink]="['/pages/mobile-search-branch']">{{currentBranch?.alias}}</a>
             </li>
-            <li>
-                <a href="javascript:;" hidden>User Profile</a>
-            </li>
-            <li>
-                <a href="javascript:;" hidden>Session</a>
-            </li>
-            <li>
-                <a href="javascript:;" hidden>Company</a>
-            </li>
-            <li>
-                <a href="javascript:;" hidden>API</a>
-            </li>
-
             <hr class="mt-1 mr-b1 mr-r15 mr-l15">
             <li (click)="logout()">
-                <a href="javascript:;">Logout</a>
+                <a href="javascript:;">{{localeData?.logout}}</a>
             </li>
         </ul>
     </div>
