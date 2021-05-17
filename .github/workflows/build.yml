@@ -44,7 +44,7 @@ jobs:
         run: ls
       - name: Create ZIP folder
         run:
-          zip -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public
+          zip -r public.zip public
       - name: Print current directory files
         run: ls
       - name: Deploy
