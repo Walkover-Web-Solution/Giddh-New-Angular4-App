@@ -625,6 +625,30 @@
         "tax_deleted": "Tax deleted successfully.",
         "trigger_created": "Trigger created successfully.",
         "trigger_updated": "Trigger updated successfully.",
-        "trigger_deleted": "Trigger deleted successfully."
-    }
+        "trigger_deleted": "Trigger deleted successfully.",
+        "seller_updated": "Seller updated successfully.",
+        "account_removed": "Account removed successfully.",
+        "discount_linked": "Discount linked successfully.",
+        "account_shared": "Shared successfully.",
+        "account_moved": "Account moved successfully.",
+        "due_date_range_created": "Due date range created successfully.",
+        "company_created": "Company created successfully.",
+        "new_company_created": "New company created successfully.",
+        "universal_date_updated": "'Universal date updated successfully.",
+        "subgroup_added": "Sub group added successfully.",
+        "group_moved": "Group moved successfully.",
+        "group_updated": "Group updated successfully.",
+        "receive_otp": "You will receive a verification code on your mobile shortly.",
+        "otp_sent_email": "A verification code has been sent to your email account.",
+        "internet_error": "Please check your internet connection.",
+        "internet_disconnected": "Internet disconnected",
+        "warehouse_created": "New warehouse created successfully.",
+        "warehouse_updated": "Warehouse updated successfully."
+    },
+    "app_supported_languages": {
+        "english": "English",
+        "hindi": "Hindi",
+        "marathi": "Marathi"
+    },
+    "app_download_here": "Download from here"
 }

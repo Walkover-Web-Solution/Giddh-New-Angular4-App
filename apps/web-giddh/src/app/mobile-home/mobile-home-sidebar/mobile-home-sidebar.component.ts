@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ReplaySubject, Observable } from 'rxjs';
@@ -17,6 +17,10 @@ import { OrganizationType } from '../../models/user-login-state';
 })
 
 export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /* This will close sidebar */
     @Output() public closeMobileSidebar: EventEmitter<boolean> = new EventEmitter();
     /* This will hold selected company */
