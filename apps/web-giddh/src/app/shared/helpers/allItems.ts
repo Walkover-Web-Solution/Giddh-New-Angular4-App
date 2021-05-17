@@ -99,8 +99,7 @@ export const ALL_ITEMS: AllItems[] = [
             { label: 'Journal Voucher *', link: '/pages/journal-voucher', icon: 'icon-journal-voucher-new', description: 'Entries of Journal Voucher' },
             { label: 'Onboarding', link: '/pages/onboarding', icon: 'icon-onboarding-new', description: 'Import data from Tally, CSV/Excel' },
             { label: 'Petty Cash', link: '/pages/expenses-manager', icon: 'icon-petty-cash', description: 'Manage petty cash & transaction', additional: { tab: 'pending', tabIndex: 0 } },
-            { label: 'Search', link: '/pages/search', icon: 'icon-search-new', description: 'Select group and search for a time span' },
-            { label: 'Settings', link: '/pages/settings', icon: 'icon-settings-cog', description: 'Add & manage various taxes' },
+            { label: 'Search', link: '/pages/search', icon: 'icon-search-new', description: 'Select group and search for a time span' }
         ]
     },
     // { TODO: After other vouchers are introduced
