@@ -43,7 +43,7 @@ export const settingsPageTabs: PageTabs[] = [
             { label: 'Integration', link: '/pages/settings/integration', icon: '<i class="icon-integration font-12"></i>' },
             { label: 'Linked Accounts', link: '/pages/settings/linked-accounts', icon: '<i class="icon-linked-accounts"></i>' },
             { label: 'Tags', link: '/pages/settings/tag', icon: '<i class="icon-tags"></i>' },
-            { label: 'Trigger', link: '/pages/settings/trigger', icon: '<i class="icon-trigger"></i>' }
+            { label: 'Trigger', link: '/pages/settings/trigger', icon: '<i class="icon-trigger-new"></i>' }
         ],
         [2]: [
             { label: 'Discount', link: '/pages/settings/discount', icon: '<i class="icon-discount"></i>' },
