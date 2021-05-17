@@ -168,7 +168,7 @@
 <!--Tabs of Company Profile-->
 <div class="settings-profile-tabs">
     <tabset #staticTabs class="profile-tab-container">
-        <tab [active]="this.currentTab === 'personal'"  (selectTab)="handleTabChanged('personal')" heading="Personal Information"
+        <tab [active]="this.currentTab === 'personal'"  (selectTab)="handleTabChanged('personal')" heading="{{currentOrganizationType | titlecase}} Information"
         [id]="(currentTab === 'personal') ? 'giddh-page-heading': ''" >
             <personal-information *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'personal'" (saveProfile)="handleSaveProfile($event)"
                 [profileData]="companyProfileObj" [organizationType]="currentOrganizationType">
