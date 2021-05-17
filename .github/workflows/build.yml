@@ -40,7 +40,7 @@ jobs:
         run: |
           mkdir public
           cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh-test /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
-          zip -r public.zip public
+          zip -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public
       - name: Deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
