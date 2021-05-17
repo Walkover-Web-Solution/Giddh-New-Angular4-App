@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, of as observableOf, ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -38,6 +38,10 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     /** This will hold country codes */
     public callingCodes$: Observable<IOption[]> = observableOf([]);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private fb: FormBuilder,
@@ -59,7 +63,7 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
         this.scheduleNowForm = this.fb.group({
             name: ['', Validators.required],
             email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(EMAIL_VALIDATION_REGEX)])],
-            phoneCode: ['91', Validators.required],
+            phoneCode: ['', Validators.required],
             mobileNo: ['', Validators.required],
             description: [''],
             date: [''],
@@ -82,15 +86,15 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
             let date = (this.scheduleNowForm.get('date').value) ? moment(this.scheduleNowForm.get('date').value).format(GIDDH_DATE_FORMAT) : "";
 
             let content = "";
-            content += "<b>Name:</b>&nbsp;" + this.scheduleNowForm.get('name').value + "<br>";
-            content += "<b>Email:</b>&nbsp;" + this.scheduleNowForm.get('email').value + "<br>";
-            content += "<b>Mobile Number:</b>&nbsp;+" + this.scheduleNowForm.get('phoneCode').value + "" + this.scheduleNowForm.get('mobileNo').value + "<br>";
-            content += "<b>Description:</b>&nbsp;" + this.scheduleNowForm.get('description').value + "<br>";
-            content += "<b>Date:</b>&nbsp;" + date + "<br>";
-            content += "<b>Time:</b>&nbsp;" + this.scheduleNowForm.get('time').value + "<br>";
+            content += "<b>" + this.commonLocaleData?.app_name + ":</b>&nbsp;" + this.scheduleNowForm.get('name').value + "<br>";
+            content += "<b>" + this.commonLocaleData?.app_email + ":</b>&nbsp;" + this.scheduleNowForm.get('email').value + "<br>";
+            content += "<b>" + this.commonLocaleData?.app_mobile_number + ":</b>&nbsp;+" + this.scheduleNowForm.get('phoneCode').value + "" + this.scheduleNowForm.get('mobileNo').value + "<br>";
+            content += "<b>" + this.commonLocaleData?.app_description + ":</b>&nbsp;" + this.scheduleNowForm.get('description').value + "<br>";
+            content += "<b>" + this.commonLocaleData?.app_date + ":</b>&nbsp;" + date + "<br>";
+            content += "<b>" + this.commonLocaleData?.app_time + ":</b>&nbsp;" + this.scheduleNowForm.get('time').value + "<br>";
 
             let scheduleNow = {
-                subject: "Giddh - Schedule Now",
+                subject: this.localeData?.email_subject,
                 sendFrom: "noreply@giddh.com",
                 sendTo: {
                     recipients: ["support@giddh.com"]
@@ -107,7 +111,7 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
 
                 if (response?.status === "success") {
                     this.closeModal.emit(true);
-                    this.toaster.successToast("Your call has been scheduled successfully.");
+                    this.toaster.successToast(this.localeData?.call_scheduled);
                 } else {
                     this.toaster.errorToast(response?.message);
                 }
@@ -202,5 +206,17 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
      */
     public allowOnlyNumbers(event: any): boolean {
         return this.generalService.allowOnlyNumbers(event);
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof ScheduleNowComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.scheduleNowForm.get('phoneCode').patchValue(this.localeData?.default_country_code);
+        }
     }
 }
