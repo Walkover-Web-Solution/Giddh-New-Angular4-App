@@ -1,31 +1,34 @@
-<div class="search-branch-page">
-    <div class="search-branch-field">
-        <div class="input-group">
-            <span class="input-group-addon">
-                <i class="icon-search2"></i>
-            </span>
-            <div class="wrap-group-account-input">
-                <input type="text" (ngModelChange)="filterBranch($event)" [(ngModel)]="searchBranchQuery"
-                    class="form-control" placeholder="Search Branch" />
+<ng-container appTranslate [file]="'mobile-home'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <div class="search-branch-page">
+        <div class="search-branch-field">
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="icon-search2"></i>
+                </span>
+                <div class="wrap-group-account-input">
+                    <input type="text" (ngModelChange)="filterBranch($event)" [(ngModel)]="searchBranchQuery"
+                        class="form-control" [placeholder]="localeData?.search_branch" />
+                </div>
+                <span class="close-addon" hidden>
+                    <i class="icon-cross"></i>
+                </span>
             </div>
-            <span class="close-addon" hidden>
-                <i class="icon-cross"></i>
-            </span>
+        </div>
+        <div class="mt-2">
+            <button *ngIf="currentOrganizationType !== 'BRANCH'" href="javascript:void(0)"
+                [routerLink]="['/pages/settings/create-branch']" class="btn-link p-0 btn bold pl-0">{{localeData?.create_branch}}</button>
+        </div>
+        <div class="all-branch-list">
+            <ul>
+                <li *ngFor="let branch of currentCompanyBranches" role="menuitem">
+                    <a (click)="switchToBranch(branch?.uniqueName, $event)" class="dropdown-item" href="javascript:void(0);"
+                        [class.active-branch]="currentBranch?.uniqueName === branch?.uniqueName">
+                        <span class="pr-3">{{branch?.alias}}</span>
+                        <i class="icon-branch-icon pull-right" [tooltip]="commonLocaleData?.app_branch"></i>
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
-    <div class="mt-2">
-        <button *ngIf="currentOrganizationType !== 'BRANCH'" href="javascript:void(0)"
-            [routerLink]="['/pages/settings/create-branch']" class="btn-link pd0 btn bold pl-0">+ Create Branch</button>
-    </div>
-    <div class="all-branch-list">
-        <ul>
-            <li *ngFor="let branch of currentCompanyBranches" role="menuitem">
-                <a (click)="switchToBranch(branch?.uniqueName, $event)" class="dropdown-item" href="javascript:void(0);"
-                    [class.active-branch]="currentBranch?.uniqueName === branch?.uniqueName">
-                    <span class="pr-3">{{branch?.alias}}</span>
-                    <i class="icon-branch-icon pull-right" tooltip="Branch"></i>
-                </a>
-            </li>
-        </ul>
-    </div>
-</div>
+</ng-container>

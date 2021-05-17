@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map, switchMap } from 'rxjs/operators';
 
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
+import { LocaleService } from '../../../services/locale.service';
 import { SettingsWarehouseService } from '../../../services/settings.warehouse.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { CustomActions } from '../../../store/customActions';
@@ -53,7 +54,7 @@ export class WarehouseActions {
                 this.toast.errorToast(response.message, response.code);
                 return this.createWarehouseResponse(response);
             }
-            this.toast.successToast('New warehouse created successfully', 'Success');
+            this.toast.successToast(this.localeService.translate("app_messages.warehouse_created"), this.localeService.translate("app_success"));
             return this.createWarehouseResponse(response);
         })
     ));
@@ -91,7 +92,7 @@ export class WarehouseActions {
                 this.toast.errorToast(response.message, response.code);
                 return { type: 'EmptyAction' };
             }
-            this.toast.successToast('Warehouse updated successfully', 'Success');
+            this.toast.successToast(this.localeService.translate("app_messages.warehouse_updated"), this.localeService.translate("app_success"));
             return this.updateWarehouseResponse(response);
         })
     ));
@@ -111,7 +112,7 @@ export class WarehouseActions {
                 this.toast.errorToast(response.message, response.code);
                 return { type: 'EmptyAction' };
             }
-            this.toast.successToast('Warehouse updated successfully', 'Success');
+            this.toast.successToast(this.localeService.translate("app_messages.warehouse_updated"), this.localeService.translate("app_success"));
             return this.setAsDefaultWarehouseResponse(response);
         })
     ));
@@ -120,7 +121,8 @@ export class WarehouseActions {
     constructor(
         private action$: Actions,
         private settingsWarehouseService: SettingsWarehouseService,
-        private toast: ToasterService
+        private toast: ToasterService,
+        private localeService: LocaleService
     ) { }
 
     /**

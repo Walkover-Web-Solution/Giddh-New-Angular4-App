@@ -16,6 +16,8 @@ export class DownloadComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* it will store image path */
     public imgPath: string = '';
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private route: ActivatedRoute) {
     }

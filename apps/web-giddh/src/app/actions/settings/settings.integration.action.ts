@@ -1,17 +1,17 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { Router } from '@angular/router';
 import { SETTINGS_INTEGRATION_ACTIONS } from './settings.integration.const';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
 import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass, PaymentClass } from '../../models/api-models/SettingsIntegraion';
 import { CustomActions } from '../../store/customActions';
 import { CompanyActions } from "../company.actions";
+import { LocaleService } from '../../services/locale.service';
 
 @Injectable()
 export class SettingsIntegrationActions {
@@ -450,7 +450,7 @@ export class SettingsIntegrationActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Seller Updated Successfully', '');
+                    this.toasty.successToast(this.localeService.translate("app_messages.seller_updated"), '');
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -514,7 +514,7 @@ export class SettingsIntegrationActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Account removed successfully');
+                    this.toasty.successToast(this.localeService.translate("app_messages.account_removed"));
                     this.store.dispatch(this._companyAction.getAllRegistrations());
                 }
                 return { type: 'EmptyAction' };
@@ -543,7 +543,7 @@ export class SettingsIntegrationActions {
 
     constructor(private action$: Actions,
         private toasty: ToasterService,
-        private router: Router,
+        private localeService: LocaleService,
         private store: Store<AppState>,
         private settingsIntegrationService: SettingsIntegrationService,
         private _companyAction: CompanyActions) {

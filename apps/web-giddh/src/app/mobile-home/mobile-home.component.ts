@@ -74,6 +74,10 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     private searchSubject: Subject<string> = new Subject();
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(@Inject(DOCUMENT) document, private store: Store<AppState>, private generalService: GeneralService, private commandKService: CommandKService, private cdref: ChangeDetectorRef, private router: Router, private loginAction: LoginActions, private socialAuthService: AuthService, private breakPointObservar: BreakpointObserver) {
         document.querySelector('body').classList.add('mobile-home');
