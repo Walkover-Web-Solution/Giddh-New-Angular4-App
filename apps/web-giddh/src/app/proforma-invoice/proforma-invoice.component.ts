@@ -6811,6 +6811,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             data.state.code = (isCompanyAddress) ? address.stateCode : (address.state) ? address.state.code : "";
+            data.stateCode = data.state.code;
+            data.state.name = (isCompanyAddress) ? address.stateName : (address.state) ? address.state.name : "";
+            data.stateName = data.state.name;
             data.gstNumber = (isCompanyAddress) ? address.taxNumber : address.gstNumber;
             data.pincode = address.pincode;
             if (isCompanyAddress) {
