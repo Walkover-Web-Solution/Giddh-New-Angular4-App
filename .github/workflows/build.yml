@@ -36,11 +36,17 @@ jobs:
           working-directory: .
       - name: Creating bundle
         run: npm run build-test
-      - name: Create ZIP folder
+      - name: Copy folder
         run: |
           mkdir public
           cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh-test /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
+      - name: Print current directory files
+        run: ls
+      - name: Create ZIP folder
+        run:
           zip -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public
+      - name: Print current directory files
+        run: ls
       - name: Deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
