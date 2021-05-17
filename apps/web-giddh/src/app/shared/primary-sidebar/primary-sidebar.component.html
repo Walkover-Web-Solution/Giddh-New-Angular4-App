@@ -144,14 +144,12 @@
                         </span>
                     </div>
                     <!--  -->
-
                     <div dropdown class="position-relative switch-company-btn mt-2" #subdropdown="bs-dropdown"
                         [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="subdropdown.isOpen = false">
                         <a href="javascript:void(0)" class="d-flex justify-content-between w-100" dropdownToggle>
                             Switch Company
                             <span class="icon-arrow-down"></span>
                         </a>
-
                         <ul id="companyList" class="company-list dropdown-menu sub-menu-nav" dropdown>
 
                             <div class="input-group" container="body">
@@ -165,71 +163,52 @@
                                         [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
                                 </span>
                             </div>
-
                             <li class="p-0">
-
                                 <perfect-scrollbar>
-
                                     <ul class="sub-list all-company-list"
                                         *ngIf="companyListForFilter && companyListForFilter.length">
-
                                         <li class="cmp position-relative header-tooltip"
                                             *ngFor="let cmp of companyListForFilter; let i = index"
                                             [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
                                             (keydown.enter)="changeCompany(cmp.uniqueName, true)"
                                             (click)="changeCompany(cmp.uniqueName, true)">
-
                                             <a vr-item href="javascript:void(0);" class="text-ellipsis"
                                                 (mouseenter)="mouseEnteredOnCompanyName(i)">
-
                                                 <ng-template #CompanyBranchname> {{ cmp.name }}
                                                     <span *ngIf="cmp.alias">({{(cmp.alias)}})</span>
                                                 </ng-template>
-
                                                 <span container="body" [tooltip]="CompanyBranchname" placement="top">
                                                     {{ cmp.name }} <span *ngIf="cmp.alias">({{(cmp.alias)}})</span>
                                                 </span>
-
                                                 <img class="pull-right permission-icon"
                                                     *ngIf="hoveredIndx !== i && cmp?.createdBy?.email !== (user$ | async)?.email"
                                                     src="assets/images/users.svg">
-
                                                 <img class="pull-right permission-icon"
                                                     *ngIf="hoveredIndx === i && cmp?.createdBy?.email !== (user$ | async)?.email"
                                                     src="assets/images/users-white.svg">
-
                                             </a>
                                         </li>
-
                                     </ul>
-
                                 </perfect-scrollbar>
-
                             </li>
-
                             <li class="create-company-btn">
                                 <button href="javascript:void(0)" (click)="createNewCompany()"
                                     class="btn-link btn">Create Company</button>
                             </li>
-
                         </ul>
                     </div>
-
                 </div>
             </div>
             <div class="company-text head-nav" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
-
                 <div class="unique-name-financial-year pd-l15">
                     <span *ngIf="currentBranch" class="branch-ellipsis pb-2 d-flex">
                         <i class="icon-branch1 mr-1 font-16" *ngIf="(currentCompanyBranches$ | async)?.length > 1"></i> {{currentBranch?.alias}} </span>
                 </div>
                 <ul *ngIf="(currentCompanyBranches$ | async)?.length > 1"
                     class="list-style-none  current-branch-name switch-branch-wrapper font-14 pd-l15">
-
                     <li class="btn-group" [exclude]="'.switch-branch-section'" (clickOutside)="subBranchDropdown.hide()"
                         dropdown placement="bottom right" #subBranchDropdown="bs-dropdown" [autoClose]="false"
                         (onShown)="loadCompanyBranches()">
-
                         <a id="button-basic" dropdownToggle href="javascript:void(0)"
                             class="dropdown-toggle cursor-pointer switch-branch-section font-14 branch-name">
                             <!-- <ng-container *ngIf="currentBranch">
@@ -243,8 +222,6 @@
                                 </div>
                             </ng-container>
                         </a>
-
-
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                             aria-labelledby="button-basic">
                             <div class="input-group mr-b1" container="body">
@@ -295,11 +272,9 @@
             <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/company-import-export')">Import/Export Data (Backup)</a>
         </li>
         <!-- #dropdown="bs-dropdown" -->
-
-
         <li role="separator" class="divider width-100"></li>
 
-        <li class="mr-b1" *ngIf="!isMobileSite">
+        <li *ngIf="!isMobileSite">
             <a [tooltip]="userEmail" placement="top" href="javascript:void(0)"
                 (click)="analyzeMenus($event, '/pages/user-details', { tab: 'profile', tabIndex: 1 })"
                 class="overflow-hidden d-flex">
@@ -326,12 +301,10 @@
 
     <!--CMD + G modal  -->
     <ng-template #navigationModal>
-
         <div class="modal-body" #mdl>
             <command-k (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
                 (groupEmitter)="makeGroupEntryInDB($event)" (selectedItemEmitter)="onItemSelected($event)"
                 [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" (closeEmitter)="modelRef.hide()"></command-k>
-
             <div class="shortcuts">
                 <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mr-l1" aria-label="Return">↵</strong>&nbsp; to
                 select <strong class="mr-l1" aria-label="Escape">esc</strong>&nbsp; to dismiss
