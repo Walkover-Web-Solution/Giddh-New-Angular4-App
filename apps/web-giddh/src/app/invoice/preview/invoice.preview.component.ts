@@ -1599,11 +1599,21 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
             if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
                 balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(2);
+                item.exchangeRate = balanceDueAmountConversionRate;
             }
 
             let text = this.localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
-            let balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
+            let balanceDueTooltipText;
+            if (item.gainLoss) {
+                const gainLossText = this.localeData?.exchange_gain_loss_label?.
+                    replace("[BASE_CURRENCY]", this.baseCurrency)?.
+                    replace("[AMOUNT]", balanceDueAmountForCompany)?.
+                    replace('[PROFIT_TYPE]', item.gainLoss > 0 ? this.localeData?.exchange_gain : this.localeData?.exchange_loss);
+                balanceDueTooltipText = `${gainLossText}: ${Math.abs(item.gainLoss)}`;
+            } else {
+                balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
+            }
 
             item['grandTotalTooltipText'] = grandTotalTooltipText;
             item['balanceDueTooltipText'] = balanceDueTooltipText;
@@ -1630,8 +1640,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invFormData.voucherDetails.grandTotal = item.grandTotal.amountForAccount;
         this.invFormData.voucherDetails.customerName = item.account.name;
         this.invFormData.voucherDetails.customerUniquename = customerUniqueName;
-        this.invFormData.voucherDetails.voucherDate = item.voucherDate
-        this.invFormData.accountDetails.currencySymbol = item.accountCurrencySymbol;
+        this.invFormData.voucherDetails.voucherDate = item.voucherDate;
+        this.invFormData.voucherDetails.exchangeRate = item.exchangeRate ?? 1;
+        this.invFormData.accountDetails.currencyCode = item.account?.currency?.code ?? this.baseCurrency ?? '';
+        this.invFormData.accountDetails.currencySymbol = item.accountCurrencySymbol ?? this.baseCurrencySymbol ?? '';
         this.changeStatusInvoiceUniqueName = item.uniqueName;
         this.selectedPerformAdjustPaymentAction = true;
         // To clear receipts voucher store

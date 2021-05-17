@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION, SearchResultText } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SubVoucher, RATE_FIELD_PRECISION, SearchResultText, AdjustedVoucherType } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
@@ -94,6 +94,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() pettyCashEntry: any;
     @Input() pettyCashBaseAccountTypeString: string;
     @Input() pettyCashBaseAccountUniqueName: string;
+    /** Stores the active company details */
+    @Input() activeCompany: any;
 
     @ViewChild('deleteAttachedFileModal', { static: true }) public deleteAttachedFileModal: ModalDirective;
     /** fileinput element ref for clear value after remove attachment **/
@@ -1738,9 +1740,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 customerUniquename: customerUniqueName,
                 totalTaxableValue: this.vm.selectedLedger.actualAmount,
                 subTotal: this.vm.selectedLedger.total.amount,
+                exchangeRate: this.vm.selectedLedger.exchangeRate ?? 1
             },
             accountDetails: {
-                currencySymbol: this.profileObj ? this.profileObj.baseCurrencySymbol : ''
+                currencySymbol: this.vm.selectedLedger?.particular?.currency?.symbol ?? this.profileObj?.baseCurrencySymbol ?? '',
+                currencyCode: this.vm.selectedLedger?.particular?.currency?.code ?? this.profileObj?.baseCurrency ?? ''
             },
             activeAccountUniqueName: this.activeAccount.uniqueName
         };
@@ -1817,6 +1821,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 if (!adjustment.voucherNumber) {
                     adjustment.voucherNumber = '-';
                 }
+                adjustment.accountCurrency = adjustment.accountCurrency ?? { symbol: this.activeCompany?.baseCurrencySymbol, code: this.activeCompany?.baseCurrency };
             });
         }
     }
@@ -1863,8 +1868,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public getAdjustVoucherType(): string {
         let adjustVoucher = this.localeData?.adjust_voucher;
-        adjustVoucher = adjustVoucher?.replace("[VOUCHER_TYPE]", (this.vm.selectedLedger.voucher.shortCode === 'sal' ? this.commonLocaleData?.app_voucher_types.sales : this.vm.selectedLedger.voucher.shortCode === 'pur' ? this.commonLocaleData?.app_voucher_types.purchase : this.vm.selectedLedger.voucher.shortCode === 'credit note' ? this.commonLocaleData?.app_voucher_types.credit_note : this.vm.selectedLedger.voucher.shortCode === 'debit note' ? this.commonLocaleData?.app_voucher_types.debit_note : this.vm.selectedLedger.voucher.shortCode === 'pay' ? this.commonLocaleData?.app_voucher_types.payment : ''));
-
+        adjustVoucher = adjustVoucher?.replace("[VOUCHER_TYPE]",
+            (this.vm.selectedLedger.voucher.shortCode === AdjustedVoucherType.Sales ? this.commonLocaleData?.app_voucher_types.sales :
+            this.vm.selectedLedger.voucher.shortCode === AdjustedVoucherType.Purchase ? this.commonLocaleData?.app_voucher_types.purchase :
+            this.vm.selectedLedger.voucher.shortCode === AdjustedVoucherType.CreditNote ? this.commonLocaleData?.app_voucher_types.credit_note :
+            this.vm.selectedLedger.voucher.shortCode === AdjustedVoucherType.DebitNote ? this.commonLocaleData?.app_voucher_types.debit_note :
+            this.vm.selectedLedger.voucher.shortCode === AdjustedVoucherType.Payment ? this.commonLocaleData?.app_voucher_types.payment : ''));
         return adjustVoucher;
     }
 

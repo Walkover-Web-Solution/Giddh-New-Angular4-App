@@ -876,14 +876,14 @@
                                             <input id="update-ledger-inclusive-tax-edit-mode" type="text"
                                                 class="form-control mr-b1"
                                                 *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
-                                                [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
+                                                [mask]="vm.inputMaskFormat" [prefix]="item.accountCurrency?.symbol"
                                                 decimalDigitsDirective
                                                 [(ngModel)]="item.adjustmentAmount.amountForAccount" disabled>
                                             <input
                                                 [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                 id="update-ledger-inclusive-tax" type="text" class="form-control mr-b1"
                                                 decimalDigitsDirective [mask]="vm.inputMaskFormat"
-                                                [prefix]="vm.selectedPrefixForCurrency"
+                                                [prefix]="item.accountCurrency?.symbol"
                                                 (blur)="adjustedInvoiceAmountChange()"
                                                 *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
                                                 [(ngModel)]="item.adjustmentAmount.amountForAccount">
@@ -895,7 +895,7 @@
                                             <label>{{commonLocaleData?.app_tax}}</label>
                                             <input type="text" id="update-ledger-voucher-tax" class="form-control mr-b1"
                                                 decimalDigitsDirective [mask]="vm.inputMaskFormat"
-                                                [prefix]="vm.selectedPrefixForCurrency"
+                                                [prefix]="item.accountCurrency?.symbol"
                                                 [(ngModel)]="item.calculatedTaxAmount" disabled>
                                         </div>
                                     </div>

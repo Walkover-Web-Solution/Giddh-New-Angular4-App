@@ -21,6 +21,7 @@ import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { GenerateBulkInvoiceRequest, IBulkInvoiceGenerationFalingError } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
 import { DaybookQueryRequest } from '../../models/api-models/DaybookRequest';
+import { LocaleService } from '../../services/locale.service';
 
 @Injectable()
 export class LedgerActions {
@@ -105,7 +106,7 @@ export class LedgerActions {
             map((action: CustomActions) => {
                 let res = action.payload as BaseResponse<string, string>;
                 if (res.status === 'success') {
-                    this._toasty.successToast('Entry deleted successfully', 'Success');
+                    this._toasty.successToast(this.localeService.translate("app_messages.entry_deleted"), this.localeService.translate("app_success"));
                 } else {
                     this._toasty.errorToast(res.message);
                 }
@@ -218,7 +219,7 @@ export class LedgerActions {
                     this.ResetUpdateLedger();
                     return { type: 'EmptyAction' };
                 } else {
-                    this._toasty.successToast('Entry updated successfully');
+                    this._toasty.successToast(this.localeService.translate("app_messages.entry_updated"));
                     if (action && action.payload && action.payload.request && action.payload.request.refreshLedger) {
                         this.store.dispatch(this.refreshLedger(true));
                     }
@@ -258,7 +259,7 @@ export class LedgerActions {
                         type: 'EmptyAction'
                     };
                 } else {
-                    this._toasty.successToast('Account Created Successfully');
+                    this._toasty.successToast(this.localeService.translate("app_messages.account_created"));
                     // if (action.payload.body.errorMessageForCashFreeVirtualAccount) {
                     //     this._toasty.warningToast('Virtual account could not be created for Account "' + action.payload.body.name + '", ' + action.payload.body.errorMessageForCashFreeVirtualAccount);
                     // }
@@ -389,7 +390,7 @@ export class LedgerActions {
                             return this.SetFailedBulkEntries(failedEntries);
                         }
                     } else {
-                        this._toasty.successToast('Entries deleted successfully', 'Success');
+                        this._toasty.successToast(this.localeService.translate("app_messages.entry_deleted"), this.localeService.translate("app_success"));
                     }
                 } else {
                     this._toasty.errorToast(res.message);
@@ -428,7 +429,7 @@ export class LedgerActions {
                                     this._toasty.warningToast(item.reason);
                                 }
                                 if (data.request && data.request.length > 0 && data.request[0].entries && data.request[0].entries.length > data.body.length) {
-                                    this._toasty.successToast("All other vouchers generated successfully.");
+                                    this._toasty.successToast(this.localeService.translate("app_messages.vouchers_generated"));
                                 }
                             });
                         } else {
@@ -505,7 +506,8 @@ export class LedgerActions {
         private _ledgerService: LedgerService,
         private _accountService: AccountService,
         private _groupService: GroupService,
-        private _invoiceServices: InvoiceService) {
+        private _invoiceServices: InvoiceService,
+        private localeService: LocaleService) {
     }
 
     public GetTransactions(request: TransactionsRequest): CustomActions {

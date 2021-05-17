@@ -1,16 +1,15 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
-import { Action, Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
+import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { PermissionService } from '../../services/permission.service';
 import { PERMISSION_ACTIONS } from './permission.const';
 import { CreateNewRoleRequest, CreateNewRoleResponse, IRoleCommonResponseAndRequest } from '../../models/api-models/Permission';
-import { Router } from '@angular/router';
 import { CustomActions } from '../../store/customActions';
+import { LocaleService } from '../../services/locale.service';
 
 /**
  * Created by ad on 04-07-2017.
@@ -87,7 +86,7 @@ export class PermissionActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast('New Role Created Successfully.');
+                    this._toasty.successToast(this.localeService.translate("app_messages.role_created"));
                     return { type: PERMISSION_ACTIONS.GET_ROLES };
                 }
                 return { type: 'EmptyAction' };
@@ -111,7 +110,7 @@ export class PermissionActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast('Role Updated Successfully.');
+                    this._toasty.successToast(this.localeService.translate("app_messages.role_updated"));
                     return { type: PERMISSION_ACTIONS.GET_ROLES };
                 }
                 return { type: 'EmptyAction' };
@@ -159,15 +158,14 @@ export class PermissionActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast('Role Deleted Successfully.');
+                    this._toasty.successToast(this.localeService.translate("app_messages.role_deleted"));
                 }
                 return { type: 'EmptyAction' };
             })));
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,
-        private _router: Router,
-        private store: Store<AppState>,
+        private localeService: LocaleService,
         private _permissionService: PermissionService) {
     }
 
