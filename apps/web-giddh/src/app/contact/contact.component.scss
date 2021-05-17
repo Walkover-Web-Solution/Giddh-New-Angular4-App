@@ -16,6 +16,14 @@
 .dis {
     display: flex;
 }
+.container-fluid {
+    position: relative;
+    height: 100vh;
+    overflow-x: auto;
+}
+.table-responsive {
+    overflow: unset;
+}
 
 .pd-1 {
     padding: 5px;
@@ -312,8 +320,9 @@ span.input-addon {
 .aging-table thead tr th {
     border-top: 1px solid $gainsboro;
     border-bottom: 1px solid $gainsboro !important;
-    position: relative;
+    position: sticky;
     padding-right: 10px !important;
+    top: 1px;
 }
 .comment-field {
     min-width: 170px;
