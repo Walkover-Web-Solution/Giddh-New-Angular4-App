@@ -54,7 +54,7 @@
                                     </tbody>
                                 </table>
                                 <p class="word-break"
-                                    *ngIf="showGstComposition && fieldsAndVisibility.header.gstComposition?.display">
+                                    *ngIf="voucherType==='sales' && showGstComposition && fieldsAndVisibility.header.gstComposition?.display">
                                     {{(fieldsAndVisibility.header.gstComposition?.label) ?
                                     fieldsAndVisibility.header.gstComposition?.label : "Registered under Composition
                                     Scheme"}}</p>
