@@ -136,7 +136,7 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public inventoryTypeUpdated(value: boolean): void {
-        this.profileData.manageInventory = value;
+        // this.profileData.manageInventory = value;
         this.profileUpdated('manageInventory');
     }
 

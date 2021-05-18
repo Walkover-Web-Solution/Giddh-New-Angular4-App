@@ -4,6 +4,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { LedgerComponent } from '../../ledger.component';
 
 @Component({
     selector: 'import-statement',
@@ -31,7 +32,8 @@ export class ImportStatementComponent implements OnDestroy {
     constructor(
         private ledgerService: LedgerService,
         public generalService: GeneralService,
-        private toaster: ToasterService) {
+        private toaster: ToasterService,
+        public ledger: LedgerComponent) {
 
     }
 
@@ -72,6 +74,7 @@ export class ImportStatementComponent implements OnDestroy {
             if (response.status === 'success') {
                 this.toaster.successToast(this.localeData?.import_success);
                 this.closeModal.emit(true);
+                this.ledger.lc.showEledger= true;
             } else {
                 this.toaster.errorToast(response.message, response.code);
             }
