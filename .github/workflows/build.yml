@@ -1,18 +1,20 @@
 # This is a basic workflow to help you get started with Actions
 
-name: UI build
+name: UI TEST build
 
 # Controls when the action will run.
 on:
+  push:
+    branches: [ giddh-2.0 ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
+concurrency: test-build
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -36,3 +38,59 @@ jobs:
           working-directory: .
       - name: Creating bundle
         run: npm run build-test
+      - name: Copy folder
+        run: |
+          mkdir public
+          cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh-test /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
+      - name: Print current directory files
+        run: ls
+      - name: Create ZIP folder
+        run:
+          zip -r public.zip public
+      - name: Print current directory files
+        run: ls
+#       - name: Deploy
+#         env:
+#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#         run: |
+#           aws s3 cp \
+#             --acl private \
+#             --region ap-south-1 \
+#             /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip s3://${{ secrets.UI_TEST_BUILD_S3_FOLDER }}
+      - name: Slack Notification Success
+        if: ${{ job.status == 'success' }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
+          SLACK_TITLE: Giddh UI Test build
+          SLACK_USERNAME: Giddh UI Test build
+          SLACK_MESSAGE: Build succeeded
+          SLACK_FOOTER: ''
+          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+      - name: Slack Notification Failure
+        if: ${{ job.status == 'failure' }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
+          SLACK_TITLE: Giddh UI Test build
+          SLACK_USERNAME: Giddh UI Test build
+          SLACK_MESSAGE: Build failed
+          SLACK_FOOTER: ''
+          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+      - name: Slack Notification Cancelled
+        if: ${{ job.status == 'cancelled' }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
+          SLACK_TITLE: Giddh UI Test build
+          SLACK_USERNAME: Giddh UI Test build
+          SLACK_MESSAGE: Build cancelled
+          SLACK_FOOTER: ''
+          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
