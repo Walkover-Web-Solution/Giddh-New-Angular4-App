@@ -49,16 +49,17 @@ jobs:
           zip -r public.zip public
       - name: Print current directory files
         run: ls
-      - name: Deploy
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          aws s3 cp \
-            --acl private \
-            --region ap-south-1 \
-            /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip s3://${{ secrets.UI_TEST_BUILD_S3_FOLDER }}
-      - name: Slack Notification
+#       - name: Deploy
+#         env:
+#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#         run: |
+#           aws s3 cp \
+#             --acl private \
+#             --region ap-south-1 \
+#             /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip s3://${{ secrets.UI_TEST_BUILD_S3_FOLDER }}
+      - name: Slack Notification Success
+        if: ${{ job.status == 'success' }}
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -66,5 +67,31 @@ jobs:
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
           SLACK_TITLE: Giddh UI Test build
           SLACK_USERNAME: Giddh UI Test build
+          SLACK_MESSAGE: Build succeeded
           SLACK_FOOTER: ''
           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+      - name: Slack Notification Failure
+        if: ${{ job.status == 'failure' }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
+          SLACK_TITLE: Giddh UI Test build
+          SLACK_USERNAME: Giddh UI Test build
+          SLACK_MESSAGE: Build failed
+          SLACK_FOOTER: ''
+          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+      - name: Slack Notification Cancelled
+        if: ${{ job.status == 'cancelled' }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
+          SLACK_TITLE: Giddh UI Test build
+          SLACK_USERNAME: Giddh UI Test build
+          SLACK_MESSAGE: Build cancelled
+          SLACK_FOOTER: ''
+          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+
