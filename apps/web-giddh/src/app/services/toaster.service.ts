@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { APP_DEFAULT_TITLE, DEFAULT_TOASTER_OPTIONS, DEFAULT_TOASTER_OPTIONS_WITH_HTML } from '../app.constant';
+import { APP_DEFAULT_TITLE, DEFAULT_TOASTER_OPTIONS, DEFAULT_TOASTER_OPTIONS_WITH_HTML, ERROR_MESSAGE_NUM } from '../app.constant';
 import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
@@ -24,9 +24,14 @@ export class ToasterService {
         this._toaster.success(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS_WITH_HTML));
     }
 
-    public errorToast(msg: string, title: string = APP_DEFAULT_TITLE): void {
-        this._toaster.error(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
-    }
+    public errorToast(msg: string = ERROR_MESSAGE_NUM, title: string = APP_DEFAULT_TITLE, params?:any): void {
+         if(params){
+             params={timeOut:params};
+             this._toaster.error(msg, title, Object.assign({}, {...DEFAULT_TOASTER_OPTIONS,...params}));
+         }else{
+             this._toaster.error(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
+         }
+     }
 
     public warningToast(msg: string, title: string = APP_DEFAULT_TITLE): void {
         this._toaster.warning(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));

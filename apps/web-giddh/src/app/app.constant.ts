@@ -38,7 +38,7 @@ export const DEFAULT_TOASTER_OPTIONS_WITH_HTML = {
     tapToDismiss: true, // close on click
     onActivateTick: false
 };
-
+export const ERROR_MESSAGE_NUM = 'The password should have minimum one number';
 export const DEFAULT_SERVER_ERROR_MSG = 'Something went wrong! Please try again.';
 export let IS_CORDOVA_WA = isCordova;
 export let IS_ELECTRON_WA = isElectron;
