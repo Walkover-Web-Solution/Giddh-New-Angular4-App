@@ -191,6 +191,12 @@ header img {
     font-weight: bold;
 }
 
+#default .table-item{
+    overflow-x: scroll;
+    width: 100%;
+}
+
+
 .text-right {
     text-align: right;
 }
@@ -199,6 +205,9 @@ header img {
     text-align: left;
 }
 
+.word-break{
+    word-break: break-word;
+}
 /* table items */
 
 #default table.item {
