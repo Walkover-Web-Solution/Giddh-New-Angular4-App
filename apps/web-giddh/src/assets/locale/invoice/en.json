@@ -130,6 +130,18 @@
     "original_copy": "Original Copy",
     "duplicate_copy": "Duplicate Copy",
     "triplicate_copy": "Triplicate Copy",
+    "create_e_invoice": "Create E-invoice",
+    "e_invoice_status": "E-invoice Status",
+    "e_invoice_statuses": {
+        "yet_to_be_pushed": "The transaction is yet to be pushed to the IRP for e-Invoicing.",
+        "pushed": "The transaction was pushed to the IRP successfully, and a QR code and IRN has been generated for it.",
+        "push_initiated": "The transaction is being pushed to the IRP as part of a bulk push action.",
+        "cancelled": "The e-Invoiced transaction has been cancelled in both Giddh and the IRP. The IRN associated with it is no longer valid.",
+        "mark_as_cancelled": "The e-Invoiced transaction has been marked as cancelled in Giddh Books alone. You’ll have to cancel it in the GST portal to make the IRN invalid.",
+        "failed": "The transaction could not be pushed to the IRP.",
+        "na": "e-Invoice creation is not applicable for this transaction.",
+        "giddh_invoice_not_cancelled": "The e-Invoiced transaction has been cancelled in the IRP but not in Giddh. The IRN associated with it is no longer valid."
+    },
     "tabs": {
         "estimates": "Estimates (Beta)",
         "debit_note": "Debit Note",
