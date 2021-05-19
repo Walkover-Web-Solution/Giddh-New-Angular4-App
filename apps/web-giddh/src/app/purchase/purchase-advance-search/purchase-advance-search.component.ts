@@ -12,16 +12,6 @@ import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helper
 import { purchaseOrderStatus } from "../../shared/helpers/purchaseOrderStatus";
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 
-/* Amount comparision filters */
-const AMOUNT_COMPARISON_FILTER = [
-    { label: 'Greater Than', value: 'GREATER_THAN' },
-    { label: 'Greater Than or Equals', value: 'GREATER_THAN_OR_EQUALS' },
-    { label: 'Less Than', value: 'LESS_THAN' },
-    { label: 'Less Than or Equals', value: 'LESS_THAN_OR_EQUALS' },
-    { label: 'Equals', value: 'EQUALS' },
-    { label: 'Not Equals', value: 'NOT_EQUALS' }
-];
-
 
 @Component({
     selector: 'purchase-advance-search',
@@ -31,11 +21,15 @@ const AMOUNT_COMPARISON_FILTER = [
 
 export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will hold the amount filter */
-    public filtersForAmount: IOption[] = AMOUNT_COMPARISON_FILTER;
+    public filtersForAmount: IOption[] = [];
     /* This will hold the status filter */
     public filtersForStatus: IOption[] = [];
     /* This will input the filters to preselect them */
     @Input() public purchaseOrderPostRequest;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /* Emitter for filters */
     @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
     /* Datepicker template */
@@ -74,6 +68,15 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
      * @memberof PurchaseAdvanceSearchComponent
      */
     public ngOnInit(): void {
+        this.filtersForAmount = [
+            { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'GREATER_THAN' },
+            { label: this.commonLocaleData?.app_comparision_filters?.greater_than_equals, value: 'GREATER_THAN_OR_EQUALS' },
+            { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'LESS_THAN' },
+            { label: this.commonLocaleData?.app_comparision_filters?.less_than_equals, value: 'LESS_THAN_OR_EQUALS' },
+            { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'EQUALS' },
+            { label: this.commonLocaleData?.app_comparision_filters?.not_equals, value: 'NOT_EQUALS' }
+        ];
+        
         purchaseOrderStatus.map(status => {
             this.filtersForStatus.push({ label: status.label, value: status.value });
         });

@@ -986,7 +986,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (event.value === 'rcpt') {
             if (this.isPettyCash && !this.accountUniqueName) {
                 let message = this.localeData?.account_entry_error;
-                message = message.replace("[ACCOUNT]", this.pettyCashBaseAccountTypeString);
+                message = message?.replace("[ACCOUNT]", this.pettyCashBaseAccountTypeString);
                 this._toasty.errorToast(message);
                 return;
             }
@@ -1860,7 +1860,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public getTotalInCurrency(): string {
         let totalInCurrency = this.localeData?.total_in_currency;
-        totalInCurrency = totalInCurrency.replace("[CURRENCY]", this.vm.baseCurrencyDetails?.code);
+        totalInCurrency = totalInCurrency?.replace("[CURRENCY]", this.vm.baseCurrencyDetails?.code);
         return totalInCurrency;
     }
 

@@ -23,6 +23,8 @@ export class PurchaseSendEmailModalComponent implements OnInit, OnDestroy {
     public emailId: any = '';
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public purchaseRecordService: PurchaseRecordService) {
 
