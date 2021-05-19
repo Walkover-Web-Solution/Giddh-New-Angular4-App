@@ -142,6 +142,9 @@
         "na": "e-Invoice creation is not applicable for this transaction.",
         "giddh_invoice_not_cancelled": "The e-Invoiced transaction has been cancelled in the IRP but not in Giddh. The IRN associated with it is no longer valid."
     },
+    "cancel_e_invoice": "Cancel E-invoice",
+    "cancel_reason": "Cancel Reason",
+    "cancel_remarks": "Cancel Remarks",
     "tabs": {
         "estimates": "Estimates (Beta)",
         "debit_note": "Debit Note",
