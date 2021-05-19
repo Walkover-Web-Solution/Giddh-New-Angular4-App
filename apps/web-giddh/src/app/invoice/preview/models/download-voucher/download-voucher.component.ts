@@ -1,10 +1,9 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { InvoiceService } from '../../../../services/invoice.service';
 import { ToasterService } from '../../../../services/toaster.service';
 import { InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
 import { VoucherTypeEnum } from '../../../../models/api-models/Sales';
-import { ProformaService } from '../../../../services/proforma.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 
@@ -15,6 +14,10 @@ import { ReplaySubject } from 'rxjs';
 
 export class DownloadVoucherComponent implements OnInit, OnDestroy {
     @Input() public selectedItem: InvoicePreviewDetailsVm;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public invoiceType: string[] = [];
     public isTransport: boolean = false;
     public isCustomer: boolean = false;
@@ -24,8 +27,7 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _invoiceService: InvoiceService, private _toaster: ToasterService, private _cdr: ChangeDetectorRef,
-        private _proformaService: ProformaService) {
+    constructor(private _invoiceService: InvoiceService, private _toaster: ToasterService) {
     }
 
     ngOnInit() {
@@ -59,10 +61,10 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
                         saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
                     }
                 } else {
-                    this._toaster.errorToast('Something went wrong Please try again!');
+                    this._toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 }
             }, (error => {
-                this._toaster.errorToast('Something went wrong Please try again!');
+                this._toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
             }));
     }
 
