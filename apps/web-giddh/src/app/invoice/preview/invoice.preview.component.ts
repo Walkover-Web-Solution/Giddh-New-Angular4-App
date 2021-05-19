@@ -284,6 +284,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public updateSelectedItems: boolean = false;
     /** This will hold comparision filters */
     public comparisionFilters: any[] = [];
+    /** Stores the E-invoice cancellation reason */
+    public eInvoiceCancel: { cancellationReason: string, cancellationRemarks?: string } = {
+        cancellationReason: '',
+        cancellationRemarks: '',
+    };
+    /** Stores the E-invoice cancellation options */
+    public eInvoiceCancellationReasonOptions = [
+        { label: 'Duplicate', value: '1' },
+        { label: 'Data entry mistake', value: '2' },
+        { label: 'Order Cancelled', value: '3' },
+        { label: 'Others', value: '4' }
+    ];
 
     constructor(
         private store: Store<AppState>,
@@ -1975,5 +1987,35 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' }
             ];
         }
+    }
+
+    /**
+     * Resets the canel e-invoice form data
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public resetCancelEInvoice(): void {
+        this.eInvoiceCancel = {
+            cancellationReason: '',
+            cancellationRemarks: '',
+        };
+    }
+
+    /**
+     * Handler for e-invoice cancellation
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public submitEInvoiceCancellation(): void {
+        this._invoiceService.cancelEInvoice({...this.eInvoiceCancel, invoiceUniqueName: this.selectedInvoicesList[0].uniqueName}).pipe(take(1)).subscribe(response => {
+            if (response.status === 'success') {
+                this._toaster.successToast(response.body);
+                this.getVoucher(this.isUniversalDateApplicable);
+            } else if (response.status === 'error') {
+                this._toaster.errorToast(response.message, response.code);
+            }
+        });
+        this.modalRef?.hide();
+        this.resetCancelEInvoice();
     }
 }

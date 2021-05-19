@@ -762,4 +762,22 @@ export class InvoiceService {
             .replace(':imgUniqueName', signatureUniqueName)).pipe(
             catchError((error) => this.errorHandler.HandleCatch<string, any>(error)));
     }
+
+    /**
+     * Handler for cancellation of E-invoice
+     *
+     * @param {{ cancellationReason: string, cancellationRemarks?: string, invoiceUniqueName: string }} requestObject Request object for the API
+     * @return {*}  {Observable<BaseResponse<any, any>>} Observable to carry out further operation
+     * @memberof InvoiceService
+     */
+    public cancelEInvoice(requestObject: { cancellationReason: string, cancellationRemarks?: string, invoiceUniqueName: string }): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.post(this.config.apiUrl +
+            INVOICE_API.CANCEL_E_INVOICE_API
+                .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+                .replace(':invoiceUniqueName', encodeURIComponent(requestObject.invoiceUniqueName))
+                .replace(':cancellationReason', encodeURIComponent(requestObject.cancellationReason))
+                .replace(':cancellationRemarks', encodeURIComponent(requestObject.cancellationRemarks)), {}).pipe(
+                    catchError((error) => this.errorHandler.HandleCatch<string, any>(error)));
+    }
 }
