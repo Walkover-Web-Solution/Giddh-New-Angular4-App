@@ -736,23 +736,23 @@ export class GeneralService {
      * @returns {ConfirmationModalConfiguration}
      * @memberof GeneralService
      */
-    public getDateChangeConfiguration(isVoucherDateSelected: boolean): ConfirmationModalConfiguration {
+    public getDateChangeConfiguration(localeData: any, commonLocaleData: any, isVoucherDateSelected: boolean): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
-            text: 'Yes',
+            text: commonLocaleData?.app_yes,
             cssClass: 'btn btn-success'
         },
         {
-            text: 'No',
+            text: commonLocaleData?.app_no,
             cssClass: 'btn btn-danger'
         }];
-        const headerText: string = 'Date Change Confirmation';
+        const headerText: string = localeData?.date_change_confirmation_heading;
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1 text-light';
         const footerCssClass: string = 'mr-b1';
         return (isVoucherDateSelected) ? {
             headerText,
             headerCssClass,
-            messageText: `Do you want to change the entry date as well?`,
+            messageText: localeData?.change_single_entry_date,
             messageCssClass,
             footerText: '',
             footerCssClass,
@@ -760,7 +760,7 @@ export class GeneralService {
         } : {
                 headerText,
                 headerCssClass,
-                messageText: `Do you want to change the all entries date with this date?`,
+                messageText: localeData?.change_all_entry_dates,
                 messageCssClass,
                 footerText: '',
                 footerCssClass,
