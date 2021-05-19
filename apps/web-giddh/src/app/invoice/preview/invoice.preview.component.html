@@ -395,7 +395,11 @@
                                     <div class="flex-fill">{{ localeData?.e_invoice_status }}</div>
                                 </div>
                             </th>
-
+                            <th [attr.data-title]="commonLocaleData?.app_status" width="10%">
+                                <div class="d-flex">
+                                    <div class="flex-fill">{{commonLocaleData?.app_status}}</div>
+                                </div>
+                            </th>
                         </tr>
                     </thead>
                     <!--sales-->
@@ -656,6 +660,41 @@
                                 <div class="e-invoice-status font-14">
                                     <strong class="d-flex" [tooltip]="item.eInvoiceStatusTooltip">{{item.status || '-'}}</strong>
                                 </div>
+                            </td>
+                            <!-- Status -->
+                            <!--for not cancelled status-->
+                            <td width="10%" [attr.data-title]="commonLocaleData?.app_status" class="cp"
+                                *ngIf="(selectedVoucher !== 'purchase') && item.balanceStatus !== 'cancel'">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-fill select-action">
+                                        <span [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ?
+                                            item.balanceStatus : commonLocaleData?.app_select_action }}</span>
+                                    </div>
+
+                                    <div>
+                                        <div *ngIf="!isCompany" dropdown container="body"
+                                            class="icon-ellipse select-action">
+                                            <a id="edit-model-basic" dropdownToggle
+                                                class="dropdown-toggle icon-dots-three-vertical pull-right"
+                                                aria-controls="dropdown-basic"></a>
+                                            <div id="dropdown-basic" *dropdownMenu
+                                                class="dropdown-menu dropdown-menu-right width-150" role="menu"
+                                                aria-labelledby="edit-model-basic">
+                                                <ul class="select-action-dropdown">
+                                                    <li (click)="onPerformAction(item, 'cancel')">
+                                                        <a class="cp"
+                                                            href="javascript:void(0)">{{commonLocaleData?.app_payment_status?.cancel}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <!--for cancelled status-->
+                            <td width="10%" [attr.data-title]="commonLocaleData?.app_status"
+                                *ngIf="(selectedVoucher !== 'purchase') && item.balanceStatus === 'cancel'">
+                                <span>{{ item.balanceStatus}}</span>
                             </td>
                         </tr>
                     </tbody>
