@@ -3435,6 +3435,13 @@ ul.pills li {
     box-shadow: none;
 }
 
+.tourist-scheme-wrapper{
+    .popover{
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+}
+
 .popover-content {
     padding: 0;
 }
