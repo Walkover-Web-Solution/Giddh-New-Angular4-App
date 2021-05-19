@@ -18,7 +18,7 @@ export const settingsPageTabs: PageTabs[] = [
         [1]: [
             { label: 'Taxes', link: '/pages/settings/taxes', icon: '<i class="icon-tax-new"></i>' },
             { label: 'Integration', link: '/pages/settings/integration', icon: '<i class="icon-integration1"></i>' },
-            { label: 'Linked Accounts', link: '/pages/settings/linked-accounts', icon: '<i class="icon-account"></i>' },
+            { label: 'Linked Accounts', link: '/pages/settings/linked-accounts', icon: '<i class="icon-linked-account"></i>' },
             { label: 'Tags', link: '/pages/settings/tag', icon: '<i class="icon-tag-new"></i>' },
             { label: 'Trigger', link: '/pages/settings/trigger', icon: '<i class="icon-trigger-new"></i>' }
         ],
