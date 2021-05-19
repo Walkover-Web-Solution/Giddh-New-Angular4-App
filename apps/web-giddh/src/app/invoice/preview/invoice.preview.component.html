@@ -32,7 +32,7 @@
                 </div>
                 <div class="d-flex add-invoice">
                     <!-- Cancel e-invoice button -->
-                    <button type="button" class="btn btn-primary desktop-view-btn" (click)="openModal(cancelTemplate)">Cancel E-invoice</button>
+                    <button type="button" class="btn btn-primary desktop-view-btn" *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales') && selectedInvoicesList?.length === 1 && selectedInvoicesList[0].irnNumber" (click)="openModal(cancelEInvoiceTemplate)">Cancel E-invoice</button>
                     <!-- E-way bill generation and export to excel for a single selected item in invoice sizes -->
                     <div class="desktop-view-btn"
                         *ngIf="(selectedVoucher !== 'purchase' && selectedItems.length > 0) || (selectedItems.length === 1 && selectedVoucher === 'purchase')">
@@ -55,7 +55,7 @@
                                         (click)="toggleEwayBillPopup()" *ngIf="selectedVoucher === 'sales'">
                                         {{localeData?.generate_eway_bill}}</a>
                                 </li>
-                                <li *ngIf="gstEInvoiceEnable && (selectedVoucher === 'sales')">
+                                <li *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales')">
                                     <a class="dropdown-item cp" href="javascript:void(0)"
                                         (click)="createBulkEInvoice()"> {{localeData?.create_e_invoice}} </a>
                                 </li>
@@ -125,7 +125,7 @@
                 <div class="row">
                     <div class="col-12 d-flex w-100 align-items-center pt-3 pb-2">
                         <!-- Cancel e-invoice button -->
-                        <button type="button" class="btn btn-primary" (click)="openModal(cancelTemplate)">Cancel E-invoice</button>
+                        <button type="button" class="btn btn-primary" *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales') && selectedInvoicesList?.length === 1" (click)="openModal(cancelEInvoiceTemplate)">Cancel E-invoice</button>
                         <div class="export-button-wrap">
                             <button class="btn btn-primary"
                                 [disabled]="((selectedInvoices && selectedInvoices.length > 0) ? selectedInvoices.length : voucherData && voucherData.totalItems) === 0"
@@ -390,11 +390,11 @@
                                 </div>
                             </th>
                             <!-- E-invoice status -->
-                            <!-- <th *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" width="10%">
+                            <th *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" width="10%">
                                 <div class="d-flex">
                                     <div class="flex-fill">{{ localeData?.e_invoice_status }}</div>
                                 </div>
-                            </th> -->
+                            </th>
 
                         </tr>
                     </thead>
@@ -652,11 +652,11 @@
                                 </span>
                             </td>
                             <!-- E-invoice status -->
-                            <!-- <td *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales')" [attr.data-title]="localeData.e_invoice_status" width="10%">
+                            <td *ngIf="gstEInvoiceEnable && (selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'sales')" [attr.data-title]="localeData.e_invoice_status" width="10%">
                                 <div class="e-invoice-status font-14">
                                     <strong class="d-flex" [tooltip]="item.eInvoiceStatusTooltip">{{item.status || '-'}}</strong>
                                 </div>
-                            </td> -->
+                            </td>
                         </tr>
                     </tbody>
                     <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
@@ -1056,8 +1056,8 @@
 </ng-container>
 
     <!-- Cancel e-inovice modal -->
-    <ng-template #cancelTemplate>
-        <div class="modal-header">
+    <ng-template #cancelEInvoiceTemplate>
+        <div class="modal-header e-invoice-cancel-header d-flex">
             <h4 class="modal-title pull-left">Cancel E-invoice</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
             <span aria-hidden="true">&times;</span>
@@ -1067,22 +1067,26 @@
              <form>
                  <div class="mr-b15">
                      <label>Invoice number</label>
-                     <input type="text" class="form-control" value="#1234567890" readonly>
+                     <input type="text" class="form-control" [value]="selectedInvoicesList[0].voucherNumber" readonly>
                  </div>
                  <div class="mr-b15">
                     <label>IRN</label>
-                    <input type="text" class="form-control" value="123456789012345678901234567890" readonly>
+                    <input type="text" class="form-control" [value]="selectedInvoicesList[0].irnNumber" readonly>
                 </div>
                 <div class="mr-b15">
                     <label>Cancel Reason <span class="red-text">*</span></label>
-                    <sh-select></sh-select>
+                    <sh-select [(ngModel)]="eInvoiceCancel.cancellationReason" [options]="eInvoiceCancellationReasonOptions"></sh-select>
                 </div>
                 <div class="mr-b15">
-                    <label>Cancel Remarks <span class="red-text">*</span></label>
-                    <textarea class="form-control w-100"></textarea>
+                    <label>Cancel Remarks</label>
+                    <textarea [(ngModel)]="eInvoiceCancel.cancellationRemarks" maxlength="100" hasFocus #cancellationRemarks="hasFocus" class="form-control w-100"></textarea>
+                    <ng-container *ngIf="cancellationRemarks?.isFocused">
+                        <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(100 -
+                            eInvoiceCancel?.cancellationRemarks?.length)}}</span>
+                    </ng-container>
                 </div>
                  <div class="button-group text-right">
-                     <button class="btn btn-success"> Confirm </button>
+                     <button [disabled]="!eInvoiceCancel.cancellationReason ? 'disabled' : null" class="btn btn-success" (click)="submitEInvoiceCancellation()"> Confirm </button>
                      <button class="btn btn-cancel"> Cancel </button>
                  </div>
              </form>
