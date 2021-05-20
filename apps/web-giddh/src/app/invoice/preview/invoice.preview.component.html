@@ -1098,7 +1098,7 @@
     <ng-template #cancelEInvoiceTemplate>
         <div class="modal-header e-invoice-cancel-header d-flex">
             <h4 class="modal-title pull-left">{{localeData?.cancel_e_invoice}}</h4>
-            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide();resetCancelEInvoice();">
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
