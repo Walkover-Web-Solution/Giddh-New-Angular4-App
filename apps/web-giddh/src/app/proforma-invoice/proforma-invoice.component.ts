@@ -7251,35 +7251,35 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public getInvoiceType(): string {
         let invoiceType = "";
         switch (this.invoiceType) {
-            case "proforma":
+            case VoucherTypeEnum.proforma:
                 invoiceType = this.localeData?.invoice_types?.proforma;
                 break;
 
-            case "proformas":
+            case VoucherTypeEnum.generateProforma:
                 invoiceType = this.localeData?.invoice_types?.proforma;
                 break;
 
-            case "estimate":
+            case VoucherTypeEnum.estimate:
                 invoiceType = this.localeData?.invoice_types?.estimate;
                 break;
 
-            case "estimates":
+            case VoucherTypeEnum.generateEstimate:
                 invoiceType = this.localeData?.invoice_types?.estimate;
                 break;
 
-            case "sales":
+            case VoucherTypeEnum.sales:
                 invoiceType = this.localeData?.invoice_types?.sales;
                 break;
 
-            case "credit note":
+            case VoucherTypeEnum.creditNote:
                 invoiceType = this.localeData?.invoice_types?.credit_note;
                 break;
 
-            case "debit note":
+            case VoucherTypeEnum.debitNote:
                 invoiceType = this.localeData?.invoice_types?.debit_note;
                 break;
 
-            case "purchase":
+            case VoucherTypeEnum.purchase:
                 invoiceType = this.localeData?.invoice_types?.purchase;
                 break;
 

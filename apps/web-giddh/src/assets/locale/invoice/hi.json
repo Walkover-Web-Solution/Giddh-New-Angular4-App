@@ -127,11 +127,9 @@
     "search_particular": "विशेष रूप से खोजें",
     "search_description": "खोज विवरण",
     "currency_conversion": "[BASE_CURRENCY] में: [AMOUNT] <br /> (रूपांतरण दर: [CONVERSION_RATE]) ",
-    "original_copy": "Original Copy",
-    "duplicate_copy": "Duplicate Copy",
-    "triplicate_copy": "Triplicate Copy",
-<<<<<<< HEAD
-=======
+    "original_copy": "मूल प्रति",
+    "duplicate_copy": "प्रतिलिपि",
+    "triplicate_copy": "ट्रिपल कॉपी",
     "create_e_invoice": "ई-चालान बनाएं",
 	"e_invoice_status": "ई-चालान स्थिति",
     "e_invoice_statuses": {
@@ -153,7 +151,6 @@
         "order_cancelled": "Order Cancelled",
         "other": "Others"
     },
->>>>>>> 60f37f101f... Fixed v2 issues
     "tabs": {
         "estimates": "अनुमान (बीटा)",
 		"debit_note": "डेबिट नोट",
@@ -165,16 +162,10 @@
 		"invoices": "चालान",
 		"recurring": "आवर्ती"
     },
-<<<<<<< HEAD
-    "all_invoices": "All-invoices",
-    "no_advance_receipt": "There is no advanced receipt for adjustment."
-}
-=======
     "all_invoices": "सभी चालान",
 	"no_advance_receipt": "समायोजन के लिए कोई अग्रिम रसीद नहीं है।",
     "exchange_gain_loss_label": "[BASE_CURRENCY] में: [AMOUNT] <br /> विनिमय [PROFIT_TYPE]: ",
     "exchange_gain": "लाभ",
     "exchange_loss": "हानि",
-    "works_for_single_entry": "Works only for single entry."
+    "works_for_single_entry": "केवल एकल प्रविष्टि के लिए काम करता है।"
 }
->>>>>>> 60f37f101f... Fixed v2 issues
