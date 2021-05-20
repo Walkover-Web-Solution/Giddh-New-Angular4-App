@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { fromEvent, ReplaySubject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
@@ -13,10 +13,10 @@ import { SearchService } from '../../../services/search.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ProformaAddBulkItemsComponent implements OnInit, OnDestroy {
+export class ProformaAddBulkItemsComponent implements OnDestroy {
     @Input() public invoiceType: string;
 
-    @ViewChild('searchElement', { static: true }) public searchElement: ElementRef;
+    @ViewChild('searchElement', { static: false }) public searchElement: ElementRef;
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
     @Output() public saveItemsEvent: EventEmitter<SalesAddBulkStockItems[]> = new EventEmitter();
 
@@ -42,25 +42,6 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private searchService: SearchService
     ) {
-    }
-
-    ngOnInit() {
-        this.onSearchQueryChanged('');
-        fromEvent(this.searchElement?.nativeElement, 'input').pipe(
-            debounceTime(700),
-            distinctUntilChanged(),
-            map((e: any) => e.target.value),
-            takeUntil(this.destroyed$)
-        ).subscribe((res: string) => {
-            // this.filteredData = this.normalData.filter(item => {
-            // 	return item.name.toLowerCase().includes(res.toLowerCase()) || item.uniqueName.toLowerCase().includes(res.toLowerCase());
-            // });
-            if (res) {
-                this.onSearchQueryChanged(res, 1);
-            }
-        });
-
-        // this.parseDataToDisplay(this.data);
     }
 
     /**
@@ -232,5 +213,35 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof ProformaAddBulkItemsComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.onSearchQueryChanged('');
+
+            setTimeout(() => {
+                fromEvent(this.searchElement?.nativeElement, 'input').pipe(
+                    debounceTime(700),
+                    distinctUntilChanged(),
+                    map((e: any) => e.target.value),
+                    takeUntil(this.destroyed$)
+                ).subscribe((res: string) => {
+                    // this.filteredData = this.normalData.filter(item => {
+                    // 	return item.name.toLowerCase().includes(res.toLowerCase()) || item.uniqueName.toLowerCase().includes(res.toLowerCase());
+                    // });
+                    if (res) {
+                        this.onSearchQueryChanged(res, 1);
+                    }
+                });
+            }, 100);
+        }
+
+        // this.parseDataToDisplay(this.data);
     }
 }
