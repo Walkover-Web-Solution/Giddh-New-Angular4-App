@@ -7113,6 +7113,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invoiceDateLabel = this.commonLocaleData?.app_invoice_date;
             this.invoiceDueDateLabel = this.localeData?.invoice_due_date;
 
+            this.pageList[0].label = this.localeData?.invoice_types?.sales;
+            this.pageList[1].label = this.localeData?.invoice_types?.credit_note;
+            this.pageList[2].label = this.localeData?.invoice_types?.debit_note;
+            this.pageList[3].label = this.localeData?.invoice_types?.purchase;
+            this.pageList[4].label = this.localeData?.invoice_types?.proforma;
+            this.pageList[5].label = this.localeData?.invoice_types?.estimate;
+
+            this.pageList[0].additional.label = this.localeData?.invoice_types?.sales;
+            this.pageList[1].additional.label = this.localeData?.invoice_types?.credit_note;
+            this.pageList[2].additional.label = this.localeData?.invoice_types?.debit_note;
+            this.pageList[3].additional.label = this.localeData?.invoice_types?.purchase;
+            this.pageList[4].additional.label = this.localeData?.invoice_types?.proforma;
+            this.pageList[5].additional.label = this.localeData?.invoice_types?.estimate;
+
             this.getItemColumns();
             this.getCopyPreviousInvoiceText();
             this.getGenerateInvoiceText();
@@ -7229,5 +7243,54 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.cancelVoucherUpdate.emit(true);
             this.router.navigate(['/pages', 'invoice', 'preview', 'pending', 'sales']);
         }
+    }
+
+    /**
+     * This will return selected voucher type
+     *
+     * @returns {string}
+     * @memberof ProformaInvoiceComponent
+     */
+    public getInvoiceType(): string {
+        let invoiceType = "";
+        switch (this.invoiceType) {
+            case VoucherTypeEnum.proforma:
+                invoiceType = this.localeData?.invoice_types?.proforma;
+                break;
+
+            case VoucherTypeEnum.generateProforma:
+                invoiceType = this.localeData?.invoice_types?.proforma;
+                break;
+
+            case VoucherTypeEnum.estimate:
+                invoiceType = this.localeData?.invoice_types?.estimate;
+                break;
+
+            case VoucherTypeEnum.generateEstimate:
+                invoiceType = this.localeData?.invoice_types?.estimate;
+                break;
+
+            case VoucherTypeEnum.sales:
+                invoiceType = this.localeData?.invoice_types?.sales;
+                break;
+
+            case VoucherTypeEnum.creditNote:
+                invoiceType = this.localeData?.invoice_types?.credit_note;
+                break;
+
+            case VoucherTypeEnum.debitNote:
+                invoiceType = this.localeData?.invoice_types?.debit_note;
+                break;
+
+            case VoucherTypeEnum.purchase:
+                invoiceType = this.localeData?.invoice_types?.purchase;
+                break;
+
+            default:
+                invoiceType = this.invoiceType;
+                break;
+        }
+
+        return invoiceType;
     }
 }
