@@ -127,6 +127,9 @@
     "search_particular": "विशेष रूप से खोजें",
     "search_description": "खोज विवरण",
     "currency_conversion": "[BASE_CURRENCY] में: [AMOUNT] <br /> (रूपांतरण दर: [CONVERSION_RATE]) ",
+    "original_copy": "Original Copy",
+    "duplicate_copy": "Duplicate Copy",
+    "triplicate_copy": "Triplicate Copy",
     "create_e_invoice": "Create E-invoice",
     "e_invoice_status": "E-invoice Status",
     "e_invoice_statuses": {
