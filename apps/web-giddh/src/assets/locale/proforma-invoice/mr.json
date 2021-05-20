@@ -1,5 +1,9 @@
 {
     "invoice_types": {
+        "sales": "विक्री",
+        "credit_note": "उधार पत्र",
+        "debit_note": "डेबिट टीप",
+        "purchase": "खरेदी",
         "cash": "रोख",
         "proforma": "प्रोफार्मा",
         "estimate": "अंदाज"
