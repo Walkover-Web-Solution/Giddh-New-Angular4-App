@@ -127,9 +127,9 @@
 	"search_particular": "शोध खास",
 	"search_description": "शोध वर्णन",
     "currency_conversion": "In [BASE_CURRENCY]: [AMOUNT]<br />(Conversion Rate: [CONVERSION_RATE])",
-    "original_copy": "Original Copy",
-    "duplicate_copy": "Duplicate Copy",
-    "triplicate_copy": "Triplicate Copy",
+    "original_copy": "मूळ प्रत",
+    "duplicate_copy": "डुप्लिकेट प्रत",
+    "triplicate_copy": "त्रिकोणीय प्रत",
     "create_e_invoice": "ई-बीजक तयार करा",
 	"e_invoice_status": "ई-चलन स्थिती",
     "e_invoice_statuses": {
@@ -167,5 +167,5 @@
     "exchange_gain_loss_label": "In [BASE_CURRENCY]: [AMOUNT]<br />Exchange [PROFIT_TYPE]: ",
     "exchange_gain": "gain",
     "exchange_loss": "loss",
-    "works_for_single_entry": "Works only for single entry."
+    "works_for_single_entry": "केवळ एकल प्रवेशासाठी कार्य करते."
 }

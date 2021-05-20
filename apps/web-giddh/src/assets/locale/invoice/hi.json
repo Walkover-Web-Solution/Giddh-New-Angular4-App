@@ -127,9 +127,9 @@
     "search_particular": "विशेष रूप से खोजें",
     "search_description": "खोज विवरण",
     "currency_conversion": "[BASE_CURRENCY] में: [AMOUNT] <br /> (रूपांतरण दर: [CONVERSION_RATE]) ",
-    "original_copy": "Original Copy",
-    "duplicate_copy": "Duplicate Copy",
-    "triplicate_copy": "Triplicate Copy",
+    "original_copy": "मूल प्रति",
+    "duplicate_copy": "प्रतिलिपि",
+    "triplicate_copy": "ट्रिपल कॉपी",
     "create_e_invoice": "ई-चालान बनाएं",
 	"e_invoice_status": "ई-चालान स्थिति",
     "e_invoice_statuses": {
@@ -167,5 +167,5 @@
     "exchange_gain_loss_label": "[BASE_CURRENCY] में: [AMOUNT] <br /> विनिमय [PROFIT_TYPE]: ",
     "exchange_gain": "लाभ",
     "exchange_loss": "हानि",
-    "works_for_single_entry": "Works only for single entry."
+    "works_for_single_entry": "केवल एकल प्रविष्टि के लिए काम करता है।"
 }
