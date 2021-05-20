@@ -2,57 +2,57 @@
     "confirmation_messages": [
         {
             "module": "sales",
-            "title": "Confirmation",
-            "message1": "Do you want to delete the voucher(s) / invoice(s)?",
-            "message2": "It will be deleted permanently and will no longer be accessible from any other module."
+            "title": "पुष्टीकरण",
+            "message1": "क्या आप वाउचर/इनवॉइस हटाना चाहते हैं?",
+            "message2": "इसे स्थायी रूप से हटा दिया जाएगा और अब किसी अन्य मॉड्यूल से एक्सेस नहीं किया जा सकेगा।"
         },
         {
             "module": "proformaslist",
-            "title": "Confirmation",
-            "message1": "Do you want to delete the voucher(s)?",
-            "message2": "They will be deleted permanently and will no longer be accessible from any other module."
+            "title": "पुष्टीकरण",
+            "message1": "क्या आप वाउचर हटाना चाहते हैं?",
+            "message2": "उन्हें स्थायी रूप से हटा दिया जाएगा और अब किसी अन्य मॉड्यूल से एक्सेस नहीं किया जा सकेगा।"
         },
         {
             "module": "estimateslist",
-            "title": "Confirmation",
-            "message1": "Do you want to delete the voucher(s)?",
-            "message2": "They will be deleted permanently and will no longer be accessible from any other module."
+            "title": "पुष्टीकरण",
+            "message1": "क्या आप वाउचर हटाना चाहते हैं?",
+            "message2": "उन्हें स्थायी रूप से हटा दिया जाएगा और अब किसी अन्य मॉड्यूल से एक्सेस नहीं किया जा सकेगा।"
         },
         {
             "module": "purchase",
-            "title": "Confirmation",
-            "message1": "Do you want to delete the record?",
-            "message2": "It will be deleted permanently and will no longer be accessible from any other module."
+            "title": "पुष्टीकरण",
+            "message1": "क्या आप रिकॉर्ड हटाना चाहते हैं?",
+            "message2": "इसे स्थायी रूप से हटा दिया जाएगा और अब किसी अन्य मॉड्यूल से एक्सेस नहीं किया जा सकेगा।"
         },
         {
             "module": "purchaselist",
-            "title": "Confirmation",
-            "message1": "Do you want to delete the selected records?",
-            "message2": "They will be deleted permanently and will no longer be accessible from any other module."
+            "title": "पुष्टीकरण",
+            "message1": "क्या आप चयनित रिकॉर्ड हटाना चाहते हैं?",
+            "message2": "उन्हें स्थायी रूप से हटा दिया जाएगा और अब किसी अन्य मॉड्यूल से एक्सेस नहीं किया जा सकेगा।"
         },
         {
             "module": "credit note",
-            "title": "Confirmation",
-            "message1": "Do you want to delete the selected vouchers?",
-            "message2": "They will be deleted permanently and will no longer be accessible from any other module."
+            "title": "पुष्टीकरण",
+            "message1": "क्या आप चुने गए वाउचर मिटाना चाहते हैं?",
+            "message2": "उन्हें स्थायी रूप से हटा दिया जाएगा और अब किसी अन्य मॉड्यूल से एक्सेस नहीं किया जा सकेगा।"
         },
         {
             "module": "debit note",
-            "title": "Confirmation",
-            "message1": "Do you want to delete the selected vouchers?",
-            "message2": "They will be deleted permanently and will no longer be accessible from any other module."
+            "title": "पुष्टीकरण",
+            "message1": "क्या आप चुने गए वाउचर मिटाना चाहते हैं?",
+            "message2": "उन्हें स्थायी रूप से हटा दिया जाएगा और अब किसी अन्य मॉड्यूल से एक्सेस नहीं किया जा सकेगा।"
         },
         {
             "module": "purchaseorder",
-            "title": "Confirmation",
-            "message1": "Do you want to delete the order?",
-            "message2": "It will be deleted permanently and will no longer be accessible from any other module."
+            "title": "पुष्टीकरण",
+            "message1": "क्या आप आदेश हटाना चाहते हैं?",
+            "message2": "इसे स्थायी रूप से हटा दिया जाएगा और अब किसी अन्य मॉड्यूल से एक्सेस नहीं किया जा सकेगा।"
         },
         {
             "module": "purchaseorderlist",
-            "title": "Confirmation",
-            "message1": "Do you want to delete the selected orders?",
-            "message2": "They will be deleted permanently and will no longer be accessible from any other module."
+            "title": "पुष्टीकरण",
+            "message1": "क्या आप चयनित आदेशों को हटाना चाहते हैं?",
+            "message2": "उन्हें स्थायी रूप से हटा दिया जाएगा और अब किसी अन्य मॉड्यूल से एक्सेस नहीं किया जा सकेगा।"
         }
     ]
 }

@@ -6991,6 +6991,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invoiceDateLabel = this.commonLocaleData?.app_invoice_date;
             this.invoiceDueDateLabel = this.localeData?.invoice_due_date;
 
+            this.pageList[0].label = this.localeData?.invoice_types?.sales;
+            this.pageList[1].label = this.localeData?.invoice_types?.credit_note;
+            this.pageList[2].label = this.localeData?.invoice_types?.debit_note;
+            this.pageList[3].label = this.localeData?.invoice_types?.purchase;
+            this.pageList[4].label = this.localeData?.invoice_types?.proforma;
+            this.pageList[5].label = this.localeData?.invoice_types?.estimate;
+
+            this.pageList[0].additional.label = this.localeData?.invoice_types?.sales;
+            this.pageList[1].additional.label = this.localeData?.invoice_types?.credit_note;
+            this.pageList[2].additional.label = this.localeData?.invoice_types?.debit_note;
+            this.pageList[3].additional.label = this.localeData?.invoice_types?.purchase;
+            this.pageList[4].additional.label = this.localeData?.invoice_types?.proforma;
+            this.pageList[5].additional.label = this.localeData?.invoice_types?.estimate;
+
             this.getItemColumns();
             this.getCopyPreviousInvoiceText();
             this.getGenerateInvoiceText();
@@ -7107,5 +7121,54 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.cancelVoucherUpdate.emit(true);
             this.router.navigate(['/pages', 'invoice', 'preview', 'pending', 'sales']);
         }
+    }
+
+    /**
+     * This will return selected voucher type
+     *
+     * @returns {string}
+     * @memberof ProformaInvoiceComponent
+     */
+    public getInvoiceType(): string {
+        let invoiceType = "";
+        switch (this.invoiceType) {
+            case "proforma":
+                invoiceType = this.localeData?.invoice_types?.proforma;
+                break;
+
+            case "proformas":
+                invoiceType = this.localeData?.invoice_types?.proforma;
+                break;
+
+            case "estimate":
+                invoiceType = this.localeData?.invoice_types?.estimate;
+                break;
+
+            case "estimates":
+                invoiceType = this.localeData?.invoice_types?.estimate;
+                break;
+
+            case "sales":
+                invoiceType = this.localeData?.invoice_types?.sales;
+                break;
+
+            case "credit note":
+                invoiceType = this.localeData?.invoice_types?.credit_note;
+                break;
+
+            case "debit note":
+                invoiceType = this.localeData?.invoice_types?.debit_note;
+                break;
+
+            case "purchase":
+                invoiceType = this.localeData?.invoice_types?.purchase;
+                break;
+
+            default:
+                invoiceType = this.invoiceType;
+                break;
+        }
+
+        return invoiceType;
     }
 }
