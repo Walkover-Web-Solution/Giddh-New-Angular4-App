@@ -288,12 +288,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         cancellationRemarks: '',
     };
     /** Stores the E-invoice cancellation options */
-    public eInvoiceCancellationReasonOptions = [
-        { label: 'Duplicate', value: '1' },
-        { label: 'Data entry mistake', value: '2' },
-        { label: 'Order Cancelled', value: '3' },
-        { label: 'Others', value: '4' }
-    ];
+    public eInvoiceCancellationReasonOptions = [];
 
     constructor(
         private store: Store<AppState>,
@@ -2001,6 +1996,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 { label: this.commonLocaleData?.app_comparision_filters?.less_than_equals, value: 'lessThanOrEquals' },
                 { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' }
             ];
+            this.eInvoiceCancellationReasonOptions = [
+                { label: this.localeData?.cancel_e_invoice_reasons?.duplicate, value: '1' },
+                { label: this.localeData?.cancel_e_invoice_reasons?.data_entry_mistake, value: '2' },
+                { label: this.localeData?.cancel_e_invoice_reasons?.order_cancelled, value: '3' },
+                { label: this.localeData?.cancel_e_invoice_reasons?.other, value: '4' }
+            ]
         }
     }
 
