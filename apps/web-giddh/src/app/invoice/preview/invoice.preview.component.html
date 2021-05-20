@@ -1114,7 +1114,7 @@
                 </div>
                 <div class="mr-b15">
                     <label>{{localeData?.cancel_reason}} <span class="red-text">*</span></label>
-                    <sh-select [(ngModel)]="eInvoiceCancel.cancellationReason" [options]="eInvoiceCancellationReasonOptions"></sh-select>
+                    <sh-select (onClear)="eInvoiceCancel.cancellationReason = ''" [(ngModel)]="eInvoiceCancel.cancellationReason" [options]="eInvoiceCancellationReasonOptions"></sh-select>
                 </div>
                 <div class="mr-b15">
                     <label>{{localeData?.cancel_remarks}}</label>

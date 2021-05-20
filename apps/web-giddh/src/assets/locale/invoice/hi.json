@@ -142,6 +142,12 @@
     "cancel_e_invoice": "Cancel E-invoice",
     "cancel_reason": "Cancel Reason",
     "cancel_remarks": "Cancel Remarks",
+    "cancel_e_invoice_reasons": {
+        "duplicate": "Duplicate",
+        "data_entry_mistake": "Data entry mistake",
+        "order_cancelled": "Order Cancelled",
+        "other": "Others"
+    },
     "tabs": {
         "estimates": "Estimates (Beta)",
         "debit_note": "Debit Note",
