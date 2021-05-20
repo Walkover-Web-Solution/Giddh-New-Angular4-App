@@ -1,8 +1,12 @@
 {
     "invoice_types": {
+        "sales": "बिक्री",
+        "credit_note": "क्रेडिट नोट",
+        "debit_note": "डेबिट नोट",
+        "purchase": "खरीद",
         "cash": "नकद",
         "proforma": "प्रोफार्मा",
-        "estimate": "आकलन"
+        "estimate": "अनुमान"
     },
     "customer_name": "ग्राहक का नाम",
     "vendor_name": "विक्रेता का नाम",
@@ -60,7 +64,7 @@
     "add_vendor": "विक्रेता जोड़ें",
     "invoice_no": "बीजक #",
     "proforma_no": "प्रोफार्मा #",
-    "estimate_no": "आकलन #",
+    "estimate_no": "अनुमान #",
     "purchase_bill_no": "खरीद बिल #",
     "invoice_due_date": "बिल की देय तिथि",
     "proforma_date": "प्रोफार्मा दिनांक",

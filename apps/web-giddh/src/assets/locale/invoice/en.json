@@ -142,5 +142,14 @@
         "recurring": "Recurring"
     },
     "all_invoices": "All-invoices",
+<<<<<<< HEAD
     "no_advance_receipt": "There is no advanced receipt for adjustment."
 }
+=======
+    "no_advance_receipt": "There is no advanced receipt for adjustment.",
+    "exchange_gain_loss_label": "In [BASE_CURRENCY]: [AMOUNT]<br />Exchange [PROFIT_TYPE]: ",
+    "exchange_gain": "gain",
+    "exchange_loss": "loss",
+    "works_for_single_entry": "Works only for single entry."
+}
+>>>>>>> 60f37f101f... Fixed v2 issues
