@@ -44,7 +44,8 @@
                                     (click)="generateBulkInvoice(true)">
                                     {{localeData?.generate_compound}}
                                 </button>
-                                <button *ngIf="!isCompany && !isMobileView" placement="top" tooltip="Works only for single entry."
+                                <button *ngIf="!isCompany && !isMobileView" placement="top"
+                                    [tooltip]="localeData?.works_for_single_entry"
                                     [hidden]="selectedLedgerItems.length === 0  || !togglePrevGenBtn"
                                     class="btn btn-primary" (click)="previewInvoice()">{{localeData?.preview_generate}}
                                 </button>

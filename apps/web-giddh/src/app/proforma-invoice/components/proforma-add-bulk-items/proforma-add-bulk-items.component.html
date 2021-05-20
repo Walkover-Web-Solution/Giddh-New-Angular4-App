@@ -1,5 +1,6 @@
-<ng-container appTranslate [file]="'proforma-invoice/add-bulk-items'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
-    <div class="add-bulk-item-modal">
+<ng-container appTranslate [file]="'proforma-invoice/add-bulk-items'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+    <div class="add-bulk-item-modal" *ngIf="localeData?.add_bulk_items">
 
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
