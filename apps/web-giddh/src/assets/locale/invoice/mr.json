@@ -127,6 +127,9 @@
     "search_particular": "Search Particular",
     "search_description": "Search Description",
     "currency_conversion": "In [BASE_CURRENCY]: [AMOUNT]<br />(Conversion Rate: [CONVERSION_RATE])",
+    "original_copy": "Original Copy",
+    "duplicate_copy": "Duplicate Copy",
+    "triplicate_copy": "Triplicate Copy",
     "create_e_invoice": "Create E-invoice",
     "e_invoice_status": "E-invoice Status",
     "e_invoice_statuses": {
