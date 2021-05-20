@@ -14,6 +14,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ValidateInvoice } from '../models/api-models/Company';
+import { VoucherTypeEnum } from '../models/api-models/Sales';
 
 declare var _: any;
 
@@ -766,18 +767,26 @@ export class InvoiceService {
     /**
      * Handler for cancellation of E-invoice
      *
-     * @param {{ cancellationReason: string, cancellationRemarks?: string, invoiceUniqueName: string }} requestObject Request object for the API
+     * @param {*} requestObject Request object for the API
      * @return {*}  {Observable<BaseResponse<any, any>>} Observable to carry out further operation
      * @memberof InvoiceService
      */
-    public cancelEInvoice(requestObject: { cancellationReason: string, cancellationRemarks?: string, invoiceUniqueName: string }): Observable<BaseResponse<any, any>> {
+    public cancelEInvoice(requestObject: any): Observable<BaseResponse<any, any>> {
+        let contextPath = `${this.config.apiUrl}${(requestObject.voucherType === VoucherTypeEnum.creditNote || requestObject.voucherType === VoucherTypeEnum.debitNote) ?
+            INVOICE_API.CANCEL_CN_DN_E_INVOICE_API : INVOICE_API.CANCEL_E_INVOICE_API}`;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl +
-            INVOICE_API.CANCEL_E_INVOICE_API
-                .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                .replace(':invoiceUniqueName', encodeURIComponent(requestObject.invoiceUniqueName))
-                .replace(':cancellationReason', encodeURIComponent(requestObject.cancellationReason))
-                .replace(':cancellationRemarks', encodeURIComponent(requestObject.cancellationRemarks)), {}).pipe(
-                    catchError((error) => this.errorHandler.HandleCatch<string, any>(error)));
+        contextPath = contextPath.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        if (requestObject.voucherType) {
+            contextPath = contextPath.replace(':voucherUniqueName', encodeURIComponent(requestObject.voucherUniqueName));
+            delete requestObject.voucherUniqueName;
+        }
+        Object.keys(requestObject).forEach((key, index) => {
+            const delimiter = index === 0 ? '?' : '&'
+            if (requestObject[key] !== undefined) {
+                contextPath += `${delimiter}${key}=${encodeURIComponent(requestObject[key])}`
+            }
+        });
+        return this._http.post(contextPath, {}).pipe(
+            catchError((error) => this.errorHandler.HandleCatch<string, any>(error)));
     }
 }

@@ -866,7 +866,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem.uniqueName, {
                     action: actionToPerform,
-                    voucherType: objItem.voucherType
+                    voucherType: objItem.voucherType ?? this.selectedVoucher
                 }));
             }
             this.selectedPerformAdjustPaymentAction = false;
@@ -1973,7 +1973,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             case EInvoiceStatus.PushInitiated:
                 return this.localeData.e_invoice_statuses.push_initiated;
             case EInvoiceStatus.Cancelled:
-                return this.localeData.e_invoice_statuses.cancelled;
+                // E-invoice got cancelled but invoice didn't cancel
+                return item.balanceStatus !== 'cancel' ? this.localeData.e_invoice_statuses.giddh_invoice_not_cancelled : this.localeData.e_invoice_statuses.cancelled;
             case EInvoiceStatus.MarkedAsCancelled:
                 return this.localeData.e_invoice_statuses.mark_as_cancelled;
             case EInvoiceStatus.Failed:
@@ -2021,15 +2022,25 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public submitEInvoiceCancellation(): void {
-        this._invoiceService.cancelEInvoice({...this.eInvoiceCancel, invoiceUniqueName: this.selectedInvoicesList[0].uniqueName}).pipe(take(1)).subscribe(response => {
+        const requestObject: any = {
+            cnlRsn: this.eInvoiceCancel.cancellationReason,
+            cnlRem: this.eInvoiceCancel.cancellationRemarks
+        };
+        if (this.selectedVoucher === VoucherTypeEnum.creditNote || this.selectedVoucher === VoucherTypeEnum.debitNote) {
+            requestObject.voucherType = this.selectedVoucher;
+            requestObject.voucherUniqueName = this.selectedInvoicesList[0].uniqueName;
+        } else if (this.selectedVoucher === VoucherTypeEnum.sales) {
+            requestObject.invoiceUniqueName = this.selectedInvoicesList[0].uniqueName;
+        }
+        this._invoiceService.cancelEInvoice(requestObject).pipe(take(1)).subscribe(response => {
+            this.getVoucher(this.isUniversalDateApplicable);
             if (response.status === 'success') {
                 this._toaster.successToast(response.body);
-                this.getVoucher(this.isUniversalDateApplicable);
+                this.modalRef?.hide();
+                this.resetCancelEInvoice();
             } else if (response.status === 'error') {
                 this._toaster.errorToast(response.message, response.code);
             }
         });
-        this.modalRef?.hide();
-        this.resetCancelEInvoice();
     }
 }
