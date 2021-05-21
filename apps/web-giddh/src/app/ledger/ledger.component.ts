@@ -2279,7 +2279,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public hideUploadBankStatementModal(): void {
         if(this.importStatementModal) {
             this.importStatementModal.hide();
-            this.getTransactionData();
+            this.getBankTransactions();
         }
     }
 
@@ -2306,7 +2306,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public bankTransactionPageChanged(event: any): void {
         if(this.bankTransactionsResponse.page !== event.page) {
             this.bankTransactionsResponse.page = event.page;
-            this.getBankTransactions();
         }
     }
 
