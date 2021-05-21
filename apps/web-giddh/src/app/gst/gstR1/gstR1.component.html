@@ -1,6 +1,8 @@
-<div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
-
-</div>
+<ng-container appTranslate [file]="'gst'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'" (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'">
+        <gstr-sidebar (navigateEvent)="handleNavigation($event)" [activeCompanyGstNumber]="activeCompanyGstNumber" [selectedGstModule]="selectedGstr" [commonLocaleData]="commonLocaleData" [localeData]="localeData" class="gst-sidebar"></gstr-sidebar>
+    </div>
 <hamburger-menu [pageHeading]="'GST'"></hamburger-menu>
 <div class="col-md-3 notification">
     <div class="mr-b2">
@@ -1716,3 +1718,4 @@
         </div>
     </div>
 </div>
+</ng-container>

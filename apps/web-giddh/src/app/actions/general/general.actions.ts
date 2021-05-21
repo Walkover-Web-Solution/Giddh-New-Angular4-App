@@ -325,4 +325,17 @@ export class GeneralActions {
             payload: items
         }
     }
+    /**
+     * Returns the action to open the GST side menu
+     *
+     * @params {boolean} shouldOpen True, if GST menu needs to be opened
+     * @return {*} {CustomActions} Action to open GST side menu
+     * @memberof GeneralActions
+     */
+     public openGstSideMenu(shouldOpen: boolean): CustomActions {
+        return {
+            type: GENERAL_ACTIONS.OPEN_GST_SIDE_MENU,
+            payload: shouldOpen
+        }
+    }
 }
