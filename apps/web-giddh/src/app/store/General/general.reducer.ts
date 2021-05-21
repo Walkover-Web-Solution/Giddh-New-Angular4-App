@@ -351,6 +351,12 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                 menuItems: action.payload
             }
         }
+        case GENERAL_ACTIONS.OPEN_GST_SIDE_MENU: {
+            return {
+                ...state,
+                openGstSideMenu: action.payload
+            };
+        }
         default:
             return state;
     }
