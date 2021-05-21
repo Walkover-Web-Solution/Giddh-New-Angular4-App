@@ -1,9 +1,9 @@
-<div class="aside-pane">
+<div class="aside-pane" appTranslate (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
 
 
     <div class="form-header">
         <div>
-            <h3><span>{{selectedAccountUniqueName ? 'Update' : 'Create'}} Account</span></h3>
+            <h3><span>{{actionAccount}}</span></h3>
         </div>
     </div>
 
