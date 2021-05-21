@@ -238,11 +238,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     *
     * @memberof HeaderComponent
     */
-     public openGstSideMenu(): void {
+    public openGstSideMenu(): void {
         this.isGstSideMenuOpened = !this.isGstSideMenuOpened;
         this.store.dispatch(this._generalActions.openGstSideMenu(this.isGstSideMenuOpened));
     }
-
     // tslint:disable-next-line:no-empty
     constructor(
         private commonService: CommonService,
