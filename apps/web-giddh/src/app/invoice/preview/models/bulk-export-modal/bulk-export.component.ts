@@ -3,8 +3,10 @@ import { BulkVoucherExportService } from 'apps/web-giddh/src/app/services/bulkvo
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil ,take} from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { Store ,select} from '@ngrx/store';
+import { AppState } from 'apps/web-giddh/src/app/store';
 
 @Component({
     selector: 'invoice-bulk-export',
@@ -36,17 +38,18 @@ export class BulkExportModal implements OnInit, OnDestroy {
     /** Selected download Voucher Copy Options */
     public copyTypes: any = [];
     /** Email Receivers */
-    public recipients: any = "";
+    public recipients: any = this.getEmail();
     /** Will handle if api call is in process */
     public isLoading: boolean = false;
 
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
+    private loggedInUserEmail:any;
     constructor(
         private bulkVoucherExportService: BulkVoucherExportService,
         private generalService: GeneralService,
-        private toaster: ToasterService) {
+        private toaster: ToasterService,
+        public store: Store<AppState>) {
 
     }
 
@@ -62,7 +65,14 @@ export class BulkExportModal implements OnInit, OnDestroy {
             { label: this.localeData?.invoice_copy_options?.transport, value: 'TRANSPORT' }
         ];
     }
-
+    public getEmail():any{
+        this.store.pipe(select(s => s.session.user), take(1)).subscribe(result => {
+            if (result && result.user) {
+                this.loggedInUserEmail = result.user.email;
+            }
+        });;
+        return this.loggedInUserEmail;
+    }
     /**
      * Export the vouchers
      *
