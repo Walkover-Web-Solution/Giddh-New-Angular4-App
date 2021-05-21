@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { BulkVoucherExportService } from 'apps/web-giddh/src/app/services/bulkvoucherexport.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -12,7 +12,7 @@ import { ReplaySubject } from 'rxjs';
     styleUrls: [`./bulk-export.component.scss`]
 })
 
-export class BulkExportModal implements OnDestroy {
+export class BulkExportModal implements OnInit, OnDestroy {
     /** Type of voucher */
     @Input() public type: string = "sales";
     /** Selected Vouchers */
@@ -23,15 +23,15 @@ export class BulkExportModal implements OnDestroy {
     @Input() public dateRange: any;
     /** Total Items For Export */
     @Input() public totalItems: any = 0;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /** Emit the close modal event */
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
     /** Download Voucher Copy Options */
-    public downloadCopyOptions: any[] = [
-        { label: 'Original', value: 'ORIGINAL' },
-        { label: 'Customer', value: 'CUSTOMER' },
-        { label: 'Transport', value: 'TRANSPORT' }
-    ];
+    public downloadCopyOptions: any[] = [];
 
     /** Selected download Voucher Copy Options */
     public copyTypes: any = [];
@@ -48,6 +48,19 @@ export class BulkExportModal implements OnDestroy {
         private generalService: GeneralService,
         private toaster: ToasterService) {
 
+    }
+
+    /**
+     * Initializes the component
+     *
+     * @memberof BulkExportModal
+     */
+    public ngOnInit(): void {
+        this.downloadCopyOptions = [
+            { label: this.localeData?.invoice_copy_options?.original, value: 'ORIGINAL' },
+            { label: this.localeData?.invoice_copy_options?.customer, value: 'CUSTOMER' },
+            { label: this.localeData?.invoice_copy_options?.transport, value: 'TRANSPORT' }
+        ];
     }
 
     /**
@@ -90,7 +103,10 @@ export class BulkExportModal implements OnDestroy {
                 recipients.forEach(email => {
                     if(validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         this.toaster.clearAllToaster();
-                        this.toaster.errorToast(email + " is invalid email!");
+                        
+                        let invalidEmail = this.localeData?.invalid_email;
+                        invalidEmail = invalidEmail?.replace("[EMAIL]", email);
+                        this.toaster.errorToast(invalidEmail);
                         validRecipients = false;
                     }
 

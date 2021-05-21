@@ -1,6 +1,5 @@
-import { Observable, of, of as observableOf, ReplaySubject, combineLatest } from 'rxjs';
+import { Observable, of, ReplaySubject, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil, auditTime } from 'rxjs/operators';
-import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
 import {
     ChangeDetectorRef,
@@ -18,7 +17,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
-import { orderBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import {
     GenBulkInvoiceFinalObj,
@@ -31,12 +29,8 @@ import {
     InvoicePreviewDetailsVm
 } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { AccountService } from '../../services/account.service';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
-import { ActivatedRoute } from '@angular/router';
-import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -45,20 +39,11 @@ import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 
-const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
     { label: '12', value: '12' },
     { label: '25', value: '25' },
     { label: '50', value: '50' },
     { label: '100', value: '100' }
-];
-
-const COMPARISON_FILTER = [
-    { label: 'Greater Than', value: 'greaterThan' },
-    { label: 'Less Than', value: 'lessThan' },
-    { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-    { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-    { label: 'Equals', value: 'equals' }
 ];
 
 @Component({
@@ -80,7 +65,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public togglePrevGenBtn: boolean = false;
     public counts: IOption[] = COUNTS;
     public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
-    public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
+    public filtersForEntryTotal: IOption[] = [];
     public ledgersData: GetAllLedgersOfInvoicesResponse;
     public selectedLedgerItems: string[] = [];
     public selectedCountOfAccounts: string[] = [];
@@ -106,56 +91,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public isGetAllRequestInProcess$: Observable<boolean> = of(true);
 
     public selectedDateRange: any;
-    public datePickerOptions: any = {
-        hideOnEsc: true,
-        // parentEl: '#dp-parent',
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'This Month to Date': [
-                moment().startOf('month'),
-                moment()
-            ],
-            'This Quarter to Date': [
-                moment().quarter(moment().quarter()).startOf('quarter'),
-                moment()
-            ],
-            'This Financial Year to Date': [
-                moment().startOf('year').subtract(9, 'year'),
-                moment()
-            ],
-            'This Year to Date': [
-                moment().startOf('year'),
-                moment()
-            ],
-            'Last Month': [
-                moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')
-            ],
-            'Last Quater': [
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-            ],
-            'Last Financial Year': [
-                moment().startOf('year').subtract(10, 'year'),
-                moment().endOf('year').subtract(10, 'year')
-            ],
-            'Last Year': [
-                moment().startOf('year').subtract(1, 'year'),
-                moment().endOf('year').subtract(1, 'year')
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment(),
-        // parentEl: '#dateRangeParent'
-    };
     public universalDate$: Observable<any>;
 
     private universalDate: Date[];
@@ -192,6 +127,18 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public branches: Array<any>;
     /** This will hold if updated is account in master to refresh the list of vouchers */
     public isAccountUpdated: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** Comparision filters */
+    public comparisionFilters: any = [
+        { label: '', value: 'greaterThan' },
+        { label: '', value: 'lessThan' },
+        { label: '', value: 'greaterThanOrEquals' },
+        { label: '', value: 'lessThanOrEquals' },
+        { label: '', value: 'equals' }
+    ];
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
@@ -311,7 +258,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.ledgerSearchRequest.dateRange = this.universalDate;
-                this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(), endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate(), chosenLabel: this.universalDate[2] };
                 this.fromDate = moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate().toString();
                 this.toDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate().toString();
 
@@ -326,27 +272,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
 
-        // set financial years based on company financial year
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
-                let activeFinancialYear = activeCompany.activeFinancialYear;
-                if (activeFinancialYear) {
-                    this.datePickerOptions.ranges['This Financial Year to Date'] = [
-                        moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'),
-                        moment()
-                    ];
-                    this.datePickerOptions.ranges['Last Financial Year'] = [
-                        moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year'),
-                        moment(activeFinancialYear.financialYearEnds, GIDDH_DATE_FORMAT).subtract(1, 'year')
-                    ];
-                }
-            }
-        });
-
         this.universalDate$.subscribe(a => {
             if (a) {
-                this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-
                 // assign date
                 // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);
 
@@ -542,17 +469,17 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         if (o.description) {
             model.description = o.description;
         }
-        if (o.entryTotalBy === COMPARISON_FILTER[0].value) {
+        if (o.entryTotalBy === this.comparisionFilters[0].value) {
             model.totalIsMore = true;
-        } else if (o.entryTotalBy === COMPARISON_FILTER[1].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[1].value) {
             model.totalIsLess = true;
-        } else if (o.entryTotalBy === COMPARISON_FILTER[2].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[2].value) {
             model.totalIsMore = true;
             model.totalIsEqual = true;
-        } else if (o.entryTotalBy === COMPARISON_FILTER[3].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[3].value) {
             model.totalIsLess = true;
             model.totalIsEqual = true;
-        } else if (o.entryTotalBy === COMPARISON_FILTER[4].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[4].value) {
             model.totalIsEqual = true;
         }
         return model;
@@ -730,7 +657,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public resetDateSearch() {
         this.ledgerSearchRequest.dateRange = this.universalDate;
         if (this.universalDate) {
-            this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(), endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate() };
+            this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
+            this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+
             this.isUniversalDateApplicable = true;
         }
         this.getLedgersOfInvoice();
@@ -774,7 +703,11 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
                 grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
             }
-            item['totalTooltipText'] = `In ${this.baseCurrency}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
+
+            let currencyConversion = this.localeData?.currency_conversion;
+            currencyConversion = currencyConversion?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
+
+            item['totalTooltipText'] = currencyConversion;
 
         } catch (error) {
         }
@@ -832,6 +765,26 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             this.ledgerSearchRequest.to = this.toDate;
             this.isUniversalDateApplicable = false;
             this.getLedgersOfInvoice();
+        }
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof InvoiceGenerateComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.filtersForEntryTotal = [
+                { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
+                { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },
+                { label: this.commonLocaleData?.app_comparision_filters?.greater_than_equals, value: 'greaterThanOrEquals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.less_than_equals, value: 'lessThanOrEquals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' }
+            ];
+
+            this.comparisionFilters = this.filtersForEntryTotal;
         }
     }
 }

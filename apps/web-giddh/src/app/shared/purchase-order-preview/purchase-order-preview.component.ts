@@ -32,6 +32,10 @@ export class PurchaseOrderPreviewModalComponent implements OnInit, OnDestroy {
     public sanitizedPdfFileUrl: any = '';
     /** PDF src */
     public pdfFileURL: any = '';
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
