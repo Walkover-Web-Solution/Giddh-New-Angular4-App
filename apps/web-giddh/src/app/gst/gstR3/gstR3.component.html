@@ -1,12 +1,7 @@
 <ng-container appTranslate [file]="'gst'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
-<<<<<<< HEAD
     <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
         <tax-sidebar (navigateEvent)="handleNavigation($event)" [activeCompanyGstNumber]="activeCompanyGstNumber" [selectedGstModule]="selectedGstr" (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'" class="gst-sidebar" [isMonthSelected]="isMonthSelected" [isGstModule]="true"></tax-sidebar>
-=======
-    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'" (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'">
-        <gstr-sidebar (navigateEvent)="handleNavigation($event)" [activeCompanyGstNumber]="activeCompanyGstNumber" [selectedGstModule]="selectedGstr" [commonLocaleData]="commonLocaleData" [localeData]="localeData" class="gst-sidebar"></gstr-sidebar>
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
     </div>
     <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="column content-column gst-filing-container navs-list">
@@ -23,8 +18,7 @@
                         </svg>
                         </a> {{localeData?.gstr3b_summary}}
                     </span>
-<<<<<<< HEAD
-=======
+
                 <!-- <div class="gstr3b-sel"> <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon icon-sm text-middle">
             <path d="M99.5 424.5h57c6.6 0 12-5.4 12-12v-57c0-6.6-5.4-12-12-12h-57c-6.6 0-12 5.4-12 12v57c0 6.6 5.4 12 12 12zM99.5 296.5h57c6.6 0 12-5.4 12-12v-57c0-6.6-5.4-12-12-12h-57c-6.6 0-12 5.4-12 12v57c0 6.6 5.4 12 12 12zM156.5.5h-17c-6.6 0-12 5.4-12 12v63c0 6.6 5.4 12 12 12h17c6.6 0 12-5.4 12-12v-63c0-6.6-5.4-12-12-12zM371.5.5h-16c-6.6 0-12 5.4-12 12v63c0 6.6 5.4 12 12 12h16c6.6 0 12-5.4 12-12v-63c0-6.6-5.4-12-12-12zM355.5 424.5h57c6.6 0 12-5.4 12-12v-57c0-6.6-5.4-12-12-12h-57c-6.6 0-12 5.4-12 12v57c0 6.6 5.4 12 12 12zM227.5 424.5h57c6.6 0 12-5.4 12-12v-57c0-6.6-5.4-12-12-12h-57c-6.6 0-12 5.4-12 12v57c0 6.6 5.4 12 12 12zM355.5 296.5h57c6.6 0 12-5.4 12-12v-57c0-6.6-5.4-12-12-12h-57c-6.6 0-12 5.4-12 12v57c0 6.6 5.4 12 12 12z"></path>
             <path d="M424.5 52.5v64c0 6.6-5.4 12-12 12h-104c-6.6 0-12-5.4-12-12v-64c0-6.6-5.4-12-12-12h-57c-6.6 0-12 5.4-12 12v64c0 6.6-5.4 12-12 12h-104c-6.6 0-12-5.4-12-12v-64c0-6.6-5.4-12-12-12h-64c-6.6 0-12 5.4-12 12v448c0 6.6 5.4 12 12 12h488.1c6.6 0 12-5.4 12-12v-448c0-6.6-5.4-12-12-12h-63c-6.7 0-12.1 5.4-12.1 12zm47 407c0 6.6-5.4 12-12 12h-407c-6.6 0-12-5.4-12-12v-279c0-6.6 5.4-12 12-12H459.4c6.6 0 12 5.4 12 12v279h.1z"></path>
@@ -35,7 +29,6 @@
 
                     <span class="caret"></span></div> -->
 
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
 
                 <div class="btn-group dropdown d-inline-block" dropdown [autoClose]="false" #monthWise="bs-dropdown"
                     (clickOutside)="monthWise.hide()" [attachOutsideOnClick]="true">
@@ -101,15 +94,6 @@
 
 
                 </div>
-<<<<<<< HEAD
-=======
-            </div>
-                <!-- <div class="btn pull-right"><span class="text-muted cursor-pointer" data-ember-action="" data-ember-action-2009="2009"><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon icon-sm text-middle">
-            <path d="M495 127h-76c-2.2 0-4-1.8-4-4V15c0-8.8-7.2-16-16-16H111c-8.8 0-16 7.2-16 16v108c0 2.2-1.8 4-4 4H15c-8.8 0-16 7.2-16 16v224c0 8.8 7.2 16 16 16h76c2.2 0 4 1.8 4 4l.4 108.6c0 8.8 7.2 15.9 16 15.9h288.1c8.8 0 16-7.2 16-16v-108c0-2.2 1.8-4 4-4l75.6-.4c8.8 0 15.9-7.2 15.9-16V143c0-8.8-7.2-16-16-16zM127 35c0-2.2 1.8-4 4-4h248c2.2 0 4 1.8 4 4v88c0 2.2-1.8 4-4 4H131c-2.2 0-4-1.8-4-4V35zm256.5 440.5c0 2.2-1.8 4-4 4h-248c-2.2 0-4-1.8-4-4v-152c0-2.2 1.8-4 4-4h248c2.2 0 4 1.8 4 4v152zm96-128.5c0 2.2-1.8 4-4 4H419c-2.2 0-4-1.8-4-4v-44c0-8.8-7.2-16-16-16H111c-8.8 0-16 7.2-16 16v44c0 2.2-1.8 4-4 4H35c-2.2 0-4-1.8-4-4V163c0-2.2 1.8-4 4-4l440.5.5c2.2 0 4 1.8 4 4V347z"></path>
-            <path d="M431.6 191.5h-32.3c-8.7 0-15.8 7.1-15.8 15.8v.3c0 8.7 7.1 15.8 15.8 15.8h32.3c8.7 0 15.8-7.1 15.8-15.8v-.3c0-8.7-7.1-15.8-15.8-15.8zM303.6 351.5H175.3c-8.7 0-15.8 7.1-15.8 15.8v.3c0 8.7 7.1 15.8 15.8 15.8h128.3c8.7 0 15.8-7.1 15.8-15.8v-.3c0-8.7-7.1-15.8-15.8-15.8zM239.6 415.5h-64.3c-8.7 0-15.8 7.1-15.8 15.8v.3c0 8.7 7.1 15.8 15.8 15.8h64.3c8.7 0 15.8-7.1 15.8-15.8v-.3c0-8.7-7.1-15.8-15.8-15.8z"></path>
-            </svg> Print </span></div> -->
-                <!---->
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
             </div>
             <div class="scroll-y noscroll-x fill body scrollbox">
                 <div class="gstr3b-header hidden-print">
@@ -189,235 +173,6 @@
                     </div>
                     <div class="summary-content">
                         <h4>{{localeData?.gstr3b?.outward_inward_supplies}}</h4>
-<<<<<<< HEAD
-                        <table border="1 " class="table gstr-3b-report">
-                            <thead>
-                                <tr class="text-muted bg-thead">
-                                    <td> {{localeData?.gstr3b?.supply_nature}} </td>
-                                    <td class="text-right "> {{commonLocaleData?.app_taxable_value}} </td>
-                                    <td class="text-right "> {{localeData?.gstr3b?.integrated_tax}} </td>
-                                    <td class="text-right "> {{localeData?.gstr3b?.central_tax}} </td>
-                                    <td class="text-right "> {{localeData?.gstr3b?.state_ut_tax}} </td>
-                                    <td class="text-right "> {{localeData?.gstr3b?.cess_tax}} </td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="bg-thead">
-                                    <td class="text-center pd-r120">{{commonLocaleData?.app_numbers?.one}}</td>
-                                    <td class="text-center ">{{commonLocaleData?.app_numbers?.two}}</td>
-                                    <td class="text-center ">{{commonLocaleData?.app_numbers?.three}}</td>
-                                    <td class="text-center ">{{commonLocaleData?.app_numbers?.four}}</td>
-                                    <td class="text-center ">{{commonLocaleData?.app_numbers?.five}}</td>
-                                    <td class="text-center ">{{commonLocaleData?.app_numbers?.six}}</td>
-                                </tr>
-                                <tr class="cursor-pointer" data-ember-action="" data-ember-action-1221="1221">
-                                    <td>{{localeData?.gstr3b?.outward_taxable_supplies_non_zero}}</td>
-                                    <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field [amount]="gstr3BData?.sup_details?.osup_det?.txval"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-
-                                    </td>
-                                    <td class="text-right "><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field [amount]="gstr3BData?.sup_details?.osup_det?.iamt"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td class="text-right "><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field [amount]="gstr3BData?.sup_details?.osup_det?.camt"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td class="text-right "><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field [amount]="gstr3BData?.sup_details?.osup_det?.samt"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td class="text-right "><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field [amount]="gstr3BData?.sup_details?.osup_det?.csamt"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr class="cursor-pointer" data-ember-action="" data-ember-action-1222="1222">
-                                    <td>{{localeData?.gstr3b?.outward_taxable_supplies_zero}}</td>
-                                    <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field [amount]="gstr3BData?.sup_details?.osup_zero?.txval"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td class="text-right "><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field [amount]="gstr3BData?.sup_details?.osup_zero?.iamt"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td class="text-right gstr3b-null"></td>
-                                    <td class="text-right gstr3b-null"></td>
-                                    <td class="text-right "><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field [amount]="gstr3BData?.sup_details?.osup_zero?.csamt"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr class="cursor-pointer" data-ember-action="" data-ember-action-1223="1223">
-                                    <td>{{localeData?.gstr3b?.other_outward_supplies}}</td>
-                                    <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field
-                                                [amount]="(gstr3BData?.sup_details?.osup_nil_exmp?.txval ? gstr3BData?.sup_details?.osup_nil_exmp?.txval : 0)"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td class="text-center gstr3b-null"></td>
-                                    <td class="text-center gstr3b-null"></td>
-                                    <td class="text-center gstr3b-null"></td>
-                                    <td class="text-center gstr3b-null"></td>
-                                </tr>
-                                <tr class="cursor-pointer" data-ember-action="" data-ember-action-1224="1224">
-                                    <td>{{localeData?.gstr3b?.inward_supplies}}</td>
-                                    <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field
-                                                [amount]="(gstr3BData?.sup_details?.isup_rev?.txval ? gstr3BData?.sup_details?.isup_rev?.txval: 0 )"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-
-                                    </td>
-                                    <td class="text-right "><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field
-                                                [amount]="(gstr3BData?.sup_details?.isup_rev?.iamt? gstr3BData?.sup_details?.isup_rev?.iamt: 0 )"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td class="text-right "><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field
-                                                [amount]="(gstr3BData?.sup_details?.isup_rev?.camt? gstr3BData?.sup_details?.isup_rev?.camt: 0 )"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td class="text-right "><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field
-                                                [amount]="(gstr3BData?.sup_details?.isup_rev?.samt? gstr3BData?.sup_details?.isup_rev?.samt: 0 )"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td class="text-right "><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field
-                                                [amount]="(gstr3BData?.sup_details?.isup_rev?.csamt? gstr3BData?.sup_details?.isup_rev?.csamt: 0 )"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr class="cursor-pointer" data-ember-action="" data-ember-action-1225="1225">
-                                    <td>{{localeData?.gstr3b?.non_gst_outward_supplies}}</td>
-                                    <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field
-                                                [amount]="(gstr3BData?.sup_details?.osup_nongst?.txval ? gstr3BData?.sup_details?.osup_nongst?.txval : 0 )"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td class="text-center gstr3b-null"></td>
-                                    <td class="text-center gstr3b-null"></td>
-                                    <td class="text-center gstr3b-null"></td>
-                                    <td class="text-center gstr3b-null"></td>
-                                </tr>
-                                <tr>
-                                    <td class="bold">{{localeData?.gstr3b?.total_value}}</td>
-                                    <td class="text-right"><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field [amount]="(gstr3BData?.sumTaxVal ? gstr3BData?.sumTaxVal : 0)"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td class="text-right"><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field [amount]="(gstr3BData?.sumIamtVal ? gstr3BData?.sumIamtVal : 0 )"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td class="text-right"><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field [amount]="(gstr3BData?.sumCamtval ? gstr3BData?.sumCamtval : 0 )"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td class="text-right"><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field [amount]="(gstr3BData?.sumSamtval ? gstr3BData?.sumSamtval : 0 )"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                    <td class="text-right"><i class="icon-rupees font-11"></i>
-                                        <span class="d-inline-flex">
-                                            <amount-field
-                                                [amount]="(gstr3BData?.sumCsamtval ? gstr3BData?.sumCsamtval : 0 )"
-                                                [currencySymbol]="false" [currencyCode]="false">
-                                            </amount-field>
-                                        </span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="summary-content ">
-                        <h4>{{localeData?.gstr3b?.supplies_shown}}</h4>
-                        <table border="1 " class="table gstr-3b-report ">
-                            <thead>
-                                <tr class="text-muted bg-thead-dark">
-                                    <td width="250px"></td>
-                                    <td class="text-center "> {{localeData?.filing?.place_supply}} </td>
-                                    <td class="text-right "> {{commonLocaleData?.app_taxable_value}} </td>
-                                    <td class="text-right "> {{localeData?.gstr3b?.integrated_tax}} </td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="bg-thead">
-                                    <td class="text-center pd-r15">{{commonLocaleData?.app_numbers?.one}}</td>
-                                    <td class="text-center ">{{commonLocaleData?.app_numbers?.two}}</td>
-                                    <td class="text-center ">{{commonLocaleData?.app_numbers?.three}}</td>
-                                    <td class="text-center ">{{commonLocaleData?.app_numbers?.four}}</td>
-                                </tr>
-                                <tr class="text-muted gstr3-subheading ">
-                                    <td colspan="4 "> {{localeData?.gstr3b?.supplies_unregistered_persons}} </td>
-                                </tr>
-                                <ng-container *ngIf="gstr3BData?.inter_sup?.unreg_details">
-                                    <tr class="pointer-none" *ngFor="let item of gstr3BData?.inter_sup?.unreg_details">
-                                        <td class="text-right">&nbsp;</td>
-                                        <td class="text-center">
-                                            <!-- {{item?.pos | giddhCurrency}} -->
-=======
                         <div class="table-responsive">
                             <table border="1 " class="table gstr-3b-report">
                                 <thead>
@@ -443,7 +198,6 @@
                                         <td>{{localeData?.gstr3b?.outward_taxable_supplies_non_zero}}</td>
                                         <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
                                             <!-- {{gstr3BData?.sup_details?.osup_det?.txval |giddhCurrency}} -->
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                                             <span class="d-inline-flex">
                                                 <amount-field [amount]="gstr3BData?.sup_details?.osup_det?.txval"
                                                     [currencySymbol]="false" [currencyCode]="false">
@@ -451,120 +205,72 @@
                                             </span>
 
                                         </td>
-<<<<<<< HEAD
-                                        <td class="text-right">
-=======
                                         <td class="text-right "><i class="icon-rupees font-11"></i>
                                             <!-- {{gstr3BData?.sup_details?.osup_det?.iamt |giddhCurrency}} -->
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                                             <span class="d-inline-flex">
                                                 <amount-field [amount]="gstr3BData?.sup_details?.osup_det?.iamt"
                                                     [currencySymbol]="false" [currencyCode]="false">
                                                 </amount-field>
                                             </span>
                                         </td>
-<<<<<<< HEAD
-                                        <td class="text-right">
-=======
                                         <td class="text-right "><i class="icon-rupees font-11"></i>
                                             <!-- {{gstr3BData?.sup_details?.osup_det?.camt |giddhCurrency}} -->
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                                             <span class="d-inline-flex">
                                                 <amount-field [amount]="gstr3BData?.sup_details?.osup_det?.camt"
                                                     [currencySymbol]="false" [currencyCode]="false">
                                                 </amount-field>
                                             </span>
                                         </td>
-<<<<<<< HEAD
-                                    </tr>
-                                </ng-container>
-                                <tr class="text-muted gstr3-subheading ">
-                                    <td colspan="4 "> {{localeData?.gstr3b?.supplies_composition_taxable_persons}} </td>
-                                </tr>
-                                <ng-container *ngIf="gstr3BData?.inter_sup?.comp_details">
-                                    <tr class="pointer-none" *ngFor="let item of gstr3BData?.inter_sup?.comp_details">
-                                        <td class="text-right">&nbsp;</td>
-                                        <td class="text-center">
-=======
                                         <td class="text-right "><i class="icon-rupees font-11"></i>
                                             <!-- {{gstr3BData?.sup_details?.osup_det?.samt |giddhCurrency}}  -->
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                                             <span class="d-inline-flex">
                                                 <amount-field [amount]="gstr3BData?.sup_details?.osup_det?.samt"
                                                     [currencySymbol]="false" [currencyCode]="false">
                                                 </amount-field>
                                             </span>
                                         </td>
-<<<<<<< HEAD
-                                        <td class="text-right">
-=======
                                         <td class="text-right "><i class="icon-rupees font-11"></i>
                                             <!-- {{gstr3BData?.sup_details?.osup_det?.csamt |giddhCurrency}} -->
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                                             <span class="d-inline-flex">
                                                 <amount-field [amount]="gstr3BData?.sup_details?.osup_det?.csamt"
                                                     [currencySymbol]="false" [currencyCode]="false">
                                                 </amount-field>
                                             </span>
                                         </td>
-<<<<<<< HEAD
-                                        <td class="text-right">
-=======
                                     </tr>
                                     <tr class="cursor-pointer" data-ember-action="" data-ember-action-1222="1222">
                                         <td>{{localeData?.gstr3b?.outward_taxable_supplies_zero}}</td>
                                         <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
                                             <!-- {{gstr3BData?.sup_details?.osup_zero?.txval |giddhCurrency}} -->
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                                             <span class="d-inline-flex">
                                                 <amount-field [amount]="gstr3BData?.sup_details?.osup_zero?.txval"
                                                     [currencySymbol]="false" [currencyCode]="false">
                                                 </amount-field>
                                             </span>
                                         </td>
-<<<<<<< HEAD
-                                    </tr>
-                                </ng-container>
-                                <tr class="text-muted gstr3-subheading ">
-                                    <td colspan="4 "> {{localeData?.gstr3b?.supplies_uin_holders}} </td>
-                                </tr>
-                                <ng-container *ngIf="gstr3BData?.inter_sup?.uin_details">
-                                    <tr class="pointer-none" *ngFor="let item of gstr3BData?.inter_sup?.uin_details">
-                                        <td class="text-right">&nbsp;</td>
-                                        <td class="text-center">
-=======
                                         <td class="text-right "><i class="icon-rupees font-11"></i>
                                             <!-- {{gstr3BData?.sup_details?.osup_zero?.iamt |giddhCurrency}} -->
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                                             <span class="d-inline-flex">
                                                 <amount-field [amount]="gstr3BData?.sup_details?.osup_zero?.iamt"
                                                     [currencySymbol]="false" [currencyCode]="false">
                                                 </amount-field>
                                             </span>
                                         </td>
-<<<<<<< HEAD
-                                        <td class="text-right">
-=======
                                         <td class="text-right gstr3b-null"></td>
                                         <td class="text-right gstr3b-null"></td>
                                         <td class="text-right "><i class="icon-rupees font-11"></i>
                                             <!-- {{gstr3BData?.sup_details?.osup_zero?.csamt |giddhCurrency}} -->
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                                             <span class="d-inline-flex">
                                                 <amount-field [amount]="gstr3BData?.sup_details?.osup_zero?.csamt"
                                                     [currencySymbol]="false" [currencyCode]="false">
                                                 </amount-field>
                                             </span>
                                         </td>
-<<<<<<< HEAD
-                                        <td class="text-right">
-=======
                                     </tr>
                                     <tr class="cursor-pointer" data-ember-action="" data-ember-action-1223="1223">
                                         <td>{{localeData?.gstr3b?.other_outward_supplies}}</td>
                                         <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
                                             <!-- {{(gstr3BData?.sup_details?.osup_nil_exmp?.txval ? gstr3BData?.sup_details?.osup_nil_exmp?.txval : 0) | giddhCurrency}} -->
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                                             <span class="d-inline-flex">
                                                 <amount-field
                                                     [amount]="(gstr3BData?.sup_details?.osup_nil_exmp?.txval ? gstr3BData?.sup_details?.osup_nil_exmp?.txval : 0)"
@@ -577,233 +283,6 @@
                                         <td class="text-center gstr3b-null"></td>
                                         <td class="text-center gstr3b-null"></td>
                                     </tr>
-<<<<<<< HEAD
-                                </ng-container>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="summary-content ">
-                        <h4>{{localeData?.gstr3b?.eligible_itc}}</h4>
-                        <table border="1 " class="table gstr-3b-report ">
-                            <thead>
-                                <tr class="text-muted bg-thead">
-                                    <td> {{commonLocaleData?.app_details}} </td>
-                                    <td class="text-right"> {{localeData?.gstr3b?.integrated_tax}} </td>
-                                    <td class="text-right"> {{localeData?.gstr3b?.central_tax}} </td>
-                                    <td class="text-right"> {{localeData?.gstr3b?.state_ut_tax}} </td>
-                                    <td class="text-right"> {{localeData?.gstr3b?.cess_tax}} </td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="bg-thead">
-                                    <td class="text-center pd-r160">{{commonLocaleData?.app_numbers?.one}}</td>
-                                    <td class="text-center">{{commonLocaleData?.app_numbers?.two}}</td>
-                                    <td class="text-center">{{commonLocaleData?.app_numbers?.three}}</td>
-                                    <td class="text-center">{{commonLocaleData?.app_numbers?.four}}</td>
-                                    <td class="text-center">{{commonLocaleData?.app_numbers?.five}}</td>
-                                </tr>
-                                <tr *ngIf="gstr3BData?.itc_elg?.itc_avl">
-                                    <td colspan="5 ">{{localeData?.gstr3b?.itc_available}}</td>
-                                </tr>
-                                <ng-container *ngIf="gstr3BData?.itc_elg?.itc_avl">
-                                    <ng-container *ngFor="let item of gstr3BData?.itc_elg?.itc_avl">
-                                        <ng-container *ngIf="item?.ty==='IMPG'">
-                                            <tr class="cursor-pointer" data-ember-action="" data-ember-action-1226="1226">
-                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{localeData?.gstr3b?.goods_import}} </td>
-                                                <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.iamt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right gstr3b-null"></td>
-                                                <td class="text-right gstr3b-null"></td>
-                                                <td class="text-right"><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.csamt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </ng-container>
-                                        <ng-container *ngIf="item?.ty==='IMPS'">
-                                            <tr class="cursor-pointer" data-ember-action="" data-ember-action-1227="1227">
-                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{localeData?.gstr3b?.services_import}}</td>
-                                                <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.iamt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-center gstr3b-null"></td>
-                                                <td class="text-center gstr3b-null"></td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.csamt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </ng-container>
-                                        <ng-container *ngIf="item?.ty==='ISRC'">
-                                            <tr class="cursor-pointer" data-ember-action="" data-ember-action-1228="1228">
-                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{localeData?.gstr3b?.inward_supplies3}}
-                                                </td>
-                                                <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.iamt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.camt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.samt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.csamt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </ng-container>
-                                        <ng-container *ngIf="item?.ty==='ISD'">
-                                            <tr>
-                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{localeData?.gstr3b?.inward_supplies_isd}} </td>
-                                                <td colspan="4 " class="text-muted text-center "> {{localeData?.gstr3b?.not_supported}} </td>
-                                            </tr>
-                                        </ng-container>
-                                        <ng-container *ngIf="item?.ty==='OTH'">
-                                            <tr class="cursor-pointer" data-ember-action="" data-ember-action-1229="1229">
-                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{localeData?.gstr3b?.all_other_itc}}</td>
-                                                <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.iamt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.camt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.samt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.csamt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </ng-container>
-                                    </ng-container>
-                                </ng-container>
-                                <!-- (B) ITC Reversed-->
-                                <tr *ngIf="gstr3BData?.itc_elg?.itc_rev">
-                                    <td colspan="5 ">{{localeData?.gstr3b?.itc_reversed}}</td>
-                                </tr>
-                                <ng-container *ngIf="gstr3BData?.itc_elg?.itc_rev">
-                                    <ng-container *ngFor="let item of gstr3BData?.itc_elg?.itc_rev">
-                                        <ng-container *ngIf="item?.ty==='RUL'">
-                                            <tr class="cursor-pointer" data-ember-action="" data-ember-action-1230="1230">
-                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{localeData?.gstr3b?.cgst_rules}}</td>
-                                                <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.iamt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.camt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.samt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.csamt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </ng-container>
-                                        <ng-container *ngIf="item?.ty==='OTH'">
-                                            <tr class="cursor-pointer" data-ember-action="" data-ember-action-1231="1231">
-                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{localeData?.gstr3b?.others}}</td>
-                                                <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.iamt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.camt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.samt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.csamt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </ng-container>
-                                    </ng-container>
-                                </ng-container>
-
-                                <ng-container>
-                                    <tr class="cursor-pointer" data-ember-action="" data-ember-action-1231="1231">
-                                        <td>{{localeData?.gstr3b?.net_itc_available}}</td>
-                                        <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
-=======
                                     <tr class="cursor-pointer" data-ember-action="" data-ember-action-1224="1224">
                                         <td>{{localeData?.gstr3b?.inward_supplies}}</td>
                                         <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
@@ -818,7 +297,6 @@
                                         </td>
                                         <td class="text-right "><i class="icon-rupees font-11"></i>
                                             <!-- {{(gstr3BData?.sup_details?.isup_rev?.iamt? gstr3BData?.sup_details?.isup_rev?.iamt: 0 )| giddhCurrency}} -->
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                                             <span class="d-inline-flex">
                                                 <amount-field
                                                     [amount]="(gstr3BData?.sup_details?.isup_rev?.iamt? gstr3BData?.sup_details?.isup_rev?.iamt: 0 )"
@@ -827,10 +305,7 @@
                                             </span>
                                         </td>
                                         <td class="text-right "><i class="icon-rupees font-11"></i>
-<<<<<<< HEAD
-=======
                                             <!-- {{(gstr3BData?.sup_details?.isup_rev?.camt? gstr3BData?.sup_details?.isup_rev?.camt: 0 )| giddhCurrency}} -->
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                                             <span class="d-inline-flex">
                                                 <amount-field
                                                     [amount]="(gstr3BData?.sup_details?.isup_rev?.camt? gstr3BData?.sup_details?.isup_rev?.camt: 0 )"
@@ -839,10 +314,7 @@
                                             </span>
                                         </td>
                                         <td class="text-right "><i class="icon-rupees font-11"></i>
-<<<<<<< HEAD
-=======
                                             <!-- {{(gstr3BData?.sup_details?.isup_rev?.samt? gstr3BData?.sup_details?.isup_rev?.samt: 0 )| giddhCurrency}} -->
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                                             <span class="d-inline-flex">
                                                 <amount-field
                                                     [amount]="(gstr3BData?.sup_details?.isup_rev?.samt? gstr3BData?.sup_details?.isup_rev?.samt: 0 )"
@@ -850,12 +322,8 @@
                                                 </amount-field>
                                             </span>
                                         </td>
-<<<<<<< HEAD
-                                        <td class="text-right"><i class="icon-rupees font-11"></i>
-=======
                                         <td class="text-right "><i class="icon-rupees font-11"></i>
                                             <!-- {{(gstr3BData?.sup_details?.isup_rev?.csamt? gstr3BData?.sup_details?.isup_rev?.csamt: 0 )| giddhCurrency}}   -->
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                                             <span class="d-inline-flex">
                                                 <amount-field
                                                     [amount]="(gstr3BData?.sup_details?.isup_rev?.csamt? gstr3BData?.sup_details?.isup_rev?.csamt: 0 )"
@@ -864,80 +332,6 @@
                                             </span>
                                         </td>
                                     </tr>
-<<<<<<< HEAD
-                                </ng-container>
-
-                                <tr *ngIf="gstr3BData?.itc_elg?.itc_inelg">
-                                    <td colspan="5 ">{{localeData?.gstr3b?.ineligible_itc}}</td>
-                                </tr>
-                                <ng-container *ngIf="gstr3BData?.itc_elg?.itc_inelg">
-                                    <ng-container *ngFor="let item of gstr3BData?.itc_elg?.itc_inelg">
-                                        <ng-container *ngIf="item?.ty==='RUL'">
-                                            <tr class="cursor-pointer" data-ember-action="" data-ember-action-1230="1230">
-                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{localeData?.gstr3b?.section_17}}</td>
-                                                <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.iamt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.camt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.samt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.csamt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </ng-container>
-                                        <ng-container *ngIf="item?.ty==='OTH'">
-                                            <tr class="cursor-pointer" data-ember-action="" data-ember-action-1231="1231">
-                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{localeData?.gstr3b?.others}}</td>
-                                                <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.iamt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.camt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.samt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right "><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.csamt" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                            </tr>
-=======
                                     <tr class="cursor-pointer" data-ember-action="" data-ember-action-1225="1225">
                                         <td>{{localeData?.gstr3b?.non_gst_outward_supplies}}</td>
                                         <td class="text-right btn-link"><i class="icon-rupees font-11"></i>
@@ -1483,7 +877,6 @@
                                                     </td>
                                                 </tr>
                                             </ng-container>
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                                         </ng-container>
                                     </ng-container>
                                 </tbody>
@@ -1492,65 +885,6 @@
                     </div>
                     <div class="summary-content">
                         <h4>{{localeData?.gstr3b?.exempt_values}} </h4>
-<<<<<<< HEAD
-                        <table border="1 " class="table gstr-3b-report ">
-                            <thead>
-                                <tr class="text-muted bg-thead">
-                                    <td class="text-left "> {{localeData?.gstr3b?.supply_nature}} </td>
-                                    <td class="text-right "> {{localeData?.gstr3b?.inter_state_supplies}} </td>
-                                    <td class="text-right "> {{localeData?.gstr3b?.intra_state_supplies}} </td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="bg-thead">
-                                    <td class="text-center pd-r190">{{commonLocaleData?.app_numbers?.one}}</td>
-                                    <td class="text-center ">{{commonLocaleData?.app_numbers?.two}}</td>
-                                    <td class="text-center ">{{commonLocaleData?.app_numbers?.three}}</td>
-                                </tr>
-                                <ng-container *ngIf="gstr3BData?.inward_sup?.isup_details">
-                                    <ng-container *ngFor="let item of gstr3BData?.inward_sup?.isup_details">
-                                        <ng-container *ngIf="item?.ty==='GST'">
-                                            <tr>
-                                                <td class="text-left ">&nbsp;{{localeData?.gstr3b?.composition_schema}}</td>
-                                                <td class="text-right btn-link" data-ember-action=""
-                                                    data-ember-action-1232="1232"><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.inter" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right btn-link" data-ember-action=""
-                                                    data-ember-action-1233="1233"><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.intra" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </ng-container>
-                                        <ng-container *ngIf="item?.ty==='NONGST'">
-                                            <tr>
-                                                <td class="text-left ">&nbsp;{{localeData?.gstr3b?.nongst_supply}}</td>
-                                                <td class="text-right btn-link" data-ember-action=""
-                                                    data-ember-action-1234="1234"><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.inter" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right btn-link" data-ember-action=""
-                                                    data-ember-action-1235="1235"><i class="icon-rupees font-11"></i>
-                                                    <span class="d-inline-flex">
-                                                        <amount-field [amount]="item?.intra" [currencySymbol]="false"
-                                                            [currencyCode]="false">
-                                                        </amount-field>
-                                                    </span>
-                                                </td>
-                                            </tr>
-=======
                         <div class="table-responsive">
                             <table border="1 " class="table gstr-3b-report ">
                                 <thead>
@@ -1614,7 +948,6 @@
                                                     </td>
                                                 </tr>
                                             </ng-container>
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                                         </ng-container>
                                     </ng-container>
                                 </tbody>
@@ -1622,36 +955,6 @@
                         </div>
                     </div>
                 </div>
-<<<<<<< HEAD
-=======
-                <!-- <div id="ember824" class="ember-view" *ngIf="selectedGstr3BTab==='filing'">
-                    <div class="gstr3-filing-procedure page-header hidden-print hide-borders">
-                        <div>
-                            <h4 style="margin-left: -10px;"><b>GSTR-3B Filing</b></h4>
-                            <div class="gstr3-points">
-                                <div class="pb-1"><span class="point">1</span> Once you've paid your taxes and cleared all your liabilities, head to <a href="https://www.gst.gov.in" target="_blank" rel="noopener noreferrer">Services <span class="fa fa-caret-right"></span> Returns <span class="fa fa-caret-right"></span> GSTR3B.</a>                                </div>
-                                <div class="pb-1"><span class="point">2</span> File GSTR3B using your e-sign or digital signature. </div>
-                                <div class="pb-1"><span class="point">3</span> Once you have filed, click on <b class="font-large">Mark as Filed</b> button below. </div>
-                            </div> <br> <button class="btn btn-default" data-ember-action="" data-ember-action-825="825">Mark as Filed</button>
-                            <div class="btn-group d-inline-block" dropdown>
-                                <button type="button" class="btn btn-default mr-0">File Via</button>
-                                <button id="button-split" type="button" dropdownToggle class="btn btn-default dropdown-toggle dropdown-toggle-split d-inline-block" aria-controls="dropdown-split">
-                        <span class="caret"></span>
-                    <span class="sr-only">Split button!</span>
-                    </button>
-                                <ul id="dropdown-split" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-split">
-                                    <li role="menuitem"><a class="dropdown-item" (click)="returnGstr3B = { via: 'VAYANA' }">Giddh Provider 1</a></li>
-                                    <li role="menuitem"><a class="dropdown-item" (click)="returnGstr3B = { via: 'TAXPRO' }">Giddh Provider 2</a>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div> -->
->>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                 <div class="transactions-overview" *ngIf="selectedGstr3BTab==='filing'">
                     <div class="gstr-transactions-summary mr-t4 mr-b4 text-center">
 
