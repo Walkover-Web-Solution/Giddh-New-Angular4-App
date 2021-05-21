@@ -2011,7 +2011,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public submitEInvoiceCancellation(): void {
         const requestObject: any = {
             cnlRsn: this.eInvoiceCancel.cancellationReason,
-            cnlRem: this.eInvoiceCancel.cancellationRemarks
+            cnlRem: this.eInvoiceCancel.cancellationRemarks?.trim()
         };
         if (this.selectedVoucher === VoucherTypeEnum.creditNote || this.selectedVoucher === VoucherTypeEnum.debitNote) {
             requestObject.voucherType = this.selectedVoucher;
@@ -2029,5 +2029,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 this._toaster.errorToast(response.message, response.code);
             }
         });
+    }
+
+    /**
+     * Trims the cancellation remarks
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public handleBlurOnCancellationRemarks(): void {
+        this.eInvoiceCancel.cancellationRemarks = this.eInvoiceCancel?.cancellationRemarks.trim();
     }
 }
