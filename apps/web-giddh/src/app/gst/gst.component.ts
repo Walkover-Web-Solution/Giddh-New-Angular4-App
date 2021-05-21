@@ -24,8 +24,7 @@ import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { AppState } from '../store';
 import { IOption } from '../theme/ng-select/ng-select';
 import { GstReport } from './constants/gst.constant';
-
-
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 @Component({
     templateUrl: './gst.component.html',
     styleUrls: ['./gst.component.scss'],
@@ -115,7 +114,8 @@ export class GstComponent implements OnInit, OnDestroy {
         private _toasty: ToasterService,
         private _cdRf: ChangeDetectorRef,
         private gstReconcileService: GstReconcileService,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private breakpointObserver: BreakpointObserver
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstr1TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr1OverViewData.count), takeUntil(this.destroyed$));
@@ -136,6 +136,15 @@ export class GstComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.breakpointObserver
+        .observe(['(max-width: 768px)'])
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((state: BreakpointState) => {
+            this.isMobileScreen = state.matches;
+            if (!this.isMobileScreen) {
+                this.asideGstSidebarMenuState = 'in';
+            }
+        });
         this.toggleGstPane();
         this.loadTaxDetails();
         let companyUniqueName = null;
@@ -185,6 +194,15 @@ export class GstComponent implements OnInit, OnDestroy {
             if (response && this.activeCompanyGstNumber !== response) {
                 this.activeCompanyGstNumber = response;
                 this.loadTaxReport();
+            }
+        });
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+                }
             }
         });
     }

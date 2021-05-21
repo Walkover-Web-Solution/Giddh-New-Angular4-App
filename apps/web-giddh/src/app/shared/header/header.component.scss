@@ -1259,10 +1259,10 @@ ul.sub-list {
             margin: 0 15px;
         }
     }
-    .setting-menu-icon {
-        padding: 4px 8px 4px 2px;
+    .setting-menu-icon, .gst-menu-icon {
+        padding:  4px 8px 4px 8px;
         display: none;
-        width: 27px;
+        width: 32px;
         text-align: center;
     }
     .mobile-back-btn {

@@ -46,6 +46,7 @@
                         </span>
                         <span class="mobile-back-btn" (click)="redirectToMobileHome()"><i
                                 class="icon-back-arrow"></i></span>
+                        <span *ngIf="currentPageUrl?.indexOf('pages/gstfiling') > -1" (click)="openGstSideMenu()" class="gst-menu-icon"> <i class="icon-bar"></i> </span>
                     </li>
                 </ul>
             </div>
