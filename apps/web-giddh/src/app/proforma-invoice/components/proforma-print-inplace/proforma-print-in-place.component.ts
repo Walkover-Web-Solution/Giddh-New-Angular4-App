@@ -19,6 +19,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
     @Input() public selectedItem: { voucherNumber: string, uniqueName: string, blob?: Blob };
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Instance of PDF container iframe */
     @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
@@ -70,7 +74,7 @@ export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
                     this.isVoucherDownloadError = false;
                 } else {
                     this.isVoucherDownloadError = true;
-                    this._toasty.errorToast('Something went wrong please try again!');
+                    this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 }
                 this.isVoucherDownloading = false;
             }, (err) => {

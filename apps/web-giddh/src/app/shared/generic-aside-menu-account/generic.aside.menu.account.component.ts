@@ -64,7 +64,11 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     @Input() public isCustomerCreation: boolean;
 
 	// private below
-	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** This will hold account action text */
+    public actionAccount: string = "";
 
 	constructor(
 		private store: Store<AppState>,
@@ -132,5 +136,17 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 	public ngOnDestroy() {
 		this.destroyed$.next(true);
 		this.destroyed$.complete();
-	}
+    }
+    
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof GenericAsideMenuAccountComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.actionAccount = this.selectedAccountUniqueName ? this.commonLocaleData?.app_update_account : this.commonLocaleData?.app_create_account;
+        }
+    }
 }
