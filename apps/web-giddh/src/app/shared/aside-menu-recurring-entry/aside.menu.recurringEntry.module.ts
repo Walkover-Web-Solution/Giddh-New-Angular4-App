@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
-import { InvoiceRoutingModule } from './invoice.routing.module';
-import { SalesModule } from '../sales/sales.module';
 import { AsideMenuRecurringEntryComponent } from './aside.menu.recurringEntry.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CommonModule } from '@angular/common';
 import { SelectModule } from '../../theme/ng-select/ng-select';
 import { LaddaModule } from 'angular2-ladda';
+import { SharedModule } from '../shared.module';
 
 // import { TooltipModule } from 'ngx-bootstrap/tooltip';
 // import { PaginationModule  } from 'ngx-bootstrap/pagination';
@@ -19,7 +18,7 @@ import { LaddaModule } from 'angular2-ladda';
 
 @NgModule({
     declarations: [AsideMenuRecurringEntryComponent],
-    imports: [ReactiveFormsModule, BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule],
+    imports: [ReactiveFormsModule, BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule, SharedModule],
     exports: [AsideMenuRecurringEntryComponent]
 })
 export class AsideMenuRecurringEntryModule {
