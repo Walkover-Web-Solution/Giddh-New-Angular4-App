@@ -2279,6 +2279,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public hideUploadBankStatementModal(): void {
         if(this.importStatementModal) {
             this.importStatementModal.hide();
+            this.getBankTransactions();
         }
     }
 
