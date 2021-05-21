@@ -82,9 +82,14 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
     }
     public ngOnInit(): void {
+<<<<<<< HEAD
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
         .observe(['(max-width: 767px)'])
+=======
+        this.breakpointObserver
+        .observe(['(max-width: 768px)'])
+>>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
         .pipe(takeUntil(this.destroyed$))
         .subscribe((state: BreakpointState) => {
             this.isMobileScreen = state.matches;
@@ -92,6 +97,10 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 this.asideGstSidebarMenuState = 'in';
             }
         });
+<<<<<<< HEAD
+=======
+        this.toggleGstPane();
+>>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
         this.activatedRoute.queryParams.pipe(take(1)).subscribe(params => {
             this.currentPeriod = {
                 from: params['from'],
@@ -199,6 +208,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 }
             }
         });
+<<<<<<< HEAD
         this.getCurrentPeriod$ = this.store.pipe(select(appStore => appStore.gstR.currentPeriod), takeUntil(this.destroyed$));
         this.getCurrentPeriod$.subscribe(currentPeriod => {
             if (currentPeriod && currentPeriod.from) {
@@ -210,6 +220,14 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                     this.isMonthSelected = true;
                 } else {
                     this.isMonthSelected = false;
+=======
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+>>>>>>> 937ed2241f... shalinee | TEST | GST Responsive
                 }
             }
         });
