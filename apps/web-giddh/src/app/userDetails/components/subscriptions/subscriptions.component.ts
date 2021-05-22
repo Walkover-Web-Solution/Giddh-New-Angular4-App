@@ -494,6 +494,12 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
         return text;
     }
 
+    /**
+     * This will return subscribed plan text
+     *
+     * @returns {string}
+     * @memberof SubscriptionsComponent
+     */
     public getPlanSubscribedText(): string {
         let text = this.localeData?.subscription?.plan_subscribed_on;
         text = text?.replace("[PLAN_NAME]", this.seletedUserPlans?.planDetails?.name)?.replace("[PLAN_STARTED_AT]", this.seletedUserPlans?.startedAt);

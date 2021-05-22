@@ -98,6 +98,9 @@
         "beneficiary_nick_name": "Beneficiary Nick Name",
         "beneficiary_account_no": "Beneficiary Account No.",
         "ifsc": "IFSC",
-        "add_beneficiary": "Add Beneficiary"
+        "add_beneficiary": "Add Beneficiary",
+        "corporate_id_label": "Corporate ID",
+        "corporate_id_placeholder": "Enter Corporate ID",
+        "client_amount_note": "The client can not select the same amount in the custom more than once."
     }
 }
