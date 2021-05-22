@@ -1030,6 +1030,17 @@ ul.sub-list {
     }
 }
 @media (max-width: 767px) {
+    .hamburger-menu {
+        span.module-title-name{
+            color: $white;
+            white-space: normal;
+            word-break: break-word;
+            max-width: 230px;
+            font-size: 14px;
+            font-family: 'opensans-semibold';
+        }
+    }
+
     .fixed-padding {
         padding-top: 90px;
         #primary-new-header.primary-main-header {
@@ -1292,6 +1303,11 @@ ul.sub-list {
     ul.sub-list {
         min-height: 50px;
         max-height: 190px;
+    }
+    .hamburger-menu {
+        span.module-title-name{
+            max-width: 170px;
+        }
     }
 }
 @media (max-width: 679px) {
