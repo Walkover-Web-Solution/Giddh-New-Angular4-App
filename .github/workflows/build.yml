@@ -41,13 +41,13 @@ jobs:
           node-version: "14"
 
 #       Runs npm i
-      - uses: bahmutov/npm-install@v1
-        env:
-          CYPRESS_INSTALL_BINARY: 0
-        with:
-          useLockFile: false
-          useRollingCache: true
-          working-directory: .
+#       - uses: bahmutov/npm-install@v1
+#         env:
+#           CYPRESS_INSTALL_BINARY: 0
+#         with:
+#           useLockFile: false
+#           useRollingCache: true
+#           working-directory: .
 #       - name: Creating Test bundle
 #         if: ${{ env.BUILD_ENV == 'Test' }}
 #         run: npm run build-test
