@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-<ng-container appTranslate [file]="'settings/integration'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
-=======
 <ng-container appTranslate [file]="'settings/integration'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
->>>>>>> 57768fbf26... Completed setting/integration
     <div class="clearfix">
         <tabset [ngClass]="{'tab-integration': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab id="tab-integration">
             <tab (selectTab)="loadSmsData($event); tabChanged('sms');">
@@ -385,9 +381,6 @@
                     <ng-template tabHeading>
                         <span class="icon-payment"></span> {{localeData?.payment?.tab_heading}}
                     </ng-template>
-                    <div class="mb-2">
-                        <img src="assets/images/icici-logo.jpg" height="50" />
-                    </div>
                     <div *ngFor="let regAcc of registeredAccount; let parentIndex=index">
 
                         <div class="box clearfix">
@@ -523,10 +516,6 @@
                             </div> -->
                                     <div class="form-group">
                                         <div class="empty-label">
-                                            <ng-container *ngIf="regAcc.registrationStatus">
-                                                {{regAcc.registrationStatus}}<br>
-                                            </ng-container>
-                                            <br>
                                             <button type="submit" [disabled]="!addBankForm.valid || isUpdateInvalid" class="btn btn-success mr-r1">{{commonLocaleData?.app_update}}</button>
                                         </div>
                                     </div>
@@ -640,9 +629,6 @@
                                         <ng-container *ngIf="isBankUpdateInEdit === parentIndex">
                                             <label>&nbsp;</label>
                                             <br>
-                                        </ng-container>
-                                        <ng-container *ngIf="regAcc.registrationStatus">
-                                            {{regAcc.registrationStatus}}<br>
                                         </ng-container>
                                         <ng-container *ngIf="isBankUpdateInEdit === parentIndex">
                                             <button type="button" class="btn btn-success mr-r1" [disabled]="!paymentFormUpdate.form.valid" (click)="updateIciciDetails(regAcc, parentIndex)">{{commonLocaleData?.app_update}}</button>
