@@ -35,7 +35,7 @@
     "deliver_from": "से उद्धार",
     "billing_address": "बिल भेजने का पता",
     "shipping_address": "शिपिंग पता",
-    "change": "खुले पैसे",
+    "change": "बदलो",
     "shipping_billing_same": "शिपिंग पते को बिलिंग पते के रूप में समान",
     "deliver_to": "उसे देदो",
     "order_no": "गण #",
@@ -68,5 +68,8 @@
     "po_updated": "खरीद आदेश सफलतापूर्वक अपडेट किया गया",
     "custom_field1": "कस्टम फील्ड् 1",
     "custom_field2": "कस्टम फील्ड् 2",
-    "currency_conversion": "[BASE_CURRENCY] में: [AMOUNT] <br /> (रूपांतरण दर: [CONVERSION_RATE]) "
+    "currency_conversion": "[BASE_CURRENCY] में: [AMOUNT] <br /> (रूपांतरण दर: [CONVERSION_RATE]) ",
+    "delayed_by_days": "[DAYS] दिनों की देरी",
+    "delivery_in_day": "[DAYS] दिनों में डिलीवरी",
+    "delivery_in_days": "[DAYS] दिनों में डिलीवरी"
 }
