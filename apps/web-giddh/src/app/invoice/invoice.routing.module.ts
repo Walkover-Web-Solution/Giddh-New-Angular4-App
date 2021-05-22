@@ -75,6 +75,7 @@ import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-
 import { DownloadVoucherComponent } from './preview/models/download-voucher/download-voucher.component';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
 import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/has-focus.module';
+import { TrimPipeModule } from '../shared/helpers/pipes/trim/trim.module';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     // Change this to your Google API key
@@ -174,7 +175,8 @@ const INVOICE_ROUTES: Routes = [
         VoucherTypeToNamePipeModule,
         SendEmailInvoiceModule,
         AdvanceReceiptAdjustmentModule,
-        HasFocusDirectiveModule
+        HasFocusDirectiveModule,
+        TrimPipeModule
     ],
     exports: [
         RouterModule,

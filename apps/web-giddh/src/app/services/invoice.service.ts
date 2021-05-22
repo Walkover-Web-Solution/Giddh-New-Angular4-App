@@ -779,6 +779,8 @@ export class InvoiceService {
         if (requestObject.voucherType) {
             contextPath = contextPath.replace(':voucherUniqueName', encodeURIComponent(requestObject.voucherUniqueName));
             delete requestObject.voucherUniqueName;
+        } else {
+            contextPath = contextPath.replace(':invoiceUniqueName', encodeURIComponent(requestObject.invoiceUniqueName));
         }
         Object.keys(requestObject).forEach((key, index) => {
             const delimiter = index === 0 ? '?' : '&'

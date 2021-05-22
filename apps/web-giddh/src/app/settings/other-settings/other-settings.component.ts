@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { currencyNumberSystems, digitAfterDecimal } from 'apps/web-giddh/src/app/shared/helpers/currencyNumberSystem';
 import { ReplaySubject, Subject } from 'rxjs';
@@ -16,7 +16,7 @@ import { OrganizationProfile } from '../constants/settings.constant';
     templateUrl: './other-settings.component.html',
     styleUrls: ['./other-settings.component.scss']
 })
-export class OtherSettingsComponent implements OnInit, OnDestroy {
+export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
     /** Stores the company number system */
     public numberSystemSource: IOption[] = [];
@@ -85,7 +85,7 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
         this.saveProfileSubject.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.saveProfile.emit(this.updatedData);
         });
-        const currencySystem = currencyNumberSystems.find(numberSystem => numberSystem.value === this.profileData.balanceDisplayFormat)
+        const currencySystem = currencyNumberSystems.find(numberSystem => numberSystem.value === this.profileData.balanceDisplayFormat);
         if (currencySystem) {
             this.numberSystem = currencySystem.name;
         }
@@ -107,6 +107,19 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
                 }
             }
         });
+    }
+
+    /**
+     * Lifecycle hook to get the value of input variables on change
+     *
+     * @param {SimpleChanges} changes
+     * @memberof OtherSettingsComponent
+     */
+    public ngOnChanges(changes: SimpleChanges): void {
+        const currencySystem = currencyNumberSystems.find(numberSystem => numberSystem.value === changes?.profileData?.currentValue?.balanceDisplayFormat);
+        if (currencySystem) {
+            this.numberSystem = currencySystem.name;
+        }
     }
 
     /**

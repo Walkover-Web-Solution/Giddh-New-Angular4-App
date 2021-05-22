@@ -318,9 +318,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatNativeDateModule,
         { provide: MAT_DATE_FORMATS, useValue: GIDDH_DATEPICKER_FORMAT },
         { provide: DateAdapter, useClass: PickDateAdapter },
-        { provide: LOCALE_ID, useValue: 'hi'},
-        { provide: LOCALE_ID, useValue: 'en'},
-        { provide: LOCALE_ID, useValue: 'mr'}
+        { provide: LOCALE_ID, useValue: 'en'}
     ]
 })
 export class SharedModule {
