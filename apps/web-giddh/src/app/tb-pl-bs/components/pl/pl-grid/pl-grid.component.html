@@ -38,8 +38,7 @@
                                             {{commonLocaleData?.app_as_of}}
                                             <span
                                                 *ngIf="plData && plData.dates && plData.dates.to && plData.dates.to!=='Invalid date'">
-                                                {{ moment(plData?.dates?.to, giddhDateFormat).toString() | date:'dd MMMM
-                                                yyyy' }}</span>
+                                                {{ moment(plData?.dates?.to, giddhDateFormat).toString() | date:'dd MMMM yyyy' }}</span>
                                         </th>
                                     </tr>
                                 </thead>
