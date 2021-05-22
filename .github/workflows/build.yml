@@ -25,19 +25,19 @@ jobs:
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
-      - if: ${{steps.extract_branch.outputs.branch === 'giddh-2.0'}}
+      - if: ${{steps.extract_branch.outputs.branch == 'giddh-2.0'}}
         run: |
           export BUILD_ENV=TEST
           echo "::set-env name=BUILD_ENV::$BUILD_ENV"
-      - if: ${{steps.extract_branch.outputs.branch === 'beta-stage'}}
+      - if: ${{steps.extract_branch.outputs.branch == 'beta-stage'}}
         run: |
           export BUILD_ENV=STAGE
           echo "::set-env name=BUILD_ENV::$BUILD_ENV"
-      - if: ${{steps.extract_branch.outputs.branch === 'beta-branch'}}
+      - if: ${{steps.extract_branch.outputs.branch == 'beta-branch'}}
         run: |
           export BUILD_ENV=BETA
           echo "::set-env name=BUILD_ENV::$BUILD_ENV"
-      - if: ${{steps.extract_branch.outputs.branch === 'production'}}
+      - if: ${{steps.extract_branch.outputs.branch == 'production'}}
         run: |
           export BUILD_ENV=PROD
           echo "::set-env name=BUILD_ENV::$BUILD_ENV"
