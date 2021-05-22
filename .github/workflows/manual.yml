@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Manual workflow
+name: Desktop build workflow
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -8,12 +8,16 @@ on:
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
-      name:
+      card:
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'Card details'
+        description: "Card details"
         # Default value if no value is explicitly provided
-        default: 'Electron build'
+        default: "Electron build"
         # Input has to be provided for the workflow to run
+        required: true
+      version:
+        description: "App version"
+        default: "8.0.8"
         required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -23,7 +27,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [windows-latest, macos-latest]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -32,7 +36,7 @@ jobs:
       - name: Install Node.js & NPM
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: "14"
       - uses: bahmutov/npm-install@v1
         env:
           CYPRESS_INSTALL_BINARY: 0
@@ -45,12 +49,69 @@ jobs:
           useLockFile: false
           useRollingCache: true
           working-directory: ./apps/electron-giddh/src/
-      - name: Preparing build bundle
-        run: npm run build.electron.giddh
-      - if: ${{ matrix.os == 'macos-latest' }}
-        uses: samuelmeuli/action-electron-builder@v1
+      - name: Update app version in root package
+        uses: MerthinTechnologies/edit-json-action@v1
         with:
-          github_token: ${{ secrets.github_token }}
-          release: true
-      - if: ${{ matrix.os == 'windows-latest' }}
-        run: npm run package:windows
+          filename: "./package.json"
+          key: "version"
+          value: ${{ github.event.inputs.version }}
+      - name: Update app version in sub-package
+        uses: MerthinTechnologies/edit-json-action@v1
+        with:
+          filename: "./apps/electron-giddh/src/package.json"
+          key: "version"
+          value: ${{ github.event.inputs.version }}
+      - name: Creating Electron bundle for Windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: npm run package:windows:test
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Install wget
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: brew install wget
+      - name: Fetching Provisioning profile
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: cd ./electron-sign && wget -q --no-check-certificate '${{ secrets.PROVISIONING_PROFILE_URL }}' -O embedded.provisionprofile
+      - name: Creating Electron bundle for Mac
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: npm run package:mac:test
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          CSC_LINK: ${{ secrets.CSC_LINK_MAC }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_LINK_MAC_PASS }}
+          NOTARIZE_EMAIL: ${{ secrets.NOTARIZE_EMAIL }}
+          NOTARIZE_PASS: ${{ secrets.NOTARIZE_PASS }}
+  notify-success:
+    if: ${{ success() }}
+    needs: release
+    name: Slack Notification Success
+    runs-on: ubuntu-latest
+    steps:
+      - name: Slack Notification Success
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
+          SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
+          SLACK_MESSAGE: "Build download URL: Windows - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+${{ github.event.inputs.version }}.exe | Mac - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.dmg"
+          SLACK_TITLE: Giddh Desktop build
+          SLACK_USERNAME: Giddh Desktop build
+          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+  notify-failure:
+    if: ${{ failure() }}
+    needs: release
+    name: Slack Notification Failure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Slack Notification Failure
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
+          SLACK_COLOR: "#e53935" # or a specific color like 'red' or '#ff00ff'
+          SLACK_MESSAGE: "Build failed"
+          SLACK_TITLE: Giddh Desktop Windows build
+          SLACK_USERNAME: Giddh Desktop Windows build
+          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
