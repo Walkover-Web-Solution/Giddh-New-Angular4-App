@@ -9,35 +9,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from 'apps/web-giddh/src/app/app.constant';
 import { Observable } from 'rxjs';
 
-const COMPARISON_FILTER = [
-    { label: 'Greater Than', value: 'greaterThan' },
-    { label: 'Less Than', value: 'lessThan' },
-    { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-    { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-    { label: 'Equals', value: 'equals' }
-];
-
-const PREVIEW_OPTIONS = [
-    { label: 'Paid', value: 'paid' },
-    { label: 'Partially Paid', value: 'partial-paid' },
-    { label: 'Unpaid', value: 'unpaid' },
-    { label: 'Hold', value: 'hold' },
-    { label: 'Cancel', value: 'cancel' },
-];
-
-const DATE_OPTIONS = [
-    { label: 'On', value: 'on' },
-    { label: 'After', value: 'after' },
-    { label: 'Before', value: 'before' },
-];
-
-const AMOUNT_COMPARISON_FILTER = [
-    { label: 'Equals', value: 'equals' },
-    { label: 'Greater Than', value: 'greaterThan' },
-    { label: 'Less Than', value: 'lessThan' },
-    { label: 'Exclude', value: 'exclude' },
-];
-
 @Component({
     selector: 'invoice-advance-search-component',
     templateUrl: './invoiceAdvanceSearch.component.html',
@@ -47,55 +18,19 @@ const AMOUNT_COMPARISON_FILTER = [
 export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
     @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma' | 'purchase';
     @Input() public request: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Output() public applyFilterEvent: EventEmitter<InvoiceFilterClassForInvoicePreview> = new EventEmitter<InvoiceFilterClassForInvoicePreview>();
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChildren(ShSelectComponent) public allShSelect: ShSelectComponent[];
 
-    public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
-    public filtersForAmount: IOption[] = AMOUNT_COMPARISON_FILTER;
-    public statusDropdownOptions: IOption[] = PREVIEW_OPTIONS;
-    public dateOptions: IOption[] = DATE_OPTIONS;
+    public filtersForEntryTotal: IOption[] = [];
+    public filtersForAmount: IOption[] = [];
+    public statusDropdownOptions: IOption[] = [];
+    public dateOptions: IOption[] = [];
 
-    public dateRangePickerOptions: any = {
-        hideOnEsc: true,
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'This Month to Date': [
-                moment().startOf('month'),
-                moment()
-            ],
-            'This Quarter to Date': [
-                moment().quarter(moment().quarter()).startOf('quarter'),
-                moment()
-            ],
-            'This Year to Date': [
-                moment().startOf('year'),
-                moment()
-            ],
-            'Last Month': [
-                moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')
-            ],
-            'Last Quater': [
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-            ],
-            'Last Year': [
-                moment().startOf('year').subtract(1, 'year'),
-                moment().endOf('year').subtract(1, 'year')
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
@@ -120,12 +55,40 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
     public universalDate$: Observable<any>;
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+
     constructor(private generalService: GeneralService, private modalService: BsModalService) {
-        //
+        
     }
 
     public ngOnInit() {
+        this.filtersForEntryTotal = [
+            { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
+            { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },
+            { label: this.commonLocaleData?.app_comparision_filters?.greater_than_equals, value: 'greaterThanOrEquals' },
+            { label: this.commonLocaleData?.app_comparision_filters?.less_than_equals, value: 'lessThanOrEquals' },
+            { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' }
+        ];
 
+        this.filtersForAmount = [
+            { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' },
+            { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
+            { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },
+            { label: this.commonLocaleData?.app_comparision_filters?.exclude, value: 'exclude' },
+        ];
+
+        this.statusDropdownOptions = [
+            { label: this.commonLocaleData?.app_payment_status?.paid, value: 'paid' },
+            { label: this.commonLocaleData?.app_payment_status?.partially_paid, value: 'partial-paid' },
+            { label: this.commonLocaleData?.app_payment_status?.unpaid, value: 'unpaid' },
+            { label: this.commonLocaleData?.app_payment_status?.hold, value: 'hold' },
+            { label: this.commonLocaleData?.app_payment_status?.cancel, value: 'cancel' },
+        ];
+
+        this.dateOptions = [
+            { label: this.commonLocaleData?.app_date_options?.on, value: 'on' },
+            { label: this.commonLocaleData?.app_date_options?.after, value: 'after' },
+            { label: this.commonLocaleData?.app_date_options?.before, value: 'before' },
+        ];
     }
 
     public invoiceTotalRangeChanged(item: IOption) {
