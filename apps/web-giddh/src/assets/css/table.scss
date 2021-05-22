@@ -23,6 +23,10 @@
         border-top: 1px solid $gainsboro !important;
         border-bottom: none !important;
         white-space: nowrap;
+        position: sticky;
+        top: 0;
+        background-color: $white;
+        z-index: 1;
         .d-flex {
             align-items: center;
         }
