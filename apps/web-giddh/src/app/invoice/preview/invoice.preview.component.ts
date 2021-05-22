@@ -406,109 +406,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         combineLatest([
-            this.store.pipe(select(p => p.receipt.vouchers), takeUntil(this.destroyed$), publishReplay(1), refCount()),
-            this.store.pipe(select(s => s.receipt.voucherNoForDetails)),
-            this.store.pipe(select(s => s.receipt.voucherNoForDetailsAction))
-        ])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(res => {
-                if (res[0]) {
-                    this.itemsListForDetails = [];
-                    let existingInvoices = [];
-                    res[0].items = res[0].items?.map((item: ReceiptItem) => {
-                        let dueDate = item.dueDate ? moment(item.dueDate, GIDDH_DATE_FORMAT) : null;
-
-                        if (dueDate) {
-                            if (dueDate.isAfter(moment()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
-                                item.dueDays = null;
-                            } else {
-                                let dueDays = dueDate ? moment().diff(dueDate, 'days') : null;
-                                item.dueDays = dueDays;
-                            }
-                        } else {
-                            item.dueDays = null;
-                        }
-                        if (MULTI_CURRENCY_MODULES.indexOf(this.selectedVoucher) > -1) {
-                            // For CR/DR note and Cash/Sales invoice
-                            item = this.addToolTiptext(item);
-                        }
-
-                        item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item.uniqueName);
-                        if (item.isSelected) {
-                            existingInvoices.push(item.uniqueName);
-                        }
-
-                        this.itemsListForDetails.push(this.parseItemForVm(item));
-                        return item;
-                    });
-
-                    let selectedInvoices = [];
-                    if (this.selectedInvoices && this.selectedInvoices.length > 0) {
-                        this.selectedInvoices.forEach(invoice => {
-                            if (existingInvoices.indexOf(invoice) > -1) {
-                                selectedInvoices.push(invoice);
-                            }
-                        });
-
-                        this.selectedInvoices = selectedInvoices;
-                    }
-
-                    let voucherData = _.cloneDeep(res[0]);
-                    if (voucherData.items.length) {
-                        // this.totalSale = voucherData.items.reduce((c, p) => {
-                        //   return Number(c.grandTotal) + Number(p.grandTotal);
-                        // }, 0);
-                        this.showExportButton = voucherData.items.every(s => s.account.uniqueName === voucherData.items[0].account.uniqueName);
-                    } else {
-                        // this.totalSale = 0;
-                        if (voucherData.page > 1) {
-                            voucherData.totalItems = voucherData.count * (voucherData.page - 1);
-                            this.advanceSearchFilter.page = Math.ceil(voucherData.totalItems / voucherData.count);
-                            this.invoiceSearchRequest.page = Math.ceil(voucherData.totalItems / voucherData.count);
-                            this.getVoucher(false);
-                            this.cdr.detectChanges();
-                        }
-                        this.showExportButton = false;
-                    }
-
-                    if (this.selectedInvoices && this.selectedInvoices.length > 0) {
-                        voucherData.items.forEach((v) => {
-                            v.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, v.uniqueName);
-                        });
-                        res[0] = voucherData;
-                    }
-                    this.selectedItems = (this.updateSelectedItems) ? this.selectedInvoices : [];
-                    this.updateSelectedItems = false;
-                }
-
-                // get voucherDetailsNo so we can open that voucher in details mode
-                if (res[0] && res[1] && res[2]) {
-                    this.selectedInvoiceForDetails = null;
-                    let voucherIndex = (res[0] as ReciptResponse).items.findIndex(f => f.voucherNumber === res[1]);
-                    if (voucherIndex > -1) {
-                        let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
-                        allItems = uniqBy([allItems[voucherIndex], ...allItems], 'voucherNumber');
-                        this.itemsListForDetails = allItems;
-                        this.toggleBodyClass();
-                        setTimeout(() => {
-                            this.selectedInvoiceForDetails = allItems[0];
-                            this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
-                        }, 1000);
-                    }
-                }
-                setTimeout(() => {
-                    this.voucherData = _.cloneDeep(res[0]);
-                    if (!this.cdr['destroyed']) {
-                        this.cdr.detectChanges();
-                    }
-                }, 100);
-
-                if (this.purchaseRecord && this.purchaseRecord.uniqueName) {
-                    this.onSelectInvoice(this.purchaseRecord);
-                }
-            });
-
-        combineLatest([
             this.store.pipe(select(store => store.receipt.vouchers), publishReplay(1), refCount()),
             this.store.pipe(select(store => store.purchaseRecord.updatedRecordDetails))
         ]).pipe(takeUntil(this.destroyed$))
@@ -1987,7 +1884,111 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 { label: this.localeData?.cancel_e_invoice_reasons?.data_entry_mistake, value: '2' },
                 { label: this.localeData?.cancel_e_invoice_reasons?.order_cancelled, value: '3' },
                 { label: this.localeData?.cancel_e_invoice_reasons?.other, value: '4' }
-            ]
+            ];
+
+            combineLatest([
+                this.store.pipe(select(p => p.receipt.vouchers), takeUntil(this.destroyed$), publishReplay(1), refCount()),
+                this.store.pipe(select(s => s.receipt.voucherNoForDetails)),
+                this.store.pipe(select(s => s.receipt.voucherNoForDetailsAction))
+            ])
+                .pipe(takeUntil(this.destroyed$))
+                .subscribe(res => {
+                    if (res[0]) {
+                        this.itemsListForDetails = [];
+                        let existingInvoices = [];
+                        res[0].items = res[0].items?.map((item: ReceiptItem) => {
+                            let dueDate = item.dueDate ? moment(item.dueDate, GIDDH_DATE_FORMAT) : null;
+    
+                            if (dueDate) {
+                                if (dueDate.isAfter(moment()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
+                                    item.dueDays = null;
+                                } else {
+                                    let dueDays = dueDate ? moment().diff(dueDate, 'days') : null;
+                                    item.dueDays = dueDays;
+                                }
+                            } else {
+                                item.dueDays = null;
+                            }
+                            if (MULTI_CURRENCY_MODULES.indexOf(this.selectedVoucher) > -1) {
+                                // For CR/DR note and Cash/Sales invoice
+                                item = this.addToolTiptext(item);
+                            }
+    
+                            item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item.uniqueName);
+                            if (item.isSelected) {
+                                existingInvoices.push(item.uniqueName);
+                            }
+    
+                            this.itemsListForDetails.push(this.parseItemForVm(item));
+                            return item;
+                        });
+    
+                        let selectedInvoices = [];
+                        if (this.selectedInvoices && this.selectedInvoices.length > 0) {
+                            this.selectedInvoices.forEach(invoice => {
+                                if (existingInvoices.indexOf(invoice) > -1) {
+                                    selectedInvoices.push(invoice);
+                                }
+                            });
+    
+                            this.selectedInvoices = selectedInvoices;
+                        }
+    
+                        let voucherData = _.cloneDeep(res[0]);
+                        if (voucherData.items.length) {
+                            // this.totalSale = voucherData.items.reduce((c, p) => {
+                            //   return Number(c.grandTotal) + Number(p.grandTotal);
+                            // }, 0);
+                            this.showExportButton = voucherData.items.every(s => s.account.uniqueName === voucherData.items[0].account.uniqueName);
+                        } else {
+                            // this.totalSale = 0;
+                            if (voucherData.page > 1) {
+                                voucherData.totalItems = voucherData.count * (voucherData.page - 1);
+                                this.advanceSearchFilter.page = Math.ceil(voucherData.totalItems / voucherData.count);
+                                this.invoiceSearchRequest.page = Math.ceil(voucherData.totalItems / voucherData.count);
+                                this.getVoucher(false);
+                                this.cdr.detectChanges();
+                            }
+                            this.showExportButton = false;
+                        }
+    
+                        if (this.selectedInvoices && this.selectedInvoices.length > 0) {
+                            voucherData.items.forEach((v) => {
+                                v.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, v.uniqueName);
+                            });
+                            res[0] = voucherData;
+                        }
+                        this.selectedItems = (this.updateSelectedItems) ? this.selectedInvoices : [];
+                        this.updateSelectedItems = false;
+                    }
+    
+                    // get voucherDetailsNo so we can open that voucher in details mode
+                    if (res[0] && res[1] && res[2]) {
+                        this.selectedInvoiceForDetails = null;
+                        let voucherIndex = (res[0] as ReciptResponse).items.findIndex(f => f.voucherNumber === res[1]);
+                        if (voucherIndex > -1) {
+                            let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
+                            const removedItem = allItems.splice(voucherIndex, 1)[0];
+                            allItems.unshift(removedItem);
+                            this.toggleBodyClass();
+                            setTimeout(() => {
+                                this.selectedInvoiceForDetails = allItems[0];
+                                this.itemsListForDetails = cloneDeep(allItems);
+                                this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
+                            }, 1000);
+                        }
+                    }
+                    setTimeout(() => {
+                        this.voucherData = _.cloneDeep(res[0]);
+                        if (!this.cdr['destroyed']) {
+                            this.cdr.detectChanges();
+                        }
+                    }, 100);
+    
+                    if (this.purchaseRecord && this.purchaseRecord.uniqueName) {
+                        this.onSelectInvoice(this.purchaseRecord);
+                    }
+                });
         }
     }
 

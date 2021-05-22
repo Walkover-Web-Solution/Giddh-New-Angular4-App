@@ -227,9 +227,7 @@
                         </ng-template>
                         <td [attr.data-title]="localeData?.expected_delivery">
                             <span [ngClass]="{'ontime-delivery': item.dueDays > 0, 'late-delivery': item.dueDays < 0}"
-                                *ngIf="item.dueDays && item.dueDays <= 7">{{item.dueDays > 0 ? 'Delivery in ' +
-                                item.dueDays + ((item.dueDays === 1) ? ' day ' : ' days') : 'Delayed by ' +
-                                formatNumber(item.dueDays) + ' days' }}</span>
+                                *ngIf="item.dueDays && item.dueDays <= 7">{{getDeliveryDaysText(item.dueDays)}}</span>
                             <span *ngIf="item.dueDays && item.dueDays > 7">{{item.dueDate}}</span>
                             <span class="ontime-delivery" *ngIf="item.dueDays === 0">Today</span>
                         </td>
