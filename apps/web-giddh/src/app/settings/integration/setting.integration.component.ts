@@ -1609,13 +1609,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public translationComplete(event: any): void {
         if(event) {
             this.typeOTPList = [
-                { label: this.localeData?.otp_types?.bank_otp, value: "BANK" },
-                { label: this.localeData?.otp_types?.giddh_otp, value: "GIDDH" },
+                { label: this.localeData?.payment?.otp_types?.bank_otp, value: "BANK" },
+                { label: this.localeData?.payment?.otp_types?.giddh_otp, value: "GIDDH" },
             ];
 
             this.amountUpToList = [
-                { label: this.localeData?.amount_limit_types?.bank_limit, value: "max" },
-                { label: this.localeData?.amount_limit_types?.custom, value: "custom" },
+                { label: this.localeData?.payment?.amount_limit_types?.bank_limit, value: "max" },
+                { label: this.localeData?.payment?.amount_limit_types?.custom, value: "custom" },
             ];
         }
     }
