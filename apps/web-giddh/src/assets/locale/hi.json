@@ -493,9 +493,8 @@
     "app_end_date": "अंतिम तिथि",
     "app_send": "संदेश",
     "app_validate": "मान्य",
-    "app_send_mail": "Send Mail",
-    "app_enter_email": "Enter email addresss",
-    "app_history": "History",
+    "app_enter_email": "ईमेल दर्ज करें",
+    "app_history": "इतिहास",
     "app_prefix": "उपसर्ग",
     "app_submit": "प्रस्तुत",
     "app_download_pdf": "डाउनलोड पीडीऍफ़",
@@ -568,7 +567,7 @@
         ]
     },
     "app_characters_left": "शेष वर्ण",
-	"app_pin": "PIN",
+	"app_pin": "पिन",
 	"app_max_100_characters_allowed_limit": "मैक्स। १०० वर्णों की अनुमति है",
 	"app_max_50_characters_allowed_limit": "मैक्स। ५० वर्णों की अनुमति है",
 	"app_active": "सक्रिय",
@@ -648,5 +647,5 @@
 		"marathi": "मराठी"
 	},
 	"app_download_here": "यहाँ से डाउनलोड करें",
-    "app_irn": "IRN"
+    "app_irn": "आईआरएन"
 }
