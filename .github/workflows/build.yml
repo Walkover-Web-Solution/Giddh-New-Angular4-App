@@ -5,7 +5,7 @@ name: UI TEST build
 # Controls when the action will run.
 on:
   push:
-    branches: [ giddh-2.0 ]
+    branches: [ giddh-2.0, beta-stage, beta-branch, production ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 concurrency: test-build
@@ -21,7 +21,27 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Check out Git repository
         uses: actions/checkout@v2
-
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      - if: ${{steps.extract_branch.outputs.branch === 'giddh-2.0'}}
+        run: |
+          export BUILD_ENV=TEST
+          echo "::set-env name=BUILD_ENV::$BUILD_ENV"
+      - if: ${{steps.extract_branch.outputs.branch === 'beta-stage'}}
+        run: |
+          export BUILD_ENV=STAGE
+          echo "::set-env name=BUILD_ENV::$BUILD_ENV"
+      - if: ${{steps.extract_branch.outputs.branch === 'beta-branch'}}
+        run: |
+          export BUILD_ENV=BETA
+          echo "::set-env name=BUILD_ENV::$BUILD_ENV"
+      - if: ${{steps.extract_branch.outputs.branch === 'production'}}
+        run: |
+          export BUILD_ENV=PROD
+          echo "::set-env name=BUILD_ENV::$BUILD_ENV"
+      - run: echo $BUILD_ENV
       # Runs a single command to install Node
       - name: Install Node.js & NPM
         uses: actions/setup-node@v2
@@ -29,26 +49,22 @@ jobs:
           node-version: "14"
 
       # Runs npm i
-      - uses: bahmutov/npm-install@v1
-        env:
-          CYPRESS_INSTALL_BINARY: 0
-        with:
-          useLockFile: false
-          useRollingCache: true
-          working-directory: .
-      - name: Creating bundle
-        run: npm run build-test
-      - name: Copy folder
-        run: |
-          mkdir public
-          cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh-test /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
-      - name: Print current directory files
-        run: ls
-      - name: Create ZIP folder
-        run:
-          zip -r public.zip public
-      - name: Print current directory files
-        run: ls
+#       - uses: bahmutov/npm-install@v1
+#         env:
+#           CYPRESS_INSTALL_BINARY: 0
+#         with:
+#           useLockFile: false
+#           useRollingCache: true
+#           working-directory: .
+#       - name: Creating bundle
+#         run: npm run build-test
+#       - name: Copy folder
+#         run: |
+#           mkdir public
+#           cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh-test /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
+#       - name: Create ZIP folder
+#         run:
+#           zip -r public.zip public
 #       - name: Deploy
 #         env:
 #           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -65,8 +81,8 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
-          SLACK_TITLE: Giddh UI Test build
-          SLACK_USERNAME: Giddh UI Test build
+          SLACK_TITLE: Giddh UI $BUILD_ENV build
+          SLACK_USERNAME: Giddh UI $BUILD_ENV build
           SLACK_MESSAGE: Build succeeded
           SLACK_FOOTER: ''
           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
@@ -77,8 +93,8 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
-          SLACK_TITLE: Giddh UI Test build
-          SLACK_USERNAME: Giddh UI Test build
+          SLACK_TITLE: Giddh UI $BUILD_ENV build
+          SLACK_USERNAME: Giddh UI $BUILD_ENV build
           SLACK_MESSAGE: Build failed
           SLACK_FOOTER: ''
           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
@@ -89,8 +105,8 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
-          SLACK_TITLE: Giddh UI Test build
-          SLACK_USERNAME: Giddh UI Test build
+          SLACK_TITLE: Giddh UI $BUILD_ENV build
+          SLACK_USERNAME: Giddh UI $BUILD_ENV build
           SLACK_MESSAGE: Build cancelled
           SLACK_FOOTER: ''
           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
