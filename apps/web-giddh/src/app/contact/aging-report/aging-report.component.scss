@@ -109,7 +109,14 @@ tr.aging-table-top td {
 .name-width {
     width: 210px;
 }
-
+.container-fluid {
+    position: relative;
+    height: 100vh;
+    overflow-x: auto;
+}
+.container-fluid::-webkit-scrollbar {
+    display: none;
+}
 // responsive
 @media (min-width: 769px) {
     .on-mobile-view > .top-aging-table-top {

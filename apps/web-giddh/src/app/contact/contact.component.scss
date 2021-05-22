@@ -16,10 +16,13 @@
 .dis {
     display: flex;
 }
-.container-fluid {
+.contact-main{
     position: relative;
     height: 100vh;
     overflow-x: auto;
+}
+.contact-main::-webkit-scrollbar {
+    display: none;
 }
 .table-responsive {
     overflow: unset;
@@ -322,7 +325,9 @@ span.input-addon {
     border-bottom: 1px solid $gainsboro !important;
     position: sticky;
     padding-right: 10px !important;
-    top: 1px;
+    top: -1px;
+    background-color: $white;
+    z-index: 1;
 }
 .comment-field {
     min-width: 170px;
