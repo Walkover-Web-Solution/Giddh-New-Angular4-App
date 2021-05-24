@@ -30,7 +30,7 @@ export class ConfirmModalComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.store.pipe(select(state => state.session.commonLocaleData), take(1)).subscribe((response) => {
-            if(response) {
+            if (response) {
                 if (!this.title) {
                     this.title = response.app_confirmation;
                 }

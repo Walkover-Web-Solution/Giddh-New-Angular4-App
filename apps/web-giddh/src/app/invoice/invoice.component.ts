@@ -13,12 +13,12 @@ import { CurrentPage } from '../models/api-models/Common';
 import { GeneralActions } from '../actions/general/general.actions';
 @Component({
     templateUrl: './invoice.component.html',
-    styleUrls:[`./invoice.component.scss`]
+    styleUrls: [`./invoice.component.scss`]
 })
 export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
 
-    public tabsDropdown:boolean = false;
+    public tabsDropdown: boolean = false;
     public selectedVoucherType: VoucherTypeEnum;
     public activeTab: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -70,7 +70,7 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                             }, 500);
                         }
                         this.tabChanged(queryParams.tab, null);
-                    } else if(queryParams.tab) {
+                    } else if (queryParams.tab) {
                         this.activeTab = queryParams.tab;
                     }
                 } else {

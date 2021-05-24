@@ -1,4 +1,5 @@
-<ng-container appTranslate [file]="'settings/tags'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'settings/tags'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <div class="box clearfix">
         <form>
             <div class="row">
@@ -12,7 +13,8 @@
                                         [placeholder]="localeData?.tag_name_placeholder" />
                                 </div>
                                 <div class="form-group">
-                                    <textarea class="form-control" name="tagDescription" [(ngModel)]="newTag.description"
+                                    <textarea class="form-control" name="tagDescription"
+                                        [(ngModel)]="newTag.description"
                                         [placeholder]="localeData?.tag_description_placeholder"></textarea>
                                 </div>
                                 <div class="mr-t1">
@@ -27,7 +29,8 @@
                         <div>
                             <span class="pull-left searchTag">
                                 <input type="text" [(ngModel)]="searchText" (keyup)="filterData(searchText)"
-                                    class="form-control" name="search_text" [placeholder]="localeData?.search_tag_placeholder" />
+                                    class="form-control" name="search_text"
+                                    [placeholder]="localeData?.search_tag_placeholder" />
                             </span>
                             <!-- <div>
                     <button class="btn btn-success btn-sm mr-l1" (click)="filterData(searchText);">Search</button>
@@ -65,11 +68,9 @@
                                             class="btn btn-xs"><i class="fa fa-trash" aria-hidden="true"
                                                 [tooltip]="commonLocaleData?.app_delete"></i></button>
                                         <button *ngIf="updateIndex === i" (click)="updateTag(tag, i);" type="button"
-                                            class="btn btn-xs"><i class="fa fa-check"
-                                                aria-hidden="true"></i></button>
-                                        <button *ngIf="updateIndex === i" (click)="resetUpdateIndex();"
-                                            type="button" class="btn btn-xs"><i class="icon-cross"
-                                                aria-hidden="true"></i></button>
+                                            class="btn btn-xs"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                        <button *ngIf="updateIndex === i" (click)="resetUpdateIndex();" type="button"
+                                            class="btn btn-xs"><i class="icon-cross" aria-hidden="true"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -101,13 +102,16 @@
             <div class="modal-content">
                 <div class="modal-header clearfix">
                     <h3>{{commonLocaleData?.app_confirmation}}</h3>
-                    <span aria-hidden="true" class="close" (click)="onUserConfirmation(false)" data-dismiss="modal">×</span>
+                    <span aria-hidden="true" class="close" (click)="onUserConfirmation(false)"
+                        data-dismiss="modal">×</span>
                 </div>
                 <div class="modal-body" [innerHTML]="confirmationMessage">
                 </div>
                 <div class="modal-footer clearfix">
-                    <button (click)="onUserConfirmation(true)" class="btn btn-sm btn-success">{{commonLocaleData?.app_yes}}</button>
-                    <button (click)="onUserConfirmation(false)" class="btn btn-sm btn-danger">{{commonLocaleData?.app_no}}</button>
+                    <button (click)="onUserConfirmation(true)"
+                        class="btn btn-sm btn-success">{{commonLocaleData?.app_yes}}</button>
+                    <button (click)="onUserConfirmation(false)"
+                        class="btn btn-sm btn-danger">{{commonLocaleData?.app_no}}</button>
                 </div>
                 <!-- modal footer -->
             </div>

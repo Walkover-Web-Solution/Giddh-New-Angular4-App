@@ -1,4 +1,4 @@
 cypress-codeship-test:
-  build:
-    image: cypress/cypress_codeship_test
-    dockerfile: Dockerfile
+    build:
+        image: cypress/cypress_codeship_test
+        dockerfile: Dockerfile

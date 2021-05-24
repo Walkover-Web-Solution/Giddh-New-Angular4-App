@@ -21,7 +21,8 @@
                                 </div>
                                 <div class="plans-box">
                                     <div class="overall-plans">
-                                        <p class="bold total-price">{{localeData?.subscription?.total_plans}}: {{totalMultipleCompanyPlans}}</p>
+                                        <p class="bold total-price">{{localeData?.subscription?.total_plans}}:
+                                            {{totalMultipleCompanyPlans}}</p>
                                         <div class="your-account">
                                             <div class="inner-your-account"
                                                 [ngClass]="{'active': showPlans === 'multiple'}">
@@ -34,7 +35,9 @@
                                                             {{defaultMultipleCompanyPlan?.planDetails?.amount}} /-</h3>
                                                         <p class="font-12">
                                                             {{defaultMultipleCompanyPlan?.planDetails?.duration}}
-                                                            {{defaultMultipleCompanyPlan?.planDetails?.durationUnit}} {{defaultMultipleCompanyPlan?.planDetails?.duration !== 1 ? '(s)' : ''}}
+                                                            {{defaultMultipleCompanyPlan?.planDetails?.durationUnit}}
+                                                            {{defaultMultipleCompanyPlan?.planDetails?.duration !== 1 ?
+                                                            '(s)' : ''}}
                                                         </p>
                                                     </div>
                                                     <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
@@ -50,7 +53,9 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mr-b1">{{localeData?.subscription?.transactions_limit}}</p>
+                                                                    <p class="bold mr-b1">
+                                                                        {{localeData?.subscription?.transactions_limit}}
+                                                                    </p>
                                                                     <p class="font-12 text-gray mr-b1">
                                                                         {{transactionLimitTooltipContent}}</p>
                                                                 </div>
@@ -67,7 +72,9 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mr-b1">{{localeData?.subscription?.unlimited_users}}</p>
+                                                                    <p class="bold mr-b1">
+                                                                        {{localeData?.subscription?.unlimited_users}}
+                                                                    </p>
                                                                     <p class="font-12 text-gray mr-b1">
                                                                         {{unlimitedUsersTooltipContent}}</p>
                                                                 </div>
@@ -80,7 +87,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mr-b1">{{localeData?.subscription?.unlimited_contacts}}
+                                                                    <p class="bold mr-b1">
+                                                                        {{localeData?.subscription?.unlimited_contacts}}
                                                                     </p>
                                                                     <p class="font-12 text-gray mr-b1">
                                                                         {{unlimitedCustomersVendorsTooltipContent}}</p>
@@ -94,7 +102,9 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mr-b1">{{localeData?.subscription?.desktop_mobile_app}}</p>
+                                                                    <p class="bold mr-b1">
+                                                                        {{localeData?.subscription?.desktop_mobile_app}}
+                                                                    </p>
                                                                     <p class="font-12 text-gray mr-b1">
                                                                         {{desktopMobileAppTooltipContent}}</p>
                                                                 </div>
@@ -105,12 +115,14 @@
                                                 <div class="plan-footer">
                                                     <p><a (click)="allFeaturesModal(AllFeatures)"
                                                             href="javascript:void(0)"
-                                                            class="color-primary font-14">{{localeData?.subscription?.check_all_features}}</a></p>
+                                                            class="color-primary font-14">{{localeData?.subscription?.check_all_features}}</a>
+                                                    </p>
                                                     <button class="btn success-btn btn-round"
                                                         [disabled]="showPlans === 'free' || showPlans === 'single'"
                                                         (click)="buyPlanClicked(defaultMultipleCompanyPlan)"
                                                         [ladda]="this.isUpdateCompanyInProgress$ | async">{{commonLocaleData?.app_buy_plan}}</button>
-                                                    <p class="font-12">{{localeData?.subscription?.prices_excluding_tax}}</p>
+                                                    <p class="font-12">
+                                                        {{localeData?.subscription?.prices_excluding_tax}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -128,7 +140,8 @@
                                 </div>
                                 <div class="plans-box">
                                     <div class="overall-plans">
-                                        <p class="bold">{{localeData?.subscription?.total_plans}}: {{totalSingleCompanyPlans}}</p>
+                                        <p class="bold">{{localeData?.subscription?.total_plans}}:
+                                            {{totalSingleCompanyPlans}}</p>
                                         <div class="your-account">
                                             <div class="inner-your-account popular"
                                                 [ngClass]="{'active': showPlans === 'single'}">
@@ -148,10 +161,13 @@
                                                             </h3>
                                                             <p class="font-12">
                                                                 {{defaultSingleCompanyPlan?.planDetails?.duration}}
-                                                                {{defaultSingleCompanyPlan?.planDetails?.durationUnit}} {{defaultSingleCompanyPlan?.planDetails?.duration !== 1 ? '(s)' : ''}}
+                                                                {{defaultSingleCompanyPlan?.planDetails?.durationUnit}}
+                                                                {{defaultSingleCompanyPlan?.planDetails?.duration !== 1
+                                                                ? '(s)' : ''}}
                                                             </p>
                                                         </div>
-                                                        <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
+                                                        <img class="guarantee-img" src="assets/images/guarantee.png"
+                                                            alt="">
                                                     </div>
                                                 </div>
                                                 <div class="clearfix">
@@ -165,7 +181,9 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mr-b1">{{localeData?.subscription?.transactions_limit}}</p>
+                                                                    <p class="bold mr-b1">
+                                                                        {{localeData?.subscription?.transactions_limit}}
+                                                                    </p>
                                                                     <p class="font-12 text-gray mr-b1">
                                                                         {{transactionLimitTooltipContent}}</p>
                                                                 </div>
@@ -182,7 +200,9 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mr-b1">{{localeData?.subscription?.unlimited_users}}</p>
+                                                                    <p class="bold mr-b1">
+                                                                        {{localeData?.subscription?.unlimited_users}}
+                                                                    </p>
                                                                     <p class="font-12 text-gray mr-b1">
                                                                         {{unlimitedUsersTooltipContent}}</p>
                                                                 </div>
@@ -195,7 +215,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mr-b1">{{localeData?.subscription?.unlimited_contacts}}
+                                                                    <p class="bold mr-b1">
+                                                                        {{localeData?.subscription?.unlimited_contacts}}
                                                                     </p>
                                                                     <p class="font-12 text-gray mr-b1">
                                                                         {{unlimitedCustomersVendorsTooltipContent}}</p>
@@ -209,7 +230,9 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mr-b1">{{localeData?.subscription?.desktop_mobile_app}}</p>
+                                                                    <p class="bold mr-b1">
+                                                                        {{localeData?.subscription?.desktop_mobile_app}}
+                                                                    </p>
                                                                     <p class="font-12 text-gray mr-b1">
                                                                         {{desktopMobileAppTooltipContent}}</p>
                                                                 </div>
@@ -220,12 +243,14 @@
                                                 <div class="plan-footer">
                                                     <p><a (click)="allFeaturesModal(AllFeatures)"
                                                             href="javascript:void(0)"
-                                                            class="color-primary font-14">{{localeData?.subscription?.check_all_features}}</a></p>
+                                                            class="color-primary font-14">{{localeData?.subscription?.check_all_features}}</a>
+                                                    </p>
                                                     <button class="btn success-btn btn-round"
                                                         [disabled]="showPlans === 'multiple' || showPlans === 'free'"
                                                         (click)="buyPlanClicked(defaultSingleCompanyPlan)"
                                                         [ladda]="this.isUpdateCompanyInProgress$ | async">{{commonLocaleData?.app_buy_plan}}</button>
-                                                    <p class="font-12">{{localeData?.subscription?.prices_excluding_tax}}</p>
+                                                    <p class="font-12">
+                                                        {{localeData?.subscription?.prices_excluding_tax}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -243,9 +268,11 @@
                                 </div>
                                 <div class="plans-box">
                                     <div class="overall-plans">
-                                        <p class="bold total-price">{{localeData?.subscription?.total_plans}}: {{totalFreePlans}}</p>
+                                        <p class="bold total-price">{{localeData?.subscription?.total_plans}}:
+                                            {{totalFreePlans}}</p>
                                         <div class="your-account">
-                                            <div class="inner-your-account" [ngClass]="{'active': showPlans === 'free'}">
+                                            <div class="inner-your-account"
+                                                [ngClass]="{'active': showPlans === 'free'}">
                                                 <h3 class="plan-heading">{{defaultFreePlan?.planDetails?.name}}</h3>
                                                 <div>
                                                     <div class="plans-head-top">
@@ -253,7 +280,9 @@
                                                             {{defaultFreePlan?.planDetails?.amount}} /-
                                                         </h3>
                                                         <p class="font-12">{{defaultFreePlan?.planDetails?.duration}}
-                                                            {{defaultFreePlan?.planDetails?.durationUnit}} {{defaultFreePlan?.planDetails?.duration !== 1 ? '(s)' : ''}}</p>
+                                                            {{defaultFreePlan?.planDetails?.durationUnit}}
+                                                            {{defaultFreePlan?.planDetails?.duration !== 1 ? '(s)' :
+                                                            ''}}</p>
                                                     </div>
                                                 </div>
                                                 <div class="clearfix">
@@ -266,7 +295,9 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mr-b1">{{localeData?.subscription?.transactions_limit}}</p>
+                                                                    <p class="bold mr-b1">
+                                                                        {{localeData?.subscription?.transactions_limit}}
+                                                                    </p>
                                                                     <p class="font-12 text-gray mr-b1">
                                                                         {{transactionLimitTooltipContent}}</p>
                                                                 </div>
@@ -282,7 +313,9 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mr-b1">{{localeData?.subscription?.unlimited_users}}</p>
+                                                                    <p class="bold mr-b1">
+                                                                        {{localeData?.subscription?.unlimited_users}}
+                                                                    </p>
                                                                     <p class="font-12 text-gray mr-b1">
                                                                         {{unlimitedUsersTooltipContent}}</p>
                                                                 </div>
@@ -295,7 +328,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mr-b1">{{localeData?.subscription?.unlimited_contacts}}
+                                                                    <p class="bold mr-b1">
+                                                                        {{localeData?.subscription?.unlimited_contacts}}
                                                                     </p>
                                                                     <p class="font-12 text-gray mr-b1">
                                                                         {{unlimitedCustomersVendorsTooltipContent}}</p>
@@ -309,7 +343,9 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mr-b1">{{localeData?.subscription?.desktop_mobile_app}}</p>
+                                                                    <p class="bold mr-b1">
+                                                                        {{localeData?.subscription?.desktop_mobile_app}}
+                                                                    </p>
                                                                     <p class="font-12 text-gray mr-b1">
                                                                         {{desktopMobileAppTooltipContent}}</p>
                                                                 </div>
@@ -320,12 +356,14 @@
                                                 <div class="plan-footer">
                                                     <p><a (click)="allFeaturesModal(AllFeatures)"
                                                             href="javascript:void(0)"
-                                                            class="color-primary font-14">{{localeData?.subscription?.check_all_features}}</a></p>
+                                                            class="color-primary font-14">{{localeData?.subscription?.check_all_features}}</a>
+                                                    </p>
                                                     <button class="btn success-btn btn-round"
                                                         [disabled]="showPlans === 'multiple' || showPlans === 'single'"
                                                         (click)="choosePlan(defaultFreePlan);"
                                                         [ladda]="this.isUpdateCompanyInProgress$ | async">{{commonLocaleData?.app_buy_plan}}</button>
-                                                    <p class="font-12">{{localeData?.subscription?.prices_excluding_tax}}</p>
+                                                    <p class="font-12">
+                                                        {{localeData?.subscription?.prices_excluding_tax}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -361,14 +399,17 @@
                             <div>
                                 <h3 class="bold font-22 mr-b05">{{item?.planDetails?.amount | number}} /-</h3>
                                 <p class="font-12">{{item?.planDetails?.duration}}
-                                    {{item?.planDetails?.durationUnit}} {{item?.planDetails?.duration !== 1 ? '(s)' : ''}}</p>
+                                    {{item?.planDetails?.durationUnit}} {{item?.planDetails?.duration !== 1 ? '(s)' :
+                                    ''}}</p>
                             </div>
                             <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
                         </div>
                         <div class="clearfix">
                             <ul class="plan-list">
-                                <li>{{localeData?.subscription?.transactions_limit}}: {{item?.planDetails?.transactionLimit | number}}</li>
-                                <li>{{localeData?.subscription?.total_companies}}: {{ item?.planDetails?.companiesLimit | number}}</li>
+                                <li>{{localeData?.subscription?.transactions_limit}}:
+                                    {{item?.planDetails?.transactionLimit | number}}</li>
+                                <li>{{localeData?.subscription?.total_companies}}: {{ item?.planDetails?.companiesLimit
+                                    | number}}</li>
                                 <li>{{localeData?.subscription?.unlimited_users}}</li>
                                 <li>{{localeData?.subscription?.unlimited_contacts}}</li>
                                 <li>{{localeData?.subscription?.desktop_mobile_app}}</li>
@@ -376,11 +417,14 @@
                         </div>
                         <div class="plan-footer">
                             <p><a (click)="allFeaturesModal(AllFeatures)" href="javascript:void(0)"
-                                    class="color-primary font-14">{{localeData?.subscription?.check_all_features}}</a></p>
+                                    class="color-primary font-14">{{localeData?.subscription?.check_all_features}}</a>
+                            </p>
                             <button class="btn success-btn btn-round" *ngIf="!item?.planDetails?.amount"
-                                (click)="choosePlan(item);" [ladda]="this.isUpdateCompanyInProgress$ | async">{{commonLocaleData?.app_buy_plan}}</button>
+                                (click)="choosePlan(item);"
+                                [ladda]="this.isUpdateCompanyInProgress$ | async">{{commonLocaleData?.app_buy_plan}}</button>
                             <button class="btn success-btn btn-round" *ngIf="item?.planDetails?.amount"
-                                (click)="buyPlanClicked(item)" [ladda]="this.isUpdateCompanyInProgress$ | async">{{commonLocaleData?.app_buy_plan}}</button>
+                                (click)="buyPlanClicked(item)"
+                                [ladda]="this.isUpdateCompanyInProgress$ | async">{{commonLocaleData?.app_buy_plan}}</button>
                         </div>
                     </div>
                 </div>
@@ -396,7 +440,8 @@
                         <p class="font-14">{{localeData?.subscription?.activation_key_note}}</p>
                         <div class="d-flex">
                             <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
-                                class="form-control mr-t1" [placeholder]="localeData?.subscription?.enter_activation_key">
+                                class="form-control mr-t1"
+                                [placeholder]="localeData?.subscription?.enter_activation_key">
                             <div class="activation-btn mr-l15">
                                 <button class="btn success-btn mr-t1 pl-3 pr-3" [disabled]="!licenceKey.value"
                                     (click)="createCompanyViaActivationKey()">

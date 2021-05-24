@@ -30,7 +30,7 @@ export class CompanyDetailsSidebarComponent implements OnInit {
     }
 
     public ngOnInit() {
-        if(this.selectedCompany) {
+        if (this.selectedCompany) {
             this.getCompanyDetails();
         }
     }

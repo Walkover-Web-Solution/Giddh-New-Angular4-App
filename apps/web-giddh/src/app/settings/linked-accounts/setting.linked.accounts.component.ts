@@ -24,10 +24,10 @@ import { SearchService } from '../../services/search.service';
 })
 export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
-    @ViewChild('connectBankModel', {static: true}) public connectBankModel: ModalDirective;
-    @ViewChild('confirmationModal', {static: true}) public confirmationModal: ModalDirective;
-    @ViewChild('yodleeFormHTML', {static: true}) public yodleeFormHTML: HTMLFormElement;
-    @ViewChild('yodleeIframe', {static: true}) public yodleeIframe: HTMLIFrameElement;
+    @ViewChild('connectBankModel', { static: true }) public connectBankModel: ModalDirective;
+    @ViewChild('confirmationModal', { static: true }) public confirmationModal: ModalDirective;
+    @ViewChild('yodleeFormHTML', { static: true }) public yodleeFormHTML: HTMLFormElement;
+    @ViewChild('yodleeIframe', { static: true }) public yodleeIframe: HTMLIFrameElement;
 
     public iframeSource: string = null;
     public ebankAccounts: BankAccountsResponse[] = [];
@@ -181,7 +181,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                         accountId = (this.selectedAccount && this.selectedAccount.providerAccount) ? this.selectedAccount.providerAccount.providerAccountId : 0;
                         deleteWithAccountId = false;
                     }
-                    if(accountId) {
+                    if (accountId) {
                         this.store.dispatch(this.settingsLinkedAccountsActions.DeleteBankAccount(accountId, deleteWithAccountId));
                     }
                     break;
@@ -232,7 +232,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(this.providerAccountId, account));
             return;
         }
-        if(account && account.providerAccount) {
+        if (account && account.providerAccount) {
             this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(account.providerAccount.providerAccountId, {}));
         }
     }
@@ -356,7 +356,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 

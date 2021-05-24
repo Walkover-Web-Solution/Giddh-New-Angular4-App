@@ -15,7 +15,7 @@ import { takeUntil } from 'rxjs/operators';
 
 export class EWayBillCredentialsComponent implements OnInit {
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('ewayBillform', {static: true}) public loginForm: NgForm;
+    @ViewChild('ewayBillform', { static: true }) public loginForm: NgForm;
     public ewayBillLogForm: EwayBillLogin = new EwayBillLogin();
     public togglePassword: boolean = true;
     public isUserAdeedInProcess$: Observable<boolean>;
@@ -26,7 +26,7 @@ export class EWayBillCredentialsComponent implements OnInit {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    
+
     constructor(
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions) {

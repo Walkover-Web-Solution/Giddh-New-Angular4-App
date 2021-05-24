@@ -10,21 +10,23 @@
         <tabset #staticTabs>
 
             <!-- start auth tab tab -->
-            <tab [heading]="localeData?.auth_key?.tab_heading" [active]="activeTab == 'auth-key'" (selectTab)="onTabChanged('auth-key')"
-                [id]="(activeTab == 'auth-key') ? 'giddh-page-heading': ''">
+            <tab [heading]="localeData?.auth_key?.tab_heading" [active]="activeTab == 'auth-key'"
+                (selectTab)="onTabChanged('auth-key')" [id]="(activeTab == 'auth-key') ? 'giddh-page-heading': ''">
                 <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'auth-key'">
                     <div class="box clearfix mt-1">
                         <h1 class="section-head pt-0">{{localeData?.auth_key?.main_auth_key}}</h1>
                         <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
                             <div class="form-group row">
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-                                    <input id="authKey" class="form-control" name="userAuthKey" [(ngModel)]="userAuthKey"
-                                        [readonly]="true" />
+                                    <input id="authKey" class="form-control" name="userAuthKey"
+                                        [(ngModel)]="userAuthKey" [readonly]="true" />
                                 </div>
                             </div>
                             <div class="form-group clearfix mb-0">
-                                <button class="btn btn-default" (click)="regenerateKey()">{{localeData?.auth_key?.regenerate_auth_key}}</button>
-                                <a class="btn btn-link" href="{{apiPostmanDocUrl}}" target="_blank">{{localeData?.auth_key?.documentation}}</a>
+                                <button class="btn btn-default"
+                                    (click)="regenerateKey()">{{localeData?.auth_key?.regenerate_auth_key}}</button>
+                                <a class="btn btn-link" href="{{apiPostmanDocUrl}}"
+                                    target="_blank">{{localeData?.auth_key?.documentation}}</a>
                             </div>
                         </form>
                     </div>
@@ -40,15 +42,18 @@
                             <h1 class="section-head">{{localeData?.mobile_number?.add_edit_mobile_number}}</h1>
                             <div class="mr-t05">
                                 <!-- ng-minlength="10" pattern="/^[0-9]{1,10}$/"  -->
-                                <input decimalDigitsDirective maxlength="10" class="form-control max-width-350 pull-left "
-                                    type="text" ng-required="true" [placeholder]="localeData?.mobile_number?.mobile_no_example" name="mobileForm.phoneNumber"
-                                    [(ngModel)]="phoneNumber" />
-                                <button class="btn btn-success btn-sm mr-l1" [ladda]="isAddNewMobileNoInProcess$ | async"
+                                <input decimalDigitsDirective maxlength="10"
+                                    class="form-control max-width-350 pull-left " type="text" ng-required="true"
+                                    [placeholder]="localeData?.mobile_number?.mobile_no_example"
+                                    name="mobileForm.phoneNumber" [(ngModel)]="phoneNumber" />
+                                <button class="btn btn-success btn-sm mr-l1"
+                                    [ladda]="isAddNewMobileNoInProcess$ | async"
                                     (click)="addNumber(phoneNumber)">{{commonLocaleData?.app_add}}
                                 </button>
                             </div>
                             <p class="mr-t1">
-                                <b>{{commonLocaleData?.app_note}}: </b>{{localeData?.mobile_number?.mobile_number_format}}
+                                <b>{{commonLocaleData?.app_note}}:
+                                </b>{{localeData?.mobile_number?.mobile_number_format}}
                             </p>
                         </form>
 
@@ -60,7 +65,8 @@
                             </h1>
                             <div class="mr-t05">
                                 <input class="form-control max-width-350 pull-left" type="text"
-                                    [placeholder]="localeData?.mobile_number?.verification_code_placeholder" [(ngModel)]="oneTimePassword" />
+                                    [placeholder]="localeData?.mobile_number?.verification_code_placeholder"
+                                    [(ngModel)]="oneTimePassword" />
                                 <button class="btn btn-success mr-l1" [ladda]="isVerifyAddNewMobileNoInProcess$ | async"
                                     (click)="verifyNumber()">{{localeData?.mobile_number?.verify}}
                                 </button>
@@ -71,7 +77,8 @@
                                 <div class="row">
                                     <div class="col-sm-12 mr-t1">
                                         <button class="btn btn-link btn-xs" (click)="expandLongCode = !expandLongCode">
-                                            <i class="icon-plus" [ngClass]="{'icon-minus':expandLongCode}"></i> {{localeData?.mobile_number?.long_code}}
+                                            <i class="icon-plus" [ngClass]="{'icon-minus':expandLongCode}"></i>
+                                            {{localeData?.mobile_number?.long_code}}
                                         </button>
                                         <div class="long-code-details" *ngIf="expandLongCode">
                                             <figure>
@@ -139,13 +146,14 @@
             <!-- end of Mobile Number tab tab -->
 
             <!-- start session tab tab -->
-            <tab [heading]="localeData?.session?.tab_heading" [active]="activeTab == 'session'" (selectTab)="onTabChanged('session')"
-                [id]="(activeTab == 'session') ? 'giddh-page-heading': ''">
+            <tab [heading]="localeData?.session?.tab_heading" [active]="activeTab == 'session'"
+                (selectTab)="onTabChanged('session')" [id]="(activeTab == 'session') ? 'giddh-page-heading': ''">
                 <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'session'">
                     <div class="box clearfix mt-1">
                         <div class="max900 d-flex pd-b1  activity-title">
                             <h1 class="section-head pt-0">{{localeData?.session?.section_heading}}</h1>
-                            <button class="btn btn-primary mr-0" (click)="clearAllSession()">{{commonLocaleData?.app_delete_all}}</button>
+                            <button class="btn btn-primary mr-0"
+                                (click)="clearAllSession()">{{commonLocaleData?.app_delete_all}}</button>
                         </div>
                         <p class="grey-color max900">{{localeData?.session?.section_description}}</p>
                         <div class="max900 mr-t15 table-responsive">
@@ -162,20 +170,28 @@
                                 </thead>
                                 <tbody *ngIf="userSessionList.length">
                                     <tr *ngFor="let session of userSessionList; index as sessionIndex">
-                                        <td [attr.data-title]="localeData?.session?.ip_address">{{ session.ipAddress }}</td>
-                                        <td [attr.data-title]="localeData?.session?.signin_date">{{ moment(session.createdAt).format('DD/MM/YYYY') }}
+                                        <td [attr.data-title]="localeData?.session?.ip_address">{{ session.ipAddress }}
                                         </td>
-                                        <td [attr.data-title]="localeData?.session?.signin_time">{{ moment(session.createdAt).format('LTS') }}</td>
-                                        <td [attr.data-title]="localeData?.session?.duration">{{moment().diff(session.createdAt,
+                                        <td [attr.data-title]="localeData?.session?.signin_date">{{
+                                            moment(session.createdAt).format('DD/MM/YYYY') }}
+                                        </td>
+                                        <td [attr.data-title]="localeData?.session?.signin_time">{{
+                                            moment(session.createdAt).format('LTS') }}</td>
+                                        <td [attr.data-title]="localeData?.session?.duration">
+                                            {{moment().diff(session.createdAt,
                                             'days')}}/{{moment(session.createdAt).subtract(moment()).format('HH/mm/ss')}}
                                         </td>
-                                        <td [attr.data-title]="localeData?.session?.browser_agent"> {{ session.userAgent }}</td>
-                                        <td [attr.data-title]="commonLocaleData?.app_action" class="ico-btn text-center">
-                                            <span *ngIf="userSessionId === session.sessionId">{{localeData?.session?.current}}</span>
+                                        <td [attr.data-title]="localeData?.session?.browser_agent"> {{ session.userAgent
+                                            }}</td>
+                                        <td [attr.data-title]="commonLocaleData?.app_action"
+                                            class="ico-btn text-center">
+                                            <span
+                                                *ngIf="userSessionId === session.sessionId">{{localeData?.session?.current}}</span>
                                             <button type="button" class="btn btn-xs"
                                                 (click)="deleteSession(session.sessionId, sessionIndex)"
                                                 *ngIf="userSessionId !== session.sessionId">
-                                                <i class="icon-trash" aria-hidden="true" [tooltip]="commonLocaleData?.app_delete"></i>
+                                                <i class="icon-trash" aria-hidden="true"
+                                                    [tooltip]="commonLocaleData?.app_delete"></i>
                                             </button>
                                         </td>
                                     </tr>
@@ -193,10 +209,12 @@
                 </div>
             </tab>
 
-            <tab [heading]="localeData?.subscription?.tab_heading" [active]="activeTab == 'subscription'" (selectTab)="onTabChanged('subscription')"
+            <tab [heading]="localeData?.subscription?.tab_heading" [active]="activeTab == 'subscription'"
+                (selectTab)="onTabChanged('subscription')"
                 [id]="(activeTab == 'subscription') ? 'giddh-page-heading': ''">
                 <div class="wrap-tab-content-pd-15">
-                    <subscriptions [activeTab]="activeTab" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></subscriptions>
+                    <subscriptions [activeTab]="activeTab" [localeData]="localeData"
+                        [commonLocaleData]="commonLocaleData"></subscriptions>
                 </div>
             </tab>
 

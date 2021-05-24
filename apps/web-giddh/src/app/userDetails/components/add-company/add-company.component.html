@@ -6,10 +6,12 @@
     <p class="mr-b15" [innerHTML]="getAddCompanyText()"></p>
     <div class="row mr-b1">
         <div class="col-lg-6 col-md-12">
-            <label class="font-14">{{localeData?.subscription?.select_company}}<span class="text-danger">*</span></label>
+            <label class="font-14">{{localeData?.subscription?.select_company}}<span
+                    class="text-danger">*</span></label>
             <div class="select-caret position-relative">
-                <sh-select [placeholder]="localeData?.subscription?.select_company" name="selectedCompany" [options]="associatedCompaniesOption"
-                    [isFilterEnabled]="true" [(ngModel)]="selectedCompany" [isRequired]="true"></sh-select>
+                <sh-select [placeholder]="localeData?.subscription?.select_company" name="selectedCompany"
+                    [options]="associatedCompaniesOption" [isFilterEnabled]="true" [(ngModel)]="selectedCompany"
+                    [isRequired]="true"></sh-select>
             </div>
         </div>
     </div>

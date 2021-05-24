@@ -36,7 +36,7 @@
         }
 
         .r-0 {
-            right:0px;
+            right: 0px;
         }
     }
     .input-group {
@@ -80,32 +80,32 @@
             font-size: 16px;
         }
     }
-    .sms-textarea{
+    .sms-textarea {
         margin-top: 0;
-        margin-bottom: 20px!important;
-        margin-left: 10px!important;
+        margin-bottom: 20px !important;
+        margin-left: 10px !important;
         width: 260px;
     }
 }
-.verified-text{
+.verified-text {
     color: $light-sea-green;
     padding: 6px 10px;
     margin-right: 10px;
     margin-left: 10px;
 }
-.delete-verified-icon{
-    padding:6px 10px;
+.delete-verified-icon {
+    padding: 6px 10px;
     border: 1px solid $gainsboro;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     width: 36px;
     height: 36px;
-    i.icon-trash{
+    i.icon-trash {
         font-size: 18px;
     }
 }
-.verify-tick-icon{
+.verify-tick-icon {
     vertical-align: middle;
     display: flex;
     align-items: center;
@@ -113,10 +113,10 @@
     color: $nobel;
 }
 @media (max-width: 991px) {
-    .custom-estimation{
+    .custom-estimation {
         margin-top: 10px;
     }
-    .sms-textarea{
+    .sms-textarea {
         width: 100%;
     }
     #invoice-setting {

@@ -52,7 +52,8 @@
         <div class="search-accounts-groups" *ngIf="hasGroups">
             <div class="search-groups" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn"
                 [hidden]="item.type !== 'GROUP'">
-                <div class="single-search-group cursor-pointer" *ngIf="item.type === 'GROUP'" (click)="itemSelected(item)">
+                <div class="single-search-group cursor-pointer" *ngIf="item.type === 'GROUP'"
+                    (click)="itemSelected(item)">
                     <div class="group-icon">
                         <span class="icon-group-folder"></span>
 
@@ -75,7 +76,8 @@
             <div class="search-groups search-accounts"
                 *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn"
                 [hidden]="item.type !== 'ACCOUNT'">
-                <div class="single-search-group cursor-pointer" *ngIf="item.type === 'ACCOUNT'" (click)="itemSelected(item)">
+                <div class="single-search-group cursor-pointer" *ngIf="item.type === 'ACCOUNT'"
+                    (click)="itemSelected(item)">
                     <div class="group-icon">
                         <span class="icon-account"></span>
                     </div>

@@ -6,7 +6,7 @@
             </span>
             <div class="wrap-group-account-input">
                 <input type="text" [(ngModel)]="searchCmp" (ngModelChange)="filterCompanyList($event)" #searchElement
-                    class="form-control" placeholder="Search Company"/>
+                    class="form-control" placeholder="Search Company" />
             </div>
             <span class="close-addon" *ngIf="searchCmp && searchCmp.length">
                 <i class="icon-cross" (click)="filterCompanyList('');searchCmp = ''"></i>

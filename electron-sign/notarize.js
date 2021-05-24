@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const electronNotarize = require('electron-notarize');
-module.exports = async function(params) {
+module.exports = async function (params) {
     // Only notarize the app on Mac OS only.
     if (process.platform !== 'darwin') {
         return;

@@ -7,7 +7,7 @@
     height: 30px;
 }
 
-.ledg-head.entry-popup table td.select2-ledger>sh-select {
+.ledg-head.entry-popup table td.select2-ledger > sh-select {
     position: initial;
     margin-top: 1px;
 }
@@ -46,18 +46,18 @@ table.width-100 {
     font-size: 24px;
 }
 
-ng-select>div i.fa.fa-caret-down::before {
+ng-select > div i.fa.fa-caret-down::before {
     color: $white;
     font-size: 20px;
 }
 
-ng-select>div a.ng-star-inserted {
+ng-select > div a.ng-star-inserted {
     color: $white;
     text-transform: uppercase;
     font-size: 16px;
 }
 
-ng-select>div {
+ng-select > div {
     background-color: transparent;
     border: none;
 }
@@ -159,7 +159,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     min-width: 80px;
 }
 
-.download-invoice-ledger>i {
+.download-invoice-ledger > i {
     top: 18px;
     position: relative;
     background-color: $white;
@@ -251,14 +251,14 @@ span.eligible-ITC {
     }
 }
 
-#update-ledger-select-account{
-    width:30%
+#update-ledger-select-account {
+    width: 30%;
 }
 
 .edit-adjustment {
     padding: 0 5px 0;
 }
-.icon-info{
+.icon-info {
     color: $gray;
     cursor: pointer;
     padding: 8px 5px 0;
@@ -268,47 +268,52 @@ span.eligible-ITC {
     padding: 15px;
     z-index: 1;
     max-width: 360px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
     color: $dark-gray;
-    .info-text{
-        font-family: 'opensans-regular';
+    .info-text {
+        font-family: "opensans-regular";
     }
 }
-.left-col-new .row, .right-col-new .row , .ledger-head .row{
+.left-col-new .row,
+.right-col-new .row,
+.ledger-head .row {
     margin: 0;
 }
-.dropdown-container[disabled], .table-amount[disabled] {
+.dropdown-container[disabled],
+.table-amount[disabled] {
     pointer-events: none;
 }
-#update-ledger-assign-tag.disabled-ledger::ng-deep .sh-select-disabled .bg-white{
+#update-ledger-assign-tag.disabled-ledger::ng-deep
+    .sh-select-disabled
+    .bg-white {
     background-color: $whisper-light !important;
 }
-#update-ledger-assign-tag.disabled-ledger::ng-deep input ,
+#update-ledger-assign-tag.disabled-ledger::ng-deep input,
 #update-ledger-select-warehouse.disabled-ledger::ng-deep input,
 #update-ledger-price-input.disabled-ledger,
 #update-ledger-invoice-voucher-number.disabled-ledger::ng-deep input,
-#update-ledger-invoice-number.disabled-ledger::ng-deep input  {
-     background-color: $whisper-light !important;
+#update-ledger-invoice-number.disabled-ledger::ng-deep input {
+    background-color: $whisper-light !important;
 }
-.tourist-scheme-wrapper{
-     input[type="checkbox"]{
+.tourist-scheme-wrapper {
+    input[type="checkbox"] {
         opacity: 0;
     }
 }
-.show-if-ledger-open{
+.show-if-ledger-open {
     height: 300px;
 }
-p.edit-message{
+p.edit-message {
     background-color: $whisper-light;
     text-align: center;
     padding: 8px 0;
     border-top: 1px solid $gainsboro;
     font-size: 16px;
-    font-family: 'opensans-semibold';
+    font-family: "opensans-semibold";
     margin-top: 15px;
 }
 
-.collapse-icons{
+.collapse-icons {
     font-size: 10px;
     border: 1px solid;
     padding: 2px;
@@ -456,21 +461,34 @@ p.edit-message{
 }
 
 .rotate {
-    -webkit-animation:spin 4s linear infinite;
-    -moz-animation:spin 4s linear infinite;
-    animation:spin 4s linear infinite;
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
 }
-.ledger-head th:first-child{
-    span{
+.ledger-head th:first-child {
+    span {
         position: relative;
         right: 15px;
     }
 }
-.list-inline>li {
+.list-inline > li {
     display: inline-block;
     padding-right: 5px;
     padding-left: 5px;
 }
-@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg) } }
+@-moz-keyframes spin {
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}

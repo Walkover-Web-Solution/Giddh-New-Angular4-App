@@ -59,11 +59,11 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
     /** True if field is required */
     @Input() public isRequired: boolean = false;
 
-    @ViewChild('inputFilter', {static: false}) public inputFilter: ElementRef;
-    @ViewChild('mainContainer', {static: true}) public mainContainer: ElementRef;
-    @ViewChild('menuEle', {static: true}) public menuEle: SalesShSelectMenuComponent;
-    @ContentChild('optionTemplate', {static: true}) public optionTemplate: TemplateRef<any>;
-    @ViewChild('dd', {static: true}) public ele: ElementRef;
+    @ViewChild('inputFilter', { static: false }) public inputFilter: ElementRef;
+    @ViewChild('mainContainer', { static: true }) public mainContainer: ElementRef;
+    @ViewChild('menuEle', { static: true }) public menuEle: SalesShSelectMenuComponent;
+    @ContentChild('optionTemplate', { static: true }) public optionTemplate: TemplateRef<any>;
+    @ViewChild('dd', { static: true }) public ele: ElementRef;
     @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onClear: EventEmitter<any[]> = new EventEmitter<any[]>();
@@ -186,7 +186,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
     public getFilteredArrOfIOptionItems(array: IOption[], term: string, action: string) {
         if (action === FLATTEN_SEARCH_TERM) {
             return array.filter((item) => {
-                let mergedAccounts =  item.additional && item.additional.mergedAccounts ?
+                let mergedAccounts = item.additional && item.additional.mergedAccounts ?
                     _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase())) : '';
                 return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.additional.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term);
             });
@@ -415,8 +415,8 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
             }
         }
 
-        if('isOpen' in changes) {
-            if(changes.isOpen && changes.isOpen.currentValue && changes.isOpen.currentValue !== changes.isOpen.previousValue) {
+        if ('isOpen' in changes) {
+            if (changes.isOpen && changes.isOpen.currentValue && changes.isOpen.currentValue !== changes.isOpen.previousValue) {
                 this.isOpen = changes.isOpen.currentValue;
                 this.openDropdown();
             }
@@ -544,7 +544,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
      */
     public openDropdown(): void {
         setTimeout(() => {
-            if(this.isOpen && this.inputFilter) {
+            if (this.isOpen && this.inputFilter) {
                 (this.inputFilter.nativeElement as any)['focus'].apply(this.inputFilter.nativeElement);
             }
         }, 300);

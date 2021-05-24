@@ -18,7 +18,8 @@
                                 [style.max-height.px]="(searchedItems?.length !== 0) ? ItemHeight * (searchedItems && (searchedItems.length < visibleItems ) ? searchedItems.length : visibleItems) : ItemHeight"
                                 (scroll)="onScroll($event)">
                                 <div class="item" *ngFor="let r of searchedItems; let i = index; trackBy: trackByFn"
-                                    (mouseover)="highlightItem(i)" (mouseout)="unhighlightItem()" (click)="itemSelected(r)"
+                                    (mouseover)="highlightItem(i)" (mouseout)="unhighlightItem()"
+                                    (click)="itemSelected(r)"
                                     [ngClass]="{'selected': r.loop === highlightedItem, 'active': r.isSelected }">
                                     <a href="javascript:void(0)" class="d-flex flex-row align-items-center">
                                         <div class="item-icon">
@@ -48,7 +49,8 @@
                                                     <ng-container *ngIf="r.parentGroups">
                                                         <p class="small-para-details">
                                                             <small>
-                                                                <span *ngFor="let item of r.parentGroups; let idx = index">
+                                                                <span
+                                                                    *ngFor="let item of r.parentGroups; let idx = index">
                                                                     <ng-container *ngIf="idx > 0">
                                                                         <span>&nbsp;❯&nbsp;</span>
                                                                     </ng-container>
@@ -79,8 +81,10 @@
                             <div class="jumper-results" [ngClass]="{'text-center': showChannelCreateBtn}">
                                 <p class="block text-center mr-b2">{{localeData?.no_records_found}}</p>
                                 <ng-container *ngIf="showChannelCreateBtn">
-                                    <button class="btn btn-primary mr-r2" (click)="triggerAddManage()">{{commonLocaleData?.app_create_group}}</button>
-                                    <button class="btn btn-primary" (click)="triggerAddManage()">{{commonLocaleData?.app_create_ac}}</button>
+                                    <button class="btn btn-primary mr-r2"
+                                        (click)="triggerAddManage()">{{commonLocaleData?.app_create_group}}</button>
+                                    <button class="btn btn-primary"
+                                        (click)="triggerAddManage()">{{commonLocaleData?.app_create_ac}}</button>
                                 </ng-container>
                             </div>
                         </span>
@@ -105,9 +109,9 @@
                     </div>
                 </div>
             </span>
-            <input class="search-element" #searchEle type="text" [placeholder]="commonLocaleData?.app_search" (focus)="handleFocus()"
-                (keydown)="handleKeydown($event)" (keyup)="initSearch($event, $event.target.value)"
-                (paste)="onPasteInSearch()" />
+            <input class="search-element" #searchEle type="text" [placeholder]="commonLocaleData?.app_search"
+                (focus)="handleFocus()" (keydown)="handleKeydown($event)"
+                (keyup)="initSearch($event, $event.target.value)" (paste)="onPasteInSearch()" />
         </div>
         <i class="icon-cross close-navigation" (click)="close()"></i>
     </ng-template>

@@ -3,11 +3,14 @@
     <div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen, 'unvisible': companyList.length===0 }"
         (clickOutside)="closeSidebarMobile($event)">
         <div class="menu-wrapper">
-            <primary-sidebar [isOpen]="sideMenu?.isopen" [apiMenuItems]="apiMenuItems" (newCompany)="createNewCompany()">
+            <primary-sidebar [isOpen]="sideMenu?.isopen" [apiMenuItems]="apiMenuItems"
+                (newCompany)="createNewCompany()">
             </primary-sidebar>
         </div>
         <div class="mobile-menu-icon" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
-            <span class="icon-bar" [tooltip]="sideMenu.isopen ? commonLocaleData?.app_collapse : commonLocaleData?.app_expand" placement="right"></span>
+            <span class="icon-bar"
+                [tooltip]="sideMenu.isopen ? commonLocaleData?.app_collapse : commonLocaleData?.app_expand"
+                placement="right"></span>
         </div>
     </div>
 
@@ -42,7 +45,8 @@
                         <button class="btn mr-0" placement="right" (click)="redirectToMobileHome()">
                             <i class="icon-home-new"></i>
                         </button>
-                        <span class="setting-menu-icon" (click)="toggleSidebarPane(true, true)"> <i class="icon-bar"></i>
+                        <span class="setting-menu-icon" (click)="toggleSidebarPane(true, true)"> <i
+                                class="icon-bar"></i>
                         </span>
                         <span class="mobile-back-btn" (click)="redirectToMobileHome()"><i
                                 class="icon-back-arrow"></i></span>
@@ -113,7 +117,8 @@
     </div>
     <!--add and manage group account modal -->
     <div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }"
-        class="modal fade full-screen-modal manage-account-popup add-manage-group-acc" role="dialog" (onShown)="onShown()">
+        class="modal fade full-screen-modal manage-account-popup add-manage-group-acc" role="dialog"
+        (onShown)="onShown()">
         <div class="modal-dialog modal-xl modal-liq-90 mr-0 width-100 h-100">
             <div class="modal-content full-screen-modal">
                 <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
@@ -146,13 +151,15 @@
 
         <div class="modal-body" #mdl>
             <command-k (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
-                (groupEmitter)="makeGroupEntryInDB($event)" (selectedItemEmitter)="onItemSelected($event)" [parentEle]="mdl"
-                [isOpen]="true" [setParentWidth]="true" (closeEmitter)="modelRef.hide()"></command-k>
+                (groupEmitter)="makeGroupEntryInDB($event)" (selectedItemEmitter)="onItemSelected($event)"
+                [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" (closeEmitter)="modelRef.hide()"></command-k>
 
             <div class="shortcuts">
                 <strong>↑</strong> <strong>↓</strong>&nbsp; {{commonLocaleData?.app_to_navigate}} <strong class="mr-l1"
-                    [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp; {{commonLocaleData?.app_to_select}} <strong class="mr-l1"
-                    [attr.aria-label]="commonLocaleData?.app_escape">{{commonLocaleData?.app_esc}}</strong>&nbsp; {{commonLocaleData?.app_to_dismiss}}
+                    [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
+                {{commonLocaleData?.app_to_select}} <strong class="mr-l1"
+                    [attr.aria-label]="commonLocaleData?.app_escape">{{commonLocaleData?.app_esc}}</strong>&nbsp;
+                {{commonLocaleData?.app_to_dismiss}}
             </div>
 
         </div>
@@ -161,7 +168,8 @@
     <ng-template #expiredPlanModel>
         <div class="modal-header">
             <h3 class="modal-title pull-left">{{localeData?.ready_to_upgrade}}</h3>
-            <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close" (click)="modelRefExpirePlan.hide()">
+            <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close"
+                (click)="modelRefExpirePlan.hide()">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -172,13 +180,15 @@
             <div class="clearfix">
                 <ul class="list-inline upgrade-plan">
                     <li>
-                        <button class="btn btn-green" *ngIf="currentCompanyPlanAmount" (click)="goToSelectPlan();">{{localeData?.renew_plan}}</button>
+                        <button class="btn btn-green" *ngIf="currentCompanyPlanAmount"
+                            (click)="goToSelectPlan();">{{localeData?.renew_plan}}</button>
                     </li>
                     <li>
                         <button class="btn btn-green" (click)="goToSelectPlan();">{{localeData?.change_plan}}</button>
                     </li>
                     <li><span class="d-inline-block pr-1">{{localeData?.or}}</span> <a class="cursor-pointer"
-                            (click)="openScheduleCalendlyModel();modelRefExpirePlan.hide();">{{localeData?.contact_us}}</a></li>
+                            (click)="openScheduleCalendlyModel();modelRefExpirePlan.hide();">{{localeData?.contact_us}}</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -187,7 +197,8 @@
     <ng-template #crossedTxLimitModel>
         <div class="modal-header">
             <h3 class="modal-title pull-left">{{localeData?.ready_to_upgrade}}</h3>
-            <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close" (click)="modelRefCrossLimit.hide()">
+            <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close"
+                (click)="modelRefCrossLimit.hide()">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -199,10 +210,12 @@
             <div class="clearfix">
                 <ul class="list-inline">
                     <li>
-                        <button class="btn btn-sky-blue" (click)="goToSelectPlan();">{{commonLocaleData?.app_buy_plan}}</button>
+                        <button class="btn btn-sky-blue"
+                            (click)="goToSelectPlan();">{{commonLocaleData?.app_buy_plan}}</button>
                     </li>
                     <li><span class="d-inline-block pr-1">{{localeData?.or}}</span> <a class="cursor-pointer"
-                            (click)="openScheduleCalendlyModel();modelRefCrossLimit.hide();">{{localeData?.contact_us}}</a></li>
+                            (click)="openScheduleCalendlyModel();modelRefCrossLimit.hide();">{{localeData?.contact_us}}</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -235,9 +248,9 @@
         <div class="datepicker-modal">
             <div class="modal-body">
                 <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions"
-                    [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                    [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                    [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true"
+                    [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+                    [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
                     (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
                     [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
                     [dateFieldPosition]="dateFieldPosition" [updatePosition]="false"></app-datepicker-wrapper>

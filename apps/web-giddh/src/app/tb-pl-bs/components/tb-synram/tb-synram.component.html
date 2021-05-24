@@ -7,13 +7,15 @@
                         <label class="d-block">Filter Type</label>
                         <div class="form-group close-btn">
                             <input type="text" readonly value="Financial year" class="form-control selected-val">
-                            <span class="clear">×</span> </div>
+                            <span class="clear">×</span>
+                        </div>
                     </div>
                     <div class="form-group mr-r1">
                         <label class="d-block">Select Year</label>
                         <div class="form-group close-btn">
                             <input type="text" readonly value="FY-APR2018-MAR2019" class="form-control selected-val">
-                            <span class="clear">×</span> </div>
+                            <span class="clear">×</span>
+                        </div>
                     </div>
                     <div class="form-group mr-r1"><br>
                         <button class="btn btn-success" type="submit"> Apply </button>
@@ -77,10 +79,10 @@
                 <thead>
                     <tr>
                         <th>Particular</th>
-                        <th *ngIf="showOpening" align="right"
-                            class="opening-check text-right table-cell">Opening Dr.</th>
-                        <th *ngIf="showOpening" align="right"
-                            class="opening-check text-right table-cell">Opening Cr.</th>
+                        <th *ngIf="showOpening" align="right" class="opening-check text-right table-cell">Opening Dr.
+                        </th>
+                        <th *ngIf="showOpening" align="right" class="opening-check text-right table-cell">Opening Cr.
+                        </th>
                         <th *ngIf="showTransactions" align="right" class="transaction-check text-right">Dr.
                             Trans</th>
                         <th *ngIf="showTransactions" align="right" class="transaction-check text-right">Cr.
@@ -95,8 +97,8 @@
                     <ng-container *ngFor="let grp of (data$ | async).groupDetails; let i = index">
                         <tr>
                             <td>{{grp.groupName}}</td>
-                            <td *ngIf="showOpening" align="right"
-                                class="opening-check text-right table-cell">{{ grp.closingBalance.amount }}</td>
+                            <td *ngIf="showOpening" align="right" class="opening-check text-right table-cell">{{
+                                grp.closingBalance.amount }}</td>
                             <td *ngIf="showOpening" align="right" class="opening-check table-cell">Table
                                 cell</td>
                             <td *ngIf="showTransactions" align="right" class="transaction-check">Table cell</td>
