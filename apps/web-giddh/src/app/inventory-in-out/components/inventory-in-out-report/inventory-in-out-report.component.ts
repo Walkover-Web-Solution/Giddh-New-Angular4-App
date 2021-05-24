@@ -93,8 +93,8 @@ export class InventoryInOutReportComponent implements OnDestroy {
         });
         this._store.pipe(select(p => p.inventoryInOutState.inventoryReport), takeUntil(this.destroyed$)).subscribe(p => this.inventoryReport = p);
         this._store.pipe(select(p => ({ stocksList: p.inventory.stocksList, inventoryUsers: p.inventoryInOutState.inventoryUsers })), takeUntil(this.destroyed$)).subscribe(p => p.inventoryUsers && p.stocksList &&
-                (this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r.uniqueName, additional: 'stock' }))
-                    .concat(p.inventoryUsers.map(r => ({ label: r.name, value: r.uniqueName, additional: 'person' })))));
+            (this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r.uniqueName, additional: 'stock' }))
+                .concat(p.inventoryUsers.map(r => ({ label: r.name, value: r.uniqueName, additional: 'person' })))));
     }
 
     public dateSelected(val) {
@@ -165,6 +165,6 @@ export class InventoryInOutReportComponent implements OnDestroy {
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
-        this.destroyed$.complete();       
-	}
+        this.destroyed$.complete();
+    }
 }

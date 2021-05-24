@@ -2,23 +2,23 @@
  * Created by kunalsaxena on 9/1/17.
  */
 import * as moment from 'moment/moment';
-import {InvoicePurchaseActions} from '../actions/purchase-invoice/purchase-invoice.action';
-import {select, Store} from '@ngrx/store';
-import {CompanyResponse, StateDetailsRequest} from '../models/api-models/Company';
-import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ToasterService} from '../services/toaster.service';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {CompanyActions} from '../actions/company.actions';
-import {BsDropdownDirective} from 'ngx-bootstrap/dropdown';
-import {AlertConfig} from 'ngx-bootstrap/alert';
-import {GIDDH_DATE_FORMAT} from '../shared/helpers/defaultDateFormat';
-import {Observable, of, ReplaySubject} from 'rxjs';
-import {AppState} from '../store';
-import {filter, take, takeUntil} from 'rxjs/operators';
-import {GstReconcileActions} from '../actions/gst-reconcile/GstReconcile.actions';
-import {NavigationStart, Router} from '@angular/router';
-import {GstOverViewRequest} from '../models/api-models/GstReconcile';
-import {createSelector} from 'reselect';
+import { InvoicePurchaseActions } from '../actions/purchase-invoice/purchase-invoice.action';
+import { select, Store } from '@ngrx/store';
+import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ToasterService } from '../services/toaster.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { CompanyActions } from '../actions/company.actions';
+import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
+import { AlertConfig } from 'ngx-bootstrap/alert';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { AppState } from '../store';
+import { filter, take, takeUntil } from 'rxjs/operators';
+import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
+import { NavigationStart, Router } from '@angular/router';
+import { GstOverViewRequest } from '../models/api-models/GstReconcile';
+import { createSelector } from 'reselect';
 import { IOption } from '../theme/ng-select/ng-select';
 import { GstReconcileService } from '../services/GstReconcile.service';
 import { GeneralService } from '../services/general.service';
@@ -47,8 +47,8 @@ import { OrganizationType } from '../models/user-login-state';
 })
 
 export class GstComponent implements OnInit, OnDestroy {
-    @ViewChild('monthWise', {static: true}) public monthWise: BsDropdownDirective;
-    @ViewChild('periodDropdown', {static: true}) public periodDropdown;
+    @ViewChild('monthWise', { static: true }) public monthWise: BsDropdownDirective;
+    @ViewChild('periodDropdown', { static: true }) public periodDropdown;
 
     public showCalendar: boolean = false;
     public period: any = null;
@@ -164,7 +164,7 @@ export class GstComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
             }
         });
-        this.imgPath = (isElectron||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompanyGstNumber !== response) {
                 this.activeCompanyGstNumber = response;
@@ -282,7 +282,7 @@ export class GstComponent implements OnInit, OnDestroy {
 
     public checkIfDatepickerVisible() {
         setTimeout(() => {
-            if(this.datepickerVisibility === "hidden") {
+            if (this.datepickerVisibility === "hidden") {
                 this.periodDropdown.hide();
             }
         }, 500);
@@ -295,7 +295,7 @@ export class GstComponent implements OnInit, OnDestroy {
      * @memberof GstComponent
      */
     public selectTax(event?: any): void {
-        if(event && event.value) {
+        if (event && event.value) {
             this.activeCompanyGstNumber = event.value;
         }
 

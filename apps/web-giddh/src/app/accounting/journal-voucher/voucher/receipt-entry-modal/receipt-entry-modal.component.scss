@@ -1,58 +1,61 @@
-@import '../../../../../assets/css/color.scss';
-.receipt-entry-content{
+@import "../../../../../assets/css/color.scss";
+.receipt-entry-content {
     .receipt-entry-top-detail {
         text-align: center;
         border-bottom: 1px solid $gainsboro;
         margin-bottom: 15px;
         padding: 0 0 15px;
-        h5{
-            font-family: 'opensans-semibold';
+        h5 {
+            font-family: "opensans-semibold";
         }
-        p{
+        p {
             font-size: 14px;
         }
     }
-    .receipt-entry-form{
+    .receipt-entry-form {
         display: flex;
         font-size: 14px;
         flex-direction: column;
         min-height: 200px;
 
-            .form-fields{
-                &:first-child{
+        .form-fields {
+            &:first-child {
                 .single-field {
-                    label{
+                    label {
                         display: flex;
                     }
-                    .icon-arrow-down, .icon-cross{
+                    .icon-arrow-down,
+                    .icon-cross {
                         top: 36px;
                     }
-
                 }
             }
         }
-        .form-fields{
+        .form-fields {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 15px;
-            .receipt-type, .select-tax, .about-invoice-detail{
+            .receipt-type,
+            .select-tax,
+            .about-invoice-detail {
                 min-width: 180px;
-                div.position-relative{
+                div.position-relative {
                     width: 100% !important;
                 }
             }
             .single-field {
-                margin-right: 15px;flex: 1 1 auto !important;
-                label{
+                margin-right: 15px;
+                flex: 1 1 auto !important;
+                label {
                     margin-bottom: 5px;
                     display: none;
                 }
-                &.set-width{
+                &.set-width {
                     width: 100%;
                     max-width: 375px;
                 }
-                .icon-arrow-down{
+                .icon-arrow-down {
                     font-size: 14px;
                     position: absolute;
                     right: 5px;
@@ -60,21 +63,21 @@
                     color: $nero;
                 }
             }
-            .to-cr-field{
+            .to-cr-field {
                 min-width: 40px;
                 max-width: 40px;
             }
-            .delete-row{
-                    display: flex;
+            .delete-row {
+                display: flex;
+                color: $nero;
+                min-width: 18px;
+                max-width: 18px;
+                i.icon-cross {
+                    font-size: 14px;
                     color: $nero;
-                    min-width: 18px;
-                    max-width: 18px;
-                    i.icon-cross{
-                        font-size: 14px;
-                        color: $nero;
-                        line-height: 2;
-                    }
+                    line-height: 2;
                 }
+            }
         }
     }
 }

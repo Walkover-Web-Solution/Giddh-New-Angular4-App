@@ -25,7 +25,7 @@ export class ExportDaybookComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _permissionDataService: PermissionDataService) {
-        
+
     }
 
     public ngOnInit() {

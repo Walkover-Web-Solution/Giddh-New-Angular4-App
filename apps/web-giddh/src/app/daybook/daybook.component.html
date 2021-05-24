@@ -1,4 +1,5 @@
-<ng-container appTranslate [file]="'daybook'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'daybook'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <ng-container *ngIf="!showLoader">
@@ -6,10 +7,12 @@
             <!-- ledger header -->
             <div class="col-md-12">
                 <div>
-                    <div class="form-group mr-r15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
+                    <div class="form-group mr-r15 pull-left linked-entities"
+                        *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
                         <div class="form-group">
-                            <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
-                                [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
+                            <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
+                                [showClear]="false" [ItemHeight]="33" width="100%"
+                                (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
                                 [placeholder]="localeData?.select_entity" [fixedValue]="currentBranch?.alias">
                                 <ng-template #optionTemplate let-option="option">
                                     <ng-container>
@@ -17,10 +20,12 @@
                                             <span class="entity-icon">
                                                 <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
                                                     tooltip="{{commonLocaleData?.app_branch}}"></i>
-                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="{{commonLocaleData?.app_company}}"></i>
+                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
+                                                    tooltip="{{commonLocaleData?.app_company}}"></i>
                                             </span>
                                             <span class="entity-details">
-                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-'
+                                                    }}</div>
                                                 <div class="item-unique giddh-limit single-line-clamp">
                                                     {{ option.name || '-' }}
                                                 </div>
@@ -34,12 +39,15 @@
                     <div class="form-inline d-block flex-row flex-nowrap daybook-filter">
                         <div class="form-group custom-datepicker" (click)="showGiddhDatepicker($event)">
                             <i class="icon-calender calendar-addon"></i>
-                            <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker border-radius-2"/>
+                            <input type="text" name="selectedDateRange"
+                                [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker border-radius-2" />
                         </div>
                         <div class="form-group cursor-pointer">
 
 
-                            <div class="advance-icon align-items-center" tooltip="Advance Search" (click)="onOpenAdvanceSearch()">
+                            <div class="advance-icon align-items-center" tooltip="Advance Search"
+                                (click)="onOpenAdvanceSearch()">
                                 <span class="icon-advance-filter"></span>
                             </div>
 
@@ -47,7 +55,8 @@
                         </div>
                         <div class="form-group expand-collapse-btn">
 
-                            <button type="button" class="btn btn-default" (click)="toggleExpand()">{{ isAllExpanded ? commonLocaleData?.app_collapse_all : commonLocaleData?.app_expand_all }}
+                            <button type="button" class="btn btn-default" (click)="toggleExpand()">{{ isAllExpanded ?
+                                commonLocaleData?.app_collapse_all : commonLocaleData?.app_expand_all }}
                             </button>
 
                         </div>
@@ -57,10 +66,13 @@
                             </button>
                         </div>
                         <div class="expand-export">
-                            <button type="button" class="btn btn-default expand-btn-hide-desktop" (click)="toggleExpand()">{{ isAllExpanded ? commonLocaleData?.app_collapse_all : commonLocaleData?.app_expand_all }}
+                            <button type="button" class="btn btn-default expand-btn-hide-desktop"
+                                (click)="toggleExpand()">{{ isAllExpanded ? commonLocaleData?.app_collapse_all :
+                                commonLocaleData?.app_expand_all }}
                             </button>
                             <button type="button" class="btn btn-default export-btn pull-right mr-0"
-                                (click)="exportDaybook()" [disabled]="!((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
+                                (click)="exportDaybook()"
+                                [disabled]="!((daybookData$ | async)?.entries?.length > 0)">{{commonLocaleData?.app_export}}</button>
                         </div>
 
                     </div>
@@ -98,16 +110,18 @@
 
                             <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);"
                                 class="daybook-table-tbody">
-                                <tr (dblclick)="showUpdateLedgerModal(entry)" (keydown.enter)="showUpdateLedgerModal(entry)">
+                                <tr (dblclick)="showUpdateLedgerModal(entry)"
+                                    (keydown.enter)="showUpdateLedgerModal(entry)">
                                     <td [attr.data-title]="commonLocaleData?.app_date">{{ entry.entryDate }}</td>
-                                    <td [attr.data-title]="commonLocaleData?.app_particular">{{ entry.particular.name }}</td>
+                                    <td [attr.data-title]="commonLocaleData?.app_particular">{{ entry.particular.name }}
+                                    </td>
                                     <td [attr.data-title]="localeData?.voucher_name">{{ entry.voucherName }}</td>
-                                    <td class="text-right" [attr.data-title]="localeData?.voucher_no">{{ entry.voucherNo }}</td>
+                                    <td class="text-right" [attr.data-title]="localeData?.voucher_no">{{ entry.voucherNo
+                                        }}</td>
                                     <td class="text-right" [attr.data-title]="localeData?.debit_amount">
                                         <!-- {{ entry.debitAmount || 0 |giddhCurrency }} -->
                                         <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="entry.debitAmount || 0"
-                                                [currencySymbol]="false"
+                                            <amount-field [amount]="entry.debitAmount || 0" [currencySymbol]="false"
                                                 [currencyCode]="false">
                                             </amount-field>
                                         </span>
@@ -115,7 +129,8 @@
                                     <td class="text-right" [attr.data-title]="localeData?.credit_amount">
                                         <!-- {{ entry.creditAmount || 0 |giddhCurrency}} -->
                                         <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="entry.creditAmount || 0" [currencySymbol]="false" [currencyCode]="false">
+                                            <amount-field [amount]="entry.creditAmount || 0" [currencySymbol]="false"
+                                                [currencyCode]="false">
                                             </amount-field>
                                         </span>
                                     </td>
@@ -124,14 +139,16 @@
                                 <ng-container *ngIf="entry !== undefined && entry.isExpanded">
                                     <tr *ngFor="let details of entry.otherTransactions">
                                         <td class="hide-td"></td>
-                                        <td [attr.data-title]="commonLocaleData?.app_particular">{{ details.particular.name }}</td>
+                                        <td [attr.data-title]="commonLocaleData?.app_particular">{{
+                                            details.particular.name }}</td>
                                         <td class="hide-td"></td>
                                         <td class="hide-td"></td>
                                         <td class="text-right" [attr.data-title]="localeData?.debit_amount">
                                             <span *ngIf="details.type === 'DEBIT'">
                                                 <!-- {{ details.amount || 0 |giddhCurrency}} -->
                                                 <span class="d-flex justify-content-end">
-                                                    <amount-field [amount]="details.amount || 0" [currencySymbol]="false" [currencyCode]="false">
+                                                    <amount-field [amount]="details.amount || 0"
+                                                        [currencySymbol]="false" [currencyCode]="false">
                                                     </amount-field>
                                                 </span>
                                             </span>
@@ -141,7 +158,8 @@
                                             <span *ngIf="details.type === 'CREDIT'">
                                                 <!-- {{ details.amount|| 0  |giddhCurrency}} -->
                                                 <span class="d-flex justify-content-end">
-                                                    <amount-field [amount]="(details.amount || 0)" [currencySymbol]="false" [currencyCode]="false">
+                                                    <amount-field [amount]="(details.amount || 0)"
+                                                        [currencySymbol]="false" [currencyCode]="false">
                                                     </amount-field>
                                                 </span>
                                             </span>
@@ -150,7 +168,8 @@
                                         <ng-container *ngIf="isEntryExpanded">
                                             <td>{{details.inventory?details.inventory.stock.name:''}}
                                             </td>
-                                            <td *ngIf="details.inventory" class=" text-right">{{details.inventory.quantity |giddhCurrency}}
+                                            <td *ngIf="details.inventory" class=" text-right">
+                                                {{details.inventory.quantity |giddhCurrency}}
                                             </td>
                                             <td *ngIf="!details.inventory" class=" text-right">{{'-'}}
                                             </td>
@@ -159,17 +178,20 @@
                                             <td *ngIf="details.inventory" class=" text-right">
                                                 <!-- {{details.inventory.rate |giddhCurrency}} -->
                                                 <span class="d-flex justify-content-end">
-                                                    <amount-field [amount]="details.inventory.rate" [currencySymbol]="false" [currencyCode]="false">
+                                                    <amount-field [amount]="details.inventory.rate"
+                                                        [currencySymbol]="false" [currencyCode]="false">
                                                     </amount-field>
                                                 </span>
                                             </td>
                                             <td *ngIf="!details.inventory" class=" text-right">{{'-'}}
                                             </td>
-                                            <td>{{details.inventory?details.inventory.hsnNumber? details.inventory.hsnNumber: details.inventory.sacNumber:''}}
+                                            <td>{{details.inventory?details.inventory.hsnNumber?
+                                                details.inventory.hsnNumber: details.inventory.sacNumber:''}}
                                             </td>
                                             <td>{{details.inventory?details.inventory.skuCode:''}}
                                             </td>
-                                            <td class="warehouse-name">{{details.inventory?details.inventory.warehouse.name:''}}
+                                            <td class="warehouse-name">
+                                                {{details.inventory?details.inventory.warehouse.name:''}}
                                             </td>
                                         </ng-container>
                                     </tr>
@@ -178,15 +200,21 @@
                         </table>
                     </div>
                     <div class="mr-t2 text-center">
-                        <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems}}
+                        <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ |
+                            async)?.totalItems}}
                             {{commonLocaleData?.app_transactions}}
                             | {{(daybookData$ | async)?.totalPages}} {{commonLocaleData?.app_pages}}
                         </small>
-                        <small class="grey" *ngIf="!((daybookData$ | async)?.totalItems)">0 {{commonLocaleData?.app_transactions}} | 0 {{commonLocaleData?.app_pages}}</small>
+                        <small class="grey" *ngIf="!((daybookData$ | async)?.totalItems)">0
+                            {{commonLocaleData?.app_transactions}} | 0 {{commonLocaleData?.app_pages}}</small>
                     </div>
                     <!-- pagination -->
                     <div class="mt-1">
-                        <pagination [totalItems]="daybookData?.totalItems" [(ngModel)]="daybookData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="daybookData?.count" [rotate]="false" (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
+                        <pagination [totalItems]="daybookData?.totalItems" [(ngModel)]="daybookData.page" [maxSize]="5"
+                            class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="daybookData?.count"
+                            [rotate]="false" (pageChanged)="pageChanged($event)"
+                            [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous"
+                            [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
                         </pagination>
                     </div>
                     <!-- pagination -->
@@ -199,8 +227,9 @@
     <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <daybook-advance-search-model *ngIf="isAdvanceSearchOpened" #daybookAdvanceSearch [startDate]="daybookQueryRequest.from"
-                    [endDate]="daybookQueryRequest.to" [localeData]="localeData" [commonLocaleData]="commonLocaleData" (closeModelEvent)="closeAdvanceSearchPopup($event)">
+                <daybook-advance-search-model *ngIf="isAdvanceSearchOpened" #daybookAdvanceSearch
+                    [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to" [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData" (closeModelEvent)="closeAdvanceSearchPopup($event)">
                 </daybook-advance-search-model>
             </div>
         </div>
@@ -211,7 +240,8 @@
     <div bsModal #exportDaybookModal="bs-modal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <export-daybook [localeData]="localeData" [commonLocaleData]="commonLocaleData" (closeExportDaybookModal)="hideExportDaybookModal($event)"></export-daybook>
+                <export-daybook [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+                    (closeExportDaybookModal)="hideExportDaybookModal($event)"></export-daybook>
             </div>
         </div>
     </div>
@@ -219,9 +249,13 @@
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">
             <div class="modal-body">
-                <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                                        [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                                        [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+                <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
+                    [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                    [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}"
+                    (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                    [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
             </div>
         </div>
     </ng-template>
@@ -232,7 +266,8 @@
     [config]="{keyboard: true}" tabindex="-1">
     <div class="modal-dialog modal-xl modal-ledger">
         <div class="modal-content" *ngIf="updateLedgerModal.isShown">
-            <update-ledger-entry-panel [isPettyCash]="false" (closeUpdateLedgerModal)="hideUpdateLedgerModal()" (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"></update-ledger-entry-panel>
+            <update-ledger-entry-panel [isPettyCash]="false" (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
+                (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"></update-ledger-entry-panel>
         </div>
     </div>
     <div class="show-if-update-ledger-open"></div>
@@ -240,9 +275,8 @@
 
 <!-- aside menu section -->
 <div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
-<app-aside-menu-sales-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'"
-    [class]="asideMenuStateForOtherTaxes" [taxes]="companyTaxesList"
-    [otherTaxesModal]="updateLedgerComponent.vm.selectedLedger.otherTaxModal"
+<app-aside-menu-sales-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'" [class]="asideMenuStateForOtherTaxes"
+    [taxes]="companyTaxesList" [otherTaxesModal]="updateLedgerComponent.vm.selectedLedger.otherTaxModal"
     [commonLocaleData]="commonLocaleData" [@slideInOut]="asideMenuStateForOtherTaxes"
     (closeModal)="toggleOtherTaxesAsidePane(null)"
     (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(null);">

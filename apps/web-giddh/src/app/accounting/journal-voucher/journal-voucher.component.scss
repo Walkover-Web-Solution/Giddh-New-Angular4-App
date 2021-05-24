@@ -181,8 +181,8 @@ textarea[name="narration"]:focus {
 :host ::ng-deep .menu {
     border-left: 0 !important;
 }
-@media(max-width:991px){
-    .account-wrapper{
+@media (max-width: 991px) {
+    .account-wrapper {
         margin-top: 50px;
     }
 }

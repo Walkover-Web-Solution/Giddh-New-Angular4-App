@@ -26,8 +26,8 @@ export class AVAccountListComponent implements OnChanges {
     @Output() public noResultClicked = new EventEmitter<null>();
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
-    @ViewChild(VirtualScrollComponent, {static: false}) public virtualScrollElm: VirtualScrollComponent;
-    @ViewChild('listContainer', {static: true}) public listContainer: ElementRef;
+    @ViewChild(VirtualScrollComponent, { static: false }) public virtualScrollElm: VirtualScrollComponent;
+    @ViewChild('listContainer', { static: true }) public listContainer: ElementRef;
     public math: any = Math;
     public viewPortItems: IOption[];
 
