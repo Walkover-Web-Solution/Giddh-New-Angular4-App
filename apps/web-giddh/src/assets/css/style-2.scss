@@ -1827,7 +1827,6 @@ fieldset[disabled] .btn-primary:hover {
 
 .ledger-main .form-control {
     background: $white !important;
-    height: 48px;
 }
 
 .ledger-header thead th {
@@ -6089,8 +6088,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 
 .ledg-head.entry-popup table td[class*="col-"] {
-    padding: 0px !important;
-    padding-bottom: 1px !important;
     border-bottom: 1px solid $gainsboro;
     border-right: 1px solid $gainsboro;
     font-size: 13px;
@@ -6103,10 +6100,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .ledg-head.entry-popup table td.pd-r25 {
     padding-right: 25px !important;
-}
-
-.ledg-head .ledger-main td[class*="col-"] {
-    padding: 0px !important;
 }
 
 /* table th[class*=col-]:last-child,

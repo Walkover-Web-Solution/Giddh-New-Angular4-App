@@ -304,8 +304,12 @@ td.border-right-none {
     border-right: none !important;
 }
 
-.inventory-stock-table td {
-    white-space: inherit;
+.inventory-stock-table{
+    td {
+        &:first-child{
+            white-space: inherit;
+        }
+    }
 }
 
 .advance-icon {

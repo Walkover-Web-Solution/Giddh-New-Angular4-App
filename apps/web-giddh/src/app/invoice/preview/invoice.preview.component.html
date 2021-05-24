@@ -804,7 +804,7 @@
                                                         item.balanceStatus ? item.balanceStatus :
                                                         commonLocaleData?.app_select_action }}</span>
                                                 </div>
-                                                <div class="click-dropdwon" [attachOutsideOnClick]="true"
+                                                <div class="click-dropdown" [attachOutsideOnClick]="true"
                                                     (clickOutside)="showMoreBtn = false" [exclude]="'.dropdown-menu'">
                                                     <i class="fa fa-ellipsis-v"
                                                         (click)="showMoreBtn=!showMoreBtn;selectedItemForMoreBtn = item.voucherNumber"></i>
@@ -870,7 +870,7 @@
                 [hidden]="(isGetAllRequestInProcess$ | async)" class="pagination-wrapper">
                 <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5"
                     class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false"
-                    previousText="&#9668;" nextText="&#9658;" (pageChanged)="pageChanged($event)"
+                    previousText="&#9664;" nextText="&#9658;" (pageChanged)="pageChanged($event)"
                     [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous"
                     [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
             </div>
