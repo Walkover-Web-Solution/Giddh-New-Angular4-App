@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -15,7 +15,7 @@ import { CustomActions } from '../../../store/customActions';
 export class SettingsTriggersActions {
 
 
-    public CreateTrigger$: Observable<Action> = createEffect( ()=> this.action$
+    public CreateTrigger$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.CREATE_TRIGGERS),
             switchMap((action: CustomActions) => {
@@ -24,7 +24,7 @@ export class SettingsTriggersActions {
             })));
 
 
-    public CreateTriggerResponse$: Observable<Action> =createEffect( ()=>  this.action$
+    public CreateTriggerResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.CREATE_TRIGGERS_RESPONSE),
             map((response: CustomActions) => {
@@ -39,7 +39,7 @@ export class SettingsTriggersActions {
             })));
 
 
-    public UpdateTrigger$: Observable<Action> =createEffect( ()=>  this.action$
+    public UpdateTrigger$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.UPDATE_TRIGGERS),
             switchMap((action: CustomActions) => {
@@ -48,7 +48,7 @@ export class SettingsTriggersActions {
             })));
 
 
-    public UpdateTriggerResponse$: Observable<Action> =createEffect( ()=>  this.action$
+    public UpdateTriggerResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.UPDATE_TRIGGERS_RESPONSE),
             map((response: CustomActions) => {
@@ -63,7 +63,7 @@ export class SettingsTriggersActions {
             })));
 
 
-    public DeleteTrigger$: Observable<Action> =createEffect( ()=>  this.action$
+    public DeleteTrigger$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.DELETE_TRIGGERS),
             switchMap((action: CustomActions) => {
@@ -72,7 +72,7 @@ export class SettingsTriggersActions {
             })));
 
 
-    public DeleteTriggerResponse$: Observable<Action> =createEffect( ()=>  this.action$
+    public DeleteTriggerResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.DELETE_TRIGGERS_RESPONSE),
             map((response: CustomActions) => {
@@ -87,7 +87,7 @@ export class SettingsTriggersActions {
             })));
 
 
-    public GetTrigger$: Observable<Action> =createEffect( ()=>  this.action$
+    public GetTrigger$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS),
             switchMap((action: CustomActions) => {

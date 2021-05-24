@@ -27,8 +27,8 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public getUpdateList: EventEmitter<string> = new EventEmitter();
-    @ViewChild('deleteAccountModal', {static: true}) public deleteAccountModal: ModalDirective;
-    @ViewChild('addAccountNewComponent', {static: true}) public addAccountNewComponent: AccountAddNewDetailsComponent;
+    @ViewChild('deleteAccountModal', { static: true }) public deleteAccountModal: ModalDirective;
+    @ViewChild('addAccountNewComponent', { static: true }) public addAccountNewComponent: AccountAddNewDetailsComponent;
 
     public flatGroupsOptions: IOption[];
     public isGstEnabledAcc: boolean = true; // true only for groups will not under other
@@ -172,8 +172,8 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
                 name: listItem.name,
                 uniqueName: listItem.uniqueName
             });
-            listItem = Object.assign({}, listItem, {parentGroups: []});
-            if(listItem) {
+            listItem = Object.assign({}, listItem, { parentGroups: [] });
+            if (listItem) {
                 listItem.parentGroups = newParents;
             }
             if (listItem.groups.length > 0) {

@@ -39,7 +39,7 @@ export class AuditLogsSidebarVM {
     public selectedFromDate: Date;
     /** Selected to date */
     public selectedToDate: Date;
-     /** Selected account unique name */
+    /** Selected account unique name */
     public selectedAccountUniqueName: string = '';
 
     constructor(private localeData, private commonLocaleData) {
