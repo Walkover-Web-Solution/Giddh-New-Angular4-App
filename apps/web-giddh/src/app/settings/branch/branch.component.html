@@ -1,4 +1,5 @@
-<ng-container appTranslate [file]="'settings/branch'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<ng-container appTranslate [file]="'settings/branch'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="clearfix">
         <div class="date-advance-search row">
             <div class="col-sm-12 mr-b15 branch-header d-flex justify-content-between">
@@ -34,7 +35,8 @@
                             </div> -->
                         <div class="search-field form-top-fields w-100">
                             <div class="search-branch-box">
-                                <input type="text" name="searchBranch" [(ngModel)]="searchBranchQuery" #branchSearch [placeholder]="localeData?.search_branch" class="form-control" />
+                                <input type="text" name="searchBranch" [(ngModel)]="searchBranchQuery" #branchSearch
+                                    [placeholder]="localeData?.search_branch" class="form-control" />
                             </div>
                             <a class="cp mr-l1 clear-filter-btn" *ngIf="searchBranchQuery" href="javascript:;"
                                 (click)="resetFilter()" [tooltip]="localeData?.reset_search">
@@ -64,7 +66,8 @@
                         </div> -->
                     </div>
                 </form>
-                <button class="btn btn-sky-blue mr-0" (click)="openAddBranchModal()">{{localeData?.create_branch}}</button>
+                <button class="btn btn-sky-blue mr-0"
+                    (click)="openAddBranchModal()">{{localeData?.create_branch}}</button>
             </div>
         </div>
         <!-- <div class="row select-branch">
@@ -100,7 +103,8 @@
         <div class="cube1"></div>
         <div class="cube2"></div>
     </div>
-    <div *ngIf="(branches$ | async)?.length > 0 && branchViewType === 'table' && !isMobileScreen " class="table-responsive">
+    <div *ngIf="(branches$ | async)?.length > 0 && branchViewType === 'table' && !isMobileScreen "
+        class="table-responsive">
         <table class="table basic giddh-table on-mobile-view">
             <thead>
                 <tr>
@@ -122,20 +126,24 @@
                     <td [attr.data-title]="localeData?.parent">{{branch?.parentBranch?.name || '-'}}</td>
                     <!-- <td data-title="Contact No.">{{branch.contactNo}}</td> -->
                     <td [attr.data-title]="localeData?.total_sales" class="text-right"><span
-                            *ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">{{branch.companyTotals.sales.amount | giddhCurrency}}</span><span
+                            *ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">{{branch.companyTotals.sales.amount
+                            | giddhCurrency}}</span><span
                             *ngIf="!(branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount)">0</span>
                     </td>
                     <td class="text-right" [attr.data-title]="localeData?.total_expenses"><span
-                            *ngIf="branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount">{{branch.companyTotals.expenses.amount | giddhCurrency}}</span><span
+                            *ngIf="branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount">{{branch.companyTotals.expenses.amount
+                            | giddhCurrency}}</span><span
                             *ngIf="!(branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount)">0</span>
                     </td>
                     <td class="text-right" [attr.data-title]="localeData?.total_taxes"><span
-                            *ngIf="branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount">{{branch.companyTotals.taxes.amount | giddhCurrency}}</span><span
+                            *ngIf="branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount">{{branch.companyTotals.taxes.amount
+                            | giddhCurrency}}</span><span
                             *ngIf="!(branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount)">0</span>
                     </td>
                     <td [attr.data-title]="commonLocaleData?.app_action" class="text-right unlink">
                         <!-- <a (click)="removeBranch(branch.uniqueName, branch.name)">Delink</a></td> -->
-                        <a (click)="updateBranch(branch)">{{commonLocaleData?.app_edit}}</a></td>
+                        <a (click)="updateBranch(branch)">{{commonLocaleData?.app_edit}}</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -167,14 +175,16 @@
                                             </div> -->
 
                                         <a id="button-basic" dropdownToggle
-                                            class="icon-dots-three-vertical dropdown-toggle cp" aria-controls="dropdown-basic">
+                                            class="icon-dots-three-vertical dropdown-toggle cp"
+                                            aria-controls="dropdown-basic">
                                         </a>
                                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                             aria-labelledby="button-basic">
                                             <!-- <li role="menuitem"><a class="dropdown-item"
                                                     (click)="removeBranch(branch.uniqueName, branch.name)">Delink</a></li> -->
                                             <li role="menuitem"><a class="dropdown-item"
-                                                    (click)="updateBranch(branch)">{{commonLocaleData?.app_edit}}</a></li>
+                                                    (click)="updateBranch(branch)">{{commonLocaleData?.app_edit}}</a>
+                                            </li>
                                             <!-- <li role="menuitem"><a class="dropdown-item" (click)="openEditBranch()">Edit</a></li>
                                             <li role="menuitem"><a class="dropdown-item">Move</a></li>
                                             <li role="menuitem"><a class="dropdown-item">Archive</a></li>
@@ -190,7 +200,8 @@
 
                             <div class="clearfix">
                                 <div *ngIf="branch?.parentBranch?.alias" class="pull-left">
-                                    <span class="parent-branch">{{localeData?.parent_entity}}:</span> {{branch?.parentBranch?.alias}}
+                                    <span class="parent-branch">{{localeData?.parent_entity}}:</span>
+                                    {{branch?.parentBranch?.alias}}
                                 </div>
                             </div>
                             <!-- <div class="clearfix">
@@ -224,7 +235,8 @@
                                                     <p *ngIf="address?.taxType && address?.taxNumber">
                                                         {{ address?.taxType }} : {{ address?.taxNumber }}
                                                     </p>
-                                                    <p *ngIf="address?.pincode">{{commonLocaleData?.pin}}: {{address?.pincode}}</p>
+                                                    <p *ngIf="address?.pincode">{{commonLocaleData?.pin}}:
+                                                        {{address?.pincode}}</p>
                                                 </ng-template>
                                             </ng-container>
                                         </div>
@@ -309,7 +321,8 @@
                 <div class="modal-content">
                     <div class="modal-header clearfix">
                         <h3>{{localeData?.create_new_branch}}</h3>
-                        <span aria-hidden="true" class="close" (click)="hideAddBranchModal()" data-dismiss="modal">×</span>
+                        <span aria-hidden="true" class="close" (click)="hideAddBranchModal()"
+                            data-dismiss="modal">×</span>
                     </div>
                     <div class="modal-body">
                         <div>
@@ -317,7 +330,8 @@
                             <div class="btn-group btn-block" dropdown>
                                 <button dropdownToggle (click)="getAllBranches()" type="button"
                                     class="form-control text-left btn-block dropdown-toggle">
-                                    <span *ngIf="!selectedCompaniesUniquename.length"> {{commonLocaleData?.app_select_branch}} </span><span
+                                    <span *ngIf="!selectedCompaniesUniquename.length">
+                                        {{commonLocaleData?.app_select_branch}} </span><span
                                         *ngIf="selectedCompaniesUniquename.length">{{selectedCompaniesUniquename.length}}
                                         {{localeData?.selected}}</span><span class="select_drop pull-right mr-t1"><i
                                             class="fa fa-caret-down"></i></span>
@@ -354,13 +368,16 @@
                         <div>
                             <br>
                             <span>{{localeData?.or}}</span>
-                            <button class="btn-link" (click)="openCreateCompanyModal()">{{localeData?.create_new_branch}}</button>
+                            <button class="btn-link"
+                                (click)="openCreateCompanyModal()">{{localeData?.create_new_branch}}</button>
                         </div>
 
 
                         <div class="buttonYesCancel">
-                            <button (click)="hideAddBranchModal()" class="btn btn-sm btn-danger">{{commonLocaleData?.app_cancel}}</button>
-                            <button (click)="createBranches()" class="btn btn-sm btn-success">{{commonLocaleData?.app_yes}}</button>
+                            <button (click)="hideAddBranchModal()"
+                                class="btn btn-sm btn-danger">{{commonLocaleData?.app_cancel}}</button>
+                            <button (click)="createBranches()"
+                                class="btn btn-sm btn-success">{{commonLocaleData?.app_yes}}</button>
                         </div>
 
                     </div>
@@ -397,8 +414,10 @@
                     <div class="modal-body" [innerHTML]="confirmationMessage">
                     </div>
                     <div class="modal-footer clearfix">
-                        <button (click)="onUserConfirmation(true)" class="btn btn-sm btn-success">{{commonLocaleData?.app_yes}}</button>
-                        <button (click)="onUserConfirmation(false)" class="btn btn-sm btn-danger">{{commonLocaleData?.app_no}}</button>
+                        <button (click)="onUserConfirmation(true)"
+                            class="btn btn-sm btn-success">{{commonLocaleData?.app_yes}}</button>
+                        <button (click)="onUserConfirmation(false)"
+                            class="btn btn-sm btn-danger">{{commonLocaleData?.app_no}}</button>
                     </div>
                     <!-- modal footer -->
                 </div>
@@ -407,12 +426,11 @@
 
 
         <!-- Edit branch -->
-        <div *ngIf="closeAddressSidePane === 'in'" appTranslate [file]="'settings/profile'" (localeData)="profileLocaleData = $event" [requireCommonData]="false">
+        <div *ngIf="closeAddressSidePane === 'in'" appTranslate [file]="'settings/profile'"
+            (localeData)="profileLocaleData = $event" [requireCommonData]="false">
             <div class="aside-overlay"></div>
             <create-address [class]="closeAddressSidePane" [@slideInOut]="closeAddressSidePane"
-                [keyboardShortcut]="'esc'"
-                (onShortcutPress)="toggleAsidePane()"
-                [companyName]="currentBranch"
+                [keyboardShortcut]="'esc'" (onShortcutPress)="toggleAsidePane()" [companyName]="currentBranch"
                 [branchToUpdate]="branchToUpdate" [showLoader]="isBranchChangeInProgress"
                 (updateAddress)="updateBranchInfo($event)" [addressConfiguration]="addressConfiguration"
                 [localeData]="profileLocaleData" [commonLocaleData]="commonLocaleData"
@@ -452,5 +470,5 @@
                 </div>
             </div>
         </ng-template> -->
-    </div>    
+    </div>
 </ng-container>

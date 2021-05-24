@@ -239,7 +239,7 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
      * @memberof RevisionHistoryComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.translationLoaded = true;
         }
     }

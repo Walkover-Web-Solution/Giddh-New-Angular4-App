@@ -353,8 +353,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 this.changeDetectorRef.detectChanges();
             }
 
-            if(event instanceof NavigationStart) {
-                if(this.companyDetailsDropDownWeb.isOpen) {
+            if (event instanceof NavigationStart) {
+                if (this.companyDetailsDropDownWeb.isOpen) {
                     this.companyDetailsDropDownWeb.hide();
                 }
             }
@@ -999,7 +999,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.allItems = this.generalService.getVisibleMenuItems(this.apiMenuItems, this.localeData?.items);
         }
     }

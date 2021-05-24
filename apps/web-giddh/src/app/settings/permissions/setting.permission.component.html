@@ -1,7 +1,10 @@
-<ng-container appTranslate [file]="'settings/permission'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'settings/permission'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <div class="pd-b2" *ngIf="localeData?.give_permission">
         <h3 class="mr-b1"><strong>{{localeData?.give_permission}}:</strong></h3>
-        <setting-permission-form [userdata]="null" [isLblShow]="false" [isUpdtCase]="false" [isHorizntl]="true" [localeData]="localeData" [commonLocaleData]="commonLocaleData" (onSubmitForm)="submitPermissionForm($event)"></setting-permission-form>
+        <setting-permission-form [userdata]="null" [isLblShow]="false" [isUpdtCase]="false" [isHorizntl]="true"
+            [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+            (onSubmitForm)="submitPermissionForm($event)"></setting-permission-form>
     </div>
 
     <div *ngIf="localeData?.give_permission">
@@ -23,11 +26,12 @@
                                         *ngFor="let user of usrGrp.rows; let i = index">
                                         <div class="row">
                                             <div class="col-12 col-lg-4 col-md-12 col-sm-12">
-                                                <div class="form-group"><input class="form-control" [value]="user.roleName"
-                                                        disabled /></div>
+                                                <div class="form-group"><input class="form-control"
+                                                        [value]="user.roleName" disabled /></div>
                                             </div>
 
-                                            <div class="col-12 col-lg-4 col-md-12 col-sm-12 permission-date-field" *ngIf="user.from || user.period">
+                                            <div class="col-12 col-lg-4 col-md-12 col-sm-12 permission-date-field"
+                                                *ngIf="user.from || user.period">
                                                 <div class="form-group">
                                                     <input *ngIf="user.from && user.to" class="form-control"
                                                         value="{{user.from}} - {{user.to}}" disabled />
@@ -36,19 +40,21 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-12 col-lg-4 col-md-12 col-sm-12 permission-date-field" *ngIf="user.ipsStr || user.cidrsStr">
+                                            <div class="col-12 col-lg-4 col-md-12 col-sm-12 permission-date-field"
+                                                *ngIf="user.ipsStr || user.cidrsStr">
                                                 <div class="form-group">
-                                                    <input *ngIf="user.ipsStr" class="form-control" [value]="user.ipsStr"
-                                                        disabled />
-                                                    <input *ngIf="user.cidrsStr" class="form-control" [value]="user.cidrsStr"
-                                                        disabled />
+                                                    <input *ngIf="user.ipsStr" class="form-control"
+                                                        [value]="user.ipsStr" disabled />
+                                                    <input *ngIf="user.cidrsStr" class="form-control"
+                                                        [value]="user.cidrsStr" disabled />
                                                 </div>
                                             </div>
 
                                             <div class="ico-btn pull-left col-12 col-lg-4 col-md-12 col-sm-12 mr-t05">
                                                 <button class="btn btn-xs" type="button"
-                                                    [hidden]="usrGrp.rows[0].isLoggedInUser" (click)="showModalForEdit(user)"><i
-                                                        aria-hidden="true" class="icon-edit-pencil"></i></button>
+                                                    [hidden]="usrGrp.rows[0].isLoggedInUser"
+                                                    (click)="showModalForEdit(user)"><i aria-hidden="true"
+                                                        class="icon-edit-pencil"></i></button>
                                                 <button class="btn btn-xs" type="button"
                                                     [hidden]="usrGrp.rows[0].isLoggedInUser"
                                                     (click)="onRevokePermission(user.uniqueName)"><i aria-hidden="true"
@@ -67,7 +73,8 @@
 
     <!-- create Ac modal -->
 
-    <div bsModal #editUserModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" *ngIf="showEditUserModal">
+    <div bsModal #editUserModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
+        *ngIf="showEditUserModal">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header clearfix">
@@ -75,7 +82,10 @@
                     <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeEditUserModal()">×</span>
                 </div>
                 <div class="modal-body">
-                    <setting-permission-form *ngIf="showEditUserModal" [isOpenedInModal]="true" [userdata]="selectedUser" [isLblShow]="true" [isUpdtCase]="(selectedUser) ? true : false" [isHorizntl]="false" [localeData]="localeData" [commonLocaleData]="commonLocaleData" (onSubmitForm)="submitPermissionForm($event)"></setting-permission-form>
+                    <setting-permission-form *ngIf="showEditUserModal" [isOpenedInModal]="true"
+                        [userdata]="selectedUser" [isLblShow]="true" [isUpdtCase]="(selectedUser) ? true : false"
+                        [isHorizntl]="false" [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+                        (onSubmitForm)="submitPermissionForm($event)"></setting-permission-form>
                 </div>
             </div>
         </div>

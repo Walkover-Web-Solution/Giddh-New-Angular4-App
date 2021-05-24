@@ -98,7 +98,7 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
 
 const getGoogleCredentials = () => {
-    if (PRODUCTION_ENV || isElectron  || isCordova) {
+    if (PRODUCTION_ENV || isElectron || isCordova) {
         return {
             GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
         };
@@ -112,7 +112,7 @@ const getGoogleCredentials = () => {
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
 };
-const SOCIAL_CONFIG = (isElectron|| isCordova) ? null : new AuthServiceConfig([
+const SOCIAL_CONFIG = (isElectron || isCordova) ? null : new AuthServiceConfig([
     {
         id: GoogleLoginProvider.PROVIDER_ID,
         // provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')

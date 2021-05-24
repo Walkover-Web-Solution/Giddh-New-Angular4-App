@@ -1,40 +1,40 @@
 {
-    "tab_heading" : "Create New Trigger(Webhook)",
-    "select_entity_type" : "Select Entity Type",
-    "select_entity_label" : "Select Entity",
-    "filter_placeholder" : "Select Filter",
-    "scope_label" : "Scope",
-    "scope_placeholder" : "Select Scope",
-    "url" : "URL",
-    "added_triggers" : "Added Triggers",
-    "entity_type" : "Entity type",
-    "entity_types" : {
-        "group" : "Group",
-        "account" : "Account"
+    "tab_heading": "Create New Trigger(Webhook)",
+    "select_entity_type": "Select Entity Type",
+    "select_entity_label": "Select Entity",
+    "filter_placeholder": "Select Filter",
+    "scope_label": "Scope",
+    "scope_placeholder": "Select Scope",
+    "url": "URL",
+    "added_triggers": "Added Triggers",
+    "entity_type": "Entity type",
+    "entity_types": {
+        "group": "Group",
+        "account": "Account"
     },
-    "webhook" : "Webhook",
-    "filter_types" : {
-        "amount_greater_than" : "Amount Greater Than",
-        "amount_less_than" : "Amount Less Than",
-        "amount_equals" : "Amount Equals",
-        "description_equals" : "Description Equals",
-        "add" : "Add",
-        "update" : "Update",
-        "delete" : "Delete"
+    "webhook": "Webhook",
+    "filter_types": {
+        "amount_greater_than": "Amount Greater Than",
+        "amount_less_than": "Amount Less Than",
+        "amount_equals": "Amount Equals",
+        "description_equals": "Description Equals",
+        "add": "Add",
+        "update": "Update",
+        "delete": "Delete"
     },
-    "scope_list" : {
-        "closing_balance" : "Closing Balance"
+    "scope_list": {
+        "closing_balance": "Closing Balance"
     },
-    "validations" : {
-        "trigger_name" : "Please enter trigger name.",
-        "entity_type" : "Please select entity type.",
-        "entity" : "Please select an entity.",
-        "scope" : "Please select a scope.",
-        "filter" : "Please select a filter.",
-        "action" : "Please select an action.",
-        "enter_value" : "Please enter value.",
-        "enter_url" : "Please enter URL."
+    "validations": {
+        "trigger_name": "Please enter trigger name.",
+        "entity_type": "Please select entity type.",
+        "entity": "Please select an entity.",
+        "scope": "Please select a scope.",
+        "filter": "Please select a filter.",
+        "action": "Please select an action.",
+        "enter_value": "Please enter value.",
+        "enter_url": "Please enter URL."
     },
-    "delete_tax" : "Are you sure you want to delete [SELECTED_TAX]?",
-    "update_trigger" : "Are you sure want to update [TRIGGER_NAME]?"
+    "delete_tax": "Are you sure you want to delete [SELECTED_TAX]?",
+    "update_trigger": "Are you sure want to update [TRIGGER_NAME]?"
 }

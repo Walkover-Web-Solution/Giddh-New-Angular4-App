@@ -26,8 +26,10 @@
                 <a href="javascript:;" [routerLink]="['/pages/mobile-search-company']">Switch Company</a>
             </li>
             <li>
-                <a *ngIf="!currentBranch" href="javascript:;" [routerLink]="['/pages/mobile-search-branch']">Switch Branch</a>
-                <a *ngIf="currentBranch" href="javascript:;" [routerLink]="['/pages/mobile-search-branch']">{{currentBranch?.alias}}</a>
+                <a *ngIf="!currentBranch" href="javascript:;" [routerLink]="['/pages/mobile-search-branch']">Switch
+                    Branch</a>
+                <a *ngIf="currentBranch" href="javascript:;"
+                    [routerLink]="['/pages/mobile-search-branch']">{{currentBranch?.alias}}</a>
             </li>
             <li>
                 <a href="javascript:;" hidden>User Profile</a>

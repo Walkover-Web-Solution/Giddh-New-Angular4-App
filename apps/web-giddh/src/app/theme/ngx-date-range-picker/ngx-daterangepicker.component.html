@@ -1,4 +1,5 @@
-<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)">
     <div class="md-drppicker" #pickerContainer [ngClass]="{
         'ltr': locale.direction === 'ltr',
         'rtl': locale.direction === 'rtl',
@@ -7,13 +8,14 @@
         'show-ranges': ranges?.length
     }" [class]="'drops-' + drops + '-' + opens">
         <!-- ranges container -->
-        <perfect-scrollbar fxFlex="auto" class="hide-horizontal-scroll ranges-perfect-scrollbar" [scrollIndicators]="true"
-            [config]="{suppressScrollX: false, suppressScrollY: false}">
+        <perfect-scrollbar fxFlex="auto" class="hide-horizontal-scroll ranges-perfect-scrollbar"
+            [scrollIndicators]="true" [config]="{suppressScrollX: false, suppressScrollY: false}">
             <div class="ranges" *ngIf="ranges?.length">
                 <!-- loop over ranges -->
                 <div class="range-container">
                     <div class="date-range-close" *ngIf="isMobileScreen" (click)="closeMobileDatePicker();">
-                        <img src="{{imgPath}}close-icon.svg"> <span class="pl-2">{{commonLocaleData?.app_date_range}}</span>
+                        <img src="{{imgPath}}close-icon.svg"> <span
+                            class="pl-2">{{commonLocaleData?.app_date_range}}</span>
                     </div>
                     <ul class="range-list">
                         <li class="menu-li custom-select-btn" type="button" (click)="openMobileDatepicker()">
@@ -23,7 +25,8 @@
                             <button type="button" class="btn-angle-down"
                                 (click)="setSelectedRange(i); clickRange($event, range);"
                                 [ngClass]="{'active': range.isSelected || (selectedRangeLabel && selectedRangeLabel === range.name) || checkIfSubRangeSelected(range)}">{{range.name}}
-                                <span *ngIf="range.ranges && range.ranges.length" class="available prev angle-down"></span>
+                                <span *ngIf="range.ranges && range.ranges.length"
+                                    class="available prev angle-down"></span>
                             </button>
                             <ul *ngIf="range.ranges && range.ranges.length && rangeDropdownShow === i"
                                 class="sub-ranges-cal menu-drawer">
@@ -54,7 +57,9 @@
                 <div class="days-upto-select">
                     <ul>
                         <li>
-                            <button><input type="tel" (keyup)="uptoInputKeyUp($event)" (change)="uptoToday($event,$event.target.value)"> {{commonLocaleData?.app_datepicker?.days_upto_today}}
+                            <button><input type="tel" (keyup)="uptoInputKeyUp($event)"
+                                    (change)="uptoToday($event,$event.target.value)">
+                                {{commonLocaleData?.app_datepicker?.days_upto_today}}
                             </button>
                         </li>
                     </ul>
@@ -98,9 +103,10 @@
                             <div class="start-end-date-d-flex">
                                 <div class="relative mr-1 d-flex date-field">
                                     <label>{{commonLocaleData?.app_start_date}}</label>
-                                    <input type="tel" name="inlineStartDate" [value]="viewOnlyStartDate" mask="00-00-0000"
-                                        (blur)="saveInlineDates($event)">
-                                    <span class="error-msg" *ngIf="invalidInlineStartDate">{{invalidInlineStartDate}}</span>
+                                    <input type="tel" name="inlineStartDate" [value]="viewOnlyStartDate"
+                                        mask="00-00-0000" (blur)="saveInlineDates($event)">
+                                    <span class="error-msg"
+                                        *ngIf="invalidInlineStartDate">{{invalidInlineStartDate}}</span>
                                 </div>
                                 <div class="relative d-flex date-field">
                                     <label>{{commonLocaleData?.app_end_date}}</label>
@@ -113,7 +119,8 @@
                             <div class="button-wrapper">
                                 <a href="javascript:void(0);" (click)="modalRef.hide()"
                                     class="mr-2 cursor-pointer">{{commonLocaleData?.app_cancel}}</a>
-                                <a href="javascript:void(0);" (click)="applyInlineDates()" class="cursor-pointer">{{commonLocaleData?.app_ok}}</a>
+                                <a href="javascript:void(0);" (click)="applyInlineDates()"
+                                    class="cursor-pointer">{{commonLocaleData?.app_ok}}</a>
                             </div>
                         </div>
                     </div>
@@ -127,24 +134,32 @@
                             <div class="wrap-selected-date">
                                 <div class="relative" [ngClass]="{'focused-date' : ActiveDate ===0}">
                                     <span class="mr-2">
-                                        <img src="assets/images/calender-icon.svg"> &nbsp; {{commonLocaleData?.app_from}} &nbsp;
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        <img src="assets/images/calender-icon.svg"> &nbsp;
+                                        {{commonLocaleData?.app_from}} &nbsp;
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
                                     </span>
                                     <span class="fa fa-search"></span>
-                                    <input [ngClass]="{'invalid-date-input':invalidStartDate, 'w-100': true}" [placeholder]="commonLocaleData?.app_start_date"
-                                        #startDateElement [value]="startDateString" (blur)="isOnScrollActive = false; initialCalendarMonths = true; setStartDate($event.target.value)"
+                                    <input [ngClass]="{'invalid-date-input':invalidStartDate, 'w-100': true}"
+                                        [placeholder]="commonLocaleData?.app_start_date" #startDateElement
+                                        [value]="startDateString"
+                                        (blur)="isOnScrollActive = false; initialCalendarMonths = true; setStartDate($event.target.value)"
                                         (focus)="ActiveDate =0" [class]="ActiveDate ===0 ?ActiveSelectedDateClass :''">
 
-                                    <span *ngIf="invalidStartDate" class="invalid-date error-msg">{{invalidStartDate}}</span>
+                                    <span *ngIf="invalidStartDate"
+                                        class="invalid-date error-msg">{{invalidStartDate}}</span>
                                 </div>
                                 <div class="relative" [ngClass]="{'focused-date' : ActiveDate ===1}">
-                                    <span class="mr-2"><img src="assets/images/calender-icon.svg"> &nbsp; {{commonLocaleData?.app_to}} &nbsp;
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    <span class="mr-2"><img src="assets/images/calender-icon.svg"> &nbsp;
+                                        {{commonLocaleData?.app_to}} &nbsp;
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
                                     </span>
-                                    <input [ngClass]="{'invalid-date-input':invalidEndDate, 'w-100': true}" [placeholder]="commonLocaleData?.app_end_date"
-                                        #endDateElement [value]="endDateString" (blur)="isOnScrollActive = false; initialCalendarMonths = true; setEndDate($event.target.value)"
+                                    <input [ngClass]="{'invalid-date-input':invalidEndDate, 'w-100': true}"
+                                        [placeholder]="commonLocaleData?.app_end_date" #endDateElement
+                                        [value]="endDateString"
+                                        (blur)="isOnScrollActive = false; initialCalendarMonths = true; setEndDate($event.target.value)"
                                         (focus)="ActiveDate =1" [class]="ActiveDate ===1 ?ActiveSelectedDateClass :''">
-                                    <span *ngIf="invalidEndDate" class="invalid-date error-msg">{{invalidEndDate}}</span>
+                                    <span *ngIf="invalidEndDate"
+                                        class="invalid-date error-msg">{{invalidEndDate}}</span>
                                 </div>
                             </div>
                         </div>
@@ -186,7 +201,8 @@
                                                 </div>
                                                 <div class="days-td" *ngFor="let dayofweek of locale.daysOfWeek"
                                                     class="th-div">
-                                                    <span>{{dayofweek}}</span></div>
+                                                    <span>{{dayofweek}}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -201,7 +217,8 @@
                     <!-- start date calendar container -->
                     <div (touchmove)="mouseUp($event)">
                         <div *ngFor="let calendarMonth of calendarMonths; let i = index;">
-                            <div class="calendar" *ngIf="calendarMonth && calendarMonth.start" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
+                            <div class="calendar" *ngIf="calendarMonth && calendarMonth.start"
+                                [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
                                 <div class="calendar-table">
                                     <div class="table-condensed">
                                         <div class="d-flex justify-content-between" hidden>
@@ -230,7 +247,8 @@
                                         </div>
                                         <div class="drp-animate">
                                             <ng-container *ngFor="let row of calendarMonth.start.calRows">
-                                                <div class="d-flex" [class]="calendarMonth.start.classes[row].classList">
+                                                <div class="d-flex"
+                                                    [class]="calendarMonth.start.classes[row].classList">
                                                     <div class="week td-div" *ngIf="showWeekNumbers">
                                                         <span>{{calendarMonth.start.calendar[row][0].week()}}</span>
                                                     </div>
@@ -252,10 +270,12 @@
                                         <div class="buttons bottom-botton">
                                             <div class="buttons-input">
                                                 <!-- clear button -->
-                                                <button *ngIf="showClearButton" class="btn btn-default clear" type="button" (click)="clear()"
-                                                    title="clear the date">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 -5 24 24">
-                                                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                                                <button *ngIf="showClearButton" class="btn btn-default clear"
+                                                    type="button" (click)="clear()" title="clear the date">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                                        viewBox="0 -5 24 24">
+                                                        <path
+                                                            d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
                                                     </svg>
                                                 </button>
                                                 <!-- clear button -->
@@ -266,9 +286,11 @@
                                                 <!-- cancel button -->
 
                                                 <!-- apply button -->
-                                                <button class="btn btn-success" *ngIf="!isMobileScreen" [disabled]="applyBtn.disabled" type="button"
+                                                <button class="btn btn-success" *ngIf="!isMobileScreen"
+                                                    [disabled]="applyBtn.disabled" type="button"
                                                     (click)="clickApply($event)">{{commonLocaleData?.app_datepicker?.done}}</button>
-                                                <button class="btn btn-success" *ngIf="isMobileScreen" [disabled]="applyBtn.disabled" type="button"
+                                                <button class="btn btn-success" *ngIf="isMobileScreen"
+                                                    [disabled]="applyBtn.disabled" type="button"
                                                     (click)="clickApply($event); closeCalender();">{{commonLocaleData?.app_datepicker?.done}}</button>
                                                 <!-- apply button -->
                                             </div>
@@ -302,8 +324,10 @@
                                     <select *ngIf="!timePicker24Hour" class="ampm-select"
                                         [(ngModel)]="timepickerVariables.start.ampmModel"
                                         (ngModelChange)="timeChanged($event, sideEnum.start)">
-                                        <option value="AM" [disabled]="timepickerVariables.start.amDisabled">{{commonLocaleData?.app_datepicker?.am}}</option>
-                                        <option value="PM" [disabled]="timepickerVariables.start.pmDisabled">{{commonLocaleData?.app_datepicker?.pm}}</option>
+                                        <option value="AM" [disabled]="timepickerVariables.start.amDisabled">
+                                            {{commonLocaleData?.app_datepicker?.am}}</option>
+                                        <option value="PM" [disabled]="timepickerVariables.start.pmDisabled">
+                                            {{commonLocaleData?.app_datepicker?.pm}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -393,8 +417,10 @@
                                     <select *ngIf="!timePicker24Hour" class="ampm-select"
                                         [(ngModel)]="timepickerVariables.end.ampmModel"
                                         (ngModelChange)="timeChanged($event, sideEnum.end)">
-                                        <option value="AM" [disabled]="timepickerVariables.end.amDisabled">{{commonLocaleData?.app_datepicker?.am}}</option>
-                                        <option value="PM" [disabled]="timepickerVariables.end.pmDisabled">{{commonLocaleData?.app_datepicker?.pm}}</option>
+                                        <option value="AM" [disabled]="timepickerVariables.end.amDisabled">
+                                            {{commonLocaleData?.app_datepicker?.am}}</option>
+                                        <option value="PM" [disabled]="timepickerVariables.end.pmDisabled">
+                                            {{commonLocaleData?.app_datepicker?.pm}}</option>
                                     </select>
                                 </div>
                             </div>

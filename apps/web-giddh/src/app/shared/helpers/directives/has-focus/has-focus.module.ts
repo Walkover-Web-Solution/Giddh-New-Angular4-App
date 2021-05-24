@@ -5,4 +5,4 @@ import { HasFocusDirective } from "./has-focus.directive";
     declarations: [HasFocusDirective],
     exports: [HasFocusDirective]
 })
-export class HasFocusDirectiveModule {}
+export class HasFocusDirectiveModule { }

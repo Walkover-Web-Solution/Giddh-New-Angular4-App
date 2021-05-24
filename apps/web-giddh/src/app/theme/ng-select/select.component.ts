@@ -53,9 +53,9 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     @Output() public noResultsClicked = new EventEmitter<null>();
     @Output() public viewInitEvent = new EventEmitter<any>();
 
-    @ViewChild('selection', {static: true}) public selectionSpan: ElementRef;
-    @ViewChild('dropdown', {static: true}) public dropdown: SelectDropdownComponent;
-    @ViewChild('filterInput', {static: true}) public filterInput: ElementRef;
+    @ViewChild('selection', { static: true }) public selectionSpan: ElementRef;
+    @ViewChild('dropdown', { static: true }) public dropdown: SelectDropdownComponent;
+    @ViewChild('filterInput', { static: true }) public filterInput: ElementRef;
 
     @ContentChild('optionTemplate') public optionTemplate: TemplateRef<any>;
 
@@ -535,7 +535,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
                 this.selectHighlightedOption();
             } else if (key === this.KEYS.UP) {
                 this.optionList.highlightPreviousOption();
-                if(this.dropdown) {
+                if (this.dropdown) {
                     this.dropdown.moveHighlightedIntoView();
                 }
                 if (!this.filterEnabled) {
@@ -543,7 +543,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
                 }
             } else if (key === this.KEYS.DOWN) {
                 this.optionList.highlightNextOption();
-                if(this.dropdown) {
+                if (this.dropdown) {
                     this.dropdown.moveHighlightedIntoView();
                 }
                 if (!this.filterEnabled) {

@@ -5,18 +5,18 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared.module';
 
 @NgModule({
-	imports: [
-		FormsModule,
+    imports: [
+        FormsModule,
         CommonModule,
         SharedModule
-	],
-	exports: [
-		SendEmailInvoiceComponent
-	],
-	declarations: [
-		SendEmailInvoiceComponent
-	],
-	providers: [],
+    ],
+    exports: [
+        SendEmailInvoiceComponent
+    ],
+    declarations: [
+        SendEmailInvoiceComponent
+    ],
+    providers: [],
 })
 export class SendEmailInvoiceModule {
 }

@@ -3,7 +3,9 @@
         <section class="w-100">
             <div>
                 <div class="form-header">
-                    <h3 *ngIf="addressConfiguration.type === 'createAddress' || addressConfiguration.type === 'createBranchAddress'">{{localeData?.create_address}}</h3>
+                    <h3
+                        *ngIf="addressConfiguration.type === 'createAddress' || addressConfiguration.type === 'createBranchAddress'">
+                        {{localeData?.create_address}}</h3>
                     <h3 *ngIf="addressConfiguration.type === 'editAddress'">{{localeData?.update_address}}</h3>
                     <h3 *ngIf="addressConfiguration.type === 'editBranch'">{{localeData?.edit_branch}}</h3>
                     <h3 *ngIf="addressConfiguration.type === 'editWarehouse'">{{localeData?.edit_warehouse}}</h3>
@@ -11,11 +13,13 @@
                 <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
 
                 <div class="aside-body">
-                    <div class="aside-pane-form" [ngClass]="{'edit-branch-mode': addressConfiguration.type === 'editBranch'}">
+                    <div class="aside-pane-form"
+                        [ngClass]="{'edit-branch-mode': addressConfiguration.type === 'editBranch'}">
                         <section
                             *ngIf="addressConfiguration.type !== 'editBranch' && addressConfiguration.type !== 'editWarehouse'"
                             class="clearfix margin-child-label">
-                            <div *ngIf="companyName" class="font-14 mr-b15" [innerHTML]="getInformationSaveText(companyName)"></div>
+                            <div *ngIf="companyName" class="font-14 mr-b15"
+                                [innerHTML]="getInformationSaveText(companyName)"></div>
                             <div class="form-bg-aside clearfix">
                                 <div class="row">
                                     <div class="form-group col-12">
@@ -48,15 +52,21 @@
                                         <label>{{commonLocaleData?.app_state}} <sup>*</sup></label>
                                         <sh-select #states
                                             [disabled]="addressConfiguration?.type === 'editAddress' && addressToUpdate?.taxNumber && addressConfiguration?.tax?.name && addressConfiguration?.tax?.name === 'GSTIN'"
-                                            [options]="addressConfiguration.stateList" required [isRequired]="true" [isFilterEnabled]="true" formControlName="state" class="w-100"
-                                            [useInBuiltFilterForIOptionTypeItems]="true" [forceClearReactive]="forceClear$ | async">
+                                            [options]="addressConfiguration.stateList" required [isRequired]="true"
+                                            [isFilterEnabled]="true" formControlName="state" class="w-100"
+                                            [useInBuiltFilterForIOptionTypeItems]="true"
+                                            [forceClearReactive]="forceClear$ | async">
                                         </sh-select>
                                     </div>
                                     <!-- static code added for the pincode -->
                                     <div class="col-sm-4">
                                         <div class="form-group mr-b05">
-                                            <label for="pinCodeNum" class="d-block">{{commonLocaleData?.app_pin_code}}</label>
-                                            <input type="text" class="form-control" autocomplete="false" name="pinCodeNum" [placeholder]="commonLocaleData?.app_enter_pin_code" formControlName="pincode" decimalDigitsDirective [preventDecimal]="true" />
+                                            <label for="pinCodeNum"
+                                                class="d-block">{{commonLocaleData?.app_pin_code}}</label>
+                                            <input type="text" class="form-control" autocomplete="false"
+                                                name="pinCodeNum" [placeholder]="commonLocaleData?.app_enter_pin_code"
+                                                formControlName="pincode" decimalDigitsDirective
+                                                [preventDecimal]="true" />
                                         </div>
                                     </div>
                                     <!-- end -->
@@ -68,7 +78,8 @@
                                                 *ngIf="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressConfiguration?.tax && addressConfiguration?.tax?.name === 'GSTIN'">*</sup></label>
                                         <textarea
                                             [class.error-box]="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressForm?.get('address')?.touched && addressForm?.get('address')?.errors?.required"
-                                            name="name" class="form-control min-height-100" formControlName="address" [placeholder]="localeData?.enter_address"
+                                            name="name" class="form-control min-height-100" formControlName="address"
+                                            [placeholder]="localeData?.enter_address"
                                             [attr.required]="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressConfiguration?.tax && addressConfiguration?.tax?.name === 'GSTIN'"></textarea>
                                         <span class="danger"
                                             *ngIf="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressForm?.get('address')?.touched && addressForm?.get('address')?.errors?.required">
@@ -102,7 +113,8 @@
                                                                     [tooltip]="commonLocaleData?.app_warehouse"></i>
                                                             </span>
                                                             <span class="entity-details">
-                                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                                                <div class="item giddh-limit single-line-clamp">{{
+                                                                    option.label || '-' }}</div>
                                                                 <div class="item-unique giddh-limit single-line-clamp">
                                                                     {{ option.name || '-' }}
                                                                 </div>
@@ -133,7 +145,8 @@
                                         <label>{{localeData?.branch_name}} <sup>*</sup></label>
                                         <input maxlength="100"
                                             [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
-                                            type="text" formControlName="name" class="form-control" [placeholder]="localeData?.enter">
+                                            type="text" formControlName="name" class="form-control"
+                                            [placeholder]="localeData?.enter">
                                         <span class="danger"
                                             *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength">
                                             {{commonLocaleData?.app_max_100_characters_allowed_limit}}
@@ -159,10 +172,12 @@
                                     <div class="form-group col-12 linked-entities linked-add create">
                                         <label>{{localeData?.linked_addresses}}</label>
                                         <div class="form-group">
-                                            <sh-select class="linked-address" [options]="addressConfiguration?.linkedEntities"
-                                                name="linkedEntities" formControlName="linkedEntity"
+                                            <sh-select class="linked-address"
+                                                [options]="addressConfiguration?.linkedEntities" name="linkedEntities"
+                                                formControlName="linkedEntity"
                                                 (clearSingleItem)="handleFinalSelection($event)" [ItemHeight]="200"
-                                                [isFilterEnabled]="true" [multiple]="true" [placeholder]="commonLocaleData?.app_select_entity">
+                                                [isFilterEnabled]="true" [multiple]="true"
+                                                [placeholder]="commonLocaleData?.app_select_entity">
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
                                                         <a (click)="selectEntity(option)" href="javascript:void(0)"
@@ -171,7 +186,8 @@
                                                                     [checked]="addressForm?.get('linkedEntity')?.value?.includes(option.value)"
                                                                     [value]="option.value"></span>&nbsp;
                                                             <span class="entity-details">
-                                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                                                <div class="item giddh-limit single-line-clamp">{{
+                                                                    option.label || '-' }}</div>
                                                                 <div class="item-unique">
                                                                     <p *ngIf="option.taxType && option.taxNumber">
                                                                         {{ option.taxType }} :
@@ -198,7 +214,8 @@
                             <div *ngIf="companyName" class="font-14" [innerHTML]="getBranchOfText(companyName)"></div>
                         </section>
 
-                        <section *ngIf="addressConfiguration.type === 'editWarehouse'" class="clearfix margin-child-label">
+                        <section *ngIf="addressConfiguration.type === 'editWarehouse'"
+                            class="clearfix margin-child-label">
                             <div class="clearfix">
                                 <div class="row">
                                     <div class="form-group col-12">
@@ -220,14 +237,14 @@
                                         <div class="form-group">
                                             <sh-select [options]="addressConfiguration?.linkedEntities"
                                                 name="linkedEntities" formControlName="linkedEntity"
-                                                [isFilterEnabled]="true"
-                                                [placeholder]="localeData?.select_address">
+                                                [isFilterEnabled]="true" [placeholder]="localeData?.select_address">
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
                                                         <a (click)="selectEntity(option)" href="javascript:void(0)"
                                                             class="list-item d-flex">
                                                             <span class="entity-details">
-                                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                                                <div class="item giddh-limit single-line-clamp">{{
+                                                                    option.label || '-' }}</div>
                                                                 <div class="item-unique">
                                                                     <p *ngIf="option.taxType && option.taxNumber">
                                                                         {{ option.taxType }} :

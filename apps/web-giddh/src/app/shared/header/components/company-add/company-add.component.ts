@@ -1,23 +1,23 @@
-import {catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil} from 'rxjs/operators';
-import {CompanyActions} from '../../../../actions/company.actions';
-import {LocationService} from '../../../../services/location.service';
-import {CompanyCreateRequest, CompanyResponse} from '../../../../models/api-models/Company';
-import {UserDetails} from '../../../../models/api-models/loginModels';
-import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
-import {VerifyMobileActions} from '../../../../actions/verifyMobile.actions';
-import {AppState} from '../../../../store';
-import {select, Store} from '@ngrx/store';
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {WizardComponent} from '../../../../theme/ng2-wizard';
-import {Router} from '@angular/router';
-import {TypeaheadMatch} from 'ngx-bootstrap/typeahead';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
+import { CompanyActions } from '../../../../actions/company.actions';
+import { LocationService } from '../../../../services/location.service';
+import { CompanyCreateRequest, CompanyResponse } from '../../../../models/api-models/Company';
+import { UserDetails } from '../../../../models/api-models/loginModels';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
+import { AppState } from '../../../../store';
+import { select, Store } from '@ngrx/store';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { WizardComponent } from '../../../../theme/ng2-wizard';
+import { Router } from '@angular/router';
+import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import {LoginActions} from '../../../../actions/login.action';
-import {AuthService} from '../../../../theme/ng-social-login-module/index';
-import {contriesWithCodes} from '../../../helpers/countryWithCodes';
-import {GeneralActions} from '../../../../actions/general/general.actions';
-import {IOption} from '../../../../theme/ng-virtual-select/sh-options.interface';
-import {GeneralService} from '../../../../services/general.service';
+import { LoginActions } from '../../../../actions/login.action';
+import { AuthService } from '../../../../theme/ng-social-login-module/index';
+import { contriesWithCodes } from '../../../helpers/countryWithCodes';
+import { GeneralActions } from '../../../../actions/general/general.actions';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
+import { GeneralService } from '../../../../services/general.service';
 
 
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
@@ -27,8 +27,8 @@ import {GeneralService} from '../../../../services/general.service';
     styleUrls: ['./company-add.component.scss']
 })
 export class CompanyAddComponent implements OnInit, OnDestroy {
-    @ViewChild('wizard', {static: true}) public wizard: WizardComponent;
-    @ViewChild('logoutModal', {static: true}) public logoutModal: ModalDirective;
+    @ViewChild('wizard', { static: true }) public wizard: WizardComponent;
+    @ViewChild('logoutModal', { static: true }) public logoutModal: ModalDirective;
     @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
     @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
     @Input() public createBranch: boolean = false;
@@ -58,17 +58,17 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private socialAuthService: AuthService,
-                private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-                private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _generalActions: GeneralActions, private _generalService: GeneralService) {
+        private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
+        private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _generalActions: GeneralActions, private _generalService: GeneralService) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(p => p.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
 
         contriesWithCodes.map(c => {
-            this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
+            this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
             this.isLoggedInWithSocialAccount$ = this.store.pipe(select(p => p.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         });
         // Country phone Code
         contriesWithCodes.map(c => {
-            this.countryPhoneCode.push({value: c.value, label: c.value});
+            this.countryPhoneCode.push({ value: c.value, label: c.value });
         });
         _.uniqBy(this.countryPhoneCode, 'value');
         const ss = Array.from(new Set(this.countryPhoneCode.map(s => s.value))).map(value => {
@@ -82,7 +82,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
             this.currencies = [];
             if (data) {
                 data.map(d => {
-                    this.currencies.push({label: d.code, value: d.code});
+                    this.currencies.push({ label: d.code, value: d.code });
                 });
             }
             this.currencySource$ = observableOf(this.currencies);
