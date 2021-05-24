@@ -86,8 +86,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 });
                 if (this.currentOrganizationUniqueName && this.addressConfiguration && this.addressConfiguration.linkedEntities
                     && this.addressConfiguration.linkedEntities.some(entity => entity.uniqueName === this.currentOrganizationUniqueName)) {
-                        // This will by default show the current organization unique name as selected linked entity
-                        this.addressForm.get('linkedEntity')?.patchValue([`${this.currentOrganizationUniqueName}`]);
+                    // This will by default show the current organization unique name as selected linked entity
+                    this.addressForm.get('linkedEntity')?.patchValue([`${this.currentOrganizationUniqueName}`]);
                 }
             } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress) {
                 if (this.addressToUpdate) {
@@ -95,7 +95,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     this.addressForm = this.formBuilder.group({
                         name: [this.addressToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                         taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
-                        state: [{value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, Validators.required],
+                        state: [{ value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, Validators.required],
                         address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' ? [Validators.required] : []],
                         linkedEntity: [this.addressToUpdate.linkedEntities.map(entity => entity.uniqueName)],
                         pincode: [this.addressToUpdate.pincode]

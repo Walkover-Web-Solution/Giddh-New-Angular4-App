@@ -84,7 +84,8 @@
     font-size: 12px;
 }
 
-.change-preference, .taxation-not-supported {
+.change-preference,
+.taxation-not-supported {
     font-size: 14px;
     color: $gray;
 }
@@ -124,17 +125,17 @@ fieldset[disabled] {
 }
 .custom-multi-select {
     li {
-    background: $white-smoke;
-    color: $white;
-    margin: 4px;
-    padding: 2px 10px;
-    font-size: 14px;
-    border-radius: 3px;
-    cursor: pointer;
-    display: inline-block;
-    a{
-        color: $gray;
-    }
+        background: $white-smoke;
+        color: $white;
+        margin: 4px;
+        padding: 2px 10px;
+        font-size: 14px;
+        border-radius: 3px;
+        cursor: pointer;
+        display: inline-block;
+        a {
+            color: $gray;
+        }
     }
 }
 span.same-as-head {
@@ -149,11 +150,11 @@ span.same-as-head {
     float: left;
 }
 
-.select-caret-contact{
+.select-caret-contact {
     width: 90px !important;
     margin-right: 16px !important;
 }
 
-.min-height-100{
-    min-height:100px;
+.min-height-100 {
+    min-height: 100px;
 }

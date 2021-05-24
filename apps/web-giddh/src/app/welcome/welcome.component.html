@@ -9,7 +9,8 @@
 
         <div class="welcome-container ">
             <p class="welcome-title">Set up your organisation profile and start accounting with Giddh.</p>
-            <form name="form" #welcomeForm="ngForm" novalidate="" class="clearfix welcome-form horizontal-form" autocomplete="off">
+            <form name="form" #welcomeForm="ngForm" novalidate="" class="clearfix welcome-form horizontal-form"
+                autocomplete="off">
                 <div class="clearfix row">
                     <div class="col-12 mr-b2">
                         <ng-container *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemName">
@@ -40,8 +41,7 @@
                                     [isFilterEnabled]="true"
                                     [disabled]="(createNewCompanyPreparedObj.country) ? 'disabled' : null"
                                     name="country" [(ngModel)]="createNewCompanyPreparedObj.country"
-                                    class="pull-left  select-caret w-100"
-                                    [defaultValue]="selectedCountry">
+                                    class="pull-left  select-caret w-100" [defaultValue]="selectedCountry">
                                 </sh-select>
                             </div>
                         </span>
@@ -50,7 +50,8 @@
                     <div class="col-6 mr-b2 ">
                         <label for="">Currency<sup class="text-danger">*</sup></label>
                         <div class="custom-select select-caret position-relative">
-                            <sh-select name="baseCurrency" [options]="currencySource$ | async" required [isRequired]="true"
+                            <sh-select name="baseCurrency" [options]="currencySource$ | async" required
+                                [isRequired]="true"
                                 [disabled]="(createNewCompanyPreparedObj.baseCurrency) ? 'disabled' : null"
                                 [isFilterEnabled]="true" [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"
                                 [defaultValue]="createNewCompanyPreparedObj.baseCurrency"></sh-select>
@@ -60,10 +61,10 @@
                         <span>
                             <label for="contactNo" class="d-block">Mobile Number<sup class="text-danger">*</sup></label>
                             <div class="d-flex">
-                                <sh-select class="pull-left select-caret select-caret-contact" (blur)="isContactNumberValid()"
+                                <sh-select class="pull-left select-caret select-caret-contact"
+                                    (blur)="isContactNumberValid()"
                                     [disabled]="(createNewCompanyPreparedObj.phoneCode && !isItemUpdateInProgress) ? 'disabled' : null"
-                                    name="phoneCode" [placeholder]="+91"
-                                    [options]="callingCodesSource$ | async"
+                                    name="phoneCode" [placeholder]="+91" [options]="callingCodesSource$ | async"
                                     [(ngModel)]="createNewCompanyPreparedObj.phoneCode"
                                     [defaultValue]="createNewCompanyPreparedObj.phoneCode"></sh-select>
                                 <input type="number" class="form-control pull-right select-caret" required
@@ -134,7 +135,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="!(isOnBoardingInProgress && isWarehouse) && !isBranch" class="col-12 mr-b2 select-box">
+                        <div *ngIf="!(isOnBoardingInProgress && isWarehouse) && !isBranch"
+                            class="col-12 mr-b2 select-box">
                             <div class="">
                                 <label for="taxes-dd">Applicable Tax</label>
                                 <div class="btn-group btn-block select-caret invoice-btn" dropdown>
@@ -144,7 +146,8 @@
                                     <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
                                         <li *ngIf="taxesList.length==0">No results found</li>
                                         <li *ngFor="let tax of taxesList">
-                                            <input type="checkbox" (click)="selectApplicableTaxes(tax, $event)" [checked]="tax.isSelected" /> {{tax.label}}
+                                            <input type="checkbox" (click)="selectApplicableTaxes(tax, $event)"
+                                                [checked]="tax.isSelected" /> {{tax.label}}
                                         </li>
                                     </ul>
                                 </div>
@@ -165,14 +168,17 @@
                         <!-- Show the section if the company/branch is Registered or onboarding of warehouse is going on -->
                         <div *ngIf="selectedBusinesstype || isWarehouse" class="clearfix">
                             <!-- static pincode start -->
-                                <div *ngIf="!isWarehouse" class="mr-b2 select-box">
+                            <div *ngIf="!isWarehouse" class="mr-b2 select-box">
+                                <div>
+                                    <label for="pinCodeNum">PIN Code</label>
                                     <div>
-                                        <label for="pinCodeNum">PIN Code</label>
-                                        <div>
-                                            <input type="text" class="form-control" autocomplete="false" placeholder="Enter PIN Code" autocomplete="false" name="pinCodeNum" decimalDigitsDirective [preventDecimal]="true" [(ngModel)]="companyProfileObj.pincode" />
-                                        </div>
+                                        <input type="text" class="form-control" autocomplete="false"
+                                            placeholder="Enter PIN Code" autocomplete="false" name="pinCodeNum"
+                                            decimalDigitsDirective [preventDecimal]="true"
+                                            [(ngModel)]="companyProfileObj.pincode" />
                                     </div>
                                 </div>
+                            </div>
                             <!-- static pincode end -->
                             <ng-container
                                 *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemAddress">
@@ -193,12 +199,19 @@
                     <div class="col-12 ">
                         <p class="change-preference">Note: You can always change your preferences later in Settings.
                         </p><br />
-                        <p class="taxation-not-supported" *ngIf="!formFields['taxName']">Create and apply taxes on all types of transactions! To get tax reports, contact <a href="mailto:sales@giddh.com">sales@giddh.com</a>!</p>
+                        <p class="taxation-not-supported" *ngIf="!formFields['taxName']">Create and apply taxes on all
+                            types of transactions! To get tax reports, contact <a
+                                href="mailto:sales@giddh.com">sales@giddh.com</a>!</p>
                     </div>
                     <div class="col-12 d-flex mr-t5">
                         <button class="btn btn-primary" (click)="back(isBranch)">Back</button>
-                        <button [ladda]="isApiInProgress" type="submit" class="btn btn-sky-blue" (click)="submit(welcomeForm)" [disabled]="welcomeForm.invalid || !isGstValid || isCreateCompanyInProgress">
-                            {{itemOnBoardingDetails?.isOnBoardingInProgress ? itemOnBoardingDetails?.isItemUpdateInProgress ? 'Update ' +  itemOnBoardingDetails?.onBoardingType : 'Create ' + itemOnBoardingDetails?.onBoardingType : 'Submit'
+                        <button [ladda]="isApiInProgress" type="submit" class="btn btn-sky-blue"
+                            (click)="submit(welcomeForm)"
+                            [disabled]="welcomeForm.invalid || !isGstValid || isCreateCompanyInProgress">
+                            {{itemOnBoardingDetails?.isOnBoardingInProgress ?
+                            itemOnBoardingDetails?.isItemUpdateInProgress ? 'Update ' +
+                            itemOnBoardingDetails?.onBoardingType : 'Create ' + itemOnBoardingDetails?.onBoardingType :
+                            'Submit'
                             }}
                         </button>
                     </div>

@@ -49,7 +49,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor() {}
+    constructor() { }
 
     /**
      * Initializes the component

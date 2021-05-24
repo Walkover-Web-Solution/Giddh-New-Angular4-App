@@ -44,12 +44,12 @@ const COMPARISON_FILTER = [
 })
 export class ReceiptComponent implements OnInit, OnDestroy {
 
-    @ViewChild('invoiceReceiptConfirmationModel', {static: true}) public invoiceReceiptConfirmationModel: ModalDirective;
-    @ViewChild('invoiceReceiptVoucherDetailsModel', {static: true}) public invoiceReceiptVoucherDetailsModel: ModalDirective;
-    @ViewChild('invoiceReceiptVoucherUpdateModel', {static: true}) public invoiceReceiptVoucherUpdateModel: ModalDirective;
-    @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
-    @ViewChild('voucherSearch', {static: true}) public voucherSearch: ElementRef;
-    @ViewChild('accountSearch', {static: true}) public accountSearch: ElementRef;
+    @ViewChild('invoiceReceiptConfirmationModel', { static: true }) public invoiceReceiptConfirmationModel: ModalDirective;
+    @ViewChild('invoiceReceiptVoucherDetailsModel', { static: true }) public invoiceReceiptVoucherDetailsModel: ModalDirective;
+    @ViewChild('invoiceReceiptVoucherUpdateModel', { static: true }) public invoiceReceiptVoucherUpdateModel: ModalDirective;
+    @ViewChild('advanceSearch', { static: true }) public advanceSearch: ModalDirective;
+    @ViewChild('voucherSearch', { static: true }) public voucherSearch: ElementRef;
+    @ViewChild('accountSearch', { static: true }) public accountSearch: ElementRef;
     @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent, static: true }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
 
     public bsConfig: Partial<BsDatepickerConfig> = {
@@ -189,7 +189,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
         // set financial years based on company financial year
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 let activeFinancialYear = activeCompany.activeFinancialYear;
                 if (activeFinancialYear) {
                     this.datePickerOptions.ranges['This Financial Year to Date'] = [

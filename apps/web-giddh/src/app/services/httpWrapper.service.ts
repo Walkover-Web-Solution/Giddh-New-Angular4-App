@@ -1,11 +1,11 @@
-import {finalize, tap} from "rxjs/operators";
-import {Injectable} from "@angular/core";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {LoaderService} from "../loader/loader.service";
-import {GeneralService} from "./general.service";
-import {UserAgent} from "@ionic-native/user-agent/ngx";
-import {isCordova} from "@giddh-workspaces/utils";
+import { finalize, tap } from "rxjs/operators";
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { LoaderService } from "../loader/loader.service";
+import { GeneralService } from "./general.service";
+import { UserAgent } from "@ionic-native/user-agent/ngx";
+import { isCordova } from "@giddh-workspaces/utils";
 
 @Injectable()
 export class HttpWrapperService {
@@ -78,7 +78,7 @@ export class HttpWrapperService {
     };
 
     public deleteWithBody = (url: string, request: any): Observable<any> => {
-        let options = {headers: {}, body: {}};
+        let options = { headers: {}, body: {} };
         options.headers["Session-Id"] = this._generalService.sessionId;
         options.headers["Content-Type"] = "application/json";
         options.headers["Accept"] = "application/json";
@@ -108,8 +108,8 @@ export class HttpWrapperService {
     };
 
     public prepareOptions(options: any): any {
-        if(options && options.loader) {
-            if(options.loader !== "hide") {
+        if (options && options.loader) {
+            if (options.loader !== "hide") {
                 this.showLoader();
             }
         } else {
@@ -136,7 +136,7 @@ export class HttpWrapperService {
         if (!options.headers["Accept"] && options.headers["Content-Type"] != "application/x-www-form-urlencoded") {
             options.headers["Accept"] = "application/json";
         }
-        if(options.headers["Content-Type"] == "application/x-www-form-urlencoded") {
+        if (options.headers["Content-Type"] == "application/x-www-form-urlencoded") {
             delete options.headers["cache-control"];
             delete options.headers["Session-Id"];
         }

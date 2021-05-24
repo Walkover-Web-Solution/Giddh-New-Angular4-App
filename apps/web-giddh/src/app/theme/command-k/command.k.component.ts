@@ -25,11 +25,11 @@ const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, 
 
 export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
 
-    @ViewChild('mainEle', {static: true}) public mainEle: ElementRef;
-    @ViewChild('searchEle', {static: false}) public searchEle: ElementRef;
-    @ViewChild('searchWrapEle', {static: true}) public searchWrapEle: ElementRef;
-    @ViewChild('wrapper', {static: true}) public wrapper: ElementRef;
-    @ViewChild(ScrollComponent, {static: false}) public virtualScrollElem: ScrollComponent;
+    @ViewChild('mainEle', { static: true }) public mainEle: ElementRef;
+    @ViewChild('searchEle', { static: false }) public searchEle: ElementRef;
+    @ViewChild('searchWrapEle', { static: true }) public searchWrapEle: ElementRef;
+    @ViewChild('wrapper', { static: true }) public wrapper: ElementRef;
+    @ViewChild(ScrollComponent, { static: false }) public virtualScrollElem: ScrollComponent;
 
     @Input() public preventOutSideClose: boolean = false;
     @Input() public dontShowNoResultMsg: boolean = false;
@@ -505,7 +505,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     public getPageUniqueName(route: string): string {
         let string = route.replace(/\s+/g, '-');
         string = string.replace(/\//g, '-');
-        string = string.replace(/^-|-$/g,'');
+        string = string.replace(/^-|-$/g, '');
         return string;
     }
 
@@ -516,7 +516,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public onPasteInSearch(): void {
         setTimeout(() => {
-            if(this.searchEle && this.searchEle.nativeElement) {
+            if (this.searchEle && this.searchEle.nativeElement) {
                 let term = this.searchEle.nativeElement.value;
                 term = (term) ? term.trim() : "";
                 this.searchSubject.next(term);

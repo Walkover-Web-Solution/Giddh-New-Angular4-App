@@ -1,6 +1,6 @@
 .giddh-table {
     background: #fff;
-    font-family: 'opensans-semibold';
+    font-family: "opensans-semibold";
     border: 1px solid $gainsboro;
     width: 100%;
     max-width: 100%;
@@ -17,16 +17,16 @@
         background: #fff;
         padding: 15px 11px;
         border-bottom: 1px solid $gainsboro;
-        font-family: 'opensans-semibold';
+        font-family: "opensans-semibold";
     }
     thead > tr > th {
         border-top: 1px solid $gainsboro !important;
         border-bottom: none !important;
         white-space: nowrap;
-        .d-flex{
+        .d-flex {
             align-items: center;
         }
-        .icon-pointer{
+        .icon-pointer {
             margin-left: 6px;
             cursor: pointer;
         }
@@ -45,10 +45,10 @@
         white-space: nowrap !important;
         border-left: none;
         border-right: none;
-        font-family: 'opensans-regular';
+        font-family: "opensans-regular";
         border-bottom: none !important;
         white-space: nowrap !important;
-        &.text-break{
+        &.text-break {
             white-space: normal !important;
         }
     }
@@ -136,7 +136,7 @@
     /*card responsive code*/
     .on-mobile-view {
         display: block;
-       .table-bordered > tfoot > tr > td {
+        .table-bordered > tfoot > tr > td {
             border: none;
         }
         .table-bordered {
@@ -176,7 +176,7 @@
             margin: 10px auto 22px;
             width: 100%;
             max-width: 100%;
-            &:first-child{
+            &:first-child {
                 margin-top: 0;
             }
         }
@@ -195,7 +195,7 @@
             font-size: 14px !important;
             margin-bottom: 14px;
             width: 100%;
-            &:last-child{
+            &:last-child {
                 border-right: none !important;
             }
         }
@@ -257,8 +257,8 @@
             text-align: center !important;
             padding: 5px 10px 5px 0% !important;
         }
-        td.empty-table{
-                border-right: none !important;
+        td.empty-table {
+            border-right: none !important;
         }
     }
 }

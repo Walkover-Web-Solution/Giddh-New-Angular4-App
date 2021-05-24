@@ -1,24 +1,24 @@
-@import '../css/color.scss';
+@import "../css/color.scss";
 .drp-calendar {
     float: left;
     max-width: 270px;
     margin: 4px;
     margin-right: 0;
-    td{
+    td {
         min-width: 32px;
         padding: 6px !important;
     }
 }
-.daterangepicker .calendar-table{
+.daterangepicker .calendar-table {
     padding-right: 12px;
 }
-.daterangepicker{
-    box-shadow: 0 3px 28px 0 rgba(0,0,0,.14);
+.daterangepicker {
+    box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
     color: $dark-gray;
     border: 1px solid $gainsboro;
-    z-index: 999!important;
+    z-index: 999 !important;
 }
-.drp-selected{
+.drp-selected {
     display: none;
 }
 .daterangepicker:after {
@@ -28,18 +28,19 @@
     border-left: 6px solid transparent;
     position: absolute;
     display: inline-block;
-    content: '';
+    content: "";
     left: 10px;
 }
-.show-ranges, .auto-apply {
+.show-ranges,
+.auto-apply {
     display: none;
 }
-.auto-apply{
-    .drp-buttons{
-     display: none;
+.auto-apply {
+    .drp-buttons {
+        display: none;
     }
 }
-.show-ranges .drp-buttons{
+.show-ranges .drp-buttons {
     clear: both;
     position: absolute;
     bottom: 8px;
@@ -47,10 +48,10 @@
     display: flex;
     flex-direction: row-reverse;
 }
-.daterangepicker.ltr .ranges{
-        padding-bottom: 36px;
+.daterangepicker.ltr .ranges {
+    padding-bottom: 36px;
 }
-.applyBtn{
+.applyBtn {
     background: $light-sea-green !important;
     color: $white !important;
     border: 1px solid $light-sea-green !important;
@@ -58,7 +59,7 @@
 .daterangepicker th.month {
     color: $nobel;
 }
-.daterangepicker th{
+.daterangepicker th {
     color: $dark-gray;
 }
 th.prev.available span {
@@ -89,16 +90,16 @@ th.next.available span {
     width: auto !important;
     max-width: 100%;
 }
-@media(max-width:991px){
-       .drp-calendar.left{
+@media (max-width: 991px) {
+    .drp-calendar.left {
         clear: left;
     }
-    .show-ranges .drp-buttons{
-       position: static;
+    .show-ranges .drp-buttons {
+        position: static;
     }
 }
-@media(max-width:767px){
-    .drp-buttons{
+@media (max-width: 767px) {
+    .drp-buttons {
         position: static;
     }
 }

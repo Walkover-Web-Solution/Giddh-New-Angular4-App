@@ -50,8 +50,8 @@ export class NgxDaterangepickerMd {
         return {
             ngModule: NgxDaterangepickerMd,
             providers: [
-                {provide: LOCALE_CONFIG, useValue: config},
-                {provide: NgxDaterangepickerLocaleService, useClass: NgxDaterangepickerLocaleService, deps: [LOCALE_CONFIG]}
+                { provide: LOCALE_CONFIG, useValue: config },
+                { provide: NgxDaterangepickerLocaleService, useClass: NgxDaterangepickerLocaleService, deps: [LOCALE_CONFIG] }
             ]
         };
     }

@@ -8,12 +8,14 @@
         <div class="col-md-6">
             <label class="font-14">{{localeData?.subscription?.select_plan}}<span class="text-danger">*</span></label>
             <div class="select-caret position-relative">
-                <sh-select [placeholder]="localeData?.subscription?.select_plan" name="availablePlans" [options]="availablePlansOption"
-                    [isFilterEnabled]="true" [(ngModel)]="selectedPlan" [isRequired]="true"></sh-select>
+                <sh-select [placeholder]="localeData?.subscription?.select_plan" name="availablePlans"
+                    [options]="availablePlansOption" [isFilterEnabled]="true" [(ngModel)]="selectedPlan"
+                    [isRequired]="true"></sh-select>
             </div>
         </div>
     </div>
     <div class="clearfix">
-        <button class="btn btn-primary" (click)="moveCompanyInNewPlan()" [disabled]="!selectedPlan">{{localeData?.subscription?.move}}</button>
+        <button class="btn btn-primary" (click)="moveCompanyInNewPlan()"
+            [disabled]="!selectedPlan">{{localeData?.subscription?.move}}</button>
     </div>
 </div>

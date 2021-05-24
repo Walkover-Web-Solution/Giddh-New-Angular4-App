@@ -8,12 +8,11 @@
     <div class="aside-body">
         <div class="aside-pane-form">
             <div>
-                <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName"
-                    [isLedgerModule]="true" [fetchingAccUniqueName$]="fetchingAccUniqueName$"
-                    (isGroupSelected)="isGroupSelected($event)" [isAccountNameAvailable$]="isAccountNameAvailable$"
-                    [isDebtorCreditor]="isDebtorCreditor" [createAccountInProcess$]="createAccountInProcess$"
-                    (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc"
-                    [isHsnSacEnabledAcc]="isHsnSacEnabledAcc">
+                <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName" [isLedgerModule]="true"
+                    [fetchingAccUniqueName$]="fetchingAccUniqueName$" (isGroupSelected)="isGroupSelected($event)"
+                    [isAccountNameAvailable$]="isAccountNameAvailable$" [isDebtorCreditor]="isDebtorCreditor"
+                    [createAccountInProcess$]="createAccountInProcess$" (submitClicked)="addNewAcSubmit($event)"
+                    [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc">
                 </account-add-new-details>
             </div>
         </div>
