@@ -284,6 +284,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public updateSelectedItems: boolean = false;
     /** This will hold comparision filters */
     public comparisionFilters: any[] = [];
+    /** Stores the E-invoice cancellation reason */
+    public eInvoiceCancel: { cancellationReason: string, cancellationRemarks?: string } = {
+        cancellationReason: '',
+        cancellationRemarks: '',
+    };
+    /** Stores the E-invoice cancellation options */
+    public eInvoiceCancellationReasonOptions = [];
 
     constructor(
         private store: Store<AppState>,
@@ -854,7 +861,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem.uniqueName, {
                     action: actionToPerform,
-                    voucherType: objItem.voucherType
+                    voucherType: objItem.voucherType ?? this.selectedVoucher
                 }));
             }
             this.selectedPerformAdjustPaymentAction = false;
@@ -1952,20 +1959,21 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private getEInvoiceTooltipText(item: ReceiptItem): string {
         switch (item.status?.toLowerCase()) {
             case EInvoiceStatus.YetToBePushed:
-                return 'The transaction is yet to be pushed to the IRP for e-Invoicing.';
+                return this.localeData.e_invoice_statuses.yet_to_be_pushed;
             case EInvoiceStatus.Pushed:
-                return 'The transaction was pushed to the IRP successfully, and a QR code and IRN has been generated for it.';
+                return this.localeData.e_invoice_statuses.pushed;
             case EInvoiceStatus.PushInitiated:
-                return 'The transaction is being pushed to the IRP as part of a bulk push action.';
+                return this.localeData.e_invoice_statuses.push_initiated;
             case EInvoiceStatus.Cancelled:
-                return 'The e-Invoiced transaction has been cancelled in both Giddh and the IRP. The IRN associated with it is no longer valid.';
+                // E-invoice got cancelled but invoice didn't cancel
+                return item.balanceStatus !== 'cancel' ? this.localeData.e_invoice_statuses.giddh_invoice_not_cancelled : this.localeData.e_invoice_statuses.cancelled;
             case EInvoiceStatus.MarkedAsCancelled:
-                return 'The e-Invoiced transaction has been marked as cancelled in Giddh Books alone. You’ll have to cancel it in the GST portal to make the IRN invalid.';
+                return this.localeData.e_invoice_statuses.mark_as_cancelled;
             case EInvoiceStatus.Failed:
-                return item.errorMessage ?? 'The transaction could not be pushed to the IRP.';
+                return item.errorMessage ?? this.localeData.e_invoice_statuses.failed;
             case EInvoiceStatus.NA:
                 // When invoice is B2C or B2B cancelled invoice
-                return item.errorMessage ?? 'e-Invoice creation is not applicable for this transaction.';
+                return item.errorMessage ?? this.localeData.e_invoice_statuses.na;
             default: return '';
         }
     }
@@ -1985,6 +1993,61 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 { label: this.commonLocaleData?.app_comparision_filters?.less_than_equals, value: 'lessThanOrEquals' },
                 { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' }
             ];
+            this.eInvoiceCancellationReasonOptions = [
+                { label: this.localeData?.cancel_e_invoice_reasons?.duplicate, value: '1' },
+                { label: this.localeData?.cancel_e_invoice_reasons?.data_entry_mistake, value: '2' },
+                { label: this.localeData?.cancel_e_invoice_reasons?.order_cancelled, value: '3' },
+                { label: this.localeData?.cancel_e_invoice_reasons?.other, value: '4' }
+            ]
         }
+    }
+
+    /**
+     * Resets the canel e-invoice form data
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public resetCancelEInvoice(): void {
+        this.eInvoiceCancel = {
+            cancellationReason: '',
+            cancellationRemarks: '',
+        };
+    }
+
+    /**
+     * Handler for e-invoice cancellation
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public submitEInvoiceCancellation(): void {
+        const requestObject: any = {
+            cnlRsn: this.eInvoiceCancel.cancellationReason,
+            cnlRem: this.eInvoiceCancel.cancellationRemarks?.trim()
+        };
+        if (this.selectedVoucher === VoucherTypeEnum.creditNote || this.selectedVoucher === VoucherTypeEnum.debitNote) {
+            requestObject.voucherType = this.selectedVoucher;
+            requestObject.voucherUniqueName = this.selectedInvoicesList[0].uniqueName;
+        } else if (this.selectedVoucher === VoucherTypeEnum.sales) {
+            requestObject.invoiceUniqueName = this.selectedInvoicesList[0].uniqueName;
+        }
+        this._invoiceService.cancelEInvoice(requestObject).pipe(take(1)).subscribe(response => {
+            this.getVoucher(this.isUniversalDateApplicable);
+            if (response.status === 'success') {
+                this._toaster.successToast(response.body);
+                this.modalRef?.hide();
+                this.resetCancelEInvoice();
+            } else if (response.status === 'error') {
+                this._toaster.errorToast(response.message, response.code);
+            }
+        });
+    }
+
+    /**
+     * Trims the cancellation remarks
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public handleBlurOnCancellationRemarks(): void {
+        this.eInvoiceCancel.cancellationRemarks = this.eInvoiceCancel?.cancellationRemarks.trim();
     }
 }
