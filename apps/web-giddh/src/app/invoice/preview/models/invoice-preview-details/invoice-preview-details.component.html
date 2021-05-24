@@ -156,7 +156,7 @@
 
                                             <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu" role="menu"
                                                 aria-labelledby="button-basic2">
-                                                <li class="cp" role="menuitem"
+                                                <li *ngIf="voucherType === 'sales'" class="cp" role="menuitem"
                                                     (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"><a
                                                     class="dropdown-item">{{commonLocaleData?.app_payment_status?.paid}}</a></li>
                                                 <li *ngIf="voucherType === 'sales'"
@@ -164,12 +164,13 @@
                                                     <a class="cp" href="javascript:void(0)">{{commonLocaleData?.app_payment_status?.adjust_amount}}</a>
                                                 </li>
 
-                                                <li class="cp" role="menuitem"
+                                                <li *ngIf="voucherType === 'sales'" class="cp" role="menuitem"
                                                     (click)="updateVoucherAction.emit('unpaid')"><a
                                                     class="dropdown-item">{{commonLocaleData?.app_payment_status?.unpaid}}</a></li>
 
-                                                <li class="cp" role="menuitem"
-                                                    (click)="updateVoucherAction.emit('hold')"><a class="dropdown-item">{{commonLocaleData?.app_payment_status?.hold}}</a>
+                                                <li *ngIf="voucherType === 'sales'" class="cp" role="menuitem"
+                                                    (click)="updateVoucherAction.emit('hold')"><a
+                                                        class="dropdown-item">{{commonLocaleData?.app_payment_status?.hold}}</a>
                                                 </li>
 
                                                 <li class="cp" role="menuitem"
