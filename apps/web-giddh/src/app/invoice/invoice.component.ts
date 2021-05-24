@@ -23,6 +23,8 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     public activeTab: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public isMobileView = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
 
     constructor(private store: Store<AppState>,
         private companyActions: CompanyActions,
@@ -106,14 +108,6 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         if (e && !e.target) {
             this.saveLastState(tab);
         }
-
-        if(tab === "pending") {
-            this.setCurrentPageTitle("Pending");
-        } else if(tab === "templates") {
-            this.setCurrentPageTitle("Templates");
-        } else if(tab === "settings") {
-            this.setCurrentPageTitle("Settings");
-        }
     }
 
     public ngOnDestroy() {
@@ -129,18 +123,5 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         stateDetailsRequest.lastState = `pages/invoice/preview/${state}/${this.selectedVoucherType !== state ? this.selectedVoucherType : ''}`;
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    }
-
-    /**
-     * This function will set the page heading
-     *
-     * @param {string} title
-     * @memberof InvoiceComponent
-     */
-    public setCurrentPageTitle(title: string) : void {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = (this.selectedVoucherType !== 'debit note' && this.selectedVoucherType !== 'credit note') ? "Invoice > " + title : title;
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 }
