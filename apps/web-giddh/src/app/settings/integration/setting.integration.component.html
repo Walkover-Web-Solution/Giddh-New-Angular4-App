@@ -369,6 +369,7 @@
                         <!-- <button class="btn btn-danger">Delete</button> -->
                     </div>
                 </div>
+<<<<<<< HEAD
             </div>
             <div class="mr-t2 box clearfix">
                 <h3 class="section-head mb-2">Shopify</h3>
@@ -392,6 +393,40 @@
                                 <button class="btn btn-xs" *ngIf="isBankUpdateInEdit !== parentIndex " (click)="editRegisterForm(parentIndex, regAcc)" type="button"><i class="icon-edit-pencil"></i></button>
                                 <button class="btn btn-xs" *ngIf="isBankUpdateInEdit === parentIndex " (click)="editRegisterForm(null)" type="button"><i class="icon-edit-pencil"></i></button>
                                 <button class="btn btn-xs mr-0" type="button" (click)="deRegisterForm(regAcc)"><i class="icon-trash"></i></button>
+=======
+                <div class="mr-t2 box clearfix">
+                    <h3 class="section-head mb-2">{{localeData?.ecommerce?.shopify_form_heading}}</h3>
+                    <span
+                        *ngIf="isEcommerceShopifyUserVerified">{{localeData?.ecommerce?.shopify_connected_message}}</span>
+                    <a href="https://shopify.giddh.com/signup.php" target="_blank"
+                        *ngIf="!isEcommerceShopifyUserVerified">
+                        <span>{{localeData?.ecommerce?.connect_shopify}}</span></a>
+                </div>
+
+            </tab>
+            <tab (selectTab)="loadPaymentData($event); tabChanged('payment');" [hidden]="!isIndianCompany">
+                <div *ngIf="isIndianCompany">
+                    <ng-template tabHeading>
+                        <span class="icon-payment"></span> {{localeData?.payment?.tab_heading}}
+                    </ng-template>
+                    <div class="mb-2 bank-logo">
+                        <img src="assets/images/ICICI-logo.png"/>
+                    </div>
+                    <div *ngFor="let regAcc of registeredAccount; let parentIndex=index">
+
+                        <div class="box clearfix">
+                            <div class="d-flex justify-content-between pull-right">
+                                <div class="ico-btn">
+                                    <button class="btn btn-xs" *ngIf="isBankUpdateInEdit !== parentIndex"
+                                        (click)="editRegisterForm(parentIndex, regAcc)" type="button"><i
+                                            class="icon-edit-pencil"></i></button>
+                                    <button class="btn btn-xs" *ngIf="isBankUpdateInEdit === parentIndex"
+                                        (click)="editRegisterForm(null)" type="button"><i
+                                            class="icon-edit-pencil"></i></button>
+                                    <button class="btn btn-xs mr-0" type="button" (click)="deRegisterForm(regAcc)"><i
+                                            class="icon-trash"></i></button>
+                                </div>
+>>>>>>> b224d20533... shalinee | test | replace icici logo
                             </div>
                         </div>
                         <div *ngIf="isBankUpdateInEdit === parentIndex ">

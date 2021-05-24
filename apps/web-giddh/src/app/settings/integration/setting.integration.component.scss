@@ -62,14 +62,22 @@
         color: $gray;
     }
 }
-.form-control, .linked-account{
-    width:100% !important;
+.form-control{
+    width: 100% !important;
 }
-
-.payment-text{
+.linked-account{
+    width: calc(100% - 42px);
+}
+.payment-text {
     color: $gray;
 }
-
+.bank-logo {
+    img{
+        max-width: 140px;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+}
 /*responsive*/
 @media(max-width:1359px) {
     .xs-pd-l15 {
