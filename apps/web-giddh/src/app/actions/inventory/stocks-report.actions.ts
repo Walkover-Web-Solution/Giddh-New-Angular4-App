@@ -5,7 +5,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { GroupStockReportRequest, GroupStockReportResponse, StockReportRequest, StockReportResponse } from '../../models/api-models/Inventory';
 import { STOCKS_REPORT_ACTIONS } from './inventory.const';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -17,7 +17,7 @@ import { CustomActions } from '../../store/customActions';
 @Injectable()
 export class StockReportActions {
 
-     public GetStocksReport$: Observable<Action> = createEffect( ()=>this.action$
+    public GetStocksReport$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT),
             switchMap((action: CustomActions) => {
@@ -42,7 +42,7 @@ export class StockReportActions {
 
             })));
 
-     public GetGroupStocksReport$: Observable<Action> =createEffect( ()=> this.action$
+    public GetGroupStocksReport$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT),
             switchMap((action: CustomActions) => {

@@ -42,72 +42,71 @@ input.green-checkbox[type="checkbox"]:checked:after {
     }
 }
 
-
-.select-field-width{
+.select-field-width {
     width: 100% !important;
 }
 
-.group-model{
+.group-model {
     margin-top: 50px;
 }
 
-.success-label{
+.success-label {
     color: $success-green !important;
 }
 
-@media (max-width: 1140px){
+@media (max-width: 1140px) {
     .left-bar-width {
         width: 80%;
     }
 }
 
-@media (min-width: 576px) and (max-width: 1024px){
+@media (min-width: 576px) and (max-width: 1024px) {
     .right-bar {
         width: 310px !important;
     }
 }
 
-@media (min-width: 721px) and (max-width: 767px){
-    .select-field-width{
+@media (min-width: 721px) and (max-width: 767px) {
+    .select-field-width {
         width: 70% !important;
     }
 }
 
-@media (min-width: 576px) and (max-width: 720px){
-    .select-field-width{
+@media (min-width: 576px) and (max-width: 720px) {
+    .select-field-width {
         width: 50% !important;
     }
-    .left-head{
+    .left-head {
         width: 50%;
     }
 }
 
-@media (min-width: 361px) and (max-width: 575px){
-    .select-field-width{
+@media (min-width: 361px) and (max-width: 575px) {
+    .select-field-width {
         width: 70% !important;
     }
-    .left-head{
+    .left-head {
         width: 70%;
     }
     .right-bar {
         width: 150px !important;
-        .right-head{
-        font-size: 14px;
+        .right-head {
+            font-size: 14px;
         }
     }
 }
 
-@media (max-width: 360px){
-    .select-field-width{
+@media (max-width: 360px) {
+    .select-field-width {
         width: 80% !important;
     }
-    .left-head{
+    .left-head {
         width: 80%;
     }
     .right-bar {
         width: 100px !important;
         padding: 5px;
-        .right-head{
+        .right-head {
             font-size: 12px;
         }
     }

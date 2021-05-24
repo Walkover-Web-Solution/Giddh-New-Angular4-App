@@ -172,7 +172,7 @@ export const GIDDH_DATE_RANGE_PICKER_RANGES = [
         key: "ThisMonth"
     },
     {
-        name: DatePickerDefaultRangeEnum.LastMonth, 
+        name: DatePickerDefaultRangeEnum.LastMonth,
         value: [
             moment().subtract(1, 'month').startOf('month'),
             moment().subtract(1, 'month').endOf('month')
@@ -180,7 +180,7 @@ export const GIDDH_DATE_RANGE_PICKER_RANGES = [
         key: "LastMonth"
     },
     {
-        name: DatePickerDefaultRangeEnum.ThisQuarterToDate, 
+        name: DatePickerDefaultRangeEnum.ThisQuarterToDate,
         value: [
             moment().quarter(moment().quarter()).startOf('quarter'),
             moment()
@@ -188,7 +188,7 @@ export const GIDDH_DATE_RANGE_PICKER_RANGES = [
         key: "ThisQuarterToDate"
     },
     {
-        name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate, 
+        name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate,
         value: [
             moment().startOf('year').subtract(9, 'year'),
             moment()
@@ -196,7 +196,7 @@ export const GIDDH_DATE_RANGE_PICKER_RANGES = [
         key: "ThisFinancialYearToDate"
     },
     {
-        name: DatePickerDefaultRangeEnum.LastQuarter, 
+        name: DatePickerDefaultRangeEnum.LastQuarter,
         value: [
             moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
             moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
@@ -204,7 +204,7 @@ export const GIDDH_DATE_RANGE_PICKER_RANGES = [
         key: "LastQuarter"
     },
     {
-        name: DatePickerDefaultRangeEnum.AllTime, 
+        name: DatePickerDefaultRangeEnum.AllTime,
         value: [
             moment().startOf('year').subtract(10, 'year'),
             moment()
@@ -229,7 +229,7 @@ export const VAT_SUPPORTED_COUNTRIES = [
     'QA', 'BH', 'AE', 'SA', 'OM', 'KW'
 ];
 
-export const API_POSTMAN_DOC_URL='https://apidoc.giddh.com/';
+export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
 
 /** Decimal point for rate field, irrespective of user profile preference
  * will be displayed up to 4 decimal places

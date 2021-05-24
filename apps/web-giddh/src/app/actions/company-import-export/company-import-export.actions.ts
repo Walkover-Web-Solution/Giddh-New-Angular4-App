@@ -4,7 +4,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
 
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { CustomActions } from '../../store/customActions';
@@ -16,7 +16,7 @@ import { GeneralService } from '../../services/general.service';
 
 @Injectable()
 export class CompanyImportExportActions {
-     public EXPORT_REQUEST$: Observable<Action> =createEffect( ()=> this.action$
+    public EXPORT_REQUEST$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(COMPANY_IMPORT_EXPORT_ACTIONS.EXPORT_REQUEST),
             switchMap((action: CustomActions) => {
@@ -38,7 +38,7 @@ export class CompanyImportExportActions {
                     return this._companyImportExportService.ExportLedgersRequest(action.payload.from, action.payload.to, action.payload.branchUniqueName).pipe(
                         map((response: BaseResponse<any, string>) => {
                             if (response.status === 'success' && response.body) {
-                                if(response.body.type === "message") {
+                                if (response.body.type === "message") {
                                     this._toasty.successToast(response.body.file);
                                 } else {
                                     let res = { body: response.body.file };
@@ -53,7 +53,7 @@ export class CompanyImportExportActions {
                 }
             })));
 
-    public IMPORT_REQUEST$: Observable<Action> =createEffect( ()=> this.action$
+    public IMPORT_REQUEST$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(COMPANY_IMPORT_EXPORT_ACTIONS.IMPORT_REQUEST),
             switchMap((action: CustomActions) => {
