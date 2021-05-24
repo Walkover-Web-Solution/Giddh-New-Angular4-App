@@ -279,8 +279,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                         <div class="col-sm-6 col-12">
                             <div class="checkbox">
                                 <label class="" for="enableSales">
@@ -436,8 +434,13 @@
                                     [ladda]="isStockUpdateInProcess$ | async" class="btn btn-primary" (click)="update()"
                                     [disabled]="addStockForm.invalid || disableStockButton">Update
                                 </button>
+                                <!-- add openModal(template) this code for the delete stock confirmation popup -->
                                 <button *ngIf="isUpdatingStockForm" [ladda]="isStockDeleteInProcess$ | async"
-                                    class="btn btn-danger" (click)="deleteStock()">Delete Stock
+                                    class="btn btn-danger" (click)="deleteStock();">Delete Stock
+                                </button>
+                                 <!-- Added new delete button for popup  -->
+                                <button
+                                    class="btn btn-danger" (click)="openModal(template)">Delete Stock
                                 </button>
                                 <button type="button" *ngIf="!isUpdatingStockForm" (click)="resetStockForm()"
                                     class="btn btn-default">Reset
@@ -447,11 +450,8 @@
                     </div>
                 </section>
             </div>
-
-
         </div>
     </section>
-
     <div class="clearfix"></div>
     <!--manufactre details  -->
 
@@ -498,3 +498,20 @@
     </div>
 </div>
 <!--ngbusy  -->
+<!-- popup for the delete group -->
+<ng-template #template>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Confirmation</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="mb-3 font-14">Stock linked with finished stock will be deleted. Still want to delete it?</p>
+      <div class="button-group">
+          <button class="btn btn-md btn-success">Yes</button>
+          <button class="btn btn-md btn-cancel">No</button>
+      </div>
+    </div>
+  </ng-template>
+  <!-- popup end -->

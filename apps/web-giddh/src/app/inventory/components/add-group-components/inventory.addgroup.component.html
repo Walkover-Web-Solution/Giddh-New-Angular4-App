@@ -101,6 +101,9 @@
                                         [ladda]="isUpdateGroupInProcess$ | async" class="btn btn-success"
                                         (click)="updateGroup()">Update
                                     </button>
+                                    <!-- Added new delete button for popup  -->
+                                    <button type="submit" class="btn btn-danger" (click)="openModal(template)">Delete Group
+                                    </button>
                                     <button type="submit" class="btn btn-danger"
                                         [ladda]="isDeleteGroupInProcess$ | async" (click)="removeGroup()"
                                         *ngIf="canDeleteGroup" [disabled]="defaultGrpActive">Delete
@@ -114,3 +117,20 @@
         </section>
     </div>
 </section>
+<!-- popup for the delete group -->
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Confirmation</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+   <p class="mb-3 font-14">Stock of this group linked with finished stock will be deleted. Still want to delete it?</p>
+    <div class="button-group">
+        <button class="btn btn-md btn-success">Yes</button>
+        <button class="btn btn-md btn-cancel">No</button>
+    </div>
+  </div>
+</ng-template>
+<!-- popup end -->
