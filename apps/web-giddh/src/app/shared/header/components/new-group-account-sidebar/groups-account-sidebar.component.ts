@@ -25,7 +25,9 @@ import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 })
 
 export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
-    items = Array.from({length: 100000}).map((_, i) => `Item #${i}`);
+
+    public items;
+
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
 
@@ -67,7 +69,6 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
     public isGroupDeleted: boolean = false;
     /** This will hold the search string */
     public searchString: string = "";
-
     // tslint:disable-next-line:no-empty
     constructor(
         private store: Store<AppState>,
@@ -127,6 +128,11 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
+        let i = Number;
+        let text = this.localeData?.item_no;
+        text = text?.replace("[ITEM_NO]", i);
+        this.items = Array.from({length: 100000}).map((_, i) => text);
+
         this._generalServices.eventHandler.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.mc.handleEvents(s.name, s.payload);
 
