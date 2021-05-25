@@ -15,7 +15,7 @@
             </ul>
             <ng-container *ngIf="col.Items">
                 <ul class="grp-list users-last-list">
-                    <cdk-virtual-scroll-viewport class="virtual-group-list" [itemSize]="37">
+                    <cdk-virtual-scroll-viewport class="virtual-group-list" [itemSize]="37" [minBufferPx]="400" [maxBufferPx]="800">
                         <li *cdkVirtualFor="let item of col.Items; let j = index;" class="list-item sidebarTooltip">
                             <ng-container *ngIf="item.isGroup">
                                 <a href="javascript:void(0);" id="subGrp_{{item.name}}" nav-vr-item class="list-item"
