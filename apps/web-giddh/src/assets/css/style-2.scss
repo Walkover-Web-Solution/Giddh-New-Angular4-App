@@ -9812,6 +9812,11 @@ body.update-scroll-hidden {
         margin-bottom: 20px;
         margin-right: 10px;
     }
+    #setting-tab .tab-integration .nav-tabs > li > a {
+        width: 90px;
+        height: 90px !important;
+        font-size: 14px;
+    }
     .gst-sidebar-open {
          .gst-sidebar{
             left: -250px !important;
