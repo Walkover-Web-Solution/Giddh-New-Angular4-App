@@ -3443,6 +3443,20 @@ ul.pills li {
     box-shadow: none;
 }
 
+.tourist-scheme-wrapper{
+    .popover{
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+}
+
+.purchase-invoice-rcm{
+    left: 50% !important;
+    top:50% !important;
+    transform: translate(-50%, -50%) !important;
+    position: fixed !important;
+}
+
 .popover-content {
     padding: 0;
 }
