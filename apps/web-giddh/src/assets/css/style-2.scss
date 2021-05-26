@@ -9818,10 +9818,37 @@ body.update-scroll-hidden {
         margin-bottom: 20px;
         margin-right: 10px;
     }
-     body.update-scroll-hidden{
-         overflow-y: hidden;
-     }
-     .e-waybill-tabs.custom-tabs .nav-tabs{
+    #setting-tab .tab-integration .nav-tabs > li > a {
+        width: 90px;
+        height: 90px !important;
+        font-size: 14px;
+    }
+    .gst-sidebar-open {
+         .gst-sidebar{
+            left: -250px !important;
+         }
+         #content-wrapper{
+            padding-left: 0;
+        }
+        .nav-left-bar{
+            display: none;
+        }
+        .plan-wrapper{
+            padding-left: 0;
+        }
+        .menu_open{
+            .gst-sidebar{
+                left: 0 !important;
+            }
+            #content-wrapper {
+                padding-left: 240px;
+            }
+            .plan-wrapper{
+                padding-left: 60px;
+            }
+        }
+    }
+    .e-waybill-tabs.custom-tabs .nav-tabs{
         position: static !important;
         padding-left: 15px !important;
     }
