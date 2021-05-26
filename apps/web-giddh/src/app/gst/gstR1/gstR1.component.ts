@@ -116,7 +116,7 @@ export class FileGstR1Component implements OnInit, OnDestroy {
     *
     * @memberof FileGstR1Component
     */
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('gst-sidebar-open');
     }
 }

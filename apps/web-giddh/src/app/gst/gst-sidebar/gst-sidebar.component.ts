@@ -60,9 +60,10 @@ export class GstrSidebarComponent {
     /**
     * This is navigate menu item
     *
+    * @param {string} type Type of GST module
     * @memberof GstrSidebarComponent
     */
-    public navigate(type) {
+    public navigate(type: string): void {
         this.selectedGstModule = type;
         this.navigateEvent.emit(type);
     }
