@@ -26,8 +26,8 @@ import { DecimalPipe } from '@angular/common';
 })
 
 export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-    @ViewChild('addCompanyNewModal', {static: true}) public addCompanyNewModal: ModalDirective;
-    @ViewChild('companynewadd', {static: true}) public companynewadd: ElementViewContainerRef;
+    @ViewChild('addCompanyNewModal', { static: true }) public addCompanyNewModal: ModalDirective;
+    @ViewChild('companynewadd', { static: true }) public companynewadd: ElementViewContainerRef;
 
     /* This will have active tab value */
     @Input() public activeTab: string = '';
@@ -88,7 +88,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
         }
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
         });
@@ -108,7 +108,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
                 this.companyListForFilter = filteredCompanies;
 
                 this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-                    if(activeCompany) {
+                    if (activeCompany) {
                         this.sortAssociatedCompanies();
                         this.showCurrentCompanyPlan();
                     }
@@ -132,9 +132,9 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
         });
 
         this.subscriptions$.subscribe(userSubscriptions => {
-            if(userSubscriptions && userSubscriptions.length > 0) {
+            if (userSubscriptions && userSubscriptions.length > 0) {
                 userSubscriptions.forEach(userSubscription => {
-                    if(userSubscription.createdAt) {
+                    if (userSubscription.createdAt) {
                         userSubscription.createdAt = moment(userSubscription.createdAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     }
 
@@ -164,7 +164,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
      * @memberof SubscriptionsComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if(changes && changes.activeTab) {
+        if (changes && changes.activeTab) {
             this.activeTab = changes.activeTab.currentValue;
         }
     }
@@ -443,7 +443,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
      * @memberof SubscriptionsComponent
      */
     public sortAssociatedCompanies(): void {
-        if(this.companyListForFilter && this.companyListForFilter.length > 0) {
+        if (this.companyListForFilter && this.companyListForFilter.length > 0) {
             let companyListForFilter = _.orderBy(this.companyListForFilter, 'name');
 
             let loop = 0;

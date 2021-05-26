@@ -123,7 +123,7 @@ export class ReceiptService implements OnInit {
             advanceSearchRequest.grandTotalOperation = PURCHASE_RECORD_GRAND_TOTAL_OPERATION.LESS_THAN;
         }
 
-        if(request.purchaseOrderNumber) {
+        if (request.purchaseOrderNumber) {
             advanceSearchRequest.purchaseOrderNumber = request.purchaseOrderNumber;
         }
 
@@ -233,9 +233,9 @@ export class ReceiptService implements OnInit {
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
         return this._http.get(url).pipe(map((res) => {
-                let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
+            let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
     }
 
     /*
@@ -252,9 +252,9 @@ export class ReceiptService implements OnInit {
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
         return this._http.get(url).pipe(map((res) => {
-                let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
+            let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
     }
 
     private createQueryString(str, model) {
@@ -333,13 +333,13 @@ export class ReceiptService implements OnInit {
         const companyUniqueName = String(requestObject.companyUniqueName);
         delete requestObject.companyUniqueName;
         let url = `${this.config.apiUrl}${RECEIPT_API.GET_ALL_ADVANCE_RECEIPTS}`
-        .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-        .replace(':sortBy', requestObject && requestObject.sortBy ? requestObject.sortBy : '')
-        .replace(':sort', requestObject && requestObject.sort ? requestObject.sort : '')
-        .replace(':page', (requestObject && requestObject.page) ? String(requestObject.page) : '')
-        .replace(':count', requestObject && requestObject.count ? String(requestObject.count) : '')
-        .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
-        .replace(':to', requestObject && requestObject.to ? requestObject.to : '');
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            .replace(':sortBy', requestObject && requestObject.sortBy ? requestObject.sortBy : '')
+            .replace(':sort', requestObject && requestObject.sort ? requestObject.sort : '')
+            .replace(':page', (requestObject && requestObject.page) ? String(requestObject.page) : '')
+            .replace(':count', requestObject && requestObject.count ? String(requestObject.count) : '')
+            .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
+            .replace(':to', requestObject && requestObject.to ? requestObject.to : '');
         if (requestObject.branchUniqueName) {
             url = url.concat(`&branchUniqueName=${requestObject.branchUniqueName !== companyUniqueName ? requestObject.branchUniqueName : ''}`);
         }
@@ -357,9 +357,9 @@ export class ReceiptService implements OnInit {
         const companyUniqueName = String(requestObject.companyUniqueName);
         delete requestObject.companyUniqueName;
         let url = `${this.config.apiUrl}${RECEIPT_API.GET_ADVANCE_RECEIPTS_SUMMARY}`
-        .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-        .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
-        .replace(':to', requestObject && requestObject.to ? requestObject.to : '');
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
+            .replace(':to', requestObject && requestObject.to ? requestObject.to : '');
         if (requestObject.branchUniqueName) {
             url = url.concat(`&branchUniqueName=${requestObject.branchUniqueName !== companyUniqueName ? requestObject.branchUniqueName : ''}`);
         }

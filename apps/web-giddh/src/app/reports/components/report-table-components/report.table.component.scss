@@ -55,11 +55,11 @@
     }
 }
 
-@media screen and (max-width:768px) {
-    .table-responsive{
-        .giddh-table.on-mobile-view{
-            tr{
-                td{
+@media screen and (max-width: 768px) {
+    .table-responsive {
+        .giddh-table.on-mobile-view {
+            tr {
+                td {
                     white-space: normal !important;
                     word-break: break-word;
                 }

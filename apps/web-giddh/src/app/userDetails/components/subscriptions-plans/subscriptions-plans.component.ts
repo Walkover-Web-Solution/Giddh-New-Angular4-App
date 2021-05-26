@@ -160,11 +160,11 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         });
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
-            if(val && val.showPlans === "true") {
+            if (val && val.showPlans === "true") {
                 this.isShowPlans = true;
             }
 
-            if((!val || val.showPlans !== "true") && this.isShowPlans) {
+            if ((!val || val.showPlans !== "true") && this.isShowPlans) {
                 this.backClicked();
                 this.isShowPlans = false;
                 this.selectNewPlan = false;
@@ -210,7 +210,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
 
     public patchProfile(obj) {
         this.settingsProfileService.PatchProfile(obj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response && response.status === "error") {
+            if (response && response.status === "error") {
                 this.toasty.errorToast(response.message);
             } else {
                 this.store.dispatch(this.settingsProfileActions.handleFreePlanSubscribed(true));

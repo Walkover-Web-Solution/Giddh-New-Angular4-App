@@ -10,7 +10,7 @@ import { Observable } from "rxjs";
 })
 export class LocaleService {
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService) {
-        
+
     }
 
     /**
@@ -23,7 +23,7 @@ export class LocaleService {
      */
     public getLocale(folder: string, languageCode: string): Observable<BaseResponse<any, any>> {
         let url = "";
-        if(folder) {
+        if (folder) {
             url = "assets/locale/" + folder + "/" + languageCode + ".json";
         } else {
             url = "assets/locale/" + languageCode + ".json";

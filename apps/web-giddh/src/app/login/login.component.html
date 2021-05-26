@@ -1,5 +1,6 @@
 <giddh-loader></giddh-loader>
-<div class="flex-container" *ngIf="!((isLoginWithPasswordInProcess$ | async) || (isLoginWithEmailInProcess$ | async) || (isLoginWithGoogleInProcess$ | async))">
+<div class="flex-container"
+    *ngIf="!((isLoginWithPasswordInProcess$ | async) || (isLoginWithEmailInProcess$ | async) || (isLoginWithGoogleInProcess$ | async))">
     <div class="login-box">
         <div class="row mx-0">
             <div class="col-md-6 col-lg-6 col-sm-12 col-12 px-0">
@@ -164,7 +165,8 @@
 </section> -->
 
 <!--email varify modal  -->
-<div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true" [config]="modalConfig">
+<div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true"
+    [config]="modalConfig">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="border-radius-0">
@@ -210,7 +212,8 @@
 <!--email varify modal  -->
 
 <!--mobile varify form  -->
-<div class="modal fade" tabindex="-1" bsModal #mobileVerifyModal="bs-modal" role="dialog" aria-hidden="true" [config]="modalConfig">
+<div class="modal fade" tabindex="-1" bsModal #mobileVerifyModal="bs-modal" role="dialog" aria-hidden="true"
+    [config]="modalConfig">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="border-radius-0">
@@ -223,7 +226,8 @@
                         [formGroup]="mobileVerifyForm">
                         <div class="clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
                             <sh-select [options]="countryCodeList" class="form-inline"
-                                (selected)="setCountryCode($event)" [placeholder]="'CC'" formControlName="country"></sh-select>
+                                (selected)="setCountryCode($event)" [placeholder]="'CC'" formControlName="country">
+                            </sh-select>
                             <input class="form-control input-width-mobile" formControlName="mobileNumber" type="text"
                                 placeholder="Enter your Mobile No" required />
                         </div>
@@ -231,13 +235,13 @@
                             class="btn sharp btn-block btn-success btn-lg mr-t1"
                             (click)="getOtp(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['country'].value)"
                             [ladda]="isLoginWithMobileInProcess$ | async"
-                            [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{ !(isLoginWithMobileInProcess$ |
-                async) ? 'Get Otp' : 'Resend' }}
+                            [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{
+                            !(isLoginWithMobileInProcess$ |
+                            async) ? 'Get Otp' : 'Resend' }}
                         </button>
                         <div class="clearfix form-group form-group-lg" *ngIf="(isLoginWithMobileSubmited$ | async)">
                             <hr class="mrtb10">
-                            <input class="form-control square" placeholder="Enter OTP"
-                                formControlName="otp">
+                            <input class="form-control square" placeholder="Enter OTP" formControlName="otp">
                             <button type="login" class="btn sharp btn-block btn-success btn-lg mr-t1"
                                 [ladda]="isVerifyMobileInProcess$ | async"
                                 (click)="VerifyCode(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['otp'].value)"
@@ -253,7 +257,8 @@
 <!--mobile verify form  -->
 
 <!-- two way auth popup -->
-<div class="modal fade" tabindex="-1" bsModal #twoWayAuthModal="bs-modal" role="dialog" aria-hidden="true" [config]="modalConfig" (onHidden)="onHiddenAuthModal($event)">
+<div class="modal fade" tabindex="-1" bsModal #twoWayAuthModal="bs-modal" role="dialog" aria-hidden="true"
+    [config]="modalConfig" (onHidden)="onHiddenAuthModal($event)">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="border-radius-0">
@@ -263,12 +268,10 @@
                         (click)="resetTwoWayAuthModal()">×</span>
                 </div>
                 <div class="modal-body clearfix">
-                    <form class="col-12" id="authModal" name="verifyEmailForm" novalidate
-                        [formGroup]="twoWayOthForm">
+                    <form class="col-12" id="authModal" name="verifyEmailForm" novalidate [formGroup]="twoWayOthForm">
                         <div class="clearfix form-group form-group-lg">
                             <hr class="mrtb10">
-                            <input class="form-control square" placeholder="Enter OTP"
-                                formControlName="otp">
+                            <input class="form-control square" placeholder="Enter OTP" formControlName="otp">
                             <small>We have sent an OTP to your registered mobile number.</small>
                             <button type="login" class="btn sharp btn-block btn-success btn-lg mr-t1"
                                 [ladda]="isTwoWayAuthInProcess$ | async" (click)="verifyTwoWayCode()"
@@ -320,7 +323,7 @@
 <!--mobile verify form  -->
 
 
-<div *ngIf="(isLoginWithPasswordInProcess$ | async) || (isLoginWithEmailInProcess$ | async) || (isLoginWithGoogleInProcess$ | async)">
+<div
+    *ngIf="(isLoginWithPasswordInProcess$ | async) || (isLoginWithEmailInProcess$ | async) || (isLoginWithGoogleInProcess$ | async)">
     <giddh-page-loader></giddh-page-loader>
 </div>
-

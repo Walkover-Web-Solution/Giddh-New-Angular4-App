@@ -33,7 +33,7 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
     public isShowClosingOpeningBalance$: Observable<boolean> = of(false);
 
     constructor(public settingsFinancialYearService: SettingsFinancialYearService, private store: Store<AppState>, private toaster: ToasterService) {
-        
+
     }
 
     /**
@@ -61,7 +61,7 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
             this.mapDataForMonthColumnName();
         }
         if (changes && changes['isBalanceTypeAsSign']) {
-          this.isCrDrChecked = changes['isBalanceTypeAsSign'].currentValue;
+            this.isCrDrChecked = changes['isBalanceTypeAsSign'].currentValue;
         }
 
     }

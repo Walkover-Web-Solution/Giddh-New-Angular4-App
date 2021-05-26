@@ -27,8 +27,8 @@ import { GeneralService } from '../../../services/general.service';
 })
 
 export class EWayBillComponent implements OnInit, OnDestroy {
-    @ViewChild('cancelEwayForm', {static: true}) public cancelEwayForm: NgForm;
-    @ViewChild('updateVehicleForm', {static: true}) public updateVehicleForm: NgForm;
+    @ViewChild('cancelEwayForm', { static: true }) public cancelEwayForm: NgForm;
+    @ViewChild('updateVehicleForm', { static: true }) public updateVehicleForm: NgForm;
 
     public isGetAllEwaybillRequestInProcess$: Observable<boolean>;
     public isGetAllEwaybillRequestSuccess$: Observable<boolean>;
@@ -53,8 +53,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public searchResults: Array<any> = [];
 
     // searching
-    @ViewChild('invoiceSearch', {static: true}) public invoiceSearch: ElementRef;
-    @ViewChild('customerSearch', {static: true}) public customerSearch: ElementRef;
+    @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
+    @ViewChild('customerSearch', { static: true }) public customerSearch: ElementRef;
     public voucherNumberInput: FormControl = new FormControl();
     public customerNameInput: FormControl = new FormControl();
     public showSearchInvoiceNo: boolean = false;
@@ -120,7 +120,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         vehicleType: null,
     };
 
-    @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
+    @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
     public selectedEway: Result;
     public states: any[] = [];
     /** directive to get reference of element */
@@ -500,7 +500,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @memberof EWayBillComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -538,7 +538,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @memberof EWayBillComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.ewayUpdateVehicleReasonList = [
                 { value: '1', label: this.localeData?.vehicle_reason_list?.break_down },
                 { value: '2', label: this.localeData?.vehicle_reason_list?.transshipment },

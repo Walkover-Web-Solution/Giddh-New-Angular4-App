@@ -17,15 +17,10 @@
                             src="{{r.favicon}}" /></span>
                     {{ r.name }} <label *ngIf="r.countryISOCode">({{r.countryISOCode}})</label></span>
             </ng-template> -->
-            <sh-select [options]="searchResults"
-                [(ngModel)]="selectedProvider.name"
-                [isPaginationEnabled]="true"
-                [forceClearReactive]="forceClearReactive$ | async"
-                (dynamicSearchedQuery)="onSearchQueryChanged($event)"
-                [enableDynamicSearch]="true"
-                (selected)="typeaheadOnSelect($event)"
-                [placeholder]="localeData?.search_provider_placeholder"
-                [showClear]="false" [multiple]="false"
+            <sh-select [options]="searchResults" [(ngModel)]="selectedProvider.name" [isPaginationEnabled]="true"
+                [forceClearReactive]="forceClearReactive$ | async" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                [enableDynamicSearch]="true" (selected)="typeaheadOnSelect($event)"
+                [placeholder]="localeData?.search_provider_placeholder" [showClear]="false" [multiple]="false"
                 [ItemHeight]="67">
             </sh-select>
         </div>
@@ -53,7 +48,8 @@
                                         *ngIf="fields.get('type').value !== 'option' && fields.get('id').value !== 'image' && fields.get('type').value !== 'checkbox' && fields.get('type').value !== 'radio'" />
                                     <select class="form-control" *ngIf="fields.get('type').value === 'option'"
                                         formControlName="value">
-                                        <option [ngValue]="null" [selected]="true">{{commonLocaleData?.app_select_type}}</option>
+                                        <option [ngValue]="null" [selected]="true">{{commonLocaleData?.app_select_type}}
+                                        </option>
                                         <option *ngFor="let list of fields.get('option')?.value"
                                             [ngValue]="list.optionValue">
                                             {{list.displayText}}
@@ -80,9 +76,10 @@
             <button class="btn btn-success btn-sm" type="submit" *ngIf="isRefreshWithCredentials"
                 [disabled]="bankSyncInProgress">{{commonLocaleData?.app_submit}}</button>
             <button class="btn btn-success btn-sm" type="button" *ngIf="!isRefreshWithCredentials"
-                (click)="refreshAccount(loginForm)" [disabled]="bankSyncInProgress">{{commonLocaleData?.app_update}}</button>
-            <small *ngIf="bankSyncInProgress" class="grey-color clearfix mr-t2 row">{{commonLocaleData?.app_status}}: <span
-                    class="primary-color">{{localeData?.authenticating}}</span>
+                (click)="refreshAccount(loginForm)"
+                [disabled]="bankSyncInProgress">{{commonLocaleData?.app_update}}</button>
+            <small *ngIf="bankSyncInProgress" class="grey-color clearfix mr-t2 row">{{commonLocaleData?.app_status}}:
+                <span class="primary-color">{{localeData?.authenticating}}</span>
                 <!-- <p>You can wait or check again in 15-20 min</p> -->
             </small>
         </form>

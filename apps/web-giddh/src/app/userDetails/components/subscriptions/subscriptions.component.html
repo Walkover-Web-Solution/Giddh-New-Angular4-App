@@ -5,25 +5,33 @@
                 <div class="form-group subscription-dropdown-wrapper mb-0">
                     <div class="btn-group d-block subscription-dropdown mb-0 open custom-input-search">
                         <i class="icon-search"></i>
-                        <input type="text" class="form-control" [placeholder]="localeData?.subscription?.search_subscribed_plan"
+                        <input type="text" class="form-control"
+                            [placeholder]="localeData?.subscription?.search_subscribed_plan"
                             (focus)="showSubscribedPlansList = true;" (focusout)="showSubscribedPlansList = false;"
                             [(ngModel)]="searchSubscribedPlan" (ngModelChange)="searchPlan($event)">
                         <ul id="dropdown-basic" class="dropdown-menu" role="menu" aria-labelledby="button-basic"
                             *ngIf="showSubscribedPlansList">
                             <li *ngIf="subscriptions.length==0">{{commonLocaleData?.app_no_result_found}}</li>
                             <li *ngFor="let item of subscriptions" [ngClass]="{'active': seletedUserPlans == item}"
-                            role="menuitem" class="cursor-pointer">
+                                role="menuitem" class="cursor-pointer">
                                 <a (click)="selectedSubscriptionPlan(item);">
                                     <div class="clearfix">
                                         <p><strong>{{item?.planDetails?.name}}</strong></p>
-                                        <p *ngIf="item.subscriptionId">{{localeData?.subscription?.subscription_id}}: {{item.subscriptionId}} </p>
-                                        <p>{{localeData?.subscription?.subscribed_on}}: {{item.startedAt ? (formatDate(item.startedAt) | date:
+                                        <p *ngIf="item.subscriptionId">{{localeData?.subscription?.subscription_id}}:
+                                            {{item.subscriptionId}} </p>
+                                        <p>{{localeData?.subscription?.subscribed_on}}: {{item.startedAt ?
+                                            (formatDate(item.startedAt) | date:
                                             giddhDateFormatUI) : '-'}} </p>
-                                        <p>{{localeData?.subscription?.companies}}: {{getSubscribedCompaniesCount(item?.totalCompanies, item?.planDetails?.companiesLimit)}} </p>
+                                        <p>{{localeData?.subscription?.companies}}:
+                                            {{getSubscribedCompaniesCount(item?.totalCompanies,
+                                            item?.planDetails?.companiesLimit)}} </p>
                                     </div>
-                                    <span class="text-warning" *ngIf="item?.status==='trial'">{{item?.status | titlecase}}</span>
-                                    <span class="text-success" *ngIf="item?.status==='active'">{{item?.status | titlecase}}</span>
-                                    <span class="text-danger" *ngIf="item?.status==='expired'">{{item?.status | titlecase}}</span>
+                                    <span class="text-warning" *ngIf="item?.status==='trial'">{{item?.status |
+                                        titlecase}}</span>
+                                    <span class="text-success" *ngIf="item?.status==='active'">{{item?.status |
+                                        titlecase}}</span>
+                                    <span class="text-danger" *ngIf="item?.status==='expired'">{{item?.status |
+                                        titlecase}}</span>
                                 </a>
                             </li>
                         </ul>
@@ -32,7 +40,8 @@
                 <div class="d-flex">
                     <button type="button" *ngIf="seletedUserPlans?.additionalCharges >0" (click)="goToBillingDetails();"
                         class="btn btn-sky-blue">{{commonLocaleData?.app_pay_now}}</button>
-                    <button type="button" (click)="isPlanShow=true" class="btn btn-green mr-0">{{commonLocaleData?.app_buy_new_plan}}</button>
+                    <button type="button" (click)="isPlanShow=true"
+                        class="btn btn-green mr-0">{{commonLocaleData?.app_buy_new_plan}}</button>
                 </div>
             </div>
         </div>
@@ -93,7 +102,8 @@
                                                     <a class="dropdown-item" href="javascript:void(0)"
                                                         (click)="isPlanShow=true">{{localeData?.subscription?.upgrade_plan}}</a>
                                                 </li>
-                                                <li role="menuitem" *ngIf="seletedUserPlans?.planDetails?.uniqueName !== defaultTrialPlan">
+                                                <li role="menuitem"
+                                                    *ngIf="seletedUserPlans?.planDetails?.uniqueName !== defaultTrialPlan">
                                                     <a class="dropdown-item" href="javascript:void(0)"
                                                         (click)="isPlanShow=true">{{localeData?.subscription?.downgrade_plan}}</a>
                                                 </li>
@@ -131,14 +141,18 @@
                                                 <td>
                                                     <!-- {{seletedUserPlans?.planDetails?.amount | number}} -->
                                                     <span class="d-inline-flex">
-                                                        <amount-field [amount]="(seletedUserPlans?.planDetails?.amount |  number)" [currencySymbol]="false" [currencyCode]="false" [useGiddhCurrencyPipe]="false">
+                                                        <amount-field
+                                                            [amount]="(seletedUserPlans?.planDetails?.amount |  number)"
+                                                            [currencySymbol]="false" [currencyCode]="false"
+                                                            [useGiddhCurrencyPipe]="false">
                                                         </amount-field>
                                                     </span>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th>{{localeData?.subscription?.total_companies}}</th>
-                                                <td>{{ getSubscribedCompaniesCount(seletedUserPlans?.totalCompanies, seletedUserPlans?.planDetails?.companiesLimit)}}</td>
+                                                <td>{{ getSubscribedCompaniesCount(seletedUserPlans?.totalCompanies,
+                                                    seletedUserPlans?.planDetails?.companiesLimit)}}</td>
                                             </tr>
                                             <tr>
                                                 <th>{{localeData?.subscription?.transactions_limit}}</th>
@@ -154,7 +168,8 @@
                                 </div>
                             </div>
 
-                            <h2 class="section-head pb-0">{{seletedUserPlans?.planDetails?.name}} ({{localeData?.subscription?.transactions_statement}})</h2>
+                            <h2 class="section-head pb-0">{{seletedUserPlans?.planDetails?.name}}
+                                ({{localeData?.subscription?.transactions_statement}})</h2>
 
                             <div class="table-subscription mt-1 xs-mb-2">
                                 <div class="table-responsive">
@@ -162,19 +177,25 @@
                                         <thead>
                                             <tr>
                                                 <!-- <th>Date</th> -->
-                                                <th>{{localeData?.subscription?.consumptions}} <span class="text-gray">{{localeData?.subscription?.previous_current}}</span></th>
+                                                <th>{{localeData?.subscription?.consumptions}} <span
+                                                        class="text-gray">{{localeData?.subscription?.previous_current}}</span>
+                                                </th>
                                                 <th>{{commonLocaleData?.app_balance}}</th>
-                                                <th class="text-right">{{localeData?.subscription?.additional_charges}}</th>
+                                                <th class="text-right">{{localeData?.subscription?.additional_charges}}
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody *ngIf="seletedUserPlans">
                                             <tr>
                                                 <!-- <td data-title="Date">{{ moment(transaction.from, giddhDateFormat).format('MMM - YY')}}</td> -->
-                                                <td [attr.data-title]="localeData?.subscription?.consumptions">{{ seletedUserPlans?.totalTransactions ?
+                                                <td [attr.data-title]="localeData?.subscription?.consumptions">{{
+                                                    seletedUserPlans?.totalTransactions ?
                                                     (seletedUserPlans?.totalTransactions | number) : 0 }}</td>
-                                                <td [attr.data-title]="commonLocaleData?.app_balance">{{ seletedUserPlans?.remainingTransactions || 0
+                                                <td [attr.data-title]="commonLocaleData?.app_balance">{{
+                                                    seletedUserPlans?.remainingTransactions || 0
                                                     }}</td>
-                                                <td [attr.data-title]="localeData?.subscription?.additional_charges" class="text-right">{{
+                                                <td [attr.data-title]="localeData?.subscription?.additional_charges"
+                                                    class="text-right">{{
                                                     seletedUserPlans?.additionalCharges?
                                                     (seletedUserPlans?.additionalCharges | number) : 0 }}</td>
                                             </tr>
@@ -238,13 +259,17 @@
                                 <div class="associated-companies" *ngIf="subscriptions && activeTab === 'subscription'">
                                     <ul>
                                         <cdk-virtual-scroll-viewport [itemSize]="48">
-                                            <li *cdkVirtualFor="let company of companyListForFilter; let i = index" class="associated-companies-li">
-                                                <a href="javascript:void(0)" (click)="toggleCompanyDetailsAsidePane(company)">
+                                            <li *cdkVirtualFor="let company of companyListForFilter; let i = index"
+                                                class="associated-companies-li">
+                                                <a href="javascript:void(0)"
+                                                    (click)="toggleCompanyDetailsAsidePane(company)">
                                                     <span>{{i+1}}</span>
                                                     <div class="d-flex associated-company-name">
                                                         <p>
-                                                            <img src="assets/images/blue-check.svg" class="mr-r05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">
-                                                            {{company.name}} {{(company.alias) ? "(" + company.alias + ")" : ""}}
+                                                            <img src="assets/images/blue-check.svg" class="mr-r05"
+                                                                *ngIf="activeCompany?.uniqueName === company?.uniqueName">
+                                                            {{company.name}} {{(company.alias) ? "(" + company.alias +
+                                                            ")" : ""}}
                                                         </p>
                                                         <p class="font-12 mr-t05"
                                                             *ngIf="activeCompany?.uniqueName === company?.uniqueName">
@@ -252,8 +277,8 @@
                                                     </div>
                                                 </a>
 
-                                                <div class="btn-group custom-dropdown"
-                                                    dropdown placement="bottom right" container="body">
+                                                <div class="btn-group custom-dropdown" dropdown placement="bottom right"
+                                                    container="body">
                                                     <button id="button-alignment" dropdownToggle type="button"
                                                         class="dropdown-toggle" aria-controls="dropdown-alignment">
                                                         <span class="icon-dots-three-vertical"></span>
@@ -264,7 +289,8 @@
                                                         <li role="menuitem">
                                                             <a class="dropdown-item"
                                                                 (click)="openModalMove(MoveCompany, company)"
-                                                                href="javascript:void(0)">{{localeData?.subscription?.move_company}} </a>
+                                                                href="javascript:void(0)">{{localeData?.subscription?.move_company}}
+                                                            </a>
                                                         </li>
                                                         <!-- <li role="menuitem">
                                                             <a class="dropdown-item" href="javascript:void(0)"
@@ -361,28 +387,41 @@
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <p class="bold font-14">{{item?.planDetails?.name}}</p>
                         <ul class="list-inline plan-list font-14">
-                            <li *ngIf="item?.status==='expired'"><span>{{localeData?.subscription?.expired_on}}: </span><span>{{item.expiry ?
+                            <li *ngIf="item?.status==='expired'"><span>{{localeData?.subscription?.expired_on}}:
+                                </span><span>{{item.expiry ?
                                     (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </span></li>
-                            <li *ngIf="item.subscriptionId && item?.status !== 'expired'"><span>{{localeData?.subscription?.subscription_id}}: </span>
-                                <span> {{item.subscriptionId}}</span> </li>
-                            <li *ngIf="item?.status!=='expired'"><span>{{localeData?.subscription?.assigned_on}}: </span> <span>{{item.createdAt ?
+                            <li *ngIf="item.subscriptionId && item?.status !== 'expired'">
+                                <span>{{localeData?.subscription?.subscription_id}}: </span>
+                                <span> {{item.subscriptionId}}</span>
+                            </li>
+                            <li *ngIf="item?.status!=='expired'"><span>{{localeData?.subscription?.assigned_on}}:
+                                </span> <span>{{item.createdAt ?
                                     (formatDate(item.createdAt) | date: giddhDateFormatUI) : '-'}} </span></li>
-                            <li *ngIf="item?.status!=='expired'"><span>{{localeData?.subscription?.expiry_date}}: </span><span>{{item.expiry ?
+                            <li *ngIf="item?.status!=='expired'"><span>{{localeData?.subscription?.expiry_date}}:
+                                </span><span>{{item.expiry ?
                                     (formatDate(item.expiry) | date: giddhDateFormatUI) : '-'}} </span></li>
-                            <li *ngIf="item?.status!=='expired'"><span>{{localeData?.subscription?.no_of_companies}}: </span>
+                            <li *ngIf="item?.status!=='expired'"><span>{{localeData?.subscription?.no_of_companies}}:
+                                </span>
                                 <span>{{item?.totalCompanies | number}}/{{item?.planDetails?.companiesLimit |
-                                    number}}</span></li>
-                            <li *ngIf="item?.status!=='expired'"><span>{{localeData?.subscription?.transaction_limit}}: </span>
+                                    number}}</span>
+                            </li>
+                            <li *ngIf="item?.status!=='expired'"><span>{{localeData?.subscription?.transaction_limit}}:
+                                </span>
                                 <span>{{item?.planDetails?.transactionLimit ? (item?.planDetails?.transactionLimit |
-                                    number) : '0'}}</span></li>
+                                    number) : '0'}}</span>
+                            </li>
                         </ul>
                     </div>
                     <div class="col-md-3 col-sm-3 col-xs-12 text-right trial-plan-state">
-                        <div class="font-14" [ngClass]="{'active': calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active}"
+                        <div class="font-14"
+                            [ngClass]="{'active': calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active}"
                             *ngIf="item?.status==='trial'"><span class="font-26"
                                 *ngIf="calculateRemainingDays(item?.expiry) !== commonLocaleData?.app_active">{{calculateRemainingDays(item?.expiry)}}</span>
-                            <span class="green-dote" *ngIf="calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active"></span>
-                            {{calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active ? commonLocaleData?.app_active : ""}} </div>
+                            <span class="green-dote"
+                                *ngIf="calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active"></span>
+                            {{calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active ?
+                            commonLocaleData?.app_active : ""}}
+                        </div>
                         <div class="active font-14" *ngIf="item?.status==='active'"><span class="green-dote"></span>
                             {{item?.status | titlecase}} </div>
                         <div class="text-danger font-14" *ngIf="item?.status==='expired'"><span class="red-dot"></span>
@@ -442,7 +481,8 @@
 <!-- Modal end -->
 
 <subscriptions-plans *ngIf="isPlanShow && localeData?.subscription" [subscriptions]="subscriptions"
-    (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></subscriptions-plans>
+    (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)" [localeData]="localeData"
+    [commonLocaleData]="commonLocaleData"></subscriptions-plans>
 
 <!-- activity-log-sidebar aside -->
 <!-- <div class="aside-overlay" *ngIf="activityLogAsideMenuState === 'in'"></div>
@@ -451,19 +491,22 @@
 <!-- activity-log-sidebar aside -->
 <div class="aside-overlay" *ngIf="companyDetailsAsideMenuState === 'in'"></div>
 <company-details-sidebar [class]="companyDetailsAsideMenuState"
-    *ngIf="companyDetailsAsideMenuState === 'in' && selectedCompany" (closeEvent)="toggleCompanyDetailsAsidePane(); hideCompanyDetails($event);"
-    [selectedCompany]="selectedCompany" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></company-details-sidebar>
+    *ngIf="companyDetailsAsideMenuState === 'in' && selectedCompany"
+    (closeEvent)="toggleCompanyDetailsAsidePane(); hideCompanyDetails($event);" [selectedCompany]="selectedCompany"
+    [localeData]="localeData" [commonLocaleData]="commonLocaleData"></company-details-sidebar>
 
 <!-- MoveCompany Modal -->
 <ng-template #MoveCompany>
     <move-company (moveCompany)="addOrMoveCompanyCallback($event)" [subscriptions]="subscriptions"
-        [moveSelectedCompany]="selectedCompany" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></move-company>
+        [moveSelectedCompany]="selectedCompany" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+    </move-company>
 </ng-template>
 
 <!-- deactivate Company Modal -->
 <ng-template #AddCompany>
     <add-company [allAssociatedCompanies]="allAssociatedCompanies" [activeCompany]="activeCompany"
-        (addCompany)="addOrMoveCompanyCallback($event)" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></add-company>
+        (addCompany)="addOrMoveCompanyCallback($event)" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+    </add-company>
 </ng-template>
 
 <!-- deactivate Company Modal -->

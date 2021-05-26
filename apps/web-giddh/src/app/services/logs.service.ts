@@ -60,7 +60,7 @@ export class LogsService {
     }
 
     /**
-     * API call to get audit log  
+     * API call to get audit log
      *
      * @param {LogsRequest} model Request model
      * @param {number} [page=1] Page number

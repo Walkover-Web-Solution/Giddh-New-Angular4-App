@@ -1,16 +1,16 @@
 .ps {
-    overflow: visible !important
+    overflow: visible !important;
 }
-.select-log{
+.select-log {
     display: flex;
     flex-direction: row;
-    p{
-        label{
+    p {
+        label {
             width: 120px;
         }
     }
 }
-label{
+label {
     line-height: 2.5;
     font-size: 14px;
 }

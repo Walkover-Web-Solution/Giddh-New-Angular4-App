@@ -50,7 +50,7 @@ export class ExportLedgerComponent implements OnInit {
     }
 
     public ngOnInit() {
-        if(this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {
+        if (this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {
             this._permissionDataService.getData.forEach(f => {
                 if (f.name === 'LEDGER') {
                     let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
@@ -115,7 +115,7 @@ export class ExportLedgerComponent implements OnInit {
         data = (data) ? data.replace(RegExp(' ', 'g'), '') : "";
         const cdata = data.split(',');
 
-        if(cdata && cdata.length > 0) {
+        if (cdata && cdata.length > 0) {
             for (let i = 0; i < cdata.length; i++) {
                 if (validateEmail(cdata[i])) {
                     sendData.recipients.push(cdata[i]);

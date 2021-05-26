@@ -28,6 +28,6 @@ export class PlExportXlsComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron ||isCordova) ? 'assets/images/xls-icon.png' : AppUrl + APP_FOLDER + 'assets/images/xls-icon.png';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/xls-icon.png' : AppUrl + APP_FOLDER + 'assets/images/xls-icon.png';
     }
 }

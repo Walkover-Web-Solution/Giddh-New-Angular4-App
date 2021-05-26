@@ -3,7 +3,7 @@ import { CompanyResponse, StateDetailsRequest, BranchFilterRequest } from '../mo
 import { GroupStockReportRequest, StockDetailResponse, StockGroupResponse } from '../models/api-models/Inventory';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
-import {BsDropdownConfig} from 'ngx-bootstrap/dropdown';
+import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -47,13 +47,13 @@ export const IsyncData = [
     providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
 })
 export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('branchModal', {static: true}) public branchModal: ModalDirective;
-    @ViewChild('addCompanyModal', {static: true}) public addCompanyModal: ModalDirective;
-    @ViewChild('companyadd', {static: true}) public companyadd: ElementViewContainerRef;
-    @ViewChild('confirmationModal', {static: true}) public confirmationModal: ModalDirective;
-    @ViewChild('inventoryStaticTabs', {static: true}) public inventoryStaticTabs: TabsetComponent;
+    @ViewChild('branchModal', { static: true }) public branchModal: ModalDirective;
+    @ViewChild('addCompanyModal', { static: true }) public addCompanyModal: ModalDirective;
+    @ViewChild('companyadd', { static: true }) public companyadd: ElementViewContainerRef;
+    @ViewChild('confirmationModal', { static: true }) public confirmationModal: ModalDirective;
+    @ViewChild('inventoryStaticTabs', { static: true }) public inventoryStaticTabs: TabsetComponent;
     /** Warehouse filter instance */
-    @ViewChild('warehouseFilter', {static: false}) warehouseFilter: ShSelectComponent;
+    @ViewChild('warehouseFilter', { static: false }) warehouseFilter: ShSelectComponent;
 
     public dataSyncOption = IsyncData;
     public currentBranch: string = null;
@@ -286,11 +286,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
         setTimeout(() => {
             if (activeTabIndex) {
-                if(this.inventoryStaticTabs && this.inventoryStaticTabs.tabs && this.inventoryStaticTabs.tabs[activeTabIndex]) {
+                if (this.inventoryStaticTabs && this.inventoryStaticTabs.tabs && this.inventoryStaticTabs.tabs[activeTabIndex]) {
                     this.inventoryStaticTabs.tabs[activeTabIndex].active = true;
                 }
             } else {
-                if(this.inventoryStaticTabs && this.inventoryStaticTabs.tabs && this.inventoryStaticTabs.tabs[this.activeTabIndex]) {
+                if (this.inventoryStaticTabs && this.inventoryStaticTabs.tabs && this.inventoryStaticTabs.tabs[this.activeTabIndex]) {
                     this.inventoryStaticTabs.tabs[this.activeTabIndex].active = true;
                 }
             }
@@ -430,7 +430,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             this.GroupStockReportRequest.branchUniqueName =
                 this.currentBranchAndWarehouseFilterValues.branch !== this.generalService.companyUniqueName ?
-                this.currentBranchAndWarehouseFilterValues.branch : null;
+                    this.currentBranchAndWarehouseFilterValues.branch : null;
             this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouseFilterValues.warehouse !== 'all-entities') ? this.currentBranchAndWarehouseFilterValues.warehouse : null;;
             this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
         });

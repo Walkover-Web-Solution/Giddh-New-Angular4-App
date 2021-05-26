@@ -1,4 +1,4 @@
-describe('This is Login Test', function() {
+describe('This is Login Test', function () {
 
     let testData = "";
     // beforeEach(() => {
@@ -11,7 +11,7 @@ describe('This is Login Test', function() {
     // })
 
 
-    before(function() {
+    before(function () {
         cy.viewport(1366, 768)
         cy.fixture('example.json')
             .then((data) => {

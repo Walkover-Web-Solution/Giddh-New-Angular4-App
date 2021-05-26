@@ -30,16 +30,16 @@ import { LocaleService } from '../services/locale.service';
     styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
-    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('integrationComponent', {static: false}) public integrationComponent: SettingIntegrationComponent;
-    @ViewChild('profileComponent', {static: false}) public profileComponent: SettingProfileComponent;
-    @ViewChild('financialYearComp', {static: false}) public financialYearComp: FinancialYearComponent;
-    @ViewChild('eBankComp', {static: false}) public eBankComp: SettingLinkedAccountsComponent;
-    @ViewChild('permissionComp', {static: false}) public permissionComp: SettingPermissionComponent;
-    @ViewChild('tagComp', {static: false}) public tagComp: SettingsTagsComponent;
-    @ViewChild('bunchComp', {static: false}) public bunchComp: BunchComponent;
+    @ViewChild('integrationComponent', { static: false }) public integrationComponent: SettingIntegrationComponent;
+    @ViewChild('profileComponent', { static: false }) public profileComponent: SettingProfileComponent;
+    @ViewChild('financialYearComp', { static: false }) public financialYearComp: FinancialYearComponent;
+    @ViewChild('eBankComp', { static: false }) public eBankComp: SettingLinkedAccountsComponent;
+    @ViewChild('permissionComp', { static: false }) public permissionComp: SettingPermissionComponent;
+    @ViewChild('tagComp', { static: false }) public tagComp: SettingsTagsComponent;
+    @ViewChild('bunchComp', { static: false }) public bunchComp: BunchComponent;
 
     public isUserSuperAdmin: boolean = false;
     public isUpdateCompanyInProgress$: Observable<boolean>;
@@ -135,7 +135,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 }, 0);
             } else if (this.activeTab === "permission") {
                 setTimeout(() => {
-                    if(this.permissionComp) {
+                    if (this.permissionComp) {
                         this.permissionComp.getInitialData();
                     }
                 }, 0);
@@ -163,7 +163,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if(this.activeLocale && this.activeLocale !== response?.value) {
+            if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('settings', response?.value).subscribe(response => {
                     this.localeData = response;
                 });
@@ -186,7 +186,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public selectTab(id: number) {
-        if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs.length) {
+        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs.length) {
             this.staticTabs.tabs[id].active = true;
         }
     }

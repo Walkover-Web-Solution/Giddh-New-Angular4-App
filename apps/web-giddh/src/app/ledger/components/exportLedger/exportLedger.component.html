@@ -1,4 +1,5 @@
-<ng-container appTranslate [file]="'ledger/export-ledger'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'ledger/export-ledger'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <div id="exportModal">
         <div class="modal-header">
             <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeExportLedgerModal.emit()"
@@ -36,8 +37,8 @@
                     <label class="w125">{{commonLocaleData?.app_export_as}}:</label>
                     <div>
                         <span class="p-0 mr-3" [hidden]="emailTypeSelected === 'columnar'">
-                            <input id="pdf" class="radio-custom cp ml-0" type="radio" name="exportAs" [(ngModel)]="exportAs"
-                                [value]="'pdf'">
+                            <input id="pdf" class="radio-custom cp ml-0" type="radio" name="exportAs"
+                                [(ngModel)]="exportAs" [value]="'pdf'">
                             <label for="pdf" class="radio-custom-label">{{commonLocaleData?.app_pdf}}</label>
                         </span>
 
@@ -52,15 +53,17 @@
                     <label class="w125">{{commonLocaleData?.app_order}}:</label>
                     <div>
                         <span class="p-0 mr-3">
-                            <input id="ascending" class="radio-custom cp ml-0" type="radio" name="order" [(ngModel)]="order"
-                                [value]="'asc'">
-                            <label for="ascending" class="radio-custom-label">{{commonLocaleData?.app_ascending}}</label>
+                            <input id="ascending" class="radio-custom cp ml-0" type="radio" name="order"
+                                [(ngModel)]="order" [value]="'asc'">
+                            <label for="ascending"
+                                class="radio-custom-label">{{commonLocaleData?.app_ascending}}</label>
                         </span>
 
                         <span class="p-0 mr-3">
                             <input id="descending" class="radio-custom cp ml-0" type="radio" name="order"
                                 [(ngModel)]="order" [value]="'desc'">
-                            <label for="descending" class="radio-custom-label">{{commonLocaleData?.app_descending}}</label>
+                            <label for="descending"
+                                class="radio-custom-label">{{commonLocaleData?.app_descending}}</label>
                         </span>
                     </div>
                 </div>

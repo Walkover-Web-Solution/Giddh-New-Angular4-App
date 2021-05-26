@@ -1,5 +1,5 @@
-
-<ng-container appTranslate [file]="'aside-setting'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<ng-container appTranslate [file]="'aside-setting'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)">
         <div class="aside-help-header relative">
             <h2>{{localeData?.page_heading}}</h2>

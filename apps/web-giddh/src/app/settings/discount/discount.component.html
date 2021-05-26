@@ -1,4 +1,5 @@
-<ng-container appTranslate [file]="'settings/discount'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<ng-container appTranslate [file]="'settings/discount'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="box clearfix">
         <div class="row">
             <h1 class="section-head pt-0 col-sm-12">{{localeData?.tab_heading}}</h1>
@@ -9,26 +10,29 @@
                 <div class="form-group col-xl-2 col-md-6 col-xs-12">
                     <div class="discount-type">
                         <label class="d-block">&nbsp;</label>
-                            <sh-select [options]="discountTypeList" [isFilterEnabled]="false" name="type"
-                                [(ngModel)]="createRequest.type" [placeholder]="localeData?.discount_type_placeholder" [ItemHeight]="33"></sh-select>
+                        <sh-select [options]="discountTypeList" [isFilterEnabled]="false" name="type"
+                            [(ngModel)]="createRequest.type" [placeholder]="localeData?.discount_type_placeholder"
+                            [ItemHeight]="33"></sh-select>
                     </div>
                 </div>
                 <div class="form-group col-xl-2 col-md-6 col-xs-12" *ngIf="createRequest.type">
                     <label>{{commonLocaleData?.app_name}}</label>
-                    <input type="text" [(ngModel)]="createRequest.name" name="name" [placeholder]="commonLocaleData?.app_name" class="form-control" />
+                    <input type="text" [(ngModel)]="createRequest.name" name="name"
+                        [placeholder]="commonLocaleData?.app_name" class="form-control" />
                 </div>
 
                 <div class="form-group col-xl-2 col-md-6 col-xs-12" *ngIf="createRequest.type">
                     <label>{{commonLocaleData?.app_value}}</label>
-                    <input type="text" [(ngModel)]="createRequest.discountValue" name="value" [placeholder]="commonLocaleData?.app_value"
-                        class="form-control" />
+                    <input type="text" [(ngModel)]="createRequest.discountValue" name="value"
+                        [placeholder]="commonLocaleData?.app_value" class="form-control" />
                 </div>
 
                 <div class="form-group col-xl-2 col-md-6 col-xs-12" *ngIf="createRequest.type">
                     <label>{{localeData?.linked_accounts_label}}</label>
                     <sh-select [isFilterEnabled]="true" [notFoundLink]="true" name="account"
-                        [(ngModel)]="createRequest.accountUniqueName" [placeholder]="localeData?.linked_accounts_placeholder"
-                        [showNotFoundLinkAsDefault]="true" [options]="accounts" [ItemHeight]="'max-content'"
+                        [(ngModel)]="createRequest.accountUniqueName"
+                        [placeholder]="localeData?.linked_accounts_placeholder" [showNotFoundLinkAsDefault]="true"
+                        [options]="accounts" [ItemHeight]="'max-content'"
                         (noResultsClicked)="toggleAccountAsidePane($event)" class="select-linked-accounts">
                     </sh-select>
                 </div>
@@ -76,7 +80,8 @@
                             </tr>
                         </tbody>
 
-                        <tbody *ngIf="!(isDiscountListInProcess$ | async) && !(discountList$ | async).length" class="on-mobile-view no-records">
+                        <tbody *ngIf="!(isDiscountListInProcess$ | async) && !(discountList$ | async).length"
+                            class="on-mobile-view no-records">
                             <tr>
                                 <td colspan="3" class="text-center empty-table">
                                     <h1>{{localeData?.no_record_found}}</h1>
@@ -91,7 +96,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                        
+
                     </table>
 
                 </div>

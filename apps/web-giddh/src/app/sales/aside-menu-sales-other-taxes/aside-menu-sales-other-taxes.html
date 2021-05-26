@@ -15,12 +15,11 @@
                     <div class="select-tax-dropdown d-flex flex-column">
                         <label>{{commonLocaleData?.app_select_tax}}<span class="text-danger">*</span></label>
                         <div class="mr-b2">
-                            <sh-select name="selectTax" [placeholder]="commonLocaleData?.app_select_tax" [options]="taxesOptions"
-                                [(ngModel)]="selectedTaxUniqueName" (selected)="applyTax($event)" (onClear)="onClear()"
-                                [showClear]="true"></sh-select>
+                            <sh-select name="selectTax" [placeholder]="commonLocaleData?.app_select_tax"
+                                [options]="taxesOptions" [(ngModel)]="selectedTaxUniqueName"
+                                (selected)="applyTax($event)" (onClear)="onClear()" [showClear]="true"></sh-select>
 
-                            <label class="label-select-tax"
-                                *ngIf="otherTaxesModal?.appliedOtherTax?.name">
+                            <label class="label-select-tax" *ngIf="otherTaxesModal?.appliedOtherTax?.name">
                                 {{ otherTaxesModal?.appliedOtherTax?.name | uppercase}}
                             </label>
                         </div>

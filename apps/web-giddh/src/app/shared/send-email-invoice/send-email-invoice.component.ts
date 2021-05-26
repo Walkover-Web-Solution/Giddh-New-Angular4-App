@@ -9,7 +9,7 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
 export class SendEmailInvoiceComponent implements OnInit {
     @Input() voucherType: VoucherTypeEnum;
-    @Input() selectedItem: { voucherNumber: string, uniqueName: string, account: {email: string} };
+    @Input() selectedItem: { voucherNumber: string, uniqueName: string, account: { email: string } };
     @Output() public successEvent: EventEmitter<any> = new EventEmitter<any>();
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
     public emailAddresses: string = '';
@@ -26,7 +26,7 @@ export class SendEmailInvoiceComponent implements OnInit {
     }
 
     ngOnInit() {
-        if(this.selectedItem && this.selectedItem.account && this.selectedItem.account.email) {
+        if (this.selectedItem && this.selectedItem.account && this.selectedItem.account.email) {
             this.emailAddresses = this.selectedItem.account.email;
         }
     }
@@ -55,7 +55,7 @@ export class SendEmailInvoiceComponent implements OnInit {
     }
 
     resetModal() {
-        if(this.selectedItem && this.selectedItem.account && this.selectedItem.account.email) {
+        if (this.selectedItem && this.selectedItem.account && this.selectedItem.account.email) {
             this.emailAddresses = this.selectedItem.account.email;
         }
         this.invoiceType = [];

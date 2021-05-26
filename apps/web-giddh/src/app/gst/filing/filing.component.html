@@ -5,8 +5,8 @@
         <div class="column list-column expanded-list-column transactions-list">
 
             <div class="list-header">
-                <filing-header [isCompany]="isCompany" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [showTaxPro]="showTaxPro"
-                    [fileReturn]="fileReturn"></filing-header>
+                <filing-header [isCompany]="isCompany" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"
+                    [showTaxPro]="showTaxPro" [fileReturn]="fileReturn"></filing-header>
             </div>
 
             <div class="nav-band"
@@ -21,8 +21,8 @@
                         <div class="transactions-overview" *ngIf="selectedTab === '1. Overview' || !selectedTabId">
                             <filing-overview [activeCompanyGstNumber]="activeCompanyGstNumber"
                                 [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"
-                                (hsnSacSelected)="openHsnSacSection()"
-                                [isTransactionSummary]="isTransactionSummary"></filing-overview>
+                                (hsnSacSelected)="openHsnSacSection()" [isTransactionSummary]="isTransactionSummary">
+                            </filing-overview>
                         </div>
                     </tab>
 
@@ -36,19 +36,21 @@
                         </div>
                     </tab>
 
-                    <tab *ngIf="selectedGst === 'gstr1'" [active]="selectedTab === 'pushToGstn' || selectedTabId === 1" (selectTab)="selectTab($event, true, 'pushToGstn')">
+                    <tab *ngIf="selectedGst === 'gstr1'" [active]="selectedTab === 'pushToGstn' || selectedTabId === 1"
+                        (selectTab)="selectTab($event, true, 'pushToGstn')">
                         <ng-template tabHeading>
                             2. Push to GSTN
                         </ng-template>
                         <div *ngIf="selectedTab === 'pushToGstn' || selectedTabId === 1">
                             <push-to-gstin [activeCompanyGstNumber]="activeCompanyGstNumber" [showHsn]="showHsn"
-                                (backClicked)="handleBackButton()"
-                                [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></push-to-gstin>
+                                (backClicked)="handleBackButton()" [currentPeriod]="currentPeriod"
+                                [selectedGst]="selectedGst"></push-to-gstin>
                         </div>
                     </tab>
 
                     <!-- Assigned by meghna  -->
-                    <tab *ngIf="isCompany && selectedGst !== 'gstr2'" (selectTab)="selectTab($event, true, '3. File your Return')">
+                    <tab *ngIf="isCompany && selectedGst !== 'gstr2'"
+                        (selectTab)="selectTab($event, true, '3. File your Return')">
                         <ng-template tabHeading>
                             3. File your Return
                         </ng-template>
