@@ -40,13 +40,13 @@
         "account_wise_report": "खाता वार रिपोर्ट",
         "trial_balance": {
             "group_wise": {
-                "download_filename": "PdfGroupWise.pdf"
+                "download_filename": "पीडीएफग्रुपवाईज.pdf"
             },
             "condensed": {
-                "download_filename": "PdfCondensed.pdf"
+                "download_filename": "पीडीएफकंडेन्स्ड.pdf"
             },
             "account_wise": {
-                "download_filename": "PdfAccountWise.pdf"
+                "download_filename": "पीडीएफएकउंटवाइज.pdf"
             },
             "particular": "विशेष",
             "opening_balance": "प्रारंभिक शेष",

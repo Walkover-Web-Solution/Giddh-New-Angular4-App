@@ -396,9 +396,9 @@
                             <span class="green-dote" *ngIf="calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active"></span>
                             {{calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active ? commonLocaleData?.app_active : ""}} </div>
                         <div class="active font-14" *ngIf="item?.status==='active'"><span class="green-dote"></span>
-                            {{item?.status | titlecase}} </div>
+                            {{commonLocaleData?.app_active}} </div>
                         <div class="text-danger font-14" *ngIf="item?.status==='expired'"><span class="red-dot"></span>
-                            {{item?.status | titlecase}} </div>
+                            {{localeData?.subscription?.expired}} </div>
                     </div>
                 </div>
             </div>
