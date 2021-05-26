@@ -1,8 +1,8 @@
 {
     "email_placeholder": "example@gmail.com",
-    "invalid_email": "Invalid Email Address",
+    "invalid_email": "अमान्य ईमेल पता",
     "default_country_code": "91",
-    "choose_time": "Choose time",
-    "email_subject": "Giddh - Schedule Now",
-    "call_scheduled": "Your call has been scheduled successfully."
+    "choose_time": "समय चुनें",
+    "email_subject": "गिद्ध - अभी शेड्यूल करें",
+    "call_scheduled": "आपका कॉल सफलतापूर्वक निर्धारित किया गया है।"
 }

@@ -1,15 +1,15 @@
 {
-    "enter_subject": "Enter Subject",
-    "enter_subject_placeholder": "Enter subject here",
-    "send_sms": "Send Sms",
-    "opening_balance": "Opening Balance",
-    "closing_balance": "Closing Balance",
-    "credit_total": "Credit Total",
-    "debit_total": "Debit Total",
-    "from_date": "From Date",
-    "to_date": "To Date",
-    "magic_link": "Magic Link",
-    "message_body_label": "Type message body",
-    "message_body_placeholder": "start typing your message here",
-    "message_body_note": "Tip: Click on the tabs below to insert data in your message body. Anything followed by '%s_' represents the position where actual data will be placed."
+	"enter_subject": "विषय दर्ज करें",
+	"enter_subject_placeholder": "यहां विषय दर्ज करें",
+	"send_sms": "एसएमएस भेजें",
+	"opening_balance": "प्रारंभिक शेष",
+	"closing_balance": "अंतिम शेष",
+	"credit_total": "कुल क्रेडिट",
+	"debit_total": "डेबिट कुल",
+	"from_date": "तारीख से",
+	"to_date": "तारीख तक",
+	"magic_link": "मैजिक लिंक",
+	"message_body_label": "संदेश का मुख्य भाग टाइप करें",
+	"message_body_placeholder": "अपना संदेश यहां टाइप करना प्रारंभ करें",
+	"message_body_note": "युक्ति: अपने संदेश के मुख्य भाग में डेटा सम्मिलित करने के लिए नीचे दिए गए टैब पर क्लिक करें। '%s_' के बाद कुछ भी उस स्थिति का प्रतिनिधित्व करता है जहां वास्तविक डेटा रखा जाएगा।"
 }
