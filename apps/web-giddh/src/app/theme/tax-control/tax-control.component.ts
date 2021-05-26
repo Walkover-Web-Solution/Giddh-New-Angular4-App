@@ -287,7 +287,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             }
         }, 100);
         this.taxAmountSumEvent.emit(this.taxSum);
-        this.selectedTaxEvent.emit(this.selectedTaxes);
+        if(this.taxRenderData?.length > 0) {
+            this.selectedTaxEvent.emit(this.selectedTaxes);
+        }
     }
 
     public onFocusLastDiv(el) {

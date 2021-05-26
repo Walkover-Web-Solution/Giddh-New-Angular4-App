@@ -1156,10 +1156,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (results[0]) {
                     let obj;
 
-                    if (results[0].roundOffTotal && results[0].roundOffTotal.amountForAccount === 0 && results[0].roundOffTotal.amountForCompany === 0) {
-                        this.applyRoundOff = false;
-                    }
-
                     if (this.isLastInvoiceCopied) {
                         obj = {
                             accountDetails: null,
