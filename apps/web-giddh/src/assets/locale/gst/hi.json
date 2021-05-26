@@ -11,7 +11,7 @@
 	"gstr1_label": "GSTR-1",
 	"outward_supplies_details": "माल और सेवाओं की जावक आपूर्ति का विवरण",
 	"all_transactions": "सभी लेन - देन",
-	"create_transactions": "\n1. अपना लेनदेन बनाएं\n",
+	"create_transactions": "1. अपना लेनदेन बनाएं",
 	"push_gstin": "2. GSTN को पुश करें",
 	"file_return": "3. फाइल रिटर्न",
 	"month_report_download_note_gstr2": "GSTR2 सारांश देखने के लिए माहवार तिथि चुनें।",

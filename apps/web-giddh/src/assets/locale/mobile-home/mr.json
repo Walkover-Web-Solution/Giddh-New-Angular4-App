@@ -1,10 +1,10 @@
 {
-    "changelog": "Changelog",
-    "switch_company": "Switch Company",
-    "switch_branch": "Switch Branch",
-    "logout": "Logout",
-    "search_branch": "Search Branch",
-    "create_branch": "+ Create Branch",
-    "search_company": "Search Company",
-    "create_company": "+ Create Company"
+	"changelog": "चेंजलॉग",
+	"switch_company": "स्विच कंपनी",
+	"switch_branch": "स्विच शाखा",
+	"logout": "लॉग आउट",
+	"search_branch": "शाखा खोजें",
+	"create_branch": "+ शाखा बनाएँ",
+	"search_company": "कंपनी खोजें",
+	"create_company": "+ कंपनी बनाएं"
 }

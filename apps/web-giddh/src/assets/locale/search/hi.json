@@ -12,8 +12,8 @@
     "query_types": {
         "closing_balance": "जमा शेष",
         "opening_balance": "प्रारंभिक शेष",
-        "cr_total": "Cr। कुल",
-        "dr_total": "कुल योग"
+        "cr_total": "कुल क्रेडिट",
+        "dr_total": "कुल डेबिट"
     },
     "query_differs": {
         "less": "कम",
@@ -27,7 +27,7 @@
     "unique_name": "अनूठा नाम",
     "parent": "मूल",
     "opening_balance": "प्रारंभिक शेष",
-    "dr_total": "कुल योग",
+    "dr_total": "कुल डेबिट",
     "cr_total": "क्रेडिट कुल",
     "closing_balance": "जमा शेष",
     "subject_label": "विषय दर्ज करें",
