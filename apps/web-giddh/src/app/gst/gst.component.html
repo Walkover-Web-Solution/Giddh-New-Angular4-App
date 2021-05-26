@@ -1,11 +1,17 @@
+
+<div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
+    <gstr-sidebar (navigateEvent)="handleNavigation($event)" [activeCompanyGstNumber]="activeCompanyGstNumber"
+    class="gst-sidebar"></gstr-sidebar>
+</div>
+
 <!-- filter area-->
 <ng-container>
-    <hamburger-menu [pageHeading]="'GST'"></hamburger-menu>
+    <hamburger-menu class="gst-menu-item" [pageHeading]="'GST'"></hamburger-menu>
     <div class="text-overdue ss" *ngIf="!activeCompanyGstNumber && !isTaxApiInProgress && !taxes?.length && !((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
         <i class="text-middle">Please add GSTIN to your default address in order to view report.</i>
     </div>
 
-    <div *ngIf="taxes?.length" class="row mb-3 mt-3 ml-3">
+    <div *ngIf="taxes?.length" class="row mb-3 mt-3 ml-3 ml-0 mr-0">
         <div class="tax-heading col-md-3 col-sm-3 col-12">
             <label>GSTIN:</label>
         </div>
@@ -20,6 +26,7 @@
                 [isRequired]="true">
             </sh-select>
         </div>
+
     </div>
     <div class="tax-engine"
         [ngClass]="{'content-disabled': ((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async)) || !activeCompanyGstNumber}">
@@ -156,7 +163,7 @@
                         </div>
                     </div>
                     <span class="btn-toolbar view-summary-btn pull-right">
-                        <a href="javascript:void(0)" class="btn btn-primary" (click)="navigateTogstR3B('gstr3b')"> View
+                        <a href="javascript:void(0)" class="btn btn-primary" (click)="navigateTogstR3B(GstReport.Gstr3b)"> View
                             Summary </a>
                     </span>
                 </div>
@@ -187,7 +194,7 @@
                             <p class="text-muted"> Details of outward supplies of goods and services </p>
                         </div>
                         <span class="btn-toolbar view-summary-btn pull-right mr-t1" *ngIf="gstr1TransactionCounts">
-                            <a href="javascript:void(0)" class="btn btn-primary " (click)="navigateToOverview('gstr1')">
+                            <a href="javascript:void(0)" class="btn btn-primary " (click)="navigateToOverview(GstReport.Gstr1)">
                                 View
                                 Summary
                             </a>
@@ -201,7 +208,7 @@
                         <div class="sales-colm">
                             <div class="text-muted text-uppercase font-xs"><b> All Transactions </b></div>
                             <div class="line"></div>
-                            <div class="count"><a (click)="navigateToOverview('gstr1')"><span class="font-xxxlarge"><b>
+                            <div class="count"><a (click)="navigateToOverview(GstReport.Gstr1)"><span class="font-xxxlarge"><b>
                                             {{gstr1TransactionCounts}} </b></span> <span>Transactions</span></a>
                             </div>
                         </div>
@@ -224,7 +231,7 @@
                                     <div class="font-large"><b>1. Create your transactions</b></div>
                                 </div>
                                 <div class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
-                                    (click)="navigateToTab(1, 'gstr1')">
+                                    (click)="navigateToTab(1, GstReport.Gstr1)">
                                     <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                         class="icon filing-step-icon">
                                         <path fill="#F41371"
@@ -237,7 +244,7 @@
                                     <div class="font-large"><b>2. Push to GSTN</b></div>
                                 </div>
                                 <div *ngIf="isCompany" class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
-                                    (click)="navigateToTab(2, 'gstr1')">
+                                    (click)="navigateToTab(2, GstReport.Gstr1)">
                                     <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                         class="icon filing-step-icon">t
                                         <path fill="#444"
@@ -272,7 +279,7 @@
                 <div class="return-content"
                     [ngClass]="{'content-disabled': !isMonthSelected || !activeCompanyGstNumber || (gstr2OverviewDataInProgress$ | async)}">
                     <span class="btn-toolbar pull-right mr-t1" *ngIf="gstr2TransactionCounts">
-                        <a href="javascript:void(0)" class="btn btn-primary" (click)="navigateToOverview('gstr2')"> View
+                        <a href="javascript:void(0)" class="btn btn-primary" (click)="navigateToOverview(GstReport.Gstr2)"> View
                             Summary
                         </a> </span>
 
@@ -299,7 +306,7 @@
                         <div class="purchase-colm">
                             <div class="text-muted text-uppercase font-xs"><b> All Transactions </b></div>
                             <div class="line"></div>
-                            <div class="count"><a (click)="navigateToOverview('gstr2')"><span class="font-xxxlarge"><b>
+                            <div class="count"><a (click)="navigateToOverview(GstReport.Gstr2)"><span class="font-xxxlarge"><b>
                                             {{gstr2TransactionCounts}} </b></span> <span>&nbsp;Transactions</span></a>
                             </div>
                         </div>
@@ -346,7 +353,7 @@
                         <div class="font-large"><b>2. Push to GSTN</b></div>
                     </div> -->
                                 <div class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
-                                    (click)="navigateToTab(1, 'gstr2')">
+                                    (click)="navigateToTab(1, GstReport.Gstr2)">
                                     <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                         class="icon filing-step-icon">
                                         <path fill="#444"
@@ -427,3 +434,4 @@
 <!-- main data-->
 
 <filing-header [isCompany]="isCompany" [currentPeriod]="currentPeriod" [fileGstr3b]="returnGstr3B"></filing-header>
+
