@@ -179,20 +179,20 @@ export class FilingComponent implements OnInit, OnDestroy {
     /**
      * Navigates to the overview or dashboard page
      *
-     * @param {*} type Type of report (gstr1, gstr2, gstr3b)
+     * @param {string} type Type of report (gstr1, gstr2, gstr3b)
      * @memberof FilingComponent
      */
-    public navigateToOverview(type) {
+    public navigateToOverview(type: string): void {
         this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0, selectedGst: this.activeCompanyGstNumber } });
     }
 
     /**
      * Navigates to GSTR 3B
      *
-     * @param {*} type Type of report (gstr1, gstr2, gstr3b)
+     * @param {string} type Type of report (gstr1, gstr2, gstr3b)
      * @memberof FilingComponent
      */
-    public navigateTogstR3B(type) {
+    public navigateTogstR3B(type: string): void {
         this._route.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: this.isCompany, selectedGst: this.activeCompanyGstNumber } });
     }
 
