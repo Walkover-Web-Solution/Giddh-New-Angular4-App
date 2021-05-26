@@ -126,7 +126,7 @@
 	"preview_generate": "पूर्वावलोकन आणि व्युत्पन्न करा",
 	"search_particular": "शोध खास",
 	"search_description": "शोध वर्णन",
-    "currency_conversion": "In [BASE_CURRENCY]: [AMOUNT]<br />(Conversion Rate: [CONVERSION_RATE])",
+    "currency_conversion": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />(रूपांतरण दर: [CONVERSION_RATE])",
     "original_copy": "मूळ प्रत",
     "duplicate_copy": "डुप्लिकेट प्रत",
     "triplicate_copy": "त्रिकोणीय प्रत",
@@ -140,16 +140,16 @@
 		"mark_as_cancelled": "केवळ गिद्ध बुक्समध्ये ई-इनव्हॉईज्ड व्यवहार रद्द म्हणून चिन्हांकित केले गेले आहेत. आयआरएन अवैध करण्यासाठी आपल्याला ते जीएसटी पोर्टलमध्ये रद्द करावे लागेल.",
 		"failed": "आयआरपीकडे व्यवहार ढकलला जाऊ शकला नाही.",
 		"na": "या व्यवहारासाठी ई-इनव्हॉईस निर्मिती लागू नाही.",
-        "giddh_invoice_not_cancelled": "The e-Invoiced transaction has been cancelled in the IRP but not in Giddh. The IRN associated with it is no longer valid."
+        "giddh_invoice_not_cancelled": "ई-इनव्हॉईज्ड व्यवहार आयआरपीमध्ये रद्द केला गेला आहे, परंतु गिद्धमध्ये नाही. त्याच्याशी संबंधित आयआरएन यापुढे वैध नाही."
     },
-    "cancel_e_invoice": "Cancel E-invoice",
-    "cancel_reason": "Cancel Reason",
-    "cancel_remarks": "Cancel Remarks",
+    "cancel_e_invoice": "ई-चलन रद्द करा",
+    "cancel_reason": "कारण रद्द करा",
+    "cancel_remarks": "टिप्पण्या रद्द करा",
     "cancel_e_invoice_reasons": {
-        "duplicate": "Duplicate",
-        "data_entry_mistake": "Data entry mistake",
-        "order_cancelled": "Order Cancelled",
-        "other": "Others"
+        "duplicate": "नक्कल",
+        "data_entry_mistake": "डेटा प्रविष्टी चूक",
+        "order_cancelled": "ऑर्डर रद्द केली",
+        "other": "इतर"
     },
     "tabs": {
 		"estimates": "अंदाज (बीटा)",
@@ -164,8 +164,8 @@
 	},
 	"all_invoices": "सर्व-पावत्या",
 	"no_advance_receipt": "समायोजित करण्यासाठी प्रगत पावती नाही.",
-    "exchange_gain_loss_label": "In [BASE_CURRENCY]: [AMOUNT]<br />Exchange [PROFIT_TYPE]: ",
-    "exchange_gain": "gain",
-    "exchange_loss": "loss",
+    "exchange_gain_loss_label": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />एक्सचेंज [PROFIT_TYPE]: ",
+    "exchange_gain": "मिळवणे",
+    "exchange_loss": "तोटा",
     "works_for_single_entry": "केवळ एकल प्रवेशासाठी कार्य करते."
 }

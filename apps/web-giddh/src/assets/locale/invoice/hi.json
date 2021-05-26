@@ -140,16 +140,16 @@
 		"mark_as_cancelled": "ई-चालान लेनदेन को केवल गिद्ध बुक्स में रद्द के रूप में चिह्नित किया गया है। IRN को अमान्य बनाने के लिए आपको इसे GST पोर्टल में रद्द करना होगा।",
 		"failed": "लेन-देन को IRP में धकेला नहीं जा सका।",
 		"na": "इस लेनदेन के लिए ई-चालान निर्माण लागू नहीं है।",
-        "giddh_invoice_not_cancelled": "The e-Invoiced transaction has been cancelled in the IRP but not in Giddh. The IRN associated with it is no longer valid."
+        "giddh_invoice_not_cancelled": "ई-चालान लेनदेन आईआरपी में रद्द कर दिया गया है लेकिन गिद्ध में नहीं। इससे जुड़ा IRN अब मान्य नहीं है।"
     },
-    "cancel_e_invoice": "Cancel E-invoice",
-    "cancel_reason": "Cancel Reason",
-    "cancel_remarks": "Cancel Remarks",
+    "cancel_e_invoice": "रद्द करें ई-चालान",
+    "cancel_reason": "कारण रद्द करें",
+    "cancel_remarks": "टिप्पणी रद्द करें",
     "cancel_e_invoice_reasons": {
-        "duplicate": "Duplicate",
-        "data_entry_mistake": "Data entry mistake",
-        "order_cancelled": "Order Cancelled",
-        "other": "Others"
+        "duplicate": "डुप्लिकेट",
+        "data_entry_mistake": "डाटा एंट्री गलती",
+        "order_cancelled": "ऑर्डर रद्द किया गया",
+        "other": "अन्य"
     },
     "tabs": {
         "estimates": "अनुमान (बीटा)",
