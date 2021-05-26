@@ -97,6 +97,7 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof InvoiceComponent
      */
     public tabChanged(tab: string, e, type?: string) {
+        document.querySelector('body').classList.remove('update-scroll-hidden');
         this.activeTab = tab;
         if (type && tab) {
             this.router.navigate(['pages', 'invoice', 'preview', tab, type]);
