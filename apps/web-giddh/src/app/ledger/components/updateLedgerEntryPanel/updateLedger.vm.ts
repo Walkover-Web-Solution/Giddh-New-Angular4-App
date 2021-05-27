@@ -318,6 +318,9 @@ export class UpdateLedgerVm {
                 this.grandTotal = giddhRoundOff(this.advanceReceiptAmount + this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
             }, 200);
         } else {
+            if (this.isRcmEntry) {
+                taxTotal = 0;
+            }
             this.taxTrxTotal = giddhRoundOff(((total * taxTotal) / 100), this.giddhBalanceDecimalPlaces);
             this.grandTotal = giddhRoundOff((total + this.taxTrxTotal), this.giddhBalanceDecimalPlaces);
         }

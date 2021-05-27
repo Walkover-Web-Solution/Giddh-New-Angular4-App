@@ -1,7 +1,7 @@
 <ng-container appTranslate [file]="'gst'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
     <div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
-        <gstr-sidebar (navigateEvent)="handleNavigation($event)" [activeCompanyGstNumber]="activeCompanyGstNumber" [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+        <gstr-sidebar (navigateEvent)="handleNavigation($event)" [activeCompanyGstNumber]="activeCompanyGstNumber" [isMonthSelected]="isMonthSelected" [localeData]="localeData" [commonLocaleData]="commonLocaleData"
             class="gst-sidebar"></gstr-sidebar>
     </div>
 

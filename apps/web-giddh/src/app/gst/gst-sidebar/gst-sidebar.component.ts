@@ -27,6 +27,8 @@ export class GstrSidebarComponent {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** True if month filter is selected */
+    @Input() public isMonthSelected: boolean;
 
     constructor(
         private router: Router,
