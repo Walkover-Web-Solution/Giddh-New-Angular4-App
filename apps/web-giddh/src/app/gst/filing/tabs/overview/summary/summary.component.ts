@@ -6,6 +6,7 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { ReconcileActionState } from '../../../../../store/GstReconcile/GstReconcile.reducer';
 import { AppState } from '../../../../../store';
 import { takeUntil } from 'rxjs/operators';
+import { GstReport } from '../../../../constants/gst.constant';
 
 interface SequenceConfig {
 	name: string;
@@ -65,7 +66,10 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
     public gstNotFoundOnPortalData$: Observable<ReconcileActionState>;
     public gstMatchedData$: Observable<ReconcileActionState>;
     public gstPartiallyMatchedData$: Observable<ReconcileActionState>;
-
+    /** Returns the enum to be used in template */
+    public get GstReport() {
+        return GstReport;
+    }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _store: Store<AppState>, private _route: Router) {
@@ -85,13 +89,13 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 		this.imgPath = (isElectron||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
 
 		this.gstr1OverviewData$.subscribe(data => {
-			if (this.selectedGst === 'gstr1') {
+			if (this.selectedGst === GstReport.Gstr1) {
 				this.gstrOverviewData = data;
 			}
 		});
 
 		this.gstr2OverviewData$.subscribe(data => {
-			if (this.selectedGst === 'gstr2') {
+			if (this.selectedGst === GstReport.Gstr2) {
 				this.gstrOverviewData = data;
 			}
 		});
