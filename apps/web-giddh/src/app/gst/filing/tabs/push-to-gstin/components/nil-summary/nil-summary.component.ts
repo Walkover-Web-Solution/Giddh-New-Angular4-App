@@ -1,7 +1,6 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { NilSummary } from '../../../../../../models/api-models/GstReconcile';
-
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -9,31 +8,27 @@ import { NilSummary } from '../../../../../../models/api-models/GstReconcile';
     templateUrl: './nil-summary.component.html',
     styleUrls: ['nil-summary.component.css'],
 })
-export class NilSummaryComponent implements OnInit, OnChanges, OnDestroy {
+export class NilSummaryComponent implements OnInit, OnDestroy {
     @Input() public nilSummary: NilSummary = new NilSummary();
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public imgPath: string = '';
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor() {
-        //
+        
     }
 
     public ngOnInit() {
-        this.imgPath =  (isElectron||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
     }
 
     public pageChanged(event) {
         // this.request['page'] = event.page;
         // this._store.dispatch(this.gstrAction.GetReturnSummary(this.selectedGst, this.request));
-    }
-
-    /**
-     * ngOnChnages
-     */
-    public ngOnChanges(s: SimpleChanges) {
-
-        //
     }
 
     public ngOnDestroy() {

@@ -32,14 +32,16 @@
                     (click)="showReport(s)"><a href="javascript:void(0);">{{s.name}}</a></li>
                 <li class="no-data-box text-center text-light" *ngIf="stocksList && stocksList.length<=0">
                     <img src="assets/images/search-data-not-found.svg" /><br>
-                    No Data Found</li>
+                    No Data Found
+                </li>
             </ul>
             <ul *ngIf="reportType==='person' && inventoryUsers" class="list-unstyled stock-grp-list clearfix">
                 <li *ngFor="let p of inventoryUsers" [ngClass]="{'active': uniqueName === p.uniqueName}"
                     (click)="showReport(p)"><a href="javascript:void(0);">{{p.name}}</a></li>
                 <li class="no-data-box text-center text-light" *ngIf="inventoryUsers && inventoryUsers.length<=0">
                     <img src="assets/images/search-data-not-found.svg" /><br>
-                    No Data Found</li>
+                    No Data Found
+                </li>
             </ul>
         </div>
     </div>

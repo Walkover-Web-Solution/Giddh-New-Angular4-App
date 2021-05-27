@@ -6,7 +6,7 @@ import * as path from 'path';
 const Configstore = require('configstore');
 
 import * as url from 'url';
-import {isDev} from './util';
+import { isDev } from './util';
 
 let serve;
 const args = process.argv.slice(1);
@@ -64,7 +64,7 @@ function defaultWindows() {
 }
 
 export class StateManager {
-    private store = new Configstore('Gidhh-unofficial', {windows: defaultWindows()});
+    private store = new Configstore('Gidhh-unofficial', { windows: defaultWindows() });
 
     private data: Config;
 

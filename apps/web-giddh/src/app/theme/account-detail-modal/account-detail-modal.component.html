@@ -1,107 +1,107 @@
-<!-- AccountInfo -->
-<div *ngIf="isModalOpen" class="p-modal-tooltip">
-    <div class="tb-pl-modal-header p-0">
-        <div class="account-detail-modal-header-div">
+<ng-container appTranslate [file]="'account-detail-modal'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+    <!-- AccountInfo -->
+    <div *ngIf="isModalOpen" class="p-modal-tooltip">
+        <div class="tb-pl-modal-header p-0">
 
-            <div class="account-detail-modal-div">
+            <div class="account-detail-modal-header-div">
 
-                <div class="account-detail-custom-header">
+                <div class="account-detail-modal-div">
 
-                    <div class="d-flex p-0 border-right-0">
+                    <div class="account-detail-custom-header">
 
-                        <div class="account-detail-padding flex-grow-1 border-right-0">
-                            <h3 class="account-detail-custom-title">{{accInfo?.name}}</h3>
+                        <div class="d-flex p-0 border-right-0">
+
+                            <div class="account-detail-padding flex-grow-1 border-right-0">
+                                <h3 class="account-detail-custom-title">{{accInfo?.name}}</h3>
+                            </div>
+
+                            <div class="account-detail-padding" (click)="performActions(0)">
+                                <img src="./assets/images/path.svg">
+                            </div>
+
                         </div>
 
-                        <div class="account-detail-padding" (click)="performActions(0)">
-                            <img src="./assets/images/path.svg">
+                        <div class="custom-detail account-detail-padding">
+                            <h4>{{accInfo?.mobileNo}}</h4>
+                            <h4>{{accInfo?.email}}</h4>
+                            <!--<h4></h4>-->
                         </div>
 
                     </div>
 
-                    <div class="custom-detail account-detail-padding">
-                        <h4>{{accInfo?.mobileNo}}</h4>
-                        <h4>{{accInfo?.email}}</h4>
-                        <!--<h4></h4>-->
-                    </div>
+                    <div class="height-82px">
 
-                </div>
+                        <ul class="list-unstyled">
 
-                <div class="height-82px">
+                            <li class="li-link">
+                                <a href="javascript:;" (click)="performActions(1)">{{commonLocaleData?.app_goto_ledger}}</a>
+                            </li>
 
-                    <ul class="list-unstyled">
+                            <li class="li-link" *ngIf="shouldShowGenerateInvoice">
+                                <a href="javascript:;" (click)="performActions(2)">{{commonLocaleData?.app_generate_invoice}}</a>
+                            </li>
 
-                        <li class="li-link">
-                            <a href="javascript: void 0" (click)="performActions(1)">Go to Ledger</a>
-                        </li>
+                            <li class="li-link">
+                                <a href="javascript:;" (click)="performActions(3, $event)">{{commonLocaleData?.app_send_sms}}</a>
+                            </li>
 
-                        <li class="li-link" *ngIf="shouldShowGenerateInvoice">
-                            <a href="javascript: void 0" (click)="performActions(2)">Generate Invoice</a>
-                        </li>
+                            <li class="li-link">
+                                <a href="javascript:;" (click)="performActions(4, $event)">{{commonLocaleData?.app_send_email}}</a>
+                            </li>
 
-                        <li class="li-link">
-                            <a href="javascript: void 0" (click)="performActions(3, $event)">Send SMS</a>
-                        </li>
-
-                        <li class="li-link">
-                            <a href="javascript: void 0" (click)="performActions(4, $event)">Send Email</a>
-                        </li>
-
-                    </ul>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-</div>
-
-
-<!--Modal for Mail/SMS-->
-<div class="modal fade border-radius-0" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true"
-    (click)="$event.stopPropagation()">
-    <div class="modal-dialog modal-md" style="margin:auto;margin-top: 200px">
-
-        <div class="modal-content" style="padding: 8px 8px 8px 8px;">
-
-            <div class="border-radius-0" style="padding: 8px 8px 8px 8px;">
-
-                <div class="modal-header theme-bg pd-l2 pd-r2 clearfix" style="padding: 8px 8px 8px 8px;">
-                    <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close"
-                        (click)="mailModal.hide()">×</span>
-                    <!-- <i class="icon-cross text-right close-modal" aria-hidden="true" ></i> -->
-                </div>
-
-                <div class="modal-body pd-l2 pd-r2 clearfix" style="padding: 0px !important;">
-                    <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:</h1>
-                    <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject
-                        [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
-                    <h1 class="mr-b1" style="margin-top:15px;">Type message body:</h1>
-                    <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4"
-                        style="resize:none;" placeholder="start typing your message here"></textarea>
-                    <small class="mr-t05 mr-b05 grey" style="margin-top:15px;display: block">Tip: Click on the tabs below to
-                        insert data
-                        in your message body. Anything
-                        followed by '%s_' represents the position where actual data will be placed.
-                    </small>
-
-                    <div class="row mr-t2" style="border: unset;margin-top: 20px;">
-                        <ul class="list-inline pills">
-                            <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)"
-                                style="padding: 5px 10px !important;">{{val.name}}</li>
                         </ul>
+
                     </div>
-                    <div class="mr-t4">
-                        <button class="btn btn-sm btn-success pull-right mr-l1"
-                            (click)="send()">{{messageBody.btn.set}}</button>
-                    </div>
+
                 </div>
+
             </div>
 
         </div>
-
     </div>
-</div>
+
+
+    <!--Modal for Mail/SMS-->
+    <div class="modal fade border-radius-0" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true"
+        (click)="$event.stopPropagation()">
+        <div class="modal-dialog modal-md" style="margin:auto;margin-top: 200px">
+
+            <div class="modal-content" style="padding: 8px 8px 8px 8px;">
+
+                <div class="border-radius-0" style="padding: 8px 8px 8px 8px;">
+
+                    <div class="modal-header theme-bg pd-l2 pd-r2 clearfix" style="padding: 8px 8px 8px 8px;">
+                        <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>
+                        <span aria-hidden="true" class="close" data-dismiss="modal" [attr.aria-label]="commonLocaleData?.app_close"
+                            (click)="mailModal.hide()">×</span>
+                        <!-- <i class="icon-cross text-right close-modal" aria-hidden="true" ></i> -->
+                    </div>
+
+                    <div class="modal-body pd-l2 pd-r2 clearfix" style="padding: 0px !important;">
+                        <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">{{localeData?.enter_subject}}:</h1>
+                        <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject
+                            [(ngModel)]="messageBody.subject" type="text" [placeholder]="localeData?.enter_subject_placeholder" />
+                        <h1 class="mr-b1" style="margin-top:15px;">{{localeData?.message_body_label}}:</h1>
+                        <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4"
+                            style="resize:none;" [placeholder]="localeData?.message_body_placeholder"></textarea>
+                        <small class="mr-t05 mr-b05 grey" style="margin-top:15px;display: block">{{localeData?.message_body_note}}</small>
+
+                        <div class="row mr-t2" style="border: unset;margin-top: 20px;">
+                            <ul class="list-inline pills">
+                                <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)"
+                                    style="padding: 5px 10px !important;">{{val.name}}</li>
+                            </ul>
+                        </div>
+                        <div class="mr-t4">
+                            <button class="btn btn-sm btn-success pull-right mr-l1"
+                                (click)="send()">{{messageBody.btn.set}}</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</ng-container>

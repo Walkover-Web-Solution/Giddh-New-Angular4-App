@@ -21,7 +21,7 @@ import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/default
 })
 export class BranchTransferComponent implements OnInit, OnDestroy {
     // @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('sourceSelect', {static: true}) public sourceSelect: ShSelectComponent;
+    @ViewChild('sourceSelect', { static: true }) public sourceSelect: ShSelectComponent;
     public form: FormGroup;
     public mode: 'destination' | 'product' = 'destination';
     public today = new Date();
@@ -78,11 +78,11 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this._store.pipe(select(p => p.inventory.stocksList && p.inventory.stocksList.results), takeUntil(this.destroyed$)).subscribe(s => {
-                if (s) {
-                    this.stockListBackUp = s;
-                    this.stockListOptions = s.map(p => ({ label: p.name, value: p.uniqueName }));
-                }
-            });
+            if (s) {
+                this.stockListBackUp = s;
+                this.stockListOptions = s.map(p => ({ label: p.name, value: p.uniqueName }));
+            }
+        });
 
         this.isBranchCreationSuccess$.subscribe(s => {
             if (s) {

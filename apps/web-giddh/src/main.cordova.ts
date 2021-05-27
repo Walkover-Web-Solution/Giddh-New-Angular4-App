@@ -9,9 +9,9 @@ import { AppCordovaModule } from './app/app.cordova.module';
 // @ts-ignore
 // let jQuery = ($ as any) = window['$'] = window['jQuery'] = require('jquery');
 if (environment.production) {
-  enableProdMode();
+    enableProdMode();
 }
 
 platformBrowserDynamic()
-  .bootstrapModule(AppCordovaModule)
-  .catch(err => console.log(err));
+    .bootstrapModule(AppCordovaModule)
+    .catch(err => console.log(err));

@@ -1,0 +1,13 @@
+{
+	"setting_taxes": "समायोजन",
+	"setting_integration": "सेटिंग > एकीकरण",
+	"setting_linked_accounts": "सेटिंग > लिंक किए गए खाते",
+	"setting_financial_year": "सेटिंग > वित्तीय वर्ष",
+	"setting_permission": "सेटिंग > अनुमति",
+	"setting_branch": "सेटिंग > शाखा",
+	"setting_tag": "सेटिंग > टैग",
+	"setting_trigger": "सेटिंग > ट्रिगर",
+	"setting_discount": "सेटिंग > छूट",
+	"setting_warehouse": "सेटिंग > गोदाम",
+	"gmail_account_added": "जीमेल खाता सफलतापूर्वक जोड़ा गया।"
+}

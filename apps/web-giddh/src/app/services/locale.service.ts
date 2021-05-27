@@ -9,8 +9,11 @@ import { Observable } from "rxjs";
     providedIn: 'root'
 })
 export class LocaleService {
+    /** This will hold the common locale json */
+    public commonLocale: any = {};
+
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService) {
-        
+
     }
 
     /**
@@ -23,7 +26,7 @@ export class LocaleService {
      */
     public getLocale(folder: string, languageCode: string): Observable<BaseResponse<any, any>> {
         let url = "";
-        if(folder) {
+        if (folder) {
             url = "assets/locale/" + folder + "/" + languageCode + ".json";
         } else {
             url = "assets/locale/" + languageCode + ".json";
@@ -32,7 +35,25 @@ export class LocaleService {
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
+
+                if (!folder) {
+                    this.commonLocale = data;
+                }
+
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * This will return the translation of provided key from common locale json
+     *
+     * @param {string} key
+     * @returns {*}
+     * @memberof LocaleService
+     */
+    public translate(key: string): any {
+        return key.split('.').reduce(function(previous, current) {
+            return previous ? previous[current] : null
+        }, this.commonLocale);
     }
 }

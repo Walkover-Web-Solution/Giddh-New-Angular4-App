@@ -2,16 +2,20 @@
     <div class="container-fluid">
         <div class="d-flex date-advance-search">
             <div class="d-flex flex-sm-row flex-column branch-transfer-flex">
-                <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'" class="input-group form-group linked-entities mb-0">
-                    <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" class="branch-dropdown"
-                        [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
-                        [isFilterEnabled]="true" placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
+                <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                    class="input-group form-group linked-entities mb-0">
+                    <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
+                        class="branch-dropdown" [showClear]="false" [ItemHeight]="33" width="100%"
+                        (selected)="handleBranchChange($event)" [isFilterEnabled]="true" placeholder="Select Entity"
+                        [fixedValue]="currentBranch?.alias">
                         <ng-template #optionTemplate let-option="option">
                             <ng-container>
                                 <a href="javascript:void(0)" class="list-item d-flex">
                                     <span class="entity-icon">
-                                        <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany" tooltip="Branch"></i>
-                                        <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
+                                        <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
+                                            tooltip="Branch"></i>
+                                        <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
+                                            tooltip="Company"></i>
                                     </span>
                                     <span class="entity-details">
                                         <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
@@ -26,9 +30,12 @@
                 </div>
                 <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                     <i class="icon-calender calendar-addon"></i>
-                    <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
+                    <input type="text" name="selectedDateRange"
+                        [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                        class="giddh-datepicker date-range-picker" />
                 </div>
-                <div class="advance-icon pointer mobile-none" tooltip="Advance Search" (click)="openSearchModal(template)">
+                <div class="advance-icon pointer mobile-none" tooltip="Advance Search"
+                    (click)="openSearchModal(template)">
                     <span class="icon-advance-filter"></span>
                 </div>
             </div>
@@ -39,7 +46,8 @@
                 </div>
             </div>
             <div class="clearfix">
-                <button *ngIf="!(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)" class="btn btn-sky-blue pull-right mr-0 mobile-none" data-toggle="tooltip" tooltip="Alt+N"
+                <button *ngIf="!(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)"
+                    class="btn btn-sky-blue pull-right mr-0 mobile-none" data-toggle="tooltip" tooltip="Alt+N"
                     (click)="toggleTransferAsidePane()">+ New Transfer</button>
             </div>
         </div>
@@ -85,7 +93,8 @@
                                 </div>
                                 <div class="input-container" [hidden]="inlineSearch !== 'senderReceiver'">
                                     <input type="text" placeholder="Sender/Receiver" class="w100" #senderReceiverField
-                                        name="senderReceiver" [(ngModel)]="branchTransferPostRequestParams.senderReceiver"
+                                        name="senderReceiver"
+                                        [(ngModel)]="branchTransferPostRequestParams.senderReceiver"
                                         (keypress)="columnSearch()" (keydown)="columnSearch()" />
                                 </div>
                             </th>
@@ -121,14 +130,17 @@
                 </thead>
                 <tbody *ngIf="!isLoading && branchTransferResponse.items && branchTransferResponse.items.length > 0">
                     <tr *ngFor="let item of branchTransferResponse.items; let i = index;">
-                        <td data-title="#">{{ (branchTransferGetRequestParams.count * (branchTransferGetRequestParams.page - 1)) + (i+1) }}
+                        <td data-title="#">{{ (branchTransferGetRequestParams.count *
+                            (branchTransferGetRequestParams.page - 1)) + (i+1) }}
                         </td>
                         <td data-title="Date">{{ item.dateOfSupply }}</td>
-                        <td data-title="Voucher Type"><span *ngIf="item.voucherType === 'deliverynote'">Delivery Challan</span><span
-                                *ngIf="item.voucherType === 'receiptnote'">Receipt Note</span></td>
-                        <td data-title="Voucher Number"><a href="javascript:;" (click)="showEditBranchTransferPopup(item)">{{ item.voucherNo }}</a>
+                        <td data-title="Voucher Type"><span *ngIf="item.voucherType === 'deliverynote'">Delivery
+                                Challan</span><span *ngIf="item.voucherType === 'receiptnote'">Receipt Note</span></td>
+                        <td data-title="Voucher Number"><a href="javascript:;"
+                                (click)="showEditBranchTransferPopup(item)">{{ item.voucherNo }}</a>
                         </td>
-                        <td *ngIf="currentOrganizationType === 'BRANCH'" data-title="Sender/Receiver">{{ item.senderReceiver }}</td>
+                        <td *ngIf="currentOrganizationType === 'BRANCH'" data-title="Sender/Receiver">{{
+                            item.senderReceiver }}</td>
                         <td *ngIf="currentOrganizationType !== 'BRANCH'" data-title="Sender">{{ item.sender }}</td>
                         <td *ngIf="currentOrganizationType !== 'BRANCH'" data-title="Receiver">{{ item.receiver }}</td>
                         <td data-title="From Warehouse">{{ item.fromWarehouse }}</td>
@@ -166,9 +178,11 @@
                         </td>
                     </tr>
                 </tbody>
-                <tbody class="on-mobile-view no-records" *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
+                <tbody class="on-mobile-view no-records"
+                    *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
                     <tr>
-                        <td *ngIf="!isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11" align="center">No records found.</td>
+                        <td *ngIf="!isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11"
+                            align="center">No records found.</td>
                         <td *ngIf="isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11">
                             <giddh-page-loader></giddh-page-loader>
                         </td>
@@ -221,7 +235,8 @@
                 <button class="btn btn-md btn-success mr-r1" type="button" (click)="search()">
                     Search
                 </button>
-                <button class="btn btn-md btn-cancel mr-0" type="button" (click)="refreshTempPostParams(); hideModal(false)">
+                <button class="btn btn-md btn-cancel mr-0" type="button"
+                    (click)="refreshTempPostParams(); hideModal(false)">
                     Cancel
                 </button>
             </div>
@@ -262,9 +277,13 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
-                                    [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
-                                    [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

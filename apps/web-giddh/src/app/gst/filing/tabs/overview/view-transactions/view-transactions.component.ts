@@ -1,5 +1,5 @@
 import { InvoiceReceiptActions } from '../../../../../actions/invoice/receipt/receipt.actions';
-import { Component, ComponentFactoryResolver, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,47 +15,7 @@ import { DownloadOrSendInvoiceOnMailComponent } from '../../../../../invoice/pre
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { saveAs } from 'file-saver';
-
-export const Gstr1TransactionType = [
-    { label: 'Invoices', value: 'invoices' },
-    { label: 'Credit Notes', value: 'credit-notes' },
-    { label: 'Debit Notes', value: 'debit-notes' },
-    { label: 'Advance Receipt', value: 'advance-receipt' },
-    { label: 'Adjusted advance receipt', value: 'adjusted-advance-receipt' },
-];
-
-export const Gstr2TransactionType = [
-    { label: 'Bills / Expenses', value: 'billsAndExpenses' },
-    { label: 'Credit / Debit Notes', value: 'crdr' },
-];
-
-export const InvoiceType = [
-    { label: 'B2B', value: 'b2b' },
-    { label: 'B2CL', value: 'b2cl' },
-    { label: 'B2CS', value: 'b2cs' },
-    { label: 'Export', value: 'export' },
-    { label: 'Nil', value: 'nil' },
-];
-
-export const Gstr2InvoiceType = [
-    { label: 'B2B', value: 'b2b' },
-    { label: 'B2BUR', value: 'b2bur' },
-    { label: 'IMPG', value: 'impg' },
-    { label: 'IMPS', value: 'imps' },
-    { label: 'Nil', value: 'nil' },
-];
-
-export const Entitytype = [
-    { label: 'All', value: 'all' },
-    { label: 'Registered', value: 'registered' },
-    { label: 'Unregistered', value: 'unregistered' }
-];
-
-// export const Status = [
-//   {label: 'All', value: 'all'},
-//   {label: 'Uploaded', value: 'uploaded'},
-//   {label: 'Unuploaded', value: 'unuploaded'},
-// ];
+import { GstReport } from '../../../../constants/gst.constant';
 
 export const filterTransaction = {
     entityType: '',
@@ -72,27 +32,31 @@ export const filterTransaction = {
     styleUrls: ['view-transactions.component.css'],
 })
 
-export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
+export class ViewTransactionsComponent implements OnInit, OnDestroy {
 
     @Input() public currentPeriod: any = null;
     @Input() public selectedGst: string = null;
     @Input() public activeCompanyGstNumber: string = null;
     @Input() public isTransactionSummary: boolean;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     // @Input() public filterParam = filterTransaction;
 
-    @ViewChild('downloadOrSendMailModel', {static: true}) public downloadOrSendMailModel: ModalDirective;
-    @ViewChild('downloadOrSendMailComponent', {static: true}) public downloadOrSendMailComponent: ElementViewContainerRef;
-    @ViewChild('invoiceGenerateModel', {static: true}) public invoiceGenerateModel: ModalDirective;
+    @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: ModalDirective;
+    @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
+    @ViewChild('invoiceGenerateModel', { static: true }) public invoiceGenerateModel: ModalDirective;
 
     public viewTransaction$: Observable<GstTransactionResult> = of(null);
-    public gstr1entityType = Gstr1TransactionType;
-    public invoiceType = InvoiceType;
-    public otherEntityType = Entitytype;
-    public gstr2InvoiceType = Gstr2InvoiceType;
+    public gstr1entityType = [];
+    public invoiceType = [];
+    public otherEntityType = [];
+    public gstr2InvoiceType = [];
     // public status = Status;
     public selectedEntityType: string = '';
     public companyGst$: Observable<string> = of('');
-    public gstr2entityType = Gstr2TransactionType;
+    public gstr2entityType = [];
     public filterParam: GStTransactionRequest = new GStTransactionRequest();
     public imgPath: string = '';
     public modalRef: BsModalRef;
@@ -108,18 +72,58 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     public base64Data: string;
     /** selected Invoice object */
     public selectedInvoice: GstTransactionSummary;
+    /** Returns the enum to be used in template */
+    public get GstReport() {
+        return GstReport;
+    }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private modalService: BsModalService,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
-        private toaster: ToasterService, ) {
+        private toaster: ToasterService,) {
         this.viewTransaction$ = this.store.pipe(select(p => p.gstR.viewTransactionData), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
         this.viewTransactionInProgress$ = this.store.pipe(select(p => p.gstR.viewTransactionInProgress), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+
+        this.gstr1entityType = [
+            { label: this.commonLocaleData?.app_invoices, value: 'invoices' },
+            { label: this.commonLocaleData?.app_credit_notes, value: 'credit-notes' },
+            { label: this.commonLocaleData?.app_debit_notes, value: 'debit-notes' },
+            { label: this.localeData?.advance_receipt, value: 'advance-receipt' },
+            { label: this.localeData?.adjusted_advance_receipt, value: 'adjusted-advance-receipt' },
+        ];
+
+        this.gstr2entityType = [
+            { label: this.localeData?.bills_expenses, value: 'billsAndExpenses' },
+            { label: this.localeData?.credit_debit_notes, value: 'crdr' },
+        ];
+
+        this.invoiceType = [
+            { label: this.localeData?.b2b, value: 'b2b' },
+            { label: this.localeData?.b2cl, value: 'b2cl' },
+            { label: this.localeData?.filing?.b2cs, value: 'b2cs' },
+            { label: this.commonLocaleData?.app_export, value: 'export' },
+            { label: this.localeData?.nil, value: 'nil' },
+        ];
+
+        this.gstr2InvoiceType = [
+            { label: this.localeData?.b2b, value: 'b2b' },
+            { label: this.localeData?.b2bur, value: 'b2bur' },
+            { label: this.localeData?.impg, value: 'impg' },
+            { label: this.localeData?.imps, value: 'imps' },
+            { label: this.localeData?.nil, value: 'nil' },
+        ];
+
+        this.otherEntityType = [
+            { label: this.commonLocaleData?.app_all, value: 'all' },
+            { label: this.localeData?.registered, value: 'registered' },
+            { label: this.localeData?.unregistered, value: 'unregistered' }
+        ];
+        
         this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         this.filterParam.from = this.currentPeriod.from;
         this.filterParam.to = this.currentPeriod.to;
@@ -169,7 +173,6 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public loadDownloadOrSendMailComponent() {
-        let transactionData = null;
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(DownloadOrSendInvoiceOnMailComponent);
         let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
         viewContainerRef.remove();
@@ -202,13 +205,13 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
 
     public mapFilters() {
         let filters = _.cloneDeep(this.filterParam);
-        if (this.selectedGst === 'gstr1') {
-            let selected = _.find(Gstr1TransactionType, o => o.value === filters.entityType);
+        if (this.selectedGst === GstReport.Gstr1) {
+            let selected = _.find(this.gstr1entityType, o => o.value === filters.entityType);
             if (selected) {
                 this.selectedFilter.entityType = selected.label;
             }
         } else {
-            let selected = _.find(Gstr2TransactionType, o => o.value === filters.entityType);
+            let selected = _.find(this.gstr2entityType, o => o.value === filters.entityType);
             if (selected) {
                 this.selectedFilter.entityType = selected.label;
             }
@@ -223,14 +226,14 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
 
         if (this.filterParam.type) {
             let selected;
-            if (this.selectedGst === 'gstr1') {
+            if (this.selectedGst === GstReport.Gstr1) {
                 if (this.filterParam.entityType === 'advance-receipt') {
-                    selected = _.find(Entitytype, o => o.value === filters.type)
+                    selected = _.find(this.otherEntityType, o => o.value === filters.type)
                 } else {
-                    selected = _.find(InvoiceType, o => o.value === filters.type);
+                    selected = _.find(this.invoiceType, o => o.value === filters.type);
                 }
             } else {
-                selected = _.find(Gstr2InvoiceType, o => o.value === filters.type);
+                selected = _.find(this.gstr2InvoiceType, o => o.value === filters.type);
             }
             if (selected) {
                 this.selectedFilter.type = selected.label;
@@ -238,10 +241,6 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
         }
         return this.filterParam = _.cloneDeep(filters);
 
-    }
-
-    public ngOnChanges(s: SimpleChanges) {
-        //
     }
 
     public ngOnDestroy() {
@@ -258,7 +257,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     */
     public downloadFile(): void {
         let blob = this.base64ToBlob(this.base64Data, 'application/pdf', 512);
-        return saveAs(blob, `Invoice-${this.selectedInvoice.account.uniqueName}.pdf`);
+        return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account.uniqueName}.pdf`);
     }
 
     /**
@@ -332,8 +331,20 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
                     }
                     return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
                 } else {
-                    this.toaster.errorToast('Something went wrong Please try again!');
+                    this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 }
             });
+    }
+
+    /**
+     * This will return filter type text
+     *
+     * @returns {string}
+     * @memberof ViewTransactionsComponent
+     */
+    public getFilterTypeText(): string {
+        let text = this.localeData?.filing?.filter_type;
+        text = text?.replace("[FILTER]", this.selectedFilter?.entityType);
+        return text;
     }
 }

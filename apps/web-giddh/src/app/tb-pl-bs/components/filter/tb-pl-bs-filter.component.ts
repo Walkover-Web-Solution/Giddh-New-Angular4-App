@@ -70,11 +70,11 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
 
     @Input() public showLabels: boolean = false;
     @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
-    @ViewChild('createTagModal', {static: true}) public createTagModal: ModalDirective;
+    @ViewChild('createTagModal', { static: true }) public createTagModal: ModalDirective;
 
     public universalDate$: Observable<any>;
     public newTagForm: FormGroup;
-     /** Date format type */
+    /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
@@ -106,13 +106,13 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
 
     constructor(private fb: FormBuilder,
-                private cd: ChangeDetectorRef,
-                private store: Store<AppState>,
-                private _settingsTagActions: SettingsTagActions,
-                private generalService: GeneralService,
-                private breakPointObservar: BreakpointObserver,
-                private settingsBranchAction: SettingsBranchActions,
-                private modalService: BsModalService) {
+        private cd: ChangeDetectorRef,
+        private store: Store<AppState>,
+        private _settingsTagActions: SettingsTagActions,
+        private generalService: GeneralService,
+        private breakPointObservar: BreakpointObserver,
+        private settingsBranchAction: SettingsBranchActions,
+        private modalService: BsModalService) {
         this.filterForm = this.fb.group({
             from: [''],
             to: [''],
@@ -145,7 +145,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
         }
         this._selectedCompany = value;
         this.financialOptions = value.financialYears.map(q => {
-            return {label: q.uniqueName, value: q.uniqueName};
+            return { label: q.uniqueName, value: q.uniqueName };
         });
 
         if (this.filterForm.get('selectedDateOption').value === '0' && value.activeFinancialYear) {
@@ -166,9 +166,9 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
         });
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.imgPath = (isElectron|| isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         if (!this.showLabels) {
-            this.filterForm?.patchValue({selectedDateOption: '0'});
+            this.filterForm?.patchValue({ selectedDateOption: '0' });
         }
         this.accountSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
@@ -267,7 +267,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
             }
         });
@@ -276,7 +276,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     public setCurrentFY() {
         // set financial years based on company financial year
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany && this.universalDateICurrent) {
+            if (activeCompany && this.universalDateICurrent) {
                 let activeFinancialYear = activeCompany.activeFinancialYear;
                 if (activeFinancialYear) {
                     // commented for later use
@@ -457,7 +457,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
      * @memberof TbPlBsFilterComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -485,10 +485,10 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
      * @memberof TbPlBsFilterComponent
      */
     public translationComplete(event: boolean): void {
-        if(event) {
+        if (event) {
             this.dateOptions = [
-                {label: this.commonLocaleData?.app_date_range, value: '1'},
-                {label: this.commonLocaleData?.app_financial_year, value: '0'}
+                { label: this.commonLocaleData?.app_date_range, value: '1' },
+                { label: this.commonLocaleData?.app_financial_year, value: '0' }
             ];
         }
     }

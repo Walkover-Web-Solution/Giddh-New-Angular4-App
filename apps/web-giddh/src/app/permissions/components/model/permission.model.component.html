@@ -53,8 +53,10 @@
                     <span class="select-drop"><i class="fa fa-caret-down"></i></span>
                 </div>
                 <div class="clearfix text-right mr-t4">
-                    <button type="submit" class="btn btn-sm btn-success" [disabled]="!isFormValid">{{commonLocaleData?.app_next}}</button>
-                    <button type="button" class="btn btn-sm btn-danger" (click)="closePopupEvent()">{{commonLocaleData?.app_cancel}}</button>
+                    <button type="submit" class="btn btn-sm btn-success"
+                        [disabled]="!isFormValid">{{commonLocaleData?.app_next}}</button>
+                    <button type="button" class="btn btn-sm btn-danger"
+                        (click)="closePopupEvent()">{{commonLocaleData?.app_cancel}}</button>
                 </div>
             </div>
         </form>

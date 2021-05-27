@@ -44,41 +44,41 @@ ul#dropdown-nested li .dropdown-menu {
     left: 184px;
     visibility: hidden;
     opacity: 0;
-    transition: .5s all ease;
+    transition: 0.5s all ease;
 }
 ul#dropdown-nested li:hover .dropdown-menu {
     visibility: visible;
     opacity: 1;
-    transition: .5s all ease;
+    transition: 0.5s all ease;
 }
 
-.search-sidebar{
+.search-sidebar {
     position: relative;
-        padding: 0 15px 15px;
-    .form-control{
-        width:205px;
+    padding: 0 15px 15px;
+    .form-control {
+        width: 205px;
         padding-left: 32px !important;
         display: inline-block;
     }
-    .fa-search{
+    .fa-search {
         position: absolute;
         top: 12px;
         left: 25px;
     }
 }
 
-@media (max-width:1024px){
+@media (max-width: 1024px) {
     #inventory-sidebar {
         min-height: 100%;
         width: 100% !important;
         padding-bottom: 0;
+    }
+    .search-sidebar {
+        .form-control {
+            width: 100%;
         }
-        .search-sidebar{
-            .form-control{
-                width:100%;
-            }
-            .btn-group{
-                display:none;
-            }
+        .btn-group {
+            display: none;
         }
     }
+}

@@ -18,7 +18,7 @@ import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
 })
 export class SettingPermissionComponent implements OnInit, OnDestroy {
 
-    @ViewChild('editUserModal', {static: false}) public editUserModal: ModalDirective;
+    @ViewChild('editUserModal', { static: false }) public editUserModal: ModalDirective;
 
     public sharedWith: object[] = [];
     public usersList: any;
@@ -34,9 +34,13 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         backdrop: 'static',
         ignoreBackdropClick: true
     };
-    public isUpdtCase:boolean = false;
+    public isUpdtCase: boolean = false;
     private loggedInUserEmail: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private _settingsPermissionActions: SettingsPermissionActions,
@@ -134,4 +138,17 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * This will return the past period,duration text
+     *
+     * @param {*} user
+     * @returns {string}
+     * @memberof SettingPermissionComponent
+     */
+    public getPastPeriodDuration(user: any): string {
+        let pastPeriodDuration = this.localeData?.past_period_duration;
+        pastPeriodDuration = pastPeriodDuration?.replace("[DURATION]", user.duration);
+        pastPeriodDuration = pastPeriodDuration?.replace("[PERIOD]", user.period);
+        return pastPeriodDuration;
+    }
 }

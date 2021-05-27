@@ -113,7 +113,8 @@ span.set-as-default {
     font-family: "opensans-semibold";
     width: 70px;
     color: $gray;
-    &.cursor-pointer, &.pin-label {
+    &.cursor-pointer,
+    &.pin-label {
         width: auto;
     }
 }
@@ -153,35 +154,35 @@ span.set-as-default {
     justify-content: flex-start;
     text-align: left;
 }
-.search-warehouse-box{
+.search-warehouse-box {
     max-width: 200px;
     width: 100%;
-    input{
-        background-image: url('../../../assets/images/searchIcon.svg') !important;
+    input {
+        background-image: url("../../../assets/images/searchIcon.svg") !important;
         background-repeat: no-repeat !important;
         padding-left: 30px !important;
         background-position: 7px 9px !important;
         background-size: 15px !important;
     }
 }
-.linked-details{
-    label{
+.linked-details {
+    label {
         width: 100%;
         margin-bottom: 8px;
     }
-    ul{
-       padding: 0;
-       list-style: none;
-       li{
-           margin-bottom: 12px;
-           color: $nero;
-           i{
-               color: $gray;
-           }
-       }
+    ul {
+        padding: 0;
+        list-style: none;
+        li {
+            margin-bottom: 12px;
+            color: $nero;
+            i {
+                color: $gray;
+            }
+        }
     }
 }
-.branch-vector{
+.branch-vector {
     text-align: right;
     position: absolute;
     bottom: -70px;
@@ -193,9 +194,9 @@ span.set-as-default {
         width: 90%;
         margin-bottom: 15px;
     }
-    .warehouse-card .btn-group{
+    .warehouse-card .btn-group {
         position: absolute;
-        top:4px;
+        top: 4px;
         right: 0;
     }
     .warehouse-card .d-flex {
@@ -209,7 +210,7 @@ span.set-as-default {
         justify-content: center;
     }
     .dropdown-item.warehouse-options {
-           justify-content: flex-start;
+        justify-content: flex-start;
     }
 }
 @media only screen and (max-width: 991px) {
@@ -218,30 +219,30 @@ span.set-as-default {
     }
 }
 
-@media(min-width:992px) and (max-width:1359px){
-    .warehouse-box{
-        .col-lg-4{
+@media (min-width: 992px) and (max-width: 1359px) {
+    .warehouse-box {
+        .col-lg-4 {
             flex: 0 0 50% !important;
             max-width: 50% !important;
         }
     }
 }
-@media(max-width:767px){
-    .branch-vector{
-        img{
+@media (max-width: 767px) {
+    .branch-vector {
+        img {
             width: 150px;
         }
     }
 }
-@media(max-width:575px){
-    .warehouse-header{
+@media (max-width: 575px) {
+    .warehouse-header {
         flex-direction: column;
-        .search-warehouse-box{
+        .search-warehouse-box {
             max-width: 100%;
             margin-bottom: 15px;
         }
     }
-    .search-container{
+    .search-container {
         .clear-filter-btn {
             padding: 0px 8px;
             font-size: 12px;

@@ -181,7 +181,7 @@ export class ProformaAddBulkItemsComponent implements OnDestroy {
                 this.selectedItems.push({ ...item });
                 this.changeDetectorRef.detectChanges();
             }
-        }, () => {});
+        }, () => { });
     }
 
     removeSelectedItem(uniqueName: string) {
@@ -222,7 +222,7 @@ export class ProformaAddBulkItemsComponent implements OnDestroy {
      * @memberof ProformaAddBulkItemsComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.onSearchQueryChanged('');
 
             setTimeout(() => {

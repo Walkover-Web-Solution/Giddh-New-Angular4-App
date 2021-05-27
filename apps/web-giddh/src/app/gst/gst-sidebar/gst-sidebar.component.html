@@ -1,0 +1,40 @@
+<div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)" asideGstSidebarMenuState>
+    <div class="help-aside-body">
+        <div class="back-to-main-slider">
+            <a href="javascript:;">
+                <span (click)="goToPreviousPage()">
+                    <i class="icon-back-arrow"></i>
+                    {{commonLocaleData?.app_back}}
+                </span>
+            </a>
+        </div>
+        <div class="gst-menu-items">
+            <ul class="mb-3">
+                <li>
+                    <a class="d-block clearfix" routerLinkActive #rla="routerLinkActive" [class.active]="rla.isActive" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/pages/gstfiling']">
+                        <span><i class="icon-dashboard-new"></i></span>
+                        <span>{{localeData?.dashboard}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" [attr.disabled]="!activeCompanyGstNumber || !isMonthSelected" [ngClass]="{'disabled': !activeCompanyGstNumber || !isMonthSelected, 'active': selectedGstModule === GstReport.Gstr3b}" class="d-block clearfix"  (click)="navigate(GstReport.Gstr3b)">
+                        <span><i class="icon-summary"></i></span>
+                        <span>{{localeData?.gstr3b_summary}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" [ngClass]="{'disabled': !activeCompanyGstNumber, 'active': selectedGstModule === GstReport.Gstr1}" class="d-block clearfix" (click)="navigate(GstReport.Gstr1)">
+                        <span><i class="icon-ecomm"></i></span>
+                        <span>{{localeData?.gstr1_label}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" [ngClass]="{'disabled': !activeCompanyGstNumber || !isMonthSelected, 'active': selectedGstModule === GstReport.Gstr2}" class="d-block clearfix" (click)="navigate(GstReport.Gstr2)">
+                        <span><i class="icon-gstr"></i></span>
+                        <span>{{localeData?.gstr2_label}}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
