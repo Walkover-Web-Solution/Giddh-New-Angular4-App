@@ -200,14 +200,6 @@ export class InvoiceUiDataService {
                     field: 'attentionTo',
                     width: null
                 };
-                if (selectedTemplate?.sections && selectedTemplate?.sections?.footer?.data?.message1?.label === '') {
-                    if (selectedTemplate?.templateType === 'gst_template_a') {
-                        selectedTemplate.sections.footer.data.message1.label = `All payments to be made in cash.\nContact us for queries on
-                        these quotations.`;
-                    } else if (selectedTemplate?.templateType === 'gst_template_e') {
-                        selectedTemplate.sections.footer.data.message1.label = `We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.`;
-                    }
-                }
                 if (!selectedTemplate.sections['header'].data['showCompanyAddress']) {
                     // Assign the default value based on value of warehouseAddress
                     selectedTemplate.sections['header'].data['showCompanyAddress'] = {

@@ -73,8 +73,12 @@
                         word-break: break-all;
                     }
                 }
-                .unique-name-financial-year{
-                    .branch-ellipsis{
+                .unique-name-financial-year {
+                    .branch-unique-name{
+                        white-space: normal;
+                        word-break: break-all;
+                    }
+                    .branch-ellipsis {
                         white-space: normal;
                         word-break: break-all;
                         i.icon-branch1{
