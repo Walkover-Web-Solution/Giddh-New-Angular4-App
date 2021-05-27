@@ -23,6 +23,8 @@ export class GstrSidebarComponent {
     @Input() public activeCompanyGstNumber: EventEmitter<boolean> = new EventEmitter(true);
     /** Stores the selected GST module */
     @Input() public selectedGstModule: string = 'dashboard';
+    /** True if month filter is selected */
+    @Input() public isMonthSelected: boolean;
 
     constructor(
         private router: Router,

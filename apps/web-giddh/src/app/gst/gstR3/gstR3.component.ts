@@ -55,6 +55,10 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     private gstr3BOverviewDataFetchedInProgress$: Observable<boolean>;
     private gstr3BOverviewData$: Observable<Gstr3bOverviewResult2>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Stores the current period */
+    public getCurrentPeriod$: Observable<any> = of(null);
+    /** True, if month filter is selected */
+    public isMonthSelected: boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -209,6 +213,20 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                                 (this.gstr3BData.sup_details.osup_zero ?
                                     (this.gstr3BData.sup_details.osup_zero.csamt ? this.gstr3BData.sup_details.osup_zero.csamt : 0) : 0));
                     }
+                }
+            }
+        });
+        this.getCurrentPeriod$ = this.store.pipe(select(appStore => appStore.gstR.currentPeriod), takeUntil(this.destroyed$));
+        this.getCurrentPeriod$.subscribe(currentPeriod => {
+            if (currentPeriod && currentPeriod.from) {
+                let date = {
+                    startDate: moment(currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
+                    endDate: moment(currentPeriod.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
+                };
+                if (date.startDate === currentPeriod.from && date.endDate === currentPeriod.to) {
+                    this.isMonthSelected = true;
+                } else {
+                    this.isMonthSelected = false;
                 }
             }
         });

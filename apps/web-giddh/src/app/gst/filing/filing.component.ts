@@ -11,6 +11,8 @@ import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { AppState } from '../../store';
 import { GstReport } from '../constants/gst.constant';
+import * as moment from 'moment/moment';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
 	// tslint:disable-next-line:component-selector
@@ -55,6 +57,10 @@ export class FilingComponent implements OnInit, OnDestroy {
 	private gstr1OverviewDataFetchedSuccessfully$: Observable<boolean>;
 	private gstr2OverviewDataFetchedSuccessfully$: Observable<boolean>;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Stores the current period */
+    public getCurrentPeriod$: Observable<any> = of(null);
+    /** True, if month filter is selected */
+    public isMonthSelected: boolean = true;
 
     constructor(private _cdr: ChangeDetectorRef,
         private _route: Router,
@@ -132,8 +138,22 @@ export class FilingComponent implements OnInit, OnDestroy {
 		// get activeCompany gst number
 		this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
             this.loadGstReport(result);
-		});
-	}
+        });
+        this.getCurrentPeriod$ = this.store.pipe(select(appStore => appStore.gstR.currentPeriod), takeUntil(this.destroyed$));
+        this.getCurrentPeriod$.subscribe(currentPeriod => {
+            if (currentPeriod && currentPeriod.from) {
+                let date = {
+                    startDate: moment(currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
+                    endDate: moment(currentPeriod.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
+                };
+                if (date.startDate === currentPeriod.from && date.endDate === currentPeriod.to) {
+                    this.isMonthSelected = true;
+                } else {
+                    this.isMonthSelected = false;
+                }
+            }
+        });
+    }
 
 	public selectTab(e, val, tabHeading) {
 		this.selectedTab = tabHeading;
