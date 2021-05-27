@@ -121,7 +121,8 @@
                                                         (keydown)="keydownPressed($event)"
                                                         [options]="searchResults" #dbtSelect
                                                         (click)="addBlankTrx('DEBIT', txn, $event)"
-                                                        (selected)="selectAccount($event,txn, dbtSelect)"
+                                                        (selected)="selectAccount($event, txn, dbtSelect)"
+                                                        (onClear)="selectAccount($event, txn, dbtSelect, true)"
                                                         [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
                                                         [ItemHeight]="67" (onShow)="dbs.hide()"
                                                         [fixedValue]="txn.particular.name"
@@ -304,7 +305,8 @@
                                                         (keydown)="keydownPressed($event)"
                                                         [options]="searchResults" #crdSelect
                                                         (click)="addBlankTrx('CREDIT', txn, $event)"
-                                                        (selected)="selectAccount($event,txn, crdSelect)"
+                                                        (selected)="selectAccount($event, txn, crdSelect)"
+                                                        (onClear)="selectAccount($event, txn, crdSelect, true)"
                                                         [fixedValue]="txn.particular.name"
                                                         (onShow)="cbs.hide()" [showClear]="false"
                                                         [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
