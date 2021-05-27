@@ -1,10 +1,9 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { AppState } from '../store/roots';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { Injectable } from '@angular/core';
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import { CustomActions } from '../store/customActions';
 import {
     AgingAdvanceSearchModal,
@@ -13,9 +12,9 @@ import {
     DueAmountReportResponse,
     DueRangeRequest
 } from '../models/api-models/Contact';
-import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
 import { AgingreportingService } from '../services/agingreporting.service';
+import { LocaleService } from '../services/locale.service';
 
 @Injectable()
 export class AgingReportActions {
@@ -45,7 +44,7 @@ export class AgingReportActions {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
-                this._toasty.successToast('Due date range created successfully', 'Success');
+                this._toasty.successToast(this.localeService.translate("app_messages.due_date_range_created"), this.localeService.translate("app_success"));
                 // set newly created company as active company
                 return { type: 'EmptyAction' };
                 // check if new uer has created first company then set newUserLoggedIn false
@@ -90,8 +89,7 @@ export class AgingReportActions {
         private action$: Actions,
         private _agingReportService: AgingreportingService,
         private _toasty: ToasterService,
-        private store: Store<AppState>,
-        private _generalService: GeneralService
+        private localeService: LocaleService
     ) {
     }
 

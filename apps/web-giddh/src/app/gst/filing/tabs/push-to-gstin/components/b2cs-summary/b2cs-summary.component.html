@@ -1,10 +1,9 @@
 <div class="gstr-transactions-summary">
     <!---->
-    <h4 class="clearfix gstr-summary-title">B2C (Small) Details</h4>
-    <p class="text-muted half pd-t05">Details of invoices with value less than 2.5 lakhs that you’ve
-        issued to consumers other than B2C (Large) transactions.</p>
+    <h4 class="clearfix gstr-summary-title">{{localeData?.filing?.b2c_small_details}}</h4>
+    <p class="text-muted half pd-t05">{{localeData?.filing?.b2c_small_details_invoices}}</p>
 
-    <div class="">
+    <div>
         <div>
             <table class="transactions-table table-striped  table zi-table on-mobile-view" *ngIf="brcsSummary.length">
                 <thead>
@@ -12,51 +11,51 @@
                         <!---->
                         <th class="text-left">
                             <div class="position-relative">
-                                <div class="pull-left over-flow"> Type</div>
+                                <div class="pull-left over-flow"> {{localeData?.filing?.type}}</div>
                                 <!---->
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="position-relative">
-                                <div class="over-flow"> Rate</div>
+                                <div class="over-flow"> {{localeData?.filing?.rate}}</div>
                                 <!---->
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="position-relative">
-                                <div class="over-flow"> Place of Supply</div>
+                                <div class="over-flow"> {{localeData?.filing?.place_supply}}</div>
                                 <!---->
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="position-relative">
-                                <div class="over-flow"> Taxable Amount</div>
-                                <!---->
-                            </div>
-                        </th>
-
-                        <th class="text-right">
-                            <div class="position-relative">
-                                <div class="over-flow"> IGST Amount</div>
-                                <!---->
-                            </div>
-                        </th>
-                        <th class="text-right">
-                            <div class="position-relative">
-                                <div class="over-flow"> CGST Amount</div>
+                                <div class="over-flow"> {{localeData?.filing?.taxable_amount}}</div>
                                 <!---->
                             </div>
                         </th>
 
                         <th class="text-right">
                             <div class="position-relative">
-                                <div class="over-flow"> SGST Amount</div>
+                                <div class="over-flow"> {{localeData?.filing?.igst_amount}}</div>
                                 <!---->
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="position-relative">
-                                <div class="over-flow"> CESS</div>
+                                <div class="over-flow"> {{localeData?.filing?.cgst_amount}}</div>
+                                <!---->
+                            </div>
+                        </th>
+
+                        <th class="text-right">
+                            <div class="position-relative">
+                                <div class="over-flow"> {{localeData?.filing?.sgst_amount}}</div>
+                                <!---->
+                            </div>
+                        </th>
+                        <th class="text-right">
+                            <div class="position-relative">
+                                <div class="over-flow"> {{commonLocaleData?.app_cess}}</div>
                                 <!---->
                             </div>
                         </th>
@@ -66,46 +65,46 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of brcsSummary">
-                        <td data-title="Type"> {{item.typ ? item.typ : '-'}} </td>
-                        <td data-title="Rate" class="text-right">
+                        <td [attr.data-title]="localeData?.filing?.type"> {{item.typ ? item.typ : '-'}} </td>
+                        <td [attr.data-title]="localeData?.filing?.rate" class="text-right">
                             <!-- {{item.rt | giddhCurrency}} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.rt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-                        <td data-title="Place of Supply" class="text-right">
+                        <td [attr.data-title]="localeData?.filing?.place_supply" class="text-right">
                             {{item.pos ? item.pos : '-'}}
                         </td>
-                        <td data-title="Taxable Amount" class="text-right">
+                        <td [attr.data-title]="localeData?.filing?.taxable_amount" class="text-right">
                             <!-- {{item.txval | giddhCurrency}}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.txval" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-                        <td data-title="IGST Amount" class="text-right">
+                        <td [attr.data-title]="localeData?.filing?.igst_amount" class="text-right">
                             <!-- {{item.iamt | giddhCurrency}}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.iamt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-                        <td data-title="CGST Amount" class="text-right">
+                        <td [attr.data-title]="localeData?.filing?.cgst_amount" class="text-right">
                             <!-- {{item.camt | giddhCurrency}}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.camt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-                        <td data-title="SGST Amount" class="text-right">
+                        <td [attr.data-title]="localeData?.filing?.sgst_amount" class="text-right">
                             <!-- {{item.samt | giddhCurrency}}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.samt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-                        <td data-title="CESS" class="text-right">
+                        <td [attr.data-title]="commonLocaleData?.app_cess" class="text-right">
                             <!-- {{item.csamt | giddhCurrency}}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.csamt" [currencySymbol]="false" [currencyCode]="false">
@@ -125,11 +124,10 @@
 
         </div>
 
-        <div class="" *ngIf="!brcsSummary.length">
+        <div *ngIf="!brcsSummary.length">
             <div class="filings-empty-state">
                 <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
-                <div class="empty-msg"><span> There is no summary of invoices with value less than 2.5 lakhs, other than
-                        B2C (Large) that you’ve issued to consumers. </span>
+                <div class="empty-msg"><span> {{localeData?.filing?.b2c_small_details_no_invoices}} </span>
                 </div>
             </div>
         </div>

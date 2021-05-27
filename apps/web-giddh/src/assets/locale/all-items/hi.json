@@ -330,12 +330,6 @@
                     "link": "/pages/search",
                     "icon": "icon-search-new",
                     "description": "Select group and search for a time span"
-                },
-                {
-                    "label": "Settings",
-                    "link": "/pages/settings",
-                    "icon": "icon-settings-cog",
-                    "description": "Add & manage various taxes"
                 }
             ]
         }

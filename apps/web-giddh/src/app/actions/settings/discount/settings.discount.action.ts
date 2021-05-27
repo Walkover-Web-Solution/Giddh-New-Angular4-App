@@ -1,16 +1,15 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
-import { Action, Store } from '@ngrx/store';
-import { AppState } from '../../../store';
+import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { Router } from '@angular/router';
 import { CustomActions } from '../../../store/customActions';
 import { SETTINGS_DISCOUNT_ACTIONS } from './settings.discount.const';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 import { CreateDiscountRequest, IDiscountList } from '../../../models/api-models/SettingsDiscount';
+import { LocaleService } from '../../../services/locale.service';
 
 @Injectable()
 export class SettingsDiscountActions {
@@ -48,7 +47,7 @@ export class SettingsDiscountActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Discount Created Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.discount_created"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -71,7 +70,7 @@ export class SettingsDiscountActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Discount Updated Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.discount_updated"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -94,15 +93,14 @@ export class SettingsDiscountActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Discount Deleted Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.discount_deleted"));
                 }
                 return { type: 'EmptyAction' };
             })));
 
     constructor(private action$: Actions,
         private toasty: ToasterService,
-        private router: Router,
-        private store: Store<AppState>,
+        private localeService: LocaleService,
         private settingsDiscountService: SettingsDiscountService) {
     }
 
