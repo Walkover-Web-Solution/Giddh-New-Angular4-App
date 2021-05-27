@@ -18,8 +18,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:void(0);" [attr.disabled]="!activeCompanyGstNumber"
-                        [ngClass]="{'disabled': !activeCompanyGstNumber, 'active': selectedGstModule === GstReport.Gstr3b}"
+                    <a href="javascript:void(0);" [attr.disabled]="!activeCompanyGstNumber || !isMonthSelected"
+                        [ngClass]="{'disabled': !activeCompanyGstNumber || !isMonthSelected, 'active': selectedGstModule === GstReport.Gstr3b}"
                         class="d-block clearfix" (click)="navigate(GstReport.Gstr3b)">
                         <span><i class="icon-summary"></i></span>
                         <span>{{localeData?.gstr3b_summary}}</span>
@@ -35,7 +35,7 @@
                 </li>
                 <li>
                     <a href="javascript:void(0);"
-                        [ngClass]="{'disabled': !activeCompanyGstNumber, 'active': selectedGstModule === GstReport.Gstr2}"
+                        [ngClass]="{'disabled': !activeCompanyGstNumber || !isMonthSelected, 'active': selectedGstModule === GstReport.Gstr2}"
                         class="d-block clearfix" (click)="navigate(GstReport.Gstr2)">
                         <span><i class="icon-gstr"></i></span>
                         <span>{{localeData?.gstr2_label}}</span>
