@@ -20,6 +20,8 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold if we need to refresh purchase bill list */
     public refreshPurchaseBill: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
 
     constructor(
         private store: Store<AppState>,

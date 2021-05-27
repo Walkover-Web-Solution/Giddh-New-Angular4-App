@@ -1826,7 +1826,6 @@ fieldset[disabled] .btn-primary:hover {
 
 .ledger-main .form-control {
     background: $white !important;
-    height: 48px;
 }
 
 .ledger-header thead th {
@@ -6085,8 +6084,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 
 .ledg-head.entry-popup table td[class*="col-"] {
-    padding: 0px !important;
-    padding-bottom: 1px !important;
     border-bottom: 1px solid $gainsboro;
     border-right: 1px solid $gainsboro;
     font-size: 13px;
@@ -6099,10 +6096,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .ledg-head.entry-popup table td.pd-r25 {
     padding-right: 25px !important;
-}
-
-.ledg-head .ledger-main td[class*="col-"] {
-    padding: 0px !important;
 }
 
 /* table th[class*=col-]:last-child,
@@ -8978,8 +8971,8 @@ ngx-daterangepicker-material {
 
 .HW_badge.HW_visible {
     position: absolute;
-    top: 2px;
-    left: 12px;
+    top: 0px;
+    left: 14px;
 }
 
 .HW_badge {
@@ -9086,7 +9079,7 @@ span#HW_badge_cont:nth-child(3) {
                     i{
                         color: $gray;
                         margin-right: 10px;
-                        font-size: 14px;
+                        font-size: 17px;
                     }
                 }
             }
@@ -10979,7 +10972,7 @@ input.mat-input-element{
         }
         .modal-dialog {
             max-width: 600px !important;
-            margin: 30px auto;
+            margin: 56px auto;
             padding: 0 10px;
         }
         .modal-dialog.modal-xl {
@@ -11210,6 +11203,9 @@ input.mat-input-element{
         min-height: 60px;
     }
 
-    .delete-icon-opacity {
-        opacity: 0.5;
-    }
+.delete-icon-opacity {
+    opacity: 0.5;
+}
+.sky-blue-bg {
+    background-color: $light-sky-blue;
+}

@@ -29,7 +29,8 @@ export class InvoiceUiDataService {
     public templateVoucherType: BehaviorSubject<string> = new BehaviorSubject(null);
     /** Stores the content form instance  */
     public contentForm: NgForm;
-
+    /** Stores the content form controls with errors  */
+    public contentFormErrors: number;
     /** Stores the image uniquename, if signature image got uploaded to the server but not updated with invoice, used
      * to avoid unused uploading of images on the server
     */
@@ -291,6 +292,12 @@ export class InvoiceUiDataService {
     public setContentForm(form: NgForm): void {
         if (form) {
             this.contentForm = form;
+            this.contentFormErrors = 0;
+            Object.keys(form.controls).forEach(key => {
+                if (form.controls[key].errors) {
+                    this.contentFormErrors++;
+                }
+            });
         }
     }
 }

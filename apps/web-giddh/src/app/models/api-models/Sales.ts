@@ -509,6 +509,8 @@ export class VoucherDetailsClass {
     public totalDepositAmount?: number;
     public cashInvoice?: string;
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
+    public currencySymbol: string;
+    public currency: Currency;
 
     constructor() {
         this.customerName = null;
@@ -610,6 +612,10 @@ export class SalesAddBulkStockItems {
 }
 
 export class CodeStockMulticurrency {
+    code: string;
+}
+
+export class Currency {
     code: string;
 }
 

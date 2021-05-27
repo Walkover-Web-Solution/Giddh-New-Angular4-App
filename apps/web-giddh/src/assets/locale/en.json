@@ -345,7 +345,9 @@
     "app_select_inventory_type": "Select Inventory Type",
     "app_inventory_type": "Inventory Type",
     "app_product": "Product",
+    "app_products": "Products",
     "app_service": "Service",
+    "app_services": "Services",
     "app_import_type": {
         "groups": "Groups",
         "accounts": "Accounts",
@@ -503,5 +505,6 @@
     "app_select_date": "Select Date",
     "app_bulk_export": "Bulk Export",
     "app_pin_code": "PIN Code",
-    "app_enter_pin_code": "Enter PIN Code"
+    "app_enter_pin_code": "Enter PIN Code",
+    "app_irn": "IRN"
 }

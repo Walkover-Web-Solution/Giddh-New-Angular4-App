@@ -72,7 +72,7 @@ export class OutwardNoteComponent implements OnChanges {
 	public modeChanged(mode: 'receiver' | 'product') {
 		this.mode = mode;
 		this.form.reset();
-		this.inventoryEntryDate.patchValue(moment().format(GIDDH_DATE_FORMAT));
+		this.inventoryEntryDate?.patchValue(moment().format(GIDDH_DATE_FORMAT));
 		this.transactions.controls = this.transactions.controls.filter(trx => false);
 
 		if (this.mode === 'receiver') {
@@ -135,12 +135,12 @@ export class OutwardNoteComponent implements OnChanges {
 		const inventoryUser = user ? { uniqueName: user.uniqueName } : null;
 		if (index >= 0) {
 			const control = items.at(index);
-			control.patchValue({
+			control?.patchValue({
 				...control.value,
 				inventoryUser
 			});
 		} else {
-			items.controls.forEach(c => c.patchValue({ ...c.value, inventoryUser }));
+			items.controls.forEach(c => c?.patchValue({ ...c.value, inventoryUser }));
 		}
 	}
 
@@ -151,9 +151,9 @@ export class OutwardNoteComponent implements OnChanges {
 		const stockUnit = stockItem ? stockItem.stockUnit.code : null;
 		if (index >= 0) {
 			const control = items.at(index);
-			control.patchValue({ ...control.value, stock, stockUnit });
+			control?.patchValue({ ...control.value, stock, stockUnit });
 		} else {
-			items.controls.forEach(c => c.patchValue({ ...c.value, stock, stockUnit }));
+			items.controls.forEach(c => c?.patchValue({ ...c.value, stock, stockUnit }));
 		}
 	}
 

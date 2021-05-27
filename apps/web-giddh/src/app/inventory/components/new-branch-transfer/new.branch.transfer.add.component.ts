@@ -1221,7 +1221,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         });
         if (this.isBranch) {
             // Find the current branch details
-            selectedBranch = (branches) ? branches.find(branch => branch.uniqueName === this._generalService.currentBranchUniqueName) : null;
+            selectedBranch = (branches) ? branches.find(branch => branch?.uniqueName === this._generalService.currentBranchUniqueName) : null;
             branchName = selectedBranch ? selectedBranch.alias : '';
         } else {
             // Company session find the HO branch
@@ -1231,10 +1231,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         if (!this.editBranchTransferUniqueName) {
             this.myCurrentCompany = this.isBranch ? branchName : hoBranch.alias;
             if (this.branchTransferMode === "deliverynote") {
-                this.branchTransfer.sources[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch.uniqueName;
+                this.branchTransfer.sources[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch?.uniqueName;
                 this.branchTransfer.sources[0].name = selectedBranch ? selectedBranch.name : hoBranch.name;
             } else if (this.branchTransferMode === "receiptnote") {
-                this.branchTransfer.destinations[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch.uniqueName;
+                this.branchTransfer.destinations[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch?.uniqueName;
                 this.branchTransfer.destinations[0].name = selectedBranch ? selectedBranch.name : hoBranch.name;
             }
         }
