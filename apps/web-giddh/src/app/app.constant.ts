@@ -9,7 +9,7 @@ export const Configuration = {
     APP_FOLDER
 };
 
-export const APP_DEFAULT_TITLE = 'Giddh -';
+export const APP_DEFAULT_TITLE = '';
 
 export const DEFAULT_TOASTER_OPTIONS = {
     closeButton: true, // show close button
@@ -291,3 +291,14 @@ export const SETTING_INTEGRATION_TABS = {
 };
 /** Email Validation Regex */
 export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+/** E-invoice statuses */
+export enum EInvoiceStatus {
+    YetToBePushed = 'yet-to-be pushed',
+    Pushed = 'pushed',
+    PushInitiated = 'push initiated',
+    Cancelled = 'cancelled',
+    MarkedAsCancelled = 'marked as cancelled',
+    Failed = 'failed',
+    NA = 'na',
+}

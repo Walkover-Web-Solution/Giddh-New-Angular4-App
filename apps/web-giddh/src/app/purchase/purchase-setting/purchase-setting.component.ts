@@ -5,7 +5,6 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import * as moment from 'moment/moment';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { AuthenticationService } from '../../services/authentication.service';
 import { InvoiceService } from '../../services/invoice.service';
@@ -43,6 +42,10 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private toaster: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions, private invoiceService: InvoiceService, public purchaseOrderService: PurchaseOrderService, private generalService: GeneralService, public authenticationService: AuthenticationService, private route: ActivatedRoute) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
@@ -147,7 +150,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
             this.updateSettingsEmail(emailId);
             return true;
         } else {
-            this.toaster.warningToast('Invalid Email Address.');
+            this.toaster.warningToast(this.localeData?.invalid_email);
             return false;
         }
     }
@@ -222,7 +225,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
         this.authenticationService.saveGmailAuthCode(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if(res) {
                 if (res.status === 'success') {
-                    this.toaster.successToast('Gmail account added successfully.', 'Success');
+                    this.toaster.successToast(this.localeData?.gmail_account_added, this.commonLocaleData?.app_success);
                 } else {
                     this.toaster.errorToast(res.message, res.code);
                 }

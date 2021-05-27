@@ -68,6 +68,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     @Input() public items: InvoicePreviewDetailsVm[];
     @Input() public selectedItem: InvoicePreviewDetailsVm;
+    /** Emits the selected item to the parent for updating the current selected item in parent component */
+    @Output() public selectedItemChange: EventEmitter<InvoicePreviewDetailsVm> = new EventEmitter<InvoicePreviewDetailsVm>();
     @Input() public appSideMenubarIsOpen: boolean;
     @Input() public invoiceSetting: InvoiceSetting;
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
@@ -76,6 +78,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @Input() public showPrinterDialogWhenPageLoad: boolean;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     @Input() public isCompany: boolean;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     @Output() public deleteVoucher: EventEmitter<any> = new EventEmitter();
     @Output() public updateVoucherAction: EventEmitter<string> = new EventEmitter();
@@ -320,6 +326,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * @memberof InvoicePreviewDetailsComponent
      */
     public selectVoucher(item: InvoicePreviewDetailsVm): void {
+        this.selectedItemChange.emit(item);
         this.selectedItem = item;
         this.isAccountHaveAdvanceReceipts = false;
         this.downloadVoucher('base64');
@@ -377,7 +384,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         this.isVoucherDownloadError = false;
                     } else {
                         this.isVoucherDownloadError = true;
-                        this._toasty.errorToast('Something went wrong please try again!');
+                        this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                     }
                     this.isVoucherDownloading = false;
                     this.detectChanges();
@@ -582,7 +589,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             this.isFileUploading = true;
         } else if (output.type === 'done') {
             if (output.file.response.status === 'success') {
-                this._toasty.successToast('File uploaded successfully');
+                this._toasty.successToast(this.localeData?.file_uploaded);
                 const response = output.file.response.body;
                 this.isFileUploading = false;
                 const requestObject = {
@@ -594,7 +601,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 };
                 this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH', true).pipe(takeUntil(this.destroyed$)).subscribe(() => {
                     this.downloadVoucher('base64');
-                }, () => this._toasty.errorToast('Something went wrong! Try again'));
+                }, () => this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong));
             } else {
                 this.isFileUploading = false;
                 this._toasty.errorToast(output.file.response.message);
@@ -787,5 +794,31 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 item.grandTotal.toString().includes(term);
         });
         this.detectChanges();
+    }
+
+    /**
+     * This will return voucher log text
+     *
+     * @param {*} log
+     * @returns {string}
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public getVoucherLogText(log: any): string {
+        let voucherLog = this.localeData?.voucher_log;
+        voucherLog = voucherLog?.replace("[ACTION]", log.action).replace("[TOTAL]", log.grandTotal).replace("[USER]", log.user?.name);
+        return voucherLog;
+    }
+
+    /**
+     * This will return edit voucher text
+     *
+     * @param {string} voucherType
+     * @returns {string}
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public getEditVoucherText(voucherType: string): string {
+        let editVoucher = this.localeData?.edit_voucher;
+        editVoucher = editVoucher.replace("[VOUCHER]", voucherType);
+        return editVoucher;
     }
 }

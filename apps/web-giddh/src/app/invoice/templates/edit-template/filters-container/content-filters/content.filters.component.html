@@ -1,4 +1,4 @@
-<div id="contentTab" class="design-tab-content mr-t2 template-editor" *ngIf="content && customTemplate && customTemplate.sections">
+<div id="contentTab" class="design-tab-content mr-t2 template-editor" *ngIf="customTemplate?.uniqueName" [hidden]="!(content && customTemplate && customTemplate.sections)">
     <!-- start header -->
     <form #contentForm="ngForm" (ngSubmit)="save()" novalidate>
         <div id="headerDiv" [hidden]="!templateUISectionVisibility.header">
@@ -27,6 +27,9 @@
                     </div>
                     <div class="form-group" *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && showGstComposition">
                         <input type="checkbox" name="irnCheckbox" [(ngModel)]="customTemplate.sections['header'].data['showIrnNumber'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show IRN number
+                    </div>
+                    <div *ngIf="showGstComposition && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="form-group">
+                        <input type="checkbox" name="showQrCodeCheckbox" [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show QR code
                     </div>
                     <div class="form-group" *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
                         <input type="checkbox" name="companyAddressCheckbox" [(ngModel)]="customTemplate.sections['header'].data['showCompanyAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Address
@@ -68,9 +71,6 @@
                                 </ng-container>
                             </div>
                         </div>
-                        <div *ngIf="showGstComposition && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="form-group">
-                            <input type="checkbox" name="showQrCodeCheckbox" [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show QR code
-                        </div>
                     </div>
                     <!--   .....this is for other voucher type -->
                     <ng-container *ngIf="voucherType!='sales'">
@@ -93,9 +93,6 @@
                                     <span class="max-character-label">Characters left:&nbsp;</span> <span class="max-character-value">{{(15 - customTemplate.sections['header'].data['voucherNumber'].label.length)}}</span>
                                 </ng-container>
                             </div>
-                        </div>
-                        <div *ngIf="showGstComposition && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')" class="form-group">
-                            <input type="checkbox" name="showQrCodeCheckbox" [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show QR code
                         </div>
                     </ng-container>
                     <div *ngIf="fieldsAndVisibility.header.dueDate" class="form-group">
@@ -479,10 +476,10 @@
                                     Value</label>
                             </td>
                             <td>
-                                <input type="text" hasFocus #taxableValue="hasFocus" maxlength="12" [class.error-box]="contentForm?.controls['tv1']?.errors?.maxlength" class="form-control" name="tv1" [(ngModel)]="customTemplate.sections['table'].data['taxableValue'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['taxableValue'].display"
+                                <input type="text" hasFocus #taxableValue="hasFocus" maxlength="14" [class.error-box]="contentForm?.controls['tv1']?.errors?.maxlength" class="form-control" name="tv1" [(ngModel)]="customTemplate.sections['table'].data['taxableValue'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['table'].data['taxableValue'].display"
                                 />
                                 <ng-container *ngIf="taxableValue?.isFocused || contentForm?.controls['tv1']?.errors?.maxlength">
-                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(12 - customTemplate.sections['table'].data['taxableValue'].label.length)}}</span>
+                                    <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(14 - customTemplate.sections['table'].data['taxableValue'].label.length)}}</span>
                                 </ng-container>
                             </td>
                         </tr>
@@ -752,10 +749,10 @@
                     <input type="checkbox" name="textUnderSloganCheckbox" [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Text under Image Signature / Slogan
                     <div class="mb-0 form-group ml-3">
                         <input type="text" [class.error-box]="contentForm?.controls['textUnderSlogan']?.errors?.maxlength" class="form-control" hasFocus #textUnderSlogan="hasFocus" [disabled]="!fieldsAndVisibility.footer.textUnderSlogan?.display" (keyup)='onFieldChange(null, null, null)' [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].label" placeholder="Text under slogan"
-                            maxlength="30" name="textUnderSlogan"/>
+                            maxlength="50" name="textUnderSlogan"/>
                     </div>
                     <div class="form-group ml-3 clearfix" *ngIf="textUnderSlogan?.isFocused || contentForm?.controls['textUnderSlogan']?.errors?.maxlength">
-                        <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(30 - customTemplate.sections['footer'].data['textUnderSlogan'].label.length)}}</span>
+                        <span class="max-character-label">Characters left:&nbsp;</span><span class="max-character-value">{{(50 - customTemplate.sections['footer'].data['textUnderSlogan'].label.length)}}</span>
                     </div>
                 </div>
                     <!-- <div *ngIf="fieldsAndVisibility.footer.slogan" class="clearfix">

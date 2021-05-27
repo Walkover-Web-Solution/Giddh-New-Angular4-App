@@ -1,0 +1,161 @@
+# This is a basic workflow to help you get started with Actions
+
+name: UI build
+
+# Controls when the action will run.
+on:
+  push:
+    branches: [ giddh-2.0, beta-stage, beta-branch, production ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+concurrency: beta-build
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch_name=${GITHUB_REF##*/}" >> $GITHUB_ENV
+        id: extract_branch
+      - if: ${{env.branch_name == 'giddh-2.0'}}
+        run: echo "BUILD_ENV=Test" >> $GITHUB_ENV
+      - if: ${{env.branch_name == 'beta-stage'}}
+        run: echo "BUILD_ENV=Stage" >> $GITHUB_ENV
+      - if: ${{env.branch_name == 'beta-branch'}}
+        run: echo "BUILD_ENV=Beta" >> $GITHUB_ENV
+      - if: ${{env.branch_name == 'production'}}
+        run: echo "BUILD_ENV=Prod" >> $GITHUB_ENV
+      - run: echo ${{ env.BUILD_ENV }}
+      # Runs a single command to install Node
+      - name: Install Node.js & NPM
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+#       Runs npm i
+      - uses: bahmutov/npm-install@v1
+        env:
+          CYPRESS_INSTALL_BINARY: 0
+        with:
+          useLockFile: false
+          useRollingCache: true
+          working-directory: .
+      - name: Creating Test bundle
+        if: ${{ env.BUILD_ENV == 'Test' }}
+        run: npm run build-test
+      - name: Copy Test folder
+        if: ${{ env.BUILD_ENV == 'Test' }}
+        run: |
+          mkdir public
+          cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh-test /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
+      - name: Creating Stage bundle
+        if: ${{ env.BUILD_ENV == 'Stage' }}
+        run: npm run build-stage
+      - name: Copy Stage folder
+        if: ${{ env.BUILD_ENV == 'Stage' }}
+        run: |
+          mkdir public
+          cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh-stage /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
+      - name: Creating Beta bundle
+        if: ${{ env.BUILD_ENV == 'Beta' }}
+        run: npm run build-prod
+      - name: Copy Beta folder
+        if: ${{ env.BUILD_ENV == 'Beta' }}
+        run: |
+          mkdir public
+          cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh-prod /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
+      - name: Creating Prod bundle
+        if: ${{ env.BUILD_ENV == 'Prod' }}
+        run: npm run build-prod
+      - name: Copy Prod folder
+        if: ${{ env.BUILD_ENV == 'Prod' }}
+        run: |
+          mkdir public
+          cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh-prod /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
+      - name: Create ZIP folder
+        run:
+          zip -r public.zip public
+      - name: Deploy to TEST env.
+        if: ${{ env.BUILD_ENV == 'Test' }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws s3 cp \
+            --acl private \
+            --region ap-south-1 \
+            /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip s3://${{ secrets.UI_TEST_BUILD_S3_FOLDER }}
+      - name: Deploy to STAGE env.
+        if: ${{ env.BUILD_ENV == 'Stage' }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws s3 cp \
+            --acl private \
+            --region ap-south-1 \
+            /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip s3://${{ secrets.UI_STAGE_BUILD_S3_FOLDER }}
+      - name: Deploy to BETA env.
+        if: ${{ env.BUILD_ENV == 'Beta' }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws s3 cp \
+            --acl private \
+            --region ap-south-1 \
+            /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip s3://${{ secrets.UI_BETA_BUILD_S3_FOLDER }}
+      - name: Deploy to PROD env.
+        if: ${{ env.BUILD_ENV == 'Prod' }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws s3 cp \
+            --acl private \
+            --region ap-south-1 \
+            /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip s3://${{ secrets.UI_PROD_BUILD_S3_FOLDER }}
+      - name: Slack Notification Success
+        if: ${{ success() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
+          SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
+          SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
+          SLACK_MESSAGE: Build succeeded
+          SLACK_FOOTER: ''
+          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+      - name: Slack Notification Failure
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
+          SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
+          SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
+          SLACK_MESSAGE: Build failed
+          SLACK_FOOTER: ''
+          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+      - name: Slack Notification Cancelled
+        if: ${{ cancelled() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'red' or '#ff00ff'
+          SLACK_TITLE: Giddh UI ${{ env.BUILD_ENV }} build
+          SLACK_USERNAME: Giddh UI ${{ env.BUILD_ENV }} build
+          SLACK_MESSAGE: Build cancelled
+          SLACK_FOOTER: ''
+          SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing

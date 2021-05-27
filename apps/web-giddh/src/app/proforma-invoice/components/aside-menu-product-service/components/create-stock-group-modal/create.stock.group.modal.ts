@@ -82,16 +82,16 @@ export class SalesAddStockGroupComponent implements OnInit, OnDestroy {
 			this.isGroupNameAvailable$.subscribe(a => {
 				if (a !== null && a !== undefined) {
 					if (a) {
-						this.addStockGroupForm.patchValue({ uniqueName: val });
+						this.addStockGroupForm?.patchValue({ uniqueName: val });
 					} else {
-						this.addStockGroupForm.patchValue({ uniqueName: val + 1 });
+						this.addStockGroupForm?.patchValue({ uniqueName: val + 1 });
 					}
 				} else {
-					this.addStockGroupForm.patchValue({ uniqueName: val + 1 });
+					this.addStockGroupForm?.patchValue({ uniqueName: val + 1 });
 				}
 			});
 		} else {
-			this.addStockGroupForm.patchValue({ uniqueName: null });
+			this.addStockGroupForm?.patchValue({ uniqueName: null });
 		}
 	}
 

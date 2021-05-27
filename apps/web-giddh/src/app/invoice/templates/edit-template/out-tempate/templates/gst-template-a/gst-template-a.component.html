@@ -53,7 +53,7 @@
               </tr> -->
                                     </tbody>
                                 </table>
-                                <p class="word-break" *ngIf="showGstComposition && fieldsAndVisibility.header.gstComposition?.display">{{(fieldsAndVisibility.header.gstComposition?.label) ? fieldsAndVisibility.header.gstComposition?.label : "Registered under Composition Scheme"}}</p>
+                                <p class="word-break" *ngIf="voucherType==='sales' && showGstComposition && fieldsAndVisibility.header.gstComposition?.display">{{(fieldsAndVisibility.header.gstComposition?.label) ? fieldsAndVisibility.header.gstComposition?.label : "Registered under Composition Scheme"}}</p>
                             </td>
 
                             <td class="pull-right">
@@ -771,7 +771,7 @@
                                     <hr *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label">
                                     <ng-container *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display">
                                         <strong>
-                                            <small>
+                                            <small class="word-break">
                                                 {{fieldsAndVisibility.footer.textUnderSlogan?.label}}
                                             </small>
                                         </strong>
@@ -784,7 +784,7 @@
                                             class="inner-img-signature" alt=" " />
                                         <hr *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display || fieldsAndVisibility.footer.slogan?.label">
                                         <strong *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display">
-                                            <small>
+                                            <small class="word-break">
                                                 {{fieldsAndVisibility.footer.textUnderSlogan?.label}}
                                             </small>
                                         </strong>
