@@ -255,9 +255,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         this.selectedGstr3BTab = tabType;
     }
 
-	/**
-	 * onDownloadSheetGSTR
-	 */
+    /**
+     * onDownloadSheetGSTR
+     */
 
     public emailGSTR3bSheet(isDownloadDetailSheet: boolean) {
 

@@ -36,7 +36,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public notFoundMsg: string = 'No results found';
     @Input() public notFoundLinkText: string = 'Create New';
     @Input() public notFoundLink: boolean = false;
-    @ContentChild('notFoundLinkTemplate', {static: true}) public notFoundLinkTemplate: TemplateRef<any>;
+    @ContentChild('notFoundLinkTemplate', { static: true }) public notFoundLinkTemplate: TemplateRef<any>;
     @Input() public showNotFoundLinkAsDefault: boolean = false;
     @Input() public isFilterEnabled: boolean = true;
     @Input() public width: string = 'auto';
@@ -75,11 +75,11 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     /** To unsubscribe from the dynamic search query subscription */
     private stopDynamicSearch$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    @ViewChild('inputFilter', {static: false}) public inputFilter: ElementRef;
-    @ViewChild('mainContainer', {static: true}) public mainContainer: ElementRef;
-    @ViewChild('menuEle', {static: true}) public menuEle: ShSelectMenuComponent;
-    @ContentChild('optionTemplate', {static: true}) public optionTemplate: TemplateRef<any>;
-    @ViewChild('dd', {static: true}) public ele: ElementRef;
+    @ViewChild('inputFilter', { static: false }) public inputFilter: ElementRef;
+    @ViewChild('mainContainer', { static: true }) public mainContainer: ElementRef;
+    @ViewChild('menuEle', { static: true }) public menuEle: ShSelectMenuComponent;
+    @ContentChild('optionTemplate', { static: true }) public optionTemplate: TemplateRef<any>;
+    @ViewChild('dd', { static: true }) public ele: ElementRef;
     @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onClear: EventEmitter<any> = new EventEmitter<any>(); // emits last cleared value
@@ -223,7 +223,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
      * @memberof ShSelectComponent
      */
     public handleInputChange(inputText: string): void {
-        if(inputText) {
+        if (inputText) {
             if (!this.enableDynamicSearch) {
                 this.updateFilter(inputText);
             }
@@ -463,11 +463,11 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
 
         this.selectedValues = [];
-        if(hide) {
+        if (hide) {
             this.onChange();
         }
         this.clearFilter();
-        if(hide) {
+        if (hide) {
             this.hide();
         }
     }
@@ -520,7 +520,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             }
         }
 
-        if('placeholder' in changes) {
+        if ('placeholder' in changes) {
             if (changes.placeholder && changes.placeholder.currentValue) {
                 this.placeholder = changes.placeholder.currentValue;
             }

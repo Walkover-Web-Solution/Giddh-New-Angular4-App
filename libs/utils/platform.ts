@@ -110,7 +110,7 @@ export function download(filename, data, mimeType) {
                     );
                 },
                 (err) => {
-                   
+
                 }
             );
         });

@@ -21,14 +21,14 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
     styleUrls: [`./eWayBill.create.component.scss`]
 })
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
-    @ViewChild('eWayBillCredentials', {static: true}) public eWayBillCredentials: ModalDirective;
-    @ViewChild('generateInvForm', {static: true}) public generateEwayBillForm: NgForm;
-    @ViewChild('generateTransporterForm', {static: true}) public generateNewTransporterForm: NgForm;
-    @ViewChild('invoiceRemoveConfirmationModel', {static: true}) public invoiceRemoveConfirmationModel: ModalDirective;
-    @ViewChild('subgrp', {static: true}) public subgrp: any;
-    @ViewChild('doctypes', {static: true}) public doctype: any;
+    @ViewChild('eWayBillCredentials', { static: true }) public eWayBillCredentials: ModalDirective;
+    @ViewChild('generateInvForm', { static: true }) public generateEwayBillForm: NgForm;
+    @ViewChild('generateTransporterForm', { static: true }) public generateNewTransporterForm: NgForm;
+    @ViewChild('invoiceRemoveConfirmationModel', { static: true }) public invoiceRemoveConfirmationModel: ModalDirective;
+    @ViewChild('subgrp', { static: true }) public subgrp: any;
+    @ViewChild('doctypes', { static: true }) public doctype: any;
 
-    @ViewChild('trans', {static: true}) public transport: any;
+    @ViewChild('trans', { static: true }) public transport: any;
 
     public invoiceNumber: string = '';
     public invoiceBillingGstinNo: string = '';
@@ -88,35 +88,19 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         backdrop: 'static',
         ignoreBackdropClick: true
     };
-    public SubsupplyTypesList: IOption[] = [
-        { value: '1', label: 'Supply' },
-        { value: '3', label: 'Export' },
-        { value: '4', label: 'Job Work' },
-        { value: '9', label: 'SKD/CKD/Lots' },
-    ];
-    // "INV", "CHL", "BIL","BOE","CNT","OTH"
-    public SupplyTypesList: IOption[] = [
-        { value: 'O', label: 'Inward' },
-        { value: 'I', label: 'Outward' },
-    ];
-    public ModifiedTransporterDocType: IOption[] = [
-        { value: 'INV', label: 'Invoice' },
-        { value: 'BIL', label: 'Bill of Supply' },
-        { value: 'CHL', label: 'Delivery Challan' },
-    ];
-    public TransporterDocType = [{ value: 'INV', label: 'Invoice' },
-    { value: 'BIL', label: 'Bill of Supply' },
-    { value: 'CHL', label: 'Delivery Challan' },
-    ];
-    public transactionType: IOption[] = [
-        { value: '1', label: 'Regular' },
-        { value: '2', label: 'Credit Notes' },
-        { value: '3', label: 'Delivery challan' }
-    ];
+    public SubsupplyTypesList: IOption[] = [];
+    public SupplyTypesList: IOption[] = [];
+    public ModifiedTransporterDocType: IOption[] = [];
+    public TransporterDocType = [];
+    public transactionType: IOption[] = [];
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
@@ -195,8 +179,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 this.clearTransportForm();
             }
         });
-
-        this.setCurrentPageTitle("Invoice > E-way bill");
     }
 
     public clearTransportForm() {
@@ -300,7 +282,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     public removeInvoice(invoice: any[]) {
         this.confirmationFlag = 'closeConfirmation';
-        this.deleteTemplateConfirmationMessage = `Are you sure want to remove invoice \'${this.selectedInvoices[0].voucherNumber}\' ?`;
+
+        let removeInvoice = this.localeData?.remove_invoice;
+        removeInvoice = removeInvoice?.replace("[VOUCHER_NUMBER]", this.selectedInvoices[0].voucherNumber);
+        this.deleteTemplateConfirmationMessage = removeInvoice;
         this.invoiceRemoveConfirmationModel.show();
     }
 
@@ -346,9 +331,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.doctype.clear();
         this.TransporterDocType = this.ModifiedTransporterDocType;
         if (event) {
-            if (event.label === 'Supply' || event.label === 'Export') {
+            if (event.label === this.localeData?.subsupply_types_list?.supply || event.label === this.localeData?.subsupply_types_list?.export) {
                 this.TransporterDocType = this.TransporterDocType.filter((item) => item.value !== 'CHL');
-            } else if (event.label === 'Job Work') {
+            } else if (event.label === this.localeData?.subsupply_types_list?.job_work) {
                 this.TransporterDocType = this.TransporterDocType.filter((item) => item.value !== 'INV' && item.value !== 'BIL');
             } else {
                 this.TransporterDocType = this.ModifiedTransporterDocType;
@@ -356,10 +341,43 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
     }
 
-    public setCurrentPageTitle(title) {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = title;
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof EWayBillCreateComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.SubsupplyTypesList = [
+                { value: '1', label: this.localeData?.subsupply_types_list?.supply },
+                { value: '3', label: this.localeData?.subsupply_types_list?.export },
+                { value: '4', label: this.localeData?.subsupply_types_list?.job_work },
+                { value: '9', label: this.localeData?.subsupply_types_list?.skd_ckd_lots }
+            ];
+
+            this.SupplyTypesList = [
+                { value: 'O', label: this.localeData?.supply_types_list?.inward },
+                { value: 'I', label: this.localeData?.supply_types_list?.outward }
+            ];
+
+            this.ModifiedTransporterDocType = [
+                { value: 'INV', label: this.localeData?.modified_transporter_doc_type?.invoice },
+                { value: 'BIL', label: this.localeData?.modified_transporter_doc_type?.bill_supply },
+                { value: 'CHL', label: this.localeData?.modified_transporter_doc_type?.delivery_challan }
+            ];
+
+            this.TransporterDocType = [
+                { value: 'INV', label: this.localeData?.modified_transporter_doc_type?.invoice },
+                { value: 'BIL', label: this.localeData?.modified_transporter_doc_type?.bill_supply },
+                { value: 'CHL', label: this.localeData?.modified_transporter_doc_type?.delivery_challan }
+            ];
+
+            this.transactionType = [
+                { value: '1', label: this.localeData?.transaction_type?.regular },
+                { value: '2', label: this.localeData?.transaction_type?.credit_notes },
+                { value: '3', label: this.localeData?.transaction_type?.delivery_challan }
+            ];
+        }
     }
 }

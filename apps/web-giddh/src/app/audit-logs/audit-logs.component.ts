@@ -85,7 +85,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
-                /** Universal date observer */
+        /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
@@ -142,7 +142,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsFormComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }

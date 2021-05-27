@@ -7,7 +7,8 @@
 <!-- filter area-->
 <ng-container>
     <hamburger-menu class="gst-menu-item" [pageHeading]="'GST'"></hamburger-menu>
-    <div class="text-overdue ss" *ngIf="!activeCompanyGstNumber && !isTaxApiInProgress && !taxes?.length && !((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
+    <div class="text-overdue ss"
+        *ngIf="!activeCompanyGstNumber && !isTaxApiInProgress && !taxes?.length && !((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
         <i class="text-middle">Please add GSTIN to your default address in order to view report.</i>
     </div>
 
@@ -16,14 +17,9 @@
             <label>GSTIN:</label>
         </div>
         <div class="tax-dropdown col-md-9 col-sm-9 col-12">
-            <sh-select [options]="taxes"
-                [(ngModel)]="activeCompanyGstNumber"
-                (selected)="selectTax($event)"
-                [defaultValue]="activeCompanyGstNumber"
-                placeholder="Select GSTIN"
-                [showClear]="false" [multiple]="false"
-                [ItemHeight]="67"
-                [isRequired]="true">
+            <sh-select [options]="taxes" [(ngModel)]="activeCompanyGstNumber" (selected)="selectTax($event)"
+                [defaultValue]="activeCompanyGstNumber" placeholder="Select GSTIN" [showClear]="false"
+                [multiple]="false" [ItemHeight]="67" [isRequired]="true">
             </sh-select>
         </div>
 
@@ -80,7 +76,8 @@
                                 </li>
 
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)" (click)="updateDatepickerVisibility('visible'); monthWise.hide()">
+                                    <a class="dropdown-item" href="javascript:void(0)"
+                                        (click)="updateDatepickerVisibility('visible'); monthWise.hide()">
                                         <label for="daterangeInput" class="d-block cp">Custom Range
                                             <div class="pull-right">
                                                 <span class="caret rotate-90"></span>
@@ -91,7 +88,8 @@
                                         <input id="daterangeInput" type="text" name="daterangeInput"
                                             [options]="{'autoApply': true}" #dateRangePickerCmp daterangepicker
                                             class="form-control daterangePicker"
-                                            (applyDaterangepicker)="periodChanged($event);" (hideDaterangepicker)="updateDatepickerVisibility('hidden')" />
+                                            (applyDaterangepicker)="periodChanged($event);"
+                                            (hideDaterangepicker)="updateDatepickerVisibility('hidden')" />
                                     </a>
                                 </li>
 
@@ -243,7 +241,8 @@
                                     </svg>
                                     <div class="font-large"><b>2. Push to GSTN</b></div>
                                 </div>
-                                <div *ngIf="isCompany" class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
+                                <div *ngIf="isCompany"
+                                    class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
                                     (click)="navigateToTab(2, GstReport.Gstr1)">
                                     <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                         class="icon filing-step-icon">t
@@ -329,7 +328,8 @@
                             </svg>
                             <i class="text-middle p-0 mr-l05">We've temporarily disabled the GSTR-2 push
                                 option in
-                                Giddh Books as GSTN has disabled it.</i></div>
+                                Giddh Books as GSTN has disabled it.</i>
+                        </div>
                     </div>
 
                     <!--   -->
@@ -434,4 +434,3 @@
 <!-- main data-->
 
 <filing-header [isCompany]="isCompany" [currentPeriod]="currentPeriod" [fileGstr3b]="returnGstr3B"></filing-header>
-

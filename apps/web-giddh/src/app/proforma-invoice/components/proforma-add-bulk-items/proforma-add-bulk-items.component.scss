@@ -136,16 +136,16 @@
     overflow-y: auto;
     padding-bottom: 60px;
 }
-.add-item-btn{
-        display: flex !important;
-        flex-wrap: nowrap;
-    .btn-number{
+.add-item-btn {
+    display: flex !important;
+    flex-wrap: nowrap;
+    .btn-number {
         margin-right: 0;
     }
-    .minus-btn{
+    .minus-btn {
         border-right: none;
     }
-    input.form-control.input-number{
+    input.form-control.input-number {
         height: 35px !important;
     }
 }

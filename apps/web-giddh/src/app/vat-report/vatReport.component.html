@@ -1,4 +1,5 @@
-<section appTranslate [file]="'vat-report'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<section appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <nav class="navbar">
         <div class="relative w-100">
             <hamburger-menu [pageHeading]="localeData?.tab_heading"></hamburger-menu>
@@ -7,25 +8,32 @@
                     <div class="vat-report w-100" id="setting-tab">
                         <tabset #staticTabs>
                             <tab heading="{{commonLocaleData?.tab_heading}}">
-                                <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'" class="row mb-3 mt-3">
+                                <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                                    class="row mb-3 mt-3">
                                     <div class="tax-heading col-md-3 col-sm-3 col-12">
                                         <label>{{commonLocaleData?.entity}}:</label>
                                     </div>
                                     <div class="tax-dropdown col-md-9 col-sm-9 col-12 linked-entities">
                                         <div class="form-group">
-                                            <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
-                                                [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
-                                                [isFilterEnabled]="true" [placeholder]="localeData?.select_entity" [fixedValue]="currentBranch?.alias">
+                                            <sh-select [options]="currentCompanyBranches"
+                                                [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
+                                                [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
+                                                [isFilterEnabled]="true" [placeholder]="localeData?.select_entity"
+                                                [fixedValue]="currentBranch?.alias">
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
                                                         <a href="javascript:void(0)" class="list-item d-flex">
                                                             <span class="entity-icon">
-                                                                <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
+                                                                <i class="icon-branch-icon pull-right"
+                                                                    *ngIf="!option.isCompany"
                                                                     tooltip="{{commonLocaleData?.app_branch}}"></i>
-                                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="{{commonLocaleData?.app_company}}"></i>
+                                                                <i class="icon-company-profile pull-right"
+                                                                    *ngIf="option.isCompany"
+                                                                    tooltip="{{commonLocaleData?.app_company}}"></i>
                                                             </span>
                                                             <span class="entity-details">
-                                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                                                <div class="item giddh-limit single-line-clamp">{{
+                                                                    option.label || '-' }}</div>
                                                                 <div class="item-unique giddh-limit single-line-clamp">
                                                                     {{ option.name || '-' }}
                                                                 </div>
@@ -42,13 +50,9 @@
                                         <label>{{commonLocaleData?.app_trn}}:</label>
                                     </div>
                                     <div class="tax-dropdown col-md-9 col-sm-9 col-12">
-                                        <sh-select [options]="taxes"
-                                            [(ngModel)]="taxNumber"
-                                            (selected)="getVatReport()"
-                                            [defaultValue]="taxNumber"
-                                            [placeholder]="localeData?.select_trn"
-                                            [showClear]="false" [multiple]="false"
-                                            [ItemHeight]="67"
+                                        <sh-select [options]="taxes" [(ngModel)]="taxNumber" (selected)="getVatReport()"
+                                            [defaultValue]="taxNumber" [placeholder]="localeData?.select_trn"
+                                            [showClear]="false" [multiple]="false" [ItemHeight]="67"
                                             [isRequired]="true">
                                         </sh-select>
                                     </div>
@@ -61,7 +65,8 @@
                                             <span class="input-wrapper">
                                                 <div class="btn-group dropdown" dropdown [autoClose]="false"
                                                     (isOpenChange)="onOpenChange($event)" #periodDropdown="bs-dropdown"
-                                                    (clickOutside)="checkIfDatepickerVisible()" [attachOutsideOnClick]="true">
+                                                    (clickOutside)="checkIfDatepickerVisible()"
+                                                    [attachOutsideOnClick]="true">
                                                     <button id="button-nested" dropdownToggle type="button"
                                                         class="dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle pull-left"
                                                         aria-controls="dropdown-nested">
@@ -69,24 +74,26 @@
                                                             {{ moment(selectedMonth).format('MMMM YYYY') }}
                                                         </ng-container>
                                                         <ng-container *ngIf="!isMonthSelected">
-                                                            {{moment(currentPeriod?.from, giddhDateFormat).format('DD MMM YYYY')}}
+                                                            {{moment(currentPeriod?.from, giddhDateFormat).format('DD
+                                                            MMM YYYY')}}
                                                             -
-                                                            {{moment(currentPeriod?.to, giddhDateFormat).format('DD MMM YYYY')}}
+                                                            {{moment(currentPeriod?.to, giddhDateFormat).format('DD MMM
+                                                            YYYY')}}
                                                         </ng-container>
                                                         <span class="caret"></span>
                                                     </button>
-                                                    <ul id="dropdown-nested" *dropdownMenu class="dropdown-menu" role="menu"
-                                                        aria-labelledby="button-nested">
-                                                        <li role="menuitem" dropdown placement="right" [autoClose]="false"
-                                                            #monthWise="bs-dropdown">
+                                                    <ul id="dropdown-nested" *dropdownMenu class="dropdown-menu"
+                                                        role="menu" aria-labelledby="button-nested">
+                                                        <li role="menuitem" dropdown placement="right"
+                                                            [autoClose]="false" #monthWise="bs-dropdown">
                                                             <a dropdownToggle class="dropdown-item dropdown-toggle cp">
                                                                 {{commonLocaleData?.app_month_wise}}
                                                                 <div class="pull-right">
                                                                     <span class="caret rotate-90"></span>
                                                                 </div>
                                                             </a>
-                                                            <ul *dropdownMenu class="dropdown-menu month-picker" role="menu"
-                                                                id="monthPicker">
+                                                            <ul *dropdownMenu class="dropdown-menu month-picker"
+                                                                role="menu" id="monthPicker">
                                                                 <li role="menuitem">
                                                                     <a class="dropdown-item" href="javascript:void(0)">
                                                                         <datepicker [datepickerMode]="'month'"
@@ -104,15 +111,18 @@
                                                         <li role="menuitem">
                                                             <a class="dropdown-item" href="javascript:void(0)"
                                                                 (click)="updateDatepickerVisibility('visible'); monthWise.hide()">
-                                                                <label for="daterangeInput" class="d-block cp">{{commonLocaleData?.app_custom_range}}
+                                                                <label for="daterangeInput"
+                                                                    class="d-block cp">{{commonLocaleData?.app_custom_range}}
                                                                     <div class="pull-right">
                                                                         <span class="caret rotate-90"></span>
                                                                     </div>
                                                                 </label>
-                                                                <input id="daterangeInput" type="text" name="daterangeInput"
+                                                                <input id="daterangeInput" type="text"
+                                                                    name="daterangeInput"
                                                                     [options]="{'autoApply': true}" #dateRangePickerCmp
                                                                     daterangepicker class="form-control daterangePicker"
-                                                                    (applyDaterangepicker)="periodChanged($event);" (hideDaterangepicker)="updateDatepickerVisibility('hidden')" />
+                                                                    (applyDaterangepicker)="periodChanged($event);"
+                                                                    (hideDaterangepicker)="updateDatepickerVisibility('hidden')" />
                                                             </a>
                                                         </li>
 
@@ -124,7 +134,7 @@
                                     <div class="clearfix" *ngIf="taxNumber">
                                         <button type="button" class="btn btn-default" (click)="downloadVatReport()"><i
                                                 class=" icon-download1"></i>
-                                                {{commonLocaleData?.app_download}}
+                                            {{commonLocaleData?.app_download}}
                                         </button>
                                     </div>
                                 </div>
@@ -140,7 +150,8 @@
                                                         <th width="5%"></th>
                                                         <th width="40%"></th>
                                                         <th width="10%"></th>
-                                                        <th width="15%" class="text-right">{{commonLocaleData?.app_amount}}
+                                                        <th width="15%" class="text-right">
+                                                            {{commonLocaleData?.app_amount}}
                                                             ({{activeCompany.baseCurrency}})</th>
                                                         <th width="15%" class="text-right">{{localeData?.vat_amount}}
                                                             ({{activeCompany.baseCurrency}})</th>
@@ -151,9 +162,12 @@
                                                 <tbody>
                                                     <tr *ngFor="let reportSections of report.sections; let i = index">
                                                         <td>{{reportSections.section}}</td>
-                                                        <td><a href="javascript:;" (click)="viewVatReportTransactions(reportSections.section)">{{reportSections.description}}</a></td>
+                                                        <td><a href="javascript:;"
+                                                                (click)="viewVatReportTransactions(reportSections.section)">{{reportSections.description}}</a>
+                                                        </td>
                                                         <td class="invoice-preview">
-                                                            <a href="javascript:void(0)" class="text-light invoice-preview"
+                                                            <a href="javascript:void(0)"
+                                                                class="text-light invoice-preview"
                                                                 *ngIf="reportSections.toolTip"
                                                                 tooltip="{{reportSections.toolTip}}"><span
                                                                     class="icon-info text-light"></span></a>
@@ -173,16 +187,19 @@
                                                         <td>{{commonLocaleData?.app_total}}</td>
                                                         <td>
                                                             <a href="javascript:void(0)" class="text-light"
-                                                                *ngIf="report.toolTip" tooltip="{{report.toolTip}}"><span
+                                                                *ngIf="report.toolTip"
+                                                                tooltip="{{report.toolTip}}"><span
                                                                     class="icon-info text-light"></span></a>
                                                         </td>
                                                         <td class="text-right">{{activeCompany.baseCurrencySymbol}}
                                                             {{report.totalAmount | giddhCurrency}}</td>
-                                                        <td class="text-right"><span *ngIf="i === 0">{{localeData?.a}}</span><span
+                                                        <td class="text-right"><span
+                                                                *ngIf="i === 0">{{localeData?.a}}</span><span
                                                                 *ngIf="i === 1">{{localeData?.c}}</span>
                                                             {{activeCompany.baseCurrencySymbol}}
                                                             {{report.totalVatAmount | giddhCurrency}}</td>
-                                                        <td class="text-right"><span *ngIf="i === 0">{{localeData?.b}}</span><span
+                                                        <td class="text-right"><span
+                                                                *ngIf="i === 0">{{localeData?.b}}</span><span
                                                                 *ngIf="i === 1">{{localeData?.d}}</span>
                                                             {{activeCompany.baseCurrencySymbol}}
                                                             {{report.totalAdjustmentAmount | giddhCurrency}}</td>
@@ -213,7 +230,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div *ngIf="!isTaxApiInProgress && !vatReport?.length && !taxes?.length" class="no-data no-report">
+                                <div *ngIf="!isTaxApiInProgress && !vatReport?.length && !taxes?.length"
+                                    class="no-data no-report">
                                     <h1>{{localeData?.no_trn_available}}</h1>
                                 </div>
                             </tab>

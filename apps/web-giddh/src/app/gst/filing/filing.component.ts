@@ -15,11 +15,11 @@ import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
-	// tslint:disable-next-line:component-selector
-	selector: 'filing',
-	templateUrl: 'filing.component.html',
-	styleUrls: ['filing.component.scss'],
-	encapsulation: ViewEncapsulation.Emulated
+    // tslint:disable-next-line:component-selector
+    selector: 'filing',
+    templateUrl: 'filing.component.html',
+    styleUrls: ['filing.component.scss'],
+    encapsulation: ViewEncapsulation.Emulated
 })
 export class FilingComponent implements OnInit, OnDestroy {
 	@ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
@@ -44,7 +44,7 @@ export class FilingComponent implements OnInit, OnDestroy {
     /** True, if HSN tab needs to be opened by default (required if a user clicks on HSN data in GSTR1) */
     public showHsn: boolean;
 
-	public gstr1OverviewDataInProgress$: Observable<boolean>;
+    public gstr1OverviewDataInProgress$: Observable<boolean>;
     public gstr2OverviewDataInProgress$: Observable<boolean>;
 
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
@@ -68,16 +68,16 @@ export class FilingComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private _gstAction: GstReconcileActions,
         private generalService: GeneralService) {
-		this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
-		this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
-		this.gstr1OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
-		this.gstr2OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
-		this.gstr1OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataInProgress), takeUntil(this.destroyed$));
-		this.gstr2OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataInProgress), takeUntil(this.destroyed$));
+        this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
+        this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
+        this.gstr1OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
+        this.gstr2OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
+        this.gstr1OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataInProgress), takeUntil(this.destroyed$));
+        this.gstr2OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataInProgress), takeUntil(this.destroyed$));
 
-		this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
+        this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
 
-		this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompanyGstNumber !== response) {
                 this.activeCompanyGstNumber = response;
             }

@@ -49,11 +49,11 @@
         cursor: auto;
     }
 }
-@media screen and (max-width:768px) {
-    .basic{
-        tbody{
-            tr{
-                td{
+@media screen and (max-width: 768px) {
+    .basic {
+        tbody {
+            tr {
+                td {
                     white-space: normal !important;
                     word-break: break-all !important;
                 }

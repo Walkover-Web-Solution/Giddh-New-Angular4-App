@@ -30,6 +30,10 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     };
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService) {
 
@@ -41,7 +45,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public ngOnInit(): void {
-        if(this.moveSelectedCompany) {
+        if (this.moveSelectedCompany) {
             this.getCompanyDetails();
         }
     }
@@ -91,12 +95,12 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
             if (response && response.status === "success" && response.body) {
                 this.moveSelectedCompany = response.body;
 
-                if(this.subscriptions && this.subscriptions.length > 0) {
+                if (this.subscriptions && this.subscriptions.length > 0) {
                     this.subscriptions.forEach(plan => {
-                        if(plan.subscriptionId && plan.planDetails && plan.planDetails.companiesLimit > plan.totalCompanies && this.moveSelectedCompany && this.moveSelectedCompany.subscription && this.moveSelectedCompany.subscription.planDetails && this.moveSelectedCompany.subscription.planDetails.uniqueName !== plan.planDetails.uniqueName && this.availablePlans[plan.planDetails.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
-                            this.availablePlansOption.push({label: plan.planDetails.name, value: plan.planDetails.uniqueName});
+                        if (plan.subscriptionId && plan.planDetails && plan.planDetails.companiesLimit > plan.totalCompanies && this.moveSelectedCompany && this.moveSelectedCompany.subscription && this.moveSelectedCompany.subscription.planDetails && this.moveSelectedCompany.subscription.planDetails.uniqueName !== plan.planDetails.uniqueName && this.availablePlans[plan.planDetails.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
+                            this.availablePlansOption.push({ label: plan.planDetails.name, value: plan.planDetails.uniqueName });
 
-                            if(this.availablePlans[plan.planDetails.uniqueName] === undefined) {
+                            if (this.availablePlans[plan.planDetails.uniqueName] === undefined) {
                                 this.availablePlans[plan.planDetails.uniqueName] = [];
                             }
 
@@ -116,5 +120,17 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * This will return move plan text
+     *
+     * @returns {string}
+     * @memberof MoveCompanyComponent
+     */
+    public getMovePlanText(): string {
+        let text = this.localeData?.subscription?.move_plan_note;
+        text = text?.replace("[COMPANY_NAME]", this.moveSelectedCompany?.name)?.replace("[PLAN_NAME]", this.moveSelectedCompany?.subscription?.planDetails?.name);
+        return text;
     }
 }

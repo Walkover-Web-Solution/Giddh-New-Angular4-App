@@ -2,8 +2,8 @@
 .create-purchase-order-form {
     position: relative;
 }
-form{
-    label{
+form {
+    label {
         justify-content: flex-start !important;
     }
 }
@@ -61,7 +61,7 @@ form{
                 }
             }
             .wrap-billing-address {
-                .form-group.row{
+                .form-group.row {
                     display: flex !important;
                 }
                 .billing-address {
@@ -88,7 +88,7 @@ form{
                             outline: none !important;
                         }
                     }
-                     textarea.form-control::-webkit-scrollbar {
+                    textarea.form-control::-webkit-scrollbar {
                         width: 5px;
                     }
                     textarea.form-control::-webkit-scrollbar-thumb {
@@ -131,14 +131,15 @@ form{
                 margin-left: 0;
                 display: flex;
                 align-items: center;
-                input{
+                input {
                     float: none !important;
                     margin-left: 0 !important;
                     margin-right: 15px !important;
                 }
             }
             .order-expected-delivery {
-                sh-select , input.form-control{
+                sh-select,
+                input.form-control {
                     width: 100%;
                 }
                 .invoice-due-date {
@@ -159,7 +160,7 @@ form{
         }
     }
 }
-.customer-purchase-order{
+.customer-purchase-order {
     .wrapper-customer-table {
         .customer-purchase-table {
             .inner-container {
@@ -274,14 +275,11 @@ form{
     padding: 0 8px;
 }
 
-
-    .list-item {
-        font-size: 14px;
-        border-bottom: 1px solid $gainsboro;
-        display:flex !important;
-    }
-
-
+.list-item {
+    font-size: 14px;
+    border-bottom: 1px solid $gainsboro;
+    display: flex !important;
+}
 
 .font-12 {
     font-size: 12px;
@@ -291,8 +289,8 @@ form{
     font-size: 11px;
 }
 
-.w-100{
-    width:100%;
+.w-100 {
+    width: 100%;
 }
 
 .table-section {
@@ -1066,19 +1064,19 @@ span.eligible-ITC {
     text-transform: capitalize;
     margin-bottom: 20px;
 }
-.bill-add{
-    label{
+.bill-add {
+    label {
         line-height: 2.3 !important;
     }
 }
-ul.change-address-dropdown{
+ul.change-address-dropdown {
     min-width: 240px;
     left: -20px !important;
     right: auto !important;
     max-height: 200px;
     overflow-y: auto;
-    li{
-        a{
+    li {
+        a {
             white-space: normal;
             word-break: break-word;
         }
@@ -1120,20 +1118,23 @@ ul.change-address-dropdown{
         font-size: 11px;
     }
 }
-.item-discount , .item-tax, .delete-btn-absolute {
+.item-discount,
+.item-tax,
+.delete-btn-absolute {
     height: 1px;
 }
-.left-currency, .right-currency {
-   .currency-digits {
+.left-currency,
+.right-currency {
+    .currency-digits {
         display: inline-block;
     }
 }
 
 /* responsive */
-@media(max-width:1199px){
+@media (max-width: 1199px) {
     .bill-add {
         margin-bottom: 15px;
-        label{
+        label {
             margin-bottom: 10px;
         }
     }
@@ -1141,16 +1142,16 @@ ul.change-address-dropdown{
         .customer-purchase-table {
             .inner-container {
                 .invoice-due-date {
-                left: -40px;
-                margin-left: 3%;
-                display: flex;
-                align-items: flex-start;
-                top: -23px;
-                justify-content: flex-start;
-                .d-flex{
-                    flex-direction: column;
+                    left: -40px;
+                    margin-left: 3%;
+                    display: flex;
                     align-items: flex-start;
-                }
+                    top: -23px;
+                    justify-content: flex-start;
+                    .d-flex {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
                 }
                 .select-customer-name {
                     sh-select,
@@ -1159,7 +1160,7 @@ ul.change-address-dropdown{
                         max-width: 82.5%;
                         width: 100%;
                     }
-                    input[type="text"]{
+                    input[type="text"] {
                         flex: 0 0 84.5%;
                         max-width: 84.5%;
                     }
@@ -1167,19 +1168,18 @@ ul.change-address-dropdown{
             }
         }
     }
-
 }
 
-@media (max-width:1024px){
+@media (max-width: 1024px) {
     .invoice-due-date {
         position: relative !important;
         width: 100% !important;
         margin-left: 0% !important;
     }
-    .customer-purchase-table.bg-white{
+    .customer-purchase-table.bg-white {
         margin-bottom: 0;
     }
-    .hsn-code-dropdown{
+    .hsn-code-dropdown {
         left: 0;
         top: 46px;
     }
@@ -1190,16 +1190,15 @@ ul.change-address-dropdown{
             display: block !important;
         }
     }
-    .height-row{
+    .height-row {
         height: 36px;
     }
 
-    .invoice-due-date{
-        .d-flex{
+    .invoice-due-date {
+        .d-flex {
             align-items: center;
         }
     }
-
 }
 @media (max-width: 990px) {
     .wrap-billing-address .bill-add {
@@ -1209,15 +1208,15 @@ ul.change-address-dropdown{
         margin-top: 20px;
     }
 }
-@media(max-width:768px){
-    .search-arrow-image{
-        left: 146px;;
+@media (max-width: 768px) {
+    .search-arrow-image {
+        left: 146px;
     }
 }
 @media (max-width: 767px) {
-.pl-0 {
-    padding-right: 0 !important;
-}
+    .pl-0 {
+        padding-right: 0 !important;
+    }
 
     .wrapper-customer-table {
         .customer-purchase-table {
@@ -1225,7 +1224,7 @@ ul.change-address-dropdown{
             .inner-container {
                 .order-expected-delivery {
                     flex-direction: column;
-                    .col-sm-6{
+                    .col-sm-6 {
                         padding-right: 0 !important;
                     }
                     .invoice-due-date {
@@ -1245,7 +1244,6 @@ ul.change-address-dropdown{
                                 width: 100% !important;
                             }
                         }
-
                     }
                 }
                 .select-customer-name {
@@ -1283,8 +1281,8 @@ ul.change-address-dropdown{
         left: 15px;
         top: 98px;
     }
-    .customer-purchase-order:before{
-            top: 153px;
+    .customer-purchase-order:before {
+        top: 153px;
     }
 }
 @media (max-width: 840px) {
@@ -1327,12 +1325,11 @@ ul.change-address-dropdown{
     }
 }
 @media (max-width: 575px) {
-
-    ul.change-address-dropdown{
+    ul.change-address-dropdown {
         left: auto !important;
         right: -25px !important;
-        li{
-            a{
+        li {
+            a {
                 white-space: normal;
                 word-break: break-word;
             }
@@ -1372,17 +1369,17 @@ ul.change-address-dropdown{
             }
         }
     }
-    .customer-purchase-order{
-    .wrapper-customer-table {
-        .customer-purchase-table {
-            .inner-container {
-                .delivery-from-field {
-                    margin-top: 50px;
+    .customer-purchase-order {
+        .wrapper-customer-table {
+            .customer-purchase-table {
+                .inner-container {
+                    .delivery-from-field {
+                        margin-top: 50px;
+                    }
                 }
             }
         }
     }
-}
 }
 
 @media (max-width: 414px) {
@@ -1449,8 +1446,8 @@ ul.change-address-dropdown{
         padding-right: 20px !important;
     }
 }
-@media (min-width: 576px){
-    .bill-add{
+@media (min-width: 576px) {
+    .bill-add {
         .form-inline .form-group {
             display: flex;
             flex: 1;

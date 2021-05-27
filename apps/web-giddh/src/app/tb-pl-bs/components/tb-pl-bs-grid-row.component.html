@@ -1,5 +1,5 @@
-<div class="row row-2 tb-pl-bs-grid-row"  [trial-accordion]="groupDetail"
-    [hidden]="!groupDetail.isVisible" *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)">
+<div class="row row-2 tb-pl-bs-grid-row" [trial-accordion]="groupDetail" [hidden]="!groupDetail.isVisible"
+    *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)">
     <div class="col-4 group" [ngStyle]="{'padding-left': padding+'px'}"
         [innerHTML]="groupDetail.groupName | uppercase | highlight:search">
     </div>

@@ -10,7 +10,6 @@ import { AlertConfig } from 'ngx-bootstrap/alert';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
-
 import { CompanyActions } from '../actions/company.actions';
 import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
 import { InvoicePurchaseActions } from '../actions/purchase-invoice/purchase-invoice.action';
@@ -176,7 +175,7 @@ export class GstComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
             }
         });
-        this.imgPath = (isElectron||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompanyGstNumber !== response) {
                 this.activeCompanyGstNumber = response;
@@ -319,7 +318,7 @@ export class GstComponent implements OnInit, OnDestroy {
 
     public checkIfDatepickerVisible() {
         setTimeout(() => {
-            if(this.datepickerVisibility === "hidden") {
+            if (this.datepickerVisibility === "hidden") {
                 this.periodDropdown.hide();
             }
         }, 500);
@@ -332,7 +331,7 @@ export class GstComponent implements OnInit, OnDestroy {
      * @memberof GstComponent
      */
     public selectTax(event?: any): void {
-        if(event && event.value) {
+        if (event && event.value) {
             this.activeCompanyGstNumber = event.value;
         }
 

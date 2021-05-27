@@ -1,7 +1,8 @@
 <div class="clearfix">
     <div class="modal-header">
         <h4 class="modal-title bg pull-left">{{commonLocaleData?.app_advance_search}}</h4>
-        <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close" (click)="closeModal.emit()">
+        <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close"
+            (click)="closeModal.emit()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -11,9 +12,11 @@
                 <label class="col-md-3">{{localeData?.adjustment_voucher_label}}</label>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" [disabled]="searchModel.adjustmentVoucherDetails.isDisabled ? 'disabled' : null"
+                        <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher"
+                            [disabled]="searchModel.adjustmentVoucherDetails.isDisabled ? 'disabled' : null"
                             [(ngModel)]="searchModel.adjustmentVoucherDetails.selectedValue"
-                            [placeholder]="localeData?.adjustment_voucher_placeholder" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
+                            [placeholder]="localeData?.adjustment_voucher_placeholder" [notFoundLink]="false"
+                            [multiple]="false" [ItemHeight]="33"
                             [options]="searchModel.adjustmentVoucherDetails.vouchers">
                         </sh-select>
                     </div>
@@ -26,8 +29,8 @@
                     <div class="form-group">
                         <sh-select class="text-left dropdown-arrow" name="totalAmount"
                             [(ngModel)]="searchModel.totalAmountFilter.selectedValue"
-                            [placeholder]="commonLocaleData?.app_select" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
-                            [options]="searchModel.totalAmountFilter.filterValues">
+                            [placeholder]="commonLocaleData?.app_select" [notFoundLink]="false" [multiple]="false"
+                            [ItemHeight]="33" [options]="searchModel.totalAmountFilter.filterValues">
                         </sh-select>
                     </div>
                 </div>
@@ -45,8 +48,8 @@
                     <div class="form-group">
                         <sh-select class="text-left dropdown-arrow" name="unusedAmount"
                             [(ngModel)]="searchModel.unusedAmountFilter.selectedValue"
-                            [placeholder]="commonLocaleData?.app_select" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
-                            [options]="searchModel.unusedAmountFilter.filterValues">
+                            [placeholder]="commonLocaleData?.app_select" [notFoundLink]="false" [multiple]="false"
+                            [ItemHeight]="33" [options]="searchModel.unusedAmountFilter.filterValues">
                         </sh-select>
                     </div>
                 </div>
@@ -59,8 +62,10 @@
             </div>
 
             <div class="clearfix mt-4">
-                <button type="button" class="btn btn-success mr-r1" (click)="confirm.emit(searchModel)">{{commonLocaleData?.app_search}}</button>
-                <button type="button" class="btn btn-cancel" (click)="cancel.emit()">{{commonLocaleData?.app_cancel}}</button>
+                <button type="button" class="btn btn-success mr-r1"
+                    (click)="confirm.emit(searchModel)">{{commonLocaleData?.app_search}}</button>
+                <button type="button" class="btn btn-cancel"
+                    (click)="cancel.emit()">{{commonLocaleData?.app_cancel}}</button>
             </div>
         </div>
     </div>

@@ -1,4 +1,5 @@
-<div class="relative" appTranslate [file]="'trial-profit-balance'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<div class="relative" appTranslate [file]="'trial-profit-balance'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
     <tabset class="setting-page tb-pl-bs-tabs" id="setting-tab" #staticTabsTBPL>
         <tab heading="{{localeData?.tabs?.trial_balance}}"
@@ -10,7 +11,7 @@
         </tab>
         <tab heading="{{localeData?.tabs?.profit_loss}}"
             (selectTab)="preventTabChangeWithRoute = false;tabChanged('profit-loss', 1); CanPLLoad = true;CanTBLoad = false;CanBSLoad = false;"
-             [id]="(CanPLLoad) ? 'giddh-page-heading': ''">
+            [id]="(CanPLLoad) ? 'giddh-page-heading': ''">
             <div class="container-fluid pd-t15">
                 <pl [selectedCompany]="selectedCompany" *ngIf="CanPLLoad"></pl>
             </div>
