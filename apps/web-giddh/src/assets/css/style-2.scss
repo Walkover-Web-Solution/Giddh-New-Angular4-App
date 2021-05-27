@@ -1439,13 +1439,20 @@ modal-container.modal {
 }
 
 .all-features-modal {
+<<<<<<< HEAD
+=======
+    width: 60%;
+>>>>>>> 6dc6609a4b... shalinee | TEST | reasponsive work
     margin: 0 auto !important;
     display: flex;
     justify-content: center;
     align-items: center;
     height: calc(100vh - 100px);
+<<<<<<< HEAD
     max-width: 940px !important;
     width: 100% !important;
+=======
+>>>>>>> 6dc6609a4b... shalinee | TEST | reasponsive work
     .modal-body {
         padding: 15px 20px;
         height: 450px;
