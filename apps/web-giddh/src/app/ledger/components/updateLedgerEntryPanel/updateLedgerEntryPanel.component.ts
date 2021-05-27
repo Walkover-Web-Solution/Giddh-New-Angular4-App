@@ -549,12 +549,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.totalTdElementWidth = event.newWidth + 10;
     }
 
-    public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent) {
-        if (!e.value) {
+    public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent, clearAccount?: boolean) {
+        if (!e.value || clearAccount) {
             // if there's no selected account set selectedAccount to null
             txn.selectedAccount = null;
             txn.inventory = null;
             txn.particular.name = undefined;
+            txn.particular.uniqueName = undefined;
+            txn.amount = 0;
 
             // check if need to showEntryPanel
             // first check with opened ledger
