@@ -21,9 +21,9 @@ export class SettingsBranchService {
         private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
-	/*
-	* Get all branches
-	*/
+    /*
+    * Get all branches
+    */
     public GetAllBranches(request: BranchFilterRequest): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
@@ -66,9 +66,9 @@ export class SettingsBranchService {
         return of(null);
     }
 
-	/**
-	 * Create Branches
-	 */
+    /**
+     * Create Branches
+     */
     public CreateBranches(model): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
@@ -79,9 +79,9 @@ export class SettingsBranchService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
-	/*
-	* Remove branch
-	*/
+    /*
+    * Remove branch
+    */
     public RemoveBranch(branchUniqueName: string): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
@@ -92,9 +92,9 @@ export class SettingsBranchService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
-	/*
-	  * Get all branches
-	  */
+    /*
+      * Get all branches
+      */
     public GetParentCompany(): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;

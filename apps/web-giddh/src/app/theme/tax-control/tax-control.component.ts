@@ -83,7 +83,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 
-    @ViewChild('taxInputElement', {static: false}) public taxInputElement: ElementRef;
+    @ViewChild('taxInputElement', { static: false }) public taxInputElement: ElementRef;
 
     public taxSum: number = 0;
     public taxTotalAmount: number = 0;
@@ -132,7 +132,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             this.change();
         }
 
-        if('taxes' in changes && changes && (Array.isArray(changes.taxes.currentValue))) {
+        if ('taxes' in changes && changes && (Array.isArray(changes.taxes.currentValue))) {
             this.prepareTaxObject();
             this.change();
         }
@@ -163,7 +163,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 if (this.date && tax.taxDetail && tax.taxDetail.length) {
                     this.taxRenderData[index].amount =
                         (moment(tax.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(moment(this.date, GIDDH_DATE_FORMAT)) || moment(tax.taxDetail[0].date, GIDDH_DATE_FORMAT) < moment(this.date, GIDDH_DATE_FORMAT)) ?
-                        tax.taxDetail[0].taxValue : 0;
+                            tax.taxDetail[0].taxValue : 0;
                 }
             } else {
 
@@ -190,7 +190,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 } else {
                     taxObj.amount = tax.taxDetail[0].taxValue;
                 }
-                    taxObj.isChecked = this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tax.uniqueName) : false;
+                taxObj.isChecked = this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tax.uniqueName) : false;
 
                 taxObj.isDisabled = false;
                 this.taxRenderData.push(taxObj);

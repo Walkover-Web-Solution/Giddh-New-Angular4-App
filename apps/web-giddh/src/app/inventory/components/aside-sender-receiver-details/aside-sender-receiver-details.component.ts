@@ -43,8 +43,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
-    @ViewChild('autoFocus', {static: true}) public autoFocus: ElementRef;
+    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
+    @ViewChild('autoFocus', { static: true }) public autoFocus: ElementRef;
 
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public showOtherDetails: boolean = false;
@@ -85,7 +85,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     }
 
     selectTab(tabId: number) {
-        if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[tabId]) {
+        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[tabId]) {
             this.staticTabs.tabs[tabId].active = true;
         }
     }
@@ -147,7 +147,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 if (activeCompany.countryV2 !== undefined && activeCompany.countryV2 !== null) {
                     this.getStates(activeCompany.countryV2.alpha2CountryCode);
                 }

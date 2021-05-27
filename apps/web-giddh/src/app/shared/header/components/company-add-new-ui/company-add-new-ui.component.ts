@@ -1,30 +1,30 @@
-import {take, takeUntil, distinctUntilChanged} from 'rxjs/operators';
-import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import {VerifyMobileActions} from '../../../../actions/verifyMobile.actions';
-import {CompanyActions} from '../../../../actions/company.actions';
-import {GeneralActions} from '../../../../actions/general/general.actions';
-import {LoginActions} from '../../../../actions/login.action';
-import {CommonActions} from '../../../../actions/common.actions';
-import {select, Store} from '@ngrx/store';
-import {Router} from '@angular/router';
-import {AuthService} from '../../../../theme/ng-social-login-module/index';
-import {GeneralService} from '../../../../services/general.service';
-import {AppState} from '../../../../store';
+import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
+import { CompanyActions } from '../../../../actions/company.actions';
+import { GeneralActions } from '../../../../actions/general/general.actions';
+import { LoginActions } from '../../../../actions/login.action';
+import { CommonActions } from '../../../../actions/common.actions';
+import { select, Store } from '@ngrx/store';
+import { Router } from '@angular/router';
+import { AuthService } from '../../../../theme/ng-social-login-module/index';
+import { GeneralService } from '../../../../services/general.service';
+import { AppState } from '../../../../store';
 import {
     CompanyResponse,
     SocketNewCompanyRequest,
     StateDetailsRequest,
     CompanyCreateRequest
 } from '../../../../models/api-models/Company';
-import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
-import {IOption} from '../../../../theme/ng-virtual-select/sh-options.interface';
-import {CompanyService} from '../../../../services/companyService.service';
-import {ToasterService} from '../../../../services/toaster.service';
-import {userLoginStateEnum} from '../../../../models/user-login-state';
-import {UserDetails} from 'apps/web-giddh/src/app/models/api-models/loginModels';
-import {NgForm} from '@angular/forms';
-import {CountryRequest} from "../../../../models/api-models/Common";
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
+import { CompanyService } from '../../../../services/companyService.service';
+import { ToasterService } from '../../../../services/toaster.service';
+import { userLoginStateEnum } from '../../../../models/user-login-state';
+import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModels';
+import { NgForm } from '@angular/forms';
+import { CountryRequest } from "../../../../models/api-models/Common";
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 
 @Component({
@@ -36,10 +36,10 @@ import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
     @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
-    @ViewChild('logoutModal', {static: true}) public logoutModal: ModalDirective;
-    @ViewChild('companyForm', {static: true}) public companyForm: NgForm;
+    @ViewChild('logoutModal', { static: true }) public logoutModal: ModalDirective;
+    @ViewChild('companyForm', { static: true }) public companyForm: NgForm;
     /** Mobile number instance */
-    @ViewChild('mobileNoEl', {static: false}) public mobileNoEl: ElementRef;
+    @ViewChild('mobileNoEl', { static: false }) public mobileNoEl: ElementRef;
     @Input() public createBranch: boolean = false;
     /** True if update mode is enabled */
     @Input() public isUpdateMode: boolean = false;
@@ -109,6 +109,10 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     public activeCompanyDetails: any;
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private socialAuthService: AuthService, private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private _generalService: GeneralService, private _toaster: ToasterService, private commonActions: CommonActions
     ) {
@@ -338,9 +342,9 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                     this.isMobileNumberValid = true;
                 } else {
                     this.isMobileNumberValid = false;
-                    this._toaster.errorToast('Invalid Contact number');
+                    this._toaster.errorToast(this.localeData?.invalid_contact_number_error);
                     ele.classList.add('error-box');
-                    this.companyForm.form.controls['contactNo'].setErrors({invalid: true});
+                    this.companyForm.form.controls['contactNo'].setErrors({ invalid: true });
                 }
             } else {
                 // branch on-boarding is carried out where no mobile field is there
@@ -348,9 +352,9 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             }
         } catch (error) {
             this.isMobileNumberValid = false;
-            this._toaster.errorToast('Invalid Contact number');
+            this._toaster.errorToast(this.localeData?.invalid_contact_number_error);
             ele.classList.add('error-box');
-            this.companyForm.form.controls['contactNo'].setErrors({invalid: true});
+            this.companyForm.form.controls['contactNo'].setErrors({ invalid: true });
         }
     }
 
@@ -422,7 +426,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
-                    this.currencies.push({label: res[key].code, value: res[key].code});
+                    this.currencies.push({ label: res[key].code, value: res[key].code });
                 });
                 this.currencySource$ = observableOf(this.currencies);
                 if (this.createBranch) {
@@ -437,7 +441,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.callingCodes).forEach(key => {
-                    this.countryPhoneCode.push({label: res.callingCodes[key], value: res.callingCodes[key]});
+                    this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
                 });
                 this.callingCodesSource$ = observableOf(this.countryPhoneCode);
             } else {
@@ -468,5 +472,17 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.companyActions.removeCompanyCreateSession());
             this.closeCompanyModal.emit();
         });
+    }
+
+    /**
+     * This will return welcome user text
+     *
+     * @returns {string}
+     * @memberof CompanyAddNewUiComponent
+     */
+    public getWelcomeUserText(): string {
+        let text = this.localeData?.welcome_user;
+        text = text?.replace("[USER]", this.logedInuser.name);
+        return text;
     }
 }

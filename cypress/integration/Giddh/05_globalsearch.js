@@ -1,7 +1,7 @@
 import TrialBalancePage from "../../support/pageObjects/TrialBalancePage";
 import GlobalSearchPage from "../../support/pageObjects/GlobalSearchPage";
 
-describe('This is Global Search Test', function() {
+describe('This is Global Search Test', function () {
 
     const globalSearchPage = new GlobalSearchPage()
 
@@ -54,7 +54,7 @@ describe('This is Global Search Test', function() {
         }
         cy.get('.scrollable-content').find('.item-details.flex-grow-1 > .width-65 > p:nth-child(1)').each(($e1, index, $list) => {
             const text = $e1.text()
-                // cy.log(text, '\n')
+            // cy.log(text, '\n')
             if (text === 'Cash') {
                 // cy.log("In If statement")
                 $e1.trigger("click")

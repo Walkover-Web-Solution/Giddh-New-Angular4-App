@@ -1,58 +1,60 @@
-<div class="modal-header">
-    <h4 class="modal-title pull-left">Schedule Now</h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal.emit(true);">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-<div class="modal-body">
-    <form [formGroup]="scheduleNowForm" class="pb-5  mb-4" (ngSubmit)="submit()">
-        <div class="row">
-            <div class="form-group col-sm-12">
-                <label>Name <sup class="text-danger">*</sup></label>
-                <input type="text" class="form-control" placeholder="Name" name="name" formControlName="name"
-                    maxlength="100" />
-            </div>
-            <div class="form-group col-sm-12">
-                <label>Email <sup class="text-danger">*</sup></label>
-                <input type="email" class="form-control" placeholder="example@gmail.com" name="email"
-                    formControlName="email" maxlength="100" />
-                <span class="error-msg"
-                    *ngIf="scheduleNowForm.get('email').dirty && scheduleNowForm.get('email').errors">Invalid Email
-                    Address</span>
-            </div>
-            <div class="form-group col-sm-12">
-                <label>Mobile Number <sup class="text-danger">*</sup></label>
-                <div>
-                    <sh-select class="pull-left select-caret phone-code-caret width-20" required name="phoneCode"
-                        placeholder="+91" [options]="callingCodes$ | async" formControlName="phoneCode"
-                        [defaultValue]="'91'"></sh-select>
-                    <input type="text" class="form-control pull-left width-765" placeholder="Mobile Number"
-                        name="mobileNo" formControlName="mobileNo" (keypress)="allowOnlyNumbers($event)" />
+<ng-container appTranslate [file]="'schedule-now'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{commonLocaleData?.app_schedule_now}}</h4>
+        <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close" (click)="closeModal.emit(true);">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="scheduleNowForm" class="pb-5  mb-4" (ngSubmit)="submit()">
+            <div class="row">
+                <div class="form-group col-sm-12">
+                    <label>{{commonLocaleData?.app_name}} <sup class="text-danger">*</sup></label>
+                    <input type="text" class="form-control" [placeholder]="commonLocaleData?.app_name" name="name" formControlName="name"
+                        maxlength="100" />
+                </div>
+                <div class="form-group col-sm-12">
+                    <label>{{commonLocaleData?.app_email}} <sup class="text-danger">*</sup></label>
+                    <input type="email" class="form-control" [placeholder]="localeData?.email_placeholder" name="email"
+                        formControlName="email" maxlength="100" />
+                    <span class="error-msg"
+                        *ngIf="scheduleNowForm.get('email').dirty && scheduleNowForm.get('email').errors">{{localeData?.invalid_email}}</span>
+                </div>
+                <div class="form-group col-sm-12">
+                    <label>{{commonLocaleData?.app_mobile_number}} <sup class="text-danger">*</sup></label>
+                    <div>
+                        <sh-select class="pull-left select-caret phone-code-caret width-20" required name="phoneCode"
+                            [placeholder]="commonLocaleData?.app_country_code" [options]="callingCodes$ | async" formControlName="phoneCode"
+                            [defaultValue]="localeData?.default_country_code"></sh-select>
+                        <input type="text" class="form-control pull-left width-765" placeholder="Mobile Number"
+                            name="mobileNo" formControlName="mobileNo" (keypress)="allowOnlyNumbers($event)" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-12">
+                    <label>{{commonLocaleData?.app_description}}</label>
+                    <textarea class="form-control" [placeholder]="commonLocaleData?.app_description" name="description"
+                        formControlName="description" maxlength="2000"></textarea>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label>{{commonLocaleData?.app_date}}</label>
+                    <giddh-datepicker [minDate]="minDate" name="date" formControlName="date" [placeholder]="commonLocaleData?.app_date"
+                        (dateSelected)="createTimeSlots()">
+                    </giddh-datepicker>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label>{{commonLocaleData?.app_time}}</label>
+                    <sh-select class="time-selection" [options]="timeSlots" name="time" formControlName="time"
+                        [isFilterEnabled]="true" [ItemHeight]="67" [forceClearReactive]="forceClear$ | async"
+                        [placeholder]="localeData?.choose_time"></sh-select>
+                </div>
+                <div class="col-sm-12 mt-2">
+                    <div class="button-group">
+                        <button class="btn btn-primary" [ladda]="isLoading$ | async"
+                            [disabled]="scheduleNowForm.invalid">{{commonLocaleData?.app_submit}}</button>
+                    </div>
                 </div>
             </div>
-            <div class="form-group col-sm-12">
-                <label>Description</label>
-                <textarea class="form-control" placeholder="Description" name="description"
-                    formControlName="description" maxlength="2000"></textarea>
-            </div>
-            <div class="form-group col-sm-6">
-                <label>Date</label>
-                <giddh-datepicker [minDate]="minDate" name="date" formControlName="date" placeholder="Date"
-                    (dateSelected)="createTimeSlots()">
-                </giddh-datepicker>
-            </div>
-            <div class="form-group col-sm-6">
-                <label>Time</label>
-                <sh-select class="time-selection" [options]="timeSlots" name="time" formControlName="time"
-                    [isFilterEnabled]="true" [ItemHeight]="67" [forceClearReactive]="forceClear$ | async"
-                    placeholder="Choose time"></sh-select>
-            </div>
-            <div class="col-sm-12 mt-2">
-                <div class="button-group">
-                    <button class="btn btn-primary" [ladda]="isLoading$ | async"
-                        [disabled]="scheduleNowForm.invalid">Submit</button>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
+</ng-container>

@@ -16,11 +16,11 @@
                             <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
                         </div>
                         <div class="d-flex align-items-center">
-                            <a href="javascript:void(0);" class="btn btn-link m-0 pd-r1" (click)="toggleAdvanceSearchPopup()">Advance search</a>
+                            <a href="javascript:void(0);" class="btn btn-link m-0 pd-r1"
+                                (click)="toggleAdvanceSearchPopup()">Advance search</a>
                             <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()"
                                 *ngIf="showAdvanceSearchIcon">
-                                <i aria-hidden="true" class="icon-refresh"
-                                    tooltip="Reset Filter"></i>
+                                <i aria-hidden="true" class="icon-refresh" tooltip="Reset Filter"></i>
                             </a>
                         </div>
                     </div>
@@ -31,7 +31,8 @@
                             <div class="btn-group mr-b1 d-inline-block" dropdown triggers="mouseover" #dp="bs-dropdown"
                                 (mouseleave)="dp.hide()">
 
-                                <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle mr-0" aria-controls="dropdown-basic">
+                                <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle mr-0"
+                                    aria-controls="dropdown-basic">
                                     More
                                     <span class="caret"></span>
                                 </button>

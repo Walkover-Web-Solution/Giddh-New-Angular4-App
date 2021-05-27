@@ -33,7 +33,7 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
      */
     public preventTabChangeWithRoute: boolean;
 
-    @ViewChild('staticTabsTBPL', {static: true}) public staticTabs: TabsetComponent;
+    @ViewChild('staticTabsTBPL', { static: true }) public staticTabs: TabsetComponent;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -43,7 +43,7 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
 
     constructor(private store: Store<AppState>, private companyActions: CompanyActions, private _route: ActivatedRoute, private router: Router, private _generalActions: GeneralActions) {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.selectedCompany = activeCompany;
             }
         });
@@ -95,7 +95,7 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
      */
     public tabChanged(tab: string, tabIndex: number): void {
         if (!this.preventTabChangeWithRoute) {
-            this.router.navigate(['/pages/trial-balance-and-profit-loss'], {queryParams: {tab, tabIndex}});
+            this.router.navigate(['/pages/trial-balance-and-profit-loss'], { queryParams: { tab, tabIndex } });
         }
         this.saveLastState(tab, tabIndex);
     }
