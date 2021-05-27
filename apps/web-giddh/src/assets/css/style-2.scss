@@ -1443,8 +1443,9 @@ modal-container.modal {
     margin-top: 0px;
     .modal-body {
         padding: 15px 30px;
-        height: 80vh;
+        height: 65vh;
         overflow-y: auto;
+        margin-right: 5px;
     }
 }
 
