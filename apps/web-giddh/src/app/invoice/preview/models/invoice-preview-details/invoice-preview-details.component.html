@@ -10,29 +10,27 @@
                 <div class="invoice-sidebar-wrapper">
 
                     <div class="invoice-search-box">
-                        <input type="text" placeholder="search" #searchElement>
+                        <input type="text" [placeholder]="commonLocaleData?.app_search" #searchElement>
 
                         <div class="btn-group" dropdown *ngIf="!isCompany && voucherType === 'sales'"
                              [autoClose]="true">
                             <button id="button-basic2" dropdownToggle type="button"
                                 class="btn btn-sky-blue dropdown-toggle dropdown-btn-new mr-0" aria-controls="dropdown-basic3">
-                                + New Invoice <span class="caret"></span>
+                                {{localeData?.new_invoice}} <span class="caret"></span>
                             </button>
                             <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu dropdown-width-small"
                                 role="menu" aria-labelledby="button-basic2">
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)" (click)="goToInvoice('cash')">Cash
-                                        Invoice</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" (click)="goToInvoice('cash')">{{localeData?.cash_invoice}}</a>
                                 </li>
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)" (click)="goToInvoice('sales')">Sales
-                                        Invoice</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" (click)="goToInvoice('sales')">{{localeData?.sales_invoice}}</a>
                                 </li>
                             </ul>
                         </div>
 
                         <button class="btn btn-sky-blue mr-0" *ngIf="!isCompany && voucherType !== 'sales'"
-                                (click)="goToInvoice()">+ New
+                                (click)="goToInvoice()">{{localeData?.new}}
                             {{voucherType | voucherTypeToNamePipe}}</button>
                     </div>
 
@@ -109,7 +107,7 @@
 
                                             <button id="button-basic" dropdownToggle type="button"
                                                     class="btn btn-sky-blue dropdown-toggle" aria-controls="dropdown-basic">
-                                                Change Status
+                                                {{localeData?.change_status}}
                                                 <span class="caret"></span>
                                             </button>
 
@@ -117,24 +115,24 @@
                                                 aria-labelledby="button-basic">
                                                 <li class="cp" role="menuitem"
                                                     (click)="updateVoucherAction.emit('accepted')"><a
-                                                    class="dropdown-item">Accepted</a></li>
+                                                    class="dropdown-item">{{localeData?.accepted}}</a></li>
 
                                                 <li class="cp" role="menuitem"
                                                     (click)="updateVoucherAction.emit('decline')"><a
-                                                    class="dropdown-item">Declined</a></li>
+                                                    class="dropdown-item">{{localeData?.declined}}</a></li>
 
                                                 <li (click)="updateVoucherAction.emit('ConvertToSalesOrder')"
                                                     *ngIf="voucherType === 'estimate' || voucherType === 'estimates'">
-                                                    <a class="cp" href="javascript:void(0)">Convert to Proforma</a>
+                                                    <a class="cp" href="javascript:void(0)">{{localeData?.convert_proforma}}</a>
                                                 </li>
 
                                                 <li (click)="updateVoucherAction.emit('ConvertToInvoice')">
-                                                    <a class="cp" href="javascript:void(0)">Convert to Invoice</a>
+                                                    <a class="cp" href="javascript:void(0)">{{localeData?.convert_invoice}}</a>
                                                 </li>
 
                                                 <li class="cp" role="menuitem"
                                                     (click)="updateVoucherAction.emit('expired')"><a
-                                                    class="dropdown-item">Expired</a></li>
+                                                    class="dropdown-item">{{localeData?.expired}}</a></li>
                                             </ul>
 
                                             <label class="labeled text-capitalize">
@@ -152,31 +150,32 @@
 
                                             <button id="button-basic2" dropdownToggle type="button"
                                                     class="btn btn-sky-blue dropdown-toggle" aria-controls="dropdown-basic2"
-                                                    *ngIf="selectedItem?.voucherStatus !== 'cancel'">Change Status <span
+                                                    *ngIf="selectedItem?.voucherStatus !== 'cancel'">{{localeData?.change_status}} <span
                                                 class="caret"></span>
                                             </button>
 
                                             <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu" role="menu"
                                                 aria-labelledby="button-basic2">
-                                                <li class="cp" role="menuitem"
+                                                <li *ngIf="voucherType === 'sales'" class="cp" role="menuitem"
                                                     (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"><a
-                                                    class="dropdown-item">Paid</a></li>
+                                                    class="dropdown-item">{{commonLocaleData?.app_payment_status?.paid}}</a></li>
                                                 <li *ngIf="voucherType === 'sales'"
                                                     (click)="openInvoiceAdvanceReceiptModal()">
-                                                    <a class="cp" href="javascript:void(0)">Adjust Amount</a>
+                                                    <a class="cp" href="javascript:void(0)">{{commonLocaleData?.app_payment_status?.adjust_amount}}</a>
                                                 </li>
 
-                                                <li class="cp" role="menuitem"
+                                                <li *ngIf="voucherType === 'sales'" class="cp" role="menuitem"
                                                     (click)="updateVoucherAction.emit('unpaid')"><a
-                                                    class="dropdown-item">Unpaid</a></li>
+                                                    class="dropdown-item">{{commonLocaleData?.app_payment_status?.unpaid}}</a></li>
 
-                                                <li class="cp" role="menuitem"
-                                                    (click)="updateVoucherAction.emit('hold')"><a class="dropdown-item">Hold</a>
+                                                <li *ngIf="voucherType === 'sales'" class="cp" role="menuitem"
+                                                    (click)="updateVoucherAction.emit('hold')"><a
+                                                        class="dropdown-item">{{commonLocaleData?.app_payment_status?.hold}}</a>
                                                 </li>
 
                                                 <li class="cp" role="menuitem"
                                                     (click)="updateVoucherAction.emit('cancel')"><a
-                                                    class="dropdown-item">Cancel</a></li>
+                                                    class="dropdown-item">{{commonLocaleData?.app_payment_status?.cancel}}</a></li>
                                             </ul>
 
                                         </div>
@@ -186,14 +185,14 @@
                                         <div [class.disabled-change-status]="isCompany" class="btn-group change-status-dropdown pull-right" dropdown
                                              *ngIf="!isCompany && selectedItem?.voucherType === 'purchase'">
 
-                                            <button id="button-basic2" dropdownToggle type="button" class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2">Change Status <span class="caret"></span></button>
+                                            <button id="button-basic2" dropdownToggle type="button" class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2">{{localeData?.change_status}} <span class="caret"></span></button>
 
                                             <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu" role="menu"
                                                 aria-labelledby="button-basic2">
-                                                <li class="cp" role="menuitem"><a class="dropdown-item" [routerLink]="['/pages/proforma-invoice/invoice/purchase/'+selectedItem?.account?.uniqueName+'/'+selectedItem?.uniqueName+'/copy']">Copy</a></li>
+                                                <li class="cp" role="menuitem"><a class="dropdown-item" [routerLink]="['/pages/proforma-invoice/invoice/purchase/'+selectedItem?.account?.uniqueName+'/'+selectedItem?.uniqueName+'/copy']">{{commonLocaleData?.app_copy}}</a></li>
                                                 <li class="cp" role="menuitem"
                                                     (click)="deleteConfirmationModel.toggle()"><a
-                                                    class="dropdown-item">Delete</a></li>
+                                                    class="dropdown-item">{{commonLocaleData?.app_delete}}</a></li>
                                             </ul>
 
                                         </div>
@@ -202,49 +201,49 @@
                                             <div class="edit-action-btn-groups pull-right">
                                                 <span *ngIf="!isCompany">
 
-                                                    <a href="javascript:void 0" tooltip="Edit" placement="top"
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_edit" placement="top"
                                                         (click)="isCompany ? '' : toggleEditMode()"><i class="icon-edit-pencil"></i></a>
                                                 </span>
 
                                                 <span *ngIf="selectedItem?.voucherType !== 'purchase'">
-                                                    <a href="javascript:void 0" tooltip="Send Email" placement="top"
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_send_email" placement="top"
                                                         (click)="showEmailSendModal.toggle()"><i
                                                             class="icon-envelope font-12"></i></a>
                                                 </span>
 
                                                 <span *ngIf="selectedItem?.voucherType === 'purchase'">
-                                                    <a href="javascript:;" tooltip="Send Email" placement="top"
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_send_email" placement="top"
                                                         (click)="openSendMailModal(sendEmailModal)"><i
                                                             class="icon-envelope font-12"></i></a>
                                                 </span>
 
                                                 <span *ngIf="shouldShowPrintDocument"
                                                     [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading}">
-                                                    <a href="javascript:void 0" tooltip="Print" placement="top"
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_print" placement="top"
                                                         (click)="printVoucher()"><i class="fa fa-print"></i></a>
                                                 </span>
 
                                                 <span *ngIf="selectedItem?.voucherType === 'purchase' && pdfPreviewLoaded">
-                                                    <a href="javascript:void 0" tooltip="Download PDF" placement="top"
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_download_pdf" placement="top"
                                                         (click)="downloadPurchaseBillPDF()"><i class="icon-file"></i></a>
                                                 </span>
 
                                                 <span
                                                     *ngIf="selectedItem?.voucherType !== 'purchase'"
                                                     [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
-                                                    <a href="javascript:void 0" tooltip="Download PDF" placement="top"
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_download_pdf" placement="top"
                                                         (click)="downloadPdf()"><i class="icon-file"></i></a>
                                                 </span>
 
                                                 <span
                                                     *ngIf="selectedItem?.voucherType === 'purchase' && attachedDocumentType?.type"
                                                     [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
-                                                    <a href="javascript:void 0" tooltip="Download attachment" placement="top"
+                                                    <a href="javascript:;" [tooltip]="localeData?.download_attachment" placement="top"
                                                         (click)="downloadFile()"><i class="icon-download"></i></a>
                                                 </span>
 
                                                 <span *ngIf="!isCompany">
-                                                    <a href="javascript:void 0" tooltip="Delete" placement="top"
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_delete" placement="top"
                                                         (click)="deleteConfirmationModel.toggle()"><i
                                                             class="icon-trash"></i></a>
                                                 </span>
@@ -252,7 +251,7 @@
                                             <div class="history-btn" *ngIf="selectedItem?.voucherType === 'purchase'">
                                                 <button class="btn btn-primary" (click)="toggleActivityHistoryAsidePane()">
                                                     <i class="icon-history-icon font-12 pr-1"></i>
-                                                        History</button>
+                                                    {{commonLocaleData?.app_history}}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -270,11 +269,9 @@
                                     (selectedItem?.voucherStatus !== 'paid' && selectedItem?.voucherStatus !== 'cancel')">
                                     <div class="single-payment-detail clearfix pr-4">
                                         <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
-                                        <p class="payment-content"> Receive payments in cash/check and record payments
-                                            manually. </p>
-                                        <a href="javascript: void 0"
-                                           (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()">Receive
-                                            Payment</a>
+                                        <p class="payment-content"> {{localeData?.record_payment}} </p>
+                                        <a href="javascript:;"
+                                           (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()">{{localeData?.receipt_payment}}</a>
                                     </div>
                                 </div>
 
@@ -282,11 +279,10 @@
                                 <div class="col-md-4 col-12">
                                     <div class="single-payment-detail clearfix">
                                         <div class="payment-icon"><img src="assets/images/send-icon.svg"></div>
-                                        <p class="payment-content">You can now email this invoice to your customer or
-                                            mark it as sent. </p>
-                                        <a href="javascript: void 0"
+                                        <p class="payment-content">{{localeData?.email_invoice}}</p>
+                                        <a href="javascript:;"
                                            (click)="showEmailSendModal.show()">
-                                            {{(selectedItem?.voucherType === 'credit note') || (selectedItem?.voucherType === 'debit note') ? 'Send Note' : 'Send Invoice'}}
+                                            {{(selectedItem?.voucherType === 'credit note') || (selectedItem?.voucherType === 'debit note') ? localeData?.send_note : localeData?.send_invoice }}
                                         </a>
                                     </div>
                                 </div>
@@ -298,20 +294,19 @@
                             <div class="payment-log-div">
 
                                 <div class="less-more-details" *ngIf="moreLogsDisplayed">
-                                    <a href="javascript:void 0" (click)="filterVoucherVersions(false)">Less Details</a>
+                                    <a href="javascript:;" (click)="filterVoucherVersions(false)">{{localeData?.less_details}}</a>
                                 </div>
                                 <div class="less-more-details"
                                      *ngIf="filteredVoucherVersions.length && !moreLogsDisplayed">
-                                    <a href="javascript:void 0" (click)="filterVoucherVersions(true)">More Details</a>
+                                    <a href="javascript:;" (click)="filterVoucherVersions(true)">{{localeData?.more_details}}</a>
                                 </div>
 
                                 <ul>
                                     <li *ngFor="let log of filteredVoucherVersions">
                                         <span class="small-circle"></span>
                                         <span class="about-payment-log">{{ log.estimateDate }},
-                                            <span *ngIf="voucherType==='estimates'">estimate</span>
-                                        <span *ngIf="voucherType!=='estimates'">{{voucherType}}</span> {{ log.action }}
-                                            for {{ log.grandTotal }} by {{ log.user.name }}</span>
+                                            <span *ngIf="voucherType==='estimates'">{{localeData?.estimate}}</span>
+                                        <span *ngIf="voucherType!=='estimates'">{{voucherType}}</span> {{ getVoucherLogText(log) }}</span>
                                     </li>
                                 </ul>
 
@@ -319,7 +314,7 @@
                             </div>
                         </div>
                         <div class="linked-purchase-order font-14 mr-t15" *ngIf="selectedItem?.voucherType === 'purchase' && purchaseOrderNumbers && purchaseOrderNumbers.length > 0">
-                            <p class="mt-1 mr-b1"><span class="icon-file-path"></span> Linked Purchase Order(s):</p>
+                            <p class="mt-1 mr-b1"><span class="icon-file-path"></span> {{localeData?.linked_po}}</p>
                             <div class="purchase-order-number">
                                 <a href="javascript:;" class="aqua-color" (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order.uniqueName)" *ngFor="let order of purchaseOrderNumbers; let i = index;">{{order.number}}<span *ngIf="checkIfPipeSymbolRequired(i)">|</span></a>
                             </div>
@@ -335,12 +330,12 @@
                         <div *ngIf="isVoucherDownloadError && (!isVoucherDownloading || !isFileUploading)"
                             class="error">
                             <span>
-                                Invoice Preview is not available right now!Please try again..
+                                {{localeData?.invoice_preview_unavailable}}
                             </span>
                         </div>
                         <div class="preview-not-supported-attachment"
                             *ngIf="attachedDocumentType?.type === 'unsupported'">
-                            <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and PDF (.pdf); to print other formats, download them. </span>
+                            <span class="text-warning">{{localeData?.preview_formats}} </span>
                         </div>
 
                             <div *ngIf="!shouldShowUploadAttachment && selectedItem?.voucherType === 'purchase' && attachedDocumentType?.type === 'image'" class="img-expand-collapse" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
@@ -349,7 +344,7 @@
                             </div>
                             <div *ngIf="shouldShowUploadAttachment && !isCompany"
                                 class="upload-excel max-width-500 center-block box dashed-border">
-                                <input type="file" id="csv-upload-input" placeholder="Upload an EXCEL or CSV file"
+                                <input type="file" id="csv-upload-input" [placeholder]="localeData?.upload_excel_csv"
                                     droppable="true" class="form-control" [options]="fileUploadOptions" ngFileSelect
                                     [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)"/>
                                 <div class="clearfix position-relative width-100">
@@ -358,11 +353,9 @@
                                             <img src="assets/images/new/import_icon.svg"/>
                                         </div>
                                         <div class="clearfix pd-r2 pd-l2">
-                                            <label class="clearfix text-light-2 font-14">Drop file to
-                                                upload</label>
+                                            <label class="clearfix text-light-2 font-14">{{localeData?.drop_file}}</label>
                                             <div class="mr-t3">
-                                                <label class="file-upload-panel" for="csv-upload-input"> <span>Browse
-                                                        file</span></label>
+                                                <label class="file-upload-panel" for="csv-upload-input"> <span>{{localeData?.browse_file}}</span></label>
                                             </div>
                                         </div>
                                     </div>
@@ -373,8 +366,8 @@
                                 <iframe #pdfContainer *ngIf="sanitizedPdfFileUrl && !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)" width="100%" height="100%" [src]="sanitizedPdfFileUrl"></iframe>
                             </div>
                             <div class="expand-file" *ngIf="selectedItem?.voucherType === 'purchase' && imagePreviewSource">
-                                <a href="javascript:;" *ngIf="!isAttachmentExpanded" class="cp" (click)="isAttachmentExpanded = true;"><span><img src="assets/images/expand.svg"></span>Expand</a>
-                                <a href="javascript:;" *ngIf="isAttachmentExpanded" class="cp" (click)="isAttachmentExpanded = false;"><span><img src="assets/images/expand.svg" class="collapse-icon"></span>Collapse</a>
+                                <a href="javascript:;" *ngIf="!isAttachmentExpanded" class="cp" (click)="isAttachmentExpanded = true;"><span><img src="assets/images/expand.svg"></span>{{commonLocaleData?.app_expand}}</a>
+                                <a href="javascript:;" *ngIf="isAttachmentExpanded" class="cp" (click)="isAttachmentExpanded = false;"><span><img src="assets/images/expand.svg" class="collapse-icon"></span>{{commonLocaleData?.app_collapse}}</a>
                             </div>
                         </div>
                     </div>
@@ -392,7 +385,7 @@
             <div class="invoice-edit-header">
 
                 <span>
-                    <p>Edit {{ selectedItem?.voucherType | voucherTypeToNamePipe | titlecase }}</p>
+                    <p>{{ getEditVoucherText(selectedItem?.voucherType | voucherTypeToNamePipe | titlecase) }}</p>
                 </span>
 
                 <span class="close-modal cp p-0" (click)="toggleEditMode()">
@@ -423,7 +416,7 @@
 <ng-template #template>
     <div class="relative header-close-btn">
 
-        <button type="button" class="close pull-right cursor-pointer" aria-label="Close" (click)="modalRef.hide()">
+        <button type="button" class="close pull-right cursor-pointer" [attr.aria-label]="commonLocaleData?.app_close" (click)="modalRef.hide()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -505,8 +498,8 @@
             <!-- endregion -->
 
             <app-send-email-invoice-component [voucherType]="voucherType"
-                                              (successEvent)="sendEmail.emit($event);showEmailSendModal.hide()"
-                                              [selectedItem]='selectedItem' (cancelEvent)="showEmailSendModal.hide()">
+                (successEvent)="sendEmail.emit($event);showEmailSendModal.hide()" [selectedItem]="selectedItem"
+                (cancelEvent)="showEmailSendModal.hide()">
             </app-send-email-invoice-component>
 
         </div>
@@ -523,7 +516,7 @@
 
         <div class="modal-content">
 
-            <download-voucher [selectedItem]="selectedItem" (cancelEvent)="downloadVoucherModal.hide()">
+            <download-voucher [selectedItem]="selectedItem" [localeData]="localeData" [commonLocaleData]="commonLocaleData" (cancelEvent)="downloadVoucherModal.hide()">
             </download-voucher>
 
         </div>
@@ -538,7 +531,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <confirm-modal
-                [body]="only4ProformaEstimates ? 'Do you want to delete the voucher(s)?' : selectedItem?.voucherType === 'purchase' ? 'Do you want to delete the selected records?' : 'Do you want to delete the voucher/invoice?'"
+                [body]="only4ProformaEstimates ? localeData?.delete_voucher : selectedItem?.voucherType === 'purchase' ? localeData?.delete_record : localeData?.delete_voucher_invoice"
                 (cancelCallBack)="deleteConfirmationModel.toggle()"
                 (successCallBack)="deleteVoucher.emit(selectedItem);deleteConfirmationModel.toggle()"></confirm-modal>
         </div>
@@ -550,7 +543,7 @@
 <div bsModal #receivePaymentPopup="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <invoice-payment-model *ngIf="receivePaymentPopup.isShown" [selectedInvoiceForPayment]="selectedItem"
+            <invoice-payment-model *ngIf="receivePaymentPopup.isShown" [selectedInvoiceForPayment]="selectedItem" [localeData]="localeData" [commonLocaleData]="commonLocaleData"
                                    (closeModelEvent)="processPaymentEvent.emit($event);receivePaymentPopup.toggle()">
             </invoice-payment-model>
         </div>
@@ -559,9 +552,9 @@
 <!-- endregion -->
 
 
-<ng-template #purchaseBillTemplate>
+<!-- <ng-template #purchaseBillTemplate>
     <purchase-bill-template></purchase-bill-template>
-</ng-template>
+</ng-template> -->
 
 <ng-template #purchaseOrderPreviewModal>
     <purchase-order-preview-modal [purchaseOrderUniqueName]="purchaseOrderPreviewUniqueName" [purchaseOrderAccountUniqueName]="selectedItem?.account?.uniqueName" [purchaseOrderCompanyUniqueName]="companyUniqueName" (closeModelEvent)="closePurchaseOrderPreviewPopup($event)"></purchase-order-preview-modal>
