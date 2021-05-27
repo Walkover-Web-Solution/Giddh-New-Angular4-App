@@ -1440,7 +1440,11 @@ modal-container.modal {
 
 .all-features-modal {
     width: 60%;
-    margin-top: 0px;
+    margin: 0 auto !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 100px);
     .modal-body {
         padding: 15px 30px;
         height: 65vh;
@@ -10224,6 +10228,9 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
+    .all-features-modal{
+        height: 100vh;
+    }
     .e-waybill-tabs.custom-tabs .nav-tabs {
         position: fixed !important;
     }
