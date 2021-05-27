@@ -25,7 +25,32 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
- .icon-discount-new:before {
+
+  .icon-manage-group-acc:before {
+      content: "\e9ef";
+  }
+  .icon-e-commerce:before {
+    content: "\e9f5";
+  }
+  .icon-multi-currency:before {
+    content: "\e9f6";
+  }
+  .icon-shortcut-key:before {
+    content: "\e9f0";
+  }
+  .icon-desktop:before {
+    content: "\e9f1";
+  }
+  .icon-mobile:before {
+    content: "\e9f2";
+  }
+  .icon-support1:before {
+    content: "\e9f3";
+  }
+  .icon-unique-code:before {
+    content: "\e9f4";
+  }
+  .icon-discount-new:before {
     content: "\e900";
   }
   .icon-financial-year-new:before {
