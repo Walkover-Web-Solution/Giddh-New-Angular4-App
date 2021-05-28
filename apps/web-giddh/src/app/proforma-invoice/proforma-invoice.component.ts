@@ -589,6 +589,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
     /** This will hold account unique name which is in edit  */
     public accountEditingUniqueName: string = "";
+    /** Stores the adjustments as a backup that are present on the current opened entry */
+    public originalVoucherAdjustments: VoucherAdjustments;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1112,6 +1114,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             this.isInvoiceAdjustedWithAdvanceReceipts = true;
                             this.calculateAdjustedVoucherTotal(results[0].voucherAdjustments.adjustments);
                             this.advanceReceiptAdjustmentData = results[0].voucherAdjustments;
+                            this.originalVoucherAdjustments = cloneDeep(results[0].voucherAdjustments);
                             if (!this.isMulticurrencyAccount) {
                                 this.adjustPaymentData.totalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentAmount;
                             } else {
@@ -3801,15 +3804,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (this.isCreditNote || this.isDebitNote) {
                     requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
                 }
-                if ((this.isCreditNote || this.isDebitNote) && this.selectedInvoice) {
-                    const selectedLinkedVoucherType = this.invoiceList.find(invoice => invoice.value === this.selectedInvoice);
-                    requestObject['invoiceLinkingRequest'] = {
-                        linkedInvoices: [{
-                            invoiceUniqueName: this.selectedInvoice,
-                            voucherType: selectedLinkedVoucherType && selectedLinkedVoucherType.additional ?
-                                selectedLinkedVoucherType.additional.voucherType : 'sales'
-                        }]
-                    };
+                if (((this.isCreditNote || this.isDebitNote) && this.selectedInvoice) || this.isSalesInvoice) {
+                    if (this.isSalesInvoice) {
+                        requestObject['invoiceLinkingRequest'] = cloneDeep(this.invFormData.voucherDetails.invoiceLinkingRequest);
+                    } else {
+                        const selectedLinkedVoucherType = this.invoiceList.find(invoice => invoice.value === this.selectedInvoice);
+                        requestObject['invoiceLinkingRequest'] = {
+                            linkedInvoices: [{
+                                invoiceUniqueName: this.selectedInvoice,
+                                voucherType: selectedLinkedVoucherType && selectedLinkedVoucherType.additional ?
+                                    selectedLinkedVoucherType.additional.voucherType : 'sales'
+                            }]
+                        };
+                    }
                 }
 
                 /** Tourist scheme is applicable only for voucher type 'sales invoice' and 'cash invoice' and company country code 'AE'   */
@@ -5624,6 +5631,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public clickAdjustAmount(event) {
         if (event) {
             this.isAdjustAmount = true;
+            if (!this.advanceReceiptAdjustmentData?.adjustments?.length && this.originalVoucherAdjustments?.adjustments?.length) {
+                // If length of voucher adjustment is 0 i.e., user has changed its original adjustments but has not performed update operation
+                // and voucher already has original adjustments to it then show the
+                // original adjustments in adjustment popup
+                this.advanceReceiptAdjustmentData = cloneDeep(this.originalVoucherAdjustments);
+                this.calculateAdjustedVoucherTotal(this.originalVoucherAdjustments?.adjustments);
+            }
             this.openAdjustPaymentModal();
         } else {
             this.isAdjustAmount = false;

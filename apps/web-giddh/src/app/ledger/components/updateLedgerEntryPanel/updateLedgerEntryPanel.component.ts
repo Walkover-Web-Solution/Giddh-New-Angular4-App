@@ -254,6 +254,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public currentCompanyBranches$: Observable<any>;
     /** Stores the current branches */
     public branches: Array<any>;
+    /** Stores the adjustments as a backup that are present on the current opened entry */
+    public originalVoucherAdjustments: VoucherAdjustments;
 
     constructor(
         private _accountService: AccountService,
@@ -1720,6 +1722,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 customerUniqueName.push(uniqueName);
             }
         });
+        if (!this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length && this.originalVoucherAdjustments?.adjustments?.length) {
+            // If length of voucher adjustment is 0 i.e., user has changed its original adjustments but has not performed update operation
+            // and voucher already has original adjustments to it then show the
+            // original adjustments in adjustment popup
+            this.vm.selectedLedger.voucherAdjustments = cloneDeep(this.originalVoucherAdjustments);
+        }
         if (this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
             this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(adjustment => {
                 if (!adjustment.balanceDue) {
@@ -2001,6 +2009,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                         //#region transaction assignment process
                         this.vm.selectedLedger = resp[0];
+                        this.originalVoucherAdjustments = cloneDeep(this.vm.selectedLedger.voucherAdjustments);
                         this.formatAdjustments();
                         if (this.vm.selectedLedger && !this.invoiceList?.length && (this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.creditNote ||
                             this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.debitNote)) {
