@@ -4,7 +4,7 @@
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopup()">×</span>
         <h3>{{localeData?.page_heading}}</h3>
     </div>
-    <p class="mb-2 money-back-gurantee px-3 py-2" [innerHTML]="localeData?.money_back_guarantee"></p>
+    <p class="mb-2 money-back-gurantee py-2" [innerHTML]="localeData?.money_back_guarantee"></p>
     <div id="my-frame" class="modal-body all-feature-modal clearfix">
         <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
@@ -58,6 +58,7 @@
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.income_account}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.zero_value_invoice}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.multicurrency_support}}</span></li>
+                        <li><i class="icon-tick mr-r1"></i><span>{{localeData?.e_invoice}}</span></li>
                     </ul>
                 </div>
                 <div class="mb-2">
@@ -71,7 +72,7 @@
                     <p class="font-14 d-flex align-items-center"><i class="icon-branch1 mr-r1"></i>
                         <span class="bold">{{commonLocaleData?.app_branch}}</span></p>
                     <ul class="all-features-list">
-                        <li><i class="icon-tick mr-r1"></i><span>{{localeData?.add_remove_branch}}</span></li>
+                        <li><i class="icon-tick mr-r1"></i><span>{{localeData?.add_branch}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.inventory_branch_transfer}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.consolidate_report}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.separate_report}}</span></li>
@@ -120,17 +121,16 @@
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.auto_change_status}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.auto_email}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.enable_send_sms}}</span></li>
-                        <li><i class="icon-tick mr-r1"></i><span>{{localeData?.e_invoice}}</span></li>
                     </ul>
                 </div>
                 <div class="mb-2">
                     <p class="font-14 d-flex align-items-center"><i class="icon-purchase-order mr-r1"></i>
                         <span class="bold">{{commonLocaleData?.app_purchase}}</span></p>
                     <ul class="all-features-list">
-                        <li><i class="icon-tick mr-r1"></i><span>{{localeData?.purchase_record}}</span></li>
+                        <li><i class="icon-tick mr-r1"></i><span>{{localeData?.purchase_bill}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.purchase_management}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.reverse_charge_option}}</span></li>
-                        <li><i class="icon-tick mr-r1"></i><span>{{localeData?.edit_purchase_record}}</span></li>
+                        <li><i class="icon-tick mr-r1"></i><span>{{localeData?.edit_purchase_bill}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.attached_purchase_bill}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.expense_account}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.create_edit_delete_po}}</span></li>
@@ -146,6 +146,7 @@
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.create_credit_note}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.edit_credit_note}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.custom_template_credit_debit_note}}</span></li>
+                        <li><i class="icon-tick mr-r1"></i><span>{{localeData?.e_invoice}}</span></li>
                     </ul>
                 </div>
                 <div class="mb-2">
@@ -337,30 +338,29 @@
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.profit_loss}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.balance_sheet}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.customer_report}}</span></li>
-                        <li><i class="icon-tick mr-r1"></i><span>{{localeData?.aging_report}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.vendor_report}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{commonLocaleData?.app_inventory}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.sales_register}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.purchase_register}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.new_vs_old_invoice}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.eway_bill}}</span></li>
-                        <li><i class="icon-tick mr-r1"></i><span>{{localeData?.manufacturing}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{commonLocaleData?.app_reverse_charge}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.petty_cash_management}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{commonLocaleData?.app_receipt}}</span></li>
-                        <li><i class="icon-tick mr-r1"></i><span>{{localeData?.delivery_challan}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.monthly_columnar_report}}</span></li>
                     </ul>
                 </div>
                 <div class="mb-2">
-                    <p class="font-14 d-flex align-items-center"><i class="icon-desktop mr-r1"></i> {{localeData?.desktop_app}}</p>
+                    <p class="font-14 d-flex align-items-center"><i class="icon-desktop mr-r1"></i>
+                        <span class="bold"> {{localeData?.desktop_app}}</span></p>
                     <ul class="all-features-list">
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.windows}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.mac}}</span></li>
                     </ul>
                 </div>
                 <div class="mb-2">
-                    <p class="font-14 d-flex align-items-center"><i class="icon-mobile mr-r1"></i>{{localeData?.mobile_app}}</p>
+                    <p class="font-14 d-flex align-items-center"><i class="icon-mobile mr-r1"></i>
+                        <span class="bold">{{localeData?.mobile_app}}</span></p>
                     <ul class="all-features-list">
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.android}}</span></li>
                     </ul>
@@ -372,7 +372,6 @@
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.two_way_auth}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.auth_key}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.session}}</span></li>
-                        <li><i class="icon-tick mr-r1"></i><span>{{localeData?.delete_company}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{commonLocaleData?.app_upcoming}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.feature_request}}</span></li>
                         <li><i class="icon-tick mr-r1"></i><span>{{localeData?.changelog}}</span></li>
