@@ -198,6 +198,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     this.adjustVoucherOptions = [];
                     this.voucherForAdjustment.forEach(item => {
                         if (item) {
+                            if (!item.adjustmentAmount) {
+                                item.adjustmentAmount = cloneDeep(item.balanceDue);
+                            }
                             item.voucherDate = item.voucherDate.replace(/-/g, '/');
                             item.accountCurrency = item.accountCurrency ?? { symbol: this.baseCurrencySymbol, code: this.companyCurrency };
                             this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
