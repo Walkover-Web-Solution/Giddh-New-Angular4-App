@@ -1799,7 +1799,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (response.body.results && response.body.results.length) {
                         response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber ? invoice.voucherNumber : '-', value: invoice.uniqueName, additional: invoice }))
                     } else {
-                        this.invoiceForceClearReactive$ = observableOf({ status: true });
                         this.invoiceSelected = '';
                     }
                     let invoiceSelected;
