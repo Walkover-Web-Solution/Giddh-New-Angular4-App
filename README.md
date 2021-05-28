@@ -1,11 +1,14 @@
 # SETUP GUIDE
-1. clone giddh-2.0.
 
-2. Access your cloned folder and run these following commands to install dependency and start local serve.
+1. Clone https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App.git.
 
-3. run `npm i` For installation of dependencies.
+2. This project requires Node version 14+, install Node from [here](https://nodejs.org/en/).
 
-4. run `npm run` start For local serve.
+3. Go inside the cloned directory `Giddh-New-Angular4-App` in any terminal and run these following commands in the terminal to install dependency and start local serve.
+
+4. Run `npm i` for installation of dependencies.
+
+5. Run `npm run start` to local serve the project.
 
 # Angular Style Guide
 
