@@ -3806,7 +3806,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 if (((this.isCreditNote || this.isDebitNote) && this.selectedInvoice) || this.isSalesInvoice) {
                     if (this.isSalesInvoice) {
-                        requestObject['invoiceLinkingRequest'] = cloneDeep(this.invFormData.voucherDetails.invoiceLinkingRequest);
+                        requestObject['invoiceLinkingRequest'] = cloneDeep(this.invFormData?.voucherDetails?.invoiceLinkingRequest);
                     } else {
                         const selectedLinkedVoucherType = this.invoiceList.find(invoice => invoice.value === this.selectedInvoice);
                         requestObject['invoiceLinkingRequest'] = {
