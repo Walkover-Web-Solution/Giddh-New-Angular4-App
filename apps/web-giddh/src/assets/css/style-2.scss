@@ -10237,6 +10237,12 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
+    .on-setting-page {
+        .hamburger-menu-icon{
+            left: 80px !important;
+            width: calc(100% - 160px) !important;
+        }
+    }
     .all-features-modal{
         height: 100vh;
     }
