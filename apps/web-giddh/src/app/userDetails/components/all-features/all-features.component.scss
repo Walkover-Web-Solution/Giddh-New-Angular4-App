@@ -1,4 +1,8 @@
 @import "../../../../assets/css/color.scss";
+.modal-header{
+    padding-left: 20px;
+    padding-right: 20px;
+}
 .all-features-list  {
     margin-bottom: 30px;
     li{
@@ -9,7 +13,6 @@
         line-height: 20px;
         display: flex;
         align-items: center;
-        cursor: pointer;
         span{
             margin-left: 15px;
         }
@@ -40,9 +43,11 @@
     }
 }
 .money-back-gurantee{
-    font-size: 14px;
+    font-size: 12px;
     background-color: $floral-white;
     color: $cascade;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 .all-feature-modal{
     p{

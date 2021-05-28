@@ -1439,15 +1439,16 @@ modal-container.modal {
 }
 
 .all-features-modal {
-    width: 60%;
     margin: 0 auto !important;
     display: flex;
     justify-content: center;
     align-items: center;
     height: calc(100vh - 100px);
+    max-width: 940px !important;
+    width: 100% !important;
     .modal-body {
-        padding: 15px 30px;
-        height: 65vh;
+        padding: 15px 20px;
+        height: 450px;
         overflow-y: auto;
         margin-right: 5px;
     }
