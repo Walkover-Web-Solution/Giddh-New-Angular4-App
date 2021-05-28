@@ -66,7 +66,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
 
     @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
-    @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
+    @ViewChild('paginationChild', {static: false}) public paginationChild: ElementViewContainerRef;
     @ViewChild('filterDropDownList', {static: true}) public filterDropDownList: BsDropdownDirective;
     /** Advance search component instance */
     @ViewChild('agingReportAdvanceSearch', { read: ContactAdvanceSearchComponent, static: true }) public agingReportAdvanceSearch: ContactAdvanceSearchComponent;
@@ -109,7 +109,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 this.dueAmountReportRequest.page = data.page;
                 setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
                 this.totalDueAmounts = data.overAllDueAmount;
-                this.totalFutureDueAmounts = data.overAllFutureDueAmount;;
+                this.totalFutureDueAmounts = data.overAllFutureDueAmount;
             }
             this.dueAmountReportData$ = of(data);
             if (data) {
