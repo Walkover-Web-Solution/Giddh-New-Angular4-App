@@ -1,3 +1,12 @@
+# SETUP GUIDE
+1. clone giddh-2.0.
+
+2. Access your cloned folder and run these following commands to install dependency and start local serve.
+
+3. run `npm i` For installation of dependencies.
+
+4. run `npm run` start For local serve.
+
 # Angular Style Guide
 
 This is a guide to Angular syntax, conventions, and application structure. This style guide presents preferred conventions to write scalable Angular Apps with syntax that is easy to read, understand, and navigate through.
