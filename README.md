@@ -1,4 +1,4 @@
-# SETUP GUIDE
+# Setup Guide
 
 1. Clone https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App.git.
 
