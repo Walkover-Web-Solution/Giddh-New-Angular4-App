@@ -17,7 +17,7 @@ import { SettingsUtilityService } from '../../settings/services/settings-utility
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ToasterService } from '../../services/toaster.service';
-import { OnboardingFormRequest, CurrentPage } from '../../models/api-models/Common';
+import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
 import { VAT_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SearchResultText } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
