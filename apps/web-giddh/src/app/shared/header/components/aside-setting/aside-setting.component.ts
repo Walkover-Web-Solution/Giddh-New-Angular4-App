@@ -58,6 +58,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
             if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('aside-setting', response?.value).subscribe(response => {
                     this.localeData = response;
+                    this.translationComplete(true);
                 });
             }
             this.activeLocale = response?.value;
