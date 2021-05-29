@@ -86,20 +86,23 @@
 
 <!-- input box template -->
 <ng-template #searchEleTemplate>
-	<div #searchWrapEle class="search-wrapper" (click)="focusInSearchBox($event)">
-		<span class="icon-search-icon"><i class="icon-search"></i></span>
-		<span *ngFor="let item of listOfSelectedGroups; let idx = index">
-			<div class="vR">
-				<div class="vN">
-					<div class="vT">{{item.name}}</div>
-					<ng-container>
-						<span>&nbsp;❯&nbsp;</span>
-					</ng-container>
-				</div>
-			</div>
-		</span>
-		<input class="search-element" #searchEle type="text" placeholder="Search" (focus)="handleFocus()"
-			(keydown)="handleKeydown($event)" (keyup)="initSearch($event, $event.target.value)" (paste)="onPasteInSearch()" />
-	</div>
-	<i class="icon-cross close-navigation" (click)="close()"></i>
+    <div class="d-flex bd-rb">
+        <div #searchWrapEle class="search-wrapper" (click)="focusInSearchBox($event)">
+            <span class="icon-search-icon"><i class="icon-search"></i></span>
+            <span *ngFor="let item of listOfSelectedGroups; let idx = index">
+                <div class="vR">
+                    <div class="vN">
+                        <div class="vT">{{item.name}}</div>
+                        <ng-container>
+                            <span>&nbsp;❯&nbsp;</span>
+                        </ng-container>
+                    </div>
+                </div>
+            </span>
+            <input class="search-element" #searchEle type="text" [placeholder]="commonLocaleData?.app_search" (focus)="handleFocus()"
+                (keydown)="handleKeydown($event)" (keyup)="initSearch($event, $event.target.value)"
+                (paste)="onPasteInSearch()" />
+        </div>
+        <i class="icon-cross close-navigation" (click)="close()"></i>
+    </div>
 </ng-template>
