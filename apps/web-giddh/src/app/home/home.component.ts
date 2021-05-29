@@ -52,6 +52,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     public subscribedPlan: SubscriptionsUser;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public hideallcharts: boolean = false;
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
