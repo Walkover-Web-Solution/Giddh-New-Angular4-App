@@ -1,40 +1,40 @@
 {
-    "tab_heading": "Create New Trigger(Webhook)",
-    "select_entity_type": "Select Entity Type",
-    "select_entity_label": "Select Entity",
-    "filter_placeholder": "Select Filter",
-    "scope_label": "Scope",
-    "scope_placeholder": "Select Scope",
-    "url": "URL",
-    "added_triggers": "Added Triggers",
-    "entity_type": "Entity type",
-    "entity_types": {
-        "group": "Group",
-        "account": "Account"
-    },
-    "webhook": "Webhook",
-    "filter_types": {
-        "amount_greater_than": "Amount Greater Than",
-        "amount_less_than": "Amount Less Than",
-        "amount_equals": "Amount Equals",
-        "description_equals": "Description Equals",
-        "add": "Add",
-        "update": "Update",
-        "delete": "Delete"
-    },
-    "scope_list": {
-        "closing_balance": "Closing Balance"
-    },
-    "validations": {
-        "trigger_name": "Please enter trigger name.",
-        "entity_type": "Please select entity type.",
-        "entity": "Please select an entity.",
-        "scope": "Please select a scope.",
-        "filter": "Please select a filter.",
-        "action": "Please select an action.",
-        "enter_value": "Please enter value.",
-        "enter_url": "Please enter URL."
-    },
-    "delete_tax": "Are you sure you want to delete [SELECTED_TAX]?",
-    "update_trigger": "Are you sure want to update [TRIGGER_NAME]?"
+	"tab_heading": "नवीन ट्रिगर (वेबहूक) तयार करा",
+	"select_entity_type": "अस्तित्वाचा प्रकार निवडा",
+	"select_entity_label": "अस्तित्व निवडा",
+	"filter_placeholder": "फिल्टर निवडा",
+	"scope_label": "व्याप्ती",
+	"scope_placeholder": "व्याप्ती निवडा",
+	"url": "URL",
+	"added_triggers": "ट्रिगर जोडले",
+	"entity_type": "अस्तित्वाचा प्रकार",
+	"entity_types": {
+		"group": "गट",
+		"account": "खाते"
+	},
+	"webhook": "वेबहूक",
+	"filter_types": {
+		"amount_greater_than": "पेक्षा मोठी रक्कम",
+		"amount_less_than": "पेक्षा कमी रक्कम",
+		"amount_equals": "रक्कम समान",
+		"description_equals": "वर्णन समान",
+		"add": "जोडा",
+		"update": "अद्यतनित करा",
+		"delete": "हटवा"
+	},
+	"scope_list": {
+		"closing_balance": "अंतिम शिल्लक"
+	},
+	"validations": {
+		"trigger_name": "कृपया ट्रिगर नाव प्रविष्ट करा.",
+		"entity_type": "कृपया अस्तित्वाचा प्रकार निवडा.",
+		"entity": "कृपया एखादे घटक निवडा.",
+		"scope": "कृपया एक व्याप्ती निवडा.",
+		"filter": "कृपया एक फिल्टर निवडा.",
+		"action": "कृपया कृती निवडा.",
+		"enter_value": "कृपया मूल्य प्रविष्ट करा.",
+		"enter_url": "कृपया URL प्रविष्ट करा."
+	},
+	"delete_tax": "आपली खात्री आहे की आपण [SELECTED_TAX] हटवू इच्छिता?",
+	"update_trigger": "आपली खात्री आहे की [TRIGGER_NAME] अद्यतनित करू इच्छिता?"
 }
