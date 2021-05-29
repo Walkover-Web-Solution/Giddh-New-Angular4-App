@@ -316,7 +316,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         ...this.companyProfileObj,
                         country: {
                             countryName: response.countryV2 ? response.countryV2.countryName : '',
-                            countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode.toLowerCase() : '',
+                            countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode?.toLowerCase() : '',
                             currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
                             currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                         },
@@ -1118,7 +1118,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 uniqueName: profileObj.uniqueName,
                 country: {
                     countryName: profileObj.countryV2 ? profileObj.countryV2.countryName : '',
-                    countryCode: profileObj.countryV2 ? profileObj.countryV2.alpha2CountryCode.toLowerCase() : '',
+                    countryCode: profileObj.countryV2 ? profileObj.countryV2.alpha2CountryCode?.toLowerCase() : '',
                     currencyCode: profileObj.countryV2 && profileObj.countryV2.currency ? profileObj.countryV2.currency.code : '',
                     currencyName: profileObj.countryV2 && profileObj.countryV2.currency ? profileObj.countryV2.currency.symbol : ''
                 },
