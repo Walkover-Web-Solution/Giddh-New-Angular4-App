@@ -301,6 +301,20 @@ export class ContactComponent implements OnInit, OnDestroy {
             );
         }
     }
+    /**
+     * This will get output by PO
+     *
+     * @param {boolean} event
+     * @memberof InvoiceComponent
+     */
+     public getPageHeading(): string {
+        if(this.activeTab === 'aging-report') {
+            return this.localeData?.aging_report;
+        }
+        else if(this.activeTab !== 'aging-report') {
+            return this.localeData?.customer;
+        }
+    }
 
     public sort(key, ord = 'asc') {
         this.key = key;
