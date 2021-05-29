@@ -3,7 +3,7 @@
     "items": [
         {
             "label": "ग्राहक",
-            "icon": "आइकन-ग्राहक",
+            "icon": "icon-customer",
             "items": [
                 {
                     "label": "एजिंग रिपोर्ट",
