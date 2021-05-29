@@ -1,10 +1,10 @@
 {
-    "remove_tag": "Are you sure you want to delete <b>[TAG_NAME]</b>?",
-    "create_tag": "Create Tag",
-    "tag_name_placeholder": "Tag Name",
-    "tag_description_placeholder": "Tag Description (optional)",
-    "search_tag_placeholder": "Search tag",
-    "s_no": "Sr. No.",
-    "tags_name": "Tags Name",
-    "tags_description": "Tags Description"
+	"remove_tag": "क्या आप वाकई <b>[TAG_NAME]</b> को हटाना चाहते हैं?",
+	"create_tag": "टैग बनाएं",
+	"tag_name_placeholder": "टैग नाम",
+	"tag_description_placeholder": "टैग विवरण (वैकल्पिक)",
+	"search_tag_placeholder": "खोज टैग",
+	"s_no": "क्रमांक।",
+	"tags_name": "टैग नाम",
+	"tags_description": "टैग विवरण"
 }
