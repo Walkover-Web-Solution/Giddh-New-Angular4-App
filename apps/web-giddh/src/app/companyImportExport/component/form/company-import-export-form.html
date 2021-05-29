@@ -43,7 +43,7 @@
                     <button class="btn btn-primary " *ngIf="mode === 'export'" (click)="save()"
                         [ladda]="isExportInProcess$ | async" [disabled]="(!fileType || !from || !to)"> {{commonLocaleData?.app_export}}
                     </button>
-                    <div class="select-file-lable mr-r15" *ngIf="mode === 'import'">
+                    <div class="select-file-label mr-r15" *ngIf="mode === 'import'">
                         <label class="d-block">{{localeData?.select_file}}</label>
 
                         <div class="form-group input-upload">

@@ -34,11 +34,11 @@
             }
             .sub-item-block{
                 .single-menu-item{
-                     cursor: pointer;
-                     padding: 15px;
-                     white-space: normal;
-                     word-break: break-word;
-                     min-height: 90px;
+                    cursor: pointer;
+                    padding: 15px;
+                    white-space: normal;
+                    word-break: break-word;
+                    min-height: 90px;
                     h4{
                         font-size: 14px;
                         margin-bottom: 5px;
@@ -53,9 +53,11 @@
                         color: $grey-chateau;
                         font-size: 12px;
                     }
-                    &:hover, &.active {
+                    &:hover,
+                    &.active {
                         background-color: $cornflower;
-                        h4, p{
+                        h4,
+                        p{
                             color: $white;
                         }
                     }

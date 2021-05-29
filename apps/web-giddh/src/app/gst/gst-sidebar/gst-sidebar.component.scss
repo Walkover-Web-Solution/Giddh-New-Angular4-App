@@ -42,8 +42,9 @@
                             }
                             &.active {
                                 background-color: $cornflower !important;
-                                span, span i{
-                                     color: $white !important;
+                                span, 
+                                span i{
+                                    color: $white !important;
                                 }
                             }
                         }

@@ -115,14 +115,14 @@ form label {
             max-width: 100%;
             width: 100%;
         }
-         p{
-             &:first-child{
+        p{
+            &:first-child{
                 max-width: 450px;
                 width: 100%;
-             }
-             span{
-                 float: right;
-             }
+            }
+            span{
+                float: right;
+            }
 
         }
     }
@@ -145,7 +145,9 @@ form label {
                 label{
                     margin-right: 5px;
                 }
-                .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
+                .form-control[disabled],
+                .form-control[readonly], 
+                fieldset[disabled] .form-control{
                     background-color: transparent !important;
                     display: inline;
                     width: auto;
@@ -212,7 +214,8 @@ form label {
     }
 }
 @media (max-width: 480px) {
-    .payment-top-form .d-flex .form-group, .payment-top-form .d-flex .form-group:last-child {
+    .payment-top-form .d-flex .form-group, 
+    .payment-top-form .d-flex .form-group:last-child {
         min-width: 100%;
     }
     .amount-remark-section .d-flex {
