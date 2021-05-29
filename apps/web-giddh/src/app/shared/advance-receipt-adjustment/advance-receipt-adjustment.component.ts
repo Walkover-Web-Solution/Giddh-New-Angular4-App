@@ -12,6 +12,7 @@ import { NgForm } from '@angular/forms';
 import { ToasterService } from '../../services/toaster.service';
 import { cloneDeep } from '../../lodash-optimized';
 import { AdjustedVoucherType, SubVoucher } from '../../app.constant';
+import { giddhRoundOff } from '../helpers/helperFunctions';
 
 /** Toast message when no advance receipt is found */
 const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
@@ -166,6 +167,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     this.adjustVoucherOptions = [];
                     if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
                         this.allAdvanceReceiptResponse.forEach(item => {
+                            this.handlePartiallyAdjustedVoucher(item);
                             if (item && item.voucherDate) {
                                 item.voucherDate = item.voucherDate.replace(/-/g, '/');
                                 item.voucherNumber = !item.voucherNumber ? '-' : item.voucherNumber;
@@ -860,7 +862,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         if (isNaN(exchangeRate)) {
             return amountForAccount;
         }
-        return exchangeRate > 1 ? amountForAccount * exchangeRate : Number((amountForAccount / exchangeRate).toFixed(2));
+        return exchangeRate > 1 ? amountForAccount * exchangeRate : giddhRoundOff((amountForAccount / exchangeRate), 4);
     }
 
     /**
@@ -926,6 +928,25 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         } else if (this.adjustedVoucherType === AdjustedVoucherType.Purchase || this.adjustedVoucherType === AdjustedVoucherType.DebitNote) {
             // Exchange gain if home currency weakens as this is Import goods case (purchase) where the due goes negative
             return this.getConvertedBalanceDue() >= 0;
+        }
+    }
+
+    /**
+     * Handles the partially adjusted voucher which has balance
+     * and is still applicable for further adjustment
+     *
+     * @private
+     * @param {Adjustment} item Item obtained in applicable vouchers
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    private handlePartiallyAdjustedVoucher(item: Adjustment): void {
+        if (this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length) {
+            // Find if the item is present in already adjusted voucher which means the item is already partially adjusted
+            const itemPresentInExistingAdjustment = this.advanceReceiptAdjustmentUpdatedData.adjustments.find(adjustment => adjustment.uniqueName === item.uniqueName);
+            if (itemPresentInExistingAdjustment && item.balanceDue?.amountForAccount) {
+                item.balanceDue.amountForAccount += itemPresentInExistingAdjustment.adjustmentAmount.amountForAccount;
+                item.adjustmentAmount.amountForAccount += itemPresentInExistingAdjustment.adjustmentAmount.amountForAccount;
+            }
         }
     }
 }
