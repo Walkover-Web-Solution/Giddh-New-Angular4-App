@@ -11,7 +11,9 @@
                 <li role="menuitem"><a class="dropdown-item" id="export-ledger-mobile-view" href="javascript:void(0)" (click)="showExportLedgerModal()">{{commonLocaleData?.app_export}}</a></li>
             </ul>
         </div>
-        <hamburger-menu [pageHeading]="(lc?.activeAccount?.name) ? (localeData?.page_heading + lc?.activeAccount?.name) + ' ' + commonLocaleData?.app_ac : ''"></hamburger-menu>
+        <hamburger-menu
+            [pageHeading]="(lc?.activeAccount?.name) ? ((!isMobileScreen ? localeData?.page_heading: '') + lc?.activeAccount?.name) + ' ' + commonLocaleData?.app_ac : ''">
+        </hamburger-menu>
         <section class="container ledger-section" [hidden]="isShowLedgerColumnarReportTable">
             <!-- region ledger table-->
             <div class="ledg-head transactions-page mr-t15 position-relative">
