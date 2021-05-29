@@ -1269,7 +1269,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             if (!this.isMulticurrencyAccount) {
                                 this.adjustPaymentData.totalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentAmount;
                             } else {
-                                this.adjustPaymentData.convertedTotalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentAmount;
+                                this.adjustPaymentData.convertedTotalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentCompanyAmount;
                             }
                             this.isAdjustAmount = true;
                         } else {
