@@ -54,8 +54,8 @@
                         </ul>
                     </div>
                     <div class="col-md-3 col-sm-3 col-xs-12 text-right trial-plan-state">
-                        <div class="font-14" [ngClass]="{'active': calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'}" *ngIf="activeCompany.subscription.status==='trial'"><span class="font-26" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) !== 'Active'">{{calculateRemainingDays(activeCompany.subscription.expiry)}}</span> <span class="green-dote" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'"></span> {{calculateRemainingDays(activeCompany.subscription.expiry) === 'Active' ? 'Active' : ""}} </div>
-                        <div class="active font-14" *ngIf="activeCompany.subscription.status==='active'"><span class="green-dote"></span> {{activeCompany.subscription.status | titlecase}} </div>
+                        <div class="font-14" [ngClass]="{'active': calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'}" *ngIf="activeCompany.subscription.status==='trial'"><span class="font-26" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) !== 'Active'">{{calculateRemainingDays(activeCompany.subscription.expiry)}}</span> <span class="green-dot" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'"></span> {{calculateRemainingDays(activeCompany.subscription.expiry) === 'Active' ? 'Active' : ""}} </div>
+                        <div class="active font-14" *ngIf="activeCompany.subscription.status==='active'"><span class="green-dot"></span> {{activeCompany.subscription.status | titlecase}} </div>
                         <div class="text-danger font-14" *ngIf="activeCompany.subscription.status==='expired'"><span class="red-dot"></span> {{activeCompany.subscription.status | titlecase}} </div>
                     </div>
                 </div>
@@ -204,11 +204,11 @@
                                 <div class="clearfix">
                                     <div class="active d-inline-block middle"
                                         *ngIf="activeCompany?.subscription?.status === 'active' || calculateRemainingDays(activeCompany?.subscription?.expiry) === commonLocaleData?.app_active">
-                                        <span class="green-dote"> </span> {{commonLocaleData?.app_active}}
+                                        <span class="green-dot"> </span> {{commonLocaleData?.app_active}}
                                     </div>
                                     <div class="text-warning font-14 d-inline-block middle"
                                         *ngIf="activeCompany?.subscription?.status === 'trial' && calculateRemainingDays(activeCompany?.subscription?.expiry) !== commonLocaleData?.app_active">
-                                        <span class="orange-dote"> </span> {{localeData?.subscription?.trial}}
+                                        <span class="orange-dot"> </span> {{localeData?.subscription?.trial}}
                                     </div>
                                     <div class="text-danger d-inline-block middle"
                                         *ngIf="activeCompany?.subscription?.status === 'expired'">
@@ -393,9 +393,9 @@
                         <div class="font-14" [ngClass]="{'active': calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active}"
                             *ngIf="item?.status==='trial'"><span class="font-26"
                                 *ngIf="calculateRemainingDays(item?.expiry) !== commonLocaleData?.app_active">{{calculateRemainingDays(item?.expiry)}}</span>
-                            <span class="green-dote" *ngIf="calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active"></span>
+                            <span class="green-dot" *ngIf="calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active"></span>
                             {{calculateRemainingDays(item?.expiry) === commonLocaleData?.app_active ? commonLocaleData?.app_active : ""}} </div>
-                        <div class="active font-14" *ngIf="item?.status==='active'"><span class="green-dote"></span>
+                        <div class="active font-14" *ngIf="item?.status==='active'"><span class="green-dot"></span>
                             {{commonLocaleData?.app_active}} </div>
                         <div class="text-danger font-14" *ngIf="item?.status==='expired'"><span class="red-dot"></span>
                             {{localeData?.subscription?.expired}} </div>

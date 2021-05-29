@@ -308,7 +308,7 @@ $greyClr: #6d6d6d;
     font-size: 12px;
 }
 
-.fs11 {
+.font-11 {
     font-size: 11px;
 }
 
@@ -597,7 +597,7 @@ textarea:focus {
 .sales-invoice-content label.sales-country-label {
     height: 36px;
 }
-.add-entryAgainst {
+.add-entry-against {
     display: none;
 }
 
@@ -652,13 +652,13 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
     padding-left: 0 !important;
 }
 
-.billingaddresFull p {
+.billing-address-full p {
     font-size: 14px;
     color: $dark-gray;
     margin-bottom: 5px;
 }
 
-.wrappAdress {
+.wrap-address {
     margin-top: 8px;
 }
 
@@ -670,11 +670,11 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
     color: $primary;
 }
 
-.wrap-invoiceNumberDetails .form-group {
+.wrap-invoice-number-details .form-group {
     display: block !important;
 }
 
-.wrap-invoiceNumberDetails .invoice-date {
+.wrap-invoice-number-details .invoice-date {
     max-width: 100% !important;
 }
 
@@ -684,7 +684,7 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
     margin: 0 0;
 }
 
-.wrap-inputField {
+.wrap-input-field {
     margin-bottom: 10px;
     display: flex;
     align-items: center;
@@ -720,12 +720,12 @@ input[type="text"] {
     height: 34px !important;
 }
 
-a.copyInvoice {
+a.copy-invoice {
     color: $primary;
     margin-left: 10px;
 }
 
-a.copyInvoice img {
+a.copy-invoice img {
     margin-right: 6px;
 }
 
@@ -791,10 +791,10 @@ a.copyInvoice img {
     color: $primary;
 }
 
-.otherDetailTable th,
-.otherDetailTable td,
-.otherDetailTable tr,
-.otherDetailTable tbody {
+.other-detail-table th,
+.other-detail-table td,
+.other-detail-table tr,
+.other-detail-table tbody {
     border-top: none !important;
 }
 

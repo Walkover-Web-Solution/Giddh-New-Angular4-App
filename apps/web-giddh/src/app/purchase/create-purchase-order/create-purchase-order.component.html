@@ -544,7 +544,7 @@
                             </div>
                             <!-- endregion -->
                         </div>
-                        <div class="row mt-b1" *ngIf="isMobileScreen">
+                        <div class="row mt-1" *ngIf="isMobileScreen">
                             <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                 <label>{{localeData?.order_date}}</label>
                             </div>
@@ -558,7 +558,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-b1" *ngIf="isMobileScreen">
+                        <div class="row mt-1" *ngIf="isMobileScreen">
                             <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                 <label>{{localeData?.expected_delivery}}</label>
                             </div>
@@ -659,7 +659,7 @@
                             <div class="description">
                                 {{transaction.description}}
                             </div>
-                            <p class="small text-muted sku-and-customfields" *ngIf="transaction.sku_and_customfields">
+                            <p class="small text-muted sku-and-custom-fields" *ngIf="transaction.sku_and_customfields">
                                 {{transaction.sku_and_customfields}}</p>
                             <div class="date-hsn-code">
                                 <div>
@@ -803,7 +803,7 @@
                                         </span>
                                     </div>
                                     <br>
-                                    <div class="tax-incurrency differ-currency"
+                                    <div class="tax-in-currency differ-currency"
                                         *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount">
                                         {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                                         <span class="d-flex justify-content-end">
@@ -888,7 +888,7 @@
                                         #description></textarea>
                                     <p class="font-12">{{commonLocaleData?.app_characters_left}}:
                                         {{entryDescriptionLength - transaction.description?.length}}</p>
-                                    <p class="small text-muted sku-and-customfields"
+                                    <p class="small text-muted sku-and-custom-fields"
                                         *ngIf="transaction.sku_and_customfields">
                                         {{transaction.sku_and_customfields}}</p>
                                 </div>
@@ -1125,7 +1125,7 @@
                                     </div>
                                 </div>
                                 <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount"
-                                    class="tax-incurrency differ-currency">
+                                    class="tax-in-currency differ-currency">
                                     {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                     <span class="d-flex justify-content-end">
                                         <amount-field [amount]="entry.otherTaxSum * exchangeRate"
@@ -1400,7 +1400,7 @@
                                     <p class="description">
                                         {{transaction.description}}
                                     </p>
-                                    <p class="small text-muted sku-and-customfields"
+                                    <p class="small text-muted sku-and-custom-fields"
                                         *ngIf="transaction.sku_and_customfields">
                                         {{transaction.sku_and_customfields}}</p>
 
@@ -1625,7 +1625,7 @@
                                                     [maxlength]="entryDescriptionLength"></textarea>
                                                 <p class="font-12">{{commonLocaleData?.app_characters_left}}:
                                                     {{entryDescriptionLength - transaction.description?.length}}</p>
-                                                <p class="small text-muted sku-and-customfields"
+                                                <p class="small text-muted sku-and-custom-fields"
                                                     *ngIf="transaction.sku_and_customfields">
                                                     {{transaction.sku_and_customfields}}</p>
                                             </div>

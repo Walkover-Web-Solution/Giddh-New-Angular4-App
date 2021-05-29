@@ -1,11 +1,11 @@
-<div id="" class="">
+<div>
 
     <div class="modal-header clearfix">
         <h3 class="modal-title" id="modal-title">{{activatedInvoice | titlecase }}</h3>
         <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="closeModelEvent.emit()"></i>
 
     </div>
-    <div class="modal-body noPad clearfix" id="export-body">
+    <div class="modal-body p-0 clearfix" id="export-body">
         <form #invoiceForm="ngForm" novalidate class="clearfix mr-b2" autocomplete="off" *ngIf="voucherFormDetails">
 
             <div class="bd-rb clearfix row">

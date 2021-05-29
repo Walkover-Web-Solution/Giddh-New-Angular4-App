@@ -648,7 +648,7 @@ span.icon-export-icon {
         background-color: $white;
         z-index: -1;
     }
-    .displayBlock {
+    .d-block {
         display: block !important;
     }
     .click-dropdown ul {
@@ -792,7 +792,7 @@ span.icon-export-icon {
 }
 
 @media (max-width: 420px) {
-    .smallLoading {
+    .small-loading {
         padding-left: 0;
         color: $night-rider;
         font-size: 12px;
@@ -808,7 +808,7 @@ span.icon-export-icon {
         padding-top: 10px;
         padding-bottom: 0;
     }
-    .smallLoading {
+    .small-loading {
         top: 5px;
     }
 }

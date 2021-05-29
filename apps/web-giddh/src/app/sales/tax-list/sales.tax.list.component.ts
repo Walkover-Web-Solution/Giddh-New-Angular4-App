@@ -45,7 +45,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
           -ms-user-select: none;
           user-select: none;
       }
-      .taxItem {
+      .tax-item {
       margin: 0;
       float: left;
       padding: 6px;

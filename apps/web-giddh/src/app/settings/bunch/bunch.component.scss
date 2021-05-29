@@ -1,3 +1,5 @@
+@import "../../../assets/css/color.scss";
+
 .form-horizontal .control-label {
     text-align: left;
 }
@@ -12,17 +14,17 @@
     margin-bottom: 5px;
 }
 
-.bunch_list li {
+.bunch-list li {
     position: relative;
     padding: 5px 15px;
     transition: all 0.3s ease;
 }
 
-.bunch_list li:hover {
-    background: #f4f5f8;
+.bunch-list li:hover {
+    background: $solitude;
 }
 
-.company_action {
+.company-action {
     right: 15px;
     top: 50%;
     opacity: 0;
@@ -30,7 +32,7 @@
     transform: translateY(-50%);
 }
 
-.bunch_parent .panel-body {
+.bunch-parent .panel-body {
     /* height: 245px;
   max-height: 245px; */
     overflow: auto;
@@ -38,7 +40,7 @@
     padding-bottom: 52px;
 }
 
-.bunch_parent {
+.bunch-parent {
     position: relative;
 }
 
@@ -49,10 +51,10 @@
     text-align: right;
     right: 0;
     left: 0;
-    background: #f4f5f8;
+    background: $solitude;
 }
 
-.bunch_list li:hover .company_action {
+.bunch-list li:hover .company-action {
     z-index: 1;
     opacity: 1;
 }

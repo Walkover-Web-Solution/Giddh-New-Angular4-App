@@ -83,7 +83,7 @@ input {
 table.ledger-footer-1 td[class*="col-"] {
     justify-content: flex-end;
 }
-.ledg-head table td.pdR25imp {
+.ledg-head table td.pd-r25 {
     padding-right: 25px !important;
 }
 
@@ -103,7 +103,7 @@ table.ledger-footer-1 td[class*="col-"] {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.ledg-head.entry-popup table td.pdR25imp {
+.ledg-head.entry-popup table td.pd-r25 {
     padding-right: 25px !important;
 }
 .transaction-mapped-table {
@@ -273,7 +273,7 @@ table.ledger-footer-1 td[class*="col-"] {
 .upload-div label {
     padding: 6px;
 }
-.pdR25imp {
+.pd-r25 {
     padding-right: 25px !important;
 }
 .thead-background1 th {
@@ -307,7 +307,7 @@ table.ledger-footer-1 td[class*="col-"] {
     width: 600px;
 }
 
-.daterange_picker_ledger {
+.daterange-picker-ledger {
     border: 0;
     background-color: transparent !important;
     text-decoration-line: none;

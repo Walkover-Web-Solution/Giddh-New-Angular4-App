@@ -1,11 +1,11 @@
 @import "../../../assets/css/color.scss";
-.webookList li {
+.webook-list li {
     list-style: none;
     margin-bottom: 7px;
     position: relative;
 }
 
-.webookList li > div > label {
+.webook-list li > div > label {
     position: absolute;
     bottom: 7px;
 }
@@ -18,7 +18,7 @@
     line-height: 34px;
 }
 
-.lh49 {
+.lh-49 {
     line-height: 49px;
 }
 

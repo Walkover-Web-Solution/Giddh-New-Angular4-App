@@ -35,14 +35,14 @@
 </div>
 <ng-container *ngFor="let account of groupDetail.accounts;trackBy: trackByFn">
     <!-- <section class="row row-2 account " [ngClass]="{'isHidden': !account.isVisible }"> -->
-    <section class="row-2 account " style="overflow: visible;" *ngIf="account.isVisible || account.isCreated"
+    <section class="row-2 account overflow-visible" *ngIf="account.isVisible || account.isCreated"
         [hidden]="!account.isVisible" (dblclick)="accountInfo(account,$event)" (clickOutside)="hideModal()"
         [exclude]="'.row-item'">
         <div class="row row-item"
             *ngIf="account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0 || account.debitTotal || account.creditTotal)">
             <div class="col-4 account no-select" [ngStyle]="{'padding-left': (padding+20)+'px'}">
 
-                <div class="pd-0 bd-r-right-none" [innerHTML]="account.name | lowercase | highlight:search">
+                <div class="p-0 bd-r-right-none" [innerHTML]="account.name | lowercase | highlight:search">
                 </div>
                 <span account-detail-modal-component *ngIf="modalUniqueName && modalUniqueName === account.uniqueName"
                     [shouldShowGenerateInvoice]="false" [accountUniqueName]="account.uniqueName"

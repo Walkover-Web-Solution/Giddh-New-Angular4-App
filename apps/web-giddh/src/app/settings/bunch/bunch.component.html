@@ -5,7 +5,7 @@
 
 <div class="row mr-t2">
     <div class="col-xs-3" *ngFor="let bunch of allBunches; let i = index; let l = last">
-        <div class="box bunch_parent clearfix">
+        <div class="box bunch-parent clearfix">
             <div class="">
                 <!--  -->
                 <div (click)="getBunchCompany(bunch)" class="cp">{{bunch.name}}</div>
@@ -24,12 +24,12 @@
             </div>
             <!-- <div class="panel-body">
           <perfect-scrollbar class="scroll-class" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" [scrollIndicators]="true">
-              <ul class="list-unstyled bunch_list">
+              <ul class="list-unstyled bunch-list">
                   <li>
                       <div>
                           Walkover Web solution Pvt Ltd.
                       </div>
-                      <span class="company_action pos-abs">
+                      <span class="company-action pos-abs">
                       <button type="button" class="btn btn-xs "><i class="fa fa-trash" aria-hidden="true" tooltip="Delete"></i></button>
                   </span>
                   </li>
