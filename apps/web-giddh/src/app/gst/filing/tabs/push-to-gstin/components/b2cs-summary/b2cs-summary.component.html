@@ -4,7 +4,7 @@
     <p class="text-muted half pd-t05">Details of invoices with value less than 2.5 lakhs that you’ve
         issued to consumers other than B2C (Large) transactions.</p>
 
-    <div class="">
+    <div>
         <div>
             <table class="transactions-table table-striped  table zi-table on-mobile-view" *ngIf="brcsSummary.length">
                 <thead>
@@ -125,7 +125,7 @@
 
         </div>
 
-        <div class="" *ngIf="!brcsSummary.length">
+        <div *ngIf="!brcsSummary.length">
             <div class="filings-empty-state">
                 <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
                 <div class="empty-msg"><span> There is no summary of invoices with value less than 2.5 lakhs, other than

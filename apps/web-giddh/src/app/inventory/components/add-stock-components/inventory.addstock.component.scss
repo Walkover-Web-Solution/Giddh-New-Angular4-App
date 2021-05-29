@@ -103,10 +103,12 @@ tr.fsstock td {
     padding: 2px;
     top: 0 !important;
 }
-.output-row  sh-select , .output-row .form-group input{
+.output-row  sh-select, 
+.output-row .form-group input{
     min-width: 140px;
 }
-.section-head.bd-rb, .output-row span{
+.section-head.bd-rb, 
+.output-row span{
     white-space: normal;
     word-break: break-word;
 

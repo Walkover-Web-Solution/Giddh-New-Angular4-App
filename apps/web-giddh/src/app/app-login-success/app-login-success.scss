@@ -1,3 +1,4 @@
+@import "../../assets/css/color.scss";
 .flex-col {
     display: flex;
     justify-content: center;
@@ -21,7 +22,7 @@
         margin-top: 20px;
     }
     p {
-        color: #7b7c7d;
+        color: $gray;
         line-height: 30px;
         margin-top: 20px;
         margin-bottom: 20px;

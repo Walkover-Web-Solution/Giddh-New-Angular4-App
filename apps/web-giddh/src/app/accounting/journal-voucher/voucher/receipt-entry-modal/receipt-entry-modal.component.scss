@@ -24,7 +24,8 @@
                     label{
                         display: flex;
                     }
-                    .icon-arrow-down, .icon-cross{
+                    .icon-arrow-down, 
+                    .icon-cross{
                         top: 36px;
                     }
 
@@ -36,14 +37,17 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 15px;
-            .receipt-type, .select-tax, .about-invoice-detail{
+            .receipt-type, 
+            .select-tax, 
+            .about-invoice-detail{
                 min-width: 180px;
                 div.position-relative{
                     width: 100% !important;
                 }
             }
             .single-field {
-                margin-right: 15px;flex: 1 1 auto !important;
+                margin-right: 15px;
+                flex: 1 1 auto !important;
                 label{
                     margin-bottom: 5px;
                     display: none;

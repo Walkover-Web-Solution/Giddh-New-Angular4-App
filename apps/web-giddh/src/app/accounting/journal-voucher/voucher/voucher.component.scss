@@ -44,9 +44,9 @@
             width: 20%;
             margin-right: 15px;
             min-width: 180px;
-             &.cr-dr-field{
-                 width: 5% !important;
-             }
+            &.cr-dr-field{
+                width: 5% !important;
+            }
             label{
                 margin-bottom: 5px;
                 display: none;
@@ -76,7 +76,8 @@
             cursor: pointer;
             padding: 5px;
         }
-        .cr-dr-field ,  .delete-row{
+        .cr-dr-field ,  
+        .delete-row{
             min-width: 30px;
             max-width: 30px;
         }

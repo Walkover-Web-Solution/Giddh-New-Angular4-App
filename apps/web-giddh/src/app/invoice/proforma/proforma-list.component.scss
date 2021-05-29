@@ -282,7 +282,8 @@ span.icon-advance-filter {
     height: 34px;
     color: $gray;
 }
-.checkbox-td, .index-no{
+.checkbox-td, 
+.index-no{
     display: flex;
     justify-content: center;
 }
@@ -333,7 +334,8 @@ span.icon-advance-filter {
     .search-icon-block {
         display: flex !important;
     }
-    .checkbox-td, .index-no{
+    .checkbox-td,
+    .index-no{
         display: flex;
         justify-content: flex-start;
     }
