@@ -24,6 +24,8 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     public isMobileView = false;
     /* This will hold local JSON data */
     public localeData: any = {};
+    /* This will store screen size */
+    public isMobileScreen: boolean = false;
 
     constructor(private store: Store<AppState>,
         private companyActions: CompanyActions,
@@ -34,6 +36,13 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileView = result.matches;
         });
+
+        this._breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
     }
 
     public ngOnInit() {
@@ -106,6 +115,50 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         if (e && !e.target) {
             this.saveLastState(tab);
+        }
+    }
+    /**
+     * This will get output by PO
+     *
+     * @param {boolean} event
+     * @memberof InvoiceComponent
+     */
+    public getPageHeading(): string {
+        if(this.activeTab === 'debit note') {
+            return this.localeData?.tabs?.debit_note;
+        }
+        else if(this.activeTab === 'credit note') {
+            return this.localeData?.tabs?.credit_note;
+        }
+        else if(this.activeTab === 'pending') {
+            return this.localeData?.tabs?.pending;
+        }
+        else if(this.activeTab === 'templates') {
+            return this.localeData?.tabs?.templates;
+        }
+        else if(this.activeTab === 'settings') {
+            return this.localeData?.tabs?.settings;
+        }
+        else if(this.activeTab === 'estimates') {
+            return this.localeData?.tabs?.estimates;
+        }
+        else if(this.activeTab === 'proformas') {
+            return this.localeData?.tabs?.proformas;
+        }
+        else if(this.activeTab === 'sales') {
+            return this.localeData?.tabs?.invoices;
+        }
+        else if(this.activeTab === 'recurring') {
+            return this.localeData?.tabs?.recurring;
+        }
+        else if(this.activeTab === 'pending') {
+            return this.localeData?.tabs?.pending;
+        }
+        else if(this.activeTab === 'templates') {
+            return this.localeData?.tabs?.templates;
+        }
+        else if(this.activeTab === 'settings') {
+            return this.localeData?.tabs?.settings;
         }
     }
 

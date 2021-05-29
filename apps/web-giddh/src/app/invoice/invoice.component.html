@@ -55,11 +55,8 @@
 
                     <!--<invoice-page-dd (pageChanged)="goToRoute($event)" (selectVoucher)="voucherChange($event)"></invoice-page-dd>-->
                     <div id="setting-tab" class="w-100">
-                        <hamburger-menu></hamburger-menu>
-                        <ng-template
-                            [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
-
-
+                        <hamburger-menu [pageHeading]="(isMobileScreen ? getPageHeading() : '') "></hamburger-menu>
+                        <ng-template [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
                             <tabset #staticTabs>
 
                                 <tab [heading]="localeData?.tabs?.debit_note" [active]="activeTab === 'debit note'"
@@ -113,10 +110,7 @@
 
                         </ng-template>
 
-
-                        <ng-template
-                            [ngIf]="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note'">
-
+                        <ng-template [ngIf]="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note'">
                             <tabset #staticTabs>
 
                                 <tab [heading]="localeData?.tabs?.estimates" (selectTab)="tabChanged('estimates', $event);

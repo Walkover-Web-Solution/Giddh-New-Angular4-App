@@ -12,7 +12,8 @@
                 <div id="setting-tab">
                     <div class="relative">
                     <div *ngIf="activeTab === 'taxes'">
-                        <hamburger-menu [pageHeading]="localeData?.setting_taxes"></hamburger-menu>
+                        <hamburger-menu [pageHeading]="localeData?.setting_taxes">
+                        </hamburger-menu>
                         <div class="setting-container">
                             <setting-taxes></setting-taxes>
                         </div>
