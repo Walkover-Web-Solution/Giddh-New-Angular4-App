@@ -1,6 +1,6 @@
 <ng-container appTranslate [file]="'purchase-record'" (localeData)="localeData = $event" [requireCommonData]="false">
     <div class="relative">
-        <hamburger-menu [pageHeading]="(isMobileScreen ? getPageHeading() : '') "></hamburger-menu>
+        <hamburger-menu [pageHeading]="getPageHeading()"></hamburger-menu>
         <div class="invoice-control" id="purchase-tab">
             <tabset class="purchase-tabset">
                 <tab [heading]="localeData?.purchase_order" [active]="activeTab == 'order'"
