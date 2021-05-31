@@ -116,8 +116,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             '(max-width: 1023px)',
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            console.log('Shalinee: ', result);
-            this.isMobileScreen = result?.breakpoints['(max-width: 1024px)'];
+            this.isMobileScreen = result?.breakpoints['(max-width: 1023px)'];
             this.isMobileView = result?.breakpoints['(max-width: 767px)'];
         });
 
