@@ -71,6 +71,9 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
                 return this.localeData?.tabs?.balance_sheet;
             }
         }
+        else {
+            return " ";
+        }
     }
 
     public ngOnInit() {

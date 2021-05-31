@@ -123,19 +123,23 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if(this.isMobileScreen){
             switch (this.activeTab) {
-                case 'debit note': return this.localeData?.tabs?.debit_note;
-                case 'credit note' :return this.localeData?.tabs?.credit_note;
+                case 'debit note':
+                return this.localeData?.tabs?.debit_note;
+                case 'credit note': return this.localeData?.tabs?.credit_note;
                 case 'pending': return this.localeData?.tabs?.pending;
-                case 'templates' :return this.localeData?.tabs?.templates;
+                case 'templates': return this.localeData?.tabs?.templates;
                 case 'settings': return this.localeData?.tabs?.settings;
-                case 'estimates' :return this.localeData?.tabs?.estimates;
+                case 'estimates': return this.localeData?.tabs?.estimates;
                 case 'proformas': return this.localeData?.tabs?.proformas;
-                case 'sales' :return this.localeData?.tabs?.sales;
+                case 'sales': return this.localeData?.tabs?.sales;
                 case 'recurring': return this.localeData?.tabs?.recurring;
                 case 'pending' :return this.localeData?.tabs?.pending;
                 case 'templates': return this.localeData?.tabs?.templates;
                 case 'settings' :return this.localeData?.tabs?.settings;
             }
+        }
+        else {
+            return " ";
         }
     }
 
