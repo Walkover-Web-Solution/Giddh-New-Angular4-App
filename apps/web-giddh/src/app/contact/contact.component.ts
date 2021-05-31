@@ -301,11 +301,12 @@ export class ContactComponent implements OnInit, OnDestroy {
             );
         }
     }
+
     /**
      * This will get output by PO
      *
      * @param {boolean} event
-     * @memberof InvoiceComponent
+     * @memberof ContactComponent
      */
      public getPageHeading(): string {
         if(this.activeTab === 'aging-report') {
