@@ -225,6 +225,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
+    /** This will store screen size */
+    public isMobileView: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -239,7 +241,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         private _groupWithAccountsAction: GroupWithAccountsAction,
         private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
         private _route: ActivatedRoute, private _generalAction: GeneralActions,
-        private _breakPointObservar: BreakpointObserver, private modalService: BsModalService,
+        private breakPointObservar: BreakpointObserver, private modalService: BsModalService,
         private settingsProfileActions: SettingsProfileActions, private groupService: GroupService,
         private settingsBranchAction: SettingsBranchActions,
         public currencyPipe: GiddhCurrencyPipe) {
@@ -303,18 +305,20 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will get output by PO
+     * This will return page heading based on active tab
      *
      * @param {boolean} event
      * @memberof ContactComponent
      */
      public getPageHeading(): string {
-        if(this.activeTab === 'aging-report') {
-            return this.localeData?.aging_report;
-        }
-        else if(this.activeTab !== 'aging-report') {
-            return this.localeData?.customer;
-        }
+        if(this.isMobileView){
+            if(this.activeTab === 'aging-report') {
+                return this.localeData?.aging_report;
+            }
+            else if(this.activeTab !== 'aging-report') {
+                return this.localeData?.customer;
+            }
+         }
     }
 
     public sort(key, ord = 'asc') {
@@ -372,10 +376,12 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
             });
 
-        this._breakPointObservar.observe([
-            '(max-width: 1023px)'
+        this.breakPointObservar.observe([
+            '(max-width: 1023px)',
+            '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
+            this.isMobileScreen = result?.breakpoints['(max-width: 1023px)'];
+            this.isMobileView = result?.breakpoints['(max-width: 767px)'];
         });
 
         combineLatest([this._route.params, this._route.queryParams])

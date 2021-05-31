@@ -54,20 +54,22 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
 
 
     /**
-     * This will get output by PO
+     * This will return page heading based on active tab
      *
      * @param {boolean} event
      * @memberof InvoiceComponent
      */
      public getPageHeading(): string {
-        if(this.CanTBLoad) {
-            return this.localeData?.tabs?.trial_balance;
-        }
-        else if(this.CanPLLoad) {
-            return this.localeData?.tabs?.profit_loss;
-        }
-        else if(this.CanBSLoad) {
-            return this.localeData?.tabs?.balance_sheet;
+        if(this.isMobileScreen){
+            if(this.CanTBLoad) {
+                return this.localeData?.tabs?.trial_balance;
+            }
+            else if(this.CanPLLoad) {
+                return this.localeData?.tabs?.profit_loss;
+            }
+            else if(this.CanBSLoad) {
+                return this.localeData?.tabs?.balance_sheet;
+            }
         }
     }
 

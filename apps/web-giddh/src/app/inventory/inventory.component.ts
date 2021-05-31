@@ -114,21 +114,12 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         private generalService: GeneralService
     ) {
         this.breakPointObservar.observe([
-            '(max-width:1024px)'
+            '(max-width: 1023px)',
+            '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (this.isMobileScreen && !result.matches) {
-                this.setDefaultGroup();
-            }
-            this.isMobileScreen = result.matches;
-        });
-
-        this.breakPointObservar.observe([
-            '(max-width:767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (this.isMobileView && !result.matches) {
-                this.setDefaultGroup();
-            }
-            this.isMobileView = result.matches;
+            console.log('Shalinee: ', result);
+            this.isMobileScreen = result?.breakpoints['(max-width: 1024px)'];
+            this.isMobileView = result?.breakpoints['(max-width: 767px)'];
         });
 
         this.activeStock$ = this.store.pipe(select(p => p.inventory.activeStock), takeUntil(this.destroyed$));
@@ -197,23 +188,25 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * This will get output by PO
+     * This will return page heading based on active tab
      *
      * @param {boolean} event
      * @memberof InventoryComponent
      */
      public getPageHeading(): string {
-        if(this.activeTabIndex === 0) {
-            return "Inventory";
-        }
-        else if(this.activeTabIndex === 1) {
-            return "Job Work";
-        }
-        else if(this.activeTabIndex === 2) {
-            return "Manufacturing";
-        }
-        else if(this.activeTabIndex === 3) {
-            return "Report";
+        if(this.isMobileView){
+            if(this.activeTabIndex === 0) {
+                return "Inventory";
+            }
+            else if(this.activeTabIndex === 1) {
+                return "Job Work";
+            }
+            else if(this.activeTabIndex === 2) {
+                return "Manufacturing";
+            }
+            else if(this.activeTabIndex === 3) {
+                return "Report";
+            }
         }
     }
 
