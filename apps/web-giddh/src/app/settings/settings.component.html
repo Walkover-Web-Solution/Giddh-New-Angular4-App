@@ -10,6 +10,7 @@
         <div class="row">
             <div class="invoice-control w-100">
                 <div id="setting-tab">
+                    <div class="relative">
                     <div *ngIf="activeTab === 'taxes'">
                         <hamburger-menu [pageHeading]="localeData?.setting_taxes"></hamburger-menu>
                         <div class="setting-container">
@@ -31,7 +32,7 @@
                             <setting-linked-accounts #eBankComp></setting-linked-accounts>
                         </div>
                     </div>
-                    <div *ngIf="activeTab === 'profile'" class="relative">
+                    <div *ngIf="activeTab === 'profile'">
                         <hamburger-menu></hamburger-menu>
                         <div class="setting-container">
                             <setting-profile #profileComponent></setting-profile>
@@ -93,6 +94,7 @@
                         <div class="setting-container">
                             <setting-warehouse></setting-warehouse>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
