@@ -177,7 +177,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      */
     public handleFinalSelection(selectedAddresses: Array<any>): void {
         this.addresses.forEach(address => {
-            if (!selectedAddresses.includes(address.uniqueName)) {
+            if (!selectedAddresses?.includes(address.uniqueName)) {
                 address.isDefault = false;
             }
         });
@@ -230,7 +230,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         const requestObj = {
             name: this.branchForm.value.name,
             alias: this.branchForm.value.alias,
-            linkAddresses: this.addresses.filter(address => this.branchForm.value.address.includes(address.uniqueName)).map(filteredAddress => ({
+            linkAddresses: this.addresses.filter(address => this.branchForm.value.address?.includes(address.uniqueName)).map(filteredAddress => ({
                 uniqueName: filteredAddress.uniqueName,
                 isDefault: filteredAddress.isDefault
             }))
@@ -302,7 +302,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
-        const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+        const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity?.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
