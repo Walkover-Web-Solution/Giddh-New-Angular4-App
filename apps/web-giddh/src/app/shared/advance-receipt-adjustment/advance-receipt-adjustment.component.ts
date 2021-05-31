@@ -178,12 +178,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                         });
                     } else {
                         // Vouchers for new adjustment not found fill the suggestions with already adjusted vouchers
-                        if (this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length) {
-                            this.advanceReceiptAdjustmentUpdatedData.adjustments.forEach(item => {
-                                this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                                this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                            });
-                        }
+                        this.pushExistingAdjustments();
                         if (this.isVoucherModule) {
                             this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                         } else {
@@ -946,6 +941,31 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             if (itemPresentInExistingAdjustment && item.balanceDue?.amountForAccount) {
                 item.balanceDue.amountForAccount += itemPresentInExistingAdjustment.adjustmentAmount.amountForAccount;
                 item.adjustmentAmount.amountForAccount += itemPresentInExistingAdjustment.adjustmentAmount.amountForAccount;
+            } else {
+                this.pushExistingAdjustments(item);
+            }
+        }
+    }
+
+    /**
+     * Pushes the existing adjustments in dropdown
+     *
+     * @private
+     * @param {Adjustment} [item] If provied pushes only this individual item else pushes all the adjustments to dropdown
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    private pushExistingAdjustments(item?: Adjustment): void {
+        if (item) {
+            this.advanceReceiptAdjustmentUpdatedData?.adjustments?.forEach(item => {
+                this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+            });
+        } else {
+            if (this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length) {
+                this.advanceReceiptAdjustmentUpdatedData.adjustments.forEach(item => {
+                    this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                    this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                });
             }
         }
     }
