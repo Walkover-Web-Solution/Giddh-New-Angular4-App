@@ -1,6 +1,6 @@
 <ng-container appTranslate [file]="'expenses'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="relative">
-        <hamburger-menu></hamburger-menu>
+        <hamburger-menu [pageHeading]="isMobileScreen ? getPageHeading(): ''"></hamburger-menu>
         <div class="clearfix petty-cash">
             <tabset class="custom-tabs" #tabset>
                 <div class="container-fluid pd-t2 mr-b15" *ngIf="!isSelectedRow">
