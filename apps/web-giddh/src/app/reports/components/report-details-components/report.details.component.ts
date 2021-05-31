@@ -110,7 +110,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         private companyService: CompanyService,
         private _toaster: ToasterService,
         private settingsBranchAction: SettingsBranchActions,
-        private generalService: GeneralService, private breakPointObservar: BreakpointObserver) {
+        private generalService: GeneralService,
+        private breakPointObservar: BreakpointObserver) {
             this.breakPointObservar.observe([
                 '(max-width: 767px)'
             ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {

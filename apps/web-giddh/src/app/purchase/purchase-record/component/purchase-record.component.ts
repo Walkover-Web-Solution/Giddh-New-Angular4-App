@@ -89,21 +89,24 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
         this.refreshPurchaseBill = event;
     }
     /**
-     * This will get output by PO
+     * This will return page heading based on active tab
      *
      * @param {boolean} event
      * @memberof PurchaseRecordComponent
      */
     public getPageHeading(): string {
-        if(this.activeTab === 'order') {
-            return this.localeData?.purchase_order;
+        if(this.isMobileScreen){
+            if(this.activeTab === 'order') {
+                return this.localeData?.purchase_order;
+            }
+            else if(this.activeTab === 'bill') {
+                return this.localeData?.purchase_bill;
+            }
+            else if(this.activeTab === 'settings') {
+                return this.localeData?.settings;
+            }
         }
-        else if(this.activeTab === 'bill') {
-            return this.localeData?.purchase_bill;
-        }
-        else if(this.activeTab === 'settings') {
-            return this.localeData?.settings;
-        }
+
     }
 
     /**
