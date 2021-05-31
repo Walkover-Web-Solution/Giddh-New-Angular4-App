@@ -319,6 +319,9 @@ export class ContactComponent implements OnInit, OnDestroy {
                 return this.localeData?.customer;
             }
          }
+         else {
+             return "";
+         }
     }
 
     public sort(key, ord = 'asc') {
