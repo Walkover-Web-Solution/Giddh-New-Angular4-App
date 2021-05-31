@@ -106,7 +106,9 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
                 return this.localeData?.settings;
             }
         }
-
+        else {
+            return "" ;
+        }
     }
 
     /**
