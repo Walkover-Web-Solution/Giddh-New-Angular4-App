@@ -33,17 +33,12 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         private router: Router, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver, private _generalActions: GeneralActions) {
 
         this._breakPointObservar.observe([
-            '(max-width: 1023px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileView = result.matches;
-        });
-
-        this._breakPointObservar.observe([
+            '(max-width: 1023px)',
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
+            this.isMobileView = result?.breakpoints['(max-width: 1023px)'];
+            this.isMobileScreen = result?.breakpoints['(max-width: 767px)'];
         });
-
     }
 
     public ngOnInit() {
@@ -119,47 +114,28 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
     /**
-     * This will get output by PO
+     * This will return page heading based on active tab
      *
      * @param {boolean} event
      * @memberof InvoiceComponent
      */
     public getPageHeading(): string {
-        if(this.activeTab === 'debit note') {
-            return this.localeData?.tabs?.debit_note;
-        }
-        else if(this.activeTab === 'credit note') {
-            return this.localeData?.tabs?.credit_note;
-        }
-        else if(this.activeTab === 'pending') {
-            return this.localeData?.tabs?.pending;
-        }
-        else if(this.activeTab === 'templates') {
-            return this.localeData?.tabs?.templates;
-        }
-        else if(this.activeTab === 'settings') {
-            return this.localeData?.tabs?.settings;
-        }
-        else if(this.activeTab === 'estimates') {
-            return this.localeData?.tabs?.estimates;
-        }
-        else if(this.activeTab === 'proformas') {
-            return this.localeData?.tabs?.proformas;
-        }
-        else if(this.activeTab === 'sales') {
-            return this.localeData?.tabs?.invoices;
-        }
-        else if(this.activeTab === 'recurring') {
-            return this.localeData?.tabs?.recurring;
-        }
-        else if(this.activeTab === 'pending') {
-            return this.localeData?.tabs?.pending;
-        }
-        else if(this.activeTab === 'templates') {
-            return this.localeData?.tabs?.templates;
-        }
-        else if(this.activeTab === 'settings') {
-            return this.localeData?.tabs?.settings;
+
+        if(this.isMobileScreen){
+            switch (this.activeTab) {
+                case 'debit note': return this.localeData?.tabs?.debit_note;
+                case 'credit note' :return this.localeData?.tabs?.credit_note;
+                case 'pending': return this.localeData?.tabs?.pending;
+                case 'templates' :return this.localeData?.tabs?.templates;
+                case 'settings': return this.localeData?.tabs?.settings;
+                case 'estimates' :return this.localeData?.tabs?.estimates;
+                case 'proformas': return this.localeData?.tabs?.proformas;
+                case 'sales' :return this.localeData?.tabs?.sales;
+                case 'recurring': return this.localeData?.tabs?.recurring;
+                case 'pending' :return this.localeData?.tabs?.pending;
+                case 'templates': return this.localeData?.tabs?.templates;
+                case 'settings' :return this.localeData?.tabs?.settings;
+            }
         }
     }
 

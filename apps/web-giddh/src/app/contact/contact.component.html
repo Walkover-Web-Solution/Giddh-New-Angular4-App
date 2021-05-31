@@ -1,6 +1,6 @@
 <ng-container appTranslate [file]="'contact'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="relative">
-        <hamburger-menu *ngIf="activeTab !== 'vendor'" [pageHeading]="(isMobileScreen ? getPageHeading() : '') "></hamburger-menu>
+        <hamburger-menu *ngIf="activeTab !== 'vendor'" [pageHeading]="getPageHeading()"></hamburger-menu>
         <hamburger-menu [pageHeading]="localeData?.page_heading" *ngIf="activeTab === 'vendor'"></hamburger-menu>
         <tabset #staticTabs class="custom-tabs" [ngClass]="{'hide-header': activeTab === 'vendor'}">
             <!-- region Customer/Vendor -->
