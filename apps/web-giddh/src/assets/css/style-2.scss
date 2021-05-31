@@ -10229,7 +10229,7 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
-    .on-setting-page {
+    .on-setting-page, .gst-sidebar-open {
         .hamburger-menu-icon{
             left: 80px !important;
             width: calc(100% - 160px) !important;

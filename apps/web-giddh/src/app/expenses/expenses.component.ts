@@ -17,6 +17,7 @@ import { GeneralService } from '../services/general.service';
 import { PendingListComponent } from './components/pending-list/pending-list.component';
 import { RejectedListComponent } from './components/rejected-list/rejected-list.component';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'app-expenses',
@@ -135,6 +136,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This will store screen size */
+    public isMobileScreen: boolean = false;
 
     constructor(private store: Store<AppState>,
         private _expenceActions: ExpencesAction,
@@ -143,11 +146,34 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private _cdRf: ChangeDetectorRef,
         private _generalService: GeneralService,
-        private router: Router) {
+        private router: Router,
+        private breakPointObservar: BreakpointObserver) {
 
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
         this.store.dispatch(this.companyActions.getTax());
+
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
+    }
+
+    /**
+     * This will get output by PO
+     *
+     * @param {boolean} event
+     * @memberof ExpensesComponent
+     */
+     public getPageHeading(): string {
+        if(this.currentSelectedTab === 'pending') {
+            return this.localeData?.pending;
+        }
+        else if(this.currentSelectedTab === 'rejected') {
+            return this.localeData?.rejected;
+        }
     }
 
     public ngOnInit() {
