@@ -24,15 +24,19 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     public isMobileView = false;
     /* This will hold local JSON data */
     public localeData: any = {};
+    /* This will store screen size */
+    public isMobileScreen: boolean = false;
 
     constructor(private store: Store<AppState>,
         private companyActions: CompanyActions,
         private router: Router, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver, private _generalActions: GeneralActions) {
 
         this._breakPointObservar.observe([
-            '(max-width: 1023px)'
+            '(max-width: 1023px)',
+            '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileView = result.matches;
+            this.isMobileView = result?.breakpoints['(max-width: 1023px)'];
+            this.isMobileScreen = result?.breakpoints['(max-width: 767px)'];
         });
     }
 
@@ -106,6 +110,35 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         if (e && !e.target) {
             this.saveLastState(tab);
+        }
+    }
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof InvoiceComponent
+     */
+    public getPageHeading(): string {
+
+        if(this.isMobileScreen){
+            switch (this.activeTab) {
+                case 'debit note':
+                return this.localeData?.tabs?.debit_note;
+                case 'credit note': return this.localeData?.tabs?.credit_note;
+                case 'pending': return this.localeData?.tabs?.pending;
+                case 'templates': return this.localeData?.tabs?.templates;
+                case 'settings': return this.localeData?.tabs?.settings;
+                case 'estimates': return this.localeData?.tabs?.estimates;
+                case 'proformas': return this.localeData?.tabs?.proformas;
+                case 'sales': return this.localeData?.tabs?.sales;
+                case 'recurring': return this.localeData?.tabs?.recurring;
+                case 'pending' :return this.localeData?.tabs?.pending;
+                case 'templates': return this.localeData?.tabs?.templates;
+                case 'settings' :return this.localeData?.tabs?.settings;
+            }
+        }
+        else {
+            return " ";
         }
     }
 
