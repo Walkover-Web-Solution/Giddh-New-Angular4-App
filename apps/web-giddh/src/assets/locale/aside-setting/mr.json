@@ -1,83 +1,83 @@
 {
-    "page_heading": "Settings",
-    "search_settings": "Search Settings",
-    "setting": "Setting",
+    "page_heading": "सेटिंग्ज",
+    "search_settings": "शोध सेटिंग्ज",
+    "setting": "सेटिंग",
     "tabs": [
         [
             [
                 {
-                    "label": "Company Profile",
+                    "label": "कंपनी प्रोफाइल",
                     "link": "/pages/settings/profile",
                     "icon": "<i class='icon-company'></i>"
                 },
                 {
-                    "label": "User Profile",
+                    "label": "वापरकर्ता प्रोफाइल",
                     "link": "/pages/user-details/mobile-number",
                     "icon": "<i class='icon-user-new'></i>"
                 },
                 {
-                    "label": "Manage User (Permission)",
+                    "label": "वापरकर्ता व्यवस्थापित करा (परवानगी)",
                     "link": "/pages/settings/permission",
                     "icon": "<i class='icon-permission1'></i>"
                 }
             ],
             [
                 {
-                    "label": "Taxes",
+                    "label": "कर",
                     "link": "/pages/settings/taxes",
                     "icon": "<i class='icon-tax-new'></i>"
                 },
                 {
-                    "label": "Integration",
+                    "label": "एकत्रीकरण",
                     "link": "/pages/settings/integration",
                     "icon": "<i class='icon-integration1 font-12'></i>"
                 },
                 {
-                    "label": "linked Accounts",
+                    "label": "दुवा साधलेली खाती",
                     "link": "/pages/settings/linked-accounts",
                     "icon": "<i class='icon-linked-account'></i>"
                 },
                 {
-                    "label": "Tags",
+                    "label": "टॅग्ज",
                     "link": "/pages/settings/tag",
                     "icon": "<i class='icon-tag-new'></i>"
                 },
                 {
-                    "label": "Trigger",
+                    "label": "ट्रिगर",
                     "link": "/pages/settings/trigger",
                     "icon": "<i class='icon-trigger-new'></i>"
                 }
             ],
             [
                 {
-                    "label": "Financial Year",
+                    "label": "आर्थिक वर्ष",
                     "link": "/pages/settings/financial-year",
                     "icon": "<i class='icon-financial-year-newr'></i>"
                 },
                 {
-                    "label": "Branch",
+                    "label": "शाखा",
                     "link": "/pages/settings/branch",
                     "icon": "<i class='icon-branch1'></i>"
                 },
                 {
-                    "label": "Discount",
+                    "label": "सवलत",
                     "link": "/pages/settings/discount",
                     "icon": "<i class='icon-discount-new'></i>"
                 },
                 {
-                    "label": "Warehouse",
+                    "label": "कोठार",
                     "link": "/pages/settings/warehouse",
                     "icon": "<i class='icon-warehouse1'></i>"
                 }
             ],
             [
                 {
-                    "label": "Invoice Management",
+                    "label": "बीजक व्यवस्थापन",
                     "link": "/pages/invoice/preview/settings/sales",
                     "icon": "<i class='icon-invoice-management'></i>"
                 },
                 {
-                    "label": "Subscription",
+                    "label": "सदस्यता",
                     "link": "/pages/user-details/subscription",
                     "icon": "<i class='icon-subscription2'></i>"
                 }
@@ -86,58 +86,58 @@
         [
             [
                 {
-                    "label": "Branch Profile",
+                    "label": "शाखा प्रोफाइल",
                     "link": "/pages/settings/profile",
                     "icon": "<i class='icon-branch1'></i>"
                 },
                 {
-                    "label": "User Profile",
+                    "label": "वापरकर्ता प्रोफाइल",
                     "link": "/pages/user-details/mobile-number",
                     "icon": "<i class='icon-user-new'></i>"
                 }
             ],
             [
                 {
-                    "label": "Taxes",
+                    "label": "कर",
                     "link": "/pages/settings/taxes",
                     "icon": "<i class='icon-tax-new'></i>"
                 },
                 {
-                    "label": "Integration",
+                    "label": "एकत्रीकरण",
                     "link": "/pages/settings/integration",
                     "icon": "<i class='icon-integration1'></i>"
                 },
                 {
-                    "label": "linked Accounts",
+                    "label": "दुवा साधलेली खाती",
                     "link": "/pages/settings/linked-accounts",
                     "icon": "<i class='icon-linked-account'></i>"
                 },
                 {
-                    "label": "Tags",
+                    "label": "टॅग्ज",
                     "link": "/pages/settings/tag",
                     "icon": "<i class='icon-tag-new'></i>"
                 },
                 {
-                    "label": "Trigger",
+                    "label": "ट्रिगर",
                     "link": "/pages/settings/trigger",
                     "icon": "<i class='icon-trigger'></i>"
                 }
             ],
             [
                 {
-                    "label": "Discount",
+                    "label": "सवलत",
                     "link": "/pages/settings/discount",
                     "icon": "<i class='icon-discount-new'></i>"
                 },
                 {
-                    "label": "Warehouse",
+                    "label": "कोठार",
                     "link": "/pages/settings/warehouse",
                     "icon": "<i class='icon-warehouse1'></i>"
                 }
             ],
             [
                 {
-                    "label": "Invoice Management",
+                    "label": "बीजक व्यवस्थापन",
                     "link": "/pages/invoice/preview/settings/sales",
                     "icon": "<i class='icon-invoice-management'></i>"
                 }
