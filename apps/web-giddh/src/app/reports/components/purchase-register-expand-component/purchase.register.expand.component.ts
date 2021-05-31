@@ -10,6 +10,7 @@ import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { FormControl } from '@angular/forms';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'purchase-register-expand',
@@ -55,11 +56,18 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* This will hold if it's mobile screen or not */
+    public isMobileScreen: boolean = false;
 
-    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef) {
+    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver) {
         this.purchaseRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.PurchaseRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetPurchaseDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetPurchaseDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetPurchaseDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetPurchaseDetailsSuccess), takeUntil(this.destroyed$));
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
     }
 
     ngOnInit() {

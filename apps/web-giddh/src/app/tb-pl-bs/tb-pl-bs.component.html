@@ -1,5 +1,6 @@
-<div class="relative" appTranslate [file]="'trial-profit-balance'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
-    <hamburger-menu></hamburger-menu>
+<div class="relative" appTranslate [file]="'trial-profit-balance'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <hamburger-menu [pageHeading]="(isMobileScreen ? getPageHeading() : '') "></hamburger-menu>
     <tabset class="setting-page tb-pl-bs-tabs" id="setting-tab" #staticTabsTBPL>
         <tab heading="{{localeData?.tabs?.trial_balance}}"
             (selectTab)="preventTabChangeWithRoute = false;tabChanged('trial-balance', 0); CanTBLoad = true;CanPLLoad = false;CanBSLoad = false;"

@@ -1,5 +1,6 @@
 {
-    "page_heading": "खरेदी नोंदणी",
+    "page_heading_single": "अहवाल",
+    "page_heading":"खरेदी नोंदणीर",
     "quantity_rate": "प्रमाण-दर",
     "search_voucher_no": "व्हाउचर नंबर शोधा",
     "transaction_count": "व्यवहार संख्या"

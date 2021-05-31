@@ -16,7 +16,7 @@ import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
-
+import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({
     selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
@@ -100,6 +100,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* This will hold if it's mobile screen or not */
+    public isMobileScreen: boolean = false;
 
     constructor(
         private router: Router,
@@ -108,8 +110,12 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         private companyService: CompanyService,
         private _toaster: ToasterService,
         private settingsBranchAction: SettingsBranchActions,
-        private generalService: GeneralService) {
-        
+        private generalService: GeneralService, private breakPointObservar: BreakpointObserver) {
+            this.breakPointObservar.observe([
+                '(max-width: 767px)'
+            ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                this.isMobileScreen = result.matches;
+            });
     }
 
     ngOnInit() {
