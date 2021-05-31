@@ -1116,7 +1116,7 @@
                     <label>{{localeData?.cancel_reason}} <span class="red-text">*</span></label>
                     <sh-select name="cancellationReason" (onClear)="eInvoiceCancel.cancellationReason = ''" [(ngModel)]="eInvoiceCancel.cancellationReason" [options]="eInvoiceCancellationReasonOptions"></sh-select>
                 </div>
-                <div class="mr-b15">
+                <div class="cancel-remarks-section">
                     <label>{{localeData?.cancel_remarks}} <span class="red-text">*</span></label>
                     <textarea name="cancellationRemarks" [(ngModel)]="eInvoiceCancel.cancellationRemarks" maxlength="100" hasFocus #cancellationRemarks="hasFocus" class="form-control w-100" (blur)="handleBlurOnCancellationRemarks()"></textarea>
                     <ng-container *ngIf="cancellationRemarks?.isFocused">
