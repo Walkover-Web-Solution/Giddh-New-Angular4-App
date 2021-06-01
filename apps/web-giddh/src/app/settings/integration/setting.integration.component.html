@@ -607,16 +607,16 @@
                                                                 #amountElement decimalDigitsDirective
                                                                 (blur)="preventZero(item.get('amount').value, index, null, false)"
                                                                 maxlength="10" formControlName="amount" name="amount"
-                                                                placeholder="Amount">
+                                                                [placeholder]="commonLocaleData?.app_amount">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-xl-2 col-md-6 payment-col1">
                                                     <ng-container *ngIf="index===0">
-                                                        <label class="d-flex relative info-icon">Select OTP <span
+                                                        <label class="d-flex relative info-icon">{{localeData?.payment?.select_otp}} <span
                                                                 class="required">*</span>
                                                             <div class="tooltip-box"><i class="icon-info cursor-pointer"
-                                                                    tooltip="The OTP will reach the person selected in Approver Name"></i>
+                                                                    [tooltip]="localeData?.payment?.select_otp_tooltip"></i>
                                                             </div>
                                                         </label>
                                                     </ng-container>
@@ -629,10 +629,10 @@
                                                 </div>
                                                 <div class="form-group col-xl-2 col-md-6 payment-col">
                                                     <ng-container *ngIf="index===0">
-                                                        <label class="d-flex relative info-icon">Approver Name <span
+                                                        <label class="d-flex relative info-icon">{{localeData?.payment?.approver_name}} <span
                                                                 class="required">*</span>
                                                             <div class="tooltip-box"><i class="icon-info cursor-pointer"
-                                                                    tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i>
+                                                                    [tooltip]="localeData?.payment?.approver_name_tooltip"></i>
                                                             </div>
                                                         </label>
 
@@ -641,7 +641,7 @@
                                                         *ngIf="item.get('otpType').value !=='BANK'">
                                                         <sh-select [options]="approvalNameList" class="text-left"
                                                             formControlName="approvalUniqueName"
-                                                            name="approvalUniqueName" [placeholder]="'Select Bank'"
+                                                            name="approvalUniqueName" [placeholder]="localeData?.payment?.select_bank"
                                                             [customSorting]="customApproverNameListSorting"
                                                             [multiple]="false" [isRequired]="true">
                                                             <ng-template #optionTemplate let-option="option">
@@ -661,7 +661,7 @@
                                                                     class="list-item relative text-light disabled disabled-list-item">
                                                                     <div class="item">
                                                                         <p>{{option?.label}}</p>
-                                                                        <p>Unverifed</p>
+                                                                        <p>{{localeData?.payment?.unverifed}}</p>
                                                                         <img src="assets/images/close-round.svg"
                                                                             class="check-search" alt="">
                                                                     </div>
@@ -672,7 +672,7 @@
                                                     <div class="custom-select select-caret position-relative"
                                                         *ngIf="item.get('otpType').value ==='BANK'">
                                                         <input type="text" class="form-control" disabled
-                                                            placeholder="Registered"
+                                                            [placeholder]="localeData?.payment?.registered"
                                                             formControlName="approvalUniqueName"
                                                             name="approvalUniqueName">
                                                     </div>
@@ -690,7 +690,7 @@
                                     <div>
                                         <a href="javascript:void(0)"
                                             (click)="addUserAmountRangesForm();checkFormValidations(addBankForm.value)"
-                                            class="btn btn-link pl-0">+ Add New Row</a>
+                                            class="btn btn-link pl-0">{{localeData?.payment?.add_new_row}}</a>
                                     </div>
                                     <!-- <div class="clearfix">
                                 <a href="javascript:void" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" (click)="openNewRegistartionForm()" class="btn btn-link pl-0">Add More ID</a>
@@ -813,16 +813,16 @@
                                                         [(ngModel)]="item.amount"
                                                         (blur)="changeAmount(item, index, amountUpdateElement, true, parentIndex );preventZero(item.amount,index, parentIndex, true )"
                                                         maxlength="10" name="amount{{parentIndex}}{{index}}"
-                                                        placeholder="Amount">
+                                                        [placeholder]="commonLocaleData?.app_amount">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                             <ng-container *ngIf="index===0">
-                                                <label class="d-flex relative info-icon">Select OTP <span
+                                                <label class="d-flex relative info-icon">{{localeData?.payment?.select_otp}} <span
                                                         class="required">*</span>
                                                     <div class="tooltip-box"><i class="icon-info cursor-pointer"
-                                                            tooltip="The OTP will reach the person selected in approver Name"></i>
+                                                        [tooltip]="localeData?.payment?.select_otp_tooltip"></i>
                                                     </div>
                                                 </label>
                                             </ng-container>
@@ -836,17 +836,17 @@
                                         </div>
                                         <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                             <ng-container *ngIf="index===0">
-                                                <label class="d-flex relative info-icon">Approver Name <span
+                                                <label class="d-flex relative info-icon">{{localeData?.payment?.approver_name}} <span
                                                         class="required">*</span>
                                                     <div class="tooltip-box"><i class="icon-info cursor-pointer"
-                                                            tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i>
+                                                            [tooltip]="localeData?.payment?.approver_name_tooltip"></i>
                                                     </div>
                                                 </label>
 
                                             </ng-container>
                                             <div class="custom-select select-caret position-relative"
                                                 *ngIf="item.otpType!=='BANK'">
-                                                <input type="text" class="form-control" placeholder="Registered"
+                                                <input type="text" class="form-control" [placeholder]="localeData?.payment?.registered"
                                                     disabled name="approvalUniqueName{{index}}"
                                                     [value]="item.approvalDetails.name">
                                             </div>
@@ -854,7 +854,7 @@
                                                 *ngIf="item.otpType==='BANK'">
                                                 <input type="text" class="form-control"
                                                     [disabled]="item.otpType==='BANK' || isBankUpdateInEdit !== parentIndex"
-                                                    placeholder="Registered" name="approvalUniqueName{{index}}">
+                                                    [placeholder]="localeData?.payment?.registered" name="approvalUniqueName{{index}}">
                                             </div>
                                         </div>
                                         <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0"
@@ -871,7 +871,7 @@
 
                                 <div *ngIf="isBankUpdateInEdit === parentIndex">
                                     <a href="javascript:void(0)" (click)="addNewAmountRangeRow(parentIndex+1)"
-                                        class="btn btn-link pl-0 pt-0">+ Add New Row</a>
+                                        class="btn btn-link pl-0 pt-0">{{localeData?.payment?.add_new_row}}</a>
                                 </div>
                                 <!-- New code -->
                                 <div>
@@ -1121,16 +1121,16 @@
                                                         #amountElement decimalDigitsDirective
                                                         (blur)="preventZero(item.get('amount').value, index, null, false)"
                                                         maxlength="10" [mask]="inputMaskFormat" formControlName="amount"
-                                                        name="amount" placeholder="Amount">
+                                                        name="amount" [placeholder]="commonLocaleData?.app_amount">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col1">
                                             <ng-container *ngIf="index===0">
-                                                <label class="d-flex relative info-icon">Select OTP <span
+                                                <label class="d-flex relative info-icon">{{localeData?.payment?.select_otp}} <span
                                                         class="required">*</span>
                                                     <div class="tooltip-box"><i class="icon-info cursor-pointer"
-                                                            tooltip="The OTP will reach the person selected in Approver Name"></i>
+                                                        [tooltip]="localeData?.payment?.select_otp_tooltip"></i>
                                                     </div>
                                                 </label>
                                             </ng-container>
@@ -1143,10 +1143,10 @@
                                         </div>
                                         <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col">
                                             <ng-container *ngIf="index===0">
-                                                <label class="d-flex relative info-icon">Approver Name <span
+                                                <label class="d-flex relative info-icon">{{localeData?.payment?.approver_name}} <span
                                                         class="required">*</span>
                                                     <div class="tooltip-box"><i class="icon-info cursor-pointer"
-                                                            tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i>
+                                                            [tooltip]="localeData?.payment?.approver_name_tooltip"></i>
                                                     </div>
                                                 </label>
 
@@ -1155,7 +1155,7 @@
                                                 *ngIf="item.get('otpType').value !=='BANK'">
                                                 <sh-select [options]="approvalNameList" class="text-left"
                                                     formControlName="approvalUniqueName" name="approvalUniqueName"
-                                                    [placeholder]="'Select Bank'"
+                                                    [placeholder]="localeData?.payment?.select_bank"
                                                     [customSorting]="customApproverNameListSorting" [multiple]="false"
                                                     [isRequired]="true">
                                                     <ng-template #optionTemplate let-option="option">
@@ -1175,7 +1175,7 @@
                                                             class="list-item relative text-light disabled disabled-list-item">
                                                             <div class="item">
                                                                 <p>{{option?.label}}</p>
-                                                                <p>Unverifed</p>
+                                                                <p>{{localeData?.payment?.unverifed}}</p>
                                                                 <img src="assets/images/close-round.svg"
                                                                     class="check-search" alt="">
                                                             </div>
@@ -1186,7 +1186,7 @@
                                             <div class="custom-select select-caret position-relative"
                                                 *ngIf="item.get('otpType').value ==='BANK'">
                                                 <input type="text" class="form-control" disabled
-                                                    placeholder="Registered" formControlName="approvalUniqueName"
+                                                    [placeholder]="localeData?.payment?.registered" formControlName="approvalUniqueName"
                                                     name="approvalUniqueName">
                                             </div>
                                         </div>
@@ -1202,7 +1202,7 @@
                             </ng-container>
                             <div>
                                 <a href="javascript:void(0)" (click)="addUserAmountRangesForm()"
-                                    class="btn btn-link pl-0 pt-0">+ Add New Row</a>
+                                    class="btn btn-link pl-0 pt-0">{{localeData?.payment?.add_new_row}}</a>
                             </div>
                             <!-- <div class="clearfix">
                                 <a href="javascript:void" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" (click)="openNewRegistartionForm()" class="btn btn-link pl-0">Add More ID</a>
