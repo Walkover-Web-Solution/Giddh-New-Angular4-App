@@ -35,6 +35,8 @@ export class InvoiceUiDataService {
      * to avoid unused uploading of images on the server
     */
     public unusedImageSignature: string;
+    /** True, if logo update is successful */
+    public isLogoUpdateInProgress: boolean;
 
     private companyName: string;
     private companyAddress: string;
@@ -144,6 +146,7 @@ export class InvoiceUiDataService {
      */
     public resetCustomTemplate() {
         this.customTemplate.next(new CustomTemplateResponse());
+        this.isLogoUpdateInProgress = false;
     }
 
     public BRToNewLine(template) {

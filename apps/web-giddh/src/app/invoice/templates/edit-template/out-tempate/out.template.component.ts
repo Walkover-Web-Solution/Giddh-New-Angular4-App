@@ -92,7 +92,9 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 		this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
 			if (template && template.logoUniqueName) {
 				this.showLogo = true;
-				this.logoSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName;
+				if (!this._invoiceUiDataService.isLogoUpdateInProgress) {
+                    this.logoSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName;
+                }
 			}
 			if (template && template.sections) {
 				if (template.sections.footer.data.imageSignature.display) {
