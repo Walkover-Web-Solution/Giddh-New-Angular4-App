@@ -101,6 +101,11 @@
         "add_beneficiary": "Add Beneficiary",
         "corporate_id_label": "Corporate ID",
         "corporate_id_placeholder": "Enter Corporate ID",
-        "client_amount_note": "The client can not select the same amount in the custom more than once."
+        "client_amount_note": "The client can not select the same amount in the custom more than once.",
+        "approver_name_tooltip": "A list of verified, non-verified and bank registered users to which the OTP will be send.",
+        "select_bank": "Select Bank",
+        "unverifed": "Unverifed",
+        "registered": "Registered",
+        "add_new_row": "+ Add New Row"
     }
 }
