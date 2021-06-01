@@ -10,6 +10,7 @@
         <div class="row">
             <div class="invoice-control w-100">
                 <div id="setting-tab">
+                    <div class="relative">
                     <div *ngIf="activeTab === 'taxes'">
                         <hamburger-menu [pageHeading]="localeData?.setting_taxes"></hamburger-menu>
                         <div class="setting-container">
@@ -93,6 +94,7 @@
                         <div class="setting-container">
                             <setting-warehouse></setting-warehouse>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
