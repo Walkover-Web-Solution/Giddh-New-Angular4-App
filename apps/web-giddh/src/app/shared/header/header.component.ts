@@ -815,7 +815,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             if (this.asideSettingMenuState === "in" && this.asideInventorySidebarMenuState === "in") {
                 document.querySelector('body').classList.add('mobile-setting-sidebar');
-            } else {
+            }
+            else {
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
         }, ((this.asideSettingMenuState === 'out') ? 100 : 0) && (this.asideInventorySidebarMenuState === 'out') ? 100 : 0);
@@ -1104,6 +1105,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.sideMenu.isopen = false;
             this.menuStateChange.emit(false);
         }
+
     }
 
     public forceCloseSidebar(event) {
@@ -1562,6 +1564,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
                 this.sideBarStateChange(true);
                 document.querySelector('body').classList.add('on-setting-page');
+                document.querySelector('.primary-sidebar').classList.add('sidebar-collapse');
+                document.querySelector('.nav-left-bar').classList.add('width-60');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-user-page');
             } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page").length > 0
@@ -1570,6 +1574,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
+                document.querySelector('.primary-sidebar').classList.add('sidebar-collapse');
+                document.querySelector('.nav-left-bar').classList.add('width-60');
             } else if (
                 document.getElementsByTagName("tabset") &&
                 document.getElementsByTagName("tabset").length > 0 &&
@@ -1578,6 +1584,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
+                document.querySelector('.primary-sidebar').classList.remove('sidebar-collapse');
+                document.querySelector('.nav-left-bar').classList.remove('width-60');
             }
             /* this code is not working so that inventory sidebar is not working on mobile view, developer please check it */
             else if (document.getElementsByClassName("new-inventory-page") && document.getElementsByClassName("new-inventory-page").length > 0) {
@@ -1585,6 +1593,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.add('inventory-sidebar');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-user-page');
+
             }
 
             else {
@@ -1592,6 +1601,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
+                document.querySelector('.primary-sidebar').classList.remove('sidebar-collapse');
+                document.querySelector('.nav-left-bar').classList.remove('width-60');
             }
         }, 500);
 
