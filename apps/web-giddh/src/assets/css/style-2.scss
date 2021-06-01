@@ -9797,14 +9797,7 @@ body.update-scroll-hidden {
 .menu_open .sales-register {
     width: calc(100% - 240px) !important;
 }
-body.page-has-tabs {
-    .hamburger-menu-icon{
-        &.page-has-heading{
-            width: 45px;
-            border-bottom: none;
-        }
-    }
-}
+
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
