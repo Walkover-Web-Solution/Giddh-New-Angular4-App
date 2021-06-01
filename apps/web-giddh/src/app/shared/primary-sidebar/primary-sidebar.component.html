@@ -6,7 +6,7 @@
                 <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
                     <span class="inner-span"></span>
                 </span>
-                <li class="company-name position-relative" dropdown #companyDetailsDropDownWeb="bs-dropdown"
+                <li class="company-name position-relative" dropdown #companyDetailsDropDownWeb="bs-dropdown" 
                     [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="companyDetailsDropDownWeb.hide()"
                     [exclude]="'.company-name'">
                     <h3 class="font-16 d-flex flex-column cursor-pointer" [checkPermission]="['MENU', 'MANAGE']"
@@ -100,7 +100,7 @@
                         </p>
                     </div>
                     <ul class="list-style-none giddh-primary-items">
-                        <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems" dropdown
+                        <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems" dropdown [autoClose]="false"
                             [attr.container]="!isOpen ? 'body' : ''">
                             <a href="javascript:void(0);" tooltip="{{menu?.label}}" *ngIf="menu?.items?.length"
                                 id="button-basic-02" dropdownToggle type="button" class="dropdown-toggle"
