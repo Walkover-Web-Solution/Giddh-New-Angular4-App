@@ -9773,14 +9773,14 @@ body.update-scroll-hidden {
         padding-left: 0 !important;
     }
 }
-body.page-has-tabs {
-    .hamburger-menu-icon{
-        &.page-has-heading{
-            width: 45px;
-            border-bottom: none;
-        }
-    }
-}
+// body.page-has-tabs {
+//     .hamburger-menu-icon{
+//         &.page-has-heading{
+//             width: 45px;
+//             border-bottom: none;
+//         }
+//     }
+// }
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
