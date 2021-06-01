@@ -152,12 +152,14 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                         this.customTemplate.logoSize === '80' ? 'M' : 'S';
                 }
                 if (this.customTemplate.logoUniqueName) {
-                    this.showDeleteButton = true;
-                    this.showUploadButton = false;
                     this.logoAttached = true;
                     this.isFileUploaded = false;
-                    let preview: any = document.getElementById('logoImage');
-                    preview.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
+                    if (!this._invoiceUiDataService.isLogoUpdateInProgress) {
+                        this.showDeleteButton = true;
+                        this.showUploadButton = false;
+                        let preview: any = document.getElementById('logoImage');
+                        preview.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
+                    }
                 }
             }
         });
@@ -280,12 +282,14 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
             this.previewFile(output.file);
             this.toogleLogoVisibility(true);
             this.isFileUploaded = false;
+            this._invoiceUiDataService.isLogoUpdateInProgress = true;
         } else if (output.type === 'start') {
             this.isFileUploadInProgress = true;
             this.showUploadButton = false;
             this.showDeleteButton = false;
             this.removeAllFiles();
             this.isFileUploaded = false;
+            this._invoiceUiDataService.isLogoUpdateInProgress = true;
         } else if (output.type === 'done') {
             this.isFileUploadInProgress = false;
             if (output.file.response.status === 'success') {
@@ -295,6 +299,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                 //this.updateTemplate(output.file.response.body.uniqueName); //unused call to save template after logo upload
                 this.onValueChange('logoUniqueName', output.file.response.body.uniqueName);
                 this.isFileUploaded = true;
+                this._invoiceUiDataService.isLogoUpdateInProgress = false;
                 this._toasty.successToast('file uploaded successfully.');
             } else {
                 this._toasty.errorToast(output.file.response.message, output.file.response.code);
