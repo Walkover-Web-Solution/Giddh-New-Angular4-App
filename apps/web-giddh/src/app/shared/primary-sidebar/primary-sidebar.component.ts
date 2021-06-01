@@ -36,6 +36,7 @@ import { OrganizationType } from '../../models/user-login-state';
 import { CompanyService } from '../../services/companyService.service';
 import { DbService } from '../../services/db.service';
 import { GeneralService } from '../../services/general.service';
+import { LocaleService } from '../../services/locale.service';
 import { AppState } from '../../store';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { AllItem, AllItems } from '../helpers/allItems';
@@ -137,6 +138,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This holds the active locale */
+    public activeLocale: string = "";
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -152,7 +155,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private loginAction: LoginActions,
         private socialAuthService: AuthService,
-        private groupWithAction: GroupWithAccountsAction
+        private groupWithAction: GroupWithAccountsAction, 
+        private localeService: LocaleService
     ) {
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
@@ -358,6 +362,16 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     this.companyDetailsDropDownWeb.hide();
                 }
             }
+        });
+
+        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            if(this.activeLocale && this.activeLocale !== response?.value) {
+                this.localeService.getLocale('all-items', response?.value).subscribe(response => {
+                    this.localeData = response;
+                    this.translationComplete(true);
+                });
+            }
+            this.activeLocale = response?.value;
         });
     }
 
