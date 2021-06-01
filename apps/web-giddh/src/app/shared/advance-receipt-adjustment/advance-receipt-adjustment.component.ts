@@ -910,7 +910,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public isExchangeProfitable(): boolean {
         /* Exchange gain/loss logic: https://www.accountingtools.com/articles/foreign-exchange-accounting.html
              ______________________________________________________________________________________________________
-            |______________________________|_____________Imoort Goods_____________|__________Export Goods__________|
+            |______________________________|_____________Import Goods_____________|__________Export Goods__________|
             |______________________________|______________________________________|________________________________|
             |  Home currency weakens       |                Loss                  |                Gain            |
             |______________________________|______________________________________|________________________________|
