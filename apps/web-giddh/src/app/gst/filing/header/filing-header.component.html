@@ -5,7 +5,7 @@
     </div>
 
     <!-- region gstr1 -->
-    <div class="list-style row" *ngIf="selectedGst === 'gstr1'">
+    <div class="list-style row" *ngIf="selectedGst === GstReport.Gstr1">
 
         <div class="wrap-GSTR-1-title col-lg-6 col-md-12 col-xs-12 xs-mb-1">
             <a href="javascript:void(0);" [routerLink]="['/gstfiling']" class="ember-view">
@@ -74,7 +74,7 @@
     <!-- endregion -->
 
     <!-- region gstr2 -->
-    <div class="list-style" *ngIf="selectedGst === 'gstr2'">
+    <div class="list-style" *ngIf="selectedGst === GstReport.Gstr2">
         <a href="javascript:void(0);" id="ember1210" class="ember-view" [routerLink]="['/gstfiling']">
             <img src="{{imgPath}}back.svg" class="icon icon-sm text-middle" />
         </a>

@@ -85,5 +85,6 @@
     },
     "export_group_ledger": "Export Group Ledger",
     "field_type_placeholder": "Type to filter",
-    "bank_details_error_message": "All the bank fields are mandatory if you provide data for any of them"
+    "bank_details_error_message": "All the bank fields are mandatory if you provide data for any of them",
+    "item_no": "Item #[ITEM_NO]"
 }

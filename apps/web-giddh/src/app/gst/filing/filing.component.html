@@ -1,3 +1,6 @@
+<div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
+    <gstr-sidebar (navigateEvent)="handleNavigation($event)" [activeCompanyGstNumber]="activeCompanyGstNumber" [selectedGstModule]="selectedGst" class="gst-sidebar" [isMonthSelected]="isMonthSelected"></gstr-sidebar>
+</div>
 <hamburger-menu [pageHeading]="'GST'"></hamburger-menu>
 <div class="column content-column gst-filing-container navs-list">
     <div class="tax-engine">
@@ -26,7 +29,7 @@
                         </div>
                     </tab>
 
-                    <tab *ngIf="selectedGst === 'gstr2'" (selectTab)="selectTab($event, true, '2. Reconcilation')">
+                    <tab *ngIf="selectedGst === GstReport.Gstr2" (selectTab)="selectTab($event, true, '2. Reconcilation')">
                         <ng-template tabHeading>
                             2. Reconcilation
                         </ng-template>
@@ -36,8 +39,7 @@
                         </div>
                     </tab>
 
-                    <tab *ngIf="selectedGst === 'gstr1'" [active]="selectedTab === 'pushToGstn' || selectedTabId === 1"
-                        (selectTab)="selectTab($event, true, 'pushToGstn')">
+                    <tab *ngIf="selectedGst === GstReport.Gstr1" [active]="selectedTab === 'pushToGstn' || selectedTabId === 1" (selectTab)="selectTab($event, true, 'pushToGstn')">
                         <ng-template tabHeading>
                             2. Push to GSTN
                         </ng-template>
@@ -49,8 +51,7 @@
                     </tab>
 
                     <!-- Assigned by meghna  -->
-                    <tab *ngIf="isCompany && selectedGst !== 'gstr2'"
-                        (selectTab)="selectTab($event, true, '3. File your Return')">
+                    <tab *ngIf="isCompany && selectedGst !== GstReport.Gstr2" (selectTab)="selectTab($event, true, '3. File your Return')">
                         <ng-template tabHeading>
                             3. File your Return
                         </ng-template>
