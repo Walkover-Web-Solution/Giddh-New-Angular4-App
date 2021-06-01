@@ -9125,30 +9125,31 @@ span#HW_badge_cont:nth-child(3) {
 
 .on-setting-page .nav-left-bar.open,
 .on-user-page .nav-left-bar.open on-user-page {
-    left: -240px !important;
-    display: none !important;
+    left: 0 !important;
+    display: block !important;
 }
 .setting-sidebar-open .nav-left-bar,
 .on-user-page .nav-left-bar,
 .on-setting-page .nav-left-bar {
-    display: none;
+    display: block;
 }
 .menu_open aside-setting.setting-sidebar {
-    left: 0 !important;
+    right: 0 !important;
 }
 .on-setting-page aside-setting.setting-sidebar,
 .on-user-page aside-setting.setting-sidebar {
-    left: -250px;
+   // left: -250px;
 }
 .setting-sidebar-open #content-wrapper.menu_open {
-    padding-left: -240px;
+    padding-right: 240px;
+    padding-left: 60px !important;
 }
 
 .setting-sidebar-open .desktop-header {
     padding-left: 0;
 }
 .setting-sidebar-open .desktop-header.menu_open {
-    padding-left: 240px !important;
+    padding-right: 240px !important;
 }
 .desktop-header.menu_open {
     padding-left: 60px !important;
@@ -10230,6 +10231,25 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
+<<<<<<< HEAD
+=======
+    .on-setting-page .nav-left-bar.open,
+    .on-user-page .nav-left-bar.open on-user-page {
+        left: 0 !important;
+        display: none !important;
+    }
+    .setting-sidebar-open .nav-left-bar,
+    .on-user-page .nav-left-bar,
+    .on-setting-page .nav-left-bar {
+        display: none;
+    }
+    .on-setting-page, .gst-sidebar-open {
+        .hamburger-menu-icon{
+            left: 80px !important;
+            width: calc(100% - 160px) !important;
+        }
+    }
+>>>>>>> 14fd9d1694... shalinee | test | showing main navigation on setting page and align setting sidebar to right
     .all-features-modal{
         height: 100vh;
     }
