@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, OnChanges } 
 import { select, Store } from '@ngrx/store';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { find, take, takeUntil } from 'rxjs/operators';
-
 import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
@@ -18,7 +17,7 @@ import { StockUnits } from './stock-unit';
 import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
-    selector: 'inventory-custom-stock',  // <home></home>
+    selector: 'inventory-custom-stock',
     templateUrl: './inventory.customstock.component.html',
     styleUrls: ['./inventory.customstock.component.scss']
 })

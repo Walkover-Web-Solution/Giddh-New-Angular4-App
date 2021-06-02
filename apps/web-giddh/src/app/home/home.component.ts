@@ -1,10 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { ComparisionChartComponent } from './components/comparision/comparision-chart.component';
-import { NetworthChartComponent } from './components/networth/networth-chart.component';
-import { HistoryChartComponent } from './components/history/history-chart.component';
 import { RevenueChartComponent } from './components/revenue/revenue-chart.component';
-import { ExpensesChartComponent } from './components/expenses/expenses-chart.component';
-import { LiveAccountsComponent } from './components/live-accounts/live-accounts.component';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -17,10 +12,8 @@ import { HomeActions } from '../actions/home/home.actions';
 import { Router } from '@angular/router';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ProfitLossComponent } from './components/profit-loss/profile-loss.component';
-import { gstComponent } from './components/gst/gst.component';
 import { BankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
 import { CrDrComponent } from './components/cr-dr-list/cr-dr-list.component';
-import { TotalSalesComponent } from './components/total-sales/total-sales.component';
 import { SubscriptionsUser } from "../models/api-models/Subscriptions";
 import { GeneralService } from "../services/general.service";
 
@@ -37,17 +30,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     public historyComparisionChartData$: Observable<IComparisionChartResponse>;
     public expensesChartData$: Observable<IExpensesChartClosingBalanceResponse>;
     public comparisionChartData$: Observable<IComparisionChartResponse>;
-    @ViewChild('liveaccount', { static: true }) public liveaccount: LiveAccountsComponent;
-    @ViewChild('expence', { static: true }) public expence: ExpensesChartComponent;
     @ViewChild('revenue', { static: true }) public revenue: RevenueChartComponent;
-    @ViewChild('compare', { static: true }) public compare: ComparisionChartComponent;
-    @ViewChild('history', { static: true }) public history: HistoryChartComponent;
-    @ViewChild('networth', { static: true }) public networth: NetworthChartComponent;
     @ViewChild('profitloss', { static: true }) public profitloss: ProfitLossComponent;
-    @ViewChild('gst', { static: true }) public gst: gstComponent;
     @ViewChild('bankaccount', { static: true }) public bankaccount: BankAccountsComponent;
     @ViewChild('crdrlist', { static: true }) public crdrlist: CrDrComponent;
-    @ViewChild('totalSales', { static: true }) public totalSales: TotalSalesComponent;
 
     public subscribedPlan: SubscriptionsUser;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

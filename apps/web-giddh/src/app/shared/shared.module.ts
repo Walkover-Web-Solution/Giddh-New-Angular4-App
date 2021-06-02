@@ -17,45 +17,25 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
-
 import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
 import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { SelectModule } from '../theme/ng-select/ng-select';
-import {
-    AuthServiceConfig,
-    GoogleLoginProvider,
-    LinkedinLoginProvider,
-    SocialLoginModule,
-} from '../theme/ng-social-login-module';
+import { AuthServiceConfig, GoogleLoginProvider, SocialLoginModule } from '../theme/ng-social-login-module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { FormWizardModule } from '../theme/ng2-wizard';
 import { UniversalListModule } from '../theme/universal-list/universal.list.module';
 import { WelcomeComponent } from '../welcome/welcome.component';
 import { CheckPermissionDirective } from './../permissions/check-permission.directive';
 import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
-import { FixedFooterComponent } from './fixed-footer/fixed-footer.component';
-import { FooterComponent } from './footer/footer.component';
-import { HeaderComponent } from './header'
+import { HeaderComponent } from './header';
 import { PrimarySidebarComponent } from './primary-sidebar/primary-sidebar.component';
-import {
-    AccountOperationsComponent,
-    AccountsSideBarComponent,
-    CompanyAddComponent,
-    CompanyAddNewUiComponent,
-    GroupsAccountSidebarComponent,
-    ManageGroupsAccountsComponent,
-} from './header/components';
-import {
-    AccountAddNewDetailsComponent,
-} from './header/components/account-add-new-details/account-add-new-details.component';
-import {
-    AccountUpdateNewDetailsComponent,
-} from './header/components/account-update-new-details/account-update-new-details.component';
+import { AccountOperationsComponent, CompanyAddNewUiComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
+import { AccountAddNewDetailsComponent } from './header/components/account-add-new-details/account-add-new-details.component';
+import { AccountUpdateNewDetailsComponent } from './header/components/account-update-new-details/account-update-new-details.component';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
 import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
 import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
@@ -100,9 +80,6 @@ registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
 
-// social login injection
-// import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
-
 const getGoogleCredentials = () => {
     if (PRODUCTION_ENV || isElectron || isCordova) {
         return {
@@ -121,12 +98,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 const SOCIAL_CONFIG = (isElectron || isCordova) ? null : new AuthServiceConfig([
     {
         id: GoogleLoginProvider.PROVIDER_ID,
-        // provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')
         provider: new GoogleLoginProvider(getGoogleCredentials().GOOGLE_CLIENT_ID)
-    },
-    {
-        id: LinkedinLoginProvider.PROVIDER_ID,
-        provider: new LinkedinLoginProvider('817roify24ig8g')
     }
 ], false);
 
@@ -157,13 +129,9 @@ export class PickDateAdapter extends NativeDateAdapter {
         LayoutComponent,
         LedgerDiscountComponent,
         HeaderComponent,
-        FooterComponent,
-        FixedFooterComponent,
-        AccountsSideBarComponent,
         AsideHelpSupportComponent,
         AsideSettingComponent,
         ManageGroupsAccountsComponent,
-        CompanyAddComponent,
         CompanyAddNewUiComponent,
         AccountOperationsComponent,
         AccountFilterPipe,
@@ -210,7 +178,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         PopoverModule.forRoot(),
         PerfectScrollbarModule,
         SocialLoginModule,
-        FormWizardModule,
         SelectModule,
         ClickOutsideModule,
         ConfirmModalModule,
@@ -251,8 +218,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         LedgerDiscountComponent,
         ModalModule,
         HeaderComponent,
-        FooterComponent,
-        FixedFooterComponent,
         ManageGroupsAccountsComponent,
         ConfirmationModalComponent,
         AccountFilterPipe,
@@ -262,7 +227,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         PerfectScrollbarModule,
         OnBoardingComponent,
         ConfirmModalModule,
-        AccountsSideBarComponent,
         AsideHelpSupportComponent,
         AsideSettingComponent,
         TextCaseChangeModule,
@@ -298,7 +262,6 @@ export class PickDateAdapter extends NativeDateAdapter {
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
-        CompanyAddComponent,
         CompanyAddNewUiComponent,
         AccountOperationsComponent,
         GroupsAccountSidebarComponent,
@@ -319,7 +282,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatNativeDateModule,
         { provide: MAT_DATE_FORMATS, useValue: GIDDH_DATEPICKER_FORMAT },
         { provide: DateAdapter, useClass: PickDateAdapter },
-        { provide: LOCALE_ID, useValue: 'en'}
+        { provide: LOCALE_ID, useValue: 'en' }
     ]
 })
 export class SharedModule {

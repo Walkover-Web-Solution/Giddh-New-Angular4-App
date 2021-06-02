@@ -274,18 +274,6 @@
     </div>
     <!-- Adjust Payment modal End-->
 
-    <!-- Adjust invoice modal start -->
-    <ng-template #adjustInvoiceModal>
-        <adjust-invoice-modal></adjust-invoice-modal>
-    </ng-template>
-    <!-- Adjust invoice modal End-->
-
-    <!-- Refund Amount modal start -->
-    <ng-template #refundAmount>
-        <refund-amount></refund-amount>
-    </ng-template>
-    <!-- Refund Amount modal End-->
-
     <!-- region sort icon template -->
     <ng-template #sortTemplate let-column="column">
         <div class="icon-sort-asc" *ngIf="searchQueryParams.sortBy !== column" (click)="handleSorting('asc', column)"
