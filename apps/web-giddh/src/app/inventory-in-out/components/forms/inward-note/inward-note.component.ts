@@ -382,6 +382,6 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
-        this.destroyed$.complete();       
-	}
+        this.destroyed$.complete();
+    }
 }

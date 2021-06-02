@@ -22,7 +22,7 @@ export class InvoiceGenerateModelComponent implements OnDestroy, OnInit {
     }
 
     public ngOnInit() {
-        this.store.pipe(select(p => p.receipt.voucher), 
+        this.store.pipe(select(p => p.receipt.voucher),
             distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((o: any) => {
                 this.hasErr = false;

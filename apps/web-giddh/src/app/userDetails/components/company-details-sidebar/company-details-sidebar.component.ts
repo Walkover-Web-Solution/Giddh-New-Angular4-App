@@ -13,6 +13,10 @@ import { ReplaySubject } from 'rxjs';
 
 export class CompanyDetailsSidebarComponent implements OnInit {
     @Input() public selectedCompany: any;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
     public moment = moment;
     /** This holds giddh date format */
@@ -26,7 +30,7 @@ export class CompanyDetailsSidebarComponent implements OnInit {
     }
 
     public ngOnInit() {
-        if(this.selectedCompany) {
+        if (this.selectedCompany) {
             this.getCompanyDetails();
         }
     }

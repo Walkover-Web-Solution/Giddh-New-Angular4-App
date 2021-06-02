@@ -1,7 +1,7 @@
 {
-    "chart_title" : "शीर्ष",
-    "debtors" : "कर्जदार (ग्राहक)",
-    "invoiced_on" : "चालू केले",
-    "bill_amount" : "बिल रक्कम",
-    "creditors" : "जमाकर्ता (विक्रेते)"
+    "chart_title": "शीर्ष",
+    "debtors": "कर्जदार (ग्राहक)",
+    "invoiced_on": "चालू केले",
+    "bill_amount": "बिल रक्कम",
+    "creditors": "जमाकर्ता (विक्रेते)"
 }

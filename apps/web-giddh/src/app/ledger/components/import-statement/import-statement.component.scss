@@ -4,7 +4,7 @@
     vertical-align: top;
 }
 .file-upload-field {
-    white-space:normal;
+    white-space: normal;
     word-break: break-all;
 }
 .file-upload-label sup {
@@ -15,10 +15,10 @@
 #import-statement-modal label.radio-inline.p-0 {
     width: 287px;
 }
-.browse-file-btn{
+.browse-file-btn {
     display: flex;
     align-items: flex-start;
-    .browse-file-label{
+    .browse-file-label {
         border: 1px solid $gainsboro;
         display: inline-block;
         padding: 1px 12px !important;
@@ -31,7 +31,7 @@
     input[type="file"] {
         display: none;
     }
-    .path-name{
+    .path-name {
         white-space: normal;
         word-break: break-all;
         float: right;

@@ -2,7 +2,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { SettingsPermissionService } from '../../../services/settings.permission.service';
 import { SETTINGS_PERMISSION_ACTIONS } from './settings.permissions.const';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -15,7 +15,7 @@ import { CustomActions } from '../../../store/customActions';
 export class SettingsPermissionActions {
 
 
-    public GetUsersWithPermissions$: Observable<Action> =createEffect( ()=>  this.action$
+    public GetUsersWithPermissions$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS),
             switchMap((action: CustomActions) => {
@@ -24,7 +24,7 @@ export class SettingsPermissionActions {
             })));
 
 
-    public GetUsersWithPermissionsResponse$: Observable<Action> =createEffect( ()=>  this.action$
+    public GetUsersWithPermissionsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS_RESPONSE),
             map((response: CustomActions) => {

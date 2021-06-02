@@ -58,11 +58,11 @@ export class PurchaseRecordService {
      * @memberof PurchaseRecordService
      */
     public downloadAttachedFile(requestObject: any): Observable<BaseResponse<PurchaseRecordAttachmentResponse, any>> {
-        const {accountUniqueName, purchaseRecordUniqueName} = requestObject;
+        const { accountUniqueName, purchaseRecordUniqueName } = requestObject;
         const contextPath: string =
             `${this.config.apiUrl}${PURCHASE_RECORD_API.DOWNLOAD_ATTACHMENT.replace(':companyUniqueName', this._generalService.companyUniqueName)
                 .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
-        return this._http.get(contextPath, {uniqueName: purchaseRecordUniqueName}).pipe(
+        return this._http.get(contextPath, { uniqueName: purchaseRecordUniqueName }).pipe(
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
     }
 
@@ -77,7 +77,7 @@ export class PurchaseRecordService {
      * @memberof PurchaseRecordService
      */
     public validatePurchaseRecord(requestObject: any): Observable<BaseResponse<any, any>> {
-        const {accountUniqueName} = requestObject;
+        const { accountUniqueName } = requestObject;
         const contextPath: string =
             `${this.config.apiUrl}${PURCHASE_RECORD_API.VALIDATE_RECORD.replace(':companyUniqueName', this._generalService.companyUniqueName)
                 .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;

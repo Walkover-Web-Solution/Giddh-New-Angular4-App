@@ -33,8 +33,8 @@ export class InventoryInOutSidebarComponent implements OnInit, OnDestroy {
     public stocksList$: Observable<IStocksItem[]>;
     public inventoryUsers$: Observable<InventoryUser[]>;
     public sidebarRect: any;
-    @ViewChild('search', {static: true}) public search: ElementRef;
-    @ViewChild('sidebar', {static: true}) public sidebar: ElementRef;
+    @ViewChild('search', { static: true }) public search: ElementRef;
+    @ViewChild('sidebar', { static: true }) public sidebar: ElementRef;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     /**
@@ -60,7 +60,7 @@ export class InventoryInOutSidebarComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        
+
     }
 
     public ngOnDestroy() {

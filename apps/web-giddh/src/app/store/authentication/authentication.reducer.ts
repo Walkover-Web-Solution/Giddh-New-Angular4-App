@@ -422,7 +422,7 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                     signupVerifyEmail: res.request.email
                 });
             } else {
-                 return Object.assign({}, state, {
+                return Object.assign({}, state, {
                     isSignupWithPasswordInProcess: false,
                     isSignupWithPasswordSuccess: false,
                 });
@@ -456,7 +456,7 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                     isForgotPasswordInProcess: false
                 });
             } else {
-                 return Object.assign({}, state, {
+                return Object.assign({}, state, {
                     isResetPasswordInSuccess: false,
                     isForgotPasswordInProcess: false
                 });
@@ -594,7 +594,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 }
                 let fromDate: any = data.fromDate ? moment(data.fromDate, GIDDH_DATE_FORMAT) : moment().subtract(30, 'days');
                 let toDate: any = data.toDate ? moment(data.toDate, GIDDH_DATE_FORMAT) : moment();
-                latestState.applicationDate = [fromDate._d, toDate._d, chosenLabel, !!data.fromDate ];
+                latestState.applicationDate = [fromDate._d, toDate._d, chosenLabel, !!data.fromDate];
                 return Object.assign({}, state, latestState);
             }
             return state;

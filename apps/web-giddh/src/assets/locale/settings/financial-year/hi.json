@@ -1,16 +1,17 @@
 {
-    "page_heading" : "Financial Year(s)",
-    "sr_no" : "Sr. No.",
-    "from" : "From",
-    "to" : "To",
-    "lock_status" : "Lock Status",
-    "locked" : "Locked",
-    "unlocked" : "Unlocked",
-    "current_financial_year" : "Current Financial Year (can not be locked)",
-    "switch_financial_year_label" : "Switch Financial Year",
-    "switch_financial_year_placeholder" : "Select Financial Year",
-    "add_financial_year_label" : "Add Financial Year",
-    "add_financial_year_placeholder" : "Select Financial Year",
-    "financial_year_period_label" : "Financial Year Period",
-    "financial_year_period_placeholder" : "Financial Year Period"
+	"page_heading": "आर्थिक वर्ष",
+	"sr_no": "क्रमांक",
+	"lock_status": "लॉक स्थिति",
+	"locked": "बंद",
+	"unlocked": "अनलॉक किया",
+	"current_financial_year": "चालू वित्तीय वर्ष (लॉक नहीं किया जा सकता)",
+	"switch_financial_year": "वित्तीय वर्ष स्विच करें",
+	"select_financial_year": "वित्तीय वर्ष चुनें",
+	"add_financial_year": "वित्तीय वर्ष जोड़ें",
+	"financial_year_period": "वित्तीय वर्ष अवधि",
+	"financial_year_period_options": {
+		"jan_dec": "जनवरी-दिसंबर",
+		"apr_mar": "अप्रैल-मार्च",
+		"july_july": "जुलाई-जुलाई"
+	}
 }

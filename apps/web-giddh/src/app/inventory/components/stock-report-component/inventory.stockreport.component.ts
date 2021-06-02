@@ -62,7 +62,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     @ViewChild('shCategoryType', { static: true }) public shCategoryType: ShSelectComponent;
     @ViewChild('shValueCondition', { static: true }) public shValueCondition: ShSelectComponent;
     /** Template reference */
-    @ViewChild('template', {static: true}) public template: ElementRef;
+    @ViewChild('template', { static: true }) public template: ElementRef;
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;
@@ -383,7 +383,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.selectedCmp = activeCompany;
                 this.getAllBranch();
             }
@@ -976,7 +976,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      * @memberof AuditLogsFormComponent
      */
     public dateSelectedCallback(value?: any, from?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -996,7 +996,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             if (!from) {
                 this.isFilterCorrect = true;
                 this.getStockReport(true);
-        }
+            }
         }
     }
     //************************************//

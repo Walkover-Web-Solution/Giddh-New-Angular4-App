@@ -1,4 +1,4 @@
-@import '../../../../assets/css/color.scss';
+@import "../../../../assets/css/color.scss";
 .width-160 {
     width: 160px;
 }
@@ -72,52 +72,52 @@ ul#dropdown-nested li .caret {
     color: $dim-gray;
 }
 
-.list-inline>li {
+.list-inline > li {
     display: inline-block;
     padding-right: 5px;
     padding-left: 5px;
 }
-.select-financial-year{
-   display: flex;
+.select-financial-year {
+    display: flex;
     align-items: center;
     max-width: 600px;
     width: 100%;
-    .btn-group{
+    .btn-group {
         width: auto;
     }
-    .inner-button{
+    .inner-button {
         width: 100%;
         max-width: 300px;
         margin-right: 15px;
     }
 }
-.report-breadcrum{
+.report-breadcrum {
     position: absolute !important;
     top: 0;
     left: 0;
     width: 100%;
     padding: 7px 0px 10px 36px !important;
     border-bottom: 1px solid $gainsboro;
-    .nav-report{
-        li{
-            font-family: 'opensans-semibold';
+    .nav-report {
+        li {
+            font-family: "opensans-semibold";
             font-size: 20px;
-            a{
+            a {
                 color: $midnight-blue;
             }
         }
     }
 }
 @media (max-width: 991px) {
-    #dropdown-nested{
+    #dropdown-nested {
         position: absolute;
         left: -141px;
-        li{
-            .caret{
+        li {
+            .caret {
                 transform: rotate(0deg);
             }
         }
-        .report-dropdown{
+        .report-dropdown {
             left: 0 !important;
             bottom: -65px;
             width: 100%;
@@ -130,28 +130,28 @@ ul#dropdown-nested li .caret {
     .xs-pr-0 {
         padding-right: 0px !important;
     }
-    .report-breadcrum{
+    .report-breadcrum {
         position: static !important;
         padding-left: 15px !important;
         padding-top: 0 !important;
-        .nav-report{
-            li{
+        .nav-report {
+            li {
                 font-size: 16px;
             }
         }
-        .custom-month-select{
-            .btn{
+        .custom-month-select {
+            .btn {
                 font-size: 16px;
             }
         }
     }
 }
-@media(max-width:575px){
-    .select-financial-year{
+@media (max-width: 575px) {
+    .select-financial-year {
         flex-direction: column;
         max-width: 100%;
         width: 100%;
-        .inner-button{
+        .inner-button {
             width: 100%;
             max-width: 100%;
             margin-right: 0;

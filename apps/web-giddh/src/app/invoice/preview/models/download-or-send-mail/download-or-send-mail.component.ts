@@ -53,6 +53,10 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public pdfFileURL: any = '';
     public voucherPreview$: Observable<any> = of(null);
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private _toasty: ToasterService,
@@ -165,7 +169,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
      */
     public onSendInvoiceOnMail(email: string) {
         if (_.isEmpty(email)) {
-            this._toasty.warningToast('Enter some valid email Id\'s');
+            this._toasty.warningToast(this.localeData?.enter_valid_email_error);
             return;
         }
         let emailList = email.split(',');
@@ -173,7 +177,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
             this.downloadOrSendMailEvent.emit({ action: 'send_mail', emails: emailList, typeOfInvoice: this.invoiceType });
             this.showEmailTextarea = false;
         } else {
-            this._toasty.errorToast('Invalid email(s).');
+            this._toasty.errorToast(this.localeData?.invalid_emails);
         }
     }
 
@@ -182,7 +186,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
      */
     public onSendInvoiceOnSms(numbers: string) {
         if (_.isEmpty(numbers)) {
-            this._toasty.warningToast('Enter some valid number\'s');
+            this._toasty.warningToast(this.localeData?.enter_valid_number_error);
             return;
         }
         let numberList = numbers.split(',');

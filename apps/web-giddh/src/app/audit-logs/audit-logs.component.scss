@@ -1,11 +1,11 @@
-@import '../../assets/css/color.scss';
+@import "../../assets/css/color.scss";
 .custom-datepicker-wrapper {
     display: flex;
     text-align: center;
     justify-content: center;
 }
 
-.clear-filter{
+.clear-filter {
     color: $midnight-blue;
     cursor: pointer;
 }
