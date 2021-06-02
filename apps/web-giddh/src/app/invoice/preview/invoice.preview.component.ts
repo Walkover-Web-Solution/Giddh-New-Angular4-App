@@ -491,7 +491,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         allItems.unshift(removedItem);
                         this.toggleBodyClass();
                         setTimeout(() => {
-                            this.selectedInvoiceForDetails = allItems[0];
+                            const itemIndex = allItems.findIndex(item => item.voucherNumber === res[1]);
+                            this.selectedInvoiceForDetails = allItems[itemIndex];
                             this.itemsListForDetails = cloneDeep(allItems);
                             this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
                         }, 1000);
@@ -529,7 +530,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.itemsListForDetails = allItems;
                         this.toggleBodyClass();
                         setTimeout(() => {
-                            this.selectedInvoiceForDetails = allItems[0];
+                            const itemIndex = this.itemsListForDetails.findIndex(item => item.uniqueName === record.purchaseRecordUniqueName);
+                            this.selectedInvoiceForDetails = allItems[itemIndex];
                             this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
                             this.store.dispatch(this.purchaseRecordActions.resetUpdatePurchaseRecord());
                         }, 1000);
