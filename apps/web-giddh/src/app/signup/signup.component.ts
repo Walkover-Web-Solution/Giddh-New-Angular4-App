@@ -83,7 +83,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         private authService: AuthService,
         @Inject(DOCUMENT) private document: Document,
         private _toaster: ToasterService,
-        private _generalService: GeneralService,
+        private _generalService: GeneralService
     ) {
         this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
