@@ -155,7 +155,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private loginAction: LoginActions,
         private socialAuthService: AuthService,
-        private groupWithAction: GroupWithAccountsAction, 
+        private groupWithAction: GroupWithAccountsAction,
         private localeService: LocaleService
     ) {
         // Reset old stored application date
@@ -237,7 +237,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         this.smartCombinedList$ = this.store.pipe(select(appStore => appStore.general.smartCombinedList), takeUntil(this.destroyed$));
         this.updateIndexDbSuccess$ = this.store.pipe(select(appStore => appStore.general.updateIndexDbComplete), takeUntil(this.destroyed$))
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if (selectedCmp) {
+            if (selectedCmp?.uniqueName !== this.selectedCompanyDetails?.uniqueName) {
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
                 this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
@@ -252,6 +252,20 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 } else {
                     this.activeCompanyForDb.name = selectedCmp.name;
                     this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
+                }
+                if (this.activeCompanyForDb?.uniqueName) {
+                    this.dbService.getAllItems(this.activeCompanyForDb.uniqueName, 'accounts').subscribe(accountList => {
+                        if (accountList?.length) {
+                            if (window.innerWidth > 1440 && window.innerHeight > 717) {
+                                this.accountItemsFromIndexDB = accountList.slice(0, 7);
+                            } else {
+                                this.accountItemsFromIndexDB = accountList.slice(0, 5);
+                            }
+                            this.changeDetectorRef.detectChanges();
+                        } else {
+                            this.accountItemsFromIndexDB = DEFAULT_AC;
+                        }
+                    });
                 }
             }
         });
@@ -332,18 +346,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
         });
-        if (this.activeCompanyForDb?.uniqueName) {
-            this.dbService.getAllItems(this.activeCompanyForDb.uniqueName, 'accounts').subscribe(accountList => {
-                if (accountList?.length) {
-                    if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                        this.accountItemsFromIndexDB = accountList.slice(0, 7);
-                    } else {
-                        this.accountItemsFromIndexDB = accountList.slice(0, 5);
-                    }
-                    this.changeDetectorRef.detectChanges();
-                }
-            });
-        }
+
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
                 const queryParamsIndex = this.router.url.indexOf('?');
