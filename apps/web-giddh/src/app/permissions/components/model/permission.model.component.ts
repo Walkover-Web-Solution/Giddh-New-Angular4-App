@@ -1,7 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
@@ -15,21 +14,25 @@ import { IRoleCommonResponseAndRequest } from 'apps/web-giddh/src/app/models/api
 @Component({
 	selector: 'permission-model',
 	templateUrl: './permission.model.component.html',
-	styleUrls: ['./permission.model.component.css'],
+	styleUrls: ['./permission.model.component.scss'],
 	providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
 })
 
 export class PermissionModelComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 	@Output() public closeEvent: EventEmitter<string> = new EventEmitter<string>();
 
 	public allRoles: INameUniqueName[] = [];
 	public newRoleObj: INewRoleFormObj = new NewRoleFormClass();
-	public dropdownHeading: string = 'Select pages';
+	public dropdownHeading: string = '';
 
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-	constructor(private router: Router, private store: Store<AppState>, private permissionActions: PermissionActions) {
-		this.store.select(p => p.permission).pipe(takeUntil(this.destroyed$)).subscribe((p: PermissionState) => {
+	constructor(private store: Store<AppState>, private permissionActions: PermissionActions) {
+		this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((p: PermissionState) => {
 			if (p.roles && p.roles.length) {
 				this.allRoles = [];
 				_.forEach(p.roles, (role: IRoleCommonResponseAndRequest) => {
@@ -56,8 +59,10 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit() {
+        this.dropdownHeading = this.localeData?.select_pages;
+
 		this.store.dispatch(this.permissionActions.GetAllPages());
-		this.newRoleObj.isFresh = true;
+        this.newRoleObj.isFresh = true;
 	}
 
 	public ngOnDestroy() {
@@ -70,11 +75,11 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
 	}
 
 	public onDDShown() {
-		this.dropdownHeading = 'Close list';
+		this.dropdownHeading = this.localeData?.close_list;
 	}
 
 	public onDDHidden() {
-		this.dropdownHeading = 'Select pages';
+		this.dropdownHeading = this.localeData?.select_pages;
 	}
 
 	/**

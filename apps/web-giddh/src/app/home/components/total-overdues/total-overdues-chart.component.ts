@@ -1,9 +1,8 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
-import { HomeActions } from '../../../actions/home/home.actions';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
@@ -16,7 +15,7 @@ import { GeneralService } from '../../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 
 @Component({
-    selector: 'toal-overdues-chart',
+    selector: 'total-overdues-chart',
     templateUrl: 'total-overdues-chart.component.html',
     styleUrls: ['../../home.component.scss', './total-overdues-chart.component.scss'],
 })
@@ -43,8 +42,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public toDate: string;
     @Input() public refresh: boolean = false;
     public imgPath: string = '';
-    public companies$: Observable<CompanyResponse[]>;
-    public activeCompanyUniqueName$: Observable<string>;
     public requestInFlight: boolean = true;
     public totaloverDueChart: typeof Highcharts = Highcharts;
     public chartOptions: Highcharts.Options;
@@ -61,31 +58,25 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public dataFound: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public toRequest: any = { from: '', to: '', refresh: false };
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe,
-        private cdRef: ChangeDetectorRef,
-        private modalService: BsModalService,
-        private generalService: GeneralService) {
-        this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
+    constructor(private store: Store<AppState>, private _dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.companies$.subscribe(c => {
-            if (c) {
-                let activeCompany: CompanyResponse;
-                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
-                    activeCompany = c.find(p => p.uniqueName === a);
-                    if (activeCompany) {
-                        this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
-                        this.amountSettings.balanceDecimalPlaces = activeCompany.balanceDecimalPlaces;
-                    }
-                });
-            }
-        });
         // img path
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
+                this.amountSettings.balanceDecimalPlaces = activeCompany.balanceDecimalPlaces;
+            }
+        });
 
         // listen for universal date
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
@@ -243,7 +234,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
      * @memberof TotalOverduesChartComponent
      */
     public getTotalOverduesData(group: string): void {
-        this._dashboardService.getClosingBalance(group, this.toRequest.from, this.toRequest.to, this.toRequest.refresh).subscribe(response => {
+        this._dashboardService.getClosingBalance(group, this.toRequest.from, this.toRequest.to, this.toRequest.refresh).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success' && response.body && response.body[0]) {
                 this.dataFound = true;
 

@@ -9,7 +9,7 @@ module.exports = {
             'errlyticsNeeded': JSON.stringify(false),
             'errlyticsKey': JSON.stringify(''),
             'AppUrl': JSON.stringify('./'),
-            'ApiUrl': JSON.stringify('http://api.giddh.com/'),
+            'ApiUrl': JSON.stringify('https://api.giddh.com/'),
             'APP_FOLDER': JSON.stringify(''),
             'PRODUCTION_ENV': JSON.stringify(true),
             'STAGING_ENV': JSON.stringify(false),

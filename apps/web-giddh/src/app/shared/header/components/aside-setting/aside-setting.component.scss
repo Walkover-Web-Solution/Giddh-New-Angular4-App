@@ -2,7 +2,7 @@
 :host {
     position: fixed;
     left: auto;
-    top:61px;
+    top:57px;
     right: 0;
     bottom: 0;
     max-width: 330px;
@@ -24,11 +24,11 @@
 }
 :host.setting-sidebar{
     position: fixed;
-    top: 61px;
+    top: 0;
     bottom: 0;
     min-height: 100vh;
     background: $white;
-    width: 215px;
+    width: 240px;
     left: 0;
     z-index: 999;
     .aside-help-header{
@@ -104,7 +104,7 @@
 }
 .aside-pane-form {
     background-color: $white;
-    box-shadow: 0px 3px 6px #0000001a;
+    box-shadow: 0px 3px 6px $black-russian;
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -136,6 +136,12 @@
                             -webkit-box-align: center;
                             align-items: center;
                             width: 28px;
+                            float: left;
+                        }
+                        &:last-child{
+                            float: left;
+                            width: 80%;
+
                         }
                 }
             }
@@ -151,11 +157,11 @@
 
 :host.setting-sidebar{
     position: fixed;
-    top: 61px;
+    top: 57px;
     bottom: 0;
     min-height: 100vh;
     background:$white;
-    width: 215px;
+    width: 240px;
     left: 0;
     z-index: 999;
     box-shadow: -2px -2px 15px rgba(0,0,0,.2) !important;
@@ -224,7 +230,7 @@
     bottom: 0;
     min-height: 100vh;
     background: $white;
-    width: 215px;
+    width: 240px;
     left: 0;
     z-index: 999999;
     width: 270px;

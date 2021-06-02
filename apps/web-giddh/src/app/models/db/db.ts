@@ -63,17 +63,30 @@ class AppDatabase extends Dexie {
 
     public getAllItems(key: any, entity: string): Promise<any[]> {
         return this.companies.get(key).then((res: CompAidataModel) => {
-            return res.aidata[entity];
+            return res?.aidata[entity];
         });
     }
 
-    public addItem(key: any, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }, isSmallScreen): Promise<any> {
+    /**
+     * Adds the item from indexDB
+     *
+     * @param {*} key Unique name of indexDB
+     * @param {string} entity Entity to be deleted
+     * @param {IUlist} model Entity model data
+     * @param {{ next: IUlist, previous: IUlist }} fromInvalidState Invalid state
+     * @param {*} isSmallScreen True, if small screen
+     * @param {boolean} isCompany True, if company mode is switched and the company has more than HO branch in it (branch count > 1)
+     * @returns {Promise<any>}
+     * @memberof AppDatabase
+     */
+    public addItem(key: any, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }, isSmallScreen, isCompany: boolean): Promise<any> {
         return this.companies.get(key).then((res: CompAidataModel) => {
             if (!res) {
                 return;
             }
-            let arr: IUlist[] = res.aidata[entity];
+            let arr: IUlist[] = res?.aidata[entity];
             let isFound = false;
+            const limit = isCompany ? 17 : 7;
 
             if (entity === 'menus') {
                 // if any fromInvalidState remove it and replace it with new menu
@@ -109,10 +122,14 @@ class AppDatabase extends Dexie {
                         if (indDefaultIndex > -1) {
                             // index where menu should be added
                             let index = arr.findIndex(a => this.clonedMenus[indDefaultIndex].pIndex === a.pIndex);
-                            if (isSmallScreen && index > 7) {
-                                index = this.smallScreenHandler(index);
+                            if (isSmallScreen && index > limit) {
+                                index = this.smallScreenHandler(index, isCompany);
                             }
-                            arr[index] = Object.assign({}, model, { isRemoved: false, pIndex: this.clonedMenus[indDefaultIndex].pIndex });
+                            if (index > -1) {
+                                arr[index] = Object.assign({}, model, { isRemoved: false, pIndex: this.clonedMenus[indDefaultIndex].pIndex });
+                            } else {
+                                arr.push(Object.assign({}, model, { isRemoved: false, pIndex: this.clonedMenus[indDefaultIndex].pIndex }));
+                            }
                             this.clonedMenus[indDefaultIndex].isRemoved = false;
                         } else {
                             /* if not in default menu first find where it should be added
@@ -127,26 +144,28 @@ class AppDatabase extends Dexie {
                             let index = arr.findIndex(a => sorted[0].pIndex === a.pIndex);
 
                             let originalIndex = duplicateIndex;
-                            if (isSmallScreen && index > 7) {
+                            if (isSmallScreen && index > limit) {
                                 originalIndex = index;
-                                index = this.smallScreenHandler(index);
+                                index = this.smallScreenHandler(index, isCompany);
                             }
 
                             if (index > -1) {
                                 arr[originalIndex] = arr[index];
                                 arr[index] = Object.assign({}, model, { isRemoved: true, pIndex: sorted[0].pIndex });
-                                this.clonedMenus = this.clonedMenus.map(m => {
-                                    if (m.pIndex === sorted[0].pIndex) {
-                                        m.isRemoved = true;
-                                    }
-                                    return m;
-                                });
+                            } else {
+                                arr.push(Object.assign({}, model, { isRemoved: true, pIndex: sorted[0].pIndex }));
                             }
+                            this.clonedMenus = this.clonedMenus.map(m => {
+                                if (m.pIndex === sorted[0].pIndex) {
+                                    m.isRemoved = true;
+                                }
+                                return m;
+                            });
                         }
                     } else {
                         let originalDuplicateIndex = duplicateIndex;
-                        if (isSmallScreen && duplicateIndex > 7) {
-                            duplicateIndex = this.smallScreenHandler(duplicateIndex);
+                        if (isSmallScreen && duplicateIndex > limit) {
+                            duplicateIndex = this.smallScreenHandler(duplicateIndex, isCompany);
                         }
                         if (this.clonedMenus.length === 0) {
                             this.clonedMenus = DEFAULT_MENUS;
@@ -174,7 +193,7 @@ class AppDatabase extends Dexie {
                 arr = orderBy(arr, ['time'], ['desc']);
             }
 
-            res.aidata[entity] = this.getSlicedResult(entity, arr);
+            res.aidata[entity] = this.getSlicedResult(entity, arr, isCompany);
 
             // do entry in db and return all data
             return this.companies.put(res).then(() => {
@@ -185,12 +204,22 @@ class AppDatabase extends Dexie {
         });
     }
 
-    public removeItem(key: any, entity: string, uniqueName: string): Promise<ICompAidata> {
+    /**
+     * Removes the item from indexDB
+     *
+     * @param {*} key Unique name of indexDB
+     * @param {string} entity Entity to be deleted
+     * @param {string} uniqueName Unique name of the entity
+     * @param {boolean} isCompany True, if company mode is switched and the company has more than HO branch in it (branch count > 1)
+     * @returns {Promise<ICompAidata>}
+     * @memberof AppDatabase
+     */
+    public removeItem(key: any, entity: string, uniqueName: string, isCompany: boolean): Promise<ICompAidata> {
         return this.companies.get(key).then((res: CompAidataModel) => {
             if (!res) {
                 return;
             }
-            let arr: IUlist[] = res.aidata[entity];
+            let arr: IUlist[] = res?.aidata[entity];
             // for accounts and groups
             arr = arr.filter((item: IUlist) => {
                 if (item.uniqueName !== uniqueName) {
@@ -199,20 +228,22 @@ class AppDatabase extends Dexie {
             });
             // order by name
             arr = orderBy(arr, ['time'], ['desc']);
-            res.aidata[entity] = this.getSlicedResult(entity, arr);
+            res.aidata[entity] = this.getSlicedResult(entity, arr, isCompany);
             // do entry in db and return all data
             return this.companies.put(res).then(() => {
-                return this.companies.get(key);
+                setTimeout(() => {
+                    return this.companies.get(key);
+                }, 500);
             }).catch((err) => (err));
         }).catch((err) => {
             console.log('error while deleting item', err);
         });
     }
 
-    private getSlicedResult(entity: string, arr: IUlist[]): any[] {
+    private getSlicedResult(entity: string, arr: IUlist[], isCompany: boolean): any[] {
         let endCount: number = 0;
         if (entity === 'menus') {
-            endCount = 15;
+            endCount = isCompany ? 17 : 15;
         } else if (entity === 'groups') {
             endCount = 40;
         } else if (entity === 'accounts') {
@@ -221,12 +252,13 @@ class AppDatabase extends Dexie {
         return arr.slice(0, endCount);
     }
 
-    private smallScreenHandler(index) {
+    private smallScreenHandler(index, isCompany: boolean) {
+        const limit = isCompany ? 17 : 7
         /*
         *  if we detect that it's a small screen then check if index is grater then 7 ( because we are showing 8 items in small screen )
         *  then we need to increase set index to index - 1 for displaying searched menu at last
         */
-        while (index > 7) {
+        while (index > limit) {
             index--;
         }
         return index;

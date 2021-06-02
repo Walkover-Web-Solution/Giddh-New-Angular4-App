@@ -1,24 +1,29 @@
 /**
  * Created by kunalsaxena on 9/1/17.
  */
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NavigationStart, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
-import {InvoicePurchaseActions} from '../actions/purchase-invoice/purchase-invoice.action';
-import {select, Store} from '@ngrx/store';
-import {CompanyResponse, StateDetailsRequest} from '../models/api-models/Company';
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {ToasterService} from '../services/toaster.service';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {CompanyActions} from '../actions/company.actions';
-import {BsDropdownDirective} from 'ngx-bootstrap/dropdown';
-import {AlertConfig} from 'ngx-bootstrap/alert';
-import {GIDDH_DATE_FORMAT} from '../shared/helpers/defaultDateFormat';
-import {Observable, of, ReplaySubject} from 'rxjs';
-import {AppState} from '../store';
-import {take, takeUntil} from 'rxjs/operators';
-import {GstReconcileActions} from '../actions/gst-reconcile/GstReconcile.actions';
-import {Router} from '@angular/router';
-import {GstOverViewRequest} from '../models/api-models/GstReconcile';
-import {createSelector} from 'reselect';
+import { AlertConfig } from 'ngx-bootstrap/alert';
+import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { filter, take, takeUntil } from 'rxjs/operators';
+
+import { CompanyActions } from '../actions/company.actions';
+import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
+import { InvoicePurchaseActions } from '../actions/purchase-invoice/purchase-invoice.action';
+import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
+import { GstOverViewRequest } from '../models/api-models/GstReconcile';
+import { OrganizationType } from '../models/user-login-state';
+import { GeneralService } from '../services/general.service';
+import { GstReconcileService } from '../services/GstReconcile.service';
+import { ToasterService } from '../services/toaster.service';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { AppState } from '../store';
+import { IOption } from '../theme/ng-select/ng-select';
+import { GstReport } from './constants/gst.constant';
 
 
 @Component({
@@ -42,9 +47,15 @@ import {createSelector} from 'reselect';
     ]
 })
 
-export class GstComponent implements OnInit {
+export class GstComponent implements OnInit, OnDestroy {
     @ViewChild('monthWise', {static: true}) public monthWise: BsDropdownDirective;
     @ViewChild('periodDropdown', {static: true}) public periodDropdown;
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
+    /* this will check mobile screen size */
+    public isMobileScreen: boolean = false;
 
     public showCalendar: boolean = false;
     public period: any = null;
@@ -77,8 +88,20 @@ export class GstComponent implements OnInit {
     public userEmail: string = '';
     public returnGstr3B: {} = { via: null };
     public datepickerVisibility: any = 'hidden';
+    /** Stores the tax details of a company */
+    public taxes: IOption[] = [];
+    /** True, if API is in progress */
+    public isTaxApiInProgress: boolean;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Returns the enum to be used in template */
+    public get GstReport() {
+        return GstReport;
+    }
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(private store: Store<AppState>,
         private _companyActions: CompanyActions,
@@ -86,8 +109,11 @@ export class GstComponent implements OnInit {
         private _gstAction: GstReconcileActions,
         private _invoicePurchaseActions: InvoicePurchaseActions,
         private _toasty: ToasterService,
-        private _cdRf: ChangeDetectorRef) {
-        this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
+        private _cdRf: ChangeDetectorRef,
+        private gstReconcileService: GstReconcileService,
+        private generalService: GeneralService
+    ) {
+        this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstr1TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr1OverViewData.count), takeUntil(this.destroyed$));
         this.gstr2TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr2OverViewData.count), takeUntil(this.destroyed$));
 
@@ -95,24 +121,6 @@ export class GstComponent implements OnInit {
         this.gstr2OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataInProgress), takeUntil(this.destroyed$));
 
         this.getCurrentPeriod$ = this.store.pipe(select(p => p.gstR.currentPeriod), take(1));
-
-        this.store.pipe(select(createSelector([((s: AppState) => s.session.companies), ((s: AppState) => s.session.companyUniqueName)],
-            (companies, uniqueName) => {
-                return companies.find(d => d.uniqueName === uniqueName);
-            })), takeUntil(this.destroyed$)
-        ).subscribe(activeCompany => {
-            if (activeCompany) {
-                if (activeCompany.addresses && activeCompany.addresses.length) {
-                    let defaultGst = activeCompany.addresses.find(a => a.isDefault);
-                    if (defaultGst) {
-                        this.activeCompanyGstNumber = defaultGst.taxNumber;
-                    } else {
-                        this.activeCompanyGstNumber = activeCompany.addresses[0].taxNumber;
-                    }
-                    this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
-                }
-            }
-        });
 
         this.gstr1TransactionCounts$.subscribe(s => {
             this.gstr1TransactionCounts = s;
@@ -124,23 +132,33 @@ export class GstComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-
+        this.toggleGstPane();
+        this.loadTaxDetails();
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'gstfiling';
 
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
+        this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+
+        this._route.events.pipe(filter(route => route instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
+            if (!event.url.includes('pages/gstfiling')) {
+                // Reset the store value
+                this.store.dispatch(this._gstAction.SetActiveCompanyGstin(''));
+            }
+        });
+
         this.getCurrentPeriod$.subscribe(a => {
             if (a && a.from) {
                 let date = {
-                    startDate: moment(a.from, 'DD-MM-YYYY').startOf('month').format('DD-MM-YYYY'),
-                    endDate: moment(a.to, 'DD-MM-YYYY').endOf('month').format('DD-MM-YYYY')
+                    startDate: moment(a.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
+                    endDate: moment(a.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
                 };
                 if (date.startDate === a.from && date.endDate === a.to) {
-                    this.selectedMonth = moment(a.from, 'DD-MM-YYYY').toISOString();
+                    this.selectedMonth = moment(a.from, GIDDH_DATE_FORMAT).toISOString();
                     this.isMonthSelected = true;
                 } else {
                     this.isMonthSelected = false;
@@ -154,23 +172,52 @@ export class GstComponent implements OnInit {
                     from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
                     to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
                 };
-                this.selectedMonth = moment(this.currentPeriod.from, 'DD-MM-YYYY').toISOString();
+                this.selectedMonth = moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
                 this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
             }
         });
-
-        if (this.activeCompanyGstNumber) {
-            let request: GstOverViewRequest = new GstOverViewRequest();
-            request.from = this.currentPeriod.from;
-            request.to = this.currentPeriod.to;
-            request.gstin = this.activeCompanyGstNumber;
-
-            this.store.dispatch(this._gstAction.GetOverView('gstr1', request));
-            this.store.dispatch(this._gstAction.GetOverView('gstr2', request));
-            this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
-        }
         this.imgPath = (isElectron||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
-
+        this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.activeCompanyGstNumber !== response) {
+                this.activeCompanyGstNumber = response;
+                this.loadTaxReport();
+            }
+        });
+    }
+    /**
+     * Aside pane toggle fixed class
+     *
+     *
+     * @memberof GstComponent
+     */
+    public toggleBodyClass(): void {
+        if (this.asideGstSidebarMenuState === 'in') {
+            document.querySelector('body').classList.add('gst-sidebar-open');
+        } else {
+            document.querySelector('body').classList.remove('gst-sidebar-open');
+        }
+    }
+    /**
+      * This will toggle the settings popup
+      *
+      * @param {*} [event]
+      * @memberof GstComponent
+      */
+    public toggleGstPane(event?): void {
+        this.toggleBodyClass();
+        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
+          this.asideGstSidebarMenuState = "out";
+        }
+    }
+    /**
+     * Unsubscribes from subscription
+     *
+     * @memberof GstComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+        document.querySelector('body').classList.remove('gst-sidebar-open');
     }
 
     /**
@@ -203,12 +250,12 @@ export class GstComponent implements OnInit {
 
             if (this.isMonthSelected) {
                 // get gstr1 and gstr2 summary
-                this.store.dispatch(this._gstAction.GetOverView('gstr1', request));
-                this.store.dispatch(this._gstAction.GetOverView('gstr2', request));
-                this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
+                this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr1, request));
+                this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr2, request));
+                this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr3b, request));
             } else {
                 // only get gstr1 data
-                this.store.dispatch(this._gstAction.GetOverView('gstr1', request));
+                this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr1, request));
             }
         } else {
             this._toasty.warningToast('Please add GSTIN in company');
@@ -221,14 +268,14 @@ export class GstComponent implements OnInit {
      * navigateToOverview
      */
     public navigateToOverview(type) {
-        this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0 } });
+        this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0, selectedGst: this.activeCompanyGstNumber } });
     }
 
     /**
     * navigateToOverview
     */
     public navigateTogstR3B(type) {
-        this._route.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to } });
+        this._route.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: this.isCompany, selectedGst: this.activeCompanyGstNumber } });
     }
 
     public emailSheet(isDownloadDetailSheet: boolean) {
@@ -260,7 +307,7 @@ export class GstComponent implements OnInit {
     }
 
     public navigateToTab(tab, returnType) {
-        this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: returnType, from: this.currentPeriod.from, to: this.currentPeriod.to, tab } });
+        this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: returnType, from: this.currentPeriod.from, to: this.currentPeriod.to, tab, selectedGst: this.activeCompanyGstNumber } });
     }
     public onOpenChange(data: boolean) {
         this.openMonthWiseCalendar(data);
@@ -276,5 +323,74 @@ export class GstComponent implements OnInit {
                 this.periodDropdown.hide();
             }
         }, 500);
+    }
+
+    /**
+     * Select tax handler
+     *
+     * @param {*} [event]
+     * @memberof GstComponent
+     */
+    public selectTax(event?: any): void {
+        if(event && event.value) {
+            this.activeCompanyGstNumber = event.value;
+        }
+
+        this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
+        this.loadTaxReport();
+    }
+    /**
+     * this is handle navigation of menu item
+     *
+     *
+     * @memberof GstComponent
+     */
+    public handleNavigation(type: string): void {
+        switch(type) {
+            case GstReport.Gstr1: case GstReport.Gstr2:
+                this.navigateToOverview(type);
+                break;
+            case GstReport.Gstr3b:
+                this.navigateTogstR3B(type);
+                break;
+            default: break;
+        }
+    }
+
+    /**
+     * Loads the tax details of a company
+     *
+     * @private
+     * @memberof GstComponent
+     */
+    private loadTaxDetails(): void {
+        this.isTaxApiInProgress = true;
+        this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.body) {
+                this.taxes = response.body.map(tax => ({
+                    label: tax,
+                    value: tax
+                }));
+            }
+            this.isTaxApiInProgress = false;
+        });
+    }
+
+    /**
+     * Loads the tax reports
+     *
+     * @private
+     * @memberof GstComponent
+     */
+    private loadTaxReport(): void {
+        if (this.activeCompanyGstNumber) {
+            let request: GstOverViewRequest = new GstOverViewRequest();
+            request.from = this.currentPeriod.from;
+            request.to = this.currentPeriod.to;
+            request.gstin = this.activeCompanyGstNumber;
+            this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr1, request));
+            this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr2, request));
+            this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr3b, request));
+        }
     }
 }

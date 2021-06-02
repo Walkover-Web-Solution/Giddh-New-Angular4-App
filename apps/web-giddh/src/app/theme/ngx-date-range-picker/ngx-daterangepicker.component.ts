@@ -242,6 +242,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public initialCalendarRender: boolean = true;
     /** This will hold how many days user can add in upto today field */
     public noOfDaysAllowed: number = 0;
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private settingsFinancialYearActions: SettingsFinancialYearActions) {
         this.choosedDate = new EventEmitter();
@@ -301,18 +303,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
     public ngOnInit(): void {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        this.store.pipe(takeUntil(this.destroyed$)).subscribe(s => {
-            let currentCompanyUniqueName = "";
 
-            if (s.session) {
-                currentCompanyUniqueName = _.cloneDeep(s.session.companyUniqueName);
-            }
-            if (currentCompanyUniqueName && s.session.companies) {
-                let companies = _.cloneDeep(s.session.companies);
-                let activeCompany = companies.find((c) => c.uniqueName === currentCompanyUniqueName);
-                if (activeCompany && activeCompany.activeFinancialYear) {
-                    this.currentFinancialYearUniqueName = activeCompany.activeFinancialYear.uniqueName;
-                }
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany && activeCompany.activeFinancialYear) {
+                this.currentFinancialYearUniqueName = activeCompany.activeFinancialYear.uniqueName;
             }
         });
 
@@ -368,11 +362,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.dropdownShow = false;
         });
 
-        this.modalService.onShow.subscribe(response => {
+        this.modalService.onShow.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isInlineDateFieldsShowing = true;
         });
 
-        this.modalService.onHide.subscribe(response => {
+        this.modalService.onHide.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isInlineDateFieldsShowing = false;
             this.invalidInlineStartDate = "";
             this.invalidInlineEndDate = "";
@@ -1224,7 +1218,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if (event.shiftKey || event.ctrlKey || (event.which >= 37 && event.which <= 40)) {
             return;
         }
-        event.target.value = event.target.value.replace(/[^0-9]/g, '');
+        event.target.value = (event && event.target && event.target.value) ? event.target.value.replace(/[^0-9]/g, '') : 0;
         if(event.target.value > this.noOfDaysAllowed) {
             event.target.value = this.noOfDaysAllowed;
         }
@@ -1793,7 +1787,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public getFinancialYears(): void {
-        this.settingsFinancialYearService.GetAllFinancialYears().subscribe(res => {
+        this.settingsFinancialYearService.GetAllFinancialYears().pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res && res.body && res.body.financialYears && res.body.financialYears.length > 0) {
                 let currentFinancialYear;
                 let lastFinancialYear;

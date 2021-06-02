@@ -6,7 +6,6 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
-import { GroupService } from '../../services/group.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 
@@ -17,13 +16,14 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
 })
 export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
 
-	@Input() public selectedGrpUniqueName: string;
+    @Input() public selectedGrpUniqueName: string;
+    /** This will hold group unique name */
+    @Input() public selectedGroupUniqueName: string;
 	@Input() public selectedAccountUniqueName: string;
 	@Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 	@Output() public addEvent: EventEmitter<AddAccountRequest> = new EventEmitter();
 	@Output() public updateEvent: EventEmitter<UpdateAccountRequest> = new EventEmitter();
 
-	private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 	public flatAccountWGroupsList$: Observable<IOption[]>;
 	public flatAccountWGroupsList: IOption[];
 	public activeGroupUniqueName: string;
@@ -33,20 +33,48 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 	public isAccountNameAvailable$: Observable<boolean>;
 	public createAccountInProcess$: Observable<boolean>;
 	public updateAccountInProcess$: Observable<boolean>;
-	public showBankDetail: boolean = false;
-	public isDebtorCreditor: boolean = true;
-
+    public showBankDetail: boolean = false;
+    /** this will hold if it's debtor/creditor */
+    @Input() public isDebtorCreditor: boolean = true;
+    /** this will hold if it's bank account */
+    @Input() public isBankAccount: boolean = true;
+    /** True, if new service is created through this component.
+     * Used to differentiate between new customer/vendor creation and service creation
+     * as they both need the groups to be shown in a particular category,
+     * for eg. If a new customer/vendor is created in Sales invoice then all the groups shown in the dropdown
+     * should be of category 'sundrydebtors'. Similarly, for PO/PB the group category should be
+     * 'sundrycreditors'.
+     * If a new service is created, then if the service is created in Invoice then it will have
+     * categroy 'revenuefromoperations' and if it is in PO/PB then category will be 'operatingcost'.
+     * So if isServiceCreation is true, then directly 'activeGroupUniqueName' will be
+     * used to fetch groups
+    */
+    @Input() public isServiceCreation: boolean;
+    /** True, if new customer/vendor account is created through this component.
+     * Used to differentiate between new customer/vendor creation and service creation
+     * as they both need the groups to be shown in a particular category,
+     * for eg. If a new customer/vendor is created in Sales invoice then all the groups shown in the dropdown
+     * should be of category 'sundrydebtors'. Similarly, for PO/PB the group category should be
+     * 'sundrycreditors'.
+     * If a new service is created, then if the service is created in Invoice then it will have
+     * categroy 'revenuefromoperations' and if it is in PO/PB then category will be 'operatingcost'.
+     * So if isCustomerCreation is true, then directly 'activeGroupUniqueName' will be
+     * used to fetch groups
+    */
+    @Input() public isCustomerCreation: boolean;
 
 	// private below
-	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** This will hold account action text */
+    public actionAccount: string = "";
 
 	constructor(
 		private store: Store<AppState>,
-		private groupService: GroupService,
 		private accountsAction: AccountsAction
 	) {
 		// account-add component's property
-		this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
 		this.fetchingAccUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingAccUniqueName), takeUntil(this.destroyed$));
 		this.isAccountNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isAccountNameAvailable), takeUntil(this.destroyed$));
 		this.createAccountInProcess$ = this.store.pipe(select(state => state.sales.createAccountInProcess), takeUntil(this.destroyed$));
@@ -70,32 +98,32 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 		this.closeAsideEvent.emit(event);
 	}
 
-	public getGroups(grpUniqueName) {
-		let flattenGroups: IFlattenGroupsAccountsDetail[] = [];
-		this.flattenGroups$.pipe(take(1)).subscribe(data => flattenGroups = data || []);
-		let items = flattenGroups.filter(grps => {
-			return grps.groupUniqueName === grpUniqueName || grps.parentGroups.some(s => s.uniqueName === grpUniqueName);
-		});
-
-		let flatGrps: IOption[] = items.map(m => {
-			return { label: m.groupName, value: m.groupUniqueName, additional: m.parentGroups };
-		});
-
-		this.flatAccountWGroupsList$ = of(flatGrps);
-		this.flatAccountWGroupsList = flatGrps;
-		this.activeGroupUniqueName = grpUniqueName;
-	}
 	public isGroupSelected(event) {
 		if (event) {
-			this.activeGroupUniqueName = event;
+			this.activeGroupUniqueName = event.value;
 		}
 	}
 
 	public ngOnChanges(s: SimpleChanges) {
 
 		if ('selectedGrpUniqueName' in s && s.selectedGrpUniqueName.currentValue !== s.selectedGrpUniqueName.previousValue) {
-			this.getGroups(s.selectedGrpUniqueName.currentValue);
-		}
+            this.isCustomerCreation = true;
+            this.activeGroupUniqueName = s.selectedGrpUniqueName.currentValue;
+            this.flatAccountWGroupsList$ = of(null);
+            this.flatAccountWGroupsList = undefined;
+        }
+
+        if('selectedGroupUniqueName' in s && s.selectedGroupUniqueName.currentValue !== s.selectedGroupUniqueName.previousValue) {
+            // get groups list
+            this.isServiceCreation = true;
+            this.flatAccountWGroupsList$ = of(null);
+            this.flatAccountWGroupsList = undefined;
+            if (this.selectedGroupUniqueName === 'purchase') {
+                this.activeGroupUniqueName = 'operatingcost';
+            } else {
+                this.activeGroupUniqueName = 'revenuefromoperations';
+            }
+        }
 
 		if ('selectedAccountUniqueName' in s) {
 			let value = s.selectedAccountUniqueName;
@@ -108,5 +136,17 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 	public ngOnDestroy() {
 		this.destroyed$.next(true);
 		this.destroyed$.complete();
-	}
+    }
+    
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof GenericAsideMenuAccountComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.actionAccount = this.selectedAccountUniqueName ? this.commonLocaleData?.app_update_account : this.commonLocaleData?.app_create_account;
+        }
+    }
 }

@@ -11,15 +11,14 @@ import { GeneralService } from './services/general.service';
 import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/defaultMenus'
 import { Configuration } from "./app.constant";
-import { LoginActions } from './actions/login.action';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
+import { OrganizationType } from './models/user-login-state';
 
 /**
  * App Component
@@ -40,7 +39,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public isProdMode: boolean = false;
     public isElectron: boolean = false;
     public isCordova: boolean = false;
-    public tagManagerUrl: SafeUrl;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public IAmLoaded: boolean = false;
     private newVersionAvailableForWebApp: boolean = false;
@@ -50,16 +48,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private _generalService: GeneralService,
         private _cdr: ChangeDetectorRef,
         private _versionCheckService: VersionCheckService,
-        private sanitizer: DomSanitizer,
         private breakpointObserver: BreakpointObserver,
         private dbServices: DbService,
         private loadingService: LoaderService,
-        private companyActions: CompanyActions,
-        private loginAction: LoginActions
+        private companyActions: CompanyActions
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
         this.isCordova = isCordova();
+
         this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe(ss => {
             if (ss.user && ss.user.session && ss.user.session.id) {
                 let a = pick(ss.user, ['isNewUser']);
@@ -74,37 +71,33 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
             this._generalService.companyUniqueName = ss.companyUniqueName;
         });
+
         if (!(this._generalService.user && this._generalService.sessionId)) {
-            if (!window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
+            if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download')) {
                 if (PRODUCTION_ENV && !(isElectron || this.isCordova)) {
                     window.location.href = 'https://giddh.com/login/';
                 } else if (this.isCordova) {
                     this._generalService.invokeEvent.next('logoutCordova');
                     this.router.navigate(['login']);
                 } else {
-                    window.location.href = AppUrl + 'login';
+                    this.router.navigate(['/login']);
                 }
             }
         }
-        this._generalService.IAmLoaded.subscribe(s => {
+
+        this._generalService.IAmLoaded.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.IAmLoaded = s;
         });
+
         if (isCordova()) {
             document.addEventListener("deviceready", function () {
                 if ((window as any).StatusBar) {
                     (window as any).StatusBar.overlaysWebView(false);
-                    // (window as any).StatusBar.backgroundColorByName("#1a237e");
                     (window as any).StatusBar.styleLightContent();
                 }
             }, false);
         }
-        this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
 
-        this.breakpointObserver.observe([
-            '(max-width: 1023px)'
-        ]).subscribe(result => {
-            this.changeOnMobileView(result.matches);
-        });
         if (Configuration.isElectron) {
             // electronOauth2
             const { ipcRenderer } = (window as any).require("electron");
@@ -134,29 +127,35 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 localStorage.setItem('isMobileSiteGiddh', 'true');
             }
             this.dbServices.clearAllData();
-            // this.router.navigate(['/pages/settings']);
         } else {
             localStorage.setItem('isMobileSiteGiddh', 'false');
         }
-        reassignNavigationalArray(isMobile);
+        let branches = [];
+        this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+            branches = response || [];
+        });
+        reassignNavigationalArray(isMobile, this._generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, []);
         this._generalService.setIsMobileView(isMobile);
     }
 
     public ngOnInit() {
+        this.breakpointObserver.observe([
+            '(max-width: 1023px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.changeOnMobileView(result.matches);
+        });
         this.sideBarStateChange(true);
         this.subscribeToLazyRouteLoading();
 
-        if(this._generalService.companyUniqueName) {
+        if(this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
             this.store.dispatch(this.companyActions.RefreshCompanies());
-            this.store.dispatch(this.loginAction.renewSession());
         }
     }
 
     public ngAfterViewInit() {
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
-        this.router.events.subscribe((evt) => {
-
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
             if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !(isElectron || isCordova())) {
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
@@ -189,7 +188,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (!LOCAL_ENV && !(isElectron || isCordova())) {
             this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
 
-            this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {
+            this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {
                     this.newVersionAvailableForWebApp = _.clone(isChanged);
                 }

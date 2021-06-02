@@ -1,11 +1,10 @@
-<div class="clearfix pt-15 pb-15">
+<hamburger-menu [pageHeading]="'E-way Bill'"></hamburger-menu>
+<div class="clearfix pd-t15 pd-b15">
     <div class="col-xs-12 col-sm-12">
-        <div class="d-inline-block pull-left mr-2 middle ewayBill-date">
-            <div class="input-group">
-                <span class="input-wrapper">
-                    <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-                        (applyDaterangepicker)="selectedDate($event)" class="form-control" />
-                </span>
+        <div class="d-inline-block pull-left mr-2 middle eway-bill-date">
+            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                <i class="icon-calender calendar-addon"></i>
+                <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
             </div>
         </div>
     </div>
@@ -18,9 +17,9 @@
                 <div class="col-md-12">
                     <div class="table-responsive">
                         <table class="table basic table-bordered giddh-table on-mobile-view">
-                            <thead class="t-h-bg1" (clickOutside)="clickedOutside();">
+                            <thead class="thead-background1" (clickOutside)="clickedOutside();">
                                 <tr>
-                                    <th style="width:50px">#</th>
+                                    <th width="50px">#</th>
                                     <th class="nowrap">
                                         <div class="d-flex">
                                             <div class="flex-fill">Date</div>
@@ -111,11 +110,11 @@
                                     <th class="nowrap">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody *ngIf="!isLoading">
                                 <tr *ngFor="let item of EwaybillLists?.results let i = index">
                                     <td data-title="#">{{ i + 1 }}</td>
                                     <td data-title="Date" class="nowrap">{{item?.invoiceDate}}</td>
-                                    <td data-title="Invoice Number" class="nowrap download-arrow"><a href="#"
+                                    <td data-title="Invoice Number" class="nowrap download-arrow"><a href="javascript:;"
                                             class="d-inline-block">{{item?.docNumber}}</a>
                                         <a (click)="onSelectEwayDownload(item)" [tooltip]="'Download E-way Bill'"> <i
                                                 class="icon-download1 cursor-pointer pull-right"></i></a>
@@ -132,8 +131,16 @@
                                         </div>
                                     </td>
                                     <td data-title="E-way Bill Date" class="nowrap">{{item?.ewayBillDate}}</td>
-                                    <td data-title="Total" class="nowrap text-right pr-1"><i class="fa fa-inr"></i>
-                                        {{item?.totalValue | giddhCurrency}}</td>
+                                    <td data-title="Total" class="nowrap text-right pr-1">
+                                        <i class="icon-rupees font-11"></i>
+                                        <!-- {{item?.totalValue | giddhCurrency}} -->
+                                        <span class="d-inline-flex">
+                                            <amount-field [amount]="item?.totalValue"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
+                                    </td>
                                     <td data-title="Action" class="nowrap">
                                         <div class="btn-group pull-left" dropdown>
                                             <a href="javascript:void(0)" class="dropdown-toggle" id="button-basic"
@@ -152,11 +159,17 @@
                                     </td>
                                 </tr>
                             </tbody>
-
+                            <tbody *ngIf="isLoading">
+                                <tr>
+                                    <td colspan="9" align="center">
+                                        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                                    </td>
+                                </tr>
+                            </tbody>
 
                         </table>
                         <div class="no-data"
-                            *ngIf="EwaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)">
+                            *ngIf="!isLoading && EwaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)">
                             <h1>No entries found within given criteria.</h1>
                             <h1>Do search with some other dates</h1>
                         </div>
@@ -168,11 +181,11 @@
 
         </tab>
         <!-- <tab heading="Consolidated Eway Bill Details">
-        <div class="mt-15 clearfix">
+        <div class="mr-t15 clearfix">
             <div class="col-md-12">
                 <div class="table-responsive">
                     <table class="table basic table-bordered">
-                        <thead class="t-h-bg1">
+                        <thead class="thead-background1">
                             <tr>
                                 <th>
                                     EWB.No & Date
@@ -303,11 +316,11 @@
         <div class="modal-body pb-4">
 
             <div class="row d-flex e-way-body ">
-                <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
+                <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
                     <label>Mode of Transportation*</label>
                 </div>
 
-                <div class="col-md-8 col-lg-8 col-sm-12 mt-15">
+                <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
 
                     <ul class="list-icon-group ">
                         <li>
@@ -338,26 +351,26 @@
             <div>
 
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
                         <label>Vehicle Type*</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-8 col-sm-12 mt-15 ">
+                    <div class="col-md-8 col-lg-8 col-sm-12 mr-t15 ">
 
-                        <!-- <span class="mr-1 ">  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Regular</span>
-<span>  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Over Dimensional Cargo</span> -->
-
-
+                        <!-- <span class="mr-1 ">  <input type="radio "class="radio-theme " style="margin-right: 10px "/> Regular</span>
+<span>  <input type="radio "class="radio-theme " style="margin-right: 10px "/> Over Dimensional Cargo</span> -->
 
 
-                        <span class="pd0 mrR3">
-                            <input id="regular" class="radio-custom cp ml0" type="radio" name="vehicleType" required
+
+
+                        <span class="p-0 mr-r3">
+                            <input id="regular" class="radio-custom cp ml-0" type="radio" name="vehicleType" required
                                 [(ngModel)]="updateEwayVehicleform.vehicleType" value="R">
                             <label for="regular" class="radio-custom-label">Regular</label>
                         </span>
 
-                        <span class="pd0 mrR3">
-                            <input id="dimensionalCargo" class="radio-custom cp ml0" type="radio" name="vehicleType"
+                        <span class="p-0 mr-r3">
+                            <input id="dimensionalCargo" class="radio-custom cp ml-0" type="radio" name="vehicleType"
                                 required value="O" [(ngModel)]="updateEwayVehicleform.vehicleType">
                             <label for="dimensionalCargo" class="radio-custom-label">Over Dimensional Cargo</label>
                         </span>
@@ -366,11 +379,11 @@
                 </div>
 
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
-                        <label class="pt-07">Vehicle No.*</label>
+                    <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
+                        <label class="pd-t07">Vehicle No.*</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mr-t15 ">
 
                         <input type="text" name="vehicleNo" required placeholder="Mention Number "
                             [(ngModel)]="updateEwayVehicleform.vehicleNo" maxlength="15" minlength="7"
@@ -380,10 +393,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
-                        <label class="pt-07">From Place*</label>
+                    <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
+                        <label class="pd-t07">From Place*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15" id="form-place">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mr-t15" id="form-place">
                         <!-- <input type="text" required placeholder="" class="form-control input" /> -->
                         <!-- <input [ngbTypeahead]="dataSource" type="text" autocomplete="off" (keyup)="onChangeCityName()" [(ngModel)]="company.city" name="city" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" required maxlength="50" placeholder="Branch City"
                                 pattern="^[^\s]+(\s+[^\s]+)*$"> -->
@@ -395,7 +408,7 @@
                         <ng-template #rt let-r="result" let-t="term">
                             <span>{{ r }}</span>
                         </ng-template> -->
-                        <sh-select [options]="searchResults" name="fromPlace" required maxlength="50"
+                        <sh-select [options]="searchResults" name="fromPlace" required [isRequired]="true" maxlength="50"
                             [(ngModel)]="updateEwayVehicleform.fromPlace" autocomplete="off"
                             (dynamicSearchedQuery)="onSearchQueryChanged($event)"
                             [enableDynamicSearch]="true"
@@ -407,24 +420,24 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
-                        <label class="pt-07">From State*</label>
+                    <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
+                        <label class="pd-t07">From State*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mr-t15 ">
                         <sales-sh-select [placeholder]="'State'" [multiple]="false" [isFilterEnabled]="true"
-                            class="select-bdr-bottom" name="fromState" required
+                            class="select-bdr-bottom" name="fromState" required [isRequired]="true"
                             [(ngModel)]="updateEwayVehicleform.fromState" [options]="statesSource$ | async">
                         </sales-sh-select>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
-                        <label class="pt-07">Reason*</label>
+                    <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
+                        <label class="pd-t07">Reason*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mr-t15 ">
                         <!-- <sh-select class="input" [options]="ewayUpdateVehicleReason" required placeholder="select type" [multiple]="false" [isFilterEnabled]="true" name="reasonCode" [(ngModel)]="updateEwayVehicleform.reasonCode"></sh-select> -->
-                        <sh-select class=" input " [options]="ewayUpdateVehicleReasonList" required
+                        <sh-select class=" input " [options]="ewayUpdateVehicleReasonList" required [isRequired]="true"
                             placeholder="select type" [isFilterEnabled]="true" name="reasonCode"
                             [(ngModel)]="updateEwayVehicleform.reasonCode" [ItemHeight]="33"></sh-select>
 
@@ -432,10 +445,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
-                        <label class="pt-07">Remark*</label>
+                    <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
+                        <label class="pd-t07">Remark*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mr-t15 ">
                         <textarea name="reasonRem" class="form-control" required
                             [(ngModel)]="updateEwayVehicleform.reasonRem" placeholder="Enter the remarks"></textarea>
 
@@ -443,32 +456,31 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
-                        <label class="pt-07">Transporter's Doc No.*</label>
+                    <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
+                        <label class="pd-t07">Transporter's Doc No.*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mr-t15 ">
                         <input type="text" placeholder="Enter transporter's doc no." required name="transDocNo"
                             [(ngModel)]="updateEwayVehicleform.transDocNo" class="form-control input" />
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
-                        <label class="pt-07">Transporter's Doc Date*</label>
+                    <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
+                        <label class="pd-t07">Transporter's Doc Date*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mr-t15 ">
                         <input placeholder="dd/mm/yyyy " name="transDocDate" required type="text " placement="top"
                             [bsConfig]="{dateInputFormat: 'DD/MM/YYYY', adaptivePosition: true}"
-                            [(ngModel)]="updateEwayVehicleform.transDocDate" class="form-control " bsDatepicker
-                            style="padding-right: 27px !important; " />
+                            [(ngModel)]="updateEwayVehicleform.transDocDate" class="form-control pd-r3" bsDatepicker/>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mr-t15 text-right">
 
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mr-t15 ">
                         <button type="submit" [disabled]="updateVehicleForm.invalid"
                             [ladda]="updateEwayvehicleProcess$ | async" (click)="updateEwayTransport(updateVehicleForm)"
                             class="btn btn-success mr-2">Save
@@ -495,30 +507,30 @@
 
         <div class="modal-body pb-4">
             <div class="row">
-                <div class="col-md-3 col-lg-3 col-sm-12 mt-15 text-right">
-                    <label class="pt-07">Reason *</label>
+                <div class="col-md-3 col-lg-3 col-sm-12 mr-t15 text-right">
+                    <label class="pd-t07">Reason *</label>
                 </div>
-                <div class="col-md-8 col-lg-7 col-sm-12 mt-15">
-                    <sh-select class=" input " [options]="ewayCancelReason" required placeholder="select type"
+                <div class="col-md-8 col-lg-7 col-sm-12 mr-t15">
+                    <sh-select class=" input " [options]="ewayCancelReason" required [isRequired]="true" placeholder="select type"
                         [isFilterEnabled]="true" name="cancelRsnCode" [(ngModel)]="cancelEwayRequest.cancelRsnCode"
                         [ItemHeight]="33"></sh-select>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 col-lg-3 col-sm-12 mt-15 text-right">
-                    <label class="pt-07">Remark</label>
+                <div class="col-md-3 col-lg-3 col-sm-12 mr-t15 text-right">
+                    <label class="pd-t07">Remark</label>
                 </div>
-                <div class="col-md-8 col-lg-7 col-sm-12 mt-15">
+                <div class="col-md-8 col-lg-7 col-sm-12 mr-t15">
                     <textarea name="cancelRmrk" class="form-control" [(ngModel)]="cancelEwayRequest.cancelRmrk"
                         placeholder="Enter the remarks"></textarea>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-3 col-lg-3 col-sm-12 mt-15 text-right">
+                <div class="col-md-3 col-lg-3 col-sm-12 mr-t15 text-right">
 
                 </div>
-                <div class="col-md-8 col-lg-7 col-sm-12 mt-15">
+                <div class="col-md-8 col-lg-7 col-sm-12 mr-t15">
                     <button type="submit" (click)="cancelEwayBill(cancelEwayForm)" [disabled]="cancelEwayForm.invalid"
                         [ladda]="cancelEwayInProcess$ | async" class="btn btn-success mr-2">Confirm
                     </button>
@@ -577,7 +589,7 @@
         <h4 class="font-22 mb-2">2. Item Details</h4>
         <div class="table-responsive">
             <table class="table basic table-bordered">
-                <thead class="t-h-bg1">
+                <thead class="thead-background1">
                     <tr>
                         <th>#</th>
                         <th>E-Way Bill No. & Date</th>
@@ -599,7 +611,7 @@
                             <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
                         </td>
                         <td>{{item?.ewayBillDate}}</td>
-                        <td><i class="fa fa-inr"></i> {{item?.totalValue}}</td>
+                        <td><i class="icon-rupees font-11"></i> {{item?.totalValue}}</td>
                         <td><a href="../../../../../../../src/app/invoice/eWayBill" class="btn-link">Action</a></td>
                     </tr>
 
@@ -608,5 +620,14 @@
         </div>
 
 
+    </div>
+</ng-template>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+                                    [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
+                                    [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
     </div>
 </ng-template>

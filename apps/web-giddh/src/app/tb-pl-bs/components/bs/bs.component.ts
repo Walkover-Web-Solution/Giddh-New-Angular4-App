@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, ViewChild } from '@angular/core';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
@@ -13,48 +13,15 @@ import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'bs',
-    template: `
-    <tb-pl-bs-filter
-      #filter
-      [selectedCompany]="selectedCompany"
-      (onPropertyChanged)="filterData($event)"
-      [showLoader]="showLoader | async"
-      [showLabels]="true"
-      (seachChange)="searchChanged($event)"
-      (expandAll)="expandAllEvent($event)"
-      [BsExportXLS]="true"
-      (plBsExportXLSEvent)="exportXLS($event)"
-    ></tb-pl-bs-filter>
-    <div *ngIf="(showLoader | async)">
-      <!-- loader -->
-      <div class="loader">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <h1>loading balance sheet</h1>
-      </div>
-    </div>
-    <div *ngIf="(!(showLoader | async) && data)">
-      <bs-grid #bsGrid
-               [search]="search"
-               [from]="from"
-               [to]="to"
-               (searchChange)="searchChanged($event)"
-               [expandAll]="expandAll"
-               [bsData]="data"
-      ></bs-grid>
-    </div>
-    <div *ngIf="(!(showLoader | async) && !(data))" style="display: flex; height: 60vh; align-items: center; justify-content: center; font-size: 31px; color: #babec1;">
-      <div class="d-flex">
-        <h2>No Data Available For This Filter</h2>
-      </div>
-    </div>
-  `,
+    templateUrl: './bs.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BsComponent implements AfterViewInit, OnDestroy, OnChanges {
+
+export class BsComponent implements AfterViewInit, OnDestroy {
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     public get selectedCompany(): CompanyResponse {
         return this._selectedCompany;
@@ -72,7 +39,6 @@ export class BsComponent implements AfterViewInit, OnDestroy, OnChanges {
                 from: value.activeFinancialYear.financialYearStarts,
                 to: value.activeFinancialYear.financialYearEnds
             };
-            // this.filterData(this.request);
         }
     }
 
@@ -91,7 +57,7 @@ export class BsComponent implements AfterViewInit, OnDestroy, OnChanges {
     private _selectedCompany: CompanyResponse;
 
     constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private _toaster: ToasterService) {
-        this.showLoader = this.store.select(p => p.tlPl.bs.showLoader).pipe(takeUntil(this.destroyed$));
+        this.showLoader = this.store.pipe(select(p => p.tlPl.bs.showLoader), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.tlPl.bs.data), takeUntil(this.destroyed$)).subscribe((p) => {
             if (p) {
                 let data = _.cloneDeep(p) as BalanceSheetData;
@@ -142,12 +108,6 @@ export class BsComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     public ngAfterViewInit() {
         this.cd.detectChanges();
-    }
-
-    public ngOnChanges(changes: SimpleChanges) {
-        // if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
-        //   this.cd.detectChanges();
-        // }
     }
 
     public filterData(request: ProfitLossRequest) {

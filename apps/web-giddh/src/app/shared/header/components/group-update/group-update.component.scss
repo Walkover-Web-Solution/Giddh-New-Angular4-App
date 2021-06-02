@@ -1,0 +1,38 @@
+@import '../../../../../assets/css/color.scss';
+
+.form-group .item-padding.text-right {
+    max-width: 100% !important;
+}
+.grp-list li a.list-item {
+    text-transform: capitalize;
+}
+.horizontal-form {
+    max-width: 660px !important;
+    width: 100% !important;
+}
+.form-group .item-padding .my-dropdown-menu {
+    width: 100% !important;
+}
+.merge-btn {
+    padding: 8px 16px;
+    width: 95px;
+}
+.move-group-form{
+    width: calc(100% - 112px);
+}
+.all-taxes{
+  width: calc(100% - 115px);
+}
+.move-group-form .list-item{
+    border-bottom:1px solid $gainsboro;
+}
+.form-box .btn{
+    width: 95px;
+}
+.collapse-icons{
+    font-size: 10px;
+    border: 1px solid $chetwode-blue;
+    border-radius: 4px;
+    padding: 2px;
+    top: 0 !important;
+}

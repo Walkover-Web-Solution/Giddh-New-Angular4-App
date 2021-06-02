@@ -1,5 +1,5 @@
-<div class="modal-header themeBg pd2 pdL2 pdR2 clearfix" style="background-color: #525252">
-    <h3 class="modal-title bg" id="modal-title">Print Voucher </h3>
+<div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
+    <h3 class="modal-title bg" id="modal-title">{{localeData?.print_voucher}} </h3>
     <i aria-hidden="true" class="icon-cross text-right close-modal" (click)="cancelEvent.emit()"></i>
 </div>
 
@@ -7,23 +7,15 @@
 
     <div class="invoice-image-section">
 
-        <div *ngIf="isVoucherDownloading" class="no-data mr-t2 loader-main">
-            <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-            <div class="spinner2">
-                <div class="cube1"></div>
-                <div class="cube2"></div>
-            </div>
-        </div>
+        <giddh-page-loader *ngIf="isVoucherDownloading"></giddh-page-loader>
 
         <div *ngIf="isVoucherDownloadError && !isVoucherDownloading" class="error">
             <span>
-                Invoice Preview is not available right now!Please try again..
+                {{localeData?.invoice_preview_unavailable}}
             </span>
         </div>
 
-        <ng2-pdfjs-viewer [downloadFileName]="'invoice.pdf'" [openFile]="false" [viewBookmark]="false"
-            [download]="true">
-        </ng2-pdfjs-viewer>
+        <iframe #pdfContainer *ngIf="sanitizedPdfFileUrl && !isVoucherDownloading" width="100%" height="100%" [src]="sanitizedPdfFileUrl"></iframe>
 
     </div>
 </div>

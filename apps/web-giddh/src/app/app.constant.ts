@@ -9,7 +9,7 @@ export const Configuration = {
     APP_FOLDER
 };
 
-export const APP_DEFAULT_TITLE = 'Giddh -';
+export const APP_DEFAULT_TITLE = '';
 
 export const DEFAULT_TOASTER_OPTIONS = {
     closeButton: true, // show close button
@@ -64,6 +64,8 @@ export enum OnBoardingType {
 
 /** Pagination limit for every module */
 export const PAGINATION_LIMIT = 50;
+/** API default count limit */
+export const API_COUNT_LIMIT = 20;
 
 /** SubVoucher type */
 export enum SubVoucher {
@@ -215,7 +217,7 @@ export const VAT_SUPPORTED_COUNTRIES = [
     'QA', 'BH', 'AE', 'SA', 'OM', 'KW'
 ];
 
-export const API_POSTMAN_DOC_URL='https://documenter.getpostman.com/view/117343/S1Zw8WF1?version=latest';
+export const API_POSTMAN_DOC_URL='https://apidoc.giddh.com/';
 
 /** Decimal point for rate field, irrespective of user profile preference
  * will be displayed up to 4 decimal places
@@ -241,7 +243,7 @@ export let DEFAULT_POPULAR_PLAN = "";
 
 if (PRODUCTION_ENV || isElectron || isCordova) {
     DEFAULT_POPULAR_PLAN = "Oak";
-}  else {
+} else {
     DEFAULT_POPULAR_PLAN = "Popular Plan";
 }
 
@@ -260,3 +262,43 @@ export enum SearchResultText {
 
 /** Types of tcs and tds taxes */
 export const TCS_TDS_TAXES_TYPES = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
+
+/** Routes for which header should display back button */
+export const ROUTES_WITH_HEADER_BACK_BUTTON = [
+    '/pages/settings/create-warehouse',
+    '/pages/settings/create-branch'
+];
+
+/** Routes which are restricted when branch is switched  */
+export const RESTRICTED_BRANCH_ROUTES = [
+    '/pages/settings/branch',
+    '/pages/settings/create-branch',
+    '/pages/settings/financial-year',
+    '/pages/user-details/subscription'
+];
+
+export const SUPPORT_TEAM_NUMBERS = [
+    "+918889500411", "+918889500350", "+918889378604"
+];
+
+/** Settings integration tabs */
+export const SETTING_INTEGRATION_TABS = {
+    SMS: { LABEL: 'sms', VALUE: 0 },
+    EMAIL: { LABEL: 'email', VALUE: 1 },
+    COLLECTION: { LABEL: 'collection', VALUE: 2 },
+    E_COMMERCE: { LABEL: 'ecommerce', VALUE: 3 },
+    PAYMENT: { LABEL: 'payment', VALUE: 4 }
+};
+/** Email Validation Regex */
+export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+/** E-invoice statuses */
+export enum EInvoiceStatus {
+    YetToBePushed = 'yet-to-be pushed',
+    Pushed = 'pushed',
+    PushInitiated = 'push initiated',
+    Cancelled = 'cancelled',
+    MarkedAsCancelled = 'marked as cancelled',
+    Failed = 'failed',
+    NA = 'na',
+}

@@ -13,50 +13,14 @@ import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'pl',
-    template: `
-      <tb-pl-bs-filter
-              #filter
-              [selectedCompany]="selectedCompany"
-              (onPropertyChanged)="filterData($event)"
-              [showLoader]="showLoader | async"
-              (seachChange)="searchChanged($event)"
-              (expandAll)="expandAllEvent($event)"
-              [tbExportCsv]="false"
-              [tbExportPdf]="false"
-              [tbExportXLS]="false"
-              [plBsExportXLS]="true"
-              (plBsExportXLSEvent)="exportXLS($event)"
-              [showLabels]="true"
-      ></tb-pl-bs-filter>
-      <div *ngIf="(showLoader | async)">
-          <div class="loader">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <h1>loading profit & loss </h1>
-          </div>
-      </div>
-      <div *ngIf="(!(showLoader | async) && data)">
-          <pl-grid #plGrid
-                   [search]="search"
-                   [from]="from"
-                   [to]="to"
-                   (searchChange)="searchChanged($event)"
-                   [expandAll]="expandAll"
-                   [plData]="data"
-                   [cogsData]="cogsData"
-          ></pl-grid>
-      </div>
-      <div *ngIf="(!(showLoader | async) && !(data))" style="display: flex; height: 60vh; align-items: center; justify-content: center; font-size: 31px; color: #babec1;">
-          <div class="d-flex">
-              <h2>No Data Available For This Filter</h2>
-          </div>
-      </div>
-  `
+    templateUrl: './pl.component.html'
 })
+
 export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     public from: string;
     public to: string;
 
@@ -95,7 +59,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     private _selectedCompany: CompanyResponse;
 
     constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private _toaster: ToasterService) {
-        this.showLoader = this.store.select(p => p.tlPl.pl.showLoader).pipe(takeUntil(this.destroyed$));
+        this.showLoader = this.store.pipe(select(p => p.tlPl.pl.showLoader), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -139,7 +103,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
                         cg.isIncludedInSearch = true;
                         cg.isOpen = false;
                         cg.uniqueName = f;
-                        cg.groupName = f.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+                        cg.groupName = (f) ? f.replace(/([a-z0-9])([A-Z])/g, '$1 $2') : "";
                         // removed following line in favour of G0-908
                         // cg.category = f === 'closingInventory' ? 'expenses' : 'income';
                         cg.category = f === 'income';

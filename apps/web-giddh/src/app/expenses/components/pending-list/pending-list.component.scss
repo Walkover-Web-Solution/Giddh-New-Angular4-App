@@ -7,7 +7,7 @@
     position: absolute;
     right: 12px;
     font-size: 11px;
-    color: #7d7d7d;
+    color: $gray;
     top: 13px;
 }
 
@@ -15,9 +15,16 @@
     font-size: 11px;
     position: absolute;
     right: 10px;
-    color: #a9a9a9;
+    color: $dim-gray;
     cursor: pointer;
     top: 12px;
+}
+
+.icon-pointer {
+    cursor: pointer;
+    .active-text-color {
+        color: $wild-blue-yonder !important;
+    }
 }
 
 .icon-sort-asc,
@@ -26,6 +33,10 @@
     cursor: pointer;
     float: left;
     margin-left: 6px;
+}
+
+.icon-sort-asc.active-text-color {
+    color: $wild-blue-yonder !important;
 }
 
 .td-search-box {

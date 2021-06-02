@@ -8,11 +8,12 @@ import { GstComponent } from './gst.component';
 import { FileGstR3Component } from './gstR3/gstR3.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GstReport } from './constants/gst.constant';
 
 const GST_ROUTES: Routes = [
     { path: '', component: GstComponent },
-    { path: 'gstR1', component: FileGstR1Component },
-    { path: 'gstR2', component: FileGstR2Component },
+    { path: GstReport.Gstr1, component: FileGstR1Component },
+    { path: GstReport.Gstr2, component: FileGstR2Component },
     { path: 'gstR3', component: FileGstR3Component },
     {
         path: 'filing-return', component: FilingComponent,

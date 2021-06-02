@@ -6,9 +6,9 @@
 
 .dropdown-menu > li > a:hover {
     color: $chetwode-blue;
-    background: #e5e5e5;
+    background: $whisper;
 }
-.zIndexForAside {
+.z-index-for-aside {
     z-index: 99999;
 }
 .authenticate-btn {

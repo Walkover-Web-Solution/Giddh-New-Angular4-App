@@ -1,4 +1,6 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { fromEvent, ReplaySubject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 import { Option } from './option';
 import { OptionList } from './option-list';
@@ -10,7 +12,7 @@ import { OptionList } from './option-list';
 	encapsulation: ViewEncapsulation.None
 })
 export class SelectDropdownComponent
-	implements AfterViewInit, OnChanges, OnInit {
+	implements AfterViewInit, OnChanges, OnInit, OnDestroy {
 
 	@Input() public filterEnabled: boolean;
 	@Input() public highlightColor: string;
@@ -24,39 +26,76 @@ export class SelectDropdownComponent
 	@Input() public top: number;
 	@Input() public width: number;
 	@Input() public placeholder: string;
-	@Input() public optionTemplate: TemplateRef<any>;
+    @Input() public optionTemplate: TemplateRef<any>;
+    /** True when pagination should be enabled */
+    @Input() isPaginationEnabled: boolean;
+    /** True if the compoonent should be used as dynamic search component instead of static search */
+    @Input() public enableDynamicSearch: boolean;
 
+    /** Emits the scroll to bottom event when pagination is required  */
+    @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
 	@Output() public optionClicked = new EventEmitter<Option>();
 	@Output() public optionsListClick = new EventEmitter<null>();
 	@Output() public singleFilterClick = new EventEmitter<null>();
 	@Output() public singleFilterFocus = new EventEmitter<null>();
 	@Output() public singleFilterInput = new EventEmitter<string>();
 	@Output() public singleFilterKeydown = new EventEmitter<any>();
-	@Output() public noResultClicked = new EventEmitter<null>();
+    @Output() public noResultClicked = new EventEmitter<null>();
+    /** Emits dynamic searched query */
+    @Output() public dynamicSearchedQuery: EventEmitter<string> = new EventEmitter();
 
 	@ViewChild('filterInput', {static: false}) public filterInput: any;
 	@ViewChild('optionsList', {static: true}) public optionsList: any;
 
 	public disabledColor: string = '#fff';
-	public disabledTextColor: string = '9e9e9e';
+    public disabledTextColor: string = '9e9e9e';
+    /** To unsubscrible the listener */
+    public scrollListener: any;
 
-	/** Event handlers. **/
+    /** To unsubscribe from the dynamic search query subscription */
+    private stopDynamicSearch$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+    constructor(
+        private renderer: Renderer2
+    ) {}
 
 	public ngOnInit() {
-		this.optionsReset();
+        this.optionsReset();
+        this.scrollListener = this.renderer.listen(this.optionsList?.nativeElement, 'scroll', () => {
+            if (this.isPaginationEnabled) {
+                // Scrolled to bottom
+                if ((this.optionsList?.nativeElement?.scrollHeight - this.optionsList?.nativeElement?.scrollTop) === this.optionsList?.nativeElement?.clientHeight) {
+                    this.scrollEnd.emit();
+                }
+            }
+        });
 	}
 
 	public ngOnChanges(changes: any) {
 		if (changes.hasOwnProperty('optionList')) {
 			this.optionsReset();
 		}
-	}
+    }
+
+    /**
+     * Releases the occupied sources
+     *
+     * @memberof SelectDropdownComponent
+     */
+    public ngOnDestroy(): void {
+        if (this.scrollListener) {
+            this.scrollListener();
+        }
+        this.stopDynamicSearch$.next(true);
+        this.stopDynamicSearch$.complete();
+    }
 
 	public ngAfterViewInit() {
 		this.moveHighlightedIntoView();
 		if ((!this.multiple && !this.isTypeAheadMode) && this.filterEnabled) {
-			this.filterInput.nativeElement.focus();
-		}
+			this.filterInput?.nativeElement.focus();
+        }
+        this.subscribeToQueryChange();
 	}
 
 	public onOptionsListClick() {
@@ -68,7 +107,9 @@ export class SelectDropdownComponent
 	}
 
 	public onSingleFilterInput(event: any) {
-		this.singleFilterInput.emit(event.target.value);
+        if (!this.enableDynamicSearch) {
+            this.singleFilterInput.emit(event.target.value);
+        }
 	}
 
 	public onSingleFilterKeydown(event: any) {
@@ -115,7 +156,7 @@ export class SelectDropdownComponent
 
 	public moveHighlightedIntoView() {
 
-		let list = this.optionsList.nativeElement;
+		let list = this.optionsList?.nativeElement;
 		let listHeight = list.offsetHeight;
 
 		let itemIndex = this.optionList.getHighlightedIndex();
@@ -136,7 +177,20 @@ export class SelectDropdownComponent
 				list.scrollTop = itemTop;
 			}
 		}
-	}
+    }
+
+    /**
+     * Subscribes to query change for dynamic search
+     *
+     * @memberof SelectComponent
+     */
+    public subscribeToQueryChange(): void {
+        if (this.enableDynamicSearch) {
+            fromEvent(this.filterInput?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((event: any) => {
+                this.dynamicSearchedQuery.emit(event?.target?.value?.trim());
+            });
+        }
+    }
 
 	/** Initialization. **/
 
@@ -146,7 +200,7 @@ export class SelectDropdownComponent
 	}
 
 	private handleOptionsWheel(e: any) {
-		let div = this.optionsList.nativeElement;
+		let div = this.optionsList?.nativeElement;
 		let atTop = div.scrollTop === 0;
 		let atBottom = div.offsetHeight + div.scrollTop === div.scrollHeight;
 
@@ -154,6 +208,6 @@ export class SelectDropdownComponent
 			e.preventDefault();
 		} else if (atBottom && e.deltaY > 0) {
 			e.preventDefault();
-		}
+        }
 	}
 }

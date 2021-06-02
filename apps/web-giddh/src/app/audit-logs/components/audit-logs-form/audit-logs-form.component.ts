@@ -2,19 +2,17 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { BsModalService } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
+import { API_COUNT_LIMIT } from '../../../app.constant';
 import { cloneDeep, flatten, map, omit, union } from '../../../lodash-optimized';
-import { UserDetails } from '../../../models/api-models/loginModels';
 import { GetAuditLogsRequest } from '../../../models/api-models/Logs';
 import { IForceClear } from '../../../models/api-models/Sales';
-import { AccountService } from '../../../services/account.service';
 import { CompanyService } from '../../../services/companyService.service';
-import { GeneralService } from '../../../services/general.service';
+import { GroupService } from '../../../services/group.service';
 import { LogsService } from '../../../services/logs.service';
+import { SearchService } from '../../../services/search.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -26,7 +24,12 @@ import { AuditLogsSidebarVM } from './Vm';
     templateUrl: './audit-logs-form.component.html',
     styleUrls: ['audit-logs-form.component.scss']
 })
+
 export class AuditLogsFormComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /** Audit log form object */
     public auditLogFormVM: AuditLogsSidebarVM;
     /** Date format type */
@@ -53,6 +56,42 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     public forceClearUser$: Observable<IForceClear> = observableOf({ status: false });
     /* Active company unique name */
     public activeCompanyUniqueName$: Observable<string>;
+    /** Stores the search results pagination details */
+    public accountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search */
+    public defaultAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details */
+    public defaultAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the list of accounts */
+    public accounts: IOption[];
+    /** Stores the search results pagination details for group dropdown */
+    public groupsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for group dropdown */
+    public defaultGroupSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for group dropdown */
+    public preventDefaultGroupScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for group dropdown */
+    public defaultGroupPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the value of groups */
+    public searchedGroups: IOption[];
     /** To destroy observers */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** From date value of parent datepicker */
@@ -62,36 +101,28 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     /** Entity sh-selct refence */
     @ViewChild('selectEntity') public shSelectEntityReference: ShSelectComponent;
 
-
-
     constructor(private store: Store<AppState>,
-        private accountService: AccountService,
         private companyService: CompanyService,
         private auditLogsActions: AuditLogsActions,
         private bsConfig: BsDatepickerConfig,
-        private modalService: BsModalService,
         private auditLogsService: LogsService,
-        private generalService: GeneralService) {
-
+        private groupService: GroupService,
+        private searchService: SearchService
+    ) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.showWeekNumbers = false;
+    }
 
-        this.auditLogFormVM = new AuditLogsSidebarVM();
+    /**
+     * Component lifecycle hook
+     *
+     * @memberof AuditLogsFormComponent
+     */
+    public ngOnInit(): void {
+        this.auditLogFormVM = new AuditLogsSidebarVM(this.localeData, this.commonLocaleData);
         this.auditLogFormVM.getLogsInprocess$ = this.store.pipe(select(state => state.auditlog.getLogInProcess), takeUntil(this.destroyed$));
-        this.auditLogFormVM.groupsList$ = this.store.pipe(select(state => state.general.groupswithaccounts), takeUntil(this.destroyed$));
         this.auditLogFormVM.user$ = this.store.pipe(select(state => { if (state.session.user) { return state.session.user.user; } }), take(1));
-        this.accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
-                let accounts: IOption[] = [];
-                data.body.results.map(d => {
-                    accounts.push({ label: d.name, value: d.uniqueName });
-                });
-                this.auditLogFormVM.accounts$ = observableOf(accounts);
-            }
-        });
-        let loginUser: UserDetails = null;
-        this.auditLogFormVM.user$.pipe(take(1)).subscribe((response) => loginUser = response);
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let users: IOption[] = [];
@@ -104,27 +135,12 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                 this.auditLogFormVM.canManageCompany = false;
             }
         });
-    }
-
-    /**
-     * Component lifecycle hook
-     *
-     * @memberof AuditLogsFormComponent
-     */
-    public ngOnInit(): void {
+        
         // To get audit log form filter
         this.getFormFilter();
-        this.auditLogFormVM.groupsList$.subscribe(data => {
-            if (data && data.length) {
-                let accountList = this.flattenGroup(data, []);
-                let groups: IOption[] = [];
-                accountList.map((item: any) => {
-                    groups.push({ label: item.name, value: item.uniqueName });
-                });
-                this.auditLogFormVM.groups$ = observableOf(groups);
-            }
-        });
         this.auditLogFormVM.reset();
+        this.loadDefaultAccountsSuggestions();
+        this.loadDefaultGroupsSuggestions();
     }
 
     /**
@@ -195,18 +211,6 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Generate custom filters
-     *
-     * @param {string} term term to filter with
-     * @param {IOption} item term to filter for
-     * @returns
-     * @memberof AuditLogsFormComponent
-     */
-    public generalCustomFilter(term: string, item: IOption): any {
-        return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
-    }
-
-    /**
      * To reset audit log form
      *
      * @memberof AuditLogsFormComponent
@@ -224,7 +228,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsFormComponent
      */
     public getFormFilter(): void {
-        this.auditLogsService.getAuditLogFormFilters().subscribe((response) => {
+        this.auditLogsService.getAuditLogFormFilters().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
                 if (response.body) {
                     this.auditLogFilterForm = response.body;
@@ -335,5 +339,209 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                 }
             }, 1000);
         }
+    }
+
+    /**
+     * Search query change handler
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof AuditLogsFormComponent
+     */
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.accountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page
+            }
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: result.name
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.accounts = searchResults;
+                    } else {
+                        this.accounts = [
+                            ...this.accounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.auditLogFormVM.accounts$ = observableOf(this.accounts);
+                    this.accountsSearchResultsPaginationData.page = data.body.page;
+                    this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+                }
+            });
+        } else {
+            this.accounts = [...this.defaultAccountSuggestions];
+            this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
+            this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler
+     *
+     * @returns null
+     * @memberof AuditLogsFormComponent
+     */
+    public handleScrollEnd(): void {
+        if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
+            this.onAccountSearchQueryChanged(
+                this.accountsSearchResultsPaginationData.query,
+                this.accountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.accountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: result.name
+                            }
+                        }) || [];
+                        this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Search query change handler for group
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof AuditLogsFormComponent
+     */
+    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.groupsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultGroupScrollApiCall &&
+            (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                count: API_COUNT_LIMIT
+            }
+            this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: result.name
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.searchedGroups = searchResults;
+                    } else {
+                        this.searchedGroups = [
+                            ...this.searchedGroups,
+                            ...searchResults
+                        ];
+                    }
+                    this.auditLogFormVM.groups$ = observableOf(this.searchedGroups);
+                    this.groupsSearchResultsPaginationData.page = data.body.page;
+                    this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.searchedGroups = [...this.defaultGroupSuggestions];
+            this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
+            this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
+            this.preventDefaultGroupScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultGroupScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler for group dropdown
+     *
+     * @returns null
+     * @memberof AuditLogsFormComponent
+     */
+    public handleGroupScrollEnd(): void {
+        if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
+            this.onGroupSearchQueryChanged(
+                this.groupsSearchResultsPaginationData.query,
+                this.groupsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.groupsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: result.name
+                            }
+                        }) || [];
+                        this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default group list for advance search
+     *
+     * @private
+     * @memberof AuditLogsFormComponent
+     */
+    private loadDefaultGroupsSuggestions(): void {
+        this.onGroupSearchQueryChanged('', 1, (response) => {
+            this.defaultGroupSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: result.name
+                }
+            }) || [];
+            this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+            this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+            this.searchedGroups = [...this.defaultGroupSuggestions];
+        });
+    }
+
+    /**
+     * Loads the default account search suggestion when module is loaded
+     *
+     * @private
+     * @memberof AuditLogsFormComponent
+     */
+    private loadDefaultAccountsSuggestions(): void {
+        this.onAccountSearchQueryChanged('', 1, (response) => {
+            this.defaultAccountSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: result.name
+                }
+            }) || [];
+            this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+            this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+            this.accounts = [...this.defaultAccountSuggestions];
+        });
     }
 }

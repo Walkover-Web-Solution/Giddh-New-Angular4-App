@@ -1,0 +1,200 @@
+{
+    "page_heading": "Ledger - ",
+    "share_ledger": "Share Ledger",
+    "attach_file": "Attach File",
+    "search_ledger": "Search ledger",
+    "import_statement": "Import Statement",
+    "loading_transactions": "Loading Transactions...",
+    "mapped_account_transactions": "Transactions from mapped account",
+    "dr": "Dr",
+    "cr": "Cr",
+    "create_account": "Create New Account",
+    "transactions": "transactions",
+    "pages": "pages",
+    "cf_balance": "C/F Balance",
+    "by": "By",
+    "to": "To",
+    "to_balance_bf": "To Balance B/F",
+    "download_file": "Download file",
+    "to_select_accounts": "To Select Accounts",
+    "by_select_accounts": "By Select Accounts",
+    "new_account": "New A/c",
+    "by_balance_bf": "By Balance B/F",
+    "bf_balance": "B/F Balance",
+    "by_particular": "By [PARTICULAR]",
+    "to_particular": "To [PARTICULAR]",
+    "to_balance_cf": "To Balance C/F",
+    "balance_bank": "Balance as per bank",
+    "pending_cheque": "Pending cheque",
+    "reconciliation": "Reconciliation",
+    "total_transactions": "Total Transactions",
+    "opening_balance": "Opening Balance",
+    "net_total": "Net Total",
+    "closing_balance": "Closing Balance",
+    "delete_entries_title": "Do you want to delete the selected entrie(s)?",
+    "delete_entries_content": "All their corresponding vouchers and invoices will be deleted permanently and will no longer be accessible from other modules.",
+    "select_voucher_generate": "Select voucher generate option",
+    "entry_created": "Entry created successfully",
+    "transaction_required": "There must be at least a transaction to make an entry.",
+    "invalid_date": "Invalid Date Selected. Please Select Valid Date",
+    "invalid_cheque_clearance_date": "Invalid Date Selected In Cheque Clearance Date. Please Select Valid Date",
+    "select_one_entry": "Please select at least one entry.",
+    "select_valid_action": "Please select a valid action.",
+    "file_uploaded": "File uploaded successfully",
+    "bank_transaction_deleted": "Bank transaction deleted Successfully",
+    "save_unfinished_entry": "Please save unfinished entry first...",
+    "qty": "Qty",
+    "price": "Price",
+    "tax_on_advance": "Tax on Advance",
+    "tax_rcm": "Tax (RCM)",
+    "select_warehouse": "Select Warehouse",
+    "other_tax": "Other Tax ?",
+    "taxable_amount": "Taxable Amount",
+    "itc_type": "ITC Type",
+    "more_details": "More Details",
+    "total_in_currency": "Total in [CURRENCY]",
+    "select_vouchers": "Select Vouchers",
+    "select_invoice": "Select Invoice",
+    "dated": "Dated",
+    "adjust_voucher": "Adjust [VOUCHER_TYPE]",
+    "adjust_receipt": "Adjust Receipt",
+    "adjust_advance_receipt": "Adjust Advance Receipt",
+    "adjusted_amount": "Adjusted Amt.",
+    "cheque_number_placeholder": "XXXX2619",
+    "assign_tag": "Assign Tag",
+    "map_transaction": "Map Transaction",
+    "with": "with",
+    "add_to_dr": "Add to DR",
+    "add_to_cr": "Add to CR",
+    "confirm_delete_file": "Are you sure you want to delete the attached file?",
+    "map_bank_entry": "Map Bank Entry",
+    "transaction_available_rc": "Is this transaction applicable for <strong>&nbsp;Reverse Charge? </strong>",
+    "tax_compulsory": "Tax is compulsory",
+    "transaction_available_ts": "Is this transaction applicable for Tourist Scheme?",
+    "passport_number": "Passport Number",
+    "no_matching_entry_found": "No entry with matching amount found, please create a new entry with same amount as this transaction.",
+    "map_cheque_bank_transaction": "Selected bank transaction will be mapped with cheque number [CHEQUE_NUMBER] Click yes to accept.",
+    "entry_mapped": "Entry Mapped Successfully",
+    "by_balance_cf": "By Balance C/F",
+    "add_account": "Add Account",
+    "add_stock": "Add Stock",
+    "upload": "Upload",
+    "import_error": "Only PDF files are supported for Import",
+    "import_success": "File has been uploaded successfully.",
+    "import_page_heading": "Import Statement (PDF only)",
+    "file": "File",
+    "password": "Password",
+    "type_filter": "Type to filter..",
+    "c_f": "C/F",
+    "total_amount": "Total Amt.",
+    "adjusted_amount_full": "Adjusted Amount",
+    "adjustment": "Adjustment",
+    "adjustment_notes": "The selected entry is a part of [VOUCHER_NUMBER]. All the adjustment will reflect to subsequent entries as well. Here we are adjusting the Invoice not just the selected entry. Please note that linked entries cannot be updated from here.",
+    "adjustment_vouchers": "Adjustment Vouchers",
+    "excess_amount": "Excess amount",
+    "adjustment_amount_error": "Adjustment amount is more than receipts.",
+    "voucher_no": "Voucher No.",
+    "compound_total": "Compound Total",
+    "toedit_switch_branch": "To edit, switch \"Branch\"",
+    "confirm_delete_entry": "Are you sure you want to delete this entry?",
+    "multiple_stock_entry_error": "you can't add multiple stock entry",
+    "invalid_account_transaction_error": "Please select a valid account in transaction",
+    "account_unchanged": "Account not changed",
+    "base_account_change_error": "You are not permitted to change base account. Voucher is already Generated",
+    "account_entry_error": "Please Select [ACCOUNT] for entry..",
+    "text_data": [
+        {
+            "accountType": "Debtors",
+            "text": {
+                "cr": "Is <accountName> giver?",
+                "dr": "Is <accountName> receiver?"
+            },
+            "balanceText": {
+                "cr": "Advance from Debtors",
+                "dr": "Due"
+            }
+        },
+        {
+            "accountType": "Creditors",
+            "text": {
+                "cr": "Is <accountName> giver?",
+                "dr": "Is <accountName> receiver?"
+            },
+            "balanceText": {
+                "cr": "Payable to creditors",
+                "dr": "Advance to creditors"
+            }
+        },
+        {
+            "accountType": "Revenue",
+            "text": {
+                "cr": "+ <accountName> (Increasing)",
+                "dr": "- <accountName> (Decreasing)"
+            },
+            "balanceText": {
+                "cr": "Revenue",
+                "dr": "(-) Negative Revenue"
+            }
+        },
+        {
+            "accountType": "Expense",
+            "text": {
+                "cr": "<accountName> ↓  (decreasing)",
+                "dr": "<accountName> ↑ (Increasing)"
+            },
+            "balanceText": {
+                "cr": "Negative Expense (looks strange) ",
+                "dr": "Expense"
+            }
+        },
+        {
+            "accountType": "Asset",
+            "text": {
+                "cr": "<accountName> is Going out (-)",
+                "dr": "<accountName> is Coming in (+)"
+            },
+            "balanceText": {
+                "cr": "(-) Asset ( ohh no!)",
+                "dr": "Asset value"
+            }
+        },
+        {
+            "accountType": "Liability",
+            "text": {
+                "cr": "<accountName> is increasing ↑",
+                "dr": "<accountName> is decreasing ↓"
+            },
+            "balanceText": {
+                "cr": "Liability Payable",
+                "dr": "Liabilities paid in advance (hurrey!)"
+            }
+        },
+        {
+            "accountType": "ReverseCharge",
+            "text": {
+                "cr": "<accountName> is decreasing ↓",
+                "dr": "<accountName> is increasing ↑"
+            },
+            "balanceText": {
+                "cr": "(-) Reverse Charge ( ohh no!)",
+                "dr": "Reverse Charge value"
+            }
+        },
+        {
+            "accountType": "null",
+            "text": {
+                "cr": "<accountName> liability is going out",
+                "dr": "<accountName> liability is coming in"
+            },
+            "balanceText": {
+                "cr": "",
+                "dr": ""
+            }
+        }
+    ],
+    "import_goods": "Import of goods",
+    "import_services": "Import of services",
+    "others": "Others",
+    "choose_file": "Choose File",
+    "remove_file": "Deleted Successfully."
+}

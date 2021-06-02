@@ -6,6 +6,7 @@ import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interfac
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment';
 import { StockUnitRequest } from '../../../../models/api-models/Inventory';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
 @Component({
 	selector: 'transfer-notes',
@@ -29,13 +30,15 @@ export class TransferNoteComponent implements OnChanges, OnInit {
 	public stockUnitsOptions: IOption[];
 	public userListOptions: IOption[];
 	public form: FormGroup;
-	public config: Partial<BsDatepickerConfig> = { dateInputFormat: 'DD-MM-YYYY' };
-	public today = new Date();
+	public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
+    public today = new Date();
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
 	// public inventoryEntryDateValid;
 	constructor(private _fb: FormBuilder) {
 		this.form = this._fb.group({
-			inventoryEntryDate: [moment().format('DD-MM-YYYY'), Validators.required],
+			inventoryEntryDate: [moment().format(GIDDH_DATE_FORMAT), Validators.required],
 			transactions: this._fb.array([]),
 			description: [''],
 			type: ['SENDER', Validators.required],
@@ -97,14 +100,14 @@ export class TransferNoteComponent implements OnChanges, OnInit {
 	public stockChanged(option: IOption) {
 		const stockItem = this.stockList.find(p => p.uniqueName === option.value);
 		const stockUnit = stockItem ? stockItem.stockUnit.code : null;
-		this.form.patchValue({ ...this.form.value, stockUnit });
+		this.form?.patchValue({ ...this.form.value, stockUnit });
 	}
 
 	public save() {
 		if (this.form.valid) {
 
 			let value: any = {
-				inventoryEntryDate: moment(this.inventoryEntryDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY'),
+				inventoryEntryDate: moment(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
 				description: this.description.value,
 				transactions: [{
 					stock: { uniqueName: this.stock.value },

@@ -1,4 +1,4 @@
-<div *ngIf="!isCreateAndSwitchCompanyInProcess" id="main" class="welcome_outer">
+<div *ngIf="!isCreateAndSwitchCompanyInProcess" id="main" class="welcome-outer">
 
     <div class="welcome-header">
         <h2>Welcome To Giddh! </h2>
@@ -53,11 +53,16 @@
                         </div>
                         <div class="form-group">
                             <label>State <span class="red-text">*</span></label>
-                            <sh-select #states [options]="statesSource$ | async" required [isFilterEnabled]="true"
-                                [disabled]="disableState" [defaultValue]="selectedState"
-                                [(ngModel)]="billingDetailsObj.stateCode" id="stateCode" name="stateCode"
-                                style="width:100%"></sh-select>
+                            <sh-select #states [options]="statesSource$ | async" required [isRequired]="true" [isFilterEnabled]="true"
+                                [disabled]="disableState" [defaultValue]="selectedState" class="w-100"
+                                [(ngModel)]="billingDetailsObj.stateCode" id="stateCode" name="stateCode"></sh-select>
                         </div>
+                        <!-- static pincode start -->
+                        <div class="form-group">
+                            <label for="pinCodeNum">Pincode <span class="red-text">*</span></label>
+                            <input type="text" class="form-control" autocomplete="false" name="pinCodeNum" />
+                        </div>
+                        <!-- static pincode end -->
                         <div class="form-group">
                             <label>Address</label>
                             <textarea class="form-control" name="address" id="address"
@@ -78,7 +83,7 @@
                 </div>
             </div>
             <div class="col-sm-6 col-xs-12">
-                <div class="proffesional-plan">
+                <div class="professional-plan">
                     <p class="plan-title"> {{selectedPlans?.planDetails?.name}} <span class="grey-text"> (Current Plan)
                         </span></p>
 
@@ -147,11 +152,5 @@
 </div>
 
 <div *ngIf="isCreateAndSwitchCompanyInProcess">
-    <div class="no-data mr-t2 loader-main">
-        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-        <div class="spinner2">
-            <div class="cube1"></div>
-            <div class="cube2"></div>
-        </div>
-    </div>
+    <giddh-page-loader></giddh-page-loader>
 </div>

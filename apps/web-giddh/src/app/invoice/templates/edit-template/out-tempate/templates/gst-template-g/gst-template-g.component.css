@@ -151,7 +151,7 @@ contenteditable {
     /* text-align:left; */
 }
 
-#silver .mrL2 {
+#silver .mr-l2 {
     margin-left: 20px;
 }
 
@@ -295,7 +295,7 @@ contenteditable {
     font-weight: bold;
 }
 
-#silver .bdrB {
+#silver .bd-rb {
     border-bottom: 1px solid#666;
     margin-bottom: 6px;
 }
@@ -324,7 +324,7 @@ contenteditable {
     vertical-align: baseline;
 }
 
-#silver .vmiddle {
+#silver .vertical-align-middle  {
     vertical-align: middle;
 }
 
@@ -352,7 +352,7 @@ contenteditable {
     border-top: 1px solid;
 }
 
-#silver .pos-rel {
+#silver .position-relative {
     position: relative;
 }
 
@@ -364,7 +364,7 @@ contenteditable {
     text-align: center;
 }
 
-#silver .mrB {
+#silver .mr-b05 {
     margin-bottom: 10px;
 }
 

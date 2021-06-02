@@ -1,5 +1,5 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { takeUntil, take, delay } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil, delay } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ComponentFactoryResolver, } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { VatReportTransactionsRequest } from '../../models/api-models/Vat';
@@ -32,7 +32,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     @ViewChild('downloadOrSendMailComponent', {static: true}) public downloadOrSendMailComponent: ElementViewContainerRef;
     @ViewChild('invoiceGenerateModel', {static: true}) public invoiceGenerateModel: ModalDirective;
 
-    public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public vatReportTransactions: any = {};
@@ -53,9 +52,12 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     };
     public selectedInvoice: any;
     public base64Data: string;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private invoiceService: InvoiceService, private generalService: GeneralService) {
-        this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.setCurrentPageTitle();
     }
 
@@ -68,6 +70,8 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.vatReportTransactionsRequest.from = params['from'];
             this.vatReportTransactionsRequest.to = params['to'];
+            this.vatReportTransactionsRequest.taxNumber = params['taxNumber'];
+
             this.getVatReportTransactions(true);
         });
 
@@ -80,22 +84,10 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(activeCompanyName => {
-            this.store.pipe(select(state => state.session.companies), takeUntil(this.destroyed$)).subscribe(res => {
-                if (!res) {
-                    return;
-                }
-                res.forEach(cmp => {
-                    if (cmp.uniqueName === activeCompanyName) {
-                        this.activeCompany = cmp;
-
-                        if (this.activeCompany && this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
-                            this.activeCompany.addresses = [_.find(this.activeCompany.addresses, (tax) => tax.isDefault)];
-                            this.getVatReportTransactions(true);
-                        }
-                    }
-                });
-            });
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
+            }
         });
     }
 
@@ -116,18 +108,16 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public getVatReportTransactions(resetPage: boolean): void {
-        if (this.activeCompany && this.activeCompany.addresses && this.activeCompany.addresses.length > 0 && this.vatReportTransactionsRequest.section && !this.isLoading) {
+        if (this.activeCompany && this.vatReportTransactionsRequest.section && !this.isLoading) {
             this.isLoading = true;
 
             if (resetPage) {
                 this.vatReportTransactionsRequest.page = 1;
             }
 
-            this.vatReportTransactionsRequest.taxNumber = this.activeCompany.addresses[0].taxNumber;
-
             this.vatReportTransactions = [];
 
-            this.vatService.getVatReportTransactions(this.activeCompany.uniqueName, this.vatReportTransactionsRequest).subscribe((res) => {
+            this.vatService.getVatReportTransactions(this.activeCompany.uniqueName, this.vatReportTransactionsRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
                     this.vatReportTransactions = res.body;
                     this.cdRef.detectChanges();
@@ -146,7 +136,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public pageChanged(event: any): void {
-        if (this.vatReportTransactionsRequest.page != event.page) {
+        if (this.vatReportTransactionsRequest.page !== event.page) {
             this.vatReportTransactions.results = [];
             this.vatReportTransactionsRequest.page = event.page;
             this.getVatReportTransactions(false);
@@ -185,7 +175,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                     accountUniqueName: invoice.accountUniqueName
                 };
                 this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
-                
+
                 this.loadDownloadOrSendMailComponent();
                 this.downloadOrSendMailModel.show();
             }
@@ -202,7 +192,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
         viewContainerRef.remove();
 
-        let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+        let componentInstanceView = componentFactory.create(viewContainerRef.injector);
         viewContainerRef.insert(componentInstanceView.hostView);
 
         let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
@@ -296,5 +286,14 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public downloadFile() {
         let blob = this.generalService.base64ToBlob(this.base64Data, 'application/pdf', 512);
         return saveAs(blob, `Invoice-${this.selectedInvoice.account.uniqueName}.pdf`);
+    }
+
+    /**
+     * Navigates to the previous page of VAT report
+     *
+     * @memberof VatReportTransactionsComponent
+     */
+    public navigateToPreviousPage(): void {
+        this.router.navigate(['/pages/vat-report'], { state: { taxNumber: this.vatReportTransactionsRequest.taxNumber, from: this.vatReportTransactionsRequest.from, to: this.vatReportTransactionsRequest.to } })
     }
 }

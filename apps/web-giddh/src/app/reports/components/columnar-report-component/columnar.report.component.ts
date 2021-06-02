@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
 import { select, Store } from '@ngrx/store';
-import { takeUntil, take } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
-import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AppState } from '../../../store';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
@@ -13,7 +12,9 @@ import * as moment from 'moment/moment';
 import { saveAs } from "file-saver";
 import { IForceClear } from '../../../models/api-models/Sales';
 import { ReportsDetailedRequestFilter } from '../../../models/api-models/Reports';
-import { PAGINATION_LIMIT } from '../../../app.constant';
+import { API_COUNT_LIMIT, PAGINATION_LIMIT } from '../../../app.constant';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { GroupService } from '../../../services/group.service';
 
 @Component({
     selector: 'columnar-report-component',
@@ -27,7 +28,6 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public selectYear: any = [];
     public selectCrDr = [{ label: 'Yes', value: true }, { label: 'No', value: false }];
     public flatGroupsOptions: any = [];
-    private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public exportRequest: any = {};
     public companyUniqueName: string = '';
@@ -50,32 +50,43 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public isShowColumnarReport: boolean = false;
     /** To check cr/dr or +/- checked */
     public isBalanceTypeAsSign: boolean = false;
-    constructor(public settingsFinancialYearService: SettingsFinancialYearService, private store: Store<AppState>, private toaster: ToasterService, private ledgerService: LedgerService, private generalService: GeneralService) {
+    /** Stores the search results pagination details for group dropdown */
+    public groupsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for group dropdown */
+    public defaultGroupSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for group dropdown */
+    public preventDefaultGroupScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for group dropdown */
+    public defaultGroupPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+
+    constructor(
+        public settingsFinancialYearService: SettingsFinancialYearService,
+        private store: Store<AppState>,
+        private toaster: ToasterService,
+        private ledgerService: LedgerService,
+        private generalService: GeneralService,
+        private groupService: GroupService
+    ) {
         this.exportRequest.fileType = 'xls';
         this.exportRequest.balanceTypeAsSign = false;
-        this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
 
-        this.flattenGroups$.subscribe(flattenGroups => {
-            if (flattenGroups) {
-                this.flatGroupsOptions = [];
-                flattenGroups.forEach(key => {
-                    this.flatGroupsOptions.push({ label: key.groupName, value: key.groupUniqueName });
-                });
-            }
-        });
-
-        this.store.pipe(takeUntil(this.destroyed$)).subscribe(state => {
-            if (state.session && !this.activeFinancialYear) {
-                this.companyUniqueName = _.cloneDeep(state.session.companyUniqueName);
-
-                if (this.companyUniqueName && state.session.companies) {
-                    let companies = _.cloneDeep(state.session.companies);
-                    let comp = companies.find((c) => c.uniqueName === this.companyUniqueName);
-                    if (comp) {
-                        this.activeFinancialYear = comp.activeFinancialYear.uniqueName;
-                        this.selectActiveFinancialYear();
-                    }
-                }
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany && !this.activeFinancialYear) {
+                this.companyUniqueName = activeCompany.uniqueName;
+                this.activeFinancialYear = activeCompany.activeFinancialYear.uniqueName;
+                this.selectActiveFinancialYear();
             }
         });
     }
@@ -85,12 +96,13 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      *
      * @memberof ColumnarReportComponent
      */
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.getColumnarRequestModel = new ReportsDetailedRequestFilter();
         this.getColumnarRequestModel.page = 1;
         this.getColumnarRequestModel.count = this.paginationCount;
         this.columnarReportResponse = null;
         this.getFinancialYears();
+        this.loadDefaultGroupsSuggestions();
     }
 
     /**
@@ -99,7 +111,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public getFinancialYears(): void {
-        this.settingsFinancialYearService.GetAllFinancialYears().subscribe(res => {
+        this.settingsFinancialYearService.GetAllFinancialYears().pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res && res.body && res.body.financialYears) {
                 res.body.financialYears.forEach(key => {
                     let financialYearStarts = moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
@@ -149,7 +161,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 this.exportRequest.page = this.getColumnarRequestModel.page;
                 this.exportRequest.count = this.getColumnarRequestModel.count;
             }
-            this.ledgerService.downloadColumnarReport(this.companyUniqueName, this.groupUniqueName, this.exportRequest, isShowReport).subscribe((res) => {
+            this.ledgerService.downloadColumnarReport(this.companyUniqueName, this.groupUniqueName, this.exportRequest, isShowReport).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
                 this.isShowColumnarReport = false;
                 if (res.status === "success") {
@@ -157,7 +169,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                         this.columnarReportResponse = res.body;
                     } else {
                         let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                        return saveAs(blob, `ColumnarReport.xlsx`);
+                        return saveAs(blob, this.localeData?.downloaded_filename);
                     }
                 } else {
                     this.toaster.clearAllToaster();
@@ -332,5 +344,111 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.columnarReportResponse = null;
         this.exportRequest.balanceTypeAsSign = false;
         this.isBalanceTypeAsSign = false;
+    }
+
+    /**
+     * Search query change handler for group
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof ColumnarReportComponent
+     */
+    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.groupsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultGroupScrollApiCall &&
+            (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                count: API_COUNT_LIMIT,
+            }
+            this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name}`,
+                            additional: result.parentGroups
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.flatGroupsOptions = searchResults;
+                    } else {
+                        this.flatGroupsOptions = [
+                            ...this.flatGroupsOptions,
+                            ...searchResults
+                        ];
+                    }
+                    this.groupsSearchResultsPaginationData.page = data.body.page;
+                    this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+                }
+            });
+        } else {
+            this.flatGroupsOptions = [...this.defaultGroupSuggestions];
+            this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
+            this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
+            this.preventDefaultGroupScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultGroupScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler for group dropdown
+     *
+     * @returns null
+     * @memberof ColumnarReportComponent
+     */
+    public handleGroupScrollEnd(): void {
+        if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
+            this.onGroupSearchQueryChanged(
+                this.groupsSearchResultsPaginationData.query,
+                this.groupsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.groupsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name}`,
+                                additional: result.parentGroups
+                            }
+                        }) || [];
+                        this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default group list for advance search
+     *
+     * @private
+     * @memberof ColumnarReportComponent
+     */
+    private loadDefaultGroupsSuggestions(): void {
+        this.onGroupSearchQueryChanged('', 1, (response) => {
+            this.defaultGroupSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: `${result.name}`,
+                    additional: result.parentGroups
+                }
+            }) || [];
+            this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+            this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+            this.flatGroupsOptions = [...this.defaultGroupSuggestions];
+        });
     }
 }

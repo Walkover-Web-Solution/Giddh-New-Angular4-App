@@ -1,0 +1,3 @@
+<div class="aside-overlay" *ngIf="branchAsideMenuState === 'in'"></div>
+<branch-destination *ngIf="branchAsideMenuState === 'in'" [class]="branchAsideMenuState"
+    [@slideInOut]="branchAsideMenuState"></branch-destination>

@@ -13,7 +13,7 @@
                 </div>
                 <div class="filter-row">
                     <div class="name">Transaction Type:</div>
-                    <div class="btn-group filter" dropdown *ngIf="selectedGst === 'gstr1'" style="display: inline-block !important;">
+                    <div class="btn-group filter d-inline-block" dropdown *ngIf="selectedGst === GstReport.Gstr1">
                         <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
                             {{selectedFilter?.entityType}} <span class="caret"></span>
                         </button>
@@ -22,7 +22,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="btn-group filter" dropdown *ngIf="selectedGst === 'gstr2'" style="display: inline-block !important;">
+                    <div class="btn-group filter d-inline-block" dropdown *ngIf="selectedGst === GstReport.Gstr2">
                         <button id="button-basic2" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
                             {{selectedFilter?.entityType}} <span class="caret"></span>
                         </button>
@@ -32,9 +32,9 @@
                         </ul>
                     </div>
                 </div>
-                <div class="filter-row" *ngIf="(filterParam.entityType !== 'invoices' && filterParam.entityType !== 'advance-receipt') && selectedGst === 'gstr1'">
+                <div class="filter-row" *ngIf="(filterParam.entityType !== 'invoices' && filterParam.entityType !== 'advance-receipt') && selectedGst === GstReport.Gstr1">
                     <div class="name">{{selectedFilter?.entityType}} Type:</div>
-                    <div class="btn-group filter" dropdown style="display: inline-block !important;">
+                    <div class="btn-group filter d-inline-block" dropdown>
                         <button id="button-basic3" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
                             {{selectedFilter?.type}} <span class="caret"></span>
                         </button>
@@ -44,9 +44,9 @@
                         </ul>
                     </div>
                 </div>
-                <div class="filter-row" *ngIf="filterParam.entityType === 'invoices' && selectedGst === 'gstr1'">
+                <div class="filter-row" *ngIf="filterParam.entityType === 'invoices' && selectedGst === GstReport.Gstr1">
                     <div class="name">{{selectedFilter?.entityType}} Type:</div>
-                    <div class="btn-group filter" dropdown style="display: inline-block !important;">
+                    <div class="btn-group filter d-inline-block" dropdown>
                         <button id="button-basic4" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
                             {{selectedFilter?.type}} <span class="caret"></span>
                         </button>
@@ -57,10 +57,10 @@
                     </div>
                 </div>
                 <!--   -->
-                <div class="filter-row" *ngIf="filterParam.entityType === 'billsAndExpenses' && selectedGst == 'gstr2'">
+                <div class="filter-row" *ngIf="filterParam.entityType === 'billsAndExpenses' && selectedGst == GstReport.Gstr2">
                     <div class="name">{{selectedFilter?.entityType}} Type:</div>
 
-                    <div class="btn-group filter" dropdown style="display: inline-block !important;">
+                    <div class="btn-group filter d-inline-block" dropdown>
                         <button id="button-basic5" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
                             {{selectedFilter?.type}} <span class="caret"></span>
                         </button>
@@ -193,11 +193,11 @@
                 <tbody>
                     <tr class="cursor-pointer" *ngFor="let item of (viewTransaction$ | async).results">
                         <td>{{item.voucherDate ? item.voucherDate : '-'}}</td>
-                        <td class="btn-link nowrap" *ngIf="item.voucherType !== 'purchase'" (click)="onSelectInvoice(item)">{{item.voucherNumber ? item.voucherNumber : '-'}}
+                        <td class="btn-link" *ngIf="item.voucherType !== 'purchase'" (click)="onSelectInvoice(item)">{{item.voucherNumber ? item.voucherNumber : '-'}}
                         </td>
                         <td *ngIf="item.voucherType === 'purchase'">
                             {{item.voucherNumber ? item.voucherNumber : '-'}}</td>
-                        <td class="nowrap">
+                        <td>
                             {{item.accountGstin ? item.accountGstin : '-'}}
                         </td>
                         <td>{{item.accountName ? item.accountName : '-'}}</td>
@@ -207,19 +207,61 @@
                             {{item.pos ? item.pos : '-'}}
                         </td>
                         <td>{{item.reverseCharge ? item.reverseCharge : '-'}}</td>
-                        <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.taxableAmount | giddhCurrency}}</td>
-                        <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.igstAmount | giddhCurrency}}</td>
-                        <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.cgstAmount | giddhCurrency}}</td>
-                        <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.sgstAmount | giddhCurrency}}</td>
-                        <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.cessAmount | giddhCurrency}}</td>
-                        <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.totalAmount | giddhCurrency}}</td>
+                        <td class="text-right">
+                            <!-- {{item.taxableAmount | giddhCurrency}} -->
+                            <span class="d-inline-flex align-items-center">
+                                <i class="icon-rupees font-11"></i>
+                                <amount-field [amount]="item?.taxableAmount" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td class="text-right">
+                            <!-- {{item.igstAmount | giddhCurrency}} -->
+                            <span class="d-inline-flex align-items-center">
+                                <i class="icon-rupees font-11"></i>
+                                <amount-field [amount]="item?.igstAmount" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td class="text-right">
+                            <!-- {{item.cgstAmount | giddhCurrency}} -->
+                            <span class="d-inline-flex align-items-center">
+                                <i class="icon-rupees font-11"></i>
+                                <amount-field [amount]="item?.cgstAmount" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td class="text-right">
+                            <!-- {{item.sgstAmount | giddhCurrency}} -->
+                            <span class="d-inline-flex align-items-center">
+                                <i class="icon-rupees font-11"></i>
+                                <amount-field [amount]="item?.sgstAmount" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td class="text-right">
+                            <!-- {{item.cessAmount | giddhCurrency}} -->
+                            <span class="d-inline-flex align-items-center">
+                                <i class="icon-rupees font-11"></i>
+                                <amount-field [amount]="item?.cessAmount" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td class="text-right">
+                            <!-- {{item.totalAmount | giddhCurrency}} -->
+                            <span class="d-inline-flex align-items-center">
+                                <i class="icon-rupees font-11"></i>
+                                <amount-field [amount]="item?.totalAmount" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <!-- pagination -->
         <div class="text-center" *ngIf="(viewTransaction$ | async)?.totalPages > 1">
-            <pagination [maxSize]="5" [totalItems]="(viewTransaction$ | async)?.totalItems" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false">
+            <pagination [maxSize]="6" [totalItems]="(viewTransaction$ | async)?.totalItems" [itemsPerPage]="(viewTransaction$ | async)?.count" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false">
             </pagination>
         </div>
         <!-- no records -->

@@ -3,8 +3,8 @@
 select-dropdown {
     font-size: 14px;
     > div {
-        background-color: #fff;
-        border: 1px solid #ccc;
+        background-color: $white;
+        border: 1px solid $gainsboro;
         border-top: none;
         box-sizing: border-box;
         position: absolute;
@@ -13,7 +13,7 @@ select-dropdown {
             padding: 3px;
             width: 100%;
             input {
-                border: 1px solid #eee;
+                border: 1px solid $gainsboro;
                 box-sizing: border-box;
                 padding: 6px;
                 width: 100%;
@@ -38,19 +38,19 @@ select-dropdown {
         }
     }
     .selected {
-        background-color: #eeeff9 !important;
+        background-color: $lavender !important;
         &.highlighted {
-            background-color: #eeeff9 !important;
+            background-color: $lavender !important;
             color: $chetwode-blue !important;
         }
     }
     .highlighted {
-        background-color: #eeeff9 !important;
+        background-color: $lavender !important;
         color: $chetwode-blue !important;
     }
     .disabled {
-        background-color: #fff;
-        color: #9e9e9e;
+        background-color: $white;
+        color: $nobel;
         cursor: default;
         pointer-events: none;
     }

@@ -25,7 +25,6 @@
             }
             input.form-control {
                 padding-left: 35px !important;
-                background-image: url(../../../assets/images/calender-icon.svg) !important;
                 background-size: 17px !important;
                 background-position: 9px 8px !important;
                 background-repeat: no-repeat !important;
@@ -73,7 +72,7 @@
     }
 }
 
-.mh18-img img {
+.check-img img {
     max-height: 17px;
     cursor: pointer;
 }
@@ -117,7 +116,7 @@
 
 .table-checkbox-field {
     img {
-        width: 20px;
+        width: 17px;
     }
 }
 .btn-group.open.show {
@@ -248,7 +247,7 @@
         display: flex;
     }
     .purchase-order-header{
-        margin-top: 15px;
+        margin-top: 0;
     }
 }
 @media (max-width: 575px) {
@@ -320,7 +319,7 @@
 
     .min-wid-check{
         min-width:20px;
-        .mh18-img{
+        .check-img{
             width:20px;
         }
     }

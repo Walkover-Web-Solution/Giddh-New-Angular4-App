@@ -1,11 +1,19 @@
 import { Injectable } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { from, Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { GIDDH_DB } from '../models/db';
 import { ICompAidata, Igtbl, IUlist } from '../models/interfaces/ulist.interface';
+import { OrganizationType } from '../models/user-login-state';
+import { AppState } from '../store';
+import { GeneralService } from './general.service';
 
 @Injectable()
 export class DbService {
-    constructor() {
+    constructor(
+        private store: Store<AppState>,
+        private generalService: GeneralService
+    ) {
         //
     }
 
@@ -27,11 +35,15 @@ export class DbService {
         return from(GIDDH_DB.insertFreshData(item));
     }
 
-    public addItem(key: string, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }, isSmallScreen: boolean): Promise<ICompAidata> {
-        return GIDDH_DB.addItem(key, entity, model, fromInvalidState, isSmallScreen);
+    public addItem(key: string, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }, isSmallScreen: boolean, isCompany: boolean): Promise<ICompAidata> {
+        return GIDDH_DB.addItem(key, entity, model, fromInvalidState, isSmallScreen, isCompany);
     }
     public removeItem(key: string, entity: string, uniqueName: string) {
-        return GIDDH_DB.removeItem(key, entity, uniqueName);
+        let branches = [];
+        this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+            branches = response || [];
+        });
+        return GIDDH_DB.removeItem(key, entity, uniqueName, this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1);
     }
     public deleteAllData(): void {
         GIDDH_DB.forceDeleteDB();

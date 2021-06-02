@@ -67,8 +67,8 @@ export class KeyboardShortcutDirective {
     @HostListener('window:keydown', ['$event, ElementRef'])
     public handleKeyDown(event: KeyboardEvent) {
         let key: string;
-        if ((this.config.hostOnly && (this.host ? !this.host.contains(event.target) : !this._el.nativeElement.contains(event.target)))
-            || (this.config.ignoreHost && (this.host ? this.host.contains(event.target) : this._el.nativeElement.contains(event.target)))) {
+        if ((this.config.hostOnly && (this.host ? !this.host.contains(event.target) : !this._el?.nativeElement.contains(event.target)))
+            || (this.config.ignoreHost && (this.host ? this.host.contains(event.target) : this._el?.nativeElement.contains(event.target)))) {
             return;
         }
         if (Array.isArray(this.keyboardShortcut)) {

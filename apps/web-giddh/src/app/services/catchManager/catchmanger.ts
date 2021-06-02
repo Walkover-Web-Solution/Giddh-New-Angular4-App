@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { HttpWrapperService } from '../httpWrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from '../service.config';
 import { ERROR_LOG_API } from '../apiurls/exception-log.api';
+import { take } from 'rxjs/operators';
 
 @Injectable()
 export class GiddhErrorHandler {
@@ -101,7 +102,7 @@ export class GiddhErrorHandler {
             uiPageUrl: this.router.url ? this.router.url.replace(/\/ledger\/.*/, '/ledger/account_unique_name') : '',
         };
         const url = `${this.config ? this.config.apiUrl : ''}${ERROR_LOG_API}`;
-        this.http.post(url, requestObject).subscribe(() => {}, () => {});
+        this.http.post(url, requestObject).pipe(take(1)).subscribe(() => {}, () => {});
     }
 }
 

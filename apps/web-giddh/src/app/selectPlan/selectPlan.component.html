@@ -1,4 +1,4 @@
-<div id="main" class="welcome_outer">
+<div id="main" class="welcome-outer">
     <layout-main [sideMenu]="false">
         <div class="welcome-header">
             <h2>Welcome To Giddh! </h2>
@@ -28,7 +28,7 @@
                             <ng-container *ngFor="let item of SubscriptionPlans; let i=index">
                                 <!-- Free plans -->
                                 <ng-container *ngIf="!item?.planDetails?.amount && !item.subscriptionId">
-                                    <div class="col-md-4 col-sm-6 col-xs-12 ">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="select-plan-block">
                                             {{item?.planDetails?.name}}
                                             <div class="your-account">
@@ -284,13 +284,7 @@
                 </div>
             </div>
             <div *ngIf="isCreateAndSwitchCompanyInProcess">
-                <div class="no-data mr-t2 loader-main">
-                    <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                    <div class="spinner2">
-                        <div class="cube1"></div>
-                        <div class="cube2"></div>
-                    </div>
-                </div>
+                <giddh-page-loader></giddh-page-loader>
             </div>
         </div>
     </layout-main>

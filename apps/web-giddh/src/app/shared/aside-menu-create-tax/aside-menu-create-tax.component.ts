@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { CompanyResponse, StatesRequest, TaxResponse } from '../../models/api-models/Company';
+import { TaxResponse } from '../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
@@ -8,18 +8,17 @@ import { takeUntil } from 'rxjs/operators';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
-import { ToasterService } from '../../services/toaster.service';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
-import { createSelector } from "reselect";
 import { IForceClear } from "../../models/api-models/Sales";
+import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
+import { SalesService } from '../../services/sales.service';
 
 @Component({
     selector: 'aside-menu-create-tax-component',
     templateUrl: './aside-menu-create-tax.component.html',
     styleUrls: [`./aside-menu-create-tax.component.scss`]
 })
-
-export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
+export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
     @Input() public tax: TaxResponse;
     @Input() public asidePaneState: string;
@@ -39,17 +38,22 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     public checkIfTdsOrTcs: boolean = false;
     public days: IOption[] = [];
     public newTaxObj: TaxResponse = new TaxResponse();
-    public flattenAccountsOptions: IOption[] = [];
+    public linkedAccountsOption: IOption[] = [];
     public isTaxCreateInProcess: boolean = false;
     public isUpdateTaxInProcess: boolean = false;
     public taxListSource$: Observable<IOption[]> = observableOf([]);
     public taxNameTypesMapping: any[] = [];
-    public selectedCompany: Observable<CompanyResponse>;
     public selectedTax: string = '';
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
-    constructor(private store: Store<AppState>, private _settingsTaxesActions: SettingsTaxesActions, private _toaster: ToasterService) {
+    constructor(
+        private store: Store<AppState>,
+        private _settingsTaxesActions: SettingsTaxesActions,
+        private salesService: SalesService
+    ) {
         for (let i = 1; i <= 31; i++) {
             this.days.push({ label: i.toString(), value: i.toString() });
         }
@@ -57,48 +61,16 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        // tslint:disable-next-line:no-shadowed-variable
-        this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-            let selectedCmp = companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-            if (!selectedCmp) {
-                return;
-            }
-            return selectedCmp;
-        })).pipe(takeUntil(this.destroyed$));
-
-        this.selectedCompany.subscribe((res: any) => {
-            if (res) {
-                this.getTaxList(res.countryV2.alpha2CountryCode);
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany && activeCompany.countryV2) {
+                this.getTaxList(activeCompany.countryV2.alpha2CountryCode);
             }
         });
 
-        this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$)).subscribe(res => {
-            let arr: IOption[] = [];
-            if (res) {
-                let accountObject = res.filter(accountObj =>
-                    accountObj.parentGroups && accountObj.parentGroups.length > 1 &&
-                    ["currentassets", "currentliabilities"].includes(accountObj.parentGroups[0].uniqueName) &&
-                    !["cash", "bankaccounts", "sundrydebtors", "sundrycreditors", "reversecharge", "taxonadvance"].includes(accountObj.parentGroups[1].uniqueName));
-                accountObject.forEach(accountObj => {
-                    arr.push({ label: `${accountObj.name} - (${accountObj.uniqueName})`, value: accountObj.uniqueName });
-                });
-            } else {
-                arr = [];
-            }
-            this.flattenAccountsOptions = arr;
-        });
+        this.loadLinkedAccounts();
 
         this.store
-            .pipe(select(p => p.company.taxes), takeUntil(this.destroyed$))
+            .pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$))
             .subscribe(taxes => {
                 if (taxes && taxes.length) {
                     let arr: IOption[] = [];
@@ -110,10 +82,10 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
             });
 
         this.store
-            .pipe(select(p => p.company.isTaxCreationInProcess), takeUntil(this.destroyed$))
+            .pipe(select(p => p.company && p.company.isTaxCreationInProcess), takeUntil(this.destroyed$))
             .subscribe(result => this.isTaxCreateInProcess = result);
         this.store
-            .pipe(select(p => p.company.isTaxUpdatingInProcess), takeUntil(this.destroyed$))
+            .pipe(select(p => p.company && p.company.isTaxUpdatingInProcess), takeUntil(this.destroyed$))
             .subscribe(result => this.isUpdateTaxInProcess = result);
     }
 
@@ -171,7 +143,11 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
         let dataToSave = _.cloneDeep(this.newTaxObj);
 
         if (dataToSave.taxType === 'tcs' || dataToSave.taxType === 'tds') {
-            dataToSave.taxType = dataToSave.tdsTcsTaxSubTypes;
+            if(this.tax && this.tax.uniqueName) {
+                dataToSave.taxType = dataToSave.taxType+dataToSave.tdsTcsTaxSubTypes;
+            } else {
+                dataToSave.taxType = dataToSave.tdsTcsTaxSubTypes;
+            }
         }
 
         dataToSave.taxDetail = [{
@@ -183,7 +159,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
             if (!dataToSave.accounts) {
                 dataToSave.accounts = [];
             }
-            this.flattenAccountsOptions.forEach((obj) => {
+            this.linkedAccountsOption.forEach((obj) => {
                 if (obj.value === dataToSave.account) {
                     let accountObj = obj.label.split(' - ');
                     dataToSave.accounts.push({ name: accountObj[0], uniqueName: obj.value });
@@ -191,7 +167,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
             });
         }
 
-        dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
+        dataToSave.date = moment(dataToSave.date).format(GIDDH_DATE_FORMAT);
         dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
         dataToSave.taxDetail = [{ date: dataToSave.date, taxValue: dataToSave.taxValue }];
 
@@ -229,5 +205,41 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     public selectTax(event) {
         this.newTaxObj.tdsTcsTaxSubTypes = "";
         this.forceClear$ = observableOf({ status: true });
+    }
+
+    /**
+     * Loads the linked accounts
+     *
+     * @private
+     * @memberof AsideMenuCreateTaxComponent
+     */
+    private loadLinkedAccounts(): void {
+        const params = {
+            group: encodeURIComponent('currentassets, currentliabilities'),
+            exceptGroups: encodeURIComponent('cash, bankaccounts, sundrydebtors, sundrycreditors, reversecharge, taxonadvance'),
+            count: 0
+        };
+        let accounts = [];
+        this.salesService.getAccountsWithCurrency(params).subscribe(response => {
+            if (response?.body?.results) {
+                accounts = response.body.results.map(account => {
+                    return { label: `${account.name} - (${account.uniqueName})`, value: account.uniqueName };
+                });
+                this.linkedAccountsOption = accounts;
+            } else {
+                this.linkedAccountsOption = accounts;
+            }
+        });
+    }
+
+
+    /**
+     * Unsubscribe from all listeners
+     *
+     * @memberof AsideMenuCreateTaxComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

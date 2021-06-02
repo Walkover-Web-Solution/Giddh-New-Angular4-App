@@ -1,8 +1,20 @@
 {
-    "select_year" : "Select Year",
-    "from_month" : "From Month",
-    "to_month" : "To Month",
-    "group" : "Group",
-    "opening_closing_balance" : "Opening/Closing Balance",
-    "cr_dr" : "Cr/Dr with +/-"
+    "page_heading": "रिपोर्ट्स > मासिक स्तंभकार रिपोर्ट",
+    "select_year": "वर्ष का चयन करें",
+    "from_month": "माह से",
+    "to_month": "महीने के लिए",
+    "group": "समूह *",
+    "opening_closing_balance": "उद्घाटन / समापन शेष",
+    "cr_dr": "Cr / Dr के साथ +/-",
+    "save": "सहेजें",
+    "reset": "रीसेट",
+    "export": "निर्यात",
+    "name_of_ledger": "लेजर का नाम",
+    "parent_group": "जनक समूह",
+    "grand_total": "कुल योग",
+    "opening_balance": "प्रारंभिक शेष",
+    "closing_balance": "जमा शेष",
+    "dr": "डेबिट",
+    "cr": "क्रेडिट",
+    "downloaded_filename": "स्तंभकार रिपोर्ट.xlsx"
 }

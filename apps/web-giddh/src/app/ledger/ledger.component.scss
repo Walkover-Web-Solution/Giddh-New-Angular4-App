@@ -1,5 +1,62 @@
 @import "../../assets/css/color.scss";
+.wrap-transaction-map{
+    border:1px solid $gainsboro;
+    border-bottom: none !important;
+    .ledger-book{
+        box-shadow: none;
+        .left-col-new{
+            border-right: 1px solid $gainsboro;
+        }
+        .checkbox-span{
+            height: 49px;
+            min-height: 49px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .ledger-row{
+            &:hover{
+                background-color: transparent;
+            }
+        }
+    }
+}
+#ledger-transaction-left-list , #ledger-transaction-right-list {
+    td{
+        padding: 0 !important;
+        &:first-child{
+            border-bottom: none !important;
+        }
+        .d-flex.align-item-center{
+            align-items: stretch !important;
+        }
+        input, sh-select, .form-control{
+            min-height: 49px;
+            height: 49px;
+            border:0 !important;
 
+        }
+        input[type="checkbox"]{
+            min-height: 20px;
+            height: 20px;
+        }
+
+    }
+}
+ #ledger-transaction-left-list td,
+ #ledger-transaction-right-list td {
+    border-bottom: 1px solid $gainsboro;
+}
+#ledger-transaction-right-list tr, #ledger-transaction-left-list tr{
+        border-bottom: 1px solid $gainsboro;
+}
+#ledger-transaction-right-list tr td:last-child, #ledger-transaction-left-list tr td:last-child{
+    border-right: none !important;
+}
+.transaction-mapped-table thead th{
+    padding: 10px 15px !important;
+    border-bottom: 1px solid $gainsboro !important;
+}
 .form-control,
 input {
     color: $nero;
@@ -20,7 +77,10 @@ input {
     display: flex;
     align-items: center;
 }
-.ledg-head table td.pdR25imp {
+ table.ledger-footer-1 td[class*="col-"]{
+    justify-content: flex-end;
+}
+.ledg-head table td.pd-r25 {
     padding-right: 25px !important;
 }
 
@@ -40,7 +100,7 @@ input {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.ledg-head.entry-popup table td.pdR25imp {
+.ledg-head.entry-popup table td.pd-r25 {
     padding-right: 25px !important;
 }
 .transaction-mapped-table{
@@ -67,10 +127,10 @@ input {
             }
         }
     }
-    .row{
-        margin-left: 0;
-        margin-right: 0 ;
-    }
+    // .row{
+    //     margin-left: 0;
+    //     margin-right: 0 ;
+    // }
     .ledger-head{
         th{
             padding-left: 15px;
@@ -89,7 +149,7 @@ input {
 .ledger-main .form-control {
     border: 0;
 }
-.t-h-bg1 th {
+.thead-background1 th {
     border-left: 0;
 }
 .ledg-head input[type="search"] {
@@ -108,8 +168,8 @@ input {
     }
 }
 .ledger-head-top i.icon-search.pos-abs {
-    background-color: #5b64c9;
-    color: #fff;
+    background-color: $chetwode-blue;
+    color: $white;
     width: 32px;
     height: 36px;
     top: 0px !important;
@@ -122,29 +182,40 @@ input {
 }
 .ledger-stat {
     padding: 10px 15px 0;
-    background: #fff;
-    color: #808080;
+    background: $white;
+    color: $gray;
     font-size: 18px;
     margin: 0px 0 0;
-    box-shadow: 0px 2px 6px #0000001a;
+    box-shadow: 0px 2px 6px $black-russian;
 }
 .ledger-stat .row {
     display: flex;
     flex-wrap: wrap;
 }
-.icomoon_ico {
+.icomoon-ico {
     margin-left: 0;
     margin-right: 8px;
 }
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: "" opensans-semibold "";
+    font-family: " opensans-semibold ";
     text-transform: capitalize;
 }
+
 .ledger-footer-1 {
     position: absolute;
     bottom: 0;
+    width:50%;
 }
+
+.left-align{
+    left: 0;
+}
+
+.right-align{
+    right: 0;
+}
+
 .ledger-head th {
     color: $jacksons-purple;
     padding-top: 5px;
@@ -170,10 +241,11 @@ input {
 }
 .page-count {
     overflow: hidden;
-    width: 100% !important;
-    left: 0% !important;
+    width: 90% !important;
+    left: 5% !important;
+    right: 5%;
     bottom: 100px;
-    background: #fff;
+    background: $white;
     padding: 5px;
     font-size: 12px;
     z-index: 0;
@@ -184,37 +256,32 @@ input {
     width: 100%;
     text-align: center;
 }
-.pagination > .active > a {
-    background: #d35f29 !important;
-    color: #fff !important;
-    border-color: #bd501d !important;
-}
 .pagination > li > a:hover {
-    color: #d35f29;
+    color: $midnight-blue;
 }
 .ledger-panel label {
     font-weight: 400;
 }
-.upload_div {
+.upload-div {
     float: left;
     text-decoration: underline;
     margin: 0px 5px;
-    border: 1px solid #ccc;
+    border: 1px solid $gainsboro;
 }
-.upload_div label {
+.upload-div label {
     padding: 6px;
 }
-.pdR25imp {
+.pd-r25 {
     padding-right: 25px !important;
 }
-.t-h-bg1 th {
-    background: #fff;
-    color: #000000;
+.thead-background1 th {
+    background: $white;
+    color: $black;
     border-right: 1px solid $gainsboro;
     padding: 15px 11px !important;
     font-weight: 400;
     border-bottom: 1px solid $gainsboro;
-    font-family: opensans-semibold;
+    font-family: 'opensans-semibold';
     font-size: 14px;
     border-top: 1px solid $gainsboro;
 }
@@ -230,7 +297,7 @@ input {
     float: left;
     width: 100%;
     margin-bottom: 16px;
-    background: #fff;
+    background: $white;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
 .Width600 {
@@ -238,7 +305,7 @@ input {
     width: 600px;
 }
 
-.daterange_picker_ledger {
+.daterange-picker-ledger {
     border: 0;
     background-color: transparent !important;
     text-decoration-line: none;
@@ -282,12 +349,17 @@ input {
 .d-none {
     display: none;
 }
-.dateStep {
+
+.date-step {
     padding: 0 !important;
     font-size: 13px;
     height: 48px;
     line-height: 1;
+    &.focus-unset{
+        padding-left: 7px !important;
+    }
 }
+
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -296,42 +368,42 @@ input[type="date"]::-webkit-outer-spin-button {
     display: none;
 }
 
-.focusUnset.ledger-main .form-control:focus {
+.focus-unset.ledger-main .form-control:focus {
     border: unset !important;
 }
 tr[vr-item]:focus {
-    background-color: #f7f8fa;
+    background-color: $alice-blue-light;
     outline: 0;
 }
 sh-select:focus {
-    outline: 1px #d35f29 solid;
+    outline: 1px $cinnabar-orange solid;
 }
 .notfound-option.active {
-    background: #efeff1 !important;
+    background: $lavender-light !important;
     padding: 2px 5px !important;
 }
-.amnt-total {
+.amount-total {
     font-size: 12px;
-    color: #999999;
+    color: $nobel;
     padding-left: 5px;
 }
 .ledger-book .left-col-new,
 .ledger-book .right-col-new {
-    background: #fff;
+    background: $white;
     padding: 0 15px 350px;
 }
-.left-col-new table.width100.h-table tbody tr td:last-child,
-.left-col-new table.width100.h-table thead tr th:last-child {
+.left-col-new table.width-100.h-table tbody tr td:last-child,
+.left-col-new table.width-100.h-table thead tr th:last-child {
     border-right: 0px !important;
 }
-.left-col-new table.width100.h-table tbody tr td:first-child,
-.left-col-new table.width100.h-table thead tr th:first-child {
+.left-col-new table.width-100.h-table tbody tr td:first-child,
+.left-col-new table.width-100.h-table thead tr th:first-child {
     border-left: 1px solid $gainsboro !important;
 }
 .custom-tabs {
     display: none;
 }
-.ledg-head .icomoon_ico {
+.ledg-head .icomoon-ico {
     color: $gray;
     width: 36px;
     height: 36px;
@@ -340,16 +412,16 @@ sh-select:focus {
     display: flex;
     justify-content: center;
     border-top-width: 1px;
-    background-color: #fff;
+    background-color: $white;
     border-radius: 50%;
 }
-.advanc-search-block input {
+.advance-search-block input {
     background: $solitude !important;
     height: 28px;
     border-color: $solitude !important;
 }
-.advanc-search-block input::placeholder {
-    color: #666666;
+.advance-search-block input::placeholder {
+    color: $dark-gray;
 }
 
 .left-col-new,
@@ -360,33 +432,30 @@ sh-select:focus {
 .ledger-section {
     display: flex;
 }
-.advanc-search-block .icon-search {
+.advance-search-block .icon-search {
     right: 0;
     top: 0;
     background-color: $chetwode-blue;
     padding: 6px 9px;
-    color: #fff;
+    color: $white;
 }
-.left-col-new table.width100.h-table#blank-ledger-container .no-left-border{
+.left-col-new table.width-100.h-table#blank-ledger-container .no-left-border{
     border-left: none !important;
-}
-.ledger-row input[type="checkbox"] {
-    margin-right: 15px;
 }
 .ledger-book .ledger-footer-1 .total-col .border-top {
     border-top: 1px solid $gainsboro !important;
 }
-.ledger-book .ledger-footer-1 .total-col .bdrT {
+.ledger-book .ledger-footer-1 .total-col .bd-rt {
     border: none;
 }
 
-.advanceSearchByDate {
+.advance-search-by-date {
     display: inline-flex;
     border: 1px solid $gainsboro;
     border-radius: 20px;
     position: relative;
 }
-.advanceSearchByDate:before {
+.advance-search-by-date:before {
     position: absolute;
     content: "";
     height: 1px;
@@ -395,7 +464,7 @@ sh-select:focus {
     left: -33%;
     top: 17px;
 }
-.advanceSearchByDate:after {
+.advance-search-by-date:after {
     position: absolute;
     content: "";
     height: 1px;
@@ -416,8 +485,8 @@ sh-select:focus {
 .digit-blue {
     color: $midnight-blue;
 }
-.greyTextClr {
-    color: #666 !important;
+.grey-text-color {
+    color: $dark-gray !important;
     font-size: 14px;
 }
 
@@ -454,7 +523,7 @@ sh-select:focus {
     }
 }
 
-.ledg-head .advanc-search-block {
+.ledg-head .advance-search-block {
     height: 34px;
     vertical-align: middle;
     display: flex;
@@ -477,11 +546,16 @@ sh-select:focus {
     font-size: 14px;
     border: 1px solid $midnight-blue;
     border-radius: 20px;
-    padding: 0 15px;
+    padding: 0;
     background-color: $white;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .clear-filter-btn i {
-    font-size: 12px;
+    font-size: 16px;
 }
 .search-ledger-field {
     .btn-danger,
@@ -539,6 +613,22 @@ sh-select:focus {
         width: 203px !important;
     }
 }
+
+.download-invoice-ledger {
+    padding-left: 6px;
+    position: unset !important;
+    align-items: center;
+}
+.icon-download-circle{
+    font-size:15px;
+    top: 0 !important;
+    margin-top: 1px !important;
+}
+
+.padding-ledger{
+    padding: 1px 0 !important;
+}
+
 /*mobile ledger view css*/
 .mobile-ledger-view {
     margin: 0 -15px;
@@ -546,20 +636,20 @@ sh-select:focus {
         width: 100%;
         tbody {
             background-color: $white;
-            .transction-date {
+            .transaction-date {
                 font-size: 16px;
                 font-family: "opensans-semibold";
             }
             td {
                 padding-top: 8px;
                 padding-bottom: 8px;
-                border-bottom: 1px solid #d1d1d1;
+                border-bottom: 1px solid $gainsboro;
                 font-size: 14px;
             }
             .second-row {
                 td {
                     &:first-child {
-                        border-right: 1px solid #d9d9d9;
+                        border-right: 1px solid $gainsboro;
                         width: 60%;
                     }
                     span.account-holder-checkbox {
@@ -631,7 +721,7 @@ sh-select:focus {
         }
     }
     .transaction-table-row table td {
-        border-bottom: 1px solid #d9d9d9;
+        border-bottom: 1px solid $gainsboro;
     }
     .transaction-table-row table:last-child td {
         border-bottom: none;
@@ -652,6 +742,18 @@ sh-select:focus {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
+.ledger-row{
+    .text-ellipsis{
+        min-width: 160px;
+        max-width: 400px;
+        width: 100%;
+    }
+}
+
+.list-item{
+    border-bottom: 1px solid $gainsboro;
+}
+
 /*responsive*/
 .modal-ledger {
     width: 70%;
@@ -662,10 +764,40 @@ sh-select:focus {
 }
 .ledger-head {
     position: sticky;
-    top: 60px;
+    top: 45px;
     z-index: 1;
     background-color: $alice-blue-light;
     padding-left: 5px;
+}
+.linked-entities {
+    width: 200px;
+    .list-item {
+        .entity-icon {
+            padding: 4px;
+        }
+        .entity-details {
+            margin-left: 6px;
+            flex: 1;
+            text-align: left;
+            .item {
+                font-family:'opensans-semibold'
+            }
+        }
+        .default-entity {
+            align-items: center;
+            display: flex;
+            &:hover:after {
+                color: $rich-blue;
+            }
+            .icon-favorite-selected {
+                color: $rich-blue;
+            }
+        }
+    }
+    i {
+        font-size: unset;
+        line-height: normal;
+    }
 }
 .show-if-ledger-open{
     height: 300px;
@@ -685,6 +817,10 @@ sh-select:focus {
     .show-if-update-ledger-open{
         height: 230px;
     }
+    .debit-credit-amount{
+        display: flex !important;
+        flex-direction: column !important;
+    }
 }
 
 @media (min-width: 1200px) {
@@ -693,12 +829,23 @@ sh-select:focus {
         max-width: 1280px;
     }
 }
+@media(min-width:1020px) and (max-width:1200px){
+    .linked-entities{
+        position: absolute;
+        top: 41px;
+        right: 0;
+    }
+    .mr-b5{
+        margin-bottom: 50px !important;
+    }
+}
 @media(max-width:1190px){
     .date-advance-search{
         &:before, &:after{
             display: none;
         }
     }
+
 }
 @media only screen and (max-width: 1024px) {
     .container {
@@ -708,14 +855,18 @@ sh-select:focus {
 
 }
 @media (max-width: 991px) {
-    .daterngoption {
+    .linked-entities{
+        margin-top: 10px;
+        margin-bottom: 0;
+    }
+    .date-range-option {
         margin-bottom: 10px;
         text-align: left !important;
         z-index: 1;
         margin-left: 0;
     }
-    .advanceSearchByDate:before,
-    .advanceSearchByDate:after {
+    .advance-search-by-date:before,
+    .advance-search-by-date:after {
         display: none;
     }
     .ledger-head-top {
@@ -728,7 +879,7 @@ sh-select:focus {
         }
     }
 
-    .advanc-search-block {
+    .advance-search-block {
         padding: 0;
     }
     .ledg-head input[type="search"] {
@@ -738,6 +889,9 @@ sh-select:focus {
         display: flex !important;
         flex-direction: column;
     }
+    .download-invoice-ledger{
+        position: absolute !important;
+    }
 }
 @media only screen and (max-width: 991px) {
     .stat-block {
@@ -745,14 +899,14 @@ sh-select:focus {
     }
     .ledg-head table td[class*="col-"],
     .ledg-head table td .select2-container {
-        border-bottom: 0px solid #ccc;
-        border-right: 0px solid #ccc;
+        border-bottom: 0px solid $gainsboro;
+        border-right: 0px solid $gainsboro;
     }
     .ledger-state-box {
         margin-bottom: 0;
     }
     .amount-total {
-        background: #efefef;
+        background: $whisper-light;
     }
     .page-count {
         width: 100%;
@@ -789,7 +943,7 @@ sh-select:focus {
         display: block;
     }
     .right-col-new .ledger-head {
-        background: #f7f8fa;
+        background: $alice-blue-light
     }
     .ledger-row td:empty {
         display: none !important;
@@ -811,8 +965,8 @@ sh-select:focus {
         font-size: 12px !important;
         padding: 6px;
     }
-    .left-col-new table.width100.h-table tbody tr td:first-child,
-    .left-col-new table.width100.h-table thead tr th:first-child {
+    .left-col-new table.width-100.h-table tbody tr td:first-child,
+    .left-col-new table.width-100.h-table thead tr th:first-child {
         border-left: 0px solid $gainsboro !important;
     }
     .ledg-head.some.transactions-page {
@@ -825,9 +979,6 @@ sh-select:focus {
     .justify-content-between {
         justify-content: inherit;
     }
-    .download-invoice-ledger {
-        padding-left: 6px;
-    }
     .custom-tabs {
         display: block;
     }
@@ -837,13 +988,13 @@ sh-select:focus {
         }
         .single-search-box {
             position: relative;
-            width: calc(100% - 215px);
+            width: calc(100% - 240px);
             margin-right: 13px;
             .full-width-input {
                 width: 100%;
             }
             .default-width-input {
-                width: calc(100% - 115px);
+                width: calc(100% - 36px);
             }
             input[type="search"] {
                 min-width: 150px;
@@ -851,11 +1002,12 @@ sh-select:focus {
             }
             .clear-filter-btn {
                 text-align: center;
-                width: 110px;
+                width: 36px;
                 padding: 0;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                height: 35px;
                 i {
                     left: -3px;
                     top: 0;
@@ -875,8 +1027,8 @@ sh-select:focus {
         .ledger-datepicker {
             width: 36px;
             height: 36px;
-            background-color: #fff;
-            border: 1px solid #d9d9d9;
+            background-color: $white;
+            border: 1px solid $gainsboro;
             text-align: center;
             align-items: center;
             justify-content: center;
@@ -966,6 +1118,9 @@ sh-select:focus {
     justify-content: flex-end !important;
 }
 @media (max-width: 767px) {
+    .linked-entities{
+        width: 100%;
+    }
     .ledger-head {
         th {
             padding: 0 0 10px !important;
@@ -989,7 +1144,7 @@ sh-select:focus {
     .ledg-head {
         .single-search-box {
             position: relative;
-            width: calc(100% - 45px);
+            width: calc(100% - 100px);
             .default-width-input {
                 width: calc(100% - 100px);
             }
@@ -1001,7 +1156,7 @@ sh-select:focus {
     .ledger-section {
         padding-top: 0;
         .transactions-page {
-            margin-top: 18px !important;
+            margin-top: 5px !important;
         }
     }
 }
@@ -1024,7 +1179,7 @@ sh-select:focus {
     .search-ledger-field {
         min-width: 200px;
     }
-    .icomoon_ico {
+    .icomoon-ico {
         margin-top: 7px;
     }
     .ledg-head {
@@ -1046,4 +1201,22 @@ sh-select:focus {
             padding-top: 5px;
         }
     }
+}
+.icon-upload {
+    font-size: 16px;
+}
+.account-placeholder {
+    color: $nobel;
+    padding-left: 12px;
+    font-size: 14px;
+    min-height: 49px;
+    display: flex;
+    padding-top: 14px;
+    border-bottom: 1px solid $white;
+}
+.account-placeholder-text {
+    color: $black !important;
+}
+.capitalize {
+    text-transform: capitalize;
 }

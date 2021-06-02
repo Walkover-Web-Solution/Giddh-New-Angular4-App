@@ -28,6 +28,7 @@ export interface InventoryState {
     createStockSuccess: boolean;
     stockReport?: StockReportResponse;
     groupStockReportInProcess: boolean;
+    stockReportInProcess: boolean;
     groupStockReport?: GroupStockReportResponse;
     isStockAddInProcess: boolean;
     isStockUpdateInProcess: boolean;
@@ -103,6 +104,7 @@ const initialState: InventoryState = {
     activeStockUniqueName: '',
     stockReport: null,
     groupStockReportInProcess: false,
+    stockReportInProcess: false,
     groupStockReport: null,
     createCustomStockSuccess: false,
     showNewGroupAsidePane: false,
@@ -606,11 +608,17 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
          * Inventory Stock Report
          * */
         case STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT_RESPONSE:
-            return Object.assign({}, state, { stockReport: action.payload });
+            return Object.assign({}, state, { stockReport: action.payload, stockReportInProcess: false });
         case STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT: {
             return {
                 ...state,
                 groupStockReportInProcess: true
+            };
+        }
+        case STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT: {
+            return {
+                ...state,
+                stockReportInProcess: true
             };
         }
         case STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT_RESPONSE:

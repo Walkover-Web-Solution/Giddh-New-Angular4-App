@@ -3,8 +3,8 @@
     visibility: hidden;
     display: none;
 }
-.parent-Group > ul > li ul li div {
-    color: #8a8a8a;
+.parent-group > ul > li ul li div {
+    color: $gray;
 }
 .btn-group.show {
     display: inline-block !important;
@@ -13,7 +13,7 @@
     margin-left: 8px;
     margin-top: -3px;
     background: none;
-    color: #707070;
+    color: $gray;
     padding: 6px;
     margin-right: 0px !important;
     width: 23px;
@@ -22,7 +22,7 @@
     box-shadow: none;
 }
 .dropdown-menu > li > a:hover {
-    background: #e5e5e5;
+    background: $whisper;
     cursor: pointer;
 }
 .dropdown-menu > li > a {
@@ -32,7 +32,7 @@ span.caret {
     display: none;
 }
 #inventory-sidebar {
-    background: #fff;
+    background: $white;
     min-height: 100vh;
     width: 260px !important;
     padding-bottom: 220px;

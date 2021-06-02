@@ -171,20 +171,20 @@
                                 "input": "apps/web-giddh/src/index.local.html",
                                 "output": "index.html"
                             },
-                            "optimization": false,
+                            "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
                             "extractCss": true,
                             "namedChunks": false,
-                            "aot": false,
-                            "extractLicenses": false,
+                            "aot": true,
+                            "extractLicenses": true,
                             "vendorChunk": false,
-                            "buildOptimizer": false,
+                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
                                     "maximumWarning": "2mb",
-                                    "maximumError": "5mb"
+                                    "maximumError": "10mb"
                                 }
                             ]
                         },
@@ -257,7 +257,7 @@
                                 {
                                     "type": "initial",
                                     "maximumWarning": "2mb",
-                                    "maximumError": "5mb"
+                                    "maximumError": "10mb"
                                 }
                             ]
                         },
@@ -297,7 +297,7 @@
                                 {
                                     "type": "initial",
                                     "maximumWarning": "2mb",
-                                    "maximumError": "5mb"
+                                    "maximumError": "10mb"
                                 }
                             ]
                         }
@@ -476,7 +476,7 @@
                                 {
                                     "type": "initial",
                                     "maximumWarning": "2mb",
-                                    "maximumError": "5mb"
+                                    "maximumError": "10mb"
                                 }
                             ]
                         },
@@ -488,7 +488,6 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseUrl": "stage.giddh.com",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/index.html",
@@ -525,7 +524,6 @@
                                 "input": "apps/web-giddh/src/index.electron.prod.html",
                                 "output": "index.html"
                             },
-                            "baseUrl": "app.giddh.com",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/index.html",
@@ -548,8 +546,8 @@
                             "budgets": [
                                 {
                                     "type": "initial",
-                                    "maximumWarning": "2mb",
-                                    "maximumError": "5mb"
+                                    "maximumWarning": "25mb",
+                                    "maximumError": "25mb"
                                 }
                             ]
                         },
@@ -561,7 +559,6 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseUrl": "test.giddh.com",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/index.html",
@@ -589,7 +586,7 @@
                                 {
                                     "type": "initial",
                                     "maximumWarning": "2mb",
-                                    "maximumError": "5mb"
+                                    "maximumError": "10mb"
                                 }
                             ]
                         }
@@ -777,7 +774,7 @@
                                 {
                                     "type": "initial",
                                     "maximumWarning": "2mb",
-                                    "maximumError": "5mb"
+                                    "maximumError": "10mb"
                                 }
                             ]
                         }

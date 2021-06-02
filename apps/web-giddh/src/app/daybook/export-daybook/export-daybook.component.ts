@@ -1,5 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { LedgerService } from '../../../services/ledger.service';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { some } from '../../lodash-optimized';
 import { ReplaySubject } from 'rxjs';
@@ -9,6 +8,10 @@ import { ReplaySubject } from 'rxjs';
     templateUrl: './export-daybook.component.html'
 })
 export class ExportDaybookComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     @Output() public closeExportDaybookModal: EventEmitter<any> = new EventEmitter();
 
@@ -22,7 +25,7 @@ export class ExportDaybookComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _permissionDataService: PermissionDataService) {
-        //
+        
     }
 
     public ngOnInit() {
@@ -32,8 +35,6 @@ export class ExportDaybookComponent implements OnInit, OnDestroy {
                 this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
                 this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
                 this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
-
-
             }
         });
     }

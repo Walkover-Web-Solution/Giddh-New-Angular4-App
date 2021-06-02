@@ -1,6 +1,5 @@
 import { UserDetails } from '../../../models/api-models/loginModels';
 import { CompanyResponse } from '../../../models/api-models/Company';
-
 import * as moment from 'moment/moment';
 import { Observable } from 'rxjs';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
@@ -12,42 +11,14 @@ export class AuditLogsSidebarVM {
 	public groupsList$: Observable<GroupsWithAccountsResponse[]>;
 	public groups$: Observable<IOption[]>;
 	public users$: Observable<IOption[]>;
-	public options: Select2Options = {
-		multiple: false,
-		width: '100%',
-		placeholder: 'Select Option',
-		allowClear: true
-	};
+	public options: Select2Options = {};
 	public moment = moment;
 	public maxDate: Date = moment().toDate();
-	public filters: IOption[] = [
-		{ label: 'All', value: 'All' },
-		{ label: 'create', value: 'create' },
-		{ label: 'delete', value: 'delete' },
-		{ label: 'share', value: 'share' },
-		{ label: 'unshare', value: 'unshare' },
-		{ label: 'move', value: 'move' },
-		{ label: 'merge', value: 'merge' },
-		{ label: 'unmerge', value: 'unmerge' },
-		{ label: 'delete-all', value: 'delete-all' },
-		{ label: 'update', value: 'update' },
-		{ label: 'master-import', value: 'master-import' },
-		{ label: 'daybook-import', value: 'daybook-import' },
-		{ label: 'ledger-excel-import', value: 'ledger-excel-import' }
-	];
-	public entities: IOption[] = [
-		{ label: 'All', value: 'All' },
-		{ label: 'company', value: 'company' },
-		{ label: 'group', value: 'group' },
-		{ label: 'account', value: 'account' },
-		{ label: 'ledger', value: 'ledger' },
-		{ label: 'voucher', value: 'voucher' },
-		{ label: 'logs', value: 'logs' },
-		{ label: 'invoice', value: 'invoice' },
-	];
+	public filters: IOption[];
+	public entities: IOption[];
 	public selectedCompany: Observable<CompanyResponse>;
 	public getLogsInprocess$: Observable<boolean>;
-	public dateOptions: IOption[] = [{ label: 'Date Range', value: '1' }, { label: 'Entry/Log Date', value: '0' }];
+	public dateOptions: IOption[];
 	public showLogDatePicker: boolean = false;
 	public canManageCompany: boolean = false;
 	public selectedOperation: string = '';
@@ -60,7 +31,45 @@ export class AuditLogsSidebarVM {
 	public selectedLogDate: Date;
 	public selectedEntryDate: Date;
 	public logOrEntry: string = 'entryDate';
-	public selectedDateOption: string = '0';
+    public selectedDateOption: string = '0';
+    
+    constructor(private localeData, private commonLocaleData) {
+        this.options = {
+            multiple: false,
+            width: '100%',
+            placeholder: this.commonLocaleData?.app_select_option,
+            allowClear: true
+        };
+
+        this.dateOptions = [{ label: this.commonLocaleData?.app_date_range, value: '1' }, { label: this.localeData?.entry_log_date, value: '0' }];
+
+        this.filters = [
+            { label: this.localeData?.filters.all, value: 'All' },
+            { label: this.localeData?.filters.create, value: 'create' },
+            { label: this.localeData?.filters.delete, value: 'delete' },
+            { label: this.localeData?.filters.share, value: 'share' },
+            { label: this.localeData?.filters.unshare, value: 'unshare' },
+            { label: this.localeData?.filters.move, value: 'move' },
+            { label: this.localeData?.filters.merge, value: 'merge' },
+            { label: this.localeData?.filters.unmerge, value: 'unmerge' },
+            { label: this.localeData?.filters.delete_all, value: 'delete-all' },
+            { label: this.localeData?.filters.update, value: 'update' },
+            { label: this.localeData?.filters.master_import, value: 'master-import' },
+            { label: this.localeData?.filters.daybook_import, value: 'daybook-import' },
+            { label: this.localeData?.filters.ledger_excel_import, value: 'ledger-excel-import' }
+        ];
+
+        this.entities = [
+            { label: this.localeData?.entities.all, value: 'All' },
+            { label: this.localeData?.entities.company, value: 'company' },
+            { label: this.localeData?.entities.group, value: 'group' },
+            { label: this.localeData?.entities.account, value: 'account' },
+            { label: this.localeData?.entities.ledger, value: 'ledger' },
+            { label: this.localeData?.entities.voucher, value: 'voucher' },
+            { label: this.localeData?.entities.logs, value: 'logs' },
+            { label: this.localeData?.entities.invoice, value: 'invoice' },
+        ];
+    }
 
 	public reset() {
 		this.showLogDatePicker = false;
@@ -76,6 +85,5 @@ export class AuditLogsSidebarVM {
 		this.selectedEntryDate = moment().toDate();
 		this.logOrEntry = 'entryDate';
 		this.selectedDateOption = '';
-
 	}
 }

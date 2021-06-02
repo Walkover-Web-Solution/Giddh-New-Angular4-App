@@ -149,6 +149,9 @@ export interface IBankAccount {
     accountNumber: string;
     visible: boolean;
     providerAccount: { providerAccountId: string };
+    isDatePickerOpen?: boolean;
+    showAccList?: boolean;
+    status?: string;
 }
 
 let cost = {

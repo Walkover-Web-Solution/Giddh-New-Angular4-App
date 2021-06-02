@@ -1,0 +1,282 @@
+<div class="aside-pane">
+    <form [formGroup]="addressForm" novalidate (ngSubmit)="handleFormSubmit()" autocomplete="off">
+        <section class="w-100">
+            <div>
+                <div class="form-header">
+                    <h3
+                        *ngIf="addressConfiguration.type === 'createAddress' || addressConfiguration.type === 'createBranchAddress'">
+                        Create Address</h3>
+                    <h3 *ngIf="addressConfiguration.type === 'editAddress'">Update Address</h3>
+                    <h3 *ngIf="addressConfiguration.type === 'editBranch'">Edit Branch</h3>
+                    <h3 *ngIf="addressConfiguration.type === 'editWarehouse'">Edit Warehouse</h3>
+                </div>
+                <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+
+                <div class="aside-body">
+                    <div class="aside-pane-form" [ngClass]="{'edit-branch-mode': addressConfiguration.type === 'editBranch'}">
+                        <section
+                            *ngIf="addressConfiguration.type !== 'editBranch' && addressConfiguration.type !== 'editWarehouse'"
+                            class="clearfix margin-child-label">
+                            <div *ngIf="companyName" class="font-14 mr-b15">
+                                All the information will save in <strong>{{companyName}}</strong>
+                            </div>
+                            <div class="form-bg-aside clearfix">
+                                <div class="row">
+                                    <div class="form-group col-12">
+                                        <label>Name <sup>*</sup></label>
+                                        <input maxlength="100"
+                                            [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
+                                            type="text" formControlName="name" class="form-control"
+                                            placeholder="Enter name">
+                                        <span class="danger"
+                                            *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength">
+                                            Max. 100 characters allowed
+                                        </span>
+                                        <span class="danger"
+                                            *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.required">
+                                            Field is required
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div *ngIf="addressConfiguration?.tax?.name" class="col-sm-4 form-group">
+                                        <label>{{addressConfiguration?.tax?.name}}</label>
+                                        <input
+                                            [class.error-box]="addressForm?.get('taxNumber')?.touched && addressForm?.get('taxNumber')?.invalid"
+                                            type="text" (keyup)="getStateCode(states, $event)" class="form-control"
+                                            formControlName="taxNumber"
+                                            [attr.placeholder]="'Enter '+ addressConfiguration?.tax?.name">
+                                    </div>
+                                    <div class="col-sm-4 form-group">
+                                        <label>State <sup>*</sup></label>
+                                        <sh-select #states
+                                            [disabled]="addressConfiguration?.type === 'editAddress' && addressToUpdate?.taxNumber && addressConfiguration?.tax?.name && addressConfiguration?.tax?.name === 'GSTIN'"
+                                            [options]="addressConfiguration.stateList" required [isRequired]="true" [isFilterEnabled]="true" formControlName="state" class="w-100"
+                                            [useInBuiltFilterForIOptionTypeItems]="true" [forceClearReactive]="forceClear$ | async">
+                                        </sh-select>
+                                    </div>
+                                    <!-- static code added for the pincode -->
+                                    <div class="col-sm-4">
+                                        <div class="form-group mr-b05">
+                                            <label for="pinCodeNum" class="d-block">PIN Code</label>
+                                            <input type="text" class="form-control" autocomplete="false" name="pinCodeNum" placeholder="Enter PIN Code" formControlName="pincode" decimalDigitsDirective [preventDecimal]="true" />
+                                        </div>
+                                    </div>
+                                    <!-- end -->
+                                </div>
+
+                                <div class="clearfix row">
+                                    <div class="form-group col-12">
+                                        <label>Address<sup
+                                                *ngIf="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressConfiguration?.tax && addressConfiguration?.tax?.name === 'GSTIN'">*</sup></label>
+                                        <textarea
+                                            [class.error-box]="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressForm?.get('address')?.touched && addressForm?.get('address')?.errors?.required"
+                                            name="name" class="form-control min-height-100" formControlName="address" placeholder="Enter Address"
+                                            [attr.required]="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressConfiguration?.tax && addressConfiguration?.tax?.name === 'GSTIN'"></textarea>
+                                        <span class="danger"
+                                            *ngIf="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressForm?.get('address')?.touched && addressForm?.get('address')?.errors?.required">
+                                            Field is required
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="addressConfiguration.type !== 'createBranchAddress'" class="row">
+                                    <div class="col-sm-12 form-group linked-entities">
+                                        <label>Link Entity</label>
+                                        <div class="form-group">
+                                            <sh-select [options]="addressConfiguration?.linkedEntities"
+                                                name="linkedEntities" formControlName="linkedEntity"
+                                                (clearSingleItem)="handleFinalSelection($event)"
+                                                [isFilterEnabled]="true" [multiple]="true
+                                                " placeholder="Select Entity">
+                                                <ng-template #optionTemplate let-option="option">
+                                                    <ng-container>
+                                                        <a (click)="selectEntity(option)" href="javascript:void(0)"
+                                                            class="list-item d-flex">
+                                                            <span><input type="checkbox"
+                                                                    [checked]="addressForm?.get('linkedEntity')?.value?.includes(option.value)"
+                                                                    [value]="option.value"></span>&nbsp;
+                                                            <span class="entity-icon">
+                                                                <i class="icon-branch-icon pull-right"
+                                                                    *ngIf="option.entity === 'BRANCH'"
+                                                                    tooltip="Branch"></i>
+                                                                <i class="icon-warehouse-icon pull-right"
+                                                                    *ngIf="option.entity === 'WAREHOUSE'"
+                                                                    tooltip="Warehouse"></i>
+                                                            </span>
+                                                            <span class="entity-details">
+                                                                <div class="item">{{ option.label || '-' }}</div>
+                                                                <div class="item-unique">
+                                                                    {{ option.name || '-' }}
+                                                                </div>
+                                                            </span>
+                                                            <span class="default-entity">
+                                                                <i (click)="setDefault(option, $event)"
+                                                                    *ngIf="!option.isDefault"
+                                                                    class="icon-no-selected mr-r05"></i>
+                                                                <i (click)="setDefault(option, $event)"
+                                                                    *ngIf="option.isDefault"
+                                                                    class="icon-favorite-selected mr-r05"></i>
+                                                            </span>
+                                                        </a>
+                                                    </ng-container>
+                                                </ng-template>
+                                            </sh-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section *ngIf="addressConfiguration.type === 'editBranch'" class="clearfix margin-child-label">
+                            <div class="form_bg clearfix">
+                                <div class="row">
+                                    <!-- DO NOT REMOVE THIS HIDDEN FIELD -->
+                                    <div hidden class="form-group col-12">
+                                        <label>Branch Name <sup>*</sup></label>
+                                        <input maxlength="100"
+                                            [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
+                                            type="text" formControlName="name" class="form-control" placeholder="Enter">
+                                        <span class="danger"
+                                            *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength">
+                                            Max. 100 characters allowed
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12 form-group">
+                                        <label>Branch Name <sup>*</sup></label>
+                                        <input maxlength="50"
+                                            [class.error-box]="addressForm?.get('alias')?.touched && addressForm?.get('alias')?.invalid"
+                                            type="text" formControlName="alias" class="form-control"
+                                            placeholder="Enter alias">
+                                        <span class="danger"
+                                            *ngIf="addressForm?.get('alias')?.touched && addressForm?.get('alias')?.errors?.maxlength">
+                                            Max. 50 characters allowed
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="clearfix row">
+                                    <div class="form-group col-12 linked-entities linked-add create">
+                                        <label>Linked Address/es</label>
+                                        <div class="form-group">
+                                            <sh-select class="linked-address" [options]="addressConfiguration?.linkedEntities"
+                                                name="linkedEntities" formControlName="linkedEntity"
+                                                (clearSingleItem)="handleFinalSelection($event)" [ItemHeight]="200"
+                                                [isFilterEnabled]="true" [multiple]="true" placeholder="Select Entity">
+                                                <ng-template #optionTemplate let-option="option">
+                                                    <ng-container>
+                                                        <a (click)="selectEntity(option)" href="javascript:void(0)"
+                                                            class="list-item d-flex">
+                                                            <span><input type="checkbox"
+                                                                    [checked]="addressForm?.get('linkedEntity')?.value?.includes(option.value)"
+                                                                    [value]="option.value"></span>&nbsp;
+                                                            <span class="entity-details">
+                                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                                                <div class="item-unique">
+                                                                    <p *ngIf="option.taxType && option.taxNumber">
+                                                                        {{ option.taxType }} :
+                                                                        {{ option.taxNumber }}</p>
+                                                                </div>
+                                                            </span>
+                                                            <span class="default-entity">
+                                                                <i (click)="setDefault(option, $event)"
+                                                                    *ngIf="!option.isDefault"
+                                                                    class="icon-no-selected mr-r05"></i>
+                                                                <i (click)="setDefault(option, $event)"
+                                                                    *ngIf="option.isDefault"
+                                                                    class="icon-favorite-selected mr-r05"></i>
+                                                            </span>
+                                                        </a>
+                                                    </ng-container>
+                                                </ng-template>
+                                            </sh-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div *ngIf="companyName" class="font-14">
+                                <!-- Headquarter name -->
+                                This is a branch of <strong>{{companyName}}</strong>
+                            </div>
+                        </section>
+
+                        <section *ngIf="addressConfiguration.type === 'editWarehouse'" class="clearfix margin-child-label">
+                            <div class="form_bg clearfix">
+                                <div class="row">
+                                    <div class="form-group col-12">
+                                        <label>Name <sup>*</sup></label>
+                                        <input maxlength="100"
+                                            [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
+                                            type="text" formControlName="name" class="form-control"
+                                            placeholder="Enter name" required>
+                                        <span class="danger"
+                                            *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength">
+                                            Max. 100 characters allowed
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="clearfix row">
+                                    <div class="form-group col-12 linked-entities linked-add create">
+                                        <label>Address/es</label>
+                                        <div class="form-group">
+                                            <sh-select [options]="addressConfiguration?.linkedEntities"
+                                                name="linkedEntities" formControlName="linkedEntity"
+                                                [isFilterEnabled]="true"
+                                                placeholder="Select Address">
+                                                <ng-template #optionTemplate let-option="option">
+                                                    <ng-container>
+                                                        <a (click)="selectEntity(option)" href="javascript:void(0)"
+                                                            class="list-item d-flex">
+                                                            <span class="entity-details">
+                                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                                                <div class="item-unique">
+                                                                    <p *ngIf="option.taxType && option.taxNumber">
+                                                                        {{ option.taxType }} :
+                                                                        {{ option.taxNumber }}</p>
+                                                                </div>
+                                                            </span>
+                                                        </a>
+                                                    </ng-container>
+                                                </ng-template>
+                                            </sh-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div *ngIf="companyName" class="font-14">
+                                <!-- Headquarter name -->
+                                This is a branch of <strong>{{companyName}}</strong>
+                            </div>
+                        </section>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 text-left">
+                                <div class="mt-5">
+                                    <button [ladda]="showLoader" [disabled]="addressForm?.invalid" type="submit"
+                                        class="btn btn-success">
+                                        <ng-container
+                                            *ngIf="addressConfiguration.type === 'createAddress' || addressConfiguration.type === 'createBranchAddress'">
+                                            Save</ng-container>
+                                        <ng-container
+                                            *ngIf="addressConfiguration.type === 'editAddress' || addressConfiguration.type === 'editBranch' || addressConfiguration.type === 'editWarehouse'">
+                                            Update</ng-container>
+                                    </button>
+                                    <button type="reset" class="btn btn-danger">Clear
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="clearfix"></div>
+    </form>
+</div>

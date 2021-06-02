@@ -1,0 +1,19 @@
+{
+    "page_heading": "ऑनबोर्डिंग",
+    "try_things" : "गोष्टी करून पहा",
+    "create_send_invoice" : "बीजक तयार करा आणि पाठवा",
+    "add_customer" : "एक ग्राहक जोडा",
+    "update_taxes" : "कर अद्यतनित करा",
+    "configure_bank_account" : "आपले बँक खाते कॉन्फिगर करा",
+    "have_data_tally" : "टॅली वर डेटा आहे?",
+    "giddh_usage" : "काळजी करू नका! <br> गिद्धवर आपला लेखा डेटा सहजपणे मिळवा",
+    "sync_with_tally" : "टॅलीसह समक्रमित करा",
+    "download_tcp" : "टीसीपी डाउनलोड करा",
+    "ask_question" : "विचारण्यासाठी प्रश्न आहे?",
+    "request_demo" : "डेमोची विनंती करा:",
+    "call" : "किंवा कॉल करा:",
+    "visit" : "किंवा भेट द्या:",
+    "help_url" : "giddh.com/help",
+    "import_data" : "डेटा आयात करा",
+    "data_available" : "सीएसव्ही किंवा एक्सेल फायलींमध्ये डेटा आहे?"
+}

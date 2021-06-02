@@ -9,7 +9,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { GroupsWithAccountsResponse } from 'apps/web-giddh/src/app/models/api-models/GroupsWithAccounts';
 import { AppState } from 'apps/web-giddh/src/app/store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AccountRequestV2, AccountResponseV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
 
 export class GroupAccountSidebarVM {
@@ -27,10 +27,15 @@ export class GroupAccountSidebarVM {
 
     public selectGroup(item: IGroupsWithAccounts, currentIndex: number, isSearching: boolean = false) {
         this.columns.splice(currentIndex + 1, this.columns.length - currentIndex + 1);
-
-        item.groups = _.sortBy(item.groups, ['uniqueName', 'name']);
-        item.accounts = _.sortBy(item.accounts, ['uniqueName', 'name']);
-        this.columns.push(new ColumnGroupsAccountVM(item));
+        if (item.groups) {
+            item.groups = _.sortBy(item.groups, ['uniqueName', 'name']);
+        }
+        if (item.accounts) {
+            item.accounts = _.sortBy(item.accounts, ['uniqueName', 'name']);
+        }
+        if (item.groups || item.accounts) {
+            this.columns.push(new ColumnGroupsAccountVM(item));
+        }
 
         if (isSearching) {
             let colLength = this.columns.length;
@@ -91,7 +96,7 @@ export class GroupAccountSidebarVM {
                         this.columns.push(new ColumnGroupsAccountVM(fCol as IGroupsWithAccounts));
                         let newCol = fCol.Items.find(j => j.uniqueName === resp.queryString.parentUniqueName);
                         let grpsBck: GroupsWithAccountsResponse[];
-                        this.store.select(s => s.general.groupswithaccounts).pipe(take(1)).subscribe(s => grpsBck = s);
+                        this.store.pipe(select(s => s.general.groupswithaccounts), take(1)).subscribe(s => grpsBck = s);
 
                         let listBckup = this.activeGroupFromGroupListBackup(grpsBck, resp.queryString.parentUniqueName, null);
                         if (listBckup) {
@@ -122,7 +127,7 @@ export class GroupAccountSidebarVM {
 
                 //     let newCol = fCol.Items.find(j => j.uniqueName === data.request.parentGroupUniqueName);
                 //     let grpsBck: GroupsWithAccountsResponse[];
-                //     this.store.select(s => s.general.groupswithaccounts).take(1).subscribe(s => grpsBck = s);
+                //     this.store.pipe(select(s => s.general.groupswithaccounts), take(1)).subscribe(s => grpsBck = s);
 
                 //     let listBckup = this.activeGroupFromGroupListBackup(grpsBck, data.request.parentGroupUniqueName, null);
                 //     if (listBckup) {
@@ -176,8 +181,8 @@ export class GroupAccountSidebarVM {
             case eventsConst.accountDeleted: {
                 let resp: BaseResponse<string, any> = payload;
                 let columnsLength = this.columns.length;
-                this.columns[columnsLength - 1].Items = this.columns[columnsLength - 1].Items.filter(f => f.uniqueName !== resp.request.accountUniqueName);
-                this.columns[columnsLength - 2].accounts = this.columns[columnsLength - 1].accounts.filter(f => f.uniqueName !== resp.request.accountUniqueName);
+                this.columns[columnsLength - 1].Items = this.columns[columnsLength - 1].Items?.filter(f => f.uniqueName !== resp.request.accountUniqueName);
+                this.columns[columnsLength - 2].accounts = this.columns[columnsLength - 1].accounts?.filter(f => f.uniqueName !== resp.request.accountUniqueName);
             }
 
             case eventsConst.accountMoved: {
@@ -196,7 +201,7 @@ export class GroupAccountSidebarVM {
 
                 //     let newCol = fCol.Items.find(j => j.uniqueName === data.request.uniqueName);
                 //     let grpsBck: GroupsWithAccountsResponse[];
-                //     this.store.select(s => s.general.groupswithaccounts).take(1).subscribe(s => grpsBck = s);
+                //     this.store.pipe(select(s => s.general.groupswithaccounts), take(1)).subscribe(s => grpsBck = s);
 
                 //     let listBckup = this.activeGroupFromGroupListBackup(grpsBck, data.request.uniqueName, null);
                 //     if (listBckup) {
@@ -219,13 +224,13 @@ export class GroupAccountSidebarVM {
 
     public activeGroupFromGroupListBackup(groups: GroupsWithAccountsResponse[], uniqueName: string, result: GroupsWithAccountsResponse) {
         for (let grp of groups) {
-            if (grp.uniqueName === uniqueName) {
+            if (grp?.uniqueName === uniqueName) {
                 result = grp;
                 return result;
             }
 
-            if (grp.groups) {
-                result = this.activeGroupFromGroupListBackup(grp.groups, uniqueName, result);
+            if (grp?.groups) {
+                result = this.activeGroupFromGroupListBackup(grp?.groups, uniqueName, result);
                 if (result) {
                     return result;
                 }

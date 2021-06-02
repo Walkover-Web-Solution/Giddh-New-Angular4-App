@@ -1,36 +1,35 @@
 <div class="modal-header">
-    <h3 class="modal-title pull-left">Approve</h3>
+    <h3 class="modal-title pull-left">{{localeData?.approve}}</h3>
     <button type="button" class="close pull-right" aria-label="Close" (click)="approveEntry.emit(false)">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
 
 <div class="modal-body approve-modal">
-    <!-- <app-rejection-reason></app-rejection-reason> -->
     <div class="clearfix modal-top">
-        <p class="font-12 text-gray mb-1">
+        <p class="font-12 text-gray mr-b1">
             <span>{{selectedEntryForApprove?.entryDate}} </span> |
-            <span>by {{selectedEntryForApprove?.createdBy?.name}}</span>
+            <span>{{byCreator}}</span>
         </p>
-        <div class="row mb-1">
+        <div class="row mr-b1">
             <div class="col-xs-4 col-sm-4">
-                <p class="font-14">Expenses:</p>
+                <p class="font-14">{{localeData?.expenses}}:</p>
             </div>
             <div class="col-xs-8 col-sm-8">
                 <p class="font-14">{{selectedEntryForApprove?.particularAccount?.name}}</p>
             </div>
         </div>
-        <div class="row mb-1">
+        <div class="row mr-b1">
             <div class="col-xs-4 col-sm-4">
-                <p class="font-14">Payment Mode:</p>
+                <p class="font-14">{{commonLocaleData?.app_payment_mode}}:</p>
             </div>
             <div class="col-xs-8 col-sm-8">
                 <p class="font-14">{{selectedEntryForApprove?.baseAccount?.name}}</p>
             </div>
         </div>
-        <div class="row mb-1">
+        <div class="row mr-b1">
             <div class="col-xs-4 col-sm-4">
-                <p class="font-14">Amount:</p>
+                <p class="font-14">{{commonLocaleData?.app_amount}}:</p>
             </div>
             <div class="col-xs-8 col-sm-8">
                 <p class="font-14">
@@ -41,13 +40,13 @@
 
     <div class="approve-modal">
         <div class="form-group">
-            <p>Are you sure to approve above transaction and add into your books ?</p>
+            <p>{{localeData?.confirm_transaction_approve}}</p>
         </div>
 
         <div>
-            <button class="btn btn-warning" (click)="approveEntry.emit(false)">No</button>
+            <button class="btn btn-warning" (click)="approveEntry.emit(false)">{{commonLocaleData?.app_no}}</button>
             <button class="btn btn-success" (click)="approveEntry.emit(true)"
-                [ladda]="approveEntryRequestInProcess">Yes</button>
+                [ladda]="approveEntryRequestInProcess">{{commonLocaleData?.app_yes}}</button>
         </div>
     </div>
 

@@ -7,13 +7,13 @@
     flex-flow: row wrap;
 }
 
-.mh18_img img {
+.check-image img {
     max-height: 20px;
     cursor: pointer;
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid #c6c4c4;
+    border-right: 1px solid $gainsboro;
 }
 
 .flex-fill {
@@ -56,9 +56,9 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: #1c1c1c;
+    color: $nero;
     border: none;
-    background-color: #f2f2f2;
+    background-color: $white-smoke;
 }
 
 .td-search-box .input-container i {
@@ -69,7 +69,7 @@
 
 .dropdown-menu > li > a:hover {
     color: $chetwode-blue;
-    background: #e5e5e5;
+    background: $whisper;
 }
 
 .dropdown-menu {
@@ -80,40 +80,40 @@
     height: 50px !important;
 }
 
-.click-dropdwon ul {
+.click-dropdown ul {
     list-style: none;
     position: absolute;
     left: -114px;
-    background-color: white;
+    background-color: $white;
     width: 131px;
-    box-shadow: 0px 4px 7px #bfbfbf;
+    box-shadow: 0px 4px 7px $silver;
     border-radius: 3px;
     z-index: 100;
     border: 1px solid $gainsboro;
 }
 
-.click-dropdwon {
+.click-dropdown {
     position: relative;
 }
 
-.click-dropdwon ul li {
+.click-dropdown ul li {
     padding: 3px 6px;
     margin-bottom: 4px;
 
-    color: orange;
+    color: $orange;
     cursor: pointer;
 }
 
-.click-dropdwon ul li:hover {
+.click-dropdown ul li:hover {
     background-color: $gainsboro;
 }
 
-.click-dropdwon ul li:hover a {
+.click-dropdown ul li:hover a {
     color: orangered;
 }
 
-.click-dropdwon ul li a {
-    color: black;
+.click-dropdown ul li a {
+    color: $black;
 }
 
 .invoice-table tr:hover .dropdown-btn {
@@ -121,7 +121,7 @@
     cursor: pointer;
 }
 
-.click-dropdwon .dropdown-btn {
+.click-dropdown .dropdown-btn {
     display: none;
 }
 
@@ -131,7 +131,7 @@
     margin-left: 6px;
 }
 
-.icon-pointer .activeTextColor {
+.icon-pointer .active-text-color {
     color: $deep-sky-blue;
 }
 .date-advance-search {
@@ -144,18 +144,18 @@
     display: none;
     margin-bottom: 15px;
 }
-ul.selectActionDropdown {
+ul.select-action-dropdown {
     list-style: none;
 }
-.selectActionDropdown a {
-    color: #333;
+.select-action-dropdown a {
+    color: $night-rider;
     font-size: 14px;
     padding: 5px 10px;
     display: block;
 }
-.selectActionDropdown a:hover {
+.select-action-dropdown a:hover {
     color: $chetwode-blue !important;
-    background: #eeeff9 !important;
+    background: $lavender !important;
 }
 .dropdown-toggle.more-btn-dropdown {
     color: $navy;
@@ -167,18 +167,18 @@ ul.selectActionDropdown {
     justify-content: space-between;
     align-items: center;
     margin-right: 15px;
-    background-color: #fff;
+    background-color: $white;
 }
 .dropdown-toggle.more-btn-dropdown:hover {
     background: $chetwode-blue;
-    color: #fff !important;
+    color: $white !important;
     border-color: $chetwode-blue;
 }
 .dropdown-toggle.more-btn-dropdown .caret {
-    color: #999999;
+    color: $nobel;
 }
 .dropdown-toggle.more-btn-dropdown:hover .caret {
-    color: #fff !important;
+    color: $white !important;
 }
 
 .proforma-container {
@@ -225,7 +225,7 @@ ul.selectActionDropdown {
     border: 1px solid $gainsboro;
     border-radius: 2px;
     color: $gray;
-    background: #fff;
+    background: $white;
     align-items: center;
     justify-content: center;
 }
@@ -233,13 +233,13 @@ ul.selectActionDropdown {
     display: none;
 }
 .advance-icon:hover {
-    background: #eaeaea;
+    background: $whisper-color;
 }
 button.btn.btn-filter {
-    background: #e4e4e4;
-    border: 1px solid #e4e4e4;
+    background: $whisper;
+    border: 1px solid $gainsboro;
     font-size: 14px;
-    color: #1a237e;
+    color: $midnight-blue;
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -248,14 +248,14 @@ button.btn.btn-filter {
 button.btn.btn-filter span.icon-cross {
     margin-right: 5px;
 }
-.icon-ellipse.selectAction a {
-    color: #333;
+.icon-ellipse.select-action a {
+    color: $night-rider;
 }
 .invoice-table th .d-flex {
     align-items: center;
 }
 a.btn-link-2 {
-    color: #1c1c1c;
+    color: $nero;
 }
 .input-wrapper {
     display: block !important;
@@ -289,6 +289,19 @@ span.icon-advance-filter {
 .select-all-proformas-on-mobile-view{
     display: none;
 }
+
+.btn-wrapper-more{
+    height: 30px;
+}
+.min-width-check{
+    min-width:50px !important;
+}
+.invoice-table.on-mobile-view {
+    td{
+        white-space: normal !important;
+        word-break: break-word !important;
+    }
+}
 // responsive
 @media(max-width:991px){
     .invoice-preview-sidebar{
@@ -296,6 +309,14 @@ span.icon-advance-filter {
     }
 }
 @media (max-width: 768px) {
+    .invoice-table.on-mobile-view {
+        td{
+            width: 100%;
+            span.justify-content-end{
+                justify-content: flex-start !important;
+            }
+        }
+}
     .select-all-proformas-on-mobile-view{
         display: flex;
         align-items: center;
@@ -324,7 +345,7 @@ span.icon-advance-filter {
         width: 100%;
         margin-top: 10px !important;
     }
-    .input-grp-dateRangePicker .form-group {
+    .input-grp-date-range-picker .form-group {
         margin-bottom: 10px;
     }
     .full-width-on-mobile {
@@ -336,19 +357,18 @@ span.icon-advance-filter {
     .proforma-container {
         padding-top: 55px;
     }
+
     .date-advance-search {
         margin-top: 0;
         margin-bottom: 15px;
-    }
-    .date-advance-search {
         display: block;
         flex-direction: column;
     }
 }
 @media (max-width: 420px) {
-    .smallLoading {
+    .small-loading {
         padding-left: 0;
-        color: #333333;
+        color: $night-rider;
         font-size: 12px;
         position: relative;
         top: 2px;
@@ -365,12 +385,12 @@ span.icon-advance-filter {
     .form-group div {
         display: block;
     }
-    .input-grp-dateRangePicker .btn {
+    .input-grp-date-range-picker .btn {
         padding-left: 0;
         padding-top: 10px;
         padding-bottom: 0;
     }
-    .smallLoading {
+    .small-loading {
         top: 5px;
     }
     .date-advance-search .btn-wrapper {

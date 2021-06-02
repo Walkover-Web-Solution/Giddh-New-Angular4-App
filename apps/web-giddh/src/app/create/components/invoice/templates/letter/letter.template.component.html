@@ -14,8 +14,8 @@
                                 <div class="ico-head">Sender’s Details</div>
                             </div>
                         </div>
-                        <div [collapse]="isOthrDtlCollapsed" class="clearfix pdL3 pdR3 col-xs-12 mr0">
-                            <div class="row mt13" formGroupName="companyDetails">
+                        <div [collapse]="isOthrDtlCollapsed" class="clearfix pd-l3 pd-r3 col-xs-12 m-0">
+                            <div class="row mt-13" formGroupName="companyDetails">
                                 <!-- <div class="form-group col-xs-2">
           <label>Ship Date</label>
           <input formControlName="shippingDate" type="text" [placeholder]="giddhDateFormat" bsDatepicker class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
@@ -42,7 +42,7 @@
                                                 <sh-select #stateEl formControlName="stateCode" class="splSales"
                                                     [options]="statesSource$ | async" [width]="139"></sh-select>
                                             </div>
-                                            <div class="mr-t2 pull-left width100">
+                                            <div class="mr-t2 pull-left width-100">
                                                 <div class="form-group col-xs-8">
                                                     <label>PAN</label>
                                                     <input type="text" class="form-control"
@@ -58,7 +58,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-4">
-                                    <div class="form-group width100">
+                                    <div class="form-group width-100">
                                         <label>Sender’s address</label>
                                         <textarea class="form-control" formControlName="address" rows="5"></textarea>
                                     </div>
@@ -98,8 +98,8 @@
                                 <div class="ico-head">Customer Details</div>
                             </div>
                         </div>
-                        <div [collapse]="isCustDtlCollapsed" class="clearfix pdL3 pdR3 col-xs-12 mr0">
-                            <div class="row mt13" formGroupName="userDetails">
+                        <div [collapse]="isCustDtlCollapsed" class="clearfix pd-l3 pd-r3 col-xs-12 m-0">
+                            <div class="row mt-13" formGroupName="userDetails">
                                 <!-- commented by sagar sir -->
                                 <div class="form-group col-xs-4"
                                     [ngClass]="{'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('userCompanyName').invalid }">
@@ -113,9 +113,9 @@
                                     <label>Country</label>
                                     <!-- <input placeholder="Customer name" type="text" formControlName="userCompanyName" class="form-control" [ngClass]="{'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('userCompanyName').invalid }"
 /> -->
-                                    <sh-select class="sh-form_control" formControlName="countryCode"
+                                    <sh-select class="sh-form-control" formControlName="countryCode"
                                         [options]="countrySource"
-                                        [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('countryCode').invalid }">
+                                        [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('countryCode').invalid }" [isRequired]="true">
                                     </sh-select>
                                 </div>
 
@@ -152,8 +152,8 @@
                                 <div class="ico-head">Mailing Details</div>
                             </div>
                         </div>
-                        <div [collapse]="isMlngAddrCollapsed" class="clearfix pdL3 pdR3 col-xs-12 mr0">
-                            <div class="row mt13">
+                        <div [collapse]="isMlngAddrCollapsed" class="clearfix pd-l3 pd-r3 col-xs-12 m-0">
+                            <div class="row mt-13">
                                 <div formGroupName="userDetails">
                                     <div class=""
                                         [ngClass]="{'col-xs-6':CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN', 'col-xs-4': CreateInvoiceForm.controls['userDetails'].get('countryCode').value !== 'IN' }">
@@ -238,8 +238,8 @@
                             </div>
 
                         </div>
-                        <div [collapse]="isGenDtlCollapsed" class="clearfix pdL3 pdR3 col-xs-12 mr0">
-                            <div class="row mt13">
+                        <div [collapse]="isGenDtlCollapsed" class="clearfix pd-l3 pd-r3 col-xs-12 m-0">
+                            <div class="row mt-13">
                                 <!-- <div class="form-group col-xs-4">
     <label>Attention to</label>
     <input type="text" name="accountDetails.attention" class="form-control" [(ngModel)]="invFormData.accountDetails.attentionTo" />
@@ -255,7 +255,7 @@
 
         <div class="form-group col-xs-6" formGroupName="userDetails">
             <label>Country <sup>*</sup></label>
-            <sh-select class="sh-form_control" formControlName="countryCode" [options]="countrySource" [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('countryCode').invalid }"></sh-select>
+            <sh-select class="sh-form-control" formControlName="countryCode" [options]="countrySource" [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('countryCode').invalid }"></sh-select>
         </div>
         <ng-container formGroupName="companyDetails">
             <div class="form-group col-xs-12">
@@ -318,8 +318,8 @@
             </section>
         </div>
     </div>
-    <div class="row mr-t">
-        <section class="clearfix pd-1 pdB2 mr-b2 whiteBg">
+    <div class="row mr-t05">
+        <section class="clearfix pd-1 pd-b2 mr-b2 white-bg">
             <div class="container">
                 <table class="table" formArrayName="entries">
                     <thead>
@@ -440,7 +440,7 @@
 </td> -->
                             <!-- <td class="tax-list-dd-wrap dropdown-container"> -->
                             <!-- <sales-tax-list
-class="salesTax"
+class="sales-tax"
 [showTaxPopup]="false"
 [taxes]="companyTaxesList$ | async"
 [applicableTaxes]="transaction.applicableTaxes"
@@ -453,7 +453,7 @@ class="salesTax"
 <input type="number" name="transaction.total_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.total"
 />
 </td>-->
-                            <td class="action-panel-td alR">
+                            <td class="action-panel-td text-right">
                                 <span class="cp" *ngIf="last" (click)="addBlankRow()">
                                     <i class="icon-add" aria-hidden="true"></i>
                                 </span>
@@ -477,56 +477,53 @@ class="salesTax"
                                 </div>
                             </td>
                             <td width="50%" formGroupName="uiCalculation">
-                                <section class="tableSec">
-                                    <div class="tableRow">
-                                        <div class="tableCell">Total Amount</div>
-                                        <div class="tableCell figureCell">{{CreateInvoiceForm.controls['uiCalculation'].get('subTotal').value
-                    | number:'1.2-2'}}
+                                <section class="tabl-sec">
+                                    <div class="table-row">
+                                        <div class="table-cell">Total Amount</div>
+                                        <div class="table-cell figure-cell">{{CreateInvoiceForm.controls['uiCalculation'].get('subTotal').value | number:'1.2-2'}}
                                         </div>
                                     </div>
-                                    <div class="tableRow">
-                                        <div class="tableCell">Discount</div>
-                                        <div class="tableCell figureCell">
+                                    <div class="table-row">
+                                        <div class="table-cell">Discount</div>
+                                        <div class="table-cell figure-cell">
                                             {{CreateInvoiceForm.controls['uiCalculation'].get('totalDiscount').value | number:'1.2-2'}}
                                         </div>
 
                                     </div>
-                                    <div class="tableRow">
-                                        <div class="tableCell">Taxable Value</div>
-                                        <div class="tableCell figureCell">
+                                    <div class="table-row">
+                                        <div class="table-cell">Taxable Value</div>
+                                        <div class="table-cell figure-cell">
                                             {{CreateInvoiceForm.controls['uiCalculation'].get('totalTaxableValue').value | number:'1.2-2'}}
                                         </div>
 
                                     </div>
-                                    <div class="tableRow">
-                                        <div class="tableCell">Tax</div>
-                                        <div class="tableCell figureCell">
+                                    <div class="table-row">
+                                        <div class="table-cell">Tax</div>
+                                        <div class="table-cell figure-cell">
                                             {{CreateInvoiceForm.controls['uiCalculation'].get('gstTaxesTotal').value | number:'1.2-2'}}
                                         </div>
                                     </div>
-                                    <div class="tableRow">
-                                        <div class="tableCell">
+                                    <div class="table-row">
+                                        <div class="table-cell">
                                             <strong>Total</strong>
                                         </div>
-                                        <div class="tableCell figureCell">
-                                            <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('grandTotal').value |
-                      number:'1.2-2'}}</strong>
+                                        <div class="table-cell figure-cell">
+                                            <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('grandTotal').value | number:'1.2-2'}}</strong>
                                         </div>
                                     </div>
-                                    <div class="tableRow">
-                                        <div class="tableCell">Deposit</div>
-                                        <div class="tableCell figureCell">
+                                    <div class="table-row">
+                                        <div class="table-cell">Deposit</div>
+                                        <div class="table-cell figure-cell">
                                             <input type="number" placeholder="Amount" class="form-control"
                                                 formControlName="depositAmount" />
                                         </div>
                                     </div>
-                                    <div class="tableRow">
-                                        <div class="tableCell">
+                                    <div class="table-row">
+                                        <div class="table-cell">
                                             <strong>Balance Due</strong>
                                         </div>
-                                        <div class="tableCell figureCell">
-                                            <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('balanceDue').value |
-                      number:'1.2-2'}}</strong>
+                                        <div class="table-cell figure-cell">
+                                            <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('balanceDue').value | number:'1.2-2'}}</strong>
                                         </div>
                                     </div>
                                 </section>
@@ -545,7 +542,7 @@ class="salesTax"
 <section class="">
     <section id="actionPane" class="text-center">
         <div class="container">
-            <div class="pull-right pr">
+            <div class="pull-right position-relative">
                 <!-- <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger">Clear</button>
   <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm)" class="btn btn-default">Generate {{toggleActionText}} &amp; Update A/c</button> -->
                 <button type="submit" class="btn btn-success" (click)="onSubmitInvoiceForm(invoiceForm)">Generate
@@ -556,7 +553,7 @@ class="salesTax"
     </section>
 </section>
 <div bsModal #invoicePreviewModal="bs-modal" [config]="{ keyboard: true }" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-xl" style="height: 100%;">
+    <div class="modal-dialog modal-xl h100">
         <div *ngIf="base64Data" class="modal-content">
             <iframe width="100%" height="600px" name="plugin" [attr.src]="base64Data" type="application/pdf"></iframe>
         </div>

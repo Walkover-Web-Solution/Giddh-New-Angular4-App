@@ -1,16 +1,16 @@
 <div class="box clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="selectedTax = null;toggleTaxAsidePane()">
-    <div style="display: flex;justify-content: space-between">
-        <h1 class="section-head pd-t1" style="margin: 0;padding: 0;line-height: 2;">Added Taxes</h1>
+    <div class="d-flex justify-content-between">
+        <h1 class="section-head m-0 pl-0 pb-0 pr-0">Added Taxes</h1>
         <button class="btn btn-sky-blue mr-0" [tooltip]="'Create New Tax'"
             (click)="selectedTax = null;toggleTaxAsidePane($event)">
-            <i class="icon icon-plus" style="font-size:12px"></i> New Tax
+            <i class="icon icon-plus font-12"></i> New Tax
         </button>
     </div>
 
-    <div class="col-sm-12 pt-15 tax-table-wrapper">
+    <div class="col-sm-12 pd-t15 tax-table-wrapper">
         <div class="row">
             <div class="table-responsive">
-                <table class="table table-bordered  basic mrB on-mobile-view">
+                <table class="table table-bordered  basic mr-b05 on-mobile-view">
 
                     <thead>
                         <tr>
@@ -29,7 +29,7 @@
 
                     </thead>
 
-                    <tbody *ngIf="availableTaxes.length">
+                    <tbody *ngIf="!isLoading && availableTaxes.length">
 
                         <tr *ngFor="let tax of availableTaxes; let i = index">
 
@@ -56,15 +56,14 @@
                             <td *ngIf="tax.taxDetail && tax.taxDetail.length && !taxToEdit[i]"
                                 data-title="Applied From">
                                 <div *ngFor="let t of tax.taxDetail">
-                                    {{moment(t.date).format('DD-MM-YYYY')}}
+                                    {{moment(t.date).format(giddhDateFormat)}}
                                 </div>
                             </td>
 
                             <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]" data-title="Applied From">
                                 <div *ngFor="let t of tax.taxDetail; let j = index; let last = last" class="mr-b1">
-                                    <!-- <input type="text" class="form-control" [(ngModel)]="t.date" name="tax_date_{{i}}_{{j}}"> -->
                                     <div class="input-group">
-                                        <input type="text" [ngModel]="moment(t.date).format('DD-MM-YYYY')"
+                                        <input type="text" [ngModel]="moment(t.date).format(giddhDateFormat)"
                                             name="tax_date_{{i}}_{{j}}" (focus)="showDatePickerInTable = true;"
                                             class="form-control" required />
                                         <span class="input-group-btn">
@@ -75,8 +74,7 @@
                                         </span>
                                     </div>
 
-                                    <div *ngIf="showDatePickerInTable && taxToEdit[i]"
-                                        style="position: absolute; z-index:10; min-height:290px;">
+                                    <div *ngIf="showDatePickerInTable && taxToEdit[i]" class="tax-datepicker">
                                         <datepicker name="tableDate{{i}}_{{j}}" [(ngModel)]="t.date"
                                             (selectionDone)="showDatePickerInTable=!showDatePickerInTable"
                                             [showWeeks]="false"></datepicker>
@@ -112,7 +110,7 @@
                             <td *ngIf="!taxToEdit[i]" data-title="File Date">{{tax.taxFileDate}}</td>
 
                             <td *ngIf="taxToEdit[i]">
-                                <div class="custom-select pos-rel">
+                                <div class="custom-select position-relative">
                                     <sh-select [options]="days" [isFilterEnabled]="false"
                                         [(ngModel)]="availableTaxes[i].taxFileDate" name="tfd{{i}}"
                                         [placeholder]="'Select'" [ItemHeight]="33"></sh-select>
@@ -120,7 +118,7 @@
                             </td>
 
                             <td data-title="Duration">
-                                <div class="custom-select pos-rel">
+                                <div class="custom-select position-relative">
                                     <sh-select [options]="duration" [disabled]="true" [isFilterEnabled]="false"
                                         [(ngModel)]="availableTaxes[i].duration" name="duration{{i}}"
                                         [placeholder]="'Select'" [ItemHeight]="33"></sh-select>
@@ -158,10 +156,17 @@
                             </td>
                         </tr>
                     </tbody>
-                    <tbody *ngIf="!availableTaxes.length" class="on-mobile-view no-records">
+                    <tbody *ngIf="!isLoading && !availableTaxes.length" class="on-mobile-view no-records">
                         <tr>
                             <td colspan="10" class="text-center empty-table">
                                 <h1>No Record Found !!</h1>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="isLoading">
+                        <tr>
+                            <td colspan="10" class="text-center empty-table">
+                                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
                             </td>
                         </tr>
                     </tbody>

@@ -1,0 +1,37 @@
+@import "../../../assets/css/color.scss";
+
+.other-information{
+    margin-top: 15px;
+    label{
+        padding-bottom:5px;
+    }
+}
+
+@media (min-width:1200px) and (max-width:1302px){
+    .other-information {
+        flex: 0 0 66.666667% !important;
+        max-width: 66.666667% !important;
+    }
+}
+
+
+
+/*branch other tab design*/
+.other-detail-section{
+    color: $dark-gray;
+    label{
+        min-width: 200px;
+    }
+}
+@media(max-width:767px){
+    .other-setting-container{
+        padding-top: 15px;
+    }
+}
+@media(max-width:575px){
+    .other-detail-section {
+        label{
+            min-width: 100%;
+        }
+    }
+}

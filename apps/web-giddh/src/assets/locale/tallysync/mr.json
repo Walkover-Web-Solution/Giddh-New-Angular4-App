@@ -1,0 +1,21 @@
+{
+    "page_heading" : "टॅलीवरून डेटा आयात करा",
+    "inprogress" : "प्रगतीपथावर",
+    "completed" : "पूर्ण",
+    "time_placeholder" : "मध्यांतर निवडा",
+    "company_placeholder" : "कंपनी निवडा",
+    "no_entries_found" : "कोणत्याही नोंदी आढळल्या नाहीत",
+    "tally" : "टॅली:",
+    "import_json" : "आयात जेसन:",
+    "last_import" : "शेवटचे आयात चालू",
+    "groups": "गट",
+    "complete" : "पूर्ण",
+    "error_occured" : "त्रुटी आली",
+    "accounts": "खाती",
+    "entries": "नोंदी",
+    "error_report" : "त्रुटी अहवाल:",
+    "filter_criteria" : "कृपया आपले फिल्टर निकष तपासा",
+    "company": "कंपनी",
+    "select_company": "कंपनी निवडा",
+    "select_interval": "मध्यांतर निवडा"
+}

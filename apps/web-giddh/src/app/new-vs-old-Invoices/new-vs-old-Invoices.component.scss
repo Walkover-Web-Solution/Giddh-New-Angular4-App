@@ -1,5 +1,5 @@
 @import "../../assets/css/color.scss";
-.h-25px {
+.height-25px {
     height: 25px;
 }
 
@@ -59,6 +59,15 @@
         }
     }
 }
+
+.bg-gray-color{
+    background-color: $whisper;
+}
+
+.strong{
+    font-weight: bold;
+}
+
 @media(max-width:991px){
     .div-table {
         display: block;

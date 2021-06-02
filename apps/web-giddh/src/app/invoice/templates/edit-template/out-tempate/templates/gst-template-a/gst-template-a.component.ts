@@ -1,16 +1,13 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
-import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
-import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
-import { InvoiceUiDataService } from '../../../../services/invoice.ui.data.service';
-import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
-import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
+import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
-import * as _ from '../../../../../../lodash-optimized';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 import { SettingsProfileActions } from '../../../../../../actions/settings/profile/settings.profile.action';
+import * as _ from '../../../../../../lodash-optimized';
+import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
+import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
 
 @Component({
 	selector: 'gst-template-a',
@@ -43,16 +40,15 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 	public isBaseCurrencyRupee = true;
 	public dollarSymbol = '$';
-	public rupeeSymbol = '&#8377';
+    public rupeeSymbol = '&#8377';
+
 	constructor(
 		private store: Store<AppState>,
 		private settingsProfileActions: SettingsProfileActions) {
-		this.companySetting$ = this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$));
-
+		this.companySetting$ = this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$));
 	}
 
 	public ngOnInit() {
-
 		this.companySetting$.subscribe(a => {
 			if (a && a.address) {
 				this.companyAddress = _.cloneDeep(a.address);
@@ -60,7 +56,6 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
 				this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
 			}
 		});
-		//
 	}
 
 	public onClickSection(sectionName: string) {
@@ -102,10 +97,8 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
 				if (changes.fieldsAndVisibility.currentValue.table.taxes && changes.fieldsAndVisibility.currentValue.table.taxes.display) {
 					this.columnsVisibled++;
 				}
-				if (changes.fieldsAndVisibility.currentValue.table.total && changes.fieldsAndVisibility.currentValue.table.total.display) {
-					this.columnsVisibled++;
-				}
 				if (this.columnsVisibled) {
+					this.columnsVisibled++;
 					this.columnsVisibled++;
 					this.columnsVisibled++;
 				}

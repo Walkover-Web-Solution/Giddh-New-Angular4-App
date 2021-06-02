@@ -1,15 +1,15 @@
 @import "../../../../assets/css/color.scss";
-.ratioAnalysisPanelBody {
+.ratio-analysis-panel-body {
     padding-left: 0;
     padding-right: 0;
 }
-.ratioAnalysisPanelBody h1 {
+.ratio-analysis-panel-body h1 {
     font-size: 14px;
     color: $nero;
 }
 
-.ratioAnalysisPanelBody small {
-    color: #666666;
+.ratio-analysis-panel-body small {
+    color: $dark-gray;
     font-size: 14px;
 }
 .ratio-chart-block {

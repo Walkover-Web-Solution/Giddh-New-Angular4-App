@@ -1,9 +1,10 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
 import { AccountDetails } from '../../../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from '../../../../lodash-optimized';
 import { FormControl } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'tb-grid',
@@ -11,7 +12,7 @@ import { debounceTime } from 'rxjs/operators';
     styleUrls: [`./tb-grid.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
+export class TbGridComponent implements OnInit, OnChanges, OnDestroy {
 
     public noData: boolean;
     public accountSearchControl: FormControl = new FormControl();
@@ -26,14 +27,20 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
     @Input() public data$: AccountDetails;
     @Input() public expandAll: boolean;
     @Output() public searchChange = new EventEmitter<string>();
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
-        //
+        
     }
 
     public ngOnInit() {
         this.accountSearchControl.valueChanges.pipe(
-            debounceTime(700))
+            debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
                 this.searchInput = newValue;
                 this.searchChange.emit(this.searchInput);
@@ -66,14 +73,18 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
                         });
                     }
                 });
-
-                // this.data$ = _.cloneDeep(this.data$);
             }
         }
     }
 
-    public ngAfterViewInit() {
-        //
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof TbGridComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     public markForCheck() {
@@ -92,7 +103,9 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
         this.showClearSearch = true;
 
         setTimeout(() => {
-            this.searchInputEl.nativeElement.focus();
+            if(this.searchInputEl && this.searchInputEl.nativeElement) {
+                this.searchInputEl.nativeElement.focus();
+            }
         }, 200);
     }
 

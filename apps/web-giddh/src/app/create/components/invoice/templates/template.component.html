@@ -3,7 +3,7 @@
 </div>
 
 <section>
-    <div class="inv_header">
+    <div class="invoice-steps-header">
         <div class="container">
             <div class="row">
                 <!-- <div class="col-sm-12 text-center">
@@ -15,44 +15,12 @@
             </div>
         </div>
     </div>
-
-
-    <!-- <section class="container">
-<div class="row">
-  <div class="col-xs-12 alC">
-    <div class="pr mrB4 clearfix mr-t2"> -->
-    <!-- <div class="alL col-xs-7">
-        <h1 class="fs18 bdrD inline lh42">
-          <a [routerLink]="['/create-invoice/invoice']">
-            <i class="glyphicon glyphicon-arrow-left cp"></i> Template LETTER
-          </a>
-        </h1>
-      </div> -->
-    <!-- <div class="col-sm-12 text-center">
-          <create-invoice-steps></create-invoice-steps>
-     </div> -->
-    <!-- </div>
-  </div>
-</div>
-</section> -->
-
-
     <section class="">
         <div class="">
             <div class="">
                 <div element-view-container-ref #letterTemplateComponent="elementviewcontainerref"></div>
                 <div *ngIf="templateId === 't002'">You'll enjoy {{TEMPLATES[1]}} template</div>
                 <div *ngIf="templateId === 't003'">You'll enjoy {{TEMPLATES[2]}} template</div>
-                <!-- download, emial, save -->
-                <!-- <div class="">
-  <div class="clearfix">
-    <button class="btn btn-primary mr-b1">Download</button>
-  </div>
-  <div class="clearfix">
-    <button class="btn btn-success mr-b1">Send Email</button>
-  </div>
-  <button class="btn btn-success">Save</button> for future reference
-</div> -->
             </div>
         </div>
     </section>
@@ -68,8 +36,8 @@
                             <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close">×</span>
                             <h3>Share Invoice</h3>
                         </div>
-                        <div class="modal-body mrB4" id="SharePop">
-                            <div class="modal_wrap">
+                        <div class="modal-body mr-b4" id="SharePop">
+                            <div class="modal-wrap">
                                 <div class="form-group add-mailer">
                                     <!--share invoice from-->
                                     <form name="shareInvoiceForm" novalidate="" class="" autocomplete="off">

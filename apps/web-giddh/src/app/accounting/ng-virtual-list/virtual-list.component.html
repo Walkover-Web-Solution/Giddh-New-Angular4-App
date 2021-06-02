@@ -7,7 +7,7 @@
           <ng-container *ngIf="selectedValues?.length">
               <span class="chip" *ngFor="let sl of selectedValues">
                   {{ sl.label }}
-                  <span class="chipClosebtn" (mousedown)="clearSingleSelection($event, sl)" (click)="clearSingleSelection($event, sl)">&times;</span>
+                  <span class="chip-close-btn" (mousedown)="clearSingleSelection($event, sl)" (click)="clearSingleSelection($event, sl)">&times;</span>
               </span>
           </ng-container>
           <input type="text" style="opacity: 0 !important;position: absolute" class="pd-l1" [ngClass]="{'hasValue':filter?.length}" #inputFilter (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
@@ -21,7 +21,7 @@
     <!-- <div (click)="show($event);" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
           <ng-container *ngIf="selectedValues?.length">
               <div *ngIf="!multiple">
-                  <input type="text" readonly value="{{selectedValues[0].label}}" class="form-control selectedVal cp" />
+                  <input type="text" readonly value="{{selectedValues[0].label}}" class="form-control selected-val cp" />
               </div>
           </ng-container>
           <ng-container *ngIf="!selectedValues?.length">
@@ -36,6 +36,6 @@
         [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)"
         (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink"
         [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight"
-        [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
-        [dropdownMinHeight]="dropdownMinHeight"></virtual-list-menu>
+        [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [isPaginationEnabled]="isPaginationEnabled"
+        [dropdownMinHeight]="dropdownMinHeight" (scrollEnd)="scrollEnd.emit()"></virtual-list-menu>
 </div>

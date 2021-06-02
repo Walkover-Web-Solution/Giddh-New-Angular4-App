@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, TemplateRef, Output, EventEmitter, Input } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -10,7 +10,7 @@ import { AuthenticationService } from '../../../services/authentication.service'
 import { AppState } from '../../../store';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { CompanyActions } from '../../../actions/company.actions';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { DEFAULT_SIGNUP_TRIAL_PLAN, DEFAULT_POPULAR_PLAN } from '../../../app.constant';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
@@ -69,17 +69,19 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
     /* This will contain the plan name of popular plan */
     public defaultPopularPlan: string = DEFAULT_POPULAR_PLAN;
+    /** This will hold if plans are showing */
+    public isShowPlans: boolean = false;
 
     constructor(private modalService: BsModalService, private _generalService: GeneralService,
         private _authenticationService: AuthenticationService, private store: Store<AppState>,
         private _route: Router, private companyActions: CompanyActions,
-        private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService, private toasty: ToasterService) {
+        private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService, private toasty: ToasterService, public route: ActivatedRoute) {
 
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        this.store.select(profile => profile.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && !_.isEmpty(response)) {
                 let companyInfo = _.cloneDeep(response);
-                this._authenticationService.getAllUserSubsciptionPlans(companyInfo.countryV2.alpha2CountryCode).subscribe(res => {
+                this._authenticationService.getAllUserSubsciptionPlans(companyInfo.countryV2.alpha2CountryCode).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                     this.subscriptionPlans = res.body;
 
                     this.totalMultipleCompanyPlans = 0;
@@ -120,11 +122,17 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 this.currentCompany = companyInfo.name;
             }
         });
-        this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
-        this.isUpdateCompanySuccess$ = this.store.select(s => s.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
+        this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
+        this.isUpdateCompanySuccess$ = this.store.pipe(select(s => s.settings.updateProfileSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        this._route.navigate(['/pages', 'user-details', 'subscription'], {
+            queryParams: {
+                showPlans: true
+            }
+        });
+
         if (this._generalService.user) {
             this.logedInUser = this._generalService.user;
         }
@@ -141,9 +149,24 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+            if(val && val.showPlans === "true") {
+                this.isShowPlans = true;
+            }
+
+            if((!val || val.showPlans !== "true") && this.isShowPlans) {
+                this.backClicked();
+                this.isShowPlans = false;
+                this.selectNewPlan = false;
+            }
+        });
     }
 
-    public ngOnDestroy() { }
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 
     /**
      * This will open the all features popup
@@ -162,6 +185,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      */
     public backClicked() {
         this.isSubscriptionPlanShow.emit(true);
+        this._route.navigate(['/pages', 'user-details', 'subscription']);
     }
 
     public buyPlanClicked(plan: any) {
@@ -176,10 +200,11 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     }
 
     public patchProfile(obj) {
-        this.settingsProfileService.PatchProfile(obj).subscribe(response => {
+        this.settingsProfileService.PatchProfile(obj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if(response && response.status === "error") {
                 this.toasty.errorToast(response.message);
             } else {
+                this.store.dispatch(this.settingsProfileActions.handleFreePlanSubscribed(true));
                 this.toasty.successToastWithHtml("Welcome onboard!<br>Accounting begins now...");
                 this.backClicked();
             }

@@ -1,5 +1,4 @@
 import { Observable, of as observableOf, ReplaySubject, of } from 'rxjs';
-
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
@@ -15,11 +14,8 @@ import {
     PaymentClass,
     RazorPayClass,
     SmsKeyClass,
-    UserAmountRangeRequests,
-    IntegratedBankList,
-    UserAmountRange,
+    IntegratedBankList
 } from '../../models/api-models/SettingsIntegraion';
-import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
@@ -38,8 +34,9 @@ import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
-import { SettingsPermissionService } from '../../services/settings.permission.service';
 import { SettingsIntegrationTab } from '../constants/settings.constant';
+import { SearchService } from '../../services/search.service';
+import { SalesService } from '../../services/sales.service';
 
 export declare const gapi: any;
 
@@ -64,7 +61,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public paymentGatewayAdded: boolean = false;
     public autoCollectAdded: boolean = false;
     public payoutAdded: boolean = false;
-    public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
     public bankAccounts$: Observable<IOption[]>;
     public gmailAuthCodeUrl$: Observable<string> = null;
     public amazonSellerForm: FormGroup;
@@ -134,12 +130,29 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public updateBankUrnNumber: any;
     /* This will clear the selected linked account */
     public forceClearLinkAccount$: Observable<IForceClear> = observableOf({ status: false });
+    /** Stores the search results pagination details */
+    public accountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search */
+    public defaultAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details */
+    public defaultAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the list of accounts */
+    public accounts: IOption[];
 
     constructor(
         private router: Router,
         private store: Store<AppState>,
         private settingsIntegrationActions: SettingsIntegrationActions,
-        private accountService: AccountService,
         private ecommerceService: EcommerceService,
         private toasty: ToasterService,
         private _companyActions: CompanyActions,
@@ -150,9 +163,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private changeDetectionRef: ChangeDetectorRef,
         private generalService: GeneralService,
         private settingsIntegrationService: SettingsIntegrationService,
-        private settingsPermissionService: SettingsPermissionService) {
-        this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
+        private searchService: SearchService,
+        private salesService: SalesService
+    ) {
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
         this.isSellerAdded = this.store.pipe(select(s => s.settings.amazonState.isSellerSuccess), takeUntil(this.destroyed$));
         this.isSellerUpdate = this.store.pipe(select(s => s.settings.amazonState.isSellerUpdated), takeUntil(this.destroyed$));
@@ -227,24 +241,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
             if (o.amazonSeller && o.amazonSeller.length) {
                 this.amazonSellerRes = _.cloneDeep(o.amazonSeller);
-                this.amazonSellerForm.controls['sellers'].patchValue(this.amazonSellerRes);
+                this.amazonSellerForm.controls['sellers']?.patchValue(this.amazonSellerRes);
                 // this.amazonSellerForm.controls['sellers'].disable();
                 this.addAmazonSellerRow();
-            }
-        });
-        this.flattenAccountsStream$.subscribe(data => {
-            if (data) {
-                let accounts: IOption[] = [];
-                let bankAccounts: IOption[] = [];
-                _.forEach(data, (item) => {
-                    accounts.push({ label: item.name, value: item.uniqueName });
-                    let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
-                    if (findBankIndx !== -1) {
-                        bankAccounts.push({ label: item.name, value: item.uniqueName });
-                    }
-                });
-                this.accounts$ = observableOf(accounts);
-                this.bankAccounts$ = observableOf(bankAccounts);
             }
         });
 
@@ -254,13 +253,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             ])
         });
 
-        this.isSellerAdded.subscribe(a => {
+        this.isSellerAdded.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.addAmazonSellerRow();
             }
         });
 
-        this.isSellerUpdate.subscribe(a => {
+        this.isSellerUpdate.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.amazonEditItemIdx = null;
                 this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
@@ -270,11 +269,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         // this.store.dispatch(this._companyActions.getAllRegistrations());
 
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o.account) {
+            if (o && o.account) {
                 this.registeredAccount = o.account;
                 if (this.registeredAccount && this.registeredAccount.length === 0) {
                     this.openNewRegistration = true;
-
                 }
                 if (this.registeredAccount && this.registeredAccount.length) {
                     this.registeredAccount.map(item => {
@@ -588,14 +586,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         const control = this.amazonSellerForm.controls['sellers'] as FormArray;
         if (item) {
             if (control.controls[i]) {
-                control.controls[i].patchValue(item);
+                control.controls[i]?.patchValue(item);
                 if (control.controls[i].value.sellerId) {
                     control.controls[i].disable();
                 }
             } else {
                 control.push(this.initAmazonReseller());
                 setTimeout(() => {
-                    control.controls[i].patchValue(item);
+                    control.controls[i]?.patchValue(item);
                     if (control.controls[i].value.sellerId) {
                         control.controls[i].disable();
                     }
@@ -726,7 +724,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public getShopifyVerifyStatus(ecommerceUniqueName: string): void {
         const requestObj = { source: "shopify" };
-        this.ecommerceService.isShopifyConnected(requestObj, ecommerceUniqueName).subscribe(response => {
+        this.ecommerceService.isShopifyConnected(requestObj, ecommerceUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success' && response.body === 'VERIFIED') {
                     this.isEcommerceShopifyUserVerified = true;
@@ -741,7 +739,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
-                const t = ipcRenderer.send("authenticate", provider);
+                const t = ipcRenderer.send("authenticate-send-email", provider);
                 ipcRenderer.once('take-your-gmail-token', (sender, arg: any) => {
                     // this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                     const dataToSave = {
@@ -749,7 +747,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         "expires_in": arg.expiry_date,
                         "refresh_token": arg.refresh_token
                     };
-                    this._authenticationService.saveGmailToken(dataToSave).subscribe((res) => {
+                    this._authenticationService.saveGmailToken(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
 
                         if (res.status === 'success') {
                             this.toasty.successToast('Gmail account added successfully.', 'Success');
@@ -821,24 +819,24 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         if (!isUpdate) {
             let userAmountRanges = this.addBankForm.get('userAmountRanges') as FormArray;
-            userAmountRanges.controls[index].get('amount').patchValue(null);
+            userAmountRanges.controls[index].get('amount')?.patchValue(null);
             if (event.value === 'max') {
-                userAmountRanges.controls[index].get('maxBankLimit').patchValue('max');
-                userAmountRanges.controls[index].get('amount').patchValue(null);
+                userAmountRanges.controls[index].get('maxBankLimit')?.patchValue('max');
+                userAmountRanges.controls[index].get('amount')?.patchValue(null);
                 userAmountRanges.controls[index].get('amount').clearValidators();
                 userAmountRanges.controls[index].get('amount').reset();
 
                 if (this.checkIsMaxBankLimitSelectedField(userAmountRanges, index)) {
-                    userAmountRanges.controls[index].get('maxBankLimit').patchValue('custom');
-                    userAmountRanges.controls[index].get('amount').patchValue(null);
+                    userAmountRanges.controls[index].get('maxBankLimit')?.patchValue('custom');
+                    userAmountRanges.controls[index].get('amount')?.patchValue(null);
                     userAmountRanges.controls[index].get('amount').setErrors({ 'incorrect': true });
                     userAmountRanges.controls[index].get('amount').setValidators(Validators.compose([Validators.required]));
                     this.toasty.infoToast('You can not select max bank limit more than 1');
                 }
             } else {
-                userAmountRanges.controls[index].get('maxBankLimit').patchValue('custom');
+                userAmountRanges.controls[index].get('maxBankLimit')?.patchValue('custom');
                 userAmountRanges.controls[index].get('amount').setValidators(Validators.compose([Validators.required]));
-                userAmountRanges.controls[index].get('amount').patchValue(null);
+                userAmountRanges.controls[index].get('amount')?.patchValue(null);
             }
         }
         if (isUpdate && this.registeredAccount && this.registeredAccount[parentIndex].userAmountRanges) {
@@ -1073,7 +1071,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             } else {
                 transactions.controls[index].get('approvalUniqueName').clearValidators();
             }
-            transactions.controls[index].get('approvalUniqueName').patchValue(null)
+            transactions.controls[index].get('approvalUniqueName')?.patchValue(null)
         } else if (event && this.registeredAccount && this.registeredAccount[parentIndex].userAmountRanges && isUpdate) {
             this.registeredAccount[parentIndex].userAmountRanges[index].approvalUniqueName = null;
             this.registeredAccount[parentIndex].userAmountRanges[index].approvalDetails = null;
@@ -1107,7 +1105,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public getValidationForm(bankType: string): void {
         if (this.selectedCompanyUniqueName && bankType) {
-            this.settingsIntegrationService.getValidationFormForBank(this.selectedCompanyUniqueName, bankType).subscribe(response => {
+            this.settingsIntegrationService.getValidationFormForBank(this.selectedCompanyUniqueName, bankType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.status === 'success') {
                     if (response.body) {
                         this.maxLimit = String(response.body.maxAmount).length;
@@ -1158,7 +1156,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             approvalUniqueName: [''],
         });
         if (value) {
-            transactionsFields.patchValue(value);
+            transactionsFields?.patchValue(value);
         }
         return transactionsFields;
     }
@@ -1219,7 +1217,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (!isUpdate) {
             const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
             if (Number(amount) <= 0) {
-                transactions.controls[index].get('amount').patchValue(null);
+                transactions.controls[index].get('amount')?.patchValue(null);
             } else {
                 transactions.controls[index].get('amount').setErrors(null);
             }
@@ -1248,7 +1246,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 updateFormValue.accountUniqueName = updateFormValue.account.uniqueName;
             }
             this.openNewRegistration = false;
-            this.addBankForm.patchValue(updateFormValue);
+            this.addBankForm?.patchValue(updateFormValue);
             updateFormValue.userAmountRanges.forEach((item, indexAmount) => {
                 if (indexAmount) {
                     this.filledAmountRangesForm(item);
@@ -1305,6 +1303,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public loadPaymentData(event?: any): void {
         if (event && event instanceof TabDirective || !event) {
+            this.loadDefaultBankAccountsSuggestions();
             this.store.dispatch(this._companyActions.getAllRegistrations());
             this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
             this.store.pipe(take(1)).subscribe(s => {
@@ -1335,10 +1334,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public loadCollectionData(event?): void {
         if (event && event instanceof TabDirective || !event) {
+            this.loadDefaultAccountsSuggestions();
+            this.loadDefaultBankAccountsSuggestions();
             this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
-            this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
-            this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
-            this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
+            // this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
+            // this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
+            // this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
         }
     }
 
@@ -1395,5 +1396,146 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             default:
                 break;
         }
+    }
+
+    /**
+     * This will navigate to selected tab
+     *
+     * @param {string} tab
+     * @memberof SettingIntegrationComponent
+     */
+    public tabChanged(tab: string): void {
+        this.router.navigateByUrl('/pages/settings/integration/' + tab);
+    }
+
+    /**
+     * Search query change handler
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof SettingIntegrationComponent
+     */
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.accountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page
+            }
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: result.name
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.accounts = searchResults;
+                    } else {
+                        this.accounts = [
+                            ...this.accounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.accounts$ = observableOf(this.accounts);
+                    this.accountsSearchResultsPaginationData.page = data.body.page;
+                    this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultAccountPaginationData.page = data.body.page;
+                        this.defaultAccountPaginationData.totalPages = data.body.totalPages;
+                    }
+                }
+            });
+        } else {
+            this.accounts = [...this.defaultAccountSuggestions];
+            this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
+            this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler
+     *
+     * @returns null
+     * @memberof SettingIntegrationComponent
+     */
+    public handleScrollEnd(): void {
+        if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
+            this.onAccountSearchQueryChanged(
+                this.accountsSearchResultsPaginationData.query,
+                this.accountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.accountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: result.name
+                            }
+                        }) || [];
+                        this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default account search suggestion when module is loaded
+     *
+     * @private
+     * @memberof SettingIntegrationComponent
+     */
+    private loadDefaultAccountsSuggestions(): void {
+        this.onAccountSearchQueryChanged('', 1, (response) => {
+            this.defaultAccountSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: result.name
+                }
+            }) || [];
+            this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+            this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+            this.accounts = [...this.defaultAccountSuggestions];
+        });
+    }
+
+    /**
+     * Loads the default account search suggestion when module is loaded
+     *
+     * @private
+     * @memberof SettingIntegrationComponent
+     */
+    private loadDefaultBankAccountsSuggestions(): void {
+        this.salesService.getAccountsWithCurrency('bankaccounts').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body?.results) {
+                const bankAccounts = response.body.results.map(account => ({
+                    label: account.name,
+                    value: account.uniqueName
+                }))
+                this.bankAccounts$ = observableOf(bankAccounts);
+            }
+        });
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

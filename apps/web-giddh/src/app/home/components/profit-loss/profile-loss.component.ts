@@ -1,15 +1,12 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
-import { HomeActions } from '../../../actions/home/home.actions';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { DashboardService } from '../../../services/dashboard.service';
 import {
     ProfitLossData,
     ProfitLossRequest,
@@ -22,6 +19,7 @@ import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/cu
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { TlPlService } from '../../../services/tl-pl.service';
 
 @Component({
     selector: 'profit-loss',
@@ -30,6 +28,7 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 })
 
 export class ProfitLossComponent implements OnInit, OnDestroy {
+    @Input() public refresh: boolean = false;
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
@@ -50,10 +49,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public fromDate: string;
     /* Selected to date */
     public toDate: string;
-    @Input() public refresh: boolean = false;
     public imgPath: string = '';
-    public companies$: Observable<CompanyResponse[]>;
-    public activeCompanyUniqueName$: Observable<string>;
     public requestInFlight: boolean = true;
     public profitLossChart: typeof Highcharts = Highcharts;
     public chartOptions: Highcharts.Options;
@@ -68,30 +64,25 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     public dataFound: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe,
-        private cdRef: ChangeDetectorRef,
-        private modalService: BsModalService,
-        private generalService: GeneralService) {
-        this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
+    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private tlPlService: TlPlService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.companies$.subscribe(c => {
-            if (c) {
-                let activeCompany: CompanyResponse;
-                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
-                    activeCompany = c.find(p => p.uniqueName === a);
-                    if (activeCompany) {
-                        this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
-                    }
-                });
-            }
-        });
         // img path
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
+            }
+        });
+
         // listen for universal date
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
@@ -102,51 +93,6 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
                 this.getFilterDate(dates);
-            }
-        });
-
-        this.store.pipe(select(p => p.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(p => {
-            if (p) {
-                this.dataFound = true;
-                let data = _.cloneDeep(p) as ProfitLossData;
-                let revenue;
-                let expense;
-                let npl;
-
-                if (data && data.incomeStatment && data.incomeStatment.revenue) {
-                    revenue = _.cloneDeep(data.incomeStatment.revenue) as GetRevenueResponse;
-                    this.totalIncome = revenue.amount;
-                    this.totalIncomeType = (revenue.type === "CREDIT") ? "Cr." : "Dr.";
-                } else {
-                    this.totalIncome = 0;
-                    this.totalIncomeType = '';
-                }
-
-                if (data && data.incomeStatment && data.incomeStatment.totalExpenses) {
-                    expense = _.cloneDeep(data.incomeStatment.totalExpenses) as GetTotalExpenseResponse;
-                    this.totalExpense = expense.amount;
-                    this.totalExpenseType = (expense.type === "CREDIT") ? "Cr." : "Dr.";
-                } else {
-                    this.totalExpense = 0;
-                    this.totalExpenseType = '';
-                }
-
-                if (data && data.incomeStatment && data.incomeStatment.incomeBeforeTaxes) {
-                    npl = _.cloneDeep(data.incomeStatment.incomeBeforeTaxes) as GetIncomeBeforeTaxes;
-                    this.netProfitLossType = (npl.type === "CREDIT") ? "+" : "-";
-                    this.netProfitLoss = npl.amount;
-                } else {
-                    this.netProfitLossType = '';
-                    this.netProfitLoss = 0;
-                }
-
-                if (this.totalIncome === 0 && this.totalExpense === 0) {
-                    this.resetChartData();
-                } else {
-                    this.generateCharts();
-                }
-            } else {
-                this.resetChartData();
             }
         });
     }
@@ -238,12 +184,10 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public getFilterDate(dates: any) {
         if (dates !== null) {
             this.requestInFlight = true;
-
             this.plRequest.from = dates[0];
             this.plRequest.to = dates[1];
             this.plRequest.refresh = false;
-
-            this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(this.plRequest)));
+            this.getProfitLossData();
         }
     }
 
@@ -255,7 +199,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public refreshChart() {
         this.requestInFlight = true;
         this.plRequest.refresh = true;
-        this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(this.plRequest)));
+        this.getProfitLossData();
     }
 
     /**
@@ -309,7 +253,58 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
             this.plRequest.from = this.fromDate;
             this.plRequest.to = this.toDate;
             this.plRequest.refresh = false;
-            this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(this.plRequest)));
+            this.getProfitLossData();
         }
+    }
+
+    /**
+     * This will get Profit/loss data
+     *
+     * @memberof ProfitLossComponent
+     */
+    public getProfitLossData(): void {
+        this.tlPlService.GetProfitLoss(_.cloneDeep(this.plRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.status === "success" && response?.body) {
+                this.dataFound = true;
+                let data = _.cloneDeep(response.body) as ProfitLossData;
+                let revenue;
+                let expense;
+                let npl;
+
+                if (data && data.incomeStatment && data.incomeStatment.revenue) {
+                    revenue = _.cloneDeep(data.incomeStatment.revenue) as GetRevenueResponse;
+                    this.totalIncome = revenue.amount;
+                    this.totalIncomeType = (revenue.type === "CREDIT") ? "Cr." : "Dr.";
+                } else {
+                    this.totalIncome = 0;
+                    this.totalIncomeType = '';
+                }
+
+                if (data && data.incomeStatment && data.incomeStatment.totalExpenses) {
+                    expense = _.cloneDeep(data.incomeStatment.totalExpenses) as GetTotalExpenseResponse;
+                    this.totalExpense = expense.amount;
+                    this.totalExpenseType = (expense.type === "CREDIT") ? "Cr." : "Dr.";
+                } else {
+                    this.totalExpense = 0;
+                    this.totalExpenseType = '';
+                }
+
+                if (data && data.incomeStatment && data.incomeStatment.incomeBeforeTaxes) {
+                    npl = _.cloneDeep(data.incomeStatment.incomeBeforeTaxes) as GetIncomeBeforeTaxes;
+                    this.netProfitLossType = (npl.type === "CREDIT") ? "+" : "-";
+                    this.netProfitLoss = npl.amount;
+                } else {
+                    this.netProfitLossType = '';
+                    this.netProfitLoss = 0;
+                }
+
+                if (this.totalIncome === 0 && this.totalExpense === 0) {
+                    this.resetChartData();
+                } else {
+                    this.generateCharts();
+                }
+            }
+            this.requestInFlight = false;
+        });
     }
 }

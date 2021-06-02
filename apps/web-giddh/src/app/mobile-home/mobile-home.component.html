@@ -5,7 +5,7 @@
             <p dropdownToggle (click)="openMobileSidebar()">{{companyInitials}}</p>
             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                 <li>
-                    <mobile-home-sidebar (closeMobileSidebar)="sideNavOpen ? (mobileSideNav.hide()) : ''; sideNavOpen ? closeMobileSidebar() : ''">
+                    <mobile-home-sidebar (closeMobileSidebar)="sideNavOpen ? closeMobileSidebar(mobileSideNav) : ''">
                     </mobile-home-sidebar>
                 </li>
             </ul>
@@ -16,7 +16,7 @@
                 <div class="wrap-group-account-input">
                     <span class="item-search-wrapper" *ngFor="let item of listOfSelectedGroups; let idx = index">
                         <span>
-                            <span class="item-search-name">{{item.name}}</span>
+                            <span class="item-search-name">{{item?.name}}</span>
                             <ng-container>
                                 <span>&nbsp;❯&nbsp;</span>
                             </ng-container>
@@ -44,34 +44,34 @@
                         <img *ngIf="item?.icon" src="{{imgPath}}mobile-home-icon/{{item.icon}}">
                     </div>
                     <div class="mobile-item-name">
-                        <h4>{{item.name}}</h4>
+                        <h4>{{item?.name}}</h4>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="serach-accounts-groups" *ngIf="hasGroups">
+        <div class="search-accounts-groups" *ngIf="hasGroups">
             <div class="search-groups" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn"
                 [hidden]="item.type !== 'GROUP'">
                 <div class="single-search-group cursor-pointer" *ngIf="item.type === 'GROUP'" (click)="itemSelected(item)">
                     <div class="group-icon">
                         <span class="icon-group-folder"></span>
-                       
+
                     </div>
                     <div class="group-name">
-                        <h4>{{item.name}}</h4>
+                        <h4>{{item?.name}}</h4>
                         <p *ngIf="item.parentGroups">
                             <span *ngFor="let subitem of item.parentGroups; let idx = index">
                                 <ng-container *ngIf="idx > 0">
                                     <span>&nbsp;❯&nbsp;</span>
                                 </ng-container>
-                                {{subitem.name}}
+                                {{subitem?.name}}
                             </span>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="serach-accounts-groups" *ngIf="hasAccounts">
+        <div class="search-accounts-groups" *ngIf="hasAccounts">
             <div class="search-groups search-accounts"
                 *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn"
                 [hidden]="item.type !== 'ACCOUNT'">
@@ -80,14 +80,14 @@
                         <span class="icon-account"></span>
                     </div>
                     <div class="group-name">
-                        <h4>{{item.name}}</h4>
+                        <h4>{{item?.name}}</h4>
                         <span class="account-unique-name">({{item.uniqueName}})</span>
                         <p *ngIf="item.parentGroups">
                             <span *ngFor="let subitem of item.parentGroups; let idx = index">
                                 <ng-container *ngIf="idx > 0">
                                     <span>&nbsp;❯&nbsp;</span>
                                 </ng-container>
-                                {{subitem.name}}
+                                {{subitem?.name}}
                             </span>
                         </p>
                     </div>

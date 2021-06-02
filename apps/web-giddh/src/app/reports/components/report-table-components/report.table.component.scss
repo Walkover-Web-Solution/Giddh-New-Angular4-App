@@ -3,7 +3,7 @@
     flex: 1 1 auto;
 }
 .basic > tbody > tr:hover td > a {
-    color: #1a237e;
+    color: $midnight-blue;
 }
 .basic > tbody > tr > td,
 .basic > thead > tr > th,
@@ -11,33 +11,33 @@
     white-space: nowrap !important;
 }
 .basic > tfoot > tr > th {
-    background: #e3e3e3;
+    background: $whisper;
 }
 .table-active {
-    background: #f0f0f1;
+    background: $solitude;
 }
 .width-200px {
     width: 200px;
 }
 .basic > tbody > tr > td > a {
-    color: #0c8fe6;
+    color: $primary;
 }
 .particular {
     float: right;
     margin-top: 2px;
     font-size: 19px;
-    color: #333333;
+    color: $night-rider;
 }
 .bgChange {
-    background: #f0f0f1;
+    background: $solitude;
 }
 .btn-sort {
     display: flex !important;
     width: 36px;
     height: 36px;
-    background-color: #fff;
+    background-color: $white;
     font-size: 18px;
-    color: #1a237e !important;
+    color: $midnight-blue !important;
     border: 1px solid $gainsboro;
     justify-content: center;
     align-items: center;
@@ -52,5 +52,18 @@
 .sales-register-footer {
     .particular {
         cursor: auto;
+    }
+}
+
+@media screen and (max-width:768px) {
+    .table-responsive{
+        .giddh-table.on-mobile-view{
+            tr{
+                td{
+                    white-space: normal !important;
+                    word-break: break-word;
+                }
+            }
+        }
     }
 }

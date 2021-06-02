@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy, OnChanges, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
-import { select, Store } from '@ngrx/store';
-import { takeUntil, take, single } from 'rxjs/operators';
-import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
 import { ToasterService } from '../../../services/toaster.service';
-import { GeneralService } from '../../../services/general.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest } from '../../../models/api-models/Ledger';
 import { ReportsDetailedRequestFilter, ColumnarResponseResult } from '../../../models/api-models/Reports';
@@ -40,12 +39,15 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     public paginationLimit: number = PAGINATION_LIMIT;
     /** Subject to destroy all observers  */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(public settingsFinancialYearService: SettingsFinancialYearService,
         private store: Store<AppState>,
         private toaster: ToasterService,
-        private ledgerService: LedgerService,
-        private generalService: GeneralService) {
+        private ledgerService: LedgerService) {
         this.store.pipe(takeUntil(this.destroyed$)).subscribe(state => {
             if (state && state.session && state.session.companyUniqueName) {
                 this.companyUniqueName = _.cloneDeep(state.session.companyUniqueName);
@@ -58,7 +60,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
      *
      * @memberof ColumnarReportTableComponent
      */
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.getColumnarRequestModel = new ReportsDetailedRequestFilter();
         this.getColumnarRequestModel.page = 1;
         this.getColumnarRequestModel.count = this.paginationLimit;
@@ -103,9 +105,9 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
         this.getColumnarRequestModel.from = columnarReq.from;
         this.getColumnarRequestModel.to = columnarReq.to;
         this.getColumnarRequestModel.sort = columnarReq.sort;
-
+        this.getColumnarRequestModel.branchUniqueName = columnarReq.branchUniqueName;
         this.isLoading = true;
-        this.ledgerService.exportLedgerColumnarReportTable(this.getColumnarRequestModel, this.companyUniqueName, this.accountUniquename, body).subscribe(response => {
+        this.ledgerService.exportLedgerColumnarReportTable(this.getColumnarRequestModel, this.companyUniqueName, this.accountUniquename, body).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response && response.status === 'success') {
                 if (response.body && response.body.results) {
@@ -130,17 +132,20 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
      */
     public prepareColumnForTable(): void {
         this.columnarTableColumn = [];
-        this.reportResponseResult.forEach((item, index) => {
-            if (item && item.accountNameAndBalanceMap) {
-                let columns = Object.keys(item.accountNameAndBalanceMap);
-
-                columns.forEach((element) => {
-                    if (this.columnarTableColumn.indexOf(element) === -1) {
-                        this.columnarTableColumn.push(element);
+        if(this.reportResponseResult && this.reportResponseResult.length > 0) {
+            this.reportResponseResult.forEach((item, index) => {
+                if (item && item.accountNameAndBalanceMap) {
+                    let columns = Object.keys(item.accountNameAndBalanceMap);
+                    if(columns && columns.length > 0) {
+                        columns.forEach((element) => {
+                            if (this.columnarTableColumn.indexOf(element) === -1) {
+                                this.columnarTableColumn.push(element);
+                            }
+                        });
                     }
-                });
-            }
-        });
+                }
+            });
+        }
     }
 
     /**
@@ -150,7 +155,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
      * @memberof LedgerColumnarReportTableComponent
      */
     public getTotalNoOfColumn(): number {
-        return this.columnarTableColumn.length + 16;
+        return (this.columnarTableColumn ? this.columnarTableColumn.length : 0) + 16;
     }
 
     /**

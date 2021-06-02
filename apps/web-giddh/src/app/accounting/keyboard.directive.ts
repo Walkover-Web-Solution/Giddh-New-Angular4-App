@@ -57,7 +57,7 @@ export class OnReturnDirective {
 
                 if (this.selectedField && this.selectedField === allElements[indx] && allElements[indx].value === '') {
                     // detect by or to
-                    const activatedRow: any = window.document.querySelectorAll('tr.activeRow');
+                    const activatedRow: any = window.document.querySelectorAll('tr.active-row');
                     const rowEntryType = activatedRow[0].children[0].children[0].value;
                     if (rowEntryType === 'by') {
                         target = allElements[indx + 4];
@@ -127,7 +127,7 @@ export class OnReturnDirective {
 
                 let target = allElements[indx - 1];
 
-                const activatedRow: any = window.document.querySelectorAll('tr.activeRow');
+                const activatedRow: any = window.document.querySelectorAll('tr.active-row');
                 const rowEntryType = activatedRow[0].children[0].children[0].value;
 
                 if (allElements[indx] && allElements[indx].classList.contains('debit-credit')) {

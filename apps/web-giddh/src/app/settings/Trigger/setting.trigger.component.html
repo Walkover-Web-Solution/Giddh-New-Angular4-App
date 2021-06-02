@@ -1,5 +1,5 @@
 <div class="box clearfix">
-    <h1 class="section-head pdT0">Create New Trigger(Webhook)</h1>
+    <h1 class="section-head pt-0">Create New Trigger(Webhook)</h1>
     <div class="row">
         <form (ngSubmit)="onSubmit(newTriggerObj)" class="col-lg-10 col-md-12 col-xs-12 ">
             <div class="row">
@@ -15,7 +15,9 @@
                 </div>
                 <div class="form-group col-lg-4 col-md-6 col-xs-12">
                     <label>Select Entity</label><br>
-                    <sh-select [disabled]="!newTriggerObj.entity" [forceClearReactive]="forceClearEntityList$ | async" [options]="entityOptions$ | async" name="entityOptions" [(ngModel)]="newTriggerObj.entityUniqueName" [placeholder]="'Select Entity'" [ItemHeight]="33">
+                    <sh-select [disabled]="!newTriggerObj.entity" [forceClearReactive]="forceClearEntityList$ | async" [options]="entityOptions$ | async" name="entityOptions" [(ngModel)]="newTriggerObj.entityUniqueName" [placeholder]="'Select Entity'" [ItemHeight]="33"
+                    [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                        (scrollEnd)="newTriggerObj.entity === 'account' ? handleScrollEnd() : handleGroupScrollEnd()" (dynamicSearchedQuery)="newTriggerObj.entity === 'account' ? onAccountSearchQueryChanged($event) : onGroupSearchQueryChanged($event)">
                     </sh-select>
                 </div>
                 <div class="form-group col-lg-4 col-md-6 col-xs-12">
@@ -48,11 +50,11 @@
             </div>
         </form>
     </div>
-    <div class="col-sm-12 pdT2">
+    <div class="col-sm-12 pd-t2">
         <div class="row">
             <h1 class="section-head pd-t1">Added Triggers</h1>
             <div class="table-responsive">
-                <table class="table table-bordered trigger-table basic mrB on-mobile-view">
+                <table class="table table-bordered trigger-table basic mr-b05 on-mobile-view">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -67,7 +69,7 @@
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
-                    <tbody *ngIf="availableTriggers.length">
+                    <tbody *ngIf="!isLoading && availableTriggers.length">
                         <tr *ngFor="let trigger of availableTriggers; let i = index">
                             <td data-title="#">{{i+1}}</td>
                             <td data-title="Name">
@@ -120,10 +122,17 @@
                             </td>
                         </tr>
                     </tbody>
-                    <tbody *ngIf="!availableTriggers.length" class="on-mobile-view no-records">
+                    <tbody *ngIf="!isLoading && !availableTriggers.length" class="on-mobile-view no-records">
                         <tr>
                             <td colspan="11" class="text-center empty-table">
                                 <h1>No Record Found !! {{availableTriggers}}</h1>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="isLoading">
+                        <tr>
+                            <td colspan="11" class="text-center empty-table">
+                                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
                             </td>
                         </tr>
                     </tbody>

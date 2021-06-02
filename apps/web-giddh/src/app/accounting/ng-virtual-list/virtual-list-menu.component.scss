@@ -44,11 +44,15 @@
 }
 
 .no-result-link > a {
-    color: #10aae0 !important;
+    color: $deep-sky-blue-hover !important;
 }
 
 #noresult:hover {
     background: transparent;
+}
+
+.list-item{
+    border-bottom: 1px solid $gainsboro;
 }
 
 :host ::ng-deep .total-padding {

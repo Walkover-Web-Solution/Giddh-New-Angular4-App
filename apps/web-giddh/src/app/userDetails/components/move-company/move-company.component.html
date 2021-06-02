@@ -8,8 +8,8 @@
     <div class="row mb-2">
         <div class="col-md-6">
             <label class="font-14">Select Plan<span class="text-danger">*</span></label>
-            <div class="select-caret pos-rel">
-                <sh-select placeholder="Select Plan" name="availablePlans" [options]="availablePlansOption" [isFilterEnabled]="true" [(ngModel)]="selectedPlan"></sh-select>
+            <div class="select-caret position-relative">
+                <sh-select placeholder="Select Plan" name="availablePlans" [options]="availablePlansOption" [isFilterEnabled]="true" [(ngModel)]="selectedPlan" [isRequired]="true"></sh-select>
             </div>
         </div>
     </div>

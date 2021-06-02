@@ -5,7 +5,7 @@
     width: 100%;
     border-top: 1px solid $gainsboro;
     margin-top: 15px;
-    padding-top: 20px;
+    padding-top: 20px !important;
     li{
         border-bottom: none;
         display: flex;
@@ -14,6 +14,7 @@
         text-align: left;
         align-items: center;
         margin-bottom: 10px;
+        border-bottom: none !important;
     }
     .custom-select{
         width: 40%;
@@ -26,7 +27,7 @@
             width: 100%;
             padding-right: 0px !important;
         }
-        .select_drop i {
+        .select-drop i {
             background: $white;
         }
     }
@@ -34,7 +35,7 @@
         font-size: 14px;
         line-height: 1.5;
         border-radius: 3px;
-        background: #eee;
+        background: $whisper-light;
         border: 1px solid $gainsboro;
         width: 30px;
         height: 30px;
@@ -44,7 +45,7 @@
     }
     .user-name-email{
         width: 40%;
-        color:$extra-dark-gray;
+        color: $night-rider !important;
         display: flex;
         white-space: normal;
         word-break: break-all;
@@ -64,9 +65,10 @@
     }
 }
 .selected-permission{
-    width: calc(100% - 96px) !important;
-    min-width:200px;
-    margin-right:10px;
+    width: calc(100% - 123px) !important;
+    min-width: 200px;
+    margin-right: 10px;
+    margin-left: 0 !important;
 }
 .btn-share{
     float: right;

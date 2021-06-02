@@ -33,7 +33,7 @@
             </div>
         </div>
         <!-- <div class="clearfix mb-2" *ngIf="activeCompany && activeCompany?.subscription && activeCompany?.subscription?.planDetails">
-            <div class="box mt-15 box-border plan-row-wrapper">
+            <div class="box mr-t15 box-border plan-row-wrapper">
                 <div class="row d-flex justify-content-between align-items-center xs-d-block plan-row">
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <p class="bold font-14">{{activeCompany.subscription.planDetails.name}}</p>
@@ -47,15 +47,15 @@
                         </ul>
                     </div>
                     <div class="col-md-3 col-sm-3 col-xs-12 text-right trial-plan-state">
-                        <div class="font-14" [ngClass]="{'active': calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'}" *ngIf="activeCompany.subscription.status==='trial'"><span class="font-26" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) !== 'Active'">{{calculateRemainingDays(activeCompany.subscription.expiry)}}</span> <span class="green-dote" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'"></span> {{calculateRemainingDays(activeCompany.subscription.expiry) === 'Active' ? 'Active' : ""}} </div>
-                        <div class="active font-14" *ngIf="activeCompany.subscription.status==='active'"><span class="green-dote"></span> {{activeCompany.subscription.status | titlecase}} </div>
-                        <div class="text-danger font-14" *ngIf="activeCompany.subscription.status==='expired'"><span class="red-dote"></span> {{activeCompany.subscription.status | titlecase}} </div>
+                        <div class="font-14" [ngClass]="{'active': calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'}" *ngIf="activeCompany.subscription.status==='trial'"><span class="font-26" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) !== 'Active'">{{calculateRemainingDays(activeCompany.subscription.expiry)}}</span> <span class="green-dot" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'"></span> {{calculateRemainingDays(activeCompany.subscription.expiry) === 'Active' ? 'Active' : ""}} </div>
+                        <div class="active font-14" *ngIf="activeCompany.subscription.status==='active'"><span class="green-dot"></span> {{activeCompany.subscription.status | titlecase}} </div>
+                        <div class="text-danger font-14" *ngIf="activeCompany.subscription.status==='expired'"><span class="red-dot"></span> {{activeCompany.subscription.status | titlecase}} </div>
                     </div>
                 </div>
             </div>
         </div> -->
 
-        <div class="box trial-plan-section mt-15">
+        <div class="box trial-plan-section mr-t15">
             <div class="clearfix">
                 <div class="row d-flex sm-d-block">
                     <div class="col-lg-7 col-md-12 col-sm-12">
@@ -123,7 +123,13 @@
 
                                             <tr>
                                                 <th>Subscription Price</th>
-                                                <td>{{seletedUserPlans?.planDetails?.amount | number}}</td>
+                                                <td>
+                                                    <!-- {{seletedUserPlans?.planDetails?.amount | number}} -->
+                                                    <span class="d-inline-flex">
+                                                        <amount-field [amount]="(seletedUserPlans?.planDetails?.amount |  number)" [currencySymbol]="false" [currencyCode]="false" [useGiddhCurrencyPipe]="false">
+                                                        </amount-field>
+                                                    </span>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th>Total Companies</th>
@@ -159,7 +165,7 @@
                                         </thead>
                                         <tbody *ngIf="seletedUserPlans">
                                             <tr>
-                                                <!-- <td data-title="Date">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td> -->
+                                                <!-- <td data-title="Date">{{ moment(transaction.from, giddhDateFormat).format('MMM - YY')}}</td> -->
                                                 <td data-title="Consumptions">{{ seletedUserPlans?.totalTransactions ? (seletedUserPlans?.totalTransactions | number) : 0 }}</td>
                                                 <td data-title="Balance">{{ seletedUserPlans?.remainingTransactions || 0 }}</td>
                                                 <td data-title="Additional Charges" class="text-right">{{ seletedUserPlans?.additionalCharges? (seletedUserPlans?.additionalCharges | number) : 0 }}</td>
@@ -169,7 +175,7 @@
                                 </div>
 
                             </div>
-                            <div class="mt-05">
+                            <div class="mr-t05">
                                 <p><small>* Additional charges on transactions above
                                         {{seletedUserPlans?.planDetails?.transactionLimit | number}} @
                                         {{seletedUserPlans?.planDetails?.ratePerExtraTransaction | number}}
@@ -186,15 +192,15 @@
                                 <h2 class="section-head pb-0">Associated Companies</h2>
                                 <div class="clearfix">
                                     <div class="active d-inline-block middle" *ngIf="activeCompany?.subscription?.status === 'active' || calculateRemainingDays(activeCompany?.subscription?.expiry) === 'Active'">
-                                        <span class="green-dote"> </span> Active
+                                        <span class="green-dot"> </span> Active
                                     </div>
                                     <div class="text-warning font-14 d-inline-block middle" *ngIf="activeCompany?.subscription?.status === 'trial' && calculateRemainingDays(activeCompany?.subscription?.expiry) !== 'Active'">
-                                        <span class="orange-dote"> </span> Trial
+                                        <span class="orange-dot"> </span> Trial
                                     </div>
                                     <div class="text-danger d-inline-block middle" *ngIf="activeCompany?.subscription?.status === 'expired'">
-                                        <span class="red-dote"> </span> Expired
+                                        <span class="red-dot"> </span> Expired
                                     </div>
-                                    <!-- <div class="btn-group d-inline-block custom-dropdown pt-05 ml-1 middle" dropdown
+                                    <!-- <div class="btn-group d-inline-block custom-dropdown pd-t05 ml-1 middle" dropdown
                                         placement="bottom right">
                                         <button id="button-alignment" dropdownToggle type="button"
                                             class="dropdown-toggle" aria-controls="dropdown-alignment">
@@ -214,7 +220,7 @@
                                 </div>
                             </div>
                             <div class="clearfix associated-companies-list" container="body">
-                                <div class="mt-15 mb-1 pl-2 pr-2 pr-1 search-company-here" *ngIf="subscriptions">
+                                <div class="mr-t15 mr-b1 pl-2 pr-2 pr-1 search-company-here" *ngIf="subscriptions">
                                     <div class="form-group custom-input-search">
                                         <i class="icon-search"></i>
                                         <input type="search" class="form-control" [(ngModel)]="searchString" (ngModelChange)="filterCompanyList($event)" placeholder="Search Company here">
@@ -228,10 +234,10 @@
                                                     <span>{{i+1}}</span>
                                                     <div class="d-flex associated-company-name">
                                                         <p>
-                                                            <img src="assets/images/blue-check.svg" class="mr-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">
-                                                            {{company.name}} ({{company.alias}})
+                                                            <img src="assets/images/blue-check.svg" class="mr-r05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">
+                                                            {{company.name}} {{(company.alias) ? "(" + company.alias + ")" : ""}}
                                                         </p>
-                                                        <p class="font-12 mt-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">(Current Company)</p>
+                                                        <p class="font-12 mr-t05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">(Current Company)</p>
                                                     </div>
                                                 </a>
 
@@ -270,7 +276,7 @@
             </div>
 
             <div class="clearfix mr-t2 relative">
-                <div class="transaction-popup mb-1" *ngIf="seletedUserPlans?.additionalCharges >0">
+                <div class="transaction-popup mr-b1" *ngIf="seletedUserPlans?.additionalCharges >0">
                     <p>You have crossed transactions limit of your </p>
                     <p><strong>Professional Plan subscribed on {{seletedUserPlans?.startedAt}}!</strong></p>
                     <p><small>Please renew your plan or pay now to continue subscription.</small></p>
@@ -283,7 +289,7 @@
                 <div class="col-sm-7 transaction-list">
                     <div class="box clearfix mr-t2 no-padding">
                         <div class="table-responsive">
-                            <table class="table basic mr0 subscription-table">
+                            <table class="table basic m-0 subscription-table">
                                 <thead>
                                     <tr>
                                         <th>Date</th> <span class="text-light-2">(previous+current)</span>
@@ -294,10 +300,10 @@
                                 </thead>
                                 <tbody *ngIf="seletedUserPlans">
                                     <tr>
-                                        <td class="professional-name">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td>
+                                        <td class="professional-name">{{ moment(transaction.from, giddhDateFormat).format('MMM - YY')}}</td>
                                         <td>{{ seletedUserPlans?.totalTransactions ? seletedUserPlans?.totalTransactions : 0 }}
                                         </td>
-                                        <span class="text-light ml-05">({{transaction.previousTransactionCount}}+{{transaction.currentTransactionCount}})</span>
+                                        <span class="text-light mr-l05">({{transaction.previousTransactionCount}}+{{transaction.currentTransactionCount}})</span>
                                         <td>{{ seletedUserPlans?.balance? seletedUserPlans?.balance: 0 }}</td>
                                         <td class="text-danger">
                                             {{ seletedUserPlans?.additionalCharges? seletedUserPlans?.additionalCharges: 0 }}
@@ -321,7 +327,7 @@
                             <h3>Companies Name + Total Transactions (till today)</h3>
                         </div>
                         <div class="clearfix">
-                            <div class="mt-1 mb-1 mr-2 ml-2">
+                            <div class="mt-1 mr-b1 mr-2 ml-2">
                                 <input type="search" class="form-control" [(ngModel)]="srchString" (ngModelChange)="filterCompanyList($event)" placeholder="Search Company here">
                             </div>
                             <div class="company-list" *ngIf="subscriptions">
@@ -351,9 +357,9 @@
                         </ul>
                     </div>
                     <div class="col-md-3 col-sm-3 col-xs-12 text-right trial-plan-state">
-                        <div class="font-14" [ngClass]="{'active': calculateRemainingDays(item?.expiry) === 'Active'}" *ngIf="item?.status==='trial'"><span class="font-26" *ngIf="calculateRemainingDays(item?.expiry) !== 'Active'">{{calculateRemainingDays(item?.expiry)}}</span> <span class="green-dote" *ngIf="calculateRemainingDays(item?.expiry) === 'Active'"></span> {{calculateRemainingDays(item?.expiry) === 'Active' ? 'Active' : ""}} </div>
-                        <div class="active font-14" *ngIf="item?.status==='active'"><span class="green-dote"></span> {{item?.status | titlecase}} </div>
-                        <div class="text-danger font-14" *ngIf="item?.status==='expired'"><span class="red-dote"></span> {{item?.status | titlecase}} </div>
+                        <div class="font-14" [ngClass]="{'active': calculateRemainingDays(item?.expiry) === 'Active'}" *ngIf="item?.status==='trial'"><span class="font-26" *ngIf="calculateRemainingDays(item?.expiry) !== 'Active'">{{calculateRemainingDays(item?.expiry)}}</span> <span class="green-dot" *ngIf="calculateRemainingDays(item?.expiry) === 'Active'"></span> {{calculateRemainingDays(item?.expiry) === 'Active' ? 'Active' : ""}} </div>
+                        <div class="active font-14" *ngIf="item?.status==='active'"><span class="green-dot"></span> {{item?.status | titlecase}} </div>
+                        <div class="text-danger font-14" *ngIf="item?.status==='expired'"><span class="red-dot"></span> {{item?.status | titlecase}} </div>
                     </div>
                 </div>
             </div>
@@ -361,12 +367,7 @@
     </div>
 </ng-container>
 <div *ngIf="isLoading">
-    <div class="no-data mr-t2 loader-main">
-        <div class="spinner2">
-            <div class="cube1"></div>
-            <div class="cube2"></div>
-        </div>
-    </div>
+    <giddh-page-loader></giddh-page-loader>
 </div>
 
 <!-- Modal start -->
@@ -391,7 +392,7 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table basic mr0 ">
+            <table class="table basic m-0 ">
                 <thead>
                     <tr>
                         <th>Date</th>
@@ -400,7 +401,7 @@
                     </tr>
 
                     <tr *ngFor="let companyTransaction of companyTransactions">
-                        <td>{{ moment(companyTransaction.from, 'DD-MM-YYYY').format('MMM') }}</td>
+                        <td>{{ moment(companyTransaction.from, giddhDateFormat).format('MMM') }}</td>
                         <td>{{ companyTransaction.totalTransactionCount }} ({{companyTransaction.previousTransactionCount}}+{{companyTransaction.currentTransactionCount}})</td>
                         <td>{{ companyTransaction.totalPlanTransactionCount }} ({{companyTransaction.previousPlanTransactionCount}}+{{companyTransaction.currentPlanTransactionCount}})</td>
                     </tr>

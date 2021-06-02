@@ -37,8 +37,8 @@ export class HistoryChartComponent implements OnInit {
     // private AllSeries: IndividualSeriesOptionsExtension[];
 
     constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
-        // this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        // this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
+        // this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
+        // this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
 
         // this.AllSeries = [{
         //     name: 'Expense',
@@ -235,14 +235,14 @@ export class HistoryChartComponent implements OnInit {
         //                     if (cmp.financialYears.length > 1) {
         //                         financialYears = cmp.financialYears.filter(cm => cm.uniqueName !== this.activeFinancialYear.uniqueName);
         //                         financialYears = _.filter(financialYears, (it: ActiveFinancialYear) => {
-        //                             let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
-        //                             let b = moment(it.financialYearEnds, 'DD-MM-YYYY');
+        //                             let a = moment(this.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT);
+        //                             let b = moment(it.financialYearEnds, GIDDH_DATE_FORMAT);
 
         //                             return b.diff(a, 'days') < 0;
         //                         });
         //                         financialYears = _.orderBy(financialYears, (p: ActiveFinancialYear) => {
-        //                             let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
-        //                             let b = moment(p.financialYearEnds, 'DD-MM-YYYY');
+        //                             let a = moment(this.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT);
+        //                             let b = moment(p.financialYearEnds, GIDDH_DATE_FORMAT);
         //                             return b.diff(a, 'days');
         //                         }, 'desc');
         //                         this.lastFinancialYear = financialYears[0];

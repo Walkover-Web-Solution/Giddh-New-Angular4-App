@@ -2,9 +2,9 @@
 @import "../../assets/css/color.scss";
 /*typography styles*/
 
-body.ununresponsive {
+body.unresponsive {
     padding: 0;
-    background: #2c2c43;
+    background: $valhalla;
 }
 
 .intro.login {
@@ -40,7 +40,7 @@ body.ununresponsive {
 }
 
 .login .brand-heading {
-    color: white;
+    color: $white;
     font-size: 40px;
     margin-bottom: 80px;
 }
@@ -85,19 +85,19 @@ body.ununresponsive {
 }
 
 .twitter {
-    background: #11b1e5;
+    background: $medium-spring-blue;
 }
 
 .google {
-    background: #de4d3c;
+    background: $light-maroon;
 }
 
 .linkedin {
-    background: #0e78aa;
+    background: $medium-black-cyan;
 }
 
 .mobile {
-    background: #26263a;
+    background: $valhalla;
 }
 
 .btn-login {
@@ -141,13 +141,21 @@ body.ununresponsive {
 .giddh-spinner {
     animation: rotate 1.5s infinite linear;
     background: #221f1f none repeat scroll 0 0;
-    border: 7px solid #c63b13;
+    border: 7px solid $red;
     border-radius: 50%;
     box-shadow: 0 -10px 0 14px $white inset;
     box-sizing: border-box;
     height: 60px;
     width: 60px;
     margin: 0 auto 20px;
+}
+
+.form-inline{
+    width: 80px;
+}
+
+.input-width-mobile{
+    width: calc(100% - 80px);
 }
 
 @keyframes rotate {
@@ -165,15 +173,15 @@ body.ununresponsive {
 }
 
 .btn-login.btn-default {
-    color: #333;
+    color: $night-rider;
     background-color: $white;
-    border-color: #ccc;
+    border-color: $gainsboro;
 }
 
 .btn-login.btn-default:hover {
-    color: #000 !important;
+    color: $black !important;
     background-color: $white;
-    border-color: #ccc;
+    border-color: $gainsboro;
     box-shadow: none;
 }
 
@@ -194,7 +202,7 @@ button.close {
     font-size: 21px;
     font-weight: 700;
     line-height: 1;
-    color: #db7f53;
+    color: $light-maroon;
     text-shadow: none;
     opacity: 1;
 }
@@ -204,7 +212,7 @@ button.close {
 } */
 
 .email {
-    background: #10aae0;
+    background: $deep-sky-blue-hover;
 }
 
 /************* end login page *************/
@@ -242,7 +250,7 @@ h1 {
 .slide-content {
     padding: 0 100px;
     color: $white;
-    background: #2c2c43;
+    background: $valhalla;
     justify-content: space-evenly;
     text-align: left;
     flex-direction: column;
@@ -250,7 +258,7 @@ h1 {
 }
 
 .login-box h1 {
-    color: #0f0f27;
+    color: $russian-black;
     font-weight: 500;
 }
 
@@ -261,7 +269,7 @@ h1 {
 }
 
 small {
-    color: #333;
+    color: $night-rider;
 }
 
 /* social-login */
@@ -312,7 +320,7 @@ small {
     position: absolute;
     width: 40px;
     left: 0;
-    background: #fff8eb;
+    background: $floral-white;
     line-height: 38px;
     vertical-align: middle;
 }
@@ -324,13 +332,13 @@ small {
 
 .login-option,
 .login-option a {
-    color: #0c5fc1;
+    color: $primary;
     margin-top: 55px;
     font-weight: 500;
 }
 
 .login-option a {
-    border-bottom: 2px dotted #0c5fc1;
+    border-bottom: 2px dotted $primary;
 }
 
 .slide-content h1 {
@@ -400,7 +408,7 @@ small {
 }
 
 .hash-tag {
-    color: #e33536;
+    color: $red;
 }
 
 .blockquote-ico {
@@ -429,7 +437,7 @@ small {
     bottom: -38px;
     border-radius: 0;
     padding: 4px;
-    border: 1px solid #ddd;
+    border: 1px solid $gainsboro;
 }
 
 .hint:before {
@@ -440,7 +448,7 @@ small {
     position: absolute;
     border-top: 8px solid transparent;
     border-bottom: 8px solid transparent;
-    border-left: 8px solid #dddddd;
+    border-left: 8px solid $gainsboro;
     /* right: -8px; */
     /* top: 3px; */
     left: 6px;

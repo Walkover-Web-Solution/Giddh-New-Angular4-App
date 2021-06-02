@@ -45,7 +45,7 @@ export class AddCompanyComponent implements OnInit {
         if (this.allAssociatedCompanies && this.allAssociatedCompanies.length > 0) {
             this.allAssociatedCompanies.forEach(company => {
                 // country should be same and should not have same plan
-                if (this.activeCompany.subscription.planDetails.countries.includes(company.country) && this.activeCompany.subscription.planDetails.uniqueName !== company.subscription.planDetails.uniqueName) {
+                if (company.subscription && company.subscription.country && this.activeCompany.subscription.planDetails.countries.includes(company.subscription.country.countryName) && this.activeCompany.subscription.planDetails.uniqueName !== company.subscription.planDetails.uniqueName) {
                     this.associatedCompanies[company.uniqueName] = company;
                     this.associatedCompaniesOption.push({ label: company.name, value: company.uniqueName });
                 }

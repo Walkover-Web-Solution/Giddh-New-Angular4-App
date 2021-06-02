@@ -1,33 +1,40 @@
 @import "../../assets/css/color.scss";
 
+.inventory-main{
+    min-height:100%;
+}
+
 .inventory-control ::ng-deep.nav > li > a {
     padding: 2px 0px !important;
     margin-right: 35px !important;
     border-bottom: 4px solid transparent !important;
-    color: black !important;
+    color: $black !important;
     border-top: transparent !important;
     border-right: transparent !important;
     border-left: transparent !important;
     font-size: 14px;
+    height: 36px;
 }
 
 .inventory-control ::ng-deep.nav.nav-tabs {
     margin-bottom: 0;
     padding: 0 0px 0 15px !important;
-    background-color: #fff;
-    z-index: 9;
-    position: relative;
-    top: -4px;
-    background-color: #f7f8fa;
+    background-color: $white;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 0px 0 50px !important;
+    border-bottom:1px solid $gainsboro;
 }
 .inventory-control ::ng-deep.nav-tabs > li > a:hover {
     border-color: transparent !important;
     color: $deep-sky-blue !important;
 }
 .inventory-control ::ng-deep.nav-tabs > ::ng-deep li.active > a,
-.nav-tabs > ::ng-deep li.active > a:focus,
-::ng-deep.nav-tabs > li.active > a:hover {
-    color: #1c1c1c !important;
+.inventory-control .nav-tabs > ::ng-deep li.active > a:focus,
+.inventory-control ::ng-deep.nav-tabs > li.active > a:hover {
+    color: $nero !important;
     border-bottom: 4px solid $deep-sky-blue !important;
     cursor: pointer !important;
     background-color: unset !important;
@@ -44,7 +51,7 @@
     margin-bottom: 10px;
 }
 .inventory-control ::ng-deep.nav > li > a:focus,
-::ng-deep.nav > li > a:hover {
+.inventory-control ::ng-deep.nav > li > a:hover {
     background-color: unset !important;
 }
 
@@ -81,10 +88,10 @@
 }
 @media(max-width:767px){
     .inventory-control ::ng-deep.nav.nav-tabs {
-        position: fixed;
+        position: fixed !important;
         width: 100%;
         top: 90px;
-        padding-top: 10px !important;
+        padding: 5px 0px 0 15px !important;
     }
 }
 @media(max-width:1024px){
@@ -92,26 +99,29 @@
         display: flex;
     }
 }
-
-
-@media (max-width:445px){
-.inventory-control .container-fluid {
-    .branch-warehouse-filter {
-        width: 100%;
-        sh-select{
-            min-width: auto;
-        }
-    }
-    .branch-filter {
-        margin-right: 0px;
-        width: 100% !important;
-    }
-    .warehouse-filter{
-        max-width: auto;
-        width: 100%;
-        margin-left:15px;
+@media(max-width:575px){
+    .wrap-top-inventory{
+        flex-direction: column;
     }
 }
+@media (max-width:445px){
+    .inventory-control .container-fluid {
+        .branch-warehouse-filter {
+            width: 100%;
+            sh-select{
+                min-width: auto;
+            }
+        }
+        .branch-filter {
+            margin-right: 0px;
+            width: 100% !important;
+        }
+        .warehouse-filter{
+            max-width: auto;
+            width: 100%;
+            margin-left:15px;
+        }
+    }
 }
 
 @media(max-width:325px){

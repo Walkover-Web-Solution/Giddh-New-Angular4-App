@@ -1,18 +1,20 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
 import { ProfitLossData } from '../../../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from '../../../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
-	selector: 'pl-grid',  // <home></home>
+	selector: 'pl-grid',
     templateUrl: './pl-grid.component.html',
     styleUrls: [`./pl-grid.component.scss`],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
+export class PlGridComponent implements OnInit, OnChanges, OnDestroy {
 	public noData: boolean;
 	public showClearSearch: boolean = false;
 	@Input() public search: string = '';
@@ -27,17 +29,24 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
 	@ViewChild('searchInputEl', {static: true}) public searchInputEl: ElementRef;
 	public moment = moment;
 	public plSearchControl: FormControl = new FormControl();
-
-	// }
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
 	constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
-		//
+		
 	}
 
 	public ngOnInit() {
 		this.plSearchControl.valueChanges.pipe(
 			debounceTime(700),
-			distinctUntilChanged())
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$))
 			.subscribe((newValue) => {
 				this.searchInput = newValue;
 				this.searchChange.emit(this.searchInput);
@@ -118,7 +127,9 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
 		this.showClearSearch = true;
 
 		setTimeout(() => {
-			this.searchInputEl.nativeElement.focus();
+            if(this.searchInputEl && this.searchInputEl.nativeElement) {
+                this.searchInputEl.nativeElement.focus();
+            }
 		}, 200);
 	}
 
@@ -131,9 +142,10 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
 	//     this.toggleVisibility(grp.childGroups, isVisible);
 	//   });
 
-	public ngAfterViewInit() {
-		//
-	}
+	public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 
 	public clickedOutside(event, el) {
 		if (this.plSearchControl.value !== null && this.plSearchControl.value !== '') {

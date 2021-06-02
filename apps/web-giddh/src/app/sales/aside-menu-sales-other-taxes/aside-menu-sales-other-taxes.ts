@@ -10,6 +10,8 @@ import { TaxResponse } from '../../models/api-models/Company';
 })
 
 export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Output() public closeModal: EventEmitter<boolean> = new EventEmitter();
     @Input() public otherTaxesModal: SalesOtherTaxesModal;
     @Input() public taxes: TaxResponse[] = [];
@@ -18,15 +20,17 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
     public taxesOptions: IOption[] = [];
     public selectedTaxUniqueName: string;
 
-    public calculationMethodOptions: IOption[] = [
-        { label: 'On Taxable Value (Amt - Dis)', value: 'OnTaxableAmount' },
-        { label: 'On Total Value (Taxable + Gst + Cess)', value: 'OnTotalAmount' },
-    ];
+    public calculationMethodOptions: IOption[];
 
     constructor() {
     }
 
     ngOnInit() {
+        this.calculationMethodOptions = [
+            { label: this.commonLocaleData?.app_on_taxable_value, value: 'OnTaxableAmount' },
+            { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' },
+        ];
+
         this.taxesOptions = this.taxes
             .filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))
             .map(m => {
@@ -36,7 +40,7 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if ('otherTaxesModal' in changes && changes.otherTaxesModal.currentValue !== changes.otherTaxesModal.previousValue) {
-
+            this.otherTaxesModal = changes.otherTaxesModal.currentValue;
             if (this.otherTaxesModal.appliedOtherTax) {
                 this.selectedTaxUniqueName = this.otherTaxesModal.appliedOtherTax.uniqueName;
                 this.applyTax({ label: this.otherTaxesModal.appliedOtherTax.name, value: this.otherTaxesModal.appliedOtherTax.uniqueName });
@@ -50,7 +54,6 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
             this.otherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
             let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
             this.isDisabledCalMethod = ['tdsrc', 'tdspay'].includes(taxType);
-            this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
         }
     }
 

@@ -3,12 +3,9 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { FormBuilder, FormGroup, AbstractControl, FormArray, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { AccountsAction } from '../../../actions/accounts.actions';
-import { CompanyActions } from '../../../actions/company.actions';
 import { CommonActions } from '../../../actions/common.actions';
 import { ToasterService } from '../../../services/toaster.service';
-import { takeUntil, take, distinctUntilChanged } from 'rxjs/operators';
-import { CompanyService } from '../../../services/companyService.service';
+import { takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
 import { IOption } from '../../../theme/ng-select/ng-select';
@@ -22,61 +19,15 @@ import { CountryRequest, OnboardingFormRequest } from '../../../models/api-model
 import { digitsOnly } from '../../../shared/helpers';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
+import { EMAIL_VALIDATION_REGEX } from '../../../app.constant';
 
 @Component({
     selector: 'aside-sender-receiver-details-pane',
-    styles: [`
-    :host {
-      position: fixed;
-      left: auto;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: 600px;
-      max-width: 100%;
-      z-index: 99999;
-    }
-
-    #close {
-      display: none;
-    }
-
-    :host.in #close {
-      display: block;
-    position: absolute;
-    left: auto;
-    top: 14px;
-    z-index: 5;
-    border: 0;
-    border-radius: 0;
-    right: 0;
-    background: transparent;
-    color: #fff;
-    font-size: 20px;
-    }
-
-    :host .container-fluid {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    :host .aside-pane {
-      width: 600px;
-      max-width: 600px;
-    }
-
-    .aside-body {
-      margin-bottom: 80px;
-    }
-.aside-pane{
-  padding:0;
-}
-  `],
     templateUrl: './aside-sender-receiver-details.component.html',
     styleUrls: ['./aside-sender-reciver-details.component.scss'],
 })
-export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChanges, OnDestroy {
 
+export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChanges, OnDestroy {
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
@@ -91,18 +42,16 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     @Input() public isDebtorCreditor: boolean = true;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
+    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
     @ViewChild('autoFocus', {static: true}) public autoFocus: ElementRef;
 
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
-
-
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
-    public companiesList$: Observable<CompanyResponse[]>;
-    public activeCompany: CompanyResponse;
     public moreGstDetailsVisible: boolean = false;
     public gstDetailsLength: number = 3;
     public isMultipleCurrency: boolean = false;
@@ -124,12 +73,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     public isGstValid: boolean;
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
-    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-
-    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
-    constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-        private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
-        this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
+    constructor(private _fb: FormBuilder, private store: Store<AppState>, private _toaster: ToasterService, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.getCountry();
         this.getCurrency();
@@ -140,21 +84,23 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         }
     }
 
-
     selectTab(tabId: number) {
-        this.staticTabs.tabs[tabId].active = true;
+        if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[tabId]) {
+            this.staticTabs.tabs[tabId].active = true;
+        }
     }
 
     closeAsidePane(event) {
         this.closeAsideEvent.emit(event);
     }
+
     public ngOnInit() {
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
         }
         this.initializeNewForm();
 
-        this.addAccountForm.get('hsnOrSac').valueChanges.subscribe(a => {
+        this.addAccountForm.get('hsnOrSac').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
             if (a === 'hsn') {
@@ -169,12 +115,11 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         });
 
         // get country code value change
-        this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
+        this.addAccountForm.get('country').get('countryCode').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
 
             if (a) {
                 const addresses = this.addAccountForm.get('addresses') as FormArray;
                 let addressFormArray = (this.addAccountForm.controls['addresses'] as FormArray);
-                let lengthofFormArray = addressFormArray.controls.length;
                 if (a !== 'IN') {
                     this.isIndia = false;
                     Object.keys(addressFormArray.controls).forEach((key) => {
@@ -193,43 +138,23 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             }
         });
         // get openingblance value changes
-        this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
+        this.addAccountForm.get('openingBalance').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
-                this.addAccountForm.get('openingBalanceType').patchValue('');
+                this.addAccountForm.get('openingBalanceType')?.patchValue('');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
-                this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
-            }
-        });
-        this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {
-            if (a) {
-                this.companiesList$.pipe(take(1)).subscribe(companies => {
-                    this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
-                    if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
-                        this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
-                    }
-                });
+                this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
             }
         });
 
-        this.store.select(s => s.session).pipe(takeUntil(this.destroyed$)).subscribe((session) => {
-            let companyUniqueName: string;
-            if (session.companyUniqueName) {
-                companyUniqueName = _.cloneDeep(session.companyUniqueName);
-            }
-            if (session.companies && session.companies.length) {
-                let companies = _.cloneDeep(session.companies);
-                let currentCompany = companies.find((company) => company.uniqueName === companyUniqueName);
-                if (currentCompany) {
-                    // set country
-                    this.setCountryByCompany(currentCompany);
-                    this.companyCurrency = _.clone(currentCompany.baseCurrency);
-                    this.isMultipleCurrency = _.clone(currentCompany.isMultipleCurrency);
-                    // if (this.isMultipleCurrency) {
-                    //     this.addAccountForm.get('currency').enable();
-                    // } else {
-                    //     this.addAccountForm.get('currency').disable();
-                    // }
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                if (activeCompany.countryV2 !== undefined && activeCompany.countryV2 !== null) {
+                    this.getStates(activeCompany.countryV2.alpha2CountryCode);
                 }
+
+                this.setCountryByCompany(activeCompany);
+                this.companyCurrency = _.clone(activeCompany.baseCurrency);
+                this.isMultipleCurrency = _.clone(activeCompany.isMultipleCurrency);
             }
         });
 
@@ -242,21 +167,21 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         //     this.isAccountNameAvailable$.subscribe(a => {
         //       if (a !== null && a !== undefined) {
         //         if (a) {
-        //           this.addAccountForm.patchValue({ uniqueName: val });
+        //           this.addAccountForm?.patchValue({ uniqueName: val });
         //         } else {
         //           let num = 1;
-        //           this.addAccountForm.patchValue({ uniqueName: val + num });
+        //           this.addAccountForm?.patchValue({ uniqueName: val + num });
         //         }
         //       }
         //     });
         //   } else {
-        //     this.addAccountForm.patchValue({ uniqueName: '' });
+        //     this.addAccountForm?.patchValue({ uniqueName: '' });
         //   }
         // });
 
         if (this.autoFocus !== undefined) {
             setTimeout(() => {
-                this.autoFocus.nativeElement.focus();
+                this.autoFocus?.nativeElement.focus();
             }, 50);
         }
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
@@ -291,16 +216,16 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     public setCountryByCompany(company: CompanyResponse) {
         let result: IContriesWithCodes = contriesWithCodes.find((c) => c.countryName === company.country);
         if (result) {
-            this.addAccountForm.get('country').get('countryCode').patchValue(result.countryflag);
-            this.addAccountForm.get('mobileCode').patchValue(result.value);
+            this.addAccountForm.get('country').get('countryCode')?.patchValue(result.countryflag);
+            this.addAccountForm.get('mobileCode')?.patchValue(result.value);
             let stateObj = this.getStateGSTCode(this.stateList, result.countryflag)
-            this.addAccountForm.get('currency').patchValue(company.baseCurrency);
+            this.addAccountForm.get('currency')?.patchValue(company.baseCurrency);
             this.getOnboardingForm(result.countryflag);
             this.companyCountry = result.countryflag;
         } else {
-            this.addAccountForm.get('country').get('countryCode').patchValue('IN');
-            this.addAccountForm.get('mobileCode').patchValue('91');
-            this.addAccountForm.get('currency').patchValue('IN');
+            this.addAccountForm.get('country').get('countryCode')?.patchValue('IN');
+            this.addAccountForm.get('mobileCode')?.patchValue('91');
+            this.addAccountForm.get('currency')?.patchValue('IN');
             this.companyCountry = 'IN';
             this.getOnboardingForm('IN');
         }
@@ -316,7 +241,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             openingBalance: [0],
             mobileNo: [''],
             mobileCode: [''],
-            email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
+            email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
             companyName: [''],
             attentionTo: [''],
             description: [''],
@@ -362,8 +287,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
 
         let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
-            control.get('stateCode').patchValue(null);
-            control.get('state').get('code').patchValue(null);
+            control.get('stateCode')?.patchValue(null);
+            control.get('state').get('code')?.patchValue(null);
             control.get('gstNumber').setValue("");
         }
     }
@@ -395,9 +320,9 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         if (val) {
             let addresses = this.addAccountForm.get('addresses') as FormArray;
             for (let control of addresses.controls) {
-                control.get('isDefault').patchValue(false);
+                control.get('isDefault')?.patchValue(false);
             }
-            addresses.controls[i].get('isDefault').patchValue(true);
+            addresses.controls[i].get('isDefault')?.patchValue(true);
         }
     }
 
@@ -415,12 +340,12 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
                 let s = state.find(st => st.value === stateCode);
                 statesEle.setDisabledState(false);
                 if (s) {
-                    gstForm.get('stateCode').patchValue(s.value);
-                    gstForm.get('state').get('code').patchValue(s.value);
+                    gstForm.get('stateCode')?.patchValue(s.value);
+                    gstForm.get('state').get('code')?.patchValue(s.value);
                     statesEle.setDisabledState(true);
                 } else {
-                    gstForm.get('stateCode').patchValue(null);
-                    gstForm.get('state').get('code').patchValue(null);
+                    gstForm.get('stateCode')?.patchValue(null);
+                    gstForm.get('state').get('code')?.patchValue(null);
                     statesEle.setDisabledState(false);
                     this._toaster.clearAllToaster();
                     this._toaster.warningToast('Invalid GSTIN.');
@@ -428,8 +353,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             });
         } else {
             statesEle.setDisabledState(false);
-            gstForm.get('stateCode').patchValue(null);
-            gstForm.get('state').get('code').patchValue(null);
+            gstForm.get('stateCode')?.patchValue(null);
+            gstForm.get('state').get('code')?.patchValue(null);
 
         }
     }
@@ -448,7 +373,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
 
     public openingBalanceTypeChnaged(type: string) {
         if (Number(this.addAccountForm.get('openingBalance').value) > 0) {
-            this.addAccountForm.get('openingBalanceType').patchValue(type);
+            this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
     }
 
@@ -543,7 +468,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
 
     public closingBalanceTypeChanged(type: string) {
         if (Number(this.addAccountForm.get('closingBalanceTriggerAmount').value) > 0) {
-            this.addAccountForm.get('closingBalanceTriggerAmountType').patchValue(type);
+            this.addAccountForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
     }
 
@@ -577,8 +502,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     public selectedState(gstForm: FormGroup, event) {
         if (gstForm && event.label) {
             let obj = this.getStateGSTCode(this.stateList, event.value)
-            gstForm.get('stateCode').patchValue(event.value);
-            gstForm.get('state').get('code').patchValue(event.value);
+            gstForm.get('stateCode')?.patchValue(event.value);
+            gstForm.get('state').get('code')?.patchValue(event.value);
         }
 
     }

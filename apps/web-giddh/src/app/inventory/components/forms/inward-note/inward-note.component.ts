@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, OnDestroy } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
@@ -10,18 +10,17 @@ import { StockUnitRequest } from '../../../../models/api-models/Inventory';
 import { digitsOnly, stockManufacturingDetailsValidator } from '../../../../shared/helpers';
 import { ToasterService } from '../../../../services/toaster.service';
 import { InventoryService } from '../../../../services/inventory.service';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'transfer-inward-note',
     templateUrl: './inward-note.component.html',
-    styles: [`
-    .pad-10-5 {
-      padding: 10px 5px;
-    }
-  `],
+    styleUrls: ['./inward-note.component.scss'],
 })
 
-export class InwardNoteComponent implements OnInit, OnChanges {
+export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public onCancel = new EventEmitter();
     @Output() public onSave = new EventEmitter<InventoryEntry>();
 
@@ -34,12 +33,16 @@ export class InwardNoteComponent implements OnInit, OnChanges {
     public stockUnitsOptions: IOption[];
     public userListOptions: IOption[];
     public form: FormGroup;
-    public config: Partial<BsDatepickerConfig> = { dateInputFormat: 'DD-MM-YYYY' };
+    public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     public mode: 'sender' | 'product' = 'sender';
     public today = new Date();
     public editLinkedStockIdx: any = null;
     public editModeForLinkedStokes: boolean = false;
     public disableStockButton: boolean = false;
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _fb: FormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
         private _zone: NgZone) {
@@ -76,7 +79,7 @@ export class InwardNoteComponent implements OnInit, OnChanges {
 
     public ngOnInit() {
         this.manufacturingDetails.disable();
-        this.isManufactured.valueChanges.subscribe(val => {
+        this.isManufactured.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(val => {
             this.manufacturingDetails.reset();
             val ? this.manufacturingDetails.enable() : this.manufacturingDetails.disable();
         });
@@ -84,7 +87,7 @@ export class InwardNoteComponent implements OnInit, OnChanges {
 
     public initializeForm(initialRequest: boolean = false) {
         this.form = this._fb.group({
-            inventoryEntryDate: [moment().format('DD-MM-YYYY'), Validators.required],
+            inventoryEntryDate: [moment().format(GIDDH_DATE_FORMAT), Validators.required],
             transactions: this._fb.array([], Validators.required),
             description: [''],
             inventoryUser: [''],
@@ -118,7 +121,7 @@ export class InwardNoteComponent implements OnInit, OnChanges {
     public modeChanged(mode: 'sender' | 'product') {
         this.mode = mode;
         this.form.reset();
-        this.inventoryEntryDate.patchValue(moment().format('DD-MM-YYYY'));
+        this.inventoryEntryDate?.patchValue(moment().format(GIDDH_DATE_FORMAT));
         this.transactions.controls = this.transactions.controls.filter(trx => false);
 
         if (this.mode === 'sender') {
@@ -182,12 +185,12 @@ export class InwardNoteComponent implements OnInit, OnChanges {
 
         if (index >= 0) {
             const control = items.at(index);
-            control.patchValue({
+            control?.patchValue({
                 ...control.value,
                 inventoryUser
             });
         } else {
-            items.controls.forEach(c => c.patchValue({ ...c.value, inventoryUser }));
+            items.controls.forEach(c => c?.patchValue({ ...c.value, inventoryUser }));
         }
     }
 
@@ -207,9 +210,9 @@ export class InwardNoteComponent implements OnInit, OnChanges {
 
                 if (stockDetails.body && stockDetails.body.manufacturingDetails) {
                     let mfd = stockDetails.body.manufacturingDetails;
-                    this.isManufactured.patchValue(true);
+                    this.isManufactured?.patchValue(true);
 
-                    this.manufacturingDetails.patchValue({
+                    this.manufacturingDetails?.patchValue({
                         manufacturingQuantity: mfd.manufacturingQuantity,
                         manufacturingUnitCode: mfd.manufacturingUnitCode
                     });
@@ -219,7 +222,7 @@ export class InwardNoteComponent implements OnInit, OnChanges {
                     });
 
                 } else {
-                    this.isManufactured.patchValue(false);
+                    this.isManufactured?.patchValue(false);
                 }
 
             } catch (e) {
@@ -232,9 +235,9 @@ export class InwardNoteComponent implements OnInit, OnChanges {
 
         if (index >= 0) {
             const control = items.at(index);
-            control.patchValue({ ...control.value, stock, stockUnit });
+            control?.patchValue({ ...control.value, stock, stockUnit });
         } else {
-            items.controls.forEach(c => c.patchValue({ ...c.value, stock, stockUnit }));
+            items.controls.forEach(c => c?.patchValue({ ...c.value, stock, stockUnit }));
         }
     }
 
@@ -258,7 +261,7 @@ export class InwardNoteComponent implements OnInit, OnChanges {
         } else {
             const stockItem = this.stockList.find(p => p.uniqueName === uniqueName);
             const stockUnit = stockItem ? stockItem.stockUnit.code : null;
-            control.at(i).get('stockUnitCode').patchValue(stockUnit);
+            control.at(i).get('stockUnitCode')?.patchValue(stockUnit);
             this.disableStockButton = false;
         }
     }
@@ -279,7 +282,7 @@ export class InwardNoteComponent implements OnInit, OnChanges {
             } else {
                 let isValid = this.validateLinkedStock(item);
                 if (isValid) {
-                    frmgrp.patchValue(item);
+                    frmgrp?.patchValue(item);
                     control.controls[i] = frmgrp;
                 } else {
                     return this._toasty.errorToast('All fields are required.');
@@ -317,7 +320,7 @@ export class InwardNoteComponent implements OnInit, OnChanges {
                 return rv;
             });
             let value: InventoryEntry = {
-                inventoryEntryDate: moment(this.inventoryEntryDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY'),
+                inventoryEntryDate: moment(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
                 description: this.description.value,
                 transactions: rawValues,
             };
@@ -370,5 +373,15 @@ export class InwardNoteComponent implements OnInit, OnChanges {
         });
         linkedStocks = _.cloneDeep(rawArr);
         return linkedStocks;
+    }
+
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof InwardNoteComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

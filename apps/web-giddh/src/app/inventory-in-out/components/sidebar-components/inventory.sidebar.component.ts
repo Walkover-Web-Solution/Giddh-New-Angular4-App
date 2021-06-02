@@ -1,21 +1,18 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store/roots';
-
-import { Store } from '@ngrx/store';
-
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { ActivatedRoute } from '@angular/router';
 import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 
 @Component({
-    selector: 'invetory-sidebar',  // <home></home>
+    selector: 'invetory-sidebar',
     templateUrl: './inventory.sidebar.component.html',
     styles: [`
-    .parent-Group > ul > li ul li div {
+    .parent-group > ul > li ul li div {
       color: #8a8a8a;
     }
 
@@ -31,7 +28,8 @@ import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
     }
   `]
 })
-export class InventoryInOutSidebarComponent implements OnInit, OnDestroy, AfterViewInit {
+
+export class InventoryInOutSidebarComponent implements OnInit, OnDestroy {
     public stocksList$: Observable<IStocksItem[]>;
     public inventoryUsers$: Observable<InventoryUser[]>;
     public sidebarRect: any;
@@ -43,12 +41,11 @@ export class InventoryInOutSidebarComponent implements OnInit, OnDestroy, AfterV
      * TypeScript public modifiers
      */
     constructor(private store: Store<AppState>,
-        private _router: ActivatedRoute,
         private _inventoryAction: InventoryAction,
         private sideBarAction: SidebarAction) {
         this.store.dispatch(this._inventoryAction.GetStock());
-        this.stocksList$ = this.store.select(s => s.inventory.stocksList && s.inventory.stocksList.results).pipe(takeUntil(this.destroyed$));
-        this.inventoryUsers$ = this.store.select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers).pipe(takeUntil(this.destroyed$));
+        this.stocksList$ = this.store.pipe(select(s => s.inventory.stocksList && s.inventory.stocksList.results), takeUntil(this.destroyed$));
+        this.inventoryUsers$ = this.store.pipe(select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers), takeUntil(this.destroyed$));
         this.sidebarRect = window.screen.height;
         this.store.pipe(take(1)).subscribe(state => {
             if (state.inventory.groupsWithStocks === null) {
@@ -62,14 +59,8 @@ export class InventoryInOutSidebarComponent implements OnInit, OnDestroy, AfterV
         this.sidebarRect = window.screen.height;
     }
 
-    // @HostListener('window:load', ['$event'])
-
     public ngOnInit() {
-        //
-    }
-
-    public ngAfterViewInit() {
-        //
+        
     }
 
     public ngOnDestroy() {

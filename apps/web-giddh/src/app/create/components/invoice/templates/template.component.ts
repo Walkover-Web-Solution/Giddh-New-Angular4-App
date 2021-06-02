@@ -54,7 +54,7 @@ export class CreateInvoiceTemplateComponent implements OnInit, OnDestroy {
 		viewContainerRef.remove();
 		let componentRef = viewContainerRef.createComponent(componentFactory);
 		let componentInstance = componentRef.instance as LetterTemplateComponent;
-		componentInstance.closeAndDestroyComponent.subscribe((data: any) => {
+		componentInstance.closeAndDestroyComponent.pipe(takeUntil(this.destroyed$)).subscribe((data: any) => {
 			componentInstance.destroyed$.next(true);
 			componentInstance.destroyed$.complete();
 		});

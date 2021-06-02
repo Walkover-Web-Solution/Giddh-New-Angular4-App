@@ -49,6 +49,7 @@ import { WebviewDirective } from './webview.directive';
 import { Daterangepicker } from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { InvoiceAdvanceSearchComponent } from './preview/models/advanceSearch/invoiceAdvanceSearch.component';
+import { BulkExportModal } from './preview/models/bulk-export-modal/bulk-export.component';
 import { InvoiceRendererComponent } from './invoice.renderer.component';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { InvoiceBulkUpdateModalComponent } from './preview/models/bulkUpdateModal/invoiceBulkUpdateModal.component';
@@ -66,7 +67,6 @@ import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.modu
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { UniqueNameModule } from '../shared/helpers/directives/uniqueName/uniqueName.module';
 import { ProformaListComponent } from './proforma/proforma-list.component';
-import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { InvoicePaymentModelComponent } from './preview/models/invoicePayment/invoice.payment.model.component';
 import { SharedModule } from '../shared/shared.module';
@@ -74,6 +74,8 @@ import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeTo
 import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-invoice.module';
 import { DownloadVoucherComponent } from './preview/models/download-voucher/download-voucher.component';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
+import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/has-focus.module';
+import { TrimPipeModule } from '../shared/helpers/pipes/trim/trim.module';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     // Change this to your Google API key
@@ -121,6 +123,7 @@ const INVOICE_ROUTES: Routes = [
         PreviewDownloadReceiptComponent,
         WebviewDirective,
         InvoiceAdvanceSearchComponent,
+        BulkExportModal,
         InvoiceRendererComponent,
         InvoiceBulkUpdateModalComponent,
         PurchaseBillTemplateComponent,
@@ -165,12 +168,13 @@ const INVOICE_ROUTES: Routes = [
         ProformaInvoiceModule,
         DigitsOnlyModule,
         UniqueNameModule,
-        PdfJsViewerModule,
         ConfirmModalModule,
         SharedModule,
         VoucherTypeToNamePipeModule,
         SendEmailInvoiceModule,
-        AdvanceReceiptAdjustmentModule
+        AdvanceReceiptAdjustmentModule,
+        HasFocusDirectiveModule,
+        TrimPipeModule
     ],
     exports: [
         RouterModule,

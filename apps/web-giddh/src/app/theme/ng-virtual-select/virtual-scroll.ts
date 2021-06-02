@@ -101,7 +101,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     get width(): any {
-        let el = this.element.nativeElement;
+        let el = this.element?.nativeElement;
         let viewWidth = el.clientWidth - this.scrollbarWidth;
         return viewWidth;
     }
@@ -122,7 +122,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     public ngOnInit() {
-        this.onScrollListener = this.renderer.listen(this.element.nativeElement, 'scroll', () => {
+        this.onScrollListener = this.renderer.listen(this.element?.nativeElement, 'scroll', () => {
             this.handleScroll();
         });
         this.scrollbarWidth = 0; // this.element.nativeElement.offsetWidth - this.element.nativeElement.clientWidth;
@@ -138,6 +138,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
         }
         if (this.items && this.items.length) {
             currentItemIndex = (currentItemIndex === -1) ? 0 : currentItemIndex;
+            this.items.forEach(item => item.isHilighted = false);
             this.items[currentItemIndex].isHilighted = true;
         }
         this.refresh();
@@ -215,7 +216,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     private countItemsPerRow() {
         let offsetTop;
         let itemsPerRow;
-        let children = this.contentElementRef.nativeElement.children;
+        let children = this.contentElementRef?.nativeElement.children;
         for (itemsPerRow = 0; itemsPerRow < children.length; itemsPerRow++) {
             if (offsetTop !== undefined && offsetTop !== children[itemsPerRow].offsetTop) {
                 break;
@@ -226,8 +227,8 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     private calculateDimensions() {
-        let el = this.element.nativeElement;
-        let content = this.contentElementRef.nativeElement;
+        let el = this.element?.nativeElement;
+        let content = this.contentElementRef?.nativeElement;
 
         let items = this.items || [];
         let itemCount = items.length === 0 ? 2 : this.items.length;
@@ -269,12 +270,12 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     private calculateItems() {
-        let el = this.element.nativeElement;
+        let el = this.element?.nativeElement;
 
         let d = this.calculateDimensions();
         let items = this.items || [];
         this.scrollHeight = d.childHeight * d.itemCount / d.itemsPerRow;
-        if (this.element.nativeElement.scrollTop > this.scrollHeight) {
+        if (this.element?.nativeElement.scrollTop > this.scrollHeight) {
             this.element.nativeElement.scrollTop = this.scrollHeight;
         }
         let indexByScrollTop = el.scrollTop / this.scrollHeight * d.itemCount / d.itemsPerRow;

@@ -12,7 +12,7 @@ export const LEDGER_API = {
     // ledger utility related mail,share
     MAIL_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/mail-ledger?', // post call
     // get call
-    RECONCILE: UNIVERSAL_URI_LEDGER + 'reconcile?from=:from&to=:to&chequeNumber=:chequeNumber',
+    RECONCILE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/reconcile?from=:from&to=:to&chequeNumber=:chequeNumber',
     // DOWNLOAD_INVOICE: 'v2/company/:companyUniqueName/accounts/:accountUniqueName/invoices/download', // post call
     DOWNLOAD_INVOICE: 'company/:companyUniqueName/accounts/:accountUniqueName/vouchers/download-file?fileType=base64', // post call
     DOWNLOAD_ATTACHMENT: 'company/:companyUniqueName/ledger/upload/:fileName', // post call
@@ -22,7 +22,7 @@ export const LEDGER_API = {
     // EXPORT_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/v2/export-ledger/file?from=:from&to=:to&type=:type&format=:format&sort=:sort',
     EXPORT_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/v3/export-ledger/file?from=:from&to=:to&type=:type&format=:format&sort=:sort',
     EXPORT_LEDGER_WITH_INVOICE_NUMBER: 'company/:companyUniqueName/accounts/:accountUniqueName/v2/export-ledger-with-invoice/file?from=:from&to=:to&type=:type&format=:format&sort=:sort',
-    GET_BANK_TRANSACTIONS: 'company/:companyUniqueName/yodlee/accounts/:accountUniqueName/eledgers?refresh=true&from=:from',
+    GET_BANK_TRANSACTIONS: 'company/:companyUniqueName/yodlee/accounts/:accountUniqueName/eledgers?refresh=true&from=:from&page=:page&count=:count',
     // put call to map transaction
     MAP_BANK_TRANSACTIONS: 'company/:companyUniqueName/accounts/:accountUniqueName/eledgers/:transactionId',
 
@@ -44,6 +44,6 @@ export const LEDGER_API = {
     GET_VOUCHER_INVOICE_LIST: 'company/:companyUniqueName/vouchers/invoice-list?voucherDate=:voucherDate',
     GET_COLUMNAR_REPORT: 'v2/company/:companyUniqueName/groups/:groupUniqueName/export/account-balances',
     // Export Ledger get columnar report table
-    EXPORT_LEDGER_COLUMNAR_REPORT_TABLE: 'company/:companyUniqueName/accounts/:accountUniqueName/columnar-report?from=:from&to=:to'
+    EXPORT_LEDGER_COLUMNAR_REPORT_TABLE: 'company/:companyUniqueName/accounts/:accountUniqueName/columnar-report?from=:from&to=:to',
+    IMPORT_STATEMENT: 'company/:companyUniqueName/import-pdf/bank-statement/?entity=pdf&accountUniqueName=:accountUniqueName'
 };
-

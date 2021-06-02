@@ -1,30 +1,37 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { InvoiceService } from '../../../../services/invoice.service';
 import { ToasterService } from '../../../../services/toaster.service';
 import { InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
 import { VoucherTypeEnum } from '../../../../models/api-models/Sales';
-import { ProformaService } from '../../../../services/proforma.service';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'download-voucher',
     templateUrl: './download-voucher.component.html'
 })
 
-export class DownloadVoucherComponent implements OnInit {
+export class DownloadVoucherComponent implements OnInit, OnDestroy {
     @Input() public selectedItem: InvoicePreviewDetailsVm;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public invoiceType: string[] = [];
     public isTransport: boolean = false;
     public isCustomer: boolean = false;
     public isProformaEstimatesInvoice: boolean = false;
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    constructor(private _invoiceService: InvoiceService, private _toaster: ToasterService, private _cdr: ChangeDetectorRef,
-        private _proformaService: ProformaService) {
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+    constructor(private _invoiceService: InvoiceService, private _toaster: ToasterService) {
     }
 
     ngOnInit() {
-        this.isProformaEstimatesInvoice = [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.selectedItem.voucherType)
+        this.isProformaEstimatesInvoice = (this.selectedItem) ? [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.selectedItem.voucherType) : false;
     }
 
     invoiceTypeChanged(event) {
@@ -38,14 +45,14 @@ export class DownloadVoucherComponent implements OnInit {
 
     public onDownloadInvoiceEvent() {
         // as discussed with backend team voucherType will never be cash, It will be sales always for download vouchers
-        let voucherType = this.selectedItem.voucherType === 'cash' ? 'sales' : this.selectedItem.voucherType;
+        let voucherType = this.selectedItem && this.selectedItem.voucherType === 'cash' ? 'sales' : this.selectedItem.voucherType;
         let dataToSend = {
             voucherNumber: [this.selectedItem.voucherNumber],
             typeOfInvoice: this.invoiceType,
             voucherType: voucherType
         };
 
-        this._invoiceService.DownloadInvoice(this.selectedItem.account.uniqueName, dataToSend)
+        this._invoiceService.DownloadInvoice(this.selectedItem.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
                 if (res) {
                     if (dataToSend.typeOfInvoice.length > 1) {
@@ -54,10 +61,10 @@ export class DownloadVoucherComponent implements OnInit {
                         saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
                     }
                 } else {
-                    this._toaster.errorToast('Something went wrong Please try again!');
+                    this._toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 }
             }, (error => {
-                this._toaster.errorToast('Something went wrong Please try again!');
+                this._toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
             }));
     }
 
@@ -70,5 +77,15 @@ export class DownloadVoucherComponent implements OnInit {
     cancel() {
         this.resetModal();
         this.cancelEvent.emit(true);
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof DownloadVoucherComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

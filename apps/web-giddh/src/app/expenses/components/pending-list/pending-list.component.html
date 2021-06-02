@@ -7,7 +7,7 @@
 
                     <th width="10%">
                         <div class="d-flex align-items-center">
-                            <span class="pull-left">Date</span>
+                            <span class="pull-left">{{commonLocaleData?.app_date}}</span>
                             <ng-container class="d-inline-block"
                                 *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'entry_date'}"></ng-container>
                         </div>
@@ -16,17 +16,17 @@
                     <th width="10%" class="td-search-box" #submittedBySearchContainer
                         (clickOutside)="clickedOutside($event, submittedBySearchContainer, 'submittedBy')">
                         <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSubmittedBySearch,
-          title: 'Submitted By', fieldName: 'submittedBy', formControl: submittedBySearchInput}"></ng-container>
+          title: localeData?.submitted_by, fieldName: 'submittedBy', formControl: submittedBySearchInput}"></ng-container>
                     </th>
 
                     <th width="10%" class="td-search-box" #accountSearchContainer
                         (clickOutside)="clickedOutside($event, accountSearchContainer, 'account')">
                         <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showAccountSearch,
-                        title: 'Account', fieldName: 'account', formControl: accountSearchInput}"></ng-container>
+                        title: commonLocaleData?.app_account, fieldName: 'account', formControl: accountSearchInput}"></ng-container>
                     </th>
 
                     <th width="20%" class="pr-2 amount-arrow">
-                        <div class="d-flex align-items-center justify-content-end"><span>Amount</span>
+                        <div class="d-flex align-items-center justify-content-end"><span>{{commonLocaleData?.app_amount}}</span>
                             <ng-container class="d-inline-block "
                                 *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
                         </div>
@@ -36,18 +36,17 @@
                         (clickOutside)="clickedOutside($event, paymentReceiptSearchContainer, 'payment/receive')">
                         <ng-container
                             *ngTemplateOutlet="searchTemplate;context:{ $implicit: showPaymentReceiveSearch,
-                        title: 'Payment/Receipt', fieldName: 'payment/receive', formControl: paymentReceiveSearchInput}">
+                        title: localeData?.payment_receipt, fieldName: 'payment/receive', formControl: paymentReceiveSearchInput}">
                         </ng-container>
                     </th>
 
-                    <th width="10%">File</th>
-                    <th width="20%">Description</th>
-                    <th width="10%">Action</th>
+                    <th width="10%">{{localeData?.file}}</th>
+                    <th width="20%">{{commonLocaleData?.app_description}}</th>
+                    <th width="10%">{{commonLocaleData?.app_action}}</th>
                 </tr>
             </thead>
 
             <tbody>
-
                 <tr (click)="rowClicked(expenses);" class="cursor-pointer"
                     *ngFor="let expenses of expensesItems let i = index">
 
@@ -55,44 +54,42 @@
 
                         <td data-title="#">{{i + 1}}</td>
 
-                        <td data-title="Date">{{expenses.entryDate}}</td>
+                        <td [attr.data-title]="commonLocaleData?.app_date">{{expenses.entryDate}}</td>
 
-                        <td data-title="Submitted By">{{expenses.createdBy.name}} </td>
+                        <td [attr.data-title]="localeData?.submitted_by">{{expenses.createdBy.name}} </td>
 
-                        <td data-title="Account">
+                        <td [attr.data-title]="commonLocaleData?.app_account">
                             <i class="dot-icon dot-warning" *ngIf="expenses.entryType==='sales'"></i>
                             <i class="dot-icon dot-success" *ngIf="expenses.entryType==='deposit'"></i>
                             <i class="dot-icon dot-primary" *ngIf="expenses.entryType==='expense'"></i>
                             {{expenses.particularAccount.name}}
                         </td>
 
-                        <td data-title="Amount" class="text-right pr-2"> {{expenses.currencySymbol}}
-                            {{ expenses.amount | giddhCurrency}}</td>
+                        <td [attr.data-title]="commonLocaleData?.app_amount" class="text-right pr-2">
+                            {{ expenses.amount | giddhCurrency}}
+                        </td>
 
-                        <td data-title="Payment/Receipt">
-                            <span *ngIf="expenses.baseAccountCategory==='OTHER'" class="font-12 text-gray">A/c</span>
+                        <td [attr.data-title]="localeData?.payment_receipt">
+                            <span *ngIf="expenses.baseAccountCategory==='OTHER'" class="font-12 text-gray">{{commonLocaleData?.app_ac}}</span>
                             <span *ngIf="expenses.baseAccountCategory==='BANK'"
                                 class="font-12 text-gray icon-atm-card"></span>
                             <span *ngIf="expenses.baseAccountCategory==='CASH'"
                                 class="font-12 text-gray icon-cash"></span> {{expenses.baseAccount.name}}
                         </td>
 
-                        <td data-title="File">
-                            <!-- <a *ngIf="!expenses.fileNames" class="font-12">
-                            <i class="icon-file-path middle"></i> attach file</a> -->
-
+                        <td [attr.data-title]="localeData?.file">
                             <i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i>
                             {{expenses.fileNames}}
                         </td>
 
-                        <td data-title="Description"><span
+                        <td [attr.data-title]="commonLocaleData?.app_description"><span
                                 *ngIf="expenses.description">{{expenses.description}}</span><span
                                 *ngIf="!expenses.description">-</span></td>
 
-                        <td data-title="Action">
+                        <td [attr.data-title]="commonLocaleData?.app_action">
                             <button type="button"
                                 (click)="showApproveConfirmPopup(ApproveConfirm,expenses);$event.stopPropagation()"
-                                class="btn btn-success-outline">Approve
+                                class="btn btn-success-outline">{{localeData?.approve}}
                             </button>
                         </td>
 
@@ -106,27 +103,20 @@
     </div>
 </div>
 
-<div *ngIf="(pettyCashReportsResponse$ | async)?.totalItems > 20" class="paginationWrapper">
+<div *ngIf="(pettyCashReportsResponse$ | async)?.totalItems > 20" class="pagination-wrapper">
     <pagination [totalItems]="(pettyCashReportsResponse$ | async)?.totalItems" [maxSize]="5" class="pagination-sm"
         [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;" nextText="&#9658;"
         (pageChanged)="pageChanged($event)"></pagination>
 </div>
 
 <div *ngIf="(getPettycashReportInprocess$ | async) ">
-    <div class="no-data mr-t2 loader-main">
-        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-        <div class="spinner2">
-            <div class="cube1"></div>
-            <div class="cube2"></div>
-        </div>
-    </div>
-
+    <giddh-page-loader></giddh-page-loader>
 </div>
 
 <div class="no-data"
     *ngIf="(pettyCashReportsResponse$ | async)?.results?.length === 0 && !(getPettycashReportInprocess$ | async)">
-    <h1>No entries found within given criteria.</h1>
-    <h1>Do search with some other dates</h1>
+    <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
+    <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
 </div>
 
 <!--loading-->
@@ -135,17 +125,17 @@
 <ng-template #sortingTemplate let-col>
 
     <div class="icon-sort-asc" *ngIf="pettycashRequest.sortBy !== col" (click)="sort('asc', col)"
-        [ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
+        [ngClass]="{'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
     </div>
 
     <div class="icon-sort-asc" *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'"
         (click)="sort('desc', col)"
-        [ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
+        [ngClass]="{'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
     </div>
 
     <div class="icon-sort-dsc" *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'"
         (click)="sort('asc', col)"
-        [ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'}">
+        [ngClass]="{'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'}">
     </div>
 
 </ng-template>
@@ -156,11 +146,10 @@
 
     <div [hidden]="show">
         <span> {{ title }}</span>
-        <!-- <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i> -->
     </div>
 
     <div class="input-container" [hidden]="!show">
-        <input type="text" placeholder="Search {{ title }}" class="w100" #searchBox [formControl]="formControl" />
+        <input type="text" [placeholder]="replaceTitle(title)" class="w100" #searchBox [formControl]="formControl" />
     </div>
 
 </ng-template>
@@ -169,7 +158,7 @@
 <!-- region approve entry confirm -->
 <ng-template #ApproveConfirm>
     <petty-cash-approve-confirm-dialog [selectedEntryForApprove]="selectedEntryForApprove"
-        [approveEntryRequestInProcess]="approveEntryRequestInProcess" (approveEntry)="hideApproveConfirmPopup($event)">
+        [approveEntryRequestInProcess]="approveEntryRequestInProcess" [localeData]="localeData" [commonLocaleData]="commonLocaleData" (approveEntry)="hideApproveConfirmPopup($event)">
     </petty-cash-approve-confirm-dialog>
 </ng-template>
 <!-- endregion -->
@@ -179,8 +168,8 @@
 
     <div class="modal-header">
 
-        <h3 class="modal-title pull-left">Filter</h3>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="hideFilterModal()">
+        <h3 class="modal-title pull-left">{{commonLocaleData?.app_filter}}</h3>
+        <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close" (click)="hideFilterModal()">
             <span aria-hidden="true">&times;</span>
         </button>
 
@@ -190,8 +179,8 @@
 
     <div class="modal-footer">
 
-        <button class="btn btn-warning" (click)="hideFilterModal()">Yes</button>
-        <button class="btn btn-success" (click)="hideFilterModal()">Cancel</button>
+        <button class="btn btn-warning" (click)="hideFilterModal()">{{commonLocaleData?.app_yes}}</button>
+        <button class="btn btn-success" (click)="hideFilterModal()">{{commonLocaleData?.app_cancel}}</button>
 
     </div>
 

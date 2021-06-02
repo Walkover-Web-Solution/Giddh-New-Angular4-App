@@ -117,7 +117,8 @@ export class InvoiceSettings {
 	autoMail: boolean;
 	autoEntryAndInvoice: boolean;
 	showSeal: boolean;
-	autoPaid: any;
+    autoPaid: any;
+    branchInvoiceNumberPrefix: any;
 	createPaymentEntry: boolean;
 	email?: any;
 	emailVerified?: any;
@@ -149,4 +150,8 @@ export class InvoiceSettings {
 	sendInvLinkOnSms: boolean;
     smsContent?: any;
     autoDeleteEntries?: any;
+    gstEInvoiceEnable?: boolean;
+    gstEInvoiceGstin?: string;
+    gstEInvoiceUserName?: string;
+    gstEInvoiceUserPassword?: string;
 }

@@ -1,7 +1,6 @@
 import { take, takeUntil } from "rxjs/operators";
 import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
-import { Router } from "@angular/router";
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ModalDirective } from "ngx-bootstrap/modal";
@@ -26,7 +25,6 @@ import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
-import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { isCordova } from "@giddh-workspaces/utils";
@@ -80,7 +78,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     public showForgotPassword: boolean = false;
     public forgotStep: number = 0;
     public retryCount: number = 0;
-    public apkVersion: string;
     private imageURL: string;
     private email: string;
     private name: string;
@@ -92,83 +89,87 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     //Button to hide linkedIn button till functionality is available
     public showLinkedInButton = false;
+    /** Modal config */
+    public modalConfig: {
+        backdrop: 'static'
+    };
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,
         private store: Store<AppState>,
-        private router: Router,
         private loginAction: LoginActions,
         private authService: AuthService,
         @Inject(DOCUMENT) private document: Document,
-        private _toaster: ToasterService,
         private _authService: AuthenticationService,
         private _generalService: GeneralService
     ) {
         this.urlPath = (isElectron || isCordova()) ? "" : AppUrl + APP_FOLDER;
-        this.isLoginWithEmailInProcess$ = store.select(state => {
+        this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
-        }).pipe(takeUntil(this.destroyed$));
-        this.isVerifyEmailInProcess$ = store.select(state => {
+        }), takeUntil(this.destroyed$));
+        this.isVerifyEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isVerifyEmailInProcess;
-        }).pipe(takeUntil(this.destroyed$));
-        this.isLoginWithMobileInProcess$ = store.select(state => {
+        }), takeUntil(this.destroyed$));
+        this.isLoginWithMobileInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithMobileInProcess;
-        }).pipe(takeUntil(this.destroyed$));
-        this.isVerifyMobileInProcess$ = store.select(state => {
+        }), takeUntil(this.destroyed$));
+        this.isVerifyMobileInProcess$ = this.store.pipe(select(state => {
             return state.login.isVerifyMobileInProcess;
-        }).pipe(takeUntil(this.destroyed$));
+        }), takeUntil(this.destroyed$));
 
-        this.isLoginWithMobileSubmited$ = store.select(state => {
+        this.isLoginWithMobileSubmited$ = this.store.pipe(select(state => {
             return state.login.isLoginWithMobileSubmited;
-        }).pipe(takeUntil(this.destroyed$));
-        this.isLoginWithEmailSubmited$ = store.select(state => {
+        }), takeUntil(this.destroyed$));
+        this.isLoginWithEmailSubmited$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailSubmited;
-        }).pipe(takeUntil(this.destroyed$));
-        store.select(state => {
+        }), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(state => {
             return state.login.isVerifyEmailSuccess;
-        }).pipe(takeUntil(this.destroyed$)).subscribe((value) => {
+        }), takeUntil(this.destroyed$)).subscribe((value) => {
             if (value) {
                 // this.router.navigate(['home']);
             }
         });
-        store.select(state => {
+
+        this.store.pipe(select(state => {
             return state.login.isVerifyMobileSuccess;
-        }).pipe(takeUntil(this.destroyed$)).subscribe((value) => {
+        }), takeUntil(this.destroyed$)).subscribe((value) => {
             if (value) {
                 // this.router.navigate(['home']);
             }
         });
-        this.isLoginWithPasswordInProcess$ = store.select(state => {
+
+        this.isLoginWithPasswordInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithPasswordInProcess;
-        }).pipe(takeUntil(this.destroyed$));
-        this.isForgotPasswordInProgress$ = store.select(state => {
+        }), takeUntil(this.destroyed$));
+        this.isForgotPasswordInProgress$ = this.store.pipe(select(state => {
             return state.login.isForgotPasswordInProcess;
-        }).pipe(takeUntil(this.destroyed$));
-        this.isResetPasswordInSuccess$ = store.select(state => {
+        }), takeUntil(this.destroyed$));
+        this.isResetPasswordInSuccess$ = this.store.pipe(select(state => {
             return state.login.isResetPasswordInSuccess;
-        }).pipe(takeUntil(this.destroyed$));
-        this.isLoginWithPasswordSuccessNotVerified$ = store.select(state => {
+        }), takeUntil(this.destroyed$));
+        this.isLoginWithPasswordSuccessNotVerified$ = this.store.pipe(select(state => {
             return state.login.isLoginWithPasswordSuccessNotVerified;
-        }).pipe(takeUntil(this.destroyed$));
-        this.isLoginWithPasswordIsShowVerifyOtp$ = store.select(state => {
+        }), takeUntil(this.destroyed$));
+        this.isLoginWithPasswordIsShowVerifyOtp$ = this.store.pipe(select(state => {
             return state.login.isLoginWithPasswordIsShowVerifyOtp;
-        }).pipe(takeUntil(this.destroyed$));
-        this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).pipe(takeUntil(this.destroyed$));
+        }), takeUntil(this.destroyed$));
+        this.isSocialLogoutAttempted$ = this.store.pipe(select(p => p.login.isSocialLogoutAttempted), takeUntil(this.destroyed$));
         this.isLoginWithGoogleInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithGoogleInProcess;
         }), takeUntil(this.destroyed$));
         contriesWithCodes.map(c => {
             this.countryCodeList.push({ value: c.countryName, label: c.value });
         });
-        this.userLoginState$ = this.store.select(p => p.session.userLoginState);
-        this.userDetails$ = this.store.select(p => p.session.user);
-        this.isTwoWayAuthInProcess$ = this.store.select(p => p.login.isTwoWayAuthInProcess);
-        this.isTwoWayAuthInSuccess$ = this.store.select(p => p.login.isTwoWayAuthSuccess);
+        this.userLoginState$ = this.store.pipe(select(p => p.session.userLoginState), takeUntil(this.destroyed$));
+        this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
+        this.isTwoWayAuthInProcess$ = this.store.pipe(select(p => p.login.isTwoWayAuthInProcess), takeUntil(this.destroyed$));
+        this.isTwoWayAuthInSuccess$ = this.store.pipe(select(p => p.login.isTwoWayAuthSuccess), takeUntil(this.destroyed$));
     }
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
-        this.getElectronAppVersion();
         this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
         this.mobileVerifyForm = this._fb.group({
@@ -209,7 +210,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         // get user object when google auth is complete
         if (!(Configuration.isElectron || Configuration.isCordova)) {
             this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
-                this.isSocialLogoutAttempted$.subscribe((res) => {
+                this.isSocialLogoutAttempted$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (!res && user) {
                         switch (user.provider) {
                             case "GOOGLE": {
@@ -460,7 +461,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public forgotPassword(userId) {
-        this.resetPasswordForm.patchValue({ uniqueKey: userId });
+        this.resetPasswordForm?.patchValue({ uniqueKey: userId });
         this.userUniqueKey = userId;
         this.store.dispatch(this.loginAction.forgotPasswordRequest(userId));
     }
@@ -478,13 +479,4 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.userUniqueKey = null;
     }
 
-    private getElectronAppVersion() {
-        this._authService.GetElectronAppVersion().subscribe((res: string) => {
-            if (res && typeof res === "string") {
-                let version = res.split("files")[0];
-                let versNum = version.split(" ")[1];
-                this.apkVersion = versNum;
-            }
-        });
-    }
 }

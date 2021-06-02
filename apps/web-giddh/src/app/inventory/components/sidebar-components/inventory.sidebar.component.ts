@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { fromEvent as observableFromEvent, Observable, ReplaySubject, Subscription } from 'rxjs';
@@ -8,6 +8,8 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { InventoryDownloadRequest } from '../../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
+import { OrganizationType } from '../../../models/user-login-state';
+import { GeneralService } from '../../../services/general.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
@@ -29,7 +31,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
 	/** Stores data related to stock group for inventory module */
 	public stockGroupData: Array<any>;
 	@ViewChild('search', {static: true}) public search: ElementRef;
-	@ViewChild('sidebar', {static: true}) public sidebar: ElementRef;
+    @ViewChild('sidebar', {static: true}) public sidebar: ElementRef;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	/**
@@ -38,7 +40,8 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
 	constructor(private store: Store<AppState>, private sidebarAction: SidebarAction, private inventoryAction: InventoryAction, private router: Router,
 		private inventoryService: InventoryService,
 		private invViewService: InvViewService,
-		private _toasty: ToasterService) {
+        private _toasty: ToasterService,
+        private generalService: GeneralService) {
 		this.store.pipe(select(inventoryStore => inventoryStore.inventory.groupsWithStocks),takeUntil(this.destroyed$)).subscribe((data: any) => {
 			this.stockGroupData = data;
 		});
@@ -62,14 +65,14 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
 	}
 
 	public ngAfterViewInit() {
-		this.invViewService.getActiveView().subscribe(v => {
+		this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
 			this.groupUniqueName = v.groupUniqueName;
 			this.stockUniqueName = v.stockUniqueName;
 		})
-		observableFromEvent(this.search.nativeElement, 'input').pipe(
+		observableFromEvent(this.search?.nativeElement, 'input').pipe(
 			debounceTime(500),
 			distinctUntilChanged(),
-			map((e: any) => e.target.value))
+			map((e: any) => e.target.value), takeUntil(this.destroyed$))
 			.subscribe((val: string) => {
 				if (val) {
 					this.isSearching = true;
@@ -96,8 +99,9 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
 		obj.format = reportFormat;
 		obj.reportType = reportType;
 		obj.from = this.fromDate;
-		obj.to = this.toDate;
-		this.inventoryService.downloadAllInventoryReports(obj)
+        obj.to = this.toDate;
+        obj.branchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : '';
+		this.inventoryService.downloadAllInventoryReports(obj).pipe(takeUntil(this.destroyed$))
 			.subscribe(res => {
 				if (res.status === 'success') {
 					this._toasty.infoToast(res.body);

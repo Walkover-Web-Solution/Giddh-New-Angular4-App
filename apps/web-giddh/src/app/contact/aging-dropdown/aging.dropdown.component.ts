@@ -1,37 +1,24 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { ToasterService } from '../../services/toaster.service';
 import { AgingDropDownoptions } from '../../models/api-models/Contact';
 import { AppState } from '../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AgingReportActions } from '../../actions/aging-report.actions';
 
 @Component({
     selector: 'aging-dropdown',
     templateUrl: 'aging.dropdown.component.html',
-    styles: [`
-    .li-design {
-      display: flex;
-      padding: 5px;
-      border: none;
-    }
-
-    .lable-design {
-      width: 60%;
-    }
-
-    .input-design {
-      width: 40%;
-    }
-
-    .depth {
-      z-index: 0 !important;
-    }
-  `]
+    styleUrls: ['./aging.dropdown.component.scss']
 })
 
-export class AgingDropdownComponent implements OnInit, OnDestroy {
+export class AgingDropdownComponent implements OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
+
     @Input() public showComponent: boolean = true;
     @Output() public closeEvent: EventEmitter<any> = new EventEmitter();
     @Input() public options: AgingDropDownoptions;
@@ -39,17 +26,12 @@ export class AgingDropdownComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private _toasty: ToasterService, public _toaster: ToasterService, private _agingReportActions: AgingReportActions) {
-        //
-        this.setDueRangeRequestInFlight$ = this.store.select(s => s.agingreport.setDueRangeRequestInFlight).pipe(takeUntil(this.destroyed$));
-
-    }
-
-    public ngOnInit() {
-        //
+        this.setDueRangeRequestInFlight$ = this.store.pipe(select(s => s.agingreport.setDueRangeRequestInFlight), takeUntil(this.destroyed$));
     }
 
     public ngOnDestroy() {
-        // this.closeEvent.emit(this.options);
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     public closeAgingDropDown() {
@@ -81,6 +63,6 @@ export class AgingDropdownComponent implements OnInit, OnDestroy {
     }
 
     private showToaster() {
-        this._toasty.errorToast('4th column must be less than 5th and 5th must be less than 6th');
+        this._toasty.errorToast(this.localeData?.aging_dropdown_error);
     }
 }

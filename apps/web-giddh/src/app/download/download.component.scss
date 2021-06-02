@@ -1,0 +1,10 @@
+@import "../../assets/css/color.scss";
+
+.header{
+    background-color: $midnight-blue;
+    padding: 15px;
+    min-height: 60px;
+}
+.download-button{
+    height: calc(100vh - 150px);
+}

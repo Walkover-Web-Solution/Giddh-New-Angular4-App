@@ -1,12 +1,12 @@
 import { GstOverViewResult, GstOverViewSummary } from '../../../../../models/api-models/GstReconcile';
-import { GstReconcileActions } from '../../../../../actions/gst-reconcile/GstReconcile.actions';
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { ReconcileActionState } from '../../../../../store/GstReconcile/GstReconcile.reducer';
 import { AppState } from '../../../../../store';
 import { takeUntil } from 'rxjs/operators';
+import { GstReport } from '../../../../constants/gst.constant';
 
 interface SequenceConfig {
 	name: string;
@@ -66,10 +66,13 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
     public gstNotFoundOnPortalData$: Observable<ReconcileActionState>;
     public gstMatchedData$: Observable<ReconcileActionState>;
     public gstPartiallyMatchedData$: Observable<ReconcileActionState>;
-
+    /** Returns the enum to be used in template */
+    public get GstReport() {
+        return GstReport;
+    }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute) {
+    constructor(private _store: Store<AppState>, private _route: Router) {
         this.gstr1OverviewData$ = this._store.pipe(select(p => p.gstR.gstr1OverViewData), takeUntil(this.destroyed$));
 
         this.gstr2OverviewData$ = this._store.pipe(select(p => p.gstR.gstr2OverViewData), takeUntil(this.destroyed$));
@@ -86,13 +89,13 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 		this.imgPath = (isElectron||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
 
 		this.gstr1OverviewData$.subscribe(data => {
-			if (this.selectedGst === 'gstr1') {
+			if (this.selectedGst === GstReport.Gstr1) {
 				this.gstrOverviewData = data;
 			}
 		});
 
 		this.gstr2OverviewData$.subscribe(data => {
-			if (this.selectedGst === 'gstr2') {
+			if (this.selectedGst === GstReport.Gstr2) {
 				this.gstrOverviewData = data;
 			}
 		});
@@ -120,7 +123,7 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 			to: this.currentPeriod.to,
 			status: 'all'
 		};
-		this._route.navigate(['pages', 'gstfiling', 'filing-return', 'transaction'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, type: param.type, entityType: param.entityType, status: param.status } });
+		this._route.navigate(['pages', 'gstfiling', 'filing-return', 'transaction'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, type: param.type, entityType: param.entityType, status: param.status, selectedGst: this.activeCompanyGstNumber } });
 	}
 
 	public ngOnChanges(s: SimpleChanges) {
@@ -132,7 +135,8 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 	}
 
 	public ngOnDestroy() {
-		this.destroyed$.next(true);
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
 	}
 
 	public mapResponseData(data: GstOverViewSummary[], sequencingList: SequenceConfig[]): GstOverViewSummary[] {

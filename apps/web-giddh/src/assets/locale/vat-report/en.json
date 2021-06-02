@@ -7,5 +7,15 @@
     "trn_number" : "TRN Number",
     "place_supply" : "Place of Supply",
     "no_records_found" : "No records found",
-    "no_trn_available" : "To see the VAT report for this company, please provide a TRN in its profile section."
+    "no_trn_available" : "Please add TRN to your default address in order to view report.",
+    "select_trn": "Select TRN",
+    "select_entity": "Select Entity",
+    "a": "A =",
+    "b": "B =",
+    "c": "C =",
+    "d": "D =",
+    "invoice_date": "Invoice Date",
+    "invoice_number": "Invoice Number",
+    "customer_name": "Customer Name",
+    "reverse_charge": "Reverse Charge"
 }

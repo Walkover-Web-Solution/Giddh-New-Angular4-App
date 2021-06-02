@@ -44,9 +44,13 @@ export class DaybookActions {
                 return this._daybookService.ExportDaybook(action.payload.request, action.payload.queryRequest).pipe(
                     map((res) => {
                         if (res.status === 'success') {
-                            let blob = this.base64ToBlob(res.body, res.queryString.requestType, 512);
-                            let type = res.queryString.requestType === 'application/pdf' ? '.pdf' : '.xls';
-                            saveAs(blob, 'response' + type);
+                            if(res.body.type === "message") {
+                                this._toasty.successToast(res.body.file);
+                            } else {
+                                let blob = this.base64ToBlob(res.body.file, res.queryString.requestType, 512);
+                                let type = res.queryString.requestType === 'application/pdf' ? '.pdf' : '.xls';
+                                saveAs(blob, 'response' + type);
+                            }
                         } else {
                             this._toasty.clearAllToaster();
                             this._toasty.errorToast(res.message);
@@ -62,9 +66,13 @@ export class DaybookActions {
                 return this._daybookService.ExportDaybookPost(action.payload.request, action.payload.queryRequest).pipe(
                     map((res) => {
                         if (res.status === 'success') {
-                            let blob = this.base64ToBlob(res.body, res.queryString.requestType, 512);
-                            let type = res.queryString.requestType === 'application/pdf' ? '.pdf' : '.xls';
-                            saveAs(blob, 'response' + type);
+                            if(res.body.type === "message") {
+                                this._toasty.successToast(res.body.file);
+                            } else {
+                                let blob = this.base64ToBlob(res.body.file, res.queryString.requestType, 512);
+                                let type = res.queryString.requestType === 'application/pdf' ? '.pdf' : '.xls';
+                                saveAs(blob, 'response' + type);
+                            }
                         } else {
                             this._toasty.clearAllToaster();
                             this._toasty.errorToast(res.message);

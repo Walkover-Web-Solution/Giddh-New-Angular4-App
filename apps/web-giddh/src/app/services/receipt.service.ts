@@ -227,8 +227,12 @@ export class ReceiptService implements OnInit {
         let url = this.createQueryString(this.config.apiUrl + COMPANY_API.GET_DETAILED_REGISTERED_SALES, {
             page: request.page, count: request.count, from: request.from, to: request.to, q: request.q, sort: request.sort, sortBy: request.sortBy
         });
-        return this._http.get(url
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        if (request.branchUniqueName && request.branchUniqueName !== this.companyUniqueName) {
+            request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
+        }
+        return this._http.get(url).pipe(map((res) => {
                 let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
@@ -242,8 +246,12 @@ export class ReceiptService implements OnInit {
         let url = this.createQueryString(this.config.apiUrl + COMPANY_API.GET_DETAILED_REGISTERED_PURCHASE, {
             page: request.page, count: request.count, from: request.from, to: request.to, q: request.q, sort: request.sort, sortBy: request.sortBy
         });
-        return this._http.get(url
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        if (request.branchUniqueName && request.branchUniqueName !== this.companyUniqueName) {
+            request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
+        }
+        return this._http.get(url).pipe(map((res) => {
                 let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
@@ -324,17 +332,18 @@ export class ReceiptService implements OnInit {
     public getAllAdvanceReceipts(requestObject: GetAllAdvanceReceiptsRequest): Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>> {
         const companyUniqueName = String(requestObject.companyUniqueName);
         delete requestObject.companyUniqueName;
-        return this._http.post(
-            `${this.config.apiUrl}${RECEIPT_API.GET_ALL_ADVANCE_RECEIPTS}`
-                .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-                .replace(':sortBy', requestObject && requestObject.sortBy ? requestObject.sortBy : '')
-                .replace(':sort', requestObject && requestObject.sort ? requestObject.sort : '')
-                .replace(':page', (requestObject && requestObject.page) ? String(requestObject.page) : '')
-                .replace(':count', requestObject && requestObject.count ? String(requestObject.count) : '')
-                .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
-                .replace(':to', requestObject && requestObject.to ? requestObject.to : ''),
-            requestObject
-        ).pipe(catchError((error) => this.errorHandler.HandleCatch<any, GetAllAdvanceReceiptsRequest>(error)));
+        let url = `${this.config.apiUrl}${RECEIPT_API.GET_ALL_ADVANCE_RECEIPTS}`
+        .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+        .replace(':sortBy', requestObject && requestObject.sortBy ? requestObject.sortBy : '')
+        .replace(':sort', requestObject && requestObject.sort ? requestObject.sort : '')
+        .replace(':page', (requestObject && requestObject.page) ? String(requestObject.page) : '')
+        .replace(':count', requestObject && requestObject.count ? String(requestObject.count) : '')
+        .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
+        .replace(':to', requestObject && requestObject.to ? requestObject.to : '');
+        if (requestObject.branchUniqueName) {
+            url = url.concat(`&branchUniqueName=${requestObject.branchUniqueName !== companyUniqueName ? requestObject.branchUniqueName : ''}`);
+        }
+        return this._http.post(url, requestObject).pipe(catchError((error) => this.errorHandler.HandleCatch<any, GetAllAdvanceReceiptsRequest>(error)));
     }
 
     /**
@@ -347,12 +356,13 @@ export class ReceiptService implements OnInit {
     public fetchSummary(requestObject: AdvanceReceiptSummaryRequest): Observable<BaseResponse<any, AdvanceReceiptSummaryRequest>> {
         const companyUniqueName = String(requestObject.companyUniqueName);
         delete requestObject.companyUniqueName;
-        return this._http.get(
-            `${this.config.apiUrl}${RECEIPT_API.GET_ADVANCE_RECEIPTS_SUMMARY}`
-                .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-                .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
-                .replace(':to', requestObject && requestObject.to ? requestObject.to : ''),
-            {}
-        ).pipe(catchError((error) => this.errorHandler.HandleCatch<any, AdvanceReceiptSummaryRequest>(error)));
+        let url = `${this.config.apiUrl}${RECEIPT_API.GET_ADVANCE_RECEIPTS_SUMMARY}`
+        .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+        .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
+        .replace(':to', requestObject && requestObject.to ? requestObject.to : '');
+        if (requestObject.branchUniqueName) {
+            url = url.concat(`&branchUniqueName=${requestObject.branchUniqueName !== companyUniqueName ? requestObject.branchUniqueName : ''}`);
+        }
+        return this._http.get(url, {}).pipe(catchError((error) => this.errorHandler.HandleCatch<any, AdvanceReceiptSummaryRequest>(error)));
     }
 }

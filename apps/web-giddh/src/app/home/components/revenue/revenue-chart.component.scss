@@ -1,5 +1,5 @@
 @import "../../../../assets/css/color.scss";
-.secondryDarkbg span {
+.secondary-dark-bg span {
     background: $teal;
     width: 15px;
     height: 15px;
@@ -7,8 +7,8 @@
     margin-right: 5px;
 }
 
-.secondrylightbg span {
-    background: #0cb1af;
+.secondary-light-bg span {
+    background: $light-sea-green;
     width: 15px;
     height: 15px;
     display: inline-block;
@@ -20,12 +20,12 @@
     justify-content: center;
     align-items: center;
 }
-.dashboard-option li.secondryDarkbg {
-    color: #087e7d;
+.dashboard-option li.secondary-dark-bg {
+    color: $teal;
     font-size: 14px;
 }
-.dashboard-option li.secondrylightbg {
-    color: #0cb1af;
+.dashboard-option li.secondary-light-bg {
+    color: $light-sea-green;
     font-size: 14px;
 }
 
@@ -33,14 +33,13 @@
     color: $dark-gray;
 }
 .left-column {
-    border-right: 1px solid #ddd;
+    border-right: 1px solid $gainsboro;
     margin: 5px 0;
 }
 span.this-week {
     color: $dark-gray;
     padding-left: 5px;
     font-size: 16px;
-    text-decoration: underline;
 }
 .total-sale-detail {
     text-align: right;
@@ -48,18 +47,18 @@ span.this-week {
 }
 .total-sale-detail p {
     font-size: 18px;
-    color: #666;
+    color: $dark-gray;
 }
 .total-sale-detail h3 {
     font-size: 22px;
-    color: #000000;
+    color: $black;
 }
 
 .total-sale-detail span {
     font-size: 18px;
-    color: #000000;
+    color: $black;
 }
-.singleSaleDetail {
+.single-sale-detail {
     padding-top: 30px;
 }
 span.icon-collapse-icon {
@@ -68,29 +67,29 @@ span.icon-collapse-icon {
     cursor: pointer;
 }
 span.icon-collapse-icon:hover {
-    color: #1a237e;
+    color: $midnight-blue;
 }
 
 /* CSS FOR LINE CHART */
 
 p.bankName {
     font-size: 14px;
-    color: #1a237e;
+    color: $midnight-blue;
     margin-bottom: 5px;
 }
 
-p.bankBalnc {
+p.bank-balance {
     color: $dark-gray;
     font-size: 14px;
     display: flex;
     justify-content: space-between;
 }
-.single-bank-detatil {
+.single-bank-detail {
     border-bottom: 1px solid $gainsboro;
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
-a.connectBnk {
+a.connect-bank {
     position: absolute;
     bottom: 10px;
     color: $nero;
@@ -101,7 +100,7 @@ a.connectBnk {
     padding: 15px;
 }
 .total-sales-header {
-    background-color: #fff;
+    background-color: $white;
     border: 1px solid $gainsboro;
     border-radius: 2px;
     padding: 15px 15px 20px;
@@ -111,13 +110,13 @@ a.connectBnk {
     color: $charcoal;
     margin-bottom: 3px;
 }
-.daterang-block .form-control {
-    border: 1px solid #5b64c9;
+.date-range-block .form-control {
+    border: 1px solid $chetwode-blue;
 }
-.dateRangeInput {
+.date-range-input {
     position: relative;
 }
-.dateRangeInput span.icon-calender {
+.date-range-input span.icon-calender {
     position: absolute;
     width: 32px;
     height: 32px;
@@ -127,12 +126,12 @@ a.connectBnk {
     border-right: 1px solid $gainsboro;
     color:$nero;
 }
-.dateRangeInput input {
+.date-range-input input {
     padding-left: 35px !important;
     color:$nero;
 }
 .page-title h1 {
-    color: #1a237e;
+    color: $midnight-blue;
     font-size: 24px;
     text-align: center;
     font-weight: 600;
@@ -156,9 +155,9 @@ a.connectBnk {
     display: inline;
     text-align: right;
     font-size: 24px;
-    color: #1a237e;
+    color: $midnight-blue;
 }
-.dateRangeInput.disabled {
+.date-range-input.disabled {
     opacity: 0.5;
 }
 .page-title {
@@ -170,7 +169,7 @@ a.connectBnk {
     font-size: 18px;
 }
 .active-date {
-    color: #1a237e;
+    color: $midnight-blue;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -180,21 +179,21 @@ a.connectBnk {
     width: 15px;
     height: 15px;
     display: inline-block;
-    background-color: #1a237e;
+    background-color: $midnight-blue;
     margin-right: 5px;
 }
-.inActive-date {
-    color: #5b64c9;
+.in-active-date {
+    color: $chetwode-blue;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     margin-right: 32px;
 }
-.inActive-date span {
+.in-active-date span {
     width: 15px;
     height: 15px;
     display: inline-block;
-    background-color: #5b64c9;
+    background-color: $chetwode-blue;
     margin-right: 5px;
 }
 
@@ -205,7 +204,7 @@ a.connectBnk {
 
     position: relative;
 }
-.topdates {
+.top-dates {
     min-height: 60px;
 }
 .single-sale-data p {
@@ -214,11 +213,11 @@ a.connectBnk {
 }
 .single-sale-data h3 {
     font-size: 22px;
-    color: #1a237e;
+    color: $midnight-blue;
     margin-top: 6px;
 }
-span.dateWiseSale {
-    color: #1a237e;
+span.date-wise-sale {
+    color: $midnight-blue;
     font-size: 18px;
 }
 
@@ -289,7 +288,7 @@ input:read-only:focus {
     .total-sale-detail{
         text-align: left;
         padding-right: 0;
-        .singleSaleDetail{
+        .single-sale-detail{
             padding-top: 0;
             padding-bottom: 10px;
         }
@@ -347,7 +346,7 @@ input:read-only:focus {
         flex-direction: column;
         align-items: baseline;
     }
-    .daterang-block {
+    .date-range-block {
         padding-bottom: 10px;
         font-size: 14px;
     }

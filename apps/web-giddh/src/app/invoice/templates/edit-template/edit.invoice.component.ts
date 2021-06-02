@@ -1,6 +1,6 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
@@ -13,6 +13,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceTemplateModalComponent } from './modals/template-modal/template-modal.component';
 import { VoucherTypeEnum } from '../../../models/api-models/Sales';
+import { InvoiceService } from '../../../services/invoice.service';
 
 /**
  * Created by kunalsaxena on 6/29/17.
@@ -634,8 +635,27 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     public showtemplateModal: boolean = false;
     public templateType: any;
 
-    constructor(private _toasty: ToasterService, private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _activatedRoute: ActivatedRoute, private _invoiceUiDataService: InvoiceUiDataService) {
+    constructor(
+        private _toasty: ToasterService,
+        private store: Store<AppState>,
+        private invoiceActions: InvoiceActions,
+        private _invoiceTemplatesService: InvoiceTemplatesService,
+        private _activatedRoute: ActivatedRoute,
+        private invoiceService: InvoiceService,
+        private _invoiceUiDataService: InvoiceUiDataService
+    ) {
         this.store.dispatch(this.invoiceActions.getTemplateState());
+    }
+
+    /**
+     * Returns the content filter form invalid status
+     *
+     * @readonly
+     * @type {boolean} True, if form is invalid
+     * @memberof EditInvoiceComponent
+     */
+    public get isFormInValid(): boolean {
+        return this._invoiceUiDataService.contentForm?.invalid;
     }
 
     public ngOnInit() {
@@ -662,7 +682,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         // });
 
         // Get custom created templates
-        this.store.select(c => c.invoiceTemplate).pipe(takeUntil(this.destroyed$)).subscribe((s) => {
+        this.store.pipe(select(c => c.invoiceTemplate), takeUntil(this.destroyed$)).subscribe((s) => {
             if (s && s.customCreatedTemplates) {
                 this.customCreatedTemplates = _.cloneDeep(s.customCreatedTemplates);
                 this.customCreatedTemplates.sort((a, b) => {
@@ -708,20 +728,20 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         let companyUniqueName = null;
         let companies = null;
         let defaultTemplate = null;
-        this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
             companyUniqueName = ss.companyUniqueName;
             companies = ss.companies;
         });
-        this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             defaultTemplate = ss.defaultTemplate;
-            if (this.templateType === 'voucher') {
-                defaultTemplate = ss.sampleTemplates[9];
-            }
+            defaultTemplate.type = this.templateType;
         });
 
-        if (defaultTemplate.sections.footer.data.companyName) { // slogan default company on new template creation
+        if (defaultTemplate && defaultTemplate.sections && defaultTemplate.sections.footer && defaultTemplate.sections.footer.data && defaultTemplate.sections.footer.data.companyName) { // slogan default company on new template creation
             defaultTemplate.sections.footer.data.slogan.label = defaultTemplate.sections.footer.data.companyName.label;
+            defaultTemplate.sections.footer.data.textUnderSlogan.label = defaultTemplate.sections.footer.data.companyName.label;
         }
+        this._invoiceUiDataService.setLogoPath('');
         this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
         this.showtemplateModal = true;
         this.templateModal.show();
@@ -759,9 +779,14 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.fontDefault = data.fontSize;
                 data.fontMedium = data.fontSize - 2;
             }
+            if (!data.sections['footer'].data['textUnderSlogan'].display || !data?.sections['footer']?.data['textUnderSlogan']?.label) {
+                // If user checks the checkbox but didn't provide label then remove the selection
+                data.sections['footer'].data['textUnderSlogan'].display = false;
+                data.sections['footer'].data['textUnderSlogan'].label = '';
+            }
             delete data['uniqueName'];
 
-            this._invoiceTemplatesService.saveTemplates(data).subscribe((res) => {
+            this._invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
                     this._toasty.successToast('Template Saved Successfully.');
                     this.templateModal.hide();
@@ -798,8 +823,18 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.fontDefault = data.fontSize;
                 data.fontMedium = data.fontSize - 2;
             }
+            if (!data.sections['footer'].data['message1'].display || !data?.sections['footer']?.data['message1']?.label) {
+                // If user checks the checkbox but didn't provide label then remove the selection
+                data.sections['footer'].data['message1'].display = false;
+                data.sections['footer'].data['message1'].label = '';
+            }
+            if (!data.sections['footer'].data['textUnderSlogan'].display || !data?.sections['footer']?.data['textUnderSlogan']?.label) {
+                // If user checks the checkbox but didn't provide label then remove the selection
+                data.sections['footer'].data['textUnderSlogan'].display = false;
+                data.sections['footer'].data['textUnderSlogan'].label = '';
+            }
             data = this.newLineToBR(data);
-            this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).subscribe((res) => {
+            this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
                     this._toasty.successToast('Template Updated Successfully.');
                     this.confirmationFlag = null;
@@ -807,7 +842,9 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                     this.deleteTemplateConfirmationMessage = null;
                     this.customTemplateConfirmationModal.hide();
                     this.templateModal.hide();
-
+                    this._invoiceUiDataService.resetCustomTemplate();
+                    this._invoiceUiDataService.setLogoPath('');
+                    this._invoiceUiDataService.unusedImageSignature = '';
                     if (this.invoiceTemplateModalComponent && this.invoiceTemplateModalComponent.editFiltersComponent) {
                         this.invoiceTemplateModalComponent.editFiltersComponent.openTab('design');
                     }
@@ -839,7 +876,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         let customCreatedTemplates = null;
         let defaultTemplate = null;
 
-        this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             customCreatedTemplates = ss.customCreatedTemplates;
             defaultTemplate = ss.defaultTemplate;
         });
@@ -858,7 +895,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         let customCreatedTemplates = null;
         let defaultTemplate = null;
 
-        this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             customCreatedTemplates = ss.customCreatedTemplates;
             defaultTemplate = ss.defaultTemplate;
         });
@@ -902,9 +939,14 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             if (this.invoiceTemplateModalComponent && this.invoiceTemplateModalComponent.editFiltersComponent) {
                 this.invoiceTemplateModalComponent.editFiltersComponent.openTab('design');
             }
+            if (this._invoiceUiDataService.unusedImageSignature) {
+                this.invoiceService.removeSignature(this._invoiceUiDataService.unusedImageSignature).subscribe(() => {});
+            }
             this._invoiceUiDataService.resetCustomTemplate();
+            this._invoiceUiDataService.setLogoPath('');
             this.templateModal.hide();
             this.showtemplateModal = false;
+            this._invoiceUiDataService.unusedImageSignature = '';
         }
         this.customTemplateConfirmationModal.hide();
     }

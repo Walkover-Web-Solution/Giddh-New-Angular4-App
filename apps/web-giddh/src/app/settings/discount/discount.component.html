@@ -1,6 +1,6 @@
 <div class="box clearfix">
 	<div class="row">
-		<h1 class="section-head pdT0 col-sm-12">Create Discount</h1>
+		<h1 class="section-head pt-0 col-sm-12">Create Discount</h1>
 	</div>
 
 	<form #discountForm="ngForm" novalidate (submit)="submit()" class="discount-form-setting-tab">
@@ -27,8 +27,8 @@
                 <label>Linked Accounts</label>
                 <sh-select [isFilterEnabled]="true" [notFoundLink]="true" name="account"
                     [(ngModel)]="createRequest.accountUniqueName" [placeholder]="'Select Discount'"
-                    [showNotFoundLinkAsDefault]="true" [options]="accounts$" [ItemHeight]="'max-content'"
-                    (noResultsClicked)="toggleAccountAsidePane($event)">
+                    [showNotFoundLinkAsDefault]="true" [options]="accounts" [ItemHeight]="'max-content'"
+                    (noResultsClicked)="toggleAccountAsidePane($event)" class="select-linked-accounts">
                 </sh-select>
             </div>
 
@@ -50,7 +50,7 @@
 
 			<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
 
-				<table class="table table-bordered basic mrB  on-mobile-view">
+				<table class="table table-bordered basic mr-b05 on-mobile-view">
 
 					<thead>
 						<tr>
@@ -60,7 +60,7 @@
 						</tr>
 					</thead>
 
-					<tbody>
+					<tbody *ngIf="!(isDiscountListInProcess$ | async)">
 						<tr *ngFor="let discount of discountList$ | async; let i = index">
 							<td data-title="#">{{ i + 1 }}</td>
 							<td data-title="Name"> {{ discount.name }}</td>
@@ -75,7 +75,7 @@
 						</tr>
 					</tbody>
 
-					<tbody *ngIf="!(discountList$ | async).length" class="on-mobile-view no-records">
+					<tbody *ngIf="!(isDiscountListInProcess$ | async) && !(discountList$ | async).length" class="on-mobile-view no-records">
 						<tr>
 							<td colspan="3" class="text-center empty-table">
 								<h1>No Discount Found !!</h1>
@@ -83,6 +83,14 @@
 						</tr>
 					</tbody>
 
+                    <tbody *ngIf="(isDiscountListInProcess$ | async)">
+						<tr>
+							<td colspan="3" class="text-center empty-table">
+								<giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+							</td>
+						</tr>
+                    </tbody>
+                    
 				</table>
 
 			</div>
@@ -93,6 +101,7 @@
 </div>
 
 <!-- open account aside -->
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
 <aside-menu-account *ngIf="accountAsideMenuState === 'in'" [class]="accountAsideMenuState"
 	[@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
 	[activeGroupUniqueName]="'discount'"></aside-menu-account>

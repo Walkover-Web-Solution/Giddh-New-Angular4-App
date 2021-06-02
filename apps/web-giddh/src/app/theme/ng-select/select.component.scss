@@ -1,3 +1,5 @@
+@import "../../../assets/css/color.scss";
+
 ng-select {
     display: inline-block;
     margin: 0;
@@ -12,12 +14,12 @@ ng-select {
     // Container.
     > div {
         border: none;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid $gainsboro;
         box-sizing: border-box;
         cursor: pointer;
         user-select: none;
         width: 100%;
-        background-color: #fff;
+        background-color: $white;
         &.open {
         }
         &.focus {
@@ -26,8 +28,8 @@ ng-select {
         &.below {
         }
         &.disabled {
-            background-color: #eee;
-            color: #aaa;
+            background-color: $whisper-light;
+            color: $dim-gray;
             cursor: default;
             pointer-events: none;
         }
@@ -48,12 +50,12 @@ ng-select {
             }
             > div.clear,
             > div.toggle {
-                color: #aaa;
+                color: $dim-gray;
                 line-height: 30px;
                 text-align: center;
                 width: 30px;
                 &:hover {
-                    background-color: #ececec;
+                    background-color: $whisper-color;
                 }
             }
             > div.clear {
@@ -71,10 +73,10 @@ ng-select {
             padding: 0 10px;
             width: 100%;
             > div.option {
-                background-color: #eee;
-                border: 1px solid #aaa;
+                background-color: $whisper-light;
+                border: 1px solid $dim-gray;
                 border-radius: 4px;
-                color: #333;
+                color: $night-rider;
                 cursor: default;
                 display: inline-block;
                 flex-shrink: 0;
@@ -83,13 +85,13 @@ ng-select {
                 margin: 3px 5px 3px 0;
                 padding: 0 4px;
                 span.deselect-option {
-                    color: #aaa;
+                    color: $dim-gray;
                     cursor: pointer;
                     font-size: 14px;
                     height: 20px;
                     line-height: 20px;
                     &:hover {
-                        color: #555;
+                        color: $dark-gray;
                     }
                 }
             }
@@ -115,7 +117,7 @@ ng-select {
     }
 }
 
-.ng-select-wrap.liq ng-select .below {
+.ng-select-wrap.select-list ng-select .below {
     width: 100% !important;
 }
 
@@ -123,7 +125,7 @@ ng-select.splSales {
     width: 190px;
     // height: 42px;
     > div {
-        border-color: #d6d6d6;
+        border-color: $light-gray;
         // height: 41px;
         > .single {
             // height: 39px;

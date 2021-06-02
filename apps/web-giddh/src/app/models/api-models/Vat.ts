@@ -2,6 +2,7 @@ export class VatReportRequest {
     from: string;
     to: string;
     taxNumber: string;
+    branchUniqueName: string;
 }
 
 export class VatReportSectionData {

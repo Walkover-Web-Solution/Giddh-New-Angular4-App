@@ -35,6 +35,7 @@ import {
     TransferProductsRequest,
     NewBranchTransferRequest, NewBranchTransferResponse, NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams, NewBranchTransferDownloadRequest
 } from '../models/api-models/BranchTransfer';
+import { PAGINATION_LIMIT } from '../app.constant';
 
 declare var _: any;
 
@@ -151,17 +152,28 @@ export class InventoryService {
     /**
      * get Stocks
      */
-    public GetStocks(companyUniqueName: string = ''): Observable<BaseResponse<StocksResponse, string>> {
+    public GetStocks(payload: any = { companyUniqueName: '' }): Observable<BaseResponse<StocksResponse, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-
         let cmpUniqueName: string = this.companyUniqueName;
-
-        if (companyUniqueName) {
-            cmpUniqueName = companyUniqueName;
+        if (payload.companyUniqueName) {
+            cmpUniqueName = payload.companyUniqueName;
+        }
+        let url = this.config.apiUrl + INVENTORY_API.STOCKS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName));
+        let delimiter = '?';
+        if (payload.branchUniqueName) {
+            url = url.concat(`?branchUniqueName=${payload.branchUniqueName !== cmpUniqueName ? encodeURIComponent(payload.branchUniqueName) : ''}`);
+            delimiter = '&';
+        }
+        if (payload.q) {
+            url = url.concat(`${delimiter}q=${payload.q}`);
+            delimiter = '&';
+        }
+        if (payload.page) {
+            url = url.concat(`${delimiter}page=${payload.page}&count=${payload.count || PAGINATION_LIMIT}`);
         }
 
-        return this._http.get(this.config.apiUrl + INVENTORY_API.STOCKS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName))).pipe(map((res) => {
+        return this._http.get(url).pipe(map((res) => {
             let data: BaseResponse<StocksResponse, string> = res;
             data.request = '';
             data.queryString = {};
@@ -976,8 +988,16 @@ export class InventoryService {
         }
 
         if (request.reportType === 'group' || request.reportType === 'stock') {
+            if (request.branchUniqueName === this._generalService.companyUniqueName) {
+                // Delete the branch unique name when company is selected in the dropdown
+                delete request.branchUniqueName;
+                delete requestObject.branchUniqueName;
+            }
             return this._http.post(url, requestObject).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error, '', {})));
         } else {
+            if (request.branchUniqueName) {
+                url = url.concat(`&branchUniqueName=${request.branchUniqueName}`);
+            }
             return this._http.get(url)
                 .pipe(map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -1064,7 +1084,10 @@ export class InventoryService {
         url = url.replace(":count", getParams.count);
         url = url.replace(":sort", getParams.sort);
         url = url.replace(":sortBy", getParams.sortBy);
-
+        if (getParams.branchUniqueName) {
+            const branchUniqueName = getParams.branchUniqueName !== this.companyUniqueName ? getParams.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${encodeURIComponent(branchUniqueName)}`);
+        }
         return this._http.post(url, postParams)
             .pipe(map((res) => {
                 let data: BaseResponse<any, any> = res;

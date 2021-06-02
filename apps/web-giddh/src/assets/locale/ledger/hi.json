@@ -1,0 +1,200 @@
+{
+    "page_heading": "बही खाता - ",
+    "share_ledger": "शेयर लेजर",
+    "attach_file": "फ़ाइल जोड़ें",
+    "search_ledger": "लेजर खोजें",
+    "import_statement": "आयात स्टेटमैंट",
+    "loading_transactions": "लेन-देन लोड हो रहा है",
+    "mapped_account_transactions": "मैप किए गए खाते से लेन-देन",
+    "dr": "डेबिट",
+    "cr": "क्रेडिट",
+    "create_account": "नया खाता बनाएँ",
+    "transactions": "लेनदेन",
+    "pages": "पृष्ठों",
+    "cf_balance": "सी / एफ बैलेंस",
+    "by": "प्रति",
+    "to": "सेवा",
+    "to_balance_bf": "शेष राशि बी / एफ के लिए",
+    "download_file": "फ़ाइल डाउनलोड करें",
+    "to_select_accounts": "खातों का चयन करें",
+    "by_select_accounts": "खातों का चयन करें",
+    "new_account": "नया खाता",
+    "by_balance_bf": "शेष बी / एफ द्वारा",
+    "bf_balance": "बी / एफ बैलेंस",
+    "by_particular": "[PARTICULAR] द्वारा",
+    "to_particular": "[PARTICULAR] को",
+    "to_balance_cf": "शेष राशि सी / एफ के लिए",
+    "balance_bank": "बैंक के अनुसार शेष राशि",
+    "pending_cheque": "लंबित चेक",
+    "reconciliation": "समाधान",
+    "total_transactions": "कुल लेन-देन",
+    "opening_balance": "प्रारंभिक शेष",
+    "net_total": "कुल",
+    "closing_balance": "जमा शेष",
+    "delete_entries_title": "क्या आप चयनित एंट्री (ओं) को हटाना चाहते हैं?",
+    "delete_entries_content": "उनके सभी संबंधित वाउचर और चालान स्थायी रूप से हटा दिए जाएंगे और अब वे अन्य मॉड्यूल से सुलभ नहीं होंगे।",
+    "select_voucher_generate": "वाउचर जनरेट विकल्प चुनें",
+    "entry_created": "प्रवेश सफलतापूर्वक बनाया गया",
+    "transaction_required": "एक प्रविष्टि करने के लिए कम से कम लेनदेन होना चाहिए।",
+    "invalid_date": "अमान्य तिथि चयनित। कृपया मान्य तिथि चुनें",
+    "invalid_cheque_clearance_date": "अमान्य तिथि चेक क्लीयरेंस तिथि में चयनित। कृपया मान्य तिथि चुनें",
+    "select_one_entry": "कृपया कम से कम एक प्रविष्टि चुनें।",
+    "select_valid_action": "कृपया एक मान्य कार्रवाई चुनें।",
+    "file_uploaded": "फाईल सफलता पूर्वक अपलोड हुई",
+    "bank_transaction_deleted": "बैंक लेनदेन सफलतापूर्वक हटा दिया गया",
+    "save_unfinished_entry": "कृपया अधूरी प्रविष्टि पहले सहेजें ...",
+    "qty": "मात्रा",
+    "price": "कीमत",
+    "tax_on_advance": "एडवांस पर टैक्स",
+    "tax_rcm": "कर (RCM)",
+    "select_warehouse": "वेयरहाउस का चयन करें",
+    "other_tax": "अन्य कर?",
+    "taxable_amount": "कर योग्य राशि",
+    "itc_type": "ITC प्रकार",
+    "more_details": "अधिक जानकारी",
+    "total_in_currency": "[CURRENCY] में कुल",
+    "select_vouchers": "वाउचर का चयन करें",
+    "select_invoice": "चालान का चयन करें",
+    "dated": "दिनांकित",
+    "adjust_voucher": "समायोजित करें [VOUCHER_TYPE]",
+    "adjust_receipt": "रसीद समायोजित करें",
+    "adjust_advance_receipt": "एडवांस रसीद समायोजित करें",
+    "adjusted_amount": "समायोजित राशि",
+    "cheque_number_placeholder": "XXXX2619",
+    "assign_tag": "टैग असाइन करें",
+    "map_transaction": "नक्शा लेन-देन",
+    "with": "साथ",
+    "add_to_dr": "डीआर में जोड़ें",
+    "add_to_cr": "सीआर में जोड़ें",
+    "confirm_delete_file": "क्या आप वाकई संलग्न फ़ाइल को हटाना चाहते हैं?",
+    "map_bank_entry": "मैप बैंक प्रविष्टि",
+    "transaction_available_rc": "क्या यह लेन-देन &nbsp;<strong>&nbsp;रिवर्स चार्ज के लिए लागू है? </strong>",
+    "tax_compulsory": "कर अनिवार्य है",
+    "transaction_available_ts": "क्या यह लेन-देन पर्यटक योजना के लिए लागू है?",
+    "passport_number": "पासपोर्ट संख्या",
+    "no_matching_entry_found": "मिलान राशि के साथ कोई प्रविष्टि नहीं मिली, कृपया इस लेनदेन के समान राशि के साथ एक नई प्रविष्टि बनाएं।",
+    "map_cheque_bank_transaction": "चयनित बैंक लेनदेन को चेक नंबर [CHEQUE_NUMBER] के साथ मैप किया जाएगा जिसे स्वीकार करने के लिए हां पर क्लिक करें।",
+    "entry_mapped": "सफलतापूर्वक प्रवेश किया",
+    "by_balance_cf": "शेष सी / एफ द्वारा",
+    "add_account": "खाता जोड़ो",
+    "add_stock": "स्टॉक जोड़ें",
+    "upload": "अपलोड",
+    "import_error": "केवल PDF फ़ाइलें आयात के लिए समर्थित हैं",
+    "import_success": "फ़ाइल सफलतापूर्वक अपलोड कर दी गई है।",
+    "import_page_heading": "आयात विवरण (केवल पीडीएफ)",
+    "file": "फ़ाइल",
+    "password": "पासवर्ड",
+    "type_filter": "फिल्टर करने के लिए टाइप करें ।।",
+    "c_f": "सी / एफ",
+    "total_amount": "कुल राशि",
+    "adjusted_amount_full": "समायोजित राशि",
+    "adjustment": "समायोजन",
+    "adjustment_notes": "चयनित प्रविष्टि [VOUCHER_NUMBER] का एक हिस्सा है। सभी समायोजन बाद की प्रविष्टियों के साथ-साथ प्रदर्शित होंगे। यहां हम चालान को न केवल चयनित प्रविष्टि को समायोजित कर रहे हैं। कृपया ध्यान दें कि लिंक की गई प्रविष्टियों को यहाँ से अपडेट नहीं किया जा सकता है।",
+    "adjustment_vouchers": "समायोजन वाउचर",
+    "excess_amount": "अतिरिक्त राशि",
+    "adjustment_amount_error": "समायोजन राशि प्राप्तियों से अधिक है।",
+    "voucher_no": "वाउचर संख्या",
+    "compound_total": "यौगिक कुल",
+    "toedit_switch_branch": "संपादित करने के लिए, \"शाखा\" स्विच करें",
+    "confirm_delete_entry": "क्या आप वाकई इस प्रविष्टि को हटाना चाहते हैं?",
+    "multiple_stock_entry_error": "आप कई स्टॉक प्रविष्टि नहीं जोड़ सकते",
+    "invalid_account_transaction_error": "कृपया लेनदेन में एक वैध खाते का चयन करें",
+    "account_unchanged": "खाता नहीं बदला गया",
+    "base_account_change_error": "आपको आधार खाता बदलने की अनुमति नहीं है। वाउचर पहले से ही जेनरेट किया गया है",
+    "account_entry_error": "कृपया प्रविष्टि के लिए [ACCOUNT] चुनें।",
+    "text_data": [
+        {
+            "accountType": "Debtors",
+            "text": {
+                "cr": "क्या <accountName> देने वाला है?",
+                "dr": "क्या <accountName> रिसीवर है?"
+            },
+            "balanceText": {
+                "cr": "देनदारों से अग्रिम",
+                "dr": "देय"
+            }
+        },
+        {
+            "accountType": "Creditors",
+            "text": {
+                "cr": "क्या <accountName> देने वाला है?",
+                "dr": "क्या <accountName> रिसीवर है?"
+            },
+            "balanceText": {
+                "cr": "लेनदारों को देय",
+                "dr": "लेनदारों को अग्रिम"
+            }
+        },
+        {
+            "accountType": "Revenue",
+            "text": {
+                "cr": "+ <accountName> (बढ़ते हुए)",
+                "dr": "- <accountName> (घटते हुए)"
+            },
+            "balanceText": {
+                "cr": "राजस्व",
+                "dr": "(-) नकारात्मक राजस्व"
+            }
+        },
+        {
+            "accountType": "Expense",
+            "text": {
+                "cr": "<accountName> ↓  (घटते हुए)",
+                "dr": "<accountName> ↑ (बढ़ते हुए)"
+            },
+            "balanceText": {
+                "cr": "नकारात्मक व्यय (अजीब लगता है) ",
+                "dr": "व्यय"
+            }
+        },
+        {
+            "accountType": "Asset",
+            "text": {
+                "cr": "<accountName> बाहर जा रहा है (-)",
+                "dr": "<accountName> (+) में आ रहा है"
+            },
+            "balanceText": {
+                "cr": "(-) एसेट (ओह नहीं!)",
+                "dr": "संपत्ति की कीमत"
+            }
+        },
+        {
+            "accountType": "Liability",
+            "text": {
+                "cr": "<accountName> बढ़ता जा रहा है ↑",
+                "dr": "<accountName> घट रही है ↓"
+            },
+            "balanceText": {
+                "cr": "देयता",
+                "dr": "देयताओं का अग्रिम भुगतान (हुर्रे!)"
+            }
+        },
+        {
+            "accountType": "ReverseCharge",
+            "text": {
+                "cr": "<accountName> घट रही है ↓",
+                "dr": "<accountName> बढ़ता जा रहा है ↑"
+            },
+            "balanceText": {
+                "cr": "(-) रिवर्स चार्ज (ओह नहीं!)",
+                "dr": "रिवर्स चार्ज वैल्यू"
+            }
+        },
+        {
+            "accountType": "null",
+            "text": {
+                "cr": "<accountName> दायित्व बाहर जा रहा है",
+                "dr": "<accountName> दायित्व में आ रहा है"
+            },
+            "balanceText": {
+                "cr": "",
+                "dr": ""
+            }
+        }
+    ],
+    "import_goods": "माल का आयात",
+    "import_services": "सेवाओं का आयात",
+    "others": "अन्य",
+    "choose_file": "फाइलें चुनें",
+    "remove_file": "सफलतापूर्वक मिटाया गया"
+}

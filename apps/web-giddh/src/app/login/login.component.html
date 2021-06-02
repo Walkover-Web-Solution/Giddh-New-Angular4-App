@@ -19,7 +19,7 @@
                             <div class="accounting-space bg-white">
                                 <section id="full-view">
                                     <h4 class="mb-4">Login to your secure accounting space</h4>
-                                    <form class="pos-rel mt-2 mb-3" id="login-with-pwd"
+                                    <form class="position-relative mt-2 mb-3" id="login-with-pwd"
                                         [formGroup]="loginWithPasswdForm"
                                         (ngSubmit)="loginWithPasswd(loginWithPasswdForm)"
                                         *ngIf="loginUsing === 'userName'"
@@ -34,7 +34,7 @@
                                                 Login
                                             </button>
                                         </div>
-                                        <a href="javascript:void(0)" class="pull-right btn-link fs14 forget-pw"
+                                        <a href="javascript:void(0)" class="pull-right btn-link font-14 forget-pw"
                                             (click)="showForgotPasswordModal()">Forgot
                                             password?</a>
                                     </form>
@@ -164,10 +164,10 @@
 </section> -->
 
 <!--email varify modal  -->
-<div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true" [config]="{backdrop: 'static'}">
+<div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true" [config]="modalConfig">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
 
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
@@ -210,10 +210,10 @@
 <!--email varify modal  -->
 
 <!--mobile varify form  -->
-<div class="modal fade" tabindex="-1" bsModal #mobileVerifyModal="bs-modal" role="dialog" aria-hidden="true" [config]="{backdrop: 'static'}">
+<div class="modal fade" tabindex="-1" bsModal #mobileVerifyModal="bs-modal" role="dialog" aria-hidden="true" [config]="modalConfig">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</span>
@@ -223,10 +223,9 @@
                         [formGroup]="mobileVerifyForm">
                         <div class="clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
                             <sh-select [options]="countryCodeList" class="form-inline"
-                                (selected)="setCountryCode($event)" [placeholder]="'CC'" formControlName="country"
-                                class="pull-left" style="width: 80px;"></sh-select>
-                            <input class="form-control" formControlName="mobileNumber" type="text"
-                                placeholder="Enter your Mobile No" required style="width: calc(100% - 80px);" />
+                                (selected)="setCountryCode($event)" [placeholder]="'CC'" formControlName="country"></sh-select>
+                            <input class="form-control input-width-mobile" formControlName="mobileNumber" type="text"
+                                placeholder="Enter your Mobile No" required />
                         </div>
                         <button *ngIf="!(isLoginWithMobileSubmited$ | async)"
                             class="btn sharp btn-block btn-success btn-lg mr-t1"
@@ -237,7 +236,7 @@
                         </button>
                         <div class="clearfix form-group form-group-lg" *ngIf="(isLoginWithMobileSubmited$ | async)">
                             <hr class="mrtb10">
-                            <input class="form-control" placeholder="Enter OTP" style="border-radius:0"
+                            <input class="form-control square" placeholder="Enter OTP"
                                 formControlName="otp">
                             <button type="login" class="btn sharp btn-block btn-success btn-lg mr-t1"
                                 [ladda]="isVerifyMobileInProcess$ | async"
@@ -254,10 +253,10 @@
 <!--mobile verify form  -->
 
 <!-- two way auth popup -->
-<div class="modal fade" tabindex="-1" bsModal #twoWayAuthModal="bs-modal" role="dialog" aria-hidden="true" [config]="{backdrop: 'static'}" (onHidden)="onHiddenAuthModal($event)">
+<div class="modal fade" tabindex="-1" bsModal #twoWayAuthModal="bs-modal" role="dialog" aria-hidden="true" [config]="modalConfig" (onHidden)="onHiddenAuthModal($event)">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal"
@@ -268,7 +267,7 @@
                         [formGroup]="twoWayOthForm">
                         <div class="clearfix form-group form-group-lg">
                             <hr class="mrtb10">
-                            <input class="form-control" placeholder="Enter OTP" style="border-radius:0"
+                            <input class="form-control square" placeholder="Enter OTP"
                                 formControlName="otp">
                             <small>We have sent an OTP to your registered mobile number.</small>
                             <button type="login" class="btn sharp btn-block btn-success btn-lg mr-t1"
@@ -288,7 +287,7 @@
 <!-- <div class="modal fade" tabindex="-1" bsModal #forgotPasswordModal="bs-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Forgot Password</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideForgotPasswordModal()">×</span>
@@ -322,11 +321,6 @@
 
 
 <div *ngIf="(isLoginWithPasswordInProcess$ | async) || (isLoginWithEmailInProcess$ | async) || (isLoginWithGoogleInProcess$ | async)">
-    <div class="no-data mr-t2 loader-main">
-        <div class="spinner2">
-            <div class="cube1"></div>
-            <div class="cube2"></div>
-        </div>
-    </div>
+    <giddh-page-loader></giddh-page-loader>
 </div>
 

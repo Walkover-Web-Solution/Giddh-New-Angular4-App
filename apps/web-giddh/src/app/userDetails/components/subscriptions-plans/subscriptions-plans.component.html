@@ -1,7 +1,7 @@
 <div class="welcome-msg">
     <div class="row">
         <div class="col-md-9 col-sm-9  font-14">
-            <p class="mb-1">Hi {{logedInUser?.name}} !</p>
+            <p class="mr-b1">Hi {{logedInUser?.name}} !</p>
             <p class="mb-3 plan-msg">All the plan come with all the features with <span class="selected">90 days money
                     back guarantee.</span></p>
         </div>
@@ -10,7 +10,7 @@
         </div>
     </div>
     <div #topAllPlans>
-        <div *ngIf="!isSwitchPlanInProcess" class="choose-ur-plan noHeight">
+        <div *ngIf="!isSwitchPlanInProcess" class="choose-ur-plan height-auto">
             <div>
                 <div class="main-row-plans">
                     <div class="row">
@@ -31,7 +31,7 @@
                                                 <div
                                                     class="d-flex align-items-center justify-content-between plans-head-top">
                                                     <div class="clearfix">
-                                                        <h3 class="bold font-22 mb-05">
+                                                        <h3 class="bold font-22 mr-b05">
                                                             {{defaultMultipleCompanyPlan?.planDetails?.amount}} /-</h3>
                                                         <p class="font-12">
                                                             {{defaultMultipleCompanyPlan?.planDetails?.duration}}
@@ -49,8 +49,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mb-1">Transactions Limit</p>
-                                                                    <p class="font-12 text-gray mb-1">
+                                                                    <p class="bold mr-b1">Transactions Limit</p>
+                                                                    <p class="font-12 text-gray mr-b1">
                                                                         {{transactionLimitTooltipContent}}</p>
                                                                 </div>
                                                             </div>
@@ -65,8 +65,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mb-1">Unlimited Users</p>
-                                                                    <p class="font-12 text-gray mb-1">
+                                                                    <p class="bold mr-b1">Unlimited Users</p>
+                                                                    <p class="font-12 text-gray mr-b1">
                                                                         {{unlimitedUsersTooltipContent}}</p>
                                                                 </div>
                                                             </div>
@@ -78,8 +78,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mb-1">Unlimited Customers/Vendors</p>
-                                                                    <p class="font-12 text-gray mb-1">
+                                                                    <p class="bold mr-b1">Unlimited Customers/Vendors</p>
+                                                                    <p class="font-12 text-gray mr-b1">
                                                                         {{unlimitedCustomersVendorsTooltipContent}}</p>
                                                                 </div>
                                                             </div>
@@ -91,8 +91,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mb-1">Desktop/Mobile App</p>
-                                                                    <p class="font-12 text-gray mb-1">
+                                                                    <p class="bold mr-b1">Desktop/Mobile App</p>
+                                                                    <p class="font-12 text-gray mr-b1">
                                                                         {{desktopMobileAppTooltipContent}}</p>
                                                                 </div>
                                                             </div>
@@ -138,7 +138,7 @@
                                                     <div
                                                         class="d-flex align-items-center justify-content-between plans-head-top">
                                                         <div class="clearfix">
-                                                            <h3 class="bold font-22 mb-05">
+                                                            <h3 class="bold font-22 mr-b05">
                                                                 <!-- <span class="price-cross">₹800</span> -->
                                                                 {{defaultSingleCompanyPlan?.planDetails?.amount}} /-
                                                             </h3>
@@ -160,8 +160,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mb-1">Transactions Limit</p>
-                                                                    <p class="font-12 text-gray mb-1">
+                                                                    <p class="bold mr-b1">Transactions Limit</p>
+                                                                    <p class="font-12 text-gray mr-b1">
                                                                         {{transactionLimitTooltipContent}}</p>
                                                                 </div>
                                                             </div>
@@ -176,8 +176,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mb-1">Unlimited Users</p>
-                                                                    <p class="font-12 text-gray mb-1">
+                                                                    <p class="bold mr-b1">Unlimited Users</p>
+                                                                    <p class="font-12 text-gray mr-b1">
                                                                         {{unlimitedUsersTooltipContent}}</p>
                                                                 </div>
                                                             </div>
@@ -189,8 +189,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mb-1">Unlimited Customers/Vendors</p>
-                                                                    <p class="font-12 text-gray mb-1">
+                                                                    <p class="bold mr-b1">Unlimited Customers/Vendors</p>
+                                                                    <p class="font-12 text-gray mr-b1">
                                                                         {{unlimitedCustomersVendorsTooltipContent}}</p>
                                                                 </div>
                                                             </div>
@@ -202,8 +202,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mb-1">Desktop/Mobile App</p>
-                                                                    <p class="font-12 text-gray mb-1">
+                                                                    <p class="bold mr-b1">Desktop/Mobile App</p>
+                                                                    <p class="font-12 text-gray mr-b1">
                                                                         {{desktopMobileAppTooltipContent}}</p>
                                                                 </div>
                                                             </div>
@@ -241,7 +241,7 @@
                                                 <h3 class="plan-heading">{{defaultFreePlan?.planDetails?.name}}</h3>
                                                 <div>
                                                     <div class="plans-head-top">
-                                                        <h3 class="bold font-22 mb-05">
+                                                        <h3 class="bold font-22 mr-b05">
                                                             {{defaultFreePlan?.planDetails?.amount}} /-
                                                         </h3>
                                                         <p class="font-12">{{defaultFreePlan?.planDetails?.duration}}
@@ -258,8 +258,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mb-1">Transactions Limit</p>
-                                                                    <p class="font-12 text-gray mb-1">
+                                                                    <p class="bold mr-b1">Transactions Limit</p>
+                                                                    <p class="font-12 text-gray mr-b1">
                                                                         {{transactionLimitTooltipContent}}</p>
                                                                 </div>
                                                             </div>
@@ -274,8 +274,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mb-1">Unlimited Users</p>
-                                                                    <p class="font-12 text-gray mb-1">
+                                                                    <p class="bold mr-b1">Unlimited Users</p>
+                                                                    <p class="font-12 text-gray mr-b1">
                                                                         {{unlimitedUsersTooltipContent}}</p>
                                                                 </div>
                                                             </div>
@@ -287,8 +287,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mb-1">Unlimited Customers/Vendors</p>
-                                                                    <p class="font-12 text-gray mb-1">
+                                                                    <p class="bold mr-b1">Unlimited Customers/Vendors</p>
+                                                                    <p class="font-12 text-gray mr-b1">
                                                                         {{unlimitedCustomersVendorsTooltipContent}}</p>
                                                                 </div>
                                                             </div>
@@ -300,8 +300,8 @@
                                                                 </button>
                                                                 <div class="transactions-popup" role="menu"
                                                                     aria-labelledby="button-alignment">
-                                                                    <p class="bold mb-1">Desktop/Mobile App</p>
-                                                                    <p class="font-12 text-gray mb-1">
+                                                                    <p class="bold mr-b1">Desktop/Mobile App</p>
+                                                                    <p class="font-12 text-gray mr-b1">
                                                                         {{desktopMobileAppTooltipContent}}</p>
                                                                 </div>
                                                             </div>
@@ -331,15 +331,10 @@
         </div>
     </div>
     <div *ngIf="isSwitchPlanInProcess">
-        <div class="no-data mr-t2 loader-main">
-            <div class="spinner2">
-                <div class="cube1"></div>
-                <div class="cube2"></div>
-            </div>
-        </div>
+        <giddh-page-loader></giddh-page-loader>
     </div>
     <div #allPlans>
-        <div class="box clearfix pl-3 mb-15 xs-pl-15 pb-3 relative all-plans" *ngIf="showPlans">
+        <div class="box clearfix pd-l3 mr-b15 xs-pd-l15 pd-r3 relative all-plans" *ngIf="showPlans">
             <a class="close close-2" href="javascript:void(0)" (click)="showPlans = ''; navigate(topAllPlans)">
                 <i class="icon-cross"></i>
             </a>
@@ -354,7 +349,7 @@
                         <h3 class="mb-2">{{item?.planDetails?.name}}</h3>
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h3 class="bold font-22 mb-05">{{item?.planDetails?.amount | number}} /-</h3>
+                                <h3 class="bold font-22 mr-b05">{{item?.planDetails?.amount | number}} /-</h3>
                                 <p class="font-12">{{item?.planDetails?.duration}}
                                     {{item?.planDetails?.durationUnit}}(s)</p>
                             </div>
@@ -388,13 +383,13 @@
         <div class="box">
             <div class="row">
                 <div class="col-md-6 col-sm-12 col-xs-12">
-                    <div class="activation-key mb-1">
+                    <div class="activation-key mr-b1">
                         <h2 class="font-26 text-blue bold mb-3">Activation Key</h2>
                         <p class="font-14">You will get the activation key from resellers.</p>
                         <div class="d-flex">
                             <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
                                 class="form-control mr-t1" placeholder="Enter activation key">
-                            <div class="activation-btn ml-15">
+                            <div class="activation-btn mr-l15">
                                 <button class="btn success-btn mr-t1 pl-3 pr-3" [disabled]="!licenceKey.value"
                                     (click)="createCompanyViaActivationKey()">
                                     Activate</button>
@@ -409,7 +404,7 @@
 
 <!-- asid bar start -->
 <!-- <div class="aside-overlay"></div>
-  <div class="accountAsideMenuState2">
+  <div class="account-aside-menu-state">
     <div class="aside-pane">
       <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
       <div class="aside-header mb-">

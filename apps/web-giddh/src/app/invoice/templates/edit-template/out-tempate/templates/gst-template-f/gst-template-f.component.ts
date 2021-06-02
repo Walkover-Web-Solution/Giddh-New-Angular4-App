@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import * as _ from '../../../../../../lodash-optimized';
 import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
@@ -15,8 +15,7 @@ import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/
 @Component({
     selector: 'gst-template-f',
     templateUrl: './gst-template-f.component.html',
-    styleUrls: ['./gst-template-f.component.css'],
-    // encapsulation: ViewEncapsulation.None
+    styleUrls: ['./gst-template-f.component.css']
 })
 
 export class GstTemplateFComponent implements OnInit, OnDestroy, OnChanges {
@@ -44,14 +43,10 @@ export class GstTemplateFComponent implements OnInit, OnDestroy, OnChanges {
 
     constructor(private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions) {
-        //
-        this.companySetting$ = this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$));
+        this.companySetting$ = this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        //
-
-
         this.companySetting$.subscribe(a => {
             if (a && a.address) {
                 this.companyAddress = _.cloneDeep(a.address);

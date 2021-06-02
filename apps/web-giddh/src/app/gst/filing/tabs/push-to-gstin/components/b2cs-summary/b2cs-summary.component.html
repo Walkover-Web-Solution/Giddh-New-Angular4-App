@@ -1,7 +1,7 @@
 <div class="gstr-transactions-summary">
     <!---->
     <h4 class="clearfix gstr-summary-title">B2C (Small) Details</h4>
-    <p style="padding-top:6px;" class="text-muted half">Details of invoices with value less than 2.5 lakhs that you’ve
+    <p class="text-muted half pd-t05">Details of invoices with value less than 2.5 lakhs that you’ve
         issued to consumers other than B2C (Large) transactions.</p>
 
     <div class="">
@@ -11,52 +11,52 @@
                     <tr>
                         <!---->
                         <th class="text-left">
-                            <div style="position: relative">
+                            <div class="position-relative">
                                 <div class="pull-left over-flow"> Type</div>
                                 <!---->
                             </div>
                         </th>
                         <th class="text-right">
-                            <div style="position: relative">
-                                <div class=" over-flow"> Rate</div>
+                            <div class="position-relative">
+                                <div class="over-flow"> Rate</div>
                                 <!---->
                             </div>
                         </th>
                         <th class="text-right">
-                            <div style="position: relative">
-                                <div class=" over-flow"> Place of Supply</div>
+                            <div class="position-relative">
+                                <div class="over-flow"> Place of Supply</div>
                                 <!---->
                             </div>
                         </th>
                         <th class="text-right">
-                            <div style="position: relative">
-                                <div class=" over-flow"> Taxable Amount</div>
-                                <!---->
-                            </div>
-                        </th>
-
-                        <th class="text-right">
-                            <div style="position: relative">
-                                <div class=" over-flow"> IGST Amount</div>
-                                <!---->
-                            </div>
-                        </th>
-                        <th class="text-right">
-                            <div style="position: relative">
-                                <div class=" over-flow"> CGST Amount</div>
+                            <div class="position-relative">
+                                <div class="over-flow"> Taxable Amount</div>
                                 <!---->
                             </div>
                         </th>
 
                         <th class="text-right">
-                            <div style="position: relative">
-                                <div class=" over-flow"> SGST Amount</div>
+                            <div class="position-relative">
+                                <div class="over-flow"> IGST Amount</div>
                                 <!---->
                             </div>
                         </th>
                         <th class="text-right">
-                            <div style="position: relative">
-                                <div class=" over-flow"> CESS</div>
+                            <div class="position-relative">
+                                <div class="over-flow"> CGST Amount</div>
+                                <!---->
+                            </div>
+                        </th>
+
+                        <th class="text-right">
+                            <div class="position-relative">
+                                <div class="over-flow"> SGST Amount</div>
+                                <!---->
+                            </div>
+                        </th>
+                        <th class="text-right">
+                            <div class="position-relative">
+                                <div class="over-flow"> CESS</div>
                                 <!---->
                             </div>
                         </th>
@@ -67,13 +67,51 @@
                 <tbody>
                     <tr *ngFor="let item of brcsSummary">
                         <td data-title="Type"> {{item.typ ? item.typ : '-'}} </td>
-                        <td data-title="Rate" class="text-right"> {{item.rt | giddhCurrency}} </td>
-                        <td data-title="Place of Supply" class="text-right"> {{item.pos ? item.pos : '-'}} </td>
-                        <td data-title="Taxable Amount" class="text-right"> {{item.txval | giddhCurrency}} </td>
-                        <td data-title="IGST Amount" class="text-right"> {{item.iamt | giddhCurrency}} </td>
-                        <td data-title="CGST Amount" class="text-right"> {{item.camt | giddhCurrency}} </td>
-                        <td data-title="SGST Amount" class="text-right"> {{item.samt | giddhCurrency}} </td>
-                        <td data-title="CESS" class="text-right"> {{item.csamt | giddhCurrency}} </td>
+                        <td data-title="Rate" class="text-right">
+                             <!-- {{item.rt | giddhCurrency}} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.rt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td data-title="Place of Supply" class="text-right">
+                            {{item.pos ? item.pos : '-'}}
+                        </td>
+                        <td data-title="Taxable Amount" class="text-right">
+                            <!-- {{item.txval | giddhCurrency}}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.txval" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td data-title="IGST Amount" class="text-right">
+                            <!-- {{item.iamt | giddhCurrency}}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.iamt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td data-title="CGST Amount" class="text-right">
+                            <!-- {{item.camt | giddhCurrency}}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.camt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td data-title="SGST Amount" class="text-right">
+                            <!-- {{item.samt | giddhCurrency}}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.samt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td data-title="CESS" class="text-right">
+                            <!-- {{item.csamt | giddhCurrency}}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.csamt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
                     </tr>
                     <!---->
                 </tbody>

@@ -3,10 +3,8 @@ import { empty as observableEmpty, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { GroupUpateRequest, MoveGroupResponse } from './../models/api-models/Group';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { Configuration, URLS } from '../app.constants';
 import { Router } from '@angular/router';
 import { HttpWrapperService } from './httpWrapper.service';
-import { LoaderService } from './loader.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
@@ -124,11 +122,16 @@ export class GroupService {
         }), catchError((e) => this.errorHandler.HandleCatch<GroupSharedWithResponse[], string>(e, groupUniqueName, { groupUniqueName })));
     }
 
-    public GetGroupsWithAccounts(q: string): Observable<BaseResponse<GroupsWithAccountsResponse[], string>> {
+    public GetGroupsWithAccounts(q: string, branchUniqueName?: string): Observable<BaseResponse<GroupsWithAccountsResponse[], string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
+        let url = this.config.apiUrl + GROUP_API.GROUPS_WITH_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || ''));
+        if (branchUniqueName) {
+            branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${branchUniqueName}`);
+        }
         if (this.companyUniqueName) {
-            return this._http.get(this.config.apiUrl + GROUP_API.GROUPS_WITH_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || ''))).pipe(map((res) => {
+            return this._http.get(url).pipe(map((res) => {
                 let data: BaseResponse<GroupsWithAccountsResponse[], string> = res;
                 data.request = q;
                 return data;
@@ -171,15 +174,19 @@ export class GroupService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, groupUniqueName, { groupUniqueName })));
     }
 
-    public GetFlattenGroupsAccounts(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false'): Observable<BaseResponse<FlattenGroupsAccountsResponse, string>> {
+    public GetFlattenGroupsAccounts(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false', branchUniqueName?: string): Observable<BaseResponse<FlattenGroupsAccountsResponse, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         if (this.companyUniqueName) {
-            return this._http.get(this.config.apiUrl + GROUP_API.FLATTEN_GROUP_WITH_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            let url = this.config.apiUrl + GROUP_API.FLATTEN_GROUP_WITH_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
                 .replace(':q', encodeURIComponent(q || ''))
                 .replace(':page', encodeURIComponent(page.toString()))
                 .replace(':count', encodeURIComponent(count.toString()))
-                .replace(':showEmptyGroups', encodeURIComponent(showEmptyGroups))).pipe(map((res) => {
+                .replace(':showEmptyGroups', encodeURIComponent(showEmptyGroups));
+            if (branchUniqueName) {
+                url = url.concat(`&branchUniqueName=${branchUniqueName !== this.companyUniqueName ? branchUniqueName : ''}`);
+            }
+            return this._http.get(url).pipe(map((res) => {
                     let data: BaseResponse<FlattenGroupsAccountsResponse, string> = res;
                     data.request = '';
                     data.queryString = { q, page, count, showEmptyGroups };
@@ -273,6 +280,30 @@ export class GroupService {
         }), catchError((exception) => this.errorHandler.HandleCatch<string, any>(exception)));
     }
 
+    /**
+     * Search groups API call
+     *
+     * @param {*} params Params (q:- query, page:- pagination, removeTop:- If true, will remove the top hierarchy of groups)
+     * @returns {Observable<any>} Observable to carry out further operations
+     * @memberof GroupService
+     */
+    public searchGroups(params: any): Observable<any> {
+        const companyUniqueName = this._generalService.companyUniqueName;
+        let contextPath = `${this.config.apiUrl}${GROUP_API.SEARCH_GROUPS}`.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        if (params) {
+            Object.keys(params).forEach((key, index) => {
+                const delimiter = index === 0 ? '?' : '&'
+                if (params[key] !== undefined) {
+                    if (key === 'branchUniqueName') {
+                        params[key] = params[key] === companyUniqueName ? '' : params[key];
+                    }
+                    contextPath += `${delimiter}${key}=${params[key]}`
+                }
+            });
+        }
+        return this._http.get(contextPath)
+            .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
 
     /**
      * returns an URL after doing errands

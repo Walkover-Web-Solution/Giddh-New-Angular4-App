@@ -1,10 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { SubscriptionsUser } from '../../../models/api-models/Subscriptions';
 import { IOption } from '../../../theme/ng-select/ng-select';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { SubscriptionRequest } from '../../../models/api-models/Company';
+import { SettingsProfileService } from '../../../services/settings.profile.service';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'move-company',
@@ -12,7 +15,7 @@ import { SubscriptionRequest } from '../../../models/api-models/Company';
     templateUrl: './move-company.component.html'
 })
 
-export class MoveCompanyComponent implements OnInit {
+export class MoveCompanyComponent implements OnInit, OnDestroy {
     @Output() public moveCompany = new EventEmitter<boolean>();
     @Input() public subscriptions: SubscriptionsUser[] = [];
     @Input() public moveSelectedCompany: any;
@@ -25,8 +28,10 @@ export class MoveCompanyComponent implements OnInit {
         userUniqueName: '',
         licenceKey: ''
     };
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions) {
+    constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService) {
 
     }
 
@@ -36,18 +41,8 @@ export class MoveCompanyComponent implements OnInit {
      * @memberof MoveCompanyComponent
      */
     public ngOnInit(): void {
-        if(this.subscriptions && this.subscriptions.length > 0) {
-            this.subscriptions.forEach(plan => {
-                if(plan.subscriptionId && plan.planDetails && plan.planDetails.companiesLimit > plan.totalCompanies && this.moveSelectedCompany && this.moveSelectedCompany.subscription && this.moveSelectedCompany.subscription.planDetails && this.moveSelectedCompany.subscription.planDetails.uniqueName !== plan.planDetails.uniqueName && this.availablePlans[plan.planDetails.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
-                    this.availablePlansOption.push({label: plan.planDetails.name, value: plan.planDetails.uniqueName});
-
-                    if(this.availablePlans[plan.planDetails.uniqueName] === undefined) {
-                        this.availablePlans[plan.planDetails.uniqueName] = [];
-                    }
-
-                    this.availablePlans[plan.planDetails.uniqueName] = plan;
-                }
-            });
+        if(this.moveSelectedCompany) {
+            this.getCompanyDetails();
         }
     }
 
@@ -84,5 +79,42 @@ export class MoveCompanyComponent implements OnInit {
      */
     public closePopup(): void {
         this.moveCompany.emit(false);
+    }
+
+    /**
+     * This will get the company details
+     *
+     * @memberof MoveCompanyComponent
+     */
+    public getCompanyDetails(): void {
+        this.settingsProfileService.getCompanyDetails(this.moveSelectedCompany.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response && response.status === "success" && response.body) {
+                this.moveSelectedCompany = response.body;
+
+                if(this.subscriptions && this.subscriptions.length > 0) {
+                    this.subscriptions.forEach(plan => {
+                        if(plan.subscriptionId && plan.planDetails && plan.planDetails.companiesLimit > plan.totalCompanies && this.moveSelectedCompany && this.moveSelectedCompany.subscription && this.moveSelectedCompany.subscription.planDetails && this.moveSelectedCompany.subscription.planDetails.uniqueName !== plan.planDetails.uniqueName && this.availablePlans[plan.planDetails.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
+                            this.availablePlansOption.push({label: plan.planDetails.name, value: plan.planDetails.uniqueName});
+
+                            if(this.availablePlans[plan.planDetails.uniqueName] === undefined) {
+                                this.availablePlans[plan.planDetails.uniqueName] = [];
+                            }
+
+                            this.availablePlans[plan.planDetails.uniqueName] = plan;
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof MoveCompanyComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

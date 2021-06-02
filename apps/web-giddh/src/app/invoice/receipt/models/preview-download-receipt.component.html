@@ -1,19 +1,19 @@
-<div id="" class="">
+<div>
 
-    <div class="modal-header clearfix" style="display: flex;">
+    <div class="modal-header clearfix d-flex">
         <span>
-            <!--<button type="button" class="btn btn-md btn-info mrR1" (click)="editButtonClicked()"-->
+            <!--<button type="button" class="btn btn-md btn-info mr-r1" (click)="editButtonClicked()"-->
             <!--*ngIf="activatedInvoice != 'receipt'">Edit</button>-->
         </span>
-        <h3 class="modal-title" id="modal-title" style="flex: 1;align-self: center;text-align: center;">
+        <h3 class="modal-title flex-fill text-center align-self-center" id="modal-title">
             {{activatedInvoice | titlecase }}</h3>
         <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="closeModelEvent.emit()"></i>
 
     </div>
 
-    <div class="modal-body noPad clearfix" id="export-body">
+    <div class="modal-body p-0 clearfix" id="export-body">
         <div *ngIf="isError">
-            <p class="lead alC">Oops! Something went wrong.</p>
+            <p class="lead text-center">Oops! Something went wrong.</p>
         </div>
         <div class="loader mr-t4" *ngIf="isRequestInProcess">
             <span></span>

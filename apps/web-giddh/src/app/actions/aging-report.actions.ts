@@ -76,7 +76,7 @@ export class AgingReportActions {
 		.pipe(
 			ofType(AgingReportActions.GET_DUE_DAY_REPORT),
 			switchMap((action: CustomActions) => {
-				return this._agingReportService.GetDueAmountReport(action.payload.model, action.payload.queryRequest).pipe(
+				return this._agingReportService.GetDueAmountReport(action.payload.model, action.payload.queryRequest, action.payload.branchUniqueName).pipe(
 					map((r) => this.validateResponse<DueAmountReportResponse, DueAmountReportRequest>(r, {
 						type: AgingReportActions.GET_DUE_DAY_REPORT_RESPONSE,
 						payload: r.body
@@ -123,10 +123,10 @@ export class AgingReportActions {
 		};
 	}
 
-	public GetDueReport(model: AgingAdvanceSearchModal, queryRequest: DueAmountReportQueryRequest): CustomActions {
+	public GetDueReport(model: AgingAdvanceSearchModal, queryRequest: DueAmountReportQueryRequest, branchUniqueName: string): CustomActions {
 		return {
 			type: AgingReportActions.GET_DUE_DAY_REPORT,
-			payload: { model, queryRequest }
+			payload: { model, queryRequest, branchUniqueName }
 		};
 	}
 

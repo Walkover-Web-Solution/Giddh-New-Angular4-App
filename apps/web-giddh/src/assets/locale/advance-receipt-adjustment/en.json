@@ -1,0 +1,14 @@
+{
+    "page_heading": "Adjust Payment",
+    "adjusted_amount_error": "The adjusted amount of the linked invoice's is more than this receipt; update them first.",
+    "customer_name": "Customer Name",
+    "adjustment_voucher": "Adjustment Voucher",
+    "select_voucher": "Select Voucher",
+    "enter_amount": "Enter Amount",
+    "inclusive_tax": "Inclusive Tax",
+    "tax_deducted": "Tax Deducted?",
+    "excess_amount": "Excess amount",
+    "adjustment_note": "We do not support all the vouchers for adjustment from this module. Please go to LEDGER to access this.",
+    "voucher_unavailable": "There is no voucher for adjustment.",
+    "post_adj": "(Post Adj):"
+}

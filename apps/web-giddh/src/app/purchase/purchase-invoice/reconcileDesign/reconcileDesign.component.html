@@ -1,6 +1,6 @@
 <perfect-scrollbar [scrollIndicators]="true" fxFlex="auto" [config]="{suppressScrollX: false, suppressScrollY: false}">
-    <table class="table" style="width: 2000px">
-        <thead style="font-size: 14px;">
+    <table class="table width-2000">
+        <thead class="font-14">
             <tr>
                 <th><input class="ng-tns-c22-2 ng-untouched ng-pristine ng-valid" type="checkbox"></th>
                 <th>VENDOR DETAILS</th>
@@ -59,48 +59,48 @@
 
                 </td>
                 <td class="text-right">
-                    <div><i class="fa fa-inr"></i> {{ item.taxableAmount }}</div>
+                    <div><i class="icon-rupees font-11"></i> {{ item.taxableAmount }}</div>
                     <div *ngIf="item.dataInGiddh"
                         [ngClass]="{ 'text-danger': item.taxableAmount !== item.dataInGiddh.taxableAmount}">
-                        <i class="fa fa-inr"></i> {{ item.dataInGiddh.taxableAmount }}
+                        <i class="icon-rupees font-11"></i> {{ item.dataInGiddh.taxableAmount }}
                     </div>
 
 
                 </td>
                 <td class="text-right">
-                    <div><i class="fa fa-inr"></i> {{ item.igst }}</div>
+                    <div><i class="icon-rupees font-11"></i> {{ item.igst }}</div>
                     <div *ngIf="item.dataInGiddh" [ngClass]="{ 'text-danger': item.igst !== item.dataInGiddh.igst}">
-                        <i class="fa fa-inr"></i> {{ item.dataInGiddh.igst }}
+                        <i class="icon-rupees font-11"></i> {{ item.dataInGiddh.igst }}
                     </div>
 
                 </td>
                 <td class="text-right">
-                    <div><i class="fa fa-inr"></i> {{ item.cgst }}</div>
+                    <div><i class="icon-rupees font-11"></i> {{ item.cgst }}</div>
                     <div *ngIf="item.dataInGiddh" [ngClass]="{ 'text-danger': item.cgst !== item.dataInGiddh.cgst}">
-                        <i class="fa fa-inr"></i> {{ item.dataInGiddh.cgst }}
+                        <i class="icon-rupees font-11"></i> {{ item.dataInGiddh.cgst }}
                     </div>
 
 
                 </td>
                 <td class="text-right">
-                    <div><i class="fa fa-inr"></i> {{ item.sgst }}</div>
+                    <div><i class="icon-rupees font-11"></i> {{ item.sgst }}</div>
                     <div *ngIf="item.dataInGiddh" [ngClass]="{ 'text-danger': item.sgst !== item.dataInGiddh.sgst}"><i
-                            class="fa fa-inr"></i> {{ item.dataInGiddh.sgst }}
+                            class="icon-rupees font-11"></i> {{ item.dataInGiddh.sgst }}
                     </div>
 
 
                 </td>
                 <td class="text-right">
-                    <div><i class="fa fa-inr"></i> {{ item.cess }}</div>
+                    <div><i class="icon-rupees font-11"></i> {{ item.cess }}</div>
                     <div *ngIf="item.dataInGiddh" [ngClass]="{ 'text-danger': item.cess !== item.dataInGiddh.cess}">
-                        <i class="fa fa-inr"></i> {{ item.dataInGiddh.cess }}
+                        <i class="icon-rupees font-11"></i> {{ item.dataInGiddh.cess }}
                     </div>
                 </td>
                 <td class="text-right">
-                    <div><i class="fa fa-inr"></i> {{ item.grandTotal }}</div>
+                    <div><i class="icon-rupees font-11"></i> {{ item.grandTotal }}</div>
                     <div *ngIf="item.dataInGiddh"
                         [ngClass]="{ 'text-danger': item.grandTotal !== item.dataInGiddh.grandTotal}">
-                        <i class="fa fa-inr"></i> {{ item.dataInGiddh.grandTotal }}
+                        <i class="icon-rupees font-11"></i> {{ item.dataInGiddh.grandTotal }}
                     </div>
                 </td>
             </tr>

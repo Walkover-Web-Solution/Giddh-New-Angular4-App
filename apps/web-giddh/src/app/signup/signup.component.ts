@@ -1,7 +1,6 @@
 import { take, takeUntil } from "rxjs/operators";
 import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
-import { Router } from "@angular/router";
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ModalDirective } from "ngx-bootstrap/modal";
@@ -34,6 +33,7 @@ import { GeneralService } from "../services/general.service";
     templateUrl: "./signup.component.html",
     styleUrls: ["./signup.component.scss"]
 })
+
 export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithMobileSubmited$: Observable<boolean>;
     @ViewChild("emailVerifyModal", {static: true}) public emailVerifyModal: ModalDirective;
@@ -79,7 +79,6 @@ export class SignupComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,
         private store: Store<AppState>,
-        private router: Router,
         private loginAction: LoginActions,
         private authService: AuthService,
         @Inject(DOCUMENT) private document: Document,
@@ -93,54 +92,55 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.isVerifyEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isVerifyEmailInProcess;
         }), takeUntil(this.destroyed$));
-        this.isLoginWithMobileInProcess$ = store.select(state => {
+        this.isLoginWithMobileInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithMobileInProcess;
-        }).pipe(takeUntil(this.destroyed$));
-        this.isVerifyMobileInProcess$ = store.select(state => {
+        }), takeUntil(this.destroyed$));
+        this.isVerifyMobileInProcess$ = this.store.pipe(select(state => {
             return state.login.isVerifyMobileInProcess;
-        }).pipe(takeUntil(this.destroyed$));
+        }), takeUntil(this.destroyed$));
 
-        this.isLoginWithMobileSubmited$ = store.select(state => {
+        this.isLoginWithMobileSubmited$ = this.store.pipe(select(state => {
             return state.login.isLoginWithMobileSubmited;
-        }).pipe(takeUntil(this.destroyed$));
-        this.isLoginWithEmailSubmited$ = store.select(state => {
+        }), takeUntil(this.destroyed$));
+        this.isLoginWithEmailSubmited$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailSubmited;
-        }).pipe(takeUntil(this.destroyed$));
-        store.select(state => {
-            return state.login.isVerifyEmailSuccess;
-        }).pipe(takeUntil(this.destroyed$)).subscribe((value) => {
-            if (value) {
-                // this.router.navigate(['home']);
-            }
-        });
-        store.select(state => {
-            return state.login.isVerifyMobileSuccess;
-        }).pipe(takeUntil(this.destroyed$)).subscribe((value) => {
-            if (value) {
-                // this.router.navigate(['home']);
-            }
-        });
-        this.isSignupWithPasswordInProcess$ = store.select(state => {
-            return state.login.isSignupWithPasswordInProcess;
-        }).pipe(takeUntil(this.destroyed$));
+        }), takeUntil(this.destroyed$));
 
-        this.isSignupWithPasswordSuccess$ = store.select(state => {
+        this.store.pipe(select(state => {
+            return state.login.isVerifyEmailSuccess;
+        }), takeUntil(this.destroyed$)).subscribe((value) => {
+            if (value) {
+                // this.router.navigate(['home']);
+            }
+        });
+        this.store.pipe(select(state => {
+            return state.login.isVerifyMobileSuccess;
+        }), takeUntil(this.destroyed$)).subscribe((value) => {
+            if (value) {
+                // this.router.navigate(['home']);
+            }
+        });
+        this.isSignupWithPasswordInProcess$ = this.store.pipe(select(state => {
+            return state.login.isSignupWithPasswordInProcess;
+        }), takeUntil(this.destroyed$));
+
+        this.isSignupWithPasswordSuccess$ = this.store.pipe(select(state => {
             return state.login.isSignupWithPasswordSuccess;
-        }).pipe(takeUntil(this.destroyed$));
+        }), takeUntil(this.destroyed$));
         this.isLoginWithGoogleInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithGoogleInProcess;
         }), takeUntil(this.destroyed$));
-        this.signupVerifyEmail$ = this.store.select(p => p.login.signupVerifyEmail).pipe(takeUntil(this.destroyed$));
+        this.signupVerifyEmail$ = this.store.pipe(select(p => p.login.signupVerifyEmail), takeUntil(this.destroyed$));
 
-        this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).pipe(takeUntil(this.destroyed$));
+        this.isSocialLogoutAttempted$ = this.store.pipe(select(p => p.login.isSocialLogoutAttempted), takeUntil(this.destroyed$));
 
         contriesWithCodes.map(c => {
             this.countryCodeList.push({ value: c.countryName, label: c.value });
         });
-        this.userLoginState$ = this.store.select(p => p.session.userLoginState);
-        this.userDetails$ = this.store.select(p => p.session.user);
-        this.isTwoWayAuthInProcess$ = this.store.select(p => p.login.isTwoWayAuthInProcess);
-        this.isTwoWayAuthInSuccess$ = this.store.select(p => p.login.isTwoWayAuthSuccess);
+        this.userLoginState$ = this.store.pipe(select(p => p.session.userLoginState), takeUntil(this.destroyed$));
+        this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
+        this.isTwoWayAuthInProcess$ = this.store.pipe(select(p => p.login.isTwoWayAuthInProcess), takeUntil(this.destroyed$));
+        this.isTwoWayAuthInSuccess$ = this.store.pipe(select(p => p.login.isTwoWayAuthSuccess), takeUntil(this.destroyed$));
     }
 
     // tslint:disable-next-line:no-empty
@@ -214,7 +214,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.signupVerifyEmail$.subscribe(a => {
             if (a) {
 
-                this.signupVerifyForm.get("email").patchValue(a);
+                this.signupVerifyForm.get("email")?.patchValue(a);
             }
         });
     }

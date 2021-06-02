@@ -1,26 +1,26 @@
-<div class="">
+<div>
     <div class="panel-body" id="customInvoice">
         <ng-container>
-            <div style="width: 100%">
-                <edit-template-filters class="templateEditor" [editMode]="editMode" (selectTab)="selectedTab($event)">
+            <div class="width-100">
+                <edit-template-filters class="template-editor" [editMode]="editMode" (selectTab)="selectedTab($event)">
                 </edit-template-filters>
                 <!--[templateSections]="templateSections" [templateId]="templateId"-->
-                <invoice-template [hidden]="isEmailTabSelected" class="invoice-preview scrollAuto"
+                <invoice-template [hidden]="isEmailTabSelected" class="invoice-preview scroll-auto"
                     [isPreviewMode]="isPreviewMode">this is pre</invoice-template>
-                <div class="invoice-preview scrollAuto" [hidden]="!isEmailTabSelected" PageHeight>
+                <div class="invoice-preview scroll-auto" [hidden]="!isEmailTabSelected" PageHeight>
                     <!--{{ emailObject | json}}-->
                     <!--<div id="email-template" class="clearfix">
               <div class="input-group">
-                  <span class="input-group-addon grey-clr">Subject</span>
+                  <span class="input-group-addon grey-color">Subject</span>
                   <input type="text" class="form-control" disabled placeholder="Subject" [value]="emailObject.subject">
               </div>
               <div class="input-group">
-                  <span class="input-group-addon grey-clr">From</span>
+                  <span class="input-group-addon grey-color">From</span>
                   <input type="text" class="form-control" disabled placeholder="From" [value]="emailObject.form">
               </div>
-              <div class="pd2" id="email-body">
+              <div class="pd-2" id="email-body">
                   <p [hidden]="!emailObject.useGreeting"><b>{{emailObject.greeting}} {{emailObject.username}}</b> </p>
-                  <p class="pdT2">{{emailObject.body}}</p>
+                  <p class="pd-t2">{{emailObject.body}}</p>
               </div>
           </div>-->
                 </div>

@@ -25,6 +25,7 @@ import { SettingsTagsComponent } from './tags/tags.component';
 import { DeleteTaxConfirmationModelComponent } from './Taxes/confirmation/confirmation.model.component';
 import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
 import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
+import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-warehouse.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
 import { SettingsServiceModule } from './settings-service.module';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
@@ -33,6 +34,13 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { PersonalInformationComponent } from './personal-information/personal-information.component';
+import { AddressSettingsComponent } from './address-settings/address-settings.component';
+import { OtherSettingsComponent } from './other-settings/other-settings.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CreateAddressComponent } from './create-address/create-address.component';
+import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
+import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -60,13 +68,20 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CreateBunchModalComponent,
         BunchAddCompanyModalComponent,
         GetBunchModalComponent,
-        WarehouseComponent
+        WarehouseComponent,
+        CreateWarehouseComponent,
+        CreateAddressComponent,
+        PersonalInformationComponent,
+        AddressSettingsComponent,
+        OtherSettingsComponent,
+        CreateBranchComponent
     ],
     imports: [
         SharedModule,
         SettingRountingModule,
         AsideMenuCreateTaxModule,
         ContactModule,
+        ReactiveFormsModule,
         CurrencyModule,
         OmitByKeyPipeModule,
         SettingsServiceModule,
@@ -74,8 +89,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         TextMaskModule,
         NgxMaskModule.forRoot(),
         DigitsOnlyModule,
-        ShSelectModule
-
+        ShSelectModule,
+        SalesShSelectModule
     ],
     providers: [
         {

@@ -1,11 +1,13 @@
 class GlobalSearchPage {
 
     typeGlobalSearch(searchValue) {
-        cy.get('.searchEle').type(searchValue, {delay:500})
+        cy.get('.search-element').clear({force:true})
+        cy.get('.search-element').type(searchValue, {delay:700, force:true})
     }
 
     getGlobalSearch(timeOut) {
-        return cy.get('.searchEle' , {timeout: timeOut})
+        return cy.xpath('//input[@placeholder=\'Search\']', {timeout: timeOut})
+
     }
 
     selectFirstValueAfterSearch() {

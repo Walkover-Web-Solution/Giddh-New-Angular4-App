@@ -126,6 +126,7 @@ export class LedgerResponse {
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
     public voucherAdjustments?: VoucherAdjustments;
     public unitRates?: Array<any>;
+    public entryVoucherTotals?: any;
 }
 /** Model for Ledger Advance receipts for invoices */
 export class VoucherAdjustmentsForInvoice {
@@ -238,6 +239,7 @@ export class TransactionsResponse implements ITransactions {
     public currencyCode?: string;
     public convertedCurrencySymbol?: string;
     public convertedCurrencyCode?: string;
+    public periodClosingBalance?: { amount: number; type: string; };
 }
 
 export class TransactionsRequest {
@@ -250,6 +252,7 @@ export class TransactionsRequest {
     public sort: string = 'asc';
     public reversePage: boolean = false;
     public accountCurrency: boolean = false;
+    public branchUniqueName?: string;
 }
 
 export interface ReconcileRequest {
@@ -296,6 +299,7 @@ export class ReconcileResponse {
 export class MagicLinkRequest {
     public from: string = '';
     public to: string = '';
+    public branchUniqueName?: string = '';
 }
 
 export class MagicLinkResponse {
@@ -310,6 +314,7 @@ export class ExportLedgerRequest {
     public sort?: string = 'asc';
     public withInvoice?: boolean = false;
     public balanceTypeAsSign?: boolean = false;
+    public branchUniqueName?: string = '';
 }
 
 /**

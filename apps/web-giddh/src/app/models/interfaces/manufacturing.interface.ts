@@ -2,7 +2,9 @@ import { INameUniqueName } from '../api-models/Inventory';
 
 // some common interface used in module everywhere
 export interface IOnlyUniqueName {
-	uniqueName: string;
+    uniqueName: string;
+    name?: string;
+    defaultName?: string;
 }
 
 export interface IOnlyAmount {
@@ -98,7 +100,9 @@ export class ManufacturingItemRequest {
 	public linkedStocks: ILinkedStockForCreate[];
 	public otherExpenses: IOtherExpensesForCreate[];
 	public voucherNumber?: string;
-	public manufacturingMultipleOf?: number;
+    public manufacturingMultipleOf?: number;
+    public warehouse?: any;
+    public warehouseUniqueName?: any;
 }
 
 /*
@@ -117,7 +121,9 @@ export interface IMfStockSearchRequest {
 	to?: string;
 	count?: number;
 	page?: number;
-	dateRange?: Date[];
+    dateRange?: Date[];
+    branchUniqueName?: string;
+    warehouseUniqueName?: any;
 }
 
 /*

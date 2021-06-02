@@ -14,10 +14,10 @@ export class CheckPermissionDirective implements OnInit {
         let permissions: IScope[] = this._permissionDataService.getData;
         // Use renderer to render the element with styles
         if (this.checkPermission && this.checkPermission.length === 2) {
-            if (this.checkPermission[0] === 'MENU') {
+            if (this.checkPermission[0] === 'MENU' && permissions) {
                 let permissionIndex = permissions.findIndex((ele) => ele.name === this.checkPermission[1]);
                 if (!permissions.length || permissionIndex === -1) {
-                    this.renderer.setStyle(this.el.nativeElement, 'display', 'none');
+                    this.renderer.setStyle(this.el?.nativeElement, 'display', 'none');
                 }
             }
         }

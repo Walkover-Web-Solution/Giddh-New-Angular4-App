@@ -1,6 +1,6 @@
-<span class="pr c-dropdown" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true"
+<span class="position-relative custom-dropdown-ledger" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true"
     (clickOutside)="toggleTaxPopup(false)">
-    <label *ngIf="showHeading">{{ customHeading ? customHeading : 'Tax' }} <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label>
+    <label *ngIf="showHeading">{{ customHeading ? customHeading : commonLocaleData?.app_tax }} <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label>
 
     <a id="tax" class="clearfix">
         <div class="multi-select adjust">
@@ -16,11 +16,11 @@
         <ul class="dropdown-menu pd update-ledger-tax-dropdown" [ngStyle]="{'display': showTaxPopup ? 'block': 'none'}"
             (click)="$event.stopPropagation()">
             <li *ngFor="let tax of taxRenderData;trackBy: trackByFn; let i = index">
-                <label class="checkbox oh width100 p0 m0 customItem bdrB" style="padding: 5px;margin-bottom: 5px;"
+                <label class="checkbox overflow-hidden width-100 p-0 m-0 custom-item bd-rb px-1 py-1 mr-b05"
                     (click)="$event.stopPropagation()" [ngClass]="{'disabled-label': tax.isDisabled}">
                     <input class="pull-left" id="{{ 'update-ledger-tax-checkbox-' + i }}" type="checkbox" [(ngModel)]="tax.isChecked" [disabled]="tax.isDisabled"
                         (change)="change()" (click)="$event.stopPropagation()" />
-                    <span class="pull-left ellp">{{tax.name}}</span>
+                    <span class="pull-left text-ellipsis">{{tax.name}}</span>
                 </label>
             </li>
         </ul>

@@ -1,5 +1,5 @@
-import { takeUntil } from 'rxjs/operators';
-import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { take, takeUntil } from 'rxjs/operators';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AppState } from '../../../store/roots';
 import * as _ from '../../../lodash-optimized';
 import { Store, select } from '@ngrx/store';
@@ -7,20 +7,31 @@ import { Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
 import { SearchRequest } from '../../../models/api-models/Search';
 import { SearchActions } from '../../../actions/search.actions';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { GeneralService } from '../../../services/general.service';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../../../models/user-login-state';
 import { GroupService } from '../../../services/group.service';
-import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
-import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
-	selector: 'search-sidebar',  // <home></home>
+	selector: 'search-sidebar',
     templateUrl: './search.sidebar.component.html',
     styleUrls: [`./search.sidebar.component.scss`],
 })
 export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
 	@Input() public pageChangeEvent: any = null;
-	@Input() public filterEventQuery: any = null;
+    @Input() public filterEventQuery: any = null;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
+
+    /** Emits the current selected branch */
+    @Output() public currentBranchChanged: EventEmitter<string> = new EventEmitter();
 
 	public showFromDatePicker: boolean;
 	public showToDatePicker: boolean;
@@ -30,8 +41,6 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 	public groupName: string;
 	public groupUniqueName: string;
 	public dataSource = [];
-	public groupsList$: Observable<GroupsWithAccountsResponse[]>;
-	public typeaheadNoResults: boolean;
 	public datePickerOptions: any = {
 		locale: {
 			applyClass: 'btn-green',
@@ -66,32 +75,73 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 		},
 		startDate: moment().subtract(30, 'days'),
 		endDate: moment()
-	};
+    };
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current company */
+    public activeCompany: any;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-	private paginationPageNumber: number;
+    private paginationPageNumber: number;
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store modal reference */
+    public modalRef: BsModalRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* Universal date observer */
+    public universalDate$: Observable<any>;
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /** Stores the search results pagination details for group dropdown */
+    public groupsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for group dropdown */
+    public defaultGroupSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for group dropdown */
+    public preventDefaultGroupScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for group dropdown */
+    public defaultGroupPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the value of groups */
+    public searchedGroups: IOption[];
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
 	/**
 	 * TypeScript public modifiers
 	 */
-	constructor(private store: Store<AppState>, public searchActions: SearchActions, private _groupService: GroupService) {
-		this.groupsList$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
-	}
+	constructor(
+        private store: Store<AppState>,
+        public searchActions: SearchActions,
+        private generalService: GeneralService,
+        private groupService: GroupService,
+        private modalService: BsModalService,
+        private settingsBranchAction: SettingsBranchActions
+    ) {	}
 
 	public ngOnInit() {
-		this.fromDate = moment().add(-1, 'month').format('DD-MM-YYYY');
-		this.toDate = moment().format('DD-MM-YYYY');
-
-		// Get source for Group Name Input selection
-		this.groupsList$.subscribe(data => {
-			if (data && data.length) {
-				let accountList = this.flattenGroup(data, []);
-				let groups = [];
-				accountList.map((d: any) => {
-					groups.push({ name: d.name, id: d.uniqueName });
-				});
-				this.dataSource = groups;
-			}
-        });
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
+		this.fromDate = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+		this.toDate = moment().format(GIDDH_DATE_FORMAT);
+        this.loadDefaultGroupsSuggestions();
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
@@ -103,6 +153,53 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
                 };
                 this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+
+                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            }
+        });
+        this.store.pipe(
+            select(appState => appState.session.activeCompany), take(1)
+        ).subscribe(activeCompany => {
+            this.activeCompany = activeCompany;
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    isCompany: true
+                });
+                let currentBranchUniqueName;
+                if (!this.currentBranch?.uniqueName) {
+                    // Assign the current branch only when it is not selected. This check is necessary as
+                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                    // branches are loaded
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
+                        currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                    } else {
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        this.currentBranch = {
+                            name: this.activeCompany ? this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        };
+                    }
+                }
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
             }
         });
 	}
@@ -129,17 +226,13 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 	}
 
 	public getClosingBalance(isRefresh: boolean, event: any, page?: number, searchReqBody?: any) {
-		if (this.typeaheadNoResults) {
-			this.groupName = '';
-			this.groupUniqueName = '';
-		}
-
 		let searchRequest: SearchRequest = {
 			groupName: this.groupUniqueName,
 			refresh: isRefresh,
 			toDate: this.toDate,
 			fromDate: this.fromDate,
-			page: page ? page : 1
+            page: page ? page : 1,
+            branchUniqueName: this.currentBranch?.uniqueName
 		};
 		this.store.dispatch(this.searchActions.GetStocksReport(searchRequest, searchReqBody));
 		if (event) {
@@ -147,45 +240,183 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 		}
 	}
 
-	public changeTypeaheadNoResults(e: boolean): void {
-		this.typeaheadNoResults = e;
-	}
-
 	public ngOnDestroy() {
 		this.destroyed$.next(true);
 		this.destroyed$.complete();
 	}
 
-	public OnSelectGroup(g: TypeaheadMatch) {
-		this.groupName = g.item.name;
-		this.groupUniqueName = g.item.id;
-	}
-
-	public flattenGroup(rawList: any[], parents: any[] = []) {
-		let listofUN;
-		listofUN = _.map(rawList, (listItem) => {
-			let newParents;
-			let result;
-			newParents = _.union([], parents);
-			newParents.push({
-				name: listItem.name,
-				uniqueName: listItem.uniqueName
-			});
-			listItem = Object.assign({}, listItem, { parentGroups: [] });
-			listItem.parentGroups = newParents;
-			if (listItem.groups.length > 0) {
-				result = this.flattenGroup(listItem.groups, newParents);
-				result.push(_.omit(listItem, 'groups'));
-			} else {
-				result = _.omit(listItem, 'groups');
-			}
-			return result;
-		});
-		return _.flatten(listofUN);
+	public onSelectGroup(group: IOption) {
+		this.groupName = group.label;
+		this.groupUniqueName = group.value;
 	}
 
 	public selectedDate(value: any) {
-		this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
-		this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
-	}
+        this.fromDate = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        this.toDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
+    }
+
+    /**
+     * To show the datepicker
+     *
+     * @param {*} element
+     * @memberof SearchSidebarComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof SearchSidebarComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof SearchSidebarComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+        }
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof SearchSidebarComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        this.currentBranchChanged.emit(selectedEntity.value);
+        this.loadDefaultGroupsSuggestions();
+    }
+
+    /**
+     * Search query change handler for group
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof SearchSidebarComponent
+     */
+    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.groupsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultGroupScrollApiCall &&
+            (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                count: API_COUNT_LIMIT,
+                branchUniqueName: this.currentBranch?.uniqueName
+            };
+            this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result?.uniqueName,
+                            label: result.name
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.searchedGroups = searchResults;
+                    } else {
+                        this.searchedGroups = [
+                            ...this.searchedGroups,
+                            ...searchResults
+                        ];
+                    }
+                    this.groupsSearchResultsPaginationData.page = data.body.page;
+                    this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+                }
+            });
+        } else {
+            this.searchedGroups = [...this.defaultGroupSuggestions];
+            this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
+            this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
+            this.preventDefaultGroupScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultGroupScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler for group dropdown
+     *
+     * @returns null
+     * @memberof SearchSidebarComponent
+     */
+    public handleGroupScrollEnd(): void {
+        if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
+            this.onGroupSearchQueryChanged(
+                this.groupsSearchResultsPaginationData.query,
+                this.groupsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.groupsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result?.uniqueName,
+                                label: result.name
+                            }
+                        }) || [];
+                        this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default group list for advance search
+     *
+     * @private
+     * @memberof SearchSidebarComponent
+     */
+    private loadDefaultGroupsSuggestions(): void {
+        this.onGroupSearchQueryChanged('', 1, (response) => {
+            this.defaultGroupSuggestions = response.map(result => {
+                return {
+                    value: result?.uniqueName,
+                    label: result.name
+                }
+            }) || [];
+            this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+            this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+            this.searchedGroups = [...this.defaultGroupSuggestions];
+        });
+    }
 }

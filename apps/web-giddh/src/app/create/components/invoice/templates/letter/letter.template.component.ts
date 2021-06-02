@@ -114,17 +114,18 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 		this.getCountry();
 		this.data = new VoucherClass();
 
-		this.CreateInvoiceForm.get('uiCalculation').get('depositAmount').valueChanges.subscribe((val) => {
+		this.CreateInvoiceForm.get('uiCalculation').get('depositAmount').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
 			let data = _.cloneDeep(this.CreateInvoiceForm.value);
 			let totalAmountWithTax = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.amount)) ? 0 : parseFloat(entry.amount));
 			let balanceDue = totalAmountWithTax - val;
-			this.CreateInvoiceForm.get('uiCalculation').get('balanceDue').patchValue(balanceDue);
+			this.CreateInvoiceForm.get('uiCalculation').get('balanceDue')?.patchValue(balanceDue);
 		});
 
 	}
 
 	public ngOnDestroy() {
-		//
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
 	}
 
 	public emitTemplateData(data: any) {
@@ -135,7 +136,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 		this.isCustDtlCollapsed = false;
 
 		if (this.CreateInvoiceForm.valid) {
-			this._createHttpService.Generate(data).subscribe(response => {
+			this._createHttpService.Generate(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
 				if (response.status === 'success') {
 					this.base64Data = this._sanitizer.bypassSecurityTrustResourceUrl('data:application/pdf;base64,' + response.body);
 					this.invoicePreviewModal.show();
@@ -210,11 +211,11 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 		let totalDiscount = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.discount)) ? 0 : parseFloat(entry.discount));
 		let gstTaxesTotal = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.tax)) ? 0 : parseFloat(entry.tax));
 
-		this.CreateInvoiceForm.get('uiCalculation').get('subTotal').patchValue(totalAmount);
-		this.CreateInvoiceForm.get('uiCalculation').get('totalTaxableValue').patchValue(totalAmount);
-		this.CreateInvoiceForm.get('uiCalculation').get('grandTotal').patchValue(totalAmountWithTax);
-		this.CreateInvoiceForm.get('uiCalculation').get('totalDiscount').patchValue(totalDiscount);
-		this.CreateInvoiceForm.get('uiCalculation').get('gstTaxesTotal').patchValue(gstTaxesTotal);
+		this.CreateInvoiceForm.get('uiCalculation').get('subTotal')?.patchValue(totalAmount);
+		this.CreateInvoiceForm.get('uiCalculation').get('totalTaxableValue')?.patchValue(totalAmount);
+		this.CreateInvoiceForm.get('uiCalculation').get('grandTotal')?.patchValue(totalAmountWithTax);
+		this.CreateInvoiceForm.get('uiCalculation').get('totalDiscount')?.patchValue(totalDiscount);
+		this.CreateInvoiceForm.get('uiCalculation').get('gstTaxesTotal')?.patchValue(gstTaxesTotal);
 	}
 
 	public autoFillShippingDetails() {
@@ -223,7 +224,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 		// this.CreateInvoiceForm.get('userDetails').get('shippingDetails').get('autoFillShipping').value
 		if (this.CreateInvoiceForm.get('userDetails').get('shippingDetails').get('autoFillShipping').value) {
 			let billingDetails = this.CreateInvoiceForm.get('userDetails').get('billingDetails').value;
-			this.CreateInvoiceForm.get('userDetails').get('shippingDetails').patchValue(billingDetails);
+			this.CreateInvoiceForm.get('userDetails').get('shippingDetails')?.patchValue(billingDetails);
 			// this.invFormData.accountDetails.shippingDetails = _.cloneDeep(this.invFormData.accountDetails.billingDetails);
 		}
 	}
@@ -341,9 +342,9 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 				let s = st.find(item => item.value === gstVal.substr(0, 2));
 				if (s) {
 					if (type === 'senderInfo') {
-						this.CreateInvoiceForm.get('companyDetails').get('companyGstDetails').get('stateCode').patchValue(s.value);
+						this.CreateInvoiceForm.get('companyDetails').get('companyGstDetails').get('stateCode')?.patchValue(s.value);
 					} else {
-						this.CreateInvoiceForm.get('userDetails').get(type).get('stateCode').patchValue(s.value);
+						this.CreateInvoiceForm.get('userDetails').get(type).get('stateCode')?.patchValue(s.value);
 					}
 				} else {
 					this.invFormData.accountDetails[type].stateCode = null;
@@ -437,7 +438,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 		let selectedRow = data[indx];
 		selectedRow.amount = selectedRow.quantity * selectedRow.rate;
 		data[indx] = selectedRow;
-		transactionEntries.patchValue(data);
+		transactionEntries?.patchValue(data);
 		this.calculateAndSetTotal();
 	}
 
@@ -448,7 +449,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 		selectedRow.amount = selectedRow.quantity * selectedRow.rate;
 		// selectedRow.amount = selectedRow.amount + ((selectedRow.amount * selectedRow.tax) / 100);
 		data[indx] = selectedRow;
-		transactionEntries.patchValue(data);
+		transactionEntries?.patchValue(data);
 		this.calculateAndSetTotal();
 	}
 

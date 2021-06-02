@@ -20,14 +20,15 @@ import { AuthenticationService } from '../services/authentication.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 import { WarehouseActions } from './warehouse/action/warehouse.action';
-import { PAGINATION_LIMIT } from '../app.constant';
+import { PAGINATION_LIMIT, SETTING_INTEGRATION_TABS } from '../app.constant';
 import { HttpClient } from "@angular/common/http";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
+import { CurrentPage } from '../models/api-models/Common';
 
 @Component({
     templateUrl: './settings.component.html',
-    styleUrls: ['./settings.component.css']
+    styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
@@ -45,7 +46,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCompanyProfileUpdated: boolean = false;
     //variable to hold sub tab value inside any tab e.g. integration -> payment
-    public selectedChildTab: number = 0;
+    public selectedChildTab: number = SETTING_INTEGRATION_TABS.SMS.VALUE;
     public activeTab: string = 'taxes';
     public integrationtab: string;
     public isMobileScreen: boolean = true;
@@ -90,35 +91,42 @@ export class SettingsComponent implements OnInit, OnDestroy {
             }
         });
 
-        this._route.params.subscribe(params => {
+        this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type'] && params['referrer']) {
-                this.setStateDetails(params['type'], params['referrer']);
                 if (params['type'] === 'integration' && params['referrer']) {
                     this.selectedChildTab = this.assignChildtabForIntegration(params['referrer']);
                 }
                 this.integrationtab = params['referrer'];
                 this.activeTab = params['type'];
             } else if (params['type'] && this.activeTab !== params['type']) {
-                this.setStateDetails(params['type'], params['referrer']);
-                this.selectedChildTab = 0;
+                this.selectedChildTab = SETTING_INTEGRATION_TABS.SMS.VALUE;
                 this.integrationtab = '';
                 this.activeTab = params['type'];
+            } else {
+                this.integrationtab = params['referrer'];
             }
+            this.setStateDetails(params['type'], params['referrer']);
 
             this.tabChanged(this.activeTab);
 
             if (this.activeTab === "linked-accounts") {
                 setTimeout(() => {
-                    this.eBankComp.getInitialEbankInfo();
+                    if (this.eBankComp) {
+                        this.eBankComp.getInitialEbankInfo();
+                    }
                 }, 0);
             } else if (this.activeTab === "profile") {
                 setTimeout(() => {
-                    this.profileComponent.getInitialProfileData();
-                    this.profileComponent.getInventorySettingData();
+                    if (this.profileComponent) {
+                        this.profileComponent.getInitialProfileData();
+                        this.profileComponent.getInventorySettingData();
+                    }
                 }, 0);
             } else if (this.activeTab === "financial-year") {
                 setTimeout(() => {
-                    this.financialYearComp.getInitialFinancialYearData();
+                    if (this.financialYearComp) {
+                        this.financialYearComp.getInitialFinancialYearData();
+                    }
                 }, 0);
             } else if (this.activeTab === "permission") {
                 setTimeout(() => {
@@ -128,7 +136,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 }, 0);
             } else if (this.activeTab === "tag") {
                 setTimeout(() => {
-                    this.tagComp.getTags();
+                    if (this.tagComp) {
+                        this.tagComp.getTags();
+                    }
                 }, 0);
             }
         });
@@ -156,23 +166,31 @@ export class SettingsComponent implements OnInit, OnDestroy {
         const selectedId = this.staticTabs.tabs.findIndex(p => p.active);
         if (key === 'alt+right' && selectedId < this.staticTabs.tabs.length) {
             this.staticTabs.tabs[selectedId + 1].active = true;
-        } else if (selectedId > 0) {
+        } else if (selectedId > 0 && this.staticTabs.tabs.length) {
             this.staticTabs.tabs[selectedId - 1].active = true;
         }
     }
 
     public selectTab(id: number) {
-        this.staticTabs.tabs[id].active = true;
+        if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs.length) {
+            this.staticTabs.tabs[id].active = true;
+        }
     }
 
     public assignChildtabForIntegration(childTab: string): number {
         switch (childTab) {
-            case 'payment':
-                return 4;
-            case 'email':
-                return 1;
+            case SETTING_INTEGRATION_TABS.PAYMENT.LABEL:
+                return SETTING_INTEGRATION_TABS.PAYMENT.VALUE;
+            case SETTING_INTEGRATION_TABS.E_COMMERCE.LABEL:
+                return SETTING_INTEGRATION_TABS.E_COMMERCE.VALUE;
+            case SETTING_INTEGRATION_TABS.COLLECTION.LABEL:
+                return SETTING_INTEGRATION_TABS.COLLECTION.VALUE;
+            case SETTING_INTEGRATION_TABS.EMAIL.LABEL:
+                return SETTING_INTEGRATION_TABS.EMAIL.VALUE;
+            case SETTING_INTEGRATION_TABS.SMS.LABEL:
+                return SETTING_INTEGRATION_TABS.SMS.VALUE;
             default:
-                return 0;
+                return SETTING_INTEGRATION_TABS.SMS.VALUE;
         }
     }
 
@@ -215,7 +233,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public tabChanged(tab: string) {
-        if (tab === 'integration' && this.integrationtab) {
+        if ((tab === 'integration' || tab === 'profile') && this.integrationtab) {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
             this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
@@ -241,13 +259,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
         options.headers = {} as any;
 
-        this.http.post("https://accounts.google.com/o/oauth2/token", getAccessTokenData, options).subscribe((p: any) => {
+        this.http.post("https://accounts.google.com/o/oauth2/token", getAccessTokenData, options).pipe(take(1)).subscribe((p: any) => {
             const dataToSave = {
                 "access_token": p.access_token,
                 "expires_in": p.expires_in,
                 "refresh_token": p.refresh_token
             };
-            this._authenticationService.saveGmailToken(dataToSave).subscribe((res) => {
+            this._authenticationService.saveGmailToken(dataToSave).pipe(take(1)).subscribe((res) => {
 
                 if (res.status === 'success') {
                     this._toast.successToast('Gmail account added successfully.', 'Success');
@@ -279,7 +297,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     private setStateDetails(type, referer?: string) {
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         if (referer) {
@@ -342,5 +360,18 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.asideSettingMenuState = "out";
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Sets the current page title
+     *
+     * @param {string} title Title of the page
+     * @memberof SettingsComponent
+     */
+    public setCurrentPageTitle(title: string): void {
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = "Settings > " + title;
+        currentPageObj.url = this.router.url;
+        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 }

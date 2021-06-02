@@ -37,7 +37,11 @@ export class MapExcelDataComponent implements OnInit {
 		this._clonedMappings = cloneDeep(value.mappings);
 	}
 
-	@Input() public entity: string;
+    @Input() public entity: string;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
 	@Output() public onNext = new EventEmitter<ImportExcelResponseData>();
 	@Output() public onBack = new EventEmitter();
@@ -66,13 +70,13 @@ export class MapExcelDataComponent implements OnInit {
 	public mapExcelData() {
 
 		if (this.mandatoryHeadersCount !== this.mandatoryHeadersModel.length) {
-			this._toaster.errorToast('Please Map the mandatory columns..');
+			this._toaster.errorToast(this.localeData?.mandatory_columns_error);
 			return;
 		} else {
 			// check if group have mandatory fields selected
 			if (this.mandatoryGroupModel.length) {
 				if (this.mandatoryGroupHeadersCount !== this.mandatoryGroupModel.length) {
-					this._toaster.errorToast('Please Map the mandatory columns..');
+					this._toaster.errorToast(this.localeData?.mandatory_columns_error);
 					return;
 				}
 			}

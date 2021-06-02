@@ -109,7 +109,7 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
         this.scrollbarHeight = 0;
 
         if (!this.parentScroll) {
-            this.addParentEventHandlers(this.element.nativeElement);
+            this.addParentEventHandlers(this.element?.nativeElement);
         }
 
         setTimeout(() => {
@@ -154,7 +154,7 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
      */
     public scrollInto(item: any, direction?: string) {
 
-        let el: Element = this.parentScroll instanceof Window ? document.body : this.parentScroll || this.element.nativeElement;
+        let el: Element = this.parentScroll instanceof Window ? document.body : this.parentScroll || this.element?.nativeElement;
         let index: number = (this.items || []).indexOf(item);
         if (index < 0 || index >= (this.items || []).length) {
             return;
@@ -406,7 +406,7 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
     private countItemsPerRow() {
         let offsetTop;
         let itemsPerRow;
-        let children = this.contentElementRef.nativeElement.children;
+        let children = this.contentElementRef?.nativeElement.children;
         for (itemsPerRow = 0; itemsPerRow < children.length; itemsPerRow++) {
             // tslint:disable-next-line:curly
             if (offsetTop !== undefined && offsetTop !== children[itemsPerRow].offsetTop) break;
@@ -417,17 +417,17 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
 
     private getElementsOffset(): number {
         let offsetTop = 0;
-        if (this.containerElementRef && this.containerElementRef.nativeElement) {
-            offsetTop += this.containerElementRef.nativeElement.offsetTop;
+        if (this.containerElementRef && this.containerElementRef?.nativeElement) {
+            offsetTop += this.containerElementRef?.nativeElement.offsetTop;
         }
         if (this.parentScroll) {
-            offsetTop += this.element.nativeElement.offsetTop;
+            offsetTop += this.element?.nativeElement.offsetTop;
         }
         return offsetTop;
     }
 
     private calculateDimensions() {
-        let el: Element = this.parentScroll instanceof Window ? document.body : this.parentScroll || this.element.nativeElement;
+        let el: Element = this.parentScroll instanceof Window ? document.body : this.parentScroll || this.element?.nativeElement;
         let items = this.items || [];
         let itemCount = items.length;
         let viewWidth = el.clientWidth - this.scrollbarWidth;
@@ -435,9 +435,9 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
 
         let contentDimensions;
         if (this.childWidth === undefined || this.childHeight === undefined) {
-            let content = this.contentElementRef.nativeElement;
-            if (this.containerElementRef && this.containerElementRef.nativeElement) {
-                content = this.containerElementRef.nativeElement;
+            let content = this.contentElementRef?.nativeElement;
+            if (this.containerElementRef && this.containerElementRef?.nativeElement) {
+                content = this.containerElementRef?.nativeElement;
             }
             contentDimensions = content.children[0] ? content.children[0].getBoundingClientRect() : {
                 width: viewWidth,
@@ -460,7 +460,7 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         if (scrollHeight !== this.lastScrollHeight) {
-            this.renderer.setStyle(this.shimElementRef.nativeElement, 'height', `${scrollHeight}px`);
+            this.renderer.setStyle(this.shimElementRef?.nativeElement, 'height', `${scrollHeight}px`);
             this.lastScrollHeight = scrollHeight;
         }
 
@@ -479,7 +479,7 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
 
     private getScrollElement(): HTMLElement {
         // tslint:disable-next-line:max-line-length
-        return this.parentScroll instanceof Window ? document.scrollingElement || document.documentElement || document.body : this.parentScroll || this.element.nativeElement;
+        return this.parentScroll instanceof Window ? document.scrollingElement || document.documentElement || document.body : this.parentScroll || this.element?.nativeElement;
     }
 
     private getScrollPosition(): number {
@@ -516,8 +516,8 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
         const topPadding = (items == null || items.length === 0) ? 0 : (d.childHeight * (start / d.itemsPerRow) - (d.childHeight * Math.min(start, this.bufferAmount)));
 
         if (topPadding !== this.lastTopPadding) {
-            this.renderer.setStyle(this.contentElementRef.nativeElement, 'transform', `translateY(${topPadding}px)`);
-            this.renderer.setStyle(this.contentElementRef.nativeElement, 'webkitTransform', `translateY(${topPadding}px)`);
+            this.renderer.setStyle(this.contentElementRef?.nativeElement, 'transform', `translateY(${topPadding}px)`);
+            this.renderer.setStyle(this.contentElementRef?.nativeElement, 'webkitTransform', `translateY(${topPadding}px)`);
             this.lastTopPadding = topPadding;
         }
         start = !isNaN(start) ? start : -1;

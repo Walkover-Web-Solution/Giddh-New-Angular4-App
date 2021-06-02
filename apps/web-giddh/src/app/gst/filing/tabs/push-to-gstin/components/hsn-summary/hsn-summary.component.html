@@ -1,7 +1,7 @@
 <div class="gstr-transactions-summary">
 
 	<h4 class="clearfix gstr-summary-title">HSN Summary</h4>
-	<p style="padding-top:6px;" class="text-muted half">This section includes the HSN-wise summary of the items you have
+	<p class="text-muted half pd-t05">This section includes the HSN-wise summary of the items you have
 		sold</p>
 
 	<div class="">
@@ -11,56 +11,56 @@
 				<thead>
 					<tr>
 						<th class="text-left">
-							<div style="position: relative">
+							<div class="position-relative">
 								<div class="pull-left over-flow"> HSN/SAC</div>
 							</div>
 						</th>
 						<th class="text-left">
-							<div style="position: relative">
+							<div class="position-relative">
 								<div class=" over-flow"> Description</div>
 							</div>
 						</th>
 						<th class="text-left">
-							<div style="position: relative">
+							<div class="position-relative">
 								<div class=" over-flow"> Quantity</div>
 							</div>
 						</th>
 
 						<th class="text-left">
-							<div style="position: relative">
+							<div class="position-relative">
 								<div class=" over-flow"> Unit</div>
 							</div>
 						</th>
 
 						<th class="text-right">
-							<div style="position: relative">
+							<div class="position-relative">
 								<div class=" over-flow"> Taxable Amount</div>
 							</div>
 						</th>
 
 						<th class="text-right">
-							<div style="position: relative">
+							<div class="position-relative">
 								<div class=" over-flow"> IGST Amount</div>
 							</div>
 						</th>
 						<th class="text-right">
-							<div style="position: relative">
+							<div class="position-relative">
 								<div class=" over-flow"> CGST Amount</div>
 							</div>
 						</th>
 						<th class="text-right">
-							<div style="position: relative">
+							<div class="position-relative">
 								<div class=" over-flow"> SGST Amount</div>
 							</div>
 						</th>
 						<th class="text-right">
-							<div style="position: relative">
+							<div class="position-relative">
 								<div class=" over-flow"> CESS</div>
 							</div>
 						</th>
 
 						<th class="text-right">
-							<div style="position: relative">
+							<div class="position-relative">
 								<div class=" over-flow"> Total Amount</div>
 							</div>
 						</th>
@@ -73,12 +73,48 @@
 						<td data-title="Description"> {{item.desc ? item.desc : '-'}} </td>
 						<td data-title="Quantity"> {{item.qty ? item.qty : '-'}} </td>
 						<td data-title="Unit"> {{item.uqc ? item.uqc : '-'}} </td>
-						<td data-title="Taxable Amount" class="text-right"> {{item.txval | giddhCurrency }} </td>
-						<td data-title="IGST Amount" class="text-right"> {{item.iamt | giddhCurrency }} </td>
-						<td data-title="CGST Amount" class="text-right"> {{item.camt | giddhCurrency }} </td>
-						<td data-title="SGST Amount" class="text-right"> {{item.samt | giddhCurrency }} </td>
-						<td data-title="CESS" class="text-right"> {{item.csamt | giddhCurrency }} </td>
-						<td data-title="Total Amount" class="text-right"> {{item.val | giddhCurrency }} </td>
+						<td data-title="Taxable Amount" class="text-right">
+                            <!-- {{item.txval | giddhCurrency }}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.txval" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+						<td data-title="IGST Amount" class="text-right">
+                            <!-- {{item.iamt | giddhCurrency }}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.iamt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+						<td data-title="CGST Amount" class="text-right">
+                            <!-- {{item.camt | giddhCurrency }}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.camt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+						<td data-title="SGST Amount" class="text-right">
+                            <!-- {{item.samt | giddhCurrency }}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.samt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+						<td data-title="CESS" class="text-right">
+                            <!-- {{item.csamt | giddhCurrency }}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.csamt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+						<td data-title="Total Amount" class="text-right">
+                            <!-- {{item.val | giddhCurrency }}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.val" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
 					</tr>
 				</tbody>
 

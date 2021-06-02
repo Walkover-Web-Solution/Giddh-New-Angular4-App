@@ -203,15 +203,27 @@ export class SalesService {
     /**
      * Returns accounts of a particular group and with particular currency
      *
-     * @param {string} groups Comma delimited string of group names
-     * @param {string} currency Comma delimited string of currencies
+     * @param {*} requestObject Comma delimited string of group names or request object with param keys for the API in dynamic search
+     * @param {string} [currency] Comma delimited string of currencies
      * @returns {Observable<any>} Observable to carry out further operations
      * @memberof SalesService
      */
-    public getAccountsWithCurrency(groups: string, currency: string): Observable<any> {
+    public getAccountsWithCurrency(requestObject: any, currency?: string): Observable<any> {
         const companyUniqueName = this._generalService.companyUniqueName;
-        const contextPath = `${this.config.apiUrl}${SALES_API_V2.GET_ACCOUNTS_OF_GROUP_WITH_CURRENCY.replace(':companyUniqueName', companyUniqueName)}`
-            .concat(`?group=${groups}&currency=${currency}&count=0`);
+        let contextPath = `${this.config.apiUrl}${SALES_API_V2.GET_ACCOUNTS_OF_GROUP_WITH_CURRENCY.replace(':companyUniqueName', companyUniqueName)}`;
+        if (typeof requestObject === 'string') {
+            contextPath = contextPath.concat(`?group=${requestObject}&count=0`);
+        } else {
+            Object.keys(requestObject).forEach((key, index) => {
+                const delimiter = index === 0 ? '?' : '&'
+                if (requestObject[key] !== undefined) {
+                    contextPath += `${delimiter}${key}=${requestObject[key]}`
+                }
+            });
+        }
+        if (currency) {
+            contextPath = contextPath.concat(`&currency=${currency}`);
+        }
         return this._http.get(contextPath);
     }
 
