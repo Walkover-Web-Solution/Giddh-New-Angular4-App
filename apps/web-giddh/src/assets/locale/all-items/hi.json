@@ -38,7 +38,7 @@
                     }
                 },
                 {
-                    "label": "बीजक",
+                    "label": "चालान",
                     "link": "/pages/invoice/preview/sales",
                     "icon": "icon-invoice-new",
                     "description": "बहुमुद्रा, आवर्ती चालान, नकद चालान"
@@ -150,7 +150,7 @@
             ]
         },
         {
-            "label": "रिपोर्टों",
+            "label": "रिपोर्ट्स",
             "icon": "icon-reports",
             "items": [
                 {
@@ -164,7 +164,7 @@
                     }
                 },
                 {
-                    "label": "रोज़नामचा",
+                    "label": "डेबुक",
                     "link": "/pages/daybook",
                     "icon": "icon-daybook-new",
                     "description": "दैनिक प्रविष्टियाँ जिन्हें निर्यात किया जा सकता है"
@@ -208,7 +208,7 @@
             "icon": "icon-import",
             "items": [
                 {
-                    "label": "हिसाब किताब",
+                    "label": "खाता आयात",
                     "link": "/pages/import/account",
                     "icon": "icon-proft-loss-new",
                     "description": "एक्सेल और सीएसवी आयात करें और मौजूदा अपडेट करें"
@@ -310,7 +310,7 @@
                     "description": "जर्नल वाउचर की प्रविष्टियाँ"
                 },
                 {
-                    "label": "ज्ञानप्राप्ति",
+                    "label": "ऑनबोर्डिंग",
                     "link": "/pages/onboarding",
                     "icon": "icon-onboarding-new",
                     "description": "टैली, सीएसवी/एक्सेल से डेटा आयात करें"

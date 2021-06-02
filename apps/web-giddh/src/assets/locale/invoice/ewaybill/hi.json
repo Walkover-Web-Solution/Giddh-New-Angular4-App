@@ -54,7 +54,7 @@
 	"sub_type": "उप प्रकार*",
 	"document_type": "दस्तावेज़ का प्रकार*",
 	"gstin_receiver_label": "रिसीवर का जीएसटीआईएन*",
-	"gstin_receiver_placeholder": "रिसीवर का GSTIN दर्ज करें",
+	"gstin_receiver_placeholder": "रिसीवर का जीएसटीआईएन दर्ज करें",
 	"pincode_receiver_label": "रिसीवर का पिन कोड*",
 	"pincode_receiver_placeholder": "पिनकोड दर्ज करें",
 	"transporter_placeholder": "ट्रांसपोर्टर का नाम चुनें",
