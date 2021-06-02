@@ -385,7 +385,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
             let currentDate = moment();
             let expiryDate = moment(expiry.split("-").reverse().join("-"));
             let difference = expiryDate.diff(currentDate, 'days');
-            return (difference <= 15) ? difference + this.localeData?.subscription?.days_remaining : this.commonLocaleData?.app_active
+            return (difference <= 15) ? difference + " " + this.localeData?.subscription?.days_remaining : this.commonLocaleData?.app_active
         } else {
             return "-";
         }
