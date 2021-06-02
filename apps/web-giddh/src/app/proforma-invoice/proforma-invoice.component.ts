@@ -4040,12 +4040,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invoiceNo = this.voucherNumber;
             this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
             this.postResponseAction(this.invoiceNo);
-            this.store.dispatch(this.purchaseRecordAction.getUpdatePurchaseRecordSuccessAction(
-                {
-                    invoiceNumber: response.body.number,
-                    purchaseRecordUniqueName: response.body.uniqueName,
-                    mergedRecordUniqueName: (this.matchingPurchaseRecord) ? this.matchingPurchaseRecord.uniqueName : ''
-                }));
+            if (this.isPurchaseInvoice) {
+                this.store.dispatch(this.purchaseRecordAction.getUpdatePurchaseRecordSuccessAction(
+                    {
+                        invoiceNumber: response.body.number,
+                        purchaseRecordUniqueName: response.body.uniqueName,
+                        mergedRecordUniqueName: (this.matchingPurchaseRecord) ? this.matchingPurchaseRecord.uniqueName : ''
+                    }));
+            }
             this.depositAccountUniqueName = '';
             this.depositAmount = 0;
             this.isUpdateMode = false;
