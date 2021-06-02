@@ -11,10 +11,8 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfe
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { SharedModule } from "../shared/shared.module";
 import { ElementViewChildModule } from "../shared/helpers/directives/elementViewChild/elementViewChild.module";
-//import { ModalModule } from 'ngx-bootstrap';
 import { SubscriptionsComponent } from './components/subscriptions/subscriptions.component';
 import { UserDetailsPipe } from './userDetails.pipe';
-import { UserDetailsCompanyComponent } from './components/company/user-details-company.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { SubscriptionsPlansComponent } from './components/subscriptions-plans/subscriptions-plans.component';
@@ -38,7 +36,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         UserDetailsComponent,
         SubscriptionsComponent,
         UserDetailsPipe,
-        UserDetailsCompanyComponent,
         SubscriptionsPlansComponent,
         CompanyDetailsSidebarComponent,
         ActiveLogSidebarComponent,

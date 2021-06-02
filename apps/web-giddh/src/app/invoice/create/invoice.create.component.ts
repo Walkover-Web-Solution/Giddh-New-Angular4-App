@@ -59,7 +59,7 @@ let THEAD_ARR_READONLY = [
 ];
 
 @Component({
-    styleUrls: ['../../sales/create/sales.invoice.component.scss', './invoice.create.component.scss'],
+    styleUrls: ['./invoice.create.component.scss'],
     selector: 'invoice-create',
     templateUrl: './invoice.create.component.html'
 })

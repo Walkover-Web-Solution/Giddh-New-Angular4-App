@@ -8,7 +8,6 @@ import { GeneralService } from './services/general.service';
       <app-header></app-header>
       <layout-main>
       </layout-main>
-      <!-- <app-footer></app-footer> -->
     </div>
   `
 })

@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges }
 import { ChildGroup } from '../../../../models/api-models/Search';
 
 @Component({
-    selector: '[bs-grid-row]',  // <home></home>
+    selector: '[bs-grid-row]',
     templateUrl: './bs-grid-row.component.html',
     styleUrls: [`./bs-grid-row.component.scss`],
 })

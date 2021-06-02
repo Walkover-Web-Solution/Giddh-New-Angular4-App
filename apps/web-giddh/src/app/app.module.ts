@@ -23,9 +23,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
 import { ToastrModule } from 'ngx-toastr';
-
 import { environment } from '../environments/environment';
-import { NotFoundComponent } from './404/404-component';
 import { ActionModule } from './actions/action.module';
 import { AppLoginSuccessComponent } from './app-login-success/app-login-success';
 import { AppComponent } from './app.component';
@@ -42,11 +40,9 @@ import { MobileHomeComponent } from './mobile-home/mobile-home.component';
 import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
 import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component';
 import { NewUserComponent } from './newUser.component';
-import { NoContentComponent } from './no-content/no-content.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
 import { PageComponent } from './page.component';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
-import { SelectPlanComponent } from './selectPlan/selectPlan.component';
 import { ExceptionLogService } from './services/exception-log.service';
 import { GiddhHttpInterceptor } from './services/http.interceptor';
 import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
@@ -60,42 +56,21 @@ import { UniversalListModule } from './theme/universal-list/universal.list.modul
 import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 import { DownloadComponent } from './download/download.component';
 
-// import { SuccessComponent } from './settings/linked-accounts/success.component';
-/*
- * Platform and Environment providers/pipes/pipes
- */
-// App is our top level component
-//import {StoreRouterConnectingModule} from '@ngrx/router-store';
 // Application wide providers
 const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
     { provide: APP_BASE_HREF, useValue: IS_ELECTRON_WA ? './' : AppUrl + APP_FOLDER }
-    // { provide: APP_BASE_HREF, useValue: './' }
 ];
-
-interface InternalStateType {
-    [key: string]: any;
-}
-
-interface StoreType {
-    state: InternalStateType;
-    rootState: InternalStateType;
-    restoreInputValues: () => void;
-    disposeOldHosts: () => void;
-}
 
 // tslint:disable-next-line:prefer-const
 let CONDITIONAL_IMPORTS = [];
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-    // return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: IS_ELECTRON_WA ? sessionStorage : localStorage })(reducer);
     return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: localStorage })(reducer);
-    // return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: sessionStorage })(reducer);
 }
 
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 if (!environment.production) {
-    // metaReducers.push(storeFreeze);
     CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
 }
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -110,26 +85,20 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     declarations: [
         AppComponent,
         PageComponent,
-        NoContentComponent,
         AppLoginSuccessComponent,
         PublicPageHandlerComponent,
-        NotFoundComponent,
         TokenVerifyComponent,
         DummyComponent,
         BillingDetailComponent,
-
-        // SuccessComponent,
         NewUserComponent,
         BrowserDetectComponent,
         OnboardingComponent,
         SocialLoginCallbackComponent,
-        SelectPlanComponent,
         MobileHomeComponent,
         MobileHomeSidebarComponent,
         MobileSearchCompanyComponent,
         MobileSearchBranchComponent,
         DownloadComponent
-        // SignupComponent
     ],
     /**
      * Import Angular's modules.
@@ -165,21 +134,12 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PerfectScrollbarModule,
         RouterModule.forRoot(ROUTES, {
             useHash: IS_ELECTRON_WA,
-            //preloadingStrategy: CustomPreloadingStrategy,
             onSameUrlNavigation: 'reload',
             preloadingStrategy: QuicklinkStrategy,
             relativeLinkResolution: 'corrected'
         }),
         QuicklinkModule,
-        //StoreRouterConnectingModule,
-        ...CONDITIONAL_IMPORTS,
-
-        /**
-         * This section will import the `DevModuleModule` only in certain build types.
-         * When the module is not imported it will get tree shaked.
-         * This is a simple example, a big app should probably implement some logic
-         */
-        // ...environment.showDevModule ? [DevModuleModule] : [],
+        ...CONDITIONAL_IMPORTS
     ],
     /**
      * Expose our Services and Providers into Angular's dependency injection.

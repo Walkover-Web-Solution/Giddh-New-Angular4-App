@@ -20,7 +20,7 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { OrganizationType } from '../../../models/user-login-state';
 import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({
-    selector: 'tb-pl-bs-filter',  // <home></home>
+    selector: 'tb-pl-bs-filter',
     templateUrl: './tb-pl-bs-filter.component.html',
     styleUrls: [`./tb-pl-bs-filter.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush

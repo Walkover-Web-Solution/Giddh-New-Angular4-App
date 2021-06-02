@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges }
 import { ChildGroup } from '../../../../models/api-models/Search';
 
 @Component({
-    selector: '[pl-grid-row]',  // <home></home>
+    selector: '[pl-grid-row]',
     template: `
 <div class="pl-grid-row row" [trial-accordion]="groupDetail"
     *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)"

@@ -11,11 +11,9 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FilingComponent } from './filing/filing.component';
 import { NgModule } from '@angular/core';
-import { FileGstR1Component } from './gstR1/gstR1.component';
 import { OverviewSummaryComponent } from './filing/tabs/overview/summary/summary.component';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { FileGstR2Component } from './gstR2/gstR2.component';
 import { B2csSummaryComponent } from './filing/tabs/push-to-gstin/components/b2cs-summary/b2cs-summary.component';
 import { NilSummaryComponent } from './filing/tabs/push-to-gstin/components/nil-summary/nil-summary.component';
 import { FilingHeaderComponent } from './filing/header/filing-header.component';
@@ -42,7 +40,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { GstrSidebarComponent } from './gst-sidebar/gst-sidebar.component';
 
 @NgModule({
-    declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component,
+    declarations: [FileGstR3Component,
         GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent,
         ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
         OverviewSummaryComponent, TransactionSummaryComponent,
