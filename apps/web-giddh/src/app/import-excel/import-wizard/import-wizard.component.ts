@@ -10,7 +10,7 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-    selector: 'import-wizard',  // <home></home>
+    selector: 'import-wizard',
     styleUrls: ['./import-wizard.component.scss'],
     templateUrl: './import-wizard.component.html'
 })

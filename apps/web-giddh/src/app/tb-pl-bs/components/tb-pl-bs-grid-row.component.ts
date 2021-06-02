@@ -7,7 +7,7 @@ import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccou
 import { SearchService } from '../../services/search.service';
 
 @Component({
-    selector: '[tb-pl-bs-grid-row]',  // <home></home>
+    selector: '[tb-pl-bs-grid-row]',
     styleUrls: ['./tb-pl-bs-grid-row.component.scss'],
     templateUrl: './tb-pl-bs-grid-row.component.html',
 })
