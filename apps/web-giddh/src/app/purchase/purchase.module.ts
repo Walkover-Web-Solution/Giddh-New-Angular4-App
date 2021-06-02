@@ -29,11 +29,6 @@ import { CreatePurchaseOrderComponent } from './create-purchase-order/create-pur
 import {
     PurchaseAdvanceSearchComponent,
 } from './purchase-advance-search/purchase-advance-search.component';
-import {
-    AsideMenuPurchaseInvoiceSettingComponent,
-} from './purchase-invoice/aside-menu/aside-menu-purchase-invoice-setting.component';
-import { PurchaseInvoiceComponent } from './purchase-invoice/purchase.invoice.component';
-import { ReconcileDesignComponent } from './purchase-invoice/reconcileDesign/reconcileDesign.component';
 import { PurchaseOrderPreviewComponent } from './purchase-order-preview/purchase-order-preview.component';
 import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
 import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
@@ -43,13 +38,10 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
 
 @NgModule({
     declarations: [
-        PurchaseInvoiceComponent,
         PurchaseOrderComponent,
         CreatePurchaseOrderComponent,
         PurchaseOrderPreviewComponent,
         PurchaseComponent,
-        AsideMenuPurchaseInvoiceSettingComponent,
-        ReconcileDesignComponent,
         PurchaseRecordComponent,
         PurchaseSettingComponent,
         PurchaseAdvanceSearchComponent
@@ -82,7 +74,7 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
     ],
     entryComponents: [],
     exports: [
-        AsideMenuPurchaseInvoiceSettingComponent,
+        
     ]
 })
 export class PurchaseModule {

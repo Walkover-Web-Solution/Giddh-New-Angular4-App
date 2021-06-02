@@ -18,7 +18,6 @@ import {
 import {
     AuthService,
     GoogleLoginProvider,
-    LinkedinLoginProvider,
     SocialUser
 } from "../theme/ng-social-login-module/index";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
@@ -349,8 +348,6 @@ export class SignupComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
             if (provider === "google") {
                 this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-            } else if (provider === "linkedin") {
-                this.authService.signIn(LinkedinLoginProvider.PROVIDER_ID);
             }
         }
     }

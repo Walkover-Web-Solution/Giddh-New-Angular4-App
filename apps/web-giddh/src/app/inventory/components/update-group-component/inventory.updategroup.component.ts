@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'inventory-update-group',  // <home></home>
+    selector: 'inventory-update-group',
     templateUrl: './inventory.updategroup.component.html'
 })
 export class InventoryUpdateGroupComponent implements OnInit, OnDestroy {

@@ -1,5 +1,4 @@
 import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
-import { TbSynramComponent } from './components/tb-synram/tb-synram.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -17,7 +16,6 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { BsComponent } from './components/bs/bs.component';
 import { BsGridComponent } from './components/bs/bs-grid/bs-grid.component';
 import { BsGridRowComponent } from './components/bs/bs-grid/bs-grid-row.component';
-
 import { PlExportXlsComponent } from './components/export/pl-export-xls.component';
 import { TbExportCsvComponent } from './components/export/tb-export-csv.component';
 import { TbExportPdfComponent } from './components/export/tb-export-pdf.component';
@@ -44,7 +42,6 @@ import { SharedModule } from '../shared/shared.module';
         TbPlBsFilterComponent,
         TlPlGridRowComponent,
         TbComponent,
-        TbSynramComponent,
         PlComponent,
         PlGridComponent,
         PlGridRowComponent,

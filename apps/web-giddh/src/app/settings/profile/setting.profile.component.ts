@@ -35,7 +35,7 @@ export interface IGstObj {
 @Component({
     selector: 'setting-profile',
     templateUrl: './setting.profile.component.html',
-    styleUrls: ['../../shared/header/components/company-add/company-add.component.scss', './setting.profile.component.scss'],
+    styleUrls: ['./setting.profile.component.scss'],
     host: { 'class': 'settings-profile' },
     animations: [
         trigger('fadeInAndSlide', [
