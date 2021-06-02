@@ -22,7 +22,7 @@
                     "description": "रोखीची चलने तयार करा"
                 },
                 {
-                    "label": "उधार पत्र",
+                    "label": "क्रेडिट टीप",
                     "link": "/pages/invoice/preview/credit note",
                     "icon": "icon-credit-note-new",
                     "description": "क्रेडिट नोट व्युत्पन्न करा आणि अद्यतनित करा"
@@ -208,7 +208,7 @@
             "icon": "icon-import",
             "items": [
                 {
-                    "label": "खाती",
+                    "label": "खाती आयात",
                     "link": "/pages/import/account",
                     "icon": "icon-proft-loss-new",
                     "description": "एक्सेल आणि सीएसव्ही आयात करा आणि विद्यमान अद्यतनित करा"
