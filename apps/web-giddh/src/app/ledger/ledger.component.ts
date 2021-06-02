@@ -336,6 +336,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.todaySelected = true;
         this.lc.blankLedger.entryDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         this.getTransactionData();
+        this.advanceSearchComp.onSearch();
         // Después del éxito de la entrada. llamar para transacciones bancarias
         this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe((data: AccountResponse) => {
             this.getBankTransactions();
