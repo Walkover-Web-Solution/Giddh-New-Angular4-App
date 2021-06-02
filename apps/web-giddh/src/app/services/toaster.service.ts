@@ -24,8 +24,13 @@ export class ToasterService {
         this._toaster.success(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS_WITH_HTML));
     }
 
-    public errorToast(msg: string, title: string = APP_DEFAULT_TITLE): void {
-        this._toaster.error(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
+    public errorToast(msg: string, title: string = APP_DEFAULT_TITLE,params?:any): void {
+        if(params){
+            params={timeOut:params};
+            this._toaster.error(msg, title, Object.assign({}, {...DEFAULT_TOASTER_OPTIONS,...params}));
+        }else{
+            this._toaster.error(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
+        }
     }
 
     public warningToast(msg: string, title: string = APP_DEFAULT_TITLE): void {
