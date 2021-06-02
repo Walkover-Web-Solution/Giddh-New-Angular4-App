@@ -487,11 +487,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     let voucherIndex = (res[0] as ReciptResponse).items.findIndex(f => f.voucherNumber === res[1]);
                     if (voucherIndex > -1) {
                         let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
-                        allItems = uniqBy([allItems[voucherIndex], ...allItems], 'voucherNumber');
-                        this.itemsListForDetails = allItems;
+                        const removedItem = allItems.splice(voucherIndex, 1)[0];
+                        allItems.unshift(removedItem);
                         this.toggleBodyClass();
                         setTimeout(() => {
                             this.selectedInvoiceForDetails = allItems[0];
+                            this.itemsListForDetails = cloneDeep(allItems);
                             this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
                         }, 1000);
                     }
@@ -962,12 +963,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             newIndex = allItems.findIndex(f => f.voucherNumber === invoice.voucherNumber);
         }
-        let removedItem = allItems.splice(newIndex, 1);
-        allItems = [...removedItem, ...allItems];
-        this.itemsListForDetails = allItems;
+        const removedItem = allItems.splice(newIndex, 1)[0];
+        allItems.unshift(removedItem);
 
         setTimeout(() => {
             this.selectedInvoiceForDetails = cloneDeep(allItems[0]);
+            this.itemsListForDetails = cloneDeep(allItems);
             this.toggleBodyClass();
         }, 200);
     }
