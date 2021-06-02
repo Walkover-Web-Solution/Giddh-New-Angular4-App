@@ -33,7 +33,7 @@
                     "icon": "<i class='icon-integration1 font-12'></i>"
                 },
                 {
-                    "label": "linked Accounts",
+                    "label": "Linked Accounts",
                     "link": "/pages/settings/linked-accounts",
                     "icon": "<i class='icon-linked-account'></i>"
                 },
@@ -52,7 +52,7 @@
                 {
                     "label": "Financial Year",
                     "link": "/pages/settings/financial-year",
-                    "icon": "<i class='icon-financial-year-newr'></i>"
+                    "icon": "<i class='icon-financial-year-new'></i>"
                 },
                 {
                     "label": "Branch",
