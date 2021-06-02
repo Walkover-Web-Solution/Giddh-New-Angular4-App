@@ -27,7 +27,6 @@ import { DOCUMENT } from "@angular/common";
 import { ToasterService } from "../services/toaster.service";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { GeneralService } from "../services/general.service";
-import { HttpClient } from "@angular/common/http";
 
 @Component({
     selector: "signup",
@@ -85,7 +84,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         @Inject(DOCUMENT) private document: Document,
         private _toaster: ToasterService,
         private _generalService: GeneralService,
-        private http : HttpClient
     ) {
         this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
