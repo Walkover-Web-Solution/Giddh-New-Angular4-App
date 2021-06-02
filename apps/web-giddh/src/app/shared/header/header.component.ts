@@ -1611,6 +1611,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('on-user-page');
 
             }
+            else if(document.getElementsByClassName("gst-sidebar-open") && document.getElementsByClassName("gst-sidebar-open").length > 0){
+                document.querySelector('.primary-sidebar').classList.add('sidebar-collapse');
+                document.querySelector('.nav-left-bar').classList.add('width-60');
+            }
 
             else {
                 document.querySelector('body').classList.remove('page-has-tabs');
@@ -1624,6 +1628,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     }
 
+    public removeClass(){
+        document.querySelector('.primary-sidebar').classList.remove('sidebar-collapse');
+        document.querySelector('.nav-left-bar').classList.remove('width-60');
+    }
+    public addClass(){
+        document.querySelector('.primary-sidebar').classList.add('sidebar-collapse');
+        document.querySelector('.nav-left-bar').classList.add('width-60');
+    }
     /**
      * This will show the datepicker
      *
