@@ -1,12 +1,10 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { GroupWithAccountsAction } from '../../../actions/groupwithaccounts.actions';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { CompanyActions } from '../../../actions/company.actions';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -20,9 +18,9 @@ import { GeneralService } from '../../../services/general.service';
 })
 export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy {
 
-    @ViewChild(ElementViewContainerRef, {static: true}) public elementViewContainerRef: ElementViewContainerRef;
-    @ViewChild('permissionModel', {static: true}) public permissionModel: ModalDirective;
-    @ViewChild('permissionConfirmationModel', {static: true}) public permissionConfirmationModel: ModalDirective;
+    @ViewChild(ElementViewContainerRef, { static: true }) public elementViewContainerRef: ElementViewContainerRef;
+    @ViewChild('permissionModel', { static: true }) public permissionModel: ModalDirective;
+    @ViewChild('permissionConfirmationModel', { static: true }) public permissionConfirmationModel: ModalDirective;
 
     public localState: any;
     public allRoles: IRoleCommonResponseAndRequest[] = [];
@@ -31,12 +29,14 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     // showBackButton will be used to show/hide the back button
     public showBackButton: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
         public route: ActivatedRoute,
-        private companyActions: CompanyActions,
-        private groupWithAccountsAction: GroupWithAccountsAction,
         private router: Router,
         private permissionActions: PermissionActions,
         private _toasty: ToasterService,
@@ -54,36 +54,22 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         });
 
         // This module should be accessible to superuser only
-        this.session$ = this.store.select(s => {
-            return s.session;
-        }).pipe(takeUntil(this.destroyed$));
-
-        this.session$.subscribe((session) => {
-            this.store.select(state => state.company).pipe(takeUntil(this.destroyed$)).subscribe((company) => {
-                if (company && session.companies.length) {
-                    let selectedCompany = session.companies.find(cmp => {
-                        return cmp.uniqueName === session.companyUniqueName;
-                    });
-                    if (selectedCompany && selectedCompany.uniqueName === session.companyUniqueName) {
-                        let superAdminIndx = selectedCompany.userEntityRoles.findIndex((entity) => entity.role.uniqueName === 'super_admin');
-                        // selectedCompany.userEntityRoles[0].role.uniqueName !== 'super_admin'
-                        if (superAdminIndx === -1) {
-                            this.redirectToDashboard();
-                        }
-                    } else {
-                        this.redirectToDashboard();
-                    }
-                } else {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                let superAdminIndx = activeCompany.userEntityRoles.findIndex((entity) => entity.role.uniqueName === 'super_admin');
+                if (superAdminIndx === -1) {
                     this.redirectToDashboard();
                 }
-            });
+            } else {
+                this.redirectToDashboard();
+            }
         });
 
-        this.route.data.subscribe((data: any) => this.localState = data.yourData);
+        this.route.data.pipe(takeUntil(this.destroyed$)).subscribe((data: any) => this.localState = data.yourData);
         // Getting roles every time user refresh page
         this.store.dispatch(this.permissionActions.GetRoles());
         this.store.dispatch(this.permissionActions.RemoveNewlyCreatedRoleFromStore());
-        this.store.select(p => p.permission.roles).pipe(takeUntil(this.destroyed$)).subscribe((roles: IRoleCommonResponseAndRequest[]) => this.allRoles = roles);
+        this.store.pipe(select(p => p.permission.roles), takeUntil(this.destroyed$)).subscribe((roles: IRoleCommonResponseAndRequest[]) => this.allRoles = roles);
     }
 
     /**
@@ -92,7 +78,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
      * @memberof PermissionListComponent
      */
     public ngAfterViewInit(): void {
-        if(this.showBackButton) {
+        if (this.showBackButton) {
             this.openPermissionModal();
         }
     }

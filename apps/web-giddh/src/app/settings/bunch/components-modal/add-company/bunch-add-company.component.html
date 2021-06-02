@@ -1,4 +1,4 @@
-<div id="" class="">
+<div>
     <div class="modal-header">
         <h3 class="modal-title bg" id="modal-title">{{ activeBunch.name }}</h3>
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
@@ -11,7 +11,7 @@
             <div class="btn-group btn-block" dropdown #companyListDropdown="bs-dropdown" [autoClose]="false"
                 (clickOutside)="hideListItems()">
                 <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
-                    Chosse company to add in group <span class="select_drop pull-right mr-t1"><i
+                    Chosse company to add in group <span class="select-drop pull-right mr-t1"><i
                             class="fa fa-caret-down"></i></span>
                 </button>
                 <ul id="" *dropdownMenu class="dropdown-menu pd-l1 pd-r1" role="menu"
@@ -24,15 +24,16 @@
                     </li>
                     <li *ngFor="let item of companiesList; let i = index">
                         <label>
-                            <input type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.isSelected"> {{ item.name
-              }}
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.isSelected">
+                            {{ item.name
+                            }}
                         </label>
                     </li>
                 </ul>
             </div>
             <!-- <div class="btn-group btn-block" dropdown #companyListDropdown="bs-dropdown" [autoClose]="false" (clickOutside)="hideListItems()">
           <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
-          Chosse company to add in group <span class="select_drop pull-right mr-t1"><i class="fa fa-caret-down"></i></span>
+          Chosse company to add in group <span class="select-drop pull-right mr-t1"><i class="fa fa-caret-down"></i></span>
 </button>
           <ul id="pageListDD" *dropdownMenu class="dropdown-menu pd-l1 pd-r1" role="menu">
               <li>

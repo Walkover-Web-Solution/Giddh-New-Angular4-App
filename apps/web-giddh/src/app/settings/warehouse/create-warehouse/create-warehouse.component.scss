@@ -1,51 +1,53 @@
 @import "../../../../assets/css/color.scss";
 /* create warehouse css starts */
-.create-warehouse-page{
-    .create-warehouse-under{
+.create-warehouse-page {
+    .create-warehouse-under {
         border-bottom: 1px solid $gainsboro;
-        .warehouse-under-company{
-            p{
+        .warehouse-under-company {
+            p {
                 color: $black;
             }
-            .warehouse-company-name{
-                .label-wrapper{
+            .warehouse-company-name {
+                .label-wrapper {
                     display: flex;
                     font-size: 14px;
-                    label{
+                    label {
                         color: $dark-gray;
                         min-width: 200px;
                     }
-                    span{
+                    span {
                         color: $dark-gray;
                         display: block;
                     }
+                    img {
+                        width: 24px;
+                    }
                 }
-
             }
         }
-        .warehouse-image{
+        .warehouse-image {
             text-align: right;
-            img{
+            img {
                 width: 100%;
                 max-width: 200px;
             }
-            img.branch-image{
+            img.branch-image {
                 max-width: 140px;
             }
         }
     }
-    .warehouse-form{
+    .warehouse-form {
         .warehouse-form-field {
             font-size: 14px;
             display: flex;
             align-items: center;
             color: $nero;
             margin-bottom: 15px;
-            label{
+            label {
                 min-width: 200px;
             }
             input,
-            .form-group{
+            .form-group {
                 width: 100%;
                 max-width: 350px;
             }
@@ -58,7 +60,7 @@
                         margin-left: 6px;
                         flex: 1;
                         .item {
-                            font-family:'opensans-semibold'
+                            font-family: "opensans-semibold";
                         }
                     }
                     .default-entity {
@@ -73,31 +75,30 @@
                     }
                 }
             }
-            input[type="checkbox"]{
+            input[type="checkbox"] {
                 width: auto;
                 max-width: auto;
                 margin-right: 15px;
             }
-            .sub-location-input{
+            .sub-location-input {
                 max-width: 350px;
                 width: 350px;
-                div{
-                    i{
+                div {
+                    i {
                         padding: 5px;
                         cursor: pointer;
-                        &.icon-plus{
-                            color:$light-sea-green;
+                        &.icon-plus {
+                            color: $light-sea-green;
                         }
                     }
                 }
             }
         }
     }
-
 }
-.footer-btn{
-        background-color: $whisper-color;
-        padding: 15px;
+.footer-btn {
+    background-color: $whisper-color;
+    padding: 15px;
 }
 .linked-entities {
     .list-item {
@@ -108,7 +109,7 @@
             margin-left: 6px;
             flex: 1;
             .item {
-               font-family:'opensans-semibold'
+                font-family: "opensans-semibold";
             }
         }
         .default-entity {
@@ -123,56 +124,54 @@
         }
     }
 }
-.address-dropdown sales-sh-select::ng-deep .menu{
+.address-dropdown sales-sh-select::ng-deep .menu {
     max-height: inherit !important;
 }
-@media(max-width:1023px){
-    .create-warehouse-page{
-    .create-warehouse-under{
-        .warehouse-image{
-            display: none;
+@media (max-width: 1023px) {
+    .create-warehouse-page {
+        .create-warehouse-under {
+            .warehouse-image {
+                display: none;
+            }
         }
     }
 }
-}
-@media(max-width:767px){
-    .create-warehouse-page{
-        .create-warehouse-under{
-            .warehouse-under-company{
-                p{
-                margin-bottom: 10px;
+@media (max-width: 767px) {
+    .create-warehouse-page {
+        .create-warehouse-under {
+            .warehouse-under-company {
+                p {
+                    margin-bottom: 10px;
                 }
-                .warehouse-company-name{
-                    .label-wrapper{
+                .warehouse-company-name {
+                    .label-wrapper {
                         flex-direction: column;
-                        label{
+                        label {
                             min-width: 100%;
                         }
                     }
-
                 }
             }
         }
-        .warehouse-form{
+        .warehouse-form {
             .warehouse-form-field {
-            flex-direction: column;
-            align-items: flex-start;
-                label{
+                flex-direction: column;
+                align-items: flex-start;
+                label {
                     width: 100%;
                     margin-bottom: 8px;
                 }
-                .checkbox-label{
+                .checkbox-label {
                     display: none;
                 }
                 input,
-                sh-select{
+                sh-select {
                     width: 100%;
                     max-width: 100%;
                 }
-                .sub-location-input{
+                .sub-location-input {
                     max-width: 100%;
                     width: 100%;
-
                 }
             }
         }

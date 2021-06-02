@@ -1,3 +1,5 @@
+@import "../../assets/css/color.scss";
+
 .welcome-header {
     display: flex;
     justify-content: center;
@@ -8,17 +10,17 @@
 .your-account span {
     display: block;
     font-size: 16px;
-    color: #9b9b9b;
+    color: $nobel;
     margin-bottom: 10px;
 }
 
 .your-account p {
-    color: #2c2c2c;
+    color: $nero;
     font-size: 16px;
 }
 
 .your-account p.success-text {
-    color: #2fab4a !important;
+    color: $success-green !important;
 }
 
 .welcome-msg {
@@ -38,7 +40,7 @@
 }
 .select-plan-block {
     margin-bottom: 30px;
-    background-color: #fff;
+    background-color: $white;
     padding: 15px;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
 }

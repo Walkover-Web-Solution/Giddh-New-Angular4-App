@@ -1,10 +1,12 @@
-.max500 {
+@import "../../../assets/css/color.scss";
+
+.max-width-500 {
     max-width: 500px;
 }
 .right-bar {
     position: absolute;
     top: -49px;
-    background-color: white;
+    background-color: $white;
     right: -15px;
     height: unset;
     width: 310px;
@@ -15,23 +17,23 @@
 input.green-checkbox[type="checkbox"]:after {
     left: -3px !important;
     border: 0px solid transparent !important;
-    background-color: #e6e6e6;
+    background-color: $whisper;
     border-radius: 27px !important;
 }
 input.green-checkbox[type="checkbox"]:before {
-    border: 2px solid #ffffff !important;
+    border: 2px solid $white !important;
     border-top-style: none !important;
     border-right-style: none !important;
     left: 0px !important;
 }
-.font-12px {
+.font-12 {
     font-size: 12px;
 }
 input.green-checkbox[type="checkbox"]:checked:after {
-    background-color: #2daa4a !important;
+    background-color: $success-green !important;
 }
 .group-card {
-    border: 1px solid #bdbdbd;
+    border: 1px solid $silver;
     padding: 0 13px;
     border-radius: 4px;
     margin: 15px 0;
@@ -40,64 +42,71 @@ input.green-checkbox[type="checkbox"]:checked:after {
     }
 }
 
-
-.select-field-width{
+.select-field-width {
     width: 100% !important;
 }
 
-@media (max-width: 1140px){
+.group-model {
+    margin-top: 50px;
+}
+
+.success-label {
+    color: $success-green !important;
+}
+
+@media (max-width: 1140px) {
     .left-bar-width {
         width: 80%;
     }
 }
 
-@media (min-width: 576px) and (max-width: 1024px){
+@media (min-width: 576px) and (max-width: 1024px) {
     .right-bar {
         width: 310px !important;
     }
 }
 
-@media (min-width: 721px) and (max-width: 767px){
-    .select-field-width{
+@media (min-width: 721px) and (max-width: 767px) {
+    .select-field-width {
         width: 70% !important;
     }
 }
 
-@media (min-width: 576px) and (max-width: 720px){
-    .select-field-width{
+@media (min-width: 576px) and (max-width: 720px) {
+    .select-field-width {
         width: 50% !important;
     }
-    .left-head{
+    .left-head {
         width: 50%;
     }
 }
 
-@media (min-width: 361px) and (max-width: 575px){
-    .select-field-width{
+@media (min-width: 361px) and (max-width: 575px) {
+    .select-field-width {
         width: 70% !important;
     }
-    .left-head{
+    .left-head {
         width: 70%;
     }
     .right-bar {
         width: 150px !important;
-        .right-head{
-        font-size: 14px;
+        .right-head {
+            font-size: 14px;
         }
     }
 }
 
-@media (max-width: 360px){
-    .select-field-width{
+@media (max-width: 360px) {
+    .select-field-width {
         width: 80% !important;
     }
-    .left-head{
+    .left-head {
         width: 80%;
     }
     .right-bar {
         width: 100px !important;
         padding: 5px;
-        .right-head{
+        .right-head {
             font-size: 12px;
         }
     }

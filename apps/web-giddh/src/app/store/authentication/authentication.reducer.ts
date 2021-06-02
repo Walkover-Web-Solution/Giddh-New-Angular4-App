@@ -29,6 +29,7 @@ import { CustomActions } from '../customActions';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { userLoginStateEnum } from '../../models/user-login-state';
+import { CommonActions } from '../../actions/common.actions';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -85,8 +86,12 @@ export interface SessionState {
     currentCompanySubscriptionPlan: CreateCompanyUsersPlan;
     totalNumberOfcompanies: number;
     currentCompanyCurrency: CompanyCountry;
-    financialYearChosenInReport: string;
+    registerReportFilters: any;
     currentOrganizationDetails: Organization;
+    activeCompany: any;
+    companyUser: any;
+    commonLocaleData: any;
+    currentLocale: any;
 }
 
 /**
@@ -143,8 +148,12 @@ const sessionInitialState: SessionState = {
     currentCompanySubscriptionPlan: null,
     currentCompanyCurrency: null,
     totalNumberOfcompanies: 0,
-    financialYearChosenInReport: '',
-    currentOrganizationDetails: null
+    registerReportFilters: null,
+    currentOrganizationDetails: null,
+    activeCompany: null,
+    companyUser: null,
+    commonLocaleData: null,
+    currentLocale: null
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -413,12 +422,11 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                     signupVerifyEmail: res.request.email
                 });
             } else {
-                 return Object.assign({}, state, {
+                return Object.assign({}, state, {
                     isSignupWithPasswordInProcess: false,
                     isSignupWithPasswordSuccess: false,
                 });
             }
-            return state;
         }
         case LoginActions.forgotPasswordRequest:
             return Object.assign({}, state, {
@@ -435,7 +443,6 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                     isForgotPasswordInProcess: true,
                 });
             }
-            return state;
         }
         case LoginActions.resetPasswordRequest:
             return Object.assign({}, state, {
@@ -449,12 +456,11 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                     isForgotPasswordInProcess: false
                 });
             } else {
-                 return Object.assign({}, state, {
+                return Object.assign({}, state, {
                     isResetPasswordInSuccess: false,
                     isForgotPasswordInProcess: false
                 });
             }
-            return state;
         }
         default:
             return state;
@@ -561,6 +567,11 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             }
             return state;
         }
+        case CompanyActions.SET_STATE_DETAILS_REQUEST:
+            return Object.assign({}, state, {
+                lastState: action.payload.lastState,
+                companyUniqueName: action.payload.companyUniqueName
+            });
         case CompanyActions.SET_STATE_DETAILS_RESPONSE:
             let setStateData: BaseResponse<string, StateDetailsRequest> = action.payload;
             if (setStateData.status === 'success') {
@@ -583,7 +594,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 }
                 let fromDate: any = data.fromDate ? moment(data.fromDate, GIDDH_DATE_FORMAT) : moment().subtract(30, 'days');
                 let toDate: any = data.toDate ? moment(data.toDate, GIDDH_DATE_FORMAT) : moment();
-                latestState.applicationDate = [fromDate._d, toDate._d, chosenLabel, !!data.fromDate ];
+                latestState.applicationDate = [fromDate._d, toDate._d, chosenLabel, !!data.fromDate];
                 return Object.assign({}, state, latestState);
             }
             return state;
@@ -775,13 +786,38 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         case CompanyActions.USER_REMOVE_COMPANY_CREATE_SESSION:
             return Object.assign({}, state, { createCompanyUserStoreRequestObj: null });
         case CompanyActions.SET_USER_CHOSEN_FINANCIAL_YEAR:
-            return Object.assign({}, state, { financialYearChosenInReport: action.payload });
+            return Object.assign({}, state, { registerReportFilters: { financialYearChosenInReport: action.payload.financialYear, branchChosenInReport: action.payload.branchUniqueName, timeFilter: action.payload.timeFilter } });
         case CompanyActions.RESET_USER_CHOSEN_FINANCIAL_YEAR:
-            return Object.assign({}, state, { financialYearChosenInReport: '' });
+            return Object.assign({}, state, { registerReportFilters: null });
         case CompanyActions.SET_COMPANY_BRANCH:
             return Object.assign({}, state, {
                 currentOrganizationDetails: action.payload
             });
+        case CompanyActions.GET_COMPANY_USER_RESPONSE: {
+            let res: BaseResponse<any, any> = action.payload;
+            if (res.status === 'success') {
+                return Object.assign({}, state, {
+                    companyUser: res.body
+                });
+            }
+            return state;
+        }
+        case CompanyActions.SET_ACTIVE_COMPANY_DATA: {
+            return Object.assign({}, state, {
+                activeCompany: action.payload
+            });
+        }
+        case CommonActions.SET_COMMON_LOCALE_DATA: {
+            return Object.assign({}, state, {
+                commonLocaleData: action.payload
+            });
+        }
+        case CommonActions.SET_ACTIVE_LOCALE: {
+            return Object.assign({}, state, {
+                currentLocale: action.payload
+            });
+        }
+
         default:
             return state;
     }

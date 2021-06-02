@@ -1,8 +1,8 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import * as _ from '../../../../../lodash-optimized';
 import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
@@ -14,7 +14,7 @@ import { InvoiceTemplatesService } from '../../../../../services/invoice.templat
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { IOption } from '../../../../../theme/ng-virtual-select/sh-options.interface';
 import { ActivatedRoute } from '@angular/router';
-import {Font} from "ngx-font-picker";
+import { Font } from "ngx-font-picker";
 
 export class TemplateDesignUISectionVisibility {
     public templates: boolean = false;
@@ -28,10 +28,10 @@ export class TemplateDesignUISectionVisibility {
 @Component({
     selector: 'design-filters',
     templateUrl: 'design.filters.component.html',
-    styleUrls: ['design.filters.component.css']
+    styleUrls: ['design.filters.component.scss']
 })
 
-export class DesignFiltersContainerComponent implements OnInit {
+export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     @Input() public design: boolean;
     @Input() public mode: string = 'create';
     public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
@@ -80,9 +80,11 @@ export class DesignFiltersContainerComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public showUploadButton: boolean = false;
     public showDeleteButton: boolean = false;
-    @ViewChild('fileInput', {static: true}) logoFile: ElementRef;
+    @ViewChild('fileInput', { static: true }) logoFile: ElementRef;
     public selectedFont: string = "";
     public selectedFontSize: string = "";
+    /** Default image size */
+    public defaultImageSize: string = 'S';
 
     constructor(
         private _invoiceUiDataService: InvoiceUiDataService,
@@ -95,17 +97,17 @@ export class DesignFiltersContainerComponent implements OnInit {
         let companies = null;
         let defaultTemplate = null;
 
-        this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
             companyUniqueName = ss.companyUniqueName;
             companies = ss.companies;
             this.companyUniqueName = ss.companyUniqueName;
         });
 
-        this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             defaultTemplate = ss.defaultTemplate;
         });
 
-        this.store.select(s => s.invoiceTemplate.sampleTemplates).pipe(take(2)).subscribe((sampleTemplates: CustomTemplateResponse[]) => {
+        this.store.pipe(select(s => s.invoiceTemplate.sampleTemplates), take(2)).subscribe((sampleTemplates: CustomTemplateResponse[]) => {
             this.sampleTemplates = _.cloneDeep(sampleTemplates);
         });
         this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
@@ -114,13 +116,13 @@ export class DesignFiltersContainerComponent implements OnInit {
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         // this.fileUploadOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
         this.humanizeBytes = humanizeBytes;
-        this.sessionId$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
-        this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+        this.sessionId$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
+        this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
 
-        this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
+        this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
             this.customTemplate = _.cloneDeep(template);
 
             this.setFontAndFontSize();
@@ -131,8 +133,8 @@ export class DesignFiltersContainerComponent implements OnInit {
                 footer: {}
             };
 
-            this._activatedRoute.params.subscribe(a => {
-                if (a.voucherType === 'credit note' || a.voucherType === 'debit note') {
+            this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
+                if (a && (a.voucherType === 'credit note' || a.voucherType === 'debit note')) {
                     this.templateType = 'voucher';
                 } else {
                     this.templateType = 'invoice';
@@ -140,36 +142,37 @@ export class DesignFiltersContainerComponent implements OnInit {
             });
 
             if (this.customTemplate && this.customTemplate.sections) {
-                // _.forIn(this.customTemplate.sections, (section, ind) => {
-                //   let out = section.data;
-                //   for (let o of section.data) {
-                //     if (ind === 'header') {
-                //       // op.header[o.field] = o.display ? 'y' : 'n';
-                //       op.header[o.field] = o;
-                //     }
-                //     if (ind === 'table') {
-                //       op.table[o.field] = o;
-                //     }
-                //     if (ind === 'footer') {
-                //       op.footer[o.field] = o;
-                //     }
-                //   }
-                // });
-                // debugger;
                 op.header = this.customTemplate.sections.header.data;
                 op.table = this.customTemplate.sections.table.data;
                 op.footer = this.customTemplate.sections.footer.data;
 
                 this._invoiceUiDataService.setFieldsAndVisibility(op);
-
+                if (this.customTemplate.logoSize) {
+                    this.defaultImageSize = this.customTemplate.logoSize === '100' ? 'L' :
+                        this.customTemplate.logoSize === '80' ? 'M' : 'S';
+                }
                 if (this.customTemplate.logoUniqueName) {
-                    this.showDeleteButton = true;
-                    this.showUploadButton = false;
                     this.logoAttached = true;
                     this.isFileUploaded = false;
-                    let preview: any = document.getElementById('logoImage');
-                    preview.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
+                    if (!this._invoiceUiDataService.isLogoUpdateInProgress) {
+                        this.showDeleteButton = true;
+                        this.showUploadButton = false;
+                        let preview: any = document.getElementById('logoImage');
+                        preview.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
+                    }
                 }
+            }
+        });
+
+        this._invoiceUiDataService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
+            if (!path) {
+                this.showDeleteButton = false;
+                this.showUploadButton = true;
+                this.logoAttached = false;
+                this.isFileUploaded = false;
+                this.defaultImageSize = 'S';
+                const preview: any = document.getElementById('logoImage');
+                preview.setAttribute('src', '');
             }
         });
 
@@ -202,8 +205,7 @@ export class DesignFiltersContainerComponent implements OnInit {
     public onDesignChange(fieldName, value) {
         let template;
         if (fieldName === 'uniqueName') { // change whole template
-            const allSampleTemplates = _.cloneDeep(this.sampleTemplates);
-            const selectedTemplate = _.cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => t.uniqueName === value));
+            const selectedTemplate = _.cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => (t.uniqueName === value)));
             template = selectedTemplate ? selectedTemplate : _.cloneDeep(this.customTemplate);
             if (this.mode === 'update' && selectedTemplate) {
                 template.uniqueName = _.cloneDeep(this.customTemplate.uniqueName);
@@ -280,12 +282,14 @@ export class DesignFiltersContainerComponent implements OnInit {
             this.previewFile(output.file);
             this.toogleLogoVisibility(true);
             this.isFileUploaded = false;
+            this._invoiceUiDataService.isLogoUpdateInProgress = true;
         } else if (output.type === 'start') {
             this.isFileUploadInProgress = true;
             this.showUploadButton = false;
             this.showDeleteButton = false;
             this.removeAllFiles();
             this.isFileUploaded = false;
+            this._invoiceUiDataService.isLogoUpdateInProgress = true;
         } else if (output.type === 'done') {
             this.isFileUploadInProgress = false;
             if (output.file.response.status === 'success') {
@@ -295,6 +299,7 @@ export class DesignFiltersContainerComponent implements OnInit {
                 //this.updateTemplate(output.file.response.body.uniqueName); //unused call to save template after logo upload
                 this.onValueChange('logoUniqueName', output.file.response.body.uniqueName);
                 this.isFileUploaded = true;
+                this._invoiceUiDataService.isLogoUpdateInProgress = false;
                 this._toasty.successToast('file uploaded successfully.');
             } else {
                 this._toasty.errorToast(output.file.response.message, output.file.response.code);
@@ -319,7 +324,7 @@ export class DesignFiltersContainerComponent implements OnInit {
 
             data = this.newLineToBR(data);
 
-            this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).subscribe((res) => {
+            this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
                     this._toasty.successToast('Template Updated Successfully.');
                     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
@@ -445,5 +450,15 @@ export class DesignFiltersContainerComponent implements OnInit {
                 });
             }
         }
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof DesignFiltersContainerComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

@@ -4,9 +4,9 @@
             <div class="col-sm-12 col-lg-4 invoice-sidebar-wrapper pr-0">
                 <div>
                     <div class="invoice-search-box">
-                        <input type="text" placeholder="search" #searchElement>
-                        <button class="btn btn-sky-blue" [routerLink]="['/pages/purchase-management/purchase-order/new']">+
-                            New Order</button>
+                        <input type="text" [placeholder]="commonLocaleData?.app_search" #searchElement>
+                        <button *ngIf="!isCompany" class="btn btn-sky-blue"
+                            [routerLink]="['/pages/purchase-management/purchase-order/new']">{{localeData?.new_order}}</button>
                     </div>
                     <ul class="invoice-sidebar">
                         <perfect-scrollbar *ngIf="filteredData && filteredData.length > 0">
@@ -28,8 +28,12 @@
                                         </div>
                                     </div>
                                     <div class="col-5 col-sm-5">
-                                        <div class="inovice-amount pull-right">
-                                            {{row.grandTotal?.amountForAccount | giddhCurrency}}
+                                        <div class="invoice-amount pull-right">
+
+                                            <!-- {{row.grandTotal?.amountForAccount | giddhCurrency}} -->
+                                            <amount-field [amount]="row.grandTotal?.amountForAccount"
+                                                [currencySymbol]="false" [currencyCode]="false">
+                                            </amount-field>
                                         </div>
                                     </div>
                                 </div>
@@ -41,7 +45,7 @@
             </div>
             <!-- endregion -->
 
-            <div class="col-sm-12 col-lg-8 pd0 invoice-detail-wrapper">
+            <div class="col-sm-12 col-lg-8 p-0 invoice-detail-wrapper">
 
                 <div class="scroll-half">
                     <div class="invoice-detail">
@@ -64,32 +68,34 @@
                                             [routerLink]="['/pages/purchase-management/purchase']">
                                             <img src="assets/images/multiply.svg"></span>
 
-                                        <div class="btn-group change-status-dropdown pull-right" dropdown>
+                                        <div *ngIf="!isCompany" class="btn-group change-status-dropdown pull-right"
+                                            dropdown>
                                             <button id="button-basic" dropdownToggle type="button"
                                                 class="btn btn-sky-blue dropdown-toggle"
-                                                aria-controls="dropdown-basic">Change Status
+                                                aria-controls="dropdown-basic">{{localeData?.change_status}}
                                                 <span class="caret"></span>
                                             </button>
 
                                             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                                 aria-labelledby="button-basic">
                                                 <li class="cp" role="menuitem" *ngIf="purchaseOrder.status === 'OPEN'">
-                                                    <a class="dropdown-item" (click)="convertToBill()">Convert to
-                                                        Bill</a></li>
+                                                    <a class="dropdown-item"
+                                                        (click)="convertToBill()">{{localeData?.convert_tobill}}</a>
+                                                </li>
                                                 <li class="cp" role="menuitem"><a class="dropdown-item"
-                                                        [routerLink]="['/pages/purchase-management/purchase-order/new/'+purchaseOrderUniqueName]">Copy</a>
+                                                        [routerLink]="['/pages/purchase-management/purchase-order/new/'+purchaseOrderUniqueName]">{{commonLocaleData?.app_copy}}</a>
                                                 </li>
                                                 <li>
                                                     <a class="cp" href="javascript:void(0)"
                                                         (click)="statusUpdate('cancelled')"
-                                                        *ngIf="purchaseOrder.status !== 'CANCELLED'">Cancel</a>
+                                                        *ngIf="purchaseOrder.status !== 'CANCELLED'">{{commonLocaleData?.app_cancel}}</a>
                                                     <a class="cp" href="javascript:void(0)"
                                                         (click)="statusUpdate('open')"
-                                                        *ngIf="purchaseOrder.status === 'CANCELLED' || purchaseOrder.status === 'EXPIRED'">Open</a>
+                                                        *ngIf="purchaseOrder.status === 'CANCELLED' || purchaseOrder.status === 'EXPIRED'">{{localeData?.open}}</a>
                                                 </li>
                                                 <li>
                                                     <a class="cp" href="javascript:void(0)"
-                                                        (click)="confirmDelete()">Delete</a>
+                                                        (click)="confirmDelete()">{{commonLocaleData?.app_delete}}</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -97,37 +103,43 @@
 
                                         <div class="wrap-edit-history-btn">
                                             <div class="edit-action-btn-groups pull-right">
-                                                <span>
-                                                    <a href="javascript:;" tooltip="Edit" placement="top"
+                                                <span *ngIf="!isCompany">
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_edit"
+                                                        placement="top"
                                                         [routerLink]="['/pages/purchase-management/purchase-order/edit/'+purchaseOrderUniqueName]"><i
-                                                            class="fa fa-pencil"></i></a>
-                                                </span>
-
-                                                <span class="pos-rel">
-                                                    <a href="javascript:;" tooltip="Send Email" placement="top"
-                                                        (click)="openSendMailModal(sendEmailModal)"><i
-                                                            class="fa fa-envelope-o"></i></a>
+                                                            class="icon-edit-pencil"></i></a>
                                                 </span>
 
                                                 <span>
-                                                    <a href="javascript:;" tooltip="Print" placement="top"
-                                                        (click)="printVoucher()"><i class="fa fa-print"></i></a>
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_send_email"
+                                                        placement="top" (click)="openSendMailModal(sendEmailModal)"><i
+                                                            class="icon-envelope font-12"></i></a>
                                                 </span>
 
                                                 <span>
-                                                    <a href="javascript:;" tooltip="Download" placement="top"
-                                                        (click)="downloadFile()"><i class="fa fa-file-pdf-o"></i></a>
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_print"
+                                                        placement="top" (click)="printVoucher()"><i
+                                                            class="fa fa-print"></i></a>
                                                 </span>
 
                                                 <span>
-                                                    <a href="javascript:;" tooltip="Delete" placement="top"
-                                                        (click)="confirmDelete()"><i class="fa fa-trash"></i></a>
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_download"
+                                                        placement="top" (click)="downloadFile()"><i
+                                                            class="icon-file"></i></a>
+                                                </span>
+
+                                                <span *ngIf="!isCompany">
+                                                    <a href="javascript:;" [tooltip]="commonLocaleData?.app_delete"
+                                                        placement="top" (click)="confirmDelete()"><i
+                                                            class="icon-trash"></i></a>
                                                 </span>
                                             </div>
 
                                             <div class="history-btn">
-                                                <button class="btn btn-primary" (click)="toggleActivityHistoryAsidePane()">
-                                                    <i class="icon-history-icon font-12"></i> History</button>
+                                                <button class="btn btn-primary"
+                                                    (click)="toggleActivityHistoryAsidePane()">
+                                                    <i class="icon-history-icon font-12 pr-1"></i>
+                                                    {{commonLocaleData?.app_history}}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -138,19 +150,17 @@
                     </div>
                     <div class="invoice-image-section">
                         <div class="relative">
-                            <div class="pos-rel" *ngIf="!pdfPreviewHasError && !pdfPreviewLoaded">
-                                <div class="loader"></div>
+                            <div class="position-relative" *ngIf="!pdfPreviewHasError && !pdfPreviewLoaded">
+                                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
                             </div>
                             <div class="error" [hidden]="!pdfPreviewHasError">
                                 <span>
-                                    Purchase Order Preview is not available right now! Please try again..
+                                    {{localeData?.po_preview_unavailable}}
                                 </span>
                             </div>
-                            <div class="fixed-ng2pdfview pdf-preview" #attachedDocumentPreview
-                                [ngClass]="{'fixed-ng2pdfview-2': pageCount === 2, 'fixed-ng2pdfview': pageCount === 1, 'fixed-ng2pdfview-3': pageCount === 3,'fixed-ng2pdfview-4': pageCount === 4}">
-                                <ng2-pdfjs-viewer pagemode="none" viewerId="MyUniqueID" [hidden]="!pdfPreviewLoaded"
-                                    [downloadFileName]="'purchaseorder.pdf'" (onDocumentLoad)="pagesLoaded($event);"
-                                    [openFile]="false" [viewBookmark]="false" [download]="false"></ng2-pdfjs-viewer>
+                            <div class="pdf-preview" #attachedDocumentPreview>
+                                <iframe #pdfContainer *ngIf="sanitizedPdfFileUrl && pdfPreviewLoaded" width="100%"
+                                    height="100%" [src]="sanitizedPdfFileUrl"></iframe>
                             </div>
                         </div>
                     </div>

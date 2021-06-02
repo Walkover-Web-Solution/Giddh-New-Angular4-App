@@ -1,5 +1,5 @@
-import { CommonModule, formatDate } from '@angular/common';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { CommonModule, formatDate, registerLocaleData } from '@angular/common';
+import { LOCALE_ID, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';
@@ -41,6 +41,7 @@ import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-t
 import { FixedFooterComponent } from './fixed-footer/fixed-footer.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header'
+import { PrimarySidebarComponent } from './primary-sidebar/primary-sidebar.component';
 import {
     AccountOperationsComponent,
     AccountsSideBarComponent,
@@ -83,15 +84,27 @@ import { MatNativeDateModule, MAT_DATE_FORMATS, NativeDateAdapter, DateAdapter }
 import { MatInputModule } from '@angular/material/input';
 import { RevisionHistoryComponent } from './revision-history/revision-history.component';
 import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
-import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
+import { HamburgerMenuComponent } from './header/components/hamburger-menu/hamburger-menu.component';
+import { AmountFieldComponent } from './amount-field/amount-field.component';
+import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { TranslateDirective } from '../theme/translate/translate.directive';
+import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.component';
+import { ScheduleNowComponent } from './schedule-now/schedule-now.component';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import localeEn from '@angular/common/locales/en-GB';
+import localeHi from '@angular/common/locales/hi';
+import localeMr from '@angular/common/locales/mr';
+registerLocaleData(localeEn);
+registerLocaleData(localeHi);
+registerLocaleData(localeMr);
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
 
 const getGoogleCredentials = () => {
-    if (PRODUCTION_ENV || isElectron  || isCordova) {
+    if (PRODUCTION_ENV || isElectron || isCordova) {
         return {
             GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
         };
@@ -105,7 +118,7 @@ const getGoogleCredentials = () => {
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
 };
-const SOCIAL_CONFIG = (isElectron|| isCordova) ? null : new AuthServiceConfig([
+const SOCIAL_CONFIG = (isElectron || isCordova) ? null : new AuthServiceConfig([
     {
         id: GoogleLoginProvider.PROVIDER_ID,
         // provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')
@@ -175,7 +188,12 @@ export class PickDateAdapter extends NativeDateAdapter {
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        GiddhDaterangepickerComponent
+        HamburgerMenuComponent,
+        GiddhDaterangepickerComponent,
+        GiddhPageLoaderComponent,
+        AmountFieldComponent,
+        ScheduleNowComponent,
+        PrimarySidebarComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -217,7 +235,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatFormFieldModule,
         MatNativeDateModule,
         MatInputModule,
-        PdfJsViewerModule
+        CurrencyModule,
+        TranslateDirectiveModule
     ],
     exports: [
         CommonModule,
@@ -268,7 +287,14 @@ export class PickDateAdapter extends NativeDateAdapter {
         GiddhDatepickerComponent,
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
-        PurchaseSendEmailModalComponent
+        PurchaseSendEmailModalComponent,
+        HamburgerMenuComponent,
+        GiddhPageLoaderComponent,
+        AmountFieldComponent,
+        CurrencyModule,
+        PrimarySidebarComponent,
+        ScheduleNowComponent,
+        TranslateDirectiveModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
@@ -293,6 +319,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatNativeDateModule,
         { provide: MAT_DATE_FORMATS, useValue: GIDDH_DATEPICKER_FORMAT },
         { provide: DateAdapter, useClass: PickDateAdapter },
+        { provide: LOCALE_ID, useValue: 'en'}
     ]
 })
 export class SharedModule {

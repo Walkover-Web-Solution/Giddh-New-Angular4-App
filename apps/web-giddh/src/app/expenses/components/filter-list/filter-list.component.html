@@ -15,7 +15,7 @@
                 <div class="left-item">
                     <p class="font-12 text-gray">
                         <span>{{filterItem?.entryDate}}</span> |
-                        <span>by {{filterItem?.createdBy?.name}}</span>
+                        <span>{{commonLocaleData?.app_by}} {{filterItem?.createdBy?.name}}</span>
                     </p>
                     <i class="dot-icon dot-warning" *ngIf="filterItem.entryType==='sales'"></i>
                     <i class="dot-icon dot-success" *ngIf="filterItem.entryType==='deposit'"></i>
@@ -29,7 +29,8 @@
                         <i class="icon-cash" *ngIf="filterItem.baseAccountCategory==='CASH'"></i>
                         <i class="icon-atm-card" *ngIf="filterItem.baseAccountCategory==='BANK'"></i>
                         <i class="icon-image" *ngIf="filterItem.fileNames"></i>
-                        <i class="text-gray" *ngIf="filterItem.baseAccountCategory==='OTHER'">A/c</i>
+                        <i class="text-gray"
+                            *ngIf="filterItem.baseAccountCategory==='OTHER'">{{commonLocaleData?.app_ac}}</i>
                     </p>
                 </div>
             </li>

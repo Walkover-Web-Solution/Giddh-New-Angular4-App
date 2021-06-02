@@ -3,25 +3,25 @@
     width: 100%;
 }
 
-.custom_dropdown {
+.custom-dropdown {
     width: 100%;
     border-radius: 0;
     margin: 0px 0;
     margin-top: 0px;
     box-shadow: none;
     transition: all 0.7s ease;
-    background: #fff !important;
+    background: $white !important;
     opacity: 1;
-    box-shadow: 0px 2px 6px #ddd;
+    box-shadow: 0px 2px 6px $gainsboro-light;
     padding: 0;
     min-width: 180px;
 }
 
-.custom_dropdown.open {
+.custom-dropdown.open {
     transform: translateY(5px);
 }
 
-.lh34 {
+.lh-34 {
     line-height: 34px;
 }
 .permission-form {
@@ -34,7 +34,7 @@
             width: 100%;
         }
     }
-    .add-btn{
+    .add-btn {
         width: auto !important;
     }
 }
@@ -50,22 +50,22 @@
     background: transparent;
 }
 
-.custom_dropdown > li > a {
+.custom-dropdown > li > a {
     padding: 6px;
 }
 
-.custom_dropdown > li > a:focus,
-.custom_dropdown > li > a:hover {
+.custom-dropdown > li > a:focus,
+.custom-dropdown > li > a:hover {
     background: $gainsboro !important;
 }
 
-.custom_dropdown .caret {
+.custom-dropdown .caret {
     transform: rotate(-90deg);
 }
 .transactions-popup {
     width: 360px;
     background: $white;
-    box-shadow: 0px 3px 6px #00000029;
+    box-shadow: 0px 3px 6px $black-russian;
     padding: 15px;
     z-index: 9;
     position: absolute;
@@ -75,7 +75,7 @@
     display: none;
     opacity: 0;
     visibility: hidden;
-    transition: .5s all ease-in;
+    transition: 0.5s all ease-in;
     border: 1px solid $light-gray;
 }
 .permission-main .transactions-popup {
@@ -94,7 +94,9 @@ i.icon-add {
 i.icon-cross {
     color: $gray;
 }
-.permission-row .col-xs-12, .permission-row .col-sm-6, .permission-row .col-sm-3 {
+.permission-row .col-xs-12,
+.permission-row .col-sm-6,
+.permission-row .col-sm-3 {
     padding-right: 5px;
     padding-left: 5px;
 }
@@ -102,10 +104,10 @@ i.icon-cross {
     margin-right: -5px;
     margin-left: -5px;
 }
-.ip-range{
-    i{
+.ip-range {
+    i {
         position: relative;
-        right: 2px
+        right: 2px;
     }
 }
 @media (max-width: 1199px) {
@@ -117,7 +119,7 @@ i.icon-cross {
         .form-group {
             margin-bottom: 15px;
         }
-        .pr-0{
+        .pr-0 {
             padding-right: 15px !important;
         }
     }
@@ -138,12 +140,13 @@ i.icon-cross {
     }
 }
 
-
 @media (max-width: 991px) {
     .permission-row {
         flex-wrap: wrap;
     }
-    .permission-row .col-xs-12, .permission-row .col-sm-6, .permission-row .col-sm-3 {
+    .permission-row .col-xs-12,
+    .permission-row .col-sm-6,
+    .permission-row .col-sm-3 {
         flex: 0 0 50%;
     }
     .transactions-popup {
@@ -183,7 +186,9 @@ i.icon-cross {
     }
 }
 @media (max-width: 640px) {
-    .permission-row .col-xs-12, .permission-row .col-sm-6, .permission-row .col-sm-3 {
+    .permission-row .col-xs-12,
+    .permission-row .col-sm-6,
+    .permission-row .col-sm-3 {
         flex: 0 0 100%;
     }
 }

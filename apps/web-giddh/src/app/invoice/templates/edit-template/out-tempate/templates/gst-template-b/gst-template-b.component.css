@@ -81,11 +81,11 @@ body {
     padding: 7px 7px;
 }
 
-#template2 .mrL2 {
+#template2 .mr-l2 {
     margin-left: 20px;
 }
 
-#template2 .mrR2 {
+#template2 .mr-r2 {
     margin-right: 20px;
 }
 
@@ -111,7 +111,7 @@ body {
     padding-bottom: 50px;
 }
 
-#template2 .inwords {
+#template2 .in-words {
     color: #939393;
 }
 
@@ -121,7 +121,7 @@ body {
 line-height: 1.2rem; */
 }
 
-#template2 .bdrB {
+#template2 .bd-rb {
     border-bottom: 1px solid #666;
 }
 
@@ -144,7 +144,7 @@ line-height: 1.2rem; */
     /* color: #df4927; */
 }
 
-#template2 .vmiddle {
+#template2 .vertical-align-middle {
     vertical-align: middle;
 }
 
@@ -241,7 +241,7 @@ line-height: 1.2rem; */
     height: 18px;
 }
 
-#template2 .pos-rel {
+#template2 .position-relative {
     position: relative;
 }
 

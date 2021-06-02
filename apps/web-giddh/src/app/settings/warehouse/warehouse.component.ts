@@ -89,22 +89,29 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
 
+    public imgPath2: string = '';
 
     /** View container to carry out on boarding */
-    @ViewChild('onBoardingContainer', {static: true}) public onBoardingContainer: ElementViewContainerRef;
+    @ViewChild('onBoardingContainer', { static: true }) public onBoardingContainer: ElementViewContainerRef;
     /** Warehouse on boarding modal viewchild */
-    @ViewChild('warehouseOnBoardingModal', {static: true}) public warehouseOnBoardingModal: ModalDirective;
+    @ViewChild('warehouseOnBoardingModal', { static: true }) public warehouseOnBoardingModal: ModalDirective;
     /** Welcome component template ref for second step of warehouse on boarding */
-    @ViewChild('welcomeComponent', {static: true}) public welcomeComponentTemplate: TemplateRef<any>;
+    @ViewChild('welcomeComponent', { static: true }) public welcomeComponentTemplate: TemplateRef<any>;
     /** Warehouse pagination instance */
-    @ViewChild('warehousePagination', {static: true}) warehousePagination: PaginationComponent;
+    @ViewChild('warehousePagination', { static: true }) warehousePagination: PaginationComponent;
     /** Branch search field instance */
-    @ViewChild('searchWarehouse', {static: false}) public searchWarehouse: ElementRef;
+    @ViewChild('searchWarehouse', { static: false }) public searchWarehouse: ElementRef;
 
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: Subject<boolean> = new Subject();
     /** Stores the current visible on boarding modal instance */
     private welcomePageModalInstance: BsModalRef;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold profile JSON data */
+    public profileLocaleData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     /** Stores the address configuration */
     public addressConfiguration: SettingsAsideConfiguration = {
@@ -134,9 +141,11 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     public ngOnInit(): void {
-        this.imgPath = (isElectron ||isCordova)  ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();
+
+        this.imgPath2 = (isElectron || isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
     /**
@@ -145,7 +154,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     public ngAfterViewInit(): void {
-        fromEvent(this.searchWarehouse.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((event: any) => {
+        fromEvent(this.searchWarehouse?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((event: any) => {
             this.showLoader = true;
             this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, query: encodeURIComponent(event.target.value), count: PAGINATION_LIMIT }));
         });
@@ -366,43 +375,17 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             warehouseUniqueName: this.selectedWarehouse.uniqueName,
             linkAddresses
         };
-        this.settingsProfileService.updatWarehouseInfo(requestObj).subscribe(response => {
+        this.settingsProfileService.updatWarehouseInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
                 this.asideEditWarehousePane = 'out';
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
-                this.toasterService.successToast('Warehouse updated successfully');
+                this.toasterService.successToast(this.localeData?.warehouse_updated);
             } else {
                 this.toasterService.errorToast(response.message);
             }
             this.isWarehouseUpdateInProgress = false;
         }, () => {
             this.isWarehouseUpdateInProgress = false;
-        });
-    }
-
-    /**
-     * Set default action handler
-     *
-     * @param {*} entity Entity to be set has default
-     * @param {*} warehouse Selected warehouse for operation
-     * @memberof WarehouseComponent
-     */
-    public setDefault(entity: any, warehouse: any): void {
-        entity.isDefault = !entity.isDefault;
-        warehouse.addresses.forEach(branchAddress => {
-            if (branchAddress.uniqueName === entity.uniqueName) {
-                branchAddress.isDefault = entity.isDefault;
-            } else {
-                branchAddress.isDefault = false;
-            }
-        });
-        const requestObject: any = {
-            name: warehouse.name,
-            linkAddresses: warehouse.addresses,
-            warehouseUniqueName: warehouse.uniqueName,
-        }
-        this.settingsProfileService.updatWarehouseInfo(requestObject).subscribe(() => {
-            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
         });
     }
 
@@ -505,7 +488,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         viewContainerRef.clear();
         let componentRef = viewContainerRef.createComponent(componentFactory);
         (componentRef.instance as OnBoardingComponent).onBoardingType = OnBoardingType.Warehouse;
-        (componentRef.instance as OnBoardingComponent).closeCompanyModal.subscribe((data: any) => {
+        (componentRef.instance as OnBoardingComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe((data: any) => {
             if (data && data.isFirstStepCompleted) {
                 this.showWelcomePage();
             } else {
@@ -585,7 +568,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     private loadAddresses(method: string, successCallback: Function): void {
-        this.settingsProfileService.getCompanyAddresses(method).subscribe((response) => {
+        this.settingsProfileService.getCompanyAddresses(method, { count: 0 }).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body && response.status === 'success') {
                 this.addressConfiguration.linkedEntities = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
                     {

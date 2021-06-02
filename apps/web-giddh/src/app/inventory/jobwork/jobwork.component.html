@@ -1,4 +1,4 @@
-<div style="min-height:100%;">
+<div class="jobwork-main">
     <!--sidebar-->
 
     <jobwork-sidebar></jobwork-sidebar>
@@ -7,28 +7,27 @@
         <welcome-jobwork></welcome-jobwork>
     </div>
     <section class="right-bar" *ngIf="!showWelcomePage">
-        <section class="container-fluid clearfix pt-15">
+        <section class="container-fluid clearfix pd-t15">
             <section class="h100">
-                <div class="fb__1-container">
-                    <div class="d-flex jobWorkContent">
+                <div class="fb-1-container">
+                    <div class="d-flex job-work-content">
 
                         <div class="d-flex form-inline">
-                            <h2 class="mr-2 ReportInfo"
-                                style="display: inline-block; font-size: 20px;font-weight: bold;text-transform:capitalize;">
-                                <span *ngIf="type==='stock'" class="ReportInfo">{{nameStockOrPerson}}</span>&nbsp;<span
+                            <h2 class="mr-2 report-info d-inline-block bold text-capitalize font-20">
+                                <span *ngIf="type==='stock'" class="report-info">{{nameStockOrPerson}}</span>&nbsp;<span
                                     *ngIf="type==='stock'">(Transaction Log)</span>
 
                                 <span *ngIf="type==='person'"
-                                    class="ReportInfo"><span>{{nameStockOrPerson}}</span></span>
+                                    class="report-info"><span>{{nameStockOrPerson}}</span></span>
                             </h2>
-                            <div class="form-group" style="margin-top: -7px;">
+                            <div class="form-group margin-datepicker">
                                 <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
                                     class="form-control date-range-picker"
                                     (applyDaterangepicker)="dateSelected($event)" />
                             </div>
 
                             <div class="form-group">
-                                <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
+                                <div class="advance-icon align-items-center" tooltip="Advance Search">
                                     <span class="icon-advance-filter" (click)="onOpenAdvanceSearch()"></span>
                                 </div>
 
@@ -46,7 +45,8 @@
                             <div class="pull-right">
                                 <div class="btn-group " dropdown placement="bottom right">
                                     <button id="buttonalignment" dropdownToggle type="button"
-                                        class="btn-link mrB cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
+                                        class="btn-link mr-b05 cp mr-1 dropdown-toggle"
+                                        aria-controls="dropdown-alignment">
                                         <i class="icon-download"></i> Download
                                     </button>
                                     <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
@@ -70,12 +70,12 @@
 
                 </div>
 
-                <section style="margin-top: 15px">
+                <section class="mr-t15">
                     <div class="table-responsive">
                         <table class="table basic table-border m-0">
                             <thead>
                                 <tr>
-                                    <th class="bdrR" width="120">
+                                    <th class="bd-rr" width="120">
                                         <div class="d-flex">
                                             <div class=""> Date</div>
                                             <div class="icon-pointer">
@@ -83,23 +83,23 @@
                                                 <div class="icon-sort-asc text-right "
                                                     *ngIf="filter.sortBy !== 'entry_date'"
                                                     (click)="sortButtonClicked('asc', 'entry_date')"
-                                                    [ngClass]="{'activeTextColor': filter.sortBy === 'entry_date' && filter.sort === 'asc'}">
+                                                    [ngClass]="{'active-text-color': filter.sortBy === 'entry_date' && filter.sort === 'asc'}">
                                                 </div>
                                                 <!-- after sort click -->
                                                 <div class="icon-sort-dsc text-right"
                                                     *ngIf="filter.sortBy === 'entry_date' && filter.sort === 'desc'"
                                                     (click)="sortButtonClicked('asc', 'entry_date')"
-                                                    [ngClass]="{'activeTextColor': filter.sortBy === 'entry_date' && filter.sort === 'desc'}">
+                                                    [ngClass]="{'active-text-color': filter.sortBy === 'entry_date' && filter.sort === 'desc'}">
                                                 </div>
                                                 <div class="icon-sort-asc text-right "
                                                     *ngIf="filter.sortBy === 'entry_date' && filter.sort === 'asc'"
                                                     (click)="sortButtonClicked('desc', 'entry_date')"
-                                                    [ngClass]="{'activeTextColor': filter.sortBy === 'entry_date' && filter.sort === 'asc'}">
+                                                    [ngClass]="{'active-text-color': filter.sortBy === 'entry_date' && filter.sort === 'asc'}">
                                                 </div>
                                             </div>
                                         </div>
                                     </th>
-                                    <th class="bdrR td-search-box" *ngIf="type ==='person'" width="15%"
+                                    <th class="bd-rr td-search-box" *ngIf="type ==='person'" width="15%"
                                         (clickOutside)="clickedOutside($event,null, 'product')">
                                         <div [hidden]="showProductSearch">
                                             <span>Product Name</span>
@@ -111,10 +111,10 @@
                     <i class="icon-search" (click)="showProductSearch = false;"></i>
                 </div> -->
                                     </th>
-                                    <th class="bdrR bdrB" *ngIf="type ==='stock'" width="15%">
+                                    <th class="bd-rr bd-rb" *ngIf="type ==='stock'" width="15%">
                                         <div class="btn-group btn-group-voucher-type" dropdown placement="bottom right">
                                             <button id="button-alignment" dropdownToggle type="button"
-                                                class="btn-link btn cp p-0 dropdown-toggle c-3 p0"
+                                                class="btn-link btn cp p-0 dropdown-toggle c-3"
                                                 aria-controls="dropdown-alignment">Voucher Type
                                                 <i class="fa fa-ellipsis-v pull-right text-light-2"
                                                     aria-hidden="true"></i>
@@ -125,11 +125,12 @@
                                                 <li role="menuitem dropdown-item" *ngFor="let item of VOUCHER_TYPES">
                                                     <label><input type="checkbox" [(ngModel)]="item.checked"
                                                             (click)="filterByCheck(item.value, $event.target.checked)" />
-                                                        {{item.label}}</label></li>
+                                                        {{item.label}}</label>
+                                                </li>
                                             </ul>
                                         </div>
                                     </th>
-                                    <th class="bdrR bdrB td-search-box" width="15%"
+                                    <th class="bd-rr bd-rb td-search-box" width="15%"
                                         (clickOutside)="clickedOutside($event,null, 'sender')">
                                         <div [hidden]="showSenderSearch">
                                             <span>Sender's Name</span>
@@ -141,7 +142,7 @@
                                             <!-- <i class="icon-search" (click)="showSenderSearch = false;"></i> -->
                                         </div>
                                     </th>
-                                    <th class="bdrR bdrB td-search-box" width="15%"
+                                    <th class="bd-rr bd-rb td-search-box" width="15%"
                                         (clickOutside)="clickedOutside($event,null, 'receiver')">
                                         <div [hidden]="showReceiverSearch">
                                             <span>Receiver's Name</span>
@@ -153,8 +154,8 @@
                                             <!-- <i class="icon-search" (click)="showReceiverSearch = false;"></i> -->
                                         </div>
                                     </th>
-                                    <th class="bdrR bdrB">Description</th>
-                                    <th class="text-right bdrB" width="140">
+                                    <th class="bd-rr bd-rb">Description</th>
+                                    <th class="text-right bd-rb" width="140">
                                         <div class="d-flex">
                                             <div class="flex-fill mr-1">Trading Qty</div>
                                             <div class="icon-pointer">
@@ -162,18 +163,18 @@
                                                 <div class="icon-sort-asc text-right "
                                                     *ngIf="filter.sortBy !== 'QUANTITY'"
                                                     (click)="sortButtonClicked('asc', 'QUANTITY')"
-                                                    [ngClass]="{'activeTextColor': filter.sortBy === 'QUANTITY' && filter.sort === 'asc'}">
+                                                    [ngClass]="{'active-text-color': filter.sortBy === 'QUANTITY' && filter.sort === 'asc'}">
                                                 </div>
                                                 <!-- after sort click -->
                                                 <div class="icon-sort-dsc text-right"
                                                     *ngIf="filter.sortBy === 'QUANTITY' && filter.sort === 'desc'"
                                                     (click)="sortButtonClicked('asc', 'QUANTITY')"
-                                                    [ngClass]="{'activeTextColor': filter.sortBy === 'QUANTITY' && filter.sort === 'desc'}">
+                                                    [ngClass]="{'active-text-color': filter.sortBy === 'QUANTITY' && filter.sort === 'desc'}">
                                                 </div>
                                                 <div class="icon-sort-asc text-right "
                                                     *ngIf="filter.sortBy === 'QUANTITY' && filter.sort === 'asc'"
                                                     (click)="sortButtonClicked('desc', 'QUANTITY')"
-                                                    [ngClass]="{'activeTextColor': filter.sortBy === 'QUANTITY' && filter.sort === 'asc'}">
+                                                    [ngClass]="{'active-text-color': filter.sortBy === 'QUANTITY' && filter.sort === 'asc'}">
                                                 </div>
                                             </div>
                                         </div>
@@ -183,18 +184,18 @@
 
                             <tbody *ngIf="inventoryReport && inventoryReport.transactions.length>0">
                                 <tr *ngFor="let txn of inventoryReport.transactions; let idx = index">
-                                    <td class="bdrR">{{txn.date}}</td>
-                                    <td class="bdrR" *ngIf="type ==='person'">{{txn.stock.name}}</td>
-                                    <td class="bdrR" *ngIf="type ==='stock'">
+                                    <td class="bd-rr">{{txn.date}}</td>
+                                    <td class="bd-rr" *ngIf="type ==='person'">{{txn.stock.name}}</td>
+                                    <td class="bd-rr" *ngIf="type ==='stock'">
                                         <!-- in case of stock type -->
                                         <span
                                             class="{{txn.jobWorkTransactionType}}">{{txn.jobWorkTransactionType}}</span>
                                     </td>
-                                    <td class="bdrR">{{txn.sender.name}}</td>
-                                    <td class="bdrR">{{txn.receiver.name}}</td>
-                                    <td class="bdrR" (click)='updateDescriptionIdx = idx'>
+                                    <td class="bd-rr">{{txn.sender.name}}</td>
+                                    <td class="bd-rr">{{txn.receiver.name}}</td>
+                                    <td class="bd-rr" (click)='updateDescriptionIdx = idx'>
                                         <ng-container *ngIf='updateDescriptionIdx != idx'>
-                                            <div class="stockDiscription">{{txn.description}}</div>
+                                            <div class="stock-description">{{txn.description}}</div>
                                         </ng-container>
                                         <ng-container *ngIf='updateDescriptionIdx === idx'>
                                             <input type="text" class='form-control' maxlength='100' autofocus="true"
@@ -202,7 +203,7 @@
                                                 (blur)='updateDescription(txn)' />
                                         </ng-container>
                                     </td>
-                                    <td class="text-right bdrR">{{txn.quantity}}<span
+                                    <td class="text-right bd-rr">{{txn.quantity}}<span
                                             class="unit-badge">{{txn.stockUnit.code}}</span>
                                     </td>
                                 </tr>
@@ -229,7 +230,7 @@
                             <tfoot *ngIf="inventoryReport?.totalPages > 1">
                                 <tr>
                                     <td colspan="7">
-                                        <div class="alC">
+                                        <div class="text-center">
                                             <pagination [maxSize]="6" [totalItems]="inventoryReport.totalItems"
                                                 [(ngModel)]="inventoryReport.page" [itemsPerPage]="6"
                                                 (pageChanged)="applyFilters($event.page)" class="pagination-sm"
@@ -257,7 +258,7 @@
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="modal-header themeBg clearfix">
+            <div class="modal-header theme-bg clearfix">
                 <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
                 <span aria-hidden="true" class="close" data-dismiss="modal"
                     (click)="advanceSearchAction('cancel')">×</span>
@@ -282,8 +283,8 @@
                             </small>
                         </div>
                     </div>
-                    <div class="row mr-t4 mrB3">
-                        <div class="col-xs-12 text-right">
+                    <div class="row mr-t4 mr-b3">
+                        <div class="col-12 text-right">
                             <button class="btn btn-success" type="button"
                                 [disabled]="!isFilterCorrect && !filter.quantity"
                                 (click)="advanceSearchAction('search')">Search

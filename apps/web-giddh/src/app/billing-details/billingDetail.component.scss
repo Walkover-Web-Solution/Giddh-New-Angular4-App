@@ -9,17 +9,17 @@
 .your-account span {
     display: block;
     font-size: 14px;
-    color: #9b9b9b;
+    color: $nobel;
     margin-bottom: 5px;
 }
 
 .your-account p {
-    color: #2c2c2c;
+    color: $nero;
     font-size: 14px;
 }
 
 .your-account p.success-text {
-    color: #2fab4a !important;
+    color: $success-green !important;
 }
 
 .welcome-msg {
@@ -35,12 +35,12 @@
     font-size: 20px;
     font-weight: 500;
     font-family: "opensans-regular";
-    color: #2c2c2c;
+    color: $nero;
     margin-bottom: 20px;
 }
 
 .billing-details form label {
-    color:$nero;
+    color: $nero;
     font-size: 14px;
 }
 
@@ -54,7 +54,7 @@
 }
 
 .billing-wrapper {
-    border-right: 1px solid #ddd;
+    border-right: 1px solid $gainsboro;
     height: 100%;
 }
 
@@ -63,5 +63,5 @@
 }
 
 .plan-title .grey-text {
-    color: #9b9b9b;
+    color: $nobel;
 }

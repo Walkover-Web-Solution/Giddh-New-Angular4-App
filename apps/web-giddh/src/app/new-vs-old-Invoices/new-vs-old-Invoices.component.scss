@@ -1,5 +1,5 @@
 @import "../../assets/css/color.scss";
-.h-25px {
+.height-25px {
     height: 25px;
 }
 
@@ -50,28 +50,37 @@
 .d-initial label {
     justify-content: left;
 }
-.form-inline{
-    form{
+.form-inline {
+    form {
         width: 100%;
         display: flex;
-        .select-fields{
+        .select-fields {
             width: 100%;
         }
     }
 }
-@media(max-width:991px){
+
+.bg-gray-color {
+    background-color: $whisper;
+}
+
+.strong {
+    font-weight: bold;
+}
+
+@media (max-width: 991px) {
     .div-table {
         display: block;
         width: 100%;
     }
-    .d-initial{
-       width: 25%;
+    .d-initial {
+        width: 25%;
     }
-    .h3-heading{
+    .h3-heading {
         margin: 0;
     }
-    .div-row{
-        .div-cell{
+    .div-row {
+        .div-cell {
             font-size: 14px !important;
         }
     }

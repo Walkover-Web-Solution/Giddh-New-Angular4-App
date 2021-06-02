@@ -1,15 +1,15 @@
 @import "../../../../assets/css/color.scss";
-.ratioAnalysisPanelBody {
+.ratio-analysis-panel-body {
     padding-left: 0;
     padding-right: 0;
 }
-.ratioAnalysisPanelBody h1 {
+.ratio-analysis-panel-body h1 {
     font-size: 14px;
     color: $nero;
 }
 
-.ratioAnalysisPanelBody small {
-    color: #666666;
+.ratio-analysis-panel-body small {
+    color: $dark-gray;
     font-size: 14px;
 }
 .ratio-chart-block {
@@ -18,22 +18,21 @@
     align-items: center;
     flex-direction: column;
 }
-@media(max-width:767px){
-    .ratio-chart-block{
+@media (max-width: 767px) {
+    .ratio-chart-block {
         position: relative;
         padding-bottom: 10px;
 
-        &:after{
-                position: absolute;
-                content: '';
-                border-bottom: 1px solid $gainsboro;
-                bottom: 0;
-                height: 1px;
-                width: 90%;
-
+        &:after {
+            position: absolute;
+            content: "";
+            border-bottom: 1px solid $gainsboro;
+            bottom: 0;
+            height: 1px;
+            width: 90%;
         }
-        &:last-child{
-            &:after{
+        &:last-child {
+            &:after {
                 display: none;
             }
         }

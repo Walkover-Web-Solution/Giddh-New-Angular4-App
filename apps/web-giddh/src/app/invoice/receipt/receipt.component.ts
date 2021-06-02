@@ -1,25 +1,19 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
-import { BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import { orderBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
-import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { AccountService } from '../../services/account.service';
-import { InvoiceService } from '../../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
-import { InvoiceTemplatesService } from 'apps/web-giddh/src/app/services/invoice.templates.service';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
 import { InvoiceReceiptFilter, ReceiptItem, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptResponse } from '../../models/api-models/recipt';
 import { ReceiptService } from '../../services/receipt.service';
@@ -50,18 +44,18 @@ const COMPARISON_FILTER = [
 })
 export class ReceiptComponent implements OnInit, OnDestroy {
 
-    @ViewChild('invoiceReceiptConfirmationModel', {static: true}) public invoiceReceiptConfirmationModel: ModalDirective;
-    @ViewChild('invoiceReceiptVoucherDetailsModel', {static: true}) public invoiceReceiptVoucherDetailsModel: ModalDirective;
-    @ViewChild('invoiceReceiptVoucherUpdateModel', {static: true}) public invoiceReceiptVoucherUpdateModel: ModalDirective;
-    @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
-    @ViewChild('voucherSearch', {static: true}) public voucherSearch: ElementRef;
-    @ViewChild('accountSearch', {static: true}) public accountSearch: ElementRef;
+    @ViewChild('invoiceReceiptConfirmationModel', { static: true }) public invoiceReceiptConfirmationModel: ModalDirective;
+    @ViewChild('invoiceReceiptVoucherDetailsModel', { static: true }) public invoiceReceiptVoucherDetailsModel: ModalDirective;
+    @ViewChild('invoiceReceiptVoucherUpdateModel', { static: true }) public invoiceReceiptVoucherUpdateModel: ModalDirective;
+    @ViewChild('advanceSearch', { static: true }) public advanceSearch: ModalDirective;
+    @ViewChild('voucherSearch', { static: true }) public voucherSearch: ElementRef;
+    @ViewChild('accountSearch', { static: true }) public accountSearch: ElementRef;
     @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent, static: true }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
 
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
-        dateInputFormat: 'DD-MM-YYYY',
-        rangeInputFormat: 'DD-MM-YYYY',
+        dateInputFormat: GIDDH_DATE_FORMAT,
+        rangeInputFormat: GIDDH_DATE_FORMAT,
         containerClass: 'theme-green myDpClass'
     };
     public selectedInvoice: IInvoiceResult;
@@ -71,7 +65,6 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     public receiptData: ReciptResponse;
     public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
     public counts: IOption[] = COUNTS;
-    public accounts$: Observable<IOption[]>;
     public moment = moment;
     public startDate: Date;
     public endDate: Date;
@@ -148,16 +141,10 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     private universalDate: Date[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private isUniversalDateApplicable: boolean = false;
-    private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     private routeEvent: Observable<Event>;
 
     constructor(
-        private modalService: BsModalService,
         private store: Store<AppState>,
-        private invoiceActions: InvoiceActions,
-        private _accountService: AccountService,
-        private _invoiceService: InvoiceService,
-        private _invoiceTemplatesService: InvoiceTemplatesService,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private _receiptService: ReceiptService,
         private _toasty: ToasterService,
@@ -167,15 +154,14 @@ export class ReceiptComponent implements OnInit, OnDestroy {
         this.receiptSearchRequest.page = 1;
         this.receiptSearchRequest.count = 25;
         this.receiptSearchRequest.entryTotalBy = '';
-        this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
-        this.isGetAllRequestInProcess$ = this.store.select(p => p.receipt.isGetAllRequestInProcess).pipe(takeUntil(this.destroyed$));
+        this.isGetAllRequestInProcess$ = this.store.pipe(select(p => p.receipt.isGetAllRequestInProcess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         // Get accountsthis
         this.routeEvent.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
-                this.store.select(p => p.receipt.vouchers).pipe(take(1)).subscribe((o: ReciptResponse) => {
+                this.store.pipe(select(p => p.receipt.vouchers), take(1)).subscribe((o: ReciptResponse) => {
                     this.getInvoiceReceipts();
                 });
             }
@@ -183,17 +169,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
         this.getInvoiceReceipts();
 
-        this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
-            let accounts: IOption[] = [];
-            _.forEach(data, (item) => {
-                if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1)) {
-                    accounts.push({ label: item.name, value: item.uniqueName });
-                }
-            });
-            this.accounts$ = observableOf(orderBy(accounts, 'label'));
-        });
-
-        this.store.select(p => p.receipt.vouchers).pipe(takeUntil(this.destroyed$)).subscribe((o: ReciptResponse) => {
+        this.store.pipe(select(p => p.receipt.vouchers), takeUntil(this.destroyed$)).subscribe((o: ReciptResponse) => {
             if (o) {
                 this.receiptData = _.cloneDeep(o);
             } else {
@@ -202,43 +178,32 @@ export class ReceiptComponent implements OnInit, OnDestroy {
         });
 
         // Refresh report data according to universal date
-        this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.receiptSearchRequest.dateRange = this.universalDate;
                 this.isUniversalDateApplicable = true;
                 this.getInvoiceReceipts();
             }
-        })).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
 
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-
-            return companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-        })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if (selectedCmp) {
-                let activeFinancialYear = selectedCmp.activeFinancialYear;
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                let activeFinancialYear = activeCompany.activeFinancialYear;
                 if (activeFinancialYear) {
                     this.datePickerOptions.ranges['This Financial Year to Date'] = [
-                        moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
+                        moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'),
                         moment()
                     ];
                     this.datePickerOptions.ranges['Last Financial Year'] = [
-                        moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
-                        moment(activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
+                        moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year'),
+                        moment(activeFinancialYear.financialYearEnds, GIDDH_DATE_FORMAT).subtract(1, 'year')
                     ];
                 }
             }
         });
+
         this.voucherNumberInput.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -384,7 +349,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this._receiptService.DownloadVoucher(this.downloadVoucherRequestObject, this.selectedReceipt.account.uniqueName)
+        this._receiptService.DownloadVoucher(this.downloadVoucherRequestObject, this.selectedReceipt.account.uniqueName).pipe(takeUntil(this.destroyed$))
             .subscribe(s => {
                 if (s) {
                     return saveAs(s, `Receipt-${this.selectedReceipt.account.uniqueName}.pdf`);
@@ -439,7 +404,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     }
 
     public itemStateChanged(uniqueName: string) {
-        let index = this.selectedItems.findIndex(f => f === uniqueName);
+        let index = (this.selectedItems) ? this.selectedItems.findIndex(f => f === uniqueName) : -1;
 
         if (index > -1) {
             this.selectedItems = this.selectedItems.filter(f => f !== uniqueName);
@@ -479,14 +444,14 @@ export class ReceiptComponent implements OnInit, OnDestroy {
             this.showAccountSearch = false;
 
             setTimeout(() => {
-                this.voucherSearch.nativeElement.focus();
+                this.voucherSearch?.nativeElement.focus();
             }, 200);
         } else {
             this.showAccountSearch = true;
             this.showVoucherSearch = false;
 
             setTimeout(() => {
-                this.accountSearch.nativeElement.focus();
+                this.accountSearch?.nativeElement.focus();
             }, 200);
         }
     }

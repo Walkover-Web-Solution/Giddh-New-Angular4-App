@@ -1,10 +1,9 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, OnChanges, OnDestroy, OnInit, Output, Input } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Router } from '@angular/router';
 
 @Component({
@@ -17,9 +16,7 @@ export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public autoFocus: boolean = false;
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public animatePaneAside: EventEmitter<any> = new EventEmitter();
-    // @Input() public openGroupPane: boolean;
 
-    // public
     public isAddStockOpen: boolean = false;
     public isAddGroupOpen: boolean = false;
     public isAddUnitOpen: boolean = false;
@@ -32,7 +29,6 @@ export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
     public addGroup: boolean;
     public addStock: boolean;
     public createStockSuccess$: Observable<boolean>;
-    public createCustomStockSuccess$: Observable<boolean>;
     public autoFocusOnChild: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -41,9 +37,8 @@ export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
         private inventoryAction: InventoryAction,
         private _router: Router,
     ) {
-        this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
-        this.createGroupSuccess$ = this.store.select(states => states.inventory.createGroupSuccess).pipe(takeUntil(this.destroyed$));
-        this.createCustomStockSuccess$ = this.store.select(s => s.inventory.createCustomStockSuccess).pipe(takeUntil(this.destroyed$));
+        this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
+        this.createGroupSuccess$ = this.store.pipe(select(states => states.inventory.createGroupSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -59,12 +54,7 @@ export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
                 this.isAddGroupOpen = false;
             }
         });
-        this.createCustomStockSuccess$.subscribe(s => {
-            if (s) {
-                // this.hideFirstScreen = false;
-                // this.isAddUnitOpen = false;
-            }
-        });
+
         this.asideClose = false;
     }
 

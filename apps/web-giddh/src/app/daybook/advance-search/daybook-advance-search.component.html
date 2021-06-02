@@ -1,57 +1,59 @@
-<div id="" class="">
-    <div class="modal-header themeBg clearfix">
-        <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
+<div>
+    <div class="modal-header theme-bg clearfix">
+        <h3 class="modal-title bg" id="modal-title">{{commonLocaleData?.app_advance_search}}</h3>
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
-        <!-- <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel()"></i> -->
     </div>
     <div class="modal-body clearfix" id="export-body">
-        <form action="" [formGroup]="advanceSearchForm" class="dayBookAdvanceSearch">
+        <form [formGroup]="advanceSearchForm" class="dayBookAdvanceSearch">
             <div class="row">
                 <div class="col-xs-12 col-sm-12">
                     <div class="row">
                         <div class="col-sm-3 col-xs-12">
-                            <label for="">Date Range</label>
+                            <label>{{commonLocaleData?.app_date_range}}</label>
                         </div>
-                        <div class="col-sm-9 col-xs-12" id="date-range-picker-parent">
-                            <input type="text" name="daterangeInput" #dateRangePickerDir daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="onDateRangeSelected($event)" (applyDaterangepicker)="onDateRangeSelected($event)" class="form-control date-range-picker cursor-pointer"
-                            />
-                            <!-- <div class="form-group input-group">
-                <input name="dateRange" autocomplete="off" #dp="bsDaterangepicker" placeholder="Select range" type="text" class="form-control"
-                  (bsValueChange)="onDateRangeSelected($event)" bsDaterangepicker required>
-                <span class="input-group-addon cursor-pointer" (click)="dp.toggle()">
-                  <i class="fa fa-calendar" aria-hidden="true"></i>
-                </span>
-              </div> -->
+                        <div class="col-sm-9 col-xs-12 custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <i class="icon-calender calendar-addon"></i>
+                            <input type="text" name="selectedDateRange"
+                                [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker border-radius-2" />
                         </div>
                     </div>
 
                 </div>
 
-                <div class="col-xs-12 col-sm-12 mr-t2 pdT2 bdrT">
+                <div class="col-xs-12 col-sm-12 mr-t2 pd-t2 bd-rt">
                     <div class="row">
                         <div class="col-sm-5 col-xs-12">
-                            <label for="">Particulars</label>
+                            <label>{{commonLocaleData?.app_particulars}}</label>
                             <p>
-                                <small>By default all accounts are selected</small>
+                                <small>{{localeData?.accounts_selected_message}}</small>
                             </p>
                         </div>
                         <div class="col-sm-7 col-xs-12">
                             <div class="row">
                                 <div class="col-6 col-sm-6">
-                                    <div class="checkbox square-switch mb-1">
+                                    <div class="checkbox square-switch mr-b1">
                                         <input type="checkbox" id="includeParticulars"
                                             formControlName="includeParticulars" />
                                         <label for="includeParticulars">
                                             <span class="pull-left"
-                                                *ngIf="advanceSearchForm.get('includeParticulars').value">Include</span>
+                                                *ngIf="advanceSearchForm.get('includeParticulars').value">{{commonLocaleData?.app_include}}</span>
                                             <span class="pull-right"
-                                                *ngIf="!advanceSearchForm.get('includeParticulars').value">Exclude</span>
+                                                *ngIf="!advanceSearchForm.get('includeParticulars').value">{{commonLocaleData?.app_exclude}}</span>
                                         </label>
                                     </div>
                                 </div>
                                 <div class="col-6 col-sm-6">
                                     <div class="form-group">
-                                        <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear('particulars')" [forceClearReactive]="forceClearParticulars$ | async" (selected)="onDDElementSelect('particulars', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'"
+                                        <sh-select [options]="accounts$ | async" name="particulars"
+                                            (onClear)="onDDClear('particulars')"
+                                            [forceClearReactive]="forceClearParticulars$ | async"
+                                            (selected)="onDDElementSelect('particulars', $event)"
+                                            [isFilterEnabled]="true" [multiple]="true"
+                                            [placeholder]="commonLocaleData?.app_select_accounts"
+                                            [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                                            [doNotResetSelectedValues]="true" (scrollEnd)="handleScrollEnd()"
+                                            (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
                                             [ItemHeight]="33"></sh-select>
                                     </div>
                                 </div>
@@ -63,9 +65,9 @@
                 <div class="col-xs-12 col-sm-12">
                     <div class="row">
                         <div class="col-sm-5 col-xs-12">
-                            <label for="">Voucher Type</label>
+                            <label>{{commonLocaleData?.app_voucher_type}}</label>
                             <p>
-                                <small>By default all vouchers are selected</small>
+                                <small>{{localeData?.vouchers_selected_message}}</small>
                             </p>
                         </div>
                         <div class="col-sm-7 col-xs-12">
@@ -75,15 +77,18 @@
                                         <input type="checkbox" id="includeVouchers" formControlName="includeVouchers" />
                                         <label for="includeVouchers">
                                             <span class="pull-left"
-                                                *ngIf="advanceSearchForm.get('includeVouchers').value">Include</span>
+                                                *ngIf="advanceSearchForm.get('includeVouchers').value">{{commonLocaleData?.app_include}}</span>
                                             <span class="pull-right"
-                                                *ngIf="!advanceSearchForm.get('includeVouchers').value">Exclude</span>
+                                                *ngIf="!advanceSearchForm.get('includeVouchers').value">{{commonLocaleData?.app_exclude}}</span>
                                         </label>
                                     </div>
                                 </div>
                                 <div class="col-6 col-sm-6">
                                     <div class="form-group">
-                                        <sh-select [options]="voucherTypeList | async" name="particulars" (onClear)="onDDClear('vouchers')" [forceClearReactive]="forceClear$ | async" (selected)="onDDElementSelect('vouchers', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'"
+                                        <sh-select [options]="voucherTypeList | async" name="particulars"
+                                            (onClear)="onDDClear('vouchers')" [forceClearReactive]="forceClear$ | async"
+                                            (selected)="onDDElementSelect('vouchers', $event)" [isFilterEnabled]="true"
+                                            [multiple]="true" [placeholder]="commonLocaleData?.app_select_accounts"
                                             [ItemHeight]="33">
                                         </sh-select>
                                     </div>
@@ -95,18 +100,24 @@
                 <div class="col-xs-12 col-sm-12">
                     <div class="row">
                         <div class="col-sm-5 col-xs-12">
-                            <label for="">Amount</label>
+                            <label>{{commonLocaleData?.app_amount}}</label>
                         </div>
                         <div class="col-sm-7 col-xs-12">
                             <div class="row">
                                 <div class="col-6 col-sm-6">
                                     <div class="form-group">
-                                        <sh-select [showClear]="false" [width]="'100%'" (selected)="onRangeSelect('amount', $event)" [forceClearReactive]="forceClearRange$ | async" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="'Select Range'" [ItemHeight]="33"></sh-select>
+                                        <sh-select [showClear]="false" [width]="'100%'"
+                                            (selected)="onRangeSelect('amount', $event)"
+                                            [forceClearReactive]="forceClearRange$ | async"
+                                            [options]="comparisonFilterDropDown$ | async" name="particulars"
+                                            [placeholder]="commonLocaleData?.app_select_range" [ItemHeight]="33">
+                                        </sh-select>
                                     </div>
                                 </div>
                                 <div class="col-6 col-sm-6">
                                     <div class="form-group">
-                                        <input type="text" decimalDigitsDirective [mask]="inputMaskFormat" formControlName="amount" class="form-control" aria-label="Text input with dropdown button">
+                                        <input type="text" decimalDigitsDirective [mask]="inputMaskFormat"
+                                            formControlName="amount" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -115,11 +126,10 @@
                 </div>
 
                 <div class="col-xs-12 col-sm-12">
-                    <div class="form-group toggle-btn mrB">
+                    <div class="form-group toggle-btn mr-b05">
                         <label class="cp" (click)="toggleOtherDetails()">
-                            <i class="fa cp" aria-hidden="true"
-                                [ngClass]="{'fa-minus-square-o': showOtherDetails, 'fa-plus-square-o': !showOtherDetails}"></i>Other
-                            Details
+                            <i class="cp collapse-icons" aria-hidden="true"
+                                [ngClass]="{'icon-minus': showOtherDetails, 'icon-plus': !showOtherDetails}"></i>{{commonLocaleData?.app_other_details}}
                         </label>
                     </div>
                 </div>
@@ -128,51 +138,75 @@
                 <ng-container *ngIf="advanceSearchForm.get('includeDescription').value">
                     <div class="col-xs-12 col-sm-12 mr-t2">
                         <div class="mr-b1 clearfix">
-                            <div class="row" >
+                            <div class="row">
                                 <div class="col-sm-5 col-xs-12">
-                                    <label for="">Inventory</label>
+                                    <label>{{commonLocaleData?.app_inventory}}</label>
                                 </div>
                                 <div class="col-sm-7 col-xs-12" formGroupName="inventory">
                                     <div class="row">
                                         <div class="col-sm-6">
 
                                             <div class="checkbox square-switch">
-                                                <input type="checkbox" id="includeInventory" formControlName="includeInventory" />
+                                                <input type="checkbox" id="includeInventory"
+                                                    formControlName="includeInventory" />
                                                 <label for="includeInventory">
                                                     <span class="pull-left"
-                                                        *ngIf="advanceSearchForm.get('inventory.includeInventory').value">Include</span>
+                                                        *ngIf="advanceSearchForm.get('inventory.includeInventory').value">{{commonLocaleData?.app_include}}</span>
                                                     <span class="pull-right"
-                                                        *ngIf="!advanceSearchForm.get('inventory.includeInventory').value">Exclude</span>
+                                                        *ngIf="!advanceSearchForm.get('inventory.includeInventory').value">{{commonLocaleData?.app_exclude}}</span>
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear('inventory')" (selected)="onDDElementSelect('inventory', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'" [ItemHeight]="33"></sh-select>
+                                                <sh-select [options]="stockListDropDown$ | async" name="inventory"
+                                                    (onClear)="onDDClear('inventory')"
+                                                    (selected)="onDDElementSelect('inventory', $event)"
+                                                    [isFilterEnabled]="true" [multiple]="true"
+                                                    [placeholder]="commonLocaleData?.app_select_accounts"
+                                                    [ItemHeight]="33" [enableDynamicSearch]="true"
+                                                    [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
+                                                    (scrollEnd)="handleStockScrollEnd()"
+                                                    (dynamicSearchedQuery)="onStockSearchQueryChanged($event)">
+                                                </sh-select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <sh-select [showClear]="false" [width]="'100%'" (selected)="onRangeSelect('inventoryQty', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="'Select Range'" [ItemHeight]="33"></sh-select>
+                                                <sh-select [showClear]="false" [width]="'100%'"
+                                                    (selected)="onRangeSelect('inventoryQty', $event)"
+                                                    [options]="comparisonFilterDropDown$ | async" name="particulars"
+                                                    [placeholder]="commonLocaleData?.app_select_range"
+                                                    [ItemHeight]="33"></sh-select>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="quantity" [mask]="inputMaskFormat" placeholder="Quantity">
+                                                <input type="text" class="form-control" decimalDigitsDirective
+                                                    [DecimalPlaces]="4" formControlName="quantity"
+                                                    [mask]="inputMaskFormat"
+                                                    [placeholder]="commonLocaleData?.app_quantity">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <sh-select [showClear]="false" [width]="'100%'" (selected)="onRangeSelect('inventoryVal', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="'Select Range'" [ItemHeight]="33"></sh-select>
+                                                <sh-select [showClear]="false" [width]="'100%'"
+                                                    (selected)="onRangeSelect('inventoryVal', $event)"
+                                                    [options]="comparisonFilterDropDown$ | async" name="particulars"
+                                                    [placeholder]="commonLocaleData?.app_select_range"
+                                                    [ItemHeight]="33"></sh-select>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <input type="text" decimalDigitsDirective [DecimalPlaces]="3" class="form-control" formControlName="itemValue" [mask]="inputMaskFormat" placeholder="Value">
+                                                <input type="text" decimalDigitsDirective [DecimalPlaces]="3"
+                                                    class="form-control" formControlName="itemValue"
+                                                    [mask]="inputMaskFormat"
+                                                    [placeholder]="commonLocaleData?.app_value">
                                             </div>
                                         </div>
                                     </div>
@@ -181,18 +215,21 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-5 col-xs-12">
-                                <label for="">Cheque Details</label>
+                                <label>{{localeData?.cheque_details}}</label>
                             </div>
                             <div class="col-sm-7 col-xs-12">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <input type="text" placeholder="Cheque Number" formControlName="chequeNumber" class="form-control">
+                                            <input type="text" [placeholder]="localeData?.cheque_number"
+                                                formControlName="chequeNumber" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <input type="text" placeholder="Clearance Date" name="from" formControlName="dateOnCheque" bsDatepicker class="form-control" [bsConfig]="bsConfig" />
+                                            <input type="text" [placeholder]="localeData?.clearance_date" name="from"
+                                                formControlName="dateOnCheque" bsDatepicker class="form-control"
+                                                [bsConfig]="bsConfig" />
                                         </div>
                                     </div>
                                 </div>
@@ -211,11 +248,25 @@
                     </div>
                 </ng-container>
                 <div class="col-xs-12 col-sm-12 text-right">
-                    <button class="btn btn-default" type="button" (click)="go(true)">Export</button>
-                    <button class="btn btn-success" type="button" (click)="go()">Search</button>
+                    <button class="btn btn-success" type="button"
+                        (click)="go()">{{commonLocaleData?.app_search}}</button>
                     <!-- <button class="btn btn-update" type="button" (click)="onSearch()">Search & Export</button> -->
                 </div>
             </div>
         </form>
     </div>
 </div>
+
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

@@ -17,6 +17,7 @@ import { IOption } from '../../theme/ng-select/ng-select';
 import { SettingsUtilityService } from '../../settings/services/settings-utility.service';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { BULK_UPDATE_FIELDS } from '../../shared/helpers/purchaseOrderStatus';
+import { OrganizationType } from '../../models/user-login-state';
 
 @Component({
     selector: 'purchase-order',
@@ -109,11 +110,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     /* This will hold current page url */
     public pageUrl: string = "pages/purchase-management/purchase";
     /* This holds the fields which can be updated in bulk */
-    public bulkUpdateFields: IOption[] = [
-        { label: 'Order Date', value: BULK_UPDATE_FIELDS.purchasedate },
-        { label: 'Expected Delivery Date', value: BULK_UPDATE_FIELDS.duedate },
-        { label: 'Warehouse', value: BULK_UPDATE_FIELDS.warehouse }
-    ];
+    public bulkUpdateFields: IOption[] = [];
     /* Stores warehouses for a company */
     public warehouses: Array<any>;
     /* Bulk update get params */
@@ -126,6 +123,16 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public selectedPo: any[] = [];
     /* Observable for selected PO applied */
     public selectedPo$: Observable<any>;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Current branches */
+    public branches: Array<any>;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
 
     constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
@@ -156,6 +163,13 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             this.isMobileScreen = result.matches;
         });
 
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.branches = response || [];
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+            }
+        });
+
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
                 this.pageUrl = event.url;
@@ -184,7 +198,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         });
 
         this.selectedPo$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response && (this.pageUrl.includes('/purchase-orders/preview') || this.pageUrl.includes('/purchase-management/purchase'))) {
+            if (response && (this.pageUrl.includes('/purchase-orders/preview') || this.pageUrl.includes('/purchase-management/purchase'))) {
                 this.selectedPo = response;
             }
         });
@@ -244,7 +258,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 Object.assign({}, { class: 'modal-sm' })
             );
         } else {
-            this.toaster.errorToast("Please select atleast 1 Purchase Order");
+            this.toaster.errorToast(this.localeData?.po_selection_error);
         }
     }
 
@@ -273,7 +287,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 this.purchaseOrderGetRequest.page = 1;
             }
 
-            this.purchaseOrderService.getAll(this.purchaseOrderGetRequest, this.purchaseOrderPostRequest).subscribe((res) => {
+            this.purchaseOrderService.getAll(this.purchaseOrderGetRequest, this.purchaseOrderPostRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res) {
                     this.isLoading = false;
                     if (res.status === 'success') {
@@ -281,9 +295,17 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
 
                         let purchaseOrders = _.cloneDeep(res.body);
 
-                        if(purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0) {
+                        if (purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0) {
                             purchaseOrders.items.map(item => {
                                 item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedPo, item.uniqueName);
+                                let grandTotalConversionRate = 0, grandTotalAmountForCompany, grandTotalAmountForAccount;
+                                grandTotalAmountForCompany = Number(item?.grandTotal?.amountForCompany) || 0;
+                                grandTotalAmountForAccount = Number(item?.grandTotal?.amountForAccount) || 0;
+
+                                if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
+                                    grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+                                }
+                                item.grandTotalTooltipText = `In ${item.grandTotal?.currencyForCompany?.code}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
                                 return item;
                             });
                         }
@@ -338,7 +360,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof PurchaseOrderComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -531,7 +553,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public deleteItem(): void {
         let getRequest = { companyUniqueName: this.purchaseOrderGetRequest.companyUniqueName, poUniqueName: this.selectedItem };
 
-        this.purchaseOrderService.delete(getRequest).subscribe((res) => {
+        this.purchaseOrderService.delete(getRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
                 if (res.status === 'success') {
                     this.getAllPurchaseOrders(false);
@@ -593,11 +615,11 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         if (purchaseNumbers.length > 0) {
             this.bulkUpdatePostParams.purchaseNumbers = purchaseNumbers;
 
-            this.purchaseOrderService.bulkUpdate(this.bulkUpdateGetParams, this.bulkUpdatePostParams).subscribe((res) => {
+            this.purchaseOrderService.bulkUpdate(this.bulkUpdateGetParams, this.bulkUpdatePostParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
 
-                        if(action === "create_purchase_bill") {
+                        if (action === "create_purchase_bill") {
                             this.refreshPurchaseBill.emit(true);
                         }
 
@@ -620,7 +642,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 }
             });
         } else {
-            this.toaster.errorToast("Please select atleast 1 Purchase Order");
+            this.toaster.errorToast(this.localeData?.po_selection_error);
         }
     }
 
@@ -635,7 +657,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             this.deleteModule = 'purchaseorderlist';
             this.poConfirmationModel.show();
         } else {
-            this.toaster.errorToast("Please select atleast 1 Purchase Order");
+            this.toaster.errorToast(this.localeData?.po_selection_error);
         }
     }
 
@@ -692,26 +714,26 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             if (this.bulkUpdateGetParams.action === BULK_UPDATE_FIELDS.purchasedate) {
                 if (!this.bulkUpdatePostParams.purchaseDate) {
                     isValid = false;
-                    this.toaster.errorToast("Please select Purchase date");
+                    this.toaster.errorToast(this.localeData?.po_date_error);
                 } else {
                     this.bulkUpdatePostParams.purchaseDate = moment(this.bulkUpdatePostParams.purchaseDate).format(GIDDH_DATE_FORMAT);
                 }
             } else if (this.bulkUpdateGetParams.action === BULK_UPDATE_FIELDS.duedate) {
                 if (!this.bulkUpdatePostParams.dueDate) {
                     isValid = false;
-                    this.toaster.errorToast("Please select Expected delivery date");
+                    this.toaster.errorToast(this.localeData?.po_expirydate_error);
                 } else {
                     this.bulkUpdatePostParams.dueDate = moment(this.bulkUpdatePostParams.dueDate).format(GIDDH_DATE_FORMAT);
                 }
             } else if (this.bulkUpdateGetParams.action === BULK_UPDATE_FIELDS.warehouse) {
                 if (!this.bulkUpdatePostParams.warehouseUniqueName) {
                     isValid = false;
-                    this.toaster.errorToast("Please select Warehouse");
+                    this.toaster.errorToast(this.localeData?.po_warehouse_error);
                 }
             }
         } else {
             isValid = false;
-            this.toaster.errorToast("Please choose a field to update");
+            this.toaster.errorToast(this.localeData?.po_bulkupdate_error);
         }
 
         if (isValid) {
@@ -739,5 +761,23 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public formatNumber(dueDays: number): number {
         dueDays = Math.abs(dueDays);
         return dueDays;
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof PurchaseOrderComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
+
+            this.bulkUpdateFields = [
+                { label: this.localeData?.order_date, value: BULK_UPDATE_FIELDS.purchasedate },
+                { label: this.localeData?.expected_delivery_date, value: BULK_UPDATE_FIELDS.duedate },
+                { label: this.commonLocaleData?.app_warehouse, value: BULK_UPDATE_FIELDS.warehouse }
+            ];
+        }
     }
 }

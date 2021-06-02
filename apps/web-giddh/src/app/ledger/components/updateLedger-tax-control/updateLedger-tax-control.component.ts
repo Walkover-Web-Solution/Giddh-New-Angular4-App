@@ -41,6 +41,8 @@ export class UpdateLedgerTaxData {
     providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
 export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnChanges {
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Input() public date: string;
     @Input() public taxes: TaxResponse[];
     @Input() public applicableTaxes: any[];
@@ -74,7 +76,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     /** Tax input field */
-    @ViewChild('taxInputElement', {static: true}) public taxInputElement: ElementRef;
+    @ViewChild('taxInputElement', { static: true }) public taxInputElement: ElementRef;
 
     public sum: number = 0;
     public formattedTotal: string;
@@ -145,11 +147,11 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
                         return moment(p.date, GIDDH_DATE_FORMAT);
                     }, 'desc');
                     let exactDate = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT).isSame(moment(this.date, GIDDH_DATE_FORMAT)));
-                    if (exactDate.length > 0) {
+                    if (exactDate && exactDate.length > 0) {
                         taxObj.amount = exactDate[0].taxValue;
                     } else {
                         let filteredTaxObject = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT) < moment(this.date, GIDDH_DATE_FORMAT));
-                        if (filteredTaxObject.length > 0) {
+                        if (filteredTaxObject && filteredTaxObject.length > 0) {
                             taxObj.amount = filteredTaxObject[0].taxValue;
                         } else {
                             taxObj.amount = 0;
@@ -164,6 +166,9 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
                 // }
             }
         });
+        if (this.taxRenderData?.length) {
+            this.taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
+        }
     }
 
     public toggleTaxPopup(action: boolean) {
@@ -190,7 +195,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
         this.selectedTaxes = this.generateSelectedTaxes();
 
         if (this.allowedSelection > 0) {
-            if (this.selectedTaxes.length >= this.allowedSelection) {
+            if (this.selectedTaxes && this.selectedTaxes.length >= this.allowedSelection) {
                 this.taxRenderData = this.taxRenderData.map(m => {
                     m.isDisabled = !m.isChecked;
                     return m;
@@ -202,11 +207,11 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
                 });
             }
         }
-        if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type.length) {
+        if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type && this.allowedSelectionOfAType.type.length) {
             this.allowedSelectionOfAType.type.forEach(taxType => {
                 const selectedTaxes = this.taxRenderData.filter(appliedTaxes => (appliedTaxes.isChecked && taxType === appliedTaxes.type));
 
-                if (selectedTaxes.length >= this.allowedSelectionOfAType.count) {
+                if (selectedTaxes && selectedTaxes.length >= this.allowedSelectionOfAType.count) {
                     this.taxRenderData.map((taxesApplied => {
                         if (taxType === taxesApplied.type && !taxesApplied.isChecked) {
                             taxesApplied.isDisabled = true;
@@ -226,7 +231,8 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
                 // In case of advance receipt only a single tax is allowed in addition to CESS
                 // Check if atleast a single non-cess tax is selected, if yes, then disable all other taxes
                 // except CESS taxes
-                const atleastSingleTaxSelected: boolean = this.taxRenderData.filter((tax) => tax.isChecked && tax.type !== 'gstcess').length !== 0;
+                let singleSelectedTax = this.taxRenderData.filter((tax) => tax.isChecked && tax.type !== 'gstcess');
+                const atleastSingleTaxSelected: boolean = singleSelectedTax && singleSelectedTax.length !== 0;
                 if (atleastSingleTaxSelected) {
                     this.taxRenderData.map((taxesApplied => {
                         if ('gstcess' !== taxesApplied.type && !taxesApplied.isChecked) {
@@ -237,15 +243,21 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
                 }
             }
         }
+        setTimeout(() => {
+            if (this.taxRenderData?.length) {
+                this.taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
+            }
+        });
 
         this.taxAmountSumEvent.emit(this.sum);
         this.selectedTaxEvent.emit(this.selectedTaxes);
 
         let diff: boolean;
-        if (this.selectedTaxes.length > 0) {
-            diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
+        if (this.selectedTaxes && this.selectedTaxes.length > 0) {
+            let taxDifference = _.difference(this.selectedTaxes, this.applicableTaxes);
+            diff = taxDifference && taxDifference.length > 0;
         } else {
-            diff = this.applicableTaxes.length > 0;
+            diff = this.applicableTaxes && this.applicableTaxes.length > 0;
         }
 
         if (diff) {
@@ -280,10 +292,10 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     }
 
     private isTaxApplicable(tax): boolean {
-        const today = moment(moment().format('DD-MM-YYYY'), 'DD-MM-YYYY', true).valueOf();
+        const today = moment(moment().format(GIDDH_DATE_FORMAT), GIDDH_DATE_FORMAT, true).valueOf();
         let isApplicable = false;
         _.each(tax.taxDetail, (det: any) => {
-            if (today >= moment(det.date, 'DD-MM-YYYY', true).valueOf()) {
+            if (today >= moment(det.date, GIDDH_DATE_FORMAT, true).valueOf()) {
                 return isApplicable = true;
             }
         });

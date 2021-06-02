@@ -3,19 +3,19 @@
     top: -59px;
     z-index: 9;
 }
-@media(max-width:991px){
-    .permission-date-field{
+@media (max-width: 991px) {
+    .permission-date-field {
         margin-top: 10px;
     }
 }
-@media(max-width:767px){
-    .user{
-        padding-bottom:7px;
+@media (max-width: 767px) {
+    .user {
+        padding-bottom: 7px;
     }
     .btn-top-box {
         position: relative;
         top: 0;
         text-align: left;
         margin-bottom: 15px;
-     }
+    }
 }

@@ -1,7 +1,7 @@
-<div id="" class="">
+<div>
 
     <div class="modal-header">
-        <h3>Perform Payment action</h3>
+        <h3>{{localeData?.perform_payment_action}}</h3>
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
     </div>
 
@@ -11,17 +11,17 @@
 
             <div class="row">
                 <div class="col-6 form-group payment-date">
-                    <label>Payment Date <sup>*</sup></label>
-
-                    <input type="text" name="invoiceDateRange" bsDatepicker class="form-control" style="width: 100%"
-                        [(ngModel)]="paymentActionFormObj.paymentDate" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" />
+                    <label>{{localeData?.payment_date}} <sup>*</sup></label>
+                    <input type="text" name="invoiceDateRange" bsDatepicker class="form-control width-100"
+                        [(ngModel)]="paymentActionFormObj.paymentDate"
+                        [bsConfig]="{dateInputFormat: giddhDateFormat}" />
                 </div>
 
                 <div class="col-6 form-group">
-                    <label>Amount <sup>*</sup></label>
+                    <label>{{commonLocaleData?.app_amount}} <sup>*</sup></label>
                     <input type="text" class="form-control" decimalDigitsDirective
-                        [(ngModel)]="paymentActionFormObj.amount" placeholder="Enter Amount" name="amount" #amountField
-                        autocomplete="off" required />
+                        [(ngModel)]="paymentActionFormObj.amount" [placeholder]="localeData?.enter_amount" name="amount"
+                        #amountField autocomplete="off" required />
                 </div>
 
             </div>
@@ -30,15 +30,16 @@
 
                 <div class="col-6 form-group">
 
-                    <label>Payment Mode <sup>*</sup></label>
+                    <label>{{commonLocaleData?.app_payment_mode}} <sup>*</sup></label>
 
                     <sh-select name="accountUniqueName" [options]="paymentModes$ | async"
                         [(ngModel)]="paymentActionFormObj.accountUniqueName" (selected)="onSelectPaymentMode($event)"
-                        [placeholder]="'Select Account'" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
-                        [useInBuiltFilterForIOptionTypeItems]="true" class="text-left" required>
+                        [placeholder]="commonLocaleData?.app_select_account" [notFoundLink]="false" [multiple]="false"
+                        [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left" required
+                        [isRequired]="true">
 
                         <ng-template #optionTemplate1 let-option="option">
-                            <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                            <a href="javascript:void(0)" class="list-item bb-1">
                                 <div class="item">{{ option.label }}</div>
                                 <div class="item-unique">{{ option.value }}</div>
                             </a>
@@ -50,11 +51,11 @@
 
                 <div class="col-6 form-group">
 
-                    <label>Tag</label>
+                    <label>{{commonLocaleData?.app_tag}}</label>
 
                     <sh-select [options]="tags" name="selectedTag" [(ngModel)]="paymentActionFormObj.tagUniqueName"
-                        [isFilterEnabled]="true" (selected)="onTagSelected($event)" [placeholder]="'Select Tag'"
-                        [ItemHeight]="33"></sh-select>
+                        [isFilterEnabled]="true" [placeholder]="commonLocaleData?.app_select_tag" [ItemHeight]="33">
+                    </sh-select>
 
                 </div>
             </div>
@@ -62,28 +63,28 @@
             <div class="row" *ngIf="isBankSelected">
 
                 <div class="col-6 form-group">
-                    <label>Cheque No.(if payment by Cheque)</label>
-                    <input type="text" class="form-control" placeholder="XXXX1231" decimalDigitsDirective
-                        [(ngModel)]="paymentActionFormObj.chequeNumber" name="chequeNumber" />
+                    <label>{{localeData?.cheque_no}}</label>
+                    <input type="text" class="form-control" [placeholder]="localeData?.cheque_no_placeholder"
+                        decimalDigitsDirective [(ngModel)]="paymentActionFormObj.chequeNumber" name="chequeNumber" />
                 </div>
 
                 <div class="col-6 form-group">
-                    <label>Cheque Clearance Date</label>
+                    <label>{{commonLocaleData?.app_cheque_clearance_date}}</label>
                     <input type="text" [textMask]="{mask: dateMask, guide: true}" class="form-control"
                         [(ngModel)]="paymentActionFormObj.chequeClearanceDate" name="chequeClearance"
-                        placeholder="DD-MM-YYYY" />
+                        [placeholder]="giddhDateFormat" />
                 </div>
 
             </div>
 
             <!-- switch currency on click-->
             <div class="clearfix" *ngIf="isMulticurrencyAccount">
-                <div class="switch-currency mb-1" *ngIf="!showSwitchedCurr">
-                    <span class="text-light d-inline-block pr-1">Base Currency</span>
+                <div class="switch-currency mr-b1" *ngIf="!showSwitchedCurr">
+                    <span class="text-light d-inline-block pr-1">{{localeData?.base_currency}}</span>
 
                     <span class="left-currency middle">1 {{accountCurrency}}</span>
 
-                    <img class="switchIcon middle mr-1 ml-1" src="assets/images/switch-icon.svg" alt="switch-icon"
+                    <img class="switch-icon middle mr-1 ml-1" src="assets/images/switch-icon.svg" alt="switch-icon"
                         (click)="switchCurrencyImg(true)">
                     <span class="edit-icon cp">
                         <img src="assets/images/edit-pencilicon.svg" class="edit-pencil mr-1"
@@ -95,8 +96,8 @@
                         <span class="mr-1 middle">{{companyCurrencyName}}</span>
                     </span>
                     <span class="right-currency middle mt-1">
-                        <span class="currency-digits"
-                            *ngIf="!showCurrencyValue">{{originalExchangeRate | giddhCurrency}}</span>
+                        <span class="currency-digits" *ngIf="!showCurrencyValue">{{originalExchangeRate |
+                            giddhCurrency}}</span>
                         <input type="number" name="exchangeRate" [(ngModel)]="exchangeRate" *ngIf="showCurrencyValue"
                             class="form-control edit-currency">
                     </span>
@@ -104,10 +105,10 @@
                 </div>
 
 
-                <div class="switch-currency mb-1" *ngIf="showSwitchedCurr">
-                    <span class="text-light d-inline-block pr-1">Base Currency</span>
+                <div class="switch-currency mr-b1" *ngIf="showSwitchedCurr">
+                    <span class="text-light d-inline-block pr-1">{{localeData?.base_currency}}</span>
                     <span class="left-currency middle">1 {{companyCurrencyName}}</span>
-                    <img class="switchIcon middle mr-1 ml-1" src="assets/images/switch-icon.svg" alt="switch-icon"
+                    <img class="switch-icon middle mr-1 ml-1" src="assets/images/switch-icon.svg" alt="switch-icon"
                         (click)="switchCurrencyImg(false)">
                     <span class="edit-icon cp">
                         <img src="assets/images/edit-pencilicon.svg" class="edit-pencil mr-1"
@@ -118,8 +119,8 @@
                         <span class="mr-1 middle">{{accountCurrency}}</span>
                     </span>
                     <span class="right-currency middle mt-1">
-                        <span class="currency-digits"
-                            *ngIf="!showCurrencyValue">{{originalReverseExchangeRate | giddhCurrency}}</span>
+                        <span class="currency-digits" *ngIf="!showCurrencyValue">{{originalReverseExchangeRate |
+                            giddhCurrency}}</span>
                         <input type="number" name="exchangeRate" [(ngModel)]="reverseExchangeRate"
                             *ngIf="showCurrencyValue" class="form-control edit-currency">
                     </span>
@@ -129,16 +130,18 @@
             <div class="row">
 
                 <div class="col-12 form-group">
-                    <label>Description</label>
-                    <textarea type="text" class="form-control" placeholder="Description"
+                    <label>{{commonLocaleData?.app_description}}</label>
+                    <textarea type="text" class="form-control" [placeholder]="commonLocaleData?.app_description"
                         [(ngModel)]="paymentActionFormObj.description" name="description"></textarea>
                 </div>
 
             </div>
 
             <div class="pull-right">
-                <button type="submit" class="btn btn-success" [disabled]="f.invalid">Save</button>
-                <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+                <button type="submit" class="btn btn-success"
+                    [disabled]="f.invalid">{{commonLocaleData?.app_save}}</button>
+                <button type="button" class="btn btn-danger"
+                    (click)="onCancel()">{{commonLocaleData?.app_cancel}}</button>
             </div>
 
         </form>

@@ -9,7 +9,7 @@ export const Configuration = {
     APP_FOLDER
 };
 
-export const APP_DEFAULT_TITLE = 'Giddh -';
+export const APP_DEFAULT_TITLE = '';
 
 export const DEFAULT_TOASTER_OPTIONS = {
     closeButton: true, // show close button
@@ -64,6 +64,8 @@ export enum OnBoardingType {
 
 /** Pagination limit for every module */
 export const PAGINATION_LIMIT = 50;
+/** API default count limit */
+export const API_COUNT_LIMIT = 20;
 
 /** SubVoucher type */
 export enum SubVoucher {
@@ -165,37 +167,49 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
 
 export const GIDDH_DATE_RANGE_PICKER_RANGES = [
     {
-        name: DatePickerDefaultRangeEnum.ThisMonth, value: [moment().startOf('month'), moment().endOf('month')]
+        name: DatePickerDefaultRangeEnum.ThisMonth,
+        value: [moment().startOf('month'), moment().endOf('month')],
+        key: "ThisMonth"
     },
     {
-        name: DatePickerDefaultRangeEnum.LastMonth, value: [
+        name: DatePickerDefaultRangeEnum.LastMonth,
+        value: [
             moment().subtract(1, 'month').startOf('month'),
             moment().subtract(1, 'month').endOf('month')
-        ]
+        ],
+        key: "LastMonth"
     },
     {
-        name: DatePickerDefaultRangeEnum.ThisQuarterToDate, value: [
+        name: DatePickerDefaultRangeEnum.ThisQuarterToDate,
+        value: [
             moment().quarter(moment().quarter()).startOf('quarter'),
             moment()
-        ]
+        ],
+        key: "ThisQuarterToDate"
     },
     {
-        name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate, value: [
+        name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate,
+        value: [
             moment().startOf('year').subtract(9, 'year'),
             moment()
-        ]
+        ],
+        key: "ThisFinancialYearToDate"
     },
     {
-        name: DatePickerDefaultRangeEnum.LastQuarter, value: [
+        name: DatePickerDefaultRangeEnum.LastQuarter,
+        value: [
             moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
             moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-        ]
+        ],
+        key: "LastQuarter"
     },
     {
-        name: DatePickerDefaultRangeEnum.AllTime, value: [
+        name: DatePickerDefaultRangeEnum.AllTime,
+        value: [
             moment().startOf('year').subtract(10, 'year'),
             moment()
-        ]
+        ],
+        key: "AllTime"
     }
 ];
 
@@ -215,7 +229,7 @@ export const VAT_SUPPORTED_COUNTRIES = [
     'QA', 'BH', 'AE', 'SA', 'OM', 'KW'
 ];
 
-export const API_POSTMAN_DOC_URL='https://documenter.getpostman.com/view/117343/S1Zw8WF1?version=latest';
+export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
 
 /** Decimal point for rate field, irrespective of user profile preference
  * will be displayed up to 4 decimal places
@@ -274,3 +288,29 @@ export const RESTRICTED_BRANCH_ROUTES = [
     '/pages/settings/financial-year',
     '/pages/user-details/subscription'
 ];
+
+export const SUPPORT_TEAM_NUMBERS = [
+    "+918889500411", "+918889500350", "+918889378604"
+];
+
+/** Settings integration tabs */
+export const SETTING_INTEGRATION_TABS = {
+    SMS: { LABEL: 'sms', VALUE: 0 },
+    EMAIL: { LABEL: 'email', VALUE: 1 },
+    COLLECTION: { LABEL: 'collection', VALUE: 2 },
+    E_COMMERCE: { LABEL: 'ecommerce', VALUE: 3 },
+    PAYMENT: { LABEL: 'payment', VALUE: 4 }
+};
+/** Email Validation Regex */
+export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+/** E-invoice statuses */
+export enum EInvoiceStatus {
+    YetToBePushed = 'yet-to-be pushed',
+    Pushed = 'pushed',
+    PushInitiated = 'push initiated',
+    Cancelled = 'cancelled',
+    MarkedAsCancelled = 'marked as cancelled',
+    Failed = 'failed',
+    NA = 'na',
+}

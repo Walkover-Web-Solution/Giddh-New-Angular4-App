@@ -1,48 +1,40 @@
 {
-    "tab_heading" : "Create New Trigger(Webhook)",
-    "name_label" : "Name",
-    "name_placeholder" : "Name",
-    "select_entity_type_label" : "Select Entity Type",
-    "select_entity_type_placeholder" : "Select Entity Type",
-    "select_entity_label" : "Select Entity",
-    "select_entity_placeholder" : "Select Entity",
-    "filter_label" : "Filter",
-    "filter_placeholder" : "Select Filter",
-    "scope_label" : "Scope",
-    "scope_placeholder" : "Select Scope",
-    "url_label" : "URL",
-    "url_placeholder" : "URL",
-    "description_label" : "Description",
-    "added_triggers" : "Added Triggers",
-    "entity_type" : "Entity type",
-    "entity" : "Entity",
-    "entity_types" : {
-        "group" : "Group",
-        "account" : "Account"
-    },
-    "webhook" : "Webhook",
-    "filter_types" : {
-        "amount_greater_than" : "Amount Greater Than",
-        "amount_less_than" : "Amount Less Than",
-        "amount_equals" : "Amount Equals",
-        "description_equals" : "Description Equals",
-        "add" : "Add",
-        "update" : "Update",
-        "delete" : "Delete"
-    },
-    "scope_list" : {
-        "closing_balance" : "Closing Balance"
-    },
-    "validations" : {
-        "trigger_name" : "Please enter trigger name.",
-        "entity_type" : "Please select entity type.",
-        "entity" : "Please select an entity.",
-        "scope" : "Please select a scope.",
-        "filter" : "Please select a filter.",
-        "action" : "Please select an action.",
-        "enter_value" : "Please enter value.",
-        "enter_url" : "Please enter URL."
-    },
-    "delete_tax" : "Are you sure you want to delete {SELECTED_TAX}}?",
-    "update_trigger" : "Are you sure want to update {{TRIGGER_NAME}}?"
+	"tab_heading": "नया ट्रिगर बनाएं (वेबहुक)",
+	"select_entity_type": "इकाई प्रकार का चयन करें",
+	"select_entity_label": "इकाई का चयन करें",
+	"filter_placeholder": "फ़िल्टर का चयन करें",
+	"scope_label": "क्षेत्र",
+	"scope_placeholder": "कार्यक्षेत्र का चयन करें",
+	"url": "URL",
+	"added_triggers": "जोड़ा गया ट्रिगर",
+	"entity_type": "इकाई प्रकार",
+	"entity_types": {
+		"group": "समूह",
+		"account": "लेखा"
+	},
+	"webhook": "वेबहुक",
+	"filter_types": {
+		"amount_greater_than": "राशि से अधिक",
+		"amount_less_than": "राशि से कम",
+		"amount_equals": "राशि बराबर",
+		"description_equals": "विवरण बराबर",
+		"add": "जोड़ना",
+		"update": "अपडेट करें",
+		"delete": "हटाएं"
+	},
+	"scope_list": {
+		"closing_balance": "समाप्ति के समय बकाया"
+	},
+	"validations": {
+		"trigger_name": "कृपया ट्रिगर नाम दर्ज करें।",
+		"entity_type": "कृपया निकाय प्रकार चुनें.",
+		"entity": "कृपया एक निकाय चुनें.",
+		"scope": "कृपया कोई दायरा चुनें.",
+		"filter": "कृपया कोई फ़िल्टर चुनें.",
+		"action": "कृपया एक क्रिया चुनें।",
+		"enter_value": "कृपया मान दर्ज करें।",
+		"enter_url": "कृपया URL दर्ज करें।"
+	},
+	"delete_tax": "क्या आप वाकई [SELECTED_TAX] हटाना चाहते हैं?",
+	"update_trigger": "क्या आप वाकई [TRIGGER_NAME] को अपडेट करना चाहते हैं?"
 }

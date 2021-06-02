@@ -2,7 +2,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { InventoryService } from '../../services/inventory.service';
 import { Router } from '@angular/router';
@@ -17,14 +17,14 @@ import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.in
 export class InventoryUsersActions {
 
 
-    public addNewUser$: Observable<Action> = createEffect( ()=>this.action$
+    public addNewUser$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVENTORY_USER_ACTIONS.CREATE_USER),
             switchMap((action: CustomActions) => this._inventoryService.CreateInventoryUser(action.payload)),
             map(response => this.addNewUserResponse(response))));
 
 
-    public addNewUserResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public addNewUserResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVENTORY_USER_ACTIONS.CREATE_USER_RESPONSE),
             map((response: CustomActions) => {
@@ -39,14 +39,14 @@ export class InventoryUsersActions {
             })));
 
 
-    public updateUser$: Observable<Action> =createEffect( ()=> this.action$
+    public updateUser$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVENTORY_USER_ACTIONS.UPDATE_USER),
             switchMap((action: CustomActions) => this._inventoryService.UpdateInventoryUser(action.payload)),
             map(response => this.updateUserResponse(response))));
 
 
-    public updateUserResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public updateUserResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVENTORY_USER_ACTIONS.UPDATE_USER_RESPONSE),
             map((response: CustomActions) => {
@@ -61,14 +61,14 @@ export class InventoryUsersActions {
             })));
 
 
-    public deleteUser$: Observable<Action> =createEffect( ()=> this.action$
+    public deleteUser$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVENTORY_USER_ACTIONS.DELETE_USER),
             switchMap((action: CustomActions) => this._inventoryService.DeleteInventoryUser(action.payload)),
             map(response => this.deleteUserResponse(response))));
 
 
-    public deleteUserResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public deleteUserResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVENTORY_USER_ACTIONS.DELETE_USER_RESPONSE),
             map((response: CustomActions) => {
@@ -83,14 +83,14 @@ export class InventoryUsersActions {
             })));
 
 
-    public getUser$: Observable<Action> =createEffect( ()=> this.action$
+    public getUser$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVENTORY_USER_ACTIONS.GET_USER),
             switchMap((action: CustomActions) => this._inventoryService.GetInventoryUser(action.payload)),
             map(response => this.getUserResponse(response))));
 
 
-    public getUserResponse$: Observable<Action> = createEffect( ()=>this.action$
+    public getUserResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVENTORY_USER_ACTIONS.GET_USER_RESPONSE),
             map((response: CustomActions) => {
@@ -105,7 +105,7 @@ export class InventoryUsersActions {
             })));
 
 
-    public getAllUsers$: Observable<Action> =createEffect( ()=> this.action$
+    public getAllUsers$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVENTORY_USER_ACTIONS.GET_ALL_USERS),
             switchMap((action: CustomActions) => this._inventoryService.GetAllInventoryUser()),

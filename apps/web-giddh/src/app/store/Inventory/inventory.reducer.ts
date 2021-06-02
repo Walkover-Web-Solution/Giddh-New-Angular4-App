@@ -28,6 +28,7 @@ export interface InventoryState {
     createStockSuccess: boolean;
     stockReport?: StockReportResponse;
     groupStockReportInProcess: boolean;
+    stockReportInProcess: boolean;
     groupStockReport?: GroupStockReportResponse;
     isStockAddInProcess: boolean;
     isStockUpdateInProcess: boolean;
@@ -103,6 +104,7 @@ const initialState: InventoryState = {
     activeStockUniqueName: '',
     stockReport: null,
     groupStockReportInProcess: false,
+    stockReportInProcess: false,
     groupStockReport: null,
     createCustomStockSuccess: false,
     showNewGroupAsidePane: false,
@@ -460,7 +462,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
             if (updateStockResp.status === 'success') {
                 groupArray = _.cloneDeep(state.groupsWithStocks);
                 let activeGroupUniqueName = _.cloneDeep(updateStockResp.queryString.stockGroupUniqueName);
-                updateStockIteminGroupArray(groupArray,activeGroupUniqueName, updateStockResp);
+                updateStockIteminGroupArray(groupArray, activeGroupUniqueName, updateStockResp);
                 return Object.assign({}, state, {
                     groupsWithStocks: groupArray,
                     activeStock: updateStockResp.body,
@@ -571,7 +573,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT_RESPONSE:
             return Object.assign({}, state, {
                 stockUnits: state.stockUnits.map(unit => {
-                    if(unit.code === action.payload.code ) {
+                    if (unit.code === action.payload.code) {
                         return action.payload
                     }
                     return unit;
@@ -606,11 +608,17 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
          * Inventory Stock Report
          * */
         case STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT_RESPONSE:
-            return Object.assign({}, state, { stockReport: action.payload });
+            return Object.assign({}, state, { stockReport: action.payload, stockReportInProcess: false });
         case STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT: {
             return {
                 ...state,
                 groupStockReportInProcess: true
+            };
+        }
+        case STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT: {
+            return {
+                ...state,
+                stockReportInProcess: true
             };
         }
         case STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT_RESPONSE:

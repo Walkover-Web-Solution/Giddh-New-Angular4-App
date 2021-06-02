@@ -31,10 +31,10 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
         private authService: AuthenticationService
     ) {
         this.connectionService.monitor().pipe(takeUntil(this.destroyed$)).subscribe(isConnected => {
-            if(!isConnected) {
+            if (!isConnected) {
                 this.isConnected = false;
             } else {
-                if(!this.isConnected) {
+                if (!this.isConnected) {
                     this.isConnected = true;
                     this.refreshPage();
                 }
@@ -48,10 +48,12 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        if(this.generalService.user) {
-            this.authService.ClearSession().subscribe(response => {
-                this.store.dispatch(this._loginAction.socialLogoutAttempt());
-                this.processLogin();
+        if (this.route.snapshot.queryParams['signup'] && this.generalService.user) {
+            this.authService.ClearSession().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response.status === 'success') {
+                    this.store.dispatch(this._loginAction.socialLogoutAttempt());
+                    this.processLogin();
+                }
             });
         } else {
             this.store.dispatch(this._loginAction.socialLogoutAttempt());
@@ -73,9 +75,9 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
 
         if (this.route.snapshot.queryParams['request']) {
             const sessionId = decodeURIComponent(this.route.snapshot.queryParams['request']);
-            this.authenticationService.getUserDetails(sessionId).subscribe((data) => {
+            this.authenticationService.getUserDetails(sessionId).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
                 this.request = data;
-                if(data.status === "success" && data.body && data.body.session && data.body.session.id) {
+                if (data.status === "success" && data.body && data.body.session && data.body.session.id) {
                     this.generalService.setCookie("giddh_session_id", data.body.session.id, 30);
                 }
                 this.verifyUser();
@@ -109,12 +111,12 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
     public refreshPage(): void {
         if (this.route.snapshot.queryParams['token']) {
             this.token = this.route.snapshot.queryParams['token'];
-            window.location.href = "/token-verify?token="+this.token;
+            window.location.href = "/token-verify?token=" + this.token;
         }
 
         if (this.route.snapshot.queryParams['request']) {
             const sessionId = decodeURIComponent(this.route.snapshot.queryParams['request']);
-            window.location.href = "/token-verify?request="+sessionId;
+            window.location.href = "/token-verify?request=" + sessionId;
         }
     }
 }

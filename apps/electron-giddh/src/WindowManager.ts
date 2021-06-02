@@ -1,8 +1,8 @@
-import {app, BrowserWindow as BrowserWindowElectron, ipcMain} from 'electron';
+import { app, BrowserWindow as BrowserWindowElectron, ipcMain } from 'electron';
 import AppUpdaterV1 from './AppUpdater';
-import {autoUpdater} from 'electron-updater';
-import {WebContentsSignal, WindowEvent} from './electronEventSignals';
-import {DEFAULT_URL, StateManager, WindowItem} from './StateManager';
+import { autoUpdater } from 'electron-updater';
+import { WebContentsSignal, WindowEvent } from './electronEventSignals';
+import { DEFAULT_URL, StateManager, WindowItem } from './StateManager';
 import BrowserWindow = Electron.BrowserWindow;
 import BrowserWindowConstructorOptions = Electron.BrowserWindowConstructorOptions;
 
@@ -97,10 +97,12 @@ export default class WindowManager {
             if (isMaximized) {
                 window.maximize();
             }
-            window.loadURL(descriptor.url);
-            window.show();
-            this.registerWindowEventHandlers(window, descriptor);
-            this.windows.push(window);
+            setTimeout(() => {
+                window.loadURL(descriptor.url);
+                window.show();
+                this.registerWindowEventHandlers(window, descriptor);
+                this.windows.push(window);
+            }, 2 * 1000);
         }
 
         // tslint:disable-next-line:no-unused-expression

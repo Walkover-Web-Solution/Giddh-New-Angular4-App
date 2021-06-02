@@ -1,12 +1,12 @@
 {
-    "no_data_found" : "Sorry, No Data Found!",
-    "account" : "Account",
-    "total_cost_of_goods_sold" : "Total Cost of Goods Sold",
-    "gross_profit" : "Gross Profit",
-    "total_revenue" : "Total Revenue",
-    "total_operating_expenses" : "Total Operating Expenses",
-    "operating_profit_loss" : "Operating Profit/Loss (EBIT)",
-    "total_other_expense" : "Total Other Expenses",
-    "income_before_taxes" : "Income Before Taxes (EBT)",
-    "taxes_30" : "Taxes (30%)"
+    "no_data_found": "क्षमा करें, कोई डेटा नहीं मिला!",
+    "account": "खाता",
+    "total_cost_of_goods_sold": "माल बेचने की कुल लागत",
+    "gross_profit": "कुल लाभ",
+    "total_revenue": "कुल आगम",
+    "total_operating_expenses": "कुल संचालन व्यय",
+    "operating_profit_loss": "ऑपरेटिंग प्रॉफिट / लॉस (EBIT)",
+    "total_other_expense": "कुल अन्य व्यय",
+    "income_before_taxes": "कर से पहले आय (EBT)",
+    "taxes_30": "कर (30%)"
 }

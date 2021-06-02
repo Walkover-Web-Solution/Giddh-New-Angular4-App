@@ -10,10 +10,11 @@ import * as moment from 'moment';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import {BsDatepickerDirective} from 'ngx-bootstrap/datepicker';
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { OrganizationType } from '../../models/user-login-state';
 
 @Component({
     selector: 'app-recurring',
@@ -57,8 +58,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
         backdrop: 'static',
         ignoreBackdropClick: true
     };
-    @ViewChild('customerSearch', {static: true}) public customerSearch: ElementRef;
-    @ViewChild(BsDatepickerDirective, {static: true}) public bsd: BsDatepickerDirective;
+    @ViewChild('customerSearch', { static: true }) public customerSearch: ElementRef;
+    @ViewChild(BsDatepickerDirective, { static: true }) public bsd: BsDatepickerDirective;
 
     public showInvoiceNumberSearch = false;
     public showCustomerNameSearch = false;
@@ -72,12 +73,21 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public showResetFilterButton: boolean = false;
     /** This will hold checked invoices */
     public selectedInvoices: any[] = [];
-
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Current branches */
+    public branches: Array<any>;
+    /** True if api call to get recurring invoices in progress */
+    public isLoading: boolean = true;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>,
         private generalService: GeneralService,
-        private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver , private modalService: BsModalService) {
+        private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver, private modalService: BsModalService) {
         this.recurringData$ = this.store.pipe(takeUntil(this.destroyed$), select(s => s.invoice.recurringInvoiceData.recurringInvoices));
         this.recurringData$.subscribe(p => {
             if (p && p.recurringVoucherDetails) {
@@ -88,6 +98,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
                 });
 
                 this.recurringVoucherDetails = items;
+                this.isLoading = false;
             }
         });
     }
@@ -97,19 +108,13 @@ export class RecurringComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.invoiceTypeOptions = [
-            { label: 'Active', value: 'active' },
-            { label: 'InActive', value: 'inactive' },
-        ];
-
-        this.intervalOptions = [
-            { label: 'Weekly', value: 'weekly' },
-            { label: 'Monthly', value: 'monthly' },
-            { label: 'Quarterly', value: 'quarterly' },
-            { label: 'Halfyearly', value: 'halfyearly' },
-            { label: 'Yearly', value: 'yearly' }
-        ];
         this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices());
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.branches = response || [];
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+            }
+        });
 
         this.invoiceNumberInput.valueChanges.pipe(
             debounceTime(700),
@@ -148,14 +153,14 @@ export class RecurringComponent implements OnInit, OnDestroy {
     }
 
     public pageChanged({ page }) {
-        //removed for resolution of G0-438 by shehbaz
-        //this.cdr.detach();
+        this.isLoading = true;
         this.currentPage = page;
         this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices(undefined, page));
     }
 
     public toggleRecurringAsidePane(toggle?: string): void {
         if (toggle) {
+            this.isLoading = true;
             this.asideMenuStateForRecurringEntry = toggle;
             this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices());
         } else {
@@ -260,7 +265,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
     }
 
     public itemStateChanged(uniqueName: string) {
-        let index = this.selectedItems.findIndex(f => f === uniqueName);
+        let index = (this.selectedItems) ? this.selectedItems.findIndex(f => f === uniqueName) : -1;
 
         if (index > -1) {
             this.selectedItems = this.selectedItems.filter(f => f !== uniqueName);
@@ -293,8 +298,10 @@ export class RecurringComponent implements OnInit, OnDestroy {
             filter.lastInvoiceDate = moment(filter.lastInvoiceDate).format(GIDDH_DATE_FORMAT);
         }
         if (Object.keys(filter).some(p => filter[p])) {
+            this.isLoading = true;
             this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices(filter));
         } else {
+            this.isLoading = true;
             this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices());
         }
     }
@@ -302,5 +309,41 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof RecurringComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.invoiceTypeOptions = [
+                { label: this.localeData?.active, value: 'active' },
+                { label: this.localeData?.inactive, value: 'inactive' },
+            ];
+
+            this.intervalOptions = [
+                { label: this.localeData?.interval_options?.weekly, value: 'weekly' },
+                { label: this.localeData?.interval_options?.monthly, value: 'monthly' },
+                { label: this.localeData?.interval_options?.quarterly, value: 'quarterly' },
+                { label: this.localeData?.interval_options?.halfyearly, value: 'halfyearly' },
+                { label: this.localeData?.interval_options?.yearly, value: 'yearly' }
+            ];
+        }
+    }
+
+    /**
+     * Returns the search field text
+     *
+     * @param {*} title
+     * @returns {string}
+     * @memberof RecurringComponent
+     */
+    public getSearchFieldText(title: any): string {
+        let searchField = this.localeData?.search_field;
+        searchField = searchField?.replace("[FIELD]", title);
+        return searchField;
     }
 }

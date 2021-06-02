@@ -1,4 +1,4 @@
-import { filter } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { BaseResponse } from './../models/api-models/BaseResponse';
 import { IMagicLinkLedgerRequest, IMagicLinkLedgerResponse } from './../models/api-models/MagicLink';
@@ -14,6 +14,8 @@ import { DOCUMENT } from '@angular/common';
 import { WindowRef } from 'apps/web-giddh/src/app/shared/helpers/window.object';
 import { underStandingTextData } from 'apps/web-giddh/src/app/ledger/underStandingTextData';
 import { CompanyService } from 'apps/web-giddh/src/app/services/companyService.service';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { EMAIL_VALIDATION_REGEX } from '../app.constant';
 
 @Component({
     selector: 'magic',
@@ -88,7 +90,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.route.queryParams.pipe(
-            filter(params => params.id))
+            filter(params => params.id), takeUntil(this.destroyed$))
             .subscribe(params => {
                 if (params && params.id) {
                     this.id = params.id;
@@ -97,7 +99,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
                             id: params.id
                         }
                     };
-                    this._magicLinkService.GetMagicLinkData(DataToSend).subscribe((response: BaseResponse<IMagicLinkLedgerResponse, IMagicLinkLedgerRequest>) => {
+                    this._magicLinkService.GetMagicLinkData(DataToSend).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<IMagicLinkLedgerResponse, IMagicLinkLedgerRequest>) => {
                         if (response.status === 'success') {
                             this.ledgerData = _.cloneDeep(response.body);
                             this.ledgerData.ledgerTransactions.ledgers = this.filterLedgers(response.body.ledgerTransactions.ledgers);
@@ -128,12 +130,12 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
         });
     }
 
-	/**
-	 * onDateRangeSelected
-	 */
+    /**
+     * onDateRangeSelected
+     */
     public onDateRangeSelected(value) {
-        this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
-        this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+        this.fromDate = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        this.toDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         let DataToSend = {
             data: {
                 id: this.id,
@@ -141,7 +143,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
                 to: this.toDate
             }
         };
-        this._magicLinkService.GetMagicLinkData(DataToSend).subscribe((response: BaseResponse<IMagicLinkLedgerResponse, IMagicLinkLedgerRequest>) => {
+        this._magicLinkService.GetMagicLinkData(DataToSend).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<IMagicLinkLedgerResponse, IMagicLinkLedgerRequest>) => {
             if (response.status === 'success') {
                 this.ledgerData = _.cloneDeep(response.body);
                 this.ledgerData.ledgerTransactions.ledgers = this.filterLedgers(response.body.ledgerTransactions.ledgers);
@@ -164,7 +166,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
     }
 
     public downloadInvoice(invoiceNumber) {
-        this._magicLinkService.DownloadInvoice(this.id, invoiceNumber).subscribe((response: BaseResponse<any, any>) => {
+        this._magicLinkService.DownloadInvoice(this.id, invoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, any>) => {
             if (response.status === 'success') {
                 let blobData;
                 blobData = this.base64ToBlob(response.body, 'application/pdf', 512);
@@ -194,9 +196,9 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
         return new Blob(byteArrays, { type: contentType });
     }
 
-	/**
-	 * downloadPurchaseInvoice
-	 */
+    /**
+     * downloadPurchaseInvoice
+     */
     public downloadPurchaseInvoice(invoiceNumber) {
         this._toaster.errorToast('Invoice for ' + invoiceNumber + ' cannot be downloaded now.');
     }
@@ -213,9 +215,9 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
         }
     }
 
-	/**
-	 * calReckoningTotal
-	 */
+    /**
+     * calReckoningTotal
+     */
     public calReckoningTotal() {
         this.reckoningDebitTotal = this.ledgerData.ledgerTransactions.debitTotal;
         this.reckoningCreditTotal = this.ledgerData.ledgerTransactions.creditTotal;
@@ -235,8 +237,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
     }
 
     public validateEmail(emailStr) {
-        let pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return pattern.test(emailStr);
+        return EMAIL_VALIDATION_REGEX.test(emailStr);
     }
 
     public submitForm(formObj) {

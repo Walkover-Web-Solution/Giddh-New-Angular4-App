@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
 
 @Component({
     selector: 'reports-dashboard',
     templateUrl: './reports.dashboard.component.html',
     styleUrls: ['./reports.dashboard.component.scss']
 })
-export class ReportsDashboardComponent implements OnInit {
+
+export class ReportsDashboardComponent {
+
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor() { }
-
-    ngOnInit() {
-
-    }
 }

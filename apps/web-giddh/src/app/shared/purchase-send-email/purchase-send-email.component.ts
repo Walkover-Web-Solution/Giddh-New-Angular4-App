@@ -1,7 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
 import { PurchaseRecordService } from '../../services/purchase-record.service';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'purchase-send-email-modal',
@@ -9,7 +11,7 @@ import { PurchaseRecordService } from '../../services/purchase-record.service';
     styleUrls: ['./purchase-send-email.component.scss']
 })
 
-export class PurchaseSendEmailModalComponent implements OnInit {
+export class PurchaseSendEmailModalComponent implements OnInit, OnDestroy {
     /* Taking input module name for send email */
     @Input() public module: string;
     /* Taking input all the params */
@@ -19,6 +21,10 @@ export class PurchaseSendEmailModalComponent implements OnInit {
 
     /* This will hold email id of receiver */
     public emailId: any = '';
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public purchaseRecordService: PurchaseRecordService) {
 
@@ -44,8 +50,8 @@ export class PurchaseSendEmailModalComponent implements OnInit {
         let getRequest = { companyUniqueName: this.sendEmailRequest.companyUniqueName, accountUniqueName: this.sendEmailRequest.accountUniqueName, uniqueName: this.sendEmailRequest.uniqueName };
         let postRequest = { emailId: [this.emailId] };
 
-        if(this.module === "purchase-order") {
-            this.purchaseOrderService.sendEmail(getRequest, postRequest).subscribe((res) => {
+        if (this.module === "purchase-order") {
+            this.purchaseOrderService.sendEmail(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
                         this.toaster.successToast(res.body);
@@ -55,8 +61,8 @@ export class PurchaseSendEmailModalComponent implements OnInit {
                     }
                 }
             });
-        } else if(this.module === "purchase-bill") {
-            this.purchaseRecordService.sendEmail(getRequest, postRequest).subscribe((res) => {
+        } else if (this.module === "purchase-bill") {
+            this.purchaseRecordService.sendEmail(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
                         this.toaster.successToast(res.body);
@@ -76,5 +82,15 @@ export class PurchaseSendEmailModalComponent implements OnInit {
      */
     public hideModal(): void {
         this.closeModelEvent.emit(true);
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof PurchaseSendEmailModalComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

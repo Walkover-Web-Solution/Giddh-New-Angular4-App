@@ -1,0 +1,62 @@
+@import "../../../../../../assets/css/color.scss";
+
+.template-editor h3 i {
+    margin-right: 9px;
+    font-size: 22px;
+}
+.upload-button {
+    background: $white;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px $nobel;
+    cursor: pointer;
+}
+
+.logo-preview {
+    float: left;
+}
+
+.logo-preview img,
+.swatch-preview {
+    width: 100px;
+    height: 100px;
+    float: left;
+    background: $white;
+    object-fit: contain;
+}
+label.upload-button {
+    display: block;
+    padding: 15px 10px;
+    margin-top: 7px;
+}
+.upload-button input[type="file"] {
+    display: none;
+}
+.mb-4px {
+    margin-bottom: 4px;
+}
+.thanks-input-group {
+    display: flex;
+}
+.thanks-input-inline {
+    margin: -6px 0px 7px 7px !important;
+}
+.collapse-icons {
+    font-size: 12px !important;
+    border: 1px solid $black;
+    border-radius: 4px;
+    padding: 2px;
+    top: 0 !important;
+}
+.start-upload-btn {
+    position: relative;
+}
+
+@media (min-width: 1024px) and (max-width: 1266px) {
+    .start-upload-btn {
+        position: relative;
+        top: 115px;
+        left: -100px;
+    }
+}

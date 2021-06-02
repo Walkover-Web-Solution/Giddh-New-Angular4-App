@@ -1,10 +1,10 @@
-import {Component, Input, OnInit, ViewChild, OnDestroy} from '@angular/core';
-import {PurchaseReportsModel} from "../../../models/api-models/Reports";
-import {Store, select} from "@ngrx/store";
-import {AppState} from "../../../store";
-import {GroupWithAccountsAction} from "../../../actions/groupwithaccounts.actions";
+import { Component, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { PurchaseReportsModel } from "../../../models/api-models/Reports";
+import { Store, select } from "@ngrx/store";
+import { AppState } from "../../../store";
+import { GroupWithAccountsAction } from "../../../actions/groupwithaccounts.actions";
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
@@ -19,7 +19,10 @@ export class PurchaseRegisterTableComponent implements OnInit, OnDestroy {
     @Input() public reportRespone: PurchaseReportsModel[];
     @Input() public activeFinacialYr: any;
     @Input() purchaseRegisterTotal: any;
-    @ViewChild('mailModal', {static: true}) public mailModal: ModalDirective;
+    /** Stores the current branch unique name used for filtering */
+    @Input() public currentBranchUniqueName: string;
+
+    @ViewChild('mailModal', { static: true }) public mailModal: ModalDirective;
     public messageBody = {
         header: {
             email: 'Send Email',
@@ -45,6 +48,10 @@ export class PurchaseRegisterTableComponent implements OnInit, OnDestroy {
 
     /** Subject to unsubscribe from subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private _groupWithAccountsAction: GroupWithAccountsAction, private _router: Router) {
 
@@ -156,7 +163,8 @@ export class PurchaseRegisterTableComponent implements OnInit, OnDestroy {
             this._router.navigate(['pages', 'reports', 'purchase-detailed-expand'], {
                 queryParams: {
                     from: from,
-                    to: to
+                    to: to,
+                    branchUniqueName: this.currentBranchUniqueName
                 }
             });
         }

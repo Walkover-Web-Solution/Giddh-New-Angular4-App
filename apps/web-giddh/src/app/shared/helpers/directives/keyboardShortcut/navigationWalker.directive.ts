@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
 
 const keyMaps = {
     left: 37,
@@ -14,7 +14,7 @@ const keyMaps = {
     selector: '[navigationWalker]',
     exportAs: 'navigationWalker'
 })
-export class NavigationWalkerDirective implements OnInit {
+export class NavigationWalkerDirective implements OnInit, OnDestroy {
 
     @Input() public navigationWalker: { horizontal: string, vertical: string, ignore: string };
     @Input() public enabled: boolean = true;
@@ -45,14 +45,14 @@ export class NavigationWalkerDirective implements OnInit {
 
     public ngOnInit(): void {
         // create horizontal and vertical walkers and set current nodes
-        this.add(this._el.nativeElement);
+        this.add(this._el?.nativeElement);
     }
 
     @HostListener('window:keydown', ['$event, ElementRef'])
     public handleKeyDown(event: KeyboardEvent) {
         if (!this.enabled
             || event.shiftKey || event.ctrlKey || event.altKey
-            || !this._el.nativeElement.contains(event.target)) {
+            || !this._el?.nativeElement.contains(event.target)) {
             return;
         }
 
@@ -198,7 +198,7 @@ export class NavigationWalkerDirective implements OnInit {
 
     private createTreeWalker(attr: string, ignore?: string, el?): TreeWalker {
         return document.createTreeWalker(
-            el || this._el.nativeElement,
+            el || this._el?.nativeElement,
             NodeFilter.SHOW_ELEMENT,
             {
                 acceptNode: (node: any) => {
@@ -240,8 +240,19 @@ export class NavigationWalkerDirective implements OnInit {
         while (this.result.length > 1) {
             this.result.pop();
         }
-        (this.horizontalTreeWalker[this.horizontalIndex]).currentNode = this._el.nativeElement;
-        (this.verticalTreeWalker[this.verticalIndex]).currentNode = this._el.nativeElement;
+        (this.horizontalTreeWalker[this.horizontalIndex]).currentNode = this._el?.nativeElement;
+        (this.verticalTreeWalker[this.verticalIndex]).currentNode = this._el?.nativeElement;
         this.onReset.emit();
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof NavigationWalkerDirective
+     */
+    public ngOnDestroy(): void {
+        if (this.listener) {
+            this.listener();
+        }
     }
 }

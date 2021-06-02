@@ -114,6 +114,7 @@ export class GstDetailsClass {
     * */
     public stateCode?: string;
     public stateName?: string;
+    public pincode?: string;
 
     constructor() {
         this.address = [];
@@ -177,6 +178,7 @@ export class AccountDetailsClass {
                     : attrs.addresses[0].stateCode;
                 this.billingDetails.state.name = attrs.addresses[0].stateName;
                 this.billingDetails.gstNumber = attrs.addresses[0].gstNumber;
+                this.billingDetails.pincode = attrs.addresses[0].pincode;
                 this.billingDetails.panNumber = '';
                 // set shipping
                 this.shippingDetails.address = [];
@@ -186,6 +188,7 @@ export class AccountDetailsClass {
                     : attrs.addresses[0].stateCode;
                 this.shippingDetails.state.name = attrs.addresses[0].stateName;
                 this.shippingDetails.gstNumber = attrs.addresses[0].gstNumber;
+                this.shippingDetails.pincode = attrs.addresses[0].pincode;
                 this.shippingDetails.panNumber = '';
             }
         } else {
@@ -225,6 +228,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public date: any;
     public taxableValue: number;
     public total?: number;
+    public convertedTotal?: number;
     public fakeAccForSelect2?: string;
     public isStockTxn?: boolean;
     public stockDetails?: any;
@@ -235,6 +239,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public requiredTax?: boolean;
     public maxQuantity?: number;
     public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
+    public showCodeType: string;
 
     constructor() {
         super();
@@ -243,6 +248,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
         this.isStockTxn = false;
         this.hsnOrSac = 'hsn';
         this.taxableValue = 0;
+        this.showCodeType = "";
     }
 
     // basic check for valid transaction
@@ -503,6 +509,8 @@ export class VoucherDetailsClass {
     public totalDepositAmount?: number;
     public cashInvoice?: string;
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
+    public currencySymbol: string;
+    public currency: Currency;
 
     constructor() {
         this.customerName = null;
@@ -604,6 +612,10 @@ export class SalesAddBulkStockItems {
 }
 
 export class CodeStockMulticurrency {
+    code: string;
+}
+
+export class Currency {
     code: string;
 }
 

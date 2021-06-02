@@ -1,12 +1,12 @@
 {
-    "popup_heading" : "Export Daybook",
-    "type" : "type",
-    "mini" : "Mini",
-    "detailed" : "Detailed",
-    "export_as" : "Export As",
-    "pdf" : "PDF",
-    "excel" : "Excel",
-    "order" : "Order",
-    "ascending" : "Ascending",
-    "descending" : "Descending"
+    "popup_heading": "एक्सपोर्ट डेबुक",
+    "type": "प्रकार",
+    "mini": "छोटा",
+    "detailed": "विस्तृत",
+    "export_as": "निर्यात के रूप में",
+    "pdf": "पीडीएफ",
+    "excel": "एक्सेल",
+    "order": "गण",
+    "ascending": "आरोही",
+    "descending": "अवरोही"
 }

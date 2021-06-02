@@ -1,12 +1,14 @@
+@import "../../../../assets/css/color.scss";
+
 .dropdown-icon {
     line-height: 0px;
     font-size: 20px;
     margin-right: 15px;
-    color: #666666;
+    color: $dark-gray;
     vertical-align: middle;
 }
 .width-200 {
-    width: 200xp;
+    width: 200px;
 }
 .select-year select {
     background: none;
@@ -17,7 +19,7 @@
     padding: 5px 22px 5px 7px !important;
 }
 .exand-icon {
-    background: #e5e5e5;
+    background: $whisper;
     width: 30px;
     height: 30px;
     text-align: center;
@@ -25,9 +27,41 @@
     vertical-align: middle;
     display: inline-block;
     font-size: 17px;
-
     margin-left: 5px;
 }
 .list-head > li {
     vertical-align: middle;
+}
+.report-breadcrum {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 7px 0px 10px 36px !important;
+    border-bottom: 1px solid $gainsboro;
+    .nav-report {
+        li {
+            font-family: "opensans-semibold";
+            font-size: 20px;
+            a {
+                color: $midnight-blue;
+            }
+        }
+    }
+}
+@media (max-width: 767px) {
+    .report-breadcrum {
+        position: static !important;
+        padding-left: 15px !important;
+        .nav-report {
+            li {
+                font-size: 16px;
+            }
+        }
+        .custom-month-select {
+            .btn {
+                font-size: 16px;
+            }
+        }
+    }
 }

@@ -1,4 +1,6 @@
-.upload-fil ul {
+@import "../../../../assets/css/color.scss";
+
+.upload-file ul {
     display: flex;
     list-style-type: none;
     text-align: center;
@@ -6,25 +8,25 @@
     overflow-y: auto;
 }
 
-.upload-fil ul > li {
+.upload-file ul > li {
     padding-right: 15px;
 }
 
-.upload-fil ul li .upload-img {
+.upload-file ul li .upload-img {
     width: 120px;
     height: 120px;
-    background: #cbcbcb;
+    background: $very-light-gray;
     display: flex;
     align-items: center;
     overflow: hidden;
     justify-content: center;
     font-size: 48px;
     cursor: pointer;
-    color: #999999;
+    color: $nobel;
 }
 
-.upload-fil ul li .upload-img > a {
-    color: #999999;
+.upload-file ul li .upload-img > a {
+    color: $nobel;
     display: block;
     width: 100%;
     height: 100%;
@@ -33,7 +35,7 @@
     justify-content: center;
 }
 
-.upload-fil ul li .upload-img img {
+.upload-file ul li .upload-img img {
     max-height: 200px;
 }
 
@@ -55,12 +57,12 @@
     top: 0;
     right: -29px;
     z-index: 99;
-    background: #cbcbcb;
+    background: $very-light-gray;
     width: 30px;
     height: 30px;
     text-align: center;
     line-height: 30px;
-    color: #666666;
+    color: $dark-gray;
     border-radius: 3px;
     cursor: pointer;
 }
@@ -101,18 +103,23 @@ span.close-modal.cp.pull-right {
     opacity: 0;
     visibility: hidden;
 }
-.pettycash {
+.petty-cash {
     /** height: 57vh;
     overflow-y: auto;**/
-    background: #fff;
+    background: $white;
 }
+
+.list-item {
+    border-bottom: 1px solid $gainsboro;
+}
+
 @media only screen and (max-width: 1440px) {
-    .pettycash {
+    .petty-cash {
         height: initial;
     }
 }
 @media only screen and (max-width: 991px) {
-    .pettycash {
+    .petty-cash {
         height: initial;
     }
 }

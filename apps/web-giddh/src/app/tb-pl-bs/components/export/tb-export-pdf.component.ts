@@ -3,7 +3,7 @@ import { ReplaySubject } from 'rxjs';
 import * as jsPDF from 'jspdf';
 import { DataFormatter, IFormatable } from './data-formatter.class';
 import { AppState } from '../../../store/roots';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { RecTypePipe } from '../../../shared/helpers/pipes/recType/recType.pipe';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { ChildGroup } from '../../../models/api-models/Search';
@@ -11,6 +11,7 @@ import { Total } from './tb-export-csv.component';
 import 'jspdf-autotable';
 import { JsPDFAutoTable } from '../../../../customTypes/jsPDF/index';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
+import { takeUntil } from 'rxjs/operators';
 
 interface GroupViewModel {
     credit: number;
@@ -27,7 +28,7 @@ class FormatPdf implements IFormatable {
     private colX: number;
     private colY: number = 20;
 
-    constructor(private request: TrialBalanceRequest) {
+    constructor(private request: TrialBalanceRequest, private localeData) {
         this.colX = 10;
         // this.colY = 50;
     }
@@ -41,7 +42,7 @@ class FormatPdf implements IFormatable {
                 .forEach(p => this.pdf.text(10, this.colY += 5, p));
         }
 
-        this.pdf.text(10, this.colY += 5, selectedCompany.city + '-' + selectedCompany.pincode);
+        this.pdf.text(10, this.colY += 5, (selectedCompany.city || '') + (selectedCompany.pincode ? ('-' + selectedCompany.pincode) : ''));
         this.pdf.text(10, this.colY += 5, `Trial Balance: ${this.request.from} to ${this.request.to}`);
         this.pdf.line(10, this.colY += 5, 200, this.colY);
 
@@ -83,27 +84,11 @@ class FormatPdf implements IFormatable {
 }
 
 @Component({
-    selector: 'tb-export-pdf',  // <home></home>
-    template: `
-      <div class="btn-group" dropdown>
-        <a dropdownToggle class="cp"><img src="{{ imgPath }}"/></a>
-        <ul id="dropdown-pdf" *dropdownMenu class="dropdown-menu dropdown-menu-right tbpl-dropdown" role="menu" aria-labelledby="button-basic">
-            <span class="caret"></span>
-            <li><a (click)="downloadPdf('group-wise')" class="cp">Group Wise
-              Report</a>
-            </li>
-            <li><a (click)="downloadPdf('condensed')" class="cp">Condensed
-              Report</a>
-            </li>
-            <li><a (click)="downloadPdf('account-wise')" class="cp">Account Wise
-              Report</a>
-            </li>
-        </ul>
-      </div>
-    <!-- end form-group -->
-  `,
+    selector: 'tb-export-pdf',
+    templateUrl: './tb-export-pdf.component.html',
     providers: [RecTypePipe]
 })
+
 export class TbExportPdfComponent implements OnInit, OnDestroy {
     @Input() public trialBalanceRequest: TrialBalanceRequest;
     @Input() public selectedCompany: CompanyResponse;
@@ -111,14 +96,27 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     public enableDownload: boolean = true;
     public showPdf: boolean;
     public imgPath: string = '';
+    /** Giddh decimal places set by user */
+    public giddhDecimalPlaces = 2;
     private exportData: ChildGroup[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private dataFormatter: DataFormatter;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private recType: RecTypePipe) {
-        this.store.select(p => p.tlPl.tb.exportData).subscribe(p => {
+        this.store.pipe(select(p => p.tlPl.tb.exportData), takeUntil(this.destroyed$)).subscribe(p => {
             this.exportData = p;
             this.dataFormatter = new DataFormatter(p, this.selectedCompany, recType);
+        });
+        this.store.pipe(select(store => store.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.balanceDecimalPlaces) {
+                this.giddhDecimalPlaces = response.balanceDecimalPlaces;
+            } else {
+                this.giddhDecimalPlaces = 2;
+            }
         });
     }
 
@@ -138,11 +136,12 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath =  (isElectron|| isCordova)  ? 'assets/images/pdf-icon.png' : AppUrl + APP_FOLDER + 'assets/images/pdf-icon.png';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/pdf-icon.png' : AppUrl + APP_FOLDER + 'assets/images/pdf-icon.png';
     }
 
     public ngOnDestroy() {
-        //
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     private downloadPdfGroupWise() {
@@ -150,23 +149,23 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
         let pdf = new jsPDF('p', 'pt') as JsPDFAutoTable;
         let columns = [
             {
-                title: 'Particular',
+                title: 'Particular', //this.localeData?.pdf.trial_balance.particular,
                 dataKey: 'name'
             },
             {
-                title: 'Opening Balance',
+                title: 'Opening Balance', //this.localeData?.pdf.trial_balance.opening_balance,
                 dataKey: 'openingBalance'
             },
             {
-                title: 'Debit',
+                title: 'Debit', //this.localeData?.pdf.trial_balance.debit,
                 dataKey: 'debit'
             },
             {
-                title: 'Credit',
+                title: 'Credit', //this.localeData?.pdf.trial_balance.credit,
                 dataKey: 'credit'
             },
             {
-                title: 'Closing Balance',
+                title: 'Closing Balance', //this.localeData?.pdf.trial_balance.closing_balance,
                 dataKey: 'closingBalance'
             }
         ];
@@ -178,7 +177,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
         };
         let rows: GroupViewModel[] = this.exportData
             .map(p => {
-                total = this.dataFormatter.calculateTotal(p, total);
+                total = this.dataFormatter.calculateTotal(p, total, this.giddhDecimalPlaces);
                 return {
                     closingBalance: `${p.closingBalance.amount} ${this.recType.transform(p.closingBalance)}`,
                     openingBalance: `${p.forwardedBalance.amount} ${this.recType.transform(p.forwardedBalance)}`,
@@ -208,8 +207,9 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
                     this.selectedCompany.address.split('\n')
                         .forEach(p => pdf.text(40, colY += 15, p));
                 }
-                pdf.text(40, colY += 15, this.selectedCompany.city + '-' + this.selectedCompany.pincode);
+                pdf.text(40, colY += 15, (this.selectedCompany.city || '') + (this.selectedCompany.pincode ? ('-' + this.selectedCompany.pincode) : ''));
                 pdf.text(40, colY += 15, `Trial Balance: ${this.trialBalanceRequest.from} to ${this.trialBalanceRequest.to}`);
+
             }
         });
         let footerX = 40;
@@ -219,22 +219,21 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
         pdf.line(40, lastY, pageWidth, lastY);
         pdf.text(footerX, lastY + 20, 'Total');
         pdf.text(footerX + 210, lastY + 20, total.ob.toString());
-        pdf.text(footerX + 302, lastY + 20, total.dr.toString());
-        pdf.text(footerX + 365, lastY + 20, total.cr.toFixed(2));
-        pdf.text(footerX + 430, lastY + 20, total.cb.toFixed(2));
+        pdf.text(footerX + 280, lastY + 20, total.dr.toString());
+        pdf.text(footerX + 360, lastY + 20, total.cr.toFixed(2));
+        pdf.text(footerX + 450, lastY + 20, total.cb.toFixed(2));
         // Save the PDF
         pdf.save('PdfGroupWise.pdf');
     }
 
     private downloadPdfCondensed() {
-        //
-        let formatPdf = new FormatPdf(this.trialBalanceRequest);
+        let formatPdf = new FormatPdf(this.trialBalanceRequest, this.localeData);
         this.dataFormatter.formatDataCondensed(formatPdf);
         formatPdf.save('PdfCondensed.pdf');
     }
 
     private downloadPdfAccountWise(): void {
-        let formatPdf = new FormatPdf(this.trialBalanceRequest);
+        let formatPdf = new FormatPdf(this.trialBalanceRequest, this.localeData);
         this.dataFormatter.formatDataAccountWise(formatPdf);
         formatPdf.save('PdfAccountWise.pdf');
     }

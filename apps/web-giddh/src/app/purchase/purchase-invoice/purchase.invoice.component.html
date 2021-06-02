@@ -1,7 +1,7 @@
 <section id="purchaseInvoice" class="container-fluid mr-t2">
-    <form class="">
-        <div class="">
-            <div class="form-group max250 pull-left mrR1">
+    <form>
+        <div>
+            <div class="form-group max-width-250 pull-left mr-r1">
                 <label>GSTR Form</label>
                 <div class="btn-group btn-block" dropdown>
                     <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left">
@@ -11,14 +11,14 @@
                             <i class="fa fa-caret-down"></i>
                         </span>
                     </button>
-                    <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+                    <ul *dropdownMenu class="dropdown-menu page-list-dd" role="menu">
                         <li (click)="onSelectGstrOption(item);" class="cp dd-options" *ngFor="let item of gstrOptions">
                             {{item.name}}
                         </li>
                     </ul>
                 </div>
             </div>
-            <div class="form-group max250 pull-left mrR1" [hidden]="!selectedGstrType.name">
+            <div class="form-group max-width-250 pull-left mr-r1" [hidden]="!selectedGstrType.name">
                 <ng-container *ngIf="!showSingleDatePicker">
                     <label class="d-block">From - to</label>
                     <div class="btn-group  dropdown" dropdown [autoClose]="false" container="body"
@@ -86,7 +86,7 @@
                                 </button>
                             </span>
                         </div>
-                        <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
+                        <div *ngIf="showGSTR1DatePicker" class="position-absolute calendar-dropdown-menu">
                             <ul class="my-dropdown-menu calendar-dropdown">
                                 <li>
                                     <datepicker [datepickerMode]="'month'" name="fromDate"
@@ -96,9 +96,9 @@
                                     <!-- [(ngModel)]="selectedDateForGSTR1" -->
                                     <!-- <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)" [showWeeks]="false" [minMode]="'month'"></datepicker> -->
                                 </li>
-                                <li class="pd-1 clearfix pdT pdB">
+                                <li class="pd-1 clearfix pd-t05 pd-b05">
                                     <span class="btn-group pull-left">
-                                        <button type="button" class="btn btn-xs btn-primary mrR"
+                                        <button type="button" class="btn btn-xs btn-primary mr-r05"
                                             (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
                                         <button type="button" class="btn btn-xs btn-success"
                                             (click)="showGSTR1DatePicker = false">Done</button>
@@ -123,9 +123,9 @@
                             <li>
                                 <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="selectedDateForGSTR1" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)" [showWeeks]="false" [minMode]="'month'"></datepicker>
                             </li>
-                            <li class="pd-1 clearfix pdT pdB">
+                            <li class="pd-1 clearfix pd-t05 pd-b05">
                                 <span class="btn-group pull-left">
-                                    <button type="button" class="btn btn-xs btn-primary mrR" (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
+                                    <button type="button" class="btn btn-xs btn-primary mr-r05" (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
                                     <button type="button" class="btn btn-xs btn-success" click)="showGSTR1DatePicker = false">Done</button>
                                 </span>
                                 <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button>
@@ -134,7 +134,7 @@
                     </div> -->
                 </div>
             </div>
-            <div class="form-group max250 pull-left mrR1" *ngIf="selectedGstrType.name === 'GSTR3B'">
+            <div class="form-group max-width-250 pull-left mr-r1" *ngIf="selectedGstrType.name === 'GSTR3B'">
                 <label>Email <i class='fa fa-info-circle' tooltip-placement="top"
                         tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
                 <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control" required
@@ -144,9 +144,9 @@
     <div class="form-group col-xs-2" [hidden]="!selectedGstrType || selectedGstrType=='GSTR1'">
         <label>Report</label>
         <div class="btn-group btn-block" dropdown>
-            <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle">-- Select Report --<span class="select_drop pull-right mr-t1"><i class="fa fa-caret-down"></i></span>
+            <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle">-- Select Report --<span class="select-drop pull-right mr-t1"><i class="fa fa-caret-down"></i></span>
  </button>
-            <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+            <ul *dropdownMenu class="dropdown-menu page-list-dd" role="menu">
                 <li class="cp" *ngFor="let item of purchaseReportOptions">
                     {{item.name}}
                 </li>
@@ -161,18 +161,18 @@
 
     </div>
 -->
-            <div class="form-group max250 pull-left" *ngIf="selectedGstrType.name">
+            <div class="form-group max-width-250 pull-left" *ngIf="selectedGstrType.name">
                 <label class="d-block">&nbsp;</label>
                 <div class="">
                     <div [hidden]="isDownloadingFileInProgress" class="btn-group" dropdown
                         [isDisabled]="!selectedGstrType.name">
                         <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left"> File
                             {{ selectedGstrType.name }}
-                            <span class="pull-right mrL4">
+                            <span class="pull-right mr-l4">
                                 <i class="fa fa-caret-down"></i>
                             </span>
                         </button>
-                        <ul *dropdownMenu class="dropdown-menu pd" role="menu" style="width: 200px;">
+                        <ul *dropdownMenu class="dropdown-menu pd width-200" role="menu">
                             <li class="cp dd-options" *ngIf="selectedGstrType.name !== 'GSTR3B'"
                                 (click)="onDownloadSheetGSTR(selectedGstrType.uniqueName);">Download Sheet
                             </li>
@@ -198,18 +198,18 @@
                             <!--<li class="cursor-pointer dd-options" *ngFor="let item of fileGstrOptions" (click)="onDownloadSheetGSTR();">{{item.name}}</li>-->
                         </ul>
                     </div>
-                    <small [hidden]="!isDownloadingFileInProgress" class="inline primary_clr"> Downloading...</small>
+                    <small [hidden]="!isDownloadingFileInProgress" class="inline primary-color"> Downloading...</small>
                 </div>
             </div>
             <!-- hide due to unused -->
             <div class="form-group pull-right" *ngIf="selectedGstrType.name === 'GSTR1'">
                 <label class="d-block">&nbsp;</label>
-                <button class="btn btn-default pull-right primary_clr"
+                <button class="btn btn-default pull-right primary-color"
                     (click)="toggleSettingAsidePane($event, 'JIO_GST');"><i class="fa fa-cog" aria-hidden="true"></i>
                     Jio GST
                 </button>
-                <span style="margin: 5px 10px;" class="pull-right">OR</span>
-                <button class="btn btn-default pull-right primary_clr"
+                <span class="pull-right span-btn-between">OR</span>
+                <button class="btn btn-default pull-right primary-color"
                     (click)="toggleSettingAsidePane($event, 'TAXPRO');"><i class="fa fa-cog" aria-hidden="true"></i> Tax
                     Pro
                 </button>
@@ -247,9 +247,9 @@
                             <div class="btn-group btn-block" dropdown>
                                 <button dropdownToggle type="button" data-toggle="dropdown"
                                     class="form-control text-left btn-block dropdown-toggle"> Filter <span
-                                        class="select_drop pull-right mr-t1"> <i class="fa fa-caret-down"></i> </span>
+                                        class="select-drop pull-right mr-t1"> <i class="fa fa-caret-down"></i> </span>
                                 </button>
-                                <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+                                <ul *dropdownMenu class="dropdown-menu page-list-dd" role="menu">
                                     <li *ngFor="let item of otherFilters">
                                         <label>
                                             <input type="checkbox">
@@ -260,7 +260,8 @@
                         </div>
                         <div class="form-group inline" *ngIf="selectedGstrType"> <br />
                             <button type="button" class="btn btn-success">GO</button>
-                            <a class="btn btn-link">Reset</a> </div>
+                            <a class="btn btn-link">Reset</a>
+                        </div>
                         <button (click)="onUpdate()" class="btn btn-generate pull-right"
                             [disabled]="!generateInvoiceArr.length">Generate <br />
                             Purchase Bill</button>
@@ -327,7 +328,7 @@
                     </td>
                     <td>{{invoice.voucherNo}}</td>
                     <td class="select text-center">
-                        <div *ngIf="timeCounter == 10 || selectedRowIndex != i" class="custom-select pos-rel">
+                        <div *ngIf="timeCounter == 10 || selectedRowIndex != i" class="custom-select position-relative">
                             <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp"
                                 (change)="onChangeEntryType(i, invoice.entryType, invoice.account.uniqueName);"
                                 [disabled]="invoice.invoiceGenerated || invoice.taxes[0] || (selectedRowIndex != i && editMode) || (invoice.invoiceNumber && invoice.invoiceNumber.length) || selectedRowIndex == null ">
@@ -339,19 +340,20 @@
                                     *ngIf="!(invoice.account.gstIn?.length >0 || ( invoice.igstAmount!='0' || invoice.cgstAmount!='0')) && !invoice.invoiceNumber">
                                     Reverse Charge</option>
                             </select>
-                            <span class="select_drop"> <i class="fa fa-caret-down"></i> </span> </div>
+                            <span class="select-drop"> <i class="fa fa-caret-down"></i> </span>
+                        </div>
                         <button
                             *ngIf="(timeCounter != 10 && selectedRowIndex == i && invoice.invoiceNumber) || (timeCounter != 10 && selectedRowIndex == i && !invoice.invoiceNumber)"
                             (click)="onUndoEntryTypeChange(i, invoice)" class="btn btn-link">Undo in
                             {{timeCounter}}s</button>
-                        <div class="btn-group btn-block mr-t" dropdown (onShown)="onDDShown()"
+                        <div class="btn-group btn-block mr-t05" dropdown (onShown)="onDDShown()"
                             (onHidden)="onDDHidden(invoice.entryUniqueName, invoice.account.uniqueName)"
                             *ngIf="isReverseChargeSelected && invoice.entryType == 'reverse charge' && !invoice.invoiceGenerated && !invoice.invoiceNumber && selectedRowIndex == i"
                             [autoClose]="false">
                             <button dropdownToggle type="button"
                                 class="form-control text-left btn-block dropdown-toggle"
                                 [disabled]="selectedRowIndex != i"> {{dropdownHeading}} <span
-                                    class="select_drop pull-right mr-t1"> <i class="fa fa-caret-down"></i> </span>
+                                    class="select-drop pull-right mr-t1"> <i class="fa fa-caret-down"></i> </span>
                             </button>
                             <ul id="pageListDD" *dropdownMenu class="dropdown-menu" role="menu">
                                 <!-- <li>
@@ -365,7 +367,8 @@
                                         <input type="checkbox" name="invoiceTax" class="invoiceTax"
                                             (click)="selectTax($event, tax, i)"
                                             [checked]="tax.uniqueName === invoice.taxes[0] || tax.uniqueName === invoice.taxes[1]">
-                                        {{ tax.name}} </label>
+                                        {{ tax.name}}
+                                    </label>
                                 </li>
                             </ul>
                         </div>
@@ -391,7 +394,8 @@
                                 aria-hidden="true" class="icon-edit-pencil"></i> </button>
                         <button class="btn btn-xs" type="button" (click)="updateEntry(invoice)"
                             *ngIf="selectedRowIndex == i && editMode"> <i aria-hidden="true" class="fa fa-check"></i>
-                        </button></td>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
             <tbody *ngIf="allPurchaseInvoices.count === 0">

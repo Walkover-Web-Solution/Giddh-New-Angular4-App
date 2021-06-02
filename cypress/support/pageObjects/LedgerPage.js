@@ -1,40 +1,40 @@
 class LedgerPage {
 
-    clickAccount(){
+    clickAccount() {
         return cy.xpath('//div[@class=\'ng-star-inserted\']//input[@placeholder=\'To Select Accounts\']')
     }
 
-    inputAccount(){
+    inputAccount() {
         return cy.xpath('//input[@placeholder=\'To Select Accounts\']')
     }
 
-    selectSalesAccount(){
+    selectSalesAccount() {
         return cy.get('.hilighted > .list-item > .item')
     }
 
-    selectSalesWithInventory(){
+    selectSalesWithInventory() {
         return cy.get(':nth-child(2) > .list-item > .item')
     }
 
-    enterAmount(){
-        // cy.xpath('//td[@class=\'col-xs-4 col-md-3 col-lg-3 pos-rel\']//input[@class=\'form-control alR ng-untouched ng-valid ng-dirtyl\']').click()
+    enterAmount() {
+        // cy.xpath('//td[@class=\'col-xs-4 col-md-3 col-lg-3 position-relative\']//input[@class=\'form-control text-right ng-untouched ng-valid ng-dirtyl\']').click()
         return cy.xpath('//input[@name=\'totalAmount\']')
     }
 
-    saveButton(){
+    saveButton() {
         return cy.xpath('//span[@class=\'ladda-label\']')
     }
 
-    taxField(){
+    taxField() {
         return cy.xpath("//input[@id='tax-control-input-mask']")
     }
 
-    checkBoxTax(){
+    checkBoxTax() {
         return cy.xpath("//input[@id='tax-checkbox-0']")
     }
 
 
-    selectTax(){
+    selectTax() {
         this.taxField().click();
         this.checkBoxTax().click()
     }

@@ -1,56 +1,56 @@
 @import "../../../../assets/css/color.scss";
-.create-branch-page{
-    .create-branch-under{
+.create-branch-page {
+    .create-branch-under {
         border-bottom: 1px solid $gainsboro;
-        .branch-under-company{
+        .branch-under-company {
             .heading {
                 font-size: 14px;
             }
-            p{
+            p {
                 color: $black;
             }
-            .branch-company-name{
-                .label-wrapper{
+            .branch-company-name {
+                .label-wrapper {
                     display: flex;
                     font-size: 14px;
-                    img{
+                    img {
                         margin-right: 4px;
+                        width: 24px;
                     }
-                    label{
+                    label {
                         color: $dark-gray;
                         min-width: 200px;
                     }
-                    span{
+                    span {
                         color: $dark-gray;
                         display: block;
                     }
                 }
-
             }
         }
-        .branch-image{
+        .branch-image {
             text-align: right;
-            img{
+            img {
                 width: 100%;
             }
-            img.branch-image{
+            img.branch-image {
                 max-width: 140px;
                 height: 100px;
             }
         }
     }
-    .branch-form{
+    .branch-form {
         .branch-form-field {
             font-size: 14px;
             display: flex;
             align-items: center;
             color: $nero;
             margin-bottom: 15px;
-            label{
+            label {
                 min-width: 200px;
             }
             input,
-            .address-dropdown{
+            .address-dropdown {
                 width: 100%;
                 max-width: 350px;
             }
@@ -63,7 +63,7 @@
                         margin-left: 6px;
                         flex: 1;
                         .item {
-                            font-family:'opensans-semibold'
+                            font-family: "opensans-semibold";
                         }
                     }
                     .default-entity {
@@ -78,20 +78,20 @@
                     }
                 }
             }
-            input[type="checkbox"]{
+            input[type="checkbox"] {
                 width: auto;
                 max-width: auto;
                 margin-right: 15px;
             }
-            .sub-location-input{
+            .sub-location-input {
                 max-width: 350px;
                 width: 350px;
-                div{
-                    i{
+                div {
+                    i {
                         padding: 5px;
                         cursor: pointer;
-                        &.icon-plus{
-                            color:$light-sea-green;
+                        &.icon-plus {
+                            color: $light-sea-green;
                         }
                     }
                 }
@@ -99,61 +99,59 @@
         }
     }
 }
-.footer-btn{
+.footer-btn {
     background-color: $whisper-color;
     padding: 15px;
 }
-.address-dropdown sales-sh-select::ng-deep .menu{
+.address-dropdown sales-sh-select::ng-deep .menu {
     max-height: inherit !important;
 }
 
-@media(max-width:1023px){
-    .create-branch-page{
-    .create-branch-under{
-        .branch-image{
-            display: none;
+@media (max-width: 1023px) {
+    .create-branch-page {
+        .create-branch-under {
+            .branch-image {
+                display: none;
+            }
         }
     }
 }
-}
-@media(max-width:767px){
-    .create-branch-page{
-        .create-branch-under{
-            .branch-under-company{
-                p{
-                margin-bottom: 10px;
+@media (max-width: 767px) {
+    .create-branch-page {
+        .create-branch-under {
+            .branch-under-company {
+                p {
+                    margin-bottom: 10px;
                 }
-                .branch-company-name{
-                    .label-wrapper{
+                .branch-company-name {
+                    .label-wrapper {
                         flex-direction: column;
-                        label{
+                        label {
                             min-width: 100%;
                         }
                     }
-
                 }
             }
         }
-        .branch-form{
+        .branch-form {
             .branch-form-field {
-            flex-direction: column;
-            align-items: flex-start;
-                label{
+                flex-direction: column;
+                align-items: flex-start;
+                label {
                     width: 100%;
                     margin-bottom: 8px;
                 }
-                .checkbox-label{
+                .checkbox-label {
                     display: none;
                 }
                 input,
-                sh-select{
+                sh-select {
                     width: 100%;
                     max-width: 100%;
                 }
-                .sub-location-input{
+                .sub-location-input {
                     max-width: 100%;
                     width: 100%;
-
                 }
             }
         }

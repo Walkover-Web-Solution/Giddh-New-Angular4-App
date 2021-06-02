@@ -1,17 +1,14 @@
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
-
-import { distinct, take, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, EventEmitter, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '../../../shared/helpers';
 import { CreateStockRequest, StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import * as  _ from '../../../lodash-optimized';
-import { AccountService } from '../../../services/account.service';
 import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
 import { IUnitRateItem } from '../../../models/interfaces/stocksItem.interface';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
@@ -22,15 +19,17 @@ import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/gr
 import { IForceClear } from '../../../models/api-models/Sales';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { CompanyActions } from '../../../actions/company.actions';
-import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvViewService } from '../../inv.view.service';
 import { INVALID_STOCK_ERROR_MESSAGE } from '../../../app.constant';
+import { SalesService } from '../../../services/sales.service';
+import { InvoiceService } from '../../../services/invoice.service';
 
 @Component({
-    selector: 'inventory-add-stock',  // <home></home>
+    selector: 'inventory-add-stock',
     templateUrl: './inventory.addstock.component.html',
     styleUrls: ['./inventory.addstock.component.scss']
 })
+
 export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     @Input() public addStock: boolean = false;
     @Input() public autoFocusInChild: boolean = false;
@@ -41,8 +40,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public purchaseAccountsDropDown$: Observable<IOption[]>;
     public salesAccountsDropDown$: Observable<IOption[]>;
 
-    @ViewChild('formDiv', {static: true}) public formDiv: ElementRef;
-    @ViewChild('groupDDList', {static: true}) public groupDDList: any;
+    @ViewChild('formDiv', { static: true }) public formDiv: ElementRef;
+    @ViewChild('groupDDList', { static: true }) public groupDDList: any;
     public formDivBoundingRect: Subject<any> = new Subject<any>();
 
     public groupUniqueName: string;
@@ -72,7 +71,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public createGroupSuccess$: Observable<boolean>;
     public showOtherDetails: boolean;
     public addNewStock: boolean = false;
-    public manageInProcess$: Observable<any>;
     public companyTaxesList$: Observable<TaxResponse[]>;
     public isManageInventory$: Observable<boolean>;
     public invoiceSetting$: Observable<any>;
@@ -93,28 +91,39 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     /** To clear sales stock  */
     public forceClearSalesStock$: Observable<IForceClear> = of({ status: false });
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This will handle if we can reset sales/purchase account information */
+    public allowReset: boolean = false;
+    /** This will hold inventory settings */
+    public inventorySettings: any;
 
-    constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-        private _fb: FormBuilder, private inventoryAction: InventoryAction, private _accountService: AccountService,
-        private customStockActions: CustomStockUnitAction, private ref: ChangeDetectorRef, private _toasty: ToasterService, private _inventoryService: InventoryService, private companyActions: CompanyActions, private invoiceActions: InvoiceActions,
+    constructor(
+        private store: Store<AppState>,
+        private sideBarAction: SidebarAction,
+        private _fb: FormBuilder,
+        private inventoryAction: InventoryAction,
+        private salesService: SalesService,
+        private customStockActions: CustomStockUnitAction,
+        private _toasty: ToasterService,
+        private _inventoryService: InventoryService,
+        private companyActions: CompanyActions,
         private invViewService: InvViewService,
-        private cdr: ChangeDetectorRef) {
-        this.fetchingStockUniqueName$ = this.store.select(state => state.inventory.fetchingStockUniqueName).pipe(takeUntil(this.destroyed$));
-        this.isStockNameAvailable$ = this.store.select(state => state.inventory.isStockNameAvailable).pipe(takeUntil(this.destroyed$));
-        this.activeGroup$ = this.store.select(s => s.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
-        this.activeStock$ = this.store.select(s => s.inventory.activeStock).pipe(takeUntil(this.destroyed$));
-        this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
-        this.isStockAddInProcess$ = this.store.select(s => s.inventory.isStockAddInProcess).pipe(takeUntil(this.destroyed$));
-        this.isStockUpdateInProcess$ = this.store.select(s => s.inventory.isStockUpdateInProcess).pipe(takeUntil(this.destroyed$));
-        this.isStockDeleteInProcess$ = this.store.select(s => s.inventory.isStockDeleteInProcess).pipe(takeUntil(this.destroyed$));
-        this.showLoadingForStockEditInProcess$ = this.store.select(s => s.inventory.showLoadingForStockEditInProcess).pipe(takeUntil(this.destroyed$));
-        this.createGroupSuccess$ = this.store.select(s => s.inventory.createGroupSuccess).pipe(takeUntil(this.destroyed$));
-        this.manageInProcess$ = this.store.select(s => s.inventory.inventoryAsideState).pipe(takeUntil(this.destroyed$));
-        this.store.dispatch(this.companyActions.getTax());
-        this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
-        this.invoiceSetting$ = this.store.select(p => p.invoice.settings).pipe(takeUntil(this.destroyed$));
+        private cdr: ChangeDetectorRef,
+        private invoiceService: InvoiceService
+    ) {
+        this.fetchingStockUniqueName$ = this.store.pipe(select(state => state.inventory.fetchingStockUniqueName), takeUntil(this.destroyed$));
+        this.isStockNameAvailable$ = this.store.pipe(select(state => state.inventory.isStockNameAvailable), takeUntil(this.destroyed$));
+        this.activeGroup$ = this.store.pipe(select(s => s.inventory.activeGroup), takeUntil(this.destroyed$));
+        this.activeStock$ = this.store.pipe(select(s => s.inventory.activeStock), takeUntil(this.destroyed$));
+        this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
+        this.isStockAddInProcess$ = this.store.pipe(select(s => s.inventory.isStockAddInProcess), takeUntil(this.destroyed$));
+        this.isStockUpdateInProcess$ = this.store.pipe(select(s => s.inventory.isStockUpdateInProcess), takeUntil(this.destroyed$));
+        this.isStockDeleteInProcess$ = this.store.pipe(select(s => s.inventory.isStockDeleteInProcess), takeUntil(this.destroyed$));
+        this.showLoadingForStockEditInProcess$ = this.store.pipe(select(s => s.inventory.showLoadingForStockEditInProcess), takeUntil(this.destroyed$));
+        this.createGroupSuccess$ = this.store.pipe(select(s => s.inventory.createGroupSuccess), takeUntil(this.destroyed$));
+        this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
+        this.invoiceSetting$ = this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$));
 
-        this.store.select(state => state.inventory.stockUnits).pipe(takeUntil(this.destroyed$)).subscribe(p => {
+        this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.length) {
                 let units = p;
                 let unitArr = units.map(unit => {
@@ -143,7 +152,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.store.dispatch(this.customStockActions.GetStockUnit());
 
         // subscribe getActiveView parameters
-        this.invViewService.getActiveView().subscribe(v => {
+        this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
             this.groupUniqueName = v.groupUniqueName;
             this.groupName = v.stockName;
             this.stockUniqueName = v.stockUniqueName;
@@ -153,7 +162,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             }
         });
 
-        this.stockListDropDown$ = this.store.select(p => {
+        this.stockListDropDown$ = this.store.pipe(select(p => {
             if (p.inventory.stocksList) {
                 if (p.inventory.stocksList.results) {
                     let units = p.inventory.stocksList.results;
@@ -163,12 +172,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     });
                 }
             }
-        }).pipe(takeUntil(this.destroyed$));
-
-        // get all stock units
-        // this.stockUnitsDropDown$ = this.store.select(p => {
-
-        // }).takeUntil(this.destroyed$);
+        }), takeUntil(this.destroyed$));
 
         // add stock form
         this.addStockForm = this._fb.group({
@@ -208,12 +212,15 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             parentGroup: [''],
             hsnNumber: [''],
             sacNumber: ['', Validators.pattern('^$|^[A-Za-z0-9]+')],
-            taxes: [[]]
+            taxes: [[]],
+            showCodeType: ['']
         });
         this.taxTempArray = [];
 
+        this.getInvoiceSettings();
+
         // subscribe isFsStock for disabling manufacturingDetails
-        this.addStockForm.controls['isFsStock'].valueChanges.subscribe((v) => {
+        this.addStockForm.controls['isFsStock'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((v) => {
             const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
             if (v) {
                 manufacturingDetailsContorl.enable();
@@ -223,7 +230,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         // subscribe enablePurchase checkbox for enable/disable unit/rate
-        this.addStockForm.controls['enablePurchase'].valueChanges.subscribe((isEnable) => {
+        this.addStockForm.controls['enablePurchase'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((isEnable) => {
             const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
             if (isEnable) {
                 purchaseUnitRatesControls.enable();
@@ -234,7 +241,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         // subscribe enableSales checkbox for enable/disable unit/rate
-        this.addStockForm.controls['enableSales'].valueChanges.subscribe((isEnable) => {
+        this.addStockForm.controls['enableSales'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((isEnable) => {
             const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
             if (isEnable) {
                 saleUnitRatesControls.enable();
@@ -245,7 +252,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         // get purchase accounts
-        this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['purchases'] }).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this.salesService.getAccountsWithCurrency('operatingcost, indirectexpenses').pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let purchaseAccounts: IOption[] = [];
                 data.body.results.map(d => {
@@ -256,7 +263,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         // get sales accounts
-        this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['sales'] }).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this.salesService.getAccountsWithCurrency('revenuefromoperations, otherincome').pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let salesAccounts: IOption[] = [];
                 data.body.results.map(d => {
@@ -268,10 +275,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
         // subscribe active stock if available fill form
         this.activeStock$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
+            this.allowReset = false;
             if (a && !this.addStock) {
+                this.addStockForm.reset();
+                this.showOtherDetails = false;
                 this.stockUniqueName = a.uniqueName;
                 this.isUpdatingStockForm = true;
-                this.addStockForm.patchValue({
+                this.addStockForm?.patchValue({
                     name: a.name, uniqueName: a.uniqueName,
                     stockUnitCode: a.stockUnit ? a.stockUnit.code : '', openingQuantity: a.openingQuantity,
                     openingAmount: a.openingAmount,
@@ -297,37 +307,37 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
                 const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
                 if (a.purchaseAccountDetails) {
-                    this.addStockForm.patchValue({ purchaseAccountUniqueName: a.purchaseAccountDetails.accountUniqueName });
+                    this.addStockForm?.patchValue({ purchaseAccountUniqueName: a.purchaseAccountDetails.accountUniqueName });
 
                     // render purchase unit rates
                     a.purchaseAccountDetails.unitRates.map((item, i) => {
                         this.addPurchaseUnitRates(i, item);
                     });
                     purchaseUnitRatesControls.enable();
-                    this.addStockForm.controls['enablePurchase'].patchValue(true);
+                    this.addStockForm.controls['enablePurchase']?.patchValue(true);
                 } else {
-                    this.addStockForm.controls['enablePurchase'].patchValue(false);
+                    this.addStockForm.controls['enablePurchase']?.patchValue(false);
                     purchaseUnitRatesControls.disable();
                 }
 
                 const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
                 if (a.salesAccountDetails) {
-                    this.addStockForm.patchValue({ salesAccountUniqueName: a.salesAccountDetails.accountUniqueName });
+                    this.addStockForm?.patchValue({ salesAccountUniqueName: a.salesAccountDetails.accountUniqueName });
 
                     // render sale unit rates
                     a.salesAccountDetails.unitRates.map((item, i) => {
                         this.addSaleUnitRates(i, item);
                     });
                     saleUnitRatesControls.enable();
-                    this.addStockForm.controls['enableSales'].patchValue(true);
+                    this.addStockForm.controls['enableSales']?.patchValue(true);
                 } else {
                     saleUnitRatesControls.disable();
-                    this.addStockForm.controls['enableSales'].patchValue(false);
+                    this.addStockForm.controls['enableSales']?.patchValue(false);
                 }
 
-                // if manufacturingDetails is avilable
+                // if manufacturingDetails is available
                 if (a.manufacturingDetails) {
-                    this.addStockForm.patchValue({
+                    this.addStockForm?.patchValue({
                         isFsStock: true,
                         manufacturingDetails: {
                             manufacturingQuantity: a.manufacturingDetails.manufacturingQuantity,
@@ -335,10 +345,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                         }
                     });
                     a.manufacturingDetails.linkedStocks.map((item, i) => {
-                        this.addItemInLinkedStocks(item, i, a.manufacturingDetails.linkedStocks.length - 1);
+                        this.addItemInLinkedStocks(item, i, a.manufacturingDetails?.linkedStocks?.length - 1);
                     });
                 } else {
-                    this.addStockForm.patchValue({ isFsStock: false });
+                    this.addStockForm?.patchValue({ isFsStock: false });
                 }
 
                 this.companyTaxesList$.subscribe((tax) => {
@@ -349,10 +359,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 });
 
                 this.taxTempArray = [];
-                if (a.taxes.length) {
+                if (a?.taxes?.length) {
                     this.mapSavedTaxes(a.taxes);
                 }
                 this.store.dispatch(this.inventoryAction.hideLoaderForStock());
+                this.allowReset = true;
                 // this.addStockForm.controls['parentGroup'].disable();
             } else {
                 this.isUpdatingStockForm = false;
@@ -373,7 +384,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 this.resetStockForm();
                 this.store.dispatch(this.inventoryAction.GetStock());
                 if (this.activeGroup) {
-                    this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
+                    this.addStockForm.get('parentGroup')?.patchValue(this.activeGroup.uniqueName);
                 }
                 this.taxTempArray = [];
                 this.companyTaxesList$.subscribe((taxes) => {
@@ -382,7 +393,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                         o.isDisabled = false;
                     });
                 });
-                this.addStockForm.get('taxes').patchValue('');
+                this.addStockForm.get('taxes')?.patchValue('');
             }
         });
 
@@ -391,7 +402,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 this.activeGroup = s;
                 this.groupUniqueName = s.uniqueName;
                 this.activeGroup.uniqueName = s.uniqueName;
-                this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
+                this.addStockForm.get('parentGroup')?.patchValue(this.activeGroup.uniqueName);
             } else {
                 this.activeGroup = null;
             }
@@ -403,15 +414,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             }
         });
         setTimeout(() => {
-            this.addStockForm.controls['enableSales'].patchValue(false);
-            this.addStockForm.controls['enablePurchase'].patchValue(false);
+            this.addStockForm.controls['enableSales']?.patchValue(false);
+            this.addStockForm.controls['enablePurchase']?.patchValue(false);
         }, 100);
-
-        this.manageInProcess$.subscribe(s => {
-            if (!s.isOpen) {
-                this.addStockForm.reset();
-            }
-        });
 
         this.invoiceSetting$.subscribe(a => {
             if (a && a.companyInventorySettings) {
@@ -425,8 +430,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         let isOk = pattern.test(e.key);
         if (!isOk) {
             let val = this.addStockForm.get('skuCode').value;
-            val = val.substr(0, (val.length - 1));
-            this.addStockForm.get('skuCode').patchValue(val);
+            val = val.substr(0, (val?.length - 1));
+            this.addStockForm.get('skuCode')?.patchValue(val);
             return;
         }
     }
@@ -449,13 +454,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public removeCustomField(type?: string, index?: number) {
         if (type === 'remove' && index === 1) {
             this.customField1 = false;
-            this.addStockForm.get('customField1Value').patchValue('');
-            this.addStockForm.get('customField1Heading').patchValue('');
+            this.addStockForm.get('customField1Value')?.patchValue('');
+            this.addStockForm.get('customField1Heading')?.patchValue('');
         }
         if (type === 'remove' && index === 2) {
             this.customField2 = false;
-            this.addStockForm.get('customField2Value').patchValue('');
-            this.addStockForm.get('customField2Heading').patchValue('');
+            this.addStockForm.get('customField2Value')?.patchValue('');
+            this.addStockForm.get('customField2Heading')?.patchValue('');
         }
     }
 
@@ -477,11 +482,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         // add purchaseUnitRates to the list
         if (item) {
             if (control.controls[i]) {
-                control.controls[i].patchValue(item);
+                control.controls[i]?.patchValue(item);
             } else {
                 control.push(this.initUnitAndRates());
                 setTimeout(() => {
-                    control.controls[i].patchValue(item);
+                    control.controls[i]?.patchValue(item);
                 }, 200);
             }
         } else {
@@ -495,7 +500,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public removePurchaseUnitRates(i: number) {
         // remove address from the list
         const control = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
-        if (control.length > 1) {
+        if (control?.length > 1) {
             control.removeAt(i);
         } else {
             control.controls[0].reset();
@@ -510,11 +515,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         // add saleUnitRates to the list
         if (item) {
             if (control.controls[i]) {
-                control.controls[i].patchValue(item);
+                control.controls[i]?.patchValue(item);
             } else {
                 control.push(this.initUnitAndRates());
                 setTimeout(() => {
-                    control.controls[i].patchValue(item);
+                    control.controls[i]?.patchValue(item);
                 }, 200);
             }
         } else {
@@ -528,7 +533,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public removeSaleUnitRates(i: number) {
         // remove address from the list
         const control = this.addStockForm.controls['saleUnitRates'] as FormArray;
-        if (control.length > 1) {
+        if (control?.length > 1) {
             control.removeAt(i);
         } else {
             control.controls[0].reset();
@@ -561,15 +566,15 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             this.isStockNameAvailable$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
                 if (a !== null && a !== undefined) {
                     if (a) {
-                        this.addStockForm.patchValue({ uniqueName: val });
+                        this.addStockForm?.patchValue({ uniqueName: val });
                     } else {
                         let num = 1;
-                        this.addStockForm.patchValue({ uniqueName: val + num });
+                        this.addStockForm?.patchValue({ uniqueName: val + num });
                     }
                 }
             });
         } else {
-            this.addStockForm.patchValue({ uniqueName: '' });
+            this.addStockForm?.patchValue({ uniqueName: '' });
         }
     }
 
@@ -583,9 +588,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             if (isNaN(Number(rate))) {
                 rate = '0';
             }
-            this.addStockForm.patchValue({ stockRate: rate });
+            this.addStockForm?.patchValue({ stockRate: rate });
         } else if (!quantity || !amount) {
-            this.addStockForm.controls['stockRate'].patchValue('');
+            this.addStockForm.controls['stockRate']?.patchValue('');
         }
     }
 
@@ -614,7 +619,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             } else {
                 let isValid = this.validateLinkedStock(item);
                 if (isValid) {
-                    frmgrp.patchValue(item);
+                    frmgrp?.patchValue(item);
                     control.controls[i] = frmgrp;
                 } else {
                     return this._toasty.errorToast('All fields are required.');
@@ -630,7 +635,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.editLinkedStockIdx = i;
         const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
         const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
-        let last = control.controls.length - 1;
+        let last = control.controls?.length - 1;
         control.disable();
         control.controls[i].enable();
         control.controls[last].enable();
@@ -640,10 +645,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public updateItemInLinkedStocks(item: FormGroup, i: any) {
         const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
         const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
-        control.controls[i].patchValue(item);
+        control.controls[i]?.patchValue(item);
         this.editLinkedStockIdx = null;
         this.editModeForLinkedStokes = false;
-        let last = control.controls.length;
+        let last = control.controls?.length;
         control.disable();
         control.controls[last - 1].enable();
     }
@@ -687,22 +692,28 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         const manufacturingDetailsContorls = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
         const linkedStocksControls = manufacturingDetailsContorls.controls['linkedStocks'] as FormArray;
 
-        if (purchaseUnitRatesControls.controls.length > 1) {
+        if (purchaseUnitRatesControls.controls?.length > 1) {
             purchaseUnitRatesControls.controls = purchaseUnitRatesControls.controls.splice(1);
         }
-        if (saleUnitRatesControls.length > 1) {
+        if (saleUnitRatesControls?.length > 1) {
             saleUnitRatesControls.controls = saleUnitRatesControls.controls.splice(1);
         }
-        if (linkedStocksControls.length > 1) {
+        if (linkedStocksControls?.length > 1) {
             linkedStocksControls.controls = [];
             linkedStocksControls.push(this.initialIManufacturingDetails());
         }
 
         this.addStockForm.reset();
+        this.companyTaxesList$.pipe(map((item) => {
+            return item.map(tax => tax.isChecked = false);
+        }), takeUntil(this.destroyed$)).subscribe(res => {
+            return res;
+        });
+        this.taxTempArray = [];
 
         if (activeStock && !this.addStock) {
             this.isUpdatingStockForm = true;
-            this.addStockForm.patchValue({
+            this.addStockForm?.patchValue({
                 name: activeStock.name,
                 uniqueName: activeStock.uniqueName,
                 stockUnitCode: activeStock.stockUnit ? activeStock.stockUnit.code : '',
@@ -711,7 +722,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             });
 
             if (activeStock.purchaseAccountDetails) {
-                this.addStockForm.patchValue({ purchaseAccountUniqueName: activeStock.purchaseAccountDetails.accountUniqueName });
+                this.addStockForm?.patchValue({ purchaseAccountUniqueName: activeStock.purchaseAccountDetails.accountUniqueName });
 
                 // render unit rates
                 activeStock.purchaseAccountDetails.unitRates.map((item, i) => {
@@ -720,7 +731,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             }
 
             if (activeStock.salesAccountDetails) {
-                this.addStockForm.patchValue({ salesAccountUniqueName: activeStock.salesAccountDetails.accountUniqueName });
+                this.addStockForm?.patchValue({ salesAccountUniqueName: activeStock.salesAccountDetails.accountUniqueName });
 
                 // render unit rates
                 activeStock.salesAccountDetails.unitRates.map((item, i) => {
@@ -730,7 +741,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
             // if manufacturingDetails is avilable
             if (activeStock.manufacturingDetails) {
-                this.addStockForm.patchValue({
+                this.addStockForm?.patchValue({
                     isFsStock: true,
                     manufacturingDetails: {
                         manufacturingQuantity: activeStock.manufacturingDetails.manufacturingQuantity,
@@ -738,10 +749,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     }
                 });
                 activeStock.manufacturingDetails.linkedStocks.map((item, i) => {
-                    this.addItemInLinkedStocks(item, i, activeStock.manufacturingDetails.linkedStocks.length - 1);
+                    this.addItemInLinkedStocks(item, i, activeStock.manufacturingDetails.linkedStocks?.length - 1);
                 });
             } else {
-                this.addStockForm.patchValue({ isFsStock: false });
+                this.addStockForm?.patchValue({ isFsStock: false });
             }
         }
     }
@@ -750,8 +761,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public submit() {
         let stockObj = new CreateStockRequest();
         let uniqueName = this.addStockForm.get('uniqueName');
-        if (uniqueName.value) {
-            uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+        if (uniqueName && uniqueName.value) {
+            uniqueName?.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
         }
         this.addStockForm.get('uniqueName').enable();
 
@@ -761,15 +772,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         stockObj.stockUnitCode = formObj.stockUnitCode;
         stockObj.openingAmount = formObj.openingAmount;
         stockObj.openingQuantity = formObj.openingQuantity;
-        stockObj.hsnNumber = formObj.hsnNumber;
-        stockObj.sacNumber = formObj.sacNumber;
+        stockObj.hsnNumber = (this.addStockForm.get("showCodeType").value === "hsn") ? formObj.hsnNumber : "";
+        stockObj.sacNumber = (this.addStockForm.get("showCodeType").value === "sac") ? formObj.sacNumber : "";
         stockObj.skuCode = formObj.skuCode;
         stockObj.skuCodeHeading = formObj.skuCodeHeading;
         stockObj.customField1Heading = formObj.customField1Heading;
         stockObj.customField1Value = formObj.customField1Value;
         stockObj.customField2Heading = formObj.customField2Heading;
         stockObj.customField2Value = formObj.customField2Value;
-
 
         if (formObj.enablePurchase) {
             if (this.validateStock(formObj.purchaseUnitRates)) {
@@ -803,7 +813,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         }
 
         stockObj.isFsStock = formObj.isFsStock;
-        stockObj.taxes = formObj.taxes;
+        stockObj.taxes = (formObj.taxes) ? formObj.taxes : [];
 
         if (stockObj.isFsStock) {
             formObj.manufacturingDetails.linkedStocks = this.removeBlankLinkedStock(formObj.manufacturingDetails.linkedStocks);
@@ -824,7 +834,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         if (formObj.parentGroup) {
             parentSelected = true;
         } else {
-            this.groupsData$.subscribe(p => {
+            this.groupsData$.pipe(takeUntil(this.destroyed$)).subscribe(p => {
                 if (p) {
                     defaultGrpisExist = p.findIndex(q => q.value === 'maingroup') > -1;
                     if (defaultGrpisExist) {
@@ -833,6 +843,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 }
             });
         }
+
+        this.showOtherDetails = false;
 
         if (!formObj.parentGroup) {
             let stockRequest = {
@@ -860,8 +872,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public update() {
         let stockObj = new CreateStockRequest();
         let uniqueName = this.addStockForm.get('uniqueName');
-        if (uniqueName.value) {
-            uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+        if (uniqueName && uniqueName.value) {
+            uniqueName?.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
         }
         this.addStockForm.get('uniqueName').enable();
 
@@ -872,9 +884,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         stockObj.stockUnitCode = formObj.stockUnitCode;
         stockObj.openingAmount = formObj.openingAmount || 0;
         stockObj.openingQuantity = formObj.openingQuantity || 0;
-        stockObj.hsnNumber = formObj.hsnNumber;
-        stockObj.sacNumber = formObj.sacNumber;
-        stockObj.taxes = formObj.taxes;
+        stockObj.hsnNumber = (this.addStockForm.get("showCodeType").value === "hsn") ? formObj.hsnNumber : "";
+        stockObj.sacNumber = (this.addStockForm.get("showCodeType").value === "sac") ? formObj.sacNumber : "";
+        stockObj.taxes = (formObj.taxes) ? formObj.taxes : [];
         stockObj.skuCode = formObj.skuCode;
         stockObj.skuCode = formObj.skuCode;
         stockObj.skuCodeHeading = formObj.skuCodeHeading;
@@ -926,6 +938,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             stockObj.manufacturingDetails = null;
         }
 
+        this.showOtherDetails = false;
+
         this.store.dispatch(this.inventoryAction.updateStock(stockObj, this.groupUniqueName, this.stockUniqueName));
     }
 
@@ -946,10 +960,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public setActiveGroupOnCreateStock() {  // trying to select active group on create stock
-        this.groupsData$.subscribe(p => {
+        this.groupsData$.pipe(takeUntil(this.destroyed$)).subscribe(p => {
             let selected = p.find(q => q.value === this.groupUniqueName);
             if (selected) {
-                this.addStockForm.get('parentGroup').patchValue({
+                this.addStockForm.get('parentGroup')?.patchValue({
                     label: selected.label,
                     value: selected.value
                 });
@@ -975,7 +989,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public groupSelected(event: IOption) {
         let selected;
         // this.generateUniqueName();
-        this.groupsData$.subscribe(p => {
+        this.groupsData$.pipe(takeUntil(this.destroyed$)).subscribe(p => {
             selected = p.find(q => q.value === event.value);
         });
         // this.activeGroup = selected;
@@ -986,9 +1000,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     //     this.groupsData$.subscribe(p => {
     //     let selected = p.find(q => q.value === grpname);
     //       if (selected) {
-    //       this.addStockForm.patchValue({ parentGroup: selected.value });
+    //       this.addStockForm?.patchValue({ parentGroup: selected.value });
     //       } else {
-    //         this.addStockForm.patchValue({ parentGroup: null });
+    //         this.addStockForm?.patchValue({ parentGroup: null });
     //       }
     //     });
     //   }
@@ -1064,13 +1078,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 this.forceClear$ = of({ status: true });
                 this.addStockForm.controls['parentGroup'].enable();
                 if (this.activeGroup) {
-                    this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
+                    this.addStockForm.get('parentGroup')?.patchValue(this.activeGroup.uniqueName);
                 } else {
-                    this.groupsData$.subscribe(p => {
+                    this.groupsData$.pipe(takeUntil(this.destroyed$)).subscribe(p => {
                         if (p) {
                             let defaultGrpisExist = p.findIndex(q => q.value === 'maingroup') > -1;
                             if (defaultGrpisExist) {
-                                this.addStockForm.get('parentGroup').patchValue('maingroup');
+                                this.addStockForm.get('parentGroup')?.patchValue('maingroup');
                             }
                         }
                     });
@@ -1079,7 +1093,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             }
         }
         if (s.autoFocusInChild && s.autoFocusInChild.currentValue) {
-            this.groupDDList.inputFilter.nativeElement.click();
+            this.groupDDList.inputFilter?.nativeElement.click();
         }
     }
 
@@ -1161,7 +1175,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 tax.isChecked = false;
             }
         }
-        this.addStockForm.get('taxes').patchValue(this.taxTempArray.map(m => m.uniqueName));
+        this.addStockForm.get('taxes')?.patchValue(this.taxTempArray.map(m => m.uniqueName));
     }
 
     /**
@@ -1213,7 +1227,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             const formEntries = unitRates.filter((unitRate) => {
                 return (unitRate.stockUnitCode && !unitRate.rate) || (!unitRate.stockUnitCode && unitRate.rate);
             });
-            return formEntries.length === 0;
+            return formEntries?.length === 0;
         }
         return true;
     }
@@ -1224,13 +1238,15 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      * @memberof InventoryAddStockComponent
      */
     public resetPurchaseInformation(): void {
-        const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
-        this.addStockForm.get('purchaseAccountUniqueName').patchValue(null);
-        this.forceClearPurchaseAccount$ = of({ status: true });
-        this.forceClearPurchaseStock$ = of({ status: true });
-        for (let control of purchaseUnitRatesControls.controls) {
-            control.get('stockUnitCode').patchValue(null);
-            control.get('rate').patchValue(null);
+        if (this.addStock || (!this.addStock && this.allowReset)) {
+            const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
+            this.addStockForm.get('purchaseAccountUniqueName')?.patchValue(null);
+            this.forceClearPurchaseAccount$ = of({ status: true });
+            this.forceClearPurchaseStock$ = of({ status: true });
+            for (let control of purchaseUnitRatesControls.controls) {
+                control.get('stockUnitCode')?.patchValue(null);
+                control.get('rate')?.patchValue(null);
+            }
         }
     }
 
@@ -1240,13 +1256,50 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      * @memberof InventoryAddStockComponent
      */
     public resetSalesInformation(): void {
-        const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
-        this.addStockForm.get('salesAccountUniqueName').patchValue(null);
-        this.forceClearSalesAccount$ = of({ status: true });
-        this.forceClearSalesStock$ = of({ status: true });
-        for (let control of saleUnitRatesControls.controls) {
-            control.get('stockUnitCode').patchValue(null);
-            control.get('rate').patchValue(null);
+        if (this.addStock || (!this.addStock && this.allowReset)) {
+            const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
+            this.addStockForm.get('salesAccountUniqueName')?.patchValue(null);
+            this.forceClearSalesAccount$ = of({ status: true });
+            this.forceClearSalesStock$ = of({ status: true });
+            for (let control of saleUnitRatesControls.controls) {
+                control.get('stockUnitCode')?.patchValue(null);
+                control.get('rate')?.patchValue(null);
+            }
+        }
+    }
+
+    /**
+     * This will get invoice settings
+     *
+     * @memberof InventoryAddStockComponent
+     */
+    public getInvoiceSettings(): void {
+        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                let invoiceSettings = _.cloneDeep(response.body);
+                this.inventorySettings = invoiceSettings.companyInventorySettings;
+            }
+        });
+    }
+
+    /**
+     * This will toggle other details section
+     *
+     * @memberof InventoryAddStockComponent
+     */
+    public toggleOtherDetails(): void {
+        this.showOtherDetails = !this.showOtherDetails;
+
+        if (this.addStockForm.get("hsnNumber").value) {
+            this.addStockForm.get("showCodeType")?.patchValue("hsn");
+        } else if (this.addStockForm.get("sacNumber").value) {
+            this.addStockForm.get("showCodeType")?.patchValue("sac");
+        } else {
+            if (this.inventorySettings?.manageInventory) {
+                this.addStockForm.get("showCodeType")?.patchValue("hsn");
+            } else {
+                this.addStockForm.get("showCodeType")?.patchValue("sac");
+            }
         }
     }
 }

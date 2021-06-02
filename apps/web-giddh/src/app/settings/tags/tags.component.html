@@ -1,108 +1,120 @@
-<div class="box clearfix">
-    <form>
-        <div class="row">
-            <div class="col-sm-12">
-                <h1 class="section-head">Create Tag</h1>
-                <div class="form-group clearfix col-md-12 col-lg-3 col-xs-12 mt-1">
-                    <form (submit)="createTag(newTag)" class="row">
-                        <div class="w-100">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="tagName" [(ngModel)]="newTag.name"
-                                    placeholder="Tag Name" />
+<ng-container appTranslate [file]="'settings/tags'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <div class="box clearfix">
+        <form>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1 class="section-head">{{localeData?.create_tag}}</h1>
+                    <div class="form-group clearfix col-md-12 col-lg-3 col-xs-12 mt-1">
+                        <form (submit)="createTag(newTag)" class="row">
+                            <div class="w-100">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="tagName" [(ngModel)]="newTag.name"
+                                        [placeholder]="localeData?.tag_name_placeholder" />
+                                </div>
+                                <div class="form-group">
+                                    <textarea class="form-control" name="tagDescription"
+                                        [(ngModel)]="newTag.description"
+                                        [placeholder]="localeData?.tag_description_placeholder"></textarea>
+                                </div>
+                                <div class="mr-t1">
+                                    <button type="submit" class="btn btn-success btn-sm"
+                                        [disabled]="!newTag.name">{{commonLocaleData?.app_create}}</button>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <textarea class="form-control" name="tagDescription" [(ngModel)]="newTag.description"
-                                    placeholder="Tag Description (optional)"></textarea>
-                            </div>
-                            <div class="mr-t1">
-                                <button type="submit" class="btn btn-success btn-sm"
-                                    [disabled]="!newTag.name">Create</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <hr class="clearfix">
-                <div class="form-group mt-15 clearfix">
-                    <div>
-                        <span class="pull-left searchTag">
-                            <input type="text" [(ngModel)]="searchText" (keyup)="filterData(searchText)"
-                                class="form-control" name="search_text" placeholder="Search tag" />
-                        </span>
-                        <!-- <div>
-                <button class="btn btn-success btn-sm mr-l1" (click)="filterData(searchText);">Search</button>
-            </div> -->
+                        </form>
                     </div>
-                </div>
-                <div class="tags-table">
+                    <hr class="clearfix">
+                    <div class="form-group mr-t15 clearfix">
+                        <div>
+                            <span class="pull-left searchTag">
+                                <input type="text" [(ngModel)]="searchText" (keyup)="filterData(searchText)"
+                                    class="form-control" name="search_text"
+                                    [placeholder]="localeData?.search_tag_placeholder" />
+                            </span>
+                            <!-- <div>
+                    <button class="btn btn-success btn-sm mr-l1" (click)="filterData(searchText);">Search</button>
+                </div> -->
+                        </div>
+                    </div>
+                    <div class="tags-table">
                         <table class="tags-table basic giddh-table table  on-mobile-view">
                             <thead>
                                 <tr>
-                                    <th>Sr. No.</th>
-                                    <th>Tags Name</th>
-                                    <th>Tags Description</th>
-                                    <th>Action</th>
+                                    <th>{{localeData?.s_no}}</th>
+                                    <th>{{localeData?.tags_name}}</th>
+                                    <th>{{localeData?.tags_description}}</th>
+                                    <th>{{commonLocaleData?.app_action}}</th>
                                 </tr>
                             </thead>
-                            <tbody *ngIf="(tags$ | async)">
+                            <tbody *ngIf="!isLoading && (tags$ | async)?.length">
                                 <tr *ngFor="let tag of tags$ | async; let i = index">
                                     <td data-title="#">{{i+1}}</td>
-                                    <td data-title="Tags Name">
+                                    <td [attr.data-title]="localeData?.tags_name">
                                         <span *ngIf="updateIndex !== i">{{tag.name}}</span>
                                         <input *ngIf="updateIndex === i" type="text" class="form-control"
                                             name="name_of_{{i}}" [(ngModel)]="tag.name" />
                                     </td>
-                                    <td data-title="Tags Desciption">
+                                    <td [attr.data-title]="localeData?.tags_description">
                                         <div *ngIf="updateIndex !== i">{{tag.description}}</div>
                                         <textarea *ngIf="updateIndex === i" class="form-control"
                                             name="description_of_{{i}}" [(ngModel)]="tag.description"></textarea>
                                     </td>
-                                    <td class="icon-btn" data-title="Action">
+                                    <td class="icon-btn" [attr.data-title]="commonLocaleData?.app_action">
                                         <button *ngIf="updateIndex !== i" (click)="setUpdateIndex(i);" type="button"
                                             class="btn btn-xs"><i class="icon-edit-pencil" aria-hidden="true"
-                                                tooltip="Edit"></i></button>
+                                                [tooltip]="commonLocaleData?.app_edit"></i></button>
                                         <button *ngIf="updateIndex !== i" (click)="deleteTag(tag, i);" type="button"
                                             class="btn btn-xs"><i class="fa fa-trash" aria-hidden="true"
-                                                tooltip="Delete"></i></button>
+                                                [tooltip]="commonLocaleData?.app_delete"></i></button>
                                         <button *ngIf="updateIndex === i" (click)="updateTag(tag, i);" type="button"
-                                            class="btn btn-xs"><i class="fa fa-check"
-                                                aria-hidden="true"></i></button>
-                                        <button *ngIf="updateIndex === i" (click)="resetUpdateIndex();"
-                                            type="button" class="btn btn-xs"><i class="icon-cross"
-                                                aria-hidden="true"></i></button>
+                                            class="btn btn-xs"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                        <button *ngIf="updateIndex === i" (click)="resetUpdateIndex();" type="button"
+                                            class="btn btn-xs"><i class="icon-cross" aria-hidden="true"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
-                            <tbody *ngIf="!(tags$ | async)" class="on-mobile-view no-records">
+                            <tbody *ngIf="!isLoading && !(tags$ | async)?.length" class="on-mobile-view no-records">
                                 <tr>
                                     <td colspan="4" class="text-center empty-table">
-                                        <h1>No Record Found !!</h1>
+                                        <h1>{{commonLocaleData?.app_no_record_found}}</h1>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="isLoading">
+                                <tr>
+                                    <td colspan="4" class="text-center empty-table">
+                                        <giddh-page-loader [cssClass]="'mt-0 mb-b'"></giddh-page-loader>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
                 </div>
             </div>
+        </form>
+    </div>
 
-        </div>
-    </form>
-</div>
-
-<!-- add branch modal -->
-<div bsModal #confirmationModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
-    role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header clearfix">
-                <h3>Confirmation</h3>
-                <span aria-hidden="true" class="close" (click)="onUserConfirmation(false)" data-dismiss="modal">×</span>
+    <!-- add branch modal -->
+    <div bsModal #confirmationModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
+        role="dialog">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header clearfix">
+                    <h3>{{commonLocaleData?.app_confirmation}}</h3>
+                    <span aria-hidden="true" class="close" (click)="onUserConfirmation(false)"
+                        data-dismiss="modal">×</span>
+                </div>
+                <div class="modal-body" [innerHTML]="confirmationMessage">
+                </div>
+                <div class="modal-footer clearfix">
+                    <button (click)="onUserConfirmation(true)"
+                        class="btn btn-sm btn-success">{{commonLocaleData?.app_yes}}</button>
+                    <button (click)="onUserConfirmation(false)"
+                        class="btn btn-sm btn-danger">{{commonLocaleData?.app_no}}</button>
+                </div>
+                <!-- modal footer -->
             </div>
-            <div class="modal-body" [innerHTML]="confirmationMessage">
-            </div>
-            <div class="modal-footer clearfix">
-                <button (click)="onUserConfirmation(true)" class="btn btn-sm btn-success">Yes</button>
-                <button (click)="onUserConfirmation(false)" class="btn btn-sm btn-danger">No</button>
-            </div>
-            <!-- modal footer -->
         </div>
     </div>
-</div>
+</ng-container>

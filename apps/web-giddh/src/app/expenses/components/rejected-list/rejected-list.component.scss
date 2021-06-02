@@ -1,4 +1,4 @@
-@import '../../../../assets/css/color.scss';
+@import "../../../../assets/css/color.scss";
 .basic > thead > tr > th {
     position: relative;
 }
@@ -7,7 +7,7 @@
     position: absolute;
     right: 12px;
     font-size: 11px;
-    color: #7d7d7d;
+    color: $gray;
     top: 13px;
 }
 
@@ -15,11 +15,11 @@
     font-size: 11px;
     position: absolute;
     right: 10px;
-    color: #a9a9a9;
+    color: $dim-gray;
     cursor: pointer;
     top: 12px;
 }
-.action-btns{
+.action-btns {
     display: flex;
 }
 .btn-icon {
@@ -41,4 +41,11 @@
 
 .btn-icon .icon-trash {
     font-size: 20px;
+}
+
+.icon-pointer .active-text-color {
+    color: $wild-blue-yonder !important;
+}
+.icon-pointer {
+    cursor: pointer;
 }

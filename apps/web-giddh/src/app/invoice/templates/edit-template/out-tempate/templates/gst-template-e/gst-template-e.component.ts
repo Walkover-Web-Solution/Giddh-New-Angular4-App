@@ -1,12 +1,8 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
+import { Store, select } from '@ngrx/store';
 import * as _ from '../../../../../../lodash-optimized';
-import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
-import { InvoiceUiDataService } from '../../../../services/invoice.ui.data.service';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -15,8 +11,7 @@ import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/
 @Component({
     selector: 'gst-template-e',
     templateUrl: './gst-template-e.component.html',
-    styleUrls: ['./gst-template-e.component.scss'],
-    // encapsulation: ViewEncapsulation.None
+    styleUrls: ['./gst-template-e.component.scss']
 })
 
 export class GstTemplateEComponent implements OnInit, OnDestroy, OnChanges {
@@ -44,8 +39,7 @@ export class GstTemplateEComponent implements OnInit, OnDestroy, OnChanges {
 
     constructor(private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions) {
-        //
-        this.companySetting$ = this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$));
+        this.companySetting$ = this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -65,9 +59,9 @@ export class GstTemplateEComponent implements OnInit, OnDestroy, OnChanges {
                 if (changes.fieldsAndVisibility.currentValue.table.sNo && changes.fieldsAndVisibility.currentValue.table.sNo.display) {
                     this.columnsVisibled++;
                 }
-                if ((changes.fieldsAndVisibility.currentValue.table.item && changes.fieldsAndVisibility.currentValue.table.item.display) || (changes.fieldsAndVisibility.currentValue.table.date && changes.fieldsAndVisibility.currentValue.table.date.display)) {
-					this.columnsVisibled++;
-				}
+                if (changes.fieldsAndVisibility.currentValue.table.item && changes.fieldsAndVisibility.currentValue.table.item.display) {
+                    this.columnsVisibled++;
+                }
                 if (changes.fieldsAndVisibility.currentValue.table.hsnSac && changes.fieldsAndVisibility.currentValue.table.hsnSac.display) {
                     this.columnsVisibled++;
                 }
@@ -80,9 +74,9 @@ export class GstTemplateEComponent implements OnInit, OnDestroy, OnChanges {
                 if (changes.fieldsAndVisibility.currentValue.table.discount && changes.fieldsAndVisibility.currentValue.table.discount.display) {
                     this.columnsVisibled++;
                 }
-                // if (changes.fieldsAndVisibility.currentValue.table.taxableValue && changes.fieldsAndVisibility.currentValue.table.taxableValue.display) {
-                //   this.columnsVisibled++;
-                // }
+                if (changes.fieldsAndVisibility.currentValue.table.taxableValue && changes.fieldsAndVisibility.currentValue.table.taxableValue.display) {
+                    this.columnsVisibled++;
+                }
                 if (changes.fieldsAndVisibility.currentValue.table.taxes && changes.fieldsAndVisibility.currentValue.table.taxes.display) {
                     this.columnsVisibled++;
                 }

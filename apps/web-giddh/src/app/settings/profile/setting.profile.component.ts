@@ -1,9 +1,8 @@
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import * as _ from '../../lodash-optimized';
@@ -23,7 +22,8 @@ import { SettingsUtilityService } from '../services/settings-utility.service';
 import { CommonService } from '../../services/common.service';
 import { CompanyService } from '../../services/companyService.service';
 import { GeneralService } from '../../services/general.service';
-
+import { Router, ActivatedRoute } from '@angular/router';
+import { LocaleService } from '../../services/locale.service';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -35,8 +35,8 @@ export interface IGstObj {
 @Component({
     selector: 'setting-profile',
     templateUrl: './setting.profile.component.html',
-    styleUrls: ['../../shared/header/components/company-add/company-add.component.css', './setting.profile.component.scss'],
-    host: {'class': 'settings-profile'},
+    styleUrls: ['../../shared/header/components/company-add/company-add.component.scss', './setting.profile.component.scss'],
+    host: { 'class': 'settings-profile' },
     animations: [
         trigger('fadeInAndSlide', [
             transition(':enter', [
@@ -149,7 +149,17 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
 
+    public imgPath: string = '';
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** This holds the active locale */
+    public activeLocale: string = "";
+    /** This holds perforsonal information tab heading */
+    public personalInformationTabHeading: string = "";
 
     constructor(
         private commonService: CommonService,
@@ -163,7 +173,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private commonActions: CommonActions,
         private settingsProfileService: SettingsProfileService,
-        private settingsUtilityService: SettingsUtilityService
+        private settingsUtilityService: SettingsUtilityService,
+        private router: Router,
+        public route: ActivatedRoute,
+        private localeService: LocaleService
     ) {
 
         this.getCountry();
@@ -175,7 +188,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         digitAfterDecimal.map(decimal => {
             this.decimalDigitSource.push({ value: decimal.value, label: decimal.name });
         });
-        this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress),takeUntil(this.destroyed$));
+        this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress), takeUntil(this.destroyed$));
 
     }
 
@@ -203,7 +216,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     let data = res.map(item => item.city);
                     this.dataSourceBackup = res;
                     return data;
-                }));
+                }),
+                takeUntil(this.destroyed$));
         };
 
         this.keyDownSubject$
@@ -213,9 +227,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             });
 
         this.gstKeyDownSubject$
-            .pipe(debounceTime(3000)
-                , distinctUntilChanged()
-                , takeUntil(this.destroyed$))
+            .pipe(debounceTime(3000), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((event: any) => {
                 if (this.isGstValid) {
 
@@ -238,6 +250,22 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 }));
             }
         });
+
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
+        });
+
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+
+        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            if (this.activeLocale && this.activeLocale !== response?.value) {
+                this.localeService.getLocale('settings/profile', response?.value).subscribe(response => {
+                    this.localeData = response;
+                    this.translationComplete(true);
+                });
+            }
+            this.activeLocale = response?.value;
+        });
     }
 
     public getInitialProfileData() {
@@ -255,6 +283,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                 this.currentOrganizationType = OrganizationType.Company;
             }
+
+            this.loadAddresses('GET');
         });
     }
 
@@ -276,7 +306,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.select(appState => appState.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.currentCompanyDetails = response;
                 if (this.currentOrganizationType === OrganizationType.Company) {
@@ -286,7 +316,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         ...this.companyProfileObj,
                         country: {
                             countryName: response.countryV2 ? response.countryV2.countryName : '',
-                            countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode.toLowerCase() : '',
+                            countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode?.toLowerCase() : '',
                             currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
                             currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                         },
@@ -735,7 +765,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public getState(gst): string {
         let state = "";
-        if(gst.stateCode) {
+        if (gst.stateCode) {
             state = gst.stateCode + " - " + gst.stateName;
         }
         return state;
@@ -768,7 +798,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public updateBranchProfile(params?: any): void {
         this.currentBranchDetails.name = this.companyProfileObj.name;
         this.currentBranchDetails.alias = this.companyProfileObj.alias;
-        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(params? params : this.currentBranchDetails))
+        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(params ? params : this.currentBranchDetails))
+            .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 if (response) {
                     if (response.status === 'success') {
@@ -796,6 +827,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
             }
         }
+        this.router.navigateByUrl('/pages/settings/profile/' + tabName);
     }
 
     /**
@@ -804,7 +836,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public loadLinkedEntities(): void {
-        this.settingsProfileService.getAllLinkedEntities().subscribe(response => {
+        this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.addressConfiguration.linkedEntities = response.body.map(result => ({
                     ...result,
@@ -823,7 +855,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public loadStates(countryCode: string): void {
-        this.companyService.getAllStates({country: countryCode}).subscribe(response => {
+        this.companyService.getAllStates({ country: countryCode }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
                 this.addressConfiguration.stateList = [];
@@ -849,7 +881,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
         onboardingFormRequest.country = countryCode;
-        this.commonService.getOnboardingForm(onboardingFormRequest).subscribe((response: any) => {
+        this.commonService.getOnboardingForm(onboardingFormRequest).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === 'success') {
                 if (response.body && response.body.fields && response.body.fields.length > 0) {
                     const taxField = response.body.fields.find(field => field && field.name === 'taxName');
@@ -919,10 +951,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             stateName: chosenState ? chosenState.stateName : '',
             address: addressDetails.formValue.address,
             name: addressDetails.formValue.name,
+            pincode: addressDetails.formValue.pincode,
             linkEntity
         };
 
-        this.settingsProfileService.createNewAddress(requestObj).subscribe(response => {
+        this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
                 this.closeAddressSidePane = true;
                 if (this.currentOrganizationType === OrganizationType.Company) {
@@ -931,6 +964,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.settingsProfileActions.getBranchInfo());
                 }
                 this._toasty.successToast('Address created successfully');
+            } else {
+                this._toasty.errorToast(response.message);
             }
             this.isAddressChangeInProgress = false;
             this.changeDetectorRef.detectChanges();
@@ -960,14 +995,17 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             stateName: chosenState ? chosenState.stateName : '',
             address: addressDetails.formValue.address,
             name: addressDetails.formValue.name,
+            pincode: addressDetails.formValue.pincode,
             uniqueName: addressDetails.formValue.uniqueName,
             linkEntity
         };
-        this.settingsProfileService.updateAddress(requestObj).subscribe(response => {
+        this.settingsProfileService.updateAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
                 this.closeAddressSidePane = true;
                 this.loadAddresses('GET');
                 this._toasty.successToast('Address updated successfully');
+            } else {
+                this._toasty.errorToast(response.message);
             }
             this.isAddressChangeInProgress = false;
         }, () => {
@@ -982,7 +1020,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public handleDeleteAddress(addressDetails: any): void {
-        this.settingsProfileService.deleteAddress(addressDetails.uniqueName).subscribe(response => {
+        this.settingsProfileService.deleteAddress(addressDetails.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.loadAddresses('GET');
             this._toasty.successToast('Address deleted successfully');
         });
@@ -1000,7 +1038,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             alias: this.currentBranchDetails.alias,
             linkAddresses: this.currentBranchDetails.addresses.filter(address => address.uniqueName !== addressDetails.uniqueName)
         }
-        this.settingsProfileService.updateBranchInfo(requestObject).subscribe(response => {
+        this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.store.dispatch(this.settingsProfileActions.getBranchInfo());
             this._toasty.successToast('Address unlinked successfully');
         });
@@ -1031,7 +1069,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 return address;
             })
         }
-        this.settingsProfileService.updateBranchInfo(requestObject).subscribe(response => {
+        this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.store.dispatch(this.settingsProfileActions.getBranchInfo());
             this._toasty.successToast('Address updated successfully');
         });
@@ -1080,7 +1118,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 uniqueName: profileObj.uniqueName,
                 country: {
                     countryName: profileObj.countryV2 ? profileObj.countryV2.countryName : '',
-                    countryCode: profileObj.countryV2 ? profileObj.countryV2.alpha2CountryCode.toLowerCase() : '',
+                    countryCode: profileObj.countryV2 ? profileObj.countryV2.alpha2CountryCode?.toLowerCase() : '',
                     currencyCode: profileObj.countryV2 && profileObj.countryV2.currency ? profileObj.countryV2.currency.code : '',
                     currencyName: profileObj.countryV2 && profileObj.countryV2.currency ? profileObj.countryV2.currency.symbol : ''
                 },
@@ -1141,7 +1179,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     private loadAddresses(method: string, params?: any): void {
         if (this.currentOrganizationType === OrganizationType.Company) {
             this.shouldShowAddressLoader = true;
-            this.settingsProfileService.getCompanyAddresses(method, params).subscribe((response) => {
+            this.settingsProfileService.getCompanyAddresses(method, params).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.shouldShowAddressLoader = false;
                 if (response && response.body && response.status === 'success') {
                     this.updateAddressPagination(response.body);
@@ -1165,4 +1203,25 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.addressTabPaginationData.count = response.count;
     }
 
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof SettingProfileComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+                if (organization) {
+                    if (organization.type === OrganizationType.Branch) {
+                        this.personalInformationTabHeading = this.localeData?.branch_information;
+                    } else {
+                        this.personalInformationTabHeading = this.localeData?.company_information;
+                    }
+                } else {
+                    this.personalInformationTabHeading = this.localeData?.company_information;
+                }
+            });
+        }
+    }
 }

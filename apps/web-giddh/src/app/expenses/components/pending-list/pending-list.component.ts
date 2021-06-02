@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ExpencesAction } from '../../../actions/expences/expence.action';
 import { ToasterService } from '../../../services/toaster.service';
@@ -20,7 +20,10 @@ import * as moment from 'moment/moment';
 })
 
 export class PendingListComponent implements OnInit, OnChanges {
-
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public expensesItems: ExpenseResults[] = [];
     public pettyCashReportsResponse$: Observable<PettyCashReportResponse>;
@@ -60,30 +63,30 @@ export class PendingListComponent implements OnInit, OnChanges {
         private expenseService: ExpenseService,
         private _toasty: ToasterService,
         private _cdRf: ChangeDetectorRef, private _modalService: BsModalService) {
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-        this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
-        this.pettyCashReportsResponse$ = this.store.select(p => p.expense.pettycashReport).pipe(takeUntil(this.destroyed$));
-        this.getPettycashReportInprocess$ = this.store.select(p => p.expense.getPettycashReportInprocess).pipe(takeUntil(this.destroyed$));
-        this.getPettycashReportSuccess$ = this.store.select(p => p.expense.getPettycashReportSuccess).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
+        this.pettyCashReportsResponse$ = this.store.pipe(select(p => p.expense.pettycashReport), takeUntil(this.destroyed$));
+        this.getPettycashReportInprocess$ = this.store.pipe(select(p => p.expense.getPettycashReportInprocess), takeUntil(this.destroyed$));
+        this.getPettycashReportSuccess$ = this.store.pipe(select(p => p.expense.getPettycashReportSuccess), takeUntil(this.destroyed$));
 
-        observableCombineLatest(this.universalDate$, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
-			if (!Array.isArray(resp[0])) {
-				return;
-			}
-			let dateObj = resp[0];
-			this.todaySelected = resp[1];
-			if (dateObj && !this.todaySelected) {
-				let universalDate = _.cloneDeep(dateObj);
-				let from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-				let to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-				if (from && to) {
-					this.pettycashRequest.from = from;
-					this.pettycashRequest.to = to;
-					this.pettycashRequest.page = 1;
-					this.pettycashRequest.status = 'pending';
-				}
-			}
-		});
+        observableCombineLatest([this.universalDate$, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+            if (!Array.isArray(resp[0])) {
+                return;
+            }
+            let dateObj = resp[0];
+            this.todaySelected = resp[1];
+            if (dateObj && !this.todaySelected) {
+                let universalDate = _.cloneDeep(dateObj);
+                let from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                let to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                if (from && to) {
+                    this.pettycashRequest.from = from;
+                    this.pettycashRequest.to = to;
+                    this.pettycashRequest.page = 1;
+                    this.pettycashRequest.status = 'pending';
+                }
+            }
+        });
     }
 
     public ngOnInit() {
@@ -122,7 +125,7 @@ export class PendingListComponent implements OnInit, OnChanges {
 
     public async approveEntry() {
         if (!this.selectedEntryForApprove.baseAccount.uniqueName) {
-            this._toasty.errorToast('Please Select Base Account First For Approving An Entry...');
+            this._toasty.errorToast(this.localeData?.approve_entry_error);
             this.hideApproveConfirmPopup(false);
             return;
         }
@@ -256,5 +259,20 @@ export class PendingListComponent implements OnInit, OnChanges {
         while ((c = c.parentNode) && c !== p) {
         }
         return !!c;
+    }
+
+    /**
+     * This will replace the search field title
+     *
+     * @param {string} title
+     * @returns {string}
+     * @memberof PendingListComponent
+     */
+    public replaceTitle(title: string): string {
+        if (this.localeData && this.localeData?.search_field) {
+            return this.localeData?.search_field.replace("[FIELD]", title);
+        } else {
+            return title;
+        }
     }
 }

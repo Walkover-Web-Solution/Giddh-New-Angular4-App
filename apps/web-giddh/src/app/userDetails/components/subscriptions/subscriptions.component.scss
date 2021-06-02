@@ -38,7 +38,7 @@
     clear: both;
 }
 .subscription-dropdown .btn {
-    border: 1px solid #c4c0c0;
+    border: 1px solid $gainsboro;
     width: 342px;
     text-align: left;
     background: $white;
@@ -77,13 +77,14 @@
 }
 .subscription-dropdown .dropdown-menu li {
     padding: 5px 4px;
-    border-bottom: 1px solid #e6e6e6;
+    border-bottom: 1px solid $gainsboro;
     transition: 0.5s all ease;
 }
 .subscription-dropdown .dropdown-menu li.active {
     background: $lavender;
 }
-.subscription-dropdown .dropdown-menu li.active a, .subscription-dropdown .dropdown-menu li.active a strong {
+.subscription-dropdown .dropdown-menu li.active a,
+.subscription-dropdown .dropdown-menu li.active a strong {
     background: none;
     color: $chetwode-blue;
 }
@@ -95,7 +96,7 @@
 }
 .subscription-dropdown li:hover a,
 .subscription-dropdown li:hover {
-    background: #f1f1f1;
+    background: $gray-95;
 }
 .subscription-dropdown .dropdown-menu li a span {
     position: absolute;
@@ -130,7 +131,7 @@
     color: $nero;
     font-size: 14px;
     padding: 12px 20px;
-    display:flex;
+    display: flex;
     white-space: initial;
     word-break: break-all;
     width: 100%;
@@ -143,43 +144,47 @@
 .associated-companies-li > a:hover {
     color: $deep-sky-blue;
 }
-.associated-company-name{
+.associated-company-name {
     flex-direction: column;
-    p{
-        img{
+    p {
+        img {
             width: 16px;
         }
     }
-    .custom-dropdown{
+    .custom-dropdown {
         right: 0;
         top: 13px;
         position: absolute;
     }
 }
-.box-border{
+.box-border {
     border: 1px solid $gainsboro;
 }
 .active {
     color: $light-green;
     font-size: 14px;
 }
-.green-dote, .red-dote, .orange-dote {
+.green-dot,
+.red-dot,
+.orange-dot {
     width: 9px;
     height: 9px;
     display: inline-block;
     border-radius: 40px;
     background-color: $light-green;
 }
-.red-dote {
+.red-dot {
     background-color: $red;
 }
-.orange-dote {
+.orange-dot {
     background-color: $orange;
 }
-.basic > tbody > tr td:first-child, .basic > thead > tr th:first-child {
+.basic > tbody > tr td:first-child,
+.basic > thead > tr th:first-child {
     border-left: 0px solid $gainsboro !important;
 }
-.basic > tbody > tr td:last-child, .basic > thead > tr th:last-child {
+.basic > tbody > tr td:last-child,
+.basic > thead > tr th:last-child {
     border-right: 0px solid $gainsboro !important;
 }
 .table-subscription {
@@ -195,9 +200,9 @@
     padding-bottom: 60px;
     padding-right: 0;
     .custom-dropdown {
-      .dropdown-toggle{
-          margin-right: 13px;
-      }
+        .dropdown-toggle {
+            margin-right: 13px;
+        }
     }
 }
 .giddh-table tbody {
@@ -227,22 +232,23 @@
 .btn-group.custom-dropdown {
     line-height: 14px;
 }
-.subscription-dropdown-wrapper{
+.subscription-dropdown-wrapper {
     max-width: 400px;
     width: 100%;
 }
-.subscription-table-box{
-    th, td{
+.subscription-table-box {
+    th,
+    td {
         padding: 3px 0 !important;
     }
 }
-.trial-plan-section{
+.trial-plan-section {
     border: 1px solid $gainsboro;
 }
 
-.plan-row-wrapper{
-    .plan-list{
-        li{
+.plan-row-wrapper {
+    .plan-list {
+        li {
             padding-right: 25px;
             margin-bottom: 0px;
         }
@@ -252,7 +258,7 @@
 .list-inline {
     padding-left: 0;
     list-style: none;
-    >li{
+    > li {
         display: inline-block;
     }
 }
@@ -283,25 +289,25 @@
     .xs-pl-0 {
         padding-left: 0px !important;
     }
-    .search-subscription{
-        .subscription-dropdown-wrapper{
+    .search-subscription {
+        .subscription-dropdown-wrapper {
             max-width: 100%;
             width: calc(100% - 120px);
         }
     }
-    .plan-row-wrapper{
+    .plan-row-wrapper {
         position: relative;
-        .plan-row{
+        .plan-row {
             justify-content: start;
-            .plan-list{
+            .plan-list {
                 margin-top: 10px;
-                li{
+                li {
                     padding-right: 0;
                     width: 50%;
                     line-height: 24px;
                 }
             }
-            .trial-plan-state{
+            .trial-plan-state {
                 position: absolute;
                 top: 12px;
                 right: 0;
@@ -309,66 +315,66 @@
             }
         }
     }
-    .table-responsive{
+    .table-responsive {
         margin-top: 10px;
     }
-    table.on-mobile-view tbody tr{
+    table.on-mobile-view tbody tr {
         box-shadow: none !important;
         margin-bottom: 0;
         margin-top: 0;
     }
-    table.on-mobile-view tbody > tr > td{
+    table.on-mobile-view tbody > tr > td {
         margin-bottom: 5px;
     }
-    table.on-mobile-view tbody td:before{
+    table.on-mobile-view tbody td:before {
         left: 0;
     }
-    .left-div{
+    .left-div {
         border-left: none;
         padding-right: 0;
-        .main-associated-companies{
+        .main-associated-companies {
             margin-top: 10px;
             overflow: hidden;
-            .associated-company-heading{
+            .associated-company-heading {
                 background-color: $gainsboro;
                 padding: 5px 5px;
                 margin-top: 15px;
             }
         }
-        .associated-companies-list{
-                .search-company-here{
-                    padding-right: 20px;
-                }
-        }
-        .custom-dropdown{
-            .dropdown-toggle{
-                 margin-right: 0;
-                }
+        .associated-companies-list {
+            .search-company-here {
+                padding-right: 20px;
             }
         }
-        .btn-group.custom-dropdown {
-           margin-right: 10px;
-        }
-        .trial-plan-state  {
-            span.font-26 {
-                font-size: 16px;
-                font-weight: bold;
+        .custom-dropdown {
+            .dropdown-toggle {
+                margin-right: 0;
             }
         }
-}
-@media(max-width:767px){
-    .search-subscription{
-         margin-top: 55px;
+    }
+    .btn-group.custom-dropdown {
+        margin-right: 10px;
+    }
+    .trial-plan-state {
+        span.font-26 {
+            font-size: 16px;
+            font-weight: bold;
+        }
     }
 }
-@media(max-width:575px){
-    .plan-row-wrapper{
-        .plan-list{
-            li{
+@media (max-width: 767px) {
+    .search-subscription {
+        margin-top: 55px;
+    }
+}
+@media (max-width: 575px) {
+    .plan-row-wrapper {
+        .plan-list {
+            li {
                 padding-right: 0;
                 width: 100% !important;
-                span{
-                    &:first-child{
+                span {
+                    &:first-child {
                         min-width: 150px;
                         display: inline-block;
                     }
@@ -380,7 +386,7 @@
         min-width: 320px;
     }
 }
-@media(max-width:320px) {
+@media (max-width: 320px) {
     .subscription-dropdown .dropdown-menu {
         min-width: 290px;
     }
@@ -391,6 +397,6 @@
         font-size: 12px !important;
     }
 }
-cdk-virtual-scroll-viewport{
+cdk-virtual-scroll-viewport {
     height: 540px;
 }

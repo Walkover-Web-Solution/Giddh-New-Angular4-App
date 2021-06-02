@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { InventoryAction } from '../../../../actions/inventory/inventory.actions';
 import { AppState } from '../../../../store';
 import * as _ from '../../../../lodash-optimized';
@@ -12,79 +12,16 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import { BranchTransferEntity, ILinkedStocksResult, LinkedStocksResponse, LinkedStocksVM, TransferDestinationRequest, TransferProductsRequest } from '../../../../models/api-models/BranchTransfer';
 import { SidebarAction } from '../../../../actions/inventory/sidebar.actions';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'branch-destination',
     templateUrl: './branch.transfer.component.html',
-    styles: [`
-    :host {
-      position: fixed;
-      left: auto;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: 100%;
-      max-width:580px;
-      z-index: 99999;
-    }
-
-    #close {
-      display: none;
-    }
-
-    :host.in #close {
-      display: block;
-      position: fixed;
-      left: -41px;
-      top: 0;
-      z-index: 5;
-      border: 0;
-      border-radius: 0;
-    }
-
-    :host .container-fluid {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    :host .aside-pane {
-      width: 100%;
-      max-width:580px;
-      background: #fff;
-    }
-
-    .aside-pane {
-      width: 100%;
-    }
-
-    .flexy-child {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .flexy-child-1 {
-      flex-grow: 1;
-    }
-
-    .vmiddle {
-      position: absolute;
-      top: 50%;
-      bottom: 0;
-      left: 0;
-      display: table;
-      width: 100%;
-      right: 0;
-      transform: translateY(-50%);
-      text-align: center;
-      margin: 0 auto;
-    }
-  `],
+    styleUrls: ['./branch.transfer.component.scss']
 })
 export class BranchTransferComponent implements OnInit, OnDestroy {
     // @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('sourceSelect', {static: true}) public sourceSelect: ShSelectComponent;
+    @ViewChild('sourceSelect', { static: true }) public sourceSelect: ShSelectComponent;
     public form: FormGroup;
     public mode: 'destination' | 'product' = 'destination';
     public today = new Date();
@@ -96,14 +33,16 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
     public isBranchCreationInProcess$: Observable<boolean>;
     public isBranchCreationSuccess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(private _fb: FormBuilder, private _store: Store<AppState>, private _inventoryAction: InventoryAction, private sidebarAction: SidebarAction) {
         this._store.dispatch(this._inventoryAction.GetAllLinkedStocks());
         this.initializeForm();
-        this.isBranchCreationInProcess$ = this._store.select(state => state.inventoryBranchTransfer.isBranchTransferInProcess).pipe(takeUntil(this.destroyed$));
-        this.isBranchCreationSuccess$ = this._store.select(state => state.inventoryBranchTransfer.isBranchTransferSuccess).pipe(takeUntil(this.destroyed$));
+        this.isBranchCreationInProcess$ = this._store.pipe(select(state => state.inventoryBranchTransfer.isBranchTransferInProcess), takeUntil(this.destroyed$));
+        this.isBranchCreationSuccess$ = this._store.pipe(select(state => state.inventoryBranchTransfer.isBranchTransferSuccess), takeUntil(this.destroyed$));
 
-        this._store.select(state => state.inventoryBranchTransfer.linkedStocks).pipe(takeUntil(this.destroyed$)).subscribe((branches: LinkedStocksResponse) => {
+        this._store.pipe(select(state => state.inventoryBranchTransfer.linkedStocks), takeUntil(this.destroyed$)).subscribe((branches: LinkedStocksResponse) => {
             if (branches) {
                 if (branches.results.length) {
                     this.branches = this.linkedStocksVM(branches.results).map(b => ({ label: b.name, value: b.uniqueName, additional: b }));
@@ -138,13 +77,12 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this._store
-            .select(p => p.inventory.stocksList && p.inventory.stocksList.results).subscribe(s => {
-                if (s) {
-                    this.stockListBackUp = s;
-                    this.stockListOptions = s.map(p => ({ label: p.name, value: p.uniqueName }));
-                }
-            });
+        this._store.pipe(select(p => p.inventory.stocksList && p.inventory.stocksList.results), takeUntil(this.destroyed$)).subscribe(s => {
+            if (s) {
+                this.stockListBackUp = s;
+                this.stockListOptions = s.map(p => ({ label: p.name, value: p.uniqueName }));
+            }
+        });
 
         this.isBranchCreationSuccess$.subscribe(s => {
             if (s) {
@@ -185,7 +123,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
 
     public initializeForm() {
         this.form = this._fb.group({
-            transferDate: [moment().format('DD-MM-YYYY'), Validators.required],
+            transferDate: [moment().format(GIDDH_DATE_FORMAT), Validators.required],
             source: ['', Validators.required],
             productName: ['', Validators.required],
             destination: [''],
@@ -238,8 +176,8 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
             });
 
             this.transfers.controls.map((trn: AbstractControl) => {
-                trn.get('stockUnit').patchValue(_.get(this.selectedProduct, 'stockUnit.code'));
-                trn.get('rate').patchValue(_.get(this.selectedProduct, 'rate', 1));
+                trn.get('stockUnit')?.patchValue(_.get(this.selectedProduct, 'stockUnit.code'));
+                trn.get('rate')?.patchValue(_.get(this.selectedProduct, 'rate', 1));
                 this.valueChanged(trn);
             });
         } else {
@@ -250,8 +188,8 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
             const stockUnit = item.get('stockUnit');
             const rate = item.get('rate');
 
-            stockUnit.patchValue(_.get(selectedProduct, 'stockUnit.code'));
-            rate.patchValue(_.get(selectedProduct, 'rate', 1));
+            stockUnit?.patchValue(_.get(selectedProduct, 'stockUnit.code'));
+            rate?.patchValue(_.get(selectedProduct, 'rate', 1));
         }
     }
 
@@ -260,7 +198,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
         const rate = item.get('rate');
         const value = item.get('value');
 
-        value.patchValue(parseFloat(quantity.value) * parseFloat(rate.value));
+        value?.patchValue(parseFloat(quantity.value) * parseFloat(rate.value));
     }
 
     public deleteEntry(index: number) {
@@ -284,7 +222,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
                 value.source = new BranchTransferEntity(this.source.value, this.getEntityType(this.source.value));
                 value.description = this.description.value;
                 value.product = new BranchTransferEntity(this.productName.value, 'stock');
-                value.transferDate = moment(this.transferDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY');
+                value.transferDate = moment(this.transferDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
                 let rawValues = this.transfers.getRawValue();
                 rawValues.map(rv => {
@@ -300,7 +238,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
                 value.source = new BranchTransferEntity(this.source.value, this.getEntityType(this.source.value));
                 value.description = this.description.value;
                 value.destination = new BranchTransferEntity(this.destination.value, this.getEntityType(this.destination.value));
-                value.transferDate = moment(this.transferDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY');
+                value.transferDate = moment(this.transferDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
                 let rawValues = this.transfers.getRawValue();
                 rawValues.map(rv => {

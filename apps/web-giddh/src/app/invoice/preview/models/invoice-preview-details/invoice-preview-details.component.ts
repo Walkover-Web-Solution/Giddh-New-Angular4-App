@@ -24,7 +24,6 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { PurchaseRecordService } from 'apps/web-giddh/src/app/services/purchase-record.service';
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { saveAs } from 'file-saver';
-import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { fromEvent, Observable, ReplaySubject } from 'rxjs';
@@ -57,23 +56,32 @@ import { ProformaListComponent } from '../../../proforma/proforma-list.component
 })
 
 export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-    @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
-    @ViewChild(PdfJsViewerComponent, {static: false}) public pdfViewer: PdfJsViewerComponent;
-    @ViewChild('showEmailSendModal', {static: true}) public showEmailSendModal: ModalDirective;
-    @ViewChild('downloadVoucherModal', {static: true}) public downloadVoucherModal: ModalDirective;
-    @ViewChild('invoiceDetailWrapper', {static: true}) invoiceDetailWrapperView: ElementRef;
-    @ViewChild('invoicedetail', {static: true}) invoiceDetailView: ElementRef;
+    @ViewChild('searchElement', { static: true }) public searchElement: ElementRef;
+    @ViewChild('showEmailSendModal', { static: true }) public showEmailSendModal: ModalDirective;
+    @ViewChild('downloadVoucherModal', { static: true }) public downloadVoucherModal: ModalDirective;
+    @ViewChild('invoiceDetailWrapper', { static: true }) invoiceDetailWrapperView: ElementRef;
+    @ViewChild('invoicedetail', { static: true }) invoiceDetailView: ElementRef;
     /** Attached document preview container instance */
-    @ViewChild('attachedDocumentPreview', {static: true}) attachedDocumentPreview: ElementRef;
+    @ViewChild('attachedDocumentPreview', { static: true }) attachedDocumentPreview: ElementRef;
+    /** Instance of PDF container iframe */
+    @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
 
     @Input() public items: InvoicePreviewDetailsVm[];
     @Input() public selectedItem: InvoicePreviewDetailsVm;
+    /** Emits the selected item to the parent for updating the current selected item in parent component */
+    @Output() public selectedItemChange: EventEmitter<InvoicePreviewDetailsVm> = new EventEmitter<InvoicePreviewDetailsVm>();
     @Input() public appSideMenubarIsOpen: boolean;
     @Input() public invoiceSetting: InvoiceSetting;
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
     @Input() public voucherNoForDetail: string;
     @Input() public voucherDetailAction: string;
     @Input() public showPrinterDialogWhenPageLoad: boolean;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    @Input() public isCompany: boolean;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     @Output() public deleteVoucher: EventEmitter<any> = new EventEmitter();
     @Output() public updateVoucherAction: EventEmitter<string> = new EventEmitter();
@@ -101,7 +109,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public invoiceDetailViewHeight: number;
     public invoiceImageSectionViewHeight: number;
     public isMobileView = false;
-    public pagecount: number = 0;
     public fileUploadOptions: UploaderOptions;
     public uploadInput: EventEmitter<UploadInput>;
 
@@ -139,6 +146,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public pdfPreviewHasError: boolean = false;
     /** This will hold the search value */
     @Input() public invoiceSearch: any = "";
+    /** PDF file url created with blob */
+    public sanitizedPdfFileUrl: any = '';
+    /** PDF src */
+    public pdfFileURL: any = '';
     /** This will hold the attached file in Purchase Bill */
     private attachedAttachmentBlob: Blob;
 
@@ -157,10 +168,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private purchaseRecordService: PurchaseRecordService,
         private sanitizer: DomSanitizer,
         private salesService: SalesService,
-        private modalService: BsModalService) {
+        private modalService: BsModalService,
+        private domSanitizer: DomSanitizer) {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileView = result.matches;
         });
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
@@ -176,15 +188,17 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * @memberof InvoicePreviewDetailsComponent
      */
     public get shouldShowPrintDocument(): boolean {
-        return this.selectedItem.voucherType !== VoucherTypeEnum.purchase ||
+        return this.selectedItem && (this.selectedItem.voucherType !== VoucherTypeEnum.purchase ||
             (this.selectedItem.voucherType === VoucherTypeEnum.purchase && this.pdfPreviewLoaded) ||
             (this.selectedItem.voucherType === VoucherTypeEnum.purchase && this.attachedDocumentType &&
-                (this.attachedDocumentType.type === 'pdf' || this.attachedDocumentType.type === 'image'));
+                (this.attachedDocumentType.type === 'pdf' || this.attachedDocumentType.type === 'image')));
     }
 
     ngOnInit() {
         if (this.selectedItem) {
-            this.downloadVoucher('base64');
+            if (!this.isVoucherDownloading) {
+                this.downloadVoucher('base64');
+            }
             this.only4ProformaEstimates = [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType);
 
             if (this.only4ProformaEstimates) {
@@ -202,7 +216,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             }
         }));
         this.isUpdateVoucherActionSuccess$.subscribe(res => {
-            if (res) {
+            if (res && this.proformaListComponent) {
                 // get all data again because we are updating action in list page so we have to update data i.e we have to fire this
                 this.proformaListComponent.getAll();
             }
@@ -219,7 +233,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     return item.uniqueName === this.selectedItem.uniqueName;
                 })[0];
             }
-            if(this.invoiceSearch && this.searchElement && this.searchElement.nativeElement) {
+            if (this.invoiceSearch && this.searchElement && this.searchElement.nativeElement) {
                 this.searchElement.nativeElement.value = this.invoiceSearch;
                 this.filterVouchers(this.invoiceSearch);
             }
@@ -250,19 +264,20 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     ngAfterViewInit(): void {
-        this.searchElement.nativeElement.focus();
-        fromEvent(this.searchElement.nativeElement, 'input')
+        this.searchElement?.nativeElement.focus();
+        fromEvent(this.searchElement?.nativeElement, 'input')
             .pipe(
                 debounceTime(500),
                 distinctUntilChanged(),
-                map((ev: any) => ev.target.value)
+                map((ev: any) => ev.target.value),
+                takeUntil(this.destroyed$)
             )
             .subscribe((term => {
                 this.filterVouchers(term);
             }))
 
-        this.invoiceDetailWrapperHeight = this.invoiceDetailWrapperView.nativeElement.offsetHeight;
-        this.invoiceDetailViewHeight = this.invoiceDetailView.nativeElement.offsetHeight;
+        this.invoiceDetailWrapperHeight = this.invoiceDetailWrapperView?.nativeElement.offsetHeight;
+        this.invoiceDetailViewHeight = this.invoiceDetailView?.nativeElement.offsetHeight;
         this.invoiceImageSectionViewHeight = this.invoiceDetailWrapperHeight - this.invoiceDetailViewHeight - 90;
     }
 
@@ -284,7 +299,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.store.dispatch(this._generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
         this.showEditMode = !this.showEditMode;
 
-        if(this.searchElement && this.searchElement.nativeElement && this.searchElement.nativeElement.value) {
+        if (this.searchElement && this.searchElement.nativeElement && this.searchElement.nativeElement.value) {
             this.filterVouchers(this.searchElement.nativeElement.value);
         }
     }
@@ -311,6 +326,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * @memberof InvoicePreviewDetailsComponent
      */
     public selectVoucher(item: InvoicePreviewDetailsVm): void {
+        this.selectedItemChange.emit(item);
         this.selectedItem = item;
         this.isAccountHaveAdvanceReceipts = false;
         this.downloadVoucher('base64');
@@ -352,34 +368,36 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.isVoucherDownloadError = false;
 
         if ([VoucherTypeEnum.sales, VoucherTypeEnum.cash, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].includes(this.voucherType)) {
-            let model: DownloadVoucherRequest = {
-                voucherType: this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem.voucherType,
-                voucherNumber: [this.selectedItem.voucherNumber]
-            };
-            let accountUniqueName: string = this.selectedItem.account.uniqueName;
-            //
-            this._receiptService.DownloadVoucher(model, accountUniqueName, false).subscribe(result => {
-                if (result) {
-                    this.selectedItem.blob = result;
-                    this.pdfViewer.pdfSrc = result;
-                    this.pdfViewer.showSpinner = true;
-                    this.pdfViewer.refresh();
-                    this.isVoucherDownloadError = false;
-                } else {
-                    this.isVoucherDownloadError = true;
-                    this._toasty.errorToast('Something went wrong please try again!');
-                }
-                this.isVoucherDownloading = false;
-                this.detectChanges();
-            }, (err) => {
-                this.handleDownloadError(err);
-            });
+            if (this.selectedItem) {
+                let model: DownloadVoucherRequest = {
+                    voucherType: this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem.voucherType,
+                    voucherNumber: [this.selectedItem.voucherNumber]
+                };
+                let accountUniqueName: string = this.selectedItem.account.uniqueName;
+                this._receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                    if (result) {
+                        this.selectedItem.blob = result;
+                        const file = new Blob([result], { type: 'application/pdf' });
+                        URL.revokeObjectURL(this.pdfFileURL);
+                        this.pdfFileURL = URL.createObjectURL(file);
+                        this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                        this.isVoucherDownloadError = false;
+                    } else {
+                        this.isVoucherDownloadError = true;
+                        this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                    }
+                    this.isVoucherDownloading = false;
+                    this.detectChanges();
+                }, (err) => {
+                    this.handleDownloadError(err);
+                });
+            }
         } else if (this.voucherType === VoucherTypeEnum.purchase) {
             const requestObject: any = {
                 accountUniqueName: this.selectedItem.account.uniqueName,
                 purchaseRecordUniqueName: this.selectedItem.uniqueName
             };
-            this.purchaseRecordService.downloadAttachedFile(requestObject).subscribe((data) => {
+            this.purchaseRecordService.downloadAttachedFile(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
                 if (data && data.body) {
                     this.shouldShowUploadAttachment = false;
                     if (data.body.fileType) {
@@ -397,9 +415,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                             this.attachedAttachmentBlob = base64ToBlob(data.body.uploadedFile, 'application/pdf', 512);
                             setTimeout(() => {
                                 this.selectedItem.blob = this.attachedAttachmentBlob;
-                                this.pdfViewer.pdfSrc = this.attachedAttachmentBlob;
-                                this.pdfViewer.showSpinner = true;
-                                this.pdfViewer.refresh();
+                                const file = new Blob([this.attachedAttachmentBlob], { type: 'application/pdf' });
+                                URL.revokeObjectURL(this.pdfFileURL);
+                                this.pdfFileURL = URL.createObjectURL(file);
+                                this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                                 this.detectChanges();
                             }, 250);
                             this.isVoucherDownloadError = false;
@@ -425,13 +444,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
             let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.selectedItem.account.uniqueName, uniqueName: this.selectedItem.uniqueName };
 
-            this.purchaseRecordService.getPdf(getRequest).subscribe(response => {
+            this.purchaseRecordService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.status === "success" && response.body) {
                     let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
                     this.attachedDocumentBlob = blob;
-                    this.pdfViewer.pdfSrc = blob;
-                    this.pdfViewer.showSpinner = true;
-                    this.pdfViewer.refresh();
+                    const file = new Blob([blob], { type: 'application/pdf' });
+                    URL.revokeObjectURL(this.pdfFileURL);
+                    this.pdfFileURL = URL.createObjectURL(file);
+                    this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                     this.pdfPreviewLoaded = true;
                     this.detectChanges();
                 } else {
@@ -439,33 +459,36 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 }
             });
         } else {
-            let request: ProformaDownloadRequest = new ProformaDownloadRequest();
-            request.fileType = fileType;
-            request.accountUniqueName = this.selectedItem.account.uniqueName;
+            if (this.selectedItem) {
+                let request: ProformaDownloadRequest = new ProformaDownloadRequest();
+                request.fileType = fileType;
+                request.accountUniqueName = this.selectedItem.account.uniqueName;
 
-            if (this.selectedItem.voucherType === VoucherTypeEnum.generateProforma) {
-                request.proformaNumber = this.selectedItem.voucherNumber;
-            } else {
-                request.estimateNumber = this.selectedItem.voucherNumber;
-            }
-
-            this._proformaService.download(request, this.selectedItem.voucherType).subscribe(result => {
-                if (result && result.status === 'success') {
-                    let blob: Blob = base64ToBlob(result.body, 'application/pdf', 512);
-                    this.pdfViewer.pdfSrc = blob;
-                    this.selectedItem.blob = blob;
-                    this.pdfViewer.showSpinner = true;
-                    this.pdfViewer.refresh();
-                    this.isVoucherDownloadError = false;
+                if (this.selectedItem.voucherType === VoucherTypeEnum.generateProforma) {
+                    request.proformaNumber = this.selectedItem.voucherNumber;
                 } else {
-                    this._toasty.errorToast(result.message, result.code);
-                    this.isVoucherDownloadError = true;
+                    request.estimateNumber = this.selectedItem.voucherNumber;
                 }
-                this.isVoucherDownloading = false;
-                this.detectChanges();
-            }, (err) => {
-                this.handleDownloadError(err);
-            });
+
+                this._proformaService.download(request, this.selectedItem.voucherType).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                    if (result && result.status === 'success') {
+                        let blob: Blob = base64ToBlob(result.body, 'application/pdf', 512);
+                        this.selectedItem.blob = blob;
+                        const file = new Blob([blob], { type: 'application/pdf' });
+                        URL.revokeObjectURL(this.pdfFileURL);
+                        this.pdfFileURL = URL.createObjectURL(file);
+                        this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                        this.isVoucherDownloadError = false;
+                    } else {
+                        this._toasty.errorToast(result.message, result.code);
+                        this.isVoucherDownloadError = true;
+                    }
+                    this.isVoucherDownloading = false;
+                    this.detectChanges();
+                }, (err) => {
+                    this.handleDownloadError(err);
+                });
+            }
         }
     }
 
@@ -502,10 +525,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         if (this.isVoucherDownloading || this.isVoucherDownloadError) {
             return;
         }
-        if (this.pdfViewer && this.pdfViewer.pdfSrc) {
-            this.pdfViewer.startPrint = true;
-            this.pdfViewer.refresh();
-            this.pdfViewer.startPrint = false;
+        if (this.pdfContainer) {
+            const window = this.pdfContainer?.nativeElement?.contentWindow;
+            if (window) {
+                window.focus();
+                setTimeout(() => {
+                    window.print();
+                }, 200);
+            }
         } else if (this.attachedDocumentPreview) {
             const windowWidth = window.innerWidth
                 || document.documentElement.clientWidth
@@ -513,7 +540,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 || 0;
             const left = (windowWidth / 2) - 450;
             const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
-            printWindow.document.write((this.attachedDocumentPreview.nativeElement as HTMLElement).innerHTML);
+            printWindow.document.write((this.attachedDocumentPreview?.nativeElement as HTMLElement).innerHTML);
             printWindow.document.close();
             printWindow.focus();
             printWindow.print();
@@ -535,10 +562,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('fixed');
-    }
-
-    public testPagesLoaded(count: number) {
-        this.pagecount = count;
     }
 
     /**
@@ -566,7 +589,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             this.isFileUploading = true;
         } else if (output.type === 'done') {
             if (output.file.response.status === 'success') {
-                this._toasty.successToast('File uploaded successfully');
+                this._toasty.successToast(this.localeData?.file_uploaded);
                 const response = output.file.response.body;
                 this.isFileUploading = false;
                 const requestObject = {
@@ -576,9 +599,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     uniqueName: this.selectedItem.uniqueName,
                     attachedFiles: [response.uniqueName]
                 };
-                this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH', true).subscribe(() => {
+                this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH', true).pipe(takeUntil(this.destroyed$)).subscribe(() => {
                     this.downloadVoucher('base64');
-                }, () => this._toasty.errorToast('Something went wrong! Try again'));
+                }, () => this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong));
             } else {
                 this.isFileUploading = false;
                 this._toasty.errorToast(output.file.response.message);
@@ -636,7 +659,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * Call API to get all advance receipts of an invoice
      *
      * @param {*} customerUniquename Selected customer unique name
-     * @param {*} voucherDate Voucher Date (DD-MM-YYYY)
+     * @param {*} voucherDate Voucher Date (GIDDH_DATE_FORMAT)
      * @memberof InvoicePreviewDetailsComponent
      */
     public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: string): void {
@@ -645,7 +668,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 accountUniqueName: customerUniqueName,
                 invoiceDate: voucherDate
             };
-            this.salesService.getAllAdvanceReceiptVoucher(requestObject).subscribe(res => {
+            this.salesService.getAllAdvanceReceiptVoucher(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res && res.status === 'success') {
                     if (res.body && res.body.length) {
                         this.isAccountHaveAdvanceReceipts = true;
@@ -747,7 +770,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public getLinkedPurchaseOrders(): void {
         this.purchaseOrderNumbers = [];
         if (this.selectedItem.voucherType === VoucherTypeEnum.purchase) {
-            this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account.uniqueName, this.selectedItem.uniqueName).subscribe((res: any) => {
+            this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account.uniqueName, this.selectedItem.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                 if (res && res.body) {
                     this.purchaseOrderNumbers = res.body.purchaseOrderDetails;
                 }
@@ -771,5 +794,31 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 item.grandTotal.toString().includes(term);
         });
         this.detectChanges();
+    }
+
+    /**
+     * This will return voucher log text
+     *
+     * @param {*} log
+     * @returns {string}
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public getVoucherLogText(log: any): string {
+        let voucherLog = this.localeData?.voucher_log;
+        voucherLog = voucherLog?.replace("[ACTION]", log.action).replace("[TOTAL]", log.grandTotal).replace("[USER]", log.user?.name);
+        return voucherLog;
+    }
+
+    /**
+     * This will return edit voucher text
+     *
+     * @param {string} voucherType
+     * @returns {string}
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public getEditVoucherText(voucherType: string): string {
+        let editVoucher = this.localeData?.edit_voucher;
+        editVoucher = editVoucher.replace("[VOUCHER]", voucherType);
+        return editVoucher;
     }
 }

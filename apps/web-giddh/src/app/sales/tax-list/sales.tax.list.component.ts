@@ -8,6 +8,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { takeUntil } from 'rxjs/operators';
 import { each } from '../../lodash-optimized';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'sales-tax-list',
@@ -44,7 +45,7 @@ import { each } from '../../lodash-optimized';
           -ms-user-select: none;
           user-select: none;
       }
-      .taxItem {
+      .tax-item {
       margin: 0;
       float: left;
       padding: 6px;
@@ -70,7 +71,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
     @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
     @Output() public closeOtherPopupEvent: EventEmitter<boolean> = new EventEmitter();
-    @ViewChild('taxListUl', {static: true}) public taxListUl: ElementRef;
+    @ViewChild('taxListUl', { static: true }) public taxListUl: ElementRef;
 
     public taxList: ITaxList[] = [];
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -79,7 +80,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
         //
 
         // get tax list and assign values to local vars
-        this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
+        this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
             if (o) {
                 this.taxes = o;
                 this.makeTaxList();
@@ -130,7 +131,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public taxInputBlur(event) {
-        if (event && event.relatedTarget && !this.taxListUl.nativeElement.contains(event.relatedTarget)) {
+        if (event && event.relatedTarget && !this.taxListUl?.nativeElement.contains(event.relatedTarget)) {
             this.toggleTaxPopup(false);
         }
     }
@@ -177,10 +178,10 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     private isTaxApplicable(tax: TaxResponse): boolean {
-        const today = moment(moment().format('DD-MM-YYYY'), 'DD-MM-YYYY', true).valueOf();
+        const today = moment(moment().format(GIDDH_DATE_FORMAT), GIDDH_DATE_FORMAT, true).valueOf();
         let isApplicable = false;
         each(tax.taxDetail, (det: ITaxDetail) => {
-            if (today >= moment(det.date, 'DD-MM-YYYY', true).valueOf()) {
+            if (today >= moment(det.date, GIDDH_DATE_FORMAT, true).valueOf()) {
                 return isApplicable = true;
             }
         });

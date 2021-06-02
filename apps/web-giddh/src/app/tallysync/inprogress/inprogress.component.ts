@@ -6,6 +6,8 @@ import { saveAs } from "file-saver";
 import { GeneralService } from '../../services/general.service';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { PAGINATION_LIMIT } from '../../app.constant';
+import { takeUntil } from "rxjs/operators";
+import { ReplaySubject } from "rxjs";
 @Component({
     selector: "app-inprogress-preview",
     templateUrl: "./inprogress.component.html",
@@ -36,6 +38,14 @@ export class InprogressComponent implements OnInit, OnDestroy {
         type: ''
     };
     public paginationRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(
         private _toaster: ToasterService,
@@ -55,17 +65,20 @@ export class InprogressComponent implements OnInit, OnDestroy {
                 this.getCurrentData();
             }
         }, 30000);
-        this.imgPath = (isElectron ||isCordova)
+        this.imgPath = (isElectron || isCordova)
             ? "assets/images/"
             : AppUrl + APP_FOLDER + "assets/images/";
     }
 
     public ngOnDestroy() {
         this.isPageLoaded = false;
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     public getCurrentData() {
-        this.tallysyncService.getInProgressSync(this.paginationRequest).subscribe(res => {
+        this.isLoading = true;
+        this.tallysyncService.getInProgressSync(this.paginationRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res && res.results && res.results.length > 0) {
                 this.progressDataResponse = res;
                 this.progressData = res.results;
@@ -124,6 +137,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
                         ).toFixed(2) + "%";
                 });
             }
+            this.isLoading = false;
         });
     }
 
@@ -133,6 +147,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
         this.downloadTallyErrorLogRequest.hour = row['hour'] ? row['hour'] : null;
         this.downloadTallyErrorLogRequest.type = row['type'];
         this.tallysyncService.getErrorLog(row.company.uniqueName, this.downloadTallyErrorLogRequest)
+            .pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
                 if (res.status === "success") {
                     let blobData = this.base64ToBlob(res.body, "application/xlsx", 512);

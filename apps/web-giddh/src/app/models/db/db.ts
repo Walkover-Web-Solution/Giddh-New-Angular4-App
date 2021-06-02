@@ -63,7 +63,7 @@ class AppDatabase extends Dexie {
 
     public getAllItems(key: any, entity: string): Promise<any[]> {
         return this.companies.get(key).then((res: CompAidataModel) => {
-            return res.aidata[entity];
+            return res?.aidata[entity];
         });
     }
 
@@ -84,7 +84,7 @@ class AppDatabase extends Dexie {
             if (!res) {
                 return;
             }
-            let arr: IUlist[] = res.aidata[entity];
+            let arr: IUlist[] = res?.aidata[entity];
             let isFound = false;
             const limit = isCompany ? 17 : 7;
 
@@ -219,7 +219,7 @@ class AppDatabase extends Dexie {
             if (!res) {
                 return;
             }
-            let arr: IUlist[] = res.aidata[entity];
+            let arr: IUlist[] = res?.aidata[entity];
             // for accounts and groups
             arr = arr.filter((item: IUlist) => {
                 if (item.uniqueName !== uniqueName) {

@@ -9,7 +9,7 @@
     box-sizing: border-box;
     z-index: 102;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    border: 1px solid rgba(0,0,0,.15);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     min-width: max-content;
     margin-top: 1px;
@@ -44,15 +44,15 @@
 
 .item > a {
     padding: 5px 10px;
-    font-size:14px;
+    font-size: 14px;
 }
 .item > a:hover {
-    color: $chetwode-blue !important;
+    color: $nero !important;
     background: $lavender !important;
 }
 
 .no-result-link > a {
-    color: #10aae0 !important;
+    color: $deep-sky-blue-hover !important;
 }
 
 #noresult:hover {

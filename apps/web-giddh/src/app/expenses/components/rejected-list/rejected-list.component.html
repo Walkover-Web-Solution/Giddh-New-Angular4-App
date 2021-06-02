@@ -1,126 +1,115 @@
 <div class="container-fluid" *ngIf="!(getPettycashRejectedReportInprocess$ | async) ">
 
-	<div class="table-responsive">
+    <div class="table-responsive">
 
-		<table class="table basic giddh-table table-bordered on-mobile-view">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>Date
-						<ng-container class="d-inline-block"
-							*ngTemplateOutlet="sortingTemplate;context: { $implicit: 'entry_date'}"></ng-container>
-					</th>
-					<th>Submitted By
-						<!-- <a class="search-icon" href="javascript:void(0)">
-                        <i class="icon-search"></i>
-                    </a> -->
-					</th>
-					<th>Account
-					</th>
-					<th class="text-right">Amount
-						<ng-container class="d-inline-block ml-1"
-							*ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
-					</th>
-					<th>Payment/Receipt
-					</th>
-					<th>File</th>
-					<th>Reason of Rejection</th>
-					<th>Action</th>
-				</tr>
-			</thead>
+        <table class="table basic giddh-table table-bordered on-mobile-view">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{{commonLocaleData?.app_date}}
+                        <ng-container class="d-inline-block"
+                            *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'entry_date'}"></ng-container>
+                    </th>
+                    <th>{{localeData?.submitted_by}}</th>
+                    <th>{{commonLocaleData?.app_account}}</th>
+                    <th class="text-right">{{commonLocaleData?.app_amount}}
+                        <ng-container class="d-inline-block ml-1"
+                            *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
+                    </th>
+                    <th>{{localeData?.payment_receipt}}</th>
+                    <th>{{localeData?.file}}</th>
+                    <th>{{localeData?.reason_of_rejection}}</th>
+                    <th>{{commonLocaleData?.app_action}}</th>
+                </tr>
+            </thead>
 
-			<tbody>
+            <tbody>
 
-				<tr *ngFor="let expenses of RejectedItems let i =index">
-					<td data-title="#">{{i + 1}}</td>
+                <tr *ngFor="let expenses of RejectedItems let i =index">
+                    <td data-title="#">{{i + 1}}</td>
 
-					<td data-title="Date">{{expenses.entryDate}}</td>
+                    <td [attr.data-title]="commonLocaleData?.app_date">{{expenses.entryDate}}</td>
 
-					<td data-title="Submitted By">{{expenses.createdBy.name}} </td>
+                    <td [attr.data-title]="localeData?.submitted_by">{{expenses.createdBy.name}} </td>
 
-					<td data-title="Account">
-						<i class="dot-icon dot-warning" *ngIf="expenses.entryType==='sales'"></i>
-						<i class="dot-icon dot-success" *ngIf="expenses.entryType==='deposit'"></i>
-						<i class="dot-icon dot-primary"
-							*ngIf="expenses.entryType==='expense'"></i>{{expenses.particularAccount.name}}
-					</td>
+                    <td [attr.data-title]="commonLocaleData?.app_account">
+                        <i class="dot-icon dot-warning" *ngIf="expenses.entryType==='sales'"></i>
+                        <i class="dot-icon dot-success" *ngIf="expenses.entryType==='deposit'"></i>
+                        <i class="dot-icon dot-primary"
+                            *ngIf="expenses.entryType==='expense'"></i>{{expenses.particularAccount.name}}
+                    </td>
 
-					<td data-title="Amount" class="text-right pr-2">{{expenses.currencySymbol}}
-						{{ expenses.amount | giddhCurrency}}</td>
+                    <td [attr.data-title]="commonLocaleData?.app_amount" class="text-right pr-2">
+                        {{expenses.currencySymbol}}
+                        {{ expenses.amount | giddhCurrency}}</td>
 
-					<td data-title="Payment/Receipt">
-						<span *ngIf="expenses.baseAccountCategory==='OTHER'" class="font-12 text-gray">A/c</span>
-						<span *ngIf="expenses.baseAccountCategory==='BANK'"
-							class="font-12 text-gray icon-atm-card"></span>
-						<span *ngIf="expenses.baseAccountCategory==='CASH'" class="font-12 text-gray icon-cash"></span>
-						{{expenses.baseAccount.name ? expenses.baseAccount.name : '-'}}
-					</td>
+                    <td [attr.data-title]="localeData?.payment_receipt">
+                        <span *ngIf="expenses.baseAccountCategory==='OTHER'" class="font-12 text-gray">A/c</span>
+                        <span *ngIf="expenses.baseAccountCategory==='BANK'"
+                            class="font-12 text-gray icon-atm-card"></span>
+                        <span *ngIf="expenses.baseAccountCategory==='CASH'" class="font-12 text-gray icon-cash"></span>
+                        {{expenses.baseAccount.name ? expenses.baseAccount.name : '-'}}
+                    </td>
 
-					<td data-title="File">
-						<!--                    <a href="javascript:void(0)" class="font-12" *ngIf="!expenses.fileNames">-->
-						<!--                        <i class="icon-file-path middle"></i> attach file</a>-->
-						<i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i> {{expenses.fileNames ? expenses.fileNames : '-'}}
-					</td>
+                    <td [attr.data-title]="localeData?.file">
+                        <i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i> {{expenses.fileNames ?
+                        expenses.fileNames : '-'}}
+                    </td>
 
-					<td data-title="Reason of Rejection">{{expenses.statusMessage ? expenses.statusMessage : '-'}}</td>
+                    <td [attr.data-title]="localeData?.reason_of_rejection">{{expenses.statusMessage ?
+                        expenses.statusMessage : '-'}}</td>
 
-					<td data-title="Action" class="action-btns">
-						<a (click)="revertActionClicked(expenses)" class="btn-icon">
-							<i class="icon-Revert"></i>
-						</a>
-						<a (click)="deleteActionClicked(expenses)" class="btn-icon">
-							<i class="icon-trash"></i>
-						</a>
-					</td>
+                    <td [attr.data-title]="commonLocaleData?.app_action" class="action-btns">
+                        <a (click)="revertActionClicked(expenses)" class="btn-icon">
+                            <i class="icon-Revert"></i>
+                        </a>
+                        <a (click)="deleteActionClicked(expenses)" class="btn-icon">
+                            <i class="icon-trash"></i>
+                        </a>
+                    </td>
 
-				</tr>
+                </tr>
 
-			</tbody>
+            </tbody>
 
-		</table>
-	</div>
+        </table>
+    </div>
 </div>
 
-<div *ngIf="totalRejectedResponse?.totalItems > 20" class="paginationWrapper">
-	<pagination [totalItems]="totalRejectedResponse?.totalItems" [maxSize]="5" class="pagination-sm"
-		[boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;" nextText="&#9658;"
-		(pageChanged)="pageChanged($event)"></pagination>
+<div *ngIf="totalRejectedResponse?.totalItems > 20" class="pagination-wrapper">
+    <pagination [totalItems]="totalRejectedResponse?.totalItems" [maxSize]="5" class="pagination-sm"
+        [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;" nextText="&#9658;"
+        (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first"
+        [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
+        [lastText]="commonLocaleData?.app_last"></pagination>
 </div>
 
 <div *ngIf="(getPettycashRejectedReportInprocess$ | async) ">
-
-	<div class="no-data mr-t2 loader-main">
-		<!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-		<div class="spinner2">
-			<div class="cube1"></div>
-			<div class="cube2"></div>
-		</div>
-	</div>
-
+    <giddh-page-loader></giddh-page-loader>
 </div>
 
 <div class="no-data" *ngIf="!(RejectedItems.length) &&  !(getPettycashRejectedReportInprocess$ | async)">
-	<h1>No entries found within given criteria.</h1>
-	<h1>Do search with some other dates</h1>
+    <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
+    <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
 </div>
 
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
-	<div class="icon-pointer d-inline-block ml-1 pointer">
+    <div class="icon-pointer d-inline-block ml-1 pointer">
 
-		<div class="icon-sort-asc" *ngIf="pettycashRequest.sortBy !== col" (click)="sort('asc', col)"
-			[ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
-		</div>
+        <div class="icon-sort-asc" *ngIf="pettycashRequest.sortBy !== col" (click)="sort('asc', col)"
+            [ngClass]="{'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
+        </div>
 
-		<div class="icon-sort-asc" *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'"
-			(click)="sort('desc', col)"
-			[ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
-		</div>
+        <div class="icon-sort-asc" *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'"
+            (click)="sort('desc', col)"
+            [ngClass]="{'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
+        </div>
 
-		<div class="icon-sort-dsc" *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'"
-			(click)="sort('asc', col)"
-			[ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'}">
-		</div>
-	</div>
+        <div class="icon-sort-dsc" *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'"
+            (click)="sort('asc', col)"
+            [ngClass]="{'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'}">
+        </div>
+    </div>
 </ng-template>
 <!-- endregion -->

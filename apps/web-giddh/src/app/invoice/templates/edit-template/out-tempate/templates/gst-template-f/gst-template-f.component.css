@@ -128,7 +128,7 @@ body {
     /* text-align:left; */
 }
 
-#gold .mrL2 {
+#gold .mr-l2 {
     margin-left: 20px;
 }
 
@@ -254,7 +254,7 @@ body {
     font-weight: bold;
 }
 
-#gold .bdrB {
+#gold .bd-rb {
     border-bottom: 1px solid #666;
     margin-bottom: 6px;
 }
@@ -277,7 +277,7 @@ body {
     vertical-align: baseline;
 }
 
-#gold .vmiddle {
+#gold .vertical-align-middle {
     vertical-align: middle;
 }
 
@@ -308,7 +308,7 @@ body {
     font-size: 10px;
 }
 
-#gold .pos-rel {
+#gold .position-relative {
     position: relative;
 }
 
@@ -320,7 +320,7 @@ body {
     text-align: center;
 }
 
-#gold .mrB {
+#gold .mr-b05 {
     margin-bottom: 10px;
 }
 

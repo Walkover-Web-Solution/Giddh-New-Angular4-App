@@ -1,28 +1,28 @@
 @import "../../../../assets/css/color.scss";
-.reciptNoteHeader {
+.receipt-note-header {
     display: flex;
     justify-content: space-between;
-    background-color: #fff;
-    border-bottom: 1px solid #c4c4c4;
+    background-color: $white;
+    border-bottom: 1px solid $silver;
     font-size: 18px;
     font-family: "opensans-bold";
     padding-top: 10px;
     padding-bottom: 10px;
     align-items: center;
-    color: #1a237e;
+    color: $midnight-blue;
 }
-section.reciptNote {
-    background-color: #fff;
+section.receipt-note {
+    background-color: $white;
 }
-.reciptNoteRadioBtn {
+.receipt-note-radio-btn {
     padding-top: 15px;
     padding-bottom: 15px;
-    color: #1c1c1c;
-    border-bottom: 1px solid #c4c4c4;
+    color: $nero;
+    border-bottom: 1px solid $silver;
 }
-.reciptNoteContent {
+.receipt-note-content {
     font-size: 14px;
-    height: 86vh;
+    max-height: calc(100vh - 142px);
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -30,16 +30,16 @@ section.reciptNote {
 .multiple-products label {
     vertical-align: middle;
     line-height: 2.5;
-    color: #1c1c1c;
+    color: $nero;
 }
-#table-recipt th,
-#table-recipt td {
-    border-left: 1px solid #ddd !important;
+#table-receipt th,
+#table-receipt td {
+    border-left: 1px solid $gainsboro !important;
 }
-#table-recipt td {
+#table-receipt td {
     vertical-align: top !important;
 }
-.tableSec .tableRow .tableCell {
+.table-sec .table-row .table-cell {
     vertical-align: middle;
     text-align: right;
     padding-bottom: 7px;
@@ -47,10 +47,10 @@ section.reciptNote {
     width: 200px;
 }
 button.btn.btn-filter {
-    background: #e4e4e4;
-    border: 1px solid #e4e4e4;
+    background: $whisper;
+    border: 1px solid $whisper;
     font-size: 14px;
-    color: #1a237e;
+    color: $midnight-blue;
     display: -webkit-inline-box;
     display: inline-flex;
     -webkit-box-pack: justify;
@@ -63,44 +63,44 @@ button.btn.btn-filter {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 12px;
-    margin-top: 9px;
+    margin-top: 5px;
 }
-.tableSec .tableRow .figureCell {
+.table-sec .table-row .figure-cell {
     width: 140px;
     padding-right: 0;
 }
-.tableSec {
+.table-sec {
     float: right;
     margin-right: 35px;
 }
-tfoot td .tableSec.form-group {
+tfoot td .table-sec.form-group {
     margin-right: 0;
 }
-#table-recipt #tfoot tr td {
+#table-receipt #tfoot tr td {
     border: none !important;
 }
-.copyReciptNote {
+.copy-receipt-note {
     position: absolute;
     right: -60%;
     top: 9px;
     font-size: 12px;
-    color: #0c8fe6;
+    color: $primary;
     z-index: 9;
 }
-.senderDetails,
-.senderRecivers,
-.multipleRecivers {
+.sender-details,
+.sender-receivers,
+.multiple-receivers {
     font-size: 12px;
-    color: #0c8fe6;
+    color: $primary;
     margin-top: 7px;
     cursor: pointer;
 }
-.rightTotalAmount {
+.right-total-amount {
     text-align: right;
-    color: #1c1c1c;
+    color: $nero;
 }
 
-.rightTotalAmount h3 {
+.right-total-amount h3 {
     font-size: 26px;
     font-family: opensans-semibold;
 }
@@ -114,72 +114,69 @@ tfoot td .tableSec.form-group {
     border-bottom: 1px solid $gainsboro;
 }
 #actionPane {
-    background-color: #ccc;
+    background-color: $very-light-gray;
     padding: 20px 0;
 }
 .btn-success-text {
-    background-color: #e6e6e6;
-    color: #28ab00;
+    background-color: $whisper;
+    color: $success-green;
 }
 .btn-danger:hover {
-    background-color: #e6e6e6;
+    background-color: $whisper;
 }
 
-.hsnCodeDropdown {
+.hsn-code-dropdown {
     position: absolute;
-    background-color: #fff;
-    border: 1px solid #c7c7c7;
+    background-color: $white;
+    border: 1px solid $gainsboro;
     border-radius: 3px;
     width: 100%;
     max-width: 250px;
     left: auto;
     top: 31px;
-    padding: 8px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     right: 0;
     z-index: 4;
 }
-.skuNumberDropdown {
+.sku-number-dropdown {
     left: 0 !important;
 }
-.hsnCodeDropdown label {
+.hsn-code-dropdown label {
     font-size: 12px !important;
     margin-bottom: 5px;
     display: block;
 }
 
-.hsnCodeDropdown input {
+.hsn-code-dropdown input {
     width: 100%;
-    height: 28px !important;
     padding: 5px;
-    max-width: 200px;
-    border: 1px solid #c7c7c7;
+    border: 1px solid $gainsboro;
 }
 
-.hsnCodeDropdown input::placeholder,
-.hsnCodeDropdown input::-webkit-input-placeholder {
-    color: #c6c6c6;
+.hsn-code-dropdown input::placeholder,
+.hsn-code-dropdown input::-webkit-input-placeholder {
+    color: $silver;
 }
 
-.hsnCodeDropdown a {
+.hsn-code-dropdown a {
     display: inline-block;
     text-align: center;
-    color: #cccccc;
+    color: $very-light-gray;
     padding: 5px 8px;
     font-size: 16px;
 }
 
-.hsnCodeDropdown .btn-group {
+.hsn-code-dropdown .btn-group {
     margin-top: 5px;
 }
 
-.hsnCodeDropdown button.btn.btn-sm.btn-success,
-.bulkItemBtnGroup button.btn.btn-sm.btn-success {
-    background-color: #28ab00;
-    color: #fff;
+.hsn-code-dropdown button.btn.btn-sm.btn-success,
+.bulk-item-btn-group button.btn.btn-sm.btn-success {
+    background-color: $success-green;
+    color: $white;
 }
-.skuCode,
-.hsnCode {
+.sku-code,
+.hsn-code {
     padding: 5px 0;
 }
 /* new branch transfer list css  */
@@ -222,7 +219,7 @@ tfoot td .tableSec.form-group {
     display: inline !important;
 }
 .branch-transfer-report .btn-group a {
-    color: #333;
+    color: $night-rider;
 }
 .branch-transfer-report .basic > thead > tr > th {
     border-top: 1px solid $gainsboro !important;
@@ -274,9 +271,9 @@ tfoot td .tableSec.form-group {
     min-width: 100%;
     padding: 11px;
     padding-right: 0;
-    color: #1c1c1c;
+    color: $nero;
     border: none;
-    background-color: #f2f2f2;
+    background-color: $white-smoke;
 }
 
 .advance-icon {
@@ -290,12 +287,12 @@ tfoot td .tableSec.form-group {
     border: 1px solid $gainsboro;
     border-radius: 2px;
     color: $midnight-express;
-    background: #fff;
+    background: $white;
 }
 .advance-icon:hover {
-    background: #eaeaea;
+    background: $whisper-color;
 }
-#table-recipt {
+#table-receipt {
     width: 100%;
     max-width: 1140px;
 }
@@ -306,8 +303,8 @@ tfoot td .tableSec.form-group {
     transform: translateY(16px);
 }
 .trash-icon-delete a {
-    color: #999;
-    border: 1px solid #999;
+    color: $nobel;
+    border: 1px solid $gainsboro;
     border-radius: 50%;
     text-align: center;
     width: 20px;
@@ -316,25 +313,25 @@ tfoot td .tableSec.form-group {
     justify-content: center;
     align-items: center;
 }
-.addNewLine.mr-t1 {
+.add-new-line.mr-t1 {
     position: absolute;
     width: 100%;
 }
-.pdT3 {
+.pd-t3 {
     padding-top: 30px;
 }
 .recept-modal .modal-title {
-    color: #fff;
+    color: $white;
 }
-.transfertype-checked:before {
-    border: 1px solid #5b64c9;
+.transfer-type-checked:before {
+    border: 1px solid $chetwode-blue;
 }
-.transfertype-checked:after {
+.transfer-type-checked:after {
     content: " ";
     position: absolute;
     width: 8px;
     height: 8px;
-    background: #5b64c9;
+    background: $chetwode-blue;
     left: 5px;
     bottom: 5px;
     border-radius: 50%;
@@ -354,7 +351,7 @@ tfoot td .tableSec.form-group {
 
 .aside-right {
     font-size: 14px;
-    background: #fff;
+    background: $white;
     right: -530px;
     transition: 0.5s all ease;
     z-index: 999;
@@ -374,7 +371,7 @@ tfoot td .tableSec.form-group {
 }
 
 .aside-right .list-icon-group input:checked + label {
-    border: 1px solid #ff5f00;
+    border: 1px solid $orange;
     border-radius: 0px;
 }
 
@@ -395,17 +392,17 @@ tfoot td .tableSec.form-group {
 
 .aside-overlay {
     transition: 0.5s all ease;
-    z-index: 999;
+    z-index: 9991;
 }
-.icon-pointer.activeTextColor {
-    color: #01a9f4;
+.icon-pointer.active-text-color {
+    color: $deep-sky-blue;
 }
-.closeRecipt {
-    color: #666666;
+.close-receipt {
+    color: $dark-gray;
     font-size: 24px;
 }
 .form-control[readonly] {
-    background-color: #fff !important;
+    background-color: $white !important;
 }
 .select-action-button {
     background: none;
@@ -415,70 +412,112 @@ tfoot td .tableSec.form-group {
 .placeholder-for-table {
     color: $very-light-gray;
 }
-
-.table-delivery{
-    width:100%;
-    overflow-x:auto;
+.transportation-details {
+    max-width: 1160px;
+    width: 100%;
+    margin-bottom: 20px !important;
 }
-
-
-@media(max-width:991px){
-    #table-recipt{
-       width: calc(100% - 30px);
+.input-group {
+    sh-select.branch-dropdown {
+        width: 100%;
+        margin-right: 8px;
     }
 }
-@media(max-width:768px){
-    .select-action-button{
+.position-relative {
+    .icon-info {
+        position: absolute;
+        right: -10px;
+        top: 10px;
+    }
+}
+.icon-info-on-table {
+    .icon-info {
+        position: absolute;
+        right: -35px;
+        top: 1px;
+        transform: translateY(16px);
+        font-size: 18px;
+        color: $gray;
+        &.change-position {
+            right: -55px;
+        }
+    }
+}
+/* responsive starts here*/
+@media (max-width: 1280px) {
+    #table-receipt {
+        width: calc(100% - 50px);
+    }
+}
+@media (max-width: 768px) {
+    .select-action-button {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        span.icon-dots-three-vertical{
-           height: 13px;
-           margin-left: 10px;
+        span.icon-dots-three-vertical {
+            height: 13px;
+            margin-left: 10px;
         }
     }
-    .branch-transfer-report{
-        ul#dropdown-basic{
+    .branch-transfer-report {
+        ul#dropdown-basic {
             right: auto !important;
             left: auto !important;
             top: 20px !important;
         }
     }
-    .mobile-none{
-        display:none;
+    .mobile-none {
+        display: none;
     }
-    .table-delivery{
-        table{
+    .table-delivery {
+        table {
             width: 100% !important;
-            tr,td{
+            tr,
+            td {
                 white-space: nowrap !important;
             }
-            .min-wid-product{
-                min-width:80px;
+            .min-wid-product {
+                min-width: 80px;
             }
-           .min-wid-rate{
-               min-width:40px;
-           }
-           .min-wid-amt{
-               min-width:40px;
-           }
-           .min-wid-qty{
-               min-width:20px;
-           }
-         }
+            .min-wid-rate {
+                min-width: 40px;
+            }
+            .min-wid-amt {
+                min-width: 40px;
+            }
+            .min-wid-qty {
+                min-width: 20px;
+            }
+        }
 
-         .basic > tbody > tr td:last-child, .basic > thead > tr th:last-child {
+        .basic > tbody > tr td:last-child,
+        .basic > thead > tr th:last-child {
             border-right: 1px solid $gainsboro-light !important;
         }
     }
 }
-@media(max-width:767px){
+@media (max-width: 767px) {
     .date-advance-search {
         margin-top: 15px;
     }
+    .table-delivery {
+        width: 100%;
+        overflow-x: auto;
+    }
 }
-@media(max-width:767px){
+@media (max-width: 767px) {
     .date-advance-search {
-        margin-top: 15px;
+        margin-top: 5px;
+    }
+}
+@media (max-width: 575px) {
+    .branch-transfer-flex {
+        width: 100%;
+        .input-group.linked-entities {
+            width: 100%;
+            sh-select {
+                margin-right: 0;
+            }
+        }
     }
 }

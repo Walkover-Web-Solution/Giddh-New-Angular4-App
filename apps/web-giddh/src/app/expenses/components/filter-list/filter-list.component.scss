@@ -1,15 +1,17 @@
+@import "../../../../assets/css/color.scss";
+
 .input-search {
     width: 100%;
 }
 
 .filter-list .inner-filter-list li {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $gainsboro;
     padding: 15px;
     display: flex;
 }
 
 .filter-list .inner-filter-list li:hover {
-    background: #f0f0f0;
+    background: $whisper-light;
     transition: 0.5s all ease;
 }
 
@@ -23,7 +25,7 @@
 }
 
 .filter-list .inner-filter-list li .right-item i {
-    color: #999999;
+    color: $nobel;
     margin-left: 5px;
 }
 
@@ -33,5 +35,5 @@
 }
 
 .filter-list .activeItem {
-    background-color: #f0f0f0;
+    background-color: $whisper-light;
 }

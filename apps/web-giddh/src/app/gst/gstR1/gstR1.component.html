@@ -1,5 +1,9 @@
+<div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
+
+</div>
+<hamburger-menu [pageHeading]="'GST'"></hamburger-menu>
 <div class="col-md-3 notification">
-    <div style="margin-bottom: 18px;">
+    <div class="mr-b2">
         <a href="#" target="_blank" rel="noreferrer noopener" class="filing-demo-video">
             <div class="text-middle video-thumbnail"> <svg xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 68 45" class="icon text-middle">
@@ -38,14 +42,14 @@
         </a>
     </div>
     <hr>
-    <div style="padding-bottom: 20px;">
+    <div class="pd-b2">
         <div id="ember1226" class="ember-view">
             <div class="filing-due-date"><span>Filing Dates for July returns</span>
                 <div class="return-details">
                     <table>
                         <colgroup>
                             <col>
-                            <col style="background-color: #e8f5ff; width: 50%;">
+                            <col class="return-detail-col">
                         </colgroup>
                         <tbody>
                             <tr>
@@ -73,7 +77,7 @@
                     <table>
                         <colgroup>
                             <col>
-                            <col style="background-color: #e8f5ff; width: 50%;">
+                            <col class="return-detail-col">
                         </colgroup>
                         <tbody>
                             <tr>
@@ -139,9 +143,8 @@
 
                         <!---->
                         <div class="btn-group">
-                            <a href="#" style="border: 1px solid #eee;" class="btn btn-link"> <svg
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                                    class="icon icon-md text-bottom">
+                            <a href="#" class="btn btn-link"> <svg xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 512 512" class="icon icon-md text-bottom">
                                     <path
                                         d="M357.2 238.4l-143.1-90c-12.4-7.8-28 2-28 17.6v180c0 15.7 15.6 25.4 28 17.6l143.1-90c12.4-7.9 12.4-27.4 0-35.2z">
                                     </path>
@@ -159,7 +162,7 @@
         </div>
         <div class="nav-band">
             <!---->
-            <ul class="nav nav-tabs  ember-view tabs_new">
+            <ul class="nav nav-tabs  ember-view tabs-new">
                 <li class="active"> <a id="tab_1" href="#tab1"> 1. Overview </a></li>
                 <!---->
                 <li><a id="tab_2" href="#tab2"> 2. Push to GSTN </a></li>
@@ -184,7 +187,7 @@
             </ul>
         </div>
         <div class="scroll-y noscroll-x body fill">
-            <div style="border-bottom: 1px solid #ddd;" class="sub-filter-nav-band" id="subtabs">
+            <div class="sub-filter-nav-band" id="subtabs">
                 <ul class="nav ember-view">
                     <li class="active"><a id="subtabs_1" href="#subtabs-1">Transaction Summary</a></li>
                     <li><a id="subtabs_2" href="#subtabs-2">HSN</a></li>
@@ -192,15 +195,15 @@
                     <li><a id="subtabs_4" href="#subtabs-4">B2CS</a></li>
                     <li><a id="subtabs_5" href="#subtabs-5">Document Issued</a></li>
                     <li class="pull-right ">
-                        <a style="padding: 10px 25px; margin: 5px auto; border-left: 1px solid #d7d1d1;" id="subtabs_6"
-                            href="#subtabs-6">
-                            <!---->Failed Transactions </a>
+                        <a class="failed-transaction" id="subtabs-6" href="#subtabs-6">
+                            <!---->Failed Transactions
+                        </a>
                     </li>
                 </ul>
             </div>
             <div class="transactions-overview">
                 <!---->
-                <hr style="margin: 0">
+                <hr class="m-0">
                 <div id="tab-body">
                     <div id="tab1" class="tab1div">
                         <div class="gstr-transactions-summary" id="hidebox">
@@ -242,7 +245,7 @@
                                                     <path fill="#1D1D1B"
                                                         d="M192 192v320.1l120-.1V392h48v120l120 .1V192H192zm256 288.1h-56V360H280v120h-56V224h224v256.1z">
                                                     </path>
-                                                </svg> <span style="margin-left: 5px;"> B2B Invoices <i id="ember3126"
+                                                </svg> <span class="mr-l05"> B2B Invoices <i id="ember3126"
                                                         class="popovercontainer ember-view" data-original-title=""
                                                         title=""> <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 512 512"
@@ -255,11 +258,11 @@
                                                             </path>
                                                         </svg> </i> </span></td>
                                             <td class="text-center"><a> 0 </a></td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                         </tr>
                                         <!---->
                                         <tr class="row-hover">
@@ -269,10 +272,10 @@
                                                     <path
                                                         d="M256 244c-58.4 0-106-47.6-106-106S197.6 32 256 32s106 47.6 106 106-47.6 106-106 106zm0-180c-40.8 0-74 33.2-74 74s33.2 74 74 74 74-33.2 74-74-33.2-74-74-74zM480 480h-32v-56.1c0-57.3-46.7-104-104-104H168c-57.3 0-104 46.7-104 104V480H32v-56.1c0-75 61-136 136-136h176c75 0 136 61 136 136V480z">
                                                     </path>
-                                                </svg> <span style="margin-left: 5px;"> B2C (Large) Invoices <i
-                                                        id="ember3129" class="popovercontainer ember-view"
-                                                        data-original-title="" title=""> <svg id="Layer_1"
-                                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                                </svg> <span class="mr-l05"> B2C (Large) Invoices <i id="ember3129"
+                                                        class="popovercontainer ember-view" data-original-title=""
+                                                        title=""> <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 512 512"
                                                             class="icon icon-sm text-bottom icon-info-circled">
                                                             <path
                                                                 d="M255.4 31.9c30.2 0 59.4 5.9 87 17.5 26.6 11.2 50.4 27.4 71 47.9 20.5 20.5 36.6 44.3 47.9 71 11.6 27.6 17.5 56.7 17.5 87s-5.9 59.4-17.5 87c-11.2 26.6-27.4 50.4-47.9 71-20.5 20.5-44.3 36.6-71 47.9-27.6 11.6-56.7 17.5-87 17.5s-59.4-5.9-87-17.5c-26.6-11.2-50.4-27.4-71-47.9-20.5-20.5-36.6-44.3-47.9-71-11.6-27.6-17.5-56.7-17.5-87s5.9-59.4 17.5-87c11.2-26.6 27.4-50.4 47.9-71s44.3-36.6 71-47.9c27.5-11.6 56.7-17.5 87-17.5m0-31.9C114.3 0 0 114.3 0 255.4s114.3 255.4 255.4 255.4 255.4-114.3 255.4-255.4S396.4 0 255.4 0z">
@@ -282,11 +285,11 @@
                                                             </path>
                                                         </svg> </i> </span></td>
                                             <td class="text-center"><a> 0 </a></td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                             <td class="text-right"> - </td>
                                             <td class="text-right"> - </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                         </tr>
                                         <!---->
                                         <tr class="row-hover">
@@ -299,35 +302,7 @@
                                                     <path
                                                         d="M425.5 216.8l-22.7 22.6 48.6 48.6H288v32h161.4l-46.6 46.6 22.7 22.6 86.2-86.2z">
                                                     </path>
-                                                </svg> <span style="margin-left: 5px;"> Export Invoices <i
-                                                        class="popovercontainer" data-original-title="" title=""> <svg
-                                                            id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                                                            viewBox="0 0 512 512"
-                                                            class="icon icon-sm text-bottom icon-info-circled">
-                                                            <path
-                                                                d="M255.4 31.9c30.2 0 59.4 5.9 87 17.5 26.6 11.2 50.4 27.4 71 47.9 20.5 20.5 36.6 44.3 47.9 71 11.6 27.6 17.5 56.7 17.5 87s-5.9 59.4-17.5 87c-11.2 26.6-27.4 50.4-47.9 71-20.5 20.5-44.3 36.6-71 47.9-27.6 11.6-56.7 17.5-87 17.5s-59.4-5.9-87-17.5c-26.6-11.2-50.4-27.4-71-47.9-20.5-20.5-36.6-44.3-47.9-71-11.6-27.6-17.5-56.7-17.5-87s5.9-59.4 17.5-87c11.2-26.6 27.4-50.4 47.9-71s44.3-36.6 71-47.9c27.5-11.6 56.7-17.5 87-17.5m0-31.9C114.3 0 0 114.3 0 255.4s114.3 255.4 255.4 255.4 255.4-114.3 255.4-255.4S396.4 0 255.4 0z">
-                                                            </path>
-                                                            <path
-                                                                d="M303.4 351.1h-8.2c-4.4 0-8-3.6-8-8v-94.4c0-15.3-11.4-28-26.6-29.7-2.5-.3-4.8-.5-6.7-.5-23.6 0-44.4 11.9-56.8 30l-.1.1v-.1c-1 2-1.7 5.2.7 6.5.6.3 1.2.5 1.8.5h15.9c4.4 0 8 3.6 8 8v79.8c0 4.4-3.6 8-8 8h-8.1c-8.7 0-15.8 7.1-15.8 15.8v.3c0 8.7 7.1 15.8 15.8 15.8h96.1c8.7 0 15.8-7.1 15.8-15.8v-.3c0-8.9-7.1-16-15.8-16zM255.4 127.7c-17.6 0-31.9 14.3-31.9 31.9s14.3 31.9 31.9 31.9 31.9-14.3 31.9-31.9-14.3-31.9-31.9-31.9z">
-                                                            </path>
-                                                        </svg> </i> </span></td>
-                                            <td class="text-center"><a> 0 </a></td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> - </td>
-                                            <td class="text-right"> - </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                        </tr>
-                                        <!---->
-                                        <tr class="row-hover ">
-                                            <td></td>
-                                            <td><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 512 512" class="icon text-bottom">
-                                                    <path
-                                                        d="M224 229c58.4 0 106-47.6 106-106S282.4 17 224 17 118 64.6 118 123s47.6 106 106 106zm0-180c40.8 0 74 33.2 74 74s-33.2 74-74 74-74-33.2-74-74 33.2-74 74-74zM346.7 310.9l10.7-30.1c-14.6-5.2-29.8-7.8-45.4-7.8H136C61 273 0 333.9 0 408.9V465h32v-56.1C32 351.6 78.7 305 136 305h176c11.9 0 23.6 2 34.7 5.9zM426.2 322.8l-22.7 22.6 47.6 47.6H289v32h162.1l-47.6 47.6 22.7 22.6 86.2-86.2z">
-                                                    </path>
-                                                </svg> <span style="margin-left: 5px;"> B2C (Small) Invoices <i
-                                                        id="ember3135" class="popovercontainer ember-view"
+                                                </svg> <span class="mr-l05"> Export Invoices <i class="popovercontainer"
                                                         data-original-title="" title=""> <svg id="Layer_1"
                                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                                             class="icon icon-sm text-bottom icon-info-circled">
@@ -339,11 +314,38 @@
                                                             </path>
                                                         </svg> </i> </span></td>
                                             <td class="text-center"><a> 0 </a></td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> - </td>
+                                            <td class="text-right"> - </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                        </tr>
+                                        <!---->
+                                        <tr class="row-hover ">
+                                            <td></td>
+                                            <td><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 512 512" class="icon text-bottom">
+                                                    <path
+                                                        d="M224 229c58.4 0 106-47.6 106-106S282.4 17 224 17 118 64.6 118 123s47.6 106 106 106zm0-180c40.8 0 74 33.2 74 74s-33.2 74-74 74-74-33.2-74-74 33.2-74 74-74zM346.7 310.9l10.7-30.1c-14.6-5.2-29.8-7.8-45.4-7.8H136C61 273 0 333.9 0 408.9V465h32v-56.1C32 351.6 78.7 305 136 305h176c11.9 0 23.6 2 34.7 5.9zM426.2 322.8l-22.7 22.6 47.6 47.6H289v32h162.1l-47.6 47.6 22.7 22.6 86.2-86.2z">
+                                                    </path>
+                                                </svg> <span class="mr-l05"> B2C (Small) Invoices <i id="ember3135"
+                                                        class="popovercontainer ember-view" data-original-title=""
+                                                        title=""> <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 512 512"
+                                                            class="icon icon-sm text-bottom icon-info-circled">
+                                                            <path
+                                                                d="M255.4 31.9c30.2 0 59.4 5.9 87 17.5 26.6 11.2 50.4 27.4 71 47.9 20.5 20.5 36.6 44.3 47.9 71 11.6 27.6 17.5 56.7 17.5 87s-5.9 59.4-17.5 87c-11.2 26.6-27.4 50.4-47.9 71-20.5 20.5-44.3 36.6-71 47.9-27.6 11.6-56.7 17.5-87 17.5s-59.4-5.9-87-17.5c-26.6-11.2-50.4-27.4-71-47.9-20.5-20.5-36.6-44.3-47.9-71-11.6-27.6-17.5-56.7-17.5-87s5.9-59.4 17.5-87c11.2-26.6 27.4-50.4 47.9-71s44.3-36.6 71-47.9c27.5-11.6 56.7-17.5 87-17.5m0-31.9C114.3 0 0 114.3 0 255.4s114.3 255.4 255.4 255.4 255.4-114.3 255.4-255.4S396.4 0 255.4 0z">
+                                                            </path>
+                                                            <path
+                                                                d="M303.4 351.1h-8.2c-4.4 0-8-3.6-8-8v-94.4c0-15.3-11.4-28-26.6-29.7-2.5-.3-4.8-.5-6.7-.5-23.6 0-44.4 11.9-56.8 30l-.1.1v-.1c-1 2-1.7 5.2.7 6.5.6.3 1.2.5 1.8.5h15.9c4.4 0 8 3.6 8 8v79.8c0 4.4-3.6 8-8 8h-8.1c-8.7 0-15.8 7.1-15.8 15.8v.3c0 8.7 7.1 15.8 15.8 15.8h96.1c8.7 0 15.8-7.1 15.8-15.8v-.3c0-8.9-7.1-16-15.8-16zM255.4 127.7c-17.6 0-31.9 14.3-31.9 31.9s14.3 31.9 31.9 31.9 31.9-14.3 31.9-31.9-14.3-31.9-31.9-31.9z">
+                                                            </path>
+                                                        </svg> </i> </span></td>
+                                            <td class="text-center"><a> 0 </a></td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                         </tr>
                                         <!---->
                                         <tr class="row-hover ember-view">
@@ -353,7 +355,7 @@
                                                     <path fill="#1D1D1B"
                                                         d="M500 192h-32v19.6c0 1.7-.8 3.2-2.2 4.2l-39 26.1c-3.3 2.2-7.8-.2-7.8-4.2V152h-32v84.9c0 4-4.5 6.4-7.8 4.2l-37-24.8c-1.4-.9-2.2-2.5-2.2-4.2V192h-32v197.7c0 1.7.8 3.2 2.2 4.1l72.4 48.8c2.8 1.9 4.4 5 4.4 8.3V512h32v-59.7c0-3.3 1.7-6.4 4.4-8.3l74.4-50.1c1.4-.9 2.2-2.5 2.2-4.1V192zm-32 70.2v29.4c0 1.7-.8 3.2-2.2 4.2l-39 26.1c-3.3 2.2-7.8-.2-7.8-4.2v-29.4c0-1.7.8-3.2 2.2-4.2l39-26.1c3.3-2.2 7.8.2 7.8 4.2zm-81 25.3v29.4c0 4-4.5 6.4-7.8 4.2l-37-24.8c-1.4-.9-2.2-2.5-2.2-4.2v-29.4c0-4 4.5-6.4 7.8-4.2l37 24.8c1.4.9 2.2 2.5 2.2 4.2zm-47 85.2v-30.1c0-4 4.5-6.4 7.8-4.2l37 24.8c1.4.9 2.2 2.5 2.2 4.2v30.2c0 4-4.5 6.4-7.8 4.1l-37-24.9c-1.4-.9-2.2-2.4-2.2-4.1zm79 26.3v-30.7c0-1.7.8-3.2 2.2-4.2l39-26.1c3.3-2.2 7.8.2 7.8 4.2v30.5c0 1.7-.8 3.2-2.2 4.1l-39 26.3c-3.3 2.3-7.8-.1-7.8-4.1zM199.6 80.4l-54.9 36.8c-2 1.3-4.7-.1-4.7-2.5V0h-32v114.7c0 2.4-2.7 3.8-4.7 2.5L48.4 80.4c-2.8-1.9-4.4-5-4.4-8.3V48H12v234.2c0 3.3 1.7 6.5 4.4 8.3l87.1 58.4c2.8 1.9 4.4 5 4.4 8.3V512h32V357.2c0-3.3 1.7-6.5 4.4-8.3l87.1-58.4c2.8-1.9 4.4-5 4.4-8.3V48h-32v24.1c.2 3.4-1.5 6.5-4.2 8.3zm4.4 54.3v33.4c0 3.3-1.7 6.5-4.4 8.3l-54.9 36.8c-2 1.3-4.7-.1-4.7-2.5v-50.3c0-1 .5-1.9 1.3-2.5l47.1-31.6c6.7-4.3 15.6.4 15.6 8.4zm-96 25.8v50.3c0 2.4-2.7 3.8-4.7 2.5l-54.9-36.8c-2.8-1.9-4.4-5-4.4-8.3v-33.4c0-8 8.9-12.8 15.6-8.3l47.1 31.6c.8.4 1.3 1.4 1.3 2.4zM44 265.1v-34.4c0-8 8.9-12.8 15.6-8.3l47.1 31.6c.8.6 1.3 1.5 1.3 2.5v51.3c0 2.4-2.7 3.8-4.7 2.5l-54.9-36.8c-2.7-1.9-4.4-5-4.4-8.4zm96 42.6v-51.3c0-1 .5-1.9 1.3-2.5l47.1-31.6c6.6-4.5 15.6.3 15.6 8.3V265c0 3.3-1.7 6.5-4.4 8.3l-54.9 36.8c-2 1.5-4.7 0-4.7-2.4z">
                                                     </path>
-                                                </svg> <span style="margin-left: 5px;"> Exempt <i
+                                                </svg> <span class="mr-l05"> Exempt <i
                                                         class="popovercontainer ember-view" data-original-title=""
                                                         title=""> <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 512 512"
@@ -383,7 +385,7 @@
                                                     <path fill="#1D1D1B"
                                                         d="M447.3 454.5l.5-263.8c0-56-20.1-110.3-56.6-152.9l-7.7-8.9-.3-.3c-2.4-4.2-5.3-8.1-8.8-11.6-10.4-10.8-25.1-17-40-17H63.3l.3 512h385.1l-1.4-57.5zM383.8 81.3c17 26.5 27.6 56.7 30.9 88-7.4-10.2-15.5-20-24.2-29.2-11.7-12.5-23.6-23.6-35.6-33.3 7-2.7 13.4-6.8 18.9-12.2 4-4 7.4-8.5 10-13.3zM95.6 480l-.3-448h239.1c6.4 0 12.8 2.7 17.3 7.3 4.4 4.5 6.7 10.1 6.6 16.1C358.1 68 347.7 78 335.1 78h-23.3c-7.7 0-14.5 5.4-16.4 12.9-2 7.5 1.4 15.4 8.1 19.2 20.8 11.7 42.8 29.7 63.6 51.9 20 21.3 36.3 45.5 48.6 72l-.4 220.7.6 25.4H95.6z">
                                                     </path>
-                                                </svg> <span style="margin-left: 5px;"> Credit / Debit Notes / Refund
+                                                </svg> <span class="mr-l05"> Credit / Debit Notes / Refund
                                                     Vouchers <i id="ember3141" class="popovercontainer ember-view"
                                                         data-original-title="" title=""> <svg id="Layer_1"
                                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
@@ -396,46 +398,48 @@
                                                             </path>
                                                         </svg> </i> </span></td>
                                             <td class="text-center"> - </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                         </tr>
                                         <tr id="ember3143" class="row-hover secondary-row ember-view">
                                             <td></td>
                                             <td>
-                                                <!----><span style="margin-left: 5px;"> Credit Note Transactions </span>
+                                                <!----><span class="mr-l05"> Credit Note Transactions </span>
                                             </td>
                                             <td class="text-center"><a> 0 </a></td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                         </tr>
                                         <tr id="ember3145" class="row-hover secondary-row ember-view">
                                             <td></td>
                                             <td>
-                                                <!----><span style="margin-left: 5px;"> Customer Debit Note Transactions
-                                                </span></td>
+                                                <!----><span class="mr-l05"> Customer Debit Note Transactions
+                                                </span>
+                                            </td>
                                             <td class="text-center"><a> 0 </a></td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                         </tr>
                                         <tr id="ember3147" class="row-hover secondary-row ember-view">
                                             <td></td>
                                             <td>
-                                                <!----><span style="margin-left: 5px;"> Refund voucher </span></td>
+                                                <!----><span class="mr-l05"> Refund voucher </span>
+                                            </td>
                                             <td class="text-center"><a> 0 </a></td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                         </tr>
                                         <tr id="ember3149" class="row-hover ember-view">
                                             <td></td>
@@ -447,10 +451,10 @@
                                                     <path
                                                         d="M319.4 128c-7.1-3.5-15.7-.6-19.2 6.5L186.1 364.8c-1.7 3.4-2 7.3-.7 10.9 1.2 3.6 3.8 6.6 7.2 8.3 2 1 4.1 1.5 6.4 1.5 5.5 0 10.4-3.1 12.8-8l114.1-230.3c3.5-7.1.6-15.7-6.5-19.2zM229 204.3c0-23.4-19-42.4-42.4-42.4s-42.4 19-42.4 42.4 19 42.4 42.4 42.4 42.4-19 42.4-42.4zm-23.8 0c0 10.2-8.3 18.5-18.5 18.5s-18.5-8.3-18.5-18.5 8.3-18.5 18.5-18.5c10.2-.1 18.5 8.3 18.5 18.5zM325.4 264.5c-23.4 0-42.4 19-42.4 42.4s19 42.4 42.4 42.4 42.4-19 42.4-42.4-19.1-42.4-42.4-42.4zm18.5 42.4c0 10.2-8.3 18.5-18.5 18.5s-18.5-8.3-18.5-18.5 8.3-18.5 18.5-18.5 18.5 8.3 18.5 18.5z">
                                                     </path>
-                                                </svg> <span style="margin-left: 5px;"> Advance Receipt <i
-                                                        id="ember3150" class="popovercontainer ember-view"
-                                                        data-original-title="" title=""> <svg id="Layer_1"
-                                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                                </svg> <span class="mr-l05"> Advance Receipt <i id="ember3150"
+                                                        class="popovercontainer ember-view" data-original-title=""
+                                                        title=""> <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 512 512"
                                                             class="icon icon-sm text-bottom icon-info-circled">
                                                             <path
                                                                 d="M255.4 31.9c30.2 0 59.4 5.9 87 17.5 26.6 11.2 50.4 27.4 71 47.9 20.5 20.5 36.6 44.3 47.9 71 11.6 27.6 17.5 56.7 17.5 87s-5.9 59.4-17.5 87c-11.2 26.6-27.4 50.4-47.9 71-20.5 20.5-44.3 36.6-71 47.9-27.6 11.6-56.7 17.5-87 17.5s-59.4-5.9-87-17.5c-26.6-11.2-50.4-27.4-71-47.9-20.5-20.5-36.6-44.3-47.9-71-11.6-27.6-17.5-56.7-17.5-87s5.9-59.4 17.5-87c11.2-26.6 27.4-50.4 47.9-71s44.3-36.6 71-47.9c27.5-11.6 56.7-17.5 87-17.5m0-31.9C114.3 0 0 114.3 0 255.4s114.3 255.4 255.4 255.4 255.4-114.3 255.4-255.4S396.4 0 255.4 0z">
@@ -460,11 +464,11 @@
                                                             </path>
                                                         </svg> </i> </span></td>
                                             <td class="text-center"><a> 0 </a></td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                         </tr>
                                         <!---->
                                         <tr id="ember3152" class="row-hover ember-view">
@@ -480,7 +484,7 @@
                                                     <path fill="#1D1D1B"
                                                         d="M403.7 330.6L347.3 387 325 364.5c-6.2-6.2-16.3-6.2-22.5 0-6.2 6.2-6.2 16.3 0 22.5l33.6 33.6c3.1 3.1 7.2 4.7 11.3 4.7s8.2-1.6 11.3-4.7l67.6-67.6c6.2-6.2 6.2-16.3 0-22.5-6.3-6.2-16.4-6.2-22.6.1zM93 97h202v31H93zM93 192h144v32H93z">
                                                     </path>
-                                                </svg> <span style="margin-left: 5px;"> Tax Paid <i id="ember3153"
+                                                </svg> <span class="mr-l05"> Tax Paid <i id="ember3153"
                                                         class="popovercontainer ember-view" data-original-title=""
                                                         title=""> <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 512 512"
@@ -493,11 +497,11 @@
                                                             </path>
                                                         </svg> </i> </span></td>
                                             <td class="text-center"><a> 0 </a></td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                         </tr>
                                         <!---->
                                         <tr id="ember3155" class="ember-view">
@@ -510,7 +514,7 @@
                                                     <path
                                                         d="M191.1 335.3h129.8c8.3 0 15.1-6.7 15.1-15.1 0-8.3-6.7-15.4-15.1-15.4H191.1c-8.3 0-15.1 7.1-15.1 15.4s6.7 15.1 15.1 15.1z">
                                                     </path>
-                                                </svg> <span style="margin-left: 5px;"> HSN Summary <i id="ember3156"
+                                                </svg> <span class="mr-l05"> HSN Summary <i id="ember3156"
                                                         class="popovercontainer ember-view" data-original-title=""
                                                         title=""> <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 512 512"
@@ -523,18 +527,18 @@
                                                             </path>
                                                         </svg> </i> </span></td>
                                             <td class="text-center"> - </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>1,111.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                            <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>1,111.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                            <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                         </tr>
                                         <!---->
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <div class="filltertabs" id="fillterid">
+                        <div class="filter-tabs" id="fillterid">
                             <div class="filter-band">
                                 <div class="row font-small">
                                     <div class="col-md-12">
@@ -634,106 +638,106 @@
                                     <thead>
                                         <tr>
                                             <!---->
-                                            <th style="" id="ember2431" class="  text-left ember-view">
-                                                <div style="position: relative">
+                                            <th id="ember2431" class="text-left ember-view">
+                                                <div class="position-relative">
                                                     <div data-test-title="Invoice Date" title="Invoice Date"
                                                         class="pull-left over-flow"> Invoice Date </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember2432" class="  text-left ember-view">
-                                                <div style="position: relative">
+                                            <th id="ember2432" class="text-left ember-view">
+                                                <div class="position-relative">
                                                     <div data-test-title="Invoice #" title="Invoice #"
                                                         class="pull-left over-flow"> Invoice # </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember2433" class="  text-left ember-view">
-                                                <div style="position: relative">
+                                            <th id="ember2433" class="text-left ember-view">
+                                                <div class="position-relative">
                                                     <div data-test-title="Customer GSTIN" title="Customer GSTIN"
                                                         class="pull-left over-flow"> Customer GSTIN </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember2434" class="  text-left ember-view">
-                                                <div style="position: relative">
+                                            <th id="ember2434" class="text-left ember-view">
+                                                <div class="position-relative">
                                                     <div data-test-title="Customer Name" title="Customer Name"
                                                         class="pull-left over-flow"> Customer Name </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember2435" class="  text-left ember-view">
-                                                <div style="position: relative">
+                                            <th id="ember2435" class="text-left ember-view">
+                                                <div class="position-relative">
                                                     <div data-test-title="Status" title="Status"
                                                         class="pull-left over-flow"> Status </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember2436" class="  text-left ember-view">
-                                                <div style="position: relative">
+                                            <th id="ember2436" class="text-left ember-view">
+                                                <div class="position-relative">
                                                     <div data-test-title="Action on GSTN" title="Action on GSTN"
                                                         class="pull-left over-flow"> Action on GSTN </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember2437" class="  text-left ember-view">
-                                                <div style="position: relative">
+                                            <th id="ember2437" class="text-left ember-view">
+                                                <div class="position-relative">
                                                     <div data-test-title="Place of supply" title="Place of supply"
                                                         class="pull-left over-flow"> Place of supply </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember2438" class="  text-left ember-view">
-                                                <div style="position: relative">
+                                            <th id="ember2438" class="text-left ember-view">
+                                                <div class="position-relative">
                                                     <div data-test-title="Invoice Type" title="Invoice Type"
                                                         class="pull-left over-flow"> Invoice Type </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember2439" class="  text-left ember-view">
-                                                <div style="position: relative">
+                                            <th id="ember2439" class="text-left ember-view">
+                                                <div class="position-relative">
                                                     <div data-test-title="Reverse Charge" title="Reverse Charge"
                                                         class="pull-left over-flow"> Reverse Charge </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember2440" class="  text-right ember-view">
-                                                <div style="position: relative">
+                                            <th id="ember2440" class="text-right ember-view">
+                                                <div class="position-relative">
                                                     <div data-test-title="Taxable Amount" title="Taxable Amount"
                                                         class=" over-flow"> Taxable Amount </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember2441" class="  text-right ember-view">
-                                                <div style="position: relative">
+                                            <th id="ember2441" class="text-right ember-view">
+                                                <div class="position-relative">
                                                     <div data-test-title="IGST" title="IGST" class=" over-flow"> IGST
                                                     </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember2442" class="  text-right ember-view">
-                                                <div style="position: relative">
+                                            <th id="ember2442" class="text-right ember-view">
+                                                <div class="position-relative">
                                                     <div data-test-title="CGST" title="CGST" class=" over-flow"> CGST
                                                     </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember2443" class="  text-right ember-view">
-                                                <div style="position: relative">
+                                            <th id="ember2443" class="text-right ember-view">
+                                                <div class="position-relative">
                                                     <div data-test-title="SGST" title="SGST" class=" over-flow"> SGST
                                                     </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember2444" class="  text-right ember-view">
-                                                <div style="position: relative">
+                                            <th id="ember2444" class="text-right ember-view">
+                                                <div class="position-relative">
                                                     <div data-test-title="Cess" title="Cess" class=" over-flow"> Cess
                                                     </div>
                                                     <!---->
                                                 </div>
                                             </th>
-                                            <th style="" id="ember2445" class="  text-right ember-view">
-                                                <div style="position: relative">
+                                            <th id="ember2445" class="text-right ember-view">
+                                                <div class="position-relative">
                                                     <div data-test-title="Total Amount" title="Total Amount"
                                                         class=" over-flow"> Total Amount </div>
                                                     <!---->
@@ -743,7 +747,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="cursor-pointer " data-ember-action="" data-ember-action-2447="2447">
+                                        <tr class="cursor-pointer" data-ember-action="" data-ember-action-2447="2447">
                                             <!---->
                                             <td>10/07/2018</td>
                                             <td class="btn-link">INV-000040</td>
@@ -754,12 +758,12 @@
                                             <td>Madhya Pradesh (23)</td>
                                             <td>Regular</td>
                                             <td>N</td>
-                                            <td align="right"><i class="fa fa-inr"></i>2,50,000.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>0.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>22,500.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>22,500.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>0.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>2,95,000.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>2,50,000.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>0.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>22,500.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>22,500.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>0.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>2,95,000.00</td>
                                         </tr>
                                         <tr class="cursor-pointer " data-ember-action="" data-ember-action-2449="2449">
                                             <!---->
@@ -772,12 +776,12 @@
                                             <td>Madhya Pradesh (23)</td>
                                             <td>Regular</td>
                                             <td>N</td>
-                                            <td align="right"><i class="fa fa-inr"></i>3,00,000.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>0.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>27,000.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>27,000.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>0.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>3,54,000.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>3,00,000.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>0.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>27,000.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>27,000.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>0.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>3,54,000.00</td>
                                         </tr>
                                         <tr class="cursor-pointer " data-ember-action="" data-ember-action-2451="2451">
                                             <!---->
@@ -790,14 +794,14 @@
                                             <td>Madhya Pradesh (23)</td>
                                             <td>Regular</td>
                                             <td>N</td>
-                                            <td align="right"><i class="fa fa-inr"></i>1,000.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>0.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>90.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>90.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>0.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>1,180.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>1,000.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>0.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>90.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>90.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>0.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>1,180.00</td>
                                         </tr>
-                                        <tr class="cursor-pointer " data-ember-action="" data-ember-action-2453="2453">
+                                        <tr class="cursor-pointer" data-ember-action="" data-ember-action-2453="2453">
                                             <!---->
                                             <td>10/07/2018</td>
                                             <td class="btn-link">INV-000045</td>
@@ -808,12 +812,12 @@
                                             <td>Maharashtra (27)</td>
                                             <td>Regular</td>
                                             <td>N</td>
-                                            <td align="right"><i class="fa fa-inr"></i>1,00,000.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>18,000.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>0.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>0.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>0.00</td>
-                                            <td align="right"><i class="fa fa-inr"></i>1,18,000.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>1,00,000.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>18,000.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>0.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>0.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>0.00</td>
+                                            <td align="right"><i class="icon-rupees font-11"></i>1,18,000.00</td>
                                         </tr>
                                         <!---->
                                     </tbody>
@@ -826,7 +830,7 @@
                             <div class="gstr-transactions-summary">
                                 <!---->
                                 <h4 class="clearfix gstr-summary-title">Transaction Summary</h4>
-                                <p style="padding-top:6px;" class="text-muted half">A summary of all the transactions in
+                                <p class="text-muted half pd-t05">A summary of all the transactions in
                                     the current filing period which are ready to be pushed to GSTN.</p>
                                 <div id="ember1350" class="ember-view">
                                     <table class="table table-striped transactions-table transactions-summary-table">
@@ -864,9 +868,9 @@
                                                         <path fill="#1D1D1B"
                                                             d="M192 192v320.1l120-.1V392h48v120l120 .1V192H192zm256 288.1h-56V360H280v120h-56V224h224v256.1z">
                                                         </path>
-                                                    </svg> <span style="margin-left: 5px;"> B2B Invoices <i
-                                                            id="ember1353" class="popovercontainer ember-view"
-                                                            data-original-title="" title=""> <svg id="Layer_1"
+                                                    </svg> <span class="mr-l05"> B2B Invoices <i id="ember1353"
+                                                            class="popovercontainer ember-view" data-original-title=""
+                                                            title=""> <svg id="Layer_1"
                                                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                                                 class="icon icon-sm text-bottom icon-info-circled">
                                                                 <path
@@ -878,11 +882,11 @@
                                                             </svg> </i> </span>
                                                 </td>
                                                 <td class="text-center"><a> 0 </a></td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                             </tr>
                                             <!---->
                                             <tr id="ember1355" class="row-hover ember-view">
@@ -892,9 +896,9 @@
                                                         <path
                                                             d="M256 244c-58.4 0-106-47.6-106-106S197.6 32 256 32s106 47.6 106 106-47.6 106-106 106zm0-180c-40.8 0-74 33.2-74 74s33.2 74 74 74 74-33.2 74-74-33.2-74-74-74zM480 480h-32v-56.1c0-57.3-46.7-104-104-104H168c-57.3 0-104 46.7-104 104V480H32v-56.1c0-75 61-136 136-136h176c75 0 136 61 136 136V480z">
                                                         </path>
-                                                    </svg> <span style="margin-left: 5px;"> B2C (Large) Invoices <i
-                                                            id="ember1356" class="popovercontainer ember-view"
-                                                            data-original-title="" title=""> <svg id="Layer_1"
+                                                    </svg> <span class="mr-l05"> B2C (Large) Invoices <i id="ember1356"
+                                                            class="popovercontainer ember-view" data-original-title=""
+                                                            title=""> <svg id="Layer_1"
                                                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                                                 class="icon icon-sm text-bottom icon-info-circled">
                                                                 <path
@@ -905,11 +909,11 @@
                                                                 </path>
                                                             </svg> </i> </span></td>
                                                 <td class="text-center"><a> 0 </a></td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                                 <td class="text-right"> - </td>
                                                 <td class="text-right"> - </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                             </tr>
                                             <!---->
                                             <tr id="ember1358" class="row-hover ember-view">
@@ -922,9 +926,9 @@
                                                         <path
                                                             d="M425.5 216.8l-22.7 22.6 48.6 48.6H288v32h161.4l-46.6 46.6 22.7 22.6 86.2-86.2z">
                                                         </path>
-                                                    </svg> <span style="margin-left: 5px;"> Export Invoices <i
-                                                            id="ember1359" class="popovercontainer ember-view"
-                                                            data-original-title="" title=""> <svg id="Layer_1"
+                                                    </svg> <span class="mr-l05"> Export Invoices <i id="ember1359"
+                                                            class="popovercontainer ember-view" data-original-title=""
+                                                            title=""> <svg id="Layer_1"
                                                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                                                 class="icon icon-sm text-bottom icon-info-circled">
                                                                 <path
@@ -935,11 +939,11 @@
                                                                 </path>
                                                             </svg> </i> </span></td>
                                                 <td class="text-center"><a> 0 </a></td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                                 <td class="text-right"> - </td>
                                                 <td class="text-right"> - </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                             </tr>
                                             <!---->
                                             <tr id="ember1361" class="ember-view">
@@ -952,7 +956,7 @@
                                                         <path fill="#1D1D1B"
                                                             d="M447.3 454.5l.5-263.8c0-56-20.1-110.3-56.6-152.9l-7.7-8.9-.3-.3c-2.4-4.2-5.3-8.1-8.8-11.6-10.4-10.8-25.1-17-40-17H63.3l.3 512h385.1l-1.4-57.5zM383.8 81.3c17 26.5 27.6 56.7 30.9 88-7.4-10.2-15.5-20-24.2-29.2-11.7-12.5-23.6-23.6-35.6-33.3 7-2.7 13.4-6.8 18.9-12.2 4-4 7.4-8.5 10-13.3zM95.6 480l-.3-448h239.1c6.4 0 12.8 2.7 17.3 7.3 4.4 4.5 6.7 10.1 6.6 16.1C358.1 68 347.7 78 335.1 78h-23.3c-7.7 0-14.5 5.4-16.4 12.9-2 7.5 1.4 15.4 8.1 19.2 20.8 11.7 42.8 29.7 63.6 51.9 20 21.3 36.3 45.5 48.6 72l-.4 220.7.6 25.4H95.6z">
                                                         </path>
-                                                    </svg> <span style="margin-left: 5px;"> Credit / Debit Notes /
+                                                    </svg> <span class="mr-l05"> Credit / Debit Notes /
                                                         Refund Vouchers <i id="ember1362"
                                                             class="popovercontainer ember-view" data-original-title=""
                                                             title=""> <svg id="Layer_1"
@@ -966,46 +970,49 @@
                                                                 </path>
                                                             </svg> </i> </span></td>
                                                 <td class="text-center"> - </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                             </tr>
                                             <tr id="ember1364" class="row-hover secondary-row ember-view">
                                                 <td></td>
                                                 <td>
-                                                    <!----><span style="margin-left: 5px;"> Credit Note Transactions
-                                                    </span></td>
+                                                    <!----><span class="mr-l05"> Credit Note Transactions
+                                                    </span>
+                                                </td>
                                                 <td class="text-center"><a> 0 </a></td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                             </tr>
                                             <tr id="ember1366" class="row-hover secondary-row ember-view">
                                                 <td></td>
                                                 <td>
-                                                    <!----><span style="margin-left: 5px;"> Customer Debit Note
-                                                        Transactions </span></td>
+                                                    <!----><span class="mr-l05"> Customer Debit Note
+                                                        Transactions </span>
+                                                </td>
                                                 <td class="text-center"><a> 0 </a></td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                             </tr>
                                             <tr id="ember1368" class="row-hover secondary-row ember-view">
                                                 <td></td>
                                                 <td>
-                                                    <!----><span style="margin-left: 5px;"> Refund voucher </span></td>
+                                                    <!----><span class="mr-l05"> Refund voucher </span>
+                                                </td>
                                                 <td class="text-center"><a> 0 </a></td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                             </tr>
                                             <tr id="ember1370" class="row-hover ember-view">
                                                 <td></td>
@@ -1017,9 +1024,9 @@
                                                         <path
                                                             d="M319.4 128c-7.1-3.5-15.7-.6-19.2 6.5L186.1 364.8c-1.7 3.4-2 7.3-.7 10.9 1.2 3.6 3.8 6.6 7.2 8.3 2 1 4.1 1.5 6.4 1.5 5.5 0 10.4-3.1 12.8-8l114.1-230.3c3.5-7.1.6-15.7-6.5-19.2zM229 204.3c0-23.4-19-42.4-42.4-42.4s-42.4 19-42.4 42.4 19 42.4 42.4 42.4 42.4-19 42.4-42.4zm-23.8 0c0 10.2-8.3 18.5-18.5 18.5s-18.5-8.3-18.5-18.5 8.3-18.5 18.5-18.5c10.2-.1 18.5 8.3 18.5 18.5zM325.4 264.5c-23.4 0-42.4 19-42.4 42.4s19 42.4 42.4 42.4 42.4-19 42.4-42.4-19.1-42.4-42.4-42.4zm18.5 42.4c0 10.2-8.3 18.5-18.5 18.5s-18.5-8.3-18.5-18.5 8.3-18.5 18.5-18.5 18.5 8.3 18.5 18.5z">
                                                         </path>
-                                                    </svg> <span style="margin-left: 5px;"> Advance Receipt <i
-                                                            id="ember1371" class="popovercontainer ember-view"
-                                                            data-original-title="" title=""> <svg id="Layer_1"
+                                                    </svg> <span class="mr-l05"> Advance Receipt <i id="ember1371"
+                                                            class="popovercontainer ember-view" data-original-title=""
+                                                            title=""> <svg id="Layer_1"
                                                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                                                 class="icon icon-sm text-bottom icon-info-circled">
                                                                 <path
@@ -1030,11 +1037,11 @@
                                                                 </path>
                                                             </svg> </i> </span></td>
                                                 <td class="text-center"><a> 0 </a></td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                             </tr>
                                             <!---->
                                             <tr id="ember1373" class="row-hover ember-view">
@@ -1050,7 +1057,7 @@
                                                         <path fill="#1D1D1B"
                                                             d="M403.7 330.6L347.3 387 325 364.5c-6.2-6.2-16.3-6.2-22.5 0-6.2 6.2-6.2 16.3 0 22.5l33.6 33.6c3.1 3.1 7.2 4.7 11.3 4.7s8.2-1.6 11.3-4.7l67.6-67.6c6.2-6.2 6.2-16.3 0-22.5-6.3-6.2-16.4-6.2-22.6.1zM93 97h202v31H93zM93 192h144v32H93z">
                                                         </path>
-                                                    </svg> <span style="margin-left: 5px;"> Tax Paid <i id="ember1374"
+                                                    </svg> <span class="mr-l05"> Tax Paid <i id="ember1374"
                                                             class="popovercontainer ember-view" data-original-title=""
                                                             title=""> <svg id="Layer_1"
                                                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
@@ -1063,11 +1070,11 @@
                                                                 </path>
                                                             </svg> </i> </span></td>
                                                 <td class="text-center"><a> 0 </a></td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
+                                                <td class="text-right"> <i class="icon-rupees font-11"></i>0.00 </td>
                                             </tr>
                                             <!---->
                                         </tbody>
@@ -1079,7 +1086,7 @@
                             <div class="gstr-transactions-summary">
                                 <!---->
                                 <h4 class="clearfix gstr-summary-title">HSN Summary</h4>
-                                <p style="padding-top:6px;" class="text-muted half">This section includes the HSN-wise
+                                <p class="text-muted half pd-t05">This section includes the HSN-wise
                                     summary of the items you have sold</p>
                                 <div id="ember1945" class="ember-view">
                                     <div class="filings-empty-state"> <svg xmlns="http://www.w3.org/2000/svg"
@@ -1175,7 +1182,7 @@
                             <div class="gstr-transactions-summary">
                                 <!---->
                                 <h4 class="clearfix gstr-summary-title">Nil Summary</h4>
-                                <p style="padding-top:6px;" class="text-muted half">This section displays the sale of
+                                <p class="text-muted half pd-t05">This section displays the sale of
                                     goods and services that are nil rated.&nbsp;Nil rated goods and services are those
                                     that have 0% GST but allows you to claim ITC on the filing paid on inputs</p>
                                 <div id="ember1945" class="ember-view">
@@ -1185,29 +1192,29 @@
                                             <thead>
                                                 <tr>
                                                     <!---->
-                                                    <th style="" id="ember1947" class="  text-left ember-view">
-                                                        <div style="position: relative">
+                                                    <th id="ember1947" class="text-left ember-view">
+                                                        <div class="position-relative">
                                                             <div data-test-title="Supply Type" title="Supply Type"
                                                                 class="pull-left over-flow"> Supply Type </div>
                                                             <!---->
                                                         </div>
                                                     </th>
-                                                    <th style="" id="ember1948" class="  text-right ember-view">
-                                                        <div style="position: relative">
+                                                    <th id="ember1948" class="text-right ember-view">
+                                                        <div class="position-relative">
                                                             <div data-test-title="Nil Amount" title="Nil Amount"
                                                                 class=" over-flow"> Nil Amount </div>
                                                             <!---->
                                                         </div>
                                                     </th>
-                                                    <th style="" id="ember1949" class="  text-right ember-view">
-                                                        <div style="position: relative">
+                                                    <th id="ember1949" class="text-right ember-view">
+                                                        <div class="position-relative">
                                                             <div data-test-title="Exempt Amount" title="Exempt Amount"
                                                                 class=" over-flow"> Exempt Amount </div>
                                                             <!---->
                                                         </div>
                                                     </th>
-                                                    <th style="" id="ember1950" class="  text-right ember-view">
-                                                        <div style="position: relative">
+                                                    <th id="ember1950" class="text-right ember-view">
+                                                        <div class="position-relative">
                                                             <div data-test-title="Non GST Amount" title="Non GST Amount"
                                                                 class=" over-flow"> Non GST Amount </div>
                                                             <!---->
@@ -1219,27 +1226,39 @@
                                             <tbody>
                                                 <tr>
                                                     <td> Intra-State supplies to registered persons </td>
-                                                    <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                    <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                    <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                                    <td class="text-right"> <i class="icon-rupees font-11"></i>0.00
+                                                    </td>
+                                                    <td class="text-right"> <i class="icon-rupees font-11"></i>0.00
+                                                    </td>
+                                                    <td class="text-right"> <i class="icon-rupees font-11"></i>0.00
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td> Inter-State supplies to registered persons </td>
-                                                    <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                    <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                    <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                                    <td class="text-right"> <i class="icon-rupees font-11"></i>0.00
+                                                    </td>
+                                                    <td class="text-right"> <i class="icon-rupees font-11"></i>0.00
+                                                    </td>
+                                                    <td class="text-right"> <i class="icon-rupees font-11"></i>0.00
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td> Intra-State supplies to unregistered persons </td>
-                                                    <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                    <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                    <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                                    <td class="text-right"> <i class="icon-rupees font-11"></i>0.00
+                                                    </td>
+                                                    <td class="text-right"> <i class="icon-rupees font-11"></i>0.00
+                                                    </td>
+                                                    <td class="text-right"> <i class="icon-rupees font-11"></i>0.00
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td> Inter-State supplies to unregistered persons </td>
-                                                    <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
-                                                    <td class="text-right"> <i class="fa fa-inr"></i>1,111.00 </td>
-                                                    <td class="text-right"> <i class="fa fa-inr"></i>0.00 </td>
+                                                    <td class="text-right"> <i class="icon-rupees font-11"></i>0.00
+                                                    </td>
+                                                    <td class="text-right"> <i class="icon-rupees font-11"></i>1,111.00
+                                                    </td>
+                                                    <td class="text-right"> <i class="icon-rupees font-11"></i>0.00
+                                                    </td>
                                                 </tr>
                                                 <!---->
                                             </tbody>
@@ -1252,7 +1271,7 @@
                             <div class="gstr-transactions-summary">
                                 <!---->
                                 <h4 class="clearfix gstr-summary-title">B2C (Small) Details</h4>
-                                <p style="padding-top:6px;" class="text-muted half">Details of invoices with value less
+                                <p class="text-muted half pd-t05">Details of invoices with value less
                                     than 2.5 lakhs that you’ve issued to consumers other than B2C (Large) transactions.
                                 </p>
                                 <div id="ember1945" class="ember-view">
@@ -1384,9 +1403,8 @@
                                                 <td></td>
                                                 <td>1</td>
                                                 <td> Invoices for outward supply </td>
-                                                <td colspan="5" style="padding: 0;">
-                                                    <table style="margin-bottom: 0; border-left: 1px solid #ededed;"
-                                                        class="table zi-table table-hover">
+                                                <td colspan="5" class="p-0">
+                                                    <table class="table zi-table table-hover mb-0 zi-table-child">
 
                                                         <tbody>
                                                             <tr>
@@ -1410,9 +1428,8 @@
                                                             class="font-small ember-view"> (View Self Invoice Summary)
                                                         </a></div>
                                                 </td>
-                                                <td colspan="5" style="padding: 0;">
-                                                    <table style="margin-bottom: 0; border-left: 1px solid #ededed;"
-                                                        class="table zi-table table-hover">
+                                                <td colspan="5" class="p-0">
+                                                    <table class="table zi-table table-hover mb-0 zi-table-child">
 
                                                         <tbody>
                                                             <tr>
@@ -1430,9 +1447,8 @@
                                                 <td></td>
                                                 <td>3</td>
                                                 <td> Revised Invoice </td>
-                                                <td colspan="5" style="padding: 0;">
-                                                    <table style="margin-bottom: 0; border-left: 1px solid #ededed;"
-                                                        class="table zi-table table-hover">
+                                                <td colspan="5" class="p-0">
+                                                    <table class="table zi-table table-hover mb-0 zi-table-child">
 
                                                         <tbody>
                                                             <tr>
@@ -1450,9 +1466,8 @@
                                                 <td></td>
                                                 <td>4</td>
                                                 <td> Debit Notes </td>
-                                                <td colspan="5" style="padding: 0;">
-                                                    <table style="margin-bottom: 0; border-left: 1px solid #ededed;"
-                                                        class="table zi-table table-hover">
+                                                <td colspan="5" class="p-0">
+                                                    <table class="table zi-table table-hover mb-0 zi-table-child">
 
                                                         <tbody>
                                                             <tr>
@@ -1470,9 +1485,8 @@
                                                 <td></td>
                                                 <td>5</td>
                                                 <td> Credit Notes </td>
-                                                <td colspan="5" style="padding: 0;">
-                                                    <table style="margin-bottom: 0; border-left: 1px solid #ededed;"
-                                                        class="table zi-table table-hover">
+                                                <td colspan="5" class="p-0">
+                                                    <table class="table zi-table table-hover mb-0 zi-table-child">
 
                                                         <tbody>
                                                             <tr>
@@ -1490,9 +1504,8 @@
                                                 <td></td>
                                                 <td>6</td>
                                                 <td> Receipt voucher </td>
-                                                <td colspan="5" style="padding: 0;">
-                                                    <table style="margin-bottom: 0; border-left: 1px solid #ededed;"
-                                                        class="table zi-table table-hover">
+                                                <td colspan="5" class="p-0">
+                                                    <table class="table zi-table table-hover mb-0 zi-table-child">
 
                                                         <tbody>
                                                             <tr>
@@ -1510,9 +1523,8 @@
                                                 <td></td>
                                                 <td>7</td>
                                                 <td> Payment Voucher </td>
-                                                <td colspan="5" style="padding: 0;">
-                                                    <table style="margin-bottom: 0; border-left: 1px solid #ededed;"
-                                                        class="table zi-table table-hover">
+                                                <td colspan="5" class="p-0">
+                                                    <table class="table zi-table table-hover mb-0 zi-table-child">
 
                                                         <tbody>
                                                             <tr>
@@ -1530,9 +1542,8 @@
                                                 <td></td>
                                                 <td>8</td>
                                                 <td> Refund voucher </td>
-                                                <td colspan="5" style="padding: 0;">
-                                                    <table style="margin-bottom: 0; border-left: 1px solid #ededed;"
-                                                        class="table zi-table table-hover">
+                                                <td colspan="5" class="p-0">
+                                                    <table class="table zi-table table-hover mb-0 zi-table-child">
 
                                                         <tbody>
                                                             <tr>
@@ -1550,9 +1561,8 @@
                                                 <td></td>
                                                 <td>9</td>
                                                 <td> Delivery Challan for job work </td>
-                                                <td colspan="5" style="padding: 0;">
-                                                    <table style="margin-bottom: 0; border-left: 1px solid #ededed;"
-                                                        class="table zi-table table-hover">
+                                                <td colspan="5" class="p-0">
+                                                    <table class="table zi-table table-hover mb-0 zi-table-child">
 
                                                         <tbody>
                                                             <tr>
@@ -1570,9 +1580,8 @@
                                                 <td></td>
                                                 <td>10</td>
                                                 <td> Delivery Challan for supply on approval </td>
-                                                <td colspan="5" style="padding: 0;">
-                                                    <table style="margin-bottom: 0; border-left: 1px solid #ededed;"
-                                                        class="table zi-table table-hover">
+                                                <td colspan="5" class="p-0">
+                                                    <table class="table zi-table table-hover mb-0 zi-table-child">
 
                                                         <tbody>
                                                             <tr>
@@ -1590,9 +1599,8 @@
                                                 <td></td>
                                                 <td>11</td>
                                                 <td> Delivery Challan in case of liquid gas </td>
-                                                <td colspan="5" style="padding: 0;">
-                                                    <table style="margin-bottom: 0; border-left: 1px solid #ededed;"
-                                                        class="table zi-table table-hover">
+                                                <td colspan="5" class="p-0">
+                                                    <table class="table zi-table table-hover mb-0 zi-table-child">
 
                                                         <tbody>
                                                             <tr>
@@ -1611,9 +1619,8 @@
                                                 <td>12</td>
                                                 <td> Delivery Challan in cases other than by way of supply (excluding at
                                                     S no. 9 to 11) </td>
-                                                <td colspan="5" style="padding: 0;">
-                                                    <table style="margin-bottom: 0; border-left: 1px solid #ededed;"
-                                                        class="table zi-table table-hover">
+                                                <td colspan="5" class="p-0">
+                                                    <table class="table zi-table table-hover mb-0 zi-table-child">
 
                                                         <tbody>
                                                             <tr>
@@ -1630,10 +1637,8 @@
                                             <tr>
                                                 <td colspan="2"></td>
                                                 <td><strong>Total</strong></td>
-                                                <td colspan="5" style="padding: 0;">
-                                                    <table
-                                                        style="margin-bottom: 0;border-bottom: 0;background-color: #f9f9f9;"
-                                                        class="table zi-table">
+                                                <td colspan="5" class="p-0">
+                                                    <table class="table zi-table table-hover mb-0 zi-table-child">
 
                                                         <tbody>
                                                             <tr>
@@ -1652,40 +1657,40 @@
                             </div>
                         </div>
                         <div class="subtabs-box" id="subtabs-6">
-                            <table id="ember1972" class="transactions-table   table zi-table table-hover ember-view">
+                            <table id="ember1972" class="transactions-table table zi-table table-hover ember-view">
                                 <thead>
                                     <tr>
                                         <!---->
-                                        <th style="" id="ember1973" class="  text-left ember-view">
-                                            <div style="position: relative">
+                                        <th id="ember1973" class="text-left ember-view">
+                                            <div class="position-relative">
                                                 <div data-test-title="Transaction #" title="Transaction #"
                                                     class="pull-left over-flow"> Transaction # </div>
                                                 <!---->
                                             </div>
                                         </th>
-                                        <th style="" id="ember1974" class="  text-left ember-view">
-                                            <div style="position: relative">
+                                        <th id="ember1974" class="text-left ember-view">
+                                            <div class="position-relative">
                                                 <div data-test-title="Transaction date" title="Transaction date"
                                                     class="pull-left over-flow"> Transaction date </div>
                                                 <!---->
                                             </div>
                                         </th>
-                                        <th style="" id="ember1975" class="  text-left ember-view">
-                                            <div style="position: relative">
+                                        <th id="ember1975" class="text-left ember-view">
+                                            <div class="position-relative">
                                                 <div data-test-title="Transaction Type" title="Transaction Type"
                                                     class="pull-left over-flow"> Transaction Type </div>
                                                 <!---->
                                             </div>
                                         </th>
-                                        <th style="" id="ember1976" class="  text-left ember-view">
-                                            <div style="position: relative">
+                                        <th id="ember1976" class="text-left ember-view">
+                                            <div class="position-relative">
                                                 <div data-test-title="Error Code" title="Error Code"
                                                     class="pull-left over-flow"> Error Code </div>
                                                 <!---->
                                             </div>
                                         </th>
-                                        <th style="width:30%" id="ember1977" class="  text-left ember-view">
-                                            <div style="position: relative">
+                                        <th width="30%" id="ember1977" class="text-left ember-view">
+                                            <div class="position-relative">
                                                 <div data-test-title="Error Message" title="Error Message"
                                                     class="pull-left over-flow"> Error Message </div>
                                                 <!---->

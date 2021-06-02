@@ -3,4 +3,5 @@ export interface INameUniqueName {
     name: string;
     isActive?: boolean;
     alias?: string;
+    taxNumber?: string;
 }

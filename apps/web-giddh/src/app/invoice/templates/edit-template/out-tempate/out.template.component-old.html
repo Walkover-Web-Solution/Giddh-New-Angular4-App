@@ -429,19 +429,22 @@
                                     <tbody>
                                         <tr *ngIf="inputTemplate.sections[0].content[4].display">
                                             <td><strong>{{(inputTemplate.sections[0].content[4].label.length > 0) ?
-                  inputTemplate.sections[0].content[4].label : 'Invoice Date'}}</strong></td>
+                                                    inputTemplate.sections[0].content[4].label : 'Invoice
+                                                    Date'}}</strong></td>
                                             <td>
                                                 <p> 23/06/2017 </p>
                                             </td>
                                         </tr>
                                         <tr *ngIf="inputTemplate.sections[0].content[5].display">
                                             <td><strong>{{(inputTemplate.sections[0].content[5].label.length > 0) ?
-                  inputTemplate.sections[0].content[5].label : 'Invoice No.'}}</strong></td>
+                                                    inputTemplate.sections[0].content[5].label : 'Invoice
+                                                    No.'}}</strong></td>
                                             <td>201770323-64</td>
                                         </tr>
                                         <tr *ngIf="inputTemplate.sections[0].content[12].display">
                                             <td><strong>{{(inputTemplate.sections[0].content[12].label.length > 0) ?
-                  inputTemplate.sections[0].content[12].label : 'Due Date'}}</strong></td>
+                                                    inputTemplate.sections[0].content[12].label : 'Due Date'}}</strong>
+                                            </td>
                                             <td>30/06/2017</td>
                                         </tr>
 
@@ -473,7 +476,8 @@
                         <td
                             *ngIf="inputTemplate.sections[0].content[9].display || inputTemplate.sections[0].content[10].display || inputTemplate.sections[0].content[11].display || inputTemplate.sections[0].content[24].display">
                             <p *ngIf="inputTemplate.sections[0].content[9].display">
-                                <strong>{{inputTemplate.sections[0].content[9].label}}</strong></p>
+                                <strong>{{inputTemplate.sections[0].content[9].label}}</strong>
+                            </p>
                             <p *ngIf="inputTemplate.sections[0].content[24].display">Green Soft Solutions</p>
                             <p *ngIf="inputTemplate.sections[0].content[10].display">
                                 {{inputTemplate.sections[0].content[10].label}}</p>
@@ -482,7 +486,7 @@
                         </td>
                         <td *ngIf="inputTemplate.sections[0].content[14].display">
                             <p><strong>{{(inputTemplate.sections[0].content[14].label.length > 0) ?
-            inputTemplate.sections[0].content[14].label : 'Billing Address'}}</strong></p>
+                                    inputTemplate.sections[0].content[14].label : 'Billing Address'}}</strong></p>
                             <p>5 A.B. Road</p>
                             <p>Indore (M.P.) 452000</p>
                             <p *ngIf="inputTemplate.sections[0].content[13].display">Madhya Pradesh</p>
@@ -492,7 +496,7 @@
                         </td>
                         <td *ngIf="inputTemplate.sections[0].content[16].display">
                             <p><strong>{{(inputTemplate.sections[0].content[16].label.length > 0) ?
-            inputTemplate.sections[0].content[16].label : 'Shipping Address'}}</strong></p>
+                                    inputTemplate.sections[0].content[16].label : 'Shipping Address'}}</strong></p>
                             <p>5 A.B. Road</p>
                             <p>Indore (M.P.) 452000</p>
                             <p *ngIf="inputTemplate.sections[0].content[17].display">Madhya Pradesh</p>
@@ -511,7 +515,7 @@
                         <td
                             *ngIf="inputTemplate.sections[0].content[14].display && inputTemplate.sections[0].content[15].display">
                             <p><strong>{{(inputTemplate.sections[0].content[15].label.length > 0) ?
-            inputTemplate.sections[0].content[15].label : 'GSTIN'}}</strong></p>
+                                    inputTemplate.sections[0].content[15].label : 'GSTIN'}}</strong></p>
                             <p>{{companyGSTIN}}</p>
                         </td>
                         <td
@@ -521,7 +525,7 @@
                         <td
                             *ngIf="inputTemplate.sections[0].content[16].display && inputTemplate.sections[0].content[18].display">
                             <p><strong>{{(inputTemplate.sections[0].content[18].label.length > 0) ?
-            inputTemplate.sections[0].content[18].label : 'GSTIN'}}</strong></p>
+                                    inputTemplate.sections[0].content[18].label : 'GSTIN'}}</strong></p>
                             <p>{{companyGSTIN}}</p>
                         </td>
                     </tr>
@@ -531,37 +535,40 @@
                 <tbody>
                     <tr>
                         <td *ngIf="inputTemplate.sections[0].content[6].display">
-                            <strong>{{(inputTemplate.sections[0].content[6].label.length > 0) ? inputTemplate.sections[0].content[6].label
-            : 'Ship Date'}}</strong>
+                            <strong>{{(inputTemplate.sections[0].content[6].label.length > 0) ?
+                                inputTemplate.sections[0].content[6].label
+                                : 'Ship Date'}}</strong>
                             <p>30/06/2017</p>
                         </td>
 
                         <td *ngIf="inputTemplate.sections[0].content[7].display">
-                            <strong>{{(inputTemplate.sections[0].content[7].label.length > 0) ? inputTemplate.sections[0].content[7].label
-            : 'Ship Via'}}</strong>
+                            <strong>{{(inputTemplate.sections[0].content[7].label.length > 0) ?
+                                inputTemplate.sections[0].content[7].label
+                                : 'Ship Via'}}</strong>
                             <p>30/06/2017</p>
                         </td>
 
                         <td *ngIf="inputTemplate.sections[0].content[8].display">
-                            <strong>{{(inputTemplate.sections[0].content[8].label.length > 0) ? inputTemplate.sections[0].content[8].label
-            : 'Tracking No'}}</strong>
+                            <strong>{{(inputTemplate.sections[0].content[8].label.length > 0) ?
+                                inputTemplate.sections[0].content[8].label
+                                : 'Tracking No'}}</strong>
                             <p>00115467</p>
                         </td>
                         <td *ngIf="inputTemplate.sections[0].content[19].display">
                             <strong>{{(inputTemplate.sections[0].content[19].label.length > 0) ?
-            inputTemplate.sections[0].content[19].label : 'Custom Field1'}}</strong>
+                                inputTemplate.sections[0].content[19].label : 'Custom Field1'}}</strong>
                             <p>Hello this is custom field</p>
                         </td>
 
                         <td *ngIf="inputTemplate.sections[0].content[20].display">
                             <strong>{{(inputTemplate.sections[0].content[20].label.length > 0) ?
-            inputTemplate.sections[0].content[20].label : 'Custom Field2'}}</strong>
+                                inputTemplate.sections[0].content[20].label : 'Custom Field2'}}</strong>
                             <p>2324342424432</p>
                         </td>
 
                         <td *ngIf="inputTemplate.sections[0].content[21].display">
                             <strong>{{(inputTemplate.sections[0].content[21].label.length > 0) ?
-            inputTemplate.sections[0].content[21].label : 'Custom Field3'}}</strong>
+                                inputTemplate.sections[0].content[21].label : 'Custom Field3'}}</strong>
                             <p>Field 3</p>
                         </td>
                     </tr>
@@ -579,53 +586,63 @@
                         <tr>
                             <th *ngIf="inputTemplate.sections[1].content[0].display" class="text-right"
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
-                                {{(inputTemplate.sections[1].content[0].label.length > 0) ? inputTemplate.sections[1].content[0].label : 'S
-            No'}}
+                                {{(inputTemplate.sections[1].content[0].label.length > 0) ?
+                                inputTemplate.sections[1].content[0].label : 'S
+                                No'}}
                             </th>
                             <th *ngIf="inputTemplate.sections[1].content[1].display" class="text-left"
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
-                                {{(inputTemplate.sections[1].content[1].label.length > 0) ? inputTemplate.sections[1].content[1].label :
-            'Date'}}
+                                {{(inputTemplate.sections[1].content[1].label.length > 0) ?
+                                inputTemplate.sections[1].content[1].label :
+                                'Date'}}
                             </th>
                             <th *ngIf="inputTemplate.sections[1].content[2].display" colspan="2" class="text-left"
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
-                                {{(inputTemplate.sections[1].content[2].label.length > 0) ? inputTemplate.sections[1].content[2].label :
-            'Item'}}
+                                {{(inputTemplate.sections[1].content[2].label.length > 0) ?
+                                inputTemplate.sections[1].content[2].label :
+                                'Item'}}
                             </th>
                             <th *ngIf="inputTemplate.sections[1].content[3].display" class="text-right"
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
-                                {{(inputTemplate.sections[1].content[3].label.length > 0) ? inputTemplate.sections[1].content[3].label :
-            'HSN/SAC'}}
+                                {{(inputTemplate.sections[1].content[3].label.length > 0) ?
+                                inputTemplate.sections[1].content[3].label :
+                                'HSN/SAC'}}
                             </th>
                             <th *ngIf="inputTemplate.sections[1].content[10].display" class="text-right"
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
-                                {{(inputTemplate.sections[1].content[10].label.length > 0) ? inputTemplate.sections[1].content[10].label :
-            'Qty.'}}
+                                {{(inputTemplate.sections[1].content[10].label.length > 0) ?
+                                inputTemplate.sections[1].content[10].label :
+                                'Qty.'}}
                             </th>
                             <th *ngIf="inputTemplate.sections[1].content[5].display" class="text-right"
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
-                                {{(inputTemplate.sections[1].content[5].label.length > 0) ? inputTemplate.sections[1].content[5].label :
-            'Rate'}} (<i class="fa fa-inr"></i>)
+                                {{(inputTemplate.sections[1].content[5].label.length > 0) ?
+                                inputTemplate.sections[1].content[5].label :
+                                'Rate'}} (<i class="icon-rupees font-11"></i>)
                             </th>
                             <th *ngIf="inputTemplate.sections[1].content[6].display" class="text-right"
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
-                                {{(inputTemplate.sections[1].content[6].label.length > 0) ? inputTemplate.sections[1].content[6].label :
-            'Disc.'}} (<i class="fa fa-inr"></i>)
+                                {{(inputTemplate.sections[1].content[6].label.length > 0) ?
+                                inputTemplate.sections[1].content[6].label :
+                                'Disc.'}} (<i class="icon-rupees font-11"></i>)
                             </th>
                             <th *ngIf="inputTemplate.sections[1].content[7].display" class="text-right"
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
-                                {{(inputTemplate.sections[1].content[7].label.length > 0) ? inputTemplate.sections[1].content[7].label :
-            'Taxable Value'}}
+                                {{(inputTemplate.sections[1].content[7].label.length > 0) ?
+                                inputTemplate.sections[1].content[7].label :
+                                'Taxable Value'}}
                             </th>
                             <th *ngIf="inputTemplate.sections[1].content[8].display" class="text-right"
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
-                                {{(inputTemplate.sections[1].content[8].label.length > 0) ? inputTemplate.sections[1].content[8].label :
-            'Tax'}}(<i class="fa fa-inr"></i>)
+                                {{(inputTemplate.sections[1].content[8].label.length > 0) ?
+                                inputTemplate.sections[1].content[8].label :
+                                'Tax'}}(<i class="icon-rupees font-11"></i>)
                             </th>
                             <th colspan="2" *ngIf="inputTemplate.sections[1].content[9].display" class="text-right"
                                 [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
-                                {{(inputTemplate.sections[1].content[9].label.length > 0) ? inputTemplate.sections[1].content[9].label :
-            'Total'}} (<i class="fa fa-inr"></i>)
+                                {{(inputTemplate.sections[1].content[9].label.length > 0) ?
+                                inputTemplate.sections[1].content[9].label :
+                                'Total'}} (<i class="icon-rupees font-11"></i>)
                             </th>
                         </tr>
                     </thead>
@@ -713,15 +730,15 @@
                 <table class="balance">
                     <tr *ngIf="inputTemplate.sections[2].content[0].display">
                         <th><strong>{{inputTemplate.sections[2].content[0].label}}</strong></th>
-                        <td><span><i class="fa fa-inr"></i>49300.00.00</span></td>
+                        <td><span><i class="icon-rupees font-11"></i>49300.00.00</span></td>
                     </tr>
                     <tr *ngIf="inputTemplate.sections[2].content[1].display">
                         <th><strong>{{inputTemplate.sections[2].content[1].label}}</strong></th>
-                        <td><span><i class="fa fa-inr"></i>5920.00</span></td>
+                        <td><span><i class="icon-rupees font-11"></i>5920.00</span></td>
                     </tr>
                     <tr *ngIf="inputTemplate.sections[2].content[3].display">
                         <th><strong>{{inputTemplate.sections[2].content[3].label}}</strong></th>
-                        <td><span><i class="fa fa-inr"></i>54230.00</span></td>
+                        <td><span><i class="icon-rupees font-11"></i>54230.00</span></td>
                     </tr>
                     <tr *ngIf="inputTemplate.sections[2].content[4].display">
                         <th><strong>{{inputTemplate.sections[2].content[4].label}}</strong></th>

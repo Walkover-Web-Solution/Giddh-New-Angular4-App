@@ -1,13 +1,15 @@
+@import "../../../../assets/css/color.scss";
+
 .or-line::before {
     content: " ";
-    border-bottom: 1px solid #a2a2a2;
+    border-bottom: 1px solid $dim-gray;
     display: inline-block;
     width: 57px;
     margin-right: 13px;
 }
 .or-line::after {
     content: "";
-    border-bottom: 1px solid #a2a2a2;
+    border-bottom: 1px solid $dim-gray;
     display: inline-block;
     width: 57px;
     margin-left: 13px;
@@ -15,6 +17,34 @@
 .or-line {
     display: flex;
     align-items: center;
-    color: #a2a2a2;
+    color: $dim-gray;
     margin-bottom: 10px;
+}
+.my-dropdown-menu {
+    padding: 10px;
+}
+.percent-label,
+.value-label {
+    width: 50px;
+}
+.percent-wrapper {
+    .form-control {
+        width: 110px;
+        padding-right: 20px !important;
+    }
+    .fa-percent {
+        top: 9px;
+        right: 6px;
+        color: $gray;
+    }
+}
+.value-box {
+    .form-control {
+        width: 110px;
+    }
+}
+.discount-list {
+    list-style: none;
+    overflow: auto;
+    max-height: 100px;
 }

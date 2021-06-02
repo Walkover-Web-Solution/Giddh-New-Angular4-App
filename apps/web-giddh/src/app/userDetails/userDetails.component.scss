@@ -10,6 +10,19 @@
     line-height: 1.7;
     text-align: center;
 }
-.session-table.basic > tbody > tr td:last-child {
-    border-right: none !important;
+
+@media (max-width: 575px) {
+    .wrap-tab-content-pd-15 {
+        form {
+            input {
+                max-width: 100%;
+                margin-bottom: 15px;
+                width: 100%;
+            }
+            .btn-success {
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+    }
 }

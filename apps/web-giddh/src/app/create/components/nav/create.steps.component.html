@@ -6,7 +6,7 @@
             <br>
             <span [ngClass]="{'label-active': (stage === 'one' || stage === 'two')}">Select Template</span>
         </span>
-        <span class="v_line" [ngClass]="{'active': stage === 'two'}"></span>
+        <span class="v-line" [ngClass]="{'active': stage === 'two'}"></span>
     </p>
     <p class="steps-block">
         <span class="sp-template">
@@ -14,7 +14,7 @@
                 [disabled]="stage === 'one'">2</button>
             <br> <span [ngClass]="{'label-active': (stage === 'two' || stage === 'three')}">Create Invoice</span>
         </span>
-        <span class="v_line" [ngClass]="{'active': stage === 'three'}"></span>
+        <span class="v-line" [ngClass]="{'active': stage === 'three'}"></span>
     </p>
     <p class="steps-block">
         <span class="sp-template">

@@ -1,7 +1,7 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { InvoiceService } from '../../services/invoice.service';
@@ -33,13 +33,15 @@ import { saveAs } from 'file-saver';
 import { CustomActions } from '../../store/customActions';
 import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
 import { RecurringVoucherService } from '../../services/recurring-voucher.service';
+import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.service';
+import { LocaleService } from '../../services/locale.service';
 
 @Injectable()
 export class InvoiceActions {
 
     // GET_ALL All Invoices
 
-    public GetAllInvoices$: Observable<Action> =createEffect( ()=> this.action$
+    public GetAllInvoices$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.GET_ALL_INVOICES),
             switchMap((action: CustomActions) => this._invoiceService.GetAllInvoices(action.payload.model, action.payload.body)),
@@ -48,7 +50,7 @@ export class InvoiceActions {
             })));
 
 
-    public GetAllInvoicesResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public GetAllInvoicesResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.GET_ALL_INVOICES_RESPONSE),
             map(response => {
@@ -57,7 +59,7 @@ export class InvoiceActions {
 
     // get all ledgers for invoice
 
-    public GetAllLedgersForInvoice$: Observable<Action> =createEffect( ()=> this.action$
+    public GetAllLedgersForInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE),
             switchMap((action: CustomActions) => this._invoiceService.GetAllLedgersForInvoice(action.payload.model, action.payload.body)),
@@ -71,7 +73,7 @@ export class InvoiceActions {
 
     // Preview Invoice
 
-    public PreviewInvoice$: Observable<Action> =createEffect( ()=> this.action$
+    public PreviewInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.PREVIEW_INVOICE),
             switchMap((action: CustomActions) => this._invoiceService.PreviewInvoice(action.payload.accountUniqueName, action.payload.body)),
@@ -85,7 +87,7 @@ export class InvoiceActions {
 
     // Preview of Generated Invoice
 
-    public PreviewOfGeneratedInvoice$: Observable<Action> =createEffect( ()=> this.action$
+    public PreviewOfGeneratedInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE),
             switchMap((action: CustomActions) => this._invoiceService.GetGeneratedInvoicePreview(action.payload.accountUniqueName, action.payload.invoiceNumber)),
@@ -99,7 +101,7 @@ export class InvoiceActions {
 
     // Preview of Generated Invoice
 
-    public UpdateGeneratedInvoice$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateGeneratedInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE),
             switchMap((action: CustomActions) => this._invoiceService.UpdateGeneratedInvoice(action.payload.accountUniqueName, action.payload.body)),
@@ -113,7 +115,7 @@ export class InvoiceActions {
 
     // Generate Invoice
 
-    public GenerateInvoice$: Observable<Action> = createEffect( ()=>this.action$
+    public GenerateInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.GENERATE_INVOICE),
             switchMap((action: CustomActions) => this._invoiceService.GenerateInvoice(action.payload.accountUniqueName, action.payload.body)),
@@ -138,7 +140,7 @@ export class InvoiceActions {
     //       payload: res
     //     }));
 
-    public GenerateBulkInvoice$: Observable<Action> =createEffect( ()=> this.action$
+    public GenerateBulkInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE),
             switchMap((action: CustomActions) => this._invoiceService.GenerateBulkInvoice(action.payload.reqObj, action.payload.body, action.payload.requestedFrom)),
@@ -147,7 +149,7 @@ export class InvoiceActions {
             })));
 
 
-    public GenerateBulkInvoiceResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public GenerateBulkInvoiceResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE),
             map((response: CustomActions) => {
@@ -168,7 +170,7 @@ export class InvoiceActions {
 
     // Delete Invoice
 
-    public DeleteInvoice$: Observable<Action> =createEffect( ()=> this.action$
+    public DeleteInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.DELETE_INVOICE),
             switchMap((action: CustomActions) => this._invoiceService.DeleteInvoice(action.payload.model, action.payload.accountUniqueName)),
@@ -177,7 +179,7 @@ export class InvoiceActions {
             })));
 
 
-    public DeleteInvoiceResponse$: Observable<Action> = createEffect( ()=>this.action$
+    public DeleteInvoiceResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE),
             map((response: CustomActions) => {
@@ -185,14 +187,14 @@ export class InvoiceActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast('Invoice Deleted Successfully');
+                    this._toasty.successToast(this.localeService.translate("app_messages.invoice_deleted"));
                 }
                 return { type: 'EmptyAction' };
             })));
 
     // Action On Invoice
 
-    public ActionOnInvoice$: Observable<Action> =createEffect( ()=> this.action$
+    public ActionOnInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.ACTION_ON_INVOICE),
             switchMap((action: CustomActions) => this._invoiceService.PerformActionOnInvoice(action.payload.invoiceUniqueName, action.payload.action)),
@@ -201,7 +203,7 @@ export class InvoiceActions {
             })));
 
 
-    public ActionOnInvoiceResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public ActionOnInvoiceResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE),
             map((response: CustomActions) => {
@@ -209,13 +211,13 @@ export class InvoiceActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast('Invoice Successfully Updated.');
+                    this._toasty.successToast(this.localeService.translate("app_messages.invoice_updated"));
                 }
                 return { type: 'EmptyAction' }; // Refresh the list
             })));
 
 
-    public GetTemplateDetailsOfInvoice$: Observable<Action> =createEffect( ()=> this.action$
+    public GetTemplateDetailsOfInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS),
             switchMap((action: CustomActions) => this._invoiceService.GetInvoiceTemplateDetails(action.payload)),
@@ -233,7 +235,7 @@ export class InvoiceActions {
      * GET_ALL INVOICE SETTING
      */
 
-    public getInvoiceSetting$: Observable<Action> =createEffect( ()=> this.action$
+    public getInvoiceSetting$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.SETTING.GET_INVOICE_SETTING),
             switchMap((action: CustomActions) => this._invoiceService.GetInvoiceSetting()),
@@ -249,7 +251,7 @@ export class InvoiceActions {
      * DELETE INVOICE WEBHOOK
      */
 
-    public DeleteWebhook$: Observable<Action> =createEffect( ()=> this.action$
+    public DeleteWebhook$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.SETTING.DELETE_WEBHOOK),
             switchMap((action: CustomActions) => this._invoiceService.DeleteInvoiceWebhook(action.payload)),
@@ -265,7 +267,7 @@ export class InvoiceActions {
      * UPDATE INVOICE EMAILID
      */
 
-    public UpdateInvoiceEmail$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateInvoiceEmail$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.SETTING.UPDATE_INVOICE_EMAIL),
             switchMap((action: CustomActions) => this._invoiceService.UpdateInvoiceEmail(action.payload)),
@@ -281,7 +283,7 @@ export class InvoiceActions {
      * SAVE INVOICE WEBHOOK
      */
 
-    public SaveInvoiceWebhook$: Observable<Action> =createEffect( ()=> this.action$
+    public SaveInvoiceWebhook$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.SETTING.SAVE_INVOICE_WEBHOOK),
             switchMap((action: CustomActions) => this._invoiceService.SaveInvoiceWebhook(action.payload)),
@@ -297,7 +299,7 @@ export class InvoiceActions {
      * UPDATE INVOICE SETTING
      */
 
-    public updateInvoiceSetting$: Observable<Action> = createEffect( ()=>this.action$
+    public updateInvoiceSetting$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.SETTING.UPDATE_INVOICE_SETTING),
             switchMap((action: CustomActions) => this._invoiceService.UpdateInvoiceSetting(action.payload)),
@@ -313,7 +315,7 @@ export class InvoiceActions {
      * GET_ALL RAZORPAY DETAIL
      */
 
-    public GetRazorPayDetail$: Observable<Action> =createEffect( ()=> this.action$
+    public GetRazorPayDetail$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.SETTING.GET_RAZORPAY_DETAIL),
             switchMap((action: CustomActions) => this._invoiceService.GetRazorPayDetail()),
@@ -329,7 +331,7 @@ export class InvoiceActions {
      * UPDATE RAZORPAY DETAIL
      */
 
-    public UpdateRazorPayDetail$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateRazorPayDetail$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL),
             switchMap((action: CustomActions) => this._invoiceService.UpdateRazorPayDetail(action.payload)),
@@ -345,7 +347,7 @@ export class InvoiceActions {
      * DELETE RAZORPAY DETAIL
      */
 
-    public DeleteRazorPayDetail$: Observable<Action> =createEffect( ()=> this.action$
+    public DeleteRazorPayDetail$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.SETTING.DELETE_RAZORPAY_DETAIL),
             switchMap((action: CustomActions) => this._invoiceService.DeleteRazorPayDetail()),
@@ -361,7 +363,7 @@ export class InvoiceActions {
      * DELETE INVOICE EMAIL
      */
 
-    public DeleteInvoiceEmail$: Observable<Action> = createEffect( ()=>this.action$
+    public DeleteInvoiceEmail$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.SETTING.DELETE_INVOICE_EMAIL),
             switchMap((action: CustomActions) => this._invoiceService.DeleteInvoiceEmail(action.payload)),
@@ -377,7 +379,7 @@ export class InvoiceActions {
      * SAVE RAZORPAY DETAIL
      */
 
-    public SaveRazorPayDetail$: Observable<Action> =createEffect( ()=> this.action$
+    public SaveRazorPayDetail$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.SETTING.SAVE_RAZORPAY_DETAIL),
             switchMap((action: CustomActions) => this._invoiceService.SaveRazorPayDetail(action.payload)),
@@ -390,7 +392,7 @@ export class InvoiceActions {
             }))));
 
 
-    public DownloadInvoice$: Observable<Action> =createEffect( ()=> this.action$
+    public DownloadInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.DOWNLOAD_INVOICE),
             switchMap((action: CustomActions) => {
@@ -399,7 +401,7 @@ export class InvoiceActions {
             })));
 
 
-    public DownloadInvoiceResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public DownloadInvoiceResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.DOWNLOAD_INVOICE_RESPONSE),
             map((response: CustomActions) => {
@@ -418,7 +420,7 @@ export class InvoiceActions {
                 return { type: 'EmptyAction' };
             })));
 
-    public DownloadExportedInvoice$: Observable<Action> =createEffect( ()=> this.action$
+    public DownloadExportedInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED),
             switchMap((action: CustomActions) => {
@@ -427,7 +429,7 @@ export class InvoiceActions {
             })));
 
 
-    public SendInvoiceOnMail$: Observable<Action> =createEffect( ()=> this.action$
+    public SendInvoiceOnMail$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.SEND_MAIL),
             switchMap((action: CustomActions) => {
@@ -436,7 +438,7 @@ export class InvoiceActions {
             })));
 
 
-    public SendInvoiceOnMailResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public SendInvoiceOnMailResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.SEND_MAIL_RESPONSE),
             map((response: CustomActions) => {
@@ -450,7 +452,7 @@ export class InvoiceActions {
             })));
 
 
-    public SendInvoiceOnSms$: Observable<Action> = createEffect( ()=>this.action$
+    public SendInvoiceOnSms$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.SEND_SMS),
             switchMap((action: CustomActions) => {
@@ -459,7 +461,7 @@ export class InvoiceActions {
             })));
 
 
-    public SendInvoiceOnSmsResponse$: Observable<Action> = createEffect( ()=>this.action$
+    public SendInvoiceOnSmsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.SEND_SMS_RESPONSE),
             map((response: CustomActions) => {
@@ -474,7 +476,7 @@ export class InvoiceActions {
 
     // Transporter effects
 
-    public addEwayBillTransporter$: Observable<Action> = createEffect( ()=>this.action$
+    public addEwayBillTransporter$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.ADD_TRANSPORTER),
             switchMap((action: CustomActions) => {
@@ -482,7 +484,7 @@ export class InvoiceActions {
                     map(response => this.addEwayBillTransporterResponse(response)));
             })));
 
-    public addEwayBillTransporterResponse$: Observable<Action> = createEffect( ()=>this.action$
+    public addEwayBillTransporterResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.ADD_TRANSPORTER_RESPONSE),
             map((response: CustomActions) => {
@@ -490,12 +492,12 @@ export class InvoiceActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast('transporter added  successfully');
+                    this._toasty.successToast(this.localeService.translate("app_messages.transporter_added"));
                 }
                 return { type: 'EmptyAction' };
             })));
 
-    public updateEwayBillTransporter$: Observable<Action> = createEffect( ()=>this.action$
+    public updateEwayBillTransporter$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.UPDATE_TRANSPORTER),
             switchMap((action: CustomActions) => {
@@ -503,7 +505,7 @@ export class InvoiceActions {
                     map(response => this.updateEwayBillTransporterResponse(response)));
             })));
 
-    public updateEwayBillTransporterResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public updateEwayBillTransporterResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.UPDATE_TRANSPORTER_RESPONSE),
             map((response: CustomActions) => {
@@ -511,20 +513,20 @@ export class InvoiceActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast('transporter updated  successfully');
+                    this._toasty.successToast(this.localeService.translate("app_messages.transporter_updated"));
                 }
                 return { type: 'EmptyAction' };
             })));
 
 
-    public UpdateEwayVehicle$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateEwayVehicle$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE),
             switchMap((action: CustomActions) => this._invoiceService.updateEwayVehicle(action.payload)),
             map(response => this.UpdateEwayVehicleResponse(response))));
 
 
-    public LoginEwaybillUser$: Observable<Action> =createEffect( ()=> this.action$
+    public LoginEwaybillUser$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER),
             switchMap((action: CustomActions) => {
@@ -535,7 +537,7 @@ export class InvoiceActions {
     //  EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER
 
 
-    public LoginEwaybillUserResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public LoginEwaybillUserResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER_RESPONSE),
             map((response: CustomActions) => {
@@ -549,7 +551,7 @@ export class InvoiceActions {
             })));
     // Is logged in user in Eway Bill IsUserLoginEwayBill
 
-    public isLoggedInUserEwayBill$: Observable<Action> =createEffect( ()=> this.action$
+    public isLoggedInUserEwayBill$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.IS_LOOGEDIN_USER_EWAYBILL),
             switchMap((action: CustomActions) => {
@@ -558,7 +560,7 @@ export class InvoiceActions {
             })));
     // Is logged in user in Eway Bill response
 
-    public isLoggedInUserEwayBillResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public isLoggedInUserEwayBillResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.IS_LOOGEDIN_USER_EWAYBILL_RESPONSE),
             map((response: CustomActions) => {
@@ -567,7 +569,7 @@ export class InvoiceActions {
             })));
     // generate Eway bill request
 
-    public GenerateNewEwaybill$: Observable<Action> =createEffect( ()=> this.action$
+    public GenerateNewEwaybill$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.GENERATE_EWAYBILL),
             switchMap((action: CustomActions) => {
@@ -577,7 +579,7 @@ export class InvoiceActions {
 
     // Generate eway bill respone
 
-    public GenerateNewEwaybillResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public GenerateNewEwaybillResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.GENERATE_EWAYBILL_RESPONSE),
             map((response: CustomActions) => {
@@ -585,14 +587,16 @@ export class InvoiceActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast('E-Way bill ' + data.body.ewayBillNo + 'generated successfully');
+                    let text = this.localeService.translate("app_messages.eway_bill_generated");
+                    text = text?.replace("[EWAY_BILL_NO]", data.body.ewayBillNo);
+                    this._toasty.successToast(text);
                     this._router.navigate(['/pages/invoice/ewaybill']);
                 }
                 return { type: 'EmptyAction' };
             })));
     // CANCEL Eway bill request
 
-    public cancelEwayBill$: Observable<Action> =createEffect( ()=> this.action$
+    public cancelEwayBill$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.CANCEL_EWAYBILL),
             switchMap((action: CustomActions) => {
@@ -602,7 +606,7 @@ export class InvoiceActions {
 
     // CANCEL eway bill respone
 
-    public cancelEwayBillResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public cancelEwayBillResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.CANCEL_EWAYBILL_RESPONSE),
             map((response: CustomActions) => {
@@ -617,7 +621,7 @@ export class InvoiceActions {
                 return { type: 'EmptyAction' };
             })));
 
-    public UpdateEwayVehicleResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateEwayVehicleResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE_RESPONSE),
             map((response: CustomActions) => {
@@ -625,7 +629,9 @@ export class InvoiceActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast(`vehicle updated date ${data.body.vehUpdDate} and valid upto ${data.body.validUpto} `);
+                    let text = this.localeService.translate("app_messages.vehicle_data_updated");
+                    text = text?.replace("[VEHICLE_UPDATE_DATE]", data.body.vehUpdDate)?.replace("[VALID_UPTO]", data.body.validUpto);
+                    this._toasty.successToast(text);
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -633,7 +639,7 @@ export class InvoiceActions {
     // Get all eway bill request
 
 
-    public getALLEwaybillList$: Observable<Action> = createEffect( ()=>this.action$
+    public getALLEwaybillList$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS),
             switchMap((action: CustomActions) => this._invoiceService.getAllEwaybillsList()),
@@ -648,7 +654,7 @@ export class InvoiceActions {
 
     // Get all eway bill list response
 
-    public getALLEwaybillListResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public getALLEwaybillListResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS_RESPONSE),
             map((response: CustomActions) => {
@@ -657,12 +663,12 @@ export class InvoiceActions {
                     this._toasty.errorToast(data.message, data.code);
                 }
                 if (data && data.status === 'success' && data.body.results.length === 0) {
-                    this._toasty.errorToast('No entries found within given criteria.');
+                    this._toasty.errorToast(this.localeService.translate("app_no_entries_found"));
                 }
                 return { type: 'EmptyAction' };
             })));
 
-    public getALLTransporterList$: Observable<Action> =createEffect( ()=> this.action$
+    public getALLTransporterList$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER),
             switchMap((action: CustomActions) => this._invoiceService.getAllTransporterList(action.payload)),
@@ -677,7 +683,7 @@ export class InvoiceActions {
 
     // Get all eway bill list response
 
-    public getALLTransporterListResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public getALLTransporterListResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER_RESPONSE),
             map((response: CustomActions) => {
@@ -692,7 +698,7 @@ export class InvoiceActions {
             })));
     // transporter effects
 
-    public deleteTransporter$: Observable<Action> =createEffect( ()=> this.action$
+    public deleteTransporter$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.DELETE_TRANSPORTER),
             switchMap((action: CustomActions) => this._invoiceService.deleteTransporterById(action.payload)),
@@ -701,7 +707,7 @@ export class InvoiceActions {
             })));
 
 
-    public deleteTransporterResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public deleteTransporterResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.DELETE_TRANSPORTER_RESPONSE),
             map((response: CustomActions) => {
@@ -716,7 +722,7 @@ export class InvoiceActions {
 
 
 
-    public GetAllEwayfilterRequest$: Observable<Action> =createEffect( ()=> this.action$
+    public GetAllEwayfilterRequest$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.GET_All_FILTERED_LIST_EWAYBILLS),
             switchMap((action: CustomActions) => this._invoiceService.getAllEwaybillsfilterList(action.payload.body)),
@@ -772,7 +778,7 @@ export class InvoiceActions {
 
     // GET_ALL SAMPLE TEMPLATES
 
-    public GetSampleTemplates$: Observable<Action> =createEffect( ()=> this.action$
+    public GetSampleTemplates$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES),
             switchMap((action: CustomActions) => this._invoiceTemplatesService.getTemplates()),
@@ -781,7 +787,7 @@ export class InvoiceActions {
             })));
 
 
-    public getSampleTemplateResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public getSampleTemplateResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES_RESPONSE),
             map((response: CustomActions) => {
@@ -794,7 +800,7 @@ export class InvoiceActions {
 
     // GET_ALL CUSTOM CREATED TEMPLATES
 
-    public getAllCreatedTemplates$: Observable<Action> = createEffect( ()=>this.action$
+    public getAllCreatedTemplates$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES),
             switchMap((action: CustomActions) => this._invoiceTemplatesService.getAllCreatedTemplates(action.payload)),
@@ -802,7 +808,7 @@ export class InvoiceActions {
                 return this.getAllCreatedTemplatesResponse(response);
             })));
 
-    public getAllCreatedTemplatesResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public getAllCreatedTemplatesResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES_RESPONSE),
             map((response: CustomActions) => {
@@ -815,7 +821,7 @@ export class InvoiceActions {
 
     // SET TEMPLATE AS DEFAULT
 
-    public setTemplateAsDefault$: Observable<Action> = createEffect( ()=>this.action$
+    public setTemplateAsDefault$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT),
             switchMap((action: CustomActions) => this._invoiceTemplatesService.setTemplateAsDefault(action.payload.templateUniqueName, action.payload.templateType)),
@@ -824,7 +830,7 @@ export class InvoiceActions {
             })));
 
 
-    public setTemplateAsDefaultResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public setTemplateAsDefaultResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE),
             map((response: CustomActions) => {
@@ -832,14 +838,14 @@ export class InvoiceActions {
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast('Template successfully marked as default.');
+                    this._toasty.successToast(this.localeService.translate("app_messages.template_marked_default"));
                 }
                 return { type: 'EmptyAction' };
             })));
 
     // DELETE TEMPLATE
 
-    public deleteTemplate$: Observable<Action> =createEffect( ()=> this.action$
+    public deleteTemplate$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.TEMPLATE.DELETE_TEMPLATE),
             switchMap((action: CustomActions) => this._invoiceTemplatesService.deleteTemplate(action.payload)),
@@ -848,7 +854,7 @@ export class InvoiceActions {
             })));
 
 
-    public deleteTemplateResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public deleteTemplateResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE),
             map((response: CustomActions) => {
@@ -862,7 +868,7 @@ export class InvoiceActions {
             })));
     // GET_ALL All Recurring Vouchers
 
-    public GetAllRecurringInvoices$: Observable<Action> =createEffect( ()=> this.action$
+    public GetAllRecurringInvoices$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA),
             switchMap((action: CustomActions) => this._recurringService.getRecurringVouchers(action.payload)),
@@ -871,28 +877,28 @@ export class InvoiceActions {
      * SAVE Recurring Voucher
      */
 
-    public SaveRecurrigVoucher$: Observable<Action> = createEffect( ()=>this.action$
+    public SaveRecurrigVoucher$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.RECURRING.CREATE_RECURRING_INVOICE),
             switchMap((action: CustomActions) => this._recurringService.createRecurringVouchers(action.payload)),
-            map(res => this.validateResponse<RecurringInvoice, string>(res, this.createRecurringInvoiceResponse(res.body), true, this.createRecurringInvoiceResponse(res.body), 'Recurring Invoice Created.'))));
+            map(res => this.validateResponse<RecurringInvoice, string>(res, this.createRecurringInvoiceResponse(res.body), true, this.createRecurringInvoiceResponse(res.body), this.localeService.translate("app_messages.recurring_invoice_created")))));
 
     /**
      * UPDATE Recurring Vouchers
      */
 
-    public UpdateRecurringVouchers$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateRecurringVouchers$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.RECURRING.UPDATE_RECURRING_INVOICE),
             switchMap((action: CustomActions) => this._recurringService.updateRecurringVouchers(action.payload)),
             map(res => this.validateResponse<RecurringInvoice, string>(res, this.updateRecurringInvoiceResponse(res.body), true,
-                this.updateRecurringInvoiceResponse(null), 'Recurring Invoice Updated.'))));
+                this.updateRecurringInvoiceResponse(null), this.localeService.translate("app_messages.recurring_invoice_updated")))));
 
     /**
      * DELETE Recurring Vouchers
      */
 
-    public DeleteRecurringVouchers$: Observable<Action> =createEffect( ()=> this.action$
+    public DeleteRecurringVouchers$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.RECURRING.DELETE_RECURRING_INVOICE),
             switchMap((action: CustomActions) => this._recurringService.deleteRecurringVouchers(action.payload)),
@@ -900,13 +906,25 @@ export class InvoiceActions {
                 true,
                 this.deleteRecurringInvoiceResponse(null)))));
 
+    public GenerateBulkEInvoice$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE),
+            switchMap((action: CustomActions) => this.bulkUpdateInvoice.bulkUpdateInvoice(action.payload.model, action.payload.actionType)),
+            map(res => this.validateResponse<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest>(res, {
+                type: INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE_RESPONSE
+            }, true, {
+                type: INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE_RESPONSE
+            }))));
+
     constructor(
         private action$: Actions,
         private _invoiceService: InvoiceService,
+        private bulkUpdateInvoice: InvoiceBulkUpdateService,
         private _recurringService: RecurringVoucherService,
         private _invoiceTemplatesService: InvoiceTemplatesService,
         private _toasty: ToasterService,
-        private _router: Router
+        private _router: Router,
+        private localeService: LocaleService
     ) {
     }
 
@@ -1872,6 +1890,31 @@ export class InvoiceActions {
     public resetTransporterListResponse(): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.RESET_ALL_TRANSPORTER_RESPONSE
+        };
+    }
+
+    /**
+     * Generates bullk e-invoice
+     *
+     * @returns {CustomActions} Generate bulk e-invoice action
+     * @memberof InvoiceActions
+     */
+    public generateBulkEInvoice(model: any): CustomActions {
+        return {
+            type: INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE,
+            payload: model
+        };
+    }
+
+    /**
+     * Resets the bulk e-invoice flag
+     *
+     * @returns {CustomActions} Resets bulk e-invoice action
+     * @memberof InvoiceActions
+     */
+    public resetBulkEInvoice(): CustomActions {
+        return {
+            type: INVOICE_ACTIONS.RESET_BULK_E_INVOICE_RESPONSE
         };
     }
 }

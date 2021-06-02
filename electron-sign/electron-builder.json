@@ -1,6 +1,6 @@
 {
     "appId": "com.giddh.prod",
-    "electronVersion": "7.1.7",
+    "electronVersion": "11.2.3",
     "publish": [
         {
             "provider": "s3",
@@ -24,7 +24,7 @@
         "entitlementsInherit": "./../../../electron-sign/default.entitlements.mas.inherit.plist",
         "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile",
         "icon": "icon.png",
-        "hardenedRuntime" : true,
+        "hardenedRuntime": true,
         "gatekeeperAssess": false
     },
     "dmg": {

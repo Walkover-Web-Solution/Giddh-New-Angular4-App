@@ -1,33 +1,31 @@
 @import "../../../../assets/css/color.scss";
-.pItem {
+.item-padding {
     padding: 0 4px;
 }
 
 .height-30 {
     height: 30px;
 }
-
-.ledg-head.entry-popup table td.select2-ledger>sh-select {
+.min-h-32 {
+    min-height: 32px;
+}
+.ledg-head.entry-popup table td.select2-ledger > sh-select {
     position: initial;
     margin-top: 1px;
 }
 
-.mr-15 {
-    margin-right: -15px;
-}
-
-table.width100 {
+table.width-100 {
     position: relative;
 }
 
-.currency_type {
+.currency-type {
     position: absolute;
     top: 50%;
     right: 6px;
     transform: translateY(-50%);
 }
 
-.multicurrency_input {
+.multi-currency-input {
     padding-right: 35px !important;
 }
 
@@ -50,38 +48,38 @@ table.width100 {
     font-size: 24px;
 }
 
-ng-select>div i.fa.fa-caret-down::before {
+ng-select > div i.fa.fa-caret-down::before {
     color: $white;
     font-size: 20px;
 }
 
-ng-select>div a.ng-star-inserted {
+ng-select > div a.ng-star-inserted {
     color: $white;
     text-transform: uppercase;
     font-size: 16px;
 }
 
-ng-select>div {
+ng-select > div {
     background-color: transparent;
     border: none;
 }
 
-ng-select .select_drop i.fa.fa-caret-up::before {
+ng-select .select-drop i.fa.fa-caret-up::before {
     color: $white;
     font-size: 20px;
 }
 
-.trxFakeInput {
+.transaction-particular-name {
     width: 100%;
     height: 38px;
     background: transparent;
     border: none !important;
     padding: 5px;
-    color: #b5b5b5;
+    color: $silver;
 }
 
 .notfound-option.active {
-    background: #efeff1 !important;
+    background: $whisper-color !important;
     padding: 2px 5px !important;
 }
 
@@ -89,9 +87,9 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     padding: 0px !important;
 }
 
-.amnt-total {
+.amount-total {
     font-size: 12px;
-    color: #999999;
+    color: $nobel;
 }
 
 .other-tax {
@@ -102,22 +100,16 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     padding-left: 8px;
 }
 
-.total-col span.bdrT {
+.total-col span.bd-rt {
     width: 150px;
-    display: inline-block;
+    display: inline-flex;
     padding: 2px 0;
+    justify-content: flex-end;
 }
-
-
-/* .ledger-main .form-control {
-    height: 26px;
-} */
 
 .ledger-main .form-control {
     background: $white !important;
-    height: 45px;
-    padding-right: 12px !important;
-    padding-left: 12px !important;
+    top: 0px !important;
 }
 
 .ledger-book {
@@ -140,11 +132,6 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 .custom-tabs {
     display: none !important;
 }
-
-
-/* .total-detail-table tbody tr td {
-  vertical-align: top;
-} */
 
 .total-detail-table {
     display: flex;
@@ -172,7 +159,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     min-width: 80px;
 }
 
-.download-invoice-ledger>i {
+.download-invoice-ledger > i {
     top: 18px;
     position: relative;
     background-color: $white;
@@ -209,11 +196,11 @@ span.eligible-ITC {
     position: relative;
 }
 
-.pr-05 {
+.pd-r05 {
     padding-right: 5px;
 }
 
-.pl-05 {
+.pd-l05 {
     padding-left: 5px;
 }
 
@@ -237,13 +224,14 @@ span.eligible-ITC {
 .update-ledger-account {
     align-items: center;
     span {
-        padding-left: 10px;
+        padding-left: 5px;
     }
     sh-select {
         width: 100%;
     }
 }
 .advanced {
+    background: $alice-blue;
     table.xs-table-block {
         tbody tr {
             td.remove-invoice {
@@ -263,10 +251,14 @@ span.eligible-ITC {
     }
 }
 
+#update-ledger-select-account {
+    width: 30%;
+}
+
 .edit-adjustment {
     padding: 0 5px 0;
 }
-.icon-info{
+.icon-info {
     color: $gray;
     cursor: pointer;
     padding: 8px 5px 0;
@@ -276,20 +268,61 @@ span.eligible-ITC {
     padding: 15px;
     z-index: 1;
     max-width: 360px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
     color: $dark-gray;
-    .info-text{
-        font-family: 'opensans-regular';
+    .info-text {
+        font-family: "opensans-regular";
     }
 }
-.left-col-new .row, .right-col-new .row , .ledger-head .row{
+.left-col-new .row,
+.right-col-new .row,
+.ledger-head .row {
     margin: 0;
+}
+.dropdown-container[disabled],
+.table-amount[disabled] {
+    pointer-events: none;
+}
+#update-ledger-assign-tag.disabled-ledger::ng-deep
+    .sh-select-disabled
+    .bg-white {
+    background-color: $whisper-light !important;
+}
+#update-ledger-assign-tag.disabled-ledger::ng-deep input,
+#update-ledger-select-warehouse.disabled-ledger::ng-deep input,
+#update-ledger-price-input.disabled-ledger,
+#update-ledger-invoice-voucher-number.disabled-ledger::ng-deep input,
+#update-ledger-invoice-number.disabled-ledger::ng-deep input {
+    background-color: $whisper-light !important;
+}
+.tourist-scheme-wrapper {
+    input[type="checkbox"] {
+        opacity: 0;
+    }
+}
+.show-if-ledger-open {
+    height: 300px;
+}
+p.edit-message {
+    background-color: $whisper-light;
+    text-align: center;
+    padding: 8px 0;
+    border-top: 1px solid $gainsboro;
+    font-size: 16px;
+    font-family: "opensans-semibold";
+    margin-top: 15px;
+}
+
+.collapse-icons {
+    font-size: 10px;
+    border: 1px solid;
+    padding: 2px;
 }
 /* responsive */
 
 @media only screen and (max-width: 1359px) {
     .ledger-bottom {
-        display: block;
+        display: flex;
     }
 }
 
@@ -323,7 +356,7 @@ span.eligible-ITC {
 }
 
 @media only screen and (max-width: 767px) {
-    .last-ttable-amount {
+    .last-table-amount {
         max-width: 100% !important;
     }
     .ledger-book .h-table tbody .ledger-row td {
@@ -354,7 +387,7 @@ span.eligible-ITC {
     .entrypanel:before {
         display: none;
     }
-    .total-amn {
+    .total-amount-ledger {
         width: 100%;
     }
     .xs-table-block {
@@ -364,7 +397,7 @@ span.eligible-ITC {
     .xs-table-block tbody tr td {
         display: block;
     }
-    .ledg-head .ledger-book .left-col-new.bdrR {
+    .ledg-head .ledger-book .left-col-new.bd-rr {
         border-right: 0 !important;
     }
     .remove-border-left-onmo {
@@ -379,7 +412,7 @@ span.eligible-ITC {
         width: 100%;
         display: inline-block;
     }
-    .entrypanel .primary_clr {
+    .entrypanel .primary-color {
         padding-left: 15px;
         padding-top: 5px;
     }
@@ -399,7 +432,7 @@ span.eligible-ITC {
         width: 185px;
         height: 36px !important;
     }
-    .debit-blank-row .amnt-total {
+    .debit-blank-row .amount-total {
         width: 185px;
         margin-top: 5px;
     }
@@ -419,30 +452,43 @@ span.eligible-ITC {
     .xs-pt-0 {
         padding-top: 0px !important;
     }
-    .adjustment-field .pr-05 {
+    .adjustment-field .pd-r05 {
         padding-right: 15px;
     }
-    .adjustment-field .pl-05 {
+    .adjustment-field .pd-l05 {
         padding-left: 15px;
     }
 }
 
 .rotate {
-    -webkit-animation:spin 4s linear infinite;
-    -moz-animation:spin 4s linear infinite;
-    animation:spin 4s linear infinite;
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
 }
-.ledger-head th:first-child{
-    span{
+.ledger-head th:first-child {
+    span {
         position: relative;
         right: 15px;
     }
 }
-.list-inline>li {
+.list-inline > li {
     display: inline-block;
     padding-right: 5px;
     padding-left: 5px;
 }
-@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg) } }
+@-moz-keyframes spin {
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}

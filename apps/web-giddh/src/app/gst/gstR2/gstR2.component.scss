@@ -1,0 +1,811 @@
+@import "../../../assets/css/color.scss";
+
+.column.list-column.expanded-list-column {
+    width: auto;
+}
+
+.tax-engine .column.list-column {
+    display: block;
+    border-right: 1px solid $gainsboro;
+}
+
+.tax-engine .column {
+    height: 100%;
+}
+
+.list-column.expanded-list-column {
+    right: 0;
+    width: auto;
+}
+
+.tax-engine .transactions-list .list-filter {
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.list-column.expanded-list-column .list-header .list-filter {
+    border-bottom: 0;
+}
+
+.tax-engine .list-filter {
+    padding: 15px !important;
+    border-bottom: 1px solid $gainsboro !important;
+    height: 80px;
+}
+
+.tax-engine .transactions-list .list-filter .btn-toolbar {
+    margin-top: 2px;
+}
+
+list-header .btn-toolbar .btn-group {
+    float: none;
+}
+
+.list-header .list-filter .btn {
+    padding: 2px 9px;
+}
+
+.btn .caret,
+.btn-group > .btn:first-child {
+    margin-left: 0;
+}
+
+.btn-group-vertical > .btn,
+.btn-group > .btn {
+    position: relative;
+    float: left;
+}
+
+.tax-engine .bottom-action,
+.tax-engine a,
+.tax-engine a > .dropdown {
+    cursor: pointer;
+}
+
+.btn,
+.btn-sm,
+.btn-xs {
+    border-radius: 3px;
+}
+
+.btn-link,
+.btn-link:active,
+.btn-link:focus,
+.btn-link:hover {
+    border-color: transparent;
+}
+
+.btn-link,
+.btn-link:active,
+.btn-link[disabled],
+fieldset[disabled] .btn-link {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.btn-link {
+    color: $curious-blue;
+    font-weight: 400;
+    cursor: pointer;
+    border-radius: 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 5px 12px;
+    margin-bottom: 0;
+    cursor: pointer;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    -o-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.list-header .list-filter .btn [class*="icon"] {
+    position: relative;
+    top: 1px;
+}
+
+svg.icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.text-bottom {
+    vertical-align: text-bottom;
+}
+
+svg.icon.icon-sm {
+    height: 14px;
+    width: 14px;
+}
+
+.tax-engine .transactions-list .list-filter .list-style .gstr-icon {
+    margin-right: 10px;
+}
+
+.tax-engine svg.icon.gstr-icon {
+    width: 42px;
+    height: 42px;
+}
+
+.tax-engine .transactions-list .list-filter .list-style .nav-top {
+    display: inline-block;
+    line-height: 1.7;
+}
+
+.text-middle {
+    vertical-align: middle;
+}
+
+.tax-engine .transactions-list .list-filter .list-style .head {
+    font-weight: 600;
+}
+
+.tax-engine .font-xs {
+    font-size: 12px;
+}
+
+.text-middle {
+    vertical-align: middle;
+}
+
+.dropdown-menu li .help-text,
+.modal-header .help-text,
+.text-muted {
+    color: $gray;
+}
+
+.space {
+    margin-top: 10px;
+}
+
+.tax-engine .nav-band .nav-tabs > li.active > a::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: $primary;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.nav > li,
+.nav > li > a {
+    display: block;
+    position: relative;
+}
+
+.nav.nav-tabs {
+    margin: 0;
+    padding: 0;
+}
+
+.nav-tabs > li a {
+    font-size: 15px;
+    color: $zambezi;
+    margin-right: 0;
+    height: 100%;
+    padding: 14px 40px;
+    border-radius: 0px;
+}
+
+.nav-tabs > li.active a {
+    font-weight: bold;
+}
+
+.nav-tabs > li {
+    margin-bottom: 0;
+}
+
+.tax-engine .transactions-list .body {
+    padding: 0;
+}
+
+.tax-engine .scroll-y {
+    -webkit-overflow-scrolling: touch;
+}
+
+.content-column .body {
+    padding: 0 20px 50px;
+}
+
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-top: 1px solid $gainsboro;
+}
+
+.tax-engine .transactions-overview .gstr-transactions-summary {
+    padding: 15px 35px;
+}
+
+.tax-engine .transactions-overview .gstr-transactions-summary .title {
+    padding: 10px 0 20px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.tax-engine .text-uppercase {
+    text-transform: uppercase;
+}
+
+.tax-engine
+    .transactions-overview
+    .gstr-transactions-summary
+    .transactions-table {
+    border: 1px solid $gainsboro;
+}
+
+.tax-engine .table.transactions-table,
+.tax-engine .transactions-list .zi-table.table-scroll {
+    table-layout: auto;
+}
+
+.table,
+address {
+    margin-bottom: 20px;
+}
+
+.tax-engine
+    .table.transactions-table
+    thead:first-child
+    tr:first-child
+    th:first-child {
+    padding-left: 20px;
+}
+
+.tax-engine .table.transactions-table thead:first-child tr:first-child th {
+    padding: 16px 12px;
+    font-size: 13px;
+    border-bottom: 1px solid $gainsboro;
+}
+
+.tax-engine .table thead:first-child tr:first-child th {
+    border-top: 1px solid $gainsboro;
+}
+
+.tax-engine .gstr-transactions-summary .table > thead > tr > th {
+    padding: 10px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.table thead:first-child tr:first-child th {
+    border-top: 1px solid $gainsboro;
+}
+
+.table caption + thead tr:first-child td,
+.table caption + thead tr:first-child th,
+.table colgroup + thead tr:first-child td,
+.table colgroup + thead tr:first-child th,
+.table thead:first-child tr:first-child td,
+.table thead:first-child tr:first-child th {
+    border-top: 0;
+}
+
+.table thead > tr > th {
+    border-bottom: 1px solid $gainsboro;
+    color: $gray;
+}
+
+.tax-engine .table.transactions-table tbody > tr > td {
+    max-width: 160px;
+    font-size: 14px;
+    padding: 16px 12px;
+    vertical-align: middle;
+}
+
+.table-striped > tbody > tr:nth-child(even) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: $gray-95;
+}
+
+.table tbody > tr > td,
+.table tbody > tr > th,
+.table tfoot > tr > td,
+.table tfoot > tr > th,
+.table thead > tr > td,
+.table thead > tr > th {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid $gainsboro;
+}
+
+.tax-engine
+    .table.transactions-summary-table
+    > tbody
+    > tr:not(.secondary-row)
+    + tr.secondary-row
+    > td {
+    border-top: 1px solid $gainsboro;
+}
+
+.tax-engine
+    .table.transactions-summary-table
+    > tbody
+    > tr.secondary-row
+    > td:nth-child(2) {
+    padding-left: 50px;
+}
+
+.tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td {
+    border: none;
+    background-color: $white;
+    border-right: 1px solid $gainsboro;
+    font-size: 13px;
+    padding: 13px;
+}
+
+.tax-engine .table.transactions-table tbody > tr > td {
+    max-width: 160px;
+    font-size: 14px;
+    padding: 16px 12px;
+    vertical-align: middle;
+}
+
+.tax-engine .gstr-transactions-summary .table > tbody > tr > td {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    vertical-align: middle;
+}
+
+.tax-engine
+    .table.transactions-summary-table
+    > tbody
+    > tr.secondary-row
+    > td:first-child {
+    border-right: none;
+}
+
+.tax-engine .nav-band .nav-tabs {
+    white-space: nowrap;
+    background-color: $white-smoke;
+}
+
+.tax-engine .sub-filter-nav-band ul > li,
+.tax-engine .sub-filter-nav-bandnew ul > li {
+    display: inline-block;
+}
+
+.tax-engine .sub-filter-nav-band ul > li > a,
+.tax-engine .sub-filter-nav-bandnew ul > li > a {
+    cursor: pointer;
+    font-style: italic;
+    padding: 14px 25px;
+    font-size: 13px;
+    background: none !important;
+}
+
+.tax-engine .sub-filter-nav-band ul > li.active:after,
+.tax-engine .sub-filter-nav-bandnew ul > li.active:after {
+    content: "";
+    display: block;
+    border-bottom: 2px solid $primary;
+    width: 55%;
+    margin: auto;
+}
+
+.tax-engine .sub-filter-nav-band ul > li.active > a,
+.tax-engine .sub-filter-nav-bandnew ul > li.active > a {
+    color: $night-rider;
+    font-weight: 600;
+}
+
+#subtabs {
+    display: none;
+}
+
+.tax-engine .gstr-transactions-summary .gstr-summary-title {
+    margin: 0 0 6px;
+    color: $gray;
+}
+
+.gstr-transactions-summary p {
+    margin-bottom: 10px;
+}
+
+.tax-engine .half {
+    width: 50% !important;
+}
+
+.tax-engine .filings-empty-state {
+    margin: 35px auto;
+    max-width: 80%;
+    text-align: center;
+}
+
+.tax-engine .filings-empty-state .empty-state-icon {
+    width: 202px;
+    height: 202px;
+    vertical-align: middle;
+}
+
+.tax-engine .filings-empty-state .empty-msg {
+    font-weight: 300;
+    padding-top: 15px;
+    font-size: 18px;
+    margin: 0 220px;
+}
+
+svg.icon.icon-xs {
+    height: 12px;
+    width: 12px;
+}
+
+.tab1div,
+.subtabs-box {
+    display: none;
+}
+
+.tab1div:first-child {
+    display: block;
+}
+
+.subtabs-box:first-child {
+    display: block;
+}
+
+.tax-engine .transactions-list .filter-band {
+    background-color: $alice-blue;
+    padding: 20px;
+    height: 66px;
+}
+
+.tax-engine .transactions-list .filter-row.back-button {
+    position: relative;
+}
+
+.tax-engine .transactions-list .filter-row {
+    display: inline-block;
+}
+
+svg.icon.icon-sm {
+    height: 14px;
+    width: 14px;
+}
+
+.tax-engine svg.icon.text-top {
+    vertical-align: text-top;
+}
+
+.tax-engine .transactions-list .filter-row + .filter-row {
+    margin-left: 20px;
+}
+
+.tax-engine .transactions-list .filter-row {
+    display: inline-block;
+    width: auto;
+    box-shadow: none;
+}
+
+.tax-engine .transactions-list .filter-row .name {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.tax-engine .transactions-list .filter-row .filter {
+    display: inline-block;
+    position: relative;
+    margin-left: 10px;
+}
+
+.tax-engine .transactions-list .filter-band .btn,
+.tax-engine .transactions-list .filter-band .btn:focus,
+.tax-engine .transactions-list .filter-band .btn:hover {
+    color: $primary;
+    border-color: $primary;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.tax-engine .transactions-list .filter-band .btn {
+    padding: 2px 12px;
+}
+
+.tax-engine .transactions-list .filter-band .btn .caret,
+.tax-engine .transactions-list .filter-band .btn:focus .caret,
+.tax-engine .transactions-list .filter-band .btn:hover .caret {
+    border-top-color: $primary;
+}
+
+.caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px solid $black;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    border-bottom: 0 dotted;
+    content: "";
+}
+
+#fillterid {
+    display: none;
+}
+
+.transactions-summary-table tbody tr {
+    cursor: pointer;
+}
+
+.table-responsive {
+    display: table;
+    width: 100%;
+}
+
+.tax-engine .transactions-overview .gstr-reconciliations-summary {
+    padding: 20px 35px;
+}
+
+.tax-engine .transactions-overview .gstr-reconciliations-summary .title {
+    padding: 10px 15px 20px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.tax-engine .transactions-overview .transaction-info:hover {
+    border: 1px solid $gainsboro;
+    box-shadow: 0 0 20px 3px $gray-95;
+}
+
+.tax-engine .transactions-overview .transaction-info {
+    padding: 10px 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.transaction-info .trans-span1 {
+    color: $bright-green;
+}
+
+.transaction-info .trans-span2 {
+    color: $bright-pink;
+}
+
+.transaction-info .trans-span3 {
+    color: $light-purple;
+}
+
+.transaction-info .trans-span4 {
+    color: $bright-yellow;
+}
+
+.width-vendor {
+    width: 250px;
+}
+
+.width-date {
+    width: 155px;
+}
+
+.width-supply {
+    width: 130px;
+}
+
+.width-amount {
+    width: 140px;
+}
+
+.over-flow {
+    max-width: 100%;
+}
+
+.list-header .list-title > a,
+.list-notes,
+.list-primary .name,
+.over-flow {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.font-xxlarge {
+    font-size: 22px;
+}
+
+.tax-engine .sub-filter-nav-band ul {
+    list-style: none;
+    margin-bottom: 0;
+}
+
+.tax-engine .sub-filter-nav-band ul > li {
+    display: inline-block;
+    position: relative;
+}
+
+.tax-engine .sub-filter-nav-band ul > li > a {
+    cursor: pointer;
+    font-style: italic;
+    padding: 14px 25px;
+    font-size: 13px;
+}
+
+.tax-engine .sub-filter-nav-band ul > li .count {
+    color: $scarlet;
+}
+
+.tax-engine .sub-filter-nav-band ul > li.active > a {
+    color: $night-rider;
+    font-weight: 600;
+}
+
+.tax-engine .sub-filter-nav-band ul > li.active:after {
+    content: "";
+    display: block;
+    border-bottom: 2px solid $primary;
+    width: 55%;
+    margin: auto;
+}
+
+.tax-engine .sub-filter-nav-band.reconciliation-type-band ul > li:last-child {
+    float: right;
+}
+
+.tax-engine .table.reconciliations-table {
+    border-bottom: 1px solid $gainsboro;
+}
+
+.tax-engine .table-fixed {
+    table-layout: fixed;
+}
+
+.zi-table {
+    border-bottom: 1px solid $gainsboro;
+    table-layout: fixed;
+}
+
+.tax-engine .table.reconciliations-table tbody > tr > td:first-child,
+.tax-engine .table.reconciliations-table thead > tr > th:first-child {
+    padding: 13px 0 13px 20px;
+}
+
+.tax-engine .table thead:first-child tr:first-child th {
+    border-top: 1px solid $gainsboro;
+}
+
+.list-column.expanded-list-column .zi-table tr td:first-of-type,
+.list-column.expanded-list-column .zi-table tr th:first-of-type {
+    padding-left: 20px;
+}
+
+.list-column.expanded-list-column .zi-table tr .bulk-selection-cell {
+    width: 40px;
+}
+
+tax-engine .table.reconciliations-table thead > tr > th {
+    border-bottom-width: 1px;
+    font-size: 12px;
+}
+
+.tax-engine .table.reconciliations-table tbody > tr > td,
+.tax-engine .table.reconciliations-table thead > tr > th {
+    font-size: 13px;
+    padding: 13px;
+}
+
+.zi-table.table-hover tbody tr:hover td {
+    background-color: $white-smoke;
+    cursor: pointer;
+}
+
+.table tbody > tr > td,
+.table tbody > tr > th,
+.table tfoot > tr > td,
+.table tfoot > tr > th,
+.table thead > tr > td,
+.table thead > tr > th {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid $gainsboro;
+}
+
+.details .details-info,
+.warehouses > li div,
+.zi-table tbody td {
+    word-wrap: break-word;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.font-xxs {
+    font-size: 11px;
+}
+
+.tax-engine .table.reconciliations-table tbody > tr > td.primary-details {
+    border-right: 1px solid $gainsboro;
+}
+
+.tax-engine .table.reconciliations-table .actions-dropdown {
+    position: relative;
+    cursor: pointer;
+    padding-top: 7px;
+}
+
+.tax-engine
+    .table.reconciliations-table
+    tbody
+    > tr:hover
+    .actions-dropdown-btn {
+    border: 1px solid $primary;
+}
+
+.tax-engine .table.reconciliations-table .actions-dropdown-btn,
+.tax-engine
+    .table.reconciliations-table
+    tbody
+    > tr:hover
+    .reconcile-row-action {
+    color: $primary;
+}
+
+.tax-engine .table.reconciliations-table .unrecognized-value {
+    color: $scarlet;
+}
+
+/*.tax-engine .table.reconciliations-table .recognized-value,
+.tax-engine .table.reconciliations-table .unrecognized-value {
+    padding-top: 10px;
+}*/
+
+.tax-engine .reconciliation-accepted {
+    color: $bright-green;
+}
+
+.zi-table.table thead > tr > th {
+    color: $muzli;
+    background: $white;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    -webkit-font-smoothing: antialiased;
+    border-top: 1px solid $gainsboro;
+    border-bottom: 1px solid $gainsboro;
+}
+
+.subtabs-box1 {
+    display: none;
+}
+
+.transactions-overview {
+    background: $white;
+}
+
+.tax-engine .sub-filter-nav-band ul > li.active > a .count {
+    color: $night-rider;
+}
+
+.table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: $gray-95;
+}
+
+.table-striped > tbody > tr:nth-child(even) > td,
+.table-striped > tbody > tr:nth-child(even) > th {
+    background-color: $white;
+}
+
+.gstr-2-filing {
+    border: 1px solid $gainsboro;
+}
+
+.sub-filter-nav-bandnew {
+    border-bottom: 1px solid $gainsboro;
+}
+
+#subtabnew-5 {
+    padding: 10px 25px;
+    margin: 5px auto;
+    border-left: 1px solid $gainsboro;
+}

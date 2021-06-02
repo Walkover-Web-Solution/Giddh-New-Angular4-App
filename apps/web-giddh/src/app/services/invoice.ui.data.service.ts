@@ -3,6 +3,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { CustomTemplateResponse } from '../models/api-models/Invoice';
 import { CompanyResponse } from '../models/api-models/Company';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { NgForm } from '@angular/forms';
 
 export class TemplateContentUISectionVisibility {
     public header: boolean = true;
@@ -26,6 +27,16 @@ export class InvoiceUiDataService {
     public companyPAN: BehaviorSubject<string> = new BehaviorSubject(null);
     public fieldsAndVisibility: BehaviorSubject<any> = new BehaviorSubject(null);
     public templateVoucherType: BehaviorSubject<string> = new BehaviorSubject(null);
+    /** Stores the content form instance  */
+    public contentForm: NgForm;
+    /** Stores the content form controls with errors  */
+    public contentFormErrors: number;
+    /** Stores the image uniquename, if signature image got uploaded to the server but not updated with invoice, used
+     * to avoid unused uploading of images on the server
+    */
+    public unusedImageSignature: string;
+    /** True, if logo update is successful */
+    public isLogoUpdateInProgress: boolean;
 
     private companyName: string;
     private companyAddress: string;
@@ -47,7 +58,7 @@ export class InvoiceUiDataService {
         if (currentCompany) {
             this.companyName = currentCompany.name;
             this.companyAddress = currentCompany.address;
-            if (currentCompany.addresses[0]) {
+            if (currentCompany.addresses && currentCompany.addresses[0]) {
                 this.companyGSTIN.next(currentCompany.addresses[0].taxNumber);
             }
             if (currentCompany.panNumber) {
@@ -135,6 +146,7 @@ export class InvoiceUiDataService {
      */
     public resetCustomTemplate() {
         this.customTemplate.next(new CustomTemplateResponse());
+        this.isLogoUpdateInProgress = false;
     }
 
     public BRToNewLine(template) {
@@ -191,6 +203,65 @@ export class InvoiceUiDataService {
                     field: 'attentionTo',
                     width: null
                 };
+                if (!selectedTemplate.sections['header'].data['showCompanyAddress']) {
+                    // Assign the default value based on value of warehouseAddress
+                    selectedTemplate.sections['header'].data['showCompanyAddress'] = {
+                        label: '',
+                        display: selectedTemplate.sections['header'].data['warehouseAddress']?.display,
+                        width: null
+                    };
+                }
+                if (!selectedTemplate.sections['header'].data['showQrCode']) {
+                    // Assign the default value based on value of warehouseAddress
+                    selectedTemplate.sections['header'].data['showQrCode'] = defaultTemplate ?
+                        defaultTemplate.sections['header'].data['showQrCode'] : {
+                            label: '',
+                            display: false,
+                            width: null
+                        };
+                }
+                if (!selectedTemplate.sections['header'].data['showIrnNumber']) {
+                    // Assign the default value based on value of warehouseAddress
+                    selectedTemplate.sections['header'].data['showIrnNumber'] = defaultTemplate ?
+                        defaultTemplate.sections['header'].data['showIrnNumber'] : {
+                            label: '',
+                            display: false,
+                            width: null
+                        };
+                }
+                if (!selectedTemplate.sections['header'].data['gstComposition']) {
+                    // Assign the default value based on value of warehouseAddress
+                    selectedTemplate.sections['header'].data['gstComposition'] = defaultTemplate ?
+                        defaultTemplate.sections['header'].data['gstComposition'] : {
+                            label: '',
+                            display: true,
+                            width: null
+                        };
+                }
+                if (!selectedTemplate.sections['footer'].data['textUnderSlogan']) {
+                    // Assign the default value based of company name if not present
+                    selectedTemplate.sections['footer'].data['textUnderSlogan'] = {
+                        label: this.companyName,
+                        display: true,
+                        width: null
+                    };
+                }
+                if (!selectedTemplate.sections['footer'].data['showNotesAtLastPage']) {
+                    selectedTemplate.sections['footer'].data['showNotesAtLastPage'] = defaultTemplate ?
+                        defaultTemplate.sections['footer'].data['showNotesAtLastPage'] : {
+                            label: '',
+                            display: false,
+                            width: null
+                        };
+                }
+                if (!selectedTemplate.sections['footer'].data['showMessage2']) {
+                    selectedTemplate.sections['footer'].data['showMessage2'] = defaultTemplate ?
+                        defaultTemplate.sections['footer'].data['showMessage2'] : {
+                            label: '',
+                            display: false,
+                            width: null
+                        };
+                }
 
                 this.BRToNewLine(selectedTemplate);
                 this.customTemplate.next(_.cloneDeep(selectedTemplate));
@@ -204,6 +275,24 @@ export class InvoiceUiDataService {
             };
 
             this.customTemplate.next(_.cloneDeep(selectedTemplate));
+        }
+    }
+
+    /**
+     * Sets the content form instance for carrying out validation
+     *
+     * @param {NgForm} form Content form instance
+     * @memberof InvoiceUiDataService
+     */
+    public setContentForm(form: NgForm): void {
+        if (form) {
+            this.contentForm = form;
+            this.contentFormErrors = 0;
+            Object.keys(form.controls).forEach(key => {
+                if (form.controls[key].errors) {
+                    this.contentFormErrors++;
+                }
+            });
         }
     }
 }

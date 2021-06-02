@@ -35,13 +35,17 @@
         display: inherit;
         .country-flag {
             display: inline-block;
-            padding-right: 8px;
+            margin-right: 8px;
+            width: 24px;
         }
     }
 }
-.personal-other-deatils {
+.personal-other-details {
     label {
         line-height: 2.3;
+    }
+    .form-group {
+        margin-bottom: 0;
     }
 }
 .img-size {
@@ -49,4 +53,9 @@
 }
 .container-fluid {
     padding-left: 0;
+}
+@media (max-width: 767px) {
+    label {
+        line-height: 2.3;
+    }
 }

@@ -12,16 +12,21 @@
     font-size: 14px;
 }
 
-.custom-multi-select li {
-    background: #f1f1f1;
-    color: white;
-    margin: 4px;
-    padding: 2px 10px;
-    font-size: 14px;
-    border-radius: 3px;
-    cursor: pointer;
+.custom-multi-select {
+    li {
+        background: $white-smoke;
+        color: $white;
+        margin: 4px;
+        padding: 2px 10px;
+        font-size: 14px;
+        border-radius: 3px;
+        cursor: pointer;
+        a {
+            color: $gray;
+        }
+    }
 }
-.selectCompanies {
+.select-companies {
     font-size: 14px;
     margin-bottom: 5px;
 }
@@ -38,7 +43,7 @@
     justify-content: center;
     align-items: center;
     border-right: 1px solid $gainsboro;
-    color: #999999;
+    color: $nobel;
     left: 0;
 }
 .input-group-date-range-picker input.form-control {
@@ -64,7 +69,7 @@
 }
 .card-basic-details .clearfix {
     margin-bottom: 10px;
-    color: #1c1c1c;
+    color: $nero;
 }
 .clearfix {
     .icon-favorite-selected {
@@ -79,7 +84,7 @@
 }
 .card-basic-details h2 {
     font-size: 16px;
-    color: #1a237e;
+    color: $midnight-blue;
     font-family: "opensans-bold";
     margin-bottom: 12px;
     white-space: normal;
@@ -89,7 +94,8 @@
     margin-bottom: 0;
 }
 .card-basic-details {
-    padding: 15px;
+    padding: 20px;
+    border-bottom: 1px solid $gainsboro;
 }
 .branch-sales-details {
     border-top: 1px solid $gainsboro;
@@ -97,7 +103,7 @@
     label {
         font-family: "opensans-semibold";
         margin-bottom: 10px;
-        color: $extra-dark-gray;
+        color: $night-rider;
     }
     .total-amount {
         width: 70%;
@@ -105,7 +111,7 @@
 }
 
 .unlink a {
-    color: #5b64c9 !important;
+    color: $chetwode-blue !important;
     cursor: pointer;
 }
 
@@ -147,12 +153,12 @@
     width: 900px !important;
 }
 
-.search-branch-box{
+.search-branch-box {
     max-width: 220px;
     width: 100%;
     margin-right: 8px;
-    input{
-        background-image: url('../../../assets/images/searchIcon.svg') !important;
+    input {
+        background-image: url("../../../assets/images/searchIcon.svg") !important;
         background-repeat: no-repeat !important;
         padding-left: 30px !important;
         background-position: 7px 9px !important;
@@ -284,9 +290,9 @@
 .btn-primary.active,
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary {
-    color: $extra-dark-gray;
-    background-color: $lavender-dark;
-    border-color: $lavender-dark;
+    color: $night-rider;
+    background-color: $lavender;
+    border-color: $lavender;
     box-shadow: none !important;
 }
 
@@ -301,10 +307,10 @@
 .right-card-section {
     margin-top: -15px;
 }
-.branch-vector{
+.branch-vector {
     text-align: right;
     position: absolute;
-    bottom: 8px;
+    bottom: -70px;
     right: 90px;
 }
 @media (max-width: 375px) {
@@ -335,16 +341,31 @@
                 margin-right: 0;
             }
         }
+        .search-field {
+            margin-right: 0;
+            .search-branch-box {
+                max-width: 180px;
+            }
+            .clear-filter-btn {
+                width: 122px !important;
+                padding: 0 12px;
+            }
+        }
     }
     .input-group-date-range-picker {
-        width: 66%;
+        width: 100%;
         .form-group {
             margin-bottom: 0;
         }
     }
-    .btn-sky-blue.pull-right{
+    .btn-sky-blue.pull-right {
         float: none;
         margin-bottom: 15px;
+    }
+    .branch-vector {
+        img {
+            width: 150px;
+        }
     }
 }
 @media (max-width: 370px) {
@@ -357,6 +378,19 @@
         }
         .btn {
             float: left !important;
+        }
+    }
+    .branch-header-content {
+        margin-right: 0;
+        .search-field {
+            margin-right: 0;
+            .search-branch-box {
+                max-width: 160px;
+            }
+            .clear-filter-btn {
+                width: 122px !important;
+                padding: 0 6px;
+            }
         }
     }
 }
@@ -384,33 +418,31 @@
     }
 }
 
-
-@media (max-width: 950px){
+@media (max-width: 950px) {
     .modal-width {
         width: auto !important;
     }
 }
 
-
-@media(max-width:575px){
+@media (max-width: 575px) {
     .date-advance-search {
         .input-group-date-range-picker {
-            width:100%;
+            width: 100%;
         }
     }
-    .branch-header{
+    .branch-header {
         flex-direction: column;
-        .search-branch-box{
+        .search-branch-box {
             max-width: 100%;
             margin-bottom: 15px;
         }
     }
 
-    .search-field{
+    .search-field {
         .clear-filter-btn {
             padding: 0px 8px;
             font-size: 12px;
             height: 36px;
         }
-    } 
+    }
 }

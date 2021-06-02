@@ -1,14 +1,10 @@
 import { Observable, ReplaySubject } from 'rxjs';
-
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-
-
 import * as moment from 'moment/moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { ActivatedRoute } from '@angular/router';
 import { ToasterService } from '../../services/toaster.service';
 import { takeUntil } from "rxjs/operators";
-import { createSelector, select, Store } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 import { AppState } from "../../store";
 import { IOption } from "../../theme/ng-virtual-select/sh-options.interface";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -18,9 +14,11 @@ import { TallySyncData, DownloadTallyErrorLogRequest } from "../../models/api-mo
 import { saveAs } from 'file-saver';
 import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
 import { GeneralService } from '../../services/general.service';
-import { HOUR } from 'ngx-bootstrap/chronos/units/constants';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { PAGINATION_LIMIT } from '../../app.constant';
+import { SettingsBranchService } from '../../services/settings.branch.service';
+import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../../models/user-login-state';
 @Component({
     selector: 'app-completed-preview',
     templateUrl: './completed.component.html',
@@ -30,8 +28,8 @@ export class CompletedComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
-        dateInputFormat: 'DD-MM-YYYY',
-        rangeInputFormat: 'DD-MM-YYYY',
+        dateInputFormat: GIDDH_DATE_FORMAT,
+        rangeInputFormat: GIDDH_DATE_FORMAT,
         containerClass: 'theme-green myDpClass'
     };
     public CompanyList: IOption[] = [];
@@ -103,44 +101,49 @@ export class CompletedComponent implements OnInit, OnDestroy {
     };
     public paginationRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
     public completedtallySyncDataResponse: any;
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current company */
+    public activeCompany: any;
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(
         private store: Store<AppState>,
         private _toaster: ToasterService,
-        private _activatedRoute: ActivatedRoute,
-        private cdr: ChangeDetectorRef,
         private fb: FormBuilder,
         private tallysyncService: TallySyncService,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private settingsBranchService: SettingsBranchService,
+        private settingsBranchAction: SettingsBranchActions,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
 
         this.filterForm = this.fb.group({
             filterCompany: [''],
             filterTimeInterval: [''],
             filterDate: ['', Validators.required],
+            branchUniqueName: ['']
         });
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-
-            return companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-        })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if (selectedCmp) {
-                this.filterForm.get('filterCompany').patchValue(selectedCmp.uniqueName);
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
+                this.filterForm.get('filterCompany')?.patchValue(activeCompany.uniqueName);
             }
         });
-
     }
 
     public ngOnInit() {
@@ -148,7 +151,6 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.paginationRequest.sortBy = '';
         this.paginationRequest.page = 1;
         this.paginationRequest.count = PAGINATION_LIMIT;
-
 
         this.companies$.subscribe(a => {
             if (a) {
@@ -158,28 +160,48 @@ export class CompletedComponent implements OnInit, OnDestroy {
             }
         });
         // set initial Data
-        this.filterForm.get('filterDate').patchValue(moment(this.maxDate).format('D-MMM-YYYY'));
-        this.filterForm.get('filterTimeInterval').patchValue(this.timeInterval[5].value);
+        this.filterForm.get('filterDate')?.patchValue(moment(this.maxDate).format('D-MMM-YYYY'));
+        this.filterForm.get('filterTimeInterval')?.patchValue(this.timeInterval[5].value);
         this.filter.timeRange = this.timeInterval[5].value;
-        this.filter.startDate = moment(this.maxDate).format('DD-MM-YYYY');
+        this.filter.startDate = moment(this.maxDate).format(GIDDH_DATE_FORMAT);
         this.getReport();
+        /** Commented as currently the Tally plugin doesn't support branch wise import
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                const hoBranch = response.find(branch => !branch.parentBranch);
+                const currentBranchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
+                this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                this.filterForm.get('branchUniqueName')?.patchValue(this.currentBranch.uniqueName);
+                this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
+            }
+        });*/
     }
-
-
 
     public getReport() {
         if (this.filterForm.invalid) {
-            this._toaster.errorToast("Please check your filter criteria");
+            this._toaster.errorToast(this.localeData?.filter_criteria);
             return;
         }
-
+        this.isLoading = true;
         // api call here
         this.filter.from = this.filter.startDate + ' ' + this.filter.timeRange.split('-')[0];
         this.filter.to = this.filter.startDate + ' ' + this.filter.timeRange.split('-')[1];
         this.paginationRequest.from = this.filter.from;
         this.paginationRequest.to = this.filter.to;
-
-        this.tallysyncService.getCompletedSync(this.paginationRequest).subscribe((res) => {
+        this.paginationRequest.branchUniqueName = this.filterForm.get('branchUniqueName').value;
+        this.tallysyncService.getCompletedSync(this.paginationRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.results && res.results.length > 0) {
                 this.completedtallySyncDataResponse = res;
                 this.completedData = res.results;
@@ -209,7 +231,8 @@ export class CompletedComponent implements OnInit, OnDestroy {
                     element['entriesErrorPercent'] = (isNaN(tallyErrorEntries) ? 0 : tallyErrorEntries).toFixed(2) + '%';
                 })
             }
-        })
+            this.isLoading = false;
+        });
     }
 
     /**
@@ -222,7 +245,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.downloadTallyErrorLogRequest.date = row['dateDDMMYY'] ? row['dateDDMMYY'] : '';
         this.downloadTallyErrorLogRequest.hour = row['hour'] ? row['hour'] : null;
         this.downloadTallyErrorLogRequest.type = row['type'];
-        this.tallysyncService.getErrorLog(row.company.uniqueName, this.downloadTallyErrorLogRequest).subscribe((res) => {
+        this.tallysyncService.getErrorLog(row.company.uniqueName, this.downloadTallyErrorLogRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === 'success') {
                 let blobData = this.base64ToBlob(res.body, 'application/xlsx', 512);
                 return saveAs(blobData, `${row.company.name}-error-log.xlsx`);
@@ -297,6 +320,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
 
     public onDDElementCompanySelect(event: IOption) {
         this.filter.company = event.value;
+        // this.loadBranches(event.value);
     }
 
     public onValueChange(event: Date): void {
@@ -315,6 +339,42 @@ export class CompletedComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof CompletedComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        this.paginationRequest.branchUniqueName = this.filterForm.get('branchUniqueName').value;
+    }
+
+    /**
+     * Loads the branches of the company selected
+     *
+     * @private
+     * @param {string} companyUniqueName Company unique name
+     * @memberof CompletedComponent
+     */
+    private loadBranches(companyUniqueName: string): void {
+        this.settingsBranchService.getBranchByCompany(companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response && response.body) {
+                this.currentCompanyBranches = response.body.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                const hoBranch = response.body.find(branch => !branch.parentBranch);
+                this.currentBranch = _.cloneDeep(hoBranch);
+                this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                this.filterForm.get('branchUniqueName')?.patchValue(this.currentBranch.uniqueName);
+                this.filterForm.updateValueAndValidity();
+                this.changeDetectorRef.detectChanges();
+            }
+        })
     }
 
 }

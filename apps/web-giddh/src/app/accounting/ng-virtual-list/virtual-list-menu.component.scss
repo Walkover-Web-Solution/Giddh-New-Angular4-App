@@ -9,8 +9,8 @@
     overflow: auto;
     box-sizing: border-box;
     z-index: 999;
-    box-shadow: 0 6px 12px rgba(0,0,0,.175);
-    border: 1px solid rgba(0,0,0,.15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 0 0 2px 2px;
     min-width: max-content;
     margin-top: 1px;
@@ -44,11 +44,15 @@
 }
 
 .no-result-link > a {
-    color: #10aae0 !important;
+    color: $deep-sky-blue-hover !important;
 }
 
 #noresult:hover {
     background: transparent;
+}
+
+.list-item {
+    border-bottom: 1px solid $gainsboro;
 }
 
 :host ::ng-deep .total-padding {

@@ -3,20 +3,21 @@ import { BankAccountsResponse, RefreshBankAccountResponse } from '../../../model
 import { HomeActions } from '../../../actions/home/home.actions';
 import { AppState } from '../../../store/roots';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
     selector: 'live-accounts',
-    templateUrl: 'live-accounts.component.html'
+    templateUrl: 'live-accounts.component.html',
+    styleUrls: ['./live-accounts.component.scss'],
 })
 
 export class LiveAccountsComponent implements OnInit, OnDestroy {
     public bankAccountsError$: Observable<string>;
     @Input() public refresh: boolean = false;
-    @ViewChild('refreshBankAccountModal', {static: true}) public refreshBankAccountModal: ModalDirective;
+    @ViewChild('refreshBankAccountModal', { static: true }) public refreshBankAccountModal: ModalDirective;
     public reconnectBankAccount$: Observable<RefreshBankAccountResponse>;
     public refreshBankAccount$: Observable<RefreshBankAccountResponse>;
     public bankAccounts$: Observable<BankAccountsResponse[]>;
@@ -25,18 +26,17 @@ export class LiveAccountsComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _sanitizer: DomSanitizer) {
-        this.isGetBankAccountsInProcess$ = this.store.select(p => p.home.isGetBankAccountsInProcess).pipe(takeUntil(this.destroyed$));
-        this.bankAccounts$ = this.store.select(p => p.home.BankAccounts).pipe(takeUntil(this.destroyed$));
-        this.bankAccountsError$ = this.store.select(p => p.home.getBankAccountError).pipe(takeUntil(this.destroyed$));
-        this.refreshBankAccount$ = this.store.select(p => p.home.RefereshBankAccount).pipe(takeUntil(this.destroyed$));
-        this.reconnectBankAccount$ = this.store.select(p => p.home.ReConnectBankAccount).pipe(takeUntil(this.destroyed$));
+        this.isGetBankAccountsInProcess$ = this.store.pipe(select(p => p.home.isGetBankAccountsInProcess), takeUntil(this.destroyed$));
+        this.bankAccounts$ = this.store.pipe(select(p => p.home.BankAccounts), takeUntil(this.destroyed$));
+        this.bankAccountsError$ = this.store.pipe(select(p => p.home.getBankAccountError), takeUntil(this.destroyed$));
+        this.refreshBankAccount$ = this.store.pipe(select(p => p.home.RefereshBankAccount), takeUntil(this.destroyed$));
+        this.reconnectBankAccount$ = this.store.pipe(select(p => p.home.ReConnectBankAccount), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        // if (activeCmpUniqueName) {
         this.reload();
-        // }
-        this.refreshBankAccount$.pipe(distinctUntilChanged()).subscribe(p => {
+
+        this.refreshBankAccount$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(p => {
             if (p) {
                 if (p.connectUrl) {
                     this.connectUrl = this._sanitizer.bypassSecurityTrustResourceUrl(p.connectUrl);
@@ -44,7 +44,7 @@ export class LiveAccountsComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        this.reconnectBankAccount$.pipe(distinctUntilChanged()).subscribe(p => {
+        this.reconnectBankAccount$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(p => {
             if (p) {
                 if (p.connectUrl) {
                     this.connectUrl = this._sanitizer.bypassSecurityTrustResourceUrl(p.connectUrl);

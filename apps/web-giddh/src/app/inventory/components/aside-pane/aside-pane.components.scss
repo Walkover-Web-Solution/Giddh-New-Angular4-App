@@ -1,3 +1,5 @@
+@import "../../../../assets/css/color.scss";
+
 :host.in {
     left: auto;
     top: 0;
@@ -19,7 +21,7 @@
     right: 10px;
     z-index: 9999999;
     background-color: transparent;
-    color: #fff;
+    color: $white;
     font-size: 17px;
     top: 18px;
     margin-right: 0;
@@ -35,7 +37,7 @@
 :host .aside-pane {
     width: 100%;
     max-width: 760px;
-    background: #f4f5f8;
+    background: $solitude;
 }
 
 .aside-pane {
@@ -53,7 +55,7 @@
     flex-grow: 1;
 }
 
-.vmiddle {
+.vertical-align-middle {
     position: absolute;
     top: 50%;
     bottom: 0;
@@ -76,29 +78,29 @@
     border-radius: 0;
     right: 58px;
     background-color: transparent;
-    border: 1px solid #fff;
-    color: #fff;
+    border: 1px solid $white;
+    color: $white;
     padding: 3px 14px;
     font-size: 14px;
 }
 :host.in #back:hover {
-    color: #1a237e;
-    background-color: #fff;
-    border-color: #fff;
+    color: $midnight-blue;
+    background-color: $white;
+    border-color: $white;
 }
 .btn-lg {
     min-width: 155px;
-    background: #fff;
-    color: #5b64c9;
+    background: $white;
+    color: $chetwode-blue;
     box-shadow: none;
 }
 
 .btn-lg:hover {
-    background: #e5e5e5;
-    color: #5b64c9;
-    box-shadow: 0px 4px 4px -3px #afabab;
+    background: $whisper;
+    color: $chetwode-blue;
+    box-shadow: 0px 4px 4px -3px $wistful;
     border-radius: 0px;
-    border-color: #5b64c9;
+    border-color: $chetwode-blue;
 }
 @media (max-width: 768px) {
     :host.in {

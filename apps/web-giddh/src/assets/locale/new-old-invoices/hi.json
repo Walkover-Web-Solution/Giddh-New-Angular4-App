@@ -1,29 +1,30 @@
 {
-    "select_year_label" : "Select Year",
-    "select_year_placeholder" : "Search Year...",
-    "select_type_label" : "Select Type",
-    "select_type_placeholder" : "Search Type...",
-    "invalid_type" : "please select type",
-    "select_month_label" : "Select Month",
-    "select_month_placeholder" : "Search Month...",
-    "invalid_month" : "please select month",
-    "select_quarter_label" : "Select Quater",
-    "select_quarter_placeholder" : "Search Quater...",
-    "invalid_quarter" : "please select quater",
-    "sales_from" : "Sales from",
-    "clients" : "Clients",
-    "no_invoices" : "No. of Invoices",
-    "bifurcation_clients" : "Bifurcation of clients in {{COLUMN_NAME}}",
-    "from_new_clients" : "From new Clients",
-    "from_old_clients" : "From old Clients",
-    "quarters" : {
-        "q1" : "Q1",
-        "q2" : "Q2",
-        "q3" : "Q3",
-        "q4" : "Q4"
+    "page_heading": "नई बनाम पुराने चालान",
+    "select_year_label": "वर्ष का चयन करें",
+    "select_year_placeholder": "वर्ष खोजें ...",
+    "select_type_label": "प्रकार चुनें",
+    "select_type_placeholder": "तलाश की विधि...",
+    "invalid_type": "कृपया प्रकार चुनें",
+    "select_month_label": "महीना चुनिए",
+    "select_month_placeholder": "महीना खोजें ...",
+    "invalid_month": "कृपया महीने का चयन करें",
+    "select_quarter_label": "तिमाही का चयन करें",
+    "select_quarter_placeholder": "तिमाही खोजें",
+    "invalid_quarter": "कृपया चयन करें",
+    "sales_from": "से बिक्री",
+    "clients": "ग्राहकों",
+    "no_invoices": "चालान की संख्या",
+    "bifurcation_clients": "[COLUMN_NAME] में ग्राहकों का द्विभाजन",
+    "from_new_clients": "नए ग्राहकों से",
+    "from_old_clients": "पुराने ग्राहकों से",
+    "quarters": {
+        "q1": "Q1",
+        "q2": "Q2",
+        "q3": "Q3",
+        "q4": "Q4"
     },
-    "get_type_options" : {
-        "month" : "Month",
-        "quarter" : "Quarter"
+    "get_type_options": {
+        "month": "महीना",
+        "quarter": "तिमाही"
     }
 }

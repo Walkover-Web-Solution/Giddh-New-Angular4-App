@@ -10,3 +10,29 @@ input.form-control.date-range-picker {
 .square-switch {
     width: 110px;
 }
+.custom-datepicker {
+    i {
+        left: 15px;
+        top: 0;
+        color: $gray;
+    }
+}
+.icon-calender {
+    position: absolute;
+    z-index: 9;
+    height: 32px;
+    width: 36px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px !important;
+    border-right: 1px solid $gainsboro !important;
+    cursor: pointer;
+}
+.collapse-icons {
+    font-size: 10px;
+    border: 1px solid $chetwode-blue;
+    border-radius: 4px;
+    padding: 2px;
+    top: 0 !important;
+}

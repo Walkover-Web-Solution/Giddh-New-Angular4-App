@@ -1,7 +1,7 @@
 <div class="aside-pane">
     <div class="form-header">
         <div>
-            <h3 class=""><span>Account Details</span></h3>
+            <h3><span>{{commonLocaleData?.app_account_details}}</span></h3>
         </div>
     </div>
 
@@ -9,12 +9,12 @@
     <div class="aside-body">
         <div class="aside-pane-form">
             <account-add-new-details #addAccountNewComponent *ngIf="activeGroupUniqueName && !isUpdateAccount"
-                class="mr-t4" [activeGroupUniqueName]="activeGroupUniqueName" [flatGroupsOptions]="flatGroupsOptions"
+                class="mr-t4" [activeGroupUniqueName]="activeGroupUniqueName"
                 [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$"
                 [isDebtorCreditor]="isDebtorCreditor" [createAccountInProcess$]="createAccountInProcess$"
                 (submitClicked)="addNewAcSubmit($event)" (isGroupSelected)="isGroupSelected($event)"
                 [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
-                [showBankDetail]="showBankDetail">
+                [showBankDetail]="showBankDetail" [isCustomerCreation]="true" [isFlattenRemoved]="true">
             </account-add-new-details>
 
             <account-update-new-details *ngIf="activeGroupUniqueName && isUpdateAccount"
@@ -34,8 +34,9 @@
 <div bsModal #deleteAccountModal="bs-modal" class="modal fade aaa" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <confirm-modal [title]="'Delete Account'" [body]="'Are you sure you want to delete this Account?'"
-                (cancelCallBack)="hideDeleteAccountModal()" (successCallBack)="deleteAccount()">
+            <confirm-modal [title]="commonLocaleData?.app_delete_account_title"
+                [body]="commonLocaleData?.app_delete_account_message" (cancelCallBack)="hideDeleteAccountModal()"
+                (successCallBack)="deleteAccount()">
             </confirm-modal>
         </div>
     </div>

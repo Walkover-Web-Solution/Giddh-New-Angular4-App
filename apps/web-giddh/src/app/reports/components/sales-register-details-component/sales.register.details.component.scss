@@ -1,3 +1,5 @@
+@import "../../../../assets/css/color.scss";
+
 .flex-fill {
     flex: 1 1 auto;
 }
@@ -6,10 +8,6 @@
 .basic > tfoot > tr > th {
     padding: 10px 14px;
 }
-.basic > tfoot > tr > th {
-    background: #e3e3e3;
-}
-
 .td-search-box {
     padding: 0px !important;
     position: relative;
@@ -23,7 +21,7 @@
 }
 .td-search-box div i {
     margin-top: 3px;
-    color: #8080808c;
+    color: $gray;
     padding-right: 8px;
     cursor: pointer;
 }
@@ -36,14 +34,14 @@
     padding: 11px;
     padding-right: 40px;
 }
-.p-modal-tolltip {
+.p-modal-tooltip {
     position: absolute;
-    background-color: white;
+    background-color: $white;
     z-index: 1000;
     width: 257px;
-    border: 1px solid #b4afaf;
+    border: 1px solid $gainsboro;
     border-radius: 4px;
-    box-shadow: 0 7px 24px #00000038;
+    box-shadow: 0 7px 24px $black-russian;
 }
 .account-detail-modal-div {
     height: 100%;
@@ -53,7 +51,7 @@
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
-    background: #ffece094;
+    background: $chablis;
 }
 .account-detail-custom-title {
     font-family: "opensans-semibold" !important;
@@ -68,25 +66,29 @@
     text-transform: none !important;
 }
 .custom-detail h4 {
-    color: #707070;
+    color: $gray;
     margin-top: 7px;
     font-size: 14px !important;
-    font-family: opensans-regular !important;
+    font-family: "opensans-regular" !important;
 }
 .height-82px {
     padding: 10px 10px 15px 10px;
-    border-top: 1px solid #c7c7c7;
+    border-top: 1px solid $gainsboro;
 }
 ul.list-unstyled li a {
-    color: black;
+    color: $black;
 }
 .li-link {
     margin-top: 15px !important;
 }
 .btn-group > a {
-    color: #333333;
+    color: $night-rider;
 }
 .ac-detail,
 .ac-detail a {
     display: block;
+}
+.account-head {
+    flex: 1;
+    border-right: 0px;
 }

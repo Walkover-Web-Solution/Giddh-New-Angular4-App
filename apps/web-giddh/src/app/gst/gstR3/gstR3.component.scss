@@ -5,7 +5,7 @@
 }
 
 a {
-    color: #428bca;
+    color: $curious-blue;
     text-decoration: none;
 }
 
@@ -27,9 +27,9 @@ svg.icon.icon-lg {
 .tax-engine .gstr3b-sel {
     display: inline-block;
     padding: 4px 4px 4px 8px;
-    border: 1px solid #ccc;
+    border: 1px solid $gainsboro;
     border-radius: 2px;
-    background: #fff;
+    background: $white;
 }
 
 svg.icon.icon-sm {
@@ -48,7 +48,7 @@ svg.icon.icon-sm {
 }
 
 .text-primary {
-    color: #428bca;
+    color: $curious-blue;
 }
 
 .caret {
@@ -57,7 +57,7 @@ svg.icon.icon-sm {
     height: 0;
     margin-left: 2px;
     vertical-align: middle;
-    border-top: 4px solid #000;
+    border-top: 4px solid $black;
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
     border-bottom: 0 dotted;
@@ -115,19 +115,22 @@ input.gsc-input {
 .tax-engine .gstr3b-header:before {
     /* content: '';
     position: absolute;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid $gainsboro;
     top: 24px;
     width: 100%; */
 }
 
 .tax-engine .gstr3b-header .sel-tab {
-    border: 1px solid #eee;
+    border: 1px solid $gainsboro;
     border-radius: 25px;
     overflow: hidden;
     padding: 0;
     position: static;
     max-width: 835px;
     margin: auto;
+    &.no-border {
+        border: none !important;
+    }
 }
 
 .content-disabled::after {
@@ -147,7 +150,7 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab li:before {
-    border-left: 23px solid #eee;
+    border-left: 23px solid $gainsboro;
     top: 42%;
     margin-top: -22px;
     margin-left: 1px;
@@ -159,7 +162,7 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab li:after {
-    border-left: 23px solid #fff;
+    border-left: 23px solid $white;
     top: 41%;
     margin-top: -21px;
     z-index: 2;
@@ -185,12 +188,12 @@ svg.icon.icon-xxlg {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active a {
-    color: #fff;
+    color: $white;
 }
 
 .tax-engine .gstr3b-header .sel-tab li a {
     padding: 0 10px;
-    color: #222;
+    color: $night-rider;
 }
 
 svg.icon.icon-xxlg {
@@ -199,12 +202,12 @@ svg.icon.icon-xxlg {
 }
 
 .column.content-column.gst-filing-container.navs-list {
-    background: #fff;
+    background: $white;
 }
 
 .tax-engine .gstr3b-header .sel-tab li {
     list-style: none;
-    display:inline-block;
+    display: inline-block;
 }
 
 .tax-engine .gstr3b-page-header {
@@ -239,7 +242,7 @@ address {
 }
 
 .tax-engine .summary-content .gstr-3b-user.table > tbody > tr > td {
-    border: 1px solid #adb4c3;
+    border: 1px solid $faux-cadet-blue;
     padding: 10px 30px 10px 10px;
 }
 
@@ -258,14 +261,14 @@ address {
 }
 
 .tax-engine .summary-content .gstr-3b-report.table > thead > tr > td {
-    border: 1px solid #adb4c3 !important;
+    border: 1px solid $faux-cadet-blue !important;
     padding: 6px;
     font-size: 13px;
 }
 
 .btn-link:focus,
 .btn-link:hover {
-    color: #2a6496;
+    color: $curious-blue;
     background-color: transparent;
     text-decoration: none;
 }
@@ -276,7 +279,7 @@ table {
 }
 
 .gstr-3b-report tr:hover {
-    background-color: #f5f4f3;
+    background-color: $gray-95;
 }
 
 .tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
@@ -287,13 +290,13 @@ table {
 
 .gstr3-subheading,
 .vat-summary thead > tr {
-    background-color: #f5f4f3;
+    background-color: $gray-95;
 }
 
 .dropdown-menu li .help-text,
 .modal-header .help-text,
 .text-muted {
-    color: #777;
+    color: $gray;
 }
 
 *,
@@ -335,7 +338,7 @@ h6 {
     position: fixed;
     top: 0;
     z-index: 1030;
-    background-color: #fff;
+    background-color: $white;
     transition: all 0.3s;
 }
 
@@ -353,13 +356,13 @@ h6 {
 
 .modal-header {
     padding: 20px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid $gainsboro;
     min-height: 21.43px;
-    background-color: #f5f5f5;
+    background-color: $gray-95;
 }
 
 .highlight-info {
-    background-color: #f4f8ff;
+    background-color: $solitude;
 }
 
 .alert {
@@ -393,9 +396,9 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .open .dropdown-toggle.btn-primary,
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
-    color: #fff;
-    background-color: #ea795b;
-    border-color: #ea795b;
+    color: $white;
+    background-color: $bitter-sweet;
+    border-color: $bitter-sweet;
 }
 
 .btn,
@@ -405,9 +408,9 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 }
 
 .btn-primary {
-    color: #fff;
-    background-color: #d64830;
-    border-color: #c53e27;
+    color: $white;
+    background-color: $cinnabar-orange;
+    border-color: $cinnabar-orange;
 }
 
 .btn {
@@ -434,8 +437,8 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 }
 
 .tax-engine .gstr3-points .point {
-    background-color: #2799fb;
-    color: #fff;
+    background-color: $primary;
+    color: $white;
     width: 22px;
     height: 22px;
     /* padding-top: 3px; */
@@ -461,19 +464,19 @@ tax-engine .caret-right {
 }
 
 .tax-engine .gstr3-points a .caret-right {
-    color: #bbb;
+    color: $silver;
 }
 
 .gstr3-filing-procedure > div {
     width: 900px;
     margin: 30px auto 0;
-    box-shadow: 1px 1px 11px #ccc;
+    box-shadow: 1px 1px 11px $very-light-gray;
     border-radius: 3px;
     padding: 20px 50px 10px;
 }
 
 .tax-engine .gstr3-points {
-    border-left: 1px dashed #ddd;
+    border-left: 1px dashed $gainsboro;
     padding-left: 41px;
 }
 
@@ -483,15 +486,15 @@ dropdown-menu-right {
     top: 30px !important;
 }
 
-.successful-fileDetail h3,
-.gstReturnDate h3 {
-    color: #333333 !important;
+.successful-file-detail h3,
+.gst-return-date h3 {
+    color: $night-rider !important;
     font-size: 24px !important;
     margin: 20px 0 7px !important;
 }
 
 .btn-2 {
-    background: #fff;
+    background: $white;
     color: $chetwode-blue;
     border: 0px;
     border-radius: 4px;
@@ -499,44 +502,74 @@ dropdown-menu-right {
 }
 
 .btn-2:hover {
-    color: #ffffff;
+    color: $white;
     background: $chetwode-blue;
 }
 
-.file-your-return{
-    font-size:18px;
+.file-your-return {
+    font-size: 18px;
 }
 
-.authenticate-btn{
-    font-size:14px;
+.authenticate-btn {
+    font-size: 14px;
 }
 
 ul#dropdown-menu {
     top: 30px !important;
 }
 
-
 .list-inline {
     padding-left: 0;
     margin-left: -5px;
     list-style: none;
-    >li {
+    > li {
         display: inline-block;
         padding-right: 5px;
         padding-left: 5px;
     }
 }
-.gstr-summary-head{
+.gstr-summary-head {
     padding: 15px;
-    height:65px;
+    height: 65px;
 }
-@media(max-width:991px){
-    .gstr-summary-head{
+
+.dropdown-menu-right {
+    min-width: 350px;
+}
+
+.pd-r120 {
+    padding-right: 120px;
+}
+
+.pd-r160 {
+    padding-right: 160px;
+}
+
+.pd-r190 {
+    padding-right: 190px;
+}
+
+.bg-thead {
+    background-color: $whisper;
+    color: $black;
+}
+
+.bg-thead-dark {
+    background: $alice-blue-light;
+    color: $black;
+}
+
+.pointer-none {
+    pointer-events: none !important;
+}
+
+@media (max-width: 991px) {
+    .gstr-summary-head {
         height: auto;
-        .dropdown{
+        .dropdown {
             float: right;
         }
-        .download-authenticate-btn{
+        .download-authenticate-btn {
             text-align: right;
             display: flex;
             align-items: flex-end;
@@ -545,10 +578,10 @@ ul#dropdown-menu {
             margin-bottom: 0;
             padding-top: 15px;
             float: none;
-            .list-middle{
-                .dropdown-menu{
+            .list-middle {
+                .dropdown-menu {
                     left: 0;
-                    right: auto
+                    right: auto;
                 }
             }
         }
@@ -557,7 +590,7 @@ ul#dropdown-menu {
             left: auto !important;
         }
     }
-    .gstr3b-header{
+    .gstr3b-header {
         margin-top: 0 !important;
     }
 }

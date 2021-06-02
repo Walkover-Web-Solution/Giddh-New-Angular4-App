@@ -1,6 +1,6 @@
 @import "../../../../assets/css/color.scss";
 .template-grid {
-    background: #fff;
+    background: $white;
     max-width: 255px;
     width: 100%;
     padding: 20px;
@@ -8,7 +8,7 @@
     border: 1px solid $gainsboro;
     float: left;
     border-radius: 4px;
-    margin:5px 15px 15px 0;
+    margin: 5px 15px 15px 0;
     position: relative;
 }
 
@@ -17,31 +17,31 @@
     font-size: 18px;
 }
 
-.template_action {
+.template-action {
     overflow: hidden;
     text-align: center;
     padding: 16px 0 0;
     margin-top: 50px;
 }
 
-.template_meta {
+.template-meta {
     padding: 15px 0 0;
 }
 
 @import "../../../../../../web-giddh/src/assets/css/color.scss";
 .btn-warning {
-    color: #fff;
-    background-color: #ec971f;
-    border-color: #d58512;
+    color: $white;
+    background-color: $bright-yellow;
+    border-color: $bright-yellow;
 }
 
 .more-btn-dropdown {
-    border: 1px solid  $gainsboro !important;
+    border: 1px solid $gainsboro !important;
     box-shadow: none !important;
     border-radius: 0 !important;
     font-size: 14px;
     padding: 5px 10px;
-    background: rgb(255, 255, 255) !important;
+    background: $white !important;
     width: 160px;
     text-align: left;
     display: flex;
@@ -53,10 +53,10 @@
 
 .dropdown-menu > li > a:hover {
     color: $chetwode-blue;
-    background: #e5e5e5;
+    background: $whisper;
 }
 .badge {
-    background: #eaeaea;
+    background: $whisper-color;
     color: $charcoal;
     font-family: opensans-regular;
     border: none;
@@ -65,26 +65,34 @@
     border-radius: 50px;
 }
 .badge.btn-success:hover {
-    background: #ddd;
+    background: $gainsboro-light;
     color: $charcoal;
 }
 .badge.btn-sky-blue,
 .badge.btn-sky-blue:hover {
-    background: #313a97 !important;
+    background: $jacksons-purple !important;
     border: none !important;
-    color: #fff !important;
+    color: $white !important;
 }
-.templteGrid-container {
+.template-grid-container {
     padding: 0 15px;
 }
-.full-modal{
-    width:100% !important;
-    margin:0;
-    max-width:100% !important;
+.full-modal {
+    width: 100% !important;
+    margin: 0;
+    max-width: 100% !important;
 }
+.select-design {
+    height: 44px;
+}
+
+.border-radius-none {
+    border-radius: 0px !important;
+}
+
 @media (max-width: 414px) {
     .template-grid {
-        background: #fafafa;
+        background: $gray-95;
         max-width: 100%;
     }
 }

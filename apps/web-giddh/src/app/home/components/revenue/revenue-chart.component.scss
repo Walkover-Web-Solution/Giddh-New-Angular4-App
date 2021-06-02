@@ -1,5 +1,5 @@
 @import "../../../../assets/css/color.scss";
-.secondryDarkbg span {
+.secondary-dark-bg span {
     background: $teal;
     width: 15px;
     height: 15px;
@@ -7,8 +7,8 @@
     margin-right: 5px;
 }
 
-.secondrylightbg span {
-    background: #0cb1af;
+.secondary-light-bg span {
+    background: $light-sea-green;
     width: 15px;
     height: 15px;
     display: inline-block;
@@ -20,12 +20,12 @@
     justify-content: center;
     align-items: center;
 }
-.dashboard-option li.secondryDarkbg {
-    color: #087e7d;
+.dashboard-option li.secondary-dark-bg {
+    color: $teal;
     font-size: 14px;
 }
-.dashboard-option li.secondrylightbg {
-    color: #0cb1af;
+.dashboard-option li.secondary-light-bg {
+    color: $light-sea-green;
     font-size: 14px;
 }
 
@@ -33,14 +33,13 @@
     color: $dark-gray;
 }
 .left-column {
-    border-right: 1px solid #ddd;
+    border-right: 1px solid $gainsboro;
     margin: 5px 0;
 }
 span.this-week {
     color: $dark-gray;
     padding-left: 5px;
     font-size: 16px;
-    text-decoration: underline;
 }
 .total-sale-detail {
     text-align: right;
@@ -48,18 +47,18 @@ span.this-week {
 }
 .total-sale-detail p {
     font-size: 18px;
-    color: #666;
+    color: $dark-gray;
 }
 .total-sale-detail h3 {
     font-size: 22px;
-    color: #000000;
+    color: $black;
 }
 
 .total-sale-detail span {
     font-size: 18px;
-    color: #000000;
+    color: $black;
 }
-.singleSaleDetail {
+.single-sale-detail {
     padding-top: 30px;
 }
 span.icon-collapse-icon {
@@ -68,29 +67,29 @@ span.icon-collapse-icon {
     cursor: pointer;
 }
 span.icon-collapse-icon:hover {
-    color: #1a237e;
+    color: $midnight-blue;
 }
 
 /* CSS FOR LINE CHART */
 
 p.bankName {
     font-size: 14px;
-    color: #1a237e;
+    color: $midnight-blue;
     margin-bottom: 5px;
 }
 
-p.bankBalnc {
+p.bank-balance {
     color: $dark-gray;
     font-size: 14px;
     display: flex;
     justify-content: space-between;
 }
-.single-bank-detatil {
+.single-bank-detail {
     border-bottom: 1px solid $gainsboro;
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
-a.connectBnk {
+a.connect-bank {
     position: absolute;
     bottom: 10px;
     color: $nero;
@@ -101,7 +100,7 @@ a.connectBnk {
     padding: 15px;
 }
 .total-sales-header {
-    background-color: #fff;
+    background-color: $white;
     border: 1px solid $gainsboro;
     border-radius: 2px;
     padding: 15px 15px 20px;
@@ -111,13 +110,13 @@ a.connectBnk {
     color: $charcoal;
     margin-bottom: 3px;
 }
-.daterang-block .form-control {
-    border: 1px solid #5b64c9;
+.date-range-block .form-control {
+    border: 1px solid $chetwode-blue;
 }
-.dateRangeInput {
+.date-range-input {
     position: relative;
 }
-.dateRangeInput span.icon-calender {
+.date-range-input span.icon-calender {
     position: absolute;
     width: 32px;
     height: 32px;
@@ -125,14 +124,14 @@ a.connectBnk {
     justify-content: center;
     align-items: center;
     border-right: 1px solid $gainsboro;
-    color:$nero;
+    color: $nero;
 }
-.dateRangeInput input {
+.date-range-input input {
     padding-left: 35px !important;
-    color:$nero;
+    color: $nero;
 }
 .page-title h1 {
-    color: #1a237e;
+    color: $midnight-blue;
     font-size: 24px;
     text-align: center;
     font-weight: 600;
@@ -156,9 +155,9 @@ a.connectBnk {
     display: inline;
     text-align: right;
     font-size: 24px;
-    color: #1a237e;
+    color: $midnight-blue;
 }
-.dateRangeInput.disabled {
+.date-range-input.disabled {
     opacity: 0.5;
 }
 .page-title {
@@ -170,7 +169,7 @@ a.connectBnk {
     font-size: 18px;
 }
 .active-date {
-    color: #1a237e;
+    color: $midnight-blue;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -180,21 +179,21 @@ a.connectBnk {
     width: 15px;
     height: 15px;
     display: inline-block;
-    background-color: #1a237e;
+    background-color: $midnight-blue;
     margin-right: 5px;
 }
-.inActive-date {
-    color: #5b64c9;
+.in-active-date {
+    color: $chetwode-blue;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     margin-right: 32px;
 }
-.inActive-date span {
+.in-active-date span {
     width: 15px;
     height: 15px;
     display: inline-block;
-    background-color: #5b64c9;
+    background-color: $chetwode-blue;
     margin-right: 5px;
 }
 
@@ -205,7 +204,7 @@ a.connectBnk {
 
     position: relative;
 }
-.topdates {
+.top-dates {
     min-height: 60px;
 }
 .single-sale-data p {
@@ -214,11 +213,11 @@ a.connectBnk {
 }
 .single-sale-data h3 {
     font-size: 22px;
-    color: #1a237e;
+    color: $midnight-blue;
     margin-top: 6px;
 }
-span.dateWiseSale {
-    color: #1a237e;
+span.date-wise-sale {
+    color: $midnight-blue;
     font-size: 18px;
 }
 
@@ -249,16 +248,16 @@ input:read-only:focus {
 .total-sales-header label {
     margin-bottom: 5px;
 }
-.panel-heading-inner-content{
+.panel-heading-inner-content {
     display: flex;
     justify-content: space-between;
 }
-.refresh-btn{
+.refresh-btn {
     align-items: center;
     display: flex;
     flex-direction: row-reverse;
 }
-@media(max-width:991px){
+@media (max-width: 991px) {
     .about-date {
         font-size: 16px;
         display: flex;
@@ -267,36 +266,36 @@ input:read-only:focus {
     .total-sales-tabs a {
         font-size: 14px;
     }
-    .total-income-wrap{
+    .total-income-wrap {
         flex-direction: column-reverse;
-        .page-title{
-            h1{
-            font-size: 16px;
-            line-height: 1.3;
+        .page-title {
+            h1 {
+                font-size: 16px;
+                line-height: 1.3;
             }
         }
-        .collapse-close{
+        .collapse-close {
             height: 20px;
             width: 20px;
             margin-left: 10px;
-            .icon-collapse-icon{
-                    font-size: 18px;
+            .icon-collapse-icon {
+                font-size: 18px;
             }
         }
     }
 }
-@media(max-width:767px){
-    .total-sale-detail{
+@media (max-width: 767px) {
+    .total-sale-detail {
         text-align: left;
         padding-right: 0;
-        .singleSaleDetail{
+        .single-sale-detail {
             padding-top: 0;
             padding-bottom: 10px;
         }
-        p{
+        p {
             font-size: 14px;
         }
-        h3{
+        h3 {
             padding-top: 3px;
             font-size: 18px;
         }
@@ -311,10 +310,10 @@ input:read-only:focus {
         text-align: left;
         align-items: flex-start;
         position: relative;
-        .refresh-btn{
+        .refresh-btn {
             padding-left: 15px;
             padding-top: 10px;
-            .glyphicon-refresh{
+            .glyphicon-refresh {
                 margin-left: 10px !important;
                 position: absolute !important;
                 right: 0;
@@ -327,50 +326,50 @@ input:read-only:focus {
             top: 0;
         }
     }
-    .revenue-tabs{
+    .revenue-tabs {
         float: none !important;
         padding-top: 5px;
     }
-    .single-sale-data{
+    .single-sale-data {
         min-height: auto;
         margin-bottom: 15px;
-        p{
+        p {
             font-size: 14px;
         }
-        h3{
+        h3 {
             font-size: 18px;
         }
     }
-    .about-date{
+    .about-date {
         display: flex;
         font-size: 14px;
         flex-direction: column;
         align-items: baseline;
     }
-    .daterang-block {
+    .date-range-block {
         padding-bottom: 10px;
         font-size: 14px;
     }
-    .page-title{
-        h1{
+    .page-title {
+        h1 {
             display: flex;
             float: left;
-            font-size: 20px
+            font-size: 20px;
         }
-        .collapse-close{
+        .collapse-close {
             height: 40px;
             width: 40px;
-            span.icon-collapse-icon{
+            span.icon-collapse-icon {
                 font-size: 20px;
             }
         }
     }
-    .total-sales-header{
+    .total-sales-header {
         padding: 15px 15px 0;
     }
 }
-@media(max-width:575px){
-     .about-date{
+@media (max-width: 575px) {
+    .about-date {
         float: none !important;
     }
 }

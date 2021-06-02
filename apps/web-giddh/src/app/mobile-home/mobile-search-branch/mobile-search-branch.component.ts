@@ -6,9 +6,9 @@ import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 
-import { RESTRICTED_BRANCH_ROUTES } from '../../app.constant';
 import { Organization, OrganizationDetails } from '../../models/api-models/Company';
 import { OrganizationType } from '../../models/user-login-state';
+import { CompanyService } from '../../services/companyService.service';
 import { GeneralService } from '../../services/general.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { AppState } from '../../store';
@@ -30,12 +30,19 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /** Holds the active company information */
     public activeCompany: any;
+    /** Stores the details of the current branch */
+    public currentBranch: any;
 
     /** Subject to unsubscribe from all the subscription */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     /** @ignore */
     constructor(
+        private companyService: CompanyService,
         private companyActions: CompanyActions,
         private generalService: GeneralService,
         private router: Router,
@@ -56,8 +63,31 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response;
+                if (this.generalService.currentBranchUniqueName) {
+                    this.currentBranch = response.find(branch =>
+                        (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
+                } else {
+                    this.currentBranch = '';
+                }
             }
-        })
+        });
+        this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+            if (organization && organization.details && organization.details.branchDetails) {
+                this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
+                this.generalService.currentOrganizationType = organization.type;
+                this.currentOrganizationType = organization.type;
+                if (this.generalService.currentBranchUniqueName) {
+                    this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
+                        if (response) {
+                            this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
+                        }
+                    });
+                }
+            } else {
+                this.generalService.currentOrganizationType = OrganizationType.Company;
+                this.currentOrganizationType = OrganizationType.Company;
+            }
+        });
     }
 
     /**
@@ -79,17 +109,29 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
     public switchToBranch(branchUniqueName: string, event: any): void {
         event.stopPropagation();
         event.preventDefault();
+        if (branchUniqueName === this.generalService.currentBranchUniqueName) {
+            return;
+        }
         const details = {
             branchDetails: {
                 uniqueName: branchUniqueName
             }
         };
         this.setOrganizationDetails(OrganizationType.Branch, details);
-        if (!RESTRICTED_BRANCH_ROUTES.includes(this.router.url)) {
-            window.location.reload();
-        } else {
-            window.location.href = '/pages/home';
-        }
+        this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.body) {
+                if (screen.width <= 767 || isCordova) {
+                    window.location.href = '/pages/mobile-home';
+                } else if (isElectron) {
+                    this.router.navigate([response.body.lastState]);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 200);
+                } else {
+                    window.location.href = response.body.lastState;
+                }
+            }
+        });
     }
 
     /**
@@ -98,7 +140,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
      * @memberof MobileSearchBranchComponent
      */
     public getCurrentCompanyData(): void {
-        this.settingsProfileService.GetProfileInfo().subscribe((response: any) => {
+        this.settingsProfileService.GetProfileInfo().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
                 this.activeCompany = response.body;
             }
@@ -118,10 +160,12 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
         });
         if (branchName) {
             this.currentCompanyBranches = branches.filter(branch => {
-                if (!branch.alias) {
-                    return branch.name.toLowerCase().includes(branchName.toLowerCase());
-                } else {
-                    return branch.name.toLowerCase().includes(branchName.toLowerCase()) || branch.alias.toLowerCase().includes(branchName.toLowerCase());
+                if (branch) {
+                    if (!branch.alias) {
+                        return branch.name.toLowerCase().includes(branchName.toLowerCase());
+                    } else {
+                        return branch.name.toLowerCase().includes(branchName.toLowerCase()) || branch.alias.toLowerCase().includes(branchName.toLowerCase());
+                    }
                 }
             });
         } else {
@@ -137,7 +181,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
     public loadCompanyBranches(): void {
         if (this.generalService.companyUniqueName) {
             // Avoid API call if new user is onboarded
-            this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+            this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
         }
     }
 

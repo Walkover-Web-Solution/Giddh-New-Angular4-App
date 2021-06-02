@@ -1,7 +1,7 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../../store/roots';
@@ -23,7 +23,14 @@ import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
     styleUrls: ['./groups-account-sidebar.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy, AfterViewChecked {
+
+export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
+
+    public items;
+
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+
     public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     public ScrollToElement = false;
     public viewPortItems: IGroupOrAccount[];
@@ -53,7 +60,6 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     @Output() public resetSearchString: EventEmitter<boolean> = new EventEmitter();
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private navigateStack: any[] = [];
     /** Active group observable */
     private activeGroup$: Observable<any>;
     public currentGroup: any;
@@ -61,19 +67,26 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     public isGroupMoved: boolean = false;
     /* This will hold if group is deleted */
     public isGroupDeleted: boolean = false;
-
+    /** This will hold the search string */
+    public searchString: string = "";
     // tslint:disable-next-line:no-empty
-    constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-        private accountsAction: AccountsAction, private _generalServices: GeneralService, private _cdRef: ChangeDetectorRef, private groupService: GroupService) {
+    constructor(
+        private store: Store<AppState>,
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private accountsAction: AccountsAction,
+        private _generalServices: GeneralService,
+        private _cdRef: ChangeDetectorRef,
+        private groupService: GroupService
+    ) {
         this.mc = new GroupAccountSidebarVM(this._cdRef, this.store);
-        this.activeGroup = this.store.select(state => state.groupwithaccounts.activeGroup).pipe(takeUntil(this.destroyed$));
-        this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
-        this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).pipe(takeUntil(this.destroyed$));
-        this.activeAccount = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
-        this.isUpdateGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupSuccess).pipe(takeUntil(this.destroyed$));
-        this.isUpdateAccountSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).pipe(takeUntil(this.destroyed$));
+        this.activeGroup = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
+        this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
+        this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
+        this.activeAccount = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
+        this.isUpdateGroupSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.isUpdateGroupSuccess), takeUntil(this.destroyed$));
+        this.isUpdateAccountSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$));
         this.isDeleteGroupSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.isDeleteGroupSuccess), takeUntil(this.destroyed$));
-        this.groupsListBackupStream$ = this.store.select(state => state.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
+        this.groupsListBackupStream$ = this.store.pipe(select(state => state.general.groupswithaccounts), takeUntil(this.destroyed$));
         this.isMoveGroupSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.isMoveGroupSuccess), takeUntil(this.destroyed$));
     }
 
@@ -81,7 +94,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
         if (changes['groups']) {
             this.resetData();
 
-            if(!this.isGroupMoved && !this.isGroupDeleted) {
+            if (!this.isGroupMoved && !this.isGroupDeleted) {
                 let activeGroup;
                 this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
                 if (this.currentGroup !== undefined) {
@@ -90,7 +103,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
                         this.currentGroup.uniqueName = activeGroup.uniqueName;
                         if (this.currentGroupIndex === 0) {
                             const currentUpdatedGroup = this.groups.find(group => this.currentGroup.uniqueName === group.uniqueName);
-                            if(currentUpdatedGroup) {
+                            if (currentUpdatedGroup) {
                                 this.currentGroup.groups = currentUpdatedGroup.groups;
                             }
                         }
@@ -99,10 +112,6 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
                 }
             }
         }
-    }
-
-    public ngAfterViewInit() {
-        //
     }
 
     public ngAfterViewChecked() {
@@ -119,17 +128,22 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
+        let i = Number;
+        let text = this.localeData?.item_no;
+        text = text?.replace("[ITEM_NO]", i);
+        this.items = Array.from({length: 100000}).map((_, i) => text);
+
         this._generalServices.eventHandler.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.mc.handleEvents(s.name, s.payload);
 
             let groups: IGroupsWithAccounts[];
-            this.store.select(state => state.general.groupswithaccounts).pipe(take(1)).subscribe(grp => groups = grp);
+            this.store.pipe(select(state => state.general.groupswithaccounts), take(1)).subscribe(grp => groups = grp);
 
             let activeGroup: GroupResponse;
-            this.store.select(state => state.groupwithaccounts.activeGroup).pipe(take(1)).subscribe(grp => activeGroup = grp);
+            this.store.pipe(select(state => state.groupwithaccounts.activeGroup), take(1)).subscribe(grp => activeGroup = grp);
 
             let activeAccount;
-            this.store.select(state => state.groupwithaccounts.activeAccount).pipe(take(1)).subscribe(acc => activeAccount = acc);
+            this.store.pipe(select(state => state.groupwithaccounts.activeAccount), take(1)).subscribe(acc => activeAccount = acc);
 
             // reset search string when you're in search case for move group || move account || merge account
             if (s.name === eventsConst.groupMoved || s.name === eventsConst.accountMoved || s.name === eventsConst.accountMerged) {
@@ -143,26 +157,48 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
             this.breadcrumbUniqueNamePath = [];
 
             if (!activeAccount) {
-                this.getBreadCrumbPathFromGroup(groups, activeGroup.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
+                this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
             } else {
-                this.getBreadCrumbPathFromGroup(groups, activeAccount.uniqueName, null, this.breadcrumbPath, false, this.breadcrumbUniqueNamePath);
+                this.getBreadCrumbPathFromGroup(activeAccount, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
             }
 
             this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
         });
 
         this.isMoveGroupSuccess$.subscribe(response => {
-            if(response) {
+            if (response) {
                 this.isGroupMoved = true;
                 this.store.dispatch(this.groupWithAccountsAction.moveGroupComplete());
-                this.getGroupDetails();
             }
         });
 
         this.isDeleteGroupSuccess$.subscribe(response => {
-            if(response) {
+            if (response) {
                 this.isGroupDeleted = true;
-                this.getGroupDetails();
+            }
+        });
+
+        this.store.pipe(select(state => state.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$)).subscribe(response => {
+            this.searchString = response;
+        });
+
+        this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(activeGroup => {
+            if (activeGroup) {
+                this.populateNewColumns(activeGroup);
+            }
+        });
+
+        this.activeAccount.pipe(takeUntil(this.destroyed$)).subscribe(activeAccount => {
+            if (activeAccount) {
+                let activeGroup;
+                this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
+                if (!activeGroup) {
+                    // Active group doesn't exist when search is made in Master
+                    this.breadcrumbPath = [];
+                    this.breadcrumbUniqueNamePath = [];
+                    this.getBreadCrumbPathFromGroup(activeAccount, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
+                    this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
+                }
             }
         });
     }
@@ -177,10 +213,10 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
         this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
 
         this.groupService.GetGroupDetails(activeGroup.uniqueName).subscribe(group => {
-            if(group && group.status === "success" && group.body) {
+            if (group && group.status === "success" && group.body) {
                 let groupDetails = group.body;
-                if(groupDetails && groupDetails.parentGroups && groupDetails.parentGroups.length > 0) {
-                    this.currentGroupIndex = groupDetails.parentGroups.length;
+                if (groupDetails && groupDetails.parentGroups && groupDetails.parentGroups?.length > 0) {
+                    this.currentGroupIndex = groupDetails.parentGroups?.length;
                 } else {
                     this.currentGroupIndex = 0;
                 }
@@ -225,33 +261,16 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
                     }
                 }
             }
-            // check if searching in groups and have active group
-            if (this.isSearchingGroups) {
-                let activeGroup = null;
-                this.store.select(state => state.groupwithaccounts.activeGroup).pipe(take(1)).subscribe(a => activeGroup = a);
-
-                // if (activeGroup) {
-                //   for (let m = 0; m < this.mc.columns.length; m++) {
-                //     let findedCol = this.mc.columns[m].groups.find(fg => fg.uniqueName === activeGroup.uniqueName);
-                //     if (findedCol) {
-                //       let fGrps = findedCol.groups.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
-                //       let fAccs = findedCol.accounts.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
-                //       this.mc.columns[m + 1].Items = [...fGrps, ...fAccs] as IGroupOrAccount[];
-                //       return;
-                //     }
-                //   }
-                // }
-            }
         }
         this.columnsChanged.emit(this.mc);
     }
 
     public polulateColms(grps: IGroupsWithAccounts[]): ColumnGroupsAccountVM {
         let activeGroup = null;
-        this.store.select(state => state.groupwithaccounts.activeGroup).pipe(take(1)).subscribe(a => activeGroup = a);
+        this.store.pipe(select(state => state.groupwithaccounts.activeGroup), take(1)).subscribe(a => activeGroup = a);
 
         if (this.isSearchingGroups) {
-            if (grps.length > 0) {
+            if (grps && grps?.length > 0) {
                 let newCOL = new ColumnGroupsAccountVM(null);
                 let allGrps = [];
                 let allAccount = [];
@@ -261,20 +280,20 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
                         grp.isActive = true;
                         newCOL.IsCreateNewBtnShowable = true;
                     }
-                    if (grp.groups && grp.groups.length > 0) {
+                    if (grp.groups && grp.groups?.length > 0) {
                         allGrps.push(...grp.groups);
                     }
                 }
                 if (!activeGroup) {
                     for (let grp of grps) {
-                        if (grp.accounts && grp.accounts.length > 0) {
+                        if (grp.accounts && grp.accounts?.length > 0) {
                             allAccount.push(...grp.accounts);
                         }
                     }
                 } else {
                     for (let grp of grps) {
                         if (grp.uniqueName === activeGroup.uniqueName) {
-                            if (grp.accounts && grp.accounts.length > 0) {
+                            if (grp.accounts && grp.accounts?.length > 0) {
                                 allAccount.push(...grp.accounts);
                             }
                         }
@@ -306,8 +325,8 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
                 if (activeGroup && grp.uniqueName === activeGroup.uniqueName) {
                     let newCOL = new ColumnGroupsAccountVM(grp);
                     newCOL.groups = [];
-                    if (grp.groups) {
-                        for (let key of grp.groups) {
+                    if (activeGroup.groups) {
+                        for (let key of activeGroup.groups) {
                             // key.isOpen = true;
                             newCOL.groups.push(key);
                         }
@@ -318,7 +337,8 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
                         newCOL.Items = [...grps2, ...accs2] as IGroupOrAccount[];
                         newCOL.SelectedItem = newCOL.Items.find(p => p.isActive) || newCOL.Items.find(p => p.isOpen);
                     }
-                    this.mc.columns.splice(1, 0, newCOL);
+                    this.mc.columns.splice(1, 1, newCOL);
+                    this._cdRef.detectChanges();
                     return newCOL;
                 } else {
                     if (grp.groups) {
@@ -361,38 +381,6 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
         this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(item.uniqueName));
         this.store.dispatch(this.accountsAction.resetActiveAccount());
         this.mc.selectedType = 'grp';
-
-        // if (!this.isSearchingGroups) {
-        //   this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
-        //   this.mc.selectGroup(item, currentIndex);
-        // } else {
-        if (currentIndex === 0) {
-            this.resetData();
-            this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
-            this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
-            this.mc.selectGroup(item, currentIndex, true);
-            return;
-        }
-
-        let grpsBck: GroupsWithAccountsResponse[];
-        this.groupsListBackupStream$.pipe(take(1)).subscribe(s => grpsBck = s);
-
-        this.getBreadCrumbPathFromGroup(grpsBck, item.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
-
-        let listBckup = this.mc.activeGroupFromGroupListBackup(grpsBck, item.uniqueName, null);
-
-        // listBckup.groups=_.sortBy(item.groups,['uniqueName', 'name']);
-        // listBckup.accounts=_.sortBy(item.accounts,['uniqueName', 'name']);
-        if (listBckup) {
-            item.groups = listBckup.groups;
-            item.accounts = listBckup.accounts;
-        }
-        this.mc.selectGroup(item, currentIndex, true);
-        // }
-
-        this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
-        this.ScrollToRight.emit(true);
-        this.ScrollToElement = true;
     }
 
     public onAccountClick(item: any, currentIndex: number) {
@@ -401,7 +389,17 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
-        let parentGrp = this.getBreadCrumbPathFromGroup(grpsBck, item.uniqueName, null, this.breadcrumbPath, false, this.breadcrumbUniqueNamePath);
+        let activeGroup;
+        this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
+        const currentAccount = {
+            name: item.name,
+            uniqueName: item.uniqueName,
+            parentGroups: activeGroup ? [
+                ...activeGroup.parentGroups,
+                { name: activeGroup.name, uniqueName: activeGroup.uniqueName }
+            ] : []
+        };
+        let parentGrp = this.getBreadCrumbPathFromGroup(currentAccount, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
         this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
         if (parentGrp) {
             if (this.mc.columns[currentIndex - 1] && this.mc.columns[currentIndex - 1].uniqueName !== parentGrp.uniqueName) {
@@ -419,7 +417,9 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
         // if (col.uniqueName) {
-        this.getBreadCrumbPathFromGroup(this._groups, col.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
+        let activeGroup;
+        this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
+        this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
         this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
         // } else {
         //   let grp = col.groups.find(p => p.isOpen);
@@ -471,39 +471,29 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
         return orderedGroups;
     }
 
-    public getBreadCrumbPathFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts, parentPath: string[], isGroup: boolean, parentUniquenamePath: string[]) {
+    /**
+     * Forms the breadcrumb path
+     *
+     * @param {*} activeEntity Active entity (either group or account)
+     * @param {IGroupsWithAccounts} result Entity that is selected for which breadcrumb is formed
+     * @param {string[]} parentPath Stores the path of names
+     * @param {string[]} parentUniquenamePath Stores the path of uniquenames
+     * @returns {*} Entity that is selected for which breadcrumb is formed
+     * @memberof GroupsAccountSidebarComponent
+     */
+    public getBreadCrumbPathFromGroup(activeEntity: any, result: IGroupsWithAccounts, parentPath: string[], parentUniquenamePath: string[]): any {
         if (result !== null) {
             return result;
         }
-        for (let el of groupList) {
-            parentUniquenamePath.push(el.uniqueName);
-            parentPath.push(el.name);
-            if (!isGroup) {
-                if (el.accounts) {
-                    for (let key of el.accounts) {
-                        if (key.uniqueName === uniqueName) {
-                            parentPath.push(key.name);
-                            parentUniquenamePath.push(key.uniqueName);
-                            result = el;
-                            return result;
-                        }
-                    }
-                }
-            } else {
-                if (el.uniqueName === uniqueName) {
-                    result = el;
-                    return result;
-                }
+        if (activeEntity?.parentGroups) {
+            for (let group of activeEntity.parentGroups) {
+                parentUniquenamePath.push(group.uniqueName);
+                parentPath.push(group.name);
             }
-            if (el.groups) {
-                result = this.getBreadCrumbPathFromGroup(el.groups, uniqueName, result, parentPath, isGroup, parentUniquenamePath);
-                if (result !== null) {
-                    return result;
-                }
-            }
-            parentUniquenamePath.pop();
-            parentPath.pop();
         }
+        parentUniquenamePath.push(activeEntity.uniqueName);
+        parentPath.push(activeEntity.name);
+        result = activeEntity;
         return result;
     }
 
@@ -543,13 +533,51 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
      * @param navigation instance of NavigationWalker
      */
     public onColAdd(el, navigation) {
-        navigation.add(el.nativeElement);
+        navigation.add(el?.nativeElement);
         navigation.nextVertical();
     }
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Populates the new columns
+     *
+     * @private
+     * @param {GroupResponse} activeGroup Active group
+     * @returns {void}
+     * @memberof GroupsAccountSidebarComponent
+     */
+    private populateNewColumns(activeGroup: GroupResponse): void {
+        if (this.currentGroupIndex === 0) {
+            this.currentGroup = {
+                ...this.currentGroup,
+                ...activeGroup
+            }
+            this.resetData();
+            this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
+            this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
+            this.mc.selectGroup(this.currentGroup, this.currentGroupIndex, true);
+            return;
+        }
+
+        let grpsBck: GroupsWithAccountsResponse[];
+        this.groupsListBackupStream$.pipe(take(1)).subscribe(s => grpsBck = s);
+
+        this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
+
+        let listBckup = this.mc.activeGroupFromGroupListBackup(grpsBck, this.currentGroup?.uniqueName, null);
+        if (listBckup) {
+            this.currentGroup.groups = listBckup.groups;
+            this.currentGroup.accounts = listBckup.accounts;
+        }
+        this.mc.selectGroup(this.currentGroup, this.currentGroupIndex, true);
+
+        this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
+        this.ScrollToRight.emit(true);
+        this.ScrollToElement = true;
     }
 
 }

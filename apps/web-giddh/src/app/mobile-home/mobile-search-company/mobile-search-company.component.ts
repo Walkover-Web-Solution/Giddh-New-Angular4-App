@@ -25,6 +25,8 @@ export class MobileSearchCompanyComponent implements OnInit, OnDestroy {
     public allCompanies: CompanyResponse[] = [];
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
 
     constructor(private store: Store<AppState>, private loginAction: LoginActions) {
 
@@ -67,7 +69,7 @@ export class MobileSearchCompanyComponent implements OnInit, OnDestroy {
      * @memberof MobileSearchCompanyComponent
      */
     public filterCompanyList(ev: string): void {
-        let companies: CompanyResponse[] = cloneDeep(this.allCompanies).filter(company => ((company.name && company.name.toLowerCase().includes(ev.toLowerCase())) || (company.nameAlias && company.nameAlias.toLowerCase().includes(ev.toLowerCase()))));
+        let companies: CompanyResponse[] = cloneDeep(this.allCompanies).filter(company => ((company && company.name && company.name.toLowerCase().includes(ev.toLowerCase())) || (company.alias && company.alias.toLowerCase().includes(ev.toLowerCase()))));
         this.companyList = cloneDeep(companies);
     }
 

@@ -1,9 +1,11 @@
+@import "../../../../../assets/css/color.scss";
+
 h4 {
     font-size: 18px;
 }
 
-.bdrD {
-    border-bottom: 2px dotted #000;
+.bd-rd {
+    border-bottom: 2px dotted $black;
 }
 
 .lh42 {
@@ -18,19 +20,19 @@ h4 {
     display: block;
 }
 
-.invoice_area {
+.invoice-area {
     max-width: 8.3in;
     float: left;
 }
 
-.invoice_sidebar {
+.invoice-sidebar {
     float: left;
     margin-left: 30px;
     .form-group {
         margin-bottom: 20px;
         .form-control {
-            background: #fff !important;
-            border: 1px solid #d6d6d6;
+            background: $white !important;
+            border: 1px solid $light-gray;
             border-radius: 2px !important;
             padding: 6px !important;
             outline: 0;
@@ -56,7 +58,7 @@ h4 {
         cursor: pointer;
     }
     .btn-primary {
-        background: #e5e5e5;
+        background: $whisper;
     }
 }
 
@@ -98,13 +100,10 @@ h4 {
         padding: 10px 0 0;
         line-height: 20px;
     }
-    .pos-rel {
-        position: relative;
-    }
     .pos-abs {
         position: absolute;
     }
-    .primary-clr {
+    .primary-color {
         color: $color_punch_approx;
     }
     .text-center {
@@ -117,7 +116,7 @@ h4 {
         color: $color_mountain_mist_approx;
     }
     .btn-link {
-        color: #10aae0;
+        color: $deep-sky-blue;
         text-decoration: underline;
     }
     .text-right {
@@ -136,7 +135,7 @@ h4 {
         float: center;
     }
 
-    .mrL2 {
+    .mr-l2 {
         margin-left: 20px;
     }
     .mr-b2 {
@@ -146,8 +145,8 @@ h4 {
         margin-bottom: 10px;
     }
 
-    .bdrB {
-        border-bottom: 1px solid $color_storm_dust_approx;
+    .bd-rb {
+        border-bottom: 1px solid #ddd;
     }
     .pdRL3 {
         padding-right: 30px !important;
@@ -174,7 +173,7 @@ h4 {
 
 #upload_label {
     padding-left: 15px;
-    background: #f6f7f7;
+    background: $alice-blue;
     width: auto;
     display: inline-block;
     line-height: 50px;
@@ -195,20 +194,20 @@ h4 {
     border-left: 1px solid $color_punch_approx !important;
 }
 
-.inv_header {
-    background: #fff8eb;
+.invoice-steps-header {
+    background: $floral-white;
     h1 {
         font-size: 20px;
-        color: #333333;
+        color: $night-rider;
         font-family: "opensans-regular";
         padding: 0;
-        border-bottom: 1px solid #333333;
+        border-bottom: 1px solid $night-rider;
         display: inline-block;
         margin: 28px 0;
     }
     span {
-        color: #e14d26;
-        border-bottom: 1px solid #e14d26;
+        color: $cinnabar-orange;
+        border-bottom: 1px solid $cinnabar-orange;
         display: inline-block;
         font-family: "opensans-regular";
         font-size: 20px;
@@ -220,9 +219,9 @@ h4 {
 
 .head_inv {
     font-size: 16px;
-    color: #333;
+    color: $night-rider;
     padding: 7px 0;
-    border-bottom: 1px solid #bfbfbf;
+    border-bottom: 1px solid $silver;
     margin-top: 20px;
 }
 

@@ -11,8 +11,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as moment from 'moment';
 import { GeneralService } from '../services/general.service';
 import { GeneralActions } from '../actions/general/general.actions';
-import { CurrentPage } from '../models/api-models/Common';
-import { AuditLogsSidebarComponent } from './components/sidebar-components/audit-logs.sidebar.component';
 import { AuditLogsFormComponent } from './components/audit-logs-form/audit-logs-form.component';
 import { GetAuditLogsRequest } from '../models/api-models/Logs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
@@ -58,11 +56,12 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     public auditLogsRequest$: Observable<GetAuditLogsRequest>;
     /** To show clear filter */
     public showClearFilter: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
-
-
-    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private route: ActivatedRoute, private generalActions: GeneralActions,
-    private generalService: GeneralService, private modalService: BsModalService, private router: Router) {
+    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private route: ActivatedRoute, private generalActions: GeneralActions, private generalService: GeneralService, private modalService: BsModalService, private router: Router) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.auditLogsRequest$ = this.store.pipe(select(state => state.auditlog.auditLogsRequest), takeUntil(this.destroyed$));
     }
@@ -73,21 +72,20 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
                 this.isNewVersion = false;
                 if (response.version && String(response.version).toLocaleLowerCase() === 'new') {
                     this.isNewVersion = true;
-                    this.setCurrentPageTitle('Audit-Log > New');
                 }
             } else {
                 this.isNewVersion = false;
             }
         });
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'audit-logs';
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
-                /** Universal date observer */
+        /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
@@ -144,7 +142,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsFormComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -163,19 +161,6 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This function will set the page heading
-    *
-    * @param {string} title
-    * @memberof AuditLogsFormComponent
-    */
-    public setCurrentPageTitle(title: string): void {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = title;
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
-    }
-
-    /**
      * To reset applied filter
      *
      * @memberof AuditLogsComponent
@@ -184,6 +169,6 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
         if (this.isNewVersion && this.auditLogFormComponent) {
             this.auditLogFormComponent.resetFilters();
             this.showClearFilter = false;
-        } 
+        }
     }
 }

@@ -1,3 +1,4 @@
 {
-    "no_data_found" : "No Data Available For This Filter"
+    "loading_message": "loading balance sheet",
+    "no_data_found": "No Data Available For This Filter"
 }

@@ -8,13 +8,11 @@ import {
     OnInit,
     Output,
     SimpleChanges,
-    ViewChild,
-    TemplateRef
+    ViewChild
 } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
-
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import * as moment from 'moment';
@@ -24,13 +22,12 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { InventoryService } from '../../../../services/inventory.service';
 import { CompanyResponse } from "../../../../models/api-models/Company";
 import { Observable, ReplaySubject } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
-import { Store } from "@ngrx/store";
+import { takeUntil } from "rxjs/operators";
+import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../../store";
 import { ShSelectComponent } from "../../../../theme/ng-virtual-select/sh-select.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { InvViewService } from "../../../inv.view.service";
 import { GeneralService } from '../../../../services/general.service';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'branch-transfer-note',
@@ -49,7 +46,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
 
     @Input() public isLoading: boolean;
     @Input() public currentCompany: CompanyResponse;
-    @ViewChild('shDestination', {static: true}) public shDestination: ShSelectComponent;
+    @ViewChild('shDestination', { static: true }) public shDestination: ShSelectComponent;
 
     public hideForm = false;
     public stockListOptions: IOption[];
@@ -57,7 +54,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
     public userListOptions: IOption[];
     public branchListOptions: IOption[];
     public form: FormGroup;
-    public config: Partial<BsDatepickerConfig> = { dateInputFormat: 'DD-MM-YYYY' };
+    public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     public mode: 'receiver' | 'product' = 'product';
     public today = new Date();
     public editLinkedStockIdx: any = null;
@@ -69,19 +66,12 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
     public stockUnitCode: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-
     constructor(
         private _generalService: GeneralService, private _fb: FormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
-        private _zone: NgZone, private _store: Store<AppState>, private invViewService: InvViewService, private _router: Router) {
+        private _zone: NgZone, private _store: Store<AppState>) {
         this.initializeForm(true);
-        this.entrySuccess$ = this._store.select(s => s.inventoryInOutState.entrySuccess).pipe(takeUntil(this.destroyed$));
+        this.entrySuccess$ = this._store.pipe(select(s => s.inventoryInOutState.entrySuccess), takeUntil(this.destroyed$));
     }
-
-    /* setModalClass() {
-         this.valueWidth = !this.valueWidth;
-         const modalWidth = this.valueWidth ? 'modal-xl' : 'modal-sm';
-         this.modalRef.setClass(modalWidth);
-     }*/
 
     public get transferDate(): FormControl {
         return this.form.get('transferDate') as FormControl;
@@ -134,7 +124,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
             entity: null
         };
         this.manufacturingDetails.disable();
-        this.isManufactured.valueChanges.subscribe(val => {
+        this.isManufactured.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(val => {
             this.manufacturingDetails.reset();
             val ? this.manufacturingDetails.enable() : this.manufacturingDetails.disable();
         });
@@ -154,13 +144,13 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
             if (this.currentCompany.uniqueName) {
                 this.InventoryEntryValue.source.uniqueName = this.currentCompany.uniqueName;
                 this.InventoryEntryValue.source.entity = 'company';
-                this.inventorySource.patchValue(this.currentCompany.uniqueName);
+                this.inventorySource?.patchValue(this.currentCompany.uniqueName);
             }
         });
     }
     public initializeForm(initialRequest: boolean = false) {
         this.form = this._fb.group({
-            transferDate: [moment().format('DD-MM-YYYY'), Validators.required],
+            transferDate: [moment().format(GIDDH_DATE_FORMAT), Validators.required],
             transfers: this._fb.array([], Validators.required),
             description: [''],
             inventoryUser: [],
@@ -200,7 +190,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
         }
         this.mode = mode;
         this.form.reset();
-        this.transferDate.patchValue(moment().format('DD-MM-YYYY'));
+        this.transferDate?.patchValue(moment().format(GIDDH_DATE_FORMAT));
         this.transfers.controls = this.transfers.controls.filter(trx => false);
         this.setSource();
         if (this.mode === 'receiver') {
@@ -298,20 +288,20 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
             }
             if (index) {
                 const control = items.at(index);
-                control.patchValue({ ...control.value, entityDetails });
-                control.get('stockUnit').patchValue(this.stockUnitCode);
+                control?.patchValue({ ...control.value, entityDetails });
+                control.get('stockUnit')?.patchValue(this.stockUnitCode);
             } else {
-                items.controls.forEach(c => c.patchValue({ ...c.value, entityDetails }));
+                items.controls.forEach(c => c?.patchValue({ ...c.value, entityDetails }));
             }
         } else {
 
             if (index) {
                 const control = items.at(index);
-                control.patchValue({
+                control?.patchValue({
                     ...control.value
                 });
             } else {
-                items.controls.forEach(c => c.patchValue({ ...c.value }));
+                items.controls.forEach(c => c?.patchValue({ ...c.value }));
             }
         }
     }
@@ -343,9 +333,9 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
 
                 if (stockDetails.body && stockDetails.body.manufacturingDetails) {
                     let mfd = stockDetails.body.manufacturingDetails;
-                    this.isManufactured.patchValue(true);
+                    this.isManufactured?.patchValue(true);
 
-                    this.manufacturingDetails.patchValue({
+                    this.manufacturingDetails?.patchValue({
                         manufacturingQuantity: mfd.manufacturingQuantity,
                         manufacturingUnitCode: mfd.manufacturingUnitCode
                     });
@@ -355,7 +345,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
                     });
 
                 } else {
-                    this.isManufactured.patchValue(false);
+                    this.isManufactured?.patchValue(false);
                 }
 
             } catch (e) {
@@ -369,10 +359,10 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
 
         if (index || index === 0) {
             const control = items.at(index);
-            control.patchValue({ ...control.value, entityDetails });
-            control.get('stockUnit').patchValue(stockUnit);
+            control?.patchValue({ ...control.value, entityDetails });
+            control.get('stockUnit')?.patchValue(stockUnit);
         } else {
-            items.controls.forEach(c => c.patchValue({ ...c.value, entityDetails }));
+            items.controls.forEach(c => c?.patchValue({ ...c.value, entityDetails }));
         }
     }
 
@@ -396,7 +386,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
         } else {
             const stockItem = this.stockList.find(p => p.uniqueName === uniqueName);
             const stockUnit = stockItem ? stockItem.stockUnit.code : null;
-            control.at(i).get('stockUnitCode').patchValue(stockUnit);
+            control.at(i).get('stockUnitCode')?.patchValue(stockUnit);
             this.disableStockButton = false;
         }
     }
@@ -406,19 +396,19 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
         const items = this.transfers;
         const control = items.at(index);
         if (type === 'qty' && control.value.quantity) {
-            control.get('quantity').patchValue(this.removeExtraChar(control.value.quantity));
+            control.get('quantity')?.patchValue(this.removeExtraChar(control.value.quantity));
         }
         if (type === 'rate' && control.value.rate) {
-            control.get('rate').patchValue(this.removeExtraChar(control.value.rate));
+            control.get('rate')?.patchValue(this.removeExtraChar(control.value.rate));
         }
 
         if (control.value && control.value.quantity && control.value.rate) {
-            control.get('totalValue').patchValue((parseFloat(control.value.quantity) * parseFloat(control.value.rate)).toFixed(2));
+            control.get('totalValue')?.patchValue((parseFloat(control.value.quantity) * parseFloat(control.value.rate)).toFixed(2));
         }
     }
 
     public removeExtraChar(val) {
-        return val.replace(/[^0-9.]/g, "");
+        return (val) ? val.replace(/[^0-9.]/g, "") : "";
     }
 
     public addItemInLinkedStocks(item, i?: number, lastIdx?) {
@@ -437,7 +427,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
             } else {
                 let isValid = this.validateLinkedStock(item);
                 if (isValid) {
-                    frmgrp.patchValue(item);
+                    frmgrp?.patchValue(item);
                     control.controls[i] = frmgrp;
                 } else {
                     return this._toasty.errorToast('All fields are required.');
@@ -493,7 +483,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
                 this.InventoryEntryValue.transferProducts = true
             }
 
-            this.InventoryEntryValue.transferDate = moment(this.transferDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY');
+            this.InventoryEntryValue.transferDate = moment(this.transferDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             this.InventoryEntryValue.description = this.description.value;
             this.InventoryEntryValue.transfers = rawValues
 
@@ -536,5 +526,15 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
 
     public openBranchTransferPopup(transferType) {
         this._generalService.invokeEvent.next(["openbranchtransferpopup", transferType]);
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof BranchTransferNoteComponent
+     */
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

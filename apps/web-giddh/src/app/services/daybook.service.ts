@@ -25,25 +25,27 @@ export class DaybookService {
     public GetDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + DAYBOOK_SEARCH_API.SEARCH
+        let url = this.config.apiUrl + DAYBOOK_SEARCH_API.SEARCH
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':page', queryRequest.page.toString())
             .replace(':count', queryRequest.count.toString())
             .replace(':from', encodeURIComponent(queryRequest.from))
-            .replace(':to', encodeURIComponent(queryRequest.to)), request).pipe(
-                map((res) => {
-                    let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
-                    data.request = request;
-                    data.queryString = queryRequest;
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request, queryRequest)));
+            .replace(':to', encodeURIComponent(queryRequest.to));
+        url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(queryRequest.branchUniqueName) : ''}`);
+        return this._http.post(url, request).pipe(
+            map((res) => {
+                let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
+                data.request = request;
+                data.queryString = queryRequest;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request, queryRequest)));
     }
 
     public ExportDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + DAYBOOK_SEARCH_API.EXPORT
+        let url = this.config.apiUrl + DAYBOOK_SEARCH_API.EXPORT
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':page', queryRequest.page.toString())
             .replace(':count', queryRequest.count.toString())
@@ -51,20 +53,25 @@ export class DaybookService {
             .replace(':to', encodeURIComponent(queryRequest.to))
             .replace(':format', queryRequest.format.toString())
             .replace(':type', queryRequest.type.toString())
-            .replace(':sort', queryRequest.sort.toString())).pipe(
-                map((res) => {
-                    let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
-                    data.queryString = queryRequest;
-                    data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request)));
+            .replace(':sort', queryRequest.sort.toString());
+        if (queryRequest.branchUniqueName) {
+            queryRequest.branchUniqueName = queryRequest.branchUniqueName !== this.companyUniqueName ? queryRequest.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName}`);
+        }
+        return this._http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
+                data.queryString = queryRequest;
+                data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request)));
     }
 
     public ExportDaybookPost(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + DAYBOOK_SEARCH_API.EXPORT
+        let url = this.config.apiUrl + DAYBOOK_SEARCH_API.EXPORT
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':page', queryRequest.page.toString())
             .replace(':count', queryRequest.count.toString())
@@ -72,14 +79,18 @@ export class DaybookService {
             .replace(':to', encodeURIComponent(queryRequest.to))
             .replace(':format', queryRequest.format.toString())
             .replace(':type', queryRequest.type.toString())
-            .replace(':sort', queryRequest.sort.toString()), request).pipe(
-                map((res) => {
-                    let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
-                    data.request = request;
-                    data.queryString = queryRequest;
-                    data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request)));
+            .replace(':sort', queryRequest.sort.toString());
+        if (queryRequest.branchUniqueName) {
+            queryRequest.branchUniqueName = queryRequest.branchUniqueName !== this.companyUniqueName ? queryRequest.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName}`);
+        }
+        return this._http.post(url, request).pipe(map((res) => {
+            let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
+            data.request = request;
+            data.queryString = queryRequest;
+            data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
+            return data;
+        }),
+            catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request)));
     }
 }

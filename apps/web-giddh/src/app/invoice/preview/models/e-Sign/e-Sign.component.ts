@@ -1,13 +1,10 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { Esignature, PreviewInvoiceResponseClass } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
 import { AppState } from '../../../../store/roots';
-import { Store } from '@ngrx/store';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Store, select } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
-import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
@@ -17,6 +14,8 @@ import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
 
 export class EsignModalComponent implements OnInit, OnDestroy {
     @Input() public base64Data: string;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
     @Output() public confirmDeleteEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
@@ -25,14 +24,14 @@ export class EsignModalComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private _toasty: ToasterService, private sanitizer: DomSanitizer,
-        private store: Store<AppState>, private invoiceActions: InvoiceActions,
+        private _toasty: ToasterService,
+        private store: Store<AppState>
     ) {
         // this.eSignModel.authToken = '3Ru6iWp1qoWpjkz90fvRzheO8M0KpLxP0TEEk08jKfXL/4NdJUisPtWFw7A0gIja';
     }
 
     public ngOnInit() {
-        this.store.select(p => p.invoice.invoiceData).pipe(takeUntil(this.destroyed$)).subscribe((o: PreviewInvoiceResponseClass) => {
+        this.store.pipe(select(p => p.invoice.invoiceData), takeUntil(this.destroyed$)).subscribe((o: PreviewInvoiceResponseClass) => {
             if (o && o.dataPreview) {
                 this.eSignModel.ReferenceNumber = o.uniqueName;
                 this.eSignModel.Name = o.company.name;
@@ -54,7 +53,7 @@ export class EsignModalComponent implements OnInit, OnDestroy {
                 eSignForm.submit();
                 this.closeModelEvent.emit(true);
             } else {
-                this._toasty.errorToast('Invalid Aadhar No:' + this.eSignModel.AadhaarNumber);
+                this._toasty.errorToast(this.localeData?.invalid_aadhar_no + this.eSignModel.AadhaarNumber);
             }
         } else {
             eSignForm.submit();

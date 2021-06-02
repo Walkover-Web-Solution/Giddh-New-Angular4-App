@@ -1,7 +1,6 @@
 import {
     AfterViewInit,
     Component,
-    ComponentFactoryResolver,
     EventEmitter,
     Input,
     OnDestroy,
@@ -14,14 +13,12 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { ModalOptions } from 'ngx-bootstrap/modal';
-import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
-
 import { CommonActions } from '../actions/common.actions';
 import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
-import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { OnBoardingType, DEFAULT_SIGNUP_TRIAL_PLAN } from '../app.constant';
 import * as _ from '../lodash-optimized';
 import { CountryRequest, OnboardingFormRequest } from '../models/api-models/Common';
@@ -92,7 +89,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         baseCurrency: '',
         isMultipleCurrency: false,
         city: '',
-        pincode: '',
         email: '',
         taxes: [],
         userBillingDetails: {
@@ -115,7 +111,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         address: '',
         isDefault: false,
         stateName: '',
-        taxNumber: ''
+        taxNumber: '',
+        pincode: ''
     };
 
     public subscriptionPlan: CreateCompanyUsersPlan = {
@@ -182,15 +179,15 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() isApiInProgress: boolean;
 
     /** States dropdown instance */
-    @ViewChild('states', {static: true}) statesDropdown: ShSelectComponent;
+    @ViewChild('states', { static: true }) statesDropdown: ShSelectComponent;
     /** GST number field */
-    @ViewChild('gstNumberField', {static: true}) gstNumberField: ElementRef<any>;
+    @ViewChild('gstNumberField', { static: true }) gstNumberField: ElementRef<any>;
     /** Contact number field */
-    @ViewChild('mobileNoEl', {static: true}) contactNumberField: ElementRef<any>;
+    @ViewChild('mobileNoEl', { static: true }) contactNumberField: ElementRef<any>;
     /** Address field */
-    @ViewChild('address', {static: true}) addressField: ElementRef<any>;
+    @ViewChild('address', { static: true }) addressField: ElementRef<any>;
     /** Form instance */
-    @ViewChild('welcomeForm', {static: true}) welcomeForm: NgForm;
+    @ViewChild('welcomeForm', { static: true }) welcomeForm: NgForm;
 
     /**
      * Returns true, if onboarding of Warehouse is going on
@@ -207,6 +204,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public isCreateCompanyInProgress: boolean = false;
     public isCompanyCreated$: Observable<boolean>;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
@@ -222,16 +223,12 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.companyProfileObj = {};
         this.store.dispatch(this._generalActions.resetStatesList());
         this.store.dispatch(this.commonActions.resetOnboardingForm());
-        this.store.select(state => {
-            if (!state.session.companies) {
-                return;
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
             }
-            state.session.companies.forEach(cmp => {
-                if (cmp.uniqueName === state.session.companyUniqueName) {
-                    this.activeCompany = cmp;
-                }
-            });
-        }).pipe(takeUntil(this.destroyed$)).subscribe();
+        });
     }
 
     public ngOnInit() {
@@ -270,7 +267,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             });
         }
         if (!this.isOnBoardingInProgress) {
-            this._companyService.GetAllBusinessNatureList().subscribe((businessNatureResponse) => {
+            this._companyService.GetAllBusinessNatureList().pipe(takeUntil(this.destroyed$)).subscribe((businessNatureResponse) => {
                 if (businessNatureResponse && businessNatureResponse.body) {
                     _.map(businessNatureResponse.body, (businessNature) => {
                         this.businessNatureList.push({ label: businessNature, value: businessNature });
@@ -287,17 +284,15 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.loggedInUser = this._generalService.user;
-        this.subscriptionRequestObj.userUniqueName = this.loggedInUser.uniqueName;
+        this.subscriptionRequestObj.userUniqueName = (this.loggedInUser) ? this.loggedInUser.uniqueName : "";
 
         this.store.pipe(select(state => state.session.isCompanyCreated), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response) {
-                if(this.activeCompany === undefined) {
-                    setTimeout(() => {
-                        if (this._router.url.includes("welcome")) {
-                            this._router.navigate(['/pages/onboarding']);
-                        }
-                    }, 2000);
-                }
+            if (response) {
+                setTimeout(() => {
+                    if (this._router.url.includes("welcome")) {
+                        this._router.navigate(['/pages/onboarding']);
+                    }
+                }, 2000);
             }
         });
     }
@@ -387,7 +382,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }
             let gstDetails = this.prepareGstDetail(this.companyProfileObj);
-            if (gstDetails.taxNumber || gstDetails.address || gstDetails.stateCode) {
+            if (gstDetails.taxNumber || gstDetails.address || gstDetails.stateCode || gstDetails.pincode) {
                 this.createNewCompanyPreparedObj.addresses.push(gstDetails);
             } else {
                 this.createNewCompanyPreparedObj.addresses = [];
@@ -404,15 +399,14 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.createCompany();
                 }
             }, 100);
-            //this._router.navigate(['select-plan']);
         } else {
             this.isCreateCompanyInProgress = false;
-            if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
+            if (this.itemOnBoardingDetails && this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
                 if (this.isItemUpdateInProgress) {
                     // Check for contact number validity only for update flow of warehouse as
                     // the create warehouse validation will be performed in on-boarding component
                     isWelcomeFormValid = this.isContactNumberValid();
-                    if (!isWelcomeFormValid && this.contactNumberField) {
+                    if (!isWelcomeFormValid && this.contactNumberField && this.contactNumberField.nativeElement) {
                         this.contactNumberField.nativeElement.focus();
                     }
                 }
@@ -459,6 +453,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.addressesObj.taxNumber = obj.taxNumber || '';
         this.addressesObj.stateCode = obj.state || '';
         this.addressesObj.address = obj.address || '';
+        this.addressesObj.pincode = obj.pincode;
         this.addressesObj.isDefault = false;
         this.addressesObj.stateName = this.selectedstateName ? this.selectedstateName.split('-')[1] : '';
         return this.addressesObj;
@@ -480,7 +475,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
 
             if (!isValid) {
-                this._toasty.errorToast('Invalid ' + this.formFields['taxName'].label);
+                let text = this.commonLocaleData?.app_invalid_tax_name;
+                text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                this._toasty.errorToast(text);
                 ele.classList.add('error-box');
                 this.isGstValid = false;
             } else {
@@ -511,10 +508,15 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                         statesEle.setDisabledState(true);
 
                     } else {
-                        this.companyProfileObj.state = '';
                         statesEle.setDisabledState(false);
                         this._toasty.clearAllToaster();
-                        this._toasty.warningToast('Invalid ' + this.formFields['taxName'].label);
+
+                        if (this.formFields['taxName'] && !this.welcomeForm.form.get('gstNumber')?.valid) {
+                            let text = this.commonLocaleData?.app_invalid_tax_name;
+                            text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                            this._toasty.warningToast(text);
+                            this.companyProfileObj.state = '';
+                        }
                     }
                 });
             } else {
@@ -532,6 +534,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.companyProfileObj.taxType = '';
             this.companyProfileObj.selectedState = '';
             this.companyProfileObj.state = '';
+            this.companyProfileObj.pincode = '';
             this.forceClear$ = observableOf({ status: true });
             this.isTaxNumberSameAsHeadQuarter = 0;
 
@@ -606,7 +609,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.getStates();
             } else {
                 let countryRequest = new CountryRequest();
-                if (this.isOnBoardingInProgress) {
+                if (this.isOnBoardingInProgress && this.itemOnBoardingDetails) {
                     countryRequest.formName = this.itemOnBoardingDetails.onBoardingType.toLowerCase();
                 } else {
                     countryRequest.formName = 'onboarding';
@@ -677,7 +680,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.reFillTax();
             } else {
                 let onboardingFormRequest = new OnboardingFormRequest();
-                if (this.isOnBoardingInProgress) {
+                if (this.isOnBoardingInProgress && this.itemOnBoardingDetails) {
                     onboardingFormRequest.formName = this.itemOnBoardingDetails.onBoardingType.toLowerCase();
                 } else {
                     onboardingFormRequest.formName = 'onboarding';
@@ -807,20 +810,26 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     public isContactNumberValid(): boolean {
-        const contactNumberElement = this.contactNumberField.nativeElement;
+        const contactNumberElement = (this.contactNumberField && this.contactNumberField.nativeElement) ? this.contactNumberField.nativeElement : undefined;
         try {
             let parsedNumber = parsePhoneNumberFromString('+' + this.createNewCompanyPreparedObj.phoneCode + contactNumberElement.value, this.company.country as CountryCode);
             if (parsedNumber.isValid()) {
-                contactNumberElement.classList.remove('error-box');
+                if (contactNumberElement) {
+                    contactNumberElement.classList.remove('error-box');
+                }
                 return true;
             } else {
-                this._toasty.errorToast('Invalid Contact number');
-                contactNumberElement.classList.add('error-box');
+                this._toasty.errorToast(this.localeData?.invalid_contact_number_error);
+                if (contactNumberElement) {
+                    contactNumberElement.classList.add('error-box');
+                }
                 return false;
             }
         } catch (error) {
-            this._toasty.errorToast('Invalid Contact number');
-            contactNumberElement.classList.add('error-box');
+            this._toasty.errorToast(this.localeData?.invalid_contact_number_error);
+            if (contactNumberElement) {
+                contactNumberElement.classList.add('error-box');
+            }
             return false;
         }
     }
@@ -832,8 +841,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     public handleNameChange(itemName: string = ''): void {
-        if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
-            if (itemName.length > 100) {
+        if (this.itemOnBoardingDetails && this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
+            if (itemName && itemName.length > 100) {
                 this.welcomeForm.form.controls['name'].setErrors({ 'maxlength': true });
             }
         }
@@ -846,7 +855,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     public validateName(itemName: string = ''): void {
-        if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
+        if (this.itemOnBoardingDetails && this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
             setTimeout(() => {
                 if (itemName) {
                     itemName = itemName.trim();
@@ -869,7 +878,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     private fillOnBoardingDetails(entity: string): void {
-        if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
+        if (this.itemOnBoardingDetails && this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
             /*  For warehouse, if the warehouse item has detais then fill the form
                 with those details else search the default warehouse and fill with
                 default warehouse details. At last, if the details are not found
@@ -1034,10 +1043,110 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     public createBranch(): void {
-        this._companyService.createNewBranch(this.activeCompany.uniqueName, this.createNewCompanyPreObj).subscribe(data => {
+        this._companyService.createNewBranch(this.activeCompany.uniqueName, this.createNewCompanyPreObj).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
             this.store.dispatch(this.companyActions.removeCompanyCreateSession());
             this._router.navigate(['pages/settings/branch']);
         });
+    }
+
+    /**
+     * This will return onboarding type name text
+     *
+     * @returns {string}
+     * @memberof WelcomeComponent
+     */
+    public getOnboardingTypeNameText(): string {
+        let text = this.localeData?.onboarding_name;
+        let onboardingType = "";
+
+        if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
+            onboardingType = this.commonLocaleData?.app_branch;
+        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
+            onboardingType = this.commonLocaleData?.app_company;
+        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
+            onboardingType = this.commonLocaleData?.app_warehouse;
+        }
+        
+        text = text?.replace("[ONBOARDING_TYPE]", onboardingType);
+        return text;
+    }
+
+    /**
+     * This will return enter tax text
+     *
+     * @returns {string}
+     * @memberof WelcomeComponent
+     */
+    public getEnterTaxText(): string {
+        let text = this.localeData?.enter_tax;
+        text = text?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
+        return text;
+    }
+
+    /**
+     * This will return onboarding type address text
+     *
+     * @returns {string}
+     * @memberof WelcomeComponent
+     */
+    public getOnboardingTypeAddressText(): string {
+        let text = this.localeData?.onboarding_address;
+        let onboardingType = "";
+
+        if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
+            onboardingType = this.commonLocaleData?.app_branch;
+        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
+            onboardingType = this.commonLocaleData?.app_company;
+        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
+            onboardingType = this.commonLocaleData?.app_warehouse;
+        }
+        
+        text = text?.replace("[ONBOARDING_TYPE]", onboardingType);
+        return text;
+    }
+
+    /**
+     * This will return create onboarding type text
+     *
+     * @returns {string}
+     * @memberof WelcomeComponent
+     */
+    public getCreateOnboardingTypeText(): string {
+        let text = this.localeData?.create_onboarding;
+        let onboardingType = "";
+
+        if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
+            onboardingType = this.commonLocaleData?.app_branch;
+        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
+            onboardingType = this.commonLocaleData?.app_company;
+        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
+            onboardingType = this.commonLocaleData?.app_warehouse;
+        }
+        
+        text = text?.replace("[ONBOARDING_TYPE]", onboardingType);
+        return text;
+    }
+
+    /**
+     * This will return update onboarding type text
+     *
+     * @returns {string}
+     * @memberof WelcomeComponent
+     */
+    public getUpdateOnboardingTypeText(): string {
+        let text = this.localeData?.update_onboarding;
+        let onboardingType = "";
+
+        if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
+            onboardingType = this.commonLocaleData?.app_branch;
+        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
+            onboardingType = this.commonLocaleData?.app_company;
+        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
+            onboardingType = this.commonLocaleData?.app_warehouse;
+        }
+        
+        text = text?.replace("[ONBOARDING_TYPE]", onboardingType);
+        return text;
     }
 }

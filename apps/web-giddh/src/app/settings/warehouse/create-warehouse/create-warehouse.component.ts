@@ -1,8 +1,8 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -34,7 +34,7 @@ import { SettingsUtilityService } from '../../services/settings-utility.service'
     ]
 })
 
-export class CreateWarehouseComponent implements OnInit {
+export class CreateWarehouseComponent implements OnInit, OnDestroy {
 
     /** Address aside menu state */
     public addressAsideMenuState: string = 'out';
@@ -68,8 +68,16 @@ export class CreateWarehouseComponent implements OnInit {
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
 
+    public imgPath: string = '';
+
     /** Unsubscribe from listener */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold profile JSON data */
+    public profileLocaleData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private commonService: CommonService,
@@ -87,7 +95,7 @@ export class CreateWarehouseComponent implements OnInit {
             address: [''],
             // linkedEntity: [[]]
         });
-        this.store.select(appState => appState.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.name) {
                 this.companyDetails = {
                     name: response.name,
@@ -99,7 +107,7 @@ export class CreateWarehouseComponent implements OnInit {
                         currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                     }
                 }
-                this.warehouseForm.get('name').patchValue(this.companyDetails.country.name);
+                this.warehouseForm.get('name')?.patchValue(this.companyDetails.country.name);
                 if (!this.addressConfiguration.stateList.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
@@ -122,7 +130,7 @@ export class CreateWarehouseComponent implements OnInit {
             linkedEntity: [[]],
             address: ['']
         });
-        this.store.select(appState => appState.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.name) {
                 this.companyDetails = {
                     name: response.name,
@@ -134,13 +142,15 @@ export class CreateWarehouseComponent implements OnInit {
                         currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                     }
                 }
-                this.warehouseForm.get('name').patchValue(this.companyDetails.country.name);
+                this.warehouseForm.get('name')?.patchValue(this.companyDetails.country.name);
                 if (!this.addressConfiguration.stateList.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
                 }
             }
         });
+
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-image.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-image.svg';
     }
 
     /**
@@ -198,7 +208,7 @@ export class CreateWarehouseComponent implements OnInit {
         }
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
-            this.warehouseForm.get('address').patchValue([
+            this.warehouseForm.get('address')?.patchValue([
                 ...(this.warehouseForm.get('address').value || []),
                 option.value
             ]);
@@ -218,16 +228,16 @@ export class CreateWarehouseComponent implements OnInit {
         // }));
         const requestObj = {
             name: this.warehouseForm.value.name,
-            linkAddresses: this.addresses.filter(address => this.warehouseForm.value.address.includes(address.uniqueName)).map(filteredAddress => ({
+            linkAddresses: this.addresses?.filter(address => this.warehouseForm.value.address.includes(address.uniqueName))?.map(filteredAddress => ({
                 uniqueName: filteredAddress.uniqueName,
                 isDefault: filteredAddress.isDefault
             })),
             // linkEntity
         };
-        this.settingsProfileService.createNewWarehouse(requestObj).subscribe(response => {
+        this.settingsProfileService.createNewWarehouse(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
-                    this.toastService.successToast('Warehouse created successfully');
+                    this.toastService.successToast(this.localeData?.warehouse_created);
                     this.warehouseForm.reset();
                     this.router.navigate(['/pages/settings/warehouse']);
                 } else {
@@ -266,7 +276,7 @@ export class CreateWarehouseComponent implements OnInit {
      * @memberof CreateWarehouseComponent
      */
     public loadStates(countryCode: string): void {
-        this.companyService.getAllStates({ country: countryCode }).subscribe(response => {
+        this.companyService.getAllStates({ country: countryCode }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
                 this.addressConfiguration.stateList = [];
@@ -302,10 +312,11 @@ export class CreateWarehouseComponent implements OnInit {
             stateName: chosenState ? chosenState.stateName : '',
             address: addressDetails.formValue.address,
             name: addressDetails.formValue.name,
+            pincode: addressDetails.formValue.pincode,
             linkEntity
         };
 
-        this.settingsProfileService.createNewAddress(requestObj).subscribe((response: any) => {
+        this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response.status === 'success' && response.body) {
                 this.toggleAddressAsidePane();
                 this.addresses.push({
@@ -313,7 +324,9 @@ export class CreateWarehouseComponent implements OnInit {
                     label: response.body.name,
                     value: response.body.uniqueName
                 })
-                this.toastService.successToast('Address created successfully');
+                this.toastService.successToast(this.profileLocaleData?.address_created);
+            } else {
+                this.toastService.errorToast(response.message);
             }
             this.isAddressChangeInProgress = false;
         }, () => {
@@ -331,7 +344,7 @@ export class CreateWarehouseComponent implements OnInit {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
         onboardingFormRequest.country = countryCode;
-        this.commonService.getOnboardingForm(onboardingFormRequest).subscribe((response: any) => {
+        this.commonService.getOnboardingForm(onboardingFormRequest).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === 'success') {
                 if (response.body && response.body.fields && response.body.fields.length > 0) {
                     const taxField = response.body.fields.find(field => field && field.name === 'taxName');
@@ -350,7 +363,7 @@ export class CreateWarehouseComponent implements OnInit {
      * @memberof CreateWarehouseComponent
      */
     public loadLinkedEntities(successCallback?: Function): void {
-        this.settingsProfileService.getAllLinkedEntities().subscribe(response => {
+        this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.addressConfiguration.linkedEntities = response.body.map(result => ({
                     ...result,
@@ -389,7 +402,7 @@ export class CreateWarehouseComponent implements OnInit {
      * @memberof CreateWarehouseComponent
      */
     private loadAddresses(method: string, params?: any): void {
-        this.settingsProfileService.getCompanyAddresses(method, params).subscribe((response) => {
+        this.settingsProfileService.getCompanyAddresses(method, params).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body && response.status === 'success') {
                 this.addresses = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
                     {
@@ -453,10 +466,12 @@ export class CreateWarehouseComponent implements OnInit {
     /**
      * Unsubscribe from all listeners
      *
-     * @memberof CreateAddressComponent
+     * @memberof CreateWarehouseComponent
      */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('fixed');
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
 }

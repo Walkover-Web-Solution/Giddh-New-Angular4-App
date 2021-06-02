@@ -1,10 +1,10 @@
-@import '../../../../assets/css/color.scss';
+@import "../../../../assets/css/color.scss";
 
-.mx-300 {
+.max-width-300 {
     max-width: 300px;
 }
 
-.mx-350 {
+.max-width-350 {
     max-width: 350px;
 }
 
@@ -30,10 +30,22 @@
     line-height: 24px;
 }
 
-.mx-300 label {
+.max-width-300 label {
     width: 130px;
 }
 
-.mx-350 label {
+.max-width-350 label {
     width: 160px;
+}
+
+.invoice-width {
+    width: 128px !important;
+}
+
+.invoice-no-width {
+    max-width: 200px !important;
+}
+
+.modal-dialog {
+    width: 298px !important;
 }

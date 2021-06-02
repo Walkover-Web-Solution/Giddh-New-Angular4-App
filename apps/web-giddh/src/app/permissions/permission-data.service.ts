@@ -1,7 +1,7 @@
-import { Store } from '@ngrx/store';
+import { Store, select, createSelector } from '@ngrx/store';
 import { AppState } from './../store/roots';
 import { Injectable } from '@angular/core';
-import { createSelector } from 'reselect';
+import { take } from 'rxjs/operators';
 
 export interface IScope {
     name: string;
@@ -23,24 +23,26 @@ export class PermissionDataService {
     private createdBy: CompanyData;
 
     constructor(private store: Store<AppState>) {
-        this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
             let currentCompany = companies.find((company) => company.uniqueName === uniqueName);
             this.getCompany = currentCompany;
-            if (currentCompany && currentCompany.userEntityRoles && currentCompany.userEntityRoles.length) {
-                let superAdminIndx = currentCompany.userEntityRoles.findIndex((role) => {
-                    return (role.entity.entity === 'COMPANY' && role.role.uniqueName === 'super_admin');
-                });
-                let companyEntityIndx = superAdminIndx !== -1 ? superAdminIndx : null;
-                if (!companyEntityIndx) {
-                    companyEntityIndx = currentCompany.userEntityRoles.findIndex((role) => {
-                        return (role.entity.entity === 'COMPANY');
+            this.store.pipe(select(state => state.session.companyUser)).subscribe(response => {
+                if (response && response.userEntityRoles && response.userEntityRoles.length) {
+                    let superAdminIndx = response.userEntityRoles.findIndex((role) => {
+                        return (role.entity.entity === 'COMPANY' && role.role.uniqueName === 'super_admin');
                     });
+                    let companyEntityIndx = superAdminIndx !== -1 ? superAdminIndx : null;
+                    if (!companyEntityIndx) {
+                        companyEntityIndx = response.userEntityRoles.findIndex((role) => {
+                            return (role.entity.entity === 'COMPANY');
+                        });
+                    }
+                    companyEntityIndx = companyEntityIndx !== -1 ? companyEntityIndx : 0;
+                    this.isUserSuperAdmin = superAdminIndx !== -1 ? true : false;
+                    this.getData = response.userEntityRoles[companyEntityIndx].role.scopes;
                 }
-                companyEntityIndx = companyEntityIndx !== -1 ? companyEntityIndx : 0;
-                this.isUserSuperAdmin = superAdminIndx !== -1 ? true : false;
-                this.getData = currentCompany.userEntityRoles[companyEntityIndx].role.scopes;
-            }
-        })).subscribe();
+            });
+        }))).subscribe();
     }
 
     private _isUserSuperAdmin: boolean = false;

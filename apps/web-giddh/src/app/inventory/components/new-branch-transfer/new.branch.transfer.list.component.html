@@ -1,15 +1,41 @@
-<div class="branch-transfer-report">
+<div class="branch-transfer-report pd-t1">
     <div class="container-fluid">
         <div class="d-flex date-advance-search">
-            <div class="d-flex">
-                <div class="input-group">
-                    <span class="input-wrapper">
-                        <input class="form-control" placeholder="Filter by Date" [(ngModel)]="datePicker"
-                            (bsValueChange)="changeFilterDate($event)" bsDaterangepicker #dpr="bsDaterangepicker"
-                            [bsConfig]="bsConfig" />
-                    </span>
+            <div class="d-flex flex-sm-row flex-column branch-transfer-flex">
+                <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                    class="input-group form-group linked-entities mb-0">
+                    <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
+                        class="branch-dropdown" [showClear]="false" [ItemHeight]="33" width="100%"
+                        (selected)="handleBranchChange($event)" [isFilterEnabled]="true" placeholder="Select Entity"
+                        [fixedValue]="currentBranch?.alias">
+                        <ng-template #optionTemplate let-option="option">
+                            <ng-container>
+                                <a href="javascript:void(0)" class="list-item d-flex">
+                                    <span class="entity-icon">
+                                        <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
+                                            tooltip="Branch"></i>
+                                        <i class="icon-company-profile pull-right" *ngIf="option.isCompany"
+                                            tooltip="Company"></i>
+                                    </span>
+                                    <span class="entity-details">
+                                        <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                        <div class="item-unique giddh-limit single-line-clamp">
+                                            {{ option.name || '-' }}
+                                        </div>
+                                    </span>
+                                </a>
+                            </ng-container>
+                        </ng-template>
+                    </sh-select>
                 </div>
-                <div class="advance-icon pointer mobile-none" tooltip="Advance Search" (click)="openSearchModal(template)">
+                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                    <i class="icon-calender calendar-addon"></i>
+                    <input type="text" name="selectedDateRange"
+                        [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                        class="giddh-datepicker date-range-picker" />
+                </div>
+                <div class="advance-icon pointer mobile-none" tooltip="Advance Search"
+                    (click)="openSearchModal(template)">
                     <span class="icon-advance-filter"></span>
                 </div>
             </div>
@@ -20,7 +46,8 @@
                 </div>
             </div>
             <div class="clearfix">
-                <button class="btn btn-sky-blue pull-right mr-0 mobile-none" data-toggle="tooltip" tooltip="Alt+N"
+                <button *ngIf="!(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)"
+                    class="btn btn-sky-blue pull-right mr-0 mobile-none" data-toggle="tooltip" tooltip="Alt+N"
                     (click)="toggleTransferAsidePane()">+ New Transfer</button>
             </div>
         </div>
@@ -30,51 +57,95 @@
                     <tr (clickOutside)="inlineSearch = null">
                         <th width="3%">#</th>
                         <th width="10%" (click)="sortBranchTransferList('dateOfSupply')">Date <span
-                                [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : branchTransferGetRequestParams.sortBy === 'dateOfSupply', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'dateOfSupply' || (branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-dsc': branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'desc'}"></span>
+                                [ngClass]="{'sorting-icon icon-pointer': 1 === 1, 'active-text-color' : branchTransferGetRequestParams.sortBy === 'dateOfSupply', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'dateOfSupply' || (branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-dsc': branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'desc'}"></span>
                         </th>
                         <th width="20%">Voucher Type</th>
                         <th width="20%">Voucher No.</th>
-                        <th width="17%" class="bdrR bdrB td-search-box">
-                            <div [hidden]="inlineSearch == 'senderReceiver'">
-                                <span>Sender/Receiver</span>
-                                <i class="icon-search" (click)="focusOnColumnSearch('senderReceiver');"></i>
+                        <ng-container *ngIf="currentOrganizationType !== 'BRANCH'">
+                            <th width="17%" class="bd-rr bd-rb td-search-box">
+                                <div [hidden]="inlineSearch == 'sender'">
+                                    <span class="pl-0">Sender</span>
+                                    <i class="icon-search" (click)="focusOnColumnSearch('sender');"></i>
+                                </div>
+                                <div class="input-container" [hidden]="inlineSearch !== 'sender'">
+                                    <input type="text" placeholder="Sender" class="w100" #senderReceiverField
+                                        name="sender" [(ngModel)]="branchTransferPostRequestParams.sender"
+                                        (keypress)="columnSearch()" (keydown)="columnSearch()" />
+                                </div>
+                            </th>
+                            <th width="17%" class="bd-rr bd-rb td-search-box">
+                                <div [hidden]="inlineSearch == 'receiver'">
+                                    <span class="pl-0">Receiver</span>
+                                    <i class="icon-search" (click)="focusOnColumnSearch('receiver');"></i>
+                                </div>
+                                <div class="input-container" [hidden]="inlineSearch !== 'receiver'">
+                                    <input type="text" placeholder="Receiver" class="w100" #senderReceiverField
+                                        name="receiver" [(ngModel)]="branchTransferPostRequestParams.receiver"
+                                        (keypress)="columnSearch()" (keydown)="columnSearch()" />
+                                </div>
+                            </th>
+                        </ng-container>
+                        <ng-container *ngIf="currentOrganizationType === 'BRANCH'">
+                            <th width="17%" class="bd-rr bd-rb td-search-box">
+                                <div [hidden]="inlineSearch == 'senderReceiver'">
+                                    <span class="pl-0">Sender/Receiver</span>
+                                    <i class="icon-search" (click)="focusOnColumnSearch('senderReceiver');"></i>
+                                </div>
+                                <div class="input-container" [hidden]="inlineSearch !== 'senderReceiver'">
+                                    <input type="text" placeholder="Sender/Receiver" class="w100" #senderReceiverField
+                                        name="senderReceiver"
+                                        [(ngModel)]="branchTransferPostRequestParams.senderReceiver"
+                                        (keypress)="columnSearch()" (keydown)="columnSearch()" />
+                                </div>
+                            </th>
+                        </ng-container>
+                        <th width="10%" class="td-search-box">
+                            <div [hidden]="inlineSearch == 'fromWarehouse'">
+                                <span class="pl-0">From Warehouse</span>
+                                <i class="icon-search" (click)="focusOnColumnSearch('fromWarehouse');"></i>
                             </div>
-                            <div class="input-container" [hidden]="inlineSearch !== 'senderReceiver'">
-                                <input type="text" placeholder="Sender/Receiver" class="w100" #senderReceiverField
-                                    name="senderReceiver" [(ngModel)]="branchTransferPostRequestParams.senderReceiver"
+                            <div class="input-container" [hidden]="inlineSearch !== 'fromWarehouse'">
+                                <input type="text" placeholder="From Warehouse" class="w100" #warehouseNameField
+                                    name="fromWarehouse" [(ngModel)]="branchTransferPostRequestParams.fromWarehouse"
                                     (keypress)="columnSearch()" (keydown)="columnSearch()" />
                             </div>
                         </th>
                         <th width="10%" class="td-search-box">
-                            <div [hidden]="inlineSearch == 'warehouseName'">
-                                <span>Warehouse</span>
-                                <i class="icon-search" (click)="focusOnColumnSearch('warehouseName');"></i>
+                            <div [hidden]="inlineSearch == 'toWarehouse'">
+                                <span class="pl-0">To Warehouse</span>
+                                <i class="icon-search" (click)="focusOnColumnSearch('toWarehouse');"></i>
                             </div>
-                            <div class="input-container" [hidden]="inlineSearch !== 'warehouseName'">
-                                <input type="text" placeholder="Warehouse" class="w100" #warehouseNameField
-                                    name="warehouseName" [(ngModel)]="branchTransferPostRequestParams.warehouseName"
+                            <div class="input-container" [hidden]="inlineSearch !== 'toWarehouse'">
+                                <input type="text" placeholder="To Warehouse" class="w100" #warehouseNameField
+                                    name="toWarehouse" [(ngModel)]="branchTransferPostRequestParams.toWarehouse"
                                     (keypress)="columnSearch()" (keydown)="columnSearch()" />
                             </div>
                         </th>
                         <th width="10%" (click)="sortBranchTransferList('totalAmount')" class="text-right">Total Amount
                             <span
-                                [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : branchTransferGetRequestParams.sortBy === 'totalAmount', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'totalAmount' || (branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-dsc': branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'desc'}"></span>
+                                [ngClass]="{'sorting-icon icon-pointer': 1 === 1, 'active-text-color' : branchTransferGetRequestParams.sortBy === 'totalAmount', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'totalAmount' || (branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-dsc': branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'desc'}"></span>
                         </th>
                         <th width="10%">Action</th>
                     </tr>
                 </thead>
-                <tbody *ngIf="branchTransferResponse.items && branchTransferResponse.items.length > 0">
+                <tbody *ngIf="!isLoading && branchTransferResponse.items && branchTransferResponse.items.length > 0">
                     <tr *ngFor="let item of branchTransferResponse.items; let i = index;">
-                        <td data-title="#">{{ (branchTransferGetRequestParams.count * (branchTransferGetRequestParams.page - 1)) + (i+1) }}
+                        <td data-title="#">{{ (branchTransferGetRequestParams.count *
+                            (branchTransferGetRequestParams.page - 1)) + (i+1) }}
                         </td>
                         <td data-title="Date">{{ item.dateOfSupply }}</td>
-                        <td data-title="Voucher Type"><span *ngIf="item.voucherType === 'deliverynote'">Delivery Challan</span><span
-                                *ngIf="item.voucherType === 'receiptnote'">Receipt Note</span></td>
-                        <td data-title="Voucher Number"><a href="javascript:;" (click)="showEditBranchTransferPopup(item)">{{ item.voucherNo }}</a>
+                        <td data-title="Voucher Type"><span *ngIf="item.voucherType === 'deliverynote'">Delivery
+                                Challan</span><span *ngIf="item.voucherType === 'receiptnote'">Receipt Note</span></td>
+                        <td data-title="Voucher Number"><a href="javascript:;"
+                                (click)="showEditBranchTransferPopup(item)">{{ item.voucherNo }}</a>
                         </td>
-                        <td data-title="Sender/Receiver">{{ item.senderReceiver }}</td>
-                        <td data-title="Warehouse">{{ item.warehouseName }}</td>
-                        <td data-title="Total Amount" class="text-right">{{activeCompany.baseCurrencySymbol}}
+                        <td *ngIf="currentOrganizationType === 'BRANCH'" data-title="Sender/Receiver">{{
+                            item.senderReceiver }}</td>
+                        <td *ngIf="currentOrganizationType !== 'BRANCH'" data-title="Sender">{{ item.sender }}</td>
+                        <td *ngIf="currentOrganizationType !== 'BRANCH'" data-title="Receiver">{{ item.receiver }}</td>
+                        <td data-title="From Warehouse">{{ item.fromWarehouse }}</td>
+                        <td data-title="To Warehouse">{{ item.toWarehouse }}</td>
+                        <td data-title="Total Amount" class="text-right">{{activeCompany?.baseCurrencySymbol}}
                             {{ item.totalAmount | giddhCurrency }}</td>
                         <td data-title="Action">
                             <div class="btn-group" container="body" dropdown [autoClose]="true">
@@ -107,17 +178,19 @@
                         </td>
                     </tr>
                 </tbody>
-                <tbody class="on-mobile-view no-records" *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
+                <tbody class="on-mobile-view no-records"
+                    *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
                     <tr>
-                        <td *ngIf="!isLoading" colspan="8" align="center">No records found.</td>
-                        <td *ngIf="isLoading" colspan="8">
-
+                        <td *ngIf="!isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11"
+                            align="center">No records found.</td>
+                        <td *ngIf="isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11">
+                            <giddh-page-loader></giddh-page-loader>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="paginationWrapper" *ngIf="branchTransferResponse.totalPages > 1">
+        <div class="pagination-wrapper" *ngIf="branchTransferResponse.totalPages > 1">
             <pagination [totalItems]="branchTransferResponse.totalPages" [(ngModel)]="branchTransferResponse.page"
                 [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
                 (pageChanged)="pageChanged($event)"></pagination>
@@ -132,7 +205,7 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="modal-body pdL2 pdR2">
+    <div class="modal-body pd-l2 pd-r2">
         <form class="clearfix">
             <div class="row">
                 <div class="col-sm-4"><label>Voucher Type</label></div>
@@ -158,11 +231,12 @@
                     </div>
                 </div>
             </div>
-            <div class="pull-right">
-                <button class="btn btn-md btn-success mrR1" type="button" (click)="search()">
+            <div class="pull-right mr-t1">
+                <button class="btn btn-md btn-success mr-r1" type="button" (click)="search()">
                     Search
                 </button>
-                <button class="btn btn-md btn-cancel" type="button" (click)="refreshTempPostParams(); hideModal(false)">
+                <button class="btn btn-md btn-cancel mr-0" type="button"
+                    (click)="refreshTempPostParams(); hideModal(false)">
                     Cancel
                 </button>
             </div>
@@ -181,7 +255,7 @@
 <!-- branch transfer modal -->
 <ng-template #branchtransfertemplate>
     <div class="recept-modal">
-        <div class="modal-body radius-none pr-0 pl-0 pt-0 no-padding">
+        <div class="modal-body radius-none pr-0 pl-0 pt-0 p-0">
             <new-branch-transfer (hideModal)="hideModal(true)"
                 [editBranchTransferUniqueName]="editBranchTransferUniqueName" [branchTransferMode]="branchTransferMode">
             </new-branch-transfer>
@@ -200,3 +274,16 @@
         </div>
     </div>
 </div>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

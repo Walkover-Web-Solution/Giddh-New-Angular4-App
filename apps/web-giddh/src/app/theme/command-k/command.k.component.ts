@@ -25,11 +25,11 @@ const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, 
 
 export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
 
-    @ViewChild('mainEle', {static: true}) public mainEle: ElementRef;
-    @ViewChild('searchEle', {static: false}) public searchEle: ElementRef;
-    @ViewChild('searchWrapEle', {static: true}) public searchWrapEle: ElementRef;
-    @ViewChild('wrapper', {static: true}) public wrapper: ElementRef;
-    @ViewChild(ScrollComponent, {static: false}) public virtualScrollElem: ScrollComponent;
+    @ViewChild('mainEle', { static: true }) public mainEle: ElementRef;
+    @ViewChild('searchEle', { static: false }) public searchEle: ElementRef;
+    @ViewChild('searchWrapEle', { static: true }) public searchWrapEle: ElementRef;
+    @ViewChild('wrapper', { static: true }) public wrapper: ElementRef;
+    @ViewChild(ScrollComponent, { static: false }) public virtualScrollElem: ScrollComponent;
 
     @Input() public preventOutSideClose: boolean = false;
     @Input() public dontShowNoResultMsg: boolean = false;
@@ -40,7 +40,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public placement: string;
     @Input() public setParentWidth: boolean = false;
     @Input() public parentEle: any;
-    @Input() public ItemHeight: number = 50;
+    @Input() public ItemHeight: number = 52;
     @Input() public ItemWidth: number = 300;
     @Input() public visibleItems: number = 10;
 
@@ -66,6 +66,10 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         totalPages: 1,
         isMobile: false
     };
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
@@ -87,7 +91,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public ngOnInit(): void {
         // listen on input for search
-        this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
+        this.searchSubject.pipe(debounceTime(300), takeUntil(this.destroyed$)).subscribe(term => {
             this.commandKRequestParams.page = 1;
             this.commandKRequestParams.q = term;
             this.searchCommandK(true);
@@ -141,12 +145,12 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.setParentWidth && this.mainEle) {
             let box: any = this.parentEle.getBoundingClientRect();
             this.ItemWidth = (box.width > this.ItemWidth) ? box.width : this.ItemWidth;
-            this.renderer.setStyle(this.mainEle.nativeElement, 'width', `${box.width}px`);
+            this.renderer.setStyle(this.mainEle?.nativeElement, 'width', `${box.width}px`);
             if (this.searchWrapEle) {
-                this.renderer.setStyle(this.searchWrapEle.nativeElement, 'width', `${box.width}px`);
+                this.renderer.setStyle(this.searchWrapEle?.nativeElement, 'width', `${box.width}px`);
             }
             if (box.width > 300) {
-                this.renderer.setStyle(this.wrapper.nativeElement, 'wider', true);
+                this.renderer.setStyle(this.wrapper?.nativeElement, 'wider', true);
             }
         }
     }
@@ -218,7 +222,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             this.commandKRequestParams.group = "";
         }
 
-        this._commandKService.searchCommandK(this.commandKRequestParams, this.activeCompanyUniqueName).subscribe((res) => {
+        this._commandKService.searchCommandK(this.commandKRequestParams, this.activeCompanyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
 
             if (res && res.body && res.body.results && res.body.results.length > 0) {
@@ -328,7 +332,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
                 e.preventDefault();
                 e.stopPropagation();
                 // first escape
-                if (this.searchEle.nativeElement.value) {
+                if (this.searchEle?.nativeElement.value) {
                     this.searchEle.nativeElement.value = null;
                 } else {
                     // second time pressing escape
@@ -338,7 +342,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         if (this.isOpen && key === BACKSPACE) {
-            if (!this.searchEle.nativeElement.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
+            if (!this.searchEle?.nativeElement.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
                 this.removeItemFromSelectedGroups();
             }
         }
@@ -426,7 +430,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public handleHighLightedItemEvent(item: any): void {
         // no need to do anything in the function
-        this.highlightedItem = item.loop;
+        this.highlightedItem = item?.loop;
     }
 
     /**
@@ -489,5 +493,34 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }
         }
+    }
+
+    /**
+     * This will return the last route name from the page route string
+     *
+     * @param {string} route
+     * @returns {string}
+     * @memberof CommandKComponent
+     */
+    public getPageUniqueName(route: string): string {
+        let string = route.replace(/\s+/g, '-');
+        string = string.replace(/\//g, '-');
+        string = string.replace(/^-|-$/g, '');
+        return string;
+    }
+
+    /**
+     * This will search after paste
+     *
+     * @memberof CommandKComponent
+     */
+    public onPasteInSearch(): void {
+        setTimeout(() => {
+            if (this.searchEle && this.searchEle.nativeElement) {
+                let term = this.searchEle.nativeElement.value;
+                term = (term) ? term.trim() : "";
+                this.searchSubject.next(term);
+            }
+        }, 100);
     }
 }

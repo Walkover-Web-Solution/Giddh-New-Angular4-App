@@ -64,6 +64,7 @@ export class SettingsUtilityService {
             formattedCompanyAddresses.push({
                 taxType: address.taxType,
                 stateCode: address.stateCode,
+                pincode: address.pincode,
                 stateName: address.stateName,
                 taxNumber: address.taxNumber,
                 address: address.address,
@@ -89,6 +90,7 @@ export class SettingsUtilityService {
                 formattedCompanyAddresses.push({
                     stateCode: address.stateCode,
                     stateName: address.stateName,
+                    pincode: address.pincode,
                     taxNumber: address.taxNumber,
                     taxType: address.taxType,
                     address: address.address,
@@ -109,10 +111,11 @@ export class SettingsUtilityService {
      * @memberof SettingsUtilityService
      */
     public getUpdateBranchRequestObject(branchDetails: any): any {
+        branchDetails.addresses = branchDetails.addresses || [];
         return {
             name: branchDetails.name,
             alias: branchDetails.alias,
-            linkAddresses: branchDetails.addresses.map(address => ({uniqueName: address.uniqueName, isDefault: address.isDefault}))
+            linkAddresses: (branchDetails.addresses && branchDetails.addresses.length > 0) ? branchDetails.addresses.map(address => ({ uniqueName: address.uniqueName, isDefault: address.isDefault })) : []
         };
     }
 

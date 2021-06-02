@@ -1,7 +1,7 @@
 @import "../../assets/css/color.scss";
-.steps_wizard {
+.steps-wizard {
     padding: 30px 0;
-    background:$white;
+    background: $white;
     text-align: center;
     display: flex;
     justify-content: space-around;
@@ -17,12 +17,12 @@
         > label {
             width: 30px;
             height: 30px;
-            border: 2px solid #dcdcdc;
+            border: 2px solid $gainsboro;
             border-radius: 100%;
             transition: background-color 1s;
-            background-color: #ffffff;
+            background-color: $white;
             position: relative;
-            color: #969696;
+            color: $opium;
             line-height: 100%;
             align-items: center;
             display: flex;
@@ -31,7 +31,7 @@
     }
 }
 
-.upload_excel {
+.upload-excel {
     display: flex;
     height: 320px;
     position: relative;
@@ -39,14 +39,14 @@
     justify-content: center;
     margin: 20px auto 0 !important;
 }
-.center-block{
+.center-block {
     margin: 0 auto;
 }
-.max500 {
+.max-width-500 {
     max-width: 500px;
 }
 
-.uploader_label {
+.uploader-label {
     position: absolute;
     left: 0;
     right: 0;
@@ -59,18 +59,18 @@
     visibility: hidden;
 }
 
-.upload_icon {
+.upload-icon {
     font-size: 62px;
     float: none;
-    color: #e2e2e2;
+    color: $whisper;
 }
 
-.sample_file-btn {
+.sample-file-btn {
     z-index: 9;
     position: relative;
 }
 
-.dashed_bdr {
+.dashed-border {
     border: 2px dashed $gainsboro;
 }
 
@@ -90,7 +90,7 @@
     justify-content: flex-end;
     margin: 0 15px;
     border: 1px solid $gainsboro;
-    background: #fafafa;
+    background: $gray-95;
     padding: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -110,14 +110,14 @@
 }
 
 .has-error .form-control {
-    border-color: red !important;
+    border-color: $red !important;
 }
-@media(max-width:991px){
+@media (max-width: 991px) {
     .import-type {
-       flex-wrap: wrap;
-       li{
+        flex-wrap: wrap;
+        li {
             width: 27%;
             margin: 0 15px 30px;
-       }
+        }
     }
 }

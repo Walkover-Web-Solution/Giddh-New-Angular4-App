@@ -11,6 +11,7 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { SUBSCRIPTIONS_API } from './apiurls/subscriptions.api';
 import * as moment from 'moment';
 import { SubscriptionsUser } from '../models/api-models/Subscriptions';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 
 @Injectable()
 export class SubscriptionsService {
@@ -42,7 +43,7 @@ export class SubscriptionsService {
         return this._http.get(this.config.apiUrl + SUBSCRIPTIONS_API.SUBSCRIBED_USER_TRANSACTIONS
             .replace(':subscriptionId', subscription.subscriptionId)
             .replace(':from', subscription.subscribedOn)
-            .replace(':to', moment(subscription.subscribedOn, 'DD-MM-YYYY').add(1, 'years').format('DD-MM-YYYY'))
+            .replace(':to', moment(subscription.subscribedOn, GIDDH_DATE_FORMAT).add(1, 'years').format(GIDDH_DATE_FORMAT))
             .replace(':interval', paymentFrequency))
             .pipe(map((res) => {
                 let data: BaseResponse<string, string> = res;

@@ -1,6 +1,6 @@
-import { takeUntil, take } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ViewChild, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
 import { AppState } from '../../../store/roots';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -17,6 +17,7 @@ import { CompanyActions } from '../../../actions/company.actions';
 import { GIDDH_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { DEFAULT_SIGNUP_TRIAL_PLAN } from '../../../app.constant';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
     selector: 'subscriptions',
@@ -25,11 +26,15 @@ import { DEFAULT_SIGNUP_TRIAL_PLAN } from '../../../app.constant';
 })
 
 export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-    @ViewChild('addCompanyNewModal', {static: true}) public addCompanyNewModal: ModalDirective;
-    @ViewChild('companynewadd', {static: true}) public companynewadd: ElementViewContainerRef;
+    @ViewChild('addCompanyNewModal', { static: true }) public addCompanyNewModal: ModalDirective;
+    @ViewChild('companynewadd', { static: true }) public companynewadd: ElementViewContainerRef;
 
     /* This will have active tab value */
     @Input() public activeTab: string = '';
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     public subscriptions: SubscriptionsUser[] = [];
     public allSubscriptions: SubscriptionsUser[] = [];
@@ -69,11 +74,12 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
     public allAssociatedCompanies: CompanyResponse[] = [];
     /* This will contain the plan unique name of default trial plan */
     public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
-    constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
+    constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions, private decimalPipe: DecimalPipe) {
         this.subscriptions$ = this.store.pipe(select(s => s.subscriptions.subscriptions), takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(cmp => cmp.session.companies).pipe(takeUntil(this.destroyed$));
-        this.activeCompanyUniqueName$ = this.store.pipe(select(cmp => cmp.session.companyUniqueName), takeUntil(this.destroyed$));
+        this.companies$ = this.store.pipe(select(cmp => cmp.session.companies), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -81,21 +87,37 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
             this.loggedInUser = this.generalService.user;
         }
 
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
+            }
+        });
+
         this.companies$.subscribe(companies => {
             if (companies) {
                 let orderedCompanies = _.orderBy(companies, 'name');
-                this.allAssociatedCompanies = orderedCompanies;
-                this.companyListForFilter = orderedCompanies;
-                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(active => {
-                    this.activeCompany = companies.find(cmp => cmp.uniqueName === active);
-                    this.sortAssociatedCompanies();
-                    this.showCurrentCompanyPlan();
+                let filteredCompanies = [];
+
+                orderedCompanies.forEach((company) => {
+                    if (company.showOnSubscription) {
+                        filteredCompanies.push(company);
+                    }
+                });
+
+                this.allAssociatedCompanies = filteredCompanies;
+                this.companyListForFilter = filteredCompanies;
+
+                this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+                    if (activeCompany) {
+                        this.sortAssociatedCompanies();
+                        this.showCurrentCompanyPlan();
+                    }
                 });
             }
         });
 
         this.isPlanShow = false;
-        this.subscriptionService.getSubScribedCompanies().subscribe((res) => {
+        this.subscriptionService.getSubScribedCompanies().pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.status === "success") {
                 if (!res.body || !res.body[0]) {
                     this.isPlanShow = true;
@@ -110,10 +132,10 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
         });
 
         this.subscriptions$.subscribe(userSubscriptions => {
-            if(userSubscriptions && userSubscriptions.length > 0) {
+            if (userSubscriptions && userSubscriptions.length > 0) {
                 userSubscriptions.forEach(userSubscription => {
-                    if(userSubscription.createdAt) {
-                        userSubscription.createdAt = moment(userSubscription.createdAt, "DD-MM-YYYY HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                    if (userSubscription.createdAt) {
+                        userSubscription.createdAt = moment(userSubscription.createdAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     }
 
                     this.subscriptions.push(userSubscription);
@@ -142,7 +164,9 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
      * @memberof SubscriptionsComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        this.activeTab = changes.activeTab.currentValue;
+        if (changes && changes.activeTab) {
+            this.activeTab = changes.activeTab.currentValue;
+        }
     }
 
     public goToBillingDetails() {
@@ -361,7 +385,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
             let currentDate = moment();
             let expiryDate = moment(expiry.split("-").reverse().join("-"));
             let difference = expiryDate.diff(currentDate, 'days');
-            return (difference <= 15) ? difference + " days remaining" : "Active"
+            return (difference <= 15) ? difference + this.localeData?.subscription?.days_remaining : this.commonLocaleData?.app_active
         } else {
             return "-";
         }
@@ -376,7 +400,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
     public filterCompanyList(term): void {
         this.companyListForFilter = [];
         this.allAssociatedCompanies.forEach((company) => {
-            if (company.name.toLowerCase().includes(term.toLowerCase())) {
+            if (company.showOnSubscription && company.name.toLowerCase().includes(term.toLowerCase())) {
                 this.companyListForFilter.push(company);
             }
         });
@@ -419,7 +443,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
      * @memberof SubscriptionsComponent
      */
     public sortAssociatedCompanies(): void {
-        if(this.companyListForFilter && this.companyListForFilter.length > 0) {
+        if (this.companyListForFilter && this.companyListForFilter.length > 0) {
             let companyListForFilter = _.orderBy(this.companyListForFilter, 'name');
 
             let loop = 0;
@@ -445,39 +469,40 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
         this.selectedCompany = {};
     }
 
-    // public getSubscriptionList() {
-    //   this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
-    //   this.store.select(s =>  s.subscriptions.subscriptions)
-    //     .pipe(takeUntil(this.destroyed$))
-    //     .subscribe(s => {
-    //       if (s && s.length) {
-    //         this.subscriptions = s;
-    //         this.store.dispatch(this._subscriptionsActions.SubscribedCompaniesList(s && s[0]));
-    //         this.store.dispatch(this._subscriptionsActions.SubscribedUserTransactions(s && s[0]));
-    //         this.store.select(s =>  s.subscriptions.transactions)
-    //           .pipe(takeUntil(this.destroyed$))
-    //           .subscribe(s => this.transactions = s);
-    //       }
-    //     });
-    // }
+    /**
+     * This will return companies limit text
+     *
+     * @param {*} item
+     * @returns {string}
+     * @memberof SubscriptionsComponent
+     */
+    public getSubscribedCompaniesCount(totalCompanies: any, companiesLimit): string {
+        let text = this.localeData?.subscription?.companies_limit;
+        text = text?.replace("[TOTAL_COMPANIES]", this.decimalPipe.transform(totalCompanies))?.replace("[PLAN_LIMIT]", this.decimalPipe.transform(companiesLimit));
+        return text;
+    }
 
-    // public getCompanyTransactions(companyName) {
-    //   if (this.subscriptions && this.subscriptions.length) {
-    //     this.store.dispatch(this._subscriptionsActions.SubscribedCompanyTransactions(this.subscriptions && this.subscriptions[0], companyName));
-    //   }
-    // }
+    /**
+     * This will return additional charges note
+     *
+     * @returns {string}
+     * @memberof SubscriptionsComponent
+     */
+    public getAdditionalChargesNote(): string {
+        let text = this.localeData?.subscription?.additional_charges_note;
+        text = text?.replace("[TRANSACTION_LIMIT]", this.decimalPipe.transform(this.seletedUserPlans?.planDetails?.transactionLimit))?.replace("[RATE_EXTRA_TRANSACTION]", this.decimalPipe.transform(this.seletedUserPlans?.planDetails?.ratePerExtraTransaction))?.replace("[CURRENCY]", this.activeCompany?.baseCurrency);
+        return text;
+    }
 
-    // public openModal(template: TemplateRef<any>, company, subscription) {
-    //    this.getCompanyTransactions(company.uniqueName);
-    //   this.modalRef = this.modalService.show(
-    //     template,
-    //     Object.assign({}, { class: 'subscription_modal' })
-    //   );
-    //   let cont = {
-    //     subscription,
-    //     company
-    //   }
-    //   this.modalRef.content = cont;
-    // }
-
+    /**
+     * This will return subscribed plan text
+     *
+     * @returns {string}
+     * @memberof SubscriptionsComponent
+     */
+    public getPlanSubscribedText(): string {
+        let text = this.localeData?.subscription?.plan_subscribed_on;
+        text = text?.replace("[PLAN_NAME]", this.seletedUserPlans?.planDetails?.name)?.replace("[PLAN_STARTED_AT]", this.seletedUserPlans?.startedAt);
+        return text;
+    }
 }

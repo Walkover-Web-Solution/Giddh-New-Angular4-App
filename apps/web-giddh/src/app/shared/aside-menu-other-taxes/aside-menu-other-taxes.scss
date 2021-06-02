@@ -1,3 +1,5 @@
+@import "../../../assets/css/color.scss";
+
 :host {
     position: fixed;
     left: auto;
@@ -15,7 +17,7 @@
     right: 10px;
     z-index: 9999999;
     background-color: transparent;
-    color: #fff;
+    color: $white;
     font-size: 17px;
     top: 18px;
     margin-right: 0;
@@ -36,8 +38,8 @@
     margin-bottom: 10px;
 }
 .aside-pane-form {
-    background-color: #fff;
-    box-shadow: 0 3px 6px #0000001a;
+    background-color: $white;
+    box-shadow: 0 3px 6px $black-russian;
     padding: 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -47,8 +49,13 @@
 }
 .form-header {
     padding: 20px 15px;
-    background: #1a237e;
-    color: #fff;
+    background: $midnight-blue;
+    color: $white;
+}
+
+.label-tax {
+    margin-top: 3px !important;
+    margin-left: 2px !important;
 }
 
 @media (max-width: 768px) {

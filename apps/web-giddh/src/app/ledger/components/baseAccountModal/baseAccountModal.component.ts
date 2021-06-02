@@ -10,11 +10,6 @@ import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 @Component({
     selector: 'base-account',
     templateUrl: './baseAccountModal.component.html',
-    styles: [`
-    .bg_grey {
-        background: #eaebed;
-    }
-    `]
 })
 export class BaseAccountComponent implements OnInit {
     @Input() public accountUniqueName: string = '';

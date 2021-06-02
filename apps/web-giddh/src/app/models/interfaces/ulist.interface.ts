@@ -1,29 +1,30 @@
 import { INameUniqueName } from '../api-models/Inventory';
 
 export interface IHelpersForSearch {
-	nameStr?: string;
-	uNameStr?: string;
+    nameStr?: string;
+    uNameStr?: string;
 }
 
 export interface IUlist extends INameUniqueName, IHelpersForSearch {
-	additional?: any;
-	type?: 'GROUP' | 'MENU' | 'ACCOUNT';
-	time?: number;
-	parentGroups?: INameUniqueName[];
+    additional?: any;
+    type?: 'GROUP' | 'MENU' | 'ACCOUNT';
+    time?: number;
+    parentGroups?: INameUniqueName[];
     route?: string;
-	pIndex?: number;
-	isRemoved?: boolean;
-	isInvalidState?: boolean;
+    pIndex?: number;
+    isRemoved?: boolean;
+    isInvalidState?: boolean;
+    hasTabs?: boolean;
 }
 
 export interface ICompAidata extends INameUniqueName {
-	aidata: Igtbl;
+    aidata: Igtbl;
 }
 
 export interface Igtbl {
-	menus: IUlist[];
-	groups: IUlist[];
-	accounts: IUlist[];
+    menus: IUlist[];
+    groups: IUlist[];
+    accounts: IUlist[];
 }
 
 export interface IUpdateDbRequest extends INameUniqueName {

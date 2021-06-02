@@ -25,7 +25,6 @@
             }
             input.form-control {
                 padding-left: 35px !important;
-                background-image: url(../../../assets/images/calender-icon.svg) !important;
                 background-size: 17px !important;
                 background-position: 9px 8px !important;
                 background-repeat: no-repeat !important;
@@ -73,7 +72,7 @@
     }
 }
 
-.mh18-img img {
+.check-img img {
     max-height: 17px;
     cursor: pointer;
 }
@@ -117,7 +116,7 @@
 
 .table-checkbox-field {
     img {
-        width: 20px;
+        width: 17px;
     }
 }
 .btn-group.open.show {
@@ -136,7 +135,7 @@
             .form-control:focus {
                 z-index: 2;
             }
-            input{
+            input {
                 width: 100% !important;
                 min-width: 100%;
                 flex: 1 auto;
@@ -181,21 +180,21 @@
     justify-content: center;
 }
 
-.status-mobile{
-    .d-flex{
+.status-mobile {
+    .d-flex {
         padding: 14px 0;
     }
 }
 @media (max-width: 768px) {
-    .purchase-order-header{
-         margin-bottom: 15px;
+    .purchase-order-header {
+        margin-bottom: 15px;
     }
     .action-icon {
         display: flex !important;
         margin-left: 0px;
         margin-top: 5px;
     }
-    .status-mobile{
+    .status-mobile {
         display: flex !important;
         justify-content: space-between !important;
     }
@@ -234,21 +233,20 @@
                 }
                 .action-icon {
                     a {
-                        height:24px;
+                        height: 24px;
                     }
                 }
             }
         }
     }
-
 }
 @media (max-width: 767px) {
     .mobile-search {
         margin-top: 0;
         display: flex;
     }
-    .purchase-order-header{
-        margin-top: 15px;
+    .purchase-order-header {
+        margin-top: 0;
     }
 }
 @media (max-width: 575px) {
@@ -289,7 +287,7 @@
 }
 
 @media (max-width: 445px) {
-    .status-mobile{
+    .status-mobile {
         display: block !important;
     }
 
@@ -306,26 +304,26 @@
     }
 }
 
-@media (max-width:768px) and (min-width:445px){
-    .status-mobile::before{
-        display:flex;
+@media (max-width: 768px) and (min-width: 445px) {
+    .status-mobile::before {
+        display: flex;
         align-items: center;
     }
 }
 
-@media (min-width:768px){
-    .min-wid-status{
-        min-width:270px;
+@media (min-width: 768px) {
+    .min-wid-status {
+        min-width: 270px;
     }
 
-    .min-wid-check{
-        min-width:20px;
-        .mh18-img{
-            width:20px;
+    .min-wid-check {
+        min-width: 20px;
+        .check-img {
+            width: 20px;
         }
     }
 
-    .min-wid-amt{
-        min-width:170px;
+    .min-wid-amt {
+        min-width: 170px;
     }
 }

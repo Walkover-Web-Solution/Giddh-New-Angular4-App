@@ -1,5 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
@@ -21,9 +21,9 @@ export class SettingsBranchService {
         private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
-	/*
-	* Get all branches
-	*/
+    /*
+    * Get all branches
+    */
     public GetAllBranches(request: BranchFilterRequest): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
@@ -36,9 +36,12 @@ export class SettingsBranchService {
         url = url.replace(':from', from);
         url = url.replace(':to', to);
 
+        let delimiter = '?';
         if (request.query !== undefined) {
             url = url.concat(`?q=${request.query}`);
+            delimiter = '&';
         }
+        url = url.concat(`${delimiter}branchUniqueName=`); // Empty branch unique name as we don't support sub-branch as of now
 
         return this._http.get(url).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
@@ -47,9 +50,25 @@ export class SettingsBranchService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
-	/**
-	 * Create Branches
-	 */
+    /**
+     * Retrieves the branches of a company
+     *
+     * @param {string} companyUniqueName Company unique name
+     * @returns {Observable<BaseResponse<any, any>>} Observable to perform further actions
+     * @memberof SettingsBranchService
+     */
+    public getBranchByCompany(companyUniqueName: string): Observable<BaseResponse<any, any>> {
+        if (companyUniqueName) {
+            let url = this.config.apiUrl + COMPANY_API.GET_ALL_BRANCHES;
+            url = url.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+            return this._http.get(url).pipe(catchError((error => this.errorHandler.HandleCatch<any, any>(error))));
+        }
+        return of(null);
+    }
+
+    /**
+     * Create Branches
+     */
     public CreateBranches(model): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
@@ -60,9 +79,9 @@ export class SettingsBranchService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
-	/*
-	* Remove branch
-	*/
+    /*
+    * Remove branch
+    */
     public RemoveBranch(branchUniqueName: string): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
@@ -73,9 +92,9 @@ export class SettingsBranchService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
-	/*
-	  * Get all branches
-	  */
+    /*
+      * Get all branches
+      */
     public GetParentCompany(): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;

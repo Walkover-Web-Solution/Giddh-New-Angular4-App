@@ -31,8 +31,8 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 export class OnBoardingComponent implements OnInit, OnDestroy {
     @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
     @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
-    @ViewChild('logoutModal', {static: true}) public logoutModal: ModalDirective;
-    @ViewChild('companyForm', {static: true}) public companyForm: NgForm;
+    @ViewChild('logoutModal', { static: true }) public logoutModal: ModalDirective;
+    @ViewChild('companyForm', { static: true }) public companyForm: NgForm;
     @Input() public createBranch: boolean = false;
 
     /** Stores the on boarding type of any item */
@@ -110,8 +110,8 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this.getCountry();
         this.getCallingCodes();
 
-        this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
-        this.imgPath = (isElectron ||isCordova)  ? '' : AppUrl + APP_FOLDER + '';
+        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(p => p.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
+        this.imgPath = (isElectron || isCordova) ? '' : AppUrl + APP_FOLDER + '';
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
             this.company = this._generalService.createNewCompany;
@@ -122,16 +122,16 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             this.isMobileNumberValid = true;
         }
         this._generalService.createNewCompany = null;
-        this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
-        this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
-        this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
+        this.companies$ = this.store.pipe(select(s => s.session.companies), takeUntil(this.destroyed$));
+        this.isCompanyCreationInProcess$ = this.store.pipe(select(s => s.session.isCompanyCreationInProcess), takeUntil(this.destroyed$));
+        this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
         this.isCompanyCreated$.subscribe(s => {
             if (s && !this.createBranch) {
-                this.store.select(state => state.session.userLoginState).pipe(take(1)).subscribe(st => {
+                this.store.pipe(select(state => state.session.userLoginState), take(1)).subscribe(st => {
                     this.isNewUser = st === userLoginStateEnum.newUserLoggedIn;
                 });
                 let prevTab = '';
-                this.store.select(ss => ss.session.lastState).pipe(take(1)).subscribe(se => {
+                this.store.pipe(select(ss => ss.session.lastState), take(1)).subscribe(se => {
                     prevTab = se;
                 });
                 let stateDetailsRequest = new StateDetailsRequest();
@@ -150,7 +150,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                 }, 500);
             }
         });
-        this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
+        this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a !== '' && this.company.uniqueName) {
                 if (a.includes(this.company.uniqueName.substring(0, 8))) {
                     this.company.name = '';
@@ -161,17 +161,11 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
-        // this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
-        //     if (res) {
-        //         this.company = res;
-        //     }
-        // });
     }
 
-	/**
-	 * createCompany
-	 */
+    /**
+     * createCompany
+     */
     public createCompany(mobileNoEl) {
         this.checkMobileNo(mobileNoEl);
 
@@ -181,8 +175,6 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             }
             return;
         } else {
-            let companies = null;
-            this.companies$.pipe(take(1)).subscribe(c => companies = c);
             this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
             this.company.isBranch = this.createBranch;
             this._generalService.createNewCompany = this.company;
@@ -196,17 +188,6 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this.companies$.pipe(take(1)).subscribe(c => companies = c);
         if (companies) {
             if (companies.length > 0) {
-                // let previousState;
-                // this.store.dispatch(this._generalActions.getGroupWithAccounts());
-                // this.store.dispatch(this._generalActions.getFlattenAccount());
-                // this.store.select(ss => ss.session.lastState).pipe(take(1)).subscribe(se => {
-                //     previousState = se;
-                // });
-                // if (previousState) {
-                //     if (!this.createBranch) {
-                //         this._route.navigate([`pages/${previousState}`]);
-                //     }
-                // }
                 this.closeCompanyModal.emit();
             } else {
                 this.showLogoutModal();
@@ -230,7 +211,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this.closeCompanyModal.emit();
         if (isElectron) {
             this.store.dispatch(this._loginAction.ClearSession());
-        } else if(isCordova){
+        } else if (isCordova) {
             // todo: Logout user in Cordova.
             (window as any).plugins.googleplus.logout(
                 (msg) => {
@@ -344,16 +325,11 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.commonActions.GetCountry(countryRequest));
             }
         });
-        this.store.pipe(select(state => state.session), takeUntil(this.destroyed$)).subscribe((session: any) => {
-            // Fetch current company country
-            if (session.companies) {
-                session.companies.forEach(company => {
-                    if (company.uniqueName === session.companyUniqueName) {
-                        const countryDetails = company.countryV2;
-                        this.company.country = countryDetails.alpha2CountryCode || countryDetails.alpha3CountryCode;
-                        this.company.phoneCode = countryDetails.callingCode;
-                    }
-                });
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                const countryDetails = activeCompany.countryV2;
+                this.company.country = countryDetails.alpha2CountryCode || countryDetails.alpha3CountryCode;
+                this.company.phoneCode = countryDetails.callingCode;
             }
         });
     }

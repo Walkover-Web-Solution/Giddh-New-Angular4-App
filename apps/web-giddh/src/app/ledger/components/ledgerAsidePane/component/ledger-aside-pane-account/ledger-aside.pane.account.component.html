@@ -1,33 +1,18 @@
 <div class="aside-pane">
     <div class="form-header">
         <div>
-            <h3 class="aside-title">Create Account</h3>
+            <h3 class="aside-title">{{commonLocaleData?.app_create_account}}</h3>
         </div>
     </div>
 
     <div class="aside-body">
         <div class="aside-pane-form">
-            <!--
-                <div class="form-group pdT2">
-                    <label class="mr-b1">Select Group</label>
-                    <div class="ng-select-wrap liq">
-                        <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." name="activeGroupUniqueName" [(ngModel)]="activeGroupUniqueName" [options]="flattenGroupsArray" style="width:100%" (selected)="checkSelectedGroup($event)">
-                            <ng-template #optionTemplate let-option="option">
-                                <div class="account-list-item">{{option?.label}}</div>
-                                <div class="account-list-item fs12">{{option?.value}}</div>
-                            </ng-template>
-                        </ng-select>
-                    </div>
-                </div>
-            -->
-
-            <div class="">
-                <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName"
-                    [flatGroupsOptions]="flattenGroupsArray" [fetchingAccUniqueName$]="fetchingAccUniqueName$"
-                    (isGroupSelected)="isGroupSelected($event)" [isAccountNameAvailable$]="isAccountNameAvailable$"
-                    [isDebtorCreditor]="isDebtorCreditor" [createAccountInProcess$]="createAccountInProcess$"
-                    (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc"
-                    [isHsnSacEnabledAcc]="isHsnSacEnabledAcc">
+            <div>
+                <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName" [isLedgerModule]="true"
+                    [fetchingAccUniqueName$]="fetchingAccUniqueName$" (isGroupSelected)="isGroupSelected($event)"
+                    [isAccountNameAvailable$]="isAccountNameAvailable$" [isDebtorCreditor]="isDebtorCreditor"
+                    [createAccountInProcess$]="createAccountInProcess$" (submitClicked)="addNewAcSubmit($event)"
+                    [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc">
                 </account-add-new-details>
             </div>
         </div>

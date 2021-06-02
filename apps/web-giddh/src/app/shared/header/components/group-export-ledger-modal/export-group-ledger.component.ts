@@ -1,19 +1,26 @@
-import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { LedgerService } from '../../../services/ledger.service';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild, Input } from '@angular/core';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import { ToasterService } from '../../services/toaster.service';
-import { ExportLedgerRequest, MailLedgerRequest } from '../../models/api-models/Ledger';
-import { validateEmail } from '../../shared/helpers/helperFunctions';
 import { some } from '../../../../lodash-optimized';
 import * as moment from 'moment/moment';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from 'apps/web-giddh/src/app/app.constant';
+import { Observable, ReplaySubject } from 'rxjs';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { Store, select } from '@ngrx/store';
+import { AppState } from 'apps/web-giddh/src/app/store';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'export-group-ledger',
     templateUrl: './export-group-ledger.component.html'
 })
-export class ExportGroupLedgerComponent implements OnInit {
 
+export class ExportGroupLedgerComponent implements OnInit {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Output() public closeExportGroupLedgerModal: EventEmitter<any> = new EventEmitter();
 
     public emailTypeSelected: string = '';
@@ -59,9 +66,37 @@ export class ExportGroupLedgerComponent implements OnInit {
         startDate: moment().subtract(30, 'days'),
         endDate: moment()
     };
+    /** Date format type */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store modal reference */
+    public modalRef: BsModalRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Moment object */
+    public moment = moment;
+    /* Selected from date */
+    public fromDate: string;
+    /* Selected to date */
+    public toDate: string;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* Universal date observer */
+    public universalDate$: Observable<any>;
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /** To unsubscribe observer */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _permissionDataService: PermissionDataService) {
+
+    constructor(private store: Store<AppState>, private _permissionDataService: PermissionDataService, private generalService: GeneralService, private modalService: BsModalService) {
         //
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -69,13 +104,25 @@ export class ExportGroupLedgerComponent implements OnInit {
         this.dateRange.from = moment(moment().subtract(30, 'days')).format(GIDDH_DATE_FORMAT);
         this.dateRange.to = moment(moment()).format(GIDDH_DATE_FORMAT);
 
-        this._permissionDataService.getData.forEach(f => {
-            if (f.name === 'LEDGER') {
-                let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
-                this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
-                this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
-                this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
+        if (this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {
+            this._permissionDataService.getData.forEach(f => {
+                if (f.name === 'LEDGER') {
+                    let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
+                    this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
+                    this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
+                    this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
 
+                }
+            });
+        }
+
+        this.universalDate$.subscribe(dateObj => {
+            if (dateObj) {
+                let universalDate = _.cloneDeep(dateObj);
+                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
         });
     }
@@ -89,4 +136,65 @@ export class ExportGroupLedgerComponent implements OnInit {
         this.dateRange.to = moment(ev.picker.endDate).format(GIDDH_DATE_FORMAT);
     }
 
+    /**
+    *To show the datepicker
+    *
+    * @param {*} element
+    * @memberof AuditLogsFormComponent
+    */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof AuditLogsFormComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof AuditLogsFormComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.dateRange.from = this.fromDate;
+            this.dateRange.to = this.toDate;
+        }
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof AuditLogsFormComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

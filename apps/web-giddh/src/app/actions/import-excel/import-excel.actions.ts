@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ToasterService } from '../../services/toaster.service';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { CustomActions } from '../../store/customActions';
 import { IMPORT_EXCEL } from './import-excel.const';
@@ -14,11 +14,11 @@ import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 @Injectable()
 export class ImportExcelActions {
 
-    public uploadFile$: Observable<Action> = createEffect( ()=>this.action$
+    public uploadFile$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(IMPORT_EXCEL.UPLOAD_FILE_REQUEST),
             switchMap((action: CustomActions) => {
-                return this._importExcelService.uploadFile(action.payload.entity, action.payload.file);
+                return this._importExcelService.uploadFile(action.payload.entity, action.payload);
             }), map((res) => {
                 if (res.status === 'error') {
                     this._toasty.errorToast(res.message);
@@ -27,7 +27,7 @@ export class ImportExcelActions {
                 // return this.validateResponse(res, this.uploadFileResponse(res.body), true, this.uploadFileResponse(res.body));
             })));
 
-    public processImport$: Observable<Action> =createEffect( ()=> this.action$
+    public processImport$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(IMPORT_EXCEL.PROCESS_IMPORT_REQUEST),
             switchMap((action: CustomActions) => {
@@ -37,7 +37,7 @@ export class ImportExcelActions {
             })));
 
 
-    public getImportStatus$: Observable<Action> =createEffect( ()=> this.action$
+    public getImportStatus$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(IMPORT_EXCEL.IMPORT_STATUS_REQUEST),
             switchMap((action: CustomActions) => {
@@ -53,10 +53,10 @@ export class ImportExcelActions {
         //
     }
 
-    public uploadFileRequest(entity: string, file: File): CustomActions {
+    public uploadFileRequest(entity: string, data: any): CustomActions {
         return {
             type: IMPORT_EXCEL.UPLOAD_FILE_REQUEST,
-            payload: { entity, file }
+            payload: { entity, data }
         };
     }
 

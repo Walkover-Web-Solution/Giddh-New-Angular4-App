@@ -9,62 +9,62 @@
     width: 100%;
 }
 .aside-header {
-    background-color: #fff;
+    background-color: $white;
     padding: 20px 10px;
 }
 .aside-pane {
     padding: 0;
-    background-color: #fff;
+    background-color: $white;
 }
 .aside-title {
     padding-bottom: 0;
     border-bottom: none;
 }
-.creditors_detail {
+.creditors-detail {
     padding: 10px;
-    background-color: #f7f8fa;
+    background-color: $alice-blue-light;
     line-height: 1.6;
 }
-.creditors_detail > p {
+.creditors-detail > p {
     font-size: 16px;
-    color: #2d3b4b;
+    color: $muzli;
 }
-.creditors_detail span.red-text {
-    color: #ff0000;
+.creditors-detail span.red-text {
+    color: $red;
 }
-.contactDetails p {
+.contact-details p {
     font-size: 12px;
-    color: #2d3b4b;
+    color: $muzli;
 }
-.accountDetils {
+.account-details {
     padding: 10px 0;
 }
 form label {
     font-size: 14px;
     margin-bottom: 0;
 }
-.accountDetils .btn-default {
+.account-details .btn-default {
     width: 100%;
     text-align: left;
     background-color: transparent;
-    border: 1px solid #ccc;
+    border: 1px solid $gainsboro;
 }
-.accountDetils .btn-group {
+.account-details .btn-group {
     width: 230px;
     display: block;
     text-align: left;
 }
-.accountDetils {
+.account-details {
     padding: 10px;
 }
-.accountDetils span.caret {
+.account-details span.caret {
     position: absolute;
     right: 20px;
     top: 14px;
 }
 .aside-pane-form {
-    background-color: #fff;
-    box-shadow: 0px 3px 6px #0000001a;
+    background-color: $white;
+    box-shadow: 0px 3px 6px $black-russian;
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -73,7 +73,7 @@ form label {
     margin-top: 15px;
 }
 /*new css of new payemtndesign*/
-.modal-title{
+.modal-title {
     color: $white;
 }
 .btn-success {
@@ -91,61 +91,62 @@ form label {
 .pt-25 {
     padding-top: 25px;
 }
-.payment-top-form{
-    .form-group{
+.payment-top-form {
+    .form-group {
         margin-bottom: 0;
-        .resend-btn{
+        .resend-btn {
             position: absolute;
             right: 0;
         }
     }
-    .otp-success-msg{
+    .otp-success-msg {
         color: $light-sea-green;
         font-size: 14px;
     }
 }
-.selected-bank-details{
+.selected-bank-details {
     border-top: 1px solid $gainsboro;
     padding-top: 25px;
     margin-top: 5px;
-    .account-holder-name{
+    .account-holder-name {
         display: flex;
         font-size: 14px;
-        .due-amount{
+        .due-amount {
             max-width: 100%;
             width: 100%;
         }
-         p{
-             &:first-child{
+        p {
+            &:first-child {
                 max-width: 450px;
                 width: 100%;
-             }
-             span{
-                 float: right;
-             }
-
+            }
+            span {
+                float: right;
+            }
         }
     }
-    .bank-deatils-wrapper{
+    .bank-details-wrapper {
         border: 1px solid $gainsboro;
         border-radius: 2px;
         margin-top: 3px;
         display: flex;
-        .readonly-bank-deatils {
+        .readonly-bank-details {
             width: 100%;
             max-width: 450px;
             font-size: 14px;
-            background-color: #EAEAEA;
+            background-color: $whisper-color;
             padding: 10px;
             border-right: 1px solid $gainsboro;
-            .label-value-data{
+            .label-value-data {
                 display: flex;
                 align-items: center;
                 margin: 5px 0;
-                label{
+                label {
                     margin-right: 5px;
                 }
-                .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
+                .form-control[disabled],
+                .form-control[readonly],
+                fieldset[disabled] .form-control {
                     background-color: transparent !important;
                     display: inline;
                     width: auto;
@@ -155,15 +156,15 @@ form label {
                 }
             }
         }
-        .amount-remark-section{
+        .amount-remark-section {
             padding: 15px;
             width: 100%;
-            .form-group{
+            .form-group {
                 margin-bottom: 0;
             }
-            .remark-block{
+            .remark-block {
                 width: 100%;
-                textarea{
+                textarea {
                     min-height: 36px;
                 }
             }
@@ -189,15 +190,13 @@ form label {
     }
 }
 @media (max-width: 767px) {
-    .selected-bank-details
-    .bank-deatils-wrapper
-    .readonly-bank-deatils {
+    .selected-bank-details .bank-details-wrapper .readonly-bank-details {
         max-width: 100% !important;
     }
 
-    .bank-deatils-wrapper {
+    .bank-details-wrapper {
         display: block !important;
-        .readonly-bank-deatils {
+        .readonly-bank-details {
             max-width: 100%;
         }
     }
@@ -212,12 +211,13 @@ form label {
     }
 }
 @media (max-width: 480px) {
-    .payment-top-form .d-flex .form-group, .payment-top-form .d-flex .form-group:last-child {
+    .payment-top-form .d-flex .form-group,
+    .payment-top-form .d-flex .form-group:last-child {
         min-width: 100%;
     }
     .amount-remark-section .d-flex {
         display: block;
-        .form-group.pr-15 {
+        .form-group.pd-r15 {
             padding-right: 0px;
         }
     }

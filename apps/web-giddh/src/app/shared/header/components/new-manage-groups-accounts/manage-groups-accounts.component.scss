@@ -1,4 +1,8 @@
-@import '../../../../../assets/css/color.scss';
+@import "../../../../../assets/css/color.scss";
+
+.modal-body .grp-col {
+    max-width: 58.333%;
+}
 .custom-filed-list-wrapper {
     padding: 15px;
     height: 768px;
@@ -23,17 +27,21 @@
     }
 }
 
-@media(max-height:800px) {
+.height-in-vh {
+    height: calc(100vh - 70px);
+}
+
+@media (max-height: 768px) {
     .custom-filed-list-wrapper {
         height: 550px;
         overflow-y: auto;
     }
 }
 @media (max-width: 767px) {
-    .searchAccount {
+    .search-account {
         float: none !important;
     }
-    .searchBar .form-control {
+    .search-bar .form-control {
         position: relative;
         top: 0;
     }
@@ -42,25 +50,21 @@
     }
 }
 
-.hieghtInVH {
-    height: calc(100vh - 70px);
-}
-
 @media (max-width: 575px) {
-    .manageGroupAcc .col-xs-6 {
+    .manage-group-acc .col-xs-6 {
         width: 100%;
         margin-bottom: 5px;
     }
-    .manageGroupAcc .searchBarWrapper {
+    .manage-group-acc .search-bar-wrapper {
         float: none !important;
     }
-    .form-group.searchBar {
+    .form-group.search-bar {
         margin-bottom: 0;
     }
-    .manageGroupAcc .modal-header {
+    .manage-group-acc .modal-header {
         padding: 0 15px 10px;
     }
-    .manageGroupAcc .modal-title {
+    .manage-group-acc .modal-title {
         font-size: 16px !important;
     }
 }

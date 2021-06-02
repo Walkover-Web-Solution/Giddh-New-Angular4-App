@@ -1,33 +1,88 @@
-<div class="row row-2 tb-pl-bs-grid-row" [trial-accordion]="groupDetail"
-    *ngIf="groupDetail.groupName && groupDetail.isVisible">
+<div class="row row-2 tb-pl-bs-grid-row" [trial-accordion]="groupDetail" [hidden]="!groupDetail.isVisible"
+    *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)">
     <div class="col-4 group" [ngStyle]="{'padding-left': padding+'px'}"
-        [innerHTML]="groupDetail.groupName | uppercase | highlight:search"></div>
-    <div class="col-2 group text-right">{{ groupDetail.forwardedBalance?.amount | giddhCurrency }}
-        {{groupDetail.forwardedBalance | recType }}
+        [innerHTML]="groupDetail.groupName | uppercase | highlight:search">
     </div>
-    <div class="col-2 group text-right">{{ groupDetail.debitTotal | giddhCurrency }}</div>
-    <div class="col-2 group text-right">{{ groupDetail.creditTotal | giddhCurrency }}</div>
-    <div class="col-2 group text-right">{{ groupDetail.closingBalance?.amount | giddhCurrency }}
-        {{groupDetail.closingBalance | recType }}
+    <div class="col-2 group text-right">
+        <!-- {{ groupDetail.forwardedBalance?.amount | giddhCurrency }}  -->
+        <span class="d-inline-flex">
+            <amount-field [amount]="groupDetail.forwardedBalance?.amount" [currencySymbol]="false"
+                [currencyCode]="false">
+            </amount-field>
+        </span>{{groupDetail.forwardedBalance | recType }}
+    </div>
+    <div class="col-2 group text-right">
+        <!-- {{ groupDetail.debitTotal | giddhCurrency }}  -->
+        <span class="d-inline-flex">
+            <amount-field [amount]="groupDetail.debitTotal" [currencySymbol]="false" [currencyCode]=" false">
+            </amount-field>
+        </span>
+    </div>
+    <div class="col-2 group text-right">
+        <!-- {{ groupDetail.creditTotal | giddhCurrency }}  -->
+        <span class="d-inline-flex">
+            <amount-field [amount]="groupDetail.creditTotal" [currencySymbol]="false" [currencyCode]=" false">
+            </amount-field>
+        </span>
+    </div>
+    <div class="col-2 group text-right">
+        <!-- {{ groupDetail.closingBalance?.amount | giddhCurrency }}  -->
+        <span class="d-inline-flex">
+            <amount-field [amount]="groupDetail.closingBalance?.amount" [currencySymbol]="false" [currencyCode]="false">
+            </amount-field>
+        </span> {{groupDetail.closingBalance | recType }}
     </div>
 </div>
-<ng-container *ngFor="let account of groupDetail.accounts">
+<ng-container *ngFor="let account of groupDetail.accounts;trackBy: trackByFn">
     <!-- <section class="row row-2 account " [ngClass]="{'isHidden': !account.isVisible }"> -->
-    <section class="row-2 account " *ngIf="account.isVisible">
-        <div class="row"
-            *ngIf="account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0)">
-            <div class="col-4 account" [ngStyle]="{'padding-left': (padding+20)+'px'}"
-                [innerHTML]="account.name | lowercase | highlight:search"></div>
-            <div class="col-2 account text-right">{{ account.openingBalance?.amount | giddhCurrency }}
-                {{account.openingBalance | recType }}
+    <section class="row-2 account overflow-visible" *ngIf="account.isVisible || account.isCreated"
+        [hidden]="!account.isVisible" (dblclick)="accountInfo(account,$event)" (clickOutside)="hideModal()"
+        [exclude]="'.row-item'">
+        <div class="row row-item"
+            *ngIf="account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0 || account.debitTotal || account.creditTotal)">
+            <div class="col-4 account no-select" [ngStyle]="{'padding-left': (padding+20)+'px'}">
+
+                <div class="p-0 bd-r-right-none" [innerHTML]="account.name | lowercase | highlight:search">
+                </div>
+                <span account-detail-modal-component *ngIf="modalUniqueName && modalUniqueName === account.uniqueName"
+                    [shouldShowGenerateInvoice]="false" [accountUniqueName]="account.uniqueName"
+                    [isModalOpen]="account.uniqueName === modalUniqueName" [accInfo]="accountDetails" [from]="from"
+                    [to]="to">
+                </span>
             </div>
-            <div class="col-2 account text-right">{{ account.debitTotal | giddhCurrency }}</div>
-            <div class="col-2 account text-right">{{ account.creditTotal | giddhCurrency }}</div>
-            <div class="col-2 account text-right">{{ account.closingBalance?.amount | giddhCurrency }}
-                {{account.closingBalance | recType }}
+            <div class="col-2 account text-right">
+                <!-- {{ account.openingBalance?.amount | giddhCurrency }} {{account.openingBalance | recType }}  -->
+
+                <span class="d-inline-flex">
+                    <amount-field [amount]="account.openingBalance?.amount" [currencySymbol]="false"
+                        [currencyCode]="false">
+                    </amount-field>
+                </span>
+
+            </div>
+            <div class="col-2 account text-right">
+                <!-- {{ account.debitTotal | giddhCurrency }}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="account.debitTotal" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
+            <div class="col-2 account text-right">
+                <!-- {{ account.creditTotal | giddhCurrency }}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="account.creditTotal" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
+            <div class="col-2 account text-right">
+                <!-- {{ account.closingBalance?.amount | giddhCurrency }}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="account.closingBalance?.amount" [currencySymbol]="false"
+                        [currencyCode]="false">
+                    </amount-field>
+                </span> {{account.closingBalance | recType }}
             </div>
         </div>
     </section>
 </ng-container>
-
 <ng-content></ng-content>

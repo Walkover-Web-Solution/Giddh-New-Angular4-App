@@ -1,6 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import * as _ from '../../lodash-optimized';
@@ -12,15 +11,12 @@ import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
-
-const PaymentGateway = [
-    { value: 'razorpay', label: 'razorpay' },
-    { value: 'cashfree', label: 'cashfree' }
-];
+import { CommonActions } from '../../actions/common.actions';
+import { GeneralService } from '../../services/general.service';
+import { OrganizationType } from '../../models/user-login-state';
 
 @Component({
     selector: 'app-invoice-setting',
@@ -60,27 +56,35 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public moment = moment;
     public isAutoPaidOn: boolean;
     public companyCashFreeSettings: CompanyCashFreeSettings = new CompanyCashFreeSettings();
-    public paymentGatewayList: IOption[] = PaymentGateway;
+    public paymentGatewayList: IOption[] = [];
     public isLockDateSet: boolean = false;
     public lockDate: Date = new Date();
-    public flattenAccounts$: Observable<IFlattenAccountsResultItem[]>;
     public isGmailIntegrated: boolean;
     public gmailAuthCodeUrl$: Observable<string> = null;
     /** True, if Gmail integration is to be displayed (TODO: Should be removed once URIs become secured) */
     shouldShowGmailIntegration: boolean;
     private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** Stores the active company information */
+    public activeCompany$: Observable<any> = null;
+    /** Stores the form fields of onboard form API, required for GST validation in E-Invoice */
+    public formFields: any[] = [];
 
     constructor(
+        private commonActions: CommonActions,
         private cdr: ChangeDetectorRef,
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
         private _toasty: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions,
         private _authenticationService: AuthenticationService,
         public _route: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private generalService: GeneralService
     ) {
-        this.flattenAccounts$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
     }
@@ -88,24 +92,41 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-
+        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
             this.isGmailIntegrated = result;
         });
         this.initSettingObj();
 
-        this.flattenAccounts$.subscribe(data => {
-            let linkAccount: IOption[] = [];
-            if (data) {
-                data.forEach(f => {
-                    linkAccount.push({ label: f.name, value: f.uniqueName });
-                });
-                this.linkAccountDropDown = linkAccount;
-            }
-        });
         this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val.code) {
                 this.saveGmailAuthCode(val.code);
+            }
+        });
+
+        this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                if (res.fields) {
+                    this.formFields = [];
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
+            } else {
+                let companyCountry;
+                this.activeCompany$.pipe(take(1)).subscribe((response: any) => {
+                    companyCountry = response.countryV2?.alpha2CountryCode;
+                });
+                if (companyCountry === 'IN') {
+                    const requestObject = {
+                        formName: 'onboarding',
+                        country: companyCountry
+                    };
+                    this.store.dispatch(this.commonActions.GetOnboardingForm(requestObject));
+                }
             }
         });
     }
@@ -170,7 +191,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
                 if (this.invoiceSetting.lockDate) {
                     this.isLockDateSet = true;
-                    this.lockDate = moment(this.invoiceSetting.lockDate, 'DD-MM-YYYY').toDate();
+                    this.lockDate = moment(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT).toDate();
                 } else {
                     this.isLockDateSet = false;
                 }
@@ -195,7 +216,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         webhook['entity'] = entityType;
         let objToSave = _.cloneDeep(webhook);
         if (!objToSave.url || !objToSave.triggerAt) {
-            this._toasty.warningToast("Last row can't be blank.");
+            this._toasty.warningToast(this.localeData?.webhook_required_error);
             return false;
         } else if (objToSave.url && objToSave.triggerAt) {
             this.validateWebhook(objToSave);
@@ -254,6 +275,26 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         if (this.formToSave.invoiceSettings.lockDate instanceof Date) {
             this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
         }
+        if (this.formToSave?.invoiceSettings?.gstEInvoiceEnable) {
+            const invoiceSettings = this.formToSave.invoiceSettings;
+            if (!invoiceSettings.gstEInvoiceUserName || !invoiceSettings.gstEInvoiceUserPassword || !invoiceSettings.gstEInvoiceGstin) {
+                this._toasty.errorToast('All fields are required for E-invoicing Authentication');
+                return;
+            }
+            if (this.formFields['taxName'] && this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
+                let isValid = false;
+                for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+                    let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                    if (regex.test(invoiceSettings.gstEInvoiceGstin)) {
+                        isValid = true;
+                    }
+                }
+                if (!isValid) {
+                    this._toasty.errorToast('Please provide a valid GSTIN');
+                    return;
+                }
+            }
+        }
 
         if (this.formToSave.invoiceSettings.autoPaid) {
             this.formToSave.invoiceSettings.autoPaid = 'runtime';
@@ -268,10 +309,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         if (!_.isEqual(this.razorpayObj, razorpayObj) && form && form.createPaymentEntry) {
             this.saveRazorPay(this.razorpayObj, form);
         }
-        // } else {
-        //   this._toasty.warningToast('No changes made.');
-        //   return false;
-        // }
     }
 
     /**
@@ -283,7 +320,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.razorpayObj.autoCapturePayment = true;
         this.razorpayObj.companyName = '';
         if (form.createPaymentEntry && (!this.razorpayObj.userName || !this.razorpayObj.account)) {
-            this._toasty.warningToast('Please Enter Valid Key Or Uncheck Razorpay Option.');
+            this._toasty.warningToast(this.localeData?.razorpay_error);
             return false;
         }
         let razorpayObj = _.cloneDeep(this.razorpayObj);
@@ -317,7 +354,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public validateWebhook(webhook) {
         let url = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,5}[.]{0,1}/;
         if (!url.test(webhook.url)) {
-            this._toasty.warningToast('Invalid Webhook URL.');
+            this._toasty.warningToast(this.localeData?.invalid_webhook_url);
         } else {
             this.webhookIsValidate = true;
         }
@@ -351,7 +388,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         if (email.test(emailId)) {
             this.store.dispatch(this.invoiceActions.updateInvoiceEmail(emailId));
         } else {
-            this._toasty.warningToast('Invalid Email Address.');
+            this._toasty.warningToast(this.localeData?.invalid_email);
             return false;
         }
     }
@@ -449,9 +486,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             grant_type: 'authorization_code',
             redirect_uri: this.getRedirectUrl(AppUrl)
         };
-        this._authenticationService.saveGmailAuthCode(dataToSave).subscribe((res) => {
+        this._authenticationService.saveGmailAuthCode(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === 'success') {
-                this._toasty.successToast('Gmail account added successfully.', 'Success');
+                this._toasty.successToast(this.localeData?.gmail_account_added, this.commonLocaleData?.app_success);
             } else {
                 this._toasty.errorToast(res.message, res.code);
             }
@@ -485,4 +522,65 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof InvoiceSettingComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.paymentGatewayList = [
+                { value: 'razorpay', label: this.localeData?.razorpay },
+                { value: 'cashfree', label: this.localeData?.cashfree }
+            ];
+        }
+    }
+
+    /**
+     * Handler for E-invoice authentication change
+     *
+     * @param {*} event Checkbox (ngModelChange) event
+     * @memberof InvoiceSettingComponent
+     */
+    public handleEInvoiceChange(event: any): void {
+        if (!event) {
+            // E-Invoice unchecked reset the credentials
+            this.invoiceSetting.gstEInvoiceGstin = '';
+            this.invoiceSetting.gstEInvoiceUserName = '';
+            this.invoiceSetting.gstEInvoiceUserPassword = '';
+        } else {
+            this.fetchCompanyGstDetails();
+        }
+    }
+
+    /**
+     * Auto-fills the GST number field for E-invoice
+     *
+     * @private
+     * @memberof InvoiceSettingComponent
+     */
+    private fetchCompanyGstDetails(): void {
+        let branches = [];
+        let currentBranch;
+        this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+            if (response && response.length) {
+                branches = response;
+
+                if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    // Find the current checked out branch
+                    currentBranch = branches.find(branch => branch.uniqueName === this.generalService.currentBranchUniqueName);
+                } else {
+                    // Find the HO branch
+                    currentBranch = branches.find(branch => !branch.parentBranch);
+                }
+                if (currentBranch && currentBranch.addresses) {
+                    const defaultAddress = currentBranch.addresses.find(address => (address && address.isDefault));
+                    if (defaultAddress) {
+                        this.invoiceSetting.gstEInvoiceGstin = defaultAddress.taxNumber;
+                    }
+                }
+            }
+        });
+    }
 }

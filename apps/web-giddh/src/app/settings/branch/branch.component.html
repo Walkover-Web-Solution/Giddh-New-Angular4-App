@@ -1,473 +1,474 @@
-<div class="clearfix">
-    <div class="date-advance-search row">
-        <div class="col-sm-12 mb-15 branch-header d-flex justify-content-between">
-        <form class="form-inline input-group-date-range-picker pr d-flex flex-row mr-0">
-            <div class="mr-1 branch-header-content w-100">
-                <!-- <div class="btn-group advance-icon" dropdown>
-                        <button id="button-basic-icon" dropdownToggle type="button" class="btn dropdown-toggle mr-0 d-flex align-items-center" aria-controls="dropdown-basic-icon">
-                                <span class="icon-advance-search"></span>
-                        </button>
-                        <ul id="dropdown-basic-icon" *dropdownMenu class="dropdown-menu advance-search-list" role="menu" aria-labelledby="button-basic-icon">
-                            <li role="menuitem">
-                                <div class="checkbox search-checkbox">
-                                    <label for="all" class="align-items-start justify-content-start">
-                                    <input type="checkbox" formControlName="all" id="all" name="all">
-                                    All</label>
-                                </div>
-                            </li>
-                            <li role="menuitem">
-                                <div class="checkbox search-checkbox">
-                                    <label for="active" class="align-items-start justify-content-start">
-                                    <input type="checkbox" formControlName="active" id="active" name="active">
-                                    Active</label>
-                                </div>
-                            </li>
-                            <li role="menuitem">
-                                <div class="checkbox search-checkbox">
-                                    <label for="archived" class="align-items-start justify-content-start">
-                                    <input type="checkbox" formControlName="archived" id="archived" name="archived">
-                                    Archived</label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div> -->
-                <div class="search-field form-top-fields w-100">
-                    <div class="search-branch-box">
-                        <input type="text" name="searchBranch" [(ngModel)]="searchBranchQuery" #branchSearch placeholder="Search branch" class="form-control" />
-                    </div>
-                    <a class="cp mr-l1 clear-filter-btn" *ngIf="searchBranchQuery" href="javascript:;"
-                        (click)="resetFilter()" tooltip="Reset Search">
-                        <i aria-hidden="true" class="icon-refresh"></i> Clear Filter
-                    </a>
-                </div>
-                <!-- <div class="input-group form-top-fields">
-                    <div class="form-group">
-                        <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" readonly
-                            placeholder="Select Date" class="form-control" #dp="bsDaterangepicker"
-                            [bsValue]="dateRangePickerValue" (bsValueChange)="setFilterDate($event)" bsDaterangepicker>
-                    </div>
-                </div>
-                <div class="content-view  mrL2">
-                    <div class="branch-views">
-                        <span (click)="changeBranchViewType('table');" class="mrR1">
-                            <input id="radio-table" name="signatureType" class="radio-custom" name="radio-view"
-                                type="radio" [checked]="(branchViewType === 'table') ? true : false" checked>
-                            <label for="radio-table" class="radio-custom-label">Table View</label>
-                        </span>
-                        <span (click)="changeBranchViewType('card');">
-                            <input id="radio-card" name="signatureType" class="radio-custom" name="radio-view"
-                                type="radio" [checked]="(branchViewType === 'card') ? true : false">
-                            <label for="radio-card" class="radio-custom-label">Card View</label>
-                        </span>
-                    </div>
-                </div> -->
-            </div>
-        </form>
-            <button class="btn btn-sky-blue mr-0" (click)="openAddBranchModal()">Create Branch</button>
-    </div>
-    </div>
-    <!-- <div class="row select-branch">
-        <div class="col-12 d-flex mb-15 align-items-center">
-                <div class="form-group mb-0">
-                    <div class="checkbox">
-                            <label for="selectAll">
-                            <input type="checkbox" formControlName="selectAll" id="selectAll" name="selectAll">
-                            Select all branches</label>
+<ng-container appTranslate [file]="'settings/branch'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+    <div class="clearfix">
+        <div class="date-advance-search row">
+            <div class="col-sm-12 mr-b15 branch-header d-flex justify-content-between">
+                <form class="form-inline input-group-date-range-picker pr d-flex flex-row mr-0">
+                    <div class="mr-1 branch-header-content w-100">
+                        <!-- <div class="btn-group advance-icon" dropdown>
+                                <button id="button-basic-icon" dropdownToggle type="button" class="btn dropdown-toggle mr-0 d-flex align-items-center" aria-controls="dropdown-basic-icon">
+                                        <span class="icon-advance-search"></span>
+                                </button>
+                                <ul id="dropdown-basic-icon" *dropdownMenu class="dropdown-menu advance-search-list" role="menu" aria-labelledby="button-basic-icon">
+                                    <li role="menuitem">
+                                        <div class="checkbox search-checkbox">
+                                            <label for="all" class="align-items-start justify-content-start">
+                                            <input type="checkbox" formControlName="all" id="all" name="all">
+                                            All</label>
+                                        </div>
+                                    </li>
+                                    <li role="menuitem">
+                                        <div class="checkbox search-checkbox">
+                                            <label for="active" class="align-items-start justify-content-start">
+                                            <input type="checkbox" formControlName="active" id="active" name="active">
+                                            Active</label>
+                                        </div>
+                                    </li>
+                                    <li role="menuitem">
+                                        <div class="checkbox search-checkbox">
+                                            <label for="archived" class="align-items-start justify-content-start">
+                                            <input type="checkbox" formControlName="archived" id="archived" name="archived">
+                                            Archived</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div> -->
+                        <div class="search-field form-top-fields w-100">
+                            <div class="search-branch-box">
+                                <input type="text" name="searchBranch" [(ngModel)]="searchBranchQuery" #branchSearch
+                                    [placeholder]="localeData?.search_branch" class="form-control" />
+                            </div>
+                            <a class="cp mr-l1 clear-filter-btn" *ngIf="searchBranchQuery" href="javascript:;"
+                                (click)="resetFilter()" [tooltip]="localeData?.reset_search">
+                                <i aria-hidden="true" class="icon-refresh"></i> {{commonLocaleData?.app_clear_filter}}
+                            </a>
                         </div>
-            </div> -->
-    <!-- <div class="btn-group more-btn" dropdown>
-                <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle d-flex align-items-center justify-content-between mr-0" aria-controls="dropdown-basic">
-                More
-                <span class="caret"></span>
-            </button>
-                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                    <li role="menuitem" >Move</li>
-                    <li role="menuitem" >Archive</li>
-                    <li role="menuitem" >Merge</li>
-                    <li role="menuitem" >Delete</li>
-                </ul>
+                        <!-- <div class="input-group form-top-fields">
+                            <div class="form-group">
+                                <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" readonly
+                                    placeholder="Select Date" class="form-control" #dp="bsDaterangepicker"
+                                    [bsValue]="dateRangePickerValue" (bsValueChange)="setFilterDate($event)" bsDaterangepicker>
+                            </div>
+                        </div>
+                        <div class="content-view  mr-l2">
+                            <div class="branch-views">
+                                <span (click)="changeBranchViewType('table');" class="mr-r1">
+                                    <input id="radio-table" name="signatureType" class="radio-custom" name="radio-view"
+                                        type="radio" [checked]="(branchViewType === 'table') ? true : false" checked>
+                                    <label for="radio-table" class="radio-custom-label">Table View</label>
+                                </span>
+                                <span (click)="changeBranchViewType('card');">
+                                    <input id="radio-card" name="signatureType" class="radio-custom" name="radio-view"
+                                        type="radio" [checked]="(branchViewType === 'card') ? true : false">
+                                    <label for="radio-card" class="radio-custom-label">Card View</label>
+                                </span>
+                            </div>
+                        </div> -->
+                    </div>
+                </form>
+                <button class="btn btn-sky-blue mr-0"
+                    (click)="openAddBranchModal()">{{localeData?.create_branch}}</button>
             </div>
         </div>
-    </div> -->
-</div>
-<div *ngIf="(branches$ | async)?.length === 0 && !showLoader" class="no-data mr-t2 loader-main">
-    <div class="no-data">
-        <h1>No branch found within given criteria.</h1>
+        <!-- <div class="row select-branch">
+            <div class="col-12 d-flex mr-b15 align-items-center">
+                    <div class="form-group mb-0">
+                        <div class="checkbox">
+                                <label for="selectAll">
+                                <input type="checkbox" formControlName="selectAll" id="selectAll" name="selectAll">
+                                Select all branches</label>
+                            </div>
+                </div> -->
+        <!-- <div class="btn-group more-btn" dropdown>
+                    <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle d-flex align-items-center justify-content-between mr-0" aria-controls="dropdown-basic">
+                    More
+                    <span class="caret"></span>
+                </button>
+                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                        <li role="menuitem" >Move</li>
+                        <li role="menuitem" >Archive</li>
+                        <li role="menuitem" >Merge</li>
+                        <li role="menuitem" >Delete</li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
     </div>
-</div>
-<div *ngIf="showLoader" class="spinner2">
-    <div class="cube1"></div>
-    <div class="cube2"></div>
-</div>
-<div *ngIf="(branches$ | async)?.length > 0 && branchViewType === 'table' && !isMobileScreen " class="table-responsive">
-    <table class="table basic giddh-table on-mobile-view">
-        <thead>
-            <tr>
-                <th>Branch Name</th>
-                <th *ngIf="formFields['taxName']">{{formFields['taxName'].label}}</th>
-                <th>Parent</th>
-                <!-- <th>Contact No.</th> -->
-                <th class="text-right">Total Sales</th>
-                <th class="text-right">Total Expenses</th>
-                <th class="text-right">Total Taxes</th>
-                <th class="text-right">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let branch of branches$ | async">
-                <td data-title="Branch Name">{{branch.name}} ({{branch.alias}})</td>
-                <td data-title="{{formFields['taxName'].label}}" *ngIf="formFields['taxName']">
-                    {{branch?.addresses[0]?.taxNumber || '-'}}</td>
-                <td data-title="Parent">{{branch?.parentBranch?.name || '-'}}</td>
-                <!-- <td data-title="Contact No.">{{branch.contactNo}}</td> -->
-                <td data-title="Total Sales" class="text-right"><span
-                        *ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">{{branch.companyTotals.sales.amount | giddhCurrency}}</span><span
-                        *ngIf="!(branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount)">0</span>
-                </td>
-                <td class="text-right" data-title="Total Expenses"><span
-                        *ngIf="branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount">{{branch.companyTotals.expenses.amount | giddhCurrency}}</span><span
-                        *ngIf="!(branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount)">0</span>
-                </td>
-                <td class="text-right" data-title="Total Taxes"><span
-                        *ngIf="branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount">{{branch.companyTotals.taxes.amount | giddhCurrency}}</span><span
-                        *ngIf="!(branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount)">0</span>
-                </td>
-                <td data-title="Action" class="text-right unlink">
-                    <!-- <a (click)="removeBranch(branch.uniqueName, branch.name)">Delink</a></td> -->
-                    <a (click)="updateBranch(branch)">Edit</a></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<div *ngIf="(branches$ | async)?.length > 0 && !showLoader">
-    <div class="branch-card-view" *ngIf="branchViewType === 'card'">
-        <div class="row">
-            <div class="col-12" *ngFor="let branch of branches$ | async">
-                <div class="branch-card">
-                    <div class="card-basic-details">
-                        <div class="clearfix">
-                            <div class="pull-left d-flex">
-                                <!-- <input type="checkbox">&nbsp;&nbsp; -->
-                                <i class="cursor-pointer icon-branch-icon" *ngIf="branch.parentBranch"
-                                    tooltip="Branch"></i>
-                                <i class="cursor-pointer icon-company-HO" *ngIf="!branch.parentBranch"
-                                    tooltip="HO Branch"></i>
-                                <div>
-                                    <h2>{{branch.alias}}</h2>
-                                </div>
-                                <div>{{branch.name}}</div>
-                            </div>
-                            <div class="pull-right right-card-section">
-                                <div class="btn-group align-items-center" dropdown [autoClose]="true">
-                                    <!-- <a href="javascript:;" *ngIf="!isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = true;">
-                                            <i class="icon-expandIcon"></i> Expand</a>
-                                        <a href="javascript:;" *ngIf="isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = false;">
-                                            <i class="icon-collapse"></i> Collapse</a>
-
-                                        <div class="ml-15 active-status">
-                                            <span class="status-bullet d-flex align-items-center">Active</span>
-                                        </div> -->
-
-                                    <a id="button-basic" dropdownToggle type="button"
-                                        class="icon-dots-three-vertical dropdown-toggle" aria-controls="dropdown-basic">
-                                    </a>
-                                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
-                                        aria-labelledby="button-basic">
-                                        <!-- <li role="menuitem"><a class="dropdown-item"
-                                                (click)="removeBranch(branch.uniqueName, branch.name)">Delink</a></li> -->
-                                        <li role="menuitem"><a class="dropdown-item"
-                                                (click)="updateBranch(branch)">Edit</a></li>
-                                        <!-- <li role="menuitem"><a class="dropdown-item" (click)="openEditBranch()">Edit</a></li>
-                                        <li role="menuitem"><a class="dropdown-item">Move</a></li>
-                                        <li role="menuitem"><a class="dropdown-item">Archive</a></li>
-                                        <li role="menuitem"><a class="dropdown-item">Merge</a></li>
-                                        <li role="menuitem"><a class="dropdown-item">Delete</a></li> -->
-
-                                    </ul>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="clearfix">
-                            <div *ngIf="branch?.parentBranch?.alias" class="pull-left">
-                                <span class="parent-branch">Parent Entity:</span> {{branch?.parentBranch?.alias}}
-                            </div>
-                        </div>
-                        <!-- <div class="clearfix">
-                            <div class="pull-left">
-                                <span class="parent-branch">Contact:</span> {{branch.contactNo}}
-                            </div>
-                        </div> -->
-                        <!-- <div class="clearfix" *ngIf="formFields['taxName']">
-                            <div class="pull-left">
-                                <span class="parent-branch">{{formFields['taxName'].label}}:</span>
-                                {{branch?.addresses[0]?.taxNumber}}
-                            </div>
-                        </div> -->
-                        <div class="clearfix row">
-                            <div class="col-xl-3 col-lg-4 col-md-6">
-                                <div class="parent-branch pt-1 pb-1">Linked Address:</div>
-                                <div>
-                                    <div *ngFor="let address of branch?.addresses" class="linked-add">
-                                        <ng-container *ngIf="address">
-                                            <i (click)="setDefault(address, branch, 'address')"
-                                                *ngIf="!address?.isDefault"
-                                                class="cursor-pointer icon-no-selected mr-05"></i>
-                                            <i (click)="setDefault(address, branch, 'address')"
-                                                *ngIf="address?.isDefault"
-                                                class="cursor-pointer icon-favorite-selected mr-05"></i>
-                                            <label class="cursor-pointer" [popover]="popTemplate"
-                                                popoverTitle="{{address?.name}}" placement="right" popover
-                                                triggers="mouseenter:mouseleave">{{address?.name}}</label>
-                                            <ng-template #popTemplate>
-                                                {{address?.address}} {{address?.stateCode}}
-                                                <p *ngIf="address?.taxType && address?.taxNumber">
-                                                    {{ address?.taxType }} : {{ address?.taxNumber }}
-                                                </p>
-                                            </ng-template>
-                                        </ng-container>
+    <div *ngIf="(branches$ | async)?.length === 0 && !showLoader" class="no-data mr-t2 loader-main">
+        <div class="no-data">
+            <h1>{{localeData?.no_branch_found}}</h1>
+        </div>
+    </div>
+    <div *ngIf="showLoader" class="spinner2">
+        <div class="cube1"></div>
+        <div class="cube2"></div>
+    </div>
+    <div *ngIf="(branches$ | async)?.length > 0 && branchViewType === 'table' && !isMobileScreen "
+        class="table-responsive">
+        <table class="table basic giddh-table on-mobile-view">
+            <thead>
+                <tr>
+                    <th>{{commonLocaleData?.app_branch_name}}</th>
+                    <th *ngIf="formFields['taxName']">{{formFields['taxName'].label}}</th>
+                    <th>{{localeData?.parent}}</th>
+                    <!-- <th>Contact No.</th> -->
+                    <th class="text-right">{{localeData?.total_sales}}</th>
+                    <th class="text-right">{{localeData?.total_expenses}}</th>
+                    <th class="text-right">{{localeData?.total_taxes}}</th>
+                    <th class="text-right">{{commonLocaleData?.app_action}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let branch of branches$ | async">
+                    <td [attr.data-title]="commonLocaleData?.app_branch_name">{{branch.alias}}</td>
+                    <td [attr.data-title]="formFields['taxName'].label" *ngIf="formFields['taxName']">
+                        {{branch?.addresses[0]?.taxNumber || '-'}}</td>
+                    <td [attr.data-title]="localeData?.parent">{{branch?.parentBranch?.name || '-'}}</td>
+                    <!-- <td data-title="Contact No.">{{branch.contactNo}}</td> -->
+                    <td [attr.data-title]="localeData?.total_sales" class="text-right"><span
+                            *ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">{{branch.companyTotals.sales.amount
+                            | giddhCurrency}}</span><span
+                            *ngIf="!(branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount)">0</span>
+                    </td>
+                    <td class="text-right" [attr.data-title]="localeData?.total_expenses"><span
+                            *ngIf="branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount">{{branch.companyTotals.expenses.amount
+                            | giddhCurrency}}</span><span
+                            *ngIf="!(branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount)">0</span>
+                    </td>
+                    <td class="text-right" [attr.data-title]="localeData?.total_taxes"><span
+                            *ngIf="branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount">{{branch.companyTotals.taxes.amount
+                            | giddhCurrency}}</span><span
+                            *ngIf="!(branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount)">0</span>
+                    </td>
+                    <td [attr.data-title]="commonLocaleData?.app_action" class="text-right unlink">
+                        <!-- <a (click)="removeBranch(branch.uniqueName, branch.name)">Delink</a></td> -->
+                        <a (click)="updateBranch(branch)">{{commonLocaleData?.app_edit}}</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="(branches$ | async)?.length > 0 && !showLoader">
+        <div class="branch-card-view" *ngIf="branchViewType === 'card'">
+            <div class="row">
+                <div class="col-12" *ngFor="let branch of branches$ | async">
+                    <div class="branch-card">
+                        <div class="card-basic-details">
+                            <div class="clearfix">
+                                <div class="pull-left d-flex">
+                                    <!-- <input type="checkbox">&nbsp;&nbsp; -->
+                                    <i class="cursor-pointer icon-branch-icon"
+                                        [tooltip]="commonLocaleData?.app_branch"></i>
+                                    <div>
+                                        <h2>{{branch.alias}}</h2>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-4 col-md-6">
-                                <div class="parent-branch pt-1 pb-1">Linked Warehouse:</div>
-                                <div>
-                                    <div *ngFor="let warehouse of branch?.warehouseResource" class="linked-add">
-                                        <ng-container *ngIf="warehouse">
-                                            <i (click)="setDefault(warehouse, branch, 'warehouse')"
-                                                *ngIf="!warehouse?.isDefault"
-                                                class="cursor-pointer icon-no-selected mr-05"></i>
-                                            <i (click)="setDefault(warehouse, branch, 'warehouse')"
-                                                *ngIf="warehouse?.isDefault"
-                                                class="cursor-pointer icon-favorite-selected mr-05"></i>
-                                            <label class="cursor-pointer">{{warehouse?.name}}</label>
-                                        </ng-container>
+                                <div class="pull-right right-card-section">
+                                    <div class="btn-group align-items-center" dropdown [autoClose]="true">
+                                        <!-- <a href="javascript:;" *ngIf="!isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = true;">
+                                                <i class="icon-expandIcon"></i> Expand</a>
+                                            <a href="javascript:;" *ngIf="isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = false;">
+                                                <i class="icon-collapse"></i> Collapse</a>
+
+                                            <div class="mr-l15 active-status">
+                                                <span class="status-bullet d-flex align-items-center">Active</span>
+                                            </div> -->
+
+                                        <a id="button-basic" dropdownToggle
+                                            class="icon-dots-three-vertical dropdown-toggle cp"
+                                            aria-controls="dropdown-basic">
+                                        </a>
+                                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                            aria-labelledby="button-basic">
+                                            <!-- <li role="menuitem"><a class="dropdown-item"
+                                                    (click)="removeBranch(branch.uniqueName, branch.name)">Delink</a></li> -->
+                                            <li role="menuitem"><a class="dropdown-item"
+                                                    (click)="updateBranch(branch)">{{commonLocaleData?.app_edit}}</a>
+                                            </li>
+                                            <!-- <li role="menuitem"><a class="dropdown-item" (click)="openEditBranch()">Edit</a></li>
+                                            <li role="menuitem"><a class="dropdown-item">Move</a></li>
+                                            <li role="menuitem"><a class="dropdown-item">Archive</a></li>
+                                            <li role="menuitem"><a class="dropdown-item">Merge</a></li>
+                                            <li role="menuitem"><a class="dropdown-item">Delete</a></li> -->
+
+                                        </ul>
                                     </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="clearfix">
+                                <div *ngIf="branch?.parentBranch?.alias" class="pull-left">
+                                    <span class="parent-branch">{{localeData?.parent_entity}}:</span>
+                                    {{branch?.parentBranch?.alias}}
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- <div class="branch-sales-details" [ngClass]="{'branch-sales-collapsed': !isBranchSalesExpanded}">
-                        <div class="row">
-                            <div class="col-xl-3 col-lg-4 col-md-6">
-                                    <div class="total-amount">
-                                            <label>Total Sales</label>
-                                            <div class="pull-right" *ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">₹{{branch.companyTotals.sales.amount | giddhCurrency}}</div>
-                                            <div class="pull-right" *ngIf="!(branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount)">₹0</div>
+                            <!-- <div class="clearfix">
+                                <div class="pull-left">
+                                    <span class="parent-branch">Contact:</span> {{branch.contactNo}}
+                                </div>
+                            </div> -->
+                            <!-- <div class="clearfix" *ngIf="formFields['taxName']">
+                                <div class="pull-left">
+                                    <span class="parent-branch">{{formFields['taxName'].label}}:</span>
+                                    {{branch?.addresses[0]?.taxNumber}}
+                                </div>
+                            </div> -->
+                            <div class="clearfix row">
+                                <div class="col-xl-3 col-lg-4 col-md-6">
+                                    <div class="parent-branch pt-1 pb-1">{{localeData?.linked_address}}:</div>
+                                    <div>
+                                        <div *ngFor="let address of branch?.addresses" class="linked-add">
+                                            <ng-container *ngIf="address">
+                                                <i (click)="setDefault(address, branch, 'address')"
+                                                    *ngIf="!address?.isDefault"
+                                                    class="cursor-pointer icon-no-selected mr-r05"></i>
+                                                <i (click)="setDefault(address, branch, 'address')"
+                                                    *ngIf="address?.isDefault"
+                                                    class="cursor-pointer icon-favorite-selected mr-r05"></i>
+                                                <label class="cursor-pointer" [popover]="popTemplate"
+                                                    popoverTitle="{{address?.name}}" placement="right" popover
+                                                    triggers="mouseenter:mouseleave">{{address?.name}}</label>
+                                                <ng-template #popTemplate>
+                                                    {{address?.address}} {{address?.stateCode}}
+                                                    <p *ngIf="address?.taxType && address?.taxNumber">
+                                                        {{ address?.taxType }} : {{ address?.taxNumber }}
+                                                    </p>
+                                                    <p *ngIf="address?.pincode">{{commonLocaleData?.app_pin}}:
+                                                        {{address?.pincode}}</p>
+                                                </ng-template>
+                                            </ng-container>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-6">
+                                    <div class="parent-branch pt-1 pb-1">{{localeData?.linked_warehouse}}:</div>
+                                    <div>
+                                        <div *ngFor="let warehouse of branch?.warehouseResource" class="linked-add">
+                                            <ng-container *ngIf="warehouse">
+                                                <i (click)="setDefault(warehouse, branch, 'warehouse')"
+                                                    *ngIf="!warehouse?.isDefault"
+                                                    class="cursor-pointer icon-no-selected mr-r05"></i>
+                                                <i (click)="setDefault(warehouse, branch, 'warehouse')"
+                                                    *ngIf="warehouse?.isDefault"
+                                                    class="cursor-pointer icon-favorite-selected mr-r05"></i>
+                                                <label class="cursor-pointer">{{warehouse?.name}}</label>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <div class="branch-sales-details" [ngClass]="{'branch-sales-collapsed': !isBranchSalesExpanded}">
+                            <div class="row">
+                                <div class="col-xl-3 col-lg-4 col-md-6">
                                         <div class="total-amount">
-                                                <label>Total Expenses</label>
-                                                <div class="pull-right" *ngIf="branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount">₹{{branch.companyTotals.expenses.amount | giddhCurrency}}</div>
-                                                <div class="pull-right" *ngIf="!(branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount)">₹0</div>
+                                                <label>Total Sales</label>
+                                                <div class="pull-right" *ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">₹{{branch.companyTotals.sales.amount | giddhCurrency}}</div>
+                                                <div class="pull-right" *ngIf="!(branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount)">₹0</div>
                                             </div>
                                             <div class="total-amount">
-                                                    <label>Total Taxes</label>
-                                                    <div class="pull-right" *ngIf="branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount">₹{{branch.companyTotals.taxes.amount | giddhCurrency}}</div>
-                                                    <div class="pull-right" *ngIf="!(branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount)">₹0</div>
+                                                    <label>Total Expenses</label>
+                                                    <div class="pull-right" *ngIf="branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount">₹{{branch.companyTotals.expenses.amount | giddhCurrency}}</div>
+                                                    <div class="pull-right" *ngIf="!(branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount)">₹0</div>
                                                 </div>
                                                 <div class="total-amount">
-                                                        <label>Total Stock</label>
-                                                        <div class="pull-right">₹30,00,000</div>
+                                                        <label>Total Taxes</label>
+                                                        <div class="pull-right" *ngIf="branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount">₹{{branch.companyTotals.taxes.amount | giddhCurrency}}</div>
+                                                        <div class="pull-right" *ngIf="!(branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount)">₹0</div>
                                                     </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-4 col-md-6">
-                                    <div class="total-amount">
-                                            <label>Total Profit/Loss</label>
-                                            <div class="pull-right">₹1,21,900</div>
-                                        </div>
+                                                    <div class="total-amount">
+                                                            <label>Total Stock</label>
+                                                            <div class="pull-right">₹30,00,000</div>
+                                                        </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-6">
                                         <div class="total-amount">
-                                                <label>Total Bank Balance</label>
-                                                <div class="pull-right">₹12,58,000</div>
+                                                <label>Total Profit/Loss</label>
+                                                <div class="pull-right">₹1,21,900</div>
                                             </div>
                                             <div class="total-amount">
-                                                    <label>Total Cash Balance</label>
-                                                    <div class="pull-right">₹20,000</div>
+                                                    <label>Total Bank Balance</label>
+                                                    <div class="pull-right">₹12,58,000</div>
                                                 </div>
+                                                <div class="total-amount">
+                                                        <label>Total Cash Balance</label>
+                                                        <div class="pull-right">₹20,000</div>
+                                                    </div>
+                                </div>
+                            </div>
+
+                        </div> -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="branch-vector">
+            <img src="{{ imgPath }}" [alt]="localeData?.branch_image">
+        </div>
+        <!-- add branch modal -->
+        <div bsModal #branchModal="bs-modal" [config]="{backdrop: 'static', keyboard: true}" tabindex="-1"
+            class="modal fade" role="dialog">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header clearfix">
+                        <h3>{{localeData?.create_new_branch}}</h3>
+                        <span aria-hidden="true" class="close" (click)="hideAddBranchModal()"
+                            data-dismiss="modal">×</span>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label class="selectCompanies">{{localeData?.select_companies}}</label>
+                            <div class="btn-group btn-block" dropdown>
+                                <button dropdownToggle (click)="getAllBranches()" type="button"
+                                    class="form-control text-left btn-block dropdown-toggle">
+                                    <span *ngIf="!selectedCompaniesUniquename.length">
+                                        {{commonLocaleData?.app_select_branch}} </span><span
+                                        *ngIf="selectedCompaniesUniquename.length">{{selectedCompaniesUniquename.length}}
+                                        {{localeData?.selected}}</span><span class="select_drop pull-right mr-t1"><i
+                                            class="fa fa-caret-down"></i></span>
+                                </button>
+                                <ul *dropdownMenu class="dropdown-menu width-100" role="menu">
+                                    <li>
+                                        <input type="checkbox" (click)="selectAllCompanies($event)"
+                                            [checked]="isAllSelected$ | async" /> {{commonLocaleData?.app_select_all}}
+                                    </li>
+                                    <li *ngFor="let cmp of companies$ | async">
+                                        <input type="checkbox"
+                                            [checked]="selectedCompaniesUniquename.indexOf(cmp.uniqueName) !== -1"
+                                            (click)="checkUncheckMe(cmp, $event)" /> {{cmp.name}} <span
+                                            *ngIf="cmp.nameAlias">
+                                            ({{cmp.nameAlias}})</span>
+                                    </li>
+                                </ul>
+
+
                             </div>
                         </div>
-
-                    </div> -->
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div *ngIf="(branches$ | async)?.length < 1">
-        <div class="col-xs-12  text-center">
-            <div class="illustration_box">
-                <img src="assets/images/new/branch-Illus.png" />
-                <div class="" *ngIf="!parentCompanyName">
-                    <h3 class="lead mr-t2 mr-b2 fs18">Add branch under <strong
-                            class="primary_clr txtCpc">{{ currentBranch }} <span *ngIf="currentBranchNameAlias">(
-                                {{currentBranchNameAlias}} )</span></strong> headquarter.
-                    </h3>
-                    <button class="btn btn-default mr-l1 btn-lg" (click)="openAddBranchModal()">Add Branch</button>
-                </div>
-                <div class="" *ngIf="parentCompanyName">
-                    <h3 class="lead mr-t2 fs18">This is a branch of <strong class="primary_clr txtCpc">{{ parentCompanyName
-					}}</strong> headquarter.</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="branch-vector">
-        <img src="../../../assets/images/branch-vector.svg" alt="branch-image">
-    </div>
-    <!-- add branch modal -->
-    <div bsModal #branchModal="bs-modal" [config]="{backdrop: 'static', keyboard: true}" tabindex="-1"
-        class="modal fade" role="dialog">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header clearfix">
-                    <h3>Create New Branch</h3>
-                    <span aria-hidden="true" class="close" (click)="hideAddBranchModal()" data-dismiss="modal">×</span>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <label class="selectCompanies">Select companies who are your branch</label>
-                        <div class="btn-group btn-block" dropdown>
-                            <button dropdownToggle (click)="getAllBranches()" type="button"
-                                class="form-control text-left btn-block dropdown-toggle">
-                                <span *ngIf="!selectedCompaniesUniquename.length"> Select Branch </span><span
-                                    *ngIf="selectedCompaniesUniquename.length">{{selectedCompaniesUniquename.length}}
-                                    selected</span><span class="select_drop pull-right mr-t1"><i
-                                        class="fa fa-caret-down"></i></span>
-                            </button>
-                            <ul *dropdownMenu class="dropdown-menu width100" role="menu">
-                                <li>
-                                    <input type="checkbox" (click)="selectAllCompanies($event)"
-                                        [checked]="isAllSelected$ | async" /> Select
-                                    all
+                        <div class="mr-t05">
+                            <ul class="list-inline custom-multi-select">
+                                <li *ngFor="let cmp of selectedCompaniesName">
+                                    <a>
+                                        {{cmp.name}} <span *ngIf="cmp.nameAlias"> ({{cmp.nameAlias}})</span><span
+                                            class="pd-l05" (click)="checkUncheckMe(cmp,$event)">×</span>
+                                    </a>
                                 </li>
-                                <li *ngFor="let cmp of companies$ | async">
-                                    <input type="checkbox"
-                                        [checked]="selectedCompaniesUniquename.indexOf(cmp.uniqueName) !== -1"
-                                        (click)="checkUncheckMe(cmp, $event)" /> {{cmp.name}} <span
-                                        *ngIf="cmp.nameAlias">
-                                        ({{cmp.nameAlias}})</span>
-                                </li>
+
                             </ul>
 
+                        </div>
+                        <div>
+                            <br>
+                            <span>{{localeData?.or}}</span>
+                            <button class="btn-link"
+                                (click)="openCreateCompanyModal()">{{localeData?.create_new_branch}}</button>
+                        </div>
 
+
+                        <div class="buttonYesCancel">
+                            <button (click)="hideAddBranchModal()"
+                                class="btn btn-sm btn-danger">{{commonLocaleData?.app_cancel}}</button>
+                            <button (click)="createBranches()"
+                                class="btn btn-sm btn-success">{{commonLocaleData?.app_yes}}</button>
+                        </div>
+
+                    </div>
+
+                    <!-- modal footer -->
+                </div>
+            </div>
+        </div>
+
+        <!--add company modal  -->
+
+
+        <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: 'true'}" tabindex="-1"
+            class="modal fade open-popup" role="dialog" (onHidden)="onHide()">
+            <div class="modal-dialog modal-xl modal-width">
+                <div class="modal-content">
+                    <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- add branch modal -->
+        <div bsModal #confirmationModal="bs-modal" [config]="{backdrop: 'static', keyboard: 'true'}" tabindex="-1"
+            class="modal fade" role="dialog">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header clearfix">
+                        <h3>{{commonLocaleData?.app_confirmation}}</h3>
+                        <span aria-hidden="true" class="close" (click)="onUserConfirmation(false)"
+                            data-dismiss="modal">×</span>
+                    </div>
+                    <div class="modal-body" [innerHTML]="confirmationMessage">
+                    </div>
+                    <div class="modal-footer clearfix">
+                        <button (click)="onUserConfirmation(true)"
+                            class="btn btn-sm btn-success">{{commonLocaleData?.app_yes}}</button>
+                        <button (click)="onUserConfirmation(false)"
+                            class="btn btn-sm btn-danger">{{commonLocaleData?.app_no}}</button>
+                    </div>
+                    <!-- modal footer -->
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Edit branch -->
+        <div *ngIf="closeAddressSidePane === 'in'" appTranslate [file]="'settings/profile'"
+            (localeData)="profileLocaleData = $event" [requireCommonData]="false">
+            <div class="aside-overlay"></div>
+            <create-address [class]="closeAddressSidePane" [@slideInOut]="closeAddressSidePane"
+                [keyboardShortcut]="'esc'" (onShortcutPress)="toggleAsidePane()" [companyName]="currentBranch"
+                [branchToUpdate]="branchToUpdate" [showLoader]="isBranchChangeInProgress"
+                (updateAddress)="updateBranchInfo($event)" [addressConfiguration]="addressConfiguration"
+                [localeData]="profileLocaleData" [commonLocaleData]="commonLocaleData"
+                (closeAsideEvent)="toggleAsidePane($event)">
+            </create-address>
+        </div>
+
+
+        <!-- Move branch popup for v2 -->
+        <!-- <ng-template #template>
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">Move</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 font-14 mb-3">
+                        <strong>Alas Branch Name</strong>will be moved permanently
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group mb-0">
+                            <label>Move From</label>
+                            <input type="text" class="form-control">
                         </div>
                     </div>
-                    <div style="margin-top: 5px;">
-                        <ul class="list-inline custom-multi-select">
-                            <li *ngFor="let cmp of selectedCompaniesName">
-                                <a style="color: gray">
-                                    {{cmp.name}} <span *ngIf="cmp.nameAlias"> ({{cmp.nameAlias}})</span><span
-                                        class="pdL" (click)="checkUncheckMe(cmp,$event)">×</span>
-                                </a>
-                            </li>
-
-                        </ul>
-
+                    <div class="col-6">
+                        <div class="form-group mb-0">
+                            <label>Move To</label>
+                            <input type="text" class="form-control">
+                        </div>
                     </div>
-                    <div>
-                        <br>
-                        <span>Or</span>
-                        <button class="btn-link" (click)="openCreateCompanyModal()">Create New Branch</button>
+                    <div class="col-12 mt-5">
+                        <button type="submit" class="btn btn-success">Move</button>
                     </div>
-
-
-                    <div class="buttonYesCancel">
-                        <button (click)="hideAddBranchModal()" class="btn btn-sm btn-danger">Cancel</button>
-                        <button (click)="createBranches()" class="btn btn-sm btn-success">Yes</button>
-                    </div>
-
-                </div>
-
-                <!-- modal footer -->
-            </div>
-        </div>
-    </div>
-
-    <!--add company modal  -->
-
-
-    <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: 'true'}" tabindex="-1"
-        class="modal fade openPoup" role="dialog" (onHidden)="onHide()">
-        <div class="modal-dialog modal-xl modal-width">
-            <div class="modal-content">
-                <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
-                </ng-template>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- add branch modal -->
-    <div bsModal #confirmationModal="bs-modal" [config]="{backdrop: 'static', keyboard: 'true'}" tabindex="-1"
-        class="modal fade" role="dialog">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header clearfix">
-                    <h3>Confirmation</h3>
-                    <span aria-hidden="true" class="close" (click)="onUserConfirmation(false)"
-                        data-dismiss="modal">×</span>
-                </div>
-                <div class="modal-body" [innerHTML]="confirmationMessage">
-                </div>
-                <div class="modal-footer clearfix">
-                    <button (click)="onUserConfirmation(true)" class="btn btn-sm btn-success">Yes</button>
-                    <button (click)="onUserConfirmation(false)" class="btn btn-sm btn-danger">No</button>
-                </div>
-                <!-- modal footer -->
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Edit branch -->
-    <div *ngIf="closeAddressSidePane === 'in'">
-        <div class="aside-overlay"></div>
-        <create-address [class]="closeAddressSidePane" [@slideInOut]="closeAddressSidePane"
-            [keyboardShortcut]="'esc'"
-            (onShortcutPress)="toggleAsidePane()"
-            [companyName]="currentBranch"
-            [branchToUpdate]="branchToUpdate" [showLoader]="isBranchChangeInProgress"
-            (updateAddress)="updateBranchInfo($event)" [addressConfiguration]="addressConfiguration"
-            (closeAsideEvent)="toggleAsidePane($event)">
-        </create-address>
-    </div>
-
-
-    <!-- Move branch popup for v2 -->
-    <!-- <ng-template #template>
-        <div class="modal-header">
-            <h4 class="modal-title pull-left">Move</h4>
-            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="row">
-                <div class="col-12 font-14 mb-3">
-                    <strong>Alas Branch Name</strong>will be moved permanently
-                </div>
-                <div class="col-6">
-                    <div class="form-group mb-0">
-                        <label>Move From</label>
-                        <input type="text" class="form-control">
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group mb-0">
-                        <label>Move To</label>
-                        <input type="text" class="form-control">
-                    </div>
-                </div>
-                <div class="col-12 mt-5">
-                    <button type="submit" class="btn btn-success">Move</button>
                 </div>
             </div>
-        </div>
-    </ng-template> -->
+        </ng-template> -->
+    </div>
+</ng-container>

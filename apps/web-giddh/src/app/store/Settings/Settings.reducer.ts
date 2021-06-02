@@ -108,6 +108,9 @@ export interface SettingsState {
     taxes: Taxes;
     branchRemoved: boolean;
     financialYearLimits: any;
+    freePlanSubscribed: boolean;
+    isGetAllTagsInProcess: boolean;
+    isGetAllTriggersInProcess: boolean;
 }
 
 export const initialState: SettingsState = {
@@ -135,7 +138,10 @@ export const initialState: SettingsState = {
     branchRemoved: false,
     // Get profile API call in process
     getProfileInProgress: false,
-    financialYearLimits: null
+    financialYearLimits: null,
+    freePlanSubscribed: false,
+    isGetAllTagsInProcess: false,
+    isGetAllTriggersInProcess: false
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -219,9 +225,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         // region profile
 
-       case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO: {
+        case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO: {
             return Object.assign({}, state, { getProfileInProgress: true });
-       }
+        }
 
         case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
@@ -230,6 +236,8 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 newState.profileRequest = true;
                 newState.getProfileInProgress = false;
                 return Object.assign({}, state, newState);
+            } else if (response.status === 'error' && response.code === 'UNAUTHORISED') {
+                return { ...state, updateProfileInProgress: false, getProfileInProgress: false };
             }
             return { ...state, updateProfileInProgress: true, getProfileInProgress: false };
         }
@@ -266,6 +274,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return {
                 ...state,
                 updateProfileSuccess: false,
+                updateProfileInProgress: false
             };
         }
         case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE: {
@@ -442,17 +451,30 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             }
             return Object.assign({}, state, newState);
         }
+        case SETTINGS_TAG_ACTIONS.GET_ALL_TAGS: {
+            return {
+                ...state,
+                isGetAllTagsInProcess: true
+            };
+        }
         case SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE: {
             let response: BaseResponse<any, any> = action.payload;
             return {
                 ...state,
-                tags: response.status === 'success' ? response.body : null
+                isGetAllTagsInProcess: false, tags: response.status === 'success' ? response.body : null
+            };
+        }
+        case SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS: {
+            return {
+                ...state,
+                isGetAllTriggersInProcess: true
             };
         }
         case SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS_RESPONSE: {
             let response: BaseResponse<any, any> = action.payload;
             if (response.status === 'success') {
                 newState.triggers = response.body;
+                newState.isGetAllTriggersInProcess = false;
                 return Object.assign({}, state, newState);
             }
             return state;
@@ -729,6 +751,13 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 });
             }
             return Object.assign({}, state, {});
+        }
+        case SETTINGS_BRANCH_ACTIONS.RESET_ALL_BRANCHES_RESPONSE: {
+            return Object.assign({}, state, { branches: null });
+        }
+
+        case SETTINGS_PROFILE_ACTIONS.FREE_PLAN_SUBSCRIBED: {
+            return Object.assign({}, state, { freePlanSubscribed: action.payload });
         }
 
         //  endregion discount reducer

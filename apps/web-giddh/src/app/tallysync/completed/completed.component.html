@@ -1,137 +1,179 @@
-<ng-container>
-    <form (ngSubmit)="getReport()" [formGroup]="filterForm">
-        <div class="row form">
-            <div class="col-lg-3 col-md-12 form-group company">
-                <label>Company</label>
-                <sh-select [options]="CompanyList" [multiple]="false" [placeholder]="'Select Company'" #shCompany
-                    formControlName="filterCompany" (selected)="onDDElementCompanySelect($event)"></sh-select>
-            </div>
-            <div class="col-lg-3 col-md-12 form-group date">
-                <label>Date</label>
-                <input name="filterDate" formControlName="filterDate" type="text" autocomplete="off"
-                    class="form-control" [maxDate]="maxDate" bsDatepicker (bsValueChange)="onValueChange($event)"
-                    [bsConfig]=" {dateInputFormat: 'D-MMM-YYYY'}">
+<ng-container appTranslate [file]="'tallysync'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <ng-container>
+        <form (ngSubmit)="getReport()" [formGroup]="filterForm">
+            <div class="row form">
+                <div class="col-lg-3 col-md-12 form-group company">
+                    <label>{{localeData?.company}}</label>
+                    <sh-select [options]="CompanyList" [multiple]="false" [placeholder]="localeData?.select_company"
+                        #shCompany formControlName="filterCompany" (selected)="onDDElementCompanySelect($event)">
+                    </sh-select>
+                </div>
+                <!-- Commented as currently the Tally plugin doesn't support branch wise import -->
+                <!-- <div *ngIf="currentCompanyBranches?.length" class="col-lg-3 col-md-12 form-group company linked-entities">
+                    <label>Branch</label>
+                    <sh-select [options]="currentCompanyBranches" formControlName="branchUniqueName" [showClear]="false"
+                        [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
+                        placeholder="Select Entity" [fixedValue]="currentBranch?.alias" name="entity">
+                        <ng-template #optionTemplate let-option="option">
+                            <ng-container>
+                                <a href="javascript:void(0)" class="list-item d-flex">
+                                    <span class="entity-icon">
+                                        <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
+                                        <i class="icon-branch-icon pull-right" *ngIf="!option.parentBranch && !option.isCompany"
+                                            tooltip="HO Branch"></i>
+                                    </span>
+                                    <span class="entity-details">
+                                        <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                        <div class="item-unique giddh-limit single-line-clamp">
+                                            {{ option.name || '-' }}
+                                        </div>
+                                    </span>
+                                </a>
+                            </ng-container>
+                        </ng-template>
+                    </sh-select>
+                </div> -->
+                <div class="col-lg-3 col-md-12 form-group date">
+                    <label>{{commonLocaleData?.app_date}}</label>
+                    <input name="filterDate" formControlName="filterDate" type="text" autocomplete="off"
+                        class="form-control" [maxDate]="maxDate" bsDatepicker (bsValueChange)="onValueChange($event)"
+                        [bsConfig]=" {dateInputFormat: 'D-MMM-YYYY'}">
 
+                </div>
+                <div class="col-lg-3 col-md-12 form-group interval">
+                    <label>{{commonLocaleData?.app_time}}</label>
+                    <sh-select [options]="timeInterval" [multiple]="false" [placeholder]="localeData?.select_interval"
+                        #shTimeInterval formControlName="filterTimeInterval"
+                        (selected)="onDDElementTimeRangeSelect($event)"></sh-select>
+                </div>
+                <div class="col-lg-2 col-md-12 form-group">
+                    <label class="d-block empty-label">&nbsp;</label>
+                    <button class="btn btn-success" type="submit">{{commonLocaleData?.app_go}}</button>
+                </div>
             </div>
-            <div class="col-lg-3 col-md-12 form-group interval">
-                <label>Time</label>
-                <sh-select [options]="timeInterval" [multiple]="false" [placeholder]="'Select Interval'" #shTimeInterval
-                    formControlName="filterTimeInterval" (selected)="onDDElementTimeRangeSelect($event)"></sh-select>
-            </div>
-            <div class="col-lg-2 col-md-12 form-group">
-                <label class="d-block empty-label">&nbsp;</label>
-                <button class="btn btn-success" type="submit">Go</button>
+        </form>
+
+        <div class="no-data" *ngIf="!isLoading && !completedData?.length">
+            <h1>{{localeData?.no_entries_found}}</h1>
+        </div>
+
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"
+            *ngIf="!isLoading && completedData?.length">
+            <div class="panel panel-default" *ngFor="let row of completedData;">
+                <div class="panel-heading">
+                    <span class="m-r-15">{{row.type === 'TALLY' ? localeData?.tally : row.type === 'COMPANY_JSON_IMPORT'
+                        ? localeData?.import_json : ''}} {{row.company.name}}</span>
+                    <small class="m-r-15">{{localeData?.last_import}} {{row.dateString}}</small>
+                    <small class="running"><i class="fa fa-circle"></i> {{row.status}}</small>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <div class="col-sm-2 col-xs-12">
+                                    <img src="./../../../assets/images/folder.svg" height="20" class="m-r-10">
+                                    <span>{{localeData?.groups}}</span>
+                                </div>
+                                <div class="col-sm-6 col-xs-8">
+                                    <small><em>{{row.totalSavedGroups}}/{{row.totalTallyGroups}}</em></small>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar"
+                                            aria-valuenow="row.totalSavedGroups" aria-valuemin="0" aria-valuemax="100"
+                                            [ngStyle]="{'width': row.groupsPercent}">>
+                                            <span class="sr-only">{{row.groupsPercent}} {{localeData?.complete}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-xs-4 text-success">
+                                    <div class="status">
+                                        <small class="m-r-10"><i class="fa fa-check"></i>{{row.groupsPercent}}
+                                            {{localeData?.complete}}</small>
+                                        <small class="text-danger"
+                                            *ngIf="row.tallyErrorGroups>0">{{row.groupsErrorPercent}}
+                                            {{localeData?.error_occured}}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <div class="col-sm-2 col-xs-12">
+                                    <img src="./../../../assets/images/folder.svg" height="20" class="m-r-10">
+                                    <span>{{localeData?.accounts}}</span>
+                                </div>
+                                <div class="col-sm-6 col-xs-8">
+                                    <small><em>{{row.totalSavedAccounts}}/{{row.totalTallyAccounts}}</em></small>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar"
+                                            aria-valuenow="row.totalSavedAccounts" aria-valuemin="0" aria-valuemax="100"
+                                            [ngStyle]="{'width': row.accountsPercent}">
+                                            <span class="sr-only">{{row.accountsPercent}}
+                                                {{localeData?.complete}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-xs-4 text-success">
+                                    <div class="status">
+                                        <small class="m-r-10"><i class="fa fa-check"></i>{{row.accountsPercent}}
+                                            {{localeData?.complete}}</small>
+                                        <small class="text-danger"
+                                            *ngIf="row.tallyErrorAccounts>0">{{row.accountsErrorPercent}}
+                                            {{localeData?.error_occured}}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <div class="col-sm-2 col-xs-12">
+                                    <img src="./../../../assets/images/folder.svg" height="20" class="m-r-10">
+                                    <span>{{localeData?.entries}}</span>
+                                </div>
+                                <div class="col-sm-6 col-xs-8">
+                                    <small><em>{{row.totalSavedEntries}}/{{row.totalTallyEntries}}</em></small>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar"
+                                            aria-valuenow="row.totalSavedEntries" aria-valuemin="0" aria-valuemax="100"
+                                            [ngStyle]="{'width': row.entriesPercent}">
+                                            <span class="sr-only">{{row.entriesPercent}} {{localeData?.complete}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-xs-4 text-success">
+                                    <div class="status">
+                                        <small class="m-r-10"><i class="fa fa-check"></i>{{row.entriesPercent}}
+                                            {{localeData?.complete}}</small>
+                                        <small class="text-danger"
+                                            *ngIf="row.tallyErrorEntries>0">{{row.entriesErrorPercent}}
+                                            {{localeData?.error_occured}}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="panel-footer"
+                    *ngIf="row.tallyErrorEntries>0 || row.tallyErrorAccounts>0 || row.tallyErrorGroups>0">
+                    <span class="m-r-15">{{localeData?.error_report}}</span>
+                    <a href="javascript:;" class="running"
+                        (click)="downloadLog(row)">{{row.company.name}}-error-log.xlsx</a>
+                </div>
             </div>
         </div>
-    </form>
-
-    <div class="no-data" *ngIf="!completedData?.length">
-        <h1>No entries found</h1>
-    </div>
-
-
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" *ngIf="completedData?.length">
-        <div class="panel panel-default" *ngFor="let row of completedData;">
-            <div class="panel-heading">
-                <span class="m-r-15">{{row.type === 'TALLY' ? 'Tally:' : row.type === 'COMPANY_JSON_IMPORT' ? 'Import Json:' : ''}} {{row.company.name}}</span>
-                <small class="m-r-15">Last Import on {{row.dateString}}</small>
-                <small class="running"><i class="fa fa-circle"></i> {{row.status}}</small>
-            </div>
-            <div class="panel-body">
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <div class="clearfix">
-                            <div class="col-sm-2 col-xs-12">
-                                <img src="./../../../assets/images/folder.svg" height="20" class="m-r-10">
-                                <span>Groups</span>
-                            </div>
-                            <div class="col-sm-6 col-xs-8">
-                                <small><em>{{row.totalSavedGroups}}/{{row.totalTallyGroups}}</em></small>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="row.totalSavedGroups"
-                                        aria-valuemin="0" aria-valuemax="100" [ngStyle]="{'width': row.groupsPercent}">>
-                                        <span class="sr-only">{{row.groupsPercent}} Complete</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-xs-4 text-success">
-                                <div class="status">
-                                    <small class="m-r-10"><i class="fa fa-check"></i>{{row.groupsPercent}}
-                                        Complete</small>
-                                    <small class="text-danger" *ngIf="row.tallyErrorGroups>0">{{row.groupsErrorPercent}}
-                                        error occured
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="clearfix">
-                            <div class="col-sm-2 col-xs-12">
-                                <img src="./../../../assets/images/folder.svg" height="20" class="m-r-10">
-                                <span>Accounts</span>
-                            </div>
-                            <div class="col-sm-6 col-xs-8">
-                                <small><em>{{row.totalSavedAccounts}}/{{row.totalTallyAccounts}}</em></small>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="row.totalSavedAccounts"
-                                        aria-valuemin="0" aria-valuemax="100"
-                                        [ngStyle]="{'width': row.accountsPercent}">
-                                        <span class="sr-only">{{row.accountsPercent}} Complete</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-xs-4 text-success">
-                                <div class="status">
-                                    <small class="m-r-10"><i class="fa fa-check"></i>{{row.accountsPercent}}
-                                        Complete</small>
-                                    <small class="text-danger"
-                                        *ngIf="row.tallyErrorAccounts>0">{{row.accountsErrorPercent}} error
-                                        occured
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="clearfix">
-                            <div class="col-sm-2 col-xs-12">
-                                <img src="./../../../assets/images/folder.svg" height="20" class="m-r-10">
-                                <span>Entries</span>
-                            </div>
-                            <div class="col-sm-6 col-xs-8">
-                                <small><em>{{row.totalSavedEntries}}/{{row.totalTallyEntries}}</em></small>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="row.totalSavedEntries"
-                                        aria-valuemin="0" aria-valuemax="100" [ngStyle]="{'width': row.entriesPercent}">
-                                        <span class="sr-only">{{row.entriesPercent}} Complete</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-xs-4 text-success">
-                                <div class="status">
-                                    <small class="m-r-10"><i class="fa fa-check"></i>{{row.entriesPercent}}
-                                        Complete</small>
-                                    <small class="text-danger"
-                                        *ngIf="row.tallyErrorEntries>0">{{row.entriesErrorPercent}} error occured
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="panel-footer"
-                *ngIf="row.tallyErrorEntries>0 || row.tallyErrorAccounts>0 || row.tallyErrorGroups>0">
-                <span class="m-r-15">Error Report:</span>
-                <a href="javascript:;" class="running" (click)="downloadLog(row)">{{row.company.name}}-error-log.xlsx</a>
-            </div>
+        <!-- pagination -->
+        <div class="text-center" [hidden]="isLoading"
+            *ngIf="completedData?.length && completedtallySyncDataResponse.totalItems>paginationRequest?.count-1">
+            <pagination [maxSize]="5" [totalItems]="completedtallySyncDataResponse?.totalItems"
+                [itemsPerPage]="completedtallySyncDataResponse.count" [(ngModel)]="paginationRequest.page"
+                (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false"
+                [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
+            </pagination>
         </div>
-    </div>
-    <!-- pagination -->
-    <div class="text-center" *ngIf="completedData?.length && completedtallySyncDataResponse.totalItems>paginationRequest?.count-1">
-        <pagination [maxSize]="5" [totalItems]="completedtallySyncDataResponse?.totalItems" [itemsPerPage]="completedtallySyncDataResponse.count" [(ngModel)]="paginationRequest.page" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"
-                    [rotate]="false">
-        </pagination>
-    </div>
+        <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+    </ng-container>
 </ng-container>

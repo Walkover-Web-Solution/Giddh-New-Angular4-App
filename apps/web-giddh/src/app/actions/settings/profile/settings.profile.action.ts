@@ -2,22 +2,22 @@ import { map, switchMap } from 'rxjs/operators';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { CompanyActions } from '../../company.actions';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { Router } from '@angular/router';
 import { SETTINGS_PROFILE_ACTIONS } from './settings.profile.const';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { CustomActions } from '../../../store/customActions';
+import { LocaleService } from '../../../services/locale.service';
 
 @Injectable()
 export class SettingsProfileActions {
 
 
-    public GetSMSKey$: Observable<Action> =createEffect( ()=> this.action$
+    public GetSMSKey$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO),
             switchMap((action: CustomActions) => this.settingsProfileService.GetProfileInfo()),
@@ -30,7 +30,7 @@ export class SettingsProfileActions {
             }))));
 
 
-    public UpdateProfile$: Observable<Action> = createEffect( ()=>this.action$
+    public UpdateProfile$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE),
             switchMap((action: CustomActions) => {
@@ -39,7 +39,7 @@ export class SettingsProfileActions {
             })));
 
 
-    public GetInventoryInfo$: Observable<Action> =createEffect( ()=> this.action$
+    public GetInventoryInfo$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_INFO),
             switchMap((action: CustomActions) => this.settingsProfileService.GetInventoryInfo()),
@@ -52,7 +52,7 @@ export class SettingsProfileActions {
             }))));
 
 
-    public UpdateInventory$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateInventory$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY),
             switchMap((action: CustomActions) => {
@@ -61,7 +61,7 @@ export class SettingsProfileActions {
             })));
 
 
-    public UpdateProfileResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateProfileResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE),
             map((response: CustomActions) => {
@@ -70,13 +70,13 @@ export class SettingsProfileActions {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.store.dispatch(this.companyActions.RefreshCompanies());
-                    this.toasty.successToast('Profile Updated Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.profile_updated"));
                 }
                 return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);
             })));
 
 
-    public PatchProfile$: Observable<Action> =createEffect( ()=> this.action$
+    public PatchProfile$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE),
             switchMap((action: CustomActions) => {
@@ -85,7 +85,7 @@ export class SettingsProfileActions {
             })));
 
     //({ dispatch: false })
-    public PatchProfileResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public PatchProfileResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE),
             map((response: CustomActions) => {
@@ -95,10 +95,10 @@ export class SettingsProfileActions {
                 } else {
                     this.store.dispatch(this.companyActions.RefreshCompanies());
 
-                    if(data.request && data.request.paymentId) {
-                        this.toasty.successToastWithHtml("Welcome onboard!<br>Accounting begins now...");
+                    if (data.request && data.request.paymentId) {
+                        this.toasty.successToastWithHtml(this.localeService.translate("app_messages.welcome_onboard"));
                     } else {
-                        this.toasty.successToast('Profile Updated Successfully.');
+                        this.toasty.successToast(this.localeService.translate("app_messages.profile_updated"));
                     }
                 }
                 if (data.request.isMultipleCurrency) {
@@ -111,7 +111,7 @@ export class SettingsProfileActions {
             })));
 
 
-    public UpdateInventoryResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateInventoryResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE),
             map((response: CustomActions) => {
@@ -120,7 +120,7 @@ export class SettingsProfileActions {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     // this.store.dispatch(this.companyActions.RefreshCompanies()); // commented because if i change refresh then inrefresh will check to change company so there is no need to change company call
-                    this.toasty.successToast('Inventory settings Updated Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.inventory_settings_updated"));
                 }
                 return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);
             })));
@@ -138,7 +138,7 @@ export class SettingsProfileActions {
 
     constructor(private action$: Actions,
         private toasty: ToasterService,
-        private router: Router,
+        private localeService: LocaleService,
         private store: Store<AppState>,
         private settingsProfileService: SettingsProfileService,
         private companyActions: CompanyActions) {
@@ -252,4 +252,17 @@ export class SettingsProfileActions {
         }
     }
 
+    /**
+     * This will hold if free plan subscribed
+     *
+     * @param {boolean} response
+     * @returns {CustomActions}
+     * @memberof SettingsProfileActions
+     */
+    public handleFreePlanSubscribed(response: boolean): CustomActions {
+        return {
+            type: SETTINGS_PROFILE_ACTIONS.FREE_PLAN_SUBSCRIBED,
+            payload: response
+        }
+    }
 }

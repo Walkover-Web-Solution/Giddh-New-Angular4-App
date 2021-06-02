@@ -2,9 +2,9 @@
 @import "../../assets/css/color.scss";
 /*typography styles*/
 
-body.ununresponsive {
+body.unresponsive {
     padding: 0;
-    background: #2c2c43;
+    background: $valhalla;
 }
 
 .intro.login {
@@ -40,7 +40,7 @@ body.ununresponsive {
 }
 
 .login .brand-heading {
-    color: white;
+    color: $white;
     font-size: 40px;
     margin-bottom: 80px;
 }
@@ -85,19 +85,19 @@ body.ununresponsive {
 }
 
 .twitter {
-    background: #11b1e5;
+    background: $medium-spring-blue;
 }
 
 .google {
-    background: #de4d3c;
+    background: $light-maroon;
 }
 
 .linkedin {
-    background: #0e78aa;
+    background: $medium-black-cyan;
 }
 
 .mobile {
-    background: #26263a;
+    background: $valhalla;
 }
 
 .btn-login {
@@ -130,8 +130,8 @@ body.ununresponsive {
 
 .giddh-spinner {
     animation: rotate 1.5s infinite linear;
-    background: #221f1f none repeat scroll 0 0;
-    border: 7px solid #c63b13;
+    background: $nero none repeat scroll 0 0;
+    border: 7px solid $cinnabar-orange;
     border-radius: 50%;
     box-shadow: 0 -10px 0 14px $white inset;
     box-sizing: border-box;
@@ -155,15 +155,15 @@ body.ununresponsive {
 }
 
 .btn-login.btn-default {
-    color: #333;
+    color: $night-rider;
     background-color: $white;
-    border-color: #ccc;
+    border-color: $very-light-gray;
 }
 
 .btn-login.btn-default:hover {
-    color: #000 !important;
+    color: $black !important;
     background-color: $white;
-    border-color: #ccc;
+    border-color: $very-light-gray;
     box-shadow: none;
 }
 
@@ -184,7 +184,7 @@ button.close {
     font-size: 21px;
     font-weight: 700;
     line-height: 1;
-    color: #db7f53;
+    color: $cinnabar-orange;
     text-shadow: none;
     opacity: 1;
 }
@@ -194,7 +194,7 @@ button.close {
 } */
 
 .email {
-    background: #10aae0;
+    background: $deep-sky-blue-hover;
 }
 
 /************* end login page *************/
@@ -251,12 +251,12 @@ h1 {
 }
 
 .login_box {
-    background: #fff8ea url("/assets/images/banner-grid-design.png") repeat;
+    background: $solitude url("/assets/images/banner-grid-design.png") repeat;
     padding: 20px 70px;
 }
 
 .login_box h1 {
-    color: #0f0f27;
+    color: $russian-black;
     font-weight: 500;
 }
 
@@ -267,7 +267,7 @@ h1 {
 }
 
 small {
-    color: #333;
+    color: $night-rider;
 }
 
 .form-wrapper form {
@@ -322,7 +322,7 @@ small {
     position: absolute;
     width: 40px;
     left: 0;
-    background: #fff8eb;
+    background: $floral-white;
     line-height: 38px;
     vertical-align: middle;
 }
@@ -334,13 +334,13 @@ small {
 
 .login-option,
 .login-option a {
-    color: #0c5fc1;
+    color: $primary;
     margin-top: 55px;
     font-weight: 500;
 }
 
 .login-option a {
-    border-bottom: 2px dotted #0c5fc1;
+    border-bottom: 2px dotted $primary;
 }
 
 .slide-content h1 {
@@ -351,7 +351,7 @@ small {
 }
 
 .hash-tag {
-    color: #e34b26;
+    color: $scarlet;
 }
 
 .slide-content .btn {
@@ -363,12 +363,12 @@ small {
 }
 
 .slide-content .btn-white {
-    color: #fff7eb;
+    color: $floral-white;
     border: 1px solid $white;
 }
 
 .slide-content .btn-white:hover {
-    color: #0f0f27;
+    color: $russian-black;
     background: $white;
 }
 
@@ -420,11 +420,11 @@ small {
 .app-ico ul li a:hover,
 .download-app ul li a:hover {
     background: $white;
-    color: #2c2d43;
+    color: $valhalla;
 }
 
 .download-app ul li a:hover i {
-    border-color: #2c2d43;
+    border-color: $valhalla;
 }
 
 .img-hover:hover img:last-child {
@@ -535,6 +535,13 @@ small {
     align-items: center;
     display: flex;
 }
+.form-inline {
+    width: 80px;
+}
+.input-width-mobile {
+    width: calc(100% - 80px);
+}
+
 @media only screen and (max-width: 767px) {
     .giddh-login {
         margin: 0 auto;

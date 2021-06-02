@@ -1,35 +1,18 @@
-import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
-
-import {debounceTime, take, takeUntil} from 'rxjs/operators';
-import {GIDDH_DATE_FORMAT} from './../../shared/helpers/defaultDateFormat';
-import {select, Store} from '@ngrx/store';
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Router} from '@angular/router';
-import {AppState} from '../../store';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
+import { select, Store } from '@ngrx/store';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import {CompanyActions} from '../../actions/company.actions';
-import {TaxResponse} from '../../models/api-models/Company';
-import {SettingsTaxesActions} from '../../actions/settings/taxes/settings.taxes.action';
-import {AccountService} from '../../services/account.service';
+import { CompanyActions } from '../../actions/company.actions';
+import { TaxResponse } from '../../models/api-models/Company';
+import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import {IOption} from '../../theme/ng-select/ng-select';
-import {ToasterService} from '../../services/toaster.service';
-import {IForceClear} from '../../models/api-models/Sales';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-
-const taxesType = [
-    {label: 'GST', value: 'GST'},
-    {label: 'InputGST', value: 'InputGST'},
-    {label: 'Others', value: 'others'}
-];
-
-const taxDuration = [
-    {label: 'Monthly', value: 'MONTHLY'},
-    {label: 'Quarterly', value: 'QUARTERLY'},
-    {label: 'Half-Yearly', value: 'HALFYEARLY'},
-    {label: 'Yearly', value: 'YEARLY'}
-];
+import { IOption } from '../../theme/ng-select/ng-select';
+import { IForceClear } from '../../models/api-models/Sales';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
     selector: 'setting-taxes',
@@ -48,9 +31,9 @@ const taxDuration = [
     ],
     styleUrls: ['./setting.taxes.component.scss'],
 })
-export class SettingTaxesComponent implements OnInit {
+export class SettingTaxesComponent implements OnInit, OnDestroy {
 
-    @ViewChild('taxConfirmationModel', {static: true}) public taxConfirmationModel: ModalDirective;
+    @ViewChild('taxConfirmationModel', { static: true }) public taxConfirmationModel: ModalDirective;
 
     public availableTaxes: TaxResponse[] = [];
     public newTaxObj: TaxResponse = new TaxResponse();
@@ -64,32 +47,37 @@ export class SettingTaxesComponent implements OnInit {
     public confirmationMessage: string;
     public confirmationFor: string;
     public accounts$: IOption[];
-    public taxList: IOption[] = taxesType;
-    public duration: IOption[] = taxDuration;
-    public forceClear$: Observable<IForceClear> = observableOf({status: false});
+    public taxList: IOption[] = [];
+    public duration: IOption[] = [];
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public taxAsideMenuState: string = 'out';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** True if api call in progress */
+    public isLoading: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
-        private router: Router,
         private store: Store<AppState>,
         private _companyActions: CompanyActions,
-        private _accountService: AccountService,
-        private _settingsTaxesActions: SettingsTaxesActions,
-        private _toaster: ToasterService
+        private _settingsTaxesActions: SettingsTaxesActions
     ) {
         for (let i = 1; i <= 31; i++) {
             let day = i.toString();
-            this.days.push({label: day, value: day});
+            this.days.push({ label: day, value: day });
         }
 
         this.store.dispatch(this._companyActions.getTax());
     }
 
     public ngOnInit() {
-        this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.taxes) {
-                this.forceClear$ = observableOf({status: true});
+                this.forceClear$ = observableOf({ status: true });
                 _.map(o.taxes, (tax) => {
                     _.each(tax.taxDetail, (t) => {
                         t.date = moment(t.date, GIDDH_DATE_FORMAT);
@@ -98,17 +86,12 @@ export class SettingTaxesComponent implements OnInit {
                 this.onCancel();
                 this.availableTaxes = _.cloneDeep(o.taxes);
             }
-        });
-        this.getFlattenAccounts('');
 
-        this.store.select((st: AppState) => st.general.addAndManageClosed).subscribe((bool) => {
-            if (bool) {
-                this.getFlattenAccounts('');
-            }
+            this.isLoading = o.isTaxesLoading;
         });
 
         this.store
-            .pipe(select(p => p.company.isTaxCreatedSuccessfully), takeUntil(this.destroyed$))
+            .pipe(select(p => p.company && p.company.isTaxCreatedSuccessfully), takeUntil(this.destroyed$))
             .subscribe(result => {
                 if (result && this.taxAsideMenuState === 'in') {
                     this.toggleTaxAsidePane();
@@ -116,39 +99,12 @@ export class SettingTaxesComponent implements OnInit {
             });
     }
 
-    public onSubmit(data) {
-        let dataToSave = _.cloneDeep(data);
-        dataToSave.taxDetail = [{
-            taxValue: dataToSave.taxValue,
-            date: dataToSave.date
-        }];
-
-        if (dataToSave.taxType === 'others') {
-            if (!dataToSave.accounts) {
-                dataToSave.accounts = [];
-            }
-            this.accounts$.forEach((obj) => {
-                if (obj.value === dataToSave.account) {
-                    let accountObj = obj.label.split(' - ');
-                    dataToSave.accounts.push({name: accountObj[0], uniqueName: obj.value});
-                }
-            });
-        }
-
-        dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
-        dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
-        dataToSave.taxDetail = [{date: dataToSave.date, taxValue: dataToSave.taxValue}];
-        if (dataToSave.duration) {
-            this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
-        } else {
-            this._toaster.errorToast('Please select tax duration.', 'Validation');
-        }
-    }
-
     public deleteTax(taxToDelete) {
         this.newTaxObj = taxToDelete;
         this.selectedTax = this.availableTaxes.find((tax) => tax.uniqueName === taxToDelete.uniqueName);
-        this.confirmationMessage = `Are you sure you want to delete ${this.selectedTax.name}?`;
+        let message = this.localeData?.tax_delete_message;
+        message = message?.replace("[TAX_NAME]", this.selectedTax.name);
+        this.confirmationMessage = message;
         this.confirmationFor = 'delete';
         this.taxConfirmationModel.show();
     }
@@ -156,7 +112,9 @@ export class SettingTaxesComponent implements OnInit {
     public updateTax(taxIndex: number) {
         let selectedTax = _.cloneDeep(this.availableTaxes[taxIndex]);
         this.newTaxObj = selectedTax;
-        this.confirmationMessage = `Are you sure want to update ${selectedTax.name}?`;
+        let message = this.localeData?.tax_update_message;
+        message = message?.replace("[TAX_NAME]", this.selectedTax.name);
+        this.confirmationMessage = message;
         this.confirmationFor = 'edit';
         this.taxConfirmationModel.show();
     }
@@ -186,7 +144,7 @@ export class SettingTaxesComponent implements OnInit {
 
     public addMoreDateAndPercentage(taxIndex: number) {
         let taxes = _.cloneDeep(this.availableTaxes);
-        taxes[taxIndex].taxDetail.push({date: null, taxValue: null});
+        taxes[taxIndex].taxDetail.push({ date: null, taxValue: null });
         this.availableTaxes = taxes;
     }
 
@@ -197,25 +155,10 @@ export class SettingTaxesComponent implements OnInit {
     }
 
     public reloadTaxList() {
-        this.store.select(p => p.company).pipe(take(1)).subscribe((o) => {
+        this.store.pipe(select(p => p.company), take(1)).subscribe((o) => {
             if (o.taxes) {
                 this.onCancel();
                 this.availableTaxes = _.cloneDeep(o.taxes);
-            }
-        });
-    }
-
-    public getFlattenAccounts(value) {
-        let query = value || '';
-        // get flattern accounts
-        this._accountService.getFlattenAccounts(query, '').pipe(debounceTime(100), takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
-                let accounts: IOption[] = [];
-                data.body.results.map(d => {
-                    accounts.push({label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName});
-                    // `${d.name} (${d.uniqueName})`
-                });
-                this.accounts$ = accounts;
             }
         });
     }
@@ -244,4 +187,36 @@ export class SettingTaxesComponent implements OnInit {
         }
     }
 
+    /**
+     * Releases memory
+     *
+     * @memberof SettingTaxesComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof SettingTaxesComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.taxList = [
+                { label: this.commonLocaleData?.app_tax_types?.gst, value: 'GST' },
+                { label: this.commonLocaleData?.app_tax_types?.input_gst, value: 'InputGST' },
+                { label: this.commonLocaleData?.app_tax_types?.others, value: 'others' }
+            ];
+
+            this.duration = [
+                { label: this.commonLocaleData?.app_duration?.monthly, value: 'MONTHLY' },
+                { label: this.commonLocaleData?.app_duration?.quarterly, value: 'QUARTERLY' },
+                { label: this.commonLocaleData?.app_duration?.half_yearly, value: 'HALFYEARLY' },
+                { label: this.commonLocaleData?.app_duration?.yearly, value: 'YEARLY' }
+            ];
+        }
+    }
 }

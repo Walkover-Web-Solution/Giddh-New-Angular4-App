@@ -13,36 +13,21 @@ import {
     ViewChildren,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { select, Store } from '@ngrx/store';
-import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as moment from 'moment';
 import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { ILedgerAdvanceSearchRequest } from '../../../models/api-models/Ledger';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
-import { AccountService } from '../../../services/account.service';
 import { GeneralService } from '../../../services/general.service';
 import { GroupService } from '../../../services/group.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-select/option.interface';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
-
-const COMPARISON_FILTER = [
-    { label: 'Greater Than', value: 'greaterThan' },
-    { label: 'Less Than', value: 'lessThan' },
-    { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-    { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-    { label: 'Equals', value: 'equals' },
-    { label: 'Exclude', value: 'exclude' }
-];
+import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { SearchService } from '../../../services/search.service';
+import { InventoryService } from '../../../services/inventory.service';
 
 @Component({
     selector: 'advance-search-model',
@@ -57,12 +42,11 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public bsRangeValue: string[];
     @Input() public advanceSearchRequest: AdvanceSearchRequest;
     @Output() public closeModelEvent: EventEmitter<{ advanceSearchData, isClose }> = new EventEmitter(null);
-    public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     public advanceSearchObject: ILedgerAdvanceSearchRequest = null;
     public advanceSearchForm: FormGroup;
     public showOtherDetails: boolean = false;
     public showChequeDatePicker: boolean = false;
-    public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY' };
+    public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: GIDDH_DATE_FORMAT, rangeInputFormat: GIDDH_DATE_FORMAT };
     public accounts$: Observable<IOption[]>;
     public groups$: Observable<IOption[]>;
     public voucherTypeList: Observable<IOption[]>;
@@ -71,7 +55,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     private moment = moment;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** datepickerTemplate element reference  */
-    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store modal reference */
@@ -94,41 +78,88 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public groups: IOption[] = [];
     public groupUniqueNames: any[] = [];
 
-    constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private modalService: BsModalService, private generalService: GeneralService) {
-        this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
-        this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+    /** Stores the search results pagination details */
+    public accountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search */
+    public defaultAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details */
+    public defaultAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the list of accounts */
+    public accounts: IOption[];
+    /** Stores the search results pagination details for stock dropdown */
+    public stocksSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for stock dropdown */
+    public defaultStockSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for stock dropdown */
+    public preventDefaultStockScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for stock dropdown */
+    public defaultStockPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the value of stocks */
+    public stocks: IOption[];
+    /** Stores the search results pagination details for group dropdown */
+    public groupsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for group dropdown */
+    public defaultGroupSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for group dropdown */
+    public preventDefaultGroupScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for group dropdown */
+    public defaultGroupPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the value of groups */
+    public searchedGroups: IOption[];
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+
+    constructor(
+        private _groupService: GroupService,
+        private inventoryService: InventoryService,
+        private fb: FormBuilder,
+        private modalService: BsModalService,
+        private generalService: GeneralService,
+        private searchService: SearchService,
+    ) {
+
     }
 
     public ngOnInit() {
-        this.flattenAccountListStream$.subscribe(data => {
-            if (data) {
-                let accounts: IOption[] = [];
-                data.map(d => {
-                    accounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
-                });
-                this.accounts$ = observableOf(accounts);
-            }
-        });
+        this.loadDefaultAccountsSuggestions();
+        this.loadDefaultStocksSuggestions();
+        this.loadDefaultGroupsSuggestions();
 
-        this.stockListDropDown$ = this.store.select(createSelector([(state: AppState) => state.inventory.stocksList], (allStocks) => {
-            let data = _.cloneDeep(allStocks);
-            if (data && data.results) {
-                let units = data.results;
-
-                return units.map(unit => {
-                    return { label: `${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
-                });
-            }
-        })).pipe(takeUntil(this.destroyed$));
-
-        if(!this.advanceSearchForm) {
+        if (!this.advanceSearchForm) {
             this.setAdvanceSearchForm();
         }
-        this.setVoucherTypes();
     }
 
     public ngOnChanges(s: SimpleChanges) {
-        if(!this.advanceSearchForm) {
+        if (!this.advanceSearchForm) {
             this.setAdvanceSearchForm();
         }
 
@@ -139,38 +170,38 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             this.selectedDateRangeUi = moment(s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             if (this.advanceSearchForm) {
                 let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
-                bsDaterangepicker.patchValue(this.selectedDateRangeUi);
+                bsDaterangepicker?.patchValue(this.selectedDateRangeUi);
             }
         }
 
-        if(this.advanceSearchForm && 'advanceSearchRequest' in s && s.advanceSearchRequest.currentValue && s.advanceSearchRequest.currentValue.dataToSend) {
+        if (this.advanceSearchForm && 'advanceSearchRequest' in s && s.advanceSearchRequest.currentValue && s.advanceSearchRequest.currentValue.dataToSend) {
             let dataToSend = s.advanceSearchRequest.currentValue.dataToSend;
 
             this.groupUniqueNames = [];
 
             setTimeout(() => {
-                if(dataToSend.accountUniqueNames) {
-                    this.advanceSearchForm.get('accountUniqueNames').patchValue(dataToSend.accountUniqueNames);
+                if (dataToSend.accountUniqueNames) {
+                    this.advanceSearchForm.get('accountUniqueNames')?.patchValue(dataToSend.accountUniqueNames);
                 }
 
-                if(dataToSend.groupUniqueNames) {
-                    if(this.groups && this.groups.length > 0) {
-                        this.advanceSearchForm.get('groupUniqueNames').patchValue(dataToSend.groupUniqueNames);
+                if (dataToSend.groupUniqueNames) {
+                    if (this.groups && this.groups.length > 0) {
+                        this.advanceSearchForm.get('groupUniqueNames')?.patchValue(dataToSend.groupUniqueNames);
                     }
 
                     this.groupUniqueNames = dataToSend.groupUniqueNames;
                 }
 
-                if(dataToSend.particulars) {
-                    this.advanceSearchForm.get('particulars').patchValue(dataToSend.particulars);
+                if (dataToSend.particulars) {
+                    this.advanceSearchForm.get('particulars')?.patchValue(dataToSend.particulars);
                 }
 
-                if(dataToSend.vouchers) {
-                    this.advanceSearchForm.get('vouchers').patchValue(dataToSend.vouchers);
+                if (dataToSend.vouchers) {
+                    this.advanceSearchForm.get('vouchers')?.patchValue(dataToSend.vouchers);
                 }
 
-                if(dataToSend.inventory) {
-                    this.advanceSearchForm.get('inventory').patchValue(dataToSend.inventory);
+                if (dataToSend.inventory) {
+                    this.advanceSearchForm.get('inventory')?.patchValue(dataToSend.inventory);
                 }
             }, 500);
         }
@@ -182,27 +213,10 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public loadComponent(): void {
-        this.store.dispatch(this.inventoryAction.GetStock());
-        // this.store.dispatch(this.groupWithAccountsAction.getFlattenGroupsWithAccounts());
-
-        // Get groups with accounts
-        this._groupService.GetFlattenGroupsAccounts().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data && data.status === 'success' && data.body && data.body.results ) {
-                let groups: IOption[] = [];
-                data.body.results.map(d => {
-                    groups.push({ label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName });
-                });
-                this.groups$ = observableOf(groups);
-
-                setTimeout(() => {
-                    if(this.groupUniqueNames && this.groupUniqueNames.length > 0) {
-                        this.advanceSearchForm.get('groupUniqueNames').patchValue(this.groupUniqueNames);
-                    }
-                }, 500);
-            }
-        });
+        this.loadDefaultAccountsSuggestions();
+        this.loadDefaultStocksSuggestions();
+        this.loadDefaultGroupsSuggestions();
     }
-
     public resetAdvanceSearchModal() {
         this.advanceSearchRequest.dataToSend.bsRangeValue = [moment().toDate(), moment().subtract(30, 'days').toDate()];
         if (this.dropDowns) {
@@ -259,53 +273,53 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             }),
         });
 
-        if(this.advanceSearchRequest) {
-            this.advanceSearchForm.patchValue(this.advanceSearchRequest.dataToSend);
+        if (this.advanceSearchRequest) {
+            this.advanceSearchForm?.patchValue(this.advanceSearchRequest.dataToSend);
         }
     }
 
-    public setVoucherTypes() {
-        this.voucherTypeList = observableOf([{
-            label: 'Sales',
-            value: 'sales'
-        }, {
-            label: 'Purchases',
-            value: 'purchase'
-        }, {
-            label: 'Receipt',
-            value: 'receipt'
-        }, {
-            label: 'Payment',
-            value: 'payment'
-        }, {
-            label: 'Journal',
-            value: 'journal'
-        }, {
-            label: 'Contra',
-            value: 'contra'
-        }, {
-            label: 'Debit Note',
-            value: 'debit note'
-        }, {
-            label: 'Credit Note',
-            value: 'credit note'
-        }]);
+    public setVoucherTypes(event?: any) {
+        if (event) {
+            this.voucherTypeList = observableOf([{
+                label: this.commonLocaleData?.app_voucher_types?.sales,
+                value: 'sales'
+            }, {
+                label: this.commonLocaleData?.app_voucher_types?.purchases,
+                value: 'purchase'
+            }, {
+                label: this.commonLocaleData?.app_voucher_types?.receipt,
+                value: 'receipt'
+            }, {
+                label: this.commonLocaleData?.app_voucher_types?.payment,
+                value: 'payment'
+            }, {
+                label: this.commonLocaleData?.app_voucher_types?.journal,
+                value: 'journal'
+            }, {
+                label: this.commonLocaleData?.app_voucher_types?.contra,
+                value: 'contra'
+            }, {
+                label: this.commonLocaleData?.app_voucher_types?.debit_note,
+                value: 'debit note'
+            }, {
+                label: this.commonLocaleData?.app_voucher_types?.credit_note,
+                value: 'credit note'
+            }]);
+
+            this.comparisonFilterDropDown$ = observableOf([
+                { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
+                { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },
+                { label: this.commonLocaleData?.app_comparision_filters?.greater_than_equals, value: 'greaterThanOrEquals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.less_than_equals, value: 'lessThanOrEquals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.exclude, value: 'exclude' }
+            ]);
+        }
     }
 
     public onCancel() {
         this.closeModelEvent.emit({ advanceSearchData: this.advanceSearchRequest, isClose: true });
         this.hideGiddhDatepicker();
-    }
-
-    /**
-     * onDateRangeSelected
-     */
-    public onDateRangeSelected(data) {
-        if (data && data.length) {
-            // this.advanceSearchRequest.from = moment(data[0]).format('DD-MM-YYYY');
-            // this.advanceSearchRequest.to = moment(data[1]).format('DD-MM-YYYY');
-        }
-        // this.closeModelEvent.emit(_.cloneDeep(this.advanceSearchRequest));
     }
 
     /**
@@ -315,6 +329,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.advanceSearchRequest.dataToSend = this.advanceSearchForm.value;
         if (this.advanceSearchRequest.dataToSend && typeof this.advanceSearchRequest.dataToSend.bsRangeValue === 'string') {
             this.advanceSearchRequest.dataToSend.bsRangeValue = [this.fromDate, this.toDate];
+        }
+        if (this.advanceSearchRequest.dataToSend && this.advanceSearchRequest.dataToSend.dateOnCheque) {
+            this.advanceSearchRequest.dataToSend.dateOnCheque = moment(this.advanceSearchRequest.dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
         }
         this.closeModelEvent.emit({ advanceSearchData: this.advanceSearchRequest, isClose: false });
     }
@@ -326,7 +343,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public prepareRequest() {
         let dataToSend = _.cloneDeep(this.advanceSearchForm.value);
         if (dataToSend.dateOnCheque) {
-            dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format('DD-MM-YYYY');
+            dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
         }
         return dataToSend;
     }
@@ -336,24 +353,26 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      */
     public onDDElementSelect(type: string, data: any[]) {
         let values = [];
-        data.forEach(element => {
-            values.push(element.value);
-        });
+        if (data && data.length > 0) {
+            data.forEach(element => {
+                values.push(element.value);
+            });
+        }
         switch (type) {
             case 'particulars':
-                this.advanceSearchForm.get('particulars').patchValue(values);
+                this.advanceSearchForm.get('particulars')?.patchValue(values);
                 break;
             case 'accountUniqueNames':
-                this.advanceSearchForm.get('accountUniqueNames').patchValue(values);
+                this.advanceSearchForm.get('accountUniqueNames')?.patchValue(values);
                 break;
             case 'vouchers':
-                this.advanceSearchForm.get('vouchers').patchValue(values);
+                this.advanceSearchForm.get('vouchers')?.patchValue(values);
                 break;
             case 'inventory':
-                this.advanceSearchForm.get('inventory.inventories').patchValue(values);
+                this.advanceSearchForm.get('inventory.inventories')?.patchValue(values);
                 break;
             case 'groupUniqueNames':
-                this.advanceSearchForm.get('groupUniqueNames').patchValue(values);
+                this.advanceSearchForm.get('groupUniqueNames')?.patchValue(values);
                 break;
         }
     }
@@ -371,112 +390,112 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public onRangeSelect(type: string, data: IOption) {
         switch (type + '-' + data.value) {
             case 'amount-greaterThan':
-                this.advanceSearchForm.get('includeAmount').patchValue(true);
-                this.advanceSearchForm.get('amountGreaterThan').patchValue(true);
-                this.advanceSearchForm.get('amountLessThan').patchValue(false);
-                this.advanceSearchForm.get('amountEqualTo').patchValue(false);
+                this.advanceSearchForm.get('includeAmount')?.patchValue(true);
+                this.advanceSearchForm.get('amountGreaterThan')?.patchValue(true);
+                this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountEqualTo')?.patchValue(false);
                 break;
             case 'amount-lessThan':
-                this.advanceSearchForm.get('includeAmount').patchValue(true);
-                this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
-                this.advanceSearchForm.get('amountLessThan').patchValue(true);
-                this.advanceSearchForm.get('amountEqualTo').patchValue(false);
+                this.advanceSearchForm.get('includeAmount')?.patchValue(true);
+                this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountLessThan')?.patchValue(true);
+                this.advanceSearchForm.get('amountEqualTo')?.patchValue(false);
                 break;
             case 'amount-greaterThanOrEquals':
-                this.advanceSearchForm.get('includeAmount').patchValue(true);
-                this.advanceSearchForm.get('amountGreaterThan').patchValue(true);
-                this.advanceSearchForm.get('amountLessThan').patchValue(false);
-                this.advanceSearchForm.get('amountEqualTo').patchValue(true);
+                this.advanceSearchForm.get('includeAmount')?.patchValue(true);
+                this.advanceSearchForm.get('amountGreaterThan')?.patchValue(true);
+                this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountEqualTo')?.patchValue(true);
                 break;
             case 'amount-lessThanOrEquals':
-                this.advanceSearchForm.get('includeAmount').patchValue(true);
-                this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
-                this.advanceSearchForm.get('amountLessThan').patchValue(true);
-                this.advanceSearchForm.get('amountEqualTo').patchValue(true);
+                this.advanceSearchForm.get('includeAmount')?.patchValue(true);
+                this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountLessThan')?.patchValue(true);
+                this.advanceSearchForm.get('amountEqualTo')?.patchValue(true);
                 break;
             case 'amount-equals':
-                this.advanceSearchForm.get('includeAmount').patchValue(true);
-                this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
-                this.advanceSearchForm.get('amountLessThan').patchValue(false);
-                this.advanceSearchForm.get('amountEqualTo').patchValue(true);
+                this.advanceSearchForm.get('includeAmount')?.patchValue(true);
+                this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountEqualTo')?.patchValue(true);
                 break;
             case 'amount-exclude':
-                this.advanceSearchForm.get('includeAmount').patchValue(false);
-                this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
-                this.advanceSearchForm.get('amountLessThan').patchValue(false);
-                this.advanceSearchForm.get('amountEqualTo').patchValue(false);
+                this.advanceSearchForm.get('includeAmount')?.patchValue(false);
+                this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountEqualTo')?.patchValue(true);
                 break;
             case 'inventoryQty-greaterThan':
-                this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
-                this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(true);
-                this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(false);
-                this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(false);
+                this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(false);
                 break;
             case 'inventoryQty-lessThan':
-                this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
-                this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(false);
-                this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(true);
-                this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(false);
+                this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(false);
                 break;
             case 'inventoryQty-greaterThanOrEquals':
-                this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
-                this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(true);
-                this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(false);
-                this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(true);
+                this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(true);
                 break;
             case 'inventoryQty-lessThanOrEquals':
-                this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
-                this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(false);
-                this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(true);
-                this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(true);
+                this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(true);
                 break;
             case 'inventoryQty-equals':
-                this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
-                this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(false);
-                this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(false);
-                this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(true);
+                this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(true);
                 break;
             case 'inventoryQty-exclude':
-                this.advanceSearchForm.get('inventory.includeQuantity').patchValue(false);
-                this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(false);
-                this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(false);
-                this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(false);
+                this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(false);
                 break;
             case 'inventoryVal-greaterThan':
-                this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(false);
                 break;
             case 'inventoryVal-lessThan':
-                this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(false);
                 break;
             case 'inventoryVal-greaterThanOrEquals':
-                this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(true);
+                this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(true);
                 break;
             case 'inventoryVal-lessThanOrEquals':
-                this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(true);
+                this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(true);
                 break;
             case 'inventoryVal-equals':
-                this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(true);
+                this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(true);
                 break;
             case 'inventoryVal-exclude':
-                this.advanceSearchForm.get('inventory.includeItemValue').patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(false);
                 break;
         }
     }
@@ -489,9 +508,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public toggleOtherDetails() {
         this.showOtherDetails = !this.showOtherDetails;
         let val: boolean = !this.advanceSearchForm.get('includeDescription').value;
-        this.advanceSearchForm.get('includeDescription').patchValue(val);
+        this.advanceSearchForm.get('includeDescription')?.patchValue(val);
         if (!val) {
-            this.advanceSearchForm.get('description').patchValue(null);
+            this.advanceSearchForm.get('description')?.patchValue(null);
         }
     }
 
@@ -539,7 +558,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
        * @memberof AdvanceSearchModelComponent
        */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -556,8 +575,326 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 this.fromDate = moment(value.startDate, GIDDH_DATE_FORMAT).toDate();
                 this.toDate = moment(value.endDate, GIDDH_DATE_FORMAT).toDate();
                 let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
-                bsDaterangepicker.patchValue([this.fromDate, this.toDate]);
+                bsDaterangepicker?.patchValue([this.fromDate, this.toDate]);
             }
         }
     }
+
+    /**
+     * Search query change handler
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof AdvanceSearchModelComponent
+     */
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.accountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page
+            }
+            if (this.advanceSearchRequest.branchUniqueName) {
+                requestObject.branchUniqueName = encodeURIComponent(this.advanceSearchRequest.branchUniqueName);
+            }
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name} (${result.uniqueName})`
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.accounts = searchResults;
+                    } else {
+                        this.accounts = [
+                            ...this.accounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.accounts$ = observableOf(this.accounts);
+                    this.accountsSearchResultsPaginationData.page = data.body.page;
+                    this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+                }
+            });
+        } else {
+            this.accounts = [...this.defaultAccountSuggestions];
+            this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
+            this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler
+     *
+     * @returns null
+     * @memberof AdvanceSearchModelComponent
+     */
+    public handleScrollEnd(): void {
+        if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
+            this.onAccountSearchQueryChanged(
+                this.accountsSearchResultsPaginationData.query,
+                this.accountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.accountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name} - (${result.uniqueName})`
+                            }
+                        }) || [];
+                        this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+                });
+        }
+    }
+
+    /**
+     * Search query change handler for stock
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof AdvanceSearchModelComponent
+     */
+    public onStockSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.stocksSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultStockScrollApiCall &&
+            (query || (this.defaultStockSuggestions && this.defaultStockSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                count: API_COUNT_LIMIT
+            }
+            if (this.advanceSearchRequest.branchUniqueName) {
+                requestObject.branchUniqueName = this.advanceSearchRequest.branchUniqueName;
+            }
+            this.inventoryService.GetStocks(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name} (${result.uniqueName})`
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.stocks = searchResults;
+                    } else {
+                        this.stocks = [
+                            ...this.stocks,
+                            ...searchResults
+                        ];
+                    }
+                    this.stockListDropDown$ = observableOf(this.stocks);
+                    this.stocksSearchResultsPaginationData.page = data.body.page;
+                    this.stocksSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.stocks = [...this.defaultStockSuggestions];
+            this.stocksSearchResultsPaginationData.page = this.defaultStockPaginationData.page;
+            this.stocksSearchResultsPaginationData.totalPages = this.defaultStockPaginationData.totalPages;
+            this.preventDefaultStockScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultStockScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Search query change handler for group
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof AdvanceSearchModelComponent
+     */
+    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.groupsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultGroupScrollApiCall &&
+            (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                count: API_COUNT_LIMIT
+            }
+            if (this.advanceSearchRequest.branchUniqueName) {
+                requestObject.branchUniqueName = encodeURIComponent(this.advanceSearchRequest.branchUniqueName);
+            }
+            this._groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name} (${result.uniqueName})`
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.searchedGroups = searchResults;
+                    } else {
+                        this.searchedGroups = [
+                            ...this.searchedGroups,
+                            ...searchResults
+                        ];
+                    }
+                    this.groups$ = observableOf(this.searchedGroups);
+                    this.groupsSearchResultsPaginationData.page = data.body.page;
+                    this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+                }
+            });
+        } else {
+            this.searchedGroups = [...this.defaultGroupSuggestions];
+            this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
+            this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
+            this.preventDefaultGroupScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultGroupScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler for stock dropdown
+     *
+     * @returns null
+     * @memberof AdvanceSearchModelComponent
+     */
+    public handleStockScrollEnd(): void {
+        if (this.stocksSearchResultsPaginationData.page < this.stocksSearchResultsPaginationData.totalPages) {
+            this.onStockSearchQueryChanged(
+                this.stocksSearchResultsPaginationData.query,
+                this.stocksSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.stocksSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name} (${result.uniqueName})`
+                            }
+                        }) || [];
+                        this.defaultStockSuggestions = this.defaultStockSuggestions.concat(...results);
+                        this.defaultStockPaginationData.page = this.stocksSearchResultsPaginationData.page;
+                        this.defaultStockPaginationData.totalPages = this.stocksSearchResultsPaginationData.totalPages;
+                    }
+                });
+        }
+    }
+
+    /**
+     * Scroll end handler for group dropdown
+     *
+     * @returns null
+     * @memberof AdvanceSearchModelComponent
+     */
+    public handleGroupScrollEnd(): void {
+        if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
+            this.onGroupSearchQueryChanged(
+                this.groupsSearchResultsPaginationData.query,
+                this.groupsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.groupsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name} (${result.uniqueName})`
+                            }
+                        }) || [];
+                        this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+                });
+        }
+    }
+
+    /**
+     * Loads the default stock list for advance search
+     *
+     * @private
+     * @memberof AdvanceSearchModelComponent
+     */
+    private loadDefaultStocksSuggestions(): void {
+        this.onStockSearchQueryChanged('', 1, (response) => {
+            this.defaultStockSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: `${result.name} (${result.uniqueName})`
+                }
+            }) || [];
+            this.defaultStockPaginationData.page = this.stocksSearchResultsPaginationData.page;
+            this.defaultStockPaginationData.totalPages = this.stocksSearchResultsPaginationData.totalPages;
+            this.stocks = [...this.defaultStockSuggestions];
+        });
+    }
+
+    /**
+     * Loads the default group list for advance search
+     *
+     * @private
+     * @memberof AdvanceSearchModelComponent
+     */
+    private loadDefaultGroupsSuggestions(): void {
+        this.onGroupSearchQueryChanged('', 1, (response) => {
+            this.defaultGroupSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: `${result.name} (${result.uniqueName})`
+                }
+            }) || [];
+            this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+            this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+            this.searchedGroups = [...this.defaultGroupSuggestions];
+        });
+    }
+
+    /**
+     * Loads the default account search suggestion when module is loaded
+     *
+     * @private
+     * @memberof AdvanceSearchModelComponent
+     */
+    private loadDefaultAccountsSuggestions(): void {
+        this.onAccountSearchQueryChanged('', 1, (response) => {
+            this.defaultAccountSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: `${result.name} (${result.uniqueName})`
+                }
+            }) || [];
+            this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+            this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+            this.accounts = [...this.defaultAccountSuggestions];
+        });
+    }
+
 }

@@ -18,25 +18,25 @@
 const fs = require('fs-extra')
 const path = require('path')
 
-function getConfigurationByFile (file) {
+function getConfigurationByFile(file) {
     const pathToConfigFile = path.resolve(__dirname, "../../cypress/config", `${file}.json`)
 
     return fs.readJson(pathToConfigFile)
 }
 module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
-  //   console.log(config) // see what all is in here!
-  //
-  //   // modify config values
-  //   config.defaultCommandTimeout = 10000
-  //   config.baseUrl = 'http://test.giddh.com/'
-  //
-  //   // modify env var value
-  //   config.env.ENVIRONMENT = 'staging'
-  //
-  //   // return config
-  //   return config
+    // `on` is used to hook into various events Cypress emits
+    // `config` is the resolved Cypress config
+    //   console.log(config) // see what all is in here!
+    //
+    //   // modify config values
+    //   config.defaultCommandTimeout = 10000
+    //   config.baseUrl = 'http://test.giddh.com/'
+    //
+    //   // modify env var value
+    //   config.env.ENVIRONMENT = 'staging'
+    //
+    //   // return config
+    //   return config
 
     const file = config.env.configFile || 'test'
 

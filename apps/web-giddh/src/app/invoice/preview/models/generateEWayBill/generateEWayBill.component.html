@@ -1,13 +1,13 @@
 <div>
-    <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix" style="background-color: #525252">
-        <h3 class="modal-title bg" id="modal-title">Generate E-way Bill</h3>
+    <div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix dark-grey-bg">
+        <h3 class="modal-title bg" id="modal-title">{{localeData?.generate_eway_bill}}</h3>
         <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel()"></i>
     </div>
 
-    <div class="modal-body p0 clearfix" id="export-body">
-        <div class="row mr0">
+    <div class="modal-body p-0 clearfix" id="export-body">
+        <div class="row m-0">
 
-            <div class="col-md-6 p0 e-way-card" (click)="createEWayBill()">
+            <div class="col-md-6 p-0 e-way-card" (click)="createEWayBill()">
                 <div>
                     <!--<img src="assets/icon/file.svg" class="iconfile" />-->
                     <svg class="icon-link" xmlns="http://www.w3.org/2000/svg" width="50.919" height="50.932"
@@ -74,12 +74,12 @@
                         </g>
                     </svg>
                     <p>
-                        Create New
+                        {{commonLocaleData?.app_create_new}}
                     </p>
                 </div>
             </div>
 
-            <div class="col-md-6 p0 e-way-card">
+            <div class="col-md-6 p-0 e-way-card">
                 <div>
                     <!-- (click)="openModal(template)" -->
                     <svg class="icon-link" xmlns="http://www.w3.org/2000/svg" width="73.813" height="21.527"
@@ -98,11 +98,11 @@
                         </g>
                     </svg>
                     <p>
-                        Associate E-way
+                        {{localeData?.associate_eway}}
 
 
                     </p>
-                    <h2> coming.. soon</h2>
+                    <h2> {{localeData?.associate_eway_coming_soon}}</h2>
                 </div>
             </div>
 
@@ -122,7 +122,7 @@
 <!-- add eway bill details modal -->
 <ng-template #template>
     <div class="modal-header">
-        <h3 class="modal-title pull-left">Add E-Way Bill Details</h3>
+        <h3 class="modal-title pull-left">{{localeData?.add_eway}}</h3>
         <span aria-hidden="true" (click)="modalRef.hide()" class="icon-cross text-right close-modal"></span>
 
 
@@ -133,17 +133,18 @@
     <div class="modal-body pd-2">
         <form action="">
             <div class="row">
-                <div class="col-xs-5">
-                    <label class="pt-05 font-14">E-Way Bill Number <span class="text-danger">*</span></label>
+                <div class="col-5">
+                    <label class="pd-t05 font-14">{{localeData?.eway_bill_number}} <span
+                            class="text-danger">*</span></label>
                 </div>
-                <div class="col-xs-7">
-                    <input type="number" class="form-control" placeholder="Enter E-way Bill Number">
+                <div class="col-7">
+                    <input type="number" class="form-control" [placeholder]="localeData?.eway_bill_number_placeholder">
                 </div>
             </div>
 
             <div class="clearfix pt-4 pb-2">
-                <button type="submit" class="btn btn-success mr-2">Save</button>
-                <button type="submit" class="btn btn-danger">Cancel</button>
+                <button type="submit" class="btn btn-success mr-2">{{commonLocaleData?.app_save}}</button>
+                <button type="submit" class="btn btn-danger">{{commonLocaleData?.app_cancel}}</button>
             </div>
 
         </form>

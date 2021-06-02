@@ -1,16 +1,19 @@
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IOption } from '../theme/ng-select/option.interface';
 import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api-models/new-vs-old-invoices';
 import { AppState } from '../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { NewVsOldInvoicesActions } from '../actions/new-vs-old-invoices.actions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyActions } from '../actions/company.actions';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { ToasterService } from '../services/toaster.service';
 import { NgForm } from '@angular/forms';
 import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
+import { SettingsFinancialYearActions } from '../actions/settings/financial-year/financial-year.action';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import * as moment from 'moment';
 
 @Component({
     selector: 'new-vs-old-invoices',
@@ -19,15 +22,15 @@ import { take } from 'rxjs/operators';
 })
 
 export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
-    public GetTypeOptions: IOption[] = [{ label: 'Month', value: 'month' }, { label: 'Quater', value: 'quater' }];
-    public selectedType: string;
-    public monthOptions: IOption[] = [{ label: 'January', value: '01' }, { label: 'February', value: '02' }, { label: 'March', value: '03' }, { label: 'April', value: '04' }, { label: 'May', value: '05' }, { label: 'June', value: '06' }, { label: 'July', value: '07' }, { label: 'August', value: '08' }, { label: 'September', value: '09' }, { label: 'October', value: '10' }, { label: 'November', value: '11' }, { label: 'December', value: '12' }];
+    public GetTypeOptions: IOption[] = [];
+    public selectedType: string = "month";
+    public monthOptions: IOption[] = [];
     public selectedmonth: string;
-    public quaterOptions: IOption[] = [{ label: 'Q1', value: '01' }, { label: 'Q2', value: '02' }, { label: 'Q3', value: '03' }, { label: 'Q4', value: '04' }];
+    public quaterOptions: IOption[] = [];
     public selectedQuater: string = '';
     public NewVsOldInvoicesData$: Observable<NewVsOldInvoicesResponse>;
 
-    public yearOptions: IOption[] = [{ label: '2014', value: '2014' }, { label: '2015', value: '2015' }, { label: '2016', value: '2016' }, { label: '2017', value: '2017' }, { label: '2018', value: '2018' }, { label: '2019', value: '2019' }, { label: '2020', value: '2020' }];
+    public yearOptions: IOption[] = [];
     public selectedYear: string;
     public NewVsOldInvoicesQueryRequest: NewVsOldInvoicesRequest;
     public columnName: string = '';
@@ -44,35 +47,65 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public newSalesInvCount: number = 0;
     public totalSalesInvCount: number = 0;
     public invoiceCountAll: number = 0;
-    @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
-    private searchFilterData: any = null;
+    @ViewChild('paginationChild', { static: true }) public paginationChild: ElementViewContainerRef;
+    /* Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if api call in progress */
+    public isLoading: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** This will hold bifurcation of clients content */
+    public bifurcationClients: string = "";
+    /** This will hold report year */
+    public reportYear: string;
 
-    constructor(private store: Store<AppState>, private _NewVsOldInvoicesActions: NewVsOldInvoicesActions,
-        private componentFactoryResolver: ComponentFactoryResolver, private _companyActions: CompanyActions,
-        private _toasty: ToasterService) {
+    constructor(private store: Store<AppState>, private _NewVsOldInvoicesActions: NewVsOldInvoicesActions, private _companyActions: CompanyActions,
+        private _toasty: ToasterService, private settingsFinancialYearActions: SettingsFinancialYearActions) {
         this.NewVsOldInvoicesQueryRequest = new NewVsOldInvoicesRequest();
-        this.NewVsOldInvoicesData$ = this.store.select(s => s.newVsOldInvoices.data);
-        this.isRequestSuccess$ = this.store.select(s => s.newVsOldInvoices.requestInSuccess);
+        this.NewVsOldInvoicesData$ = this.store.pipe(select(s => s.newVsOldInvoices.data), takeUntil(this.destroyed$));
+        this.isRequestSuccess$ = this.store.pipe(select(s => s.newVsOldInvoices.requestInSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
+
+        this.store.pipe(select(state => state.settings.financialYearLimits), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.startDate && response.endDate) {
+                this.yearOptions = [];
+                let startYear = Number(moment(response.startDate, GIDDH_DATE_FORMAT).format("YYYY"));
+                let endYear = Number(moment(response.endDate, GIDDH_DATE_FORMAT).format("YYYY"));
+
+                for (startYear; startYear <= endYear; startYear++) {
+                    this.yearOptions.push({ label: String(startYear), value: String(startYear) });
+                }
+            }
+        });
+
+        this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                let universalEndDate = moment(response[1]).format("YYYY");
+
+                if (moment(response[1]).toDate() >= moment().toDate()) {
+                    this.selectedYear = (new Date()).getFullYear().toString();
+                    this.selectedmonth = ("0" + (new Date().getMonth() + 1)).slice(-2).toString();
+                    this.go();
+                } else {
+                    this.selectedYear = universalEndDate;
+                    this.selectedmonth = ("0" + (moment(response[1]).format("M"))).slice(-2).toString();
+                    this.go();
+                }
+            }
+        });
+
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'new-vs-old-invoices';
 
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
-
-        this.isRequestSuccess$.subscribe(s => {
-            if (s) {
-                if (this.NewVsOldInvoicesQueryRequest.type === 'month' && this.selectedmonth) {
-                    this.columnName = this.monthOptions.find(f => f.value === this.selectedmonth).label;
-                } else if (this.NewVsOldInvoicesQueryRequest.type === 'quater' && this.selectedQuater) {
-                    this.columnName = this.quaterOptions.find(f => f.value === this.selectedQuater).label;
-                }
-            }
-        });
 
         this.NewVsOldInvoicesData$.subscribe(s => {
             if (s) {
@@ -103,8 +136,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 this.invoiceCountAll = 0;
             }
         });
-
-        this.selectedYear = (new Date()).getFullYear().toString();
     }
 
     public ChangingValue(event) {
@@ -113,7 +144,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._NewVsOldInvoicesActions.GetResponseNull());
     }
 
-    public go(form: NgForm) {
+    public go(form?: NgForm) {
         // if (!this.selectedYear) {
         //   this.showErrorToast('please select year');
         //   return;
@@ -133,12 +164,15 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         //   this.showErrorToast('please select quater');
         //   return;
         // }
+        this.isLoading = true;
         this.NewVsOldInvoicesQueryRequest.type = this.selectedType;
         if (this.NewVsOldInvoicesQueryRequest.type === 'month') {
             this.NewVsOldInvoicesQueryRequest.value = this.selectedmonth + '-' + this.selectedYear;
         } else {
             this.NewVsOldInvoicesQueryRequest.value = this.selectedQuater + '-' + this.selectedYear;
         }
+
+        this.reportYear = this.selectedYear;
 
         this.store.dispatch(this._NewVsOldInvoicesActions.GetNewVsOldInvoicesRequest(this.NewVsOldInvoicesQueryRequest));
     }
@@ -148,10 +182,39 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        //
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     public customMonthSorting(a: IOption, b: IOption) {
         return (parseInt(a.value) - parseInt(b.value));
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof NewVsOldInvoicesComponent
+     */
+    public translationComplete(event: boolean): void {
+        if (event) {
+            this.monthOptions = [{ label: this.commonLocaleData?.app_months_full.january, value: '01' }, { label: this.commonLocaleData?.app_months_full.february, value: '02' }, { label: this.commonLocaleData?.app_months_full.march, value: '03' }, { label: this.commonLocaleData?.app_months_full.april, value: '04' }, { label: this.commonLocaleData?.app_months_full.may, value: '05' }, { label: this.commonLocaleData?.app_months_full.june, value: '06' }, { label: this.commonLocaleData?.app_months_full.july, value: '07' }, { label: this.commonLocaleData?.app_months_full.august, value: '08' }, { label: this.commonLocaleData?.app_months_full.september, value: '09' }, { label: this.commonLocaleData?.app_months_full.october, value: '10' }, { label: this.commonLocaleData?.app_months_full.november, value: '11' }, { label: this.commonLocaleData?.app_months_full.december, value: '12' }];
+
+            this.GetTypeOptions = [{ label: this.localeData?.get_type_options?.month, value: 'month' }, { label: this.localeData?.get_type_options?.quarter, value: 'quater' }];
+            this.quaterOptions = [{ label: this.localeData?.quarters?.q1, value: '01' }, { label: this.localeData?.quarters?.q2, value: '02' }, { label: this.localeData?.quarters?.q3, value: '03' }, { label: this.localeData?.quarters?.q4, value: '04' }];
+
+            this.isRequestSuccess$.subscribe(s => {
+                if (s) {
+                    this.isLoading = false;
+                    if (this.NewVsOldInvoicesQueryRequest.type === 'month' && this.selectedmonth) {
+                        this.columnName = this.monthOptions.find(f => f.value === this.selectedmonth)?.label;
+                    } else if (this.NewVsOldInvoicesQueryRequest.type === 'quater' && this.selectedQuater) {
+                        this.columnName = this.quaterOptions.find(f => f.value === this.selectedQuater)?.label;
+                    }
+
+                    this.bifurcationClients = this.localeData?.bifurcation_clients.replace("[COLUMN_NAME]", this.columnName);
+                }
+            });
+        }
     }
 }

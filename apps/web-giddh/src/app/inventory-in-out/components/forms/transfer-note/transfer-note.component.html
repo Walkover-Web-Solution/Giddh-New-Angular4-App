@@ -1,15 +1,15 @@
 <div class="form-header">
     <h2 class="">Transfer Note</h2>
 </div>
-<div class="form_body witBg clearfix margin-child-label">
-    <div class="form_bg clearfix">
+<div class="form-body white-bg clearfix margin-child-label">
+    <div class="clearfix">
         <form [formGroup]="form" class="form-group">
             <div class="row">
                 <div class="col-xs-6 form-group">
                     <label>Date <sup>*</sup></label>
                     <input name="dateRange" formControlName="inventoryEntryDate" type="text" autocomplete="off"
                         class="form-control" bsDatepicker [minDate]="today"
-                        [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
+                        [bsConfig]=" {dateInputFormat: giddhDateFormat}">
                     <span
                         *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)">
                         <span *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']"
@@ -20,7 +20,8 @@
                 <div class="col-xs-6 form-group">
                     <label>Product Name <sup>*</sup></label>
                     <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                        (selected)="stockChanged($event)" [ItemHeight]="'33'" formControlName="stock"></sh-select>
+                        (selected)="stockChanged($event)" [ItemHeight]="'33'" formControlName="stock"
+                        [isRequired]="true"></sh-select>
                     <!-- <span *ngIf="stock.invalid">
               <span *ngIf="stock?.errors && stock?.errors['required']" class="text-danger">Please select Product.</span>
                     </span> -->
@@ -42,7 +43,8 @@
                 <div class="col-xs-6 form-group">
                     <label>Receiver's Name <sup>*</sup></label>
                     <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Receiver'"
-                        (selected)="recieverUniqueName = $event.value" [ItemHeight]="'33'"></sh-select>
+                        (selected)="recieverUniqueName = $event.value" [ItemHeight]="'33'" [isRequired]="true">
+                    </sh-select>
                     <!-- <span [hidden]="recieverUniqueName" class="text-danger">Please select Receiver.</span> -->
                 </div>
             </div>
@@ -60,7 +62,7 @@
                 <div class="col-xs-6 form-group">
                     <label>Unit <sup>*</sup></label>
                     <sh-select [options]="stockUnitsOptions" [placeholder]="'Choose unit'" formControlName="stockUnit"
-                        [multiple]="false" [ItemHeight]="33"></sh-select>
+                        [multiple]="false" [ItemHeight]="33" [isRequired]="true"></sh-select>
                     <!-- <span *ngIf="stockUnit?.errors && stockUnit.errors['required']" class="text-danger">Please select Unit.</span> -->
                 </div>
 

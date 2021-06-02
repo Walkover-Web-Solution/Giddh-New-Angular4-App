@@ -22,7 +22,7 @@ import { GENERAL_ACTIONS } from './general.const';
 @Injectable()
 export class GeneralActions {
 
-    public GetGroupsWithAccount$: Observable<Action> = createEffect( ()=>this.action$
+    public GetGroupsWithAccount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GENERAL_ACTIONS.GENERAL_GET_GROUP_WITH_ACCOUNTS),
             switchMap((action: CustomActions) =>
@@ -33,7 +33,7 @@ export class GeneralActions {
             })));
 
 
-    public GetFlattenGroups$: Observable<Action> =createEffect( ()=> this.action$
+    public GetFlattenGroups$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GENERAL_ACTIONS.FLATTEN_GROUPS_REQ),
             switchMap((action: CustomActions) =>
@@ -44,7 +44,7 @@ export class GeneralActions {
             })));
 
 
-    public getFlattenAccounts$: Observable<Action> =createEffect( ()=> this.action$
+    public getFlattenAccounts$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS),
             switchMap((action: CustomActions) =>
@@ -55,7 +55,7 @@ export class GeneralActions {
             })));
 
 
-    public getAllState$: Observable<Action> = createEffect( ()=>this.action$
+    public getAllState$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GENERAL_ACTIONS.GENERAL_GET_ALL_STATES),
             switchMap((action: CustomActions) => this._companyService.getAllStates(action.payload)),
@@ -66,7 +66,7 @@ export class GeneralActions {
             ofType(GENERAL_ACTIONS.UPDATE_INDEX_DB),
             switchMap((action: CustomActions) => {
                 const payload: IUpdateDbRequest = action.payload;
-                return this._dbService.getItemDetails(payload.uniqueName).pipe(map(itemData => ({itemData, payload})))
+                return this._dbService.getItemDetails(payload.uniqueName).pipe(map(itemData => ({ itemData, payload })))
             }),
             switchMap(data => {
                 if (data.itemData && data.payload) {
@@ -74,7 +74,7 @@ export class GeneralActions {
                     const items = data.itemData;
                     switch (payload.type) {
                         case "accounts": {
-                            const matchedIndex = items.aidata.accounts.findIndex(item => item && item.uniqueName && item.uniqueName === payload.oldUniqueName);
+                            const matchedIndex = (items && items.aidata && items.aidata.accounts) ? items.aidata.accounts.findIndex(item => item && item.uniqueName && item.uniqueName === payload.oldUniqueName) : -1;
                             if (matchedIndex > -1) {
                                 items.aidata.accounts[matchedIndex] = {
                                     ...items.aidata.accounts[matchedIndex],
@@ -92,7 +92,7 @@ export class GeneralActions {
                                 return of(this.updateIndexDbComplete());
                             }
                         }
-                        default : {
+                        default: {
                             return of(this.updateIndexDbComplete());
                         }
                     }
@@ -118,6 +118,12 @@ export class GeneralActions {
                 }).catch(error => this.deleteEntryFromIndexDbError());
             })
         ));
+
+    public getSideMenuItems$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(GENERAL_ACTIONS.GET_SIDE_MENU_ITEMS),
+            switchMap(() => this._companyService.getMenuItems()),
+            map(resp => this.saveSideMenuItems(resp.body))));
 
     constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService, private _companyService: CompanyService, private _dbService: DbService, private _activatedRoute: ActivatedRoute, private route: Router) {
         //
@@ -215,7 +221,7 @@ export class GeneralActions {
     public setAppTitle(uniqueName: string, additional?: { tab: string, tabIndex: number }) {
         return {
             type: GENERAL_ACTIONS.SET_APP_HEADER_TITLE,
-            payload: {uniqueName, additional}
+            payload: { uniqueName, additional }
         }
     }
 
@@ -297,6 +303,26 @@ export class GeneralActions {
     public updateUiFromDb(): CustomActions {
         return {
             type: GENERAL_ACTIONS.UPDATE_UI_FROM_DB
+        }
+    }
+    /* This function is storinng side menu */
+    public openSideMenu(isOpen: boolean) {
+        return {
+            type: GENERAL_ACTIONS.OPEN_SIDE_MENU,
+            payload: isOpen
+        }
+    }
+
+    public getSideMenuItems(): CustomActions {
+        return {
+            type: GENERAL_ACTIONS.GET_SIDE_MENU_ITEMS
+        }
+    }
+
+    public saveSideMenuItems(items: Array<any>): CustomActions {
+        return {
+            type: GENERAL_ACTIONS.SAVE_SIDE_MENU_ITEMS,
+            payload: items
         }
     }
 }

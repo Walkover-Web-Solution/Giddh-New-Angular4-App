@@ -3,32 +3,34 @@
         <div class="row">
             <div class="pull-left">
                 <form class="form-inline">
-                    <div class="form-group mrR1">
+                    <div class="form-group mr-r1">
                         <label class="d-block">Filter Type</label>
-                        <div class="form-group closebtn">
-                            <input type="text" readonly value="Financial year" class="form-control selectedVal">
-                            <span class="clear">×</span> </div>
+                        <div class="form-group close-btn">
+                            <input type="text" readonly value="Financial year" class="form-control selected-val">
+                            <span class="clear">×</span>
+                        </div>
                     </div>
-                    <div class="form-group mrR1">
+                    <div class="form-group mr-r1">
                         <label class="d-block">Select Year</label>
-                        <div class="form-group closebtn">
-                            <input type="text" readonly value="FY-APR2018-MAR2019" class="form-control selectedVal">
-                            <span class="clear">×</span> </div>
+                        <div class="form-group close-btn">
+                            <input type="text" readonly value="FY-APR2018-MAR2019" class="form-control selected-val">
+                            <span class="clear">×</span>
+                        </div>
                     </div>
-                    <div class="form-group mrR1"><br>
+                    <div class="form-group mr-r1"><br>
                         <button class="btn btn-success" type="submit"> Apply </button>
                     </div>
-                    <div class="form-group mrR1"><br>
-                        <input type="checkbox" class="checkboxbtn" name="showOpening" [(ngModel)]="showOpening">
-                        openingcheck
+                    <div class="form-group mr-r1"><br>
+                        <input type="checkbox" class="checkbox-btn" name="showOpening" [(ngModel)]="showOpening">
+                        opening-check
                     </div>
-                    <div class="form-group mrR1"><br>
-                        <input type="checkbox" class="checkboxbtn" name="showTransactions"
+                    <div class="form-group mr-r1"><br>
+                        <input type="checkbox" class="checkbox-btn" name="showTransactions"
                             [(ngModel)]="showTransactions">
                         Transactions
                     </div>
-                    <div class="form-group mrR1"><br>
-                        <input type="checkbox" class="checkboxbtn" name="showClosing" [(ngModel)]="showClosing">
+                    <div class="form-group mr-r1"><br>
+                        <input type="checkbox" class="checkbox-btn" name="showClosing" [(ngModel)]="showClosing">
                         Closing
                     </div>
                 </form>
@@ -54,7 +56,7 @@
         </div>
 
         <div class="col-4">
-            <div class="form-group mrB">
+            <div class="form-group mr-b05">
                 <div class="input-group input-group-md">
                     <input class="form-control" placeholder="Search" type="search">
                     <!---->
@@ -77,17 +79,17 @@
                 <thead>
                     <tr>
                         <th>Particular</th>
-                        <th *ngIf="showOpening" align="right" style="text-align:right; display:table-cell;"
-                            class="openingcheck">Opening Dr.</th>
-                        <th *ngIf="showOpening" align="right" style="text-align:right; display:table-cell;"
-                            class="openingcheck">Opening Cr.</th>
-                        <th *ngIf="showTransactions" align="right" style="text-align:right;" class="transcheck">Dr.
-                            Trans</th>
-                        <th *ngIf="showTransactions" align="right" style="text-align:right;" class="transcheck">Cr.
-                            Trans</th>
-                        <th *ngIf="showClosing" align="right" style="text-align:right;" class="closingcheck">Closing Dr.
+                        <th *ngIf="showOpening" align="right" class="opening-check text-right table-cell">Opening Dr.
                         </th>
-                        <th *ngIf="showClosing" align="right" style="text-align:right;" class="closingcheck">Closing Cr.
+                        <th *ngIf="showOpening" align="right" class="opening-check text-right table-cell">Opening Cr.
+                        </th>
+                        <th *ngIf="showTransactions" align="right" class="transaction-check text-right">Dr.
+                            Trans</th>
+                        <th *ngIf="showTransactions" align="right" class="transaction-check text-right">Cr.
+                            Trans</th>
+                        <th *ngIf="showClosing" align="right" class="closing-check text-right">Closing Dr.
+                        </th>
+                        <th *ngIf="showClosing" align="right" class="closing-check text-right">Closing Cr.
                         </th>
                     </tr>
                 </thead>
@@ -95,91 +97,16 @@
                     <ng-container *ngFor="let grp of (data$ | async).groupDetails; let i = index">
                         <tr>
                             <td>{{grp.groupName}}</td>
-                            <td *ngIf="showOpening" align="right" style="text-align:right; display:table-cell;"
-                                class="openingcheck">{{ grp.closingBalance.amount }}</td>
-                            <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table
+                            <td *ngIf="showOpening" align="right" class="opening-check text-right table-cell">{{
+                                grp.closingBalance.amount }}</td>
+                            <td *ngIf="showOpening" align="right" class="opening-check table-cell">Table
                                 cell</td>
-                            <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-                            <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-                            <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-                            <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
+                            <td *ngIf="showTransactions" align="right" class="transaction-check">Table cell</td>
+                            <td *ngIf="showTransactions" align="right" class="transaction-check">Table cell</td>
+                            <td *ngIf="showClosing" align="right" class="closing-check">Table cell</td>
+                            <td *ngIf="showClosing" align="right" class="closing-check">Table cell</td>
                         </tr>
-                        <!-- <tr class="exp11" *ngIf="isExpanded">
-                <td align="center">Another group</td>
-                <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-                <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-                <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-                <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-                <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-                <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-              </tr> -->
                     </ng-container>
-
-                    <!-- <tr>
-              <td>3</td>
-
-              <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-              <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-              <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-              <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-              <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-              <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-
-            </tr>
-            <tr class="exp11" *ngIf="isExpanded">
-              <td align="center">expand</td>
-              <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-              <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-              <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-              <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-              <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-              <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-              <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-              <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-              <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-              <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-              <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-              <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-              <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-              <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-              <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-              <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-            </tr>
-            <tr>
-              <td>6</td>
-              <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-              <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-              <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-              <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-              <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-              <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-            </tr>
-            <tr>
-              <td>7</td>
-              <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-              <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-              <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-              <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-              <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-              <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-            </tr>
-             <tr>
-              <td>8</td>
-              <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-              <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-              <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-              <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-              <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-              <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-            </tr> -->
                 </tbody>
             </table>
         </div>

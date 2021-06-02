@@ -1,17 +1,15 @@
-<div class="" auto-height>
+<div auto-height>
     <!--loader-->
-    <div class="loader mr-t4" *ngIf="searchLoader$ | async">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+    <div *ngIf="searchLoader$ | async">
+        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
     <!--end loader-->
 
     <!-- result -->
     <section [hidden]="!(!(searchLoader$ | async) && (search$ | async))">
-        <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV($event)" (searchQuery)="filterData($event)" (openEmailDialog)="openEmailDialog()" (openSmsDialog)="openSmsDialog()">
+        <search-filter [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+            (isFiltered)="resetFilters($event)" (createCsv)="createCSV($event)" (searchQuery)="filterData($event)"
+            (openEmailDialog)="openEmailDialog()" (openSmsDialog)="openSmsDialog()">
         </search-filter>
         <div class="table-responsive">
             <table class="table table-bordered basic giddh-table on-mobile-view">
@@ -19,136 +17,175 @@
                     <tr>
                         <th [style.width.px]="25">
                             <div>
-                                <input type="checkbox" (change)="toggleSelectAll($event)" [checked]="isAllChecked" [(ngModel)]="isAllChecked">
+                                <input type="checkbox" (change)="toggleSelectAll($event)" [checked]="isAllChecked"
+                                    [(ngModel)]="isAllChecked">
                             </div>
                         </th>
-                        <!-- <th>#</th> -->
                         <th>
                             <div (click)="sortType = 'name'; sortReverse = !sortReverse">
-                                Name
-                                <span *ngIf="sortType == 'name' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-                                <span *ngIf="sortType == 'name' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                                {{commonLocaleData?.app_name}}
+                                <span *ngIf="sortType == 'name' && !sortReverse"
+                                    class="glyphicon glyphicon-chevron-down"></span>
+                                <span *ngIf="sortType == 'name' && sortReverse"
+                                    class="glyphicon glyphicon-chevron-up"></span>
                             </div>
                         </th>
                         <th>
                             <div (click)="sortType = 'uniqueName'; sortReverse = !sortReverse">
-                                UniqueName
-                                <span *ngIf="sortType == 'uniqueName' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-                                <span *ngIf="sortType == 'uniqueName' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                                {{localeData?.unique_name}}
+                                <span *ngIf="sortType == 'uniqueName' && !sortReverse"
+                                    class="glyphicon glyphicon-chevron-down"></span>
+                                <span *ngIf="sortType == 'uniqueName' && sortReverse"
+                                    class="glyphicon glyphicon-chevron-up"></span>
                             </div>
                         </th>
                         <th>
                             <div (click)="sortType = 'parent'; sortReverse = !sortReverse">
-                                Parent
-                                <span *ngIf="sortType == 'parent' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-                                <span *ngIf="sortType == 'parent' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                                {{localeData?.parent}}
+                                <span *ngIf="sortType == 'parent' && !sortReverse"
+                                    class="glyphicon glyphicon-chevron-down"></span>
+                                <span *ngIf="sortType == 'parent' && sortReverse"
+                                    class="glyphicon glyphicon-chevron-up"></span>
                             </div>
                         </th>
                         <th class="text-right">
                             <div (click)="sortType = 'openingBalance'; sortReverse = !sortReverse">
-                                Opening Bal.
-                                <span *ngIf="sortType=='openingBalance' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-                                <span *ngIf="sortType=='openingBalance' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                                {{localeData?.opening_balance}}
+                                <span *ngIf="sortType=='openingBalance' && !sortReverse"
+                                    class="glyphicon glyphicon-chevron-down"></span>
+                                <span *ngIf="sortType=='openingBalance' && sortReverse"
+                                    class="glyphicon glyphicon-chevron-up"></span>
                             </div>
                         </th>
                         <th class="text-right">
                             <div (click)="sortType = 'debitTotal'; sortReverse = !sortReverse">
-                                DR Total
-                                <span *ngIf="sortType == 'debitTotal' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-                                <span *ngIf="sortType == 'debitTotal' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                                {{localeData?.dr_total}}
+                                <span *ngIf="sortType == 'debitTotal' && !sortReverse"
+                                    class="glyphicon glyphicon-chevron-down"></span>
+                                <span *ngIf="sortType == 'debitTotal' && sortReverse"
+                                    class="glyphicon glyphicon-chevron-up"></span>
                             </div>
                         </th>
                         <th class="text-right">
                             <div (click)="sortType = 'creditTotal'; sortReverse = !sortReverse">
-                                CR Total
-                                <span *ngIf="sortType == 'creditTotal' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-                                <span *ngIf="sortType == 'creditTotal' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                                {{localeData?.cr_total}}
+                                <span *ngIf="sortType == 'creditTotal' && !sortReverse"
+                                    class="glyphicon glyphicon-chevron-down"></span>
+                                <span *ngIf="sortType == 'creditTotal' && sortReverse"
+                                    class="glyphicon glyphicon-chevron-up"></span>
                             </div>
                         </th>
                         <th class="text-right">
                             <div (click)="sortType = 'closingBalance'; sortReverse = !sortReverse">
-                                Closing Bal.
-                                <span *ngIf="sortType=='closingBalance' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-                                <span *ngIf="sortType=='closingBalance' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                                {{localeData?.closing_balance}}
+                                <span *ngIf="sortType=='closingBalance' && !sortReverse"
+                                    class="glyphicon glyphicon-chevron-down"></span>
+                                <span *ngIf="sortType=='closingBalance' && sortReverse"
+                                    class="glyphicon glyphicon-chevron-up"></span>
                             </div>
                         </th>
-
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of searchResponseFiltered$ | async; let i = index">
-                        <!-- [(ngModel)]="item.isSelected" -->
-                        <td data-title="Select Item"><input type="checkbox" [checked]="selectedItems.indexOf(item.uniqueName) > -1" (change)="toggleSelection($event, item)"></td>
-                        <!-- <td>{{i+1}}</td> -->
-                        <td data-title="Name">{{item.name}}</td>
-                        <td data-title="Unique Name">{{item.uniqueName}}</td>
-                        <td data-title="Parent">{{item.parent}}</td>
-                        <td data-title="Opening Balance" class="alR">
-                            {{item.openingBalance | giddhCurrency }}
+                        <td [attr.data-title]="localeData?.select_item"><input type="checkbox"
+                                [checked]="selectedItems.indexOf(item?.uniqueName) > -1"
+                                (change)="toggleSelection($event, item)"></td>
+                        <td [attr.data-title]="commonLocaleData?.app_name">{{item.name}}</td>
+                        <td [attr.data-title]="localeData?.unique_name">{{item?.uniqueName}}</td>
+                        <td [attr.data-title]="localeData?.parent">{{item.parent}}</td>
+                        <td [attr.data-title]="localeData?.opening_balance" class="text-right">
+                            <!-- {{item.openingBalance | giddhCurrency }} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item?.openingBalance" [currencySymbol]="false"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </span>
                             <span *ngIf="item.openingBalance > 0">
-                                <span class="text-success" *ngIf="item.openBalanceType === 'DEBIT'">Dr</span>
-                            <span class="text-danger" *ngIf="item.openBalanceType === 'CREDIT'">Cr</span>
+                                <span class="text-success"
+                                    *ngIf="item.openBalanceType === 'DEBIT'">{{localeData?.balance_type.dr}}</span>
+                                <span class="text-danger"
+                                    *ngIf="item.openBalanceType === 'CREDIT'">{{localeData?.balance_type.cr}}</span>
                             </span>
                         </td>
-                        <td data-title="DR Total" class="alR">{{item.debitTotal | giddhCurrency }}</td>
-                        <td data-title="CR Total" class="alR">{{item.creditTotal | giddhCurrency}}</td>
-                        <td data-title="Closing Balance" class="alR">
-                            {{item.closingBalance | giddhCurrency }}
+                        <td [attr.data-title]="localeData?.dr_total" class="text-right">
+                            <!-- {{item.debitTotal | giddhCurrency }} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item?.debitTotal" [currencySymbol]="false"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td [attr.data-title]="localeData?.cr_total" class="text-right">
+                            <!-- {{item.creditTotal | giddhCurrency}} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item?.creditTotal" [currencySymbol]="false"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td [attr.data-title]="localeData?.closing_balance" class="text-right">
+                            <!-- {{item.closingBalance | giddhCurrency }} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item?.closingBalance" [currencySymbol]="false"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </span>
                             <span *ngIf="item.closingBalance > 0">
-                                <span class="text-success" *ngIf="item.closeBalanceType === 'DEBIT'">Dr</span>
-                            <span class="text-danger" *ngIf="item.closeBalanceType === 'CREDIT'">Cr</span>
+                                <span class="text-success"
+                                    *ngIf="item.closeBalanceType === 'DEBIT'">{{localeData?.balance_type.dr}}</span>
+                                <span class="text-danger"
+                                    *ngIf="item.closeBalanceType === 'CREDIT'">{{localeData?.balance_type.cr}}</span>
                             </span>
                         </td>
                     </tr>
-                    <tr *ngIf="!(searchResponseFiltered$ | async).length">
+                    <tr *ngIf="!(searchResponseFiltered$ | async)?.length">
                         <td colspan="9" class="text-center empty-table">
-                            <h1>No Record Found !!</h1>
+                            <h1>{{commonLocaleData?.app_no_record_found}}</h1>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div class="d-flex align-items-center justify-content-center">
-            <pagination [totalItems]="totalPages" [(ngModel)]="page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
-                [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+            <pagination [totalItems]="totalPages" [(ngModel)]="page" [maxSize]="5" class="pagination-sm"
+                [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"
+                [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
         </div>
     </section>
     <!-- end pd div -->
-
 </div>
-
 <!--Modal for Mail/SMS-->
-<div class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">
+<div class="modal fade border-radius-0" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
-                <div class="modal-header themeBg pdL2 pdR2 clearfix">
+            <div class="border-radius-0">
+                <div class="modal-header theme-bg pd-l2 pd-r2 clearfix">
                     <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>
-                    <!-- <i class="icon-cross text-right close-modal" aria-hidden="true" ></i> -->
+                    <span aria-hidden="true" class="close" data-dismiss="modal"
+                        [attr.aria-label]="commonLocaleData?.app_close" (click)="mailModal.hide()">×</span>
                 </div>
-                <div class="modal-body pdL2 pdR2 clearfix">
-                    <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
-                    <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
-                    <h1 class="mr-b1">Type message body:</h1>
-                    <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" placeholder="start typing your message here"></textarea>
-                    <small class="mr-t mrB grey">Tip: Click on the tabs below to insert data in your message body.
-                        Anything
-                        followed by '%s_' represents the position where actual data will be placed.
-                    </small>
-
+                <div class="modal-body pd-l2 pd-r2 clearfix">
+                    <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'">{{localeData?.subject_label}}</h1>
+                    <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject
+                        [(ngModel)]="messageBody.subject" type="text" [placeholder]="localeData?.subject_placeholder" />
+                    <h1 class="mr-b1">{{localeData?.message_body_label}}</h1>
+                    <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control resize-none" rows="4"
+                        [placeholder]="localeData?.message_body_placeholder"></textarea>
+                    <small class="mr-t05 mr-b05 grey">{{localeData?.message_body_tips}}</small>
                     <div class="row mr-t2">
                         <ul class="list-inline pills">
                             <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)">{{val.name}}</li>
                         </ul>
                     </div>
                     <div class="mr-t4">
-                        <button class="btn btn-sm btn-success pull-right mr-l1" (click)="send()">{{messageBody.btn.set}}</button>
+                        <button class="btn btn-sm btn-success pull-right mr-l1"
+                            (click)="send()">{{messageBody.btn.set}}</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <!--end Modal for Mail/SMS-->

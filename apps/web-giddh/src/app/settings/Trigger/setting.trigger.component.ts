@@ -1,63 +1,30 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
-import { Store } from '@ngrx/store';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Store, select } from '@ngrx/store';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { CompanyActions } from '../../actions/company.actions';
 import { TaxResponse } from '../../models/api-models/Company';
-import { AccountService } from '../../services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { ToasterService } from '../../services/toaster.service';
 import { IForceClear } from '../../models/api-models/Sales';
 import { SettingsTriggersActions } from '../../actions/settings/triggers/settings.triggers.actions';
-
-const entityType = [
-    { label: 'Group', value: 'group' },
-    { label: 'Account', value: 'account' }
-];
-
-const actionType = [
-    { label: 'Webhook', value: 'webhook' }
-];
-
-const filterType = [
-    { label: 'Amount Greater Than', value: 'amountGreaterThan' },
-    { label: 'Amount Less Than', value: 'amountSmallerThan' },
-    { label: 'Amount Equals', value: 'amountEquals' },
-    { label: 'Description Equals', value: 'descriptionEquals' },
-    { label: 'Add', value: 'add' },
-    { label: 'Update', value: 'update' },
-    { label: 'Delete', value: 'delete' }
-];
-
-const scopeList = [
-    // G0-1393--Invoive and Entry not implemented from API
-    //{label: 'Invoice', value: 'invoice'},
-    //{label: 'Entry', value: 'entry'},
-    { label: 'Closing Balance', value: 'closing balance' }
-];
-
-const taxDuration = [
-    { label: 'Monthly', value: 'MONTHLY' },
-    { label: 'Quarterly', value: 'QUARTERLY' },
-    { label: 'Half-Yearly', value: 'HALFYEARLY' },
-    { label: 'Yearly', value: 'YEARLY' }
-];
+import { SearchService } from '../../services/search.service';
+import { GroupService } from '../../services/group.service';
+import { API_COUNT_LIMIT } from '../../app.constant';
 
 @Component({
     selector: 'setting-trigger',
     templateUrl: './setting.trigger.component.html',
     styleUrls: [`./setting.trigger.component.scss`]
 })
-export class SettingTriggerComponent implements OnInit {
 
-    @ViewChild('triggerConfirmationModel', {static: true}) public triggerConfirmationModel: ModalDirective;
+export class SettingTriggerComponent implements OnInit, OnDestroy {
+
+    @ViewChild('triggerConfirmationModel', { static: true }) public triggerConfirmationModel: ModalDirective;
 
     public availableTriggers: any[] = [];
     public newTriggerObj: any = {};
@@ -74,30 +41,67 @@ export class SettingTriggerComponent implements OnInit {
     public accounts: IOption[];
     public groups: IOption[];
     public triggerToEdit = []; // It is for edit toogle
-    public companies: IOption[];
-    public entityList: IOption[] = entityType;
-    public filterList: IOption[] = filterType;
-    public actionList: IOption[] = actionType;
-    public scopeList: IOption[] = scopeList;
+    public entityList: IOption[] = [];
+    public filterList: IOption[] = [];
+    public actionList: IOption[] = [];
+    public scopeList: IOption[] = [];
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public forceClearEntityList$: Observable<IForceClear> = observableOf({ status: false });
     public forceClearFilterList$: Observable<IForceClear> = observableOf({ status: false });
     public entityOptions$: Observable<IOption[]>;
+
+    /** Stores the search results pagination details */
+    public accountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search */
+    public defaultAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details */
+    public defaultAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the search results pagination details for group dropdown */
+    public groupsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for group dropdown */
+    public defaultGroupSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for group dropdown */
+    public preventDefaultGroupScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for group dropdown */
+    public defaultGroupPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if api call in progress */
+    public isLoading: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
-        private router: Router,
+        private groupService: GroupService,
         private store: Store<AppState>,
-        private _companyActions: CompanyActions,
-        private _accountService: AccountService,
         private _settingsTriggersActions: SettingsTriggersActions,
+        private searchService: SearchService,
         private _toaster: ToasterService
     ) {
         for (let i = 1; i <= 31; i++) {
             let day = i.toString();
             this.days.push({ label: day, value: day });
         }
-
         this.store.dispatch(this._settingsTriggersActions.GetTriggers());
     }
 
@@ -105,22 +109,17 @@ export class SettingTriggerComponent implements OnInit {
         // default value assinged bcz currently there is only single option
         this.newTriggerObj.action = 'webhook';
         this.newTriggerObj.scope = 'closing balance';
-        this.store.select(p => p.settings.triggers).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p.settings.triggers), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o) {
                 this.forceClear$ = observableOf({ status: true });
                 this.availableTriggers = _.cloneDeep(o);
             }
         });
 
-        this.getFlattenAccounts('');
+        this.loadDefaultAccountsSuggestions();
+        this.loadDefaultGroupsSuggestions();
 
-        this.store.select((state: AppState) => state.general.addAndManageClosed).subscribe((bool) => {
-            if (bool) {
-                this.getFlattenAccounts('');
-            }
-        });
-
-        this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$)).subscribe((groups) => {
+        this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$)).subscribe((groups) => {
             if (groups) {
                 let groupsRes: IOption[] = [];
                 groups.map(d => {
@@ -130,14 +129,8 @@ export class SettingTriggerComponent implements OnInit {
             }
         });
 
-        this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$)).subscribe((companies) => {
-            if (companies) {
-                let companiesRes: IOption[] = [];
-                companies.map(d => {
-                    companiesRes.push({ label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName });
-                });
-                this.companies = _.cloneDeep(companiesRes);
-            }
+        this.store.pipe(select(state => state.settings.isGetAllTriggersInProcess), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLoading = response;
         });
     }
 
@@ -145,37 +138,37 @@ export class SettingTriggerComponent implements OnInit {
         let dataToSave = _.cloneDeep(data);
         dataToSave.action = 'webhook';
         if (!dataToSave.name) {
-            this._toaster.errorToast('Please enter trigger name.', 'Validation');
+            this._toaster.errorToast(this.localeData?.validations?.trigger_name, 'Validation');
             return;
         }
         if (!dataToSave.entity) {
-            this._toaster.errorToast('Please select entity type.', 'Validation');
+            this._toaster.errorToast(this.localeData?.validations?.entity_type, 'Validation');
             return;
         }
         if (!dataToSave.entityUniqueName) {
-            this._toaster.errorToast('Please select an entity.', 'Validation');
+            this._toaster.errorToast(this.localeData?.validations?.entity, 'Validation');
             return;
         }
         if (!dataToSave.scope) {
-            this._toaster.errorToast('Please select a scope.', 'Validation');
+            this._toaster.errorToast(this.localeData?.validations?.scope, 'Validation');
             return;
         }
         if (!dataToSave.filter) {
-            this._toaster.errorToast('Please select a filter.', 'Validation');
+            this._toaster.errorToast(this.localeData?.validations?.filter, 'Validation');
             return;
         }
         if (!dataToSave.action) {
-            this._toaster.errorToast('Please select an action.', 'Validation');
+            this._toaster.errorToast(this.localeData?.validations?.action, 'Validation');
             return;
         }
         if (!dataToSave.value && this.newTriggerObj.scope !== 'closing balance') {
-            this._toaster.errorToast('Please enter value.', 'Validation');
+            this._toaster.errorToast(this.localeData?.validations?.enter_value, 'Validation');
             return;
         } else {
             delete dataToSave['value'];
         }
         if (!dataToSave.url) {
-            this._toaster.errorToast('Please enter URL.', 'Validation');
+            this._toaster.errorToast(this.localeData?.validations?.enter_url, 'Validation');
             return;
         }
         this.store.dispatch(this._settingsTriggersActions.CreateTrigger(dataToSave));
@@ -184,7 +177,9 @@ export class SettingTriggerComponent implements OnInit {
     public deleteTax(taxToDelete) {
         this.newTriggerObj = taxToDelete;
         this.selectedTax = this.availableTriggers.find((tax) => tax.uniqueName === taxToDelete.uniqueName).name;
-        this.confirmationMessage = `Are you sure you want to delete ${this.selectedTax}?`;
+        let message = this.localeData?.delete_tax;
+        message = message?.replace("[SELECTED_TAX]", this.selectedTax);
+        this.confirmationMessage = message;
         this.confirmationFor = 'delete';
         this.triggerConfirmationModel.show();
     }
@@ -192,7 +187,9 @@ export class SettingTriggerComponent implements OnInit {
     public updateTrigger(taxIndex: number) {
         let selectedTrigger = _.cloneDeep(this.availableTriggers[taxIndex]);
         this.newTriggerObj = selectedTrigger;
-        this.confirmationMessage = `Are you sure want to update ${selectedTrigger.name}?`;
+        let message = this.localeData?.update_trigger;
+        message = message?.replace("[TRIGGER_NAME]", selectedTrigger.name);
+        this.confirmationMessage = message;
         this.confirmationFor = 'edit';
         this.triggerConfirmationModel.show();
     }
@@ -227,23 +224,6 @@ export class SettingTriggerComponent implements OnInit {
         this.availableTriggers = taxes;
     }
 
-	/**
-	 *
-	 */
-    public getFlattenAccounts(value) {
-        let query = value || '';
-        // get flattern accounts
-        this._accountService.getFlattenAccounts(query, '').pipe(debounceTime(100), takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
-                let accounts: IOption[] = [];
-                data.body.results.map(d => {
-                    accounts.push({ label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName });
-                });
-                this.accounts = accounts;
-            }
-        });
-    }
-
     public customAccountFilter(term: string, item: IOption) {
         return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
     }
@@ -266,9 +246,9 @@ export class SettingTriggerComponent implements OnInit {
         this.forceClearEntityList$ = observableOf({ status: true });
     }
 
-	/**
-	 * onSelectScope
-	 */
+    /**
+     * onSelectScope
+     */
     public onSelectScope(event) {
         if (event.value === 'closing balance') {
             this.onSelectClosingBalance();
@@ -278,15 +258,276 @@ export class SettingTriggerComponent implements OnInit {
                 this.forceClearFilterList$ = observableOf({ status: true });
             }
         } else {
-            this.filterList = filterType;
+            this.filterList = [
+                { label: this.localeData?.filter_types?.amount_greater_than, value: 'amountGreaterThan' },
+                { label: this.localeData?.filter_types?.amount_less_than, value: 'amountSmallerThan' },
+                { label: this.localeData?.filter_types?.amount_equals, value: 'amountEquals' },
+                { label: this.localeData?.filter_types?.description_equals, value: 'descriptionEquals' },
+                { label: this.localeData?.filter_types?.add, value: 'add' },
+                { label: this.localeData?.filter_types?.update, value: 'update' },
+                { label: this.localeData?.filter_types?.delete, value: 'delete' }
+            ];
         }
     }
 
     public onSelectClosingBalance() {
         this.filterList = [
-            { label: 'Amount Greater Than', value: 'amountGreaterThan' },
-            { label: 'Amount Less Than', value: 'amountSmallerThan' },
+            { label: this.localeData?.filter_types?.amount_greater_than, value: 'amountGreaterThan' },
+            { label: this.localeData?.filter_types?.amount_less_than, value: 'amountSmallerThan' },
         ];
     }
 
+    /**
+     * Search query change handler
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof SettingTriggerComponent
+     */
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.accountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject = {
+                q: encodeURIComponent(query),
+                page
+            }
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name} - (${result.uniqueName})`
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.accounts = searchResults;
+                    } else {
+                        this.accounts = [
+                            ...this.accounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.entityOptions$ = observableOf(this.accounts);
+                    this.accountsSearchResultsPaginationData.page = data.body.page;
+                    this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultAccountPaginationData.page = data.body.page;
+                        this.defaultAccountPaginationData.totalPages = data.body.totalPages;
+                    }
+                }
+            });
+        } else {
+            this.accounts = [...this.defaultAccountSuggestions];
+            this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
+            this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Search query change handler for group
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof AdvanceSearchModelComponent
+     */
+    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.groupsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultGroupScrollApiCall &&
+            (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                count: API_COUNT_LIMIT,
+                onlyTop: true
+            }
+            this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name} (${result.uniqueName})`
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.groups = searchResults;
+                    } else {
+                        this.groups = [
+                            ...this.groups,
+                            ...searchResults
+                        ];
+                    }
+                    this.entityOptions$ = observableOf(this.groups);
+                    this.groupsSearchResultsPaginationData.page = data.body.page;
+                    this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+                }
+            });
+        } else {
+            this.groups = [...this.defaultGroupSuggestions];
+            this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
+            this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
+            this.preventDefaultGroupScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultGroupScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler
+     *
+     * @returns null
+     * @memberof SettingTriggerComponent
+     */
+    public handleScrollEnd(): void {
+        if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
+            this.onAccountSearchQueryChanged(
+                this.accountsSearchResultsPaginationData.query,
+                this.accountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.accountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name} - (${result.uniqueName})`
+                            }
+                        }) || [];
+                        this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+                });
+        }
+    }
+
+    /**
+     * Scroll end handler for group dropdown
+     *
+     * @returns null
+     * @memberof AdvanceSearchModelComponent
+     */
+    public handleGroupScrollEnd(): void {
+        if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
+            this.onGroupSearchQueryChanged(
+                this.groupsSearchResultsPaginationData.query,
+                this.groupsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.groupsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name} - (${result.uniqueName})`
+                            }
+                        }) || [];
+                        this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+                });
+        }
+    }
+
+    /**
+     * Loads the default account search suggestion when module is loaded
+     *
+     * @private
+     * @memberof SettingTriggerComponent
+     */
+    private loadDefaultAccountsSuggestions(): void {
+        this.onAccountSearchQueryChanged('', 1, (response) => {
+            this.defaultAccountSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: `${result.name} - (${result.uniqueName})`
+                }
+            }) || [];
+            this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+            this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+            this.accounts = [...this.defaultAccountSuggestions];
+        });
+    }
+
+    /**
+     * Loads the default group list for advance search
+     *
+     * @private
+     * @memberof SettingTriggerComponent
+     */
+    private loadDefaultGroupsSuggestions(): void {
+        this.onGroupSearchQueryChanged('', 1, (response) => {
+            this.defaultGroupSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: `${result.name} - (${result.uniqueName})`
+                }
+            }) || [];
+            this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+            this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+            this.groups = [...this.defaultGroupSuggestions];
+        });
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof SettingTriggerComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof SettingTriggerComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.entityList = [
+                { label: this.localeData?.entity_types?.group, value: 'group' },
+                { label: this.localeData?.entity_types?.account, value: 'account' }
+            ];
+
+            this.actionList = [
+                { label: this.localeData?.webhook, value: 'webhook' }
+            ];
+
+            this.filterList = [
+                { label: this.localeData?.filter_types?.amount_greater_than, value: 'amountGreaterThan' },
+                { label: this.localeData?.filter_types?.amount_less_than, value: 'amountSmallerThan' },
+                { label: this.localeData?.filter_types?.amount_equals, value: 'amountEquals' },
+                { label: this.localeData?.filter_types?.description_equals, value: 'descriptionEquals' },
+                { label: this.localeData?.filter_types?.add, value: 'add' },
+                { label: this.localeData?.filter_types?.update, value: 'update' },
+                { label: this.localeData?.filter_types?.delete, value: 'delete' }
+            ];
+
+            this.scopeList = [
+                // G0-1393--Invoive and Entry not implemented from API
+                //{label: 'Invoice', value: 'invoice'},
+                //{label: 'Entry', value: 'entry'},
+                { label: this.localeData?.scope_list?.closing_balance, value: 'closing balance' }
+            ];
+        }
+    }
 }

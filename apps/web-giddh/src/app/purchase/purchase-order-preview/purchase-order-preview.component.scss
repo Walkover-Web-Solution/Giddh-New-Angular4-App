@@ -7,28 +7,31 @@
     background-color: $white;
     top: 170px;
     bottom: 0;
-    left: 0;
+    left: 240px;
     z-index: -1;
 }
 
 .invoice-control {
     position: relative;
 }
-
 .invoice-detail-header {
     padding-top: 25px;
+    width: 100%;
+}
+.relative {
+    height: 100% !important;
 }
 
 .invoice-modal-content {
     padding: 0;
     position: fixed;
-    top: 59px;
+    top: 57px;
     width: 100%;
     background-color: $white;
     margin: 0 0;
     height: 100vh;
-    z-index: 999;
-    left: 0;
+    z-index: 99;
+    left: 240px;
 }
 
 .invoice-sidebar {
@@ -77,7 +80,7 @@
     border-bottom: none;
 }
 
-.invoice-sidebar .inovice-amount {
+.invoice-sidebar .invoice-amount {
     font-size: 12px;
     line-height: 3.4;
 }
@@ -127,13 +130,16 @@
 .invoice-detail-header .edit-change-status .edit-action-btn-groups {
     display: flex;
     background-color: $white;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     margin-right: 10px;
     span {
-        border-left: 1px solid $very-light-gray;
+        border-left: 1px solid $gainsboro;
         padding: 5px;
-        height: 30px;
-        width: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 33px;
+        width: 32px;
         &:first-child {
             border-left: none;
         }
@@ -194,8 +200,8 @@ span.close-modal.cp.pull-right {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    height: 32px;
-    width: 32px;
+    height: 34px;
+    width: 34px;
     background-color: $gainsboro;
     border: 1px solid $gainsboro;
     position: static;
@@ -254,10 +260,10 @@ span.close-modal.cp.pull-right {
     height: 100vh;
 }
 
-.invoice-editWrapper {
+.invoice-edit-wrapper {
     height: 100vh;
     overflow-y: auto;
-    .invoice-editHeader {
+    .invoice-edit-header {
         display: flex;
         justify-content: space-between;
         height: 54px;
@@ -285,7 +291,7 @@ span.close-modal.cp.pull-right {
             transform: inherit;
         }
     }
-    .invoice-editBody {
+    .invoice-edit-body {
         padding-bottom: 140px;
     }
 }
@@ -296,18 +302,18 @@ span.close-modal.cp.pull-right {
     right: 0;
 }
 
-.sendEmailModal {
+.send-email-modal {
     min-width: 240px;
     position: absolute;
     top: 40px;
     z-index: 10;
     right: 0;
     border: 1px solid $gainsboro;
-    .sendEmailModalWrapper {
+    .send-email-modal-wrapper {
         background-color: $white;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
         height: 200px;
-        .sendEmailModalHeader {
+        .send-email-modal-header {
             background-color: $whisper-color;
             padding: 8px 10px;
             border-bottom: 1px solid $gainsboro;
@@ -316,10 +322,10 @@ span.close-modal.cp.pull-right {
             }
         }
     }
-    .sendEmailModalBody {
+    .send-email-modal-body {
         padding: 5px;
     }
-    .sendEmailModalBody label {
+    .send-email-modal-body label {
         font-size: 12px;
         margin-bottom: 7px;
     }
@@ -372,7 +378,7 @@ span.close-modal.cp.pull-right {
     color: $success-green;
 }
 
-.file-uplod-penal {
+.file-upload-panel {
     width: 100%;
     text-align: left;
     border: 1px solid $gainsboro;
@@ -701,7 +707,7 @@ p {
 
 #default .subfooter hr {
     width: 100%;
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
     margin: 3px 0;
 }
 
@@ -925,91 +931,113 @@ table.tax-table.item {
         top: 10px;
     }
 }
-@media (max-width:1024px) and (min-width:992px){
-    .invoice-search-box{
+.wrap-edit-history-btn {
+    .history-btn {
+        i.icon-history-icon {
+            color: $gray;
+        }
+        &:hover {
+            i.icon-history-icon {
+                color: $white;
+            }
+        }
+    }
+}
+@media (max-width: 1024px) and (min-width: 992px) {
+    .invoice-search-box {
         flex-direction: column;
-        button.btn{
+        button.btn {
             width: 100%;
             margin: 10px 0 !important;
         }
-        input{
+        input {
             flex: auto;
         }
     }
 }
-@media(max-width:991px){
+@media (max-width: 991px) {
     .invoice-sidebar-wrapper {
         display: none;
     }
-    .invoice-modal-content{
-        top:60px;
-        overflow-y:auto;
-        .invoice-sidebar{
+    .invoice-modal-content {
+        top: 60px;
+        overflow-y: auto;
+        .invoice-sidebar {
             height: 300px;
         }
-        .invoice-detail-wrapper{
+        .invoice-detail-wrapper {
             height: 100%;
         }
-        .invoice-detail-header{
-            .edit-change-status{
-                    margin-top: 10px;
+        .invoice-detail-header {
+            .edit-change-status {
+                margin-top: 10px;
             }
         }
-        .invoice-image-section{
+        .invoice-image-section {
             margin-top: 15px;
-                height: auto;
+            height: auto;
         }
     }
-    .wrap-edit-history-btn{
+    .wrap-edit-history-btn {
         float: left;
         display: flex;
         align-items: center;
     }
-    .invoice-detail-header{
+    .invoice-detail-header {
         padding-left: 30px !important;
     }
 }
-@media(max-width:767px){
-    .invoice-modal-content{
-        top:90px;
+@media (max-width: 1019px) {
+    .invoice-modal-content {
+        left: 60px;
+        width: 100%;
+        &:after {
+            display: none;
+        }
     }
 }
-@media(max-width:575px){
-    .invoice-search-box{
+@media (max-width: 767px) {
+    .invoice-modal-content {
+        top: 90px;
+        left: 0;
+    }
+}
+@media (max-width: 575px) {
+    .invoice-search-box {
         flex-direction: column;
-        button.btn{
+        button.btn {
             width: 100%;
             margin: 10px 0 !important;
         }
-        input{
+        input {
             flex: auto;
         }
     }
-    .wrap-edit-history-btn{
+    .wrap-edit-history-btn {
         float: none;
         display: flex;
         width: 100%;
         padding-top: 10px;
     }
-    .edit-change-status{
+    .edit-change-status {
         text-align: left;
-        .close-modal{
+        .close-modal {
             position: absolute !important;
             top: -42px;
             right: 30px;
         }
-        .change-status-dropdown{
+        .change-status-dropdown {
             float: left;
             display: flex !important;
             width: 100% !important;
-            .btn{
+            .btn {
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 width: 100%;
             }
         }
-        .wrap-edit-history-btn{
+        .wrap-edit-history-btn {
             justify-content: space-between;
         }
     }

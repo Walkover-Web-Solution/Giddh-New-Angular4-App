@@ -1,0 +1,20 @@
+@import "../../../assets/css/color.scss";
+
+.navbar-brand {
+    height: auto;
+    padding: 5px 15px;
+}
+.more-btn-dropdown {
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    font-size: 24px;
+    padding: 0;
+}
+.dropdown-menu > li > a:hover {
+    background: $solitude;
+}
+.dropdown-menu {
+    margin-top: 0;
+}

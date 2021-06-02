@@ -91,7 +91,7 @@ body {
 tfoot.table-details tr th {
     font-weight: normal;
 }
-#royal .mrL2 {
+#royal .mr-l2 {
     margin-left: 20px;
 }
 #royal .mr-b2 {
@@ -146,7 +146,7 @@ tfoot.table-details tr th {
   width: 100%;
   z-index: -1;
 } */
-#royal .inwords {
+#royal .in-words {
     color: #939393;
 }
 
@@ -189,7 +189,7 @@ tfoot.table-details tr th {
     font-weight: bold;
 }
 
-#royal .bdrB {
+#royal .bd-rb {
     border-bottom: 1px solid$nobel;
     margin-bottom: 10px;
 }
@@ -209,8 +209,20 @@ tfoot.table-details tr th {
     vertical-align: baseline;
 }
 
-#royal .vmiddle {
-    vertical-align: middle;
+#royal .subfooter hr {
+    width: 100%;
+    border-bottom: 1px solid $very-light-gray;
+    margin: 3px 0;
+    border-top: 0 !important;
+}
+
+#royal {
+    .vertical-align-middle {
+        vertical-align: middle;
+    }
+    .vertical-align-top {
+        vertical-align: top;
+    }
 }
 
 #royal .note {
@@ -233,11 +245,7 @@ tfoot.table-details tr th {
     width: auto;
 }
 
-#royal .pos-rel {
-    position: relative;
-}
-
-#royal .primary-clr {
+#royal .primary-color {
     color: #df4927;
 }
 
@@ -245,7 +253,7 @@ tfoot.table-details tr th {
     text-align: center;
 }
 
-#royal .mrB {
+#royal .mr-b05 {
     margin-bottom: 10px;
 }
 
@@ -263,10 +271,11 @@ tfoot.table-details tr th {
 
 .tax-table {
     table-layout: fixed;
+    min-width: 100% !important;
 }
 
 .tax-table thead tr th:nth-child(1) {
-    width: 30%;
+    width: 20%;
 }
 
 #royal .tax-table thead tr th,
@@ -308,6 +317,16 @@ table.tax-table.item {
 
 #template-table {
     clear: both;
+}
+
+.name-email {
+    p {
+        word-break: break-word;
+    }
+}
+
+.d-block {
+    display: block !important;
 }
 
 .edit-template {
@@ -374,4 +393,24 @@ header.bottom-border {
 .tax-table {
     padding-right: 0px !important;
     padding-left: 0px !important;
+}
+.date-text {
+    color: $zambezi;
+}
+
+.qr-image img {
+    width: 160px !important;
+}
+
+.width-40 {
+    width: 40%;
+}
+
+.inner-img-signature {
+    height: 60px;
+    min-width: 60px;
+}
+
+.word-break {
+    word-break: break-word;
 }

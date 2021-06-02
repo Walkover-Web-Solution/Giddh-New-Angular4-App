@@ -13,17 +13,21 @@ export class AVAccountListComponent implements OnChanges {
     @Input() public isOpen: boolean;
     @Input() public optionTemplate: TemplateRef<any>;
     @Input() public notFoundMsg: string;
-    @Input() public notFoundLinkText: string = 'Create New';
+    @Input() public notFoundLinkText: string = '';
     @Input() public noResultLinkEnabled: boolean;
     @Input() public ItemHeight: number;
     @Input() public NoFoundMsgHeight: number;
     @Input() public NoFoundLinkHeight: number;
     @Input() public dropdownMinHeight: number;
+    /** True when pagination should be enabled */
+    @Input() isPaginationEnabled: boolean;
 
     @Output() public noToggleClick: EventEmitter<any> = new EventEmitter<any>();
     @Output() public noResultClicked = new EventEmitter<null>();
-    @ViewChild(VirtualScrollComponent, {static: false}) public virtualScrollElm: VirtualScrollComponent;
-    @ViewChild('listContainer', {static: true}) public listContainer: ElementRef;
+    /** Emits the scroll to bottom event when pagination is required  */
+    @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
+    @ViewChild(VirtualScrollComponent, { static: false }) public virtualScrollElm: VirtualScrollComponent;
+    @ViewChild('listContainer', { static: true }) public listContainer: ElementRef;
     public math: any = Math;
     public viewPortItems: IOption[];
 

@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'inventory-inout-header',
-    styles: [`
-  `],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -19,56 +19,25 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
             transition('out => in', animate('400ms ease-in-out'))
         ]),
     ],
-    template: `
-    <div class="inline pull-right">
-      <div class="">
-        <div class="pull-right">
-
-          <div class="btn-group" dropdown>
-            <button id="button-basic" dropdownToggle type="button" class="btn btn-default btn-sm dropdown-toggle"
-                    aria-controls="dropdown-basic">
-              New <span class="caret"></span>
-            </button>
-            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu  dropdown-option dropdown-menu-right"
-                role="menu" aria-labelledby="button-basic">
-              <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="toggleGroupStockAsidePane('inward', $event)">Inward Note</a></li>
-              <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="toggleGroupStockAsidePane('outward', $event)">Outward Note</a></li>
-              <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="toggleGroupStockAsidePane('transfer', $event)">Transfer Note</a></li>
-              <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="toggleGroupStockAsidePane('createStock', $event)">Create Stock</a></li>
-              <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" (click)="toggleGroupStockAsidePane('createAccount', $event)">Create Account</a></li>
-            </ul>
-          </div>
-          <!-- <button (click)="toggleGroupStockAsidePane($event)" type="button" class="btn btn-default">New</button> -->
-        </div>
-      </div>
-    </div>
-    <aside-menu
-      [class]="asideMenuState"
-      [@slideInOut]="asideMenuState"
-      (closeAsideEvent)="toggleGroupStockAsidePane('', $event)" [selectedAsideView]="selectedAsideView"></aside-menu>
-    <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-    <!-- <aside-custom-stock [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleCustomUnitAsidePane($event)"></aside-custom-stock>-->
-  `
+    templateUrl: './inventory-header.component.html'
 })
-// <button type="button" class="btn btn-default" (click)="goToAddGroup()">Add Group</button>
-// <button type="button" *ngIf="activeGroupName$ | async" class="btn btn-default" (click)="goToAddStock()">Add Stock</button>
-// [routerLink]="['custom-stock']"
-export class InventoryHeaderComponent implements OnInit {
+
+export class InventoryHeaderComponent implements OnInit, OnDestroy {
     public asideMenuState: string = 'out';
     public selectedAsideView: string = '';
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _store: Store<AppState>) {
 
     }
 
     public ngOnInit() {
-        this._store
-            .select(p => p.inventoryInOutState.entrySuccess)
-            .subscribe(p => {
-                if (p) {
-                    this.toggleGroupStockAsidePane('');
-                }
-            });
+        this._store.pipe(select(p => p.inventoryInOutState.entrySuccess), takeUntil(this.destroyed$)).subscribe(p => {
+            if (p) {
+                this.toggleGroupStockAsidePane('');
+            }
+        });
     }
 
     public toggleGroupStockAsidePane(view, event?): void {
@@ -86,5 +55,15 @@ export class InventoryHeaderComponent implements OnInit {
         } else {
             document.querySelector('body').classList.remove('fixed');
         }
+    }
+
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof InventoryHeaderComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

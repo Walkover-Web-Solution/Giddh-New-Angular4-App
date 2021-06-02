@@ -1,6 +1,9 @@
 export const ROUTES = [
+    { path: 'download' },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: '404' },
+    { path: 'app-login-success' },
+    { path: 'token-verify' },
     { path: 'create-invoice', loadChildren: () => import('./create/create.module').then(module => module.CreateModule) },
     { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule) },
     { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule) },
@@ -13,10 +16,12 @@ export const ROUTES = [
     { path: 'manufacturing', redirectTo: 'pages/manufacturing', pathMatch: 'full' },
     { path: 'about', redirectTo: 'pages/about', pathMatch: 'full' },
     { path: 'trial-balance-and-profit-loss', redirectTo: 'pages/trial-balance-and-profit-loss', pathMatch: 'full' },
+    { path: 'giddh-all-items', redirectTo: 'pages/giddh-all-items', pathMatch: 'full' },
     { path: 'audit-logs', redirectTo: 'pages/audit-logs', pathMatch: 'full' },
     { path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full' },
     { path: 'dummy' },
     { path: 'browser-support' },
+    { path: 'proforma-invoice' },
     { path: 'new-user' },
     { path: 'welcome' },
     { path: 'onboarding' },
@@ -36,6 +41,12 @@ export const ROUTES = [
     { path: 'purchase/create', redirectTo: 'pages/purchase/create' },
     { path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full' },
     { path: 'reports', redirectTo: 'pages/reports' },
+    { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
+    { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
+    { path: 'select-plan' },
+    { path: 'billing-detail' },
+    { path: 'billing-detail/buy-plan' },
+    //{ path: 'new-inventory/create-group', component: InventoryCreateGroupComponent },
     {
         path: 'pages',
         children: [
@@ -57,7 +68,6 @@ export const ROUTES = [
                 data: { preload: true }
             },
             { path: 'audit-logs', loadChildren: () => import('./audit-logs/audit-logs.module').then(module => module.AuditLogsModule) },
-            { path: 'all-modules', loadChildren: () => import('./all-modules/all-modules.module').then(module => module.AllModulesModule) },
             { path: 'create-advance-receipt', loadChildren: () => import('./create-advance-receipt/create-advance-receipt.module').then(module => module.CreateAdvanceReceiptModule) },
             {
                 path: 'ledger/:accountUniqueName',

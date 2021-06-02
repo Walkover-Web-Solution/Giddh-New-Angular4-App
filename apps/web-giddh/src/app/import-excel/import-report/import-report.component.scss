@@ -1,38 +1,38 @@
 @import "../../../assets/css/color.scss";
 
-.import-data-table{
+.import-data-table {
     height: 68vh;
     overflow-y: auto;
     .import-card {
         padding: 15px;
-        background-color: white;
+        background-color: $white;
         box-shadow: 0px 3px 7px $black-russian;
         border-radius: 2px;
         position: relative;
         padding-right: 30px;
         font-size: 14px;
-        i{
-           position: absolute;
-           right: 15px;
-           cursor: pointer;
-           z-index: 2;
+        i {
+            position: absolute;
+            right: 15px;
+            cursor: pointer;
+            z-index: 2;
         }
-        svg.download-import{
-            fill:$gray;
+        svg.download-import {
+            fill: $gray;
         }
     }
-    .import-data-row{
+    .import-data-row {
         margin-right: 0;
     }
 }
-.pagination-wrap{
+.pagination-wrap {
     display: flex;
     justify-content: center;
     margin-top: 15px;
 }
-@media(max-width:991px){
-.import-data-table{
-        .import-data-row{
+@media (max-width: 991px) {
+    .import-data-table {
+        .import-data-row {
             margin-right: -15px;
         }
     }

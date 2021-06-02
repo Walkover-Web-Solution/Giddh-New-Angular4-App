@@ -18,6 +18,10 @@ export class AddCompanyComponent implements OnInit {
     @Input() public activeCompany: any;
     /* This will accept all associated company data */
     @Input() public allAssociatedCompanies: any[] = [];
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /* This will contain all active company data based on criteria */
     public associatedCompanies: any[] = [];
     /* This will contain list of all active company data which we will show in dropdown */
@@ -45,7 +49,7 @@ export class AddCompanyComponent implements OnInit {
         if (this.allAssociatedCompanies && this.allAssociatedCompanies.length > 0) {
             this.allAssociatedCompanies.forEach(company => {
                 // country should be same and should not have same plan
-                if (this.activeCompany.subscription.planDetails.countries.includes(company.country) && this.activeCompany.subscription.planDetails.uniqueName !== company.subscription.planDetails.uniqueName) {
+                if (company.subscription && company.subscription.country && this.activeCompany.subscription.planDetails.countries.includes(company.subscription.country.countryName) && this.activeCompany.subscription.planDetails.uniqueName !== company.subscription.planDetails.uniqueName) {
                     this.associatedCompanies[company.uniqueName] = company;
                     this.associatedCompaniesOption.push({ label: company.name, value: company.uniqueName });
                 }
@@ -86,5 +90,17 @@ export class AddCompanyComponent implements OnInit {
      */
     public closePopup(): void {
         this.addCompany.emit(false);
+    }
+
+    /**
+     * This will return add company text
+     *
+     * @returns {string}
+     * @memberof AddCompanyComponent
+     */
+    public getAddCompanyText(): string {
+        let text = this.localeData?.subscription?.add_company_note;
+        text = text?.replace("[PLAN_NAME]", this.activeCompany?.subscription?.planDetails?.name);
+        return text;
     }
 }

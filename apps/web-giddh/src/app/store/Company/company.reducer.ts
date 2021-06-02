@@ -1,5 +1,5 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { TaxResponse, Organization } from '../../models/api-models/Company';
+import { TaxResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
 import { SETTINGS_TAXES_ACTIONS } from '../../actions/settings/taxes/settings.taxes.const';
 import * as _ from '../../lodash-optimized';

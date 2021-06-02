@@ -1,13 +1,12 @@
-import { distinctUntilKeyChanged, take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { CurrentPage } from '../models/api-models/Common';
 import { GeneralActions } from '../actions/general/general.actions';
 
 @Component({
@@ -16,7 +15,7 @@ import { GeneralActions } from '../actions/general/general.actions';
     styleUrls: ['./tb-pl-bs.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TbPlBsComponent implements OnInit, AfterViewInit {
+export class TbPlBsComponent implements OnInit, OnDestroy {
 
     public selectedCompany: CompanyResponse;
     public CanTBLoad: boolean = true;
@@ -24,21 +23,33 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
     public CanBSLoad: boolean = false;
     public CanNewTBLoadOnThisEnv: boolean = false;
     public isWalkoverCompany: boolean = false;
+    /* This will hold active tab */
+    public activeTab: string = 'trial-balance';
+    /* This will hold active tab index */
+    public activeTabIndex: number = 0;
+    /** True, when tabs are navigated with the help of routing, done to prevent redundant routing as
+     * tab changed event is triggered on setting any tab as active which leads to a second navigation to the
+     * same route which cancels the previous route with route ID and doesn't highlight the menu item
+     */
+    public preventTabChangeWithRoute: boolean;
 
-    @ViewChild('staticTabsTBPL', {static: true}) public staticTabs: TabsetComponent;
+    @ViewChild('staticTabsTBPL', { static: true }) public staticTabs: TabsetComponent;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private cd: ChangeDetectorRef, private _route: ActivatedRoute, private router: Router, private _generalActions: GeneralActions) {
-        this.store.pipe(select(p => p.session), distinctUntilKeyChanged('companyUniqueName')).subscribe(p => {
-            let companies = p.companies;
-            this.selectedCompany = companies.find(q => q.uniqueName === p.companyUniqueName);
+    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private _route: ActivatedRoute, private router: Router, private _generalActions: GeneralActions) {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.selectedCompany = activeCompany;
+            }
         });
     }
 
     public ngOnInit() {
-        this.setCurrentPageTitle('Trial Balance');
-
         if (TEST_ENV) {
             this.CanNewTBLoadOnThisEnv = true;
         } else {
@@ -46,34 +57,63 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
         }
 
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        // Sagar: show new trial balance for Walkover company only
-        this.isWalkoverCompany = (companyUniqueName === 'walkpvindore14504197149880siqli') ? true : false;
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'trial-balance-and-profit-loss';
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
 
         this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tab && val.tabIndex) {
+                this.activeTab = val.tab;
+                this.activeTabIndex = val.tabIndex;
+                this.preventTabChangeWithRoute = true;
                 this.selectTab(val.tabIndex);
             }
         });
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    }
-
-    public ngAfterViewInit() {
-        //
+        this.saveLastState(this.activeTab, this.activeTabIndex);
     }
 
     public selectTab(id: number) {
-        this.staticTabs.tabs[id].active = true;
+        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
+            this.staticTabs.tabs[id].active = true;
+        }
     }
 
-    public setCurrentPageTitle(title) {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = title;
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof TbPlBsComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    /**
+     * This will navigate to selected tab
+     *
+     * @param {string} tab
+     * @param {number} tabIndex
+     * @memberof TbPlBsComponent
+     */
+    public tabChanged(tab: string, tabIndex: number): void {
+        if (!this.preventTabChangeWithRoute) {
+            this.router.navigate(['/pages/trial-balance-and-profit-loss'], { queryParams: { tab, tabIndex } });
+        }
+        this.saveLastState(tab, tabIndex);
+    }
+
+    /**
+     * Saves the last state for purchase module
+     *
+     * @private
+     * @param {string} tabName Current tab name
+     * @param {number} tabIndex Current tab index
+     * @memberof TbPlBsComponent
+     */
+    private saveLastState(tabName: string, tabIndex: number): void {
+        let companyUniqueName = null;
+        this.store.pipe(select(appState => appState.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
+        let stateDetailsRequest = new StateDetailsRequest();
+        stateDetailsRequest.companyUniqueName = companyUniqueName;
+        stateDetailsRequest.lastState = `/pages/trial-balance-and-profit-loss?tab=${tabName}&tabIndex=${tabIndex}`;
+        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 }

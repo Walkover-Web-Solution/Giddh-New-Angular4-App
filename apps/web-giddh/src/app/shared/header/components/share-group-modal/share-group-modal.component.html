@@ -1,64 +1,71 @@
-<div id="share-modal" class="pdB4 shareGrp">
+<div id="share-modal" class="pd-b4 share-grp group-share-modal">
     <div class="modal-header">
-        <h3>Share Group</h3>
+        <h3>{{localeData?.share_group}}</h3>
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
     </div>
     <div class="modal-body" id="SharePop">
         <div class="form-group mb-0">
-            <h3 class="pd-b1">Share with</h3>
-            <div class="add_mailer">
+            <h3 class="pd-b1">{{localeData?.share_with}}</h3>
+            <div class="add-mailer">
 
                 <!--share group from-->
-                <form name="shareGroupForm" #shareGroupForm="ngForm" novalidate="" class="form-inline clearfix" autocomplete="off">
+                <form name="shareGroupForm" #shareGroupForm="ngForm" novalidate="" class="form-inline clearfix"
+                    autocomplete="off">
                     <div class="input-group form-group w-100">
-                        <input name="userEmail" type="email" [(ngModel)]="email" required placeholder="Email ID" class="form-control" [pattern]="giddhEmailRegex">
+                        <input name="userEmail" type="email" [(ngModel)]="email" required
+                            [placeholder]="commonLocaleData?.app_email_id" class="form-control"
+                            [pattern]="giddhEmailRegex">
                         <div class="input-group-btn">
-                            <select name="selectedPermission" class="form-control selected-permission" [(ngModel)]="selectedPermission" required>
-                                <option value="">-Select permission-</option>
+                            <select name="selectedPermission" class="form-control selected-permission"
+                                [(ngModel)]="selectedPermission" required>
+                                <option value="">{{localeData?.select_permission}}</option>
                                 <option [value]="permission.uniqueName"
                                     *ngFor="let permission of allPermissions$ | async">
                                     {{permission.name}}
                                 </option>
                             </select>
-                            <button class="btn btn-success btn-share ml-0" type="submit" [disabled]="shareGroupForm.invalid" (click)="shareGroup()">Share
+                            <button class="btn btn-success btn-share ml-0" type="submit"
+                                [disabled]="shareGroupForm.invalid"
+                                (click)="shareGroup()">{{commonLocaleData?.app_share}}
                             </button>
                         </div>
                         <!-- /btn-group -->
-                </div>
+                    </div>
                 </form>
 
                 <!--shared with array-->
                 <div class="pd-t1" *ngIf="(activeGroupSharedWith$ | async)?.length">
                     <div>
-                        <ul class="shared_list group-shared-list">
+                        <ul class="shared-list group-shared-list">
                             <li *ngFor="let val of (activeGroupSharedWith$ | async); let i = index">
                                 <div class="user-name-email">
-                                    <i class="fa fa-user pd-r1"></i>
+                                    <i class="icon-user1 pd-r1"></i>
                                     <span class="user-email">
                                         <small *ngIf="val.emailId!==val.userName">{{val.userName}}</small>
                                         <small>{{ val.emailId }}</small>
                                     </span>
                                 </div>
 
-                                <div class="custom-select pos-rel">
-                                    <select name="selectedPermission_{{i}}" class="form-control cp" (change)="updatePermission(val, $event)">
+                                <div class="custom-select position-relative">
+                                    <select name="selectedPermission_{{i}}" class="form-control cp"
+                                        (change)="updatePermission(val, $event)">
                                         <option [selected]="val.roleUniqueName === permission.uniqueName"
                                             [value]="permission.uniqueName"
                                             *ngFor="let permission of allPermissions$ | async">{{permission.name}}
                                         </option>
                                     </select>
-                                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                                    <span class="select-drop d-none"><i class="fa fa-caret-down"></i></span>
                                 </div>
                                 <span class="delete-icon pull-right cp">
-                                        <i (click)="unShareGroup(val.uniqueName, val.entityUniqueName)"
-                                            class="icon-trash" aria-hidden="true"></i>
-                                    </span>
+                                    <i (click)="unShareGroup(val.uniqueName, val.entityUniqueName)" class="icon-trash"
+                                        aria-hidden="true"></i>
+                                </span>
                             </li>
 
                         </ul>
                     </div>
                 </div>
-                
+
             </div>
             <!-- add mailer -->
         </div>

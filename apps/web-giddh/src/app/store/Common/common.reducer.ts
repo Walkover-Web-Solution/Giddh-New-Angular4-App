@@ -15,6 +15,7 @@ export interface CurrentCommonState {
     onboardingform: OnboardingFormResponse,
     partyTypes: IOption[],
     getOnboardingFormInProcess: boolean;
+    isAccountUpdated: boolean;
 }
 
 const initialState: CurrentCommonState = {
@@ -24,7 +25,8 @@ const initialState: CurrentCommonState = {
     callingcodes: null,
     onboardingform: null,
     partyTypes: null,
-    getOnboardingFormInProcess: false
+    getOnboardingFormInProcess: false,
+    isAccountUpdated: false
 };
 
 export function CommonReducer(state: CurrentCommonState = initialState, action: CustomActions): CurrentCommonState {
@@ -57,9 +59,9 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
             return Object.assign({}, state, {});
 
         case CommonActions.GET_ONBOARDING_FORM: {
-              return Object.assign({}, state, {
-                    getOnboardingFormInProcess: true
-                });
+            return Object.assign({}, state, {
+                getOnboardingFormInProcess: true
+            });
         }
         case CommonActions.GET_ONBOARDING_FORM_RESPONSE:
             let onboardingform: BaseResponse<OnboardingFormResponse, string> = action.payload;
@@ -86,6 +88,10 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
 
         case CommonActions.RESET_COUNTRY: {
             return Object.assign({}, state, { countries: null });
+        }
+
+        case CommonActions.ACCOUNT_UPDATED: {
+            return Object.assign({}, state, { isAccountUpdated: action.payload });
         }
 
         default:

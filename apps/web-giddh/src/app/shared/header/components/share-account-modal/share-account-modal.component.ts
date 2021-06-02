@@ -1,10 +1,9 @@
 import { first, takeUntil } from 'rxjs/operators';
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
-import { ToasterService } from './../../../../services/toaster.service';
 import { GetAllPermissionResponse } from './../../../../permissions/permission.utility';
 import { PermissionActions } from '../../../../actions/permission/permission.action';
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
@@ -19,6 +18,10 @@ import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
 })
 
 export class ShareAccountModalComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public email: string;
     public selectedPermission: string;
     public activeAccount$: Observable<AccountResponseV2>;
@@ -30,10 +33,10 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private accountActions: AccountsAction, private _toasty: ToasterService, private _permissionActions: PermissionActions) {
-        this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
-        this.activeAccountSharedWith$ = this.store.select(state => state.groupwithaccounts.activeAccountSharedWith).pipe(takeUntil(this.destroyed$));
-        this.allPermissions$ = this.store.select(state => state.permission.permissions).pipe(takeUntil(this.destroyed$));
+    constructor(private store: Store<AppState>, private accountActions: AccountsAction, private _permissionActions: PermissionActions) {
+        this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
+        this.activeAccountSharedWith$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountSharedWith), takeUntil(this.destroyed$));
+        this.allPermissions$ = this.store.pipe(select(state => state.permission.permissions), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {

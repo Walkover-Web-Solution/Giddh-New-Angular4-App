@@ -38,6 +38,7 @@ export class StateDetailsRequest {
 export class StateDetailsResponse {
     public lastState: string;
     public companyUniqueName: string;
+    public branchUniqueName?: string;
 }
 
 export class AddressList {
@@ -55,6 +56,7 @@ export class Addresses {
     public taxNumber: string;
     public name?: string;
     public taxType?: string;
+    public pincode?: string;
 }
 
 export class CompanyTotals {
@@ -120,6 +122,7 @@ export class CompanyResponse {
     public branches?: Array<any>;
     public parentBranch?: ParentBranch;
     public warehouseResource?: Array<any>;
+    public showOnSubscription?: boolean;
 }
 
 export interface UserEntityRole {

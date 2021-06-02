@@ -2,8 +2,8 @@
 .create-purchase-order-form {
     position: relative;
 }
-form{
-    label{
+form {
+    label {
         justify-content: flex-start !important;
     }
 }
@@ -61,7 +61,7 @@ form{
                 }
             }
             .wrap-billing-address {
-                .form-group.row{
+                .form-group.row {
                     display: flex !important;
                 }
                 .billing-address {
@@ -88,7 +88,7 @@ form{
                             outline: none !important;
                         }
                     }
-                     textarea.form-control::-webkit-scrollbar {
+                    textarea.form-control::-webkit-scrollbar {
                         width: 5px;
                     }
                     textarea.form-control::-webkit-scrollbar-thumb {
@@ -111,7 +111,7 @@ form{
                         line-height: 2;
                         border-bottom: 1px solid $gainsboro;
                         padding-left: 6px;
-                        border-bottom-color: rgb(214, 214, 214);
+                        border-bottom-color: $gainsboro;
                         width: 100%;
                     }
                     .input-custom {
@@ -131,14 +131,15 @@ form{
                 margin-left: 0;
                 display: flex;
                 align-items: center;
-                input{
+                input {
                     float: none !important;
                     margin-left: 0 !important;
                     margin-right: 15px !important;
                 }
             }
             .order-expected-delivery {
-                sh-select , input.form-control{
+                sh-select,
+                input.form-control {
                     width: 100%;
                 }
                 .invoice-due-date {
@@ -159,7 +160,7 @@ form{
         }
     }
 }
-.customer-purchase-order{
+.customer-purchase-order {
     .wrapper-customer-table {
         .customer-purchase-table {
             .inner-container {
@@ -274,25 +275,22 @@ form{
     padding: 0 8px;
 }
 
+.list-item {
+    font-size: 14px;
+    border-bottom: 1px solid $gainsboro;
+    display: flex !important;
+}
 
-    .list-item {
-        font-size: 14px;
-        border-bottom: 1px solid $very-light-gray;
-        display:flex !important;
-    }
-
-
-
-.fs12 {
+.font-12 {
     font-size: 12px;
 }
 
-.fs11 {
+.font-11 {
     font-size: 11px;
 }
 
-.w-100{
-    width:100%;
+.w-100 {
+    width: 100%;
 }
 
 .table-section {
@@ -351,11 +349,11 @@ ng-select.splSales {
     font-weight: 100;
 }
 
-.salesTax .taxInput {
+.sales-tax .tax-input {
     text-align: right;
 }
 .description textarea {
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     width: 100%;
     min-height: 55px;
     margin-top: 10px;
@@ -364,10 +362,12 @@ ng-select.splSales {
 .create-purchase-order-table table input[disabled] {
     cursor: default;
     background-color: $whisper-color;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     padding: 5px;
     width: 100%;
-    // max-width: 150px;
+    &.other-taxes-input {
+        width: 85%;
+    }
 }
 
 .create-purchase-order-table table.basic td {
@@ -380,12 +380,12 @@ input[type="text"] {
     height: 36px !important;
 }
 
-a.copyInvoice {
+a.copy-invoice {
     color: $primary;
     margin-left: 10px;
 }
 
-a.copyInvoice img {
+a.copy-invoice img {
     margin-right: 6px;
 }
 
@@ -398,7 +398,7 @@ a.copyInvoice img {
     padding-right: 10px;
 }
 .shipping-address textarea {
-    border-bottom: 1px solid $very-light-gray !important;
+    border-bottom: 1px solid $gainsboro !important;
 }
 
 .entry-date label {
@@ -448,10 +448,10 @@ a.copyInvoice img {
     color: $primary;
 }
 
-.otherDetailTable th,
-.otherDetailTable td,
-.otherDetailTable tr,
-.otherDetailTable tbody {
+.other-detail-table th,
+.other-detail-table td,
+.other-detail-table tr,
+.other-detail-table tbody {
     border-top: none !important;
 }
 
@@ -506,7 +506,6 @@ span.edit-icon {
     min-width: 250px;
     left: auto;
     top: 31px;
-    padding: 8px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     right: 0;
     z-index: 4;
@@ -520,7 +519,6 @@ span.edit-icon {
 
 .hsn-code-dropdown input {
     width: 100%;
-    height: 28px !important;
     padding: 5px;
     border: 1px solid $gainsboro;
 }
@@ -543,12 +541,12 @@ span.edit-icon {
 }
 
 .hsn-code-dropdown button.btn.btn-sm.btn-success,
-.bulkItemBtnGroup button.btn.btn-sm.btn-success {
+.bulk-item-btn-group button.btn.btn-sm.btn-success {
     background-color: $success-green;
     color: $white;
 }
 
-.temapletFooter {
+.template-footer {
     position: fixed;
     bottom: 15px;
     width: 100%;
@@ -640,14 +638,14 @@ section.static-purchase-table {
 
 .customer-purchase-table.bg-white {
     margin-top: 10px;
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
     margin-bottom: 20px;
 }
 
 // .customer-purchase-table section.form-inline {
 //   padding-top: 60px;
 // }
-.customer-purchase-table section.billing-addressWrap {
+.customer-purchase-table section.billing-address-wrap {
     padding-top: 60px;
 }
 
@@ -657,22 +655,22 @@ section.static-purchase-table {
 }
 
 // new table css
-section.newtable {
+section.new-table {
     background-color: $whisper-color;
     margin-bottom: 30px;
     margin: 0 15px 30px;
 }
 
-.newtable .thead {
+.new-table .thead {
     border-right: 1px solid $gainsboro;
     padding: 8px 10px;
 }
 
-.newtable .thead:first-child {
+.new-table .thead:first-child {
     padding-left: 30px;
 }
 
-.newtable .row > div {
+.new-table .row > div {
     padding: 0;
 }
 
@@ -729,7 +727,7 @@ section.newtable {
                     width: 90px;
                 }
                 &.error-box.item-tax {
-                    border: 2px solid red !important;
+                    border: 2px solid $red !important;
                 }
             }
         }
@@ -794,7 +792,7 @@ table.table.table-custom-invoice.basic {
     height: 105% !important;
 }
 
-.set-active.isOtherTax td:last-child .td-wrapper .differ-currency {
+.set-active.is-other-tax td:last-child .td-wrapper .differ-currency {
     margin-bottom: 14px;
 }
 
@@ -837,11 +835,11 @@ strong {
     text-align: right;
 }
 
-.proformaSalesTime ul {
+.proforma-sales-time ul {
     top: 30px !important;
 }
 
-.item-total input.other-taxes-checkobx[type="checkbox"]:focus:after {
+.item-total input.other-taxes-checkbox[type="checkbox"]:focus:after {
     border-color: $chetwode-blue !important;
 }
 .p-1.aqua-color.add-line-bulk-item {
@@ -1024,7 +1022,7 @@ span.eligible-ITC {
 
 .save-card-data {
     position: absolute;
-    top: 11px;
+    top: 13px;
     right: 40px;
     color: $primary;
 }
@@ -1038,7 +1036,7 @@ span.eligible-ITC {
     border-bottom-color: rgb(214, 214, 214);
 }
 
-.loaderClass {
+.loader-class {
     height: calc(100% - 150px);
     display: flex;
     justify-content: center;
@@ -1066,15 +1064,77 @@ span.eligible-ITC {
     text-transform: capitalize;
     margin-bottom: 20px;
 }
-.bill-add{
-    label{
+.bill-add {
+    label {
         line-height: 2.3 !important;
     }
 }
-@media(max-width:1199px){
+ul.change-address-dropdown {
+    min-width: 240px;
+    left: -20px !important;
+    right: auto !important;
+    max-height: 200px;
+    overflow-y: auto;
+    li {
+        a {
+            white-space: normal;
+            word-break: break-word;
+        }
+    }
+}
+.switch-currency {
+    font-size: 14px;
+    color: $night-rider;
+    max-width: 1000px;
+    text-align: right;
+    margin-bottom: 10px;
+    width: 100%;
+    .switch-icon {
+        padding: 0 10px;
+        cursor: pointer;
+    }
+    input.form-control.edit-currency {
+        display: inline-block;
+        width: 80px;
+        height: 26px !important;
+    }
+    span.edit-icon {
+        line-height: 17px;
+        position: relative;
+        top: -2px;
+    }
+}
+.differ-currency {
+    color: $nobel;
+    font-size: 14px;
+    text-align: right;
+    bottom: 3px;
+    right: 8px;
+    white-space: nowrap;
+    padding-left: 2px;
+    align-self: flex-end;
+    justify-self: flex-end;
+    span.icon-rupees {
+        font-size: 11px;
+    }
+}
+.item-discount,
+.item-tax,
+.delete-btn-absolute {
+    height: 1px;
+}
+.left-currency,
+.right-currency {
+    .currency-digits {
+        display: inline-block;
+    }
+}
+
+/* responsive */
+@media (max-width: 1199px) {
     .bill-add {
         margin-bottom: 15px;
-        label{
+        label {
             margin-bottom: 10px;
         }
     }
@@ -1082,16 +1142,16 @@ span.eligible-ITC {
         .customer-purchase-table {
             .inner-container {
                 .invoice-due-date {
-                left: -40px;
-                margin-left: 3%;
-                display: flex;
-                align-items: flex-start;
-                top: -23px;
-                justify-content: flex-start;
-                .d-flex{
-                    flex-direction: column;
+                    left: -40px;
+                    margin-left: 3%;
+                    display: flex;
                     align-items: flex-start;
-                }
+                    top: -23px;
+                    justify-content: flex-start;
+                    .d-flex {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
                 }
                 .select-customer-name {
                     sh-select,
@@ -1100,7 +1160,7 @@ span.eligible-ITC {
                         max-width: 82.5%;
                         width: 100%;
                     }
-                    input[type="text"]{
+                    input[type="text"] {
                         flex: 0 0 84.5%;
                         max-width: 84.5%;
                     }
@@ -1108,19 +1168,18 @@ span.eligible-ITC {
             }
         }
     }
-
 }
 
-@media (max-width:1024px){
+@media (max-width: 1024px) {
     .invoice-due-date {
         position: relative !important;
         width: 100% !important;
         margin-left: 0% !important;
     }
-    .customer-purchase-table.bg-white{
+    .customer-purchase-table.bg-white {
         margin-bottom: 0;
     }
-    .hsn-code-dropdown{
+    .hsn-code-dropdown {
         left: 0;
         top: 46px;
     }
@@ -1131,16 +1190,15 @@ span.eligible-ITC {
             display: block !important;
         }
     }
-    .height-row{
+    .height-row {
         height: 36px;
     }
 
-    .invoice-due-date{
-        .d-flex{
+    .invoice-due-date {
+        .d-flex {
             align-items: center;
         }
     }
-
 }
 @media (max-width: 990px) {
     .wrap-billing-address .bill-add {
@@ -1150,15 +1208,15 @@ span.eligible-ITC {
         margin-top: 20px;
     }
 }
-@media(max-width:768px){
-    .search-arrow-image{
-        left: 146px;;
+@media (max-width: 768px) {
+    .search-arrow-image {
+        left: 146px;
     }
 }
 @media (max-width: 767px) {
-.pl-0 {
-    padding-right: 0 !important;
-}
+    .pl-0 {
+        padding-right: 0 !important;
+    }
 
     .wrapper-customer-table {
         .customer-purchase-table {
@@ -1166,7 +1224,7 @@ span.eligible-ITC {
             .inner-container {
                 .order-expected-delivery {
                     flex-direction: column;
-                    .col-sm-6{
+                    .col-sm-6 {
                         padding-right: 0 !important;
                     }
                     .invoice-due-date {
@@ -1186,7 +1244,6 @@ span.eligible-ITC {
                                 width: 100% !important;
                             }
                         }
-
                     }
                 }
                 .select-customer-name {
@@ -1224,8 +1281,8 @@ span.eligible-ITC {
         left: 15px;
         top: 98px;
     }
-    .customer-purchase-order:before{
-            top: 153px;
+    .customer-purchase-order:before {
+        top: 153px;
     }
 }
 @media (max-width: 840px) {
@@ -1268,6 +1325,17 @@ span.eligible-ITC {
     }
 }
 @media (max-width: 575px) {
+    ul.change-address-dropdown {
+        left: auto !important;
+        right: -25px !important;
+        li {
+            a {
+                white-space: normal;
+                word-break: break-word;
+            }
+        }
+    }
+
     #actionPane .btn-group.dropup {
         display: block;
         margin-top: 5px;
@@ -1301,17 +1369,17 @@ span.eligible-ITC {
             }
         }
     }
-    .customer-purchase-order{
-    .wrapper-customer-table {
-        .customer-purchase-table {
-            .inner-container {
-                .delivery-from-field {
-                    margin-top: 50px;
+    .customer-purchase-order {
+        .wrapper-customer-table {
+            .customer-purchase-table {
+                .inner-container {
+                    .delivery-from-field {
+                        margin-top: 50px;
+                    }
                 }
             }
         }
     }
-}
 }
 
 @media (max-width: 414px) {
@@ -1354,7 +1422,7 @@ span.eligible-ITC {
         padding-right: 0 !important;
         text-align: right;
     }
-    .balanceDueText {
+    .balance-due-text {
         text-align: right;
     }
     #actionPane .update-mode {
@@ -1378,8 +1446,8 @@ span.eligible-ITC {
         padding-right: 20px !important;
     }
 }
-@media (min-width: 576px){
-    .bill-add{
+@media (min-width: 576px) {
+    .bill-add {
         .form-inline .form-group {
             display: flex;
             flex: 1;

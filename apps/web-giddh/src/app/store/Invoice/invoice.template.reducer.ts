@@ -85,22 +85,37 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
+                    textUnderSlogan: {
+                        label: '',
+                        display: true,
+                        width: null
+                    },
+                    showNotesAtLastPage: {
+                        label: '',
+                        display: false,
+                        width: null
+                    },
                     message1: {
                         label: '',
                         display: true,
                         width: null
                     },
-                     tcs: { // this is for template a
+                    showMessage2: {
+                        label: '',
+                        display: true,
+                        width: null
+                    },
+                    tcs: { // this is for template a
                         label: 'TCS',
                         display: true,
                         width: null
                     },
-                     tds: { // this is for template a
+                    tds: { // this is for template a
                         label: 'TDS',
                         display: true,
                         width: null
                     },
-                     taxBifurcation: { // this is for template a
+                    taxBifurcation: { // this is for template a
                         label: 'Tax Bifurcation',
                         display: true,
                         width: null
@@ -112,6 +127,11 @@ export const initialState: CustomTemplateState = {
                     shippingDate: {
                         label: 'Ship Date',
                         display: true,
+                        width: null
+                    },
+                    showIrnNumber: {
+                        label: '',
+                        display: false,
                         width: null
                     },
                     customField1: {
@@ -172,6 +192,11 @@ export const initialState: CustomTemplateState = {
                     invoiceNumber: {
                         label: 'Invoice No.',
                         display: true,
+                        width: null
+                    },
+                    showQrCode: {
+                        label: '',
+                        display: false,
                         width: null
                     },
                     voucherDate: {
@@ -250,6 +275,11 @@ export const initialState: CustomTemplateState = {
                         width: null
                     },
                     warehouseAddress: {
+                        label: '',
+                        display: true,
+                        width: null
+                    },
+                    showCompanyAddress: {
                         label: '',
                         display: true,
                         width: null

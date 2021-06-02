@@ -2,7 +2,7 @@
     <div>
         <h3 class="">
             <span>Outward Note</span>
-            <span class="pull-right fs14">Multiple
+            <span class="pull-right font-14">Multiple
                 <a href="javascript:void(0)" [ngClass]="{'text-link': mode === 'receiver' }"
                     (click)="modeChanged('receiver')">Receivers</a>
                 /
@@ -14,15 +14,15 @@
     </div>
 </div>
 
-<div class="form_body witBg clearfix margin-child-label">
-    <div class="form_bg clearfix">
+<div class="form-body white-bg clearfix margin-child-label">
+    <div class="clearfix">
         <form [formGroup]="form" class="form-group">
             <div class="row">
                 <div class="col-xs-6 form-group">
                     <label>Date <sup>*</sup></label>
                     <input name="dateRange" formControlName="inventoryEntryDate" type="text" autocomplete="off"
                         class="form-control" bsDatepicker [minDate]="today"
-                        [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}" />
+                        [bsConfig]=" {dateInputFormat: giddhDateFormat}" />
                     <span
                         *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)">
                         <span *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']"
@@ -33,7 +33,7 @@
                 <div class="col-xs-6 form-group" *ngIf="mode === 'receiver'">
                     <label class="mr-b1">Product Name <sup>*</sup></label>
                     <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                        formControlName="stock" (selected)="stockChanged($event)"></sh-select>
+                        formControlName="stock" (selected)="stockChanged($event)" [isRequired]="true"></sh-select>
                     <!-- <span *ngIf="stock.invalid">
               <span *ngIf="stock?.errors && stock?.errors['required']" class="text-danger">Please select Product.</span>
                     </span> -->
@@ -42,7 +42,8 @@
                 <div class="col-xs-6 form-group" *ngIf="mode === 'product'">
                     <label class="mr-b1">Receiver <sup>*</sup></label>
                     <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Receiver'"
-                        formControlName="inventoryUser" (selected)="userChanged($event)"></sh-select>
+                        formControlName="inventoryUser" (selected)="userChanged($event)" [isRequired]="true">
+                    </sh-select>
                     <!-- <span *ngIf="inventoryUser.invalid">
               <span *ngIf="inventoryUser?.errors && inventoryUser?.errors['required']"
                     class="text-danger">Please select Receiver.</span>
@@ -54,18 +55,18 @@
 
             <div class="row">
                 <div class="col-xs-4" *ngIf="mode === 'receiver'">
-                    <label class="fs14">Receiver <sup>*</sup></label>
+                    <label class="font-14">Receiver <sup>*</sup></label>
                 </div>
                 <div class="col-xs-4" *ngIf="mode === 'product'">
-                    <label class="fs14">Product Name <sup>*</sup></label>
+                    <label class="font-14">Product Name <sup>*</sup></label>
                 </div>
 
                 <div class="col-xs-4">
-                    <label class="fs14">Unit<sup>*</sup></label>
+                    <label class="font-14">Unit<sup>*</sup></label>
                 </div>
 
                 <div class="col-xs-4">
-                    <label class="fs14">Quantity <sup>*</sup></label>
+                    <label class="font-14">Quantity <sup>*</sup></label>
                 </div>
             </div>
 
@@ -85,14 +86,16 @@
                     <div class="col-xs-4 form-group" *ngIf="mode === 'product'">
                         <!-- <label class="mr-b1">Product Name</label> -->
                         <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                            (selected)="stockChanged($event,i)" [ItemHeight]="'33'" formControlName="stock"></sh-select>
+                            (selected)="stockChanged($event,i)" [ItemHeight]="'33'" formControlName="stock"
+                            [isRequired]="true"></sh-select>
                         <!-- <span [hidden]="!item.controls['stock'].errors?.required"
                   class="text-danger">Please select Product.</span> -->
                     </div>
 
                     <div class="col-xs-4 form-group">
                         <sh-select [options]="stockUnitsOptions" [placeholder]="'Choose unit'"
-                            formControlName="stockUnit" [multiple]="false" [ItemHeight]="33"></sh-select>
+                            formControlName="stockUnit" [multiple]="false" [ItemHeight]="33" [isRequired]="true">
+                        </sh-select>
                         <!-- <span [hidden]="!item.get('stockUnit')?.errors?.required" class="text-danger">Please select Unit.</span> -->
                     </div>
 
@@ -105,13 +108,13 @@
                             </div>
 
 
-                            <div class="pull-right mr-t unit_add">
+                            <div class="pull-right mr-t05 unit-add">
                                 <button class="btn-link" (click)="addTransactionItem(transactions.controls[i])"
                                     *ngIf="last">
-                                    <i class="icon-plus add_row"></i>
+                                    <i class="icon-plus add-row"></i>
                                 </button>
                                 <button class="btn-link" (click)="deleteTransactionItem(i)" *ngIf="!last">
-                                    <i class="icon-cross dlet"></i>
+                                    <i class="icon-cross delete"></i>
                                 </button>
                             </div>
                         </div>
@@ -123,7 +126,7 @@
   <span [hidden]="!item.controls['quantity'].errors?.required" class="text-danger">Please enter quantity.</span>
 </div> -->
                     </div>
-                    <!-- <div class="col-lg-2 form-group pdT2">
+                    <!-- <div class="col-lg-2 form-group pd-t2">
   <a (click)="addTransactionItem()">
     <i class="icon-plus" *ngIf="first || !last"></i>
   </a>

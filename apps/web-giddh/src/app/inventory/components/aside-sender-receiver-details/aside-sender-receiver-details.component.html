@@ -8,20 +8,20 @@
 
     <button id="close" class="" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
 
-    <div class="aside-pane-conatainer">
+    <div class="aside-pane-container">
         <form name="addAccountForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
             <div class="">
                 <div class="upper-form">
-                    <div class="row ">
+                    <div class="row">
                         <div class="col-sm-4">
-                            <div class="ng-select-wrap liq selectGroup">
+                            <div class="ng-select-wrap select-list select-group">
                                 <label>Select Group<span class="red-text">*</span> </label>
                                 <ng-select placeholder="Select Group" filterPlaceholder="Type to search..."
                                     (selected)="selectGroup($event)" formControlName="activeGroupUniqueName"
-                                    [options]="flatGroupsOptions" style="width:100%">
+                                    class="w-100" [options]="flatGroupsOptions">
                                     <ng-template #optionTemplate let-option="option">
                                         <div class="account-list-item">{{option?.label}}</div>
-                                        <div class="account-list-item fs12">{{option?.value}}</div>
+                                        <div class="account-list-item font-12">{{option?.value}}</div>
                                     </ng-template>
                                 </ng-select>
                             </div>
@@ -110,9 +110,9 @@
             </div>
 
             <tabset #staticTabs class="custom-tabs " id="asidePaneFormTabs">
-                <tab heading="Address" class="gstinAddress">
+                <tab heading="Address" class="gstin-address">
                     <ng-container>
-                        <div class="gstinForm" formArrayName="addresses">
+                        <div class="gstin-form" formArrayName="addresses">
                             <ng-container
                                 *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last"
                                 [formGroupName]="i">
@@ -141,10 +141,10 @@
                                         <div class="form-group">
                                             <label>State <sup *ngIf="isDebtorCreditor">*</sup></label>
                                             <div class="custom-select">
-                                                <sh-select #states [options]="statesSource$ | async"
+                                                <sh-select #states [options]="statesSource$ | async" class="w-100"
                                                     [isFilterEnabled]="true" (selected)="selectedState(gst, $event)"
                                                     [forceClearReactive]="forceClear$ | async"
-                                                    formControlName="stateCode" style="width:100%">
+                                                    formControlName="stateCode">
                                                 </sh-select>
                                             </div>
                                         </div>
@@ -175,7 +175,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>Party Type<span class="red-text">*</span></label>
-                                            <div class="custom-select pos-rel">
+                                            <div class="custom-select position-relative">
                                                 <sh-select [options]="partyTypeSource" formControlName="partyType"
                                                     [isFilterEnabled]="true"></sh-select>
                                             </div>
@@ -213,8 +213,8 @@
                     </div> -->
 
                 </tab>
-                <tab heading="Contact" class="ContactFromWrap">
-                    <div class="contactForm">
+                <tab heading="Contact" class="contact-form-wrap">
+                    <div class="contact-form">
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
@@ -228,7 +228,7 @@
                                     <label>Mobile Number</label>
                                     <div class="d-flex">
                                         <sh-select [placeholder]="'+91'" [options]="countryPhoneCode"
-                                            formControlName="mobileCode" style="width: 60px; margin-right: 10px;">
+                                            class="mobile-contact" formControlName="mobileCode">
                                         </sh-select>
                                         <input type="text" pattern="[0-9]*" class="form-control pull-right"
                                             placeholder="98XXXXXXXX" formControlName="mobileNo" id="contactNo"
@@ -272,7 +272,7 @@
                         </div>
                     </div>
                     <!-- <div class="row">
-                <div class="col-sm-12 mrT3">
+                <div class="col-sm-12 mr-t3">
                     <div class="button-group">
                         <button class="btn btn-cancel">Cancel</button>
                         <button class="btn btn-success">Save</button>
@@ -283,7 +283,7 @@
 
 
                 <!-- bank details visible when sundry credtiors selected , right now is hide -->
-                <tab heading="Bank Details" class="bankDetialsForm">
+                <tab heading="Bank Details" class="bank-details-form">
                     <div *ngIf="showBankDetail">
                         <div formArrayName="accountBankDetails">
                             <div class="row"
@@ -311,10 +311,10 @@
 
                 </tab>
 
-                <tab heading="Others " class="otherFormWrap ">
+                <tab heading="Others" class="other-form-wrap">
 
-                    <div class="otherForm ">
-                        <div class="row ">
+                    <div class="other-form">
+                        <div class="row">
                             <div class="col-sm-6 ">
                                 <div class="form-group ">
                                     <label>Account Unique Name</label>
@@ -378,7 +378,7 @@
                             <input type="text " class="form-control " placeholder="Group Name ">
                         </div>
                     </div>
-                    <div class="col-sm-2 pdL0 ">
+                    <div class="col-sm-2 pl-0 ">
                         <label>&nbsp;</label>
                         <button class="btn btn-sky-blue ">Move</button>
                     </div>
@@ -390,7 +390,7 @@
                             <input type="text " class="form-control " placeholder="Select account ">
                         </div>
                     </div>
-                    <div class="col-sm-2 pdL0 ">
+                    <div class="col-sm-2 pl-0 ">
                         <label>&nbsp;</label>
                         <button class="btn btn-sky-blue ">Merge</button>
                     </div>
@@ -399,7 +399,7 @@
 
                 </tab>
                 <div class="row">
-                    <div class="col-sm-12 mrT3">
+                    <div class="col-sm-12 mr-t3">
                         <div class="button-group">
                             <button class="btn btn-cancel">Cancel</button>
                             <button type="submit" class="btn btn-success" [ladda]="createAccountInProcess$ | async"

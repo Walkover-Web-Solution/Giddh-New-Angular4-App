@@ -1,56 +1,49 @@
-<div id="live">
+<div id="live" appTranslate [file]="'home/total-overdues-chart'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <div class="card">
-
         <div class="panel-heading">
-            <strong>Total Overdues</strong>
+            <strong>{{localeData?.chart_title}}</strong>
             <div class="pull-right dashboard-filter">
-                <!-- <div class="btn-group" dropdown>
-					<span id="button-basic" dropdownToggle class="dropdown-toggle month-dropdown"
-						aria-controls="dropdown-basic">
-						<datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
-					</span>
-                </div> - -->
                 <i class="icon-refresh mr-1" (click)="refreshChart()"></i>
                 <div (click)="showGiddhDatepicker($event)">
-                    <input type="text" readonly name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker dashboard-datepicker" />
+                    <input type="text" readonly name="selectedDateRange"
+                        [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                        class="giddh-datepicker form-control date-range-picker dashboard-datepicker" />
                 </div>
             </div>
         </div>
 
-        <div class="card-body pos-rel {{requestInFlight}}">
-            <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-                <div class="no-data mr-t2 loader-main">
-                    <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                    <div class="spinner2">
-                        <div class="cube1"></div>
-                        <div class="cube2"></div>
-                    </div>
-                </div>
+        <div class="card-body position-relative">
+            <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
             <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
-                <!-- <chart [chart]="totaloverDueChart" *ngIf="dataFound" #currentRatio></chart> -->
-                <highcharts-chart *ngIf="chartOptions && dataFound" [Highcharts]="totaloverDueChart" [options]="chartOptions"></highcharts-chart>
-                <div class="noDataAvailable" *ngIf="!dataFound">
-                    <img src="{{imgPath}}noDataChart.svg" alt="no data found">
+                <highcharts-chart *ngIf="chartOptions && dataFound" [Highcharts]="totaloverDueChart"
+                    [options]="chartOptions"></highcharts-chart>
+                <div class="no-data-available" *ngIf="!dataFound">
+                    <img src="{{imgPath}}noDataChart.svg" [alt]="commonLocaleData?.app_no_data_found">
                 </div>
                 <div class="clearfix mr-b2">
                     <div class="due">
-                        <span class="mr-b1 due-amount">Customer Due</span>
+                        <span class="mr-b1 due-amount">{{localeData?.customer_due}}</span>
                         <span class="total-amount pull-right vendor-due-text">
-								<span>{{amountSettings.baseCurrencySymbol}}</span> {{ totalRecievable | giddhCurrency }}</span>
+                            <span>{{amountSettings.baseCurrencySymbol}}</span> {{ totalRecievable | giddhCurrency
+                            }}</span>
                     </div>
                     <div class="clearfix">
-                        <small>Pending Invoices</small>
+                        <small>{{localeData?.pending_invoices}}</small>
                         <small class="pull-right">{{ ReceivableDurationAmt | giddhCurrency }}</small>
                     </div>
                 </div>
                 <div class="clearfix mr-b2">
                     <div class="due">
-                        <span class="mr-b1 due-amount">Vendor Due</span>
-                        <span class="total-amount pull-right customer-due-text"><span>{{amountSettings.baseCurrencySymbol}}</span> {{ totalPayable | giddhCurrency }}</span>
+                        <span class="mr-b1 due-amount">{{localeData?.vendor_due}}</span>
+                        <span
+                            class="total-amount pull-right customer-due-text"><span>{{amountSettings.baseCurrencySymbol}}</span>
+                            {{ totalPayable | giddhCurrency }}</span>
                     </div>
                     <div class="clearfix">
-                        <small>Pending Invoices</small>
+                        <small>{{localeData?.pending_invoices}}</small>
                         <small class="pull-right">{{ PaybaleDurationAmt | giddhCurrency }}</small>
                     </div>
                 </div>
@@ -61,9 +54,13 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
-                [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

@@ -4,18 +4,18 @@ p.bank-name {
     color: $midnight-blue;
     margin-bottom: 5px;
 }
-p.bankBalnc {
+p.bank-balance {
     color: $dark-gray;
     font-size: 14px;
     display: flex;
     justify-content: space-between;
 }
-.single-bank-detatil {
+.single-bank-detail {
     border-bottom: 1px solid $gainsboro;
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
-a.connectBnk {
+a.connect-bank {
     position: absolute;
     bottom: 10px;
     color: $nero;
@@ -31,17 +31,17 @@ table.basic td {
     font-size: 16px;
     color: $charcoal;
 }
-.table thead th{
+.table thead th {
     vertical-align: bottom;
     border-bottom: 1px solid $gainsboro;
     border-top: none;
     padding-left: 0;
 }
-.credtors-table tr:last-child td {
+.creditors-table tr:last-child td {
     border-bottom: none !important;
 }
 table.basic th {
-    color: #1a237e;
+    color: $midnight-blue;
     font-size: 14px;
 }
 .cr-dr-body {
@@ -75,15 +75,15 @@ thead th {
     border-radius: 30px;
     border: 1px solid $gainsboro;
 }
-@media(max-width:768px){
+@media (max-width: 768px) {
     .debtors-table {
         margin-bottom: 30px;
     }
     table.basic td {
         border-bottom: none !important;
     }
-    table.on-mobile-view{
-        tbody td:before{
+    table.on-mobile-view {
+        tbody td:before {
             left: 10px;
         }
         tbody tr {

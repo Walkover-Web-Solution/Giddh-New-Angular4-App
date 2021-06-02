@@ -1,8 +1,8 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
@@ -33,7 +33,7 @@ import { SettingsUtilityService } from '../../services/settings-utility.service'
     ]
 })
 
-export class CreateBranchComponent implements OnInit {
+export class CreateBranchComponent implements OnInit, OnDestroy {
     /** Aside menu pane status */
     public addressAsideMenuState: string = 'out';
     /** Stores the current company details */
@@ -66,8 +66,16 @@ export class CreateBranchComponent implements OnInit {
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
 
+    public imgPath: string = '';
+
     /** Unsubscribes from all the listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold profile JSON data */
+    public profileLocaleData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private commonService: CommonService,
@@ -83,10 +91,10 @@ export class CreateBranchComponent implements OnInit {
     ) {
         this.branchForm = this.formBuilder.group({
             alias: ['', [Validators.required, Validators.maxLength(50)]],
-            name: ['', [Validators.required, Validators.maxLength(100)]],
+            name: [''],
             address: ['']
         });
-        this.store.select(appState => appState.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.name) {
                 this.companyDetails = {
                     name: response.name,
@@ -98,7 +106,7 @@ export class CreateBranchComponent implements OnInit {
                         currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                     }
                 }
-                this.branchForm.get('name').patchValue(this.companyDetails.name);
+                this.branchForm.get('name')?.patchValue(this.companyDetails.name);
                 if (!this.addressConfiguration.stateList.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
@@ -116,6 +124,8 @@ export class CreateBranchComponent implements OnInit {
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.loadAddresses('GET', { count: 0 });
         this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/branch'));
+
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/branch-image.svg' : AppUrl + APP_FOLDER + 'assets/images/branch-image.svg';
     }
 
     /**
@@ -173,7 +183,7 @@ export class CreateBranchComponent implements OnInit {
      */
     public handleFinalSelection(selectedAddresses: Array<any>): void {
         this.addresses.forEach(address => {
-            if (!selectedAddresses.includes(address.uniqueName)) {
+            if (!selectedAddresses?.includes(address.uniqueName)) {
                 address.isDefault = false;
             }
         });
@@ -210,7 +220,7 @@ export class CreateBranchComponent implements OnInit {
         }
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
-            this.branchForm.get('address').patchValue([
+            this.branchForm.get('address')?.patchValue([
                 ...(this.branchForm.get('address').value || []),
                 option.value
             ]);
@@ -226,15 +236,15 @@ export class CreateBranchComponent implements OnInit {
         const requestObj = {
             name: this.branchForm.value.name,
             alias: this.branchForm.value.alias,
-            linkAddresses: this.addresses.filter(address => this.branchForm.value.address.includes(address.uniqueName)).map(filteredAddress => ({
+            linkAddresses: this.addresses.filter(address => this.branchForm.value.address?.includes(address.uniqueName)).map(filteredAddress => ({
                 uniqueName: filteredAddress.uniqueName,
                 isDefault: filteredAddress.isDefault
             }))
         };
-        this.settingsProfileService.createNewBranch(requestObj).subscribe(response => {
+        this.settingsProfileService.createNewBranch(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
-                    this.toastService.successToast('Branch created successfully');
+                    this.toastService.successToast(this.localeData?.branch_created);
                     this.branchForm.reset();
                     this.router.navigate(['/pages/settings/branch']);
                 } else {
@@ -273,7 +283,7 @@ export class CreateBranchComponent implements OnInit {
      * @memberof CreateBranchComponent
      */
     public loadStates(countryCode: string): void {
-        this.companyService.getAllStates({ country: countryCode }).subscribe(response => {
+        this.companyService.getAllStates({ country: countryCode }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
                 this.addressConfiguration.stateList = [];
@@ -298,7 +308,7 @@ export class CreateBranchComponent implements OnInit {
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
-        const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+        const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity?.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
@@ -309,10 +319,11 @@ export class CreateBranchComponent implements OnInit {
             stateName: chosenState ? chosenState.stateName : '',
             address: addressDetails.formValue.address,
             name: addressDetails.formValue.name,
+            pincode: addressDetails.formValue.pincode,
             linkEntity
         };
 
-        this.settingsProfileService.createNewAddress(requestObj).subscribe((response: any) => {
+        this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response.status === 'success' && response.body) {
                 this.toggleAddressAsidePane();
                 this.addresses.push({
@@ -320,7 +331,9 @@ export class CreateBranchComponent implements OnInit {
                     label: response.body.name,
                     value: response.body.uniqueName
                 })
-                this.toastService.successToast('Address created successfully');
+                this.toastService.successToast(this.localeData?.address_created);
+            } else {
+                this.toastService.errorToast(response.message);
             }
             this.isAddressChangeInProgress = false;
         }, () => {
@@ -338,7 +351,7 @@ export class CreateBranchComponent implements OnInit {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
         onboardingFormRequest.country = countryCode;
-        this.commonService.getOnboardingForm(onboardingFormRequest).subscribe((response: any) => {
+        this.commonService.getOnboardingForm(onboardingFormRequest).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === 'success') {
                 if (response.body && response.body.fields && response.body.fields.length > 0) {
                     const taxField = response.body.fields.find(field => field && field.name === 'taxName');
@@ -357,7 +370,7 @@ export class CreateBranchComponent implements OnInit {
      * @memberof CreateBranchComponent
      */
     public loadLinkedEntities(successCallback: Function): void {
-        this.settingsProfileService.getAllLinkedEntities().subscribe(response => {
+        this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.addressConfiguration.linkedEntities = response.body.map(result => ({
                     ...result,
@@ -396,7 +409,7 @@ export class CreateBranchComponent implements OnInit {
      * @memberof CreateBranchComponent
      */
     private loadAddresses(method: string, params?: any): void {
-        this.settingsProfileService.getCompanyAddresses(method, params).subscribe((response) => {
+        this.settingsProfileService.getCompanyAddresses(method, params).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body && response.status === 'success') {
                 this.addresses = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
                     {
@@ -407,6 +420,16 @@ export class CreateBranchComponent implements OnInit {
                     }));
             }
         });
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof CreateBranchComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
 }

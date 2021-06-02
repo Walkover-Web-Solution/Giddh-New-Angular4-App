@@ -1,8 +1,7 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { CompanyResponse } from '../../../models/api-models/Company';
-import { Observable, ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -11,6 +10,8 @@ import { RevenueGraphDataRequest } from "../../../models/api-models/Dashboard";
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import { GeneralService } from "../../../services/general.service";
+import { DashboardService } from '../../../services/dashboard.service';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'revenue-chart',
@@ -23,8 +24,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public requestInFlight: boolean = false;
     public revenueChart: typeof Highcharts = Highcharts;
     public chartOptions: Highcharts.Options;
-    public companies$: Observable<CompanyResponse[]>;
-    public activeCompanyUniqueName$: Observable<string>;
     public revenueGraphTypes: any[] = [];
     public activeGraphType: any;
     public graphParams: any = {
@@ -49,11 +48,14 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public graphExpanded: boolean = false;
     public currentDateRangePickerValue: Date[] = [];
     public previousDateRangePickerValue: Date[] = [];
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True if chart changed */
+    public chartChanged: boolean = false;
 
-    constructor(private store: Store<AppState>, private _homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private _generalService: GeneralService) {
-        this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
-
+    constructor(private store: Store<AppState>, private _homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private _generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService) {
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
         this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(moment(this.getCurrentWeekStartEndDate[0]).subtract(1, 'days'));
 
@@ -69,15 +71,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.companies$.subscribe(c => {
-            if (c) {
-                let activeCompany: CompanyResponse;
-                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
-                    activeCompany = c.find(p => p.uniqueName === a);
-                    if (activeCompany) {
-                        this.activeCompany = activeCompany;
-                    }
-                });
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
             }
         });
     }
@@ -108,16 +104,21 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         });
     }
 
-    public getRevenueGraphData() {
-        this.store.pipe(select(s => s.home.revenueGraphData), takeUntil(this.destroyed$)).subscribe(res => {
+    public getRevenueGraphData(): void {
+        this.requestInFlight = true;
+        let revenueGraphDataRequest = new RevenueGraphDataRequest();
+        revenueGraphDataRequest = this.graphParams;
+
+        this.dashboardService.GetRevenueGraphData(revenueGraphDataRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.currentData = [];
             this.previousData = [];
             this.summaryData.totalCurrent = 0;
             this.summaryData.totalLast = 0;
             this.summaryData.highest = 0;
             this.summaryData.lowest = 0;
+            let res = response?.body;
 
-            if (res && res.balances) {
+            if (response?.status === "success" && res?.balances) {
                 if (res.balances !== null) {
                     let x = 0;
                     Object.keys(res.balances).forEach(key => {
@@ -155,19 +156,19 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                 }
 
                 if (res.previousHighestClosingBalance !== null && res.previousHighestClosingBalance.amount !== null) {
-                    previousHighest = res.previousHighestClosingBalance.amount;
+                    previousHighest = Number(res.previousHighestClosingBalance.amount);
                 }
 
                 if (res.currentHighestClosingBalance !== null && res.currentHighestClosingBalance.amount !== null) {
-                    currentHighest = res.currentHighestClosingBalance.amount;
+                    currentHighest = Number(res.currentHighestClosingBalance.amount);
                 }
 
                 if (res.previousLowestClosingBalance !== null && res.previousLowestClosingBalance.amount !== null) {
-                    previousLowest = res.previousLowestClosingBalance.amount;
+                    previousLowest = Number(res.previousLowestClosingBalance.amount);
                 }
 
                 if (res.currentLowestClosingBalance !== null && res.currentLowestClosingBalance.amount !== null) {
-                    currentLowest = res.currentLowestClosingBalance.amount;
+                    currentLowest = Number(res.currentLowestClosingBalance.amount);
                 }
 
                 if (currentHighest > previousHighest) {
@@ -188,19 +189,17 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
                 this.generateChart();
             } else {
-                this.getChartData();
+                if (response?.status === "error" && response?.message) {
+                    this.toasterService.errorToast(response.message);
+                }
             }
+
+            this.requestInFlight = false;
         });
     }
 
-    public getChartData() {
-        let revenueGraphDataRequest = new RevenueGraphDataRequest();
-        revenueGraphDataRequest = this.graphParams;
-        this.store.dispatch(this._homeActions.getRevenueGraphData(revenueGraphDataRequest));
-    }
-
     public refreshChart() {
-        this.store.dispatch(this._homeActions.resetRevenueGraphData());
+        this.getRevenueGraphData();
     }
 
     public getWeekStartEndDate(date) {
@@ -283,6 +282,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     }
 
     public showLineChart() {
+        this.chartChanged = true;
         this._generalService.invokeEvent.next("hideallcharts");
         this.currentData = [];
         this.previousData = [];
@@ -309,16 +309,16 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.generateChart();
 
         setTimeout(() => {
-            this.getChartData();
+            this.getRevenueGraphData();
         }, 200);
     }
 
     public setPreviousDate(data) {
-        if (data) {
+        if (data && !this.chartChanged) {
             this.graphParams.previousFrom = moment(data[0]).format(GIDDH_DATE_FORMAT);
             this.graphParams.previousTo = moment(data[1]).format(GIDDH_DATE_FORMAT);
             this.getPreviousWeekStartEndDate = [data[0], data[1]];
-            this.getChartData();
+            this.getRevenueGraphData();
         }
     }
 
@@ -327,7 +327,8 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
             this.graphParams.currentFrom = moment(data[0]).format(GIDDH_DATE_FORMAT);
             this.graphParams.currentTo = moment(data[1]).format(GIDDH_DATE_FORMAT);
             this.getCurrentWeekStartEndDate = [data[0], data[1]];
-            this.getChartData();
+            this.getRevenueGraphData();
+            this.chartChanged = false;
         }
     }
 
@@ -348,7 +349,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.graphParams.previousFrom = moment(this.getPreviousWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
         this.graphParams.previousTo = moment(this.getPreviousWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
 
-        this.getChartData();
-        this.generateChart();
+        this.getRevenueGraphData();
     }
 }

@@ -29,6 +29,7 @@ import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-acco
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { TextMaskModule } from 'angular2-text-mask';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
+import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 //payemnt aside component
 
 
@@ -88,7 +89,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        }
+        },
+        GiddhCurrencyPipe
     ]
 })
 export class ContactModule {

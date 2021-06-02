@@ -8,20 +8,20 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Invoice / Voucher Number
-                            <span class="sortTable">
+                        <th>{{localeData?.filing?.invoice_voucher_number}}
+                            <span class="sort-table">
                                 <a href="javascript:void(0)" class="top-sort" (click)="sortBy('number', 'asc')"></a>
                                 <a href="javascript:void(0)" class="bottom-sort" (click)="sortBy('number', 'desc')"></a>
                             </span>
                         </th>
-                        <th>Type
-                            <span class="sortTable">
+                        <th>{{localeData?.filing?.type}}
+                            <span class="sort-table">
                                 <a href="javascript:void(0)" class="top-sort" (click)="sortBy('type', 'asc')"></a>
                                 <a href="javascript:void(0)" class="bottom-sort" (click)="sortBy('type', 'desc')"></a>
                             </span>
                         </th>
-                        <th>Messages
-                            <span class="sortTable">
+                        <th>{{localeData?.filing?.messages}}
+                            <span class="sort-table">
                                 <a href="javascript:void(0)" class="top-sort" (click)="sortBy('messages', 'asc')"></a>
                                 <a href="javascript:void(0)" class="bottom-sort"
                                     (click)="sortBy('messages', 'desc')"></a>
@@ -34,9 +34,9 @@
                 <tbody>
                     <tr *ngFor="let item of filteredTransactions; let i = index">
                         <td data-title="#">{{i + 1}}</td>
-                        <td data-title="Invoice / Voucher Number" class="nowrap">{{item.number}}</td>
-                        <td data-title="Type" class="nowrap">{{item.type}}</td>
-                        <td data-title="Messages">{{item.messages}}</td>
+                        <td [attr.data-title]="localeData?.filing?.invoice_voucher_number" class="nowrap">{{item.number}}</td>
+                        <td [attr.data-title]="localeData?.filing?.type" class="nowrap">{{item.type}}</td>
+                        <td [attr.data-title]="localeData?.filing?.messages">{{item.messages}}</td>
                     </tr>
                 </tbody>
 
@@ -45,13 +45,15 @@
 
         <div class="text-center mb-4" [hidden]="!failedTransactions.length">
             <pagination [totalItems]="failedTransactions.length" [itemsPerPage]="itemsPerPage"
-                (pageChanged)="pageChanged($event)"></pagination>
+                (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first"
+                [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
+                [lastText]="commonLocaleData?.app_last"></pagination>
         </div>
 
-        <div class="" *ngIf="!failedTransactions.length">
+        <div *ngIf="!failedTransactions.length">
             <div class="filings-empty-state">
                 <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
-                <div class="empty-msg"><span> No result found. </span></div>
+                <div class="empty-msg"><span> {{localeData?.filing?.no_result_found}} </span></div>
             </div>
         </div>
 

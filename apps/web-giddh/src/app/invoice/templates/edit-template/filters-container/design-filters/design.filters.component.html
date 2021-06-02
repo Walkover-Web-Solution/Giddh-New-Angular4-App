@@ -1,4 +1,4 @@
-<div id="design" class="tabcontent pdT2 pdB2" [hidden]="!design" [attachOutsideOnClick]="true"
+<div id="design" class="design-tab-content pd-t2 pd-b2" [hidden]="!design" [attachOutsideOnClick]="true"
     (clickOutside)="clickedOutside()" (click)="$event.stopPropagation()">
 
 
@@ -17,15 +17,15 @@
   <button type="button" class="start-upload-btn" (click)="startUpload()">
   Start Upload
 </button> {{imagePreview}} -->
-    <div class="clearfix scrollAuto">
-        <ul class="designTool">
+    <div class="clearfix scroll-auto">
+        <ul class="design-tool">
             <li [hidden]="templateUISectionVisibility.templates" (click)="onChangeVisibility('templates')">
                 <i class="ico-template"></i> <label>Change up to template</label>
             </li>
             <li [hidden]="!templateUISectionVisibility.templates">
                 <i class="ico-template"></i> <label>Change up to template</label>
                 <div class="clearfix">
-                    <ul class="templateView">
+                    <ul class="template-view">
                         <!-- {{ sampleTemplates | json}} -->
                         <ng-container *ngFor="let template of sampleTemplates">
                             <li (click)="onDesignChange('uniqueName', template.uniqueName)"
@@ -79,7 +79,7 @@
             <li [hidden]="!templateUISectionVisibility.logo">
                 <i class="ico-edit"></i> <label>Make logo edit</label>
                 <div class="clearfix mr-t1">
-                    <div class="logoTool">
+                    <div class="logo-tool">
                         <span class="logo-preview" [class.cursor-disable]="isFileUploaded">
                             <label class="upload-button" for="logo-edit" [hidden]="logoAttached">
                                 <input type="file" #fileInput accept="image/png, image/jpeg" id="logo-edit"
@@ -101,21 +101,23 @@
                         <div class="pull-left mr-l1 mr-t1 choose-size">
                             <div class="d-block" [class.cursor-disable]="isFileUploaded">
                                 <p>Size</p>
-                                <input name="chooseSize" type="radio" id="fontS" value="S" [disabled]="isFileUploaded"
-                                    (click)="onValueChange('logoSize', '40')">
+                                <input [(ngModel)]="defaultImageSize" name="chooseSize" type="radio" id="fontS"
+                                    value="S" [disabled]="isFileUploaded" (click)="onValueChange('logoSize', '60')"
+                                    checked>
                                 <label for="fontS">S</label>
-                                <input name="chooseSize" type="radio" id="fontM" value="M" [disabled]="isFileUploaded"
-                                    (click)="onValueChange('logoSize', '50')">
+                                <input [(ngModel)]="defaultImageSize" name="chooseSize" type="radio" id="fontM"
+                                    value="M" [disabled]="isFileUploaded" (click)="onValueChange('logoSize', '80')">
                                 <label for="fontM">M</label>
-                                <input name="chooseSize" type="radio" id="fontL" value="L" [disabled]="isFileUploaded"
-                                    (click)="onValueChange('logoSize', '60')">
+                                <input [(ngModel)]="defaultImageSize" name="chooseSize" type="radio" id="fontL"
+                                    value="L" [disabled]="isFileUploaded" (click)="onValueChange('logoSize', '100')">
                                 <label for="fontL">L</label>
                             </div>
                             <div class="d-block">
-                                <a class="primary_clr" [attr.disabled]="isFileUploaded"
+                                <a class="primary-color" [attr.disabled]="isFileUploaded"
                                     [class.cursor-disable]="isFileUploaded" [hidden]="!logoAttached"
                                     (click)="toogleLogoVisibility()"><span [hidden]="showLogo">Show</span><span
-                                        [hidden]="!showLogo">Hide</span> logo</a> </div>
+                                        [hidden]="!showLogo">Hide</span> logo</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -168,8 +170,9 @@
                 <i class="ico-txt"></i> <label>Select different fonts</label>
                 <div class="row font-selector mr-t1 form-group">
                     <div class="col-9">
-                        <sh-select [defaultValue]="selectedFont" [options]="presetFonts" (selected)="onFontSelect($event)"
-                            [placeholder]="'Choose font'" [multiple]="false" [ItemHeight]="33"></sh-select>
+                        <sh-select [defaultValue]="selectedFont" [options]="presetFonts"
+                            (selected)="onFontSelect($event)" [placeholder]="'Choose font'" [multiple]="false"
+                            [ItemHeight]="33"></sh-select>
                     </div>
                 </div>
             </li>
@@ -181,8 +184,9 @@
                     <i class="ico-txt"></i> <label>Select different fonts size</label>
                     <div class="row font-selector mr-t1 form-group">
                         <div class="col-9">
-                            <sh-select [defaultValue]="selectedFontSize" [options]="presetFontsSize" (selected)="onFontSizeSelect($event)"
-                                [placeholder]="'Choose font size'" [multiple]="false" [ItemHeight]="33"></sh-select>
+                            <sh-select [defaultValue]="selectedFontSize" [options]="presetFontsSize"
+                                (selected)="onFontSizeSelect($event)" [placeholder]="'Choose font size'"
+                                [multiple]="false" [ItemHeight]="33"></sh-select>
                         </div>
                     </div>
                 </li>
@@ -194,9 +198,9 @@
                 <i class="ico-print"></i> <label>Edit print setting</label>
 
                 <div class="clearfix mr-t1">
-                    <div class="printTool pos-rel">
+                    <div class="print-tool position-relative">
                         <p>Page margins (in pixel)</p>
-                        <table class="table mr0">
+                        <table class="table m-0">
                             <thead>
                                 <tr>
                                     <th>Top</th>

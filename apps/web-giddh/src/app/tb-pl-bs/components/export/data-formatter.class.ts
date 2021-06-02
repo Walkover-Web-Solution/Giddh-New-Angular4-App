@@ -15,7 +15,7 @@ export interface IFormatable {
 export class DataFormatter {
     public accounts: Account[] = [];
     public groups: ChildGroup[] = [];
-    public formatDataGroupWise = (): string => {
+    public formatDataGroupWise = (localeData): string => {
         let csv;
         let header;
         let row;
@@ -29,8 +29,8 @@ export class DataFormatter {
         };
         csv = '';
         row = '';
-        title = '' + ',' + 'Opening Balance' + ',' + 'Debit' + ',' + 'Credit' + ',' + 'Closing Balance' + '\n';
-        header = `${this.selectedCompany.name}\r\n"${this.selectedCompany.address}"\r\n${this.selectedCompany.city}-${this.selectedCompany.pincode}\r\nTrial Balance: fromDate  to toDate\r\n`;
+        title = '' + ',' + localeData?.csv.trial_balance.opening_balance + ',' + localeData?.csv.trial_balance.debit + ',' + localeData?.csv.trial_balance.credit + ',' + localeData?.csv.trial_balance.closing_balance + '\n';
+        header = `${this.selectedCompany.name}\r\n"${this.selectedCompany.address}"\r\n${this.selectedCompany.city}-${this.selectedCompany.pincode}\r\n${localeData?.csv.trial_balance.trial_balance} ${localeData?.csv.trial_balance.fromDate} ${localeData?.csv.trial_balance.to} ${localeData?.csv.trial_balance.toDate}\r\n`;
         csv += `${header}\r\n${title}`;
 
         this.exportData.forEach(obj => {
@@ -40,7 +40,7 @@ export class DataFormatter {
             // }
         });
         csv += `${row}\r\n`;
-        csv += `\r\nTotal,${this.suffixRecordType(total.ob)},${total.dr},${total.cr},${this.suffixRecordType(total.cb)}\n`;
+        csv += `\r\n${localeData?.csv.trial_balance.total},${this.suffixRecordType(total.ob)},${total.dr},${total.cr},${this.suffixRecordType(total.cb)}\n`;
         return csv;
     }
     public formatDataAccountWise = (formatable: IFormatable): void => {
@@ -156,7 +156,7 @@ export class DataFormatter {
         formatable.setFooter(data);
     }
 
-    public calculateTotal = (group: ChildGroup, total: Total): Total => {
+    public calculateTotal = (group: ChildGroup, total: Total, decimalPlaces?: number): Total => {
         if (group.forwardedBalance.type === 'DEBIT') {
             total.ob = total.ob + group.forwardedBalance.amount;
         } else {
@@ -170,6 +170,12 @@ export class DataFormatter {
 
         total.cr += group.creditTotal;
         total.dr += group.debitTotal;
+        if (decimalPlaces) {
+            total.cr = giddhRoundOff(total.cr, decimalPlaces);
+            total.dr = giddhRoundOff(total.dr, decimalPlaces);
+            total.ob = giddhRoundOff(total.ob, decimalPlaces);
+            total.cb = giddhRoundOff(total.cb, decimalPlaces);
+        }
 
         return total;
     }

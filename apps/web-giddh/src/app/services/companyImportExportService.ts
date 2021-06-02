@@ -20,11 +20,14 @@ export class CompanyImportExportService {
         private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
-    public ExportRequest(): Observable<BaseResponse<any, string>> {
+    public ExportRequest(branchUniqueName?: string): Observable<BaseResponse<any, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-
-        return this._http.get(this.config.apiUrl + COMPANY_IMPORT_EXPORT_API.EXPORT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
+        let url = this.config.apiUrl + COMPANY_IMPORT_EXPORT_API.EXPORT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        if (branchUniqueName) {
+            url = url.concat(`?branchUniqueName=${branchUniqueName}`);
+        }
+        return this._http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, string> = res;
                 return data;
@@ -32,15 +35,17 @@ export class CompanyImportExportService {
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
     }
 
-    public ExportLedgersRequest(from: string, to: string): Observable<BaseResponse<any, string>> {
+    public ExportLedgersRequest(from: string, to: string, branchUniqueName?: string): Observable<BaseResponse<any, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-
-        return this._http.get(this.config.apiUrl + COMPANY_IMPORT_EXPORT_API.EXPORT_LEDGERS
+        let url = this.config.apiUrl + COMPANY_IMPORT_EXPORT_API.EXPORT_LEDGERS
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':from', encodeURIComponent(from))
-            .replace(':to', encodeURIComponent(to))
-        ).pipe(
+            .replace(':to', encodeURIComponent(to));
+        if (branchUniqueName) {
+            url = url.concat(`&branchUniqueName=${branchUniqueName}`);
+        }
+        return this._http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, string> = res;
                 return data;
@@ -48,7 +53,7 @@ export class CompanyImportExportService {
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
     }
 
-    public ImportRequest(file: File): Observable<BaseResponse<string, string>> {
+    public ImportRequest(file: File, branchUniqueName: string): Observable<BaseResponse<string, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
 
@@ -58,15 +63,18 @@ export class CompanyImportExportService {
         const httpOptions = {
             headers: { 'Content-Type': 'multipart/form-data', 'Accept': 'application/json' }
         };
-
+        let url = this.config.apiUrl + COMPANY_IMPORT_EXPORT_API.IMPORT
+            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        if (branchUniqueName) {
+            url = url.concat(`?branchUniqueName=${branchUniqueName}`);
+        }
         // const header = new Header
-        return this._http.post(this.config.apiUrl + COMPANY_IMPORT_EXPORT_API.IMPORT
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), formData, httpOptions).pipe(
-                map((res) => {
-                    let data: BaseResponse<string, string> = res;
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
+        return this._http.post(url, formData, httpOptions).pipe(
+            map((res) => {
+                let data: BaseResponse<string, string> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 
     public ImportLedgersRequest(file: File): Observable<BaseResponse<string, string>> {

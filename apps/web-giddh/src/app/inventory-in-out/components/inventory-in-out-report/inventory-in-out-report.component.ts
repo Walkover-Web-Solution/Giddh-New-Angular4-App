@@ -1,35 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InventoryReportActions } from '../../../actions/inventory/inventory.report.actions';
 import { InventoryFilter, InventoryReport } from '../../../models/api-models/Inventory-in-out';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
-    selector: 'invetory-in-out-report',  // <home></home>
+    selector: 'invetory-in-out-report',
     templateUrl: './inventory-in-out-report.component.html',
-    styles: [`
-    .bdrT {
-      border-color: #ccc;
-    }
-
-    :host ::ng-deep .fb__1-container {
-      justify-content: flex-start;
-    }
-
-    :host ::ng-deep .fb__1-container .form-group {
-      margin-right: 10px;
-      margin-bottom: 0;
-    }
-
-    :host ::ng-deep .fb__1-container .date-range-picker {
-      min-width: 150px;
-    }
-  `]
+    styleUrls: ['./inventory-in-out-report.component.scss']
 })
-export class InventoryInOutReportComponent {
+
+export class InventoryInOutReportComponent implements OnDestroy {
     public datePickerOptions: any = {
         locale: {
             applyClass: 'btn-green',
@@ -68,8 +55,8 @@ export class InventoryInOutReportComponent {
     public inventoryReport: InventoryReport;
     public filter: InventoryFilter = {};
     public stockOptions: IOption[] = [];
-    public startDate: string = moment().subtract(30, 'days').format('DD-MM-YYYY');
-    public endDate: string = moment().format('DD-MM-YYYY');
+    public startDate: string = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+    public endDate: string = moment().format(GIDDH_DATE_FORMAT);
     public uniqueName: string;
     public type: string;
     public COMPARISON_FILTER = [
@@ -83,12 +70,14 @@ export class InventoryInOutReportComponent {
         { label: 'Sender', value: 'Sender' },
         { label: 'Receiver', value: 'Receiver' }
     ];
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _router: ActivatedRoute,
         private inventoryReportActions: InventoryReportActions,
         private _store: Store<AppState>) {
 
-        this._router.params.subscribe(p => {
+        this._router.params.pipe(takeUntil(this.destroyed$)).subscribe(p => {
             this.uniqueName = p.uniqueName;
             this.type = p.type;
             this.filter = {};
@@ -102,18 +91,16 @@ export class InventoryInOutReportComponent {
                 this.applyFilters(1, false);
             }
         });
-        this._store.select(p => p.inventoryInOutState.inventoryReport)
-            .subscribe(p => this.inventoryReport = p);
-        this._store.select(p => ({ stocksList: p.inventory.stocksList, inventoryUsers: p.inventoryInOutState.inventoryUsers }))
-            .subscribe(p => p.inventoryUsers && p.stocksList &&
-                (this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r.uniqueName, additional: 'stock' }))
-                    .concat(p.inventoryUsers.map(r => ({ label: r.name, value: r.uniqueName, additional: 'person' })))));
+        this._store.pipe(select(p => p.inventoryInOutState.inventoryReport), takeUntil(this.destroyed$)).subscribe(p => this.inventoryReport = p);
+        this._store.pipe(select(p => ({ stocksList: p.inventory.stocksList, inventoryUsers: p.inventoryInOutState.inventoryUsers })), takeUntil(this.destroyed$)).subscribe(p => p.inventoryUsers && p.stocksList &&
+            (this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r.uniqueName, additional: 'stock' }))
+                .concat(p.inventoryUsers.map(r => ({ label: r.name, value: r.uniqueName, additional: 'person' })))));
     }
 
     public dateSelected(val) {
         const { startDate, endDate } = val.picker;
-        this.startDate = startDate.format('DD-MM-YYYY');
-        this.endDate = endDate.format('DD-MM-YYYY');
+        this.startDate = startDate.format(GIDDH_DATE_FORMAT);
+        this.endDate = endDate.format(GIDDH_DATE_FORMAT);
     }
 
     public searchChanged(val: IOption) {
@@ -169,5 +156,15 @@ export class InventoryInOutReportComponent {
     public applyFilters(page: number, applyFilter: boolean = true) {
         this._store.dispatch(this.inventoryReportActions
             .genReport(this.uniqueName, this.startDate, this.endDate, page, 10, applyFilter ? this.filter : null));
+    }
+
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof InventoryInOutReportComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

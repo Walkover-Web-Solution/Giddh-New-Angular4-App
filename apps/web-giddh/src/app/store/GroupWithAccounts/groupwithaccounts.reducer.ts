@@ -456,6 +456,8 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             return state;
         case AccountsAction.UPDATE_ACCOUNTV2:
             return Object.assign({}, state, { updateAccountInProcess: true, updateAccountIsSuccess: false });
+        case AccountsAction.RESET_UPDATE_ACCOUNTV2:
+            return Object.assign({}, state, { updateAccountInProcess: false, updateAccountIsSuccess: false });
         case AccountsAction.UPDATE_ACCOUNT_RESPONSEV2: {
             let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
             if (updatedAccount.status === 'success') {
@@ -629,7 +631,9 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                     uniqueName: accountData.body.uniqueName
                 };
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+                if (groupArray) {
+                    addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+                }
                 return Object.assign({}, state, {
                     createAccountInProcess: false,
                     createAccountIsSuccess: true,
@@ -650,7 +654,9 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 };
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 let result = false;
-                addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+                if (groupArray) {
+                    addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+                }
                 return Object.assign({}, state, {
                     createAccountInProcess: false,
                     createAccountIsSuccess: true,

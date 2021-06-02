@@ -1,3 +1,5 @@
+@import "../../../../assets/css/color.scss";
+
 .form-group {
     .steps-block {
         display: inline-block;
@@ -5,15 +7,15 @@
             display: inline-block;
             vertical-align: top;
             font-size: 18px;
-            color: #d5c8b6;
+            color: $behr-french;
             span {
                 &.active {
-                    color: #1c3361;
+                    color: $midnight-express;
                 }
             }
         }
         .label-active {
-            color: #222;
+            color: $night-rider;
         }
     }
     .btn {
@@ -22,22 +24,22 @@
         text-align: center;
         display: inline-block;
         background: transparent;
-        border: 1px solid #d5c8b6;
+        border: 1px solid $behr-french;
         border-radius: 100%;
         line-height: 15px;
         padding: 0;
         font-size: 20px;
-        color: #d5c8b6;
+        color: $behr-french;
         margin-bottom: 6px;
         &.active {
-            color: #fff;
+            color: $white;
         }
     }
-    .v_line {
+    .v-line {
         height: 1px;
         width: 40px;
         display: inline-block;
-        border-bottom: 8px dotted #d5c8b6;
+        border-bottom: 8px dotted $behr-french;
         margin: 0 58px;
     }
 }

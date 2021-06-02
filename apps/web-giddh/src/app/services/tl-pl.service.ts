@@ -32,6 +32,11 @@ export class TlPlService {
         if (request.tagName) {
             params.tagName = request.tagName;
         }
+        if (request.branchUniqueName && request.branchUniqueName !== this.companyUniqueName) {
+            params.branchUniqueName = encodeURIComponent(request.branchUniqueName);
+        } else {
+            params.branchUniqueName = '';
+        }
         return this._http.get(this.config.apiUrl + TB_PL_BS_API.GET_TRIAL_BALANCE
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), params).pipe(
                 map((res) => {
@@ -52,6 +57,11 @@ export class TlPlService {
         if (request.tagName) {
             params.tagName = request.tagName;
         }
+        if (request.branchUniqueName && request.branchUniqueName !== this.companyUniqueName) {
+            params.branchUniqueName = encodeURIComponent(request.branchUniqueName);
+        } else {
+            params.branchUniqueName = '';
+        }
         return this._http.get(this.config.apiUrl + TB_PL_BS_API.GET_V2_TRIAL_BALANCE
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), params).pipe(
                 map((res) => {
@@ -68,6 +78,9 @@ export class TlPlService {
     public GetProfitLoss(request: ProfitLossRequest): Observable<BaseResponse<AccountDetails, ProfitLossRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
+        if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
+            delete request.branchUniqueName;
+        }
         let filteredRequest = (Object.keys(request)
             .filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
@@ -108,6 +121,9 @@ export class TlPlService {
     public GetBalanceSheet(request: BalanceSheetRequest): Observable<BaseResponse<AccountDetails, BalanceSheetRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
+        if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
+            delete request.branchUniqueName;
+        }
         let filteredRequest = (Object.keys(request)
             .filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
@@ -130,7 +146,7 @@ export class TlPlService {
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), request).pipe(
                 map((res) => {
                     let data = this.b64toBlob(res.body, 'application/xml', 512);
-                    saveAs(data, 'trialbalance.xlsx');
+                    saveAs(data, request.filename);
                     return res;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
@@ -139,6 +155,9 @@ export class TlPlService {
     public DownloadBalanceSheetExcel(request: ProfitLossRequest): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
+        if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
+            delete request.branchUniqueName;
+        }
         let filteredRequest = (Object.keys(request)
             .filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
@@ -147,7 +166,7 @@ export class TlPlService {
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
                     let data = this.b64toBlob(res.body, 'application/xml', 512);
-                    saveAs(data, 'balancesheet.xlsx');
+                    saveAs(data, request.filename);
                     return res;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
@@ -156,6 +175,9 @@ export class TlPlService {
     public DownloadProfitLossExcel(request: ProfitLossRequest): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
+        if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
+            delete request.branchUniqueName;
+        }
         let filteredRequest = (Object.keys(request)
             .filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
@@ -164,7 +186,7 @@ export class TlPlService {
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
                     let data = this.b64toBlob(res.body, 'application/xml', 512);
-                    saveAs(data, 'profitloss.xlsx');
+                    saveAs(data, request.filename);
                     return res;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));

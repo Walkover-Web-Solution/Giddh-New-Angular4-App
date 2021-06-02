@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as _ from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
@@ -14,51 +14,14 @@ import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'tb',
-    template: `
-    <tb-pl-bs-filter
-      #filter
-      [selectedCompany]="selectedCompany"
-      [showLoader]="showLoader | async"
-      [showLabels]="true"
-      (seachChange)="searchChanged($event)"
-      (onPropertyChanged)="filterData($event)"
-      (expandAll)="expandAllEvent($event)"
-      (tbExportCsvEvent)="exportCsv($event)"
-      (tbExportPdfEvent)="exportPdf($event)"
-      (tbExportXLSEvent)="exportXLS($event)"
-      [tbExportCsv]="true"
-      [tbExportPdf]="true"
-      [tbExportXLS]="true"
-    ></tb-pl-bs-filter>
-    <div *ngIf="(showLoader | async)">
-      <!-- loader -->
-      <div class="loader">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <h1>loading trial balance</h1>
-      </div>
-    </div>
-    <div *ngIf="(data$ | async) && !(showLoader | async)">
-      <tb-grid #tbGrid
-               [search]="search"
-               [from]="from"
-               [to]="to"
-               (searchChange)="searchChanged($event)"
-               [expandAll]="expandAll"
-               [data$]="data$  | async"
-      ></tb-grid>
-    </div>
-    <div *ngIf="(!(showLoader | async) && !(data$ | async))" style="display: flex; height: 60vh; align-items: center; justify-content: center; font-size: 31px; color: #babec1;">
-      <div class="d-flex">
-        <h2>No Data Available For This Filter</h2>
-      </div>
-    </div>
-  `
+    templateUrl: './tb.component.html'
 })
-export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+
+export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     public showLoader: Observable<boolean>;
     public data$: Observable<AccountDetails>;
     public request: TrialBalanceRequest;
@@ -66,14 +29,14 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     public search: string;
     public from: string;
     public to: string;
-    @ViewChild('tbGrid', {static: true}) public tbGrid: TbGridComponent;
+    @ViewChild('tbGrid', { static: true }) public tbGrid: TbGridComponent;
     @Input() public isV2: boolean = false;
     @Input() public isDateSelected: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
 
     constructor(private store: Store<AppState>, private cd: ChangeDetectorRef, public tlPlActions: TBPlBsActions, private _toaster: ToasterService) {
-        this.showLoader = this.store.select(p => p.tlPl.tb.showLoader).pipe(takeUntil(this.destroyed$));
+        this.showLoader = this.store.pipe(select(p => p.tlPl.tb.showLoader), takeUntil(this.destroyed$));
     }
 
     public get selectedCompany(): CompanyResponse {
@@ -95,7 +58,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     }
 
     public ngOnInit() {
-        this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.tb.data, (p: AccountDetails) => {
+        this.data$ = this.store.pipe(select(createSelector((p: AppState) => p.tlPl.tb.data, (p: AccountDetails) => {
             let d = _.cloneDeep(p) as AccountDetails;
             if (d) {
                 if (d.message) {
@@ -111,7 +74,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
                 });
             }
             return d;
-        })).pipe(takeUntil(this.destroyed$));
+        })), takeUntil(this.destroyed$));
         this.data$.subscribe(p => {
             this.cd.markForCheck();
         });
@@ -135,19 +98,6 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
 
     public ngAfterViewInit() {
         this.cd.detectChanges();
-    }
-
-    public ngOnChanges(changes: SimpleChanges) {
-        // if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
-        //   this.cd.detectChanges();
-        // }
-        // if ('isV2' in changes && changes['isV2'].currentValue !== changes['isV2'].previousValue) {
-        //   if (changes['isV2'].currentValue) {
-        //     this.store.dispatch(this.tlPlActions.GetV2TrialBalance(_.cloneDeep(this.request)));
-        //   } else {
-        //     this.store.dispatch(this.tlPlActions.GetTrialBalance(_.cloneDeep(this.request)));
-        //   }
-        // }
     }
 
     public filterData(request: TrialBalanceRequest) {

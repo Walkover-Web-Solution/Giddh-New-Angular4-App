@@ -1,4 +1,4 @@
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil, take } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
@@ -11,7 +11,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { cloneDeep, forEach, isEqual, sumBy, filter, find, without, maxBy , findIndex} from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep, forEach, isEqual, sumBy, filter, find, without, maxBy, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
@@ -35,7 +35,7 @@ const CustomShortcode = [
 @Component({
     selector: 'voucher-grid',
     templateUrl: './voucher-grid.component.html',
-    styleUrls: ['../accounting.component.css'],
+    styleUrls: ['../accounting.component.scss'],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -58,20 +58,20 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     @Input() public newSelectedAccount: AccountResponse;
     @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 
-    @ViewChild('quickAccountComponent', {static: true}) public quickAccountComponent: ElementViewContainerRef;
-    @ViewChild('quickAccountModal', {static: true}) public quickAccountModal: ModalDirective;
-    @ViewChild('chequeEntryModal', {static: true}) public chequeEntryModal: ModalDirective;
-    @ViewChild('particular', {static: true}) public accountField: any;
-    @ViewChild('dateField', {static: true}) public dateField: ElementRef;
-    @ViewChild('narrationBox', {static: true}) public narrationBox: ElementRef;
-    @ViewChild('chequeNumberInput', {static: true}) public chequeNumberInput: ElementRef;
-    @ViewChild('chequeClearanceDateInput', {static: true}) public chequeClearanceDateInput: ElementRef;
-    @ViewChild('chqFormSubmitBtn', {static: true}) public chqFormSubmitBtn: ElementRef;
-    @ViewChild('submitButton', {static: true}) public submitButton: ElementRef;
-    @ViewChild('resetButton', {static: true}) public resetButton: ElementRef;
-    @ViewChild('manageGroupsAccountsModal', {static: true}) public manageGroupsAccountsModal: ModalDirective;
-    @ViewChild('byAmountField', {static: true}) public byAmountField: ElementRef;
-    @ViewChild('toAmountField', {static: true}) public toAmountField: ElementRef;
+    @ViewChild('quickAccountComponent', { static: true }) public quickAccountComponent: ElementViewContainerRef;
+    @ViewChild('quickAccountModal', { static: true }) public quickAccountModal: ModalDirective;
+    @ViewChild('chequeEntryModal', { static: true }) public chequeEntryModal: ModalDirective;
+    @ViewChild('particular', { static: true }) public accountField: any;
+    @ViewChild('dateField', { static: true }) public dateField: ElementRef;
+    @ViewChild('narrationBox', { static: true }) public narrationBox: ElementRef;
+    @ViewChild('chequeNumberInput', { static: true }) public chequeNumberInput: ElementRef;
+    @ViewChild('chequeClearanceDateInput', { static: true }) public chequeClearanceDateInput: ElementRef;
+    @ViewChild('chqFormSubmitBtn', { static: true }) public chqFormSubmitBtn: ElementRef;
+    @ViewChild('submitButton', { static: true }) public submitButton: ElementRef;
+    @ViewChild('resetButton', { static: true }) public resetButton: ElementRef;
+    @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: ModalDirective;
+    @ViewChild('byAmountField', { static: true }) public byAmountField: ElementRef;
+    @ViewChild('toAmountField', { static: true }) public toAmountField: ElementRef;
 
     public showLedgerAccountList: boolean = false;
     public selectedInput: 'by' | 'to' = 'by';
@@ -124,6 +124,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     public previousVoucherType: string = "";
     public universalDate$: Observable<any>;
     public universalDate: any = '';
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(
         private _accountService: AccountService,
@@ -140,7 +142,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.requestObj.transactions = [];
-        this._keyboardService.keyInformation.subscribe((key) => {
+        this._keyboardService.keyInformation.pipe(takeUntil(this.destroyed$)).subscribe((key) => {
             this.watchKeyboardEvent(key);
         });
 
@@ -152,13 +154,13 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                 return false;
             }
             return true;
-        })).subscribe((d) => {
+        }), takeUntil(this.destroyed$)).subscribe((d) => {
             if (d && d.gridType === 'voucher') {
                 this.requestObj.voucherType = d.page;
                 this.createAccountsList();
                 this.resetEntriesIfVoucherChanged();
                 setTimeout(() => {
-                    this.dateField.nativeElement.focus();
+                    this.dateField?.nativeElement.focus();
                 }, 50);
             } else if (d) {
                 this.createAccountsList();
@@ -167,7 +169,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             }
         });
 
-        this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
+        this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -191,25 +193,25 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                 return false;
             }
             return true;
-        })).subscribe((data) => {
+        }), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data) {
                 this.requestObj = cloneDeep(data);
             }
         });
 
-        this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$)).subscribe((s: boolean) => {
+        this.store.pipe(select(p => p.ledger.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
             if (s) {
                 this._toaster.successToast('Entry created successfully', 'Success');
                 this.refreshEntry();
                 this.store.dispatch(this._ledgerActions.ResetLedger());
                 this.requestObj.description = '';
-                this.dateField.nativeElement.focus();
+                this.dateField?.nativeElement.focus();
             }
         });
 
         this.refreshEntry();
 
-        this._tallyModuleService.filteredAccounts.subscribe((accounts) => {
+        this._tallyModuleService.filteredAccounts.pipe(takeUntil(this.destroyed$)).subscribe((accounts) => {
             if (accounts) {
                 this.allAccounts = accounts;
                 this.createAccountsList();
@@ -222,7 +224,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                 this.autoFocusStockGroupField = false;
                 this.getStock(null, null, true);
                 setTimeout(() => {
-                    this.dateField.nativeElement.focus();
+                    this.dateField?.nativeElement.focus();
                 }, 1000);
             }
         });
@@ -231,7 +233,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     public ngOnChanges(c: SimpleChanges) {
         if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
             this.showFromDatePicker = c.openDatePicker.currentValue;
-            this.dateField.nativeElement.focus();
+            this.dateField?.nativeElement.focus();
         }
         if ('openCreateAccountPopup' in c && c.openCreateAccountPopup.currentValue !== c.openCreateAccountPopup.previousValue) {
             if (c.openCreateAccountPopup.currentValue) {
@@ -391,7 +393,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     public openChequeDetailForm() {
         this.chequeEntryModal.show();
         setTimeout(() => {
-            this.chequeNumberInput.nativeElement.focus();
+            this.chequeNumberInput?.nativeElement.focus();
         }, 200);
     }
 
@@ -400,7 +402,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
      */
     public setAccount(acc) {
         let openChequePopup = false;
-        if (acc.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts') && (!this.requestObj.chequeNumber && !this.requestObj.chequeClearanceDate)) {
+        if (acc && acc.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts') && (!this.requestObj.chequeNumber && !this.requestObj.chequeClearanceDate)) {
             openChequePopup = true;
             this.openChequeDetailForm();
         }
@@ -435,9 +437,9 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             if (openChequePopup === false) {
                 setTimeout(() => {
                     if (transaction.type === 'by') {
-                        this.byAmountField.nativeElement.focus();
+                        this.byAmountField?.nativeElement.focus();
                     } else {
-                        this.toAmountField.nativeElement.focus();
+                        this.toAmountField?.nativeElement.focus();
                     }
                 }, 200);
             }
@@ -482,7 +484,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             }
             this.requestObj.transactions.splice(indx, 1);
             if (reqField === null) {
-                this.dateField.nativeElement.focus();
+                this.dateField?.nativeElement.focus();
             } else {
                 reqField.focus();
             }
@@ -523,7 +525,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             }
         } else {
             this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            return setTimeout(() => this.narrationBox?.nativeElement.focus(), 500);
         }
     }
 
@@ -544,17 +546,17 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
         if (foundContraEntry && data.voucherType !== 'Contra') {
             this._toaster.errorToast('Contra entry (Cash + Bank), not allowed in ' + data.voucherType, 'Error');
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            return setTimeout(() => this.narrationBox?.nativeElement.focus(), 500);
         }
         if (!foundContraEntry && data.voucherType === 'Contra') {
             this._toaster.errorToast('There should be Cash and Bank entry in contra.', 'Error');
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            return setTimeout(() => this.narrationBox?.nativeElement.focus(), 500);
         }
 
         // This suggestion was given by Sandeep
         if (foundSalesAndBankEntry && data.voucherType === 'Journal') {
             this._toaster.errorToast('Sales and Purchase entry not allowed in journal.', 'Error');
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            return setTimeout(() => this.narrationBox?.nativeElement.focus(), 500);
         }
 
         if (this.totalCreditAmount === this.totalDebitAmount) {
@@ -570,17 +572,17 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             } else {
                 const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
                 this._toaster.errorToast('Please select at least one cash or bank account in ' + byOrTo.toUpperCase(), 'Error');
-                setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+                setTimeout(() => this.narrationBox?.nativeElement.focus(), 500);
             }
         } else {
             this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
-            setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            setTimeout(() => this.narrationBox?.nativeElement.focus(), 500);
         }
     }
 
     public validateForContraEntry(data) {
-        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash'))));
-        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash'))));
+        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash'))));
+        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash'))));
 
         if (debitEntryWithCashOrBank && creditEntryWithCashOrBank) {
             return true;
@@ -590,8 +592,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public validateForSalesAndPurchaseEntry(data) {
-        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities' || pg.uniqueName === 'purchases' || pg.uniqueName === 'directexpenses'))));
-        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities' || pg.uniqueName === 'purchases' || pg.uniqueName === 'directexpenses'))));
+        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities' || pg.uniqueName === 'purchases' || pg.uniqueName === 'directexpenses'))));
+        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities' || pg.uniqueName === 'purchases' || pg.uniqueName === 'directexpenses'))));
 
         if (debitEntryWithCashOrBank && creditEntryWithCashOrBank) {
             return true;
@@ -625,7 +627,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         this.requestObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
         this.journalDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         this.requestObj.description = '';
-        this.dateField.nativeElement.focus();
+        this.dateField?.nativeElement.focus();
         setTimeout(() => {
             this.newEntryObj();
             this.requestObj.transactions[0].type = 'by';
@@ -704,7 +706,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             return validEntry;
         } else {
             this._toaster.errorToast("Particular can't be blank");
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 500);
+            return setTimeout(() => this.narrationBox?.nativeElement.focus(), 500);
         }
 
     }
@@ -836,7 +838,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public dateEntered() {
-        const date = moment(this.journalDate, 'DD-MM-YYYY');
+        const date = moment(this.journalDate, GIDDH_DATE_FORMAT);
         if (moment(date).format('dddd') !== 'Invalid date') {
             this.displayDay = moment(date).format('dddd');
         } else {
@@ -928,22 +930,24 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public loadQuickAccountComponent() {
-        this.quickAccountModal.config.backdrop = false;
+        if (this.quickAccountModal && this.quickAccountModal.config) {
+            this.quickAccountModal.config.backdrop = false;
+        }
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
         let viewContainerRef = this.quickAccountComponent.viewContainerRef;
         viewContainerRef.remove();
         let componentRef = viewContainerRef.createComponent(componentFactory);
         let componentInstance = componentRef.instance as QuickAccountComponent;
         componentInstance.needAutoFocus = true;
-        componentInstance.closeQuickAccountModal.subscribe((a) => {
+        componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideQuickAccountModal();
             componentInstance.newAccountForm.reset();
             componentInstance.destroyed$.next(true);
             componentInstance.destroyed$.complete();
             this.isNoAccFound = false;
-            this.dateField.nativeElement.focus();
+            this.dateField?.nativeElement.focus();
         });
-        componentInstance.isQuickAccountCreatedSuccessfully$.subscribe((status: boolean) => {
+        componentInstance.isQuickAccountCreatedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe((status: boolean) => {
             if (status) {
                 this.refreshAccountListData(true);
             }
@@ -964,7 +968,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
     public hideQuickAccountModal() {
         this.quickAccountModal.hide();
-        this.dateField.nativeElement.focus();
+        this.dateField?.nativeElement.focus();
         return setTimeout(() => {
             this.selectedAccountInputField.value = '';
             this.selectedAccountInputField.focus();
@@ -976,7 +980,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         this.autoFocusStockGroupField = false;
         // after creating stock, get all stocks again
         this.filterByText = '';
-        this.dateField.nativeElement.focus();
+        this.dateField?.nativeElement.focus();
         this.getStock(null, null, true, true);
     }
 
@@ -986,9 +990,9 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             e.stopPropagation();
             return setTimeout(() => {
                 if (fieldType === 'chqNumber') {
-                    this.chequeClearanceDateInput.nativeElement.focus();
+                    this.chequeClearanceDateInput?.nativeElement.focus();
                 } else if (fieldType === 'chqDate') {
-                    this.chqFormSubmitBtn.nativeElement.focus();
+                    this.chqFormSubmitBtn?.nativeElement.focus();
                 }
             }, 100);
         }
@@ -996,21 +1000,21 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
     public keyUpOnSubmitButton(e) {
         if (e && (e.keyCode === 39 || e.which === 39) || (e.keyCode === 78 || e.which === 78)) {
-            return setTimeout(() => this.resetButton.nativeElement.focus(), 50);
+            return setTimeout(() => this.resetButton?.nativeElement.focus(), 50);
         }
         if (e && (e.keyCode === 8 || e.which === 8)) {
             this.showConfirmationBox = false;
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+            return setTimeout(() => this.narrationBox?.nativeElement.focus(), 50);
         }
     }
 
     public keyUpOnResetButton(e) {
         if (e && (e.keyCode === 37 || e.which === 37) || (e.keyCode === 89 || e.which === 89)) {
-            return setTimeout(() => this.submitButton.nativeElement.focus(), 50);
+            return setTimeout(() => this.submitButton?.nativeElement.focus(), 50);
         }
         if (e && (e.keyCode === 13 || e.which === 13)) {
             this.showConfirmationBox = false;
-            return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+            return setTimeout(() => this.narrationBox?.nativeElement.focus(), 50);
         }
     }
 
@@ -1079,7 +1083,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     private refreshAccountListData(needToFocusAccountInputField: boolean = false) {
-        this.store.select(p => p.session.companyUniqueName).subscribe(a => {
+        this.store.pipe(select(p => p.session.companyUniqueName), take(1)).subscribe(a => {
             if (a && a !== '') {
                 this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data.status === 'success') {

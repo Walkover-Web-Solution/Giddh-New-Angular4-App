@@ -94,7 +94,7 @@ body {
     text-align: right;
 }
 
-#template3 .mrL2 {
+#template3 .mr-l2 {
     margin-left: 20px;
 }
 
@@ -141,7 +141,7 @@ body {
     z-index: -1;
 }
 
-#template3 .inwords {
+#template3 .in-words {
     color: #7d7d7d;
 }
 
@@ -171,7 +171,7 @@ body {
     font-weight: bold;
 }
 
-#template3 .bdrB {
+#template3 .bd-rb {
     border-bottom: 1px solid #666;
     margin-bottom: 10px;
 }
@@ -193,7 +193,7 @@ body {
     font-weight: 100;
 }
 
-#template3 .vmiddle {
+#template3 .vertical-align-middle {
     vertical-align: middle;
 }
 
@@ -218,7 +218,7 @@ body {
     font-size: 10px;
 }
 
-#template3 .pos-rel {
+#template3 .position-relative {
     position: relative;
 }
 

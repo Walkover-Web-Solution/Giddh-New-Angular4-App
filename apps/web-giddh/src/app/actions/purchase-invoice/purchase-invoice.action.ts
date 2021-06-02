@@ -1,25 +1,22 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
-import { SETTINGS_PROFILE_ACTIONS } from './settings.profile.const';
 import { GST_RETURN_ACTIONS, PURCHASE_INVOICE_ACTIONS } from './purchase-invoice.const';
-
 import { saveAs } from 'file-saver';
 import { CustomActions } from '../../store/customActions';
 import { IInvoicePurchaseItem, IInvoicePurchaseResponse, ITaxResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ToasterService } from '../../services/toaster.service';
-import { AppState } from '../../store/index';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
+import { LocaleService } from '../../services/locale.service';
 
 @Injectable()
 export class InvoicePurchaseActions {
 
 
-    public GetPurchaseInvoices$: Observable<Action> =createEffect( ()=> this.action$
+    public GetPurchaseInvoices$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES),
             switchMap((action: CustomActions) => this.purchaseInvoiceService.GetPurchaseInvoice(action.payload)),
@@ -32,7 +29,7 @@ export class InvoicePurchaseActions {
             }))));
 
 
-    public UpdatePurchaseInvoice$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdatePurchaseInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE),
             switchMap((action: CustomActions) => {
@@ -41,7 +38,7 @@ export class InvoicePurchaseActions {
             })));
 
 
-    public GetTaxesForThisCompany$: Observable<Action> =createEffect( ()=> this.action$
+    public GetTaxesForThisCompany$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PURCHASE_INVOICE_ACTIONS.GET_TAXES),
             switchMap((action: CustomActions) => this.purchaseInvoiceService.GetTaxesForThisCompany()),
@@ -54,7 +51,7 @@ export class InvoicePurchaseActions {
             }))));
 
 
-    public GeneratePurchaseInvoice$: Observable<Action> =createEffect( ()=> this.action$
+    public GeneratePurchaseInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PURCHASE_INVOICE_ACTIONS.GENERATE_PURCHASE_INVOICE),
             switchMap((action: CustomActions) => {
@@ -63,7 +60,7 @@ export class InvoicePurchaseActions {
             })));
 
 
-    public UpdatePurchaseInvoiceResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdatePurchaseInvoiceResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE_RESPONSE),
             map((response: CustomActions) => {
@@ -71,13 +68,13 @@ export class InvoicePurchaseActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Purchase Invoice Updated Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.purchase_invoice_updated"));
                 }
                 return { type: 'EmptyAction' };
             })));
 
 
-    public DownloadGSTR1Sheet$: Observable<Action> =createEffect( ()=> this.action$
+    public DownloadGSTR1Sheet$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_SHEET),
             switchMap((action: CustomActions) => {
@@ -86,7 +83,7 @@ export class InvoicePurchaseActions {
             })));
 
 
-    public DownloadGSTR1SheetResponse$: Observable<Action> = createEffect( ()=>this.action$
+    public DownloadGSTR1SheetResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_SHEET_RESPONSE),
             map((response: CustomActions) => {
@@ -95,13 +92,13 @@ export class InvoicePurchaseActions {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.downloadFile(data.body, data.queryString.reqObj.period, data.queryString.reqObj.gstNumber, data.queryString.reqObj.type, data.queryString.reqObj.gstType);
-                    this.toasty.successToast('Sheet Downloaded Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.sheet_downloaded"));
                 }
                 return { type: 'EmptyAction' };
             })));
 
 
-    public DownloadGSTR1ErrorSheet$: Observable<Action> =createEffect( ()=> this.action$
+    public DownloadGSTR1ErrorSheet$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET),
             switchMap((action: CustomActions) => {
@@ -110,7 +107,7 @@ export class InvoicePurchaseActions {
             })));
 
 
-    public DownloadGSTR1ErrorSheetResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public DownloadGSTR1ErrorSheetResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET_RESPONSE),
             map((response: CustomActions) => {
@@ -119,13 +116,13 @@ export class InvoicePurchaseActions {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.downloadFile(data.body, data.queryString.reqObj.period, data.queryString.reqObj.gstNumber, data.queryString.reqObj.type, data.queryString.reqObj.gstType);
-                    this.toasty.successToast('Error Sheet Downloaded Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.error_sheet_downloaded"));
                 }
                 return { type: 'EmptyAction' };
             })));
 
 
-    public SendGSTR3BEmail$: Observable<Action> =createEffect( ()=> this.action$
+    public SendGSTR3BEmail$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PURCHASE_INVOICE_ACTIONS.SEND_GSTR3B_EMAIL),
             switchMap((action: CustomActions) => {
@@ -134,7 +131,7 @@ export class InvoicePurchaseActions {
             })));
 
 
-    public SendGSTR3BEmailResponse$: Observable<Action> = createEffect( ()=>this.action$
+    public SendGSTR3BEmailResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PURCHASE_INVOICE_ACTIONS.SEND_GSTR3B_EMAIL_RESPONSE),
             map((response: CustomActions) => {
@@ -151,7 +148,7 @@ export class InvoicePurchaseActions {
      * UPDATE PURCHASE ENTRY
      */
 
-    public UpdatePurchaseEntry$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdatePurchaseEntry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY),
             switchMap((action: CustomActions) => {
@@ -163,7 +160,7 @@ export class InvoicePurchaseActions {
      * UPDATE PURCHASE ENTRY RESPONSE
      */
 
-    public UpdatePurchaseEntryResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdatePurchaseEntryResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY_RESPONSE),
             map((response: CustomActions) => {
@@ -171,7 +168,7 @@ export class InvoicePurchaseActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Entry Updated Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.entry_updated"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -180,7 +177,7 @@ export class InvoicePurchaseActions {
      * UPDATE INVOICE
      */
 
-    public UpdateInvoice$: Observable<Action> = createEffect( ()=>this.action$
+    public UpdateInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_INVOICE),
             switchMap((action: CustomActions) => {
@@ -192,7 +189,7 @@ export class InvoicePurchaseActions {
      * UPDATE PURCHASE ENTRY RESPONSE
      */
 
-    public UpdateInvoiceResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateInvoiceResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_INVOICE_RESPONSE),
             map((response: CustomActions) => {
@@ -200,7 +197,7 @@ export class InvoicePurchaseActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Entry Updated Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.entry_updated"));
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -209,7 +206,7 @@ export class InvoicePurchaseActions {
      * Save Jio Gst Details
      */
 
-    public SaveJioGst$: Observable<Action> =createEffect( ()=> this.action$
+    public SaveJioGst$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GST_RETURN_ACTIONS.SAVE_JIO_GST),
             switchMap((action: CustomActions) => {
@@ -221,7 +218,7 @@ export class InvoicePurchaseActions {
      * Save Jio Gst Details RESPONSE
      */
 
-    public SaveJioGstResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public SaveJioGstResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GST_RETURN_ACTIONS.SAVE_JIO_GST_RESPONSE),
             map((response: CustomActions) => {
@@ -238,7 +235,7 @@ export class InvoicePurchaseActions {
      * Save Tax Pro Details
      */
 
-    public SaveTaxPro$: Observable<Action> =createEffect( ()=> this.action$
+    public SaveTaxPro$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO),
             switchMap((action: CustomActions) => {
@@ -250,7 +247,7 @@ export class InvoicePurchaseActions {
      * Save Tax Pro RESPONSE
      */
 
-    public SaveTaxProResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public SaveTaxProResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_RESPONSE),
             map((response: CustomActions) => {
@@ -266,7 +263,7 @@ export class InvoicePurchaseActions {
     /**
      * Save Tax Pro With OTP Details
      **/
-    public SaveTaxProWithOTP$: Observable<Action> =createEffect( ()=> this.action$
+    public SaveTaxProWithOTP$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_WITH_OTP),
             switchMap((action: CustomActions) => {
@@ -278,7 +275,7 @@ export class InvoicePurchaseActions {
      * Save Tax Pro With OTP Details RESPONSE
      */
 
-    public SaveTaxProWithOTPResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public SaveTaxProWithOTPResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_WITH_OTP_RESPONSE),
             map((response: CustomActions) => {
@@ -294,7 +291,7 @@ export class InvoicePurchaseActions {
     /**
      * File Jio GSTR1
      */
-    public FileJioGstReturn$: Observable<Action> =createEffect( ()=> this.action$
+    public FileJioGstReturn$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GST_RETURN_ACTIONS.FILE_JIO_GST),
             switchMap((action: CustomActions) => {
@@ -306,7 +303,7 @@ export class InvoicePurchaseActions {
      * File Jio GSTR1 Response
      */
 
-    public FileJioGstReturnResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public FileJioGstReturnResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GST_RETURN_ACTIONS.FILE_JIO_GST_RESPONSE),
             map((response: CustomActions) => {
@@ -320,7 +317,7 @@ export class InvoicePurchaseActions {
             })));
 
 
-    public SaveGSPSession$: Observable<Action> = createEffect( ()=>this.action$
+    public SaveGSPSession$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GST_RETURN_ACTIONS.SAVE_GSP_SESSION),
             switchMap((action: CustomActions) => {
@@ -332,7 +329,7 @@ export class InvoicePurchaseActions {
      * Save Tax Pro RESPONSE
      */
 
-    public SaveGSPSessionResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public SaveGSPSessionResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GST_RETURN_ACTIONS.SAVE_GSP_SESSION_RESPONSE),
             map((response: CustomActions) => {
@@ -346,7 +343,7 @@ export class InvoicePurchaseActions {
             })));
 
 
-    public SaveGSPSessionWithOTP$: Observable<Action> =createEffect( ()=> this.action$
+    public SaveGSPSessionWithOTP$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GST_RETURN_ACTIONS.SAVE_GSP_SESSION_WITH_OTP),
             switchMap((action: CustomActions) => {
@@ -355,7 +352,7 @@ export class InvoicePurchaseActions {
             })));
 
 
-    public SaveGSPSessionWithOTPResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public SaveGSPSessionWithOTPResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GST_RETURN_ACTIONS.SAVE_GSP_SESSION_WITH_OTP_RESPONSE),
             map((response: CustomActions) => {
@@ -369,7 +366,7 @@ export class InvoicePurchaseActions {
             })));
 
 
-    public GetGSPSession$: Observable<Action> =createEffect( ()=> this.action$
+    public GetGSPSession$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GST_RETURN_ACTIONS.GET_GSP_SESSION),
             switchMap((action: CustomActions) => {
@@ -378,7 +375,7 @@ export class InvoicePurchaseActions {
             })));
 
 
-    public FileGSTR3B$: Observable<Action> = createEffect( ()=>this.action$
+    public FileGSTR3B$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GST_RETURN_ACTIONS.FILE_GSTR3B),
             switchMap((action: CustomActions) => {
@@ -390,7 +387,7 @@ export class InvoicePurchaseActions {
      * File Jio GSTR1 Response
      */
 
-    public FileGSTR3BResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public FileGSTR3BResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GST_RETURN_ACTIONS.FILE_GSTR3B_RESPONSE),
             map((response: CustomActions) => {
@@ -405,8 +402,7 @@ export class InvoicePurchaseActions {
 
     constructor(private action$: Actions,
         private toasty: ToasterService,
-        private router: Router,
-        private store: Store<AppState>,
+        private localeService: LocaleService,
         private purchaseInvoiceService: PurchaseInvoiceService) {
     }
 

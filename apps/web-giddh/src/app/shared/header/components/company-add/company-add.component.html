@@ -1,35 +1,35 @@
-<div id="share-modal" class=" shareGrp ">
+<div id="share-modal" class="share-grp">
     <div class="modal-header">
         <h3>Create New Company</h3>
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
     </div>
-    <div class="modal-body pd0" id="SharePop">
-        <div class="welcome_wrapper">
+    <div class="modal-body p-0" id="SharePop">
+        <div class="welcome-wrapper">
             <div class="giddh-logo-welcome">
                 <img src="{{imgPath}}assets/images/giddh-big-logo.svg">
             </div>
-            <div class="welcome_header">
+            <div class="welcome-header">
                 <h1>Welcome {{ this.logedInusers.name}},</h1>
             </div>
         </div>
 
-        <div class="form-group clearfix add-companyDetail pdB5">
+        <div class="form-group clearfix add-company-detail pd-b5">
             <!--<h3 class="pd-b1">Share with</h3>-->
-            <div class="add_mailer">
+            <div class="add-mailer">
                 <!--create company from-->
                 <form name="form" #createCompanyForm="ngForm" class="clearfix" novalidate="" class=""
                     autocomplete="off">
                     <div class="company-form-body row">
 
-                        <div class="col-xs-12 col-sm-12 m-t-50">
-                            <div class="input-group form-group dblock m-b-30">
+                        <div class="col-xs-12 col-sm-12 mr-t5">
+                            <div class="input-group form-group d-block mr-b3">
                                 <p>Enter your new Branch company name to start hassle free accounting with Giddh.</p>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 mrB3">
-                            <label for="name" class="m-t-40">Company Name<sup>*</sup></label>
+                        <div class="col-xs-12 col-sm-12 mr-b3">
+                            <label for="name" class="mr-t4">Company Name<sup>*</sup></label>
                             <input #name="ngModel" id="name" type="text"
-                                [ngClass]="{'hasError': name.invalid && name.touched && name.dirty, 'has-success':name.valid}"
+                                [ngClass]="{'has-error': name.invalid && name.touched && name.dirty, 'has-success':name.valid}"
                                 [(ngModel)]="company.name" class="form-control" placeholder="Company Name" required
                                 name="name" pattern="[a-zA-Z0-9^ .&]{5,100}">
                             <small class="text-danger" *ngIf="name.invalid && name.touched && name.dirty">Company name
@@ -38,34 +38,35 @@
                             </small>
                         </div>
 
-                        <div class="col-xs-6 col-sm-6 mrB3 ">
+                        <div class="col-xs-6 col-sm-6 mr-b3">
                             <span>
                                 <label for="country" class="d-block">Country<sup>*</sup></label>
                                 <sh-select id="country" [options]="countrySource" [isFilterEnabled]="true"
                                     name="country" [(ngModel)]="company.country" class="pull-left select-caret w-100"
-                                    [required]='true'>
+                                    [required]='true' [isRequired]="true">
                                 </sh-select>
                             </span>
 
                         </div>
-                        <div class="col-xs-6 col-sm-6 mrB3 ">
+                        <div class="col-xs-6 col-sm-6 mr-b3">
                             <label for="">Currency <sup>*</sup></label>
-                            <div class="custom-select select-caret pos-rel">
+                            <div class="custom-select select-caret position-relative">
                                 <sh-select name="baseCurrency" [options]="currencySource$ | async" required
-                                    [isFilterEnabled]="true" [(ngModel)]="company.baseCurrency"></sh-select>
+                                    [isRequired]="true" [isFilterEnabled]="true" [(ngModel)]="company.baseCurrency">
+                                </sh-select>
                             </div>
                         </div>
 
-                        <div class="col-xs-6 col-sm-6 mrB3">
+                        <div class="col-xs-6 col-sm-6 mr-b3">
                             <label for="nameAlias">Unique Name</label>
                             <input #nameAlias="ngModel" type="text" autocomplete="off"
-                                [ngClass]="{'hasError': nameAlias.invalid && nameAlias.touched && nameAlias.dirty, 'has-success':nameAlias.valid}"
+                                [ngClass]="{'has-error': nameAlias.invalid && nameAlias.touched && nameAlias.dirty, 'has-success':nameAlias.valid}"
                                 [(ngModel)]="company.nameAlias" class="form-control" placeholder="Branch Alias"
                                 name="nameAlias">
 
                         </div>
                         <!-- Commented for now can be replaced with new dynamic search sh-select
-                        <div class="col-xs-6 col-sm-6 mrB3">
+                        <div class="col-xs-6 col-sm-6 mr-b3">
                             <label for="city">City <sup>*</sup></label>
                             <input [ngbTypeahead]="dataSource" type="text" autocomplete="off"
                                 (keyup)="onChangeCityName()" [(ngModel)]="company.city" name="city"
@@ -77,15 +78,15 @@
                             </ng-template>
                         </div> -->
 
-                        <div class="col-xs-12 col-sm-12 mrB3">
+                        <div class="col-xs-12 col-sm-12 mr-b3">
                             <span>
                                 <label for="contactNo" class="d-block">Mobile Number<sup>*</sup></label>
                                 <div class="d-flex welcome-select ">
-                                    <sh-select class="pull-left select-caret" required
-                                        style="width: 85px;margin-right: 28px;" name="phoneCode" [placeholder]="+91"
+                                    <sh-select class="pull-left select-caret phone-code-caret" required
+                                        [isRequired]="true" name="phoneCode" [placeholder]="+91"
                                         [options]="countryPhoneCode" [(ngModel)]="company.phoneCode">
                                     </sh-select>
-                                    <input type="text" pattern="[0-9]*" class="form-control pull-right mrR1" required
+                                    <input type="text" pattern="[0-9]*" class="form-control pull-right mr-r1" required
                                         placeholder="9998899988" id="contactNo" autocomplete="off"
                                         [(ngModel)]="company.contactNo" name="contactNo" #mobileNoEl />
                                 </div>
@@ -94,8 +95,8 @@
                         </div>
 
                         <div class="col-xs-12 col-sm-12 mr-t1">
-                            <button class="btn btn-sky-blue ml-1" type="submit"
-                                (click)="createCompany()" [disabled]="createCompanyForm.invalid">Next
+                            <button class="btn btn-sky-blue ml-1" type="submit" (click)="createCompany()"
+                                [disabled]="createCompanyForm.invalid">Next
                             </button>
                         </div>
 
@@ -125,7 +126,7 @@
             <h3>Create New Branch</h3>
             <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
         </div>
-        <div class="welcome_header">
+        <div class="welcome-header">
             <h1>WELCOME!</h1>
         </div>
         <div class="modal-body noPad">
@@ -142,12 +143,12 @@
 
                     <div class="wizard-step">
 
-                        <form #createCompanyForm="ngForm" name="createCompForm" novalidate id="createCompForm" class="mr-t mr-b1" (submit)="createCompany()">
+                        <form #createCompanyForm="ngForm" name="createCompForm" novalidate id="createCompForm" class="mr-t05 mr-b1" (submit)="createCompany()">
                             <div>
-                                <div class="input-group form-group dblock m-b-30">
+                                <div class="input-group form-group d-block mr-b3">
                                     <p>Enter your new Branch company name to start hassle free accounting with Giddh.</p>
-                                    <label for="name" class="m-t-40">Company Name <sup>*</sup></label>
-                                    <input #name="ngModel" id="name" type="text" [ngClass]="{'hasError': name.invalid && name.touched && name.dirty, 'has-success':name.valid}" [(ngModel)]="company.name" class="form-control" placeholder="Company Name" required name="name" pattern="[a-zA-Z0-9^ .&]{5,100}">
+                                    <label for="name" class="mr-t4">Company Name <sup>*</sup></label>
+                                    <input #name="ngModel" id="name" type="text" [ngClass]="{'has-error': name.invalid && name.touched && name.dirty, 'has-success':name.valid}" [(ngModel)]="company.name" class="form-control" placeholder="Company Name" required name="name" pattern="[a-zA-Z0-9^ .&]{5,100}">
                                     <small class="text-danger" *ngIf="name.invalid && name.touched && name.dirty">Company name should
                                         contain atleast 5 characters and should not contain any special character.
                                 </small>
@@ -156,13 +157,13 @@
                             <div>
                                 <div class="row">
                                     <div class="col-xs-6">
-                                        <label for="nameAlias" class="m-t-20">Unique Name</label>
-                                        <input #nameAlias="ngModel" type="text" autocomplete="off" [ngClass]="{'hasError': nameAlias.invalid && nameAlias.touched && nameAlias.dirty, 'has-success':nameAlias.valid}" [(ngModel)]="company.nameAlias" class="form-control" placeholder="Branch Alias"
+                                        <label for="nameAlias" class="mr-t2">Unique Name</label>
+                                        <input #nameAlias="ngModel" type="text" autocomplete="off" [ngClass]="{'has-error': nameAlias.invalid && nameAlias.touched && nameAlias.dirty, 'has-success':nameAlias.valid}" [(ngModel)]="company.nameAlias" class="form-control" placeholder="Branch Alias"
                                             name="nameAlias">
 
                                     </div>
                                     <div class="col-xs-6 form-group">
-                                        <label for="city" class="m-t-20">City <sup>*</sup></label>
+                                        <label for="city" class="mr-t2">City <sup>*</sup></label>
                                         <input [ngbTypeahead]="dataSource" type="text" autocomplete="off" (keyup)="onChangeCityName()" [(ngModel)]="company.city" name="city" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" required maxlength="50" placeholder="Branch City"
                                             pattern="^[^\s]+(\s+[^\s]+)*$">
 
@@ -173,7 +174,7 @@
 
                                 </div>
                             </div>
-                            <div class="clearfix class= m-t-20">
+                            <div class="clearfix class= mr-t2">
                                 <button class="btn btn-success" type="submit" [ladda]="isCompanyCreationInProcess$ | async" [disabled]="createCompanyForm.invalid || !isCitySelectedByDropdown">Create
                               </button>
                             </div>

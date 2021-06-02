@@ -1,14 +1,14 @@
-import { Component, OnInit, NgModule, OnDestroy, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ReplaySubject, Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../../services/general.service';
-import { CompanyResponse } from '../../models/api-models/Company';
+import { CompanyResponse, Organization } from '../../models/api-models/Company';
 import { cloneDeep } from '../../lodash-optimized';
 import { LoginActions } from '../../actions/login.action';
 import { AuthService } from '../../theme/ng-social-login-module/index';
-import { UserDetails } from '../../models/api-models/loginModels';
+import { OrganizationType } from '../../models/user-login-state';
 
 @Component({
     selector: 'mobile-home-sidebar',
@@ -17,6 +17,10 @@ import { UserDetails } from '../../models/api-models/loginModels';
 })
 
 export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /* This will close sidebar */
     @Output() public closeMobileSidebar: EventEmitter<boolean> = new EventEmitter();
     /* This will hold selected company */
@@ -29,6 +33,10 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold the email of user */
     public userEmail: any;
+    /** Stores the details of the current branch */
+    public currentBranch: any;
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
 
     constructor(private store: Store<AppState>, private loginAction: LoginActions, private socialAuthService: AuthService, private generalService: GeneralService) {
 
@@ -40,39 +48,55 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
      * @memberof MobileHomeSidebarComponent
      */
     public ngOnInit(): void {
-        this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
-            if (companies) {
-                let selectedCmp = companies.find(cmp => {
-                    if (cmp && cmp.uniqueName) {
-                        return cmp.uniqueName === this.generalService.companyUniqueName;
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.selectedCompany = cloneDeep(activeCompany);
+                let selectedCompanyArray = activeCompany.name.split(" ");
+                let companyInitials = [];
+                for (let loop = 0; loop < selectedCompanyArray.length; loop++) {
+                    if (loop <= 1) {
+                        companyInitials.push(selectedCompanyArray[loop][0]);
                     } else {
-                        return false;
+                        break;
                     }
-                });
-
-                if (selectedCmp) {
-                    this.selectedCompany = cloneDeep(selectedCmp);
-                    let selectedCompanyArray = selectedCmp.name.split(" ");
-                    let companyInitials = [];
-                    for (let loop = 0; loop < selectedCompanyArray.length; loop++) {
-                        if (loop <= 1) {
-                            companyInitials.push(selectedCompanyArray[loop][0]);
-                        } else {
-                            break;
+                }
+                this.companyInitials = companyInitials.join(" ");
+            }
+        });
+        this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+            if (organization && organization.details && organization.details.branchDetails) {
+                this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
+                this.generalService.currentOrganizationType = organization.type;
+                if (this.generalService.currentBranchUniqueName) {
+                    this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
+                        if (response) {
+                            this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
                         }
-                    }
-                    this.companyInitials = companyInitials.join(" ");
+                    });
+                }
+            } else {
+                this.generalService.currentOrganizationType = OrganizationType.Company;
+            }
+        });
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                if (this.generalService.currentBranchUniqueName) {
+                    this.currentBranch = response.find(branch =>
+                        (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
+                } else {
+                    this.currentBranch = '';
                 }
             }
         });
 
         this.store.pipe(select((state: AppState) => state.session.user), takeUntil(this.destroyed$)).subscribe(user => {
-            if(user && user.user && user.user.email) {
+            if (user && user.user && user.user.email) {
                 this.userEmail = user.user.email;
             }
         });
 
-        this.isLoggedInWithSocialAccount$ = this.store.select(state => state.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
+        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
     }
 
     /**

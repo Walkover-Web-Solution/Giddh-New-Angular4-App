@@ -1,9 +1,19 @@
 {
-    "transaction_report" : "Transaction Report",
-    "date" : "Date",
-    "particular" : "Particular",
-    "voucher_name" : "Vch. Name",
-    "voucher_no" : "Vch. No.",
-    "debit_amount" : "Debit Amt",
-    "credit_amount" : "Credit Amt"
+    "page_heading": "डेबुक",
+    "transaction_report": "लेन-देन की रिपोर्ट",
+    "voucher_name": "वाउचर नाम",
+    "voucher_no": "वाउचर नंबर",
+    "debit_amount": "डेबिट राशि",
+    "credit_amount": "क्रेडिट राशि",
+    "product_service": "उत्पाद / सेवा",
+    "qty": "मात्रा",
+    "select_entity": "इकाई का चयन करें",
+    "export_daybook": "एक्सपोर्ट डेबुक",
+    "type": "प्रकार:",
+    "order": "गण:",
+    "accounts_selected_message": "डिफ़ॉल्ट रूप से सभी खातों का चयन किया जाता है",
+    "vouchers_selected_message": "डिफ़ॉल्ट रूप से सभी वाउचर चुने जाते हैं",
+    "cheque_details": "विवरण की जाँच करें",
+    "cheque_number": "चेक नंबर",
+    "clearance_date": "क्लीयरेंस की तारीख"
 }

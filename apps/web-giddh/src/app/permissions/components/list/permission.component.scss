@@ -3,7 +3,7 @@
 .role {
     background: $lavender;
     border: 1px solid $lavender;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 .role ul {
@@ -32,31 +32,31 @@
 }
 
 #single-role td {
-    border-bottom: 1px solid #c2cdd3;
+    border-bottom: 1px solid $gainsboro;
 }
 
 #single-role thead th {
-    color: #010101 !important;
+    color: $black !important;
     font-weight: 400;
     text-align: center;
 }
 
 #single-role tbody tr td:first-child,
 #single-role thead th:first-child {
-    color: #858585;
+    color: $gray;
     text-align: left;
-    border-right: 1px solid #c2cdd3;
+    border-right: 1px solid $gainsboro;
 }
 
 #single-role tbody tr td:first-child input[type="checkbox"]:checked:after {
-    background: #d4602a;
-    border-color: #d4602a;
+    background: $cinnabar-orange;
+    border-color: $cinnabar-orange;
 }
 
-.headName {
+.head-name {
     padding: 13px;
-    background: #d4602a;
-    color: #fff;
+    background: $cinnabar-orange;
+    color: $white;
     position: relative;
 }
 
@@ -66,14 +66,14 @@
 }
 
 #single-role tbody tr:first-child {
-    background: #ffffff;
+    background: $white;
 }
 
 #single-role thead th:first-child {
     padding-left: 18px;
 }
 
-.role_title {
+.role-title {
     font-size: 2rem;
     position: relative;
     width: calc(100% - 220px);
@@ -82,13 +82,13 @@
     text-align: center;
 }
 
-.new_col {
+.new-col {
     background: $white-smoke;
-    border: 1px solid #c2cdd3;
+    border: 1px solid $gainsboro;
 }
 
 .role-head {
-    background: #fff;
+    background: $white;
     min-height: 170px;
     display: flex;
     flex-direction: column;
@@ -107,12 +107,12 @@
     width: 25%;
     color: $nero;
     padding: 6px;
-    font-family: 'opensans-semibold';
+    font-family: "opensans-semibold";
     word-break: break-word;
 }
 
 .not-allowed {
-    color: #c7c9c9 !important;
+    color: $very-light-gray !important;
 }
 
 .new-box h1 {
@@ -133,8 +133,8 @@
 }
 
 #single-role input[type="checkbox"]:checked:after {
-    background: #d4602a;
-    border-color: #d4602a;
+    background: $cinnabar-orange;
+    border-color: $cinnabar-orange;
 }
 
 #headsList {
@@ -142,7 +142,7 @@
 }
 
 #single-role tbody tr td:nth-child(1n + 2) input[type="checkbox"]:before {
-    border-color: #000;
+    border-color: $black;
 }
 
 #single-role
@@ -175,7 +175,7 @@
     background: $white-smoke;
     border-color: $white-smoke;
 }
-.role-head .vcenter {
+.role-head .vertical-center {
     max-width: 100%;
     padding: 0 18px;
     display: flex;
@@ -183,13 +183,13 @@
     align-items: center;
     flex-direction: column;
 }
-.new-box{
+.new-box {
     background-color: $white;
-    border:1px solid $chetwode-blue;
+    border: 1px solid $chetwode-blue;
 }
-@media(max-width:767px){
-    .role{
-        ul{
+@media (max-width: 767px) {
+    .role {
+        ul {
             padding: 15px 0;
             li {
                 display: block;
@@ -198,12 +198,12 @@
             }
         }
     }
-    .role-head{
-            min-height: 110px;
-        }
+    .role-head {
+        min-height: 110px;
+    }
 }
-@media(max-width:360px){
-  .role ul li {
+@media (max-width: 360px) {
+    .role ul li {
         width: 100%;
         float: none;
     }

@@ -28,14 +28,19 @@ export class SearchService {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         const request = reqPayload.request;
-        return this._http.post(this.config.apiUrl + SEARCH_API.SEARCH
+        let url = this.config.apiUrl + SEARCH_API.SEARCH
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':groupName', encodeURIComponent(request.groupName))
             .replace(':count', encodeURIComponent('15'))
             .replace(':from', encodeURIComponent(request.fromDate))
             .replace(':to', encodeURIComponent(request.toDate))
             .replace(':refresh', String(request.refresh))
-            .replace(':page', String(request.page)),
+            .replace(':page', String(request.page));
+        if (request.branchUniqueName) {
+            request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
+        }
+        return this._http.post(url,
             reqPayload.searchReqBody)
             .pipe(map((res) => {
                 res.body.groupName = request.groupName;
@@ -59,6 +64,34 @@ export class SearchService {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&'
                 if (params[key] !== undefined) {
+                    if (key === 'branchUniqueName') {
+                        params[key] = params[key] === companyUniqueName ? '' : params[key];
+                    }
+                    contextPath += `${delimiter}${key}=${params[key]}`
+                }
+            });
+        }
+        return this._http.get(contextPath)
+            .pipe(catchError((error) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(error)));
+    }
+
+    /**
+     * Searches accounts v2
+     *
+     * @param {*} params Request payload for API call
+     * @returns {Observable<any>} Observable to carry out further operations
+     * @memberof SearchService
+     */
+    public searchAccountV2(params: any): Observable<any> {
+        const companyUniqueName = this._generalService.companyUniqueName;
+        let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_SEARCH_V2}`.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        if (params) {
+            Object.keys(params).forEach((key, index) => {
+                const delimiter = index === 0 ? '?' : '&'
+                if (params[key] !== undefined) {
+                    if (key === 'branchUniqueName') {
+                        params[key] = params[key] === companyUniqueName ? '' : params[key];
+                    }
                     contextPath += `${delimiter}${key}=${params[key]}`
                 }
             });
@@ -78,11 +111,14 @@ export class SearchService {
     public loadDetails(uniqueName: string, params?: any): Observable<any> {
         const companyUniqueName = this._generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_DETAIL}`
-        .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-        .replace(':accountUniqueName', encodeURIComponent(uniqueName));
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            .replace(':accountUniqueName', encodeURIComponent(uniqueName));
         if (params) {
             Object.keys(params).forEach((key, index) => {
-                const delimiter = index === 0 ? '?' : '&'
+                const delimiter = index === 0 ? '?' : '&';
+                if (key === 'branchUniqueName') {
+                    params[key] = params[key] === companyUniqueName ? '' : params[key];
+                }
                 contextPath += `${delimiter}${key}=${params[key]}`
             });
         }

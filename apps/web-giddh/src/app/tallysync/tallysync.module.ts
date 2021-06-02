@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-
+import { SharedModule } from './../shared/shared.module';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { TallysyncRoutingModule } from './tallysync.routing.module';
 
@@ -7,7 +7,8 @@ import { TallysyncRoutingModule } from './tallysync.routing.module';
     declarations: [],
     imports: [
         TallysyncRoutingModule,
-        DigitsOnlyModule
+        DigitsOnlyModule,
+        SharedModule
     ],
     exports: [
         TallysyncRoutingModule

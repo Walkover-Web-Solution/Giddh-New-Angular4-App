@@ -1,4 +1,4 @@
-import { distinctUntilChanged, take } from 'rxjs/operators';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { IPageInfo, TallyModuleService } from './../tally-service';
 import { ReplaySubject } from 'rxjs';
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
@@ -13,7 +13,8 @@ import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() public AccountListOpen: boolean;
-
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
     public isGroupToggle: boolean;
     public accountSearch: string = '';
@@ -42,8 +43,7 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
                 return false;
             }
             return true;
-        })).subscribe((pageInfo: IPageInfo) => {
-            // && pageInfo.page !== this.selectedVoucher && pageInfo.gridType !== this.selectedGrid
+        }), takeUntil(this.destroyed$)).subscribe((pageInfo: IPageInfo) => {
             if (pageInfo) {
                 this.selectedVoucher = pageInfo.page;
                 this.selectedGrid = pageInfo.gridType;

@@ -1,3 +1,4 @@
 {
-    "no_data_found" : "No Data Available For This Filter"
+    "loading_message": "लोडिंग बैलेंस शीट",
+    "no_data_found": "इस फ़िल्टर के लिए कोई डेटा उपलब्ध नहीं है"
 }

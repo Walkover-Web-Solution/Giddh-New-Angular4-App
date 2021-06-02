@@ -1,10 +1,10 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { ScrollComponent } from '../virtual-scroll/vscroll';
 import { UniversalSearchService, WindowRefService } from '../service';
 import { ReplaySubject, Subject } from 'rxjs';
 import { cloneDeep, find, findIndex, remove, uniq } from '../../../lodash-optimized';
 import { IUlist } from '../../../models/interfaces/ulist.interface';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { ALT, BACKSPACE, CAPS_LOCK, CONTROL, DOWN_ARROW, ENTER, ESCAPE, LEFT_ARROW, MAC_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, RIGHT_ARROW, SHIFT, TAB, UP_ARROW } from '@angular/cdk/keycodes';
@@ -32,13 +32,13 @@ const LOCAL_MEMORY = {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+export class DataListComponent implements OnInit, OnDestroy, AfterViewInit {
 
-    @ViewChild('mainEle', {static: true}) public mainEle: ElementRef;
-    @ViewChild('searchEle', {static: true}) public searchEle: ElementRef;
-    @ViewChild('searchWrapEle', {static: true}) public searchWrapEle: ElementRef;
-    @ViewChild('wrapper', {static: true}) public wrapper: ElementRef;
-    @ViewChild(ScrollComponent, {static: true}) public virtualScrollElem: ScrollComponent;
+    @ViewChild('mainEle', { static: true }) public mainEle: ElementRef;
+    @ViewChild('searchEle', { static: true }) public searchEle: ElementRef;
+    @ViewChild('searchWrapEle', { static: true }) public searchWrapEle: ElementRef;
+    @ViewChild('wrapper', { static: true }) public wrapper: ElementRef;
+    @ViewChild(ScrollComponent, { static: true }) public virtualScrollElem: ScrollComponent;
 
     // bot related
     @Input() public preventOutSideClose: boolean = false;
@@ -115,18 +115,18 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     public ngOnInit() {
 
         // listen on input for searc
-        this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
+        this.searchSubject.pipe(debounceTime(300), takeUntil(this.destroyed$)).subscribe(term => {
             this.handleSearch(term);
             this._cdref.markForCheck();
         });
 
         // listen for companies and active company
-        this._store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe((name) => {
+        this._store.pipe(select(p => p.session.companyUniqueName), take(1)).subscribe((name) => {
             this.activeCompany = name;
         });
 
         // listen to smart list
-        this._store.select(p => p.general.smartCombinedList).pipe(takeUntil(this.destroyed$))
+        this._store.pipe(select(p => p.general.smartCombinedList), takeUntil(this.destroyed$))
             .subscribe((data: IUlist[]) => {
                 if (data) {
                     this.rawSmartComboList = data;
@@ -134,7 +134,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
             });
 
         // listen to smart list
-        this._store.select(p => p.general.smartList).pipe(takeUntil(this.destroyed$))
+        this._store.pipe(select(p => p.general.smartList), takeUntil(this.destroyed$))
             .subscribe((data: IUlist[]) => {
                 if (data) {
                     this.smartList = data;
@@ -225,17 +225,6 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     }
 
     /**
-     * watching over some keys to update UI on data basis
-     * @param changes
-     */
-    public ngOnChanges(changes: SimpleChanges) {
-        // listen for force auto focus
-        // if ('forceSetAutoFocus' in changes && changes.forceSetAutoFocus.currentValue) {
-        // this.setFocusOnList(this.forcekey);
-        // }
-    }
-
-    /**
      * function will be used to set element liquid width.
      * according to parent width.
      */
@@ -243,12 +232,12 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
         if (this.setParentWidth && this.mainEle) {
             let box: any = this.parentEle.getBoundingClientRect();
             this.ItemWidth = (box.width > this.ItemWidth) ? box.width : this.ItemWidth;
-            this.renderer.setStyle(this.mainEle.nativeElement, 'width', `${box.width}px`);
+            this.renderer.setStyle(this.mainEle?.nativeElement, 'width', `${box.width}px`);
             if (this.searchWrapEle) {
-                this.renderer.setStyle(this.searchWrapEle.nativeElement, 'width', `${box.width}px`);
+                this.renderer.setStyle(this.searchWrapEle?.nativeElement, 'width', `${box.width}px`);
             }
             if (box.width > 300) {
-                this.renderer.setStyle(this.wrapper.nativeElement, 'wider', true);
+                this.renderer.setStyle(this.wrapper?.nativeElement, 'wider', true);
             }
         }
     }
@@ -338,7 +327,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
                 e.preventDefault();
                 e.stopPropagation();
                 // first escape
-                if (this.searchEle.nativeElement.value) {
+                if (this.searchEle?.nativeElement.value) {
                     this.searchEle.nativeElement.value = null;
                 } else {
                     // second time pressing escape

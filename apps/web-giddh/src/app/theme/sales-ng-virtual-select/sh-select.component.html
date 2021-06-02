@@ -1,20 +1,22 @@
 <div #dd [style.width]="width" class="pr">
     <!-- (click)="show($event)" -->
-    <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'"
-        [class.open]="isOpen" (click)="show($event)" (focus)="show($event)" (blur)="hide($event)" (keydown)="keydownUp($event)">
+    <div [attr.style]="borderConfiguration?.style" class="header" #mainContainer [class.sh-select-disabled]="disabled"
+        [class.inline]="mode==='inline'" [class.open]="isOpen" (click)="show($event)" (focus)="show($event)"
+        (blur)="hide($event)" (keydown)="keydownUp($event)">
 
 
         <!--region multiple-->
-        <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" style="background: white;" class="bdr">
+        <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" class="bdr white-bg">
             <ng-container *ngIf="selectedValues?.length">
                 <span class="chip" *ngFor="let sl of selectedValues">
                     {{ sl.label }}
-                    <span class="chipClosebtn" (mousedown)="clearSingleSelection($event, sl)"
+                    <span class="chip-close-btn" (mousedown)="clearSingleSelection($event, sl)"
                         (click)="clearSingleSelection($event, sl)">&times;</span>
                 </span>
             </ng-container>
             <!-- (click)="show($event);" -->
-            <input autocomplete="disabled" type="text" class="pd-l1 form-control"
+            <input [attr.style]="borderConfiguration?.style" autocomplete="disabled" type="text"
+                class="pd-l1 form-control"
                 [ngClass]="{'hasValue':filter?.length, 'bottom-border-only' : showBottomBorderOnly}" #inputFilter
                 tabindex="0" (blur)="filterInputBlur($event)"
                 [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter"
@@ -28,11 +30,11 @@
             [hidden]="((!isOpen || !isFilterEnabled))">{{selectedValues[0]?.label}}
         </button>
 
-        <input autocomplete="disabled" type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" class="form-control" #inputFilter
-            *ngIf="!multiple && !showLabelOnly" [hidden]="((!isOpen || !isFilterEnabled))"
-            (focus)="subscribeToQueryChange()"
+        <input autocomplete="disabled" type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}"
+            class="form-control pd-r3" #inputFilter *ngIf="!multiple && !showLabelOnly"
+            [hidden]="((!isOpen || !isFilterEnabled))" [attr.style]="borderConfiguration?.style"
             (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter"
-            (ngModelChange)="handleInputChange($event)" style="padding-right: 28px !important;">
+            (ngModelChange)="handleInputChange($event)">
 
         <!-- (click)="show($event);" -->
         <div *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
@@ -40,17 +42,17 @@
                 <div *ngIf="!multiple">
                     <button class="form-control label-btn text-left"
                         *ngIf="showLabelOnly">{{selectedValues[0]?.label}}</button>
-                    <input autocomplete="disabled" type="text" *ngIf="!showLabelOnly" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}"
-                        (input)="openListIfNotOpened($event)" (click)="selectText($event);" type="text"
-                        value="{{selectedValues[0].label}}" class="form-control selectedVal cp" />
+                    <input autocomplete="disabled" type="text" *ngIf="!showLabelOnly"
+                        [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" (input)="openListIfNotOpened($event)"
+                        (click)="selectText($event);" type="text" value="{{selectedValues[0].label}}"
+                        class="form-control selected-val cp" [attr.style]="borderConfiguration?.style" />
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">
-                <input autocomplete="disabled" type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" *ngIf="!showLabelOnly"
-                    (focus)="subscribeToQueryChange()"
-                    [tabindex]="tabIndex" class="firstElementToFocus form-control" name="filter2" [(ngModel)]="filter"
-                    (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [value]="filter"
-                    style="padding-right: 28px !important;" />
+                <input autocomplete="disabled" type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}"
+                    *ngIf="!showLabelOnly" [attr.style]="borderConfiguration?.style" [tabindex]="tabIndex"
+                    class="firstElementToFocus form-control pd-r3" name="filter2" [(ngModel)]="filter"
+                    (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [value]="filter" />
             </ng-container>
         </div>
         <!--endregion-->
@@ -63,11 +65,11 @@
 
     <!-- <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span> -->
     <sh-select-menu #menuEle [showLabelOnly]="showLabelOnly" [isOpen]="isOpen" [rows]="rows"
-        [isPaginationEnabled]="isPaginationEnabled" (scrollEnd)="reachedEnd()"
-        [selectedValues]="selectedValues" [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)"
+        [isPaginationEnabled]="isPaginationEnabled" (scrollEnd)="reachedEnd()" [selectedValues]="selectedValues"
+        [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)"
         (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink"
         [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight"
         [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
         [noResultLinkTemplate]="notFoundLinkTemplate" [dropdownMinHeight]="dropdownMinHeight"
-        [salesShSelectPading]="salesShSelectPading"></sh-select-menu>
+        [salesShSelectPading]="salesShSelectPading" [isRequired]="isRequired" [filter]="filter"></sh-select-menu>
 </div>

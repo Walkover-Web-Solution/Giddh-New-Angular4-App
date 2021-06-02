@@ -1,52 +1,58 @@
-<div class="modal-header themeBg pd2 pdL2 pdR2 clearfix" style="background-color: #525252">
-    <h3 class="modal-title bg" id="modal-title">Send Mail </h3>
-    <i aria-hidden="true" class="icon-cross text-right close-modal" (click)="cancel()"></i>
-</div>
-
-<div class="modal-body">
-
-    <div class="row mr-b1">
-        <div class="col-sm-12">
-            <input type="text" class="form-control" placeholder="Enter email addresses" [(ngModel)]="emailAddresses">
-        </div>
+<ng-container appTranslate [file]="'invoice/send-email'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
+        <h3 class="modal-title bg" id="modal-title">{{localeData?.page_heading}} </h3>
+        <i aria-hidden="true" class="icon-cross text-right close-modal" (click)="cancel()"></i>
     </div>
 
-    <div class="clearfix"
-        *ngIf="voucherType !== 'proforma' && voucherType !== 'proformas' && voucherType !== 'estimates' && voucherType !== 'estimate'">
-        <h3 class="fs16 mrB">Invoice Copy</h3>
-        <hr>
+    <div class="modal-body">
 
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" value="Transport" (change)="invoiceTypeChanged($event)"
-                    [(ngModel)]="isTransport">
-                Transport
-            </label>
-        </div>
-
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" value="Customer" (change)="invoiceTypeChanged($event)" [(ngModel)]="isCustomer">
-                Customer
-            </label>
-        </div>
-    </div>
-
-
-    <!-- region buttons -->
-    <div class="row mr-t2 mr-b1">
-        <div class="col-sm-12">
-
-            <div class="btn-group" role="group" aria-label="Basic example">
-
-                <button type="button" class="btn btn-success" [disabled]="!emailAddresses" (click)="sendEmail()">Send
-                </button>
-
-                <button type="button" class="btn btn-danger" (click)="cancel()">Cancel</button>
-
+        <div class="row mr-b1">
+            <div class="col-sm-12">
+                <input type="text" class="form-control" [placeholder]="localeData?.enter_email_address"
+                    [(ngModel)]="emailAddresses">
             </div>
         </div>
-    </div>
-    <!-- endregion -->
 
-</div>
+        <div class="clearfix"
+            *ngIf="voucherType !== 'proforma' && voucherType !== 'proformas' && voucherType !== 'estimates' && voucherType !== 'estimate'">
+            <h3 class="font-16 mr-b05">{{localeData?.invoice_copy}}</h3>
+            <hr>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="Transport" (change)="invoiceTypeChanged($event)"
+                        [(ngModel)]="isTransport">
+                    {{localeData?.transport}}
+                </label>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="Customer" (change)="invoiceTypeChanged($event)"
+                        [(ngModel)]="isCustomer">
+                    {{commonLocaleData?.app_customer}}
+                </label>
+            </div>
+        </div>
+
+
+        <!-- region buttons -->
+        <div class="row mr-t2 mr-b1">
+            <div class="col-sm-12">
+
+                <div class="btn-group" role="group">
+
+                    <button type="button" class="btn btn-success" [disabled]="!emailAddresses"
+                        (click)="sendEmail()">{{commonLocaleData?.app_send}}</button>
+
+                    <button type="button" class="btn btn-danger"
+                        (click)="cancel()">{{commonLocaleData?.app_cancel}}</button>
+
+                </div>
+            </div>
+        </div>
+        <!-- endregion -->
+
+    </div>
+</ng-container>
