@@ -1,5 +1,5 @@
 import { take } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
 import { SearchRequest } from '../models/api-models/Search';
@@ -18,6 +18,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     public pageChangeEvent: any;
     public filterEventQuery: any;
 
+    /** Stores the current branch unique name */
+    public currentBranchUniqueName: string;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+
     constructor(private store: Store<AppState>, private _searchActions: SearchActions, private companyActions: CompanyActions) {
     }
 
@@ -33,7 +40,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'search';
@@ -52,4 +59,15 @@ export class SearchComponent implements OnInit, OnDestroy {
     public FilterByAPIEvent(ev) {
         this.filterEventQuery = ev; // this key is an input in search-sidebar component
     }
+
+    /**
+     * Stores the current branch switched
+     *
+     * @param {string} value Unique name of current branch
+     * @memberof SearchComponent
+     */
+    public handleCurrentBranchChange(value: string): void {
+        this.currentBranchUniqueName = value;
+    }
+
 }

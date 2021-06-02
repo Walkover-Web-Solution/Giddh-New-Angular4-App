@@ -5,6 +5,7 @@ import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface'
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
 @Component({
 	selector: 'transfer-inventory-user',
@@ -24,7 +25,7 @@ export class InventoryUserComponent implements OnChanges, OnInit {
 	public stockListOptions: IOption[];
 	public userListOptions: IOption[];
 	public form: FormGroup;
-	public config: Partial<BsDatepickerConfig> = { dateInputFormat: 'DD-MM-YYYY' };
+	public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
 	public today = new Date();
 
 	// public inventoryEntryDateValid;
@@ -68,12 +69,12 @@ export class InventoryUserComponent implements OnChanges, OnInit {
 		const inventoryUser = user ? { uniqueName: user.uniqueName } : null;
 		if (index >= 0) {
 			const control = items.at(index);
-			control.patchValue({
+			control?.patchValue({
 				...control.value,
 				inventoryUser
 			});
 		} else {
-			items.controls.forEach(c => c.patchValue({ ...c.value, inventoryUser }));
+			items.controls.forEach(c => c?.patchValue({ ...c.value, inventoryUser }));
 		}
 	}
 
@@ -84,21 +85,21 @@ export class InventoryUserComponent implements OnChanges, OnInit {
 		const stockUnit = stockItem ? { code: stockItem.stockUnit.code } : null;
 		if (index >= 0) {
 			const control = items.at(index);
-			control.patchValue({ ...control.value, stock, stockUnit });
+			control?.patchValue({ ...control.value, stock, stockUnit });
 		} else {
-			items.controls.forEach(c => c.patchValue({ ...c.value, stock, stockUnit }));
+			items.controls.forEach(c => c?.patchValue({ ...c.value, stock, stockUnit }));
 		}
 	}
 
 	public quantityChanged(event) {
 		const items = this.form.get('transactions') as FormArray;
-		items.controls.forEach(c => c.patchValue({ ...c.value, quantity: event.target.value }));
+		items.controls.forEach(c => c?.patchValue({ ...c.value, quantity: event.target.value }));
 
 	}
 
 	public save() {
 		if (this.form.valid) {
-			const inventoryEntryDate = moment(this.form.value.transferDate).format('DD-MM-YYYY');
+			const inventoryEntryDate = moment(this.form.value.transferDate).format(GIDDH_DATE_FORMAT);
 			this.onSave.emit(this.form.value);
 		}
 	}

@@ -1,4 +1,4 @@
-<div class=" pd-t1 pdB2">
+<div class="pd-b2">
 	<h3 class="mr-b1"><strong>Give Permission to:</strong></h3>
 	<setting-permission-form [userdata]="null" [isLblShow]="false" [isUpdtCase]="false" [isHorizntl]="true"
 		(onSubmitForm)="submitPermissionForm($event)"></setting-permission-form>
@@ -8,18 +8,18 @@
 	<h3 class="mr-b1"><strong>Users</strong></h3>
 	<div class="box" *ngIf="currentUser">
 		<div *ngFor="let usrGrp of usersList">
-			<div class="user_list">
+			<div class="user-list">
 				<div class="row">
 					<div class="col-12 col-lg-3 col-md-6 col-sm-6 user">
-						<div class="ellp">
-							<div class="ellp"><i class="fa fa-user pd-r1"></i>{{usrGrp.name}}</div>
-							<small class="mrL2">{{usrGrp.rows[0].emailId}}</small>
+						<div class="text-ellipsis">
+							<div class="text-ellipsis"><i class="icon-user-black pd-r1"></i>{{usrGrp.name}}</div>
+							<small class="mr-l2">{{usrGrp.rows[0].emailId}}</small>
 						</div>
 					</div>
 					<div class="col-12 col-lg-9 col-md-6 col-sm-6">
 						<div class="row">
-							<div class="permission_list w-100">
-								<div class="col-12 col-lg-12 col-sm-12 permission"
+							<div class="permission-list w-100">
+								<div class="col-xl-10 col-lg-12 col-sm-12 permission"
 									*ngFor="let user of usrGrp.rows; let i = index">
                                     <div class="row">
                                         <div class="col-12 col-lg-4 col-md-12 col-sm-12">
@@ -45,14 +45,14 @@
                                             </div>
                                         </div>
 
-                                        <div class="ico-btn pull-left col-12 col-lg-4 col-md-12 col-sm-12 mr-t">
+                                        <div class="ico-btn pull-left col-12 col-lg-4 col-md-12 col-sm-12 mr-t05">
                                             <button class="btn btn-xs" type="button"
                                                 [hidden]="usrGrp.rows[0].isLoggedInUser" (click)="showModalForEdit(user)"><i
                                                     aria-hidden="true" class="icon-edit-pencil"></i></button>
                                             <button class="btn btn-xs" type="button"
                                                 [hidden]="usrGrp.rows[0].isLoggedInUser"
                                                 (click)="onRevokePermission(user.uniqueName)"><i aria-hidden="true"
-                                                    class="fa fa-trash-o"></i></button>
+                                                    class="icon-trash"></i></button>
                                         </div>
                                     </div>
 								</div>

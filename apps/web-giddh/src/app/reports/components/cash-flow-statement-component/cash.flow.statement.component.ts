@@ -4,7 +4,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { takeUntil, take } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import * as moment from 'moment/moment';
 import { ReplaySubject, Observable } from 'rxjs';
 import { CashFlowStatementService } from '../../../services/cashflowstatement.service';
@@ -44,8 +44,6 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     /* Active company details */
     public activeCompany: any;
-    /* Active company unique name */
-    public activeCompanyUniqueName$: Observable<string>;
     /* Api request object */
     public downloadRequest = {
         from: '',
@@ -58,10 +56,13 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = {x: 0, y: 0};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private store: Store<AppState>, private cashFlowStatementService: CashFlowStatementService, private generalService: GeneralService, private toaster: ToasterService) {
-        this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
-        this.universalDate$ = this.store.select(state => state.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     /**
@@ -73,7 +74,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
         /* Observer to detect device based on screen width */
         this.breakPointObservar.observe([
             '(max-width: 1023px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
 
@@ -91,18 +92,11 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
         });
 
         /* This will get the company details */
-        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(activeCompanyUniqueName => {
-            this.downloadRequest.companyUniqueName = activeCompanyUniqueName;
-
-            this.store.pipe(select(state => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
-                if (companies) {
-                    companies.forEach(company => {
-                        if (company.uniqueName === activeCompanyUniqueName) {
-                            this.activeCompany = company;
-                        }
-                    });
-                }
-            });
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.downloadRequest.companyUniqueName = activeCompany.uniqueName;
+                this.activeCompany = activeCompany;
+            }
         });
     }
 
@@ -177,19 +171,19 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
         this.downloadRequest.to = this.toDate;
         this.isLoading = true;
 
-        this.cashFlowStatementService.downloadReport(this.downloadRequest).subscribe((res) => {
+        this.cashFlowStatementService.downloadReport(this.downloadRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
             if(res) {
                 if (res.status === "success") {
                     let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                    return saveAs(blob, `CashFlowStatement.xlsx`);
+                    return saveAs(blob, this.localeData?.downloaded_filename);
                 } else {
                     this.toaster.clearAllToaster();
                     this.toaster.errorToast(res.message);
                 }
             } else {
                 this.toaster.clearAllToaster();
-                this.toaster.errorToast("Something went wrong! Please try again.");
+                this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
             }
         });
     }

@@ -1,8 +1,8 @@
 {
-    "chart_title" : "Bank Accounts",
-    "in_giddh" : "In Giddh",
-    "cr_heading" : "Cr.",
-    "dr_heading" : "Dr.",
-    "connect_bank" : "Connect Bank",
-    "no_banks_found" : "Yet to add Bank Details"
+    "chart_title": "बैंक खाते",
+    "in_giddh": "गिद्ध में",
+    "cr_heading": "क्रेडिट",
+    "dr_heading": "डेबिट",
+    "connect_bank": "बैंक अकाउंट शामिल करें",
+    "no_banks_found": "बैंक विवरण जोड़ना शेष है"
 }

@@ -1,9 +1,9 @@
 @import "../../../assets/css/color.scss";
-:host ::ng-deep .parent-Group {
+:host ::ng-deep .parent-group {
     padding-left: 0;
 }
 
-:host ::ng-deep .acntAccordion .mainLiAclist .title:before {
+:host ::ng-deep .account-accordion .main-account-list .title:before {
     content: none;
 }
 
@@ -25,21 +25,21 @@
     border: none;
 }
 
-.bg_wrap {
-    background: #f5f5f5;
+.bg-wrap {
+    background: $gray-95;
 }
 
-.entry_table thead th {
+.entry-table thead th {
     font-weight: normal;
     padding: 8px 6px;
 }
 
-.entry_table tbody tr td {
+.entry-table tbody tr td {
     padding: 0;
     border: 0;
 }
 
-.entry_table tbody tr td .form-control {
+.entry-table tbody tr td .form-control {
     background: transparent !important;
     border: 0;
     border-radius: 0 !important;
@@ -48,16 +48,16 @@
     padding: 0 6px !important;
 }
 
-.entry_table tbody tr td .form-control.focus:focus {
-    background: #ccc !important;
+.entry-table tbody tr td .form-control.focus:focus {
+    background: $very-light-gray !important;
 }
 
-.activeRow {
-    background: #e5e5e5;
+.active-row {
+    background: $whisper;
 }
 
-.confirmation_box {
-    background: white;
+.confirmation-box {
+    background: $white;
     display: inline-block;
     padding: 20px;
     width: 230px;
@@ -68,7 +68,7 @@
     margin: 20px 0;
 }
 
-.total_box {
+.total-box {
     padding: 15px 0;
     border-top: 1px solid;
     border-bottom: 1px solid;
@@ -77,24 +77,24 @@
     font-size: 14px;
 }
 
-.total_box > span {
+.total-box > span {
     margin: 0 8px;
     display: inline-block;
     min-width: 120px;
 }
 
 .appearance-none {
-    background: #e5e5e5 !important;
+    background: $whisper !important;
     border: 0 !important;
     font-size: 16px;
-    color: #333333;
+    color: $night-rider;
 }
 
-.account_listbar {
+.account-listbar {
     overflow-y: hidden;
     height: 100vh;
     width: 250px;
-    background: white;
+    background: $white;
     position: absolute;
     left: -250px;
     z-index: 0;
@@ -103,31 +103,31 @@
 .sidebar-menu {
     min-height: 100vh;
     background: $nero;
-    color: white;
+    color: $white;
     float: right;
     /* width: 250px; */
     position: relative;
 }
 
-.menu_list {
+.menu-list {
     padding: 15px 0;
 }
 
-.menu_list li {
+.menu-list li {
     list-style: none;
 }
 
-.menu_list li a {
-    color: #fff;
+.menu-list li a {
+    color: $white;
     padding: 4px 12px;
     display: block;
 }
 
-.menu_list li a.isHidden {
-    color: #4d4d4d;
+.menu-list li a.isHidden {
+    color: $matterhorn;
 }
 
-.sidebar_list {
+.sidebar-list {
     width: 300px;
     position: absolute;
     right: 0;
@@ -136,11 +136,11 @@
     padding: 0 !important;
     border: 0;
     z-index: 0;
-    border-left: 1px solid #d6d6d6;
+    border-left: 1px solid $gainsboro;
 }
 
-.sidebar_list h3 {
-    background: #fff;
+.sidebar-list h3 {
+    background: $white;
 }
 /*
 .label.isActive {
@@ -154,7 +154,7 @@ input[name="entryDate"] {
     background: transparent !important;
     border: 0;
     padding: 0 !important;
-    color: #333;
+    color: $night-rider;
     height: auto;
     width: 100px;
     font-size: 16px;
@@ -167,7 +167,7 @@ textarea[name="narration"] {
 
 input[name="entryDate"]:focus,
 textarea[name="narration"]:focus {
-    background: #e5e5e5 !important;
+    background: $whisper !important;
 }
 
 :host ::ng-deep .menu {

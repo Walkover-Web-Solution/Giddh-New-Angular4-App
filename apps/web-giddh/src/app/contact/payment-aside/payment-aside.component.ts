@@ -4,27 +4,30 @@ import { AppState } from '../../store';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { CompanyActions } from "../../actions/company.actions";
 import { takeUntil, take } from 'rxjs/operators';
-import { Observable, of as observableOf, ReplaySubject, of } from "rxjs";
-import { VerifyEmailResponseModel, VerifyMobileModel } from "../../models/api-models/loginModels";
+import { Observable, ReplaySubject, of } from "rxjs";
+import { VerifyEmailResponseModel } from "../../models/api-models/loginModels";
 import { AccountResponseV2 } from "../../models/api-models/Account";
 import { CompanyService } from "../../services/companyService.service";
-import { BankTransferRequest } from "../../models/api-models/Company";
 import { IRegistration, IntegratedBankList, BankTransactionForOTP, GetOTPRequest, BulkPaymentConfirmRequest } from "../../models/interfaces/registration.interface";
 import { ToasterService } from "../../services/toaster.service";
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { FormGroup, NgForm, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { cloneDeep } from '../../lodash-optimized';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { GeneralService } from '../../services/general.service';
+
 @Component({
     selector: 'payment-aside',
     templateUrl: './payment-aside.component.html',
     styleUrls: [`./payment-aside.component.scss`],
 })
 
-
 export class PaymentAsideComponent implements OnInit, OnChanges {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     //variable that holds registered account information
     public registeredAccounts: any;
@@ -119,7 +122,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     /** Get all bank inprogress */
     public isGetAllIntegratedBankInProgress$: Observable<boolean>;
 
-
     constructor(
         private formBuilder: FormBuilder,
         private modalService: BsModalService,
@@ -130,13 +132,12 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         private _toaster: ToasterService,
         private generalService: GeneralService
     ) {
-        this.userDetails$ = this.store.select(p => p.session.user);
+        this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
         this.userDetails$.pipe(take(1)).subscribe(p => this.user = p);
-        this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
+        this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
 
-        this.integratedBankList$ = this.store.pipe(select(p => p.company.integratedBankList), takeUntil(this.destroyed$));
-        this.isGetAllIntegratedBankInProgress$ = this.store.pipe(select(storeBank => storeBank.company.isGetAllIntegratedBankInProgress), takeUntil(this.destroyed$));
-
+        this.integratedBankList$ = this.store.pipe(select(p => p.company && p.company.integratedBankList), takeUntil(this.destroyed$));
+        this.isGetAllIntegratedBankInProgress$ = this.store.pipe(select(storeBank => storeBank.company && storeBank.company.isGetAllIntegratedBankInProgress), takeUntil(this.destroyed$));
     }
 
     /**
@@ -279,7 +280,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 urn: this.mode.iciciCorporateDetails.URN
             }
         };
-        this._companyService.getOTP(request).subscribe((res) => {
+        this._companyService.getOTP(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === 'success') {
                 this.OTPsent = true;
             } else {
@@ -301,7 +302,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.timerOn = true
         this.startTimer(40);
         this.receivedOtp = null;
-        this._companyService.resendOtp(this.companyUniqueName, this.selectedBankUrn, this.paymentRequestId).subscribe((response) => {
+        this._companyService.resendOtp(this.companyUniqueName, this.selectedBankUrn, this.paymentRequestId).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
 
                 this.isPayClicked = true;
@@ -325,7 +326,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.isRequestInProcess = true;
         bankTransferConfirmOtpRequest.requestId = this.paymentRequestId;
         bankTransferConfirmOtpRequest.otp = this.receivedOtp;
-        this._companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, bankTransferConfirmOtpRequest).subscribe((res) => {
+        this._companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, bankTransferConfirmOtpRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.status === 'success') {
                 this.closePaymentModel(true);
                 this.openModalWithClass(this.successTemplate);
@@ -347,7 +348,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public removeSelectedAccount(item: any): void {
-        if (item) {
+        if (item && this.selectedAccForBulkPayment) {
             let itemIndx = this.selectedAccForBulkPayment.findIndex((element) => element === item);
             this.selectedAccForBulkPayment.splice(itemIndx, 1);
         }
@@ -424,7 +425,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.paymentRequestId = '';
         this.otpReceiverNameMessage = '';
         this.isRequestInProcess = true;
-        this._companyService.bulkVendorPayment(this.companyUniqueName, this.requestObjectToGetOTP).subscribe(response => {
+        this._companyService.bulkVendorPayment(this.companyUniqueName, this.requestObjectToGetOTP).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isRequestInProcess = false;
             if (response && response.status === 'success') {
                 this.isPayClicked = true;
@@ -615,9 +616,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             vendorUniqueName: [''],
         });
         if (val) {
-            transactionsFields.get('remarks').patchValue('');
-            transactionsFields.get('amount').patchValue(val.closingBalanceAmount);
-            transactionsFields.get('vendorUniqueName').patchValue(val.uniqueName);
+            transactionsFields.get('remarks')?.patchValue('');
+            transactionsFields.get('amount')?.patchValue(val.closingBalanceAmount);
+            transactionsFields.get('vendorUniqueName')?.patchValue(val.uniqueName);
         }
         return transactionsFields;
     }
@@ -641,5 +642,15 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      */
     public allowOnlyNumbers(event: any): boolean {
         return this.generalService.allowOnlyNumbers(event);
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof PaymentAsideComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

@@ -1,17 +1,16 @@
 @import "../../assets/css/color.scss";
 .date-range-picker {
-    padding-left: 35px !important;
-    // border-color:$chetwode-blue;
-    background-image: url("../../assets/images/calender-icon.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
     background-repeat: no-repeat !important;
-    padding-left: 45px !important;
+    padding-left: 30px !important;
     position: relative;
     z-index: 1;
     cursor: default;
     border: 1px solid $gainsboro;
-    text-align: left;
+    text-align: center;
+    max-width: 230px;
+    width: 230px;
 }
 
 .date-range-picker:focus {
@@ -20,7 +19,7 @@
 .input-wrapper {
     position: relative;
     display: block;
-    background-color: #fff;
+    background-color: $white;
 }
 .input-wrapper:before {
     position: absolute;
@@ -46,18 +45,18 @@
     -webkit-box-align: center;
     align-items: center;
     font-size: 18px;
-    margin-left: 7px;
+    margin-left: 15px;
     border: 1px solid $gainsboro;
     border-radius: 2px;
     color: $midnight-blue;
-    margin-right: 7px;
-    background: #fff;
+    margin-right: 15px;
+    background: $white;
     cursor: pointer;
 }
 .table > tbody + tbody {
     border-top: none;
 }
-.expandBtnHideDesktop {
+.expand-btn-hide-desktop {
     display: none;
 }
 .expand-export {
@@ -66,36 +65,64 @@
 .warehouse-name {
     white-space: normal;
 }
+.linked-entities {
+    width: 200px;
+}
+.icon-calender {
+    position: absolute;
+    z-index: 9;
+    height: 32px;
+    width: 36px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px !important;
+    border-right: 1px solid $gainsboro !important;
+    cursor: pointer;
+}
 /*responsive */
 @media (max-width: 768px) {
     .on-mobile-view th {
         display: none !important;
     }
-    .hideTD {
+    .hide-td {
         display: none;
     }
-    .transctionReport {
+    .transaction-report {
         margin-bottom: 0;
     }
-    td.text-right.hideTd {
+    td.text-right.hide-td {
         display: none;
     }
-    .transactions-page{
-        margin-top: 20px !important;
-    }
 }
-@media (max-width: 575px) {
+@media (max-width: 767px) {
     .expand-collapse-btn.form-group {
         display: none !important;
     }
-    .expandBtnHideDesktop {
+    .expand-btn-hide-desktop {
         display: inline-block;
     }
     .expand-export {
-        margin-top: 10px;
-    }
-    .expand-export {
         float: none;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: 15px;
+    }
+    .linked-entities{
+        margin-bottom: 0 !important;
+    }
+}
+@media(max-width:575px){
+    .daybook-filter{
+        clear: both;
+    }
+    .linked-entities{
+        width: 100%;
+    }
+    .advance-icon{
+        margin-left: 21px;
+        margin-right:0;
     }
 }
 @media (min-width: 320px) {
@@ -107,4 +134,11 @@
 }
 .daybook-table-tbody > tr {
     cursor: pointer;
+}
+.table-container section div > div {
+    padding: 8px 8px;
+}
+
+.trial-balance.table-container > div > section {
+    border-left: 0;
 }

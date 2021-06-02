@@ -47,7 +47,7 @@
     justify-content: center;
     align-items: center;
     border-right: 1px solid $gainsboro;
-    color: #999999;
+    color: $nobel;
 }
 .input-wrapper {
     display: block !important;
@@ -76,13 +76,13 @@
     margin-left: 10px;
     border: 1px solid $gainsboro;
     border-radius: 2px;
-    color: #1a237e;
-    background: #fff;
+    color: $midnight-blue;
+    background: $white;
 }
 
 .btn-filter {
     background: $whisper-color;
-    border: 1px solid $whisper-color;
+    border: 1px solid $gainsboro;
     font-size: 14px;
     color: $midnight-blue;
     display: inline-flex;
@@ -103,7 +103,7 @@
     }
 }
 
-.input-grp-dateRangePicker input.form-control {
+.input-grp-date-range-picker input.form-control {
     padding-left: 45px !important;
     width: 220px;
 }
@@ -120,13 +120,13 @@
 }
 .invoice-footer h3 {
     font-size: 16px;
-    color: #999999;
+    color: $nobel;
     display: block;
     margin-right: 10px;
 }
 .invoice-footer h1 {
     font-size: 22px;
-    color: #333;
+    color: $night-rider;
     display: block;
 }
 .giddh-table .td-search-box {
@@ -134,6 +134,29 @@
 }
 .entry-date {
     padding-left: 0 !important;
+}
+.entity-dropdown {
+    width: 200px;
+}
+@media screen and (max-width:1199px) {
+    .invoice-footer {
+        h1{
+            font-size: 18px;
+        }
+        h3{
+            margin-right: 0;
+            margin-bottom: 3px;
+        }
+    }
+    .total-due-sale {
+        margin-bottom: 15px !important;
+    }
+    .clear-filter{
+        margin-left: 15px;
+    }
+    .reverse-table-report{
+        margin-bottom: 100px;
+    }
 }
 @media(max-width:991px){
     .total-due-sale{
@@ -157,9 +180,13 @@
         position: relative;
         margin-top: 10px;
         margin-left: 0;
-    }
-    .total-due-sale {
-        margin-bottom: 15px;
+        left: 0;
+        .total-due-sale-wrap{
+            padding-left: 0 !important;
+            .total-due-sale{
+                margin-bottom: 15px;
+            }
+        }
     }
     .total-due-sale:last-child {
         margin-bottom: 0px;
@@ -167,4 +194,51 @@
     .entry-date {
         padding: 5px 10px 5px 50% !important;
     }
+    .input-grp-date-range-picker{
+        flex-direction: column;
+        .clear-filter{
+            margin-left: 0;
+        }
+    }
+}
+@media(max-width:575px){
+    .input-grp-date-range-picker{
+        &.clear-filter-applicable{
+            position: relative;
+            .advance-icon{
+                position: absolute !important;
+                bottom: 0;
+                margin-left: 0 !important;
+            }
+            .custom-datepicker{
+                margin-bottom: 15px;
+                width: 100%;
+                input{
+                    width: 100% !important;
+                    max-width: 100% !important;
+                }
+            }
+            .clear-filter{
+                margin-left: 50px;
+            }
+        }
+
+        .mr-r1{
+            margin-right: 0 !important;
+        }
+
+        .linked-entities{
+            margin-bottom: 15px;
+            margin-right: 0;
+            width: 100%;
+            sh-select{
+                width: 100%;
+            }
+        }
+        .clear-filter{
+            justify-content: end !important;
+            margin-left: 0;
+        }
+    }
+
 }

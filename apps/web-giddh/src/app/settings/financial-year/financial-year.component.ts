@@ -1,7 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { Store, select } from '@ngrx/store';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../store/roots';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
 import * as _ from '../../lodash-optimized';
@@ -28,9 +28,8 @@ export interface IGstObj {
     styleUrls: ['./financial-year.component.scss']
 })
 
-export class FinancialYearComponent implements OnInit {
+export class FinancialYearComponent implements OnInit, OnDestroy {
     public financialYearObj: IFinancialYearResponse;
-    public currentCompanyUniqueName: string;
     public currentCompanyFinancialYearUN: string;
     public currentCompanyName: string;
     public financialOptions = [];
@@ -61,26 +60,13 @@ export class FinancialYearComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.store.select(createSelector([(state: AppState) => state.settings.refreshCompany], (o) => {
-            if (o) {
-                this.store.dispatch(this._companyActions.RefreshCompanies());
-            }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
-
-        this.store.pipe(select((state: AppState) => state.session),takeUntil(this.destroyed$)).subscribe(session => {
-            if (session) {
-                this.currentCompanyUniqueName = _.cloneDeep(session.companyUniqueName);
-            }
-            if (this.currentCompanyUniqueName && session.companies) {
-                let companies = _.cloneDeep(session.companies);
-                let company = companies.find((items) => items.uniqueName === this.currentCompanyUniqueName);
-                if (company) {
-                    this.currentCompanyName = company.name;
-                    this.currentCompanyFinancialYearUN = company.activeFinancialYear.uniqueName;
-                    this.financialOptions = company.financialYears.map(element => {
-                        return { label: element.uniqueName, value: element.uniqueName };
-                    });
-                }
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.currentCompanyName = activeCompany.name;
+                this.currentCompanyFinancialYearUN = activeCompany.activeFinancialYear.uniqueName;
+                this.financialOptions = activeCompany.financialYears.map(element => {
+                    return { label: element.uniqueName, value: element.uniqueName };
+                });
             }
         });
     }
@@ -97,7 +83,7 @@ export class FinancialYearComponent implements OnInit {
     public getInitialFinancialYearData() {
         this.setYearRange();
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
-        this.store.select(createSelector([(state: AppState) => state.settings.financialYears], (o) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.settings.financialYears], (o) => {
             this.setYearRange();
             if (o) {
                 this.financialYearObj = _.cloneDeep(o);
@@ -112,10 +98,9 @@ export class FinancialYearComponent implements OnInit {
                 this.yearOptions = _.cloneDeep(yearOptions);
                 this.forceClear$ = observableOf({ status: true });
             } else if (_.isNull(o)) {
-                // this.store.dispatch(this._companyActions.RefreshCompanies()); // for card G0-1477
                 this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
     }
 
     public lockUnlockFinancialYear(financialYear: ActiveFinancialYear) {
@@ -167,4 +152,13 @@ export class FinancialYearComponent implements OnInit {
         }
     }
 
+    /**
+     * Releases memory
+     *
+     * @memberof FinancialYearComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

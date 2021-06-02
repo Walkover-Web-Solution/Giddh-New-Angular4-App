@@ -1,0 +1,10 @@
+{
+    "liabilities" : "उत्तरदायित्व",
+    "assets" : "मालमत्ता",
+    "income" : "उत्पन्न",
+    "expenses" : "खर्च",
+    "reload_data" : "डेटा रीलोड करा",
+    "create_new_tag" : "नवीन टॅग तयार करा",
+    "tag_name" : "टॅग नाव",
+    "tag_description" : "टॅग वर्णन (पर्यायी)"
+}

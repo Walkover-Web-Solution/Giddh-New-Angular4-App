@@ -11,24 +11,27 @@
     text-transform: lowercase;
 }
 
-.parent-Group {
+.parent-group {
     padding-left: 20px;
 }
 
+
 /* width */
 
-.acntAccordion::-webkit-scrollbar {
+.account-accordion::-webkit-scrollbar {
     width: 10px;
 }
 
+
 /* Track */
 
-.acntAccordion::-webkit-scrollbar-track {
+.account-accordion::-webkit-scrollbar-track {
     background:  $white-smoke;
 }
 
+
 /* Handle */
 
-.acntAccordion::-webkit-scrollbar-thumb {
+.account-accordion::-webkit-scrollbar-thumb {
     background:  $nobel;
 }

@@ -1,13 +1,11 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
 import { takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../../../store/roots';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InventoryService } from '../../../../../services/inventory.service';
 import { INameUniqueName, StockGroupRequest, StockGroupResponse } from '../../../../../models/api-models/Inventory';
-import { InventoryAction } from '../../../../../actions/inventory/inventory.actions';
 import { uniqueNameInvalidStringReplace } from '../../../../../shared/helpers/helperFunctions';
 import { SidebarAction } from '../../../../../actions/inventory/sidebar.actions';
 import { BaseResponse } from '../../../../../models/api-models/BaseResponse';
@@ -36,12 +34,11 @@ export class SalesAddStockGroupComponent implements OnInit, OnDestroy {
 		private _store: Store<AppState>,
 		private _fb: FormBuilder,
 		private _inventoryService: InventoryService,
-		private _inventoryActions: InventoryAction,
 		private _sideBarAction: SidebarAction,
 		private _toasty: ToasterService,
 		private _salesActions: SalesActions
 	) {
-		this.isGroupNameAvailable$ = this._store.select(state => state.inventory.isGroupNameAvailable).pipe(takeUntil(this.destroyed$));
+		this.isGroupNameAvailable$ = this._store.pipe(select(state => state.inventory.isGroupNameAvailable), takeUntil(this.destroyed$));
 	}
 
 	public ngOnInit() {
@@ -66,7 +63,7 @@ export class SalesAddStockGroupComponent implements OnInit, OnDestroy {
 		});
 
 		// get groups list and assign values
-		this._store.select(state => state.sales.hierarchicalStockGroups).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+		this._store.pipe(select(state => state.sales.hierarchicalStockGroups), takeUntil(this.destroyed$)).subscribe((o) => {
 			if (o) {
 				this.stockGroups$ = observableOf(o);
 			} else {
@@ -85,16 +82,16 @@ export class SalesAddStockGroupComponent implements OnInit, OnDestroy {
 			this.isGroupNameAvailable$.subscribe(a => {
 				if (a !== null && a !== undefined) {
 					if (a) {
-						this.addStockGroupForm.patchValue({ uniqueName: val });
+						this.addStockGroupForm?.patchValue({ uniqueName: val });
 					} else {
-						this.addStockGroupForm.patchValue({ uniqueName: val + 1 });
+						this.addStockGroupForm?.patchValue({ uniqueName: val + 1 });
 					}
 				} else {
-					this.addStockGroupForm.patchValue({ uniqueName: val + 1 });
+					this.addStockGroupForm?.patchValue({ uniqueName: val + 1 });
 				}
 			});
 		} else {
-			this.addStockGroupForm.patchValue({ uniqueName: null });
+			this.addStockGroupForm?.patchValue({ uniqueName: null });
 		}
 	}
 

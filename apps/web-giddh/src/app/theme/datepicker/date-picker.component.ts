@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, forwardRef, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as moment from 'moment/moment';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 export const DATEPICKER_VALUE_ACCESSOR: any = {
 	provide: NG_VALUE_ACCESSOR,
@@ -82,7 +83,7 @@ export class DatePickerComponent implements AfterViewInit, OnChanges, OnDestroy,
 			return;
 		}
 
-		const clickedInside = this._elementRef.nativeElement.contains(targetElement);
+		const clickedInside = this._elementRef?.nativeElement.contains(targetElement);
 		if (!clickedInside) {
 			this.showToDatePicker = false;
 		}
@@ -135,11 +136,11 @@ export class DatePickerComponent implements AfterViewInit, OnChanges, OnDestroy,
 		this.showToDatePicker = false;
 	}
 
-	public convertToDate(str: string, format: string = 'DD-MM-YYYY'): Date {
+	public convertToDate(str: string, format: string = GIDDH_DATE_FORMAT): Date {
 		return moment(str, format).toDate();
 	}
 
-	public convertToString(date: Date, format: string = 'DD-MM-YYYY'): string {
+	public convertToString(date: Date, format: string = GIDDH_DATE_FORMAT): string {
 		return moment(date).format(format);
 	}
 }

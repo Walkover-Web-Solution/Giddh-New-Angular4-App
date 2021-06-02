@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Component, ComponentFactoryResolver, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store/roots';
@@ -9,7 +9,6 @@ import { CompanyResponse } from "../../../models/api-models/Company";
 import { CompanyActions } from "../../../actions/company.actions";
 import { CompanyAddNewUiComponent } from "../../../shared/header/components";
 import { ElementViewContainerRef } from "../../../shared/helpers/directives/elementViewChild/element.viewchild.directive";
-import { GroupWithAccountsAction } from "../../../actions/groupwithaccounts.actions";
 import { GeneralService } from "../../../services/general.service";
 
 @Component({
@@ -41,10 +40,9 @@ export class UserDetailsCompanyComponent implements OnInit {
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	constructor(private modalService: BsModalService, private store: Store<AppState>,
-		private componentFactoryResolver: ComponentFactoryResolver, private _companyActions: CompanyActions,
-		private groupWithAccountsAction: GroupWithAccountsAction, private _generalService: GeneralService) {
-		this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
-		this.isGetAllRequestInProcess$ = this.store.select(p => p.company.isCompanyActionInProgress).pipe(takeUntil(this.destroyed$));
+		private componentFactoryResolver: ComponentFactoryResolver, private _companyActions: CompanyActions, private _generalService: GeneralService) {
+		this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
+		this.isGetAllRequestInProcess$ = this.store.pipe(select(p => p.company && p.company.isCompanyActionInProgress), takeUntil(this.destroyed$));
 	}
 
 	openModal(template: TemplateRef<any>, selectedCompany: CompanyResponse) {
@@ -97,7 +95,7 @@ export class UserDetailsCompanyComponent implements OnInit {
 		let viewContainerRef = this.companynewadd.viewContainerRef;
 		viewContainerRef.clear();
 		let componentRef = viewContainerRef.createComponent(componentFactory);
-		(componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.subscribe((a) => {
+		(componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
 			this.hideAddCompanyModal();
 		});
 	}

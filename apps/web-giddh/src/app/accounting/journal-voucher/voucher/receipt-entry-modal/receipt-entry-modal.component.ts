@@ -13,7 +13,8 @@ import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/default
 import * as moment from 'moment';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
-import { VOUCHERS, KEYS } from '../../journal-voucher.component';
+import { KEYS } from '../../journal-voucher.component';
+import { VOUCHERS } from '../../../constants/accounting.constant';
 
 @Component({
     selector: 'receipt-entry',
@@ -270,7 +271,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
      * @memberof ReceiptEntryModalComponent
      */
     public getInvoiceListForReceiptVoucher(): void {
-        this.salesService.getInvoiceList(this.pendingInvoicesListParams, moment(this.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)).subscribe(response => {
+        this.salesService.getInvoiceList(this.pendingInvoicesListParams, moment(this.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body && response.body.results && response.body.results.length > 0) {
                 let pendingInvoiceList: IOption[] = [];
 

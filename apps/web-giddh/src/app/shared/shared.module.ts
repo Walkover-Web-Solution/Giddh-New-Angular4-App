@@ -41,6 +41,7 @@ import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-t
 import { FixedFooterComponent } from './fixed-footer/fixed-footer.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header'
+import { PrimarySidebarComponent } from './primary-sidebar/primary-sidebar.component';
 import {
     AccountOperationsComponent,
     AccountsSideBarComponent,
@@ -83,10 +84,15 @@ import { MatNativeDateModule, MAT_DATE_FORMATS, NativeDateAdapter, DateAdapter }
 import { MatInputModule } from '@angular/material/input';
 import { RevisionHistoryComponent } from './revision-history/revision-history.component';
 import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
-import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
+import { HamburgerMenuComponent } from './header/components/hamburger-menu/hamburger-menu.component';
+import { AmountFieldComponent } from './amount-field/amount-field.component';
+import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { TranslateDirective } from '../theme/translate/translate.directive';
+import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.component';
 
+import { ScheduleNowComponent } from './schedule-now/schedule-now.component';
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
 
@@ -175,7 +181,14 @@ export class PickDateAdapter extends NativeDateAdapter {
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        GiddhDaterangepickerComponent
+        HamburgerMenuComponent,
+        GiddhDaterangepickerComponent,
+        AmountFieldComponent,
+        TranslateDirective,
+        GiddhPageLoaderComponent,
+        AmountFieldComponent,
+        ScheduleNowComponent,
+        PrimarySidebarComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -217,7 +230,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatFormFieldModule,
         MatNativeDateModule,
         MatInputModule,
-        PdfJsViewerModule
+        CurrencyModule
     ],
     exports: [
         CommonModule,
@@ -268,7 +281,14 @@ export class PickDateAdapter extends NativeDateAdapter {
         GiddhDatepickerComponent,
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
-        PurchaseSendEmailModalComponent
+        PurchaseSendEmailModalComponent,
+        HamburgerMenuComponent,
+        AmountFieldComponent,
+        CurrencyModule,
+        TranslateDirective,
+        ScheduleNowComponent,
+        GiddhPageLoaderComponent,
+        PrimarySidebarComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

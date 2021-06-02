@@ -1,4 +1,4 @@
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import * as isCidr from 'is-cidr';
@@ -58,6 +58,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public createPermissionSuccess$: Observable<boolean>;
     // observable to clear role permission dropdown
     public permissionRoleClear$: Observable<IForceClear> = observableOf({ status: false });
+    /** To check active company role */
+    public isSuperAdminCompany: boolean = false;
     // private methods
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -81,7 +83,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this._accountsAction.resetShareEntity();
-        
+
         if (this.userdata) {
             if (this.userdata.from && this.userdata.to) {
                 let from: any = moment(this.userdata.from, GIDDH_DATE_FORMAT);
@@ -105,7 +107,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         });
 
         // get roles
-        this.store.select(s => s.permission).pipe(takeUntil(this.destroyed$)).subscribe(p => {
+        this.store.pipe(select(s => s.permission), takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.roles) {
                 let roles = _.cloneDeep(p.roles);
                 let allRoleArray = [];
@@ -121,12 +123,20 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany && activeCompany.userEntityRoles && activeCompany.userEntityRoles.length && activeCompany.userEntityRoles[0] && activeCompany.userEntityRoles[0].role && activeCompany.userEntityRoles[0].role.uniqueName === 'super_admin') {
+                this.isSuperAdminCompany = true;
+            } else {
+                this.isSuperAdminCompany = false;
+            }
+        });
+
         // utitlity
-        this.permissionForm.get('periodOptions').valueChanges.pipe(debounceTime(100)).subscribe(val => {
+        this.permissionForm.get('periodOptions').valueChanges.pipe(debounceTime(100), takeUntil(this.destroyed$)).subscribe(val => {
             this.togglePeriodOptionsVal(val);
         });
 
-        this.permissionForm.get('ipOptions').valueChanges.subscribe(val => {
+        this.permissionForm.get('ipOptions').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(val => {
             this.toggleIpOptVal(val);
         });
     }
@@ -143,7 +153,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         if (ev && ev.length) {
             let from = moment(ev[0]).format(GIDDH_DATE_FORMAT);
             let to = moment(ev[1]).format(GIDDH_DATE_FORMAT);
-            this.permissionForm.patchValue({ from, to });
+            this.permissionForm?.patchValue({ from, to });
         }
     }
 
@@ -154,7 +164,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             this.selectedTimeSpan = 'Past Period';
             this.dateRangePickerValue = [];
             if (this.permissionForm) {
-                this.permissionForm.patchValue({ from: null, to: null });
+                this.permissionForm?.patchValue({ from: null, to: null });
             }
         }
     }
@@ -344,7 +354,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 delete obj.data.to;
                 obj.data.periodOptions = null;
             }
-            this._settingsPermissionService.UpdatePermission(form).subscribe((res) => {
+            this._settingsPermissionService.UpdatePermission(form).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
                     this._toasty.successToast('Permission Updated Successfully!');
                 } else {
@@ -388,7 +398,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
      * @memberof SettingPermissionFormComponent
      */
     public handleIpAddressChange(value: string): void {
-        this.permissionForm.get('ipOptions').patchValue(value, { onlySelf: true });
+        this.permissionForm.get('ipOptions')?.patchValue(value, { onlySelf: true });
     }
 
     /**
@@ -400,6 +410,6 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
      * @memberof SettingPermissionFormComponent
      */
     public handleTimeSpanChange(value: string): void {
-        this.permissionForm.get('periodOptions').patchValue(value, { onlySelf: true });
+        this.permissionForm.get('periodOptions')?.patchValue(value, { onlySelf: true });
     }
 }

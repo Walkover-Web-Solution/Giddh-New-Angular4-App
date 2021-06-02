@@ -1,17 +1,29 @@
-import { map, switchMap, take } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { CompanyService } from '../services/companyService.service';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse, TaxResponse, CompanyCreateRequest, CreateCompanyUsersPlan, CompanyCountry } from '../models/api-models/Company';
 import { Injectable } from '@angular/core';
-import { Action, Store } from '@ngrx/store';
-import { ToasterService } from '../services/toaster.service';
-import { BaseResponse } from '../models/api-models/BaseResponse';
-import { AppState } from '../store/roots';
-import { CustomActions } from '../store/customActions';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Action, Store, select } from '@ngrx/store';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { Observable } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
+
+import { BaseResponse } from '../models/api-models/BaseResponse';
+import {
+    CompanyCountry,
+    CompanyCreateRequest,
+    CompanyRequest,
+    CompanyResponse,
+    CreateCompanyUsersPlan,
+    Organization,
+    StateDetailsRequest,
+    StateDetailsResponse,
+    TaxResponse,
+} from '../models/api-models/Company';
+import { IRegistration } from '../models/interfaces/registration.interface';
+import { OrganizationType } from '../models/user-login-state';
+import { CompanyService } from '../services/companyService.service';
+import { ToasterService } from '../services/toaster.service';
+import { CustomActions } from '../store/customActions';
+import { AppState } from '../store/roots';
 import { COMMON_ACTIONS } from './common.const';
-import { IRegistration } from "../models/interfaces/registration.interface";
 
 @Injectable()
 
@@ -62,6 +74,14 @@ export class CompanyActions {
 
     public static GET_ALL_INTEGRATED_BANK = 'GET_ALL_INTEGRATED_BANK';
     public static GET_ALL_INTEGRATED_BANK_RESPONSE = 'GET_ALL_INTEGRATED_BANK_RESPONSE';
+    public static SET_COMPANY_BRANCH = 'SET_COMPANY_BRANCH';
+
+    public static SET_ACTIVE_COMPANY_DATA = 'SET_ACTIVE_COMPANY_DATA';
+
+    public static GET_COMPANY_USER = 'GET_COMPANY_USER';
+    public static GET_COMPANY_USER_RESPONSE = 'GET_COMPANY_USER_RESPONSE';
+
+    public static SET_STATE_DETAILS_REQUEST = 'SET_STATE_DETAILS_REQUEST';
 
     public createCompany$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -103,11 +123,11 @@ export class CompanyActions {
                 // check if new uer has created first company then set newUserLoggedIn false
                 let isNewUser = false;
                 let prevTab = '';
-                this.store.select(s => s.session).pipe(take(1)).subscribe(s => {
+                this.store.pipe(select(s => s.session), take(1)).subscribe(s => {
                     isNewUser = s.userLoginState === 2;
                     prevTab = s.lastState;
                 });
-                //
+                
                 if (isNewUser) {
                     this.store.dispatch({
                         type: 'SetLoginStatus',
@@ -128,6 +148,7 @@ export class CompanyActions {
                         stateDetailsObj.lastState = 'home';
                     }
                     if (prevTab !== 'user-details') {
+                        this.store.dispatch(this.setStateDetailsRequest(stateDetailsObj));
                         this.store.dispatch(this.SetStateDetails(stateDetailsObj));
                     }
                 }
@@ -170,7 +191,7 @@ export class CompanyActions {
                 // check if new uer has created first company then set newUserLoggedIn false
                 let isNewUser = false;
                 let prevTab = '';
-                this.store.select(s => s.session).pipe(take(1)).subscribe(s => {
+                this.store.pipe(select(s => s.session), take(1)).subscribe(s => {
                     isNewUser = s.userLoginState === 2;
                     prevTab = s.lastState;
                 });
@@ -195,6 +216,7 @@ export class CompanyActions {
                         stateDetailsObj.lastState = 'home';
                     }
                     if (prevTab !== 'user-details') {
+                        this.store.dispatch(this.setStateDetailsRequest(stateDetailsObj));
                         this.store.dispatch(this.SetStateDetails(stateDetailsObj));
                     }
                 }
@@ -227,24 +249,18 @@ export class CompanyActions {
                 if (response.body.length) {
                     let activeCompanyName = null;
                     let totalCompany = 0;
-                    this.store.select(s => s.session.companyUniqueName).pipe(take(1)).subscribe(a => activeCompanyName = a);
-                    this.store.select(s => s.session.totalNumberOfcompanies).pipe(take(1)).subscribe(res => totalCompany = res);
+                    this.store.pipe(select(s => s.session.companyUniqueName), take(1)).subscribe(a => activeCompanyName = a);
+                    this.store.pipe(select(s => s.session.totalNumberOfcompanies), take(1)).subscribe(res => totalCompany = res);
 
                     if (activeCompanyName) {
                         let companyIndex = response.body.findIndex(cmp => cmp.uniqueName === activeCompanyName);
                         if (companyIndex > -1) {
                             // if active company find no action needed
-                            if (response.body.length === totalCompany) {     // if company created success then only change to new created company otherwise refres Api call will return null action
+                            if (response.body.length === totalCompany) { // if company created success then only change to new created company otherwise refresh Api call will return null action
                                 return { type: 'EmptyAction' };
-
                             } else {
-                                return {
-                                    type: 'CHANGE_COMPANY',
-                                    payload: response.body[companyIndex].uniqueName
-                                };
+                                return { type: 'EmptyAction' };
                             }
-
-                            // return { type: 'EmptyAction' };
                         } else {
                             // if no active company active next company from companies list
                             return {
@@ -394,6 +410,24 @@ export class CompanyActions {
                 return { type: 'EmptyAction' };
             })));
 
+    public getCompanyUser$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CompanyActions.GET_COMPANY_USER),
+            switchMap((action: CustomActions) => this._companyService.getCompanyUser(action.payload)),
+            map(response => {
+                return this.getCompanyUserResponse(response);
+            })));
+
+    public getCompanyUserResponse$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CompanyActions.GET_COMPANY_USER_RESPONSE),
+            map((action: CustomActions) => {
+                if (action.payload.status === 'error') {
+                    this._toasty.errorToast(action.payload.message, action.payload.code);
+                }
+                return { type: 'EmptyAction' };
+            })));
+
     constructor(
         private action$: Actions,
         private _companyService: CompanyService,
@@ -482,6 +516,17 @@ export class CompanyActions {
     }
     public CreateNewCompanyResponse(value: BaseResponse<CompanyResponse, CompanyCreateRequest>): CustomActions {
         this.store.dispatch(this.ResetApplicationData());
+        const details = {
+            branchDetails: {
+                uniqueName: ''
+            }
+        };
+        const organization: Organization = {
+            type: OrganizationType.Company, // Mode to which user is switched to
+            uniqueName: '',
+            details
+        };
+        this.store.dispatch(this.setCompanyBranch(organization));
         return {
             type: CompanyActions.CREATE_NEW_COMPANY_RESPONSE,
             payload: value
@@ -506,6 +551,20 @@ export class CompanyActions {
             type: CompanyActions.GET_STATE_DETAILS_RESPONSE,
             payload: value
         };
+    }
+
+    /**
+     * This will set the newly created company uniquename and last state in store
+     *
+     * @param {*} value
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public setStateDetailsRequest(value: any): CustomActions {
+        return {
+            type: CompanyActions.SET_STATE_DETAILS_REQUEST,
+            payload: value
+        }
     }
 
     public SetStateDetails(value: StateDetailsRequest): CustomActions {
@@ -629,12 +688,12 @@ export class CompanyActions {
     /**
      * Returns the action to set the financial year chosen in either sales or purchase register
      *
-     * @param {string} financialYearUniqueName Unique name of chosen financial year
+     * @param {string} filterValues Stores the filter values
      * @returns {CustomActions} Action to set the financial year
      * @memberof CompanyActions
      */
-    public setUserChosenFinancialYear(financialYearUniqueName: string): CustomActions {
-        return { type: CompanyActions.SET_USER_CHOSEN_FINANCIAL_YEAR, payload: financialYearUniqueName };
+    public setUserChosenFinancialYear(filterValues: {financialYear: string, branchUniqueName: string, timeFilter: string}): CustomActions {
+        return { type: CompanyActions.SET_USER_CHOSEN_FINANCIAL_YEAR, payload: filterValues };
     }
 
     /**
@@ -675,5 +734,59 @@ export class CompanyActions {
         };
     }
 
+    /**
+     * Set the branch detail for a company
+     *
+     * @param {Organization} organizationDetails Details of the organization (branch)
+     * @returns {CustomActions} Action to be dispatche
+     * @memberof CompanyActions
+     */
+    public setCompanyBranch(organizationDetails: Organization): CustomActions {
+        return {
+            type: CompanyActions.SET_COMPANY_BRANCH,
+            payload: organizationDetails
+        };
+    }
 
+    /**
+     * This will set the active company data in store
+     *
+     * @param {*} data
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public setActiveCompanyData(data: any): CustomActions {
+        return {
+            type: CompanyActions.SET_ACTIVE_COMPANY_DATA,
+            payload: data
+        };
+    }
+
+    /**
+     * This will initiate get company uer api
+     *
+     * @param {*} data
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public getCompanyUser(data: any): CustomActions {
+        return {
+            type: CompanyActions.GET_COMPANY_USER,
+            payload: data
+        };
+    }
+
+    /**
+     * This will set the company uer data in store
+     *
+     * @param {BaseResponse<any, string>} value
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public getCompanyUserResponse(value: BaseResponse<any, string>): CustomActions {
+        return {
+            type: CompanyActions.GET_COMPANY_USER_RESPONSE,
+            payload: value
+        };
+    }
 }

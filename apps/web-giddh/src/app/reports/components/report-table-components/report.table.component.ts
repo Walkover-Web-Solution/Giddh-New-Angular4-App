@@ -1,6 +1,4 @@
 import { Component, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { ILedgersInvoiceResult } from "../../../models/api-models/Invoice";
 import { ReportsModel } from "../../../models/api-models/Reports";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -11,13 +9,18 @@ import { takeUntil } from 'rxjs/operators';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { ReplaySubject } from 'rxjs';
 
-
 @Component({
     selector: 'reports-table-component',
     templateUrl: './report.table.component.html',
     styleUrls: ['./report.table.component.scss']
 })
+
 export class ReportsTableComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
+    
     @Input() public reportRespone: ReportsModel[];
     @Input() public activeFinacialYr: any;
     @Input() salesRegisterTotal: any;
@@ -44,6 +47,8 @@ export class ReportsTableComponent implements OnInit, OnDestroy {
 
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
+    /** Stores the current branch unique name used for filtering */
+    @Input() public currentBranchUniqueName: string;
 
     /** Subject to unsubscribe from subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -154,7 +159,7 @@ export class ReportsTableComponent implements OnInit, OnDestroy {
         let aa = this.activeFinacialYr;
 
         if (from != null && to != null) {
-            this._router.navigate(['pages', 'reports', 'sales-detailed-expand'], {queryParams: {from: from, to: to}});
+            this._router.navigate(['pages', 'reports', 'sales-detailed-expand'], {queryParams: {from: from, to: to, branchUniqueName: this.currentBranchUniqueName}});
         }
     }
 }

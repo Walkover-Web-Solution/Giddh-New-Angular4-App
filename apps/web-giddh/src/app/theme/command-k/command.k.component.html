@@ -19,38 +19,42 @@
 									<div class="item-icon">
 										<ng-container [ngSwitch]="r.type">
 											<ng-container *ngSwitchCase="'MENU'">
-												<span class="icon-bar"></span>
+												<span class="icon-bar" id="icon-bar"></span>
 											</ng-container>
 											<ng-container *ngSwitchCase="'GROUP'">
-												<span class="icon-group-folder"></span>
+												<span class="icon-group-folder" id="icon-group-folder"></span>
 											</ng-container>
 											<ng-container *ngSwitchDefault>
-                                                <span class="icon-account"></span>
+                                                <span class="icon-account" id="icon-account"></span>
 											</ng-container>
 										</ng-container>
 									</div>
 									<div class="item-details flex-grow-1">
-										<p>{{r.name}}</p>
-										<ng-container [ngSwitch]="r.type">
-											<ng-container *ngSwitchCase="'MENU'">
-												<small>Menu</small>
+										<div class="d-flex justify-content-between align-items-center">
+											<div class="width-65">
+                                                <p id="{{ (r.type.toLowerCase()) + '-' + (r.type === 'MENU' ? getPageUniqueName(r.route) : r.uniqueName) }}">{{r.name}}</p>
+                                                <ng-container [ngSwitch]="r.type">
+                                                    <ng-container *ngSwitchCase="'MENU'">
+                                                        <small>Menu</small>
+                                                    </ng-container>
+                                                </ng-container>
+                                                <ng-container *ngIf="r.parentGroups">
+                                                    <p class="small-para-details">
+                                                        <small>
+                                                            <span *ngFor="let item of r.parentGroups; let idx = index">
+                                                                <ng-container *ngIf="idx > 0">
+                                                                    <span>&nbsp;❯&nbsp;</span>
+                                                                </ng-container>
+                                                                {{item.name}}
+                                                            </span>
+                                                        </small>
+                                                    </p>
+                                                </ng-container>
+											</div>
+											<ng-container *ngIf="r.type === 'ACCOUNT'">
+												<span class="command-hover-text">{{r.uniqueName}}</span>
 											</ng-container>
-										</ng-container>
-										<ng-container *ngIf="r.parentGroups">
-											<p class="smlP">
-												<small>
-													<span *ngFor="let item of r.parentGroups; let idx = index">
-														<ng-container *ngIf="idx > 0">
-															<span>&nbsp;❯&nbsp;</span>
-														</ng-container>
-														{{item.name}}
-													</span>
-												</small>
-											</p>
-										</ng-container>
-										<ng-container *ngIf="r.type === 'ACCOUNT'">
-											<span class="hvrTxt">{{r.uniqueName}}</span>
-										</ng-container>
+										</div>
 									</div>
 								</a>
 							</div>
@@ -65,10 +69,10 @@
 			<div #mainEle>
 				<div class="p-2">
 					<span>
-						<div class="jumper-results" [ngClass]="{'alC': showChannelCreateBtn}">
+						<div class="jumper-results" [ngClass]="{'text-center': showChannelCreateBtn}">
 							<p class="block text-center mr-b2">No matches found. Did you spell it correctly?</p>
 							<ng-container *ngIf="showChannelCreateBtn">
-								<button class="btn btn-primary mrR2" (click)="triggerAddManage()">Create Group</button>
+								<button class="btn btn-primary mr-r2" (click)="triggerAddManage()">Create Group</button>
 								<button class="btn btn-primary" (click)="triggerAddManage()">Create A/c</button>
 							</ng-container>
 						</div>
@@ -82,20 +86,23 @@
 
 <!-- input box template -->
 <ng-template #searchEleTemplate>
-	<div #searchWrapEle class="search-wrapper" (click)="focusInSearchBox($event)">
-		<span class="searh-ico"><i class="icon-search"></i></span>
-		<span *ngFor="let item of listOfSelectedGroups; let idx = index">
-			<div class="vR">
-				<div class="vN">
-					<div class="vT">{{item.name}}</div>
-					<ng-container>
-						<span>&nbsp;❯&nbsp;</span>
-					</ng-container>
-				</div>
-			</div>
-		</span>
-		<input class="searchEle" #searchEle type="text" placeholder="Search" (focus)="handleFocus()"
-			(keydown)="handleKeydown($event)" (keyup)="initSearch($event, $event.target.value)" />
-	</div>
-	<i class="icon-cross close-navigation" (click)="close()"></i>
+    <div class="d-flex bd-rb">
+        <div #searchWrapEle class="search-wrapper" (click)="focusInSearchBox($event)">
+            <span class="icon-search-icon"><i class="icon-search"></i></span>
+            <span *ngFor="let item of listOfSelectedGroups; let idx = index">
+                <div class="vR">
+                    <div class="vN">
+                        <div class="vT">{{item.name}}</div>
+                        <ng-container>
+                            <span>&nbsp;❯&nbsp;</span>
+                        </ng-container>
+                    </div>
+                </div>
+            </span>
+            <input class="search-element" #searchEle type="text" [placeholder]="commonLocaleData?.app_search" (focus)="handleFocus()"
+                (keydown)="handleKeydown($event)" (keyup)="initSearch($event, $event.target.value)"
+                (paste)="onPasteInSearch()" />
+        </div>
+        <i class="icon-cross close-navigation" (click)="close()"></i>
+    </div>
 </ng-template>

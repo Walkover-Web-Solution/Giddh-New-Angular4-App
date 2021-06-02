@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
 
@@ -56,7 +56,7 @@ export class AsideCustomStockComponent implements OnInit, OnDestroy {
     constructor(
         private store: Store<AppState>
     ) {
-        this.createCustomStockSuccess$ = this.store.select(s => s.inventory.createCustomStockSuccess).pipe(takeUntil(this.destroyed$));
+        this.createCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.createCustomStockSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {

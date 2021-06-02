@@ -5,9 +5,9 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GstSaveGspSessionRequest, VerifyOtpRequest } from '../../../models/api-models/GstReconcile';
 import { AppState } from '../../../store';
-import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
 import { ToasterService } from '../../../services/toaster.service';
+import { GstReport } from '../../constants/gst.constant';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -50,12 +50,15 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
     public gstReturnInProcess = false;
     public isTaxproAuthenticated = false;
     public isVayanaAuthenticated = false;
+    /** Returns the enum to be used in template */
+    public get GstReport() {
+        return GstReport;
+    }
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private store: Store<AppState>,
-        private invoicePurchaseActions: InvoicePurchaseActions,
         private gstReconcileActions: GstReconcileActions,
         private _toaster: ToasterService
     ) {
@@ -97,7 +100,7 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
             this.gspSessionOtpAuthorized = yes;
         });
 
-        this.store.pipe(select(p => p.gstR.currentPeriod)).subscribe(data => {
+        this.store.pipe(select(p => p.gstR.currentPeriod), takeUntil(this.destroyed$)).subscribe(data => {
             if (data) {
                 this.getCurrentPeriod = data;
             }
@@ -116,7 +119,7 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
 
         this.store.pipe(select(p => p.gstR.gstReturnFileInProgress), takeUntil(this.destroyed$)).subscribe((value => this.gstReturnInProcess = value));
 
-        this.store.pipe(select(s => s.gstR.gstSessionResponse)).subscribe(a => {
+        this.store.pipe(select(s => s.gstR.gstSessionResponse), takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.isTaxproAuthenticated = a.taxpro;
                 this.isVayanaAuthenticated = a.vayana;

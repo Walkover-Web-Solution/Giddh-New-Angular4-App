@@ -1,8 +1,8 @@
 <div class="form-header">
     <div>
-        <h3 class="">
+        <h3>
             <span>Inward Note</span>
-            <span class="pull-right fs14">Multiple
+            <span class="pull-right font-14">Multiple
                 <a href="javascript:void(0)" [ngClass]="{'text-link': mode === 'sender' }"
                     (click)="modeChanged('sender')">Senders</a>
                 /
@@ -13,15 +13,15 @@
 
     </div>
 </div>
-<div class="form_body witBg clearfix mrBChldLbl">
-    <div class="form_bg clearfix">
+<div class="form-body white-bg clearfix margin-child-label">
+    <div class="clearfix">
         <form [formGroup]="form" class="form-group">
             <div class="row">
-                <div class="col-xs-6 form-group">
+                <div class="col-6 form-group">
                     <label>Date <sup>*</sup></label>
                     <input name="dateRange" formControlName="inventoryEntryDate" type="text" autocomplete="off"
                         class="form-control" bsDatepicker [minDate]="today"
-                        [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
+                        [bsConfig]=" {dateInputFormat: giddhDateFormat}">
                     <span
                         *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)">
                         <span *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']"
@@ -29,7 +29,7 @@
                     </span>
                 </div>
 
-                <div class="col-xs-6 form-group" *ngIf="mode === 'sender'">
+                <div class="col-6 form-group" *ngIf="mode === 'sender'">
                     <label>Product Name <sup>*</sup></label>
                     <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
                         [disabled]="stock.disabled" formControlName="stock" (selected)="stockChanged($event)">
@@ -39,10 +39,10 @@
                     </span> -->
                 </div>
 
-                <div class="col-xs-6 form-group" *ngIf="mode === 'product'">
+                <div class="col-6 form-group" *ngIf="mode === 'product'">
                     <label>Sender <sup>*</sup></label>
                     <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Sender'"
-                        formControlName="inventoryUser" (selected)="userChanged($event)"></sh-select>
+                        formControlName="inventoryUser" (selected)="userChanged($event)" [isRequired]="true"></sh-select>
                     <!-- <span *ngIf="inventoryUser.invalid">
               <span *ngIf="inventoryUser?.errors && inventoryUser?.errors['required']"
                     class="text-danger">Please select Sender.</span>
@@ -52,19 +52,19 @@
             </div>
 
             <div class="row">
-                <div class="col-xs-4" *ngIf="mode === 'sender'">
-                    <label class="fs14">Sender <sup>*</sup></label>
+                <div class="col-4" *ngIf="mode === 'sender'">
+                    <label class="font-14">Sender <sup>*</sup></label>
                 </div>
-                <div class="col-xs-4" *ngIf="mode === 'product'">
-                    <label class="fs14">Product Name <sup>*</sup></label>
-                </div>
-
-                <div class="col-xs-4">
-                    <label class="fs14">Unit<sup>*</sup></label>
+                <div class="col-4" *ngIf="mode === 'product'">
+                    <label class="font-14">Product Name <sup>*</sup></label>
                 </div>
 
-                <div class="col-xs-4">
-                    <label class="fs14">Quantity <sup>*</sup></label>
+                <div class="col-4">
+                    <label class="font-14">Unit<sup>*</sup></label>
+                </div>
+
+                <div class="col-4">
+                    <label class="font-14">Quantity <sup>*</sup></label>
                 </div>
             </div>
 
@@ -73,7 +73,7 @@
                 *ngFor="let item of transactions.controls; let i = index;let first = first;let last = last">
                 <div [formGroupName]="i">
 
-                    <div class="col-xs-4 form-group" *ngIf="mode === 'sender'">
+                    <div class="col-4 form-group" *ngIf="mode === 'sender'">
                         <!-- <label class="mr-b1">Sender</label> -->
                         <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Sender'"
                             (selected)="userChanged($event,i)" formControlName="inventoryUser" [ItemHeight]="'33'">
@@ -81,34 +81,34 @@
                         <!-- <span [hidden]="!item.get('inventoryUser')?.errors?.required"
                   class="text-danger">Please select Sender.</span> -->
                     </div>
-                    <div class="col-xs-4 form-group" *ngIf="mode === 'product'">
+                    <div class="col-4 form-group" *ngIf="mode === 'product'">
                         <!-- <label class="mr-b1">Product Name</label> -->
                         <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                            (selected)="stockChanged($event,i)" [ItemHeight]="'33'" formControlName="stock"></sh-select>
+                            (selected)="stockChanged($event,i)" [ItemHeight]="'33'" formControlName="stock" [isRequired]="true"></sh-select>
                         <!-- <span [hidden]="!item.get('stock')?.errors?.required" class="text-danger">Please select Product.</span> -->
                     </div>
 
-                    <div class="col-xs-4 form-group">
+                    <div class="col-4 form-group">
                         <sh-select [options]="stockUnitsOptions" [placeholder]="'Choose unit'"
-                            formControlName="stockUnit" [multiple]="false" [ItemHeight]="33"></sh-select>
+                            formControlName="stockUnit" [multiple]="false" [ItemHeight]="33" [isRequired]="true"></sh-select>
                         <!-- <span [hidden]="!item.get('stockUnit')?.errors?.required" class="text-danger">Please select Unit.</span> -->
                     </div>
 
-                    <div class="col-xs-4 form-group">
+                    <div class="col-4 form-group">
                         <!-- <label class="mr-b1">Quantity</label> -->
                         <div class="row">
-                            <div class="col-xs-10">
+                            <div class="col-10">
                                 <input name="" type="text" formControlName="quantity" class="form-control">
                             </div>
 
 
-                            <div class="pull-right mr-t unit_add">
+                            <div class="pull-right mr-t05 unit-add">
                                 <button class="btn-link" (click)="addTransactionItem(transactions.controls[i])"
                                     *ngIf="last">
-                                    <i class="icon-plus add_row"></i>
+                                    <i class="icon-plus add-row"></i>
                                 </button>
                                 <button class="btn-link" (click)="deleteTransactionItem(i)" *ngIf="!last">
-                                    <i class="icon-cross dlet"></i>
+                                    <i class="icon-cross delete"></i>
                                 </button>
                             </div>
                         </div>
@@ -121,10 +121,10 @@
             <ng-container *ngIf="mode === 'sender'">
                 <div class="row">
 
-                    <div class="mr-t1 pdL pdR">
-                        <div class="col-xs-12">
+                    <div class="mr-t1 pd-l05 pd-r05">
+                        <div class="col-12">
                             <div class="checkbox">
-                                <label class="" for="isManufactured">
+                                <label for="isManufactured">
                                     <input type="checkbox" formControlName="isManufactured" id="isManufactured"
                                         name="isManufactured"> Is
                                     it
@@ -135,36 +135,35 @@
                     </div>
 
 
-                    <section class="col-xs-12" *ngIf="form.value.isManufactured">
-                        <div class="">
-                            <h1 class="section-head bdrB"><strong>{{form.controls['stock'].value}} (Made with)</strong>
+                    <section class="col-12" *ngIf="form.value.isManufactured">
+                        <div>
+                            <h1 class="section-head bd-rb"><strong>{{form.controls['stock'].value}} (Made with)</strong>
                             </h1>
 
                             <div formGroupName="manufacturingDetails">
 
-                                <div class="row" style="padding-top: 5px">
-                                    <div class="col-xs-4">
-                                        <label class="fs14">Output Qty <sup>*</sup></label>
+                                <div class="row pd-t05">
+                                    <div class="col-4">
+                                        <label class="font-14">Output Qty <sup>*</sup></label>
                                     </div>
-                                    <div class="col-xs-5">
-                                        <label class="fs14">Stock Unit <sup>*</sup></label>
+                                    <div class="col-5">
+                                        <label class="font-14">Stock Unit <sup>*</sup></label>
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-xs-4 form-group">
+                                    <div class="col-4 form-group">
                                         <input type="text" class="form-control" decimalDigitsDirective
                                             [DecimalPlaces]="4" name="manufacturingQuantity" placeholder="Quantity"
                                             formControlName="manufacturingQuantity" />
                                     </div>
 
-                                    <div class="col-xs-5 form-group">
+                                    <div class="col-5 form-group">
                                         <sh-select [options]="stockUnitsOptions" formControlName="manufacturingUnitCode"
-                                            [placeholder]="'Select Unit'" [multiple]="false" [ItemHeight]="33"
-                                            [forceClearReactive]="forceClear$ | async"></sh-select>
+                                            [placeholder]="'Select Unit'" [multiple]="false" [ItemHeight]="33" [isRequired]="true"></sh-select>
                                     </div>
 
-                                    <div class="col-xs-3" style="display: flex;align-items: center;height: 30px"
+                                    <div class="col-3 d-flex align-items-center height-30"
                                         *ngIf="manufacturingDetails.controls['manufacturingQuantity'].value">
                                         <label>&nbsp;</label>
                                         <span class="d-block"><strong>= (
@@ -175,13 +174,13 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-xs-4">
+                                    <div class="col-4">
                                         <strong>Input Stock Name</strong>
                                     </div>
-                                    <div class="col-xs-3">
+                                    <div class="col-3">
                                         <strong>Stock Qty</strong>
                                     </div>
-                                    <div class="col-xs-4">
+                                    <div class="col-4">
                                         <strong>Stock Unit</strong>
                                     </div>
                                 </div>
@@ -191,27 +190,27 @@
                                         *ngFor="let list of manufacturingDetails['controls']['linkedStocks'].controls;let i = index; let l = last"
                                         [formGroupName]="i">
 
-                                        <div class="col-xs-4 form-group">
+                                        <div class="col-4 form-group">
                                             <sh-select [options]="stockListOptions" formControlName="stockUniqueName"
                                                 [multiple]="false" [placeholder]="'Select Stock Name'" [ItemHeight]="33"
                                                 (selected)="findAddedStock($event?.value, i)"></sh-select>
                                         </div>
-                                        <div class="col-xs-3 form-group">
+                                        <div class="col-3 form-group">
                                             <input type="text" formControlName="quantity" decimalDigitsDirective
                                                 [DecimalPlaces]="4" name="quantity" placeholder="Enter Quantity"
                                                 class="form-control" />
                                         </div>
-                                        <div class="col-xs-4 form-group">
+                                        <div class="col-4 form-group">
                                             <sh-select [options]="stockUnitsOptions" formControlName="stockUnitCode"
                                                 [multiple]="false" [placeholder]="'Select Unit'" [ItemHeight]="33">
                                             </sh-select>
                                         </div>
-                                        <div class="pull-right mr-t unit_add">
+                                        <div class="pull-right mr-t05 unit-add">
                                             <button class="btn-link" (click)="addItemInLinkedStocks(list, i, i)"
                                                 *ngIf="l" [disabled]="disableStockButton"><i
-                                                    class="icon-plus add_row"></i></button>
+                                                    class="icon-plus add-row"></i></button>
                                             <button class="btn-link" (click)="removeItemInLinkedStocks(i)" *ngIf="!l"><i
-                                                    class="icon-cross dlet"></i></button>
+                                                    class="icon-cross delete"></i></button>
                                         </div>
 
 
@@ -233,7 +232,7 @@
             </ng-container>
 
             <div class="row">
-                <div class="col-xs-12 text-left mr-t1">
+                <div class="col-12 text-left mr-t1">
                     <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
                     <button class="btn btn-success" [ladda]="isLoading" [disabled]="form.invalid"
                         (click)="save()">Save</button>

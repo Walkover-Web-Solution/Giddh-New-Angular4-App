@@ -1,0 +1,204 @@
+@import "../../../assets/css/color.scss";
+
+.giddh-table {
+    tr {
+        td {
+            vertical-align: top !important;
+            .action-icon {
+                display: flex;
+                align-items: center;
+                border: 1px solid $gainsboro;
+                a {
+                    width: 34px;
+                    font-size: 18px;
+                    color: $gray;
+                    border-right: 1px solid $gainsboro;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0 5px;
+                    cursor: pointer;
+                    align-items: stretch;
+                    height: 34px;
+                    align-items: center;
+                    background-color: $white;
+                }
+                &:last-child {
+                    border-right: none !important;
+                }
+            }
+            p.address-row{
+                margin-bottom: 0;
+                max-width: 400px;
+                white-space: normal;
+                word-break: break-word;
+            }
+        }
+    }
+    &:hover {
+        td {
+            .action-icon {
+                display: flex !important;
+            }
+        }
+    }
+}
+
+.address-list-top {
+    .search-container {
+        display: flex;
+        align-items: center;
+        .clear-filter-btn {
+            color: $midnight-blue;
+            font-size: 14px;
+            border: 1px solid $midnight-blue;
+            border-radius: 20px;
+            padding: 0 15px;
+            height: 40px;
+            width: 150px !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $white;
+            i {
+                font-size: 12px;
+                padding-right: 8px;
+                top: 0;
+                color: $midnight-blue;
+            }
+        }
+    }
+}
+
+.linked-with{
+    white-space: normal;
+    word-break: break-word;
+    span.pb-1{
+        display: flex;
+    }
+    i{
+        color: $gray;
+        margin-right:5px;
+        margin-top: 4px;
+        float: left;
+    }
+    span.entity-alias{
+        margin-right: 0;
+        margin-top: 0;
+        float: right;
+        width: 95%;
+    }
+}
+
+@media(max-width:768px){
+    .giddh-table {
+        tr {
+            td {
+                &::before {
+                    left: 15px;
+                }
+            }
+        }
+    }
+    .linked-with{
+        width: 100% !important;
+        .wrap-linked-company{
+            flex-direction: column;
+            .ml-auto{
+                margin-left: 0 !important;
+                .action-icon{
+                    width: 70px;
+                }
+            }
+        }
+    }
+    .address-list-top{
+        .search-container{
+            width: calc(100% - 120px);
+        }
+    }
+}
+
+@media(max-width:767px){
+    .setting-profile-container{
+        padding-top: 15px;
+    }
+    .linked-with{
+        width: 100% !important;
+        .wrap-linked-company{
+            flex-direction: column;
+            .ml-auto{
+                margin-left: 0 !important;
+                .action-icon{
+                    width: 70px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 445px) {
+    .giddh-table {
+        tr {
+            td {
+                .action-icon {
+                    a {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width:575px){
+    .address-list-top{
+        display:block !important;
+        .btn-sky-blue{
+            float:right;
+            margin-top:5px;
+        }
+    }
+}
+
+.transform-inherit {
+    transform: inherit !important;
+}
+
+
+/* branch profile */
+.branch-profile-address-content{
+    background-color: $white;
+    border: 1px solid $gainsboro;
+    padding: 15px;
+    margin-bottom: 15px;
+    .single-branch-detail {
+        font-size: 14px;
+        h4{
+            font-size: 16px;
+            font-family: 'opensans-bold';
+            margin-bottom: 10px;
+            color: $midnight-blue;
+            i{
+                margin-right:10px;
+            }
+        }
+        label{
+            color:$gray;
+            line-height: 2.3;
+        }
+        .set-default{
+            .selected-defualt{
+                i{
+                    color: $chetwode-blue;
+                }
+            }
+            .icon-unlink{
+                color: $gray;
+            }
+        }
+    }
+}
+
+
+

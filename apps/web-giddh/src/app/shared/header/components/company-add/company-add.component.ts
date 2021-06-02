@@ -14,7 +14,6 @@ import {TypeaheadMatch} from 'ngx-bootstrap/typeahead';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import {LoginActions} from '../../../../actions/login.action';
 import {AuthService} from '../../../../theme/ng-social-login-module/index';
-import {AuthenticationService} from '../../../../services/authentication.service';
 import {contriesWithCodes} from '../../../helpers/countryWithCodes';
 import {GeneralActions} from '../../../../actions/general/general.actions';
 import {IOption} from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -25,7 +24,7 @@ import {GeneralService} from '../../../../services/general.service';
 @Component({
     selector: 'company-add',
     templateUrl: './company-add.component.html',
-    styleUrls: ['./company-add.component.css']
+    styleUrls: ['./company-add.component.scss']
 })
 export class CompanyAddComponent implements OnInit, OnDestroy {
     @ViewChild('wizard', {static: true}) public wizard: WizardComponent;
@@ -60,13 +59,12 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
 
     constructor(private socialAuthService: AuthService,
                 private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-                private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
-                private _aunthenticationServer: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService) {
-        this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
+                private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _generalActions: GeneralActions, private _generalService: GeneralService) {
+        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(p => p.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
 
         contriesWithCodes.map(c => {
             this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
-            this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
+            this.isLoggedInWithSocialAccount$ = this.store.pipe(select(p => p.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         });
         // Country phone Code
         contriesWithCodes.map(c => {
@@ -80,7 +78,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
             };
         });
         this.countryPhoneCode = ss;
-        this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+        this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$)).subscribe((data) => {
             this.currencies = [];
             if (data) {
                 data.map(d => {
@@ -94,9 +92,9 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
         this.imgPath = (isElectron || isCordova) ? '' : AppUrl + APP_FOLDER + '';
-        this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
-        this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox).pipe(takeUntil(this.destroyed$));
-        this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
+        this.companies$ = this.store.pipe(select(s => s.session.companies), takeUntil(this.destroyed$));
+        this.showVerificationBox = this.store.pipe(select(s => s.verifyMobile.showVerificationBox), takeUntil(this.destroyed$));
+        this.isCompanyCreationInProcess$ = this.store.pipe(select(s => s.session.isCompanyCreationInProcess), takeUntil(this.destroyed$));
 
         this.store.pipe(select(s => s.session.createBranchUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -106,17 +104,8 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
             }
         });
 
-        // this.isMobileVerified = this.store.select(s => {
-        //   if (s.session.user) {
-        //     if (s.session.user.user.mobileNo) {
-        //       return s.session.user.user.mobileNo !== null;
-        //     } else {
-        //       return s.session.user.user.contactNo !== null;
-        //     }
-        //   }
-        // }).pipe(takeUntil(this.destroyed$));
         this.logedInusers = this._generalService.user;
-        this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
+        this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
         this.dataSource = (text$: Observable<any>): Observable<any> => {
             return text$.pipe(
                 debounceTime(300),
@@ -135,25 +124,12 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
                     }));
                 }),
                 map((res) => {
-                    // let data = res.map(item => item.address_components[0].long_name);
                     let data = res.map(item => item.city);
                     this.dataSourceBackup = res;
                     return data;
-                }));
+                }),
+                takeUntil(this.destroyed$));
         };
-
-        // this.isMobileVerified.subscribe(p => {
-        //   if (p) {
-        //     // this.wizard.next();
-        //     this.showMobileVarifyMsg = true;
-        //   }
-        // });
-        // this.isCompanyCreated$.subscribe(s => {
-        //   if (s) {
-        //     //  this._route.navigate(['sales']);
-        //     this.closeModal();
-        //   }
-        // });
     }
 
     public typeaheadOnSelect(e: TypeaheadMatch): void {
@@ -193,7 +169,6 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         if (companies) {
             if (companies.length > 0) {
                 this.store.dispatch(this._generalActions.getGroupWithAccounts());
-                this.store.dispatch(this._generalActions.getFlattenAccount());
                 this.closeCompanyModal.emit();
             } else {
                 this.showLogoutModal();

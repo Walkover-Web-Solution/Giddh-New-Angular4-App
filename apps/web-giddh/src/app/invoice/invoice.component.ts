@@ -1,5 +1,5 @@
-import { auditTime, take, takeUntil } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { take, takeUntil } from 'rxjs/operators';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { CompanyActions } from '../actions/company.actions';
@@ -15,21 +15,24 @@ import { GeneralActions } from '../actions/general/general.actions';
     templateUrl: './invoice.component.html',
     styleUrls:[`./invoice.component.scss`]
 })
-export class InvoiceComponent implements OnInit, OnDestroy {
+export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
-    
+
     public tabsDropdown:boolean = false;
     public selectedVoucherType: VoucherTypeEnum;
     public activeTab: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public isMobileView = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+
     constructor(private store: Store<AppState>,
         private companyActions: CompanyActions,
-        private router: Router,
-        private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver, private _generalActions: GeneralActions) {
+        private router: Router, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver, private _generalActions: GeneralActions) {
+
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileView = result.matches;
         });
     }
@@ -71,7 +74,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
                         this.activeTab = queryParams.tab;
                     }
                 } else {
-                    this.activeTab = params.voucherType;
+                    this.activeTab = (params) ? params.voucherType : "";
                 }
             });
     }
@@ -80,15 +83,22 @@ export class InvoiceComponent implements OnInit, OnDestroy {
         this.selectedVoucherType = VoucherTypeEnum[tab];
     }
 
-/**
- *
- *
- * @param {string} tab  this is voucher type
- * @param {*} e   event to set last state
- * @param {string} [type]    selected type only to it for Cr/Dr and sales voucher(common tabs like pending, template and settings)
- * @memberof InvoiceComponent
- */
-public tabChanged(tab: string, e, type?: string) {
+    /**
+     * Saves the last state
+     */
+    public ngAfterViewInit(): void {
+        this.saveLastState(this.activeTab);
+    }
+
+    /**
+     *
+     *
+     * @param {string} tab  this is voucher type
+     * @param {*} e   event to set last state
+     * @param {string} [type]    selected type only to it for Cr/Dr and sales voucher(common tabs like pending, template and settings)
+     * @memberof InvoiceComponent
+     */
+    public tabChanged(tab: string, e, type?: string) {
         this.activeTab = tab;
         if (type && tab) {
             this.router.navigate(['pages', 'invoice', 'preview', tab, type]);
@@ -97,14 +107,6 @@ public tabChanged(tab: string, e, type?: string) {
         }
         if (e && !e.target) {
             this.saveLastState(tab);
-        }
-
-        if(tab === "pending") {
-            this.setCurrentPageTitle("Pending");
-        } else if(tab === "templates") {
-            this.setCurrentPageTitle("Templates");
-        } else if(tab === "settings") {
-            this.setCurrentPageTitle("Settings");
         }
     }
 
@@ -118,21 +120,8 @@ public tabChanged(tab: string, e, type?: string) {
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = `pages/invoice/preview/${state}`;
+        stateDetailsRequest.lastState = `pages/invoice/preview/${state}/${this.selectedVoucherType !== state ? this.selectedVoucherType : ''}`;
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    }
-
-    /**
-     * This function will set the page heading
-     *
-     * @param {string} title
-     * @memberof InvoiceComponent
-     */
-    public setCurrentPageTitle(title: string) : void {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = (this.selectedVoucherType !== 'debit note' && this.selectedVoucherType !== 'credit note') ? "Invoice > " + title : title;
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 }

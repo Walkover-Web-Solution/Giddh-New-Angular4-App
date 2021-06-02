@@ -1,7 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { Observable, ReplaySubject } from 'rxjs';
 
@@ -12,6 +12,10 @@ import { Observable, ReplaySubject } from 'rxjs';
 })
 
 export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 
     public isAddStockOpen: boolean = false;
@@ -23,8 +27,8 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private _inventorySidebarAction: SidebarAction) {
-        this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
-        this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess);
+        this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
+        this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -65,15 +69,12 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
         this.hideFirstScreen = false;
         this.isAddStockOpen = false;
         this.isAddAccountOpen = false;
-        if (e) {
-            //
-        } else {
+        if (!e) {
             this.closeAsideEvent.emit();
         }
     }
 
     public ngOnDestroy() {
-        // this.store.dispatch(this.inventoryAction.resetActiveStock());
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

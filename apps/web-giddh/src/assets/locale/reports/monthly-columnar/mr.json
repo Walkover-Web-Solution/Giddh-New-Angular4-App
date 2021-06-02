@@ -1,0 +1,20 @@
+{
+    "page_heading": "अहवाल > मासिक स्तंभ अहवाल",
+    "select_year": "वर्ष निवडा",
+    "from_month": "महिन्यापासून",
+    "to_month": "To Month",
+    "group": "गट *",
+    "opening_closing_balance": "शिल्लक उघडणे / बंद करणे",
+    "cr_dr": "क्रेडिट / डेबिट +/- सह",
+    "save": "जतन करा",
+    "reset": "रीसेट करा",
+    "export": "निर्यात करा",
+    "name_of_ledger": "लेजरचे नाव",
+    "parent_group": "पालक गट",
+    "grand_total": "भव्य एकूण",
+    "opening_balance": "प्रारंभिक शिल्लक",
+    "closing_balance": "अंतिम शिल्लक",
+    "dr": "डेबिट",
+    "cr": "जमा",
+    "downloaded_filename": "कॉलमर्नर-रिपोर्ट.xlsx"
+}

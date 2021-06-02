@@ -1,12 +1,12 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
 
 import { HttpWrapperService } from '../services/httpWrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { BlankLedgerVM } from './../ledger/ledger.vm';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
+import { VOUCHERS } from './constants/accounting.constant';
 
 export interface IPageInfo {
     page: string;
@@ -51,91 +51,113 @@ export class TallyModuleService {
         private http: HttpWrapperService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
     ) {
-        this.selectedFieldType.pipe(distinctUntilChanged((p, q) => p === q)).subscribe((type: string) => {
-            if (type && this.selectedPageInfo.value) {
-                let filteredAccounts;
-                if (this.selectedPageInfo.value.page === 'Journal') {
-                    if (type === 'by') {
-                        filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
-                        this.filteredAccounts.next(filteredAccounts);
-                    } else if (type === 'to') {
-                        filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
-                        this.filteredAccounts.next(filteredAccounts);
-                    }
-                }
-                if (this.selectedPageInfo.value.page === 'Purchase') {
-                    if (type === 'by') {
-                        filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
-                        this.filteredAccounts.next(filteredAccounts);
-                    } else if (type === 'to') {
-                        filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
-                        this.filteredAccounts.next(filteredAccounts);
-                    }
-                }
-                if (this.selectedPageInfo.value.page === 'Sales') { // Here 1 thing is pending
-                    if (type === 'by') {
-                        filteredAccounts = _.cloneDeep(this.salesAccounts.value);
-                        this.filteredAccounts.next(filteredAccounts);
-                    } else if (type === 'to') {
-                        filteredAccounts = _.cloneDeep(this.salesAccounts.value);
-                        this.filteredAccounts.next(filteredAccounts);
-                    }
-                }
-                if (this.selectedPageInfo.value.page === 'Payment') {
-                    if (type === 'by') {
-                        filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
-                        this.filteredAccounts.next(filteredAccounts);
-                    } else if (type === 'to') {
-                        filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value));
-                        this.filteredAccounts.next(filteredAccounts);
-                    }
-                }
-                if (this.selectedPageInfo.value.page === 'Contra') {
-                    if (type === 'by') {
-                        if(this.salesAccounts.value) {
-                            filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
-                        } else if(this.bankAccounts.value) {
-                            filteredAccounts = _.cloneDeep(this.bankAccounts.value.concat(this.taxAccounts.value));
-                        } else {
-                            filteredAccounts = _.cloneDeep(this.taxAccounts.value);
-                        }
-                        this.filteredAccounts.next(filteredAccounts);
-                    } else if (type === 'to') {
-                        filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
-                        this.filteredAccounts.next(filteredAccounts);
-                    }
-                }
-                if (this.selectedPageInfo.value.page === 'Receipt') {
-                    // if (type === 'by') {
-                    //     filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value));
-                    //     this.filteredAccounts.next(filteredAccounts);
-                    // } else if (type === 'to') {
-                        filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
-                        this.filteredAccounts.next(filteredAccounts);
-                    //}
-                }
-                if (this.selectedPageInfo.value.page === 'Debit note') {
-                    if (type === 'by') {
-                        filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
-                        this.filteredAccounts.next(filteredAccounts);
-                    } else if (type === 'to') {
-                        filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
-                        this.filteredAccounts.next(filteredAccounts);
-                    }
-                }
-                if (this.selectedPageInfo.value.page === 'Credit note') {
-                    if (type === 'by') {
-                        filteredAccounts = _.cloneDeep(this.salesAccounts.value);
-                        this.filteredAccounts.next(filteredAccounts);
-                    } else if (type === 'to') {
-                        filteredAccounts = _.cloneDeep(this.salesAccounts.value);
-                        this.filteredAccounts.next(filteredAccounts);
-                    }
-                }
-            } else {
-                this.filteredAccounts.next(this.flattenAccounts.value);
-            }
-        });
+        // this.selectedFieldType.pipe(distinctUntilChanged((p, q) => p === q)).subscribe((type: string) => {
+        //     if (type && this.selectedPageInfo.value) {
+        //         let filteredAccounts;
+        //         if (this.selectedPageInfo.value.page === 'Journal') {
+        //             if (type === 'by') {
+        //                 filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
+        //                 this.filteredAccounts.next(filteredAccounts);
+        //             } else if (type === 'to') {
+        //                 filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
+        //                 this.filteredAccounts.next(filteredAccounts);
+        //             }
+        //         }
+        //         if (this.selectedPageInfo.value.page === 'Purchase') {
+        //             if (type === 'by') {
+        //                 if(this.cashAccounts.value) {
+        //                     filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+        //                 } else if(this.bankAccounts.value) {
+        //                     filteredAccounts = _.cloneDeep(this.bankAccounts.value.concat(this.taxAccounts.value));
+        //                 } else {
+        //                     filteredAccounts = _.cloneDeep(this.taxAccounts.value);
+        //                 }
+        //                 this.filteredAccounts.next(filteredAccounts);
+        //             } else if (type === 'to') {
+        //                 filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
+        //                 this.filteredAccounts.next(filteredAccounts);
+        //             }
+        //         }
+        //         if (this.selectedPageInfo.value.page === 'Sales') { // Here 1 thing is pending
+        //             if (type === 'by') {
+        //                 filteredAccounts = _.cloneDeep(this.salesAccounts.value);
+        //                 this.filteredAccounts.next(filteredAccounts);
+        //             } else if (type === 'to') {
+        //                 filteredAccounts = _.cloneDeep(this.salesAccounts.value);
+        //                 this.filteredAccounts.next(filteredAccounts);
+        //             }
+        //         }
+        //         if (this.selectedPageInfo.value.page === 'Payment') {
+        //             if (type === 'by') {
+        //                 filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
+        //                 this.filteredAccounts.next(filteredAccounts);
+        //             } else if (type === 'to') {
+        //                 if(this.salesAccounts.value) {
+        //                     filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value));
+        //                 } else {
+        //                     filteredAccounts = _.cloneDeep(this.bankAccounts.value);
+        //                 }
+        //                 this.filteredAccounts.next(filteredAccounts);
+        //             }
+        //         }
+        //         if (this.selectedPageInfo.value.page === 'Contra') {
+        //             if (type === 'by') {
+        //                 if(this.salesAccounts.value) {
+        //                     filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+        //                 } else if(this.bankAccounts.value) {
+        //                     filteredAccounts = _.cloneDeep(this.bankAccounts.value.concat(this.taxAccounts.value));
+        //                 } else {
+        //                     filteredAccounts = _.cloneDeep(this.taxAccounts.value);
+        //                 }
+        //                 this.filteredAccounts.next(filteredAccounts);
+        //             } else if (type === 'to') {
+        //                 if(this.salesAccounts.value) {
+        //                     filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+        //                 } else if(this.bankAccounts.value) {
+        //                     filteredAccounts = _.cloneDeep(this.bankAccounts.value.concat(this.taxAccounts.value));
+        //                 } else {
+        //                     filteredAccounts = _.cloneDeep(this.taxAccounts.value);
+        //                 }
+        //                 this.filteredAccounts.next(filteredAccounts);
+        //             }
+        //         }
+        //         if (this.selectedPageInfo.value.page === 'Receipt') {
+        //             // if (type === 'by') {
+        //             //     filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value));
+        //             //     this.filteredAccounts.next(filteredAccounts);
+        //             // } else if (type === 'to') {
+        //                 filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
+        //                 this.filteredAccounts.next(filteredAccounts);
+        //             //}
+        //         }
+        //         if (this.selectedPageInfo.value.page === 'Debit note') {
+        //             if (type === 'by') {
+        //                 if(this.cashAccounts.value) {
+        //                     filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+        //                 } else if(this.bankAccounts.value) {
+        //                     filteredAccounts = _.cloneDeep(this.bankAccounts.value.concat(this.taxAccounts.value));
+        //                 } else {
+        //                     filteredAccounts = _.cloneDeep(this.taxAccounts.value);
+        //                 }
+        //                 this.filteredAccounts.next(filteredAccounts);
+        //             } else if (type === 'to') {
+        //                 filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
+        //                 this.filteredAccounts.next(filteredAccounts);
+        //             }
+        //         }
+        //         if (this.selectedPageInfo.value.page === 'Credit note') {
+        //             if (type === 'by') {
+        //                 filteredAccounts = _.cloneDeep(this.salesAccounts.value);
+        //                 this.filteredAccounts.next(filteredAccounts);
+        //             } else if (type === 'to') {
+        //                 filteredAccounts = _.cloneDeep(this.salesAccounts.value);
+        //                 this.filteredAccounts.next(filteredAccounts);
+        //             }
+        //         }
+        //     } else {
+        //         this.filteredAccounts.next(this.flattenAccounts.value);
+        //     }
+        // });
     }
 
     public setVoucher(info: IPageInfo) {
@@ -202,31 +224,35 @@ export class TallyModuleService {
         let taxAccounts = [];
         let expenseAccounts = [];
         let salesAccounts = [];
-        let cashAccount = account.parentGroups.find((pg) => pg.uniqueName === 'cash');
-        if (cashAccount) {
-            cashAccounts.push(account);
+
+        if(account) {
+            let cashAccount = account.parentGroups.find((pg) => pg.uniqueName === 'cash');
+            if (cashAccount) {
+                cashAccounts.push(account);
+            }
+            let purchaseAccount = account.parentGroups.find((pg) => pg.uniqueName === 'purchases' || pg.uniqueName === 'directexpenses');
+            if (purchaseAccount) {
+                purchaseAccounts.push(account);
+            }
+            let bankAccount = account.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts');
+            if (bankAccount) {
+                bankAccounts.push(account);
+            }
+            let taxAccount = account.parentGroups.find((pg) => pg.uniqueName === 'currentliabilities');
+            if (taxAccount) {
+                taxAccounts.push(account);
+            }
+            let expenseAccount = account.parentGroups.find((pg) => pg.uniqueName === 'indirectexpenses' || pg.uniqueName === 'operatingcost');
+            if (expenseAccount) {
+                expenseAccounts.push(account);
+            }
+            // pg.uniqueName === 'income'
+            let salesAccount = account.parentGroups.find((pg) => pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities');
+            if (salesAccount) {
+                salesAccounts.push(account);
+            }
         }
-        let purchaseAccount = account.parentGroups.find((pg) => pg.uniqueName === 'purchases' || pg.uniqueName === 'directexpenses');
-        if (purchaseAccount) {
-            purchaseAccounts.push(account);
-        }
-        let bankAccount = account.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts');
-        if (bankAccount) {
-            bankAccounts.push(account);
-        }
-        let taxAccount = account.parentGroups.find((pg) => pg.uniqueName === 'currentliabilities');
-        if (taxAccount) {
-            taxAccounts.push(account);
-        }
-        let expenseAccount = account.parentGroups.find((pg) => pg.uniqueName === 'indirectexpenses' || pg.uniqueName === 'operatingcost');
-        if (expenseAccount) {
-            expenseAccounts.push(account);
-        }
-        // pg.uniqueName === 'income'
-        let salesAccount = account.parentGroups.find((pg) => pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities');
-        if (salesAccount) {
-            salesAccounts.push(account);
-        }
+
         this.cashAccounts.next([this.cashAccounts.value, ...cashAccounts]);
         this.purchaseAccounts.next([...this.purchaseAccounts.value, ...purchaseAccounts]);
         this.bankAccounts.next([...this.bankAccounts.value, ...bankAccounts]);
@@ -245,19 +271,53 @@ export class TallyModuleService {
                 case 'Journal':
                     // accounts = this.flattenAccounts.value;
                     // As discussed with Manish, Cash and Bank account should not come in Journal entry
-                    accounts = this.purchaseAccounts.value.concat(this.expenseAccounts.value).concat(this.taxAccounts.value).concat(this.salesAccounts.value);
+                    if(this.purchaseAccounts.value) {
+                        accounts = this.purchaseAccounts.value.concat(this.expenseAccounts.value).concat(this.taxAccounts.value).concat(this.salesAccounts.value);
+                    } else if(this.expenseAccounts.value) {
+                        accounts = this.expenseAccounts.value.concat(this.taxAccounts.value).concat(this.salesAccounts.value);
+                    } else if(this.taxAccounts.value) {
+                        accounts = this.taxAccounts.value.concat(this.salesAccounts.value);
+                    } else {
+                        accounts = this.salesAccounts.value;
+                    }
                     break;
                 case 'Purchase':
-                    accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.taxAccounts.value);
+                    if(this.bankAccounts.value) {
+                        accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.taxAccounts.value);
+                    } else if(this.cashAccounts.value) {
+                        accounts = this.cashAccounts.value.concat(this.expenseAccounts.value).concat(this.taxAccounts.value);
+                    } else if(this.expenseAccounts.value) {
+                        accounts = this.expenseAccounts.value.concat(this.taxAccounts.value);
+                    } else {
+                        accounts = this.taxAccounts.value;
+                    }
                     break;
                 case 'Sales':
-                    accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.salesAccounts.value);
+                    if(this.bankAccounts.value) {
+                        accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.salesAccounts.value);
+                    } else if(this.cashAccounts.value) {
+                        accounts = this.cashAccounts.value.concat(this.expenseAccounts.value).concat(this.salesAccounts.value);
+                    } else if(this.expenseAccounts.value) {
+                        accounts = this.expenseAccounts.value.concat(this.salesAccounts.value);
+                    } else {
+                        accounts = this.salesAccounts.value;
+                    }
                     break;
                 case 'Credit note':
-                    accounts = this.taxAccounts.value.concat(this.salesAccounts.value);
+                    if(this.taxAccounts.value) {
+                        accounts = this.taxAccounts.value.concat(this.salesAccounts.value);
+                    } else {
+                        accounts = this.salesAccounts.value;
+                    }
                     break;
                 case 'Debit note':
-                    accounts = this.purchaseAccounts.value.concat(this.taxAccounts.value).concat(this.expenseAccounts.value);
+                    if(this.purchaseAccounts.value) {
+                        accounts = this.purchaseAccounts.value.concat(this.taxAccounts.value).concat(this.expenseAccounts.value);
+                    } else if(this.taxAccounts.value) {
+                        accounts = this.taxAccounts.value.concat(this.expenseAccounts.value);
+                    } else {
+                        accounts = this.expenseAccounts.value;
+                    }
                     break;
                 case 'Payment':
                     accounts = this.flattenAccounts.value;
@@ -423,7 +483,7 @@ export class TallyModuleService {
     }
 
     /**
-     * Returns the date in DD-MM-YYYY format from YYYY-MM-DD format
+     * Returns the date in GIDDH_DATE_FORMAT format from YYYY-MM-DD format
      *
      * @param {string} date Date to be formatted
      * @returns {string} Formatted date
@@ -435,5 +495,34 @@ export class TallyModuleService {
             return `${unformattedDate[2]}-${unformattedDate[1]}-${unformattedDate[0]}`;
         }
         return date;
+    }
+
+    /**
+     * Gets the group by voucher type and transaction type
+     *
+     * @param {string} voucherType Voucher type
+     * @param {string} [selectedTransactionType] Transaction type ('to'/ 'by')
+     * @returns {*} Group and except group pair; the loaded accounts will be of groups -> (Groups - Except Groups)
+     * @memberof TallyModuleService
+     */
+    public getGroupByVoucher(voucherType: string, selectedTransactionType?: string): any {
+        if (voucherType === VOUCHERS.CONTRA) {
+            return {
+                group: encodeURIComponent('bankaccounts, cash, currentliabilities'),
+                exceptGroups: encodeURIComponent('sundrycreditors, dutiestaxes')
+            };
+        } else if (voucherType === VOUCHERS.RECEIPT) {
+            return {
+                group: selectedTransactionType === 'to' ?
+                    encodeURIComponent('currentliabilities, sundrycreditors, sundrydebtors') :
+                    encodeURIComponent('bankaccounts, cash, currentliabilities, sundrycreditors, sundrydebtors'),
+                exceptGroups: encodeURIComponent('dutiestaxes')
+            };
+        } else {
+            return {
+                group: '',
+                exceptGroups: ''
+            };
+        }
     }
 }

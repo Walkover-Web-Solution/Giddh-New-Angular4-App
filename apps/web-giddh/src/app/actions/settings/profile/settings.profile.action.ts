@@ -125,6 +125,17 @@ export class SettingsProfileActions {
                 return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);
             })));
 
+    public branchProfileResponse$: Observable<Action> = createEffect(() => this.action$.pipe(
+        ofType(SETTINGS_PROFILE_ACTIONS.GET_BRANCH_INFO),
+        switchMap(() => this.settingsProfileService.getBranchInfo()),
+        map(res => this.validateResponse<any, string>(res, {
+            type: SETTINGS_PROFILE_ACTIONS.GET_BRANCH_INFO_RESPONSE,
+            payload: res
+        }, true, {
+            type: SETTINGS_PROFILE_ACTIONS.GET_BRANCH_INFO_RESPONSE,
+            payload: res
+        }))));
+
     constructor(private action$: Actions,
         private toasty: ToasterService,
         private router: Router,
@@ -215,4 +226,43 @@ export class SettingsProfileActions {
         };
     }
 
+    /**
+     * Returns action for fetching branch info
+     *
+     * @returns {CustomActions} Action for fetching branch info
+     * @memberof SettingsProfileActions
+     */
+    public getBranchInfo(): CustomActions {
+        return {
+            type: SETTINGS_PROFILE_ACTIONS.GET_BRANCH_INFO
+        };
+    }
+
+    /**
+     * Handles company response
+     *
+     * @param {*} response Response
+     * @returns {CustomActions}
+     * @memberof SettingsProfileActions
+     */
+    public handleCompanyProfileResponse(response: any): CustomActions {
+        return {
+            type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
+            payload: response
+        }
+    }
+
+    /**
+     * This will hold if free plan subscribed
+     *
+     * @param {boolean} response
+     * @returns {CustomActions}
+     * @memberof SettingsProfileActions
+     */
+    public handleFreePlanSubscribed(response: boolean): CustomActions {
+        return {
+            type: SETTINGS_PROFILE_ACTIONS.FREE_PLAN_SUBSCRIBED,
+            payload: response
+        }
+    }
 }

@@ -1,18 +1,18 @@
 @import "../../assets/css/color.scss";
 
 .return-body .main-wrapper {
-    background-color: #f5f5f5;
+    background-color: $gray-95;
     padding: 0;
-    border-right: 1px solid #eee;
+    border-right: 1px solid $gainsboro;
 }
 
 .return-content {
     padding: 15px;
-    background-color: #fff;
+    background-color: $white;
 }
 
 .btn-primary {
-    border-color: #5b64c9 !important;
+    border-color: $chetwode-blue !important;
 }
 .btn-primary.disabled,
 .btn-primary.disabled.active,
@@ -37,9 +37,9 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .open .dropdown-toggle.btn-primary,
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
-    border-color: #5b64c9 !important;
-    background: #5b64c9;
-    color: #ffffff;
+    border-color: $chetwode-blue !important;
+    background: $chetwode-blue;
+    color: $white;
 }
 
 .btn,
@@ -67,10 +67,15 @@ svg.icon.icon-xxlg-md {
     width: 40px;
 }
 
-.return-content .return-top {
-    display: inline-block;
-    margin-left: 1%;
-}
+.return-content{
+    .return-top {
+        display: inline-block;
+        margin-left: 1%;
+        .font-xlarge{
+            margin: 3px auto;
+        }
+    }
+} 
 
 .text-middle {
     vertical-align: middle;
@@ -81,7 +86,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .return-content .return-filed {
-    background-color: #00b177;
+    background-color: $jade-color;
 }
 
 .text-uppercase {
@@ -89,7 +94,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .text-muted {
-    color: #777;
+    color: $gray;
 }
 
 .return-content .content-graph {
@@ -117,7 +122,7 @@ svg.icon.gstr-icon {
 
 .return-content .line {
     margin: 5px 18px;
-    border-bottom: 1px solid #ededed;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .return-content .line::before {
@@ -126,7 +131,7 @@ svg.icon.gstr-icon {
     width: 9px;
     height: 9px;
     border-radius: 5px;
-    background-color: #ededed;
+    background-color: $whisper-light;
     position: relative;
     top: 5px;
     right: 19px;
@@ -164,8 +169,11 @@ svg.icon {
 
 .text-overdue {
     color: $chetwode-blue;
+    margin: 20px 0px 0px;
+    i{
+        padding: 0 4%;
+    }
 }
-
 svg.icon.icon-xxlg-md {
     height: 40px;
     width: 40px;
@@ -183,14 +191,14 @@ svg.icon.icon-xxlg-md {
 }
 
 .btn-default {
-    color: #333;
-    background-color: #f5f5f5;
-    border-color: #ddd;
+    color: $night-rider;
+    background-color: $gray-95;
+    border-color: $gainsboro;
 }
 
 .return-body .notification {
     padding-top: 25px;
-    background: #fff;
+    background: $white;
 }
 
 .filing-demo-video {
@@ -219,13 +227,13 @@ svg.icon.icon-xxlg-md {
 }
 
 .label-default {
-    background-color: #999;
+    background-color: $nobel;
 }
 
 hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid $gainsboro;
 }
 
 .filing-due-date {
@@ -234,7 +242,7 @@ hr {
 
 .filing-due-date .return-details {
     margin-top: 10px;
-    border: 1px solid #eee;
+    border: 1px solid $gainsboro;
     border-radius: 4px;
 }
 
@@ -256,7 +264,7 @@ hr {
     display: inline-block;
     margin-right: 6px;
     vertical-align: middle;
-    background-color: #41aaff;
+    background-color: $cornflower-blue;
 }
 
 .filing-due-date .return-details > table > tbody > tr > td:last-child {
@@ -270,7 +278,7 @@ hr {
 
 .return-body .notification .notify-title {
     font-size: 13px;
-    color: #999;
+    color: $nobel;
 }
 
 .return-body .notification .activity-graph {
@@ -289,14 +297,14 @@ hr {
     left: 4px;
     bottom: 5px;
     height: 75%;
-    border-left: 1px solid #e4e4e4;
+    border-left: 1px solid $whisper;
 }
 
 .return-body .notification .activity-graph .notify-circle {
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    background-color: #2a85fb;
+    background-color: $primary;
     display: inline-block;
     margin-right: 15px;
     margin-top: 4px;
@@ -315,12 +323,12 @@ hr {
 
 .notify label.font-xs.text-muted strong {
     font-weight: 600;
-    color: #777 !important;
+    color: $gray !important;
 }
 
 .font-normal {
     font-size: 13px;
-    color: #777;
+    color: $gray;
 }
 
 .return-body .notification .faq-list {
@@ -329,25 +337,25 @@ hr {
 
 .return-body .notification .faq-list li {
     padding: 6px 10px;
-    color: #428bca;
+    color: $curious-blue;
     font-size: 13px;
 }
 
 .return-body .notification .faq-list li a:hover {
-    color: #005bd0;
+    color: $faux-true;
 }
 
 #c-tab ::ng-deep .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:focus,
 .nav-tabs > li.active > a:hover {
-    color: #555;
+    color: $zambezi;
     cursor: default;
-    background-color: #fff;
-    border: 2px solid #ddd;
+    background-color: $white;
+    border: 2px solid $gainsboro;
     border-right: 0 !important;
     border-left: 0 !important;
     border-top: 0 !important;
-    border-bottom-color: #025cff;
+    border-bottom-color: $navy-blue;
 }
 
 .my-dropdown-menu {
@@ -383,7 +391,7 @@ hr {
 
 .dropdown-menu > li > a:hover {
     color: $chetwode-blue;
-    background: #e5e5e5;
+    background: $whisper;
 }
 
 .month-picker {
@@ -419,13 +427,13 @@ hr {
     color: inherit !important;
 }
 ::ng-deep #monthPicker .btn-info:hover .text-success {
-    color: #fff !important;
+    color: $white !important;
 }
 ::ng-deep #monthPicker .btn-default > .text-success {
     color: inherit !important;
 }
 ::ng-deep #monthPicker .btn-default:hover > .text-success {
-    color: #fff !important;
+    color: $white !important;
 }
 .parent {
     position: relative;
@@ -450,7 +458,7 @@ hr {
     top: 0px;
     width: 200px;
     height: 4px;
-    background-color: #5b64c9;
+    background-color: $chetwode-blue;
     animation: loading 2s linear infinite;
 }
 
@@ -463,6 +471,12 @@ hr {
         padding-right: 5px;
         padding-left: 5px;
     }
+}
+.tax-heading {
+    max-width: 10%;
+}
+.tax-dropdown {
+    max-width: 30%;
 }
 
 @keyframes loading {
@@ -494,7 +508,7 @@ hr {
 /*responsive*/
 @media (max-width: 767px) {
     .return-content {
-        background-color: #fff;
+        background-color: $white;
     }
     .filing-steps .font-large {
         font-size: 14px;

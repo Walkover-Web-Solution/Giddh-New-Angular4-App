@@ -69,8 +69,10 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             let newState = _.cloneDeep(state);
             let res: BaseResponse<ReciptResponse, InvoiceReceiptFilter> = action.payload;
             if (res.status === 'success') {
-                newState[res.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers'] = res.body;
+                newState[res.request && res.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers'] = res.body;
                 newState.isGetAllRequestSuccess = true;
+            } else if (res.status === 'error' && res.code === 'UNAUTHORISED') {
+                newState['vouchers'].items = [];
             }
             newState.isGetAllRequestInProcess = false;
             return Object.assign({}, state, newState);
@@ -136,6 +138,8 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
                             }
 
                             if(result && result.body && (result.body.type === VoucherTypeEnum.sales || result.body.type === VoucherTypeEnum.cash) && result.body.number == m.voucherNumber) {
+                                m.account = result.body.account;
+                            } else if(result && result.body && result.body.type === VoucherTypeEnum.purchase && result.body.uniqueName == m.uniqueName) {
                                 m.account = result.body.account;
                             }
                             return m;

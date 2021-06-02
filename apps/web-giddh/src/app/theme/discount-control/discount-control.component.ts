@@ -8,15 +8,7 @@ import { take, takeUntil } from 'rxjs/operators';
 @Component({
     selector: 'discount-control-component',
     templateUrl: './discount-control-component.html',
-    styles: [`
-    /*.multi-select input.form-control {
-       background-image: unset !important;
-    }*/
-
-    .multi-select .caret {
-      display: block !important;
-    }
-  `]
+    styleUrls: ['./discount-control-component.scss']
 })
 
 export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
@@ -29,7 +21,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public ledgerAmount: number = 0;
     @Input() public totalAmount: number = 0;
     @Input() public showHeaderText: boolean = true;
-    @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
+    @Output() public discountTotalUpdated: EventEmitter<{discount: any, isActive: boolean}> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Input() public discountSum: number;
     @Input() public maskInput: string;
@@ -43,6 +35,8 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild('disInptEle', {static: true}) public disInptEle: ElementRef;
 
     @Input() public discountMenu: boolean;
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /** Mask format for decimal number and comma separation  */
     public inputMaskFormat: string = '';
 
@@ -136,8 +130,8 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', event: any) {
-        this.defaultDiscount.amount = parseFloat(event.target.value);
-        this.defaultDiscount.discountValue = parseFloat(event.target.value);
+        this.defaultDiscount.amount = parseFloat(String(event.target.value).replace(/[,'\s]/g,''));
+        this.defaultDiscount.discountValue = parseFloat(String(event.target.value).replace(/[,'\s]/g,''));
         this.defaultDiscount.discountType = type;
 
         this.change();
@@ -159,8 +153,8 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
 	/**
 	 * on change of discount amount
 	 */
-    public change() {
-        this.discountTotalUpdated.emit();
+    public change(discount?: any, event?: boolean) {
+        this.discountTotalUpdated.emit({discount: discount, isActive: event});
     }
 
     public trackByFn(index) {
@@ -172,7 +166,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public discountInputBlur(event) {
-        if (event && event.relatedTarget && this.disInptEle && !this.disInptEle.nativeElement.contains(event.relatedTarget)) {
+        if (event && event.relatedTarget && this.disInptEle && !this.disInptEle?.nativeElement.contains(event.relatedTarget)) {
             this.hideDiscountMenu();
         }
     }

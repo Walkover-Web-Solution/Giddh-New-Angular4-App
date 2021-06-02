@@ -1,15 +1,17 @@
-.whiteBg {
-    background-color: #fff;
+@import "../../../../assets/css/color.scss";
+
+.white-bg {
+    background-color: $white;
 }
 
 // .form-group input, .form-group select, .form-group textarea{
 //   max-width: 140px;
 // }
-// .form-group.size_240 input, .form-group.size_240 select, .form-group.size_240 textarea{
+// .form-group.size-240 input, .form-group.size-240 select, .form-group.size-240 textarea{
 //   max-width: 240px;
 //   width: 240px;
 // }
-// .form-group.size_360 input, .form-group.size_360 select, .form-group.size_360 textarea{
+// .form-group.size-360 input, .form-group.size-360 select, .form-group.size-360 textarea{
 //   max-width: 360px;
 // }
 .flex-row {
@@ -23,7 +25,7 @@
     width: 100%;
     height: 80px;
     padding: 20px 0;
-    background-color: #7d7d7d;
+    background-color: $gray;
 }
 
 // styles
@@ -53,35 +55,35 @@
         font-weight: 400;
         margin-bottom: 5px;
     }
-    &.size_175 {
+    &.size-175 {
         input,
         select,
         textarea {
             width: 175px;
         }
     }
-    &.size_240 {
+    &.size-240 {
         input,
         select,
         textarea {
             width: 240px;
         }
     }
-    &.size_340 {
+    &.size-340 {
         input,
         select,
         textarea {
             width: 340px;
         }
     }
-    &.size_380 {
+    &.size-380 {
         input,
         select,
         textarea {
             width: 380px;
         }
     }
-    &.noMarg {
+    &.no-margin {
         margin: 0;
     }
 }

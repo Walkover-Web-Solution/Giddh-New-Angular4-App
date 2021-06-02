@@ -1,5 +1,11 @@
 @import "../../../assets/css/color.scss";
-.upload_excel {
+.upload-and-map-content{
+    h2{
+        font-size: 32px;
+    }
+}
+
+.upload-excel {
     display: flex;
     height: 320px;
     position: relative;
@@ -10,22 +16,22 @@
 .center-block{
     margin: 0 auto;
 }
-.max500 {
+.max-width-500 {
     max-width: 500px;
 }
 
-.upload_icon {
+.upload-icon {
     font-size: 62px;
     float: none;
-    color: #e2e2e2;
+    color: $whisper-light;
 }
 
-.sample_file-btn {
+.sample-file-btn {
     z-index: 9;
     position: relative;
 }
 
-.dashed_bdr {
+.dashed-border {
     border: 2px dashed $gainsboro;
 }
 
@@ -45,7 +51,7 @@
     justify-content: flex-end;
     margin: 0 15px;
     border: 1px solid $gainsboro;
-    background: #fafafa;
+    background: $gray-95;
     padding: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -65,7 +71,7 @@
 }
 
 .has-error .form-control {
-    border-color: red !important;
+    border-color: $red !important;
 }
 
 #csvUploadInput {
@@ -84,10 +90,10 @@
     top: 0;
     bottom: 0;
     z-index: 9;
-    background: #fff;
+    background: $white;
     text-align: left;
     position: absolute;
-    border: 1px solid #d6d6d6;
+    border: 1px solid $light-gray;
     border-radius: 2px !important;
     padding: 6px 12px !important;
     outline: 0;
@@ -96,15 +102,40 @@
     width: calc(100% - 95px);
 }
 .select-file {
-    color: #089328;
+    color: $light-green;
 }
-.file-uplod-penal {
+.file-upload-panel {
     width: 100%;
     text-align: left;
     border: 1px solid $gainsboro;
     padding: 8px;
     border-radius: 4px;
-    color: #cccccc;
+    color: $very-light-gray;
+
+}
+.linked-entities {
+    .list-item {
+        .entity-icon {
+            padding: 4px;
+        }
+        .entity-details {
+            margin-left: 6px;
+            flex: 1;
+            .item {
+                font-family:'opensans-semibold'
+            }
+        }
+        .default-entity {
+            align-items: center;
+            display: flex;
+            &:hover:after {
+                color: $rich-blue;
+            }
+            .icon-favorite-selected {
+                color: $rich-blue;
+            }
+        }
+    }
 }
 @media(max-width:991px){
     .import-type {

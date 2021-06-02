@@ -37,7 +37,7 @@
 p {
     line-height: 17px;
   }
-  .mb-05 {
+  .mr-b05 {
     margin-bottom: 5px;
   }
   /* heading */
@@ -199,6 +199,10 @@ header img {
     text-align: left;
 }
 
+.word-break{
+    word-break: break-word;
+}
+
 /* table items */
 
 #default table.item {
@@ -328,6 +332,9 @@ header img {
 
 #default .subfooter {
     padding: 10px 10px 0px 10px;
+    .notes2-default-text {
+        white-space:pre-line;
+    }
 }
 
 #default .subfooter hr {
@@ -397,6 +404,14 @@ header img {
     z-index: 0;
 }
 
+#default header .qr-image img { 
+    width: 160px;
+    height: 100%;
+    float: right !important;
+    margin-bottom: 0px !important;
+    max-width: 100% !important;
+}
+
 .docTitle hr {
     position: absolute;
     height: 2px;
@@ -407,6 +422,15 @@ header img {
 
 strong {
     font-weight: bold;
+}
+
+.invoice-head{
+    width: 50%;
+    word-break: break-word;
+}
+
+.width-40{
+    width: 40%;
 }
 
 /* common template css  */
@@ -479,6 +503,11 @@ strong {
 }
 .tax-table {
     table-layout: fixed;
+    min-width: 100% !important;
+}
+
+.tax-table thead tr th:nth-child(1) {
+    width: 20%;
 }
 
 .tax-table thead tr th,

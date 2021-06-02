@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Injectable()
 export class VersionCheckService {
@@ -24,7 +25,7 @@ export class VersionCheckService {
         setTimeout(() => {
             this.checkVersion(url);
         }, 2000);
-        
+
         setInterval(() => {
             this.checkVersion(url);
         }, frequency);
@@ -36,7 +37,7 @@ export class VersionCheckService {
      */
     private checkVersion(url) {
         // timestamp these requests to invalidate caches
-        this.http.get(url + '?t=' + new Date().getTime())
+        this.http.get(url + '?t=' + new Date().getTime()).pipe(take(1))
             .subscribe(
                 (response: any) => {
                     const hash = response.hash;

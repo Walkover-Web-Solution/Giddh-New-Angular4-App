@@ -40,6 +40,7 @@ import { TokenVerifyComponent } from './login/token-verify.component';
 import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mobile-home-sidebar.component';
 import { MobileHomeComponent } from './mobile-home/mobile-home.component';
 import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
+import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component';
 import { NewUserComponent } from './newUser.component';
 import { NoContentComponent } from './no-content/no-content.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
@@ -56,6 +57,8 @@ import { SocialLoginCallbackComponent } from './social-login-callback.component'
 import { reducers } from './store';
 import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
 import { UniversalListModule } from './theme/universal-list/universal.list.module';
+import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
+import { DownloadComponent } from './download/download.component';
 
 // import { SuccessComponent } from './settings/linked-accounts/success.component';
 /*
@@ -123,7 +126,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         SelectPlanComponent,
         MobileHomeComponent,
         MobileHomeSidebarComponent,
-        MobileSearchCompanyComponent
+        MobileSearchCompanyComponent,
+        MobileSearchBranchComponent,
+        DownloadComponent
         // SignupComponent
     ],
     /**
@@ -159,10 +164,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         StoreModule.forRoot(reducers, {metaReducers}),
         PerfectScrollbarModule,
         RouterModule.forRoot(ROUTES, {
-            useHash: IS_ELECTRON_WA,
-            preloadingStrategy: CustomPreloadingStrategy,
-            onSameUrlNavigation: 'reload'
-        }),
+    useHash: IS_ELECTRON_WA,
+    //preloadingStrategy: CustomPreloadingStrategy,
+    onSameUrlNavigation: 'reload',
+    preloadingStrategy: QuicklinkStrategy,
+    relativeLinkResolution: 'corrected'
+}),
+        QuicklinkModule,
         //StoreRouterConnectingModule,
         ...CONDITIONAL_IMPORTS,
 

@@ -44,26 +44,29 @@ export class AgingreportingService implements OnInit {
             catchError((e) => this.errorHandler.HandleCatch<string[], string>(e, null, {})));
     }
 
-    public GetDueAmountReport(model: DueAmountReportRequest, queryRequest: DueAmountReportQueryRequest): Observable<BaseResponse<DueAmountReportResponse, DueAmountReportRequest>> {
+    public GetDueAmountReport(model: DueAmountReportRequest, queryRequest: DueAmountReportQueryRequest, branchUniqueName: string): Observable<BaseResponse<DueAmountReportResponse, DueAmountReportRequest>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
+        let url = this.config.apiUrl + DUEAMOUNTREPORT_API_V2.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            .replace(':q', encodeURIComponent(queryRequest.q || ''))
+            .replace(':page', encodeURIComponent(queryRequest.page.toString()))
+            .replace(':count', encodeURIComponent(queryRequest.count.toString()))
+            .replace(':sort', encodeURIComponent(queryRequest.sort.toString()))
+            .replace(':sortBy', encodeURIComponent(queryRequest.sortBy.toString()))
+            .replace(':fromDate', encodeURIComponent(queryRequest.from))
+            .replace(':toDate', encodeURIComponent(queryRequest.to))
+            .replace(':rangeCol', encodeURIComponent(queryRequest.rangeCol ? queryRequest.rangeCol.toString() : ''));
+        if (branchUniqueName) {
+            branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${branchUniqueName}`);
+        }
         if (this.companyUniqueName) {
-            return this._http.post(
-                this.config.apiUrl + DUEAMOUNTREPORT_API_V2.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                    .replace(':q', encodeURIComponent(queryRequest.q || ''))
-                    .replace(':page', encodeURIComponent(queryRequest.page.toString()))
-                    .replace(':count', encodeURIComponent(queryRequest.count.toString()))
-                    .replace(':sort', encodeURIComponent(queryRequest.sort.toString()))
-                    .replace(':sortBy', encodeURIComponent(queryRequest.sortBy.toString()))
-                    .replace(':fromDate', encodeURIComponent(queryRequest.from))
-                    .replace(':toDate', encodeURIComponent(queryRequest.to))
-                    .replace(':rangeCol', encodeURIComponent(queryRequest.rangeCol ? queryRequest.rangeCol.toString() : ''))
-                , model).pipe(
-                    map((res) => {
-                        let data: BaseResponse<DueAmountReportResponse, DueAmountReportRequest> = res;
-                        data.request = model;
-                        data.queryString = queryRequest;
-                        return data;
-                    }), catchError((e) => this.errorHandler.HandleCatch<DueAmountReportResponse, DueAmountReportRequest>(e, model, queryRequest)));
+            return this._http.post(url, model).pipe(
+                map((res) => {
+                    let data: BaseResponse<DueAmountReportResponse, DueAmountReportRequest> = res;
+                    data.request = model;
+                    data.queryString = queryRequest;
+                    return data;
+                }), catchError((e) => this.errorHandler.HandleCatch<DueAmountReportResponse, DueAmountReportRequest>(e, model, queryRequest)));
         } else {
             return empty();
         }

@@ -4,8 +4,10 @@
     color: $white !important;
     background: $vivid-blue;
 }
+
 .virtual-group-list {
     height: 100%;
+    min-height: 300px;
 }
 
 

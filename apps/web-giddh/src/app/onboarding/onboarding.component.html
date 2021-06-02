@@ -1,123 +1,113 @@
-<div id="main" class="welcome-container clearfix">
-    <div class="">
-        <div class="row m-t-35 mr-0 ml-0">
-            <div class="col-xs-12 col-md-5 col-sm-6">
-                <h1 class="borderbtm">Try things out</h1>
-                <ul class="manage_invoice">
-                    <li>
-                        <!-- <i class="icon-Create-Invoice"></i>proforma-invoice/invoice/sales -->
-                        <a [routerLink]="['/pages','proforma-invoice','invoice','sales']"> <img src="{{imgPath}}create-invoice.svg" alt="" class="mrR1"> Create and send an Invoice</a>
-                    </li>
-                    <li>
-                        <!-- <i class="icon-Add-customer"></i> -->
-                        <a [routerLink]="['/pages','contact', 'customer']"> <img src="{{imgPath}}add-customer.svg" alt="" class="mrR1"> Add a customer
-                        </a>
-                    </li>
-                    <li>
-                        <!-- <i class="icon-Invite-Accountant"></i> -->
-                        <a [routerLink]="['/pages','settings', 'taxes']"> <img src="{{imgPath}}updateGST.svg" alt="" class="mrR1"> Update Taxes </a>
-                    </li>
-                    <li>
+<ng-container appTranslate [file]="'onboarding'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+    <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    <div id="main" class="welcome-container clearfix">
+        <div>
+            <div class="row mt-2 mr-0 ml-0">
+                <div class="col-xs-12 col-md-5 col-sm-6">
+                    <h1 class="border-btm">{{localeData?.try_things}}</h1>
+                    <ul class="manage-invoice">
+                        <li>
+                            <a [routerLink]="['/pages','proforma-invoice','invoice','sales']"> <img src="{{imgPath}}create-invoice.svg" alt="" class="mr-r1">{{localeData?.create_send_invoice}}</a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/pages','contact', 'customer']"> <img src="{{imgPath}}add-customer.svg" alt="" class="mr-r1">{{localeData?.add_customer}}</a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/pages','settings', 'taxes']"> <img src="{{imgPath}}updateGST.svg" alt="" class="mr-r1">{{localeData?.update_taxes}}</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void 0" (click)="selectConfigureBank()"> <img src="{{imgPath}}configure-bank-account.svg" alt="" class="mr-r1">{{localeData?.configure_bank_account}}</a>
+                        </li>
+                    </ul>
+                    <h1 class="border-btm mr-t5">{{localeData?.have_data_tally}}</h1>
+                    <p [innerHTML]="localeData?.giddh_usage"></p>
+                    <a class="btn btn-sync" target="_blank" href="https://giddh.com/help/sync-with-tally-1591360375828781">
+                        {{localeData?.sync_with_tally}}
+                    </a>
+                    <a class="btn btn-sync" href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp">
+                        {{localeData?.download_tcp}}
+                    </a>
 
-                        <a href="javascript:void 0" (click)="selectConfigureBank()"> <img src="{{imgPath}}configure-bank-account.svg" alt="" class="mrR1"> Configure your bank account
-                        </a>
-                    </li>
-                </ul>
-                <h1 class="borderbtm m-t-50">Have data on Tally?</h1>
-                <p>
-                    Don't worry!<br> Easily get your accounting data on Giddh
-                </p>
-                <!--<button class="btn btn-sync">Sync with Tally</button>-->
-                <a class="btn btn-sync" target="_blank" href="https://giddh.com/help/sync-with-tally-1591360375828781">
-                    Sync With Tally
-                </a>
-                <a class="btn btn-sync" href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp">
-                Download TCP
-                </a>
-
-                <div class="mt-2 right_section">
-                    <h1 class="borderbtm">Have a question to ask?</h1>
-                    <span>Request a demo:</span>
-                    <button class="btn btn-success m-t-10" (click)="scheduleNow()">Schedule Now</button>
-                    <br>
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-6">
-                            <span class="m-t-30">or call:</span>
-                            <a class="text-dark" href="tel:8818888764">8818888764</a>,
-                            <a class="text-dark" href="tel:8889500411">8889500411</a>
-                            <span class="m-t-30 m-b-10">or visit:</span>
-                            <a href="https://giddh.com/help" target="_blank" class="text-dark">giddh.com/help</a>
-                        </div>
-                        <div class="col-sm-6 scheduleImg">
-                            <div class="">
-                                <img src="assets/images/Schedule.png" alt="">
+                    <div class="mt-2 right-section">
+                        <h1 class="border-btm">{{localeData?.ask_question}}</h1>
+                        <span>{{localeData?.request_demo}}</span>
+                        <button class="btn btn-success mr-t1" (click)="scheduleNow()">{{commonLocaleData?.app_schedule_now}}</button>
+                        <br>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <span class="mr-t3">{{localeData?.call}}</span>
+                                <a class="text-dark" href="tel:{{supportTeamNumber}}">{{supportTeamNumber}}</a>
+                                <span class="mr-t3 mr-b1">{{localeData?.visit}}</span>
+                                <a href="https://giddh.com/help" target="_blank" class="text-dark">giddh.com/help</a>
+                            </div>
+                            <div class="col-sm-6 schedule-img">
+                                <div class="">
+                                    <img src="assets/images/Schedule.png" alt="">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
-            </div>
-            <div class="col-xs-12 col-md-5 col-sm-6 ">
-                <div class="right_section">
-                    <h1 class="borderbtm">Select Inventory Type</h1>
-                    <span>Inventory type</span>
-                    <div class="pd-b1 clearfix">
-
-                        <span class="pd0 mrR3 d-inline-block">
-                            <input id="product" class="radio-custom cp ml0" type="radio" [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                            (change)="updateInventorySetting(true)" name="inventoryType">
-                            <label for="product" class="radio-custom-label">Product</label>
-                        </span>
-
-                        <span class="pd0 mrR3 d-inline-block">
-                            <input id="service" class="radio-custom cp ml0" type="radio" [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                            (change)="updateInventorySetting(false)" name="inventoryType">
-                            <label for="service" class="radio-custom-label">Service</label>
-                        </span>
-
-                    </div>
-                    <br><br><br>
-
-                    <div class="importData">
-                        <h1 class="borderbtm">Import Data</h1>
-                        <span>Have data in CSV or Excel files?</span>
-
-                        <div class="importData-blocks">
-                            <div class="d-inline-flex">
-                                <a [routerLink]="['/pages','import','account']"> <img src="assets/images/new/acc-import.svg">
-                                    <p>Accounts</p>
-                                </a>
-                            </div>
-                            <div class="d-inline-flex">
-                                <a [routerLink]="['/pages','import','group']"> <img src="assets/images/new/group-import.svg">
-                                    <p>Groups</p>
-                                </a>
-                            </div>
-                            <div class="d-inline-flex">
-                                <a [routerLink]="['/pages','import','stock']"> <img src="assets/images/new/Inventory-13.svg">
-                                    <p>Inventories</p>
-                                </a>
-                            </div>
-                            <div class="d-inline-flex">
-                                <a [routerLink]="['/pages','import','entries']"><img src="assets/images/new/entries-import.svg">
-                                    <p>Entries</p>
-                                </a>
-                            </div>
-                            <div class="d-inline-flex">
-                                <a [routerLink]="['/pages','import','trial-balance']"><img src="assets/images/new/tb-import.svg">
-                                    <p>Trial Balance</p>
-                                </a>
+                <div class="col-xs-12 col-md-5 col-sm-6">
+                    <div class="right-section">
+                        <h1 class="border-btm">{{commonLocaleData?.app_select_inventory_type}}</h1>
+                        <span>{{commonLocaleData?.app_inventory_type}}</span>
+                        <div class="pd-b1 clearfix">
+                            <span class="p-0 mr-r3 d-inline-block">
+                                <input id="product" class="radio-custom cp ml-0" type="radio" [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                                (change)="updateInventorySetting(true)" name="inventoryType">
+                                <label for="product" class="radio-custom-label">{{commonLocaleData?.app_product}}</label>
+                            </span>
+                            <span class="p-0 mr-r3 d-inline-block">
+                                <input id="service" class="radio-custom cp ml-0" type="radio" [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                                (change)="updateInventorySetting(false)" name="inventoryType">
+                                <label for="service" class="radio-custom-label">{{commonLocaleData?.app_service}}</label>
+                            </span>
+                        </div>
+                        <br><br><br>
+                        <div class="import-data">
+                            <h1 class="border-btm">{{localeData?.import_data}}</h1>
+                            <span>{{localeData?.data_available}}</span>
+                            <div class="import-data-blocks">
+                                <div class="d-inline-flex">
+                                    <a [routerLink]="['/pages','import','account']"> <img src="assets/images/new/acc-import.svg">
+                                        <p>{{commonLocaleData?.app_import_type?.accounts}}</p>
+                                    </a>
+                                </div>
+                                <div class="d-inline-flex">
+                                    <a [routerLink]="['/pages','import','group']"> <img src="assets/images/new/group-import.svg">
+                                        <p>{{commonLocaleData?.app_import_type?.groups}}</p>
+                                    </a>
+                                </div>
+                                <div class="d-inline-flex">
+                                    <a [routerLink]="['/pages','import','stock']"> <img src="assets/images/new/Inventory-13.svg">
+                                        <p>{{commonLocaleData?.app_import_type?.inventory}}</p>
+                                    </a>
+                                </div>
+                                <div class="d-inline-flex">
+                                    <a [routerLink]="['/pages','import','entries']"><img src="assets/images/new/entries-import.svg">
+                                        <p>{{commonLocaleData?.app_import_type?.entries}}</p>
+                                    </a>
+                                </div>
+                                <div class="d-inline-flex">
+                                    <a [routerLink]="['/pages','import','trial-balance']"><img src="assets/images/new/tb-import.svg">
+                                        <p>{{commonLocaleData?.app_import_type?.trial_balance}}</p>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
-
     </div>
     <!--    </layout-main>-->
     <!-- <app-footer></app-footer> -->
+</ng-container>
+<div bsModal #scheduleNowModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <schedule-now  *ngIf="scheduleNowModel?.isShown" (closeModal)="scheduleNowModel?.hide();"></schedule-now>
+        </div>
+    </div>
 </div>

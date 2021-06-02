@@ -1,13 +1,21 @@
 {
+    "page_heading" : "Import Data From TALLY",
     "inprogress" : "In-Progress",
     "completed" : "Completed",
     "time_placeholder" : "Select Interval",
     "company_placeholder" : "Select Company",
     "no_entries_found" : "No entries found",
-    "import_json" : "Import Json",
+    "tally" : "Tally:",
+    "import_json" : "Import Json:",
     "last_import" : "Last Import on",
+    "groups": "Groups",
     "complete" : "Complete",
     "error_occured" : "error occured",
+    "accounts": "Accounts",
+    "entries": "Entries",
     "error_report" : "Error Report:",
-    "filter_criteria" : "Please check your filter criteria"
+    "filter_criteria" : "Please check your filter criteria",
+    "company": "Company",
+    "select_company": "Select Company",
+    "select_interval": "Select Interval"
 }

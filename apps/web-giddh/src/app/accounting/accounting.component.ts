@@ -4,7 +4,7 @@ import { TallyModuleService } from './tally-service';
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { CompanyActions } from '../actions/company.actions';
 import { AppState } from '../store/roots';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { ReplaySubject } from 'rxjs';
 import { SidebarAction } from '../actions/inventory/sidebar.actions';
@@ -82,7 +82,7 @@ export const PAGES_WITH_CHILD = ['Purchase', 'Sales', 'Credit note', 'Debit note
 
 @Component({
     templateUrl: './accounting.component.html',
-    styleUrls: ['./accounting.component.css']
+    styleUrls: ['./accounting.component.scss']
 })
 
 export class AccountingComponent implements OnInit, OnDestroy {
@@ -105,7 +105,7 @@ export class AccountingComponent implements OnInit, OnDestroy {
         private _tallyModuleService: TallyModuleService,
         private _accountService: AccountService,
         private sidebarAction: SidebarAction) {
-        this._tallyModuleService.selectedPageInfo.subscribe((d) => {
+        this._tallyModuleService.selectedPageInfo.pipe(takeUntil(this.destroyed$)).subscribe((d) => {
             if (d) {
                 this.gridType = d.gridType;
                 this.selectedPage = d.page;
@@ -186,23 +186,12 @@ export class AccountingComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'journal-voucher';
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-
-        this.store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe(a => {
-            if (a && a !== '') {
-                this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data.status === 'success') {
-                        this.flattenAccounts = data.body.results;
-                        this._tallyModuleService.setFlattenAccounts(data.body.results);
-                    }
-                });
-            }
-        });
 
         this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
     }

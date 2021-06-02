@@ -1,13 +1,12 @@
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { Observable, ReplaySubject } from 'rxjs';
 import { GroupCreateRequest } from '../../../../models/api-models/Group';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
-import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { digitsOnly } from '../../../helpers';
 
 @Component({
@@ -16,6 +15,10 @@ import { digitsOnly } from '../../../helpers';
 })
 
 export class GroupAddComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 	@Input() public path: string[] = [];
 	public activeGroupUniqueName$: Observable<string>;
 	public groupDetailForm: FormGroup;
@@ -28,14 +31,13 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-	constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-		private _generalServices: GeneralService) {
-		this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
-		this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).pipe(takeUntil(this.destroyed$));
-		this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName).pipe(takeUntil(this.destroyed$));
-		this.isGroupNameAvailable$ = this.store.select(state => state.groupwithaccounts.isGroupNameAvailable).pipe(takeUntil(this.destroyed$));
-		this.isCreateGroupInProcess$ = this.store.select(state => state.groupwithaccounts.isCreateGroupInProcess).pipe(takeUntil(this.destroyed$));
-		this.isCreateGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isCreateGroupSuccess).pipe(takeUntil(this.destroyed$));
+	constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
+		this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
+		this.showAddNewGroup$ = this.store.pipe(select(state => state.groupwithaccounts.showAddNewGroup), takeUntil(this.destroyed$));
+		this.fetchingGrpUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingGrpUniqueName), takeUntil(this.destroyed$));
+		this.isGroupNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isGroupNameAvailable), takeUntil(this.destroyed$));
+		this.isCreateGroupInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.isCreateGroupInProcess), takeUntil(this.destroyed$));
+		this.isCreateGroupSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.isCreateGroupSuccess), distinctUntilChanged(), takeUntil(this.destroyed$));
 	}
 
 	public ngOnInit() {
@@ -47,51 +49,30 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 			closingBalanceTriggerAmountType: ['CREDIT']
 		});
 
-		this.isCreateGroupSuccess$.pipe(distinctUntilChanged()).subscribe(a => {
+		this.isCreateGroupSuccess$.subscribe(a => {
 			if (a) {
 				this.groupDetailForm.reset();
 			}
 		});
 
-		this.groupDetailForm.get('name').valueChanges.pipe(debounceTime(100)).subscribe(name => {
+		this.groupDetailForm.get('name').valueChanges.pipe(debounceTime(100), takeUntil(this.destroyed$)).subscribe(name => {
 			let val: string = name;
 			val = uniqueNameInvalidStringReplace(val);
 			if (val) {
-                this.groupDetailForm.patchValue({ uniqueName: val });
+                this.groupDetailForm?.patchValue({ uniqueName: val });
 			} else {
-				this.groupDetailForm.patchValue({ uniqueName: '' });
+				this.groupDetailForm?.patchValue({ uniqueName: '' });
 			}
 		});
 		setTimeout(() => {
-			this.autoFocus.nativeElement.focus();
+			this.autoFocus?.nativeElement.focus();
 		}, 50);
 	}
-
-	// public generateUniqueName() {
-	//   let val: string = this.groupDetailForm.controls['name'].value;
-	//   val = uniqueNameInvalidStringReplace(val);
-	//   if (val) {
-	//     this.store.dispatch(this.groupWithAccountsAction.getGroupUniqueName(val));
-
-	//     this.isGroupNameAvailable$.subscribe(a => {
-	//       if (a !== null && a !== undefined) {
-	//         if (a) {
-	//           this.groupDetailForm.patchValue({ uniqueName: val });
-	//         } else {
-	//           let num = 1;
-	//           this.groupDetailForm.patchValue({ uniqueName: val + num });
-	//         }
-	//       }
-	//     });
-	//   } else {
-	//     this.groupDetailForm.patchValue({ uniqueName: '' });
-	//   }
-	// }
 
 	public addNewGroup() {
 		let activeGrpUniqueName: string;
 		let uniqueName = this.groupDetailForm.get('uniqueName');
-		uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+		uniqueName?.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
 
 		this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGrpUniqueName = a);
 
@@ -106,7 +87,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 
 	public closingBalanceTypeChanged(type: string) {
 		if (Number(this.groupDetailForm.get('closingBalanceTriggerAmount').value) > 0) {
-			this.groupDetailForm.get('closingBalanceTriggerAmountType').patchValue(type);
+			this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
 		}
 	}
 

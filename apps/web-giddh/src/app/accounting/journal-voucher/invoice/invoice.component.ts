@@ -54,7 +54,7 @@ const CustomShortcode = [
 @Component({
 	selector: 'account-as-invoice',
 	templateUrl: './invoice.component.html',
-	styleUrls: ['./invoice.component.scss', '../../accounting.component.css'],
+	styleUrls: ['./invoice.component.scss', '../../accounting.component.scss'],
 	animations: [
 		trigger('slideInOut', [
 			state('in', style({
@@ -147,7 +147,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	private selectedAccountInputField: any;
 	private taxesToRemember: any[] = [];
 	private isAccountListFiltered: boolean = false;
-	private allFlattenAccounts: any[] = [];
+    private allFlattenAccounts: any[] = [];
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
 	constructor(
 		private _accountService: AccountService,
@@ -162,7 +164,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		private inventoryAction: InventoryAction,
 		private invoiceActions: InvoiceActions,
 	) {
-		this._keyboardService.keyInformation.subscribe((key) => {
+		this._keyboardService.keyInformation.pipe(takeUntil(this.destroyed$)).subscribe((key) => {
 			this.watchKeyboardEvent(key);
 		});
 
@@ -174,12 +176,12 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 				return false;
 			}
 			return true;
-		})).subscribe((d) => {
+		}), takeUntil(this.destroyed$)).subscribe((d) => {
 			if (d && d.gridType === 'invoice') {
 				this.data.voucherType = d.page;
 				this.gridType = d.gridType;
 				setTimeout(() => {
-					this.dateField.nativeElement.focus();
+					this.dateField?.nativeElement.focus();
 				}, 50);
 				if (d.page === 'Debit note' || d.page === 'Credit note') {
 					this.invoiceNoHeading = 'Original invoice number';
@@ -213,7 +215,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 				return false;
 			}
 			return true;
-		})).subscribe((data) => {
+		}), takeUntil(this.destroyed$)).subscribe((data) => {
 			if (data) {
 				this.data = cloneDeep(data);
 				if (this.gridType === 'invoice') {
@@ -222,8 +224,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 			}
 		});
 
-		this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
-		this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
+		this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
+		this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
 		this.store.dispatch(this.invoiceActions.getInvoiceSetting());
 	}
 
@@ -232,12 +234,12 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		// dispatch stocklist request
 		this.store.dispatch(this.inventoryAction.GetStock());
 
-		this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$)).subscribe((s: boolean) => {
+		this.store.pipe(select(p => p.ledger.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
 			if (s) {
 				this._toaster.successToast('Entry created successfully', 'Success');
 				this.refreshEntry();
 				this.data.description = '';
-				this.dateField.nativeElement.focus();
+				this.dateField?.nativeElement.focus();
 				this.taxesToRemember = [];
 			}
 		});
@@ -245,7 +247,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		// this.refreshEntry();
 		// this.data.transactions[this.data.transactions.length - 1].inventory.push(this.initInventory());
 
-		this._tallyModuleService.filteredAccounts.subscribe((accounts) => {
+		this._tallyModuleService.filteredAccounts.pipe(takeUntil(this.destroyed$)).subscribe((accounts) => {
 			if (accounts) {
 				let accList: IOption[] = [];
 				accounts.forEach((acc: IFlattenAccountsResultItem) => {
@@ -274,7 +276,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
 	public ngOnChanges(c: SimpleChanges) {
 		if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
-			this.dateField.nativeElement.focus();
+			this.dateField?.nativeElement.focus();
 		}
 		if ('newSelectedAccount' in c && c.newSelectedAccount.currentValue !== c.newSelectedAccount.previousValue) {
 			this.setAccount(c.newSelectedAccount.currentValue);
@@ -511,7 +513,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		this.stockTotal = null;
 		this.accountsTotal = null;
 		this.data.description = '';
-		this.dateField.nativeElement.focus();
+		this.dateField?.nativeElement.focus();
 		this.data.invoiceNumberAgainstVoucher = null;
 	}
 
@@ -678,7 +680,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	public saveEntry() {
 		if (!this.creditorAcc.uniqueName) {
 			this._toaster.errorToast("Party A/c Name can't be blank.");
-			return setTimeout(() => this.partyAccNameInputField.nativeElement.focus(), 200);
+			return setTimeout(() => this.partyAccNameInputField?.nativeElement.focus(), 200);
 		}
 		let data = cloneDeep(this.data);
 		data.generateInvoice = data.invoiceNumberAgainstVoucher ? !!data.invoiceNumberAgainstVoucher.trim() : false;
@@ -789,7 +791,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	}
 
 	public dateEntered() {
-		const date = moment(this.entryDate, 'DD-MM-YYYY');
+		const date = moment(this.entryDate, GIDDH_DATE_FORMAT);
 		if (moment(date).format('dddd') !== 'Invalid date') {
 			this.displayDay = moment(date).format('dddd');
 		} else {
@@ -899,18 +901,18 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		let componentRef = viewContainerRef.createComponent(componentFactory);
 		let componentInstance = componentRef.instance as QuickAccountComponent;
 		componentInstance.needAutoFocus = true;
-		componentInstance.closeQuickAccountModal.subscribe((a) => {
+		componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
 			this.hideQuickAccountModal();
 			componentInstance.needAutoFocus = false;
 			componentInstance.newAccountForm.reset();
 			componentInstance.destroyed$.next(true);
 			componentInstance.destroyed$.complete();
-			this.dateField.nativeElement.focus();
+			this.dateField?.nativeElement.focus();
 			if (this.selectedAccountInputField) {
 				this.selectedAccountInputField.value = '';
 			}
 		});
-		componentInstance.isQuickAccountCreatedSuccessfully$.subscribe((status: boolean) => {
+		componentInstance.isQuickAccountCreatedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe((status: boolean) => {
 			if (status) {
 				this.refreshAccountListData(null, true);
 			}
@@ -975,7 +977,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		// after creating stock, get all stocks again
 		this.selectedStockInputField.value = '';
 		this.filterByText = '';
-		this.dateField.nativeElement.focus();
+		this.dateField?.nativeElement.focus();
 		this.getFlattenGrpofAccounts(null, null, true, true);
 	}
 
@@ -989,7 +991,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		if (!Number(amount)) {
 			if (transactionType === 'stock') {
 				if (indx === 0) {
-					this.dateField.nativeElement.focus();
+					this.dateField?.nativeElement.focus();
 				} else {
 					let stockEle = document.getElementById(`stock_${indx - 1}`);
 					stockEle.focus();
@@ -997,7 +999,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 				this.stocksTransaction.splice(indx, 1);
 			} else if (transactionType === 'account') {
 				if (indx === 0) {
-					this.dateField.nativeElement.focus();
+					this.dateField?.nativeElement.focus();
 				} else {
 					let accountEle = document.getElementById(`account_${indx - 1}`);
 					accountEle.focus();
@@ -1009,21 +1011,21 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
 	public keyUpOnSubmitButton(e) {
 		if (e && (e.keyCode === 39 || e.which === 39) || (e.keyCode === 78 || e.which === 78)) {
-			return setTimeout(() => this.resetButton.nativeElement.focus(), 50);
+			return setTimeout(() => this.resetButton?.nativeElement.focus(), 50);
 		}
 		if (e && (e.keyCode === 8 || e.which === 8)) {
 			this.showConfirmationBox = false;
-			return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+			return setTimeout(() => this.narrationBox?.nativeElement.focus(), 50);
 		}
 	}
 
 	public keyUpOnResetButton(e) {
 		if (e && (e.keyCode === 37 || e.which === 37) || (e.keyCode === 89 || e.which === 89)) {
-			return setTimeout(() => this.submitButton.nativeElement.focus(), 50);
+			return setTimeout(() => this.submitButton?.nativeElement.focus(), 50);
 		}
 		if (e && (e.keyCode === 13 || e.which === 13)) {
 			this.showConfirmationBox = false;
-			return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+			return setTimeout(() => this.narrationBox?.nativeElement.focus(), 50);
 		}
     }
 
@@ -1035,7 +1037,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	}
 
 	private refreshAccountListData(groupUniqueName: string = null, needToFocusSelectedInputField: boolean = false) {
-		this.store.select(p => p.session.companyUniqueName).subscribe(a => {
+		this.store.pipe(select(p => p.session.companyUniqueName), take(1)).subscribe(a => {
 			if (a && a !== '') {
 				this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
 					if (data.status === 'success') {

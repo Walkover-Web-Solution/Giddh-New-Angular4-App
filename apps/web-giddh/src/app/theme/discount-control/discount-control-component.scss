@@ -1,0 +1,27 @@
+@import "../../../assets/css/color.scss";
+
+.multi-select .caret {
+    display: block !important;
+}
+.fa-percent{
+    top: 9px;
+    right: 6px;
+    color: $dim-gray;
+}
+.discount-name-ul{
+    list-style: none;
+    overflow: auto;
+    max-height: 100px;
+}
+.width-50{
+    width: 50px;
+}
+.value-width{
+    width: 110px;
+}
+.percentage-width{
+    padding-right: 22px !important;
+}
+.label-line{
+    line-height: 1.4 !important;
+}

@@ -183,8 +183,8 @@
 <ng-template #commonHeaderTemplateForReconciliationTable>
     <tr>
 
-        <th style="width:250px" id="4" class="text-left">
-            <div style="position: relative">
+        <th id="4" class="text-left width-vendor">
+            <div class="position-relative">
                 <div data-test-title="Vendor Details" title="Vendor Details" class="pull-left over-flow">
                     Vendor
                     Details
@@ -192,25 +192,24 @@
             </div>
         </th>
 
-        <th style="width:155px" class="text-left">
-            <div style="position: relative">
-                <div data-test-title="Transaction Date" title="Transaction Date"
-                     class="pull-left over-flow">
+        <th class="text-left width-date">
+            <div class="position-relative">
+                <div data-test-title="Transaction Date" title="Transaction Date" class="pull-left over-flow">
                     Transaction Date
                 </div>
             </div>
         </th>
 
-        <th style="width:130px" class="text-left">
-            <div style="position: relative">
+        <th class="text-left width-supply">
+            <div class="position-relative">
                 <div data-test-title="Place of Supply" title="Place of Supply" class="pull-left over-flow">
                     Place of Supply
                 </div>
             </div>
         </th>
 
-        <th style="width:140px" class="text-right">
-            <div style="position: relative">
+        <th class="text-right width-amount">
+            <div class="position-relative">
                 <div data-test-title="Taxable Amount" title="Taxable Amount" class=" over-flow"> Taxable
                     Amount
                 </div>
@@ -218,32 +217,32 @@
         </th>
 
         <th class="text-right">
-            <div style="position: relative">
-                <div data-test-title="IGST" title="IGST" class=" over-flow"> IGST</div>
+            <div class="position-relative">
+                <div data-test-title="IGST" title="IGST" class="over-flow"> IGST</div>
             </div>
         </th>
 
         <th class="text-right">
-            <div style="position: relative">
-                <div data-test-title="CGST" title="CGST" class=" over-flow"> CGST</div>
+            <div class="position-relative">
+                <div data-test-title="CGST" title="CGST" class="over-flow"> CGST</div>
             </div>
         </th>
 
         <th class="text-right">
-            <div style="position: relative">
-                <div data-test-title="SGST" title="SGST" class=" over-flow"> SGST</div>
+            <div class="position-relative">
+                <div data-test-title="SGST" title="SGST" class="over-flow"> SGST</div>
             </div>
         </th>
 
         <th class="text-right">
-            <div style="position: relative">
-                <div data-test-title="Cess" title="Cess" class=" over-flow"> Cess</div>
+            <div class="position-relative">
+                <div data-test-title="Cess" title="Cess" class="over-flow"> Cess</div>
             </div>
         </th>
 
         <th class="text-right">
-            <div style="position: relative">
-                <div data-test-title="Total Amount" title="Total Amount" class=" over-flow"> Total Amount
+            <div class="position-relative">
+                <div data-test-title="Total Amount" title="Total Amount" class="over-flow"> Total Amount
                 </div>
             </div>
         </th>
@@ -273,32 +272,68 @@
         </td>
 
         <td class="text-right">
-            <div> {{item.taxable_amount | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.taxable_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item.taxable_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
             <div class="unrecognized-value pt-1"> -</div>
         </td>
 
         <td class="text-right">
-            <div> {{item.igst_amount | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.igst_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item.igst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
             <div class="unrecognized-value pt-1"> -</div>
         </td>
 
         <td class="text-right">
-            <div> {{item.cgst_amount | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.cgst_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item.cgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
             <div class="unrecognized-value pt-1"> -</div>
         </td>
 
         <td class="text-right">
-            <div> {{item.sgst_amount | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.sgst_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item.sgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
             <div class="unrecognized-value pt-1"> -</div>
         </td>
 
         <td class="text-right">
-            <div> {{item.cess_amount | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.cess_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item.cess_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
             <div class="unrecognized-value pt-1"> -</div>
         </td>
 
         <td class="text-right">
-            <div> {{item.grand_total | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.grand_total | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item.grand_total" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
             <div class="unrecognized-value pt-1"> -</div>
         </td>
 
@@ -328,32 +363,68 @@
 
         <td class="text-right">
             <div> -</div>
-            <div class="unrecognized-value pt-1"> {{item.taxable_amount | giddhCurrency}} </div>
+            <div class="unrecognized-value pt-1">
+                <!-- {{item.taxable_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item.taxable_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
         </td>
 
         <td class="text-right">
             <div> -</div>
-            <div class="unrecognized-value pt-1"> {{item.igst_amount | giddhCurrency}} </div>
+            <div class="unrecognized-value pt-1">
+                <!-- {{item.igst_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item.igst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
         </td>
 
         <td class="text-right">
             <div> -</div>
-            <div class="unrecognized-value pt-1"> {{item.cgst_amount | giddhCurrency}} </div>
+            <div class="unrecognized-value pt-1">
+                <!-- {{item.cgst_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item.cgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
         </td>
 
         <td class="text-right">
             <div> -</div>
-            <div class="unrecognized-value pt-1"> {{item.sgst_amount | giddhCurrency}} </div>
+            <div class="unrecognized-value pt-1">
+                <!-- {{item.sgst_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item.sgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
         </td>
 
         <td class="text-right">
             <div> -</div>
-            <div class="unrecognized-value pt-1"> {{item.cess_amount | giddhCurrency}} </div>
+            <div class="unrecognized-value pt-1">
+                <!-- {{item.cess_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item.cess_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
         </td>
 
         <td class="text-right">
             <div> -</div>
-            <div class="unrecognized-value pt-1"> {{item.grand_total | giddhCurrency}} </div>
+            <div class="unrecognized-value pt-1">
+                <!-- {{item.grand_total | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item.grand_total" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
         </td>
 
     </tr>
@@ -385,44 +456,105 @@
         </td>
 
         <td class="text-right">
-            <div> {{item.taxable_amount | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.taxable_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.taxable_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
             <div [ngClass]="{ 'unrecognized-value': item.taxable_amount !== item?.data_in_giddh?.taxable_amount }" class="pt-1">
-                {{item?.data_in_giddh?.taxable_amount | giddhCurrency}}
+                <!-- {{item?.data_in_giddh?.taxable_amount | giddhCurrency}} -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.data_in_giddh?.taxable_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
             </div>
         </td>
 
         <td class="text-right">
-            <div> {{item.igst_amount | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.igst_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.igst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
             <div [ngClass]="{ 'unrecognized-value': item.igst_amount !== item?.data_in_giddh?.igst_amount }" class="pt-1">
-                {{item?.data_in_giddh?.igst_amount | giddhCurrency}}
+                <!-- {{item?.data_in_giddh?.igst_amount | giddhCurrency}} -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.data_in_giddh?.igst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
             </div>
         </td>
 
         <td class="text-right">
-            <div> {{item.cgst_amount | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.cgst_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.cgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
             <div [ngClass]="{ 'unrecognized-value': item.cgst_amount !== item?.data_in_giddh?.cgst_amount }" class="pt-1">
-                {{item?.data_in_giddh?.cgst_amount | giddhCurrency}}
+                <!-- {{item?.data_in_giddh?.cgst_amount | giddhCurrency}} -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.data_in_giddh?.cgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+
             </div>
         </td>
 
         <td class="text-right">
-            <div> {{item.sgst_amount | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.sgst_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.sgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
             <div [ngClass]="{ 'unrecognized-value': item.sgst_amount !== item?.data_in_giddh?.sgst_amount }" class="pt-1">
-                {{item?.data_in_giddh?.sgst_amount | giddhCurrency}}
+                <!-- {{item?.data_in_giddh?.sgst_amount | giddhCurrency}} -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.data_in_giddh?.sgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
             </div>
         </td>
 
         <td class="text-right">
-            <div> {{item.cess_amount | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.cess_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.cess_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
             <div [ngClass]="{ 'unrecognized-value': item.cess_amount !== item?.data_in_giddh?.cess_amount }" class="pt-1">
-                {{item?.data_in_giddh?.cess_amount | giddhCurrency}}
+                <!-- {{item?.data_in_giddh?.cess_amount | giddhCurrency}} -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.data_in_giddh?.cess_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
             </div>
         </td>
 
         <td class="text-right">
-            <div> {{item.grand_total | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.grand_total | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.grand_total" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
             <div [ngClass]="{ 'unrecognized-value': item.grand_total !== item?.data_in_giddh?.grand_total }" class="pt-1">
-                {{item?.data_in_giddh?.grand_total | giddhCurrency}}
+                <!-- {{item?.data_in_giddh?.grand_total | giddhCurrency}} -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.data_in_giddh?.grand_total" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
             </div>
         </td>
 
@@ -451,35 +583,106 @@
         </td>
 
         <td class="text-right">
-            <div> {{item.taxable_amount | giddhCurrency}} </div>
-            <div class="pt-1"> {{item?.data_in_giddh?.taxable_amount | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.taxable_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item.taxable_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
+            <div class="pt-1">
+                <!-- {{item?.data_in_giddh?.taxable_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.data_in_giddh?.taxable_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
         </td>
 
         <td class="text-right">
-            <div> {{item.igst_amount | giddhCurrency}} </div>
-            <div class="pt-1"> {{item?.data_in_giddh?.igst_amount | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.igst_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item.igst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
+            <div class="pt-1">
+                <!-- {{item?.data_in_giddh?.igst_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.data_in_giddh?.igst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
         </td>
 
         <td class="text-right">
-            <div> {{item.cgst_amount | giddhCurrency}} </div>
-            <div class="pt-1"> {{item?.data_in_giddh?.cgst_amount | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.cgst_amount | giddhCurrency}} -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.cgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
+            <div class="pt-1">
+                <!-- {{item?.data_in_giddh?.cgst_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.data_in_giddh?.cgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
         </td>
 
         <td class="text-right">
-            <div> {{item.sgst_amount | giddhCurrency}} </div>
-            <div class="pt-1"> {{item?.data_in_giddh?.sgst_amount | giddhCurrency}} </div>
+            <div>
+                 <!-- {{item.sgst_amount | giddhCurrency}} -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.sgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
+            <div class="pt-1">
+                <!-- {{item?.data_in_giddh?.sgst_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.data_in_giddh?.sgst_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
         </td>
 
         <td class="text-right">
-            <div> {{item.cess_amount | giddhCurrency}} </div>
-            <div class="pt-1"> {{item?.data_in_giddh?.cess_amount | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.cess_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.cess_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
+            <div class="pt-1">
+                <!-- {{item?.data_in_giddh?.cess_amount | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.data_in_giddh?.cess_amount" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
         </td>
 
         <td class="text-right">
-            <div> {{item.grand_total | giddhCurrency}} </div>
-            <div class="pt-1"> {{item?.data_in_giddh?.grand_total | giddhCurrency}} </div>
+            <div>
+                <!-- {{item.grand_total | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.grand_total" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
+            <div class="pt-1">
+                <!-- {{item?.data_in_giddh?.grand_total | giddhCurrency}}  -->
+                <span class="d-inline-flex">
+                    <amount-field [amount]="item?.data_in_giddh?.grand_total" [currencySymbol]="false" [currencyCode]="false">
+                    </amount-field>
+                </span>
+            </div>
         </td>
-
     </tr>
 </ng-template>
 <!-- endregion -->

@@ -1,26 +1,28 @@
+@import '../../../../assets/css/color.scss';
+
 :host {
     .search-wrapper {
         padding: 1.25rem 2rem 1.25rem 4.2rem;
         display: flex;
         flex-direction: row;
         align-items: center;
-        background-color: white;
+        background-color: $white;
         flex-wrap: wrap !important;
-        border-bottom: 1px solid #ccc;
-        .searchEle {
+        border-bottom: 1px solid $very-light-gray;
+        .search-element {
             outline: none;
             border: none;
             font-size: 14px;
             font-weight: normal;
             line-height: initial;
         }
-        .searh-ico {
+        .icon-search-icon {
             position: absolute;
             left: 0;
             right: 0;
             width: 4.2rem;
             text-align: center;
-            color: #858484;
+            color: $gray;
         }
     }
     .vR {
@@ -69,7 +71,7 @@
 }
 
 .universal-data-list-wrapper {
-    background-color: white;
+    background-color: $white;
     overflow: auto;
     display: none;
     box-sizing: border-box;
@@ -126,7 +128,7 @@
             }
             .item-icon {
                 // margin-right: 22px;
-                color: #979797;
+                color: $nobel;
                 width: 2.7rem;
                 font-size: 14px;
                 .icon-group {
@@ -136,9 +138,9 @@
             .item-details {
                 position: relative;
                 font-size: 14px;
-                color: #333333;
+                color: $night-rider;
                 text-transform: capitalize;
-                .smlP {
+                .small-para-details {
                     margin: 0;
                     width: 320px;
                     white-space: nowrap;
@@ -147,31 +149,31 @@
                 }
                 small {
                     font-size: 12px;
-                    color: #858484;
+                    color: $gray;
                 }
-                .hvrTxt {
-                    color: white;
+                .command-hover-text {
+                    color: $white;
                     position: absolute;
                     right: 0;
                     top: 10px;
                     text-transform: initial;
                 }
-                .brdcrmb {
+                .command-bread-crumb {
                     max-width: 150px;
                     overflow: hidden;
                 }
             }
             // hover effect
             &.selected {
-                background-color: #5b64c9;
+                background-color: $chetwode-blue;
                 .item-details {
-                    color: white;
+                    color: $white;
                     small {
-                        color: white;
+                        color: $white;
                     }
                 }
                 .item-icon {
-                    color: #fff;
+                    color: $white;
                 }
             }
         }

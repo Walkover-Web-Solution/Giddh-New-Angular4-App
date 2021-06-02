@@ -1,7 +1,7 @@
 {
-    "report": "Report",
+    "page_heading": "Reports",
     "business_overview": "Business Overview",
-    "cash_flow_statement": "Cash Flow Statement (coming soon)",
+    "cash_flow_statement": "Cash Flow Statement",
     "transactions_overview": "Transactions Overview",
     "purchase_register": "Purchase Register",
     "cash_register": "Cash Register (coming soon)",
@@ -19,8 +19,6 @@
     "input_tax_rebate": "Input Tax Rebate (coming soon)",
     "advance_receipt": "Advance Receipt",
     "tax_on_advance_receipt": "Tax on Advance Receipt (coming soon)",
-    "cumulative": "Cumulative",
-    "quantity_rate": "Qty-Rate",
-    "transaction_count": "Transaction count",
-    "receipt_beta": "Receipt(Beta)"
+    "receipt_beta": "Receipt(Beta)",
+    "search_report": "Search Report"
 }

@@ -1,7 +1,7 @@
 class LedgerPage {
 
     clickAccount(){
-        return cy.xpath('//div[@class=\'ng-star-inserted\']//input[@placeholder=\'To Select Accounts\']')
+        return cy.xpath('//div[@class=\'ng-star-inserted\']//input[@placeholder=\'To Select Accounts\']', {timeout: 40000})
     }
 
     inputAccount(){
@@ -17,7 +17,7 @@ class LedgerPage {
     }
 
     enterAmount(){
-       // cy.xpath('//td[@class=\'col-xs-4 col-md-3 col-lg-3 pos-rel\']//input[@class=\'form-control alR ng-untouched ng-valid ng-dirtyl\']').click()
+        // cy.xpath('//td[@class=\'col-xs-4 col-md-3 col-lg-3 position-relative\']//input[@class=\'form-control text-right ng-untouched ng-valid ng-dirtyl\']').click()
         return cy.xpath('//input[@name=\'totalAmount\']')
     }
 
@@ -25,6 +25,19 @@ class LedgerPage {
         return cy.xpath('//span[@class=\'ladda-label\']')
     }
 
+    taxField(){
+        return cy.xpath("//input[@id='tax-control-input-mask']")
+    }
+
+    checkBoxTax(){
+        return cy.xpath("//input[@id='tax-checkbox-0']")
+    }
+
+
+    selectTax(){
+        this.taxField().click();
+        this.checkBoxTax().click()
+    }
 
 
 }

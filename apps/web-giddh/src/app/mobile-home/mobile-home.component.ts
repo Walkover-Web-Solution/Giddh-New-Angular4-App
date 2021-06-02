@@ -12,7 +12,7 @@ import { LoginActions } from '../actions/login.action';
 import { AuthService } from '../theme/ng-social-login-module/index';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommandKRequest } from '../models/api-models/Common';
-import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
+import { BsDropdownConfig, BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { DOCUMENT } from '@angular/common';
 
 @Component({
@@ -77,11 +77,6 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(@Inject(DOCUMENT) document, private store: Store<AppState>, private generalService: GeneralService, private commandKService: CommandKService, private cdref: ChangeDetectorRef, private router: Router, private loginAction: LoginActions, private socialAuthService: AuthService, private breakPointObservar: BreakpointObserver) {
         document.querySelector('body').classList.add('mobile-home');
-
-        this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$)).subscribe(res => {
-            this.activeCompanyUniqueName = res;
-        });
-
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount, takeUntil(this.destroyed$)));
     }
 
@@ -93,7 +88,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngOnInit(): void {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (!result.matches) {
                 this.router.navigate(["/pages/home"]);
             }
@@ -111,33 +106,23 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.searchSubject.next("");
 
-        this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
-            if (companies) {
-                let selectedCmp = companies.find(cmp => {
-                    if (cmp && cmp.uniqueName) {
-                        return cmp.uniqueName === this.generalService.companyUniqueName;
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.activeCompanyUniqueName = activeCompany.uniqueName;
+                let selectedCompanyArray = activeCompany.name.split(" ");
+                let companyInitials = [];
+                for (let loop = 0; loop < selectedCompanyArray.length; loop++) {
+                    if (loop <= 1) {
+                        companyInitials.push(selectedCompanyArray[loop][0]);
                     } else {
-                        return false;
+                        break;
                     }
-                });
-
-                if (selectedCmp) {
-                    let selectedCompanyArray = selectedCmp.name.split(" ");
-                    let companyInitials = [];
-                    for (let loop = 0; loop < selectedCompanyArray.length; loop++) {
-                        if (loop <= 1) {
-                            companyInitials.push(selectedCompanyArray[loop][0]);
-                        } else {
-                            break;
-                        }
-                    }
-
-                    this.companyInitials = companyInitials.join(" ");
                 }
+                this.companyInitials = companyInitials.join(" ");
             }
         });
 
-        this.scrollSubject$.pipe(debounceTime(25)).subscribe((response) => {
+        this.scrollSubject$.pipe(debounceTime(25), takeUntil(this.destroyed$)).subscribe((response) => {
             this.onScroll(response);
         });
     }
@@ -171,9 +156,9 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public openMobileSidebar(): void {
         document.querySelector('body').classList.add('mobile-sidebar-open');
-        setTimeout(() => {
+        // setTimeout(() => {
             this.sideNavOpen = true;
-        }, 100);
+        // }, 100);
     }
 
     /**
@@ -181,7 +166,10 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      *
      * @memberof MobileHomeComponent
      */
-    public closeMobileSidebar(): void {
+    public closeMobileSidebar(mobileSideNav: BsDropdownDirective): void {
+        if (mobileSideNav) {
+            mobileSideNav.hide();
+        }
         this.sideNavOpen = false;
         document.querySelector('body').classList.remove('mobile-sidebar-open');
     }
@@ -226,7 +214,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.commandKRequestParams.group = "";
         }
 
-        this.commandKService.searchCommandK(this.commandKRequestParams, this.activeCompanyUniqueName).subscribe((res) => {
+        this.commandKService.searchCommandK(this.commandKRequestParams, this.activeCompanyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
 
             if (res && res.body && res.body.results && res.body.results.length > 0) {
@@ -385,7 +373,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public handleKeydown(e: any): void {
         let key = e.which || e.keyCode;
 
-        if (key === BACKSPACE && !this.searchElement.nativeElement.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
+        if (key === BACKSPACE && !this.searchElement?.nativeElement.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
             this.removeItemFromSelectedGroups();
         }
     }
@@ -400,7 +388,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         if (event.deltaY < 0) {
             this.scrollSubject$.next("top");
         } else {
-            if (this.mobileHomeView.nativeElement.offsetHeight + this.mobileHomeView.nativeElement.scrollTop >= (this.mobileHomeView.nativeElement.scrollHeight - 200)) {
+            if (this.mobileHomeView?.nativeElement.offsetHeight + this.mobileHomeView?.nativeElement.scrollTop >= (this.mobileHomeView?.nativeElement.scrollHeight - 200)) {
                 this.scrollSubject$.next("bottom");
             }
         }

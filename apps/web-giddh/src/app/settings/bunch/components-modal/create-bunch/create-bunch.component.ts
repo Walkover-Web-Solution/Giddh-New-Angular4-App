@@ -49,8 +49,8 @@ export class CreateBunchModalComponent implements OnChanges {
         let control = this.addBunchForm.get('name');
         let uniqueControl = this.addBunchForm.get('uniqueName');
         let unqName = control.value;
-        unqName = unqName.replace(/ |,|\//g, '');
-        unqName = unqName.toLowerCase();
+        unqName = unqName?.replace(/ |,|\//g, '');
+        unqName = unqName?.toLowerCase();
         if (unqName.length >= 1) {
             let unq = '';
             let text = '';
@@ -61,9 +61,9 @@ export class CreateBunchModalComponent implements OnChanges {
                 i++;
             }
             unq = unqName + text;
-            uniqueControl.patchValue(unq);
+            uniqueControl?.patchValue(unq);
         } else {
-            uniqueControl.patchValue('');
+            uniqueControl?.patchValue('');
         }
     }
 
@@ -72,7 +72,7 @@ export class CreateBunchModalComponent implements OnChanges {
      */
     public ngOnChanges(s) {
         if (s && s.mode && s.mode.currentValue === 'update') {
-            this.addBunchForm.patchValue({
+            this.addBunchForm?.patchValue({
                 name: s.formData.currentValue.name,
                 uniqueName: s.formData.currentValue.uniqueName,
                 description: s.formData.currentValue.description

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import {
     Gstr3bOverviewResult,
@@ -16,6 +16,7 @@ import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.ac
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
+import { GstReport } from '../constants/gst.constant';
 
 
 @Component({
@@ -24,6 +25,12 @@ import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-
     styleUrls: ['gstR3.component.scss'],
 })
 export class FileGstR3Component implements OnInit, OnDestroy {
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
+    /* this will check mobile screen size */
+    public isMobileScreen: boolean = false;
 
     public gstr3BData: Gstr3bOverviewResult2;
     public currentPeriod: GstDatePeriod = null;
@@ -41,10 +48,17 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public dateSelected: boolean = false;
     public userEmail: string = '';
     public selectedMMYYYY: string = '';
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+
     private gstr3BOverviewDataFetchedSuccessfully$: Observable<boolean>;
     private gstr3BOverviewDataFetchedInProgress$: Observable<boolean>;
     private gstr3BOverviewData$: Observable<Gstr3bOverviewResult2>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Stores the current period */
+    public getCurrentPeriod$: Observable<any> = of(null);
+    /** True, if month filter is selected */
+    public isMonthSelected: boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -59,34 +73,53 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         this.gstr3BOverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDataFetchedSuccessfully, takeUntil(this.destroyed$)));
         this.gstr3BOverviewData$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDate), takeUntil(this.destroyed$));
         this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
-        this.store.pipe(select(createSelector([((s: AppState) => s.session.companies), ((s: AppState) => s.session.companyUniqueName)],
-            (companies, uniqueName) => {
-                return companies.find(d => d.uniqueName === uniqueName);
-            }))
-        ).subscribe(activeCompany => {
-            if (activeCompany) {
-                if (activeCompany.addresses && activeCompany.addresses.length) {
-                    let defaultGst = activeCompany.addresses.find(a => a.isDefault);
-                    if (defaultGst) {
-                        this.activeCompanyGstNumber = defaultGst.taxNumber;
-                    } else {
-                        this.activeCompanyGstNumber = activeCompany.addresses[0].taxNumber;
-                    }
-                    this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
-                }
+        this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.activeCompanyGstNumber !== response) {
+                this.activeCompanyGstNumber = response;
             }
         });
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
     }
+    /**
+    * Aside pane toggle fixed class
+    *
+    *
+    * @memberof FileGstR3Component
+    */
+    public toggleBodyClass(): void {
+        if (this.asideGstSidebarMenuState === 'in') {
+            document.querySelector('body').classList.add('gst-sidebar-open');
+        } else {
+            document.querySelector('body').classList.remove('gst-sidebar-open');
+        }
+    }
+    /**
+      * This will toggle the settings popup
+      *
+      * @param {*} [event]
+      * @memberof FileGstR3Component
+      */
+    public toggleGstPane(event?): void {
+        this.toggleBodyClass();
+
+        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
+            this.asideGstSidebarMenuState = "out";
+        }
+    }
 
     public ngOnInit(): void {
-
+        this.toggleGstPane();
         this.activatedRoute.queryParams.pipe(take(1)).subscribe(params => {
             this.currentPeriod = {
                 from: params['from'],
                 to: params['to']
             };
-            this.selectedMonth = moment(this.currentPeriod.from, 'DD-MM-YYYY').toISOString();
+            if (params['selectedGst']) {
+                this.activeCompanyGstNumber = params['selectedGst'];
+                this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
+            }
+            this.isCompany = params['isCompany'] === 'true';
+            this.selectedMonth = moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
             this.selectedMonth = moment(this.selectedMonth).format('MMMM YYYY');
             this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
             this.selectedGstr = params['return_type'];
@@ -94,7 +127,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 
         this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
         this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
-            this.activeCompanyGstNumber = result;
+            if (result) {
+                this.activeCompanyGstNumber = result;
+            }
 
             let request: GstOverViewRequest = new GstOverViewRequest();
             request.from = this.currentPeriod.from;
@@ -103,7 +138,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 
             this.gstr3BOverviewDataFetchedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe(bool => {
                 if (!bool && !this.dateSelected) {
-                    this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
+                    this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr3b, request));
                 }
             });
         });
@@ -181,6 +216,20 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 }
             }
         });
+        this.getCurrentPeriod$ = this.store.pipe(select(appStore => appStore.gstR.currentPeriod), takeUntil(this.destroyed$));
+        this.getCurrentPeriod$.subscribe(currentPeriod => {
+            if (currentPeriod && currentPeriod.from) {
+                let date = {
+                    startDate: moment(currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
+                    endDate: moment(currentPeriod.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
+                };
+                if (date.startDate === currentPeriod.from && date.endDate === currentPeriod.to) {
+                    this.isMonthSelected = true;
+                } else {
+                    this.isMonthSelected = false;
+                }
+            }
+        });
     }
 
     public periodChanged(ev) {
@@ -196,7 +245,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             request.from = this.currentPeriod.from;
             request.to = this.currentPeriod.to;
             request.gstin = this.activeCompanyGstNumber;
-            this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
+            this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr1, request));
+            this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr2, request));
+            this.store.dispatch(this._gstAction.GetOverView(GstReport.Gstr3b, request));
         }
     }
 
@@ -225,9 +276,52 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             this.userEmail = '';
         }
     }
-
+    /**
+    * Unsubscribes from subscription
+    *
+    * @memberof GstComponent
+    */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('gst-sidebar-open');
+    }
+
+    /**
+     * Handles GST sidebar navigation event
+     *
+     * @param {string} type Type of report (gstr1, gstr2, gstr3b) to navigate to
+     * @memberof FileGstR3Component
+     */
+    public handleNavigation(type: string): void {
+        switch(type) {
+            case GstReport.Gstr1: case GstReport.Gstr2:
+                this.navigateToOverview(type);
+                break;
+            case GstReport.Gstr3b:
+                this.navigateTogstR3B(type);
+                break;
+            default: break;
+        }
+    }
+
+    /**
+     * Navigates to the overview or dashboard page
+     *
+     * @param {*} type Type of report (gstr1, gstr2, gstr3b)
+     * @memberof FileGstR3Component
+     */
+     public navigateToOverview(type): void {
+        this.router.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0, selectedGst: this.activeCompanyGstNumber } });
+    }
+
+    /**
+     * Navigates to GSTR 3B
+     *
+     * @param {*} type Type of report (gstr1, gstr2, gstr3b)
+     * @memberof FileGstR3Component
+     */
+    public navigateTogstR3B(type): void {
+        this.router.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: this.isCompany, selectedGst: this.activeCompanyGstNumber } });
     }
 }

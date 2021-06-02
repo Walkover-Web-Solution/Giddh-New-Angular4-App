@@ -20,11 +20,11 @@ import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
       outline: 0;
     }
 
-    .grp_open {
+    .group-open {
       background: rgb(255, 255, 255);
     }
 
-    .grp_open li {
+    .group-open li {
       border: 0;
     }
 
@@ -36,7 +36,7 @@ import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
     template: `
     <ul class="list-unstyled stock-grp-list clearfix" *ngIf="personList">
       <li routerLinkActive="active" *ngFor="let p of personList"><a [routerLink]="['/pages','inventory-in-out','person',p.uniqueName]"> {{p.name}}</a></li>
-      <!-- <li class="clearfix" [ngClass]="{'isGrp': grp.childStockGroups.length > 0,'grp_open': grp.isOpen}" *ngFor="let grp of Groups">
+      <!-- <li class="clearfix" [ngClass]="{'isGrp': grp.childStockGroups.length > 0,'group-open': grp.isOpen}" *ngFor="let grp of Groups">
          <a (click)="OpenGroup(grp,$event)" class="pull-left" [routerLink]="[ 'group', grp.uniqueName, 'stock-report' ]">
            <div [ngClass]="{'active': (activeGroupUniqueName$ | async) === grp.uniqueName}">{{grp.name}}</div>
          </a>

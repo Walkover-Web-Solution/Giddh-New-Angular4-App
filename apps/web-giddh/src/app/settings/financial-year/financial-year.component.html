@@ -23,13 +23,9 @@
                                     <td data-title="Lock Status"
                                         *ngIf="currentCompanyFinancialYearUN != financialYear?.uniqueName"
                                         class="status">
-                                        <span *ngIf="financialYear?.isLocked"><i class="fa fa-toggle-off fa-2x cp"
-                                                aria-hidden="true"
-                                                (click)="lockUnlockFinancialYear(financialYear);"></i>
+                                        <span *ngIf="financialYear?.isLocked"><span (click)="lockUnlockFinancialYear(financialYear);"><i class="fa fa-toggle-off fa-2x cp" aria-hidden="true"></i></span>
                                             <label>Locked</label></span>
-                                        <span *ngIf="!financialYear?.isLocked"><i class="fa fa-toggle-on fa-2x cp"
-                                                aria-hidden="true"
-                                                (click)="lockUnlockFinancialYear(financialYear);"></i>
+                                        <span *ngIf="!financialYear?.isLocked"><span (click)="lockUnlockFinancialYear(financialYear);"><i class="fa fa-toggle-on fa-2x cp" aria-hidden="true"></i></span>
                                             <label>Unlocked</label></span>
                                     </td>
                                     <td data-title="Lock Status"

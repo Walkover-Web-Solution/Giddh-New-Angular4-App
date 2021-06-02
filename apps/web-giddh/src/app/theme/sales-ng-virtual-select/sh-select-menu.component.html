@@ -1,5 +1,5 @@
-<div class="menu" *ngIf="isOpen && _rows" style="background-color: white" [style.min-height.px]="dropdownMinHeight"
-    [style.max-height.px]="viewPortItems?.length !== 0? ItemHeight*(viewPortItems ? viewPortItems.length : 5)+10 : ItemHeight">
+<div class="menu white-bg" *ngIf="isOpen && _rows" [style.min-height.px]="dropdownMinHeight"
+    [style.max-height.px]="viewPortItems?.length !== 0? ItemHeight*(viewPortItems ? viewPortItems.length : 5)+30 : ItemHeight">
 
     <!-- *ngIf="viewPortItems?.length === 0 && noResultLinkEnabled" -->
     <div *ngIf="noResultLinkEnabled && !showLabelOnly" class="item no-result-link"

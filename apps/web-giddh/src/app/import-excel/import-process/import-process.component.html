@@ -1,37 +1,27 @@
 <!-- Review Field start-->
-<div class="reviewData">
+<div class="review-data">
     <div class="text-right">
-        <div class="action_btn">
-            <button class="btn btn-default" (click)="onBack.emit()">Back</button>
-            <button class="btn btn-success" [disabled]="!importDisable" [ladda]="isLoading"
-                (click)="save()">Import</button>
+        <div class="action-btn">
+            <button class="btn btn-default" (click)="onBack.emit()">{{commonLocaleData?.app_back}}</button>
+            <button class="btn btn-success" [disabled]="!importDisable" [ladda]="isLoading" (click)="save()">{{commonLocaleData?.app_import}}</button>
         </div>
     </div>
     <div class="data_overview" [perfectScrollbar]="config">
 
         <table class="table basic table-bordered mr-t1">
-
             <thead>
-
                 <tr>
                     <th *ngFor="let col of userHeader">{{col}}</th>
                 </tr>
-
             </thead>
-
             <tbody>
-
                 <tr *ngFor="let item of importData.data.items">
                     <td *ngFor="let row of item.row">
-                        <div class="ellp" container="body" [tooltip]="row.columnValue">{{row.columnValue}}</div>
+                        <div class="text-ellipsis" container="body" [tooltip]="row.columnValue">{{row.columnValue}}</div>
                     </td>
                 </tr>
-
             </tbody>
-
         </table>
-
     </div>
-
 </div>
 <!-- Review Field end-->

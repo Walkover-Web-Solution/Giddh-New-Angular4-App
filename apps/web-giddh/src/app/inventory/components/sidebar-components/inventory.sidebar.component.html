@@ -1,4 +1,4 @@
-<section id="inventory-sidebar" class="sidebar p0 pull-left" #sidebar
+<section id="inventory-sidebar" class="sidebar pull-left" #sidebar
 	[ngClass]="{'invisible': stockGroupData?.length==0 && isSearching==false}">
 	<div class="h100 clearfix">
 		<div class="search-sidebar">
@@ -6,7 +6,7 @@
 			<i class="fa fa-search text-light-2"></i>
 			<div class="btn-group" dropdown placement="bottom left">
 				<div class="btn-group" dropdown [autoClose]="true" container="body">
-					<button id="button-nested" dropdownToggle type="button" class="btn mrl0 dropdown-toggle"
+					<button id="button-nested" dropdownToggle type="button" class="btn ml-0 dropdown-toggle"
 						aria-controls="dropdown-nested"> <i class="fa fa-ellipsis-v"></i> <span class="caret"></span>
 					</button>
 					<ul id="dropdown-nested" *dropdownMenu class="dropdown-menu" role="menu"
@@ -61,7 +61,7 @@
 		<!-- <div class="pd-1">
       <button class="btn isActive btn-sm" id="warehouseBtn" type="button" (click)="showBranchScreen()">Branch Transfer</button>
     </div> -->
-		<stockgrp-list class="parent-Group" [Groups]='stockGroupData'>
+		<stockgrp-list class="parent-group" [Groups]='stockGroupData'>
 		</stockgrp-list>
 	</div>
 </section>

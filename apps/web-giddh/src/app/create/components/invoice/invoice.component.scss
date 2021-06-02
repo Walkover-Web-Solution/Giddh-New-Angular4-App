@@ -1,17 +1,19 @@
-.inv_header {
-    background: #fff8eb;
+@import "../../../../assets/css/color.scss";
+
+.invoice-steps-header {
+    background: $floral-white;
     h1 {
         font-size: 20px;
-        color: #333333;
+        color: $night-rider;
         font-family: "opensans-regular";
         padding: 0;
-        border-bottom: 1px solid #333333;
+        border-bottom: 1px solid $night-rider;
         display: inline-block;
         margin: 28px 0;
     }
     span {
-        color: #e14d26;
-        border-bottom: 1px solid #e14d26;
+        color: $cinnabar-orange;
+        border-bottom: 1px solid $cinnabar-orange;
         display: inline-block;
         font-family: "opensans-regular";
         font-size: 20px;
@@ -21,8 +23,8 @@
     }
 }
 
-.inv_content {
-    background: #fff;
+.invoice-content {
+    background: $white;
     padding-bottom: 20px;
 }
 
@@ -32,7 +34,7 @@
     overflow: hidden;
     figure {
         position: relative;
-        .template_img {
+        .template-img {
             width: 100%;
         }
     }
@@ -52,8 +54,8 @@
             top: 50%;
             left: 50%;
             transform: translateX(-50%);
-            background: #e6e6e6;
-            color: #f26122;
+            background: $whisper;
+            color: $cinnabar-orange;
             font-size: 16px;
         }
     }

@@ -1,10 +1,10 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GroupsAccountSidebarComponent } from '../new-group-account-sidebar/groups-account-sidebar.component';
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { AppState } from '../../../../store/roots';
-import { Store } from '@ngrx/store';
-import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
@@ -17,11 +17,12 @@ import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 
 @Component({
 	selector: 'app-manage-groups-accounts',
 	templateUrl: './manage-groups-accounts.component.html',
-	styleUrls: ['./manage-groups-accounts.component.scss']
+    styleUrls: ['./manage-groups-accounts.component.scss']
 })
 export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewChecked {
 	@Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -56,12 +57,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public customFieldForm: FormGroup;
 
     /** List custom row data type  */
-    public dataTypeList: IOption[] =
-        [
-            { label: "String", value: "STRING" },
-            { label: "Number", value: "NUMERIC" },
-            { label: "Boolean", value: "BOOLEAN" }
-        ];
+    public dataTypeList: IOption[] = [];
     /** List of custom row value type */
     public booleanDataTypeList: IOption[] =
         [
@@ -78,20 +74,36 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public updateModeLength: number = 0;
     /** Index to delete row in custom field */
     public selectedRowIndex: number = null;
+    /* To check form value validation */
+    public isCustomFormValid: boolean = true;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
 	// tslint:disable-next-line:no-empty
-    constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef,private breakPointObservar: BreakpointObserver,
-        private renderer: Renderer2, private _generalService: GeneralService, private modalService: BsModalService, private groupService: GroupService, private toasterService: ToasterService) {
-		this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading).pipe(takeUntil(this.destroyed$));
-		this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts).pipe(takeUntil(this.destroyed$));
-		this.groupAndAccountSearchString$ = this.store.select(s => s.groupwithaccounts.groupAndAccountSearchString).pipe(takeUntil(this.destroyed$));
+    constructor(
+        private store: Store<AppState>,
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private formBuilder: FormBuilder,
+        private cdRef: ChangeDetectorRef,
+        private breakPointObservar: BreakpointObserver,
+        private renderer: Renderer2,
+        private _generalService: GeneralService,
+        private modalService: BsModalService,
+        private groupService: GroupService,
+        private toasterService: ToasterService
+    ) {
+		this.searchLoad = this.store.pipe(select(state => state.groupwithaccounts.isGroupWithAccountsLoading), takeUntil(this.destroyed$));
+		this.groupAndAccountSearchString$ = this.store.pipe(select(s => s.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$));
 		this.psConfig = { maxScrollbarLength: 80 };
+        this.groupList$ = this.store.pipe(select(state => state.groupwithaccounts.groupswithaccounts), takeUntil(this.destroyed$));
 	}
 
 	@HostListener('window:resize', ['$event'])
 	public resizeEvent(e) {
-		this.headerRect = this.header.nativeElement.getBoundingClientRect();
-		this.myModelRect = this.myModel.nativeElement.getBoundingClientRect();
+		this.headerRect = this.header.nativeElement?.getBoundingClientRect();
+		this.myModelRect = this.myModel.nativeElement?.getBoundingClientRect();
     }
 
     /**
@@ -103,7 +115,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     @HostListener('keyup', ['$event'])
     public onKeyUp(event: any): void {
         if(!this.keyupInitialized && this._generalService.allowCharactersNumbersSpecialCharacters(event)) {
-            this.groupSrch.nativeElement.focus();
+            this.groupSrch?.nativeElement.focus();
             this.searchString = event.key;
             this.keyupInitialized = true;
         }
@@ -122,7 +134,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
 	// tslint:disable-next-line:no-empty
 	public ngOnInit() {
-
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -132,9 +143,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.getCompanyCustomField();
 		// search groups
 		this.groupSearchTerms.pipe(
-			debounceTime(700))
+			debounceTime(700), takeUntil(this.destroyed$))
 			.subscribe(term => {
-				this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
+                this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
 			});
 
 		this.groupAndAccountSearchString$.subscribe(s => {
@@ -145,7 +156,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 			this.breadcrumbUniquePath = [];
 		});
 
-		this._generalService.invokeEvent.subscribe(value => {
+		this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
 			if (value[0] === "accountdeleted") {
 				if (this.searchString) {
 					this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
@@ -157,7 +168,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.groupList$.subscribe(response => {
             if(this.keyupInitialized) {
                 setTimeout(() => {
-                    this.groupSrch.nativeElement.focus();
+                    this.groupSrch?.nativeElement.focus();
                 }, 200);
             }
         });
@@ -182,7 +193,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
 		this.breadcrumbPath = [];
 		this.breadcrumbUniquePath = [];
-		this.renderer.setProperty(this.groupSrch.nativeElement, 'value', '');
+		this.renderer.setProperty(this.groupSrch?.nativeElement, 'value', '');
 	}
 
 	public closePopupEvent() {
@@ -216,7 +227,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      */
     public submitCustomFields(value: any, operationType?: string): void {
         this.isSaveCustomInProgress = true;
-        this.groupService.createCompanyCustomField(value.customField).subscribe(response => {
+        this.groupService.createCompanyCustomField(value.customField).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
                     this.customFieldForm.get('customField').reset();
@@ -224,11 +235,11 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                     this.updateModeLength = customFieldResponse.length;
                     this.renderCustomField(customFieldResponse);
                     if (operationType === 'create') {
-                        this.toasterService.successToast('Custom field created successfully');
+                        this.toasterService.successToast(this.localeData?.custom_field_created);
                     } else if (operationType === 'delete') {
-                        this.toasterService.successToast('Custom field deleted successfully');
+                        this.toasterService.successToast(this.localeData?.custom_field_deleted);
                     } else {
-                        this.toasterService.successToast('Custom field updated successfully');
+                        this.toasterService.successToast(this.localeData?.custom_field_updated);
                     }
                 } else {
                     this.toasterService.errorToast(response.message);
@@ -250,7 +261,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      */
     public getCompanyCustomField(): void {
         this.isGetCustomInProgress = true;
-        this.groupService.getCompanyCustomField().subscribe(response => {
+        this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isEnabledIndex = null;
             if (response) {
                 if (response.status === 'success') {
@@ -313,7 +324,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             uniqueName: [null],
         });
         if (item) {
-            initCustomForm.patchValue(item);
+            initCustomForm?.patchValue(item);
         }
         return initCustomForm;
     }
@@ -330,7 +341,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         if (this.customFieldForm.valid) {
             customRow.push(this.initNewCustomField(null));
         } else {
-            this.toasterService.warningToast('Please fill all mandatory field');
+            this.toasterService.warningToast(this.localeData?.fill_mandatory_fields);
         }
         return;
     }
@@ -384,9 +395,79 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         if (event.value === 'BOOLEAN') {
             row.controls[index].get('valueLength').clearValidators();
         } else {
-            row.controls[index].get('valueLength').setValidators([Validators.required])
+            if (event.value === 'NUMERIC') {
+                row.controls[index].get('valueLength').setValidators([Validators.required, Validators.max(30)]);
+            } else if (event.value === 'STRING') {
+                row.controls[index].get('valueLength').setValidators([Validators.required, Validators.max(150)]);
+            }
         }
         row.controls[index].get('valueLength').setValue(null);
     }
 
+    /**
+     * To show check custom field validation
+     *
+     * @param {string} type
+     * @param {number} index
+     * @memberof ManageGroupsAccountsComponent
+     */
+    public checkValidation(type: string, index: number): void {
+        const row = this.customFieldForm.get('customField') as FormArray;
+        this.isCustomFormValid = true;
+        if (type === 'name') {
+            if (row.controls[index] && row.controls[index].get('key') && row.controls[index].get('key').value && row.controls[index].get('key').value.length > 50) {
+                this.toasterService.errorToast(this.localeData?.name_length_validation);
+                this.isCustomFormValid = false;
+            }
+        } else {
+            if (row.controls[index].get('dataType').value === 'NUMERIC' && row.controls[index].get('valueLength').value > 30) {
+                this.toasterService.warningToast(this.localeData?.number_length_validation);
+                this.isCustomFormValid = false;
+
+            } else if (row.controls[index].get('dataType').value === 'STRING' && row.controls[index].get('valueLength').value > 150) {
+                this.toasterService.warningToast(this.localeData?.string_length_validation);
+                this.isCustomFormValid = false;
+            }
+        }
+
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof ManageGroupsAccountsComponent
+     */
+    public translationComplete(event: boolean): void {
+        if(event) {
+            this.dataTypeList = [
+                { label: this.commonLocaleData?.app_datatype_list?.string, value: "STRING" },
+                { label: this.commonLocaleData?.app_datatype_list?.number, value: "NUMERIC" },
+                { label: this.commonLocaleData?.app_datatype_list?.boolean, value: "BOOLEAN" }
+            ];
+        }
+    }
+
+    /**
+     * Loads the default groups
+     *
+     * @private
+     * @memberof ManageGroupsAccountsComponent
+     */
+    private loadDefaultGroups(): void {
+        const requestObject: any = {
+            q: '',
+            onlyTop: true
+        }
+        this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data?.body?.results) {
+                this.groupList$ = of(data.body.results);
+                if (this.keyupInitialized) {
+                    setTimeout(() => {
+                        this.groupSrch?.nativeElement.focus();
+                    }, 200);
+                }
+            }
+        });
+    }
 }

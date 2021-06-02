@@ -1,0 +1,19 @@
+{
+    "page_heading": "डेबुक",
+    "transaction_report": "व्यवहार अहवाल",
+    "voucher_name": "व्हाउचर नाव",
+    "voucher_no": "व्हाउचर क्रमांक.",
+    "debit_amount": "डेबिट रक्कम",
+    "credit_amount": "पत रक्कम",
+    "product_service": "उत्पादन / सेवा",
+    "qty": "माप",
+    "select_entity": "घटक निवडा",
+    "export_daybook": "डेबुक निर्यात",
+    "type": "प्रकार:",
+    "order": "ऑर्डर:",
+    "accounts_selected_message": "डीफॉल्टनुसार सर्व खाती निवडली जातात",
+    "vouchers_selected_message": "डीफॉल्टनुसार सर्व व्हाउचर निवडले जातात",
+    "cheque_details": "चेक तपशील",
+    "cheque_number": "चेक संख्या",
+    "clearance_date": "मंजुरीची तारीख"
+}

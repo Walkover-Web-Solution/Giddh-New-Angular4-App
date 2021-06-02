@@ -6,6 +6,7 @@ import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interfac
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import * as moment from 'moment';
 import { StockUnitRequest } from '../../../../models/api-models/Inventory';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
 @Component({
 	selector: 'transfer-outward-note',
@@ -25,9 +26,11 @@ export class OutwardNoteComponent implements OnChanges {
 	public stockUnitsOptions: IOption[];
 	public userListOptions: IOption[];
 	public form: FormGroup;
-	public config: Partial<BsDatepickerConfig> = { dateInputFormat: 'DD-MM-YYYY' };
+	public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
 	public mode: 'receiver' | 'product' = 'receiver';
-	public today = new Date();
+    public today = new Date();
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
 	constructor(private _fb: FormBuilder) {
 		this.initializeForm(true);
@@ -55,7 +58,7 @@ export class OutwardNoteComponent implements OnChanges {
 
 	public initializeForm(initialRequest: boolean = false) {
 		this.form = this._fb.group({
-			inventoryEntryDate: [moment().format('DD-MM-YYYY'), Validators.required],
+			inventoryEntryDate: [moment().format(GIDDH_DATE_FORMAT), Validators.required],
 			transactions: this._fb.array([], Validators.required),
 			description: [''],
 			inventoryUser: [''],
@@ -69,7 +72,7 @@ export class OutwardNoteComponent implements OnChanges {
 	public modeChanged(mode: 'receiver' | 'product') {
 		this.mode = mode;
 		this.form.reset();
-		this.inventoryEntryDate.patchValue(moment().format('DD-MM-YYYY'));
+		this.inventoryEntryDate?.patchValue(moment().format(GIDDH_DATE_FORMAT));
 		this.transactions.controls = this.transactions.controls.filter(trx => false);
 
 		if (this.mode === 'receiver') {
@@ -132,12 +135,12 @@ export class OutwardNoteComponent implements OnChanges {
 		const inventoryUser = user ? { uniqueName: user.uniqueName } : null;
 		if (index >= 0) {
 			const control = items.at(index);
-			control.patchValue({
+			control?.patchValue({
 				...control.value,
 				inventoryUser
 			});
 		} else {
-			items.controls.forEach(c => c.patchValue({ ...c.value, inventoryUser }));
+			items.controls.forEach(c => c?.patchValue({ ...c.value, inventoryUser }));
 		}
 	}
 
@@ -148,9 +151,9 @@ export class OutwardNoteComponent implements OnChanges {
 		const stockUnit = stockItem ? stockItem.stockUnit.code : null;
 		if (index >= 0) {
 			const control = items.at(index);
-			control.patchValue({ ...control.value, stock, stockUnit });
+			control?.patchValue({ ...control.value, stock, stockUnit });
 		} else {
-			items.controls.forEach(c => c.patchValue({ ...c.value, stock, stockUnit }));
+			items.controls.forEach(c => c?.patchValue({ ...c.value, stock, stockUnit }));
 		}
 	}
 
@@ -163,7 +166,7 @@ export class OutwardNoteComponent implements OnChanges {
 				return rv;
 			});
 			let value: InventoryEntry = {
-				inventoryEntryDate: moment(this.inventoryEntryDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY'),
+				inventoryEntryDate: moment(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
 				description: this.description.value,
 				transactions: rawValues
 			};

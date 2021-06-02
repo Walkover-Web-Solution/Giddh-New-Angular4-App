@@ -1,7 +1,7 @@
 @import "../../../../assets/css/color.scss";
 
 .stock-items .active {
-    background-color: #eeeff9;
+    background-color: $lavender;
 }
 .stock-items .active a .span {
     color: $jacksons-purple !important;
@@ -13,6 +13,11 @@
 .in-list {
     display: flex;
     align-items: center;
+    a{
+        white-space: normal;
+        word-break: break-word;
+        padding-right: 8px;
+    }
 }
 .in-list .btn {
     line-height: 14px !important;

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { fromEvent, ReplaySubject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
@@ -13,10 +13,10 @@ import { SearchService } from '../../../services/search.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestroy {
+export class ProformaAddBulkItemsComponent implements OnDestroy {
     @Input() public invoiceType: string;
 
-    @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
+    @ViewChild('searchElement', { static: false }) public searchElement: ElementRef;
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
     @Output() public saveItemsEvent: EventEmitter<SalesAddBulkStockItems[]> = new EventEmitter();
 
@@ -32,30 +32,16 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
     };
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private toaster: ToasterService,
         private searchService: SearchService
     ) {
-    }
-
-    ngOnInit() {
-        fromEvent(this.searchElement.nativeElement, 'input').pipe(
-            debounceTime(700),
-            distinctUntilChanged(),
-            map((e: any) => e.target.value),
-            takeUntil(this.destroyed$)
-        ).subscribe((res: string) => {
-            // this.filteredData = this.normalData.filter(item => {
-            // 	return item.name.toLowerCase().includes(res.toLowerCase()) || item.uniqueName.toLowerCase().includes(res.toLowerCase());
-            // });
-            if (res && res.length > 1) {
-                this.onSearchQueryChanged(res, 1);
-            }
-        });
-
-        // this.parseDataToDisplay(this.data);
     }
 
     /**
@@ -68,7 +54,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
     public onSearchQueryChanged(query: string, page: number = 1): void {
         this.searchResultsPaginationData.query = query;
         const requestObject = this.getSearchRequestObject(query, page);
-        this.searchAccount(requestObject).subscribe(data => {
+        this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body && data.body.results) {
                 this.prepareSearchLists(data.body.results, page);
                 this.searchResultsPaginationData.page = data.body.page;
@@ -161,13 +147,13 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
     addItemToSelectedArr(item: SalesAddBulkStockItems) {
         let index = this.selectedItems.findIndex(f => f.uniqueName === item.uniqueName);
         if (index > -1) {
-            this.toaster.warningToast('this item is already selected please increase it\'s quantity');
+            this.toaster.warningToast(this.localeData?.item_selected);
             return;
         }
         let requestObject = {
             stockUniqueName: item.additional && item.additional.stock ? item.additional.stock.uniqueName : ''
         };
-        this.searchService.loadDetails(item.additional.uniqueName, requestObject).subscribe(data => {
+        this.searchService.loadDetails(item.additional.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body) {
                 // Take taxes of parent group and stock's own taxes
                 const taxes = data.body.taxes || [];
@@ -224,12 +210,38 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
         }
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        //
-    }
-
     ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof ProformaAddBulkItemsComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.onSearchQueryChanged('');
+
+            setTimeout(() => {
+                fromEvent(this.searchElement?.nativeElement, 'input').pipe(
+                    debounceTime(700),
+                    distinctUntilChanged(),
+                    map((e: any) => e.target.value),
+                    takeUntil(this.destroyed$)
+                ).subscribe((res: string) => {
+                    // this.filteredData = this.normalData.filter(item => {
+                    // 	return item.name.toLowerCase().includes(res.toLowerCase()) || item.uniqueName.toLowerCase().includes(res.toLowerCase());
+                    // });
+                    if (res) {
+                        this.onSearchQueryChanged(res, 1);
+                    }
+                });
+            }, 100);
+        }
+
+        // this.parseDataToDisplay(this.data);
     }
 }

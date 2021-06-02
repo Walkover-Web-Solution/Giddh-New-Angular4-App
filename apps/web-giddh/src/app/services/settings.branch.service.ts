@@ -1,5 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
@@ -9,6 +9,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { SETTINGS_BRANCH_API } from './apiurls/settings.branch.api';
 import { BranchFilterRequest } from '../models/api-models/Company';
+import { COMPANY_API } from './apiurls/comapny.api';
 
 @Injectable()
 export class SettingsBranchService {
@@ -30,16 +31,39 @@ export class SettingsBranchService {
         let from = (request.from) ? request.from : "";
         let to = (request.to) ? request.to : "";
 
-        let url = this.config.apiUrl + SETTINGS_BRANCH_API.GET_ALL_BRANCHES;
+        let url = this.config.apiUrl + COMPANY_API.GET_ALL_BRANCHES;
         url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url.replace(':from', from);
         url = url.replace(':to', to);
+
+        let delimiter = '?';
+        if (request.query !== undefined) {
+            url = url.concat(`?q=${request.query}`);
+            delimiter = '&';
+        }
+        url = url.concat(`${delimiter}branchUniqueName=`); // Empty branch unique name as we don't support sub-branch as of now
 
         return this._http.get(url).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.queryString = {};
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * Retrieves the branches of a company
+     *
+     * @param {string} companyUniqueName Company unique name
+     * @returns {Observable<BaseResponse<any, any>>} Observable to perform further actions
+     * @memberof SettingsBranchService
+     */
+    public getBranchByCompany(companyUniqueName: string): Observable<BaseResponse<any, any>> {
+        if (companyUniqueName) {
+            let url = this.config.apiUrl + COMPANY_API.GET_ALL_BRANCHES;
+            url = url.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+            return this._http.get(url).pipe(catchError((error => this.errorHandler.HandleCatch<any, any>(error))));
+        }
+        return of(null);
     }
 
 	/**

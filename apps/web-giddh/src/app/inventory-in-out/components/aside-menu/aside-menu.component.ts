@@ -1,7 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { InventoryUsersActions } from '../../../actions/inventory/inventory.users.actions';
@@ -15,59 +15,10 @@ import { CustomStockUnitAction } from '../../../actions/inventory/customStockUni
 @Component({
 	selector: 'aside-menu',
 	templateUrl: './aside-menu.component.html',
-	styles: [`
-    .buttons-container {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .buttons-container > * {
-      margin: 20px;
-    }
-
-    :host {
-      position: fixed;
-      left: auto;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      max-width:480px;
-      width: 100%;
-      z-index: 99999;
-    }
-
-    #close {
-      display: none;
-    }
-
-    :host.in #close {
-      display: block;
-      position: fixed;
-      left: -41px;
-      top: 0;
-      z-index: 5;
-      border: 0;
-      border-radius: 0;
-    }
-
-    :host .container-fluid {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    :host .aside-pane {
-      max-width:480px;
-      width: 100%;
-      padding: 0;
-      background: #fff;
-    }
-  `],
+	styleUrls: ['./aside-menu.component.scss'],
 })
 
-export class AsideMenuComponent implements OnInit, OnChanges {
+export class AsideMenuComponent implements OnInit, OnDestroy {
 	public stockList$: Observable<IStocksItem[]>;
 	public stockUnits$: Observable<StockUnitRequest[]>;
 	public userList$: Observable<InventoryUser[]>;
@@ -92,27 +43,12 @@ export class AsideMenuComponent implements OnInit, OnChanges {
 		this.createStockSuccess$ = this._store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
 	}
 
-	public ngOnChanges(changes: SimpleChanges): void {
-		//
-	}
-
 	public ngOnInit() {
-		this.stockList$ = this._store
-			.select(p => p.inventory.stocksList && p.inventory.stocksList.results);
-
-		this.stockUnits$ = this._store
-			.select(p => p.inventory.stockUnits);
-
-		this.userList$ = this._store
-			.select(p => p.inventoryInOutState.inventoryUsers.filter(o => o.uniqueName !== this._generalService.companyUniqueName));
-
-		this._store
-			.select(p => p.inventoryInOutState.entryInProcess)
-			.subscribe(p => this.isLoading = p);
-
-		this._store
-			.select(p => p.inventoryInOutState.userSuccess)
-			.subscribe(p => p && this.closeAsidePane(p));
+		this.stockList$ = this._store.pipe(select(p => p.inventory.stocksList && p.inventory.stocksList.results), takeUntil(this.destroyed$));
+		this.stockUnits$ = this._store.pipe(select(p => p.inventory.stockUnits), takeUntil(this.destroyed$));
+		this.userList$ = this._store.pipe(select(p => p.inventoryInOutState.inventoryUsers.filter(o => o.uniqueName !== this._generalService.companyUniqueName)), takeUntil(this.destroyed$));
+		this._store.pipe(select(p => p.inventoryInOutState.entryInProcess), takeUntil(this.destroyed$)).subscribe(p => this.isLoading = p);
+		this._store.pipe(select(p => p.inventoryInOutState.userSuccess), takeUntil(this.destroyed$)).subscribe(p => p && this.closeAsidePane(p));
 
 		this.createStockSuccess$.subscribe(s => {
 			if (s) {
@@ -139,5 +75,15 @@ export class AsideMenuComponent implements OnInit, OnChanges {
 
 	public createAccount(value) {
 		this._store.dispatch(this._inventoryUserAction.addNewUser(value.name));
+    }
+    
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof AsideMenuComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();       
 	}
 }

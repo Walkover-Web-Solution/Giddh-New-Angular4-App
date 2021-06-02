@@ -1,13 +1,15 @@
-<div class="container-fluid">
-    <div>
-        <div class="clearfix ">
-            <div class="top-bar clearfix bdrB">
-                <!-- <h1 class="section-title inline"><strong>Search</strong></h1> -->
-                <search-sidebar [pageChangeEvent]="pageChangeEvent" [filterEventQuery]="filterEventQuery">
-                </search-sidebar>
+<ng-container appTranslate [file]="'search'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+    <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    <div class="container-fluid">
+        <div>
+            <div class="clearfix">
+                <div class="top-bar clearfix bd-rb">
+                    <search-sidebar *ngIf="localeData?.page_heading" [pageChangeEvent]="pageChangeEvent" [filterEventQuery]="filterEventQuery" [localeData]="localeData" [commonLocaleData]="commonLocaleData" (currentBranchChanged)="handleCurrentBranchChange($event)">
+                    </search-sidebar>
+                </div>
+                <search-grid *ngIf="localeData?.page_heading" [localeData]="localeData" [commonLocaleData]="commonLocaleData" (pageChangeEvent)="paginationChanged($event)" (FilterByAPIEvent)="FilterByAPIEvent($event)" [currentBranchUniqueName]="currentBranchUniqueName">
+                </search-grid>
             </div>
-            <search-grid (pageChangeEvent)="paginationChanged($event)" (FilterByAPIEvent)="FilterByAPIEvent($event)">
-            </search-grid>
         </div>
     </div>
-</div>
+</ng-container>

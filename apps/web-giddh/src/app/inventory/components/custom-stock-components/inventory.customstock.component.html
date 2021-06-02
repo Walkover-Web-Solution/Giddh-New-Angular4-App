@@ -7,8 +7,8 @@
         <button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
         <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
             <div class="aside-pane-form">
-                <form #customUnitForm="ngForm" name="customUnitForm" class="form_body" novalidate>
-                    <div class="form_bg clearfix">
+                <form #customUnitForm="ngForm" name="customUnitForm" class="form-body" novalidate>
+                    <div class="clearfix">
                         <div class="row">
                             <div class="form-group col-xs-6 col-sm-6">
                                 <label>Unit Name<sup>*</sup></label>
@@ -17,7 +17,7 @@
                                     [placeholder]="'Select unit'" (selected)="setUnitName($event?.label)"
                                     [ItemHeight]="33" (onClear)="clearUnit()" [forceClearReactive]="forceClear$ | async"
                                     [doNotReset]="true" (noOptionsFound)="noUnitFound(unitName)"
-                                    [notFoundMsg]="'Type to create custom unit'">
+                                    [notFoundMsg]="'Type to create custom unit'" [isRequired]="true">
                                 </sh-select>
                                 <input placeholder="Unit name" type="text" class="form-control" name="name"
                                     [(ngModel)]="customUnitObj.name" required *ngIf="country != 'india'"
@@ -42,14 +42,14 @@
 
                             <div class="form-group col-xs-3 col-sm-3">
                                 <div class="row">
-                                    <label class="width100 d-block">&nbsp;</label>
+                                    <label class="width-100 d-block">&nbsp;</label>
                                     <div class="checkbox square-switch">
                                         <input type="checkbox" id="isDivide" [checked]="isDivide"
                                             (change)="isDivide = !isDivide" />
                                         <label for="isDivide">
-                                            <span class="pull-left width100 text-left" *ngIf="isDivide"><img
+                                            <span class="pull-left width-100 text-left" *ngIf="isDivide"><img
                                                     src="./assets/images/divide-ico.svg" /> Divide</span>
-                                            <span class="pull-right width100 text-right" *ngIf="!isDivide"><img
+                                            <span class="pull-right width-100 text-right" *ngIf="!isDivide"><img
                                                     src="./assets/images/multiply.svg" [style.width.px]="11" />
                                                 Multiply</span>
                                         </label>
@@ -67,13 +67,13 @@
                                     [(ngModel)]="customUnitObj.quantityPerUnit" name="quantityPerUnit"
                                     class="form-control" required>
                             </div>
-                            <div class="grey-clr col-xs-12 col-sm-12 mr-b2 multiply"
+                            <div class="grey-color col-xs-12 col-sm-12 mr-b2 multiply"
                                 *ngIf="customUnitObj.name && customUnitObj.quantityPerUnit && !isDivide">1
                                 {{customUnitObj?.name}} = {{customUnitObj?.quantityPerUnit}}
                                 {{customUnitObj?.parentStockUnit?.name}} </div>
-                            <div class="grey-clr col-xs-12 mr-b2 division"
+                            <div class="grey-color col-xs-12 mr-b2 division"
                                 *ngIf="customUnitObj.name && customUnitObj.quantityPerUnit && isDivide">
-                                <span class="mrR">1 {{customUnitObj?.name}}</span> <span class="mrR fs18">=</span>
+                                <span class="mr-r05">1 {{customUnitObj?.name}}</span> <span class="mr-r05 font-18">=</span>
                                 <div class="text-center">
                                     1 {{customUnitObj.parentStockUnit?.name}}
                                     <div class="hr"></div> {{customUnitObj?.quantityPerUnit}}

@@ -28,6 +28,10 @@ export class VatService {
         url = url.replace(':from', request.from);
         url = url.replace(':to', request.to);
         url = url.replace(':taxNumber', request.taxNumber);
+        if (request.branchUniqueName) {
+            request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
+        }
         return this._http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<VatReportResponse, any> = res;
@@ -44,6 +48,10 @@ export class VatService {
         url = url.replace(':from', request.from);
         url = url.replace(':to', request.to);
         url = url.replace(':taxNumber', request.taxNumber);
+        if (request.branchUniqueName) {
+            request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
+        }
         return this._http.get(url).pipe(
             map((res) => {
                 return res;

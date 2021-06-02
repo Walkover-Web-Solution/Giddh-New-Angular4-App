@@ -7,16 +7,16 @@ import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-ta
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { underStandingTextData } from 'apps/web-giddh/src/app/ledger/underStandingTextData';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { AccountResponse } from '../../../models/api-models/Account';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { RATE_FIELD_PRECISION, SubVoucher } from '../../../app.constant';
+import { take } from 'rxjs/operators';
 
 export class UpdateLedgerVm {
-    public flatternAccountList: IFlattenAccountsResultItem[] = [];
+    public otherAccountList: IFlattenAccountsResultItem[] = [];
     public flatternAccountList4Select: Observable<IOption[]>;
     public flatternAccountList4BaseAccount: IOption[] = [];
     public companyTaxesList$: Observable<TaxResponse[]>;
@@ -79,35 +79,7 @@ export class UpdateLedgerVm {
     public ratePrecision = RATE_FIELD_PRECISION;
 
     constructor() {
-        this.voucherTypeList = [{
-            label: 'Sales',
-            value: 'sal'
-        }, {
-            label: 'Purchases',
-            value: 'pur'
-        }, {
-            label: 'Receipt',
-            value: 'rcpt'
-        }, {
-            label: 'Payment',
-            value: 'pay'
-        }, {
-            label: 'Journal',
-            value: 'jr'
-        }, {
-            label: 'Contra',
-            value: 'cntr'
-        }, {
-            label: 'Debit Note',
-            value: 'debit note'
-        }, {
-            label: 'Credit Note',
-            value: 'credit note'
-        }, {
-            label: 'Advance Receipt',
-            value: 'advance-receipt',
-            subVoucher: SubVoucher.AdvanceReceipt
-        }];
+        
     }
 
     public get stockTrxEntry(): ILedgerTransactionItem {
@@ -169,31 +141,8 @@ export class UpdateLedgerVm {
         return;
     }
 
-    public getCategoryNameFromAccount(accountName: string): string {
-        let categoryName = '';
-        let account = find(this.flatternAccountList, (fla) => fla.uniqueName === accountName);
-        if (account && account.parentGroups[0]) {
-            categoryName = this.accountCatgoryGetterFunc(account, accountName);
-        } else {
-            let flatterAccounts: IFlattenAccountsResultItem[] = this.flatternAccountList;
-            flatterAccounts.map(fa => {
-                if (fa.mergedAccounts && fa.mergedAccounts !== '') {
-                    let tempMergedAccounts = fa.mergedAccounts.split(',').map(mm => mm.trim());
-                    if (tempMergedAccounts.indexOf(accountName) > -1) {
-                        categoryName = this.accountCatgoryGetterFunc(fa, accountName);
-                        if (categoryName) {
-                            return categoryName;
-                        }
-                    }
-                }
-            });
-
-        }
-        return categoryName;
-    }
-
     public accountCatgoryGetterFunc(account, accountName): string {
-        let parent = account.parentGroups ? account.parentGroups[0] : '';
+        let parent = account && account.parentGroups && account.parentGroups.length > 0 ? account.parentGroups[0] : '';
         if (parent) {
             if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent.uniqueName)) {
                 return 'liabilities';
@@ -226,7 +175,8 @@ export class UpdateLedgerVm {
 
     public isThereStockEntry(uniqueName: string): boolean {
         // check if entry with same stock added multiple times
-        let count: number = this.selectedLedger.transactions.filter(f => f.particular.uniqueName === uniqueName).length;
+        let isAvailable = this.selectedLedger.transactions.filter(f => f.particular.uniqueName === uniqueName);
+        let count: number = isAvailable && isAvailable.length;
 
         if (count > 1) {
             return true;
@@ -242,12 +192,13 @@ export class UpdateLedgerVm {
     }
 
     public isThereIncomeOrExpenseEntry(): number {
-        return filter(this.selectedLedger.transactions, (trx: ILedgerTransactionItem) => {
+        let isAvailable = filter(this.selectedLedger.transactions, (trx: ILedgerTransactionItem) => {
             if (trx.particular.uniqueName) {
                 let category = this.accountCatgoryGetterFunc(trx.particular, trx.particular.uniqueName);
                 return this.isValidCategory(category) || trx.inventory;
             }
-        }).length;
+        });
+        return isAvailable && isAvailable.length;
     }
 
     public checkDiscountTaxesAllowedOnOpenedLedger(acc: AccountResponse): boolean {
@@ -281,7 +232,7 @@ export class UpdateLedgerVm {
     public onTxnAmountChange(txn: ILedgerTransactionItem) {
 
         if (!txn.isUpdated) {
-            if (this.selectedLedger.taxes.length && !txn.isTax) {
+            if (this.selectedLedger && this.selectedLedger.taxes && this.selectedLedger.taxes.length && !txn.isTax) {
                 txn.isUpdated = true;
             }
         }
@@ -325,7 +276,7 @@ export class UpdateLedgerVm {
         let companyTaxes: TaxResponse[] = [];
         let totalTaxes = 0;
 
-        this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
+        this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
 
         if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
             const amount = (this.isAdvanceReceipt) ? this.advanceReceiptAmount : this.totalAmount;
@@ -367,6 +318,9 @@ export class UpdateLedgerVm {
                 this.grandTotal = giddhRoundOff(this.advanceReceiptAmount + this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
             }, 200);
         } else {
+            if (this.isRcmEntry) {
+                taxTotal = 0;
+            }
             this.taxTrxTotal = giddhRoundOff(((total * taxTotal) / 100), this.giddhBalanceDecimalPlaces);
             this.grandTotal = giddhRoundOff((total + this.taxTrxTotal), this.giddhBalanceDecimalPlaces);
         }
@@ -465,29 +419,19 @@ export class UpdateLedgerVm {
         } else {
 
             // update every transaction conversion rates for multi-currency
-            this.selectedLedger.transactions = this.selectedLedger.transactions.map(t => {
-                let category = this.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
+            if(this.selectedLedger.transactions && this.selectedLedger.transactions.length > 0) {
+                this.selectedLedger.transactions = this.selectedLedger.transactions.map(t => {
+                    let category = this.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
 
-                // find account that's from category income || expenses || fixed assets and update it's amount too
-                if (this.isValidCategory(category)) {
-                    t.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
-                    t.isUpdated = true;
-                }
-                t.convertedAmount = this.calculateConversionRate(t.amount);
-                return t;
-            });
-
-            // find account that's from category income || expenses || fixed assets
-            // let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
-            //   let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
-            //   return this.isValidCategory(category);
-            // });
-            //
-            // if (trx) {
-            //   trx.amount = giddhRoundOff(Number(this.totalAmount), 2);
-            //   trx.convertedAmount = this.calculateConversionRate(trx.amount);
-            //   trx.isUpdated = true;
-            // }
+                    // find account that's from category income || expenses || fixed assets and update it's amount too
+                    if (this.isValidCategory(category)) {
+                        t.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
+                        t.isUpdated = true;
+                    }
+                    t.convertedAmount = this.calculateConversionRate(t.amount);
+                    return t;
+                });
+            }
         }
 
         this.getEntryTotal();
@@ -652,15 +596,26 @@ export class UpdateLedgerVm {
         return requestObj;
     }
 
-    public getUnderstandingText(selectedLedgerAccountType, accountName) {
-        let data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
-        if (data) {
-            data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
-            data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+    public getUnderstandingText(selectedLedgerAccountType, accountName, localeData?: any) {
+        let underStandingTextData = localeData?.text_data;
+        if(underStandingTextData) {
+            let data = _.cloneDeep(underStandingTextData?.find(p => p.accountType === selectedLedgerAccountType));
+            if (data) {
+                if(data.balanceText && data.balanceText.cr) {
+                    data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
+                }
+                if(data.balanceText && data.balanceText.dr) {
+                    data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+                }
 
-            data.text.dr = data.text.dr.replace('<accountName>', accountName);
-            data.text.cr = data.text.cr.replace('<accountName>', accountName);
-            this.ledgerUnderStandingObj = _.cloneDeep(data);
+                if(data.text && data.text.dr) {
+                    data.text.dr = data.text.dr.replace('<accountName>', accountName);
+                }
+                if(data.text && data.text.cr) {
+                    data.text.cr = data.text.cr.replace('<accountName>', accountName);
+                }
+                this.ledgerUnderStandingObj = _.cloneDeep(data);
+            }
         }
     }
 

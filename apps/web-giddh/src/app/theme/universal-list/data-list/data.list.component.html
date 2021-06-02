@@ -44,7 +44,7 @@
 											</ng-container>
 										</ng-container>
 										<ng-container *ngIf="r.parentGroups">
-											<p class="smlP">
+											<p class="small-para-details">
 												<small>
 													<span *ngFor="let item of r.parentGroups; let idx = index">
 														<ng-container *ngIf="idx > 0">
@@ -56,7 +56,7 @@
 											</p>
 										</ng-container>
 										<ng-container *ngIf="!r.type">
-											<span class="hvrTxt">{{r.uniqueName}}</span>
+											<span class="command-hover-text">{{r.uniqueName}}</span>
 										</ng-container>
 									</div>
 								</a>
@@ -73,10 +73,10 @@
 			<div #mainEle>
 				<div class="p-2" [style.width.px]="ItemWidth" *ngIf="!dontShowNoResultMsg">
 					<span *ngIf="rows && rows.length === 0">
-						<div class="jumper-results" [ngClass]="{'alC': showChannelCreateBtn}">
+						<div class="jumper-results" [ngClass]="{'text-center': showChannelCreateBtn}">
 							<p class="block text-center mr-b2">No matches found. Did you spell it correctly?</p>
 							<ng-container *ngIf="showChannelCreateBtn">
-								<button class="btn btn-primary mrR2" (click)="triggerAddManage()">Create Group</button>
+								<button class="btn btn-primary mr-r2" (click)="triggerAddManage()">Create Group</button>
 								<button class="btn btn-primary" (click)="triggerAddManage()">Create A/c</button>
 								<!-- <a href="javascript:void(0)" class="btn btn-light create_channel" (click)="newTeamCreationEmitter.emit(searchEle.nativeElement.value)">
                   Create a channel named #{{searchEle.nativeElement.value | slice:0:21}}
@@ -96,7 +96,7 @@
 <!-- input box template -->
 <ng-template #searchEleTemplate>
 	<div #searchWrapEle class="search-wrapper" (click)="handleClickOnSearchWrapper($event)">
-		<span class="searh-ico"><i class="icon-search"></i></span>
+		<span class="icon-search-icon"><i class="icon-search"></i></span>
 		<span *ngFor="let item of listOfSelectedGroups; let idx = index">
 			<div class="vR">
 				<div class="vN">
@@ -108,7 +108,7 @@
 				</div>
 			</div>
 		</span>
-		<input class="searchEle" #searchEle type="text" [placeholder]="searchBoxPlaceholder" (focus)="handleFocus()"
+		<input class="search-element" #searchEle type="text" [placeholder]="searchBoxPlaceholder" (focus)="handleFocus()"
 			(keydown)="handleKeydown($event)" (keyup)="search($event, $event.target.value)" />
 	</div>
 	<i class="icon-cross close-navigation" (click)="close()"></i>

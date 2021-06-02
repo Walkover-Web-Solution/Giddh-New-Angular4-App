@@ -1,7 +1,7 @@
 import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, take } from 'rxjs/operators';
 
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { EXCEPTION_API } from './apiurls/exception-log.api';
@@ -28,7 +28,12 @@ export class ExceptionLogService implements ErrorHandler {
      */
     public handleError(error: any): void {
         if (error.stack) {
-            this.addUiException({ component: '', exception: error.stack }).subscribe(() => { }, () => { });
+            this.addUiException({ component: '', exception: error.stack }).pipe(take(1)).subscribe(() => {
+                const chunkFailedMessage = /Loading chunk [\d]+ failed/;
+                if (chunkFailedMessage.test(error.stack)) {
+                    window.location.reload();
+                }
+            }, () => { });
         }
         throw error;
     }

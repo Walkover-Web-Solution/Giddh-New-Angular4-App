@@ -1,9 +1,10 @@
-.marge-btn {
+.merge-btn {
     padding: 8px 16px;
+    width: 95px;
 }
 
 .form-box .btn {
-    width: 72px;
+    width: 95px;
 }
 
 .item-unique ul {
@@ -16,7 +17,10 @@
 .export-group-ledger{
     margin-right: 15px;
 }
-
+.btn-share{
+    width: 100px;
+    margin-bottom: 5px;
+}
 @media (min-width: 576px) and (max-width:767px){
     .modal-share-group{
         max-width: 500px !important;

@@ -1,7 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { InventoryUsersActions } from '../../../actions/inventory/inventory.users.actions';
@@ -11,7 +11,6 @@ import { InventoryEntryActions } from '../../../actions/inventory/inventory.entr
 import { GeneralService } from '../../../services/general.service';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
     selector: 'aside-transfer-pane',
@@ -19,7 +18,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
     styleUrls: ['./aside-transfer-pane.component.scss'],
 })
 
-export class AsideTransferPaneComponent implements OnInit, OnChanges {
+export class AsideTransferPaneComponent implements OnInit, OnDestroy {
     public stockList$: Observable<IStocksItem[]>;
     public stockUnits$: Observable<StockUnitRequest[]>;
     public userList$: Observable<InventoryUser[]>;
@@ -28,8 +27,6 @@ export class AsideTransferPaneComponent implements OnInit, OnChanges {
     public isLoading: boolean;
     public createStockSuccess$: Observable<boolean>;
     public entrySuccess$: Observable<boolean>;
-
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _store: Store<AppState>,
@@ -43,31 +40,30 @@ export class AsideTransferPaneComponent implements OnInit, OnChanges {
         // dispatch stockunit request
         this._store.dispatch(this._customStockActions.GetStockUnit());
         this._store.dispatch(this._inventoryUserAction.getAllUsers());
-        this.createStockSuccess$ = this._store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
-        this.entrySuccess$ = this._store.select(s => s.inventoryInOutState.entrySuccess).pipe(takeUntil(this.destroyed$));
+        this.createStockSuccess$ = this._store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
+        this.entrySuccess$ = this._store.pipe(select(s => s.inventoryInOutState.entrySuccess), takeUntil(this.destroyed$));
     }
 
-    public ngOnChanges(changes: SimpleChanges): void {
-        //
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof AsideTransferPaneComponent
+     */
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     public ngOnInit() {
-        this.stockList$ = this._store
-            .select(p => p.inventory.stocksList && p.inventory.stocksList.results);
+        this.stockList$ = this._store.pipe(select(p => p.inventory.stocksList && p.inventory.stocksList.results), takeUntil(this.destroyed$));
 
-        this.stockUnits$ = this._store
-            .select(p => p.inventory.stockUnits);
+        this.stockUnits$ = this._store.pipe(select(p => p.inventory.stockUnits), takeUntil(this.destroyed$));
 
-        this.userList$ = this._store
-            .select(p => p.inventoryInOutState.inventoryUsers.filter(o => o.uniqueName !== this._generalService.companyUniqueName));
+        this.userList$ = this._store.pipe(select(p => p.inventoryInOutState.inventoryUsers.filter(o => o.uniqueName !== this._generalService.companyUniqueName)), takeUntil(this.destroyed$));
 
-        this._store
-            .select(p => p.inventoryInOutState.entryInProcess)
-            .subscribe(p => this.isLoading = p);
+        this._store.pipe(select(p => p.inventoryInOutState.entryInProcess), takeUntil(this.destroyed$)).subscribe(p => this.isLoading = p);
 
-        this._store
-            .select(p => p.inventoryInOutState.userSuccess)
-            .subscribe(p => p && this.closeAsidePane(p));
+        this._store.pipe(select(p => p.inventoryInOutState.userSuccess), takeUntil(this.destroyed$)).subscribe(p => p && this.closeAsidePane(p));
 
         this.createStockSuccess$.subscribe(s => {
             if (s) {

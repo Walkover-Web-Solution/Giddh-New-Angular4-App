@@ -74,7 +74,7 @@ export class GeneralActions {
                     const items = data.itemData;
                     switch (payload.type) {
                         case "accounts": {
-                            const matchedIndex = items.aidata.accounts.findIndex(item => item && item.uniqueName && item.uniqueName === payload.oldUniqueName);
+                            const matchedIndex = (items && items.aidata && items.aidata.accounts) ? items.aidata.accounts.findIndex(item => item && item.uniqueName && item.uniqueName === payload.oldUniqueName) : -1;
                             if (matchedIndex > -1) {
                                 items.aidata.accounts[matchedIndex] = {
                                     ...items.aidata.accounts[matchedIndex],
@@ -118,6 +118,12 @@ export class GeneralActions {
                 }).catch(error => this.deleteEntryFromIndexDbError());
             })
         ));
+
+    public getSideMenuItems$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(GENERAL_ACTIONS.GET_SIDE_MENU_ITEMS),
+            switchMap(() => this._companyService.getMenuItems()),
+            map(resp => this.saveSideMenuItems(resp.body))));
 
     constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService, private _companyService: CompanyService, private _dbService: DbService, private _activatedRoute: ActivatedRoute, private route: Router) {
         //
@@ -297,6 +303,26 @@ export class GeneralActions {
     public updateUiFromDb(): CustomActions {
         return {
             type: GENERAL_ACTIONS.UPDATE_UI_FROM_DB
+        }
+    }
+    /* This function is storinng side menu */
+    public openSideMenu(isOpen: boolean) {
+        return {
+            type: GENERAL_ACTIONS.OPEN_SIDE_MENU,
+            payload: isOpen
+        }
+    }
+
+    public getSideMenuItems(): CustomActions {
+        return {
+            type: GENERAL_ACTIONS.GET_SIDE_MENU_ITEMS
+        }
+    }
+
+    public saveSideMenuItems(items: Array<any>): CustomActions {
+        return {
+            type: GENERAL_ACTIONS.SAVE_SIDE_MENU_ITEMS,
+            payload: items
         }
     }
 }

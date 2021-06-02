@@ -1,3 +1,5 @@
+@import "../../../assets/css/color.scss";
+
 table {
     table-layout: fixed;
 }
@@ -13,7 +15,7 @@ table {
     float: left;
 }
 
-.data_overview {
+.data-overview {
     width: 100%;
     overflow-x: scroll;
     min-height: 300px;
@@ -30,7 +32,7 @@ table {
     color: rgba(0, 0, 0, 0.8);
 }
 
-.action_btn {
+.action-btn {
     right: 15px;
 }
 
@@ -43,5 +45,5 @@ table {
 }
 
 .basic > thead > tr > th {
-    border: 1px solid #ccc;
+    border: 1px solid $gainsboro;
 }

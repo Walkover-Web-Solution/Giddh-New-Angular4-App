@@ -1,6 +1,4 @@
 import { UserDetails } from '../../../models/api-models/loginModels';
-import { CompanyResponse } from '../../../models/api-models/Company';
-
 import * as moment from 'moment/moment';
 import { Observable } from 'rxjs';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
@@ -26,7 +24,7 @@ export class AuditLogsSidebarVM {
     /** Observer to get logs in progress */
     public getLogsInprocess$: Observable<boolean>;
     /** Date range options */
-    public dateOptions: IOption[] = [{ label: 'Date Range', value: '1' }, { label: 'Entry/Log Date', value: '0' }];
+    public dateOptions: IOption[];
     /** Check for manage company  */
     public canManageCompany: boolean = false;
     /** Selected operation type */
@@ -43,6 +41,10 @@ export class AuditLogsSidebarVM {
     public selectedToDate: Date;
      /** Selected account unique name */
     public selectedAccountUniqueName: string = '';
+
+    constructor(private localeData, private commonLocaleData) {
+        this.dateOptions = [{ label: this.commonLocaleData?.app_date_range, value: '1' }, { label: this.localeData?.entry_log_date, value: '0' }];
+    }
 
     /**
      * To reset selected filter for audit log

@@ -1,7 +1,7 @@
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
@@ -14,7 +14,7 @@ import { ReplaySubject } from 'rxjs';
       padding: 20px;
     }
 
-    section.sales-invoiceBGwhite {
+    section.sales-invoice-bg-white {
       background-color: #fff;
     }
   `],
@@ -38,7 +38,7 @@ export class SalesComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'sales';
@@ -48,7 +48,7 @@ export class SalesComponent implements OnInit, OnDestroy {
         this.isCreditNote = this.router.routerState.snapshot.url.includes('credit');
         this.isDebitNote = this.router.routerState.snapshot.url.includes('debit');
 
-        this.route.params.subscribe(parmas => {
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(parmas => {
             if (parmas['accUniqueName']) {
                 this.accountUniqueName = parmas['accUniqueName'];
             }

@@ -4,18 +4,18 @@ p.bank-name {
     color: $midnight-blue;
     margin-bottom: 5px;
 }
-p.bankBalnc {
+p.bank-balance {
     color: $dark-gray;
     font-size: 14px;
     display: flex;
     justify-content: space-between;
 }
-.single-bank-detatil {
+.single-bank-detail {
     border-bottom: 1px solid $gainsboro;
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
-a.connectBnk {
+a.connect-bank {
     position: absolute;
     bottom: 10px;
     color: $nero;
@@ -37,11 +37,11 @@ table.basic td {
     border-top: none;
     padding-left: 0;
 }
-.credtors-table tr:last-child td {
+.creditors-table tr:last-child td {
     border-bottom: none !important;
 }
 table.basic th {
-    color: #1a237e;
+    color: $midnight-blue;
     font-size: 14px;
 }
 .cr-dr-body {

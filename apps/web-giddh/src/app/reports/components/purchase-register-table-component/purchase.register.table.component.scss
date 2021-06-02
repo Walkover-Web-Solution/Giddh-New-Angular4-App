@@ -3,41 +3,32 @@
     flex: 1 1 auto;
 }
 .basic > tbody > tr:hover td > a {
-    color: #1a237e;
+    color: $midnight-blue;
 }
 .basic > tbody > tr > td,
 .basic > thead > tr > th,
 .basic > tfoot > tr > th {
     white-space: nowrap !important;
 }
-.basic > tfoot > tr > th {
-    background: #e3e3e3;
-}
-.table-active {
-    background: #f0f0f1;
-}
 .width-200px {
     width: 200px;
 }
-.basic > tbody > tr > td > a {
-    color: #0c8fe6;
-}
-.particular[_ngcontent-c9] {
+.particular {
     float: right;
     margin-top: 2px;
     font-size: 19px;
-    color: #333333;
+    color: $night-rider;
 }
 .bgChange {
-    background: #f0f0f1;
+    background: $white-smoke;
 }
 .btn-sort {
     display: flex !important;
     width: 36px;
     height: 36px;
-    background-color: #fff;
+    background-color: $white;
     font-size: 18px;
-    color: #1a237e !important;
+    color: $midnight-blue !important;
     border: 1px solid $gainsboro;
     justify-content: center;
     align-items: center;
@@ -56,5 +47,17 @@
 .purchase-footer {
     .particular {
         cursor: auto;
+    }
+}
+@media screen and (max-width:768px) {
+    .basic{
+        tbody{
+            tr{
+                td{
+                    white-space: normal !important;
+                    word-break: break-all !important;
+                }
+            }
+        }
     }
 }

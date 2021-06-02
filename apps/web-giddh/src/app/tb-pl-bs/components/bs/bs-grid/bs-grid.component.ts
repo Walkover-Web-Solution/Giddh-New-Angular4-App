@@ -1,18 +1,21 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
 import { BalanceSheetData } from '../../../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from '../../../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { FormControl } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
-	selector: 'bs-grid',  // <home></home>
+	selector: 'bs-grid',
     templateUrl: './bs-grid.component.html',
     styleUrls: [`./bs-grid.component.scss`],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
+
+export class BsGridComponent implements OnInit, OnChanges, OnDestroy {
 	public noData: boolean;
 	public showClearSearch: boolean = false;
 	@Input() public search: string = '';
@@ -25,19 +28,24 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
 	@Input() public to: string = '';
 	@Output() public searchChange = new EventEmitter<string>();
 	@ViewChild('searchInputEl', {static: true}) public searchInputEl: ElementRef;
-	public bsSearchControl: FormControl = new FormControl();
+    public bsSearchControl: FormControl = new FormControl();
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
 	constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
-		//
+		
 	}
 
 	public ngOnChanges(changes: SimpleChanges) {
 		if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
-			//
 			if (this.bsData) {
-				// this.cd.detach();
 				this.zone.run(() => {
-					// if (!this.search) {
 					if (this.bsData) {
 						this.toggleVisibility(this.bsData.assets, changes.expandAll.currentValue);
 						this.toggleVisibility(this.bsData.liabilities, changes.expandAll.currentValue);
@@ -69,26 +77,14 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
 
 					}
 					this.cd.detectChanges();
-					// } else if (this.search && this.search.length < 3) {
-					//   if (this.plData.liabilities) {
-					//     this.plData.liabilities.forEach(p => p.isVisible = true);
-					//   }
-					//   if (this.plData.assets) {
-					//     this.plData.assets.forEach(p => p.isVisible = true);
-					//   }
-					// }
-
 				});
-
-				// this.plData = _.cloneDeep(this.plData);
-				// this.cd.detectChanges();
 			}
 		}
 	}
 
 	public ngOnInit() {
 		this.bsSearchControl.valueChanges.pipe(
-			debounceTime(700))
+			debounceTime(700), takeUntil(this.destroyed$))
 			.subscribe((newValue) => {
 				this.searchInput = newValue;
 				this.searchChange.emit(this.searchInput);
@@ -100,15 +96,13 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
 			});
 	}
 
-	public ngAfterViewInit() {
-		//
-	}
-
 	public toggleSearch() {
 		this.showClearSearch = true;
 
 		setTimeout(() => {
-			this.searchInputEl.nativeElement.focus();
+            if(this.searchInputEl && this.searchInputEl.nativeElement) {
+                this.searchInputEl.nativeElement.focus();
+            }
 		}, 200);
 	}
 
@@ -145,5 +139,15 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
 				this.toggleVisibility(grp.childGroups, isVisible);
 			}
 		});
-	}
+    }
+    
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof BsGridComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

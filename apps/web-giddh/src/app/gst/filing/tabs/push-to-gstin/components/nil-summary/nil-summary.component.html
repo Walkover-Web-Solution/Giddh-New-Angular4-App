@@ -1,6 +1,6 @@
 <div class="gstr-transactions-summary">
     <h4 class="clearfix gstr-summary-title">Nil Summary</h4>
-    <p style="padding-top:6px;" class="text-muted half">This section displays the sale of goods and services that are
+    <p class="text-muted half pd-t05">This section displays the sale of goods and services that are
         nil
         rated.&nbsp;Nil rated goods and services are those that have 0% GST but allows you to claim ITC on the filing
         paid
@@ -11,23 +11,23 @@
                 <thead>
                     <tr>
                         <th class="text-left">
-                            <div style="position: relative">
+                            <div class="position-relative">
                                 <div class="pull-left over-flow">Supply Type</div>
                             </div>
                         </th>
                         <th class="text-right">
-                            <div style="position: relative">
-                                <div class=" over-flow">Nil Amount</div>
+                            <div class="position-relative">
+                                <div class="over-flow">Nil Amount</div>
                             </div>
                         </th>
                         <th class="text-right">
-                            <div style="position: relative">
-                                <div class=" over-flow">Exempt Amount</div>
+                            <div class="position-relative">
+                                <div class="over-flow">Exempt Amount</div>
                             </div>
                         </th>
                         <th class="text-right">
-                            <div style="position: relative">
-                                <div class=" over-flow">Non GST Amount</div>
+                            <div class="position-relative">
+                                <div class="over-flow">Non GST Amount</div>
                             </div>
                         </th>
                     </tr>
@@ -37,9 +37,27 @@
                 <tbody>
                     <tr *ngFor="let item of nilSummary.inv">
                         <td data-title="Supply Type"> {{item.sply_ty ? item.sply_ty : '-'}} </td>
-                        <td data-title="Nil Amount" class="text-right"> {{item.nil_amt | giddhCurrency}} </td>
-                        <td data-title="Exempt Amount" class="text-right"> {{item.expt_amt | giddhCurrency}} </td>
-                        <td data-title="Non GST Amount" class="text-right"> {{item.ngsup_amt | giddhCurrency}} </td>
+                        <td data-title="Nil Amount" class="text-right">
+                            <!-- {{item.nil_amt | giddhCurrency} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.nil_amt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td data-title="Exempt Amount" class="text-right">
+                            <!-- {{item.expt_amt | giddhCurrency}}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.expt_amt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td data-title="Non GST Amount" class="text-right">
+                            <!-- {{item.ngsup_amt | giddhCurrency}}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.ngsup_amt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
                     </tr>
 
                 </tbody>

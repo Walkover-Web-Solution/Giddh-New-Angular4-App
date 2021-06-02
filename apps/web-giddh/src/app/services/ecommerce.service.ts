@@ -37,4 +37,23 @@ export class EcommerceService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
+
+    /**
+     * This will send the email
+     *
+     * @param {*} model
+     * @returns {*}
+     * @memberof EcommerceService
+     */
+    public sendEmail(model: any): any {
+        this.user = this.generalService.user;
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + ECOMMERCE_API.SEND_EMAIL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
 }

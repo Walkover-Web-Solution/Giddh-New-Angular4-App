@@ -21,14 +21,6 @@ export class StockReportActions {
         .pipe(
             ofType(STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT),
             switchMap((action: CustomActions) => {
-                // let activeGroup: StockGroupResponse = null;
-                // let sub = this.store.select(a => a.inventory.activeGroup);
-                // sub.take(1).subscribe(a => {
-                //   activeGroup = a;
-                // });
-                // if (activeGroup) {
-                //   this.store.dispatch()
-                // }
                 return this._inventoryService.GetStocksReport_v2(action.payload).pipe(
                     map((response) => {
                         const isStockNotFound = response && response.status === 'error' && response.code === 'STOCK_NOT_FOUND';

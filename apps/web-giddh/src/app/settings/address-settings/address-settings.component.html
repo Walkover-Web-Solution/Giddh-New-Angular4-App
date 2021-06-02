@@ -1,0 +1,219 @@
+<div class="container-fluid setting-profile-container">
+    <div class="row">
+        <div *ngIf="organizationType === 'COMPANY'"
+            class="w-100 d-flex justify-content-between mt-1 mb-4 align-items-center address-list-top">
+            <div class="search-container">
+                <div class="font-14">List of all the addresses created and linked in the company</div>
+                <a class="cp mr-l1 clear-filter-btn"
+                    *ngIf="searchStateInput?.value || searchAddressInput?.value || searchAddressNameInput?.value"
+                    href="javascript:;" (click)="resetFilter()" tooltip="Reset Search">
+                    <i aria-hidden="true" class="icon-refresh"></i> Clear Filter
+                </a>
+            </div>
+            <button type="button" class="btn btn-sky-blue mr-0" (click)="openAddAndManage()">+ Add Address</button>
+        </div>
+        <!-- branch profile element start -->
+        <div *ngIf="organizationType === 'BRANCH'"
+            class="w-100 d-flex justify-content-between mb-4 align-items-center address-list-top">
+            <div class="font-14">List of all the addresses created</div>
+            <button type="button" class="btn btn-sky-blue mr-0" (click)="openAddAndManage()">+ Add Address</button>
+        </div>
+        <!-- branch profile element end -->
+        <div *ngIf="organizationType === 'COMPANY'" class="w-100">
+            <div class="table-responsive">
+                <table class="table basic table-bordered giddh-table on-mobile-view">
+                    <thead>
+                        <tr>
+                            <th class="min-wid-check" width="2%">
+                                <div>#</div>
+                            </th>
+                            <th #searchAddressNameInputField width="15%" class="td-search-box"
+                                (clickOutside)="clickedOutside($event, searchAddressNameInputField, 'searchAddressNameInput')">
+                                <div>
+                                    <ng-container
+                                        *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSearchName, title: 'Name', fieldName: 'searchAddressNameInput', formControl: searchAddressNameInput}">
+                                    </ng-container>
+                                </div>
+                            </th>
+                            <th #searchAddressInputField width="25%" class="td-search-box"
+                                (clickOutside)="clickedOutside($event, searchAddressInputField, 'searchAddressInput')">
+                                <div>
+                                    <ng-container
+                                        *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSearchAddress, title: 'Address', fieldName: 'searchAddressInput', formControl: searchAddressInput}">
+                                    </ng-container>
+                                </div>
+                            </th>
+                            <th #searchStateInputField width="15%" class="td-search-box"
+                                (clickOutside)="clickedOutside($event, searchStateInputField, 'searchStateInput')">
+                                <div>
+                                    <ng-container
+                                        *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSearchState, title: 'State', fieldName: 'searchStateInput', formControl: searchStateInput}">
+                                    </ng-container>
+                                </div>
+                            </th>
+                            <th width="25%" class="td-search-box">
+                                <div>
+                                    <span>Linked with</span>
+                                    <!-- <i class="icon-search"></i> -->
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="!shouldShowLoader">
+                        <tr class="cursor-pointer" *ngFor="let address of addresses; index as addressIndex">
+                            <td data-title="#">
+                                <div>{{addressIndex + 1}}.</div>
+                            </td>
+                            <td data-title="Name">
+                                <div>{{address.name}}</div>
+                            </td>
+                            <td data-title="Address">
+                                <div>
+                                    <p class="address-row">{{address.address}}</p>
+                                    <ng-container *ngIf="address.taxType && address.taxNumber">
+                                        {{address.taxType}} : {{address.taxNumber}}&nbsp;
+                                    </ng-container>
+                                    <ng-container *ngIf="address.pincode">
+                                        PIN: {{address.pincode}}
+                                    </ng-container>
+                                </div>
+                            </td>
+                            <td data-title="State">
+                                <div>{{address.stateCode}} - {{address.stateName}}</div>
+                            </td>
+                            <td data-title="Linked with" width="30%" class="linked-with">
+                                <div class="d-flex wrap-linked-company">
+                                    <div class="d-flex flex-column linked-with w-100">
+                                        <span *ngFor="let entity of address.linkedEntities" class="pb-1">
+                                            <i tooltip="Branch" *ngIf="entity.isBranch"
+                                                class="icon-branch-icon"></i>
+                                            <i tooltip="Warehouse" *ngIf="entity.isWarehouse"
+                                                class="icon-warehouse-icon"></i>
+                                           <span class="entity-alias"> {{entity.alias || entity.name}} </span>
+                                        </span>
+                                    </div>
+
+                                    <div class="ml-auto">
+                                        <div class="action-icon">
+                                            <a href="javascript:void(0);" (click)="handleUpdateAddress(address)">
+                                                <span class="icon-edit"></span></a>
+                                            <a href="javascript:void(0);" (click)="showConfirmationModal(address)">
+                                                <span class="icon-trash"></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <giddh-page-loader *ngIf="shouldShowLoader"></giddh-page-loader>
+                <div class="no-data" *ngIf="addresses.length === 0 && !shouldShowLoader">
+                    <h1>No addresses found within given criteria.</h1>
+                </div>
+            </div>
+        </div>
+        <!-- branch profile element start -->
+        <div class="d-flex flex-column w-100" *ngIf="organizationType === 'BRANCH'">
+            <div *ngFor="let address of addresses; index as addressIndex">
+                <div class="branch-profile-address-content col-md-12 mr-b15">
+                    <div class="single-branch-detail mr-b15">
+                        <h4><i class="icon-branch-icon"></i>{{address?.name}}</h4>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Address:</label>
+                                <p>
+                                    {{address.address}}
+                                    <ng-container *ngIf="address.taxType && address.taxNumber">
+                                        <br *ngIf="address.address" />
+                                        {{address.taxType}} : {{address.taxNumber}}
+                                    </ng-container>
+                                </p>
+                            </div>
+                            <div class="col-md-4 mb-1">
+                                <div>
+                                    <label>State:</label>
+                                    <p>{{address.stateCode}} - {{address.stateName}}</p>
+                                </div>
+                                <!-- static pincode  -->
+                                <div *ngIf="address.pincode">
+                                    <label>PIN:</label>
+                                    <p>{{address.pincode}}</p>
+                                </div>
+                                <!-- static pincode  -->
+                            </div>
+                            <div class="col-md-4">
+                                <div class="set-default">
+                                    <p class="no-selected mb-1 cursor-pointer" hidden><i
+                                            class="icon-no-selected mr-r05"></i>Set
+                                        as Default</p>
+                                    <p (click)="handleSetDefaultAddress(address)"
+                                        class="selected-defualt mb-1 cursor-pointer">
+                                        <i *ngIf="address.isDefault" class="icon-favorite-selected mr-r05"></i>
+                                        <i *ngIf="!address.isDefault" class="icon-no-selected mr-r05"></i>
+                                        Set as Default</p>
+                                    <p (click)="showConfirmationModal(address)" class="cursor-pointer">
+                                        <i class="icon-unlink mr-r05"></i>Unlink Address</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="no-data" *ngIf="addresses.length === 0">
+                <h1>No addresses found within given criteria.</h1>
+            </div>
+        </div>
+        <!-- branch profile element end -->
+        <div *ngIf="organizationType === 'COMPANY'" class="w-100 text-center">
+            <pagination [(ngModel)]="paginationConfig.page"
+                *ngIf="!shouldShowLoader && paginationConfig?.totalItems > paginationLimit"
+                [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count"
+                [boundaryLinks]="true" [rotate]="true" (pageChanged)="handlePageChange($event)"></pagination>
+        </div>
+    </div>
+</div>
+
+<!-- Create address part of Address Tab -->
+<div *ngIf="accountAsideMenuState === 'in' && !closeSidePane" [keyboardShortcut]="'esc'"
+    (onShortcutPress)="toggleAccountAsidePane()">
+    <div class="aside-overlay"></div>
+    <create-address class="account-aside-menu-state  transform-inherit" [@slideInOut]="accountAsideMenuState"
+        [companyName]="organizationType === 'BRANCH' ? profileData?.companyName : ''"
+        [currentOrganizationUniqueName]="currentOrganizationUniqueName" [showLoader]="isAddressChangeInProgress"
+        (saveAddress)="saveAddress($event)" (updateAddress)="updateAddress($event)" [addressToUpdate]="addressToUpdate"
+        (closeAsideEvent)="toggleAccountAsidePane()" [addressConfiguration]="addressConfiguration">
+    </create-address>
+</div>
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+    <div [hidden]="show">
+        <span> {{ title }}</span>
+        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+    </div>
+    <div class="input-container w-100" [hidden]="!show">
+        <input type="text" placeholder="Search {{ title }}" class="w100" #searchBox [formControl]="formControl" />
+    </div>
+</ng-template>
+<div bsModal #deleteAddressConfirmationModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
+    tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div>
+                <div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
+                    <h3 class="modal-title bg" id="modal-title">Confirmation </h3>
+                    <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel()"></i>
+                </div>
+                <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
+                    <form name="newRole" novalidate class="" autocomplete="off">
+                        <div class="modal-wrap mr-b2">
+                            <h3>Are you sure you want to continue?</h3>
+                        </div>
+                        <div class="d-flex justify-content-start">
+                            <button type="submit" class="btn btn-md btn-success mr-r1" (click)="onConfirmation()">Yes</button>
+                            <button type="submit" class="btn btn-md btn-cancel" (click)="onCancel()">No</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

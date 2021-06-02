@@ -1,5 +1,5 @@
 @import "../../../../assets/css/color.scss";
-.output_row > td {
+.output-row > td {
     padding: 12px 10px 12px 0 !important;
 }
 
@@ -7,9 +7,12 @@
     padding: 2px 10px 2px 0;
 }
 
-.table_label td {
-    padding-top: 12px !important;
-    padding-bottom: 5px;
+.table-label{
+    border-color: $gainsboro;
+    td {
+        padding-top: 12px !important;
+        padding-bottom: 5px;
+    }
 }
 
 .dropdown-menu {
@@ -25,7 +28,7 @@
         background: none;
         border: none;
         max-width: 108px;
-        border-bottom: 1px solid #dddddd;
+        border-bottom: 1px solid $gainsboro;
     }
     .item-label {
         display: inline-block;
@@ -39,16 +42,16 @@
     i {
         margin-left: 10px;
         padding-bottom: 3px;
-        border-bottom: 1px solid #dddddd;
+        border-bottom: 1px solid $gainsboro;
     }
     .new-custom-btn {
         font-size: 12px;
-        color: #2262d1;
+        color: $primary;
         padding-top: 30px;
         cursor: pointer;
     }
     .text-danger {
-        color: #f80606;
+        color: $red;
     }
 }
 
@@ -61,13 +64,13 @@
 tr.fsstock td {
     padding-bottom: 15px;
 }
-.table_label strong {
+.table-label strong {
     color: $charcoal;
     font-weight: normal !important;
     font-size: 14px;
     font-family: "opensans-regular";
 }
-.inputLabelStock {
+.input-label-stock {
     display: none;
 }
 
@@ -77,15 +80,15 @@ tr.fsstock td {
     right: 10px;
     z-index: 9999999;
     background-color: transparent;
-    color: #fff;
+    color: $white;
     font-size: 17px;
     top: 18px;
     margin-right: 0;
     border: 0;
 }
 .aside-pane-form {
-    background-color: #fff;
-    box-shadow: 0 3px 6px #0000001a;
+    background-color: $white;
+    box-shadow: 0 3px 6px $black-russian;
     padding: 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -93,16 +96,31 @@ tr.fsstock td {
     position: relative;
     margin-top: 15px;
 }
+.collapse-icons{
+    font-size: 10px;
+    border: 1px solid $chetwode-blue;
+    border-radius: 4px;
+    padding: 2px;
+    top: 0 !important;
+}
+.output-row  sh-select , .output-row .form-group input{
+    min-width: 140px;
+}
+.section-head.bd-rb, .output-row span{
+    white-space: normal;
+    word-break: break-word;
+
+}
 @media (max-width: 767px) {
-    section.form_body table.noHover td {
+    section.form-body table.no-hover td {
         width: 100%;
         display: block;
         margin-bottom: 0;
     }
-    tr.noHover.table_label {
+    tr.no-hover.table-label {
         display: none;
     }
-    .inputLabelStock {
+    .input-label-stock {
         display: block;
     }
 }

@@ -7,7 +7,9 @@ import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import * as moment from 'moment';
-import { find } from '../lodash-optimized';
+import { cloneDeep, find } from '../lodash-optimized';
+import { OrganizationType } from '../models/user-login-state';
+import { AllItems } from '../shared/helpers/allItems';
 
 @Injectable()
 export class GeneralService {
@@ -16,6 +18,10 @@ export class GeneralService {
     // public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public isCurrencyPipeLoaded: boolean = false;
 
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
+    /** Stores the branch unique name */
+    public currentBranchUniqueName: string;
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -172,17 +178,19 @@ export class GeneralService {
         let byteCharacters = atob(b64Data);
         let byteArrays = [];
         let offset = 0;
-        while (offset < byteCharacters.length) {
-            let slice = byteCharacters.slice(offset, offset + sliceSize);
-            let byteNumbers = new Array(slice.length);
-            let i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
+        if(byteCharacters && byteCharacters.length > 0) {
+            while (offset < byteCharacters.length) {
+                let slice = byteCharacters.slice(offset, offset + sliceSize);
+                let byteNumbers = new Array(slice.length);
+                let i = 0;
+                while (i < slice.length) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                    i++;
+                }
+                let byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+                offset += sliceSize;
             }
-            let byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
         }
         return new Blob(byteArrays, { type: contentType });
     }
@@ -243,37 +251,37 @@ export class GeneralService {
      * @returns {ConfirmationModalConfiguration} RCM modal configuration
      * @memberof GeneralService
      */
-    public getRcmConfiguration(isRcmSelected: boolean): ConfirmationModalConfiguration {
+    public getRcmConfiguration(isRcmSelected: boolean, commonLocaleData?: any): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
-            text: 'Yes',
+            text: (commonLocaleData) ? commonLocaleData?.app_yes : 'Yes',
             cssClass: 'btn btn-success'
         },
         {
-            text: 'No',
+            text: (commonLocaleData) ? commonLocaleData?.app_no : 'No',
             cssClass: 'btn btn-danger'
         }];
-        const headerText: string = 'Reverse Charge Confirmation';
+        const headerText: string = (commonLocaleData) ? commonLocaleData?.app_rc_heading : 'Reverse Charge Confirmation';
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1 text-light';
         const footerCssClass: string = 'mr-b1';
         return (isRcmSelected) ? {
             headerText,
             headerCssClass,
-            messageText: `Note: If you check this transaction for Reverse Charge,
+            messageText: (commonLocaleData) ? commonLocaleData?.app_rc_selected_note : `Note: If you check this transaction for Reverse Charge,
             applied taxes will be considered under Reverse Charge taxes and
             will be added in tax report.`,
             messageCssClass,
-            footerText: 'Are you sure you want to check this transaction for Reverse Charge?',
+            footerText: (commonLocaleData) ? commonLocaleData?.app_rc_selected_footer_note : 'Are you sure you want to check this transaction for Reverse Charge?',
             footerCssClass,
             buttons
         } : {
                 headerText,
                 headerCssClass,
-                messageText: `Note: If you uncheck this transaction from Reverse Charge, applied
+                messageText: (commonLocaleData) ? commonLocaleData?.app_rc_unselected_note : `Note: If you uncheck this transaction from Reverse Charge, applied
                 taxes will be considered as normal taxes and reverse
                 charge effect will be removed from tax report.`,
                 messageCssClass,
-                footerText: 'Are you sure you want to uncheck this transaction from Reverse Charge?',
+                footerText: (commonLocaleData) ? commonLocaleData?.app_rs_unselected_footer_note : 'Are you sure you want to uncheck this transaction from Reverse Charge?',
                 footerCssClass,
                 buttons
             };
@@ -331,12 +339,10 @@ export class GeneralService {
      * @memberof CompletedComponent
      */
     public ConvertUTCTimeToLocalTime(UTCDateString) {
+        UTCDateString = UTCDateString.replace("@", "");
         let convertdLocalTime = new Date(UTCDateString);
-
         let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
-
         convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset * 60));
-
         return convertdLocalTime;
     }
 
@@ -450,13 +456,15 @@ export class GeneralService {
         const name = `${cookieName}=`;
         const decodedCookie = decodeURIComponent(document.cookie);
         const availableCookies = decodedCookie.split(';');
-        for (let index = 0; index < availableCookies.length; index++) {
-            let cookie = availableCookies[index];
-            while (cookie.charAt(0) === ' ') {
-                cookie = cookie.substring(1);
-            }
-            if (cookie.indexOf(name) === 0) {
-                return cookie.substring(name.length, cookie.length);
+        if(availableCookies && availableCookies.length > 0) {
+            for (let index = 0; index < availableCookies.length; index++) {
+                let cookie = availableCookies[index];
+                while (cookie.charAt(0) === ' ') {
+                    cookie = cookie.substring(1);
+                }
+                if (cookie.indexOf(name) === 0) {
+                    return cookie.substring(name.length, cookie.length);
+                }
             }
         }
         return '';
@@ -719,5 +727,186 @@ export class GeneralService {
         date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
         const expires = "expires=" + date.toUTCString();
         document.cookie = cookieName + "=" + cookieValue + ";domain=giddh.com;" + expires + ";path=/";
+    }
+
+    /**
+     * Handles the voucher date change modal configuration
+     *
+     * @param {boolean} isVoucherDateSelected
+     * @returns {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public getDateChangeConfiguration(localeData: any, commonLocaleData: any, isVoucherDateSelected: boolean): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            cssClass: 'btn btn-success'
+        },
+        {
+            text: commonLocaleData?.app_no,
+            cssClass: 'btn btn-danger'
+        }];
+        const headerText: string = localeData?.date_change_confirmation_heading;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return (isVoucherDateSelected) ? {
+            headerText,
+            headerCssClass,
+            messageText: localeData?.change_single_entry_date,
+            messageCssClass,
+            footerText: '',
+            footerCssClass,
+            buttons
+        } : {
+                headerText,
+                headerCssClass,
+                messageText: localeData?.change_all_entry_dates,
+                messageCssClass,
+                footerText: '',
+                footerCssClass,
+                buttons
+            };
+    }
+
+    /**
+     * This will return the file extension
+     *
+     * @param {string} path
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getFileExtension(path: string): string {
+        return (path && path.match(/(?:.+..+[^\/]+$)/ig) != null) ? path.split('.').pop() : 'null';
+    }
+
+    /**
+     * this will store currency code
+     *  @param {string} path
+     *  @returns {string}
+     *  @memberof GeneralService
+     */
+    public isRtlCurrency(currencyCode: string): boolean {
+        const rtlCurrencyCodes = ['AED'];
+
+        if (rtlCurrencyCodes.indexOf(currencyCode) > -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * This will return supported locales
+     *
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getSupportedLocales(): any {
+        return [
+            { label: 'English', value: 'en' },
+            { label: 'Hindi', value: 'hi' },
+            { label: 'Marathi', value: 'mr' }
+        ];
+    }
+
+    /**
+     * Returns the array in priority
+     *
+     * @param {Array<string>} [stockTaxes] Taxes on stock
+     * @param {Array<string>} [stockGroupTaxes] Taxes on group to which stock belongs
+     * @param {Array<string>} [accountTaxes] Taxes on account that is linked with the stock
+     * @param {Array<string>} [accountGroupTaxes] Taxes on group of account that is linked with the stock
+     * @returns {Array<string>} Returns the taxes array in priority order
+     * @memberof GeneralService
+     */
+    public fetchTaxesOnPriority(stockTaxes?: Array<string>, stockGroupTaxes?: Array<string>,
+        accountTaxes?: Array<string>, accountGroupTaxes?: Array<string>): Array<string> {
+        if (stockTaxes?.length) {
+            return stockTaxes;
+        } else if (stockGroupTaxes?.length) {
+            return stockGroupTaxes;
+        } else if (accountTaxes?.length) {
+            return accountTaxes;
+        } else if (accountGroupTaxes?.length) {
+            return accountGroupTaxes;
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * Validates the bank details: Bank Name, Account number, IFSC code.
+     * If either of them is provided then the rest two fields are also mandatory
+     * as all the 3 values are required for payment purpose. If none of them is provided,
+     * then also it is valid. It is invalid when anyone of them is missing and rest
+     * are provided
+     *
+     * @returns {boolean} True, if bank details are valid
+     * @memberof GeneralService
+     */
+     public checkForValidBankDetails(bankDetails: any, countryCode: string): boolean {
+        const fieldsWithValue = bankDetails;
+        const keys = countryCode === 'AE' ?
+            ['beneficiaryName', 'bankName', 'branchName', 'bankAccountNo', 'swiftCode'] :
+            ['bankName', 'bankAccountNo', 'ifsc'];
+        let isValid = true;
+        if (fieldsWithValue) {
+            isValid = keys.every(key => Boolean(fieldsWithValue[key])) || keys.every(key => !Boolean(fieldsWithValue[key]));
+            return isValid;
+        } else {
+            return isValid;
+        }
+    }
+
+    /**
+     * Returns the string initials upto 2 letters/characters
+     *
+     * @param {string} name String whose intials are required
+     * @param {string} [delimiter] Delimiter to break the strings
+     * @return {*} {string} Initials of string
+     * @memberof GeneralService
+     */
+    public getInitialsFromString(name: string, delimiter?: string): string {
+        if (name) {
+            let nameArray = name.split(delimiter || " ");
+            if (nameArray?.length > 1) {
+                // Check if "" is not present at 0th and 1st index
+                let count = 0;
+                let initials = '';
+                nameArray.forEach(word => {
+                    if (word && count < 2) {
+                        initials += ` ${word[0]}`;
+                        count++;
+                    }
+                })
+                return initials;
+            } else if (nameArray?.length === 1) {
+                return nameArray[0][0];
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Returns the visible menu items to be shown for menu panel (as per permission)
+     *
+     * @param {Array<any>} apiItems List of permissible items obtained from API
+     * @param {Array<AllItems>} itemList List of all the items of menu
+     * @returns {Array<AllItems>} Array of permissible menu items
+     * @memberof GeneralService
+     */
+    public getVisibleMenuItems(apiItems: Array<any>, itemList: Array<AllItems>): Array<AllItems> {
+        const visibleMenuItems = cloneDeep(itemList);
+        itemList.forEach((menuItem, menuIndex) => {
+            visibleMenuItems[menuIndex].items = [];
+            menuItem.items.forEach(item => {
+                const isValidItem = apiItems.find(apiItem => apiItem.uniqueName === item.link);
+                if (isValidItem || item.alwaysPresent) {
+                    // If items returned from API have the current item which can be shown in branch/company mode, add it
+                    visibleMenuItems[menuIndex].items.push(item);
+                }
+            });
+        });
+        return visibleMenuItems;
     }
 }

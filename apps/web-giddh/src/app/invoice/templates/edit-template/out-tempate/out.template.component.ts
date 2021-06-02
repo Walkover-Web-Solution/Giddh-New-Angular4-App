@@ -1,7 +1,7 @@
 import { ActivatedRoute } from '@angular/router';
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { ReplaySubject, Observable } from 'rxjs';
 import * as _ from '../../../../lodash-optimized';
@@ -45,61 +45,56 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 		let companies = null;
 		let defaultTemplate = null;
 
-		this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
+		this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
 			companyUniqueName = ss.companyUniqueName;
 			companies = ss.companies;
 			this.companyUniqueName = ss.companyUniqueName;
         });
-        
-        this.companyUniqueName$ = this.store.select(state => state.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
 
-        this.companyUniqueName$.pipe(take(1)).subscribe(activeCompanyUniqueName => {
-            if (companies) {
-                companies.forEach(company => {
-                    if (company.uniqueName === activeCompanyUniqueName) {
-                        if (company.country === "India") {
-                            this.showGstComposition = true;
-                        }
-                    }
-                });
-            }
-        });
+        this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
 
-		this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
+		this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
 			defaultTemplate = ss.defaultTemplate;
 		});
 		this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
 	}
 
 	public ngOnInit() {
-
-		this._activatedRoute.params.subscribe(a => {
+        this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => {
+            if (activeCompany?.countryV2?.countryName) {
+                this.showGstComposition = activeCompany.countryV2.countryName === 'India';
+            } else {
+                this.showGstComposition = false;
+            }
+        });
+		this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
 			if (!a) {
 				return;
 			}
 			this.voucherType = a.voucherType;
-			// this.getVoucher(false);
 		});
-		this._invoiceUiDataService.templateVoucherType.subscribe((voucherType: string) => {
+		this._invoiceUiDataService.templateVoucherType.pipe(takeUntil(this.destroyed$)).subscribe((voucherType: string) => {
 			this.voucherType = _.cloneDeep(voucherType);
 		});
 
-		this._invoiceUiDataService.fieldsAndVisibility.subscribe((obj) => {
+		this._invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
 			this.fieldsAndVisibility = _.cloneDeep(obj);
 		});
 
-		this._invoiceUiDataService.logoPath.subscribe((path: string) => {
+		this._invoiceUiDataService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
 			this.logoSrc = _.cloneDeep(path);
 		});
 
-		this._invoiceUiDataService.isLogoVisible.subscribe((yesOrNo: boolean) => {
+		this._invoiceUiDataService.isLogoVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
 			this.showLogo = _.cloneDeep(yesOrNo);
 		});
 
 		this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
 			if (template && template.logoUniqueName) {
 				this.showLogo = true;
-				this.logoSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName;
+				if (!this._invoiceUiDataService.isLogoUpdateInProgress) {
+                    this.logoSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName;
+                }
 			}
 			if (template && template.sections) {
 				if (template.sections.footer.data.imageSignature.display) {
@@ -126,7 +121,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 			}
 		});
 
-		this._invoiceUiDataService.isCompanyNameVisible.subscribe((yesOrNo: boolean) => {
+		this._invoiceUiDataService.isCompanyNameVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
 			this.showCompanyName = _.cloneDeep(yesOrNo);
 		});
 
@@ -140,12 +135,12 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 				footer: true
 			};
 		} else {
-			this._invoiceUiDataService.selectedSection.subscribe((info: TemplateContentUISectionVisibility) => {
+			this._invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
 				this.templateUISectionVisibility = _.cloneDeep(info);
 			});
 		}
 
-		this._invoiceUiDataService.selectedSection.subscribe((info: TemplateContentUISectionVisibility) => {
+		this._invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
 			if (this.isPreviewMode) {
 				this.templateUISectionVisibility = {
 					header: true,

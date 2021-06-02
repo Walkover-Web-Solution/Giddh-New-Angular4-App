@@ -110,7 +110,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
             return {
                 ...state,
                 getAllInProcess: false,
-                [response.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers']: response.status === 'success' ? response.body : null
+                [response.request && response.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers']: response.status === 'success' ? response.body : null
             }
         }
         // endregion

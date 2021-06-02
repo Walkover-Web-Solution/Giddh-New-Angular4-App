@@ -1,15 +1,20 @@
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
-    BsModalRef,
-    BsModalService,
-    ModalOptions
-} from 'ngx-bootstrap/modal';
-import {BsDropdownConfig} from 'ngx-bootstrap/dropdown';
-import {PaginationComponent, PageChangedEvent} from 'ngx-bootstrap/pagination';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+    AfterViewInit,
+    Component,
+    ComponentFactoryResolver,
+    ElementRef,
+    OnDestroy,
+    OnInit,
+    TemplateRef,
+    ViewChild,
+} from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
+import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap/modal';
+import { PageChangedEvent, PaginationComponent } from 'ngx-bootstrap/pagination';
+import { fromEvent, Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
@@ -17,10 +22,13 @@ import { GeneralActions } from '../../actions/general/general.actions';
 import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-boarding.action';
 import { OnBoardingType, PAGINATION_LIMIT } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
+import { SettingsProfileService } from '../../services/settings.profile.service';
+import { ToasterService } from '../../services/toaster.service';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { OnBoardingComponent } from '../../shared/on-boarding/on-boarding.component';
 import { ItemOnBoardingState } from '../../store/item-on-boarding/item-on-boarding.reducer';
 import { AppState } from '../../store/roots';
+import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import { WarehouseActions } from './action/warehouse.action';
 import { WarehouseState } from './reducer/warehouse.reducer';
@@ -37,10 +45,23 @@ import { WarehouseState } from './reducer/warehouse.reducer';
     selector: 'setting-warehouse',
     templateUrl: './warehouse.component.html',
     styleUrls: ['./warehouse.component.scss'],
-    providers: [{ provide: BsDropdownConfig, useValue: { autoClose: true } }]
+    providers: [{ provide: BsDropdownConfig, useValue: { autoClose: true } }],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
-export class WarehouseComponent implements OnInit, OnDestroy {
+export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
 
+    public isBranchElemnt: boolean = true;
     /** Image path relative to app environment */
     public imgPath: string = '';
     /** Stores item on boarding details */
@@ -55,6 +76,20 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     public paginationLimit: number = PAGINATION_LIMIT;
     /** Stores the list of warehouses */
     public warehouses: Array<any> = [];
+    /** Warehouse search query */
+    public searchWarehouseQuery: string = '';
+    /** True, if API is in progress */
+    public showLoader: boolean = true;
+    /** 'in' if edit warehouse flow is carried out */
+    public asideEditWarehousePane: string = 'out';
+    /** True, if warehouse update is in progress */
+    public isWarehouseUpdateInProgress: boolean;
+    /** Warehouse details to update */
+    public warehouseToUpdate: any;
+    /** Stores the current organization uniqueName */
+    public currentOrganizationUniqueName: string;
+
+    public imgPath2: string = '';
 
     /** View container to carry out on boarding */
     @ViewChild('onBoardingContainer', {static: true}) public onBoardingContainer: ElementViewContainerRef;
@@ -64,11 +99,19 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     @ViewChild('welcomeComponent', {static: true}) public welcomeComponentTemplate: TemplateRef<any>;
     /** Warehouse pagination instance */
     @ViewChild('warehousePagination', {static: true}) warehousePagination: PaginationComponent;
+    /** Branch search field instance */
+    @ViewChild('searchWarehouse', {static: false}) public searchWarehouse: ElementRef;
 
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: Subject<boolean> = new Subject();
     /** Stores the current visible on boarding modal instance */
     private welcomePageModalInstance: BsModalRef;
+
+    /** Stores the address configuration */
+    public addressConfiguration: SettingsAsideConfiguration = {
+        type: SettingsAsideFormType.EditWarehouse,
+        linkedEntities: []
+    };
 
     /** @ignore */
     constructor(
@@ -81,6 +124,8 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         private itemOnBoardingActions: ItemOnBoardingActions,
         private settingsUtilityService: SettingsUtilityService,
         private store: Store<AppState>,
+        private settingsProfileService: SettingsProfileService,
+        private toasterService: ToasterService,
         private warehouseActions: WarehouseActions
     ) { }
 
@@ -91,8 +136,22 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.imgPath = (isElectron ||isCordova)  ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();
-        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
+
+        this.imgPath2 =  (isElectron|| isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+    }
+
+    /**
+     * Listens to the input change event of warehouse search filter
+     *
+     * @memberof WarehouseComponent
+     */
+    public ngAfterViewInit(): void {
+        fromEvent(this.searchWarehouse?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((event: any) => {
+            this.showLoader = true;
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, query: encodeURIComponent(event.target.value), count: PAGINATION_LIMIT }));
+        });
     }
 
     /**
@@ -203,9 +262,15 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      */
     public editWarehouse(warehouse: any): void {
         this.selectedWarehouse = warehouse;
-        this.startOnBoarding();
-        this.store.dispatch(this.itemOnBoardingActions.getItemUpdateAction(true));
-        this.showWelcomePage();
+
+        this.loadAddresses('GET', () => {
+            this.warehouseToUpdate = {
+                name: warehouse.name,
+                // address: warehouse.address,
+                linkedEntities: warehouse.addresses || []
+            };
+            this.toggleAsidePane();
+        });
     }
 
     /**
@@ -215,6 +280,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      * @memberof WarehouseComponent
      */
     public pageChanged(event: PageChangedEvent): void {
+        this.showLoader = true;
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: event.page, count: PAGINATION_LIMIT }));
     }
 
@@ -247,6 +313,77 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Resets the search filter
+     *
+     * @memberof WarehouseComponent
+     */
+    public resetFilter(): void {
+        this.searchWarehouseQuery = '';
+        this.showLoader = true;
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
+    }
+
+    /**
+     * Toggle aside pane
+     *
+     * @param {*} [event] Event
+     * @memberof WarehouseComponent
+     */
+    public toggleAsidePane(event?: any): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.asideEditWarehousePane = this.asideEditWarehousePane === 'out' ? 'in' : 'out';
+        this.isWarehouseUpdateInProgress = false;
+        this.toggleBodyClass();
+    }
+
+    /**
+     * Toggles fixed body class
+     *
+     * @memberof WarehouseComponent
+     */
+    public toggleBodyClass(): void {
+        if (this.asideEditWarehousePane === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+
+    /**
+     * Updates warehouse info
+     *
+     * @param {*} warehouseDetails Warehouse details
+     * @memberof WarehouseComponent
+     */
+    public updateWarehouseInfo(warehouseDetails: any): void {
+        warehouseDetails.formValue.linkedEntity = warehouseDetails.formValue.linkedEntity || [];
+        this.isWarehouseUpdateInProgress = true;
+        const linkAddresses = warehouseDetails.addressDetails.linkedEntities.filter(entity => (warehouseDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+            uniqueName: filteredEntity.uniqueName,
+            isDefault: filteredEntity.isDefault,
+        }));
+        const requestObj = {
+            name: warehouseDetails.formValue.name,
+            warehouseUniqueName: this.selectedWarehouse.uniqueName,
+            linkAddresses
+        };
+        this.settingsProfileService.updatWarehouseInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response.status === 'success') {
+                this.asideEditWarehousePane = 'out';
+                this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
+                this.toasterService.successToast('Warehouse updated successfully');
+            } else {
+                this.toasterService.errorToast(response.message);
+            }
+            this.isWarehouseUpdateInProgress = false;
+        }, () => {
+            this.isWarehouseUpdateInProgress = false;
+        });
+    }
+
+    /**
      * Initializes all the subscribers to warehouse store
      *
      * @private
@@ -264,6 +401,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
                 this.endOnBoarding();
                 this.store.dispatch(this.warehouseActions.resetCreateWarehouse());
                 this.store.dispatch(this.warehouseActions.resetUpdateWarehouse());
+                this.showLoader = true;
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
             }
             if (warehouseState && warehouseState.defaultWarehouseData) {
@@ -279,6 +417,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
                     totalItems: warehouseData.totalItems,
                     totalPages: warehouseData.totalPages,
                 }
+                this.showLoader = false;
                 setTimeout(() => {
                     if (this.warehousePagination) {
                         this.warehousePagination.writeValue(warehouseData.page);
@@ -343,7 +482,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         viewContainerRef.clear();
         let componentRef = viewContainerRef.createComponent(componentFactory);
         (componentRef.instance as OnBoardingComponent).onBoardingType = OnBoardingType.Warehouse;
-        (componentRef.instance as OnBoardingComponent).closeCompanyModal.subscribe((data: any) => {
+        (componentRef.instance as OnBoardingComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe((data: any) => {
             if (data && data.isFirstStepCompleted) {
                 this.showWelcomePage();
             } else {
@@ -412,5 +551,30 @@ export class WarehouseComponent implements OnInit, OnDestroy {
             const warehouseIndex = defaultWarehouseData.request.warehouseIndex;
             this.warehouses[warehouseIndex].isDefault = true;
         }
+    }
+
+    /**
+     * Loads all the addresses
+     *
+     * @private
+     * @param {string} method API call method ('GET' for fetching and 'POST' for searching)
+     * @param {Function} successCallback Callback to carry out further operations
+     * @memberof WarehouseComponent
+     */
+    private loadAddresses(method: string, successCallback: Function): void {
+        this.settingsProfileService.getCompanyAddresses(method, { count: 0 }).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response && response.body && response.status === 'success') {
+                this.addressConfiguration.linkedEntities = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
+                    {
+                        ...address,
+                        isDefault: false,
+                        label: address.name,
+                        value: address.uniqueName
+                    }));
+                if (successCallback) {
+                    successCallback();
+                }
+            }
+        });
     }
 }

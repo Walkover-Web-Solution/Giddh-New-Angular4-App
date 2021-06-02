@@ -1,8 +1,8 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { Observable, ReplaySubject } from 'rxjs';
 import { PermissionActions } from '../../../actions/permission/permission.action';
@@ -29,16 +29,19 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     public roleObj: NewRoleClass;
     public pageName: string = '';
     public addUpdateRoleInProcess$: Observable<boolean>;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private router: Router,
-        private activatedRoute: ActivatedRoute,
         private store: Store<AppState>,
         private _location: Location,
         private permissionActions: PermissionActions,
         private _toaster: ToasterService
     ) {
 
-        this.store.select(p => p.permission).pipe(takeUntil(this.destroyed$)).subscribe((permission) => {
+        this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((permission) => {
             this.allRoles = _.cloneDeep(permission.roles);
             this.singlePageForFreshStart = _.find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
                 return o.uniqueName === 'super_admin';
@@ -54,7 +57,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
             this.newRole = permission.newRole;
             this.pageList = permission.pages;
         });
-        this.addUpdateRoleInProcess$ = this.store.select(p => p.permission.addUpdateRoleInProcess).pipe(takeUntil(this.destroyed$));
+        this.addUpdateRoleInProcess$ = this.store.pipe(select(p => p.permission.addUpdateRoleInProcess), takeUntil(this.destroyed$));
     }
 
     public ngOnDestroy() {
@@ -143,7 +146,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
         let data = _.cloneDeep(this.roleObj);
         data.scopes = this.getScopeDataReadyForAPI(data);
         if (data.scopes.length < 1) {
-            return this._toaster.errorToast('At least 1 scope should selected.');
+            return this._toaster.errorToast(this.localeData?.add_role_error);
         }
         this.store.dispatch(this.permissionActions.CreateRole(data));
     }
@@ -236,29 +239,29 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     public getNameByCode(code: string) {
         switch (code) {
             case 'VW':
-                return 'view';
+                return this.localeData?.name_codes.view;
             case 'UPDT':
-                return 'edit';
+                return this.localeData?.name_codes.edit;
             case 'DLT':
-                return 'delete';
+                return this.localeData?.name_codes.delete;
             case 'ADD':
-                return 'create';
+                return this.localeData?.name_codes.create;
             case 'SHR':
-                return 'share';
+                return this.localeData?.name_codes.share;
             case 'VWDLT':
-                return 'view delete';
+                return this.localeData?.name_codes.view_delete;
             case 'SHRLWR':
-                return 'Share Lower';
+                return this.localeData?.name_codes.share_lower;
             case 'SHRALL':
-                return 'Share All';
+                return this.localeData?.name_codes.share_all;
             case 'SHRSM':
-                return 'Share Same';
+                return this.localeData?.name_codes.share_same;
             case 'CMT':
-                return 'Comment';
+                return this.localeData?.name_codes.comment;
             case 'GSTVW':
-                return 'GST View';
+                return this.localeData?.name_codes.gst_view;
             case 'GSTFL':
-                return 'GST Filing';
+                return this.localeData?.name_codes.gst_filing;
             default:
                 return '';
         }

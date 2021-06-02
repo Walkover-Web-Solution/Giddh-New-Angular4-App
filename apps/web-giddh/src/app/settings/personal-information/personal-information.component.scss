@@ -1,0 +1,61 @@
+@import "../../../assets/css/color.scss";
+
+.custom-file {
+    border: 1px dashed $gainsboro;
+    border-radius: 2px;
+    background: $white;
+    width: 100px;
+    height: 100px;
+}
+
+.custom-file-input ~ .custom-file-label::after {
+    content: "";
+}
+
+.custom-file-label {
+    border: none;
+    padding: 30px;
+    background: $white;
+    height: 100%;
+    &::after {
+        height: 0 !important;
+        padding: 0 !important;
+    }
+    .icon-plus {
+        font-size: 40px;
+        color: $whisper-color;
+    }
+}
+
+.unique-name,
+.country-name,
+.parent-name {
+    color: $dark-gray;
+    .country-info {
+        display: inherit;
+        .country-flag {
+            display: inline-block;
+            margin-right: 8px;
+            width: 24px;
+        }
+    }
+}
+.personal-other-details {
+    label {
+        line-height: 2.3;
+    }
+    .form-group{
+        margin-bottom: 0;
+    }
+}
+.img-size {
+    color: $gray;
+}
+.container-fluid {
+    padding-left: 0;
+}
+@media(max-width:767px){
+    label{
+        line-height: 2.3;
+    }
+}

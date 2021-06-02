@@ -5,7 +5,7 @@ import { FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreat
 import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Action, Store } from '@ngrx/store';
+import { Action, Store, select } from '@ngrx/store';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { GroupService } from '../services/group.service';
 import { ToasterService } from '../services/toaster.service';
@@ -98,9 +98,6 @@ export class GroupWithAccountsAction {
                         grouName = s.groupwithaccounts.activeGroup.uniqueName;
                     }
                 });
-
-                // get flatten accounts after group tax applied successfully
-                this.store.dispatch(this._generalActions.getFlattenAccount());
                 return this.getTaxHierarchy(grouName);
             })));
 
@@ -185,7 +182,6 @@ export class GroupWithAccountsAction {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    this.store.dispatch(this._generalActions.getFlattenGroupsReq());
                     this._generalService.eventHandler.next({ name: eventsConst.groupAdded, payload: action.payload });
                     this._toasty.successToast('Sub group added successfully', 'Success');
                 }
@@ -328,13 +324,6 @@ export class GroupWithAccountsAction {
                 } else {
                     let data = action.payload as BaseResponse<MoveGroupResponse, MoveGroupRequest>;
 
-                    // let groups;
-                    // this.store.select(g => g.general.groupswithaccounts).take(1).subscribe(grps => groups = grps);
-                    // this.store.dispatch({
-                    //   type: GroupWithAccountsAction.GEN_ADD_AND_MANAGE_UI,
-                    //   payload: { groups, groupUniqueName: data.request.parentGroupUniqueName }
-                    // });
-
                     this._generalService.eventHandler.next({ name: eventsConst.groupMoved, payload: data });
                     this._toasty.successToast('Group moved successfully', '');
                     return this.getGroupDetails(data.request.parentGroupUniqueName);
@@ -400,7 +389,7 @@ export class GroupWithAccountsAction {
             switchMap((action: CustomActions) => this._groupService.DeleteGroup(action.payload)),
             map(response => {
                 let activeGrp: IGroupsWithAccounts;
-                this.store.select(s => s.groupwithaccounts.groupswithaccounts).pipe(take(1)).subscribe(a => {
+                this.store.pipe(select(s => s.groupwithaccounts.groupswithaccounts), take(1)).subscribe(a => {
                     activeGrp = this.findMyParent(a, response.queryString.groupUniqueName, null);
                 });
                 response.queryString = { groupUniqueName: response.queryString.groupUniqueName, parentUniqueName: activeGrp.uniqueName };

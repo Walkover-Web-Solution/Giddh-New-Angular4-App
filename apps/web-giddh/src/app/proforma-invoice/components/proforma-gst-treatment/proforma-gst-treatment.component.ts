@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
     selector: 'proforma-gst-treatment-component',
@@ -9,6 +9,10 @@ import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output } from
 
 export class ProformaGstTreatmentComponent implements OnInit {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     constructor() {
     }

@@ -1,451 +1,421 @@
-<div class="top-bar clearfix">
-    <div class="form-inline">
-        <div class="dis  mrR1 d-inline-block middle">
-            <div (clickOutside)="hideListItems()" class="btn-group d-flex" #filterDropDownList="bs-dropdown" dropdown
-                [autoClose]="false" [placement]="'right'">
-                <i dropdownToggle class="icon-options pd cp fs20"></i>
-                <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
-                    <li role="menuitem">
-                        <a class="dropdown-item">
-                            <input type="checkbox" name="voucherType" (ngModelChange)="
-                                    columnFilter($event, 'voucherType')
-                                " [(ngModel)]="showFieldFilter.voucherType" />
-                            Voucher Type</a>
-                    </li>
-                    <li role="menuitem">
-                        <a class="dropdown-item">
-                            <input type="checkbox" name="voucherNo" (ngModelChange)="
-                                    columnFilter($event, 'voucherNo')
-                                " [(ngModel)]="showFieldFilter.voucherNo" />
-                            Voucher No.</a>
-                    </li>
-                    <li role="menuitem">
-                        <a class="dropdown-item">
-                            <input type="checkbox" name="qtyRate" (ngModelChange)="
-                                    columnFilter($event, 'qtyRate')
-                                " [(ngModel)]="showFieldFilter.qtyRate" />
-                            Qty-Rate</a>
-                    </li>
-                    <li role="menuitem">
-                        <a class="dropdown-item">
-                            <input type="checkbox" name="discount" (ngModelChange)="
-                                    columnFilter($event, 'discount')
-                                " [(ngModel)]="showFieldFilter.discount" />
-                            Discount
-                        </a>
-                    </li>
-                    <li role="menuitem">
-                        <a class="dropdown-item">
-                            <input type="checkbox" name="tax" (ngModelChange)="columnFilter($event, 'tax')"
-                                [(ngModel)]="showFieldFilter.tax" />
-                            Tax
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="d-inline-block middle">
+<ng-container appTranslate [file]="'reports/sales-register'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+    <div class="relative">
+        <hamburger-menu></hamburger-menu>
+        <div class="report-breadcrum">
             <ul class="list-inline d-inline-block middle nav-report">
-                <li class="active">
-                    <a href="javascript:void(0)" (click)="goToDashboard(true)">Report</a>
+                <li class="active" id="giddh-page-heading-link">
+                    <a href="javascript:void(0)" (click)="goToDashboard(true)">{{commonLocaleData?.app_report}}</a>
                     <span class="d-inline-block pl-1"> ></span>
                 </li>
                 <li>
-                    <a href="javascript:void(0)" (click)="goToDashboard(false)">Sales Register</a><span
-                        class="d-inline-block pl-1"> ></span>
+                    <a href="javascript:void(0)" (click)="goToDashboard(false)">{{localeData?.page_heading}}</a><span class="d-inline-block pl-1">
+                        ></span>
                 </li>
             </ul>
-        </div>
-
-        <div class="btn-group customeMnthSelect" dropdown>
-            <button id="button-custom-html" dropdownToggle type="button" class="btn  dropdown-toggle"
-                aria-controls="dropdown-custom-html">
-                {{ selectedMonth }} <span class="caret"></span>
-            </button>
-            <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu" role="menu"
-                aria-labelledby="button-custom-html">
-                <ng-container *ngFor="let item of monthYear; let i = index">
-                    <li role="menuitem">
-                        <a class="dropdown-item cursor-pointer"
-                            (click)="selectedFilterMonth(item, i + 1)">{{ item }}</a>
-                    </li>
-                </ng-container>
-            </ul>
-        </div>
-
-
-
-        <div class="form-group expand-collapse-btn mr-1 d-inline-block">
-            <a class="cp" (click)="emitExpand()" data-toggle="tooltip" data-placement="top" title="Expand All"
-                *ngIf="!expand">
-                <span class="icon-expandIcon"></span>
-            </a>
-
-            <a class="cp" (click)="emitExpand()" data-toggle="tooltip" data-placement="top" title="Collapse All"
-                *ngIf="expand">
-                <span class="icon-collapse"></span>
-            </a>
-        </div>
-    </div>
-</div>
-
-<ng-container *ngIf="(isGetSalesDetailsSuccess$ | async)">
-    <div class="clearfix sales-register-table">
-        <div class="responsive table-responsive">
-            <table class="table basic giddh-table on-mobile-view">
-                <thead>
-                    <tr>
-                        <th>
-                            <div class="d-flex">
-                                <div class=" ">Date</div>
-                                <div class="icon-pointer">
-                                    <ng-container *ngTemplateOutlet="
-                                            sortingTemplate;
-                                            context: { $implicit: 'date' }
-                                        ">
-                                    </ng-container>
-                                </div>
-                            </div>
-                        </th>
-
-                        <th class="td-search-box ">
-                            <div><span> Account</span></div>
-                        </th>
-
-
-                        <th *ngIf="showFieldFilter.voucherType">
-                            <div class="d-flex ">
-                                <div class="">Voucher Type</div>
-                                <div class="icon-pointer">
-                                    <ng-container *ngTemplateOutlet="
-                                            sortingTemplate;
-                                            context: {
-                                                $implicit: 'voucherType'
-                                            }
-                                        ">
-                                    </ng-container>
-                                </div>
-                            </div>
-                        </th>
-
-
-
-                        <th *ngIf="showFieldFilter.voucherNo" class="td-search-box nowrap" style="width: 210px;"
-                            #searchInvoiceContainer (clickOutside)="clickedOutsideEvent()">
-                            <div [hidden]="showSearchInvoiceNo">
-                                <span>Voucher No</span>
-                                <i class="icon-search" (click)="toggleSearch('invoiceNumber')"></i>
-                            </div>
-
-                            <div class="input-container" [hidden]="!showSearchInvoiceNo">
-                                <input type="text" placeholder="Search voucher number" class="w100" #invoiceSearch
-                                    [formControl]="voucherNumberInput" />
-                            </div>
-                        </th>
-
-                        <th *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class=" text-right ">
-                            <div class="d-flex justify-content-end">
-                                <div class=" text-right ">Sales</div>
-                                <div class="icon-pointer">
-                                    <ng-container *ngTemplateOutlet="
-                                            sortingTemplate;
-                                            context: {
-                                                $implicit: 'creditTotal'
-                                            }
-                                        ">
-                                    </ng-container>
-                                </div>
-                            </div>
-                        </th>
-
-                        <th *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal" class=" text-right ">
-                            <div class="d-flex justify-content-end">
-                                <div class=" text-right  ">Return</div>
-                                <div class="icon-pointer">
-                                    <ng-container *ngTemplateOutlet="
-                                            sortingTemplate;
-                                            context: { $implicit: 'debitTotal' }
-                                        ">
-                                    </ng-container>
-                                </div>
-                            </div>
-                        </th>
-                        <th *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.quantityTotal"
-                            class=" text-right ">
-                            <div class="d-flex justify-content-end">
-                                <div class=" text-right  ">Qty/Unit</div>
-                            </div>
-                        </th>
-                        <th *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.rateTotal"
-                            class=" text-right ">
-                            <div class="d-flex justify-content-end">
-                                <div class=" text-right ">Rate</div>
-                                <div class="icon-pointer">
-                                    <ng-container *ngTemplateOutlet="
-                                            sortingTemplate;
-                                            context: { $implicit: 'rate' }
-                                        ">
-                                    </ng-container>
-                                </div>
-                            </div>
-                        </th>
-
-                        <th *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal"
-                            class=" text-right ">
-                            <div class="d-flex justify-content-end">
-                                <div class=" text-right  ">Discount</div>
-                                <div class="icon-pointer">
-                                    <ng-container *ngTemplateOutlet="
-                                            sortingTemplate;
-                                            context: {
-                                                $implicit: 'discountTotal'
-                                            }
-                                        ">
-                                    </ng-container>
-                                </div>
-                            </div>
-                        </th>
-
-                        <th *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async)?.taxTotal"
-                            class=" text-right ">
-                            <div class="d-flex justify-content-end">
-                                <div class=" text-right ">Tax</div>
-                                <div class="icon-pointer">
-                                    <ng-container *ngTemplateOutlet="
-                                            sortingTemplate;
-                                            context: { $implicit: 'taxTotal' }
-                                        ">
-                                    </ng-container>
-                                </div>
-                            </div>
-                        </th>
-                        <th class=" text-right ">
-                            <div class="d-flex justify-content-end">
-                                <div class=" ">Net Sales</div>
-                                <div class="icon-pointer">
-                                    <ng-container *ngTemplateOutlet="
-                                            sortingTemplate;
-                                            context: { $implicit: 'netTotal' }
-                                        ">
-                                    </ng-container>
-                                </div>
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody *ngIf="(salesRegisteDetailedResponse$ | async).items.length">
-                    <tr *ngFor="
-                            let item of (salesRegisteDetailedResponse$ | async)
-                                .items
-                        ">
-                        <td data-title="Date">{{ item.date }}</td>
-
-                        <td data-title="Account" (dblclick)="modalUniqueName = item.uniqueName"
-                            class="cp no-dbl-click-select " (clickOutside)="modalUniqueName = ''">
-                            {{ item.account.name }}
-                            <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
-                                [accountUniqueName]="item.account.uniqueName" [voucherType]="'sales'" [from]="this.from"
-                                [to]="this.to" [isModalOpen]="
-                                    modalUniqueName === item.uniqueName
-                                "></div>
-                            <ng-container *ngIf="expand">
-                                <ng-container *ngFor="let stock of item.stocks">
-                                    <p>{{ stock.stock.name }}</p>
-                                </ng-container>
-                            </ng-container>
-                        </td>
-                        <td data-title="Voucher Type" *ngIf="showFieldFilter.voucherType" class="verticle-align-top">
-                            {{ item.voucherType }}
-                        </td>
-                        <td data-title="Voucher No" *ngIf="showFieldFilter.voucherNo" class="verticle-align-top">
-                            {{ item.voucherNumber }}
-                        </td>
-                        <td data-title="Sales" *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal"
-                            class="text-right ">
-                            {{ item.creditTotal | giddhCurrency }}
-                            <ng-container *ngIf="expand">
-                                <ng-container *ngFor="let stock of item.stocks">
-                                    <p>{{ stock.amount | giddhCurrency }}</p>
-                                </ng-container>
-                            </ng-container>
-                        </td>
-                        <td data-title="Return" *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal"
-                            class="text-right ">
-                            {{ item.debitTotal | giddhCurrency }}
-                        </td>
-                        <td data-title="Qty/Unit" class="text-right "
-                            *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.quantityTotal">
-                            -
-                            <ng-container *ngIf="expand">
-                                <ng-container *ngFor="let stock of item.stocks">
-                                    <p>
-                                        {{ stock.quantity | giddhCurrency }}
-                                        {{ stock.unit.code }}
-                                    </p>
-                                </ng-container>
-                            </ng-container>
-                        </td>
-                        <td data-title="Rate" class="text-right "
-                            *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.rateTotal">
-                            -
-                            <ng-container *ngIf="expand">
-                                <ng-container *ngFor="let stock of item.stocks">
-                                    <p>{{ stock.rate | giddhCurrency }}</p>
-                                </ng-container>
-                            </ng-container>
-                        </td>
-                        <td data-title="Discount"
-                            *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal"
-                            class="text-right ">
-                            {{ item.discountTotal | giddhCurrency }}
-                        </td>
-                        <td data-title="Tax"
-                            *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async)?.taxTotal"
-                            class="text-right ">
-                            {{ item.taxTotal | giddhCurrency }}
-                        </td>
-                        <td data-title="Net Sales" class="text-right ">
-                            {{ item.netTotal | giddhCurrency }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="text-center " *ngIf="(salesRegisteDetailedResponse$ | async).totalItems > paginationLimit">
-            <pagination [totalItems]="
-                    (salesRegisteDetailedResponse$ | async).totalItems
-                " [(ngModel)]="getDetailedsalesRequestFilter.page" [maxSize]="5" class="pagination-sm "
-                [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" previousText="&#9668; "
-                nextText="&#9658; " (pageChanged)="pageChanged($event)"></pagination>
-        </div>
-    </div>
-    <div class="no-data " *ngIf="
-            (salesRegisteDetailedResponse$ | async).items.length === 0 &&
-            !(isGetSalesDetailsInProcess$ | async)
-        ">
-        <h1>No entries found within given criteria.</h1>
-        <h1>Do search with some other dates</h1>
-    </div>
-
-    <div class="clearfix sales-register">
-        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12 pl-0">
-            <p>Transaction count</p>
-            <p>
-                {{ (salesRegisteDetailedResponse$ | async).totalItems }}
-            </p>
-        </div>
-        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-12">
-            <div *ngIf="SalesRegisteDetailedItems" class="clearfix main-sale-register-box">
-                <div *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class="sale-register-box text-right">
-                    <p>Sales</p>
-                    <h4>
-                        {{
-                            (salesRegisteDetailedResponse$ | async).creditTotal
-                                | giddhCurrency
-                        }}
-                    </h4>
-                </div>
-                <div *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal" class="sale-register-box text-right">
-                    <p>Return</p>
-                    <h4>
-                        {{
-                            (salesRegisteDetailedResponse$ | async).debitTotal
-                                | giddhCurrency
-                        }}
-                    </h4>
-                </div>
-                <div class="sale-register-box text-right"
-                    *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal">
-                    <p>Discount</p>
-                    <h4>
-                        {{
-                            (salesRegisteDetailedResponse$ | async)
-                                .discountTotal | giddhCurrency
-                        }}
-                    </h4>
-                </div>
-                <div class="sale-register-box text-right"
-                    *ngIf="isTcsTdsApplicable && (salesRegisteDetailedResponse$ | async).tcsTotal">
-                    <p>TCS</p>
-                    <h4>
-                        {{
-                            (salesRegisteDetailedResponse$ | async).tcsTotal
-                                | giddhCurrency
-                        }}
-                    </h4>
-                </div>
-                <div class="sale-register-box text-right"
-                    *ngIf="isTcsTdsApplicable && (salesRegisteDetailedResponse$ | async).tdsTotal">
-                    <p>TDS</p>
-                    <h4>
-                        {{
-                            (salesRegisteDetailedResponse$ | async).tdsTotal
-                                | giddhCurrency
-                        }}
-                    </h4>
-                </div>
-                <div class="sale-register-box text-right"
-                    *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async).taxTotal">
-                    <p>Tax</p>
-                    <h4>
-                        {{
-                            (salesRegisteDetailedResponse$ | async).taxTotal
-                                | giddhCurrency
-                        }}
-                    </h4>
-                </div>
-
-                <div class="sale-register-box text-right">
-                    <p>Net Sales</p>
-                    <h4>
-                        {{
-                            (salesRegisteDetailedResponse$ | async).netTotal
-                                .amount | giddhCurrency
-                        }}
-                    </h4>
-                </div>
-
+            <div class="btn-group custom-month-select" dropdown>
+                <button id="button-custom-html" dropdownToggle type="button" class="btn  dropdown-toggle"
+                    aria-controls="dropdown-custom-html">
+                    {{ selectedMonth }} <span class="caret"></span>
+                </button>
+                <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-custom-html">
+                    <ng-container *ngFor="let item of monthYear; let i = index">
+                        <li role="menuitem">
+                            <a class="dropdown-item cursor-pointer" (click)="selectedFilterMonth(item, i + 1)">{{ item }}</a>
+                        </li>
+                    </ng-container>
+                </ul>
             </div>
         </div>
     </div>
-</ng-container>
-
-<div *ngIf="(isGetSalesDetailsInProcess$ | async)">
-    <div class="no-data mr-t2 loader-main" *ngIf="showLoader">
-        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-        <div class="spinner2">
-            <div class="cube1"></div>
-            <div class="cube2"></div>
+    <div class="top-bar clearfix">
+        <div class="form-inline">
+            <div class="dis  mr-r1 d-inline-block middle">
+                <div (clickOutside)="hideListItems()" class="btn-group d-flex" #filterDropDownList="bs-dropdown" dropdown
+                    [autoClose]="false" [placement]="'right'">
+                    <i dropdownToggle class="icon-options pd cp font-20"></i>
+                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
+                        <li role="menuitem">
+                            <a class="dropdown-item">
+                                <input type="checkbox" name="voucherType" (ngModelChange)="columnFilter($event, 'voucherType')" [(ngModel)]="showFieldFilter.voucherType" />
+                                {{commonLocaleData?.app_voucher_type}}</a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item">
+                                <input type="checkbox" name="voucherNo" (ngModelChange)="columnFilter($event, 'voucherNo')" [(ngModel)]="showFieldFilter.voucherNo" />
+                                {{commonLocaleData?.app_voucher_no}}</a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item">
+                                <input type="checkbox" name="qtyRate" (ngModelChange)="columnFilter($event, 'qtyRate')" [(ngModel)]="showFieldFilter.qtyRate" />
+                                {{localeData?.quantity_rate}}</a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item">
+                                <input type="checkbox" name="discount" (ngModelChange)="columnFilter($event, 'discount')" [(ngModel)]="showFieldFilter.discount" />
+                                {{commonLocaleData?.app_discount}}
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item">
+                                <input type="checkbox" name="tax" (ngModelChange)="columnFilter($event, 'tax')"
+                                    [(ngModel)]="showFieldFilter.tax" />
+                                {{commonLocaleData?.app_tax}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="form-group expand-collapse-btn mr-1 mb-0 d-inline-block">
+                <a class="cp" (click)="emitExpand()" data-toggle="tooltip" data-placement="top" title="{{commonLocaleData?.app_expand_all}}"
+                    *ngIf="!expand">
+                    <span class="icon-expandIcon"></span>
+                </a>
+                <a class="cp" (click)="emitExpand()" data-toggle="tooltip" data-placement="top" title="{{commonLocaleData?.app_collapse_all}}"
+                    *ngIf="expand">
+                    <span class="icon-collapse"></span>
+                </a>
+            </div>
         </div>
     </div>
-</div>
-<!-- region sorting template -->
-<ng-template #sortingTemplate let-col>
 
-    <div class="icon-sort-asc" *ngIf="getDetailedsalesRequestFilter.sortBy !== col" (click)="sortbyApi('asc', col)"
-        [ngClass]="{
-            activeTextColor:
+    <ng-container *ngIf="(isGetSalesDetailsSuccess$ | async)">
+        <div class="clearfix sales-register-table mb-5">
+            <div class="responsive table-responsive">
+                <table class="table basic giddh-table on-mobile-view">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="d-flex">
+                                    <div>{{commonLocaleData?.app_date}}</div>
+                                    <div class="icon-pointer">
+                                        <ng-container *ngTemplateOutlet="
+                                                sortingTemplate;
+                                                context: { $implicit: 'date' }
+                                            ">
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="td-search-box">
+                                <div><span> {{commonLocaleData?.app_account}}</span></div>
+                            </th>
+                            <th *ngIf="showFieldFilter.voucherType">
+                                <div class="d-flex">
+                                    <div>{{commonLocaleData?.app_voucher_type}}</div>
+                                    <div class="icon-pointer">
+                                        <ng-container *ngTemplateOutlet="
+                                                sortingTemplate;
+                                                context: {
+                                                    $implicit: 'voucherType'
+                                                }
+                                            ">
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </th>
+                            <th *ngIf="showFieldFilter.voucherNo" class="td-search-box nowrap" width="20%"
+                                #searchInvoiceContainer (clickOutside)="clickedOutsideEvent()">
+                                <div [hidden]="showSearchInvoiceNo">
+                                    <span>{{commonLocaleData?.app_voucher_no}}</span>
+                                    <i class="icon-search" (click)="toggleSearch('invoiceNumber')"></i>
+                                </div>
+
+                                <div class="input-container" [hidden]="!showSearchInvoiceNo">
+                                    <input type="text" [placeholder]="localeData?.search_voucher_no" class="w100" #invoiceSearch
+                                        [formControl]="voucherNumberInput" />
+                                </div>
+                            </th>
+                            <th *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class="text-right">
+                                <div class="d-flex justify-content-end">
+                                    <div class="text-right">{{commonLocaleData?.app_sales}}</div>
+                                    <div class="icon-pointer">
+                                        <ng-container *ngTemplateOutlet="
+                                                sortingTemplate;
+                                                context: {
+                                                    $implicit: 'creditTotal'
+                                                }
+                                            ">
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </th>
+
+                            <th *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal" class="text-right">
+                                <div class="d-flex justify-content-end">
+                                    <div class="text-right">{{commonLocaleData?.app_return}}</div>
+                                    <div class="icon-pointer">
+                                        <ng-container *ngTemplateOutlet="
+                                                sortingTemplate;
+                                                context: { $implicit: 'debitTotal' }
+                                            ">
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </th>
+                            <th *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.quantityTotal"
+                                class="text-right">
+                                <div class="d-flex justify-content-end">
+                                    <div class="text-right">{{commonLocaleData?.app_quantity_unit}}</div>
+                                </div>
+                            </th>
+                            <th *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.rateTotal"
+                                class="text-right">
+                                <div class="d-flex justify-content-end">
+                                    <div class="text-right">{{commonLocaleData?.app_rate}}</div>
+                                    <div class="icon-pointer">
+                                        <ng-container *ngTemplateOutlet="
+                                                sortingTemplate;
+                                                context: { $implicit: 'rate' }
+                                            ">
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </th>
+
+                            <th *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal"
+                                class="text-right">
+                                <div class="d-flex justify-content-end">
+                                    <div class="text-right">{{commonLocaleData?.app_discount}}</div>
+                                    <div class="icon-pointer">
+                                        <ng-container *ngTemplateOutlet="
+                                                sortingTemplate;
+                                                context: {
+                                                    $implicit: 'discountTotal'
+                                                }
+                                            ">
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </th>
+
+                            <th *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async)?.taxTotal"
+                                class="text-right">
+                                <div class="d-flex justify-content-end">
+                                    <div class="text-right">{{commonLocaleData?.app_tax}}</div>
+                                    <div class="icon-pointer">
+                                        <ng-container *ngTemplateOutlet="
+                                                sortingTemplate;
+                                                context: { $implicit: 'taxTotal' }
+                                            ">
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="text-right">
+                                <div class="d-flex justify-content-end">
+                                    <div>{{commonLocaleData?.app_net_sales}}</div>
+                                    <div class="icon-pointer">
+                                        <ng-container *ngTemplateOutlet="
+                                                sortingTemplate;
+                                                context: { $implicit: 'netTotal' }
+                                            ">
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="(salesRegisteDetailedResponse$ | async).items.length">
+                        <tr *ngFor="
+                                let item of (salesRegisteDetailedResponse$ | async)
+                                    .items
+                            ">
+                            <td [attr.data-title]="commonLocaleData?.app_date">{{ item.date }}</td>
+
+                            <td [attr.data-title]="commonLocaleData?.app_account" (dblclick)="modalUniqueName = item.uniqueName"
+                                class="cp no-dbl-click-select " (clickOutside)="modalUniqueName = ''">
+                                {{ item.account.name }}
+                                <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
+                                    [accountUniqueName]="item.account.uniqueName" [voucherType]="'sales'" [from]="this.from"
+                                    [to]="this.to" [isModalOpen]="
+                                        modalUniqueName === item.uniqueName
+                                    "></div>
+                                <ng-container *ngIf="expand">
+                                    <ng-container *ngFor="let stock of item.stocks">
+                                        <p>{{ stock.stock.name }}</p>
+                                    </ng-container>
+                                </ng-container>
+                            </td>
+                            <td [attr.data-title]="commonLocaleData?.app_voucher_type" *ngIf="showFieldFilter.voucherType" class="verticle-align-top">
+                                {{ item.voucherType }}
+                            </td>
+                            <td width="20%" [attr.data-title]="commonLocaleData?.app_voucher_no" *ngIf="showFieldFilter.voucherNo" class="verticle-align-top voucher-number-td">
+                                {{ item.voucherNumber }}
+                            </td>
+                            <td [attr.data-title]="commonLocaleData?.app_sales" *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal"
+                                class="text-right ">
+                                {{ item.creditTotal | giddhCurrency }}
+                                <ng-container *ngIf="expand">
+                                    <ng-container *ngFor="let stock of item.stocks">
+                                        <p>{{ stock.amount | giddhCurrency }}</p>
+                                    </ng-container>
+                                </ng-container>
+                            </td>
+                            <td [attr.data-title]="commonLocaleData?.app_return" *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal"
+                                class="text-right ">
+                                {{ item.debitTotal | giddhCurrency }}
+                            </td>
+                            <td [attr.data-title]="commonLocaleData?.app_quantity_unit" class="text-right "
+                                *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.quantityTotal">
+                                -
+                                <ng-container *ngIf="expand">
+                                    <ng-container *ngFor="let stock of item.stocks">
+                                        <p>
+                                            {{ stock.quantity | giddhCurrency }}
+                                            {{ stock.unit.code }}
+                                        </p>
+                                    </ng-container>
+                                </ng-container>
+                            </td>
+                            <td [attr.data-title]="commonLocaleData?.app_rate" class="text-right "
+                                *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.rateTotal">
+                                -
+                                <ng-container *ngIf="expand">
+                                    <ng-container *ngFor="let stock of item.stocks">
+                                        <p>{{ stock.rate | giddhCurrency }}</p>
+                                    </ng-container>
+                                </ng-container>
+                            </td>
+                            <td [attr.data-title]="commonLocaleData?.app_discount"
+                                *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal"
+                                class="text-right ">
+                                {{ item.discountTotal | giddhCurrency }}
+                            </td>
+                            <td [attr.data-title]="commonLocaleData?.app_tax"
+                                *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async)?.taxTotal"
+                                class="text-right ">
+                                {{ item.taxTotal | giddhCurrency }}
+                            </td>
+                            <td [attr.data-title]="commonLocaleData?.app_net_sales" class="text-right ">
+                                {{ item.netTotal | giddhCurrency }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-center " *ngIf="(salesRegisteDetailedResponse$ | async).totalItems > paginationLimit">
+                <pagination [totalItems]="(salesRegisteDetailedResponse$ | async).totalItems" [(ngModel)]="getDetailedsalesRequestFilter.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" previousText="&#9668; "
+                    nextText="&#9658; " (pageChanged)="pageChanged($event)"></pagination>
+            </div>
+        </div>
+        <div class="no-data" *ngIf="
+                (salesRegisteDetailedResponse$ | async).items.length === 0 &&
+                !(isGetSalesDetailsInProcess$ | async)
+            ">
+            <h1>{{commonLocaleData?.app_no_entries_found}}</h1>
+            <h1>{{commonLocaleData?.app_search_suggestion}}</h1>
+        </div>
+
+        <div class="clearfix sales-register">
+            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 pl-0 d-flex flex-lg-column flex-md-row transaction-count-data">
+                <p class="mr-r15">{{localeData?.transaction_count}}</p>
+                <p>
+                    {{ (salesRegisteDetailedResponse$ | async).totalItems }}
+                </p>
+            </div>
+            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12 pl-0">
+                <div *ngIf="SalesRegisteDetailedItems" class="clearfix main-sale-register-box">
+                    <div *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class="sale-register-box text-right">
+                        <p>{{commonLocaleData?.app_sales}}</p>
+                        <h4>
+                            {{
+                                (salesRegisteDetailedResponse$ | async).creditTotal
+                                    | giddhCurrency
+                            }}
+                        </h4>
+                    </div>
+                    <div *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal" class="sale-register-box text-right">
+                        <p>{{commonLocaleData?.app_return}}</p>
+                        <h4>
+                            {{
+                                (salesRegisteDetailedResponse$ | async).debitTotal
+                                    | giddhCurrency
+                            }}
+                        </h4>
+                    </div>
+                    <div class="sale-register-box text-right"
+                        *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal">
+                        <p>{{commonLocaleData?.app_discount}}</p>
+                        <h4>
+                            {{
+                                (salesRegisteDetailedResponse$ | async)
+                                    .discountTotal | giddhCurrency
+                            }}
+                        </h4>
+                    </div>
+                    <div class="sale-register-box text-right"
+                        *ngIf="isTcsTdsApplicable && (salesRegisteDetailedResponse$ | async).tcsTotal">
+                        <p>{{commonLocaleData?.app_tcs}}</p>
+                        <h4>
+                            {{
+                                (salesRegisteDetailedResponse$ | async).tcsTotal
+                                    | giddhCurrency
+                            }}
+                        </h4>
+                    </div>
+                    <div class="sale-register-box text-right"
+                        *ngIf="isTcsTdsApplicable && (salesRegisteDetailedResponse$ | async).tdsTotal">
+                        <p>{{commonLocaleData?.app_tds}}</p>
+                        <h4>
+                            {{
+                                (salesRegisteDetailedResponse$ | async).tdsTotal
+                                    | giddhCurrency
+                            }}
+                        </h4>
+                    </div>
+                    <div class="sale-register-box text-right"
+                        *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async).taxTotal">
+                        <p>{{commonLocaleData?.app_tax}}</p>
+                        <h4>
+                            {{
+                                (salesRegisteDetailedResponse$ | async).taxTotal
+                                    | giddhCurrency
+                            }}
+                        </h4>
+                    </div>
+
+                    <div class="sale-register-box text-right">
+                        <p>{{commonLocaleData?.app_net_sales}}</p>
+                        <h4>
+                            {{
+                                (salesRegisteDetailedResponse$ | async).netTotal
+                                    .amount | giddhCurrency
+                            }}
+                        </h4>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <div *ngIf="(isGetSalesDetailsInProcess$ | async)">
+        <giddh-page-loader></giddh-page-loader>
+    </div>
+    <!-- region sorting template -->
+    <ng-template #sortingTemplate let-col>
+
+        <div class="icon-sort-asc" *ngIf="getDetailedsalesRequestFilter.sortBy !== col" (click)="sortbyApi('asc', col)"
+            [ngClass]="{'active-text-color': getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'asc'}"></div>
+
+        <div class="icon-sort-asc" *ngIf="
                 getDetailedsalesRequestFilter.sortBy === col &&
                 getDetailedsalesRequestFilter.sort === 'asc'
-        }"></div>
+            " (click)="sortbyApi('desc', col)" [ngClass]="{
+                'active-text-color':
+                    getDetailedsalesRequestFilter.sortBy === col &&
+                    getDetailedsalesRequestFilter.sort === 'asc'
+            }"></div>
 
-    <div class="icon-sort-asc" *ngIf="
-            getDetailedsalesRequestFilter.sortBy === col &&
-            getDetailedsalesRequestFilter.sort === 'asc'
-        " (click)="sortbyApi('desc', col)" [ngClass]="{
-            activeTextColor:
-                getDetailedsalesRequestFilter.sortBy === col &&
-                getDetailedsalesRequestFilter.sort === 'asc'
-        }"></div>
-
-    <div class="icon-sort-dsc" *ngIf="
-            getDetailedsalesRequestFilter.sortBy === col &&
-            getDetailedsalesRequestFilter.sort === 'desc'
-        " (click)="sortbyApi('asc', col)" [ngClass]="{
-            activeTextColor:
+        <div class="icon-sort-dsc" *ngIf="
                 getDetailedsalesRequestFilter.sortBy === col &&
                 getDetailedsalesRequestFilter.sort === 'desc'
-        }"></div>
-</ng-template>
-<!-- endregion -->
+            " (click)="sortbyApi('asc', col)" [ngClass]="{
+                'active-text-color':
+                    getDetailedsalesRequestFilter.sortBy === col &&
+                    getDetailedsalesRequestFilter.sort === 'desc'
+            }"></div>
+    </ng-template>
+    <!-- endregion -->
+</ng-container>

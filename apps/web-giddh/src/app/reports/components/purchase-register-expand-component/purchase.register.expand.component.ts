@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
@@ -8,8 +8,6 @@ import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operat
 import { ReplaySubject, Observable } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { FormControl } from '@angular/forms';
-import { CurrentPage } from '../../../models/api-models/Common';
-import { GeneralActions } from '../../../actions/general/general.actions';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 
@@ -19,7 +17,7 @@ import { CurrentCompanyState } from '../../../store/Company/company.reducer';
     styleUrls: ['./purchase.register.expand.component.scss']
 })
 
-export class PurchaseRegisterExpandComponent implements OnInit {
+export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public PurchaseRegisteDetailedItems: PurchaseRegisteDetailedResponse;
     public from: string;
     public to: string;
@@ -39,10 +37,7 @@ export class PurchaseRegisterExpandComponent implements OnInit {
     @ViewChild('invoiceSearch', {static: true}) public invoiceSearch: ElementRef;
     @ViewChild('filterDropDownList', {static: true}) public filterDropDownList: BsDropdownDirective;
     public voucherNumberInput: FormControl = new FormControl();
-    public monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];
-
+    public monthNames = [];
     public monthYear: string[] = [];
     public modalUniqueName: string;
     public imgPath: string;
@@ -56,21 +51,22 @@ export class PurchaseRegisterExpandComponent implements OnInit {
         discount: false,
         tax: false
     };
-    bsValue = new Date();
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private _generalActions: GeneralActions) {
+    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef) {
         this.purchaseRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.PurchaseRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetPurchaseDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetPurchaseDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetPurchaseDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetPurchaseDetailsSuccess), takeUntil(this.destroyed$));
     }
 
     ngOnInit() {
-        this.setCurrentPageTitle();
         this.imgPath = (isElectron||isCordova)  ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         this.getDetailedPurchaseRequestFilter.page = 1;
         this.getDetailedPurchaseRequestFilter.count = 50;
         this.getDetailedPurchaseRequestFilter.q = '';
-
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
@@ -82,10 +78,10 @@ export class PurchaseRegisterExpandComponent implements OnInit {
                 this.to = params.to;
                 this.getDetailedPurchaseRequestFilter.from = this.from;
                 this.getDetailedPurchaseRequestFilter.to = this.to;
+                this.getDetailedPurchaseRequestFilter.branchUniqueName = params.branchUniqueName;
             }
         });
         this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
-        this.getCurrentMonthYear();
         this.purchaseRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: PurchaseRegisteDetailedResponse) => {
             if (res) {
                 this.PurchaseRegisteDetailedItems = res;
@@ -94,7 +90,7 @@ export class PurchaseRegisterExpandComponent implements OnInit {
                 });
                 if (this.voucherNumberInput.value) {
                     setTimeout(() => {
-                        this.invoiceSearch.nativeElement.focus();
+                        this.invoiceSearch?.nativeElement.focus();
                     }, 200);
                 }
             }
@@ -165,8 +161,8 @@ export class PurchaseRegisterExpandComponent implements OnInit {
     public getDateToDMY(selecteddate) {
         let date = selecteddate.split('-');
         if (date.length === 3) {
-            let month = this.monthNames[parseInt(date[1]) - 1].substr(0, 3);
-            let year = date[2].substr(2, 4);
+            let month = this.monthNames[parseInt(date[1]) - 1]?.substr(0, 3);
+            let year = date[2]?.substr(2, 4);
             return date[0] + ' ' + month + ' ' + year;
         } else {
             return selecteddate;
@@ -228,7 +224,7 @@ export class PurchaseRegisterExpandComponent implements OnInit {
         if (fieldName === 'invoiceNumber') {
             this.showSearchInvoiceNo = true;
             setTimeout(() => {
-                this.invoiceSearch.nativeElement.focus();
+                this.invoiceSearch?.nativeElement.focus();
             }, 200);
         } else {
             this.showSearchInvoiceNo = false;
@@ -246,10 +242,27 @@ export class PurchaseRegisterExpandComponent implements OnInit {
         }
     }
 
-    public setCurrentPageTitle() {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = "Reports > Purchase Register";
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public translationComplete(event: boolean): void {
+        if(event) {
+            this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
+
+            this.getCurrentMonthYear();
+        }
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

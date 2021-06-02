@@ -1,9 +1,9 @@
 <ul class="list-unstyled stock-grp-list clearfix">
-    <li class="clearfix main-group" [ngClass]="{'isGrp': grp.childStockGroups.length > 0,'grp_open': grp.isOpen}" *ngFor="let grp of Groups" style="padding: 0 !important;padding-left: 0 !important;">
+    <li class="clearfix main-group p-0" [ngClass]="{'isGrp': grp.childStockGroups.length > 0,'group-open': grp.isOpen}" *ngFor="let grp of Groups">
         <div class="item-group" [ngClass]="{'active': grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName) && !(activeStockUniqueName$ | async)}">
             <a (click)="OpenGroup(grp, $event)" class="d-flex">
                 <a class="text-black inventory-group-name">{{grp.name}}</a>
-                <i (click)="OpenGroup(grp, $event)"  class="icon-arrow-down pr" [ngClass]="{'open': grp.isOpen}"></i>
+                <i (click)="OpenGroup(grp, $event)"  class="icon-arrow-down position-relative" [ngClass]="{'open': grp.isOpen}"></i>
             </a>
             <!-- *ngIf="grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName) && (activeStockUniqueName$ | async)" -->
             <span class="pull-right">

@@ -1,0 +1,91 @@
+<div>
+    <div class="row">
+        <!-- <div class="col-md-12 mr-t15">
+            <div class="d-flex form-group">
+                <div class="custom-file cp" id="customFile">
+                    <input type="file" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp">
+                    <label class="custom-file-label d-flex align-items-center justify-content-center"
+                        for="exampleInputFile">
+                        <i class="icon-plus"></i>
+                    </label>
+                </div>
+                <div class="font-14 pl-2">
+                    <p class="pb-1">This logo will appear on the vouchers (estimates, invoices, etc.) that are created.
+                    </p>
+                    <p class="pb-1 img-size">Preferred Image Size: 240px x 240px @ 72 DPI Maximum size of 1MB.</p>
+                    <a href="#">Remove Logo</a>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-md-12 mt-2 border-bottom pd-b15">
+            <div class="row pd-b1">
+                <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2 d-flex align-items-center">
+                    <label *ngIf="organizationType === 'COMPANY'" class="font-14">Company Name</label>
+                    <label *ngIf="organizationType === 'BRANCH'" class="font-14">Branch Name</label>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
+                    <div class="form-group mb-0">
+                        <div class="input-group">
+                            <input *ngIf="organizationType === 'COMPANY'" [(ngModel)]="profileData.name" (ngModelChange)="profileUpdated('name')" type="text" placeholder="" name="companyName" class="form-control" />
+                            <input *ngIf="organizationType === 'BRANCH'" name="alias" [(ngModel)]="profileData.alias" (ngModelChange)="profileUpdated('alias')"  type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row pd-b1 unique-name">
+                <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2">
+                    <label class="font-14">Unique Name:</label>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
+                    <div class="font-14">{{profileData.uniqueName}}</div>
+                </div>
+            </div>
+            <div *ngIf="organizationType === 'BRANCH'" class="row pb-1 parent-name">
+                <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2">
+                    <label class="font-14">Parent:</label>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
+                    <div *ngIf="profileData?.parent?.name" class="font-14">{{profileData?.parent?.name}} ({{profileData?.parent?.businessType}})</div>
+                    <div *ngIf="!profileData?.parent?.name" class="font-14">{{profileData?.companyName}}</div>
+                </div>
+            </div>
+            <div class="row country-name">
+                <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2">
+                    <label class="font-14">Country & Currency:</label>
+                </div>
+                <div class="country-info col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
+                    <img class="country-flag" src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{profileData?.country?.countryCode}}.svg">
+                    <div class="font-14">{{profileData?.country?.countryName}} - {{profileData?.country?.currencyCode}} {{profileData?.country?.currencyName}}</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="personal-other-details">
+        <div class="row" *ngIf="organizationType === 'COMPANY'">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
+                <div class="form-group">
+                    <label>Business Type</label>
+                    <sh-select disabled placeholder="Select Business Type" name="businessType" id="businessType"
+                        autocomplete="false" [readonlyInput]="true"
+                        (selected)="profileUpdated('businessType')"
+                        [(ngModel)]="profileData.businessType" [options]="profileData.businessTypes"
+                        [ItemHeight]="33" [defaultValue]="profileData.businessType">
+                    </sh-select>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
+                <div class="form-group">
+                    <label>Company Alias</label>
+                    <input name="companyAlias" [(ngModel)]="profileData.nameAlias" (ngModelChange)="profileUpdated('nameAlias')"  type="text" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
+                <div class="form-group">
+                    <label>Headquarter Name</label>
+                    <input name="headQuarterAlias" [(ngModel)]="profileData.headQuarterAlias" (ngModelChange)="profileUpdated('headQuarterAlias')"  type="text" class="form-control">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

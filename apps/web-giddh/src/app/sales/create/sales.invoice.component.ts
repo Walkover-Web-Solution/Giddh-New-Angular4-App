@@ -1,8 +1,6 @@
 import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
 import { auditTime, catchError, take, takeUntil } from 'rxjs/operators';
-//import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { cloneDeep } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -194,28 +192,27 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         private invoiceReceiptActions: InvoiceReceiptActions,
         private _settingsProfileActions: SettingsProfileActions,
         private _ledgerService: LedgerService,
-        private _salesActions: SalesActions,
-        private cdr: ChangeDetectorRef
+        private _salesActions: SalesActions
     ) {
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
         this.invFormData = new VoucherClass();
-        this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        this.activeAccount$ = this.store.select(p => p.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
+        this.companyUniqueName$ = this.store.pipe(select(s => s.session.companyUniqueName), takeUntil(this.destroyed$));
+        this.activeAccount$ = this.store.pipe(select(p => p.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.store.dispatch(this.companyActions.getTax());
         this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
-        this.newlyCreatedAc$ = this.store.select(p => p.groupwithaccounts.newlyCreatedAccount).pipe(takeUntil(this.destroyed$));
-        this.newlyCreatedStockAc$ = this.store.select(p => p.sales.newlyCreatedStockAc).pipe(takeUntil(this.destroyed$));
-        this.newlyCreatedServiceAc$ = this.store.select(p => p.sales.newlyCreatedServiceAc).pipe(takeUntil(this.destroyed$));
-        this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
-        this.voucherDetails$ = this.store.select(p => (p.receipt.voucher as VoucherClass)).pipe(takeUntil(this.destroyed$));
-        this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).pipe(takeUntil(this.destroyed$));
-        this.createAccountIsSuccess$ = this.store.select(p => p.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
+        this.newlyCreatedAc$ = this.store.pipe(select(p => p.groupwithaccounts.newlyCreatedAccount), takeUntil(this.destroyed$));
+        this.newlyCreatedStockAc$ = this.store.pipe(select(p => p.sales.newlyCreatedStockAc), takeUntil(this.destroyed$));
+        this.newlyCreatedServiceAc$ = this.store.pipe(select(p => p.sales.newlyCreatedServiceAc), takeUntil(this.destroyed$));
+        this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
+        this.voucherDetails$ = this.store.pipe(select(p => (p.receipt.voucher as VoucherClass)), takeUntil(this.destroyed$));
+        this.selectedAccountDetails$ = this.store.pipe(select(p => p.sales.acDtl), takeUntil(this.destroyed$));
+        this.createAccountIsSuccess$ = this.store.pipe(select(p => p.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
         this.store.dispatch(this._invoiceActions.getInvoiceSetting());
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
-        this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
-        this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+        this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
+        this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
         // bind state sources
@@ -341,7 +338,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     openBulkModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(
             template,
-            Object.assign({}, { class: 'addBulkItemmodal ' })
+            Object.assign({}, { class: 'add-bulk-item-modal ' })
         );
     }
 
@@ -373,7 +370,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                     }
                 }
             } else {
-                this.cashInvoiceInput.nativeElement.focus();
+                this.cashInvoiceInput?.nativeElement.focus();
             }
         }, 200);
     }
@@ -394,7 +391,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
             }
         });
 
-        this.route.params.subscribe(parmas => {
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(parmas => {
             if (parmas['accUniqueName']) {
                 this.accountUniqueName = parmas['accUniqueName'];
                 this.isUpdateMode = false;
@@ -444,7 +441,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         });
 
         // get tax list and assign values to local vars
-        this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
+        this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
             if (o) {
                 this.companyTaxesList$ = observableOf(o);
                 _.map(this.theadArrReadOnly, (item: IContentCommon) => {
@@ -466,7 +463,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         });
 
         // listen for universal date
-        this.store.select(createSelector([(p: AppState) => p.session.applicationDate], (dateObj: Date[]) => {
+        this.store.pipe(select(createSelector([(p: AppState) => p.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
                 try {
                     this.universalDate = _.cloneDeep(moment(dateObj[1]).toDate());
@@ -477,10 +474,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                     this.universalDate = _.cloneDeep(new Date());
                 }
             }
-        })).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
 
         this.addBlankRow(null);
-        this.store.select(createSelector([(s: AppState) => s.invoice.settings], (setting: InvoiceSetting) => {
+        this.store.pipe(select(createSelector([(s: AppState) => s.invoice.settings], (setting: InvoiceSetting) => {
             if (setting && setting.invoiceSettings) {
                 const dueDate: any = moment().add(setting.invoiceSettings.duePeriod, 'days');
                 this.useCustomInvoiceNumber = setting.invoiceSettings.useCustomInvoiceNumber;
@@ -489,7 +486,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                 // }
                 this.invFormData.voucherDetails.dueDate = dueDate._d;
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
 
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
@@ -726,10 +723,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                         }
 
                         if (obj.voucherDetails.voucherDate) {
-                            obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
+                            obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
                         }
                         if (obj.voucherDetails.dueDate) {
-                            obj.voucherDetails.dueDate = moment(obj.voucherDetails.dueDate, 'DD-MM-YYYY').toDate();
+                            obj.voucherDetails.dueDate = moment(obj.voucherDetails.dueDate, GIDDH_DATE_FORMAT).toDate();
                         }
 
                         this.isCustomerSelected = true;
@@ -846,7 +843,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                     }
                 }
             } else {
-                this.cashInvoiceInput.nativeElement.focus();
+                this.cashInvoiceInput?.nativeElement.focus();
             }
         }, 200);
 
@@ -961,7 +958,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         }
 
         if (this.isSalesInvoice || this.isPurchaseInvoice) {
-            if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
+            if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
                 this._toasty.errorToast('Due date cannot be less than Invoice Date');
                 return;
             }
@@ -1524,7 +1521,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                         catchError(err => {
                             this.fetchedConvertedRate = 0;
                             return err;
-                        })
+                        }),
+                        takeUntil(this.destroyed$)
                     )
                     .subscribe((res: any) => {
                         let rate = res.body;
@@ -1971,7 +1969,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         let data: VoucherClass = _.cloneDeep(this.invFormData);
 
         if (this.isSalesInvoice || this.isPurchaseInvoice) {
-            if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
+            if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
                 this._toasty.errorToast('Due date cannot be less than Invoice Date');
                 return;
             }
@@ -2142,7 +2140,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                     taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                 } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                     let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                    taxableValue = (rawAmount + entry.taxSum);
+                    taxableValue = (rawAmount + entry.taxSum + entry.cessSum);
                 }
                 entry.otherTaxType = 'tcs';
                 entry.tdsTaxList = [];

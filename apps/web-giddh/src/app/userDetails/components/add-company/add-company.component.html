@@ -3,12 +3,12 @@
     <h3>Add Company</h3>
 </div>
 <div id="my-frame" class="modal-body clearfix font-14">
-    <p class="mb-15">Select the Company you want to add in <strong>{{activeCompany?.subscription?.planDetails?.name}}</strong> plan</p>
-    <div class="row mb-1">
+    <p class="mr-b15">Select the Company you want to add in <strong>{{activeCompany?.subscription?.planDetails?.name}}</strong> plan</p>
+    <div class="row mr-b1">
         <div class="col-lg-6 col-md-12">
             <label class="font-14">Select Company<span class="text-danger">*</span></label>
-            <div class="select-caret pos-rel">
-                <sh-select placeholder="Select Company" name="selectedCompany" [options]="associatedCompaniesOption" [isFilterEnabled]="true" [(ngModel)]="selectedCompany"></sh-select>
+            <div class="select-caret position-relative">
+                <sh-select placeholder="Select Company" name="selectedCompany" [options]="associatedCompaniesOption" [isFilterEnabled]="true" [(ngModel)]="selectedCompany" [isRequired]="true"></sh-select>
             </div>
         </div>
     </div>

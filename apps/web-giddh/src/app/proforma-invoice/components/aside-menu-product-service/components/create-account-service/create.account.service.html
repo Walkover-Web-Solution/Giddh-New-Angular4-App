@@ -7,15 +7,15 @@
     <div class="row">
         <div class="form-group col-12">
             <label class="mr-b1">Select Group</label>
-            <div class="ng-select-wrap liq">
+            <div class="ng-select-wrap select-list">
                 <ng-select placeholder="Sales Group" filterPlaceholder="Type to search..." name="flatAccountWGroupsList"
-                    [(ngModel)]="activeGroupUniqueName" [options]="flatAccountWGroupsList$ | async" style="width:100%">
+                    [(ngModel)]="activeGroupUniqueName" [options]="flatAccountWGroupsList$ | async" class="w-100">
                     <ng-template #optionTemplate let-option="option">
                         <div class="account-list-item">{{option?.label}}</div>
-                        <div class="account-list-item fs12">{{option?.value}}</div>
+                        <div class="account-list-item font-12">{{option?.value}}</div>
                     </ng-template>
                 </ng-select>
-            </div>
+        </div>
         </div>
     </div>
 
@@ -80,7 +80,7 @@
 
         <div class="row">
             <div class="form-group col-12 text-right mr-t2">
-                <button type="submit" class="btn btn-md btn-success mrR" [ladda]="createAccountInProcess$ | async"
+                <button type="submit" class="btn btn-md btn-success mr-r05" [ladda]="createAccountInProcess$ | async"
                     (click)="addAcFormSubmit()" [disabled]="addAcForm.invalid">Save
                 </button>
                 <button (click)="closeCreateAcModal()" class="btn btn-md btn-primary">Cancel</button>

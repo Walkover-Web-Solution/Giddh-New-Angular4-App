@@ -1,7 +1,7 @@
 @import "../../../../assets/css/color.scss";
-span.monthDropdown {
+span.month-dropdown {
     font-size: 12px;
-    color: #666666;
+    color: $dark-gray;
     vertical-align: top;
 }
 .dashboard-filter .btn-group {
@@ -10,14 +10,14 @@ span.monthDropdown {
 }
 .dashboard-filter .btn-group span {
     vertical-align: middle;
-    color: #666666;
+    color: $dark-gray;
 }
 .underline {
     text-decoration: underline;
 }
 .dashboard-filter {
     display: inline-flex;
-    color: #666666;
+    color: $dark-gray;
     align-items: flex-end;
 }
 
@@ -31,54 +31,54 @@ span.monthDropdown {
 .gst-dropdown span.icon-arrow-down {
     margin-left: 5px;
 }
-.amountInCash {
+.amount-in-cash {
     font-size: 20px;
-    color: #1a237e;
+    color: $midnight-blue;
 }
-.amountInCash span.icon-rupees {
-    font-size: 16px;
+.amount-in-cash span.icon-rupees {
+    font-size: 12px;
 }
-.totalGstCode {
+.total-gst-code {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-top: 30px;
 }
-.gstApply {
+.gst-apply {
     font-size: 14px;
     color: $nero;
 }
-.gstApply span.icon-rupees {
+.gst-apply span.icon-rupees {
     font-size: 11px;
 }
-.totalGstCode small {
-    color: #666666;
+.total-gst-code small {
+    color: $dark-gray;
     font-size: 14px;
 }
-.dateamount {
+.date-amount {
     color: $nero;
     font-size: 12px;
 }
 .info-gst {
     margin-top: 30px;
-    color: #666666;
+    color: $dark-gray;
     font-size: 14px;
 }
 #dashboard .panel-default {
     position: relative;
 }
 
-.addTax {
+.add-tax {
     display: flex;
     justify-content: inherit;
     position: absolute;
     bottom: 20px;
     text-decoration: underline;
 }
-.addTax a {
+.add-tax a {
     color: $nero;
     font-size: 14px;
 }
-.dateamount small {
+.date-amount small {
     font-size: 12px;
 }

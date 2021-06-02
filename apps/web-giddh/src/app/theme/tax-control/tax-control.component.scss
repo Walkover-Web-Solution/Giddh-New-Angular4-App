@@ -1,3 +1,5 @@
+@import '../../../assets/css/color.scss';
+
 .single-item .dropdown-menu {
     height: 50px !important;
 }
@@ -9,7 +11,7 @@
     overflow: auto;
 }
 
-.fakeLabel {
+.fake-label {
     cursor: pointer;
     padding: 5px 10px;
     line-height: 24px;
@@ -30,5 +32,10 @@
 sup.mandatory-asterisk {
     font-size: 14px;
     top: 0;
-    color: red;
+    color: $red;
+}
+
+.dropdown-menu{
+    left: unset !important;
+    top: 0px;
 }

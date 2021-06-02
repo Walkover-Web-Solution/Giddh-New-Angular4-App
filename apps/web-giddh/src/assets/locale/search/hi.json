@@ -1,51 +1,53 @@
 {
-    "page_heading" : "Search",
-    "filter_by_account" : "Filter by account",
-    "whose" : "whose",
-    "is" : "is",
-    "than" : "than",
-    "to" : "to",
-    "and" : "and",
-    "add_new_query" : "Add New Query",
-    "delete_row" : "Delete Row",
-    "send_as" : "Send as",
-    "query_types" : {
-        "closing_balance" : "Closing Balance",
-        "opening_balance" : "Opening Balance",
-        "cr_total" : "Cr. total",
-        "dr_total" : "Dr. total"
+    "page_heading": "खोज",
+    "filter_by_account": "खाते से फ़िल्टर करें",
+    "whose": "किसका",
+    "is": "है",
+    "than": "की अपेक्षा",
+    "to": "तक",
+    "and": "और",
+    "add_new_query": "नई क्वेरी जोड़ें",
+    "delete_row": "पंक्ति को हटाएं",
+    "send_as": "इस रूप में भेजें",
+    "query_types": {
+        "closing_balance": "जमा शेष",
+        "opening_balance": "प्रारंभिक शेष",
+        "cr_total": "Cr। कुल",
+        "dr_total": "कुल योग"
     },
-    "query_differs" : {
-        "less" : "Less",
-        "greater" : "Greater",
-        "equals" : "Equals"
+    "query_differs": {
+        "less": "कम",
+        "greater": "ग्रेटर",
+        "equals": "बराबर"
     },
-    "balance_type" : {
-        "cr" : "CR",
-        "dr" : "DR"
+    "balance_type": {
+        "cr": "जमा करना",
+        "dr": "खर्च"
     },
-    "unique_name" : "UniqueName",
-    "parent" : "Parent",
-    "opening_balance" : "Opening Bal.",
-    "dr_total" : "DR Total",
-    "cr_total" : "CR Total",
-    "closing_balance" : "Closing Bal.",
-    "subject_label" : "Enter Subject",
-    "subject_placeholder" : "Enter subject here",
-    "message_body_label" : "Type message body",
-    "message_body_placeholder" : "start typing your message here",
-    "message_body_tips" : "Tip: Click on the tabs below to insert data in your message body. Anything followed by '%s_' represents the position where actual data will be placed.",
-    "email_variables" : {
-        "opening_balance" : "Opening Balance",
-        "closing_balance" : "Closing Balance",
-        "credit_total" : "Credit Total",
-        "debit_total" : "Debit Total",
-        "from_date" : "From Date",
-        "to_date" : "To Date",
-        "magic_link" : "Magic Link",
-        "account_name" : "Account Name"
+    "unique_name": "अनूठा नाम",
+    "parent": "मूल",
+    "opening_balance": "प्रारंभिक शेष",
+    "dr_total": "कुल योग",
+    "cr_total": "क्रेडिट कुल",
+    "closing_balance": "जमा शेष",
+    "subject_label": "विषय दर्ज करें",
+    "subject_placeholder": "विषय यहाँ दर्ज करें",
+    "message_body_label": "संदेश बॉडी टाइप करें",
+    "message_body_placeholder": "यहां अपना संदेश लिखना शुरू करें",
+    "message_body_tips": "युक्ति: अपने संदेश में डेटा सम्मिलित करने के लिए नीचे दिए गए टैब पर क्लिक करें। '%s_' के बाद कुछ भी उस स्थिति का प्रतिनिधित्व  करता है जहां वास्तविक डेटा रखा जाएगा।",
+    "email_variables": {
+        "opening_balance": "प्रारंभिक शेष",
+        "closing_balance": "जमा शेष",
+        "credit_total": "क्रेडिट कुल",
+        "debit_total": "कुल योग",
+        "from_date": "तारीख से",
+        "to_date": "तारीख तक",
+        "magic_link": "मैजिक लिंक",
+        "account_name": "खाता नाम"
     },
-    "select_groups_label" : "Select Groups",
-    "select_groups_placeholder" : "Search Groups",
-    "from_to" : "From - To"
+    "select_groups_label": "समूह चुनें",
+    "select_groups_placeholder": "समूह खोजें",
+    "from_to": "कब से कब तक",
+    "select_item": "वस्तु चुनें",
+    "select_query": "क्वेरी का चयन करें"
 }

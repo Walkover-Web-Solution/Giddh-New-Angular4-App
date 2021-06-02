@@ -1,6 +1,6 @@
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ViewChild, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
 import { AppState } from '../../../store/roots';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -69,11 +69,12 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
     public allAssociatedCompanies: CompanyResponse[] = [];
     /* This will contain the plan unique name of default trial plan */
     public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
         this.subscriptions$ = this.store.pipe(select(s => s.subscriptions.subscriptions), takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(cmp => cmp.session.companies).pipe(takeUntil(this.destroyed$));
-        this.activeCompanyUniqueName$ = this.store.pipe(select(cmp => cmp.session.companyUniqueName), takeUntil(this.destroyed$));
+        this.companies$ = this.store.pipe(select(cmp => cmp.session.companies), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -81,21 +82,37 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
             this.loggedInUser = this.generalService.user;
         }
 
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.activeCompany = activeCompany;
+            }
+        });
+
         this.companies$.subscribe(companies => {
             if (companies) {
                 let orderedCompanies = _.orderBy(companies, 'name');
-                this.allAssociatedCompanies = orderedCompanies;
-                this.companyListForFilter = orderedCompanies;
-                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(active => {
-                    this.activeCompany = companies.find(cmp => cmp.uniqueName === active);
-                    this.sortAssociatedCompanies();
-                    this.showCurrentCompanyPlan();
+                let filteredCompanies = [];
+
+                orderedCompanies.forEach((company) => {
+                    if (company.showOnSubscription) {
+                        filteredCompanies.push(company);
+                    }
+                });
+
+                this.allAssociatedCompanies = filteredCompanies;
+                this.companyListForFilter = filteredCompanies;
+
+                this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+                    if(activeCompany) {
+                        this.sortAssociatedCompanies();
+                        this.showCurrentCompanyPlan();
+                    }
                 });
             }
         });
 
         this.isPlanShow = false;
-        this.subscriptionService.getSubScribedCompanies().subscribe((res) => {
+        this.subscriptionService.getSubScribedCompanies().pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.status === "success") {
                 if (!res.body || !res.body[0]) {
                     this.isPlanShow = true;
@@ -113,7 +130,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
             if(userSubscriptions && userSubscriptions.length > 0) {
                 userSubscriptions.forEach(userSubscription => {
                     if(userSubscription.createdAt) {
-                        userSubscription.createdAt = moment(userSubscription.createdAt, "DD-MM-YYYY HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                        userSubscription.createdAt = moment(userSubscription.createdAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     }
 
                     this.subscriptions.push(userSubscription);
@@ -142,7 +159,9 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
      * @memberof SubscriptionsComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        this.activeTab = changes.activeTab.currentValue;
+        if(changes && changes.activeTab) {
+            this.activeTab = changes.activeTab.currentValue;
+        }
     }
 
     public goToBillingDetails() {
@@ -376,7 +395,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
     public filterCompanyList(term): void {
         this.companyListForFilter = [];
         this.allAssociatedCompanies.forEach((company) => {
-            if (company.name.toLowerCase().includes(term.toLowerCase())) {
+            if (company.showOnSubscription && company.name.toLowerCase().includes(term.toLowerCase())) {
                 this.companyListForFilter.push(company);
             }
         });
@@ -447,15 +466,13 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
 
     // public getSubscriptionList() {
     //   this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
-    //   this.store.select(s =>  s.subscriptions.subscriptions)
-    //     .pipe(takeUntil(this.destroyed$))
+    //   this.store.pipe(select(s =>  s.subscriptions.subscriptions), takeUntil(this.destroyed$))
     //     .subscribe(s => {
     //       if (s && s.length) {
     //         this.subscriptions = s;
     //         this.store.dispatch(this._subscriptionsActions.SubscribedCompaniesList(s && s[0]));
     //         this.store.dispatch(this._subscriptionsActions.SubscribedUserTransactions(s && s[0]));
-    //         this.store.select(s =>  s.subscriptions.transactions)
-    //           .pipe(takeUntil(this.destroyed$))
+    //         this.store.pipe(select(s =>  s.subscriptions.transactions), takeUntil(this.destroyed$))
     //           .subscribe(s => this.transactions = s);
     //       }
     //     });

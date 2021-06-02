@@ -1,8 +1,9 @@
 {
+    "page_heading": "Reports > Monthly Columnar Report",
     "select_year": "Select Year",
     "from_month": "From Month",
     "to_month": "To Month",
-    "group": "Group",
+    "group": "Group *",
     "opening_closing_balance": "Opening/Closing Balance",
     "cr_dr": "Cr/Dr with +/-",
     "save": "Save",
@@ -12,5 +13,8 @@
     "parent_group": "Parent Group",
     "grand_total": "Grand Total",
     "opening_balance": "Opening Balance",
-    "closing_balance": "Closing Balance"
+    "closing_balance": "Closing Balance",
+    "dr": "Dr",
+    "cr": "Cr",
+    "downloaded_filename": "ColumnarReport.xlsx"
 }

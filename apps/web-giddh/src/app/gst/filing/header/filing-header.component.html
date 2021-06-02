@@ -5,7 +5,7 @@
     </div>
 
     <!-- region gstr1 -->
-    <div class="list-style row" *ngIf="selectedGst === 'gstr1'">
+    <div class="list-style row" *ngIf="selectedGst === GstReport.Gstr1">
 
         <div class="wrap-GSTR-1-title col-lg-6 col-md-12 col-xs-12 xs-mb-1">
             <a href="javascript:void(0);" [routerLink]="['/gstfiling']" class="ember-view">
@@ -17,14 +17,14 @@
                 <div class="text-middle head"> GSTR-1
 
                     <ng-container *ngIf="isMonthSelected">
-                        ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('MMMM YYYY')}})
+                        ({{moment(currentPeriod.from, giddhDateFormat).format('MMMM YYYY')}})
                     </ng-container>
                     <ng-container *ngIf="!isMonthSelected">
-                        ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('DD MMM YYYY')}} -
-                        {{moment(currentPeriod.to, 'DD-MM-YYYY').format('DD MMM YYYY')}})
+                        ({{moment(currentPeriod.from, giddhDateFormat).format('DD MMM YYYY')}} -
+                        {{moment(currentPeriod.to, giddhDateFormat).format('DD MMM YYYY')}})
                     </ng-container>
                 </div>
-                <div style="font-weight: normal;" class="font-xs text-muted text-middle">Details of outward supplies of
+                <div class="font-xs text-muted text-middle font-normal">Details of outward supplies of
                     goods and services
                 </div>
             </div>
@@ -35,7 +35,7 @@
         <div class="col-lg-6 col-md-12 col-xs-12">
             <ul class="list-inline list-middle download-drop-down">
                 <!-- <li>
-            <a href="javscript:void(0)" [routerLink]="['error-sheet']" class="btn grey-clr"><img src="assets/images/gst/error-link.svg" alt=""> Error Sheet</a>
+            <a href="javscript:void(0)" [routerLink]="['error-sheet']" class="btn grey-color"><img src="assets/images/gst/error-link.svg" alt=""> Error Sheet</a>
         </li> -->
                 <li>
                     <div class="btn-group" dropdown #dropdown="bs-dropdown">
@@ -54,7 +54,7 @@
 
                 <li>
 
-                    <div *ngIf="showTaxPro">
+                    <div *ngIf="showTaxPro && isCompany">
 
                         <button class="btn btn-primary authenticate-btn pull-right"
                             [ngClass]="{'btn-success': gstAuthenticated }"
@@ -73,7 +73,7 @@
     <!-- endregion -->
 
     <!-- region gstr2 -->
-    <div class="list-style" *ngIf="selectedGst === 'gstr2'">
+    <div class="list-style" *ngIf="selectedGst === GstReport.Gstr2">
         <a href="javascript:void(0);" id="ember1210" class="ember-view" [routerLink]="['/gstfiling']">
             <img src="{{imgPath}}back.svg" class="icon icon-sm text-middle" />
         </a>
@@ -83,22 +83,22 @@
             <div class="text-middle"> GSTR-2
 
                 <ng-container *ngIf="isMonthSelected">
-                    ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('MMMM YYYY')}})
+                    ({{moment(currentPeriod.from, giddhDateFormat).format('MMMM YYYY')}})
                 </ng-container>
                 <ng-container *ngIf="!isMonthSelected">
-                    ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('DD MMM YYYY')}} -
-                    {{moment(currentPeriod.to, 'DD-MM-YYYY').format('DD MMM YYYY')}})
+                    ({{moment(currentPeriod.from, giddhDateFormat).format('DD MMM YYYY')}} -
+                    {{moment(currentPeriod.to, giddhDateFormat).format('DD MMM YYYY')}})
                 </ng-container>
 
             </div>
-            <div style="font-weight: normal;" class="font-xs text-muted text-middle">Details of inward supplies of goods
+            <div class="font-xs text-muted text-middle font-normal">Details of inward supplies of goods
                 and services
             </div>
         </div>
 
         <div class="pull-right btn-wrapper-filling-header">
 
-            <div class="btn-group" style="display: inline-block !important;" dropdown #dropdown="bs-dropdown">
+            <div class="btn-group d-inline-block" dropdown #dropdown="bs-dropdown">
                 <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue"><i
                         class="icon-download"></i>
                     Download
@@ -116,7 +116,7 @@
 
 
             <button class="btn btn-primary pull-right" [ngClass]="{'btn-success': gstAuthenticated }"
-                (click)="toggleSettingAsidePane($event, 'VAYANA')" *ngIf="showTaxPro">
+                (click)="toggleSettingAsidePane($event, 'VAYANA')" *ngIf="showTaxPro && isCompany">
                 {{ gstAuthenticated ? 'Authenticated' : 'Authenticate'}}
             </button>
 
@@ -138,7 +138,7 @@
 
 
 <!-- region cancel confirmation modal -->
-<div bsModal #cancelConfirmationModel="bs-modal" class="modal zIndexForAside fade" role="dialog"
+<div bsModal #cancelConfirmationModel="bs-modal" class="modal z-index-for-aside fade" role="dialog"
     [config]="{ ignoreBackdropClick: true }">
     <div class="modal-dialog modal-md second">
         <!-- modal-liq-90 class is removed for now-->

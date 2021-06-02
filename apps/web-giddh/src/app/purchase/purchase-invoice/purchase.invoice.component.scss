@@ -1,0 +1,441 @@
+@import "../../../assets/css/color.scss";
+
+.section-title {
+    padding: 15px 0;
+}
+
+.input-err {
+    border-color: $scarlet;
+}
+
+.input-warn {
+    border-color: $bright-yellow;
+}
+
+.btn-generate {
+    margin-top: 4px;
+    color: $white;
+}
+
+.btn-generate:disabled {
+    background: $silver;
+}
+
+.search-form .input-group-btn {
+    width: 35px;
+    font-size: inherit;
+    border: 1px solid $gainsboro;
+    text-align: center;
+    color: $nobel;
+    background: $white;
+    border-right: 0;
+    vertical-align: middle;
+    line-height: 32px;
+}
+
+.search-form .form-control {
+    border-left: 0;
+}
+
+.open > .page-list-dd {
+    display: inline-block;
+    min-width: 200px;
+    width: 100%;
+    max-height: 180px;
+    overflow: auto;
+    padding-left: 7px;
+}
+
+.dd-options:hover {
+    color: $orange;
+}
+
+.bt-border-1px {
+    border-bottom: 1px solid $gainsboro;
+}
+
+.tr-td-div > td div {
+    padding: 4px 0px;
+}
+
+.return-body .main-wrapper {
+    background-color: $gray-95;
+    padding: 0;
+    border-right: 1px solid $gainsboro;
+}
+
+.return-content {
+    padding: 31px 4% 15px;
+    background-color: $white;
+}
+
+.btn-primary,
+.btn-primary.disabled,
+.btn-primary.disabled.active,
+.btn-primary.disabled:active,
+.btn-primary.disabled:focus,
+.btn-primary.disabled:hover,
+.btn-primary[disabled],
+.btn-primary[disabled].active,
+.btn-primary[disabled]:active,
+.btn-primary[disabled]:focus,
+.btn-primary[disabled]:hover,
+fieldset[disabled] .btn-primary,
+fieldset[disabled] .btn-primary.active,
+fieldset[disabled] .btn-primary:active,
+fieldset[disabled] .btn-primary:focus,
+fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
+.btn-primary.disabled,
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary,
+.receipt-wrapper .doc-checkbox:checked,
+.doc-actions {
+    color: $white;
+    background-color: $flamingo;
+    border-color: $flamingo;
+}
+
+.btn,
+.btn-sm,
+.btn-xs {
+    border-radius: 3px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 5px 12px;
+    margin-bottom: 0;
+    cursor: pointer;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    -o-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+svg.icon.icon-xxlg-md {
+    height: 40px;
+    width: 40px;
+}
+
+.return-content .return-top {
+    display: inline-block;
+    margin-left: 1%;
+}
+
+.text-middle {
+    vertical-align: middle;
+}
+
+.return-content:not(:first-child) {
+    margin: 22px 0;
+}
+
+.return-content .return-filed {
+    background-color: $jade-color;
+}
+
+.text-uppercase {
+    text-transform: uppercase;
+}
+
+.text-muted {
+    color: $dark-gray;
+}
+
+.return-content .content-graph {
+    padding: 35px 0;
+}
+
+svg.icon.gstr-icon {
+    width: 42px;
+    height: 42px;
+}
+
+.return-content .sales-colm {
+    width: 32%;
+    display: inline-block;
+    vertical-align: text-top;
+}
+
+.font-xs {
+    font-size: 12px;
+}
+
+.return-body b {
+    font-weight: 600;
+}
+
+.return-content .line {
+    margin: 5px 18px;
+    border-bottom: 1px solid $gainsboro;
+}
+
+.return-content .line::before {
+    content: "";
+    display: block;
+    width: 9px;
+    height: 9px;
+    border-radius: 5px;
+    background-color: $whisper-light;
+    position: relative;
+    top: 5px;
+    right: 19px;
+}
+
+.return-content .count a {
+    color: $primary;
+}
+
+.font-xxxlarge {
+    font-size: 24px;
+}
+
+.return-content .count a {
+    color: $primary;
+}
+
+.bottom-action,
+.tax-engine a,
+.tax-engine a > .dropdown {
+    cursor: pointer;
+}
+
+.return-content .line-gradient {
+    border-image: linear-gradient(to right, #eee 0, #eee 30%, #fff 60%);
+    border-image-slice: 1;
+}
+
+.return-content .purchase-colm {
+    width: 24%;
+    display: inline-block;
+}
+
+svg.icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.text-overdue {
+    color: $chetwode-blue;
+}
+
+svg.icon.icon-xxlg-md {
+    height: 40px;
+    width: 40px;
+}
+
+.content-disabled {
+    opacity: 0.5;
+    position: relative;
+    cursor: not-allowed;
+}
+
+.return-content:last-child {
+    margin-bottom: 0;
+}
+
+.btn-default {
+    color: $night-rider;
+    background-color: $gray-95;
+    border-color: $gainsboro;
+}
+
+.return-body .notification {
+    padding-top: 25px;
+    background: $white;
+}
+
+.filing-demo-video {
+    padding: 10px;
+    display: block;
+    border-radius: 2px;
+    margin-bottom: 12px;
+}
+
+.filing-demo-video .video-thumbnail {
+    display: inline-block;
+}
+
+.filing-demo-video .video-thumbnail > svg {
+    width: 60px;
+    height: 40px;
+}
+
+.filing-demo-video .video-desc {
+    display: inline-block;
+    padding-left: 10px;
+}
+
+.font-medium {
+    font-size: 15px;
+}
+
+.label-default {
+    background-color: $nobel;
+}
+
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-top: 1px solid $gainsboro;
+}
+
+.filing-due-date {
+    margin: 10px 0 25px;
+}
+
+.filing-due-date .return-details {
+    margin-top: 10px;
+    border: 1px solid $gainsboro;
+    border-radius: 4px;
+}
+
+.filing-due-date .return-details > table {
+    width: 100%;
+    font-size: 13px;
+}
+
+.filing-due-date .return-details > table > tbody > tr > td:first-child {
+    padding: 10px 15px;
+    vertical-align: top;
+}
+
+.filing-due-date .return-details > table > tbody > tr > td:first-child:before {
+    content: " ";
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+    vertical-align: middle;
+    background-color: $vivid-blue;
+}
+
+.filing-due-date .return-details > table > tbody > tr > td:last-child {
+    padding: 10px 15px;
+    text-align: right;
+}
+
+.filing-due-date {
+    margin: 10px 0 25px;
+}
+
+.return-body .notification .notify-title {
+    font-size: 13px;
+    color: $nobel;
+}
+
+.return-body .notification .activity-graph {
+    padding: 20px 0 25px;
+}
+
+.return-body .notification .activity-graph .notify {
+    position: relative;
+    padding-bottom: 30px;
+}
+
+.return-body .notification .activity-graph .notify:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: 14px;
+    left: 4px;
+    bottom: 5px;
+    height: 75%;
+    border-left: 1px solid $gainsboro;
+}
+
+.return-body .notification .activity-graph .notify-circle {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: $primary;
+    display: inline-block;
+    margin-right: 15px;
+    margin-top: 4px;
+}
+
+.return-body .notification .activity-graph .notify-content {
+    display: inline-block;
+    width: 90%;
+}
+
+.return-body .notification .activity-graph h4 {
+    line-height: 1.5;
+    margin-bottom: 2px;
+    margin-top: 10px;
+}
+
+.notify label.font-xs.text-muted strong {
+    font-weight: 600;
+    color: $gray !important;
+}
+
+.font-normal {
+    font-size: 13px;
+    color: $gray;
+}
+
+.return-body .notification .faq-list {
+    padding: 10px 0 10px 20px;
+}
+
+.return-body .notification .faq-list li {
+    padding: 6px 10px;
+    color: $curious-blue;
+    font-size: 13px;
+}
+
+.return-body .notification .faq-list li a:hover {
+    color: $primary;
+}
+
+#c-tab ::ng-deep .nav-tabs > li.active > a,
+.nav-tabs > li.active > a:focus,
+.nav-tabs > li.active > a:hover {
+    color: $dark-gray;
+    cursor: default;
+    background-color: $white;
+    border: 2px solid $gainsboro;
+    border-right: 0 !important;
+    border-left: 0 !important;
+    border-top: 0 !important;
+    border-bottom-color: $primary;
+}
+
+.daterangePicker {
+    position: absolute;
+    opacity: 0;
+    right: -160px;
+    top: 0;
+    /* visibility: hidden; */
+    pointer-events: none;
+}
+
+:host ::ng-deep .daterangepicker.opensright:after,
+:host ::ng-deep .daterangepicker.opensright:before {
+    content: none;
+}
+
+.rotate-90 {
+    transform: rotate(-90deg);
+}
+
+.calendar-dropdown-menu{
+    z-index:10; 
+    min-height:290px;
+}
+
+.width-200{
+    width: 200px;
+}
+
+.span-btn-between{
+    margin: 5px 10px;
+}

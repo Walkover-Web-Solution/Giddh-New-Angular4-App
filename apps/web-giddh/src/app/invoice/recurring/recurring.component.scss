@@ -15,8 +15,8 @@
     font-size: 18px;
     border: 1px solid $gainsboro;
     border-radius: 2px;
-    color: gray;
-    background: #fff;
+    color: $gray;
+    background: $white;
     align-items: center;
     justify-content: center;
 }
@@ -48,7 +48,7 @@
     padding: 11px;
     padding-right: 40px;
     border: none;
-    background-color: #f2f2f2;
+    background-color: $white-smoke;
 }
 
 .td-search-box .input-container i {
@@ -61,16 +61,20 @@
     flex: 1 1 auto;
 }
 
+.list-item{
+    border-bottom: 1px solid $gainsboro !important;
+}
+
 .d-flex {
     display: flex;
 }
 
-.activeTextColor {
+.active-text-color {
     color: $deep-sky-blue !important;
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid #c6c4c4;
+    border-right: 1px solid $gainsboro;
 }
 .icon-pointer {
     margin-left: 6px;
@@ -84,7 +88,7 @@
     color: $deep-sky-blue;
 }
 
-.mh18_img img {
+.check-image img {
     max-height: 20px;
     cursor: pointer;
 }
@@ -105,16 +109,65 @@
     align-items: center;
 }
 .btn-link-2 {
-    color: #1c1c1c;
+    color: $nero;
 }
+
+.more-dropdown{
+    height: 30px !important;
+    .dropdown-menu{
+        right: -53px !important;
+    }
+}
+
 .search-invoice-filed {
     display: none;
+}
+.more-dropdown{
+    height: 30px !important;
+    .dropdown-menu{
+        right: -53px !important;
+    }
+}
+.giddh-table{
+    td{
+        white-space: normal !important;
+        word-break: break-word !important;
+    }
 }
 // responsive
 @media(max-width:1190px){
     .recurring-form {
         .input-group {
             width: 125px;
+        }
+    }
+}
+@media(max-width:1191px) and (min-width:1024px){
+    .recurring-form-wrapper{
+        display: flex;
+        width: 100%;
+        .recurring-form{
+            flex: auto;
+            display: flex;
+            width: 100%;
+            .form-group{
+                flex-flow: column wrap;
+                align-items: flex-start;
+                margin-bottom: 0;
+                width: 25%;
+                .input-group{
+                    width: 100%;
+                    display: flex;
+                        sh-select, input, div{
+                        min-width: 100%;
+                        max-width: 100%;
+                    }
+                }
+            }
+            input{
+                min-width: 100%;
+                max-width: 100%;
+            }
         }
     }
 }
@@ -129,6 +182,11 @@
     }
 }
 @media (max-width: 768px) {
+    .giddh-table{
+        td{
+            width: 100%;
+        }
+    }
     .form-view .input-group {
         display: flex;
     }
@@ -142,37 +200,32 @@
         background: transparent;
         border: none;
     }
-    .input-grp-dateRangePicker.form-inline .form-group {
+    .input-grp-date-range-picker.form-inline .form-group {
         display: inline-block;
         width: 49%;
         margin-bottom: 5px;
     }
-    .input-grp-dateRangePicker .form-group .input-group,
-    .input-grp-dateRangePicker .form-group button {
+    .input-grp-date-range-picker .form-group .input-group,
+    .input-grp-date-range-picker .form-group button {
         width: 100%;
         display: block;
     }
-    .input-grp-dateRangePicker.form-inline .form-group:nth-child(2n) {
+    .input-grp-date-range-picker.form-inline .form-group:nth-child(2n) {
         margin-right: 0 !important;
     }
     .search-invoice-filed {
         display: block;
     }
 }
-@media (max-width: 767px) {
-    .recurring-container {
-        margin-top: 55px;
-    }
-}
 @media (max-width: 530px) {
-    .input-grp-dateRangePicker.form-inline .form-group {
+    .input-grp-date-range-picker.form-inline .form-group {
         display: inline-block;
         width: 48.5%;
         margin-bottom: 5px;
     }
 }
 @media (max-width: 375px) {
-    .input-grp-dateRangePicker.form-inline .form-group {
+    .input-grp-date-range-picker.form-inline .form-group {
         display: inline-block;
         width: 48.2%;
         margin-bottom: 5px;

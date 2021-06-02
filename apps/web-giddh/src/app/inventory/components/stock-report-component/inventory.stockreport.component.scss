@@ -1,17 +1,16 @@
 @import "../../../../assets/css/color.scss";
 
-.bdrT {
-    border-color: #ccc;
+.bd-rt {
+    border-color: $gainsboro;
 }
 
 .flex-fill {
     flex: 1 1 auto;
 }
 
-.d-flex {
-    display: flex;
+.sh-select-dropdown{
+    width: 230px;
 }
-
 /*td-in-searchbox_style*/
 
 .td-search-box div {
@@ -24,7 +23,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: #757bb9;
+    color: $wild-blue-yonder;
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -44,7 +43,7 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: #1c1c1c;
+    color: $nero;
     border: none;
     background-color: $white-smoke;
 }
@@ -56,7 +55,7 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid #cdcdcd;
+    border-right: 1px solid $gainsboro;
 }
 
 .icon-pointer .glyphicon {
@@ -69,7 +68,7 @@
 
 .dropdown-menu > li > a:hover {
     color: $chetwode-blue;
-    background: $gray-90;
+    background: $whisper;
 }
 .stock-input {
     background-color: transparent !important;
@@ -83,23 +82,23 @@
     color: $white;
 }
 .inventory-stock-table input.form-control.stock-input {
-    color: #1c1c1c;
+    color: $nero;
     text-align: left;
 }
 .table-border input.form-control.stock-input {
-    color: #1c1c1c;
+    color: $nero;
     text-align: left;
 }
 .footer-tr td {
-    background-color: $gray-90;
+    background-color: $whisper;
 }
 .total-footer {
     background-color: $white;
     display: flex;
-    .footitem {
+    .foot-item {
         padding: 41px;
         h2 {
-            color: #8f9091;
+            color: $wistful;
             font-size: 20px;
             margin-bottom: 10px;
         }
@@ -109,37 +108,27 @@
     }
 }
 
-.Journal_Voucher {
-    color: #c4c0c0;
+.journal-voucher {
+    color: $silver;
 }
 
-.Purchase {
-    color: #0c8fe6;
+.purchase {
+    color: $primary;
 }
-.Sales {
-    color: #229e2b;
+.sales {
+    color: $success-green;
 }
 
-.Journal_Voucher {
-    color: #c4c0c0;
-}
 /* class name same as what we are getting data */
 
-.PURCHASE {
-    color: #0c8fe6;
+.journal {
+    color: $hint-of-cyan;
 }
-.SALES {
-    color: #229e2b;
+.credit {
+    color: $faux-true;
 }
-
-.JOURNAL {
-    color: #19c2d0;
-}
-.CREDIT {
-    color: #0467a8;
-}
-.DEBIT {
-    color: #f6b232;
+.debit {
+    color: $orange;
 }
 .modal-content {
     border-radius: 0px;
@@ -193,7 +182,7 @@
     border-radius: 0px;
     padding: 0px;
     input[type="checkbox"]:after {
-        border: 1px solid #cccccc;
+        border: 1px solid $gainsboro;
         width: 15px;
         height: 15px;
         top: 2px;
@@ -202,12 +191,12 @@
         top: 6px;
         width: 9px;
         height: 5px;
-        border: 2px solid #fff;
+        border: 2px solid $white;
         border-top-style: none;
         border-right-style: none;
     }
     li {
-        color: #333333;
+        color: $night-rider;
         padding: 3px 7px !important;
         font-size: 12px;
     }
@@ -217,7 +206,7 @@
     }
 }
 button[aria-expanded="true"] i {
-    color: #adadad;
+    color: $dim-gray;
 }
 /* voucher type DDL */
 
@@ -227,7 +216,7 @@ button[aria-expanded="true"] i {
 .table-border {
     border: 1px solid $gainsboro;
 }
-.bdrN {
+.border-none {
     border: none !important;
 }
 .unit-badge {
@@ -241,9 +230,9 @@ button[aria-expanded="true"] i {
 .icon-pointer .icon-sort-dsc {
     line-height: 20px;
     width: 15px;
-    color: #757bb9;
+    color: $wild-blue-yonder;
 }
-.icon-pointer .activeTextColor {
+.icon-pointer .active-text-color {
     color: $deep-sky-blue;
 }
 .sticky-footer-sale-amount {
@@ -260,7 +249,7 @@ button[aria-expanded="true"] i {
         }
         .operators {
             font-size: 39px;
-            color: #8f9091;
+            color: $wistful;
         }
         h2 {
             font-size: 18px;
@@ -279,16 +268,16 @@ button[aria-expanded="true"] i {
 .select-style select {
     width: 100% !important;
 }
-.text-orange {
-    color: #5b64c9;
+.text-purple {
+    color: $chetwode-blue;
 }
 .bg-white {
-    background: white;
+    background: $white;
 }
 .btn-link-2 {
-    color: #0c8fe6;
+    color: $primary;
 }
-.mB100 {
+.mr-b100 {
     margin-bottom: 100px;
 }
 .advance-icon {
@@ -299,10 +288,10 @@ button[aria-expanded="true"] i {
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border: 1px solid #5b64c9;
+    border: 1px solid $chetwode-blue;
     border-radius: 2px;
-    color: #1a237e;
-    background: #fff;
+    color: $midnight-blue;
+    background: $white;
 }
 .inventory-stock-table .d-flex {
     align-items: center;
@@ -312,10 +301,10 @@ button[aria-expanded="true"] i {
     cursor: pointer;
 }
 button.btn.btn-filter {
-    background: #e4e4e4;
-    border: 1px solid #e4e4e4;
+    background: $whisper;
+    border: 1px solid $gainsboro;
     font-size: 14px;
-    color: #1a237e;
+    color: $midnight-blue;
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -323,9 +312,6 @@ button.btn.btn-filter {
 }
 .stock-not-found {
     text-transform: none;
-}
-.wrap-head-report{
-    align-items: center;
 }
 .head-report{
     font-size: 20px;
@@ -362,6 +348,25 @@ button.btn.btn-filter {
 }
 .inventory-branch-dropdown{
     display: none !important;
+}
+
+@media(max-width:1440px){
+    .head-report {
+        max-width: 245px;
+        white-space: normal;
+        word-break: break-all;
+    }
+    .right-inventory{
+        width: 43%;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex-direction: row !important;
+        text-align: right;
+        .transfer-btn{
+            margin-top: 0;
+            margin-right: 15px;
+        }
+    }
 }
 @media(max-width:1024px){
     .wrap-head-report{

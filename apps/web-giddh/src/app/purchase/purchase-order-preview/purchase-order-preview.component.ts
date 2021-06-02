@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -13,10 +13,10 @@ import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonActions } from '../../actions/common.actions';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
 import { base64ToBlob } from '../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-order.action';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'purchase-order-preview',
@@ -31,14 +31,20 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @Input() public companyUniqueName: any;
     /* Taking input of purchase order unique name */
     @Input() public purchaseOrderUniqueName: any;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    @Input() public isCompany: boolean;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /* Search element */
     @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
     /* Confirm box */
     @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
-    /* Instance of PDF viewer*/
-    @ViewChild(PdfJsViewerComponent) public pdfViewer: PdfJsViewerComponent;
     /** Attached document preview container instance */
     @ViewChild('attachedDocumentPreview') attachedDocumentPreview: ElementRef;
+    /** Instance of PDF container iframe */
+    @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
     /* Modal instance */
     public modalRef: BsModalRef;
     /* This will hold state of activity history aside pan */
@@ -71,8 +77,6 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public shouldShowTrnGstField: boolean = false;
     /* Onboarding params object */
     public onboardingFormRequest: OnboardingFormRequest = { formName: 'onboarding', country: '' };
-    /* This will hold count of pages in pdf */
-    public pageCount: number = 0;
     /* This will hold if pdf preview loaded */
     public pdfPreviewLoaded: boolean = false;
     /* This will hold if pdf preview has error */
@@ -81,8 +85,22 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     private attachedDocumentBlob: Blob;
     /** This will hold the search value */
     public poSearch: any = "";
+    /** PDF file url created with blob */
+    public sanitizedPdfFileUrl: any = '';
+    /** PDF src */
+    public pdfFileURL: any = '';
 
-    constructor(private store: Store<AppState>, private modalService: BsModalService, public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public router: Router, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private purchaseOrderActions: PurchaseOrderActions) {
+    constructor(
+        private store: Store<AppState>,
+        private modalService: BsModalService,
+        public purchaseOrderService: PurchaseOrderService,
+        private toaster: ToasterService,
+        public router: Router,
+        private commonActions: CommonActions,
+        private invoiceActions: InvoiceActions,
+        private purchaseOrderActions: PurchaseOrderActions,
+        private domSanitizer: DomSanitizer
+    ) {
         this.getInventorySettings();
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
     }
@@ -103,16 +121,11 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             }
         }
 
-        this.store.pipe(select(state => {
-            if (!state.session.companies) {
-                return;
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.selectedCompany = activeCompany;
             }
-            state.session.companies.forEach(cmp => {
-                if (cmp.uniqueName === state.session.companyUniqueName) {
-                    this.selectedCompany = cmp;
-                }
-            });
-        }), takeUntil(this.destroyed$)).subscribe();
+        });
 
         this.store.pipe(select(state => state.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -177,8 +190,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public ngAfterViewInit(): void {
-        this.searchElement.nativeElement.focus();
-        fromEvent(this.searchElement.nativeElement, 'input')
+        this.searchElement?.nativeElement.focus();
+        fromEvent(this.searchElement?.nativeElement, 'input')
             .pipe(
                 debounceTime(500),
                 distinctUntilChanged(),
@@ -206,7 +219,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         this.pdfPreviewLoaded = false;
         this.isLoading = true;
         let getRequest = { companyUniqueName: this.companyUniqueName, poUniqueName: this.purchaseOrderUniqueName };
-        this.purchaseOrderService.get(getRequest).subscribe(response => {
+        this.purchaseOrderService.get(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response) {
                 if (response.status === "success") {
@@ -308,7 +321,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public deleteItem(): void {
         let getRequest = { companyUniqueName: this.companyUniqueName, poUniqueName: this.purchaseOrder.uniqueName };
 
-        this.purchaseOrderService.delete(getRequest).subscribe((res) => {
+        this.purchaseOrderService.delete(getRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
                 if (res.status === 'success') {
                     this.closeConfirmationPopup();
@@ -342,7 +355,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.purchaseOrder.account.uniqueName };
             let postRequest = { purchaseNumber: this.purchaseOrder.number, action: action };
 
-            this.purchaseOrderService.statusUpdate(getRequest, postRequest).subscribe((res) => {
+            this.purchaseOrderService.statusUpdate(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
                         this.getPurchaseOrder();
@@ -353,7 +366,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                 }
             });
         } else {
-            this.toaster.errorToast("Invalid Purchase Order");
+            this.toaster.errorToast(this.localeData?.invalid_po);
         }
     }
 
@@ -426,7 +439,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         let bulkUpdateGetParams = { action: "create_purchase_bill", companyUniqueName: this.purchaseOrder.company.uniqueName };
         let bulkUpdatePostParams = { purchaseNumbers: purchaseNumbers };
 
-        this.purchaseOrderService.bulkUpdate(bulkUpdateGetParams, bulkUpdatePostParams).subscribe((res) => {
+        this.purchaseOrderService.bulkUpdate(bulkUpdateGetParams, bulkUpdatePostParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
                 if (res.status === 'success') {
                     this.toaster.successToast(res.body);
@@ -445,28 +458,19 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public getPdf(): void {
         let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.purchaseOrder.account.uniqueName, poUniqueName: this.purchaseOrderUniqueName };
 
-        this.purchaseOrderService.getPdf(getRequest).subscribe(response => {
+        this.purchaseOrderService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
                 let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
                 this.attachedDocumentBlob = blob;
-                this.pdfViewer.pdfSrc = blob;
-                this.pdfViewer.showSpinner = true;
-                this.pdfViewer.refresh();
+                const file = new Blob([blob], { type: 'application/pdf' });
+                URL.revokeObjectURL(this.pdfFileURL);
+                this.pdfFileURL = URL.createObjectURL(file);
+                this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                 this.pdfPreviewLoaded = true;
             } else {
                 this.pdfPreviewHasError = true;
             }
         });
-    }
-
-    /**
-     * Callback for pages loaded
-     *
-     * @param {number} count
-     * @memberof PurchaseOrderPreviewComponent
-     */
-    public pagesLoaded(count: number): void {
-        this.pageCount = count;
     }
 
     /**
@@ -479,7 +483,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
             return;
         }
-        saveAs(this.attachedDocumentBlob, 'purchaseorder.pdf');
+        saveAs(this.attachedDocumentBlob, this.localeData?.download_po_filename);
     }
 
     /**
@@ -492,10 +496,14 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
             return;
         }
-        if (this.pdfViewer && this.pdfViewer.pdfSrc) {
-            this.pdfViewer.startPrint = true;
-            this.pdfViewer.refresh();
-            this.pdfViewer.startPrint = false;
+        if (this.pdfContainer) {
+            const window = this.pdfContainer?.nativeElement?.contentWindow;
+            if (window) {
+                window.focus();
+                setTimeout(() => {
+                    window.print();
+                }, 200);
+            }
         } else if (this.attachedDocumentPreview) {
             const windowWidth = window.innerWidth
                 || document.documentElement.clientWidth
@@ -503,7 +511,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                 || 0;
             const left = (windowWidth / 2) - 450;
             const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
-            printWindow.document.write((this.attachedDocumentPreview.nativeElement as HTMLElement).innerHTML);
+            printWindow.document.write((this.attachedDocumentPreview?.nativeElement as HTMLElement).innerHTML);
             printWindow.document.close();
             printWindow.focus();
             printWindow.print();

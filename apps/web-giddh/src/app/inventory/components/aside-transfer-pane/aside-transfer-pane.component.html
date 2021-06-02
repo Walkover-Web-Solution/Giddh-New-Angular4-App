@@ -33,20 +33,20 @@
             <transfer-inventory-user (onSave)="createAccount($event)" (onCancel)="onCancel()"></transfer-inventory-user>
         </ng-container>
         <ng-container *ngSwitchDefault>
-            <div class="aside-body flexy-child vmiddle asidePanelLedger" vr-item>
-                <div class="pd-1 alC">
+            <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" vr-item>
+                <div class="pd-1 text-center">
                     <button type="button" class="btn btn-lg btn-primary" (click)="selectView('inward')">Inward
                         Note</button>
                 </div>
-                <div class="pd-1 alC">
+                <div class="pd-1 text-center">
                     <button type="button" class="btn btn-lg btn-primary" (click)="selectView('outward')">Outward
                         Note</button>
                 </div>
-                <div class="pd-1 alC">
+                <div class="pd-1 text-center">
                     <button type="button" class="btn btn-lg btn-primary" (click)="selectView('createStock')">Create
                         Stock</button>
                 </div>
-                <div class="pd-1 alC">
+                <div class="pd-1 text-center">
                     <button type="button" class="btn btn-lg btn-primary" (click)="selectView('createAccount')">Create
                         Account</button>
                 </div>

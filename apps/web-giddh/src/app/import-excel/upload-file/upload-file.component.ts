@@ -1,9 +1,14 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { select, Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
-import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../../models/user-login-state';
+import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
+import { AppState } from '../../store';
 
 @Component({
     selector: 'upload-file',
@@ -14,29 +19,50 @@ import { ToasterService } from '../../services/toaster.service';
 export class UploadFileComponent implements OnInit, OnDestroy {
     @Input() public isLoading: boolean;
     @Input() public entity: string;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Output() public onFileUpload = new EventEmitter();
     public file: File = null;
     public selectedFileName: string = '';
     public selectedType: string = '';
     public title: string;
 
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = {
+        name: '',
+        uniqueName: ''
+    };
+    /** Stores the current company */
+    public activeCompany: any;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
+
     /** Subject to unsubscribe all the listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private toasterService: ToasterService,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private settingsBranchAction: SettingsBranchActions,
+        private store: Store<AppState>,
+        private generalService: GeneralService
     ) {
         //
     }
 
     public onFileChange(file: FileList) {
         let validExts = ['csv', 'xls', 'xlsx'];
-        let type = this.getExt(file.item(0).name);
+        let type = (file && file.item(0)) ? this.getExt(file.item(0).name) : 'null';
         let isValidFileType = validExts.some(s => type === s);
 
         if (!isValidFileType) {
-            this.toasterService.errorToast('Only XLS files are supported for Import');
+            this.toasterService.errorToast(this.localeData?.invalid_file_type);
             this.selectedFileName = '';
             this.file = null;
             return;
@@ -72,6 +98,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
      */
 
     public ngOnInit(): void {
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data) {
                 this.entity = data.type;
@@ -79,6 +106,36 @@ export class UploadFileComponent implements OnInit, OnDestroy {
             }
         });
         this.setTitle();
+        this.store.pipe(
+            select(state => state.session.activeCompany), take(1)
+        ).subscribe(activeCompany => {
+            this.activeCompany = activeCompany;
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                const hoBranch = response.find(branch => !branch.parentBranch);
+                const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
+                if (!this.currentBranch.uniqueName) {
+                    // Assign the current branch only when it is not selected. This check is necessary as
+                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                    // branches are loaded
+                    this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                    this.currentBranch.name = (this.currentBranch ? this.currentBranch.name : '') + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                }
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
+            }
+        });
     }
 
     /**
@@ -90,9 +147,9 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         if (this.entity === 'group' || this.entity === 'account') {
             this.title = this.entity + 's';
         } else if (this.entity === 'stock') {
-            this.title = 'inventories';
+            this.title = this.localeData?.inventories;
         } else if (this.entity === 'trial-balance') {
-            this.title = 'Trial Balances';
+            this.title = this.localeData?.trial_balances;
         } else {
             this.title = this.entity;
         }
@@ -106,5 +163,27 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof UploadFileComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+    }
+
+    /**
+     * File upload handler
+     *
+     * @param {File} file File uploaded
+     * @memberof UploadFileComponent
+     */
+    public handleFileUpload(file: File): void {
+        this.onFileUpload.emit({
+            file,
+            branchUniqueName: this.entity === 'entries' ? this.currentBranch.uniqueName : ''
+        });
     }
 }

@@ -1,9 +1,7 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -45,6 +43,7 @@ import { ProformaInvoiceRendererComponent } from './proforma-invoice-renderer.co
 import { ProformaInvoiceComponent } from './proforma-invoice.component';
 import { ProformaInvoiceRoutingModule } from './proforma-invoice.routing.module';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
+import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/has-focus.module';
 
 
 @NgModule({
@@ -72,11 +71,11 @@ import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjust
         SelectModule.forRoot(),
         SendEmailInvoiceModule,
         VoucherTypeToNamePipeModule,
-        PdfJsViewerModule,
         CurrencyModule,
         NgxMaskModule.forRoot(),
         SettingsServiceModule,
-        AdvanceReceiptAdjustmentModule
+        AdvanceReceiptAdjustmentModule,
+        HasFocusDirectiveModule
     ],
     exports: [ProformaInvoiceComponent, SalesAddStockComponent, SalesAddStockGroupComponent, AsideMenuProductServiceComponent],
     declarations: [
@@ -91,7 +90,7 @@ import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjust
         AsideMenuProductServiceComponent,
         ProformaPrintInPlaceComponent
     ],
-    providers: [],
+    providers: [TitleCasePipe],
 })
 export class ProformaInvoiceModule {
 }

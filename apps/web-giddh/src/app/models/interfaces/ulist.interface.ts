@@ -13,7 +13,8 @@ export interface IUlist extends INameUniqueName, IHelpersForSearch {
     route?: string;
 	pIndex?: number;
 	isRemoved?: boolean;
-	isInvalidState?: boolean;
+    isInvalidState?: boolean;
+    hasTabs?: boolean;
 }
 
 export interface ICompAidata extends INameUniqueName {

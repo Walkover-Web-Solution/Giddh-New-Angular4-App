@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ExpencesAction } from '../../../actions/expences/expence.action';
 import { ToasterService } from '../../../services/toaster.service';
@@ -18,6 +18,10 @@ import * as moment from 'moment/moment';
 })
 
 export class RejectedListComponent implements OnInit, OnChanges {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 	public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 	public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
 
@@ -39,13 +43,13 @@ export class RejectedListComponent implements OnInit, OnChanges {
 		private _toasty: ToasterService,
 		private _cdRf: ChangeDetectorRef,
 		private expenseService: ExpenseService) {
-		this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-		this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
-		this.pettycashRejectedReportResponse$ = this.store.select(p => p.expense.pettycashRejectedReport).pipe(takeUntil(this.destroyed$));
-		this.getPettycashRejectedReportInprocess$ = this.store.select(p => p.expense.getPettycashRejectedReportInprocess).pipe(takeUntil(this.destroyed$));
-		this.getPettycashRejectedReportSuccess$ = this.store.select(p => p.expense.getPettycashRejectedReportSuccess).pipe(takeUntil(this.destroyed$));
+		this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+		this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
+		this.pettycashRejectedReportResponse$ = this.store.pipe(select(p => p.expense.pettycashRejectedReport), takeUntil(this.destroyed$));
+		this.getPettycashRejectedReportInprocess$ = this.store.pipe(select(p => p.expense.getPettycashRejectedReportInprocess), takeUntil(this.destroyed$));
+		this.getPettycashRejectedReportSuccess$ = this.store.pipe(select(p => p.expense.getPettycashRejectedReportSuccess), takeUntil(this.destroyed$));
 
-		observableCombineLatest(this.universalDate$, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+		observableCombineLatest([this.universalDate$, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
 			if (!Array.isArray(resp[0])) {
 				return;
 			}
@@ -103,7 +107,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
 	public revertActionClicked(item: ExpenseResults) {
 		this.actionPettycashRequest.actionType = 'revert';
 		this.actionPettycashRequest.uniqueName = item.uniqueName;
-		this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).subscribe(res => {
+		this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
 			if (res.status === 'success') {
 				this._toasty.successToast(res.body);
 				this.getPettyCashRejectedReports(this.pettycashRequest);
@@ -122,7 +126,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
 	public deleteActionClicked(item: ExpenseResults) {
 		this.actionPettycashRequest.actionType = 'delete';
 		this.actionPettycashRequest.uniqueName = item.uniqueName;
-		this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).subscribe(res => {
+		this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
 			if (res.status === 'success') {
 				this._toasty.successToast(res.body);
 				this.getPettyCashRejectedReports(this.pettycashRequest);
@@ -150,5 +154,30 @@ export class RejectedListComponent implements OnInit, OnChanges {
 		if (!this._cdRf['destroyed']) {
 			this._cdRf.detectChanges();
 		}
-	}
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof RejectedListComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+    
+    /**
+     * This will replace the search field title
+     *
+     * @param {string} title
+     * @returns {string}
+     * @memberof RejectedListComponent
+     */
+    public replaceTitle(title: string): string {
+        if(this.localeData && this.localeData?.search_field) {
+            return this.localeData?.search_field.replace("[FIELD]", title);
+        } else {
+            return title;
+        }
+    }
 }

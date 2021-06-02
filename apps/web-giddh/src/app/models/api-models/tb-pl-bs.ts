@@ -3,7 +3,8 @@ import { ChildGroup, ClosingBalance, ForwardedBalance, OpeningBalance } from './
 export interface TrialBalanceExportExcelRequest {
 	fromDate?: string;
 	toDate?: string;
-	export?: string;
+    export?: string;
+    filename?: string;
 }
 
 export interface TrialBalanceRequest {
@@ -11,7 +12,9 @@ export interface TrialBalanceRequest {
 	to?: string;
 	refresh?: boolean;
 	selectedDateOption?: string;
-	tagName?: string;
+    tagName?: string;
+    branchUniqueName?: string;
+    filename?: string;
 }
 
 export interface ProfitLossRequest extends TrialBalanceRequest {

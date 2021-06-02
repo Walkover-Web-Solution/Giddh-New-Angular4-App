@@ -9,18 +9,21 @@
 
 .nav-left-bar {
     position: fixed;
-    top: 61px;
+    top: 57px;
     bottom: 0;
     min-height: 100vh;
-    background: #fff;
-    width: 215px;
-    left: -215px;
+    background-color: $white;
+    width: 60px;
+    left: 0;
     z-index: 991;
+    box-shadow: -2px -2px 15px rgba(0,0,0,.2)!important;
 }
-
+/*
+Comment for now
 .nav-left-bar.open {
     box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2);
 }
+*/
 
 .account-search .input-group-addon {
     color: $charcoal;
@@ -47,7 +50,7 @@
 
 .account-search .form-control:focus {
     border-color: $gainsboro !important;
-    color: #b7b7b7;
+    color: $pink-swan;
 }
 
 .account-search {
@@ -65,8 +68,8 @@
 }
 
 a[vr-item]:focus {
-    background-color: #2d9ee0;
-    color: #fff;
+    background-color: $vivid-blue;
+    color: $white;
     cursor: pointer;
 }
 
@@ -83,7 +86,7 @@ a[vr-item]:focus {
 }
 
 .account-search .form-control:after {
-    background: red;
+    background: $red;
     content: "";
     width: 90px;
     height: 90px;
@@ -140,9 +143,9 @@ a[vr-item]:focus {
     }
 }
 
-.main-company-name > li > a:hover .c-text .c-name,
+.main-company-name > li > a:hover .company-text .company-name,
 .main-company-name > li > a:hover .icon-dots-three-vertical {
-    color: #fff;
+    color: $white;
 }
 
 .left-fixed-header > li {
@@ -152,6 +155,12 @@ a[vr-item]:focus {
 }
 .no-padding {
     padding: 0px !important;
+}
+
+.button-back-head{
+    position: absolute;
+    right: 0;
+    top: 110px;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
@@ -182,7 +191,7 @@ a[vr-item]:focus {
 }
 .left-fixed-header > li > a:hover .label > span,
 .left-fixed-header > li > a:hover .label {
-    color: #01a9f4;
+    color: $deep-sky-blue;
 }
 
 .left-fixed-header > li a.active {
@@ -229,7 +238,7 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header .divider {
-    border-bottom: 1px solid #363a41;
+    border-bottom: 1px solid $night-rider;
     padding: 4px 0;
     height: 0;
     margin-bottom: 4px;
@@ -291,7 +300,7 @@ a[vr-item]:focus {
     text-align: center;
     line-height: 15.9px;
     border-radius: 2px;
-    color: #fff;
+    color: $white;
     margin-top: 1px;
     margin-right: 2px;
 }
@@ -306,13 +315,13 @@ a[vr-item]:focus {
     text-align: center;
     line-height: 15.9px;
     border-radius: 2px;
-    color: #999;
+    color: $nobel;
     margin-top: 1px;
 }
 
 .left-fixed-header > h6 > i:hover {
-    color: #fff;
-    background: #6b73c8;
+    color: $white;
+    background: $rich-blue;
 }
 
 .nav-tabs {
@@ -321,11 +330,12 @@ a[vr-item]:focus {
 
 .nav-left-bar.open {
     left: 0;
+    width: 240px;
 }
 
 .left-sub-menu ul > li > a {
     font-size: 14px;
-    color: dimgray;
+    color: $dim-gray;
     display: block;
     clear: both;
     padding: 6px 15px;
@@ -333,7 +343,7 @@ a[vr-item]:focus {
 }
 
 .left-sub-menu ul > li > a:hover {
-    color: #01a9f4;
+    color: $deep-sky-blue;
 }
 
 .left-sub-menu ul {
@@ -344,7 +354,7 @@ a[vr-item]:focus {
 }
 
 .left-sub-menu {
-    background: #fff;
+    background: $white;
     position: absolute;
     left: -12px;
     bottom: 0;
@@ -353,7 +363,7 @@ a[vr-item]:focus {
     display: block;
     clear: both;
     float: none;
-    box-shadow: 0 0 3px #00000036;
+    box-shadow: 0 0 3px $black-russian;
     border-radius: 2px;
     padding: 5px 0;
     visibility: hidden;
@@ -368,7 +378,7 @@ a[vr-item]:focus {
     vertical-align: middle;
     text-align: right;
     position: relative;
-    color: #a0a0a0;
+    color: $dim-gray;
     top: 6px;
 }
 
@@ -379,7 +389,7 @@ a[vr-item]:focus {
 .sub-menu > li > a {
     display: block;
     padding: 8px 20px;
-    color: #b7b7b7;
+    color: $pink-swan;
 }
 
 .left-fixed-header > li > a > i {
@@ -400,6 +410,7 @@ a[vr-item]:focus {
 
 .menu-wrapper {
     max-height: 100%;
+    height: 100%;
 }
 
 .left-sub-menu.open {
@@ -417,17 +428,12 @@ a[vr-item]:focus {
     max-width: none !important;
 }
 
-.posrelative {
-    position: relative;
-}
-
 .d-inline-block {
     display: inline-block !important;
 }
 .notification {
     padding: 0 !important;
     margin-right: 10px !important;
-    height: 34px;
     &.mr-0{
         margin-right: 0 !important;
     }
@@ -437,22 +443,22 @@ a[vr-item]:focus {
     position: relative;
     border: 1px solid $white;
     border-radius: 20px;
-    padding: 0 10px;
+    padding: 0 7px;
     i {
         vertical-align: bottom;
         display: inline-block;
         position: relative;
         left: 16px;
         padding: 0 20px;
-        color:$white;
+        color: $white;
         font-size: 20px;
 
     }
 }
 
 .universal-date li input {
-    padding-left: 20px !important;
-    color: #fff !important;
+    padding-left: 10px !important;
+    color: $white !important;
     padding-right: 0 !important;
     text-align: left;
 }
@@ -463,7 +469,7 @@ a[vr-item]:focus {
 .header-date {
     padding: 5px 11px;
     border-radius: 0px 2px 2px 0px;
-    color: #fff;
+    color: $white;
     padding-left: 0;
 }
 
@@ -471,28 +477,27 @@ a[vr-item]:focus {
     display: none;
 }
 
-.calender-addone {
-    color: $white;
+.calendar-addon {
     padding: 9px 8px 9px 10px;
     vertical-align: bottom;
-    font-size: 14px;
+    font-size: 18px;
     border-radius: 2px 0 0 2px;
     display: inline-flex;
     top: 1px;
 }
 
 .not-today{
-    padding:0px !important;
     border:0px !important;
-    .calender-addone {
+    .calendar-addon {
         position: absolute;
-        left:auto;
+        left:7px;
         margin:auto;
     }
     .input-date{
-        border: 1px solid #ffffff;
+        border: 1px solid $white;
         border-radius: 20px !important;
         height: 34px;
+        width: 220px;
         input{
             margin-right: 44px;
             text-align:center !important;
@@ -512,6 +517,7 @@ a[vr-item]:focus {
     border: 1px solid $white;
     border-radius: 20px;
     margin-right: 15px;
+    display: inline-block !important;
     i {
         font-size: 12px;
         padding-right: 5px;
@@ -519,7 +525,7 @@ a[vr-item]:focus {
 }
 span.icon-support.dropdown-toggle {
     background-color: $governor-bay;
-    color: #fff;
+    color: $white;
     padding: 6px 7px;
     font-size: 17px;
     border: 1px solid $governor-bay;
@@ -539,7 +545,7 @@ span.icon-support.dropdown-toggle {
 }
 
 .other a {
-    color: $extra-dark-gray;
+    color: $night-rider;
     text-transform: uppercase;
 }
 .show-more-opt {
@@ -590,11 +596,11 @@ span.icon-support.dropdown-toggle {
     vertical-align: middle;
 }
 
-.primary-header .c-text {
+.primary-header .company-text {
     display: flex;
     align-items: center;
 }
-.c-text {
+.company-text {
     padding: 6px 8px 6px 0 !important;
     overflow: hidden;
 }
@@ -618,7 +624,7 @@ ul.sub-list {
     padding-left: 0 !important;
 }
 
-.nav-left-bar .company-name .c-text span {
+.nav-left-bar .company-name .company-text span {
     color: $nero;
     word-break: break-all;
 }
@@ -638,13 +644,13 @@ ul.sub-list {
 
 .nav-left-bar .company-name .branch-unique-name {
     font-size: 12px;
-    color: #01a9f4 !important;
+    color: $deep-sky-blue !important;
     padding: 0 0 3px 0;
 }
 
-.company-name .ellp {
-    font-size: 14px;
-    font-family: 'opensans-semibold';
+.company-name .text-ellipsis {
+    font-size: 13px;
+    font-family: 'opensans-regular';
 }
 
 .overlay-cal {
@@ -676,7 +682,7 @@ ul.sub-list {
     transition: 2s linear;
 }
 .head-nav {
-    background: #f1f1f1;
+    background: $white-smoke;
     border-bottom: 1px solid $whisper-color;
     margin-bottom: 5px;
 }
@@ -706,7 +712,7 @@ ul.sub-list {
     padding: 10px 15px;
     margin-bottom: 10px;
     font-size: 16px;
-    box-shadow: 1px 1px 3px #00000029;
+    box-shadow: 1px 1px 3px $black-russian;
     margin-top: 10px;
     p {
         font-family: "opensans-semibold";
@@ -729,7 +735,7 @@ ul.sub-list {
     }
 }
 .white-row.menu_open {
-    margin-left: 215px;
+    margin-left: 240px;
 }
 .setting-sidebar {
     box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2);
@@ -740,11 +746,18 @@ ul.sub-list {
 .unique-name-financial-year{
     display: flex;
     align-items: center;
-    .fyear{
-        margin-left: 5px;
+    flex-wrap: wrap;
+    .branch-unique-name{
+        margin-right: 5px;
+        white-space: normal;
+        word-break: break-word;
     }
 }
-
+.desktop-header{
+    .navbar{
+        display: none;
+    }
+}
 .name-year{
     font-size:12px !important;
     color:$deep-sky-blue !important;
@@ -753,6 +766,11 @@ ul.sub-list {
     ul.dropdown-menu.user-dropdown-header{
         left: 0 !important;
         color: $night-rider;
+        .company-name-finance-year{
+            .text-ellipsis{
+                white-space: normal;
+            }
+        }
     }
 }
 .create-company-btn{
@@ -770,16 +788,208 @@ ul.sub-list {
     left: 15px;
     border: 1px solid $gainsboro;
 }
-.not-today{
-    .today-date.input-date{
-        width: 100px;
-        padding-left: 5px !important;
-        input{
-            text-align: left !important;
-            padding-left: 30px !important;
+.switch-branch-wrapper{
+    .btn-group{
+        display: flex;
+        a.dropdown-toggle{
+            font-size: 16px;
+            display: flex;
+            padding: 15px;
+            font-family: 'opensans-bold';
+            color: $nero;
+            border-bottom: 1px solid $gainsboro;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+            word-break: break-word;
+            white-space: inherit;
+            span{
+                font-size: 9px;
+                float: right;
+                padding-top: 4px;
+                transform: rotate(270deg);
+                border: 2px solid $gray;;
+                padding: 3px;
+                border-radius: 50%;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+                color: $gray;
+            }
+        }
+        .dropdown-menu{
+            left: auto !important;
+            right: -270px !important;
+            top: 17px !important;
+            transform: translateY(0px);
+            bottom: auto;
+            border: 1px solid $gainsboro;
+            box-shadow: 0 6px 12px rgba(0,0,0,.175);
+            min-width: 270px;
+            max-width: 270px;
+            max-height: 315px;
+            overflow-y: auto;
+            padding-top: 0;
+            border-top: none;
+            overflow-x: hidden;
+            li{
+                a{
+                    padding: 6px 10px;
+                    white-space: normal;
+                    word-break: break-word;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    color: $nero !important;
+                    cursor: pointer;
+                    &.dropdown-item.active-branch {
+                        color: $chetwode-blue;
+                        font-weight: bold;
+
+                    }
+                    &.company-create{
+                        color: $chetwode-blue !important;
+                    }
+                    &:hover{
+                        color: $chetwode-blue !important;
+                    }
+                }
+                span{
+                    a{
+                        padding: 0;
+                    }
+                }
+                .branch-alias-name{
+                    width: 90%;
+                }
+                span{
+                    a{
+                        padding: 0;
+                    }
+                }
+                .branch-alias-name{
+                    width: 90%;
+                }
+            }
+            .go-to-company{
+                color: $deep-sky-blue;
+                &.company-label {
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                }
+            }
+            .company-create{
+                color: $chetwode-blue;
+            }
+            div{
+                input{
+                    padding-left: 30px;
+                    border-left: none;
+                    background-image: url(../../../assets/images/Search.svg);
+                }
+                .input-group-addon{
+                    display: flex;
+                    align-items: center;
+                }
+            }
         }
     }
 }
+.not-today{
+    .today-date.input-date{
+        width: 94px;
+        padding-left: 5px !important;
+        input{
+            text-align: left !important;
+            padding-left: 28px !important;
+        }
+    }
+}
+.branch-icon-tooltip{
+    padding:  0 5px;
+}
+
+/*new header css starts*/
+.fixed-padding{
+    padding-top: 58px;
+}
+#primary-new-header.primary-main-header{
+    padding-left: 15px;
+    border-bottom: 1px solid $gainsboro;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background-color: $midnight-blue;
+    z-index: 990;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    .universal-date{
+        color:$persian-blue !important;
+        display: flex;
+        align-items: center;
+        li{
+            border: none;
+            a{
+                display: flex;
+                align-items: center;
+            }
+            i{
+                padding: 0 !important;
+                cursor: pointer;
+            }
+        }
+        .icon-bell-new, .icon-calender, .icon-plus , i, .btn-link{
+            color: $white !important;
+            position: static !important;
+        }
+        .notification{
+            .icon-bell-new{
+                padding: 4px !important;
+            }
+        }
+        .not-today{
+            .calendar-addon{
+                padding: 6px 7px 7px 8px;
+            }
+            .input-date{
+                height: 32px;
+            }
+        }
+        .input-date{
+            background-color: $white;
+            border-radius: 3px !important;
+            border: none;
+            input{
+                color:$persian-blue !important;
+            }
+
+        }
+        #add-manage{
+            color:$persian-blue !important;
+            padding: 6px 8px;
+            background-color: $white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            border-radius: 3px;
+            i{
+                padding: 0 5px !important;
+                padding-left: 0 !important;
+                color: $persian-blue !important;
+            }
+        }
+        .header-utility-icons{
+            i{
+                padding: 3px !important;
+                font-size: 22px;
+            }
+        }
+    }
+}
+
+/*new header css end*/
 
 /* responsive */
 @media (max-height: 800px) {
@@ -816,15 +1026,89 @@ ul.sub-list {
     .lower-layer-header {
         padding-top: 5px;
     }
-    .hamburger-menu button {
-        width: 32px;
-        padding: 4px 4px 3px 0;
-        i {
-            font-size: 20px !important;
+    .hamburger-menu{
+        display: flex;
+        align-items: center;
+        button {
+            width: 32px;
+            padding: 4px 4px 3px 0;
+            margin-right: 4px !important;
+            i {
+                font-size: 22px !important;
+            }
         }
     }
 }
 @media (max-width: 767px) {
+    .fixed-padding{
+        padding-top: 90px;
+        #primary-new-header.primary-main-header{
+            background-color: $midnight-blue;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 90px;
+            padding: 5px 15px !important;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            z-index: 999;
+            .logo-wrapper{
+                display: none;
+            }
+            .hamburger-menu{
+                i{
+                    color: $white;
+                }
+            }
+            .universal-date{
+                margin-right: 0 !important;
+                li{
+                    display: flex;
+                    i{
+                        font-size: 24px;
+                    }
+                }
+                .select-today{
+                    position: absolute !important;
+                    left: 10px;
+                    bottom: 10px;
+                }
+                .not-today{
+                    position: absolute;
+                    left: 60px;
+                    bottom: 10px;
+                    .calendar-addon{
+                        padding: 5px 7px 7px 8px;
+                        font-size: 18px;
+                    }
+                    .date-range-picker{
+                        padding-left: 19px !important;
+                    }
+                    &.if-today{
+                        left: 10px;
+                        .giddh-datepicker{
+                            padding-left: 30px !important;
+                        }
+                    }
+                }
+                #add-manage{
+                    position: absolute;
+                    right: 10px;
+                    bottom: 10px;
+                }
+                .header-utility-icons{
+                 padding-right: 0;
+                }
+                }
+        }
+    }
+
+    .not-today{
+        .input-date{
+            width: auto;
+        }
+    }
     .hide-today{
         display: none !important;
     }
@@ -881,6 +1165,7 @@ ul.sub-list {
             margin-bottom: 5px;
             display: flex;
             flex-direction: row;
+            flex-wrap: inherit;
             .hamburger-menu {
                 display: flex;
                 align-items: center;
@@ -897,7 +1182,7 @@ ul.sub-list {
     .mobile-menu-icon {
         position: absolute;
         top: 14px;
-        color: #fff;
+        color: $white;
         right: -35px;
         background-color: $midnight-blue;
         width: 35px;
@@ -914,10 +1199,10 @@ ul.sub-list {
         display: flex;
     }
     .upper-layer-header .open .dropdown-menu {
-        background-color: #fff;
+        background-color: $white;
         -webkit-background-clip: padding-box;
         background-clip: padding-box;
-        border: 1px solid #ccc;
+        border: 1px solid $gainsboro;
         border: 1px solid rgba(0, 0, 0, 0.15);
         border-radius: 4px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
@@ -946,12 +1231,11 @@ ul.sub-list {
             }
         }
         .notification {
-            height: 34px;
             position: relative;
             line-height: 1.8;
         }
     }
-    .calender-addone {
+    .calendar-addon {
         height: 30px;
         vertical-align: middle;
         align-items: center;
@@ -966,10 +1250,10 @@ ul.sub-list {
         width: 200px;
         float: left;
     }
-    .c-text {
+    .company-text {
         overflow: hidden;
     }
-    .c-text.head-nav {
+    .company-text.head-nav {
         display: none;
     }
     .universal-date li {
@@ -993,7 +1277,7 @@ ul.sub-list {
     }
     .mobile-back-btn {
         display: none;
-        color: #fff;
+        color: $white;
         margin-right: 10px;
     }
     .not-today {

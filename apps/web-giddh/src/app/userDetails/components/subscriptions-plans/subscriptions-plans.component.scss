@@ -21,7 +21,7 @@
     color: $dark-gray;
     padding: 10px;
 }
-.noHeight {
+.height-auto {
     height: auto !important;
 }
 .payment-log-list > li {
@@ -59,7 +59,7 @@
     border-radius: 90px;
     border: 1px solid $dark-gray;
 }
-.accountAsideMenuState2 {
+.account-aside-menu-state {
     position: fixed;
     left: auto;
     top: 0;
@@ -279,7 +279,7 @@
 }
 .btn-cancel {
     background: $very-light-gray;
-    border-color: $very-light-gray;
+    border-color: $gainsboro;
     color: $night-rider;
     font-family: "opensans-semibold" !important;
     margin-bottom: 15px !important;
@@ -466,7 +466,7 @@
     .xs-pr-0 {
         padding-right: 0px !important;
     }
-    .xs-pl-15 {
+    .xs-pd-l15 {
         padding-left: 15px !important;
     }
     .inner-your-account {
@@ -512,7 +512,6 @@
         }
     }
     .welcome-msg{
-        margin-top: 15px;
         .plan-msg{
             margin-bottom:15px;
         }

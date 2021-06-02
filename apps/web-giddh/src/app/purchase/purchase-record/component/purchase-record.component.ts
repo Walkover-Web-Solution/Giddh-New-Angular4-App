@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppState } from '../../../store';
 import { GeneralActions } from '../../../actions/general/general.actions';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { StateDetailsRequest } from '../../../models/api-models/Company';
+import { CompanyActions } from '../../../actions/company.actions';
 
 @Component({
     styleUrls: [`./purchase-record.component.scss`],
@@ -18,8 +20,16 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold if we need to refresh purchase bill list */
     public refreshPurchaseBill: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
 
-    constructor(private store: Store<AppState>, private generalAction: GeneralActions, public route: ActivatedRoute, public router: Router) {
+    constructor(
+        private store: Store<AppState>,
+        private generalAction: GeneralActions,
+        public route: ActivatedRoute,
+        private companyActions: CompanyActions,
+        public router: Router
+    ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type']) {
                 this.activeTab = params['type'];
@@ -34,6 +44,7 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.store.dispatch(this.generalAction.setAppTitle('/pages/purchase-management/purchase'));
+        this.saveLastState(this.activeTab);
     }
 
     /**
@@ -54,6 +65,7 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
      */
     public onTabChanged(tabName: string): void {
         this.router.navigate(['pages/purchase-management/purchase/', tabName], { replaceUrl: true });
+        this.saveLastState(tabName);
     }
 
     /**
@@ -64,5 +76,21 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
      */
     public purchaseOrderOutput(event: boolean): void {
         this.refreshPurchaseBill = event;
+    }
+
+    /**
+     * Saves the last state for purchase module
+     *
+     * @private
+     * @param {string} tabName Current tab name
+     * @memberof PurchaseRecordComponent
+     */
+    private saveLastState(tabName: string): void {
+        let companyUniqueName = null;
+        this.store.pipe(select(appState => appState.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
+        let stateDetailsRequest = new StateDetailsRequest();
+        stateDetailsRequest.companyUniqueName = companyUniqueName;
+        stateDetailsRequest.lastState = `pages/purchase-management/purchase/${tabName}`;
+        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 }

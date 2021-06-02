@@ -4,6 +4,8 @@ import * as _moment from 'moment';
 import { NgxDaterangepickerComponent } from './ngx-daterangepicker.component';
 import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 const moment = _moment;
 
@@ -131,6 +133,9 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     @Output() rangeClicked: EventEmitter<Object> = new EventEmitter();
     @Output() datesUpdated: EventEmitter<Object> = new EventEmitter();
 
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
     constructor(
         public viewContainerRef: ViewContainerRef,
         public _changeDetectorRef: ChangeDetectorRef,
@@ -150,13 +155,13 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     }
 
     ngOnInit() {
-        this.picker.rangeClicked.asObservable().subscribe((range: any) => {
+        this.picker.rangeClicked.asObservable().pipe(takeUntil(this.destroyed$)).subscribe((range: any) => {
             this.rangeClicked.emit(range);
         });
-        this.picker.datesUpdated.asObservable().subscribe((range: any) => {
+        this.picker.datesUpdated.asObservable().pipe(takeUntil(this.destroyed$)).subscribe((range: any) => {
             this.datesUpdated.emit(range);
         });
-        this.picker.choosedDate.asObservable().subscribe((change: any) => {
+        this.picker.choosedDate.asObservable().pipe(takeUntil(this.destroyed$)).subscribe((change: any) => {
             if (change) {
                 const value = {};
                 value[this._startKey] = change.startDate;
@@ -318,7 +323,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     setPosition() {
         const container = document.getElementsByTagName("ngx-daterangepicker-material")[0] as HTMLElement;
         if(container) {
-            const element = this._el.nativeElement;
+            const element = this._el?.nativeElement;
             let position = this.getPosition(element);
             let screenWidth = window.innerWidth;
             let totalWidth = container.offsetWidth + position.x;
@@ -347,7 +352,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         if (targetElement.classList.contains('ngx-daterangepicker-action')) {
             return;
         }
-        const clickedInside = this._el.nativeElement.contains(targetElement);
+        const clickedInside = this._el?.nativeElement.contains(targetElement);
         if (!clickedInside) {
             this.hide();
         }
@@ -356,5 +361,15 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     @HostListener('window:resize', ['$event'])
     windowResize(event) {
         this.hide();
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof NgxDaterangepickerDirective
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

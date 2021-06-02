@@ -1,4 +1,4 @@
-<div id="" class="">
+<div>
     <div class="modal-header">
         <h3 class="modal-title bg" id="modal-title" *ngIf="mode === 'create' || !mode">Create Group </h3>
         <h3 class="modal-title bg" id="modal-title" *ngIf="mode === 'update'">Update Group </h3>
@@ -7,19 +7,19 @@
     <div class="modal-body clearfix" id="export-body">
         <form name="newRole" [formGroup]="addBunchForm" novalidate class="" autocomplete="off">
             <div class="row">
-                <div class="col-xs-6 form-group">
+                <div class="col-md-6 form-group">
                     <label>Name <sup>*</sup></label>
                     <input type="text" class="form-control" formControlName="name" (blur)="generateUniqueName()" />
                 </div>
 
-                <div class="col-xs-6 form-group">
+                <div class="col-md-6 form-group">
                     <label>UniqueName <sup>*</sup></label>
                     <input type="text" class="form-control" formControlName="uniqueName" />
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-xs-12 form-group">
+                <div class="col-md-12 form-group">
                     <label>Description</label>
                     <textarea class="form-control" formControlName="description"></textarea>
                 </div>

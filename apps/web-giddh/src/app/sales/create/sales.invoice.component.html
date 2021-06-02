@@ -1,5 +1,5 @@
-<div class="pd-b1 upper-layer   clearfix">
-    <div class="col-xs-12 clearfix">
+<div class="pd-b1 upper-layer row clearfix">
+    <div class="col-md-12 clearfix">
         <div class="btn-group" dropdown>
             <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                 aria-controls="dropdown-basic">
@@ -23,14 +23,8 @@
 
 <ng-container *ngIf="isUpdateDataInProcess">
 
-    <div class="loaderClass">
-        <div class="no-data mr-t2 loader-main">
-            <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-            <div class="spinner2">
-                <div class="cube1"></div>
-                <div class="cube2"></div>
-            </div>
-        </div>
+    <div class="loader-class">
+        <giddh-page-loader></giddh-page-loader>
     </div>
 
 </ng-container>
@@ -40,16 +34,16 @@
         [ngClass]="{ ' customer-invoice-form ' : !invFormData.voucherDetails.customerName , 'customer-invoice-form-purchase': isPurchaseInvoice } ">
         <div class="clearfix sales-invoice-content ">
 
-            <div class="upper-layer " [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }">
-                <div class="clearfix">
-                    <div class="col-md-9 pd0">
-                        <div class="customer-name" [hidden]="isPurchaseInvoice">
+            <div class="upper-layer" [ngClass]="{' first-table' : !invFormData.voucherDetails.customerName }">
+                <div class="clearfix row">
+                    <div class="col-md-9 p-0">
+                        <div class="customer-name row" [hidden]="isPurchaseInvoice">
                             <div class="col-sm-2">
                                 <label>Customer Name</label>
                             </div>
                             <div class="col-sm-5">
                                 <ng-container *ngIf="!isCashInvoice">
-                                    <sales-sh-select style="width:100%; float: left;" name="voucherDetails.customerName"
+                                    <sales-sh-select class="width-100 float-left" name="voucherDetails.customerName"
                                         [options]="customerAcList$ | async"
                                         [(ngModel)]="invFormData.voucherDetails.tempCustomerName"
                                         [customFilter]="customMoveGroupFilter"
@@ -62,16 +56,14 @@
                                         (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
                                         [showClear]="!isUpdateMode" [disabled]="isUpdateMode">
                                         <ng-template #optionTemplate let-option="option">
-                                            <a href="javascript:void(0)" class="list-item"
-                                                style="border-bottom: 1px solid #ccc;">
+                                            <a href="javascript:void(0)" class="list-item bd-rb">
                                                 <div class="item">{{ option.label }}</div>
                                                 <div class="item-unique">{{ option.value }}</div>
                                             </a>
                                         </ng-template>
                                         <ng-template #notFoundLinkTemplate>
-                                            <a href="javascript:void(0)" class="list-item" [keyboardShortcut]="'alt+c'"
-                                                (onShortcutPress)="toggleAccountAsidePane()"
-                                                style="width:100%; display: flex;justify-content: space-between;">
+                                            <a href="javascript:void(0)" class="list-item width-100 d-flex justify-content-between" [keyboardShortcut]="'alt+c'"
+                                                (onShortcutPress)="toggleAccountAsidePane()">
                                                 <div class="item">Add Customer</div>
                                                 <div class="item">Alt+C</div>
                                             </a>
@@ -81,7 +73,7 @@
 
                                 <ng-container *ngIf="isCashInvoice">
                                     <input type="text" #cashInvoiceInput name="voucherDetails.customerName"
-                                        class="form-control cashInvoiceInput"
+                                        class="form-control cash-invoice-input"
                                         [(ngModel)]="invFormData.voucherDetails.customerName" [readOnly]="isUpdateMode">
                                 </ng-container>
 
@@ -89,17 +81,17 @@
 
 
                         </div>
-                        <div class="vendore-name" [hidden]="!isPurchaseInvoice">
+                        <div class="vendor-name row" [hidden]="!isPurchaseInvoice">
                             <div class="col-sm-2">
                                 <label>Vendor Name</label>
                             </div>
                             <div class="col-sm-5">
                                 <div class="flex-row-child">
-                                    <div class="form-group noMarg">
+                                    <div class="form-group no-margin">
 
                                         <!-- [useInBuiltFilterForIOptionTypeItems]="true" -->
                                         <!--  -->
-                                        <sales-sh-select style="width:100%;" name="voucherDetails.customerName"
+                                        <sales-sh-select class="width-100" name="voucherDetails.customerName"
                                             [options]="customerAcList$ | async"
                                             [(ngModel)]="invFormData.voucherDetails.tempCustomerName"
                                             [customFilter]="customMoveGroupFilter"
@@ -112,8 +104,7 @@
                                             (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
                                             [showClear]="!isUpdateMode">
                                             <ng-template #optionTemplate let-option="option">
-                                                <a href="javascript:void(0)" class="list-item"
-                                                    style="border-bottom: 1px solid #ccc;">
+                                                <a href="javascript:void(0)" class="list-item bd-rb">
                                                     <div class="item">{{ option.label }}</div>
                                                     <div class="item-unique">{{ option.value }}</div>
                                                 </a>
@@ -124,10 +115,11 @@
                             </div>
 
                         </div>
+                        <div class="row">
                         <div class="col-sm-10 col-sm-offset-2">
                             <ng-container>
-                                <section class="form-inline  ">
-                                    <div class=" wrap-billing-address clearfix">
+                                <section class="form-inline">
+                                    <div class="wrap-billing-address clearfix">
                                         <ng-container *ngIf="isSalesInvoice || isPurchaseInvoice">
                                             <img src="assets/images/new/search_customer.svg"
                                                 class="img-responsive search-arrow-image "
@@ -140,7 +132,7 @@
                                                 [ngClass]="{'cash-invoice-tip-img' : isCashInvoice}" />
                                         </ng-container>
                                         <div class="row">
-                                            <div class="col-xs-6">
+                                            <div class="col-6">
                                                 <div class="form-group">
                                                     <label>Billing Address</label>
                                                     <div class="billing-address clearfix">
@@ -149,7 +141,7 @@
                                                             [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]"
                                                             rows="3" autocomplete="off" autofocus="off"
                                                             aria-autocomplete="none"></textarea>
-                                                        <div class="">
+                                                        <div>
                                                             <div class="col-sm-6 pd">
                                                                 <!-- <label>Country</label> -->
 
@@ -158,7 +150,7 @@
                                                                 </label>
 
                                                             </div>
-                                                            <div class="col-sm-6 pd stateField">
+                                                            <div class="col-sm-6 pd state-field">
                                                                 <!-- <label>State</label> -->
                                                                 <!-- remove disabled after api changes -->
                                                                 <sales-sh-select [disabled]="isUpdateMode"
@@ -186,8 +178,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-xs-6">
-                                                <div class="form-group p0 width100">
+                                            <div class="col-6">
+                                                <div class="form-group p-0 width-100">
                                                     <label>
                                                         <input type="checkbox" (change)="autoFillShippingDetails()"
                                                             name="autoFillShipping" [attr.checked]="true"
@@ -210,7 +202,7 @@
                                                                         </label>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-sm-6 pd stateField">
+                                                                <div class="col-sm-6 pd state-field">
                                                                     <!-- <label>State</label> -->
                                                                     <!-- <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></ng-select> -->
                                                                     <!-- (selected)="autoFillShippingDetails()" -->
@@ -248,11 +240,12 @@
                                 </section>
                             </ng-container>
                         </div>
+                        </div>
                     </div>
-                    <div class="col-md-3  balncDue">
-                        <div class=" text-right" *ngIf="invFormData.voucherDetails.customerName && !isCashInvoice"
+                    <div class="col-md-3 balance-due">
+                        <div class="text-right" *ngIf="invFormData.voucherDetails.customerName && !isCashInvoice"
                             [hidden]="isPurchaseInvoice">
-                            <p *ngIf="toggleFieldForSales" class="fs20 b">
+                            <p *ngIf="toggleFieldForSales" class="font-20 b">
                                 <span class="balance-due">Balance Due: </span>
 
                                 <span class="sp-rupees">Rs
@@ -264,9 +257,9 @@
                 </div>
             </div>
 
-            <div class="">
-                <div class="col-md-9 pd0">
-                    <div class="attention-to clearfix">
+            <div>
+                <div class="col-md-9 p-0">
+                    <div class="attention-to clearfix row">
                         <div class="col-sm-2">
                             <label>Attention to</label>
                         </div>
@@ -274,14 +267,14 @@
                             <div class="form-group">
                                 <!--col-xs-3 -->
                                 <input type="text" name="accountDetails.attention" placeholder="Attention to"
-                                    class="form-control attentionTo"
+                                    class="form-control attention-to"
                                     [(ngModel)]="invFormData.accountDetails.attentionTo" />
                             </div>
                         </div>
 
 
                     </div>
-                    <div class="email-id clearfix">
+                    <div class="email-id clearfix row">
                         <div class="col-sm-2">
                             <label>Email Id</label>
                         </div>
@@ -289,45 +282,45 @@
                             <div class="form-group">
                                 <!--col-xs-3 -->
                                 <input type="email" placeholder="someone@example.com" name="accountDetails.email"
-                                    class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.email" />
+                                    class="form-control attention-to" [(ngModel)]="invFormData.accountDetails.email" />
                             </div>
                         </div>
 
 
                     </div>
-                    <div class="mobile-number clearfix">
+                    <div class="mobile-number clearfix row">
                         <div class="col-sm-2">
                             <label>Mobile Number</label>
                         </div>
                         <div class="col-sm-5">
                             <div class="form-group">
                                 <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text"
-                                    name="accountDetails.mobileNumber" class="form-control attentionTo"
+                                    name="accountDetails.mobileNumber" class="form-control attention-to"
                                     [(ngModel)]="invFormData.accountDetails.contactNumber" />
                             </div>
                         </div>
 
 
                     </div>
-                    <div class="inovice-purchaseInvoice" [ngClass]="{'forPurchase': isPurchaseInvoice}">
+                    <div class="invoice-purchase-invoice row" [ngClass]="{'forPurchase': isPurchaseInvoice}">
                         <div class="col-sm-2">
                             <label> {{ !isPurchaseInvoice ? 'Invoice No.' : 'Purchase Invoice No.' }}</label>
                         </div>
                         <div class="col-sm-5">
                             <input type="text" name="accountDetails.invoiceNum"
-                                class="form-control invoiceDate attentionTo"
-                                [ngClass]="{'dateinvoice': !isPurchaseInvoice }"
+                                class="form-control invoice-date attention-to"
+                                [ngClass]="{'date-invoice': !isPurchaseInvoice }"
                                 [disabled]="isUpdateMode  || !useCustomInvoiceNumber"
                                 [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
                         </div>
                         <div class="col-sm-5 invoice-date-due-date">
                             <div class="form-inline ">
-                                <div class="form-group m-r-15">
+                                <div class="form-group mr-r15">
                                     <!--col-xs-2-->
                                     <label>{{isPurchaseInvoice ? 'Bill Date' : 'Invoice Date' }} </label>
 
                                     <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel"
-                                        name="voucherDate" class="form-control dateinvoice" bsDatepicker
+                                        name="voucherDate" class="form-control date-invoice" bsDatepicker
                                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                         [(ngModel)]="invFormData.voucherDetails.voucherDate" [disabled]="isUpdateMode"
                                         [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" />
@@ -342,7 +335,7 @@
                                     <label> {{isPurchaseInvoice ? ' Due Date' : 'Due Date'}}</label>
 
                                     <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate"
-                                        class="form-control dateinvoice" bsDatepicker
+                                        class="form-control date-invoice" bsDatepicker
                                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                         [(ngModel)]="invFormData.voucherDetails.dueDate"
                                         [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)" />
@@ -353,13 +346,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="">
+                    <div>
                         <ng-container>
 
                             <section
-                                class="staticInvoiceTable salseInvoicetable clearfix mr-b2 whiteBg container-fluid ng-tns-c8-0 ">
-                                <div class="table_width-small ">
-                                    <table class="table  table-custom-invoice  basic">
+                                class="static-invoice-table sales-invoice-table clearfix mr-b2 white-bg container-fluid ng-tns-c8-0 ">
+                                <div class="table-width-small">
+                                    <table class="table table-custom-invoice basic">
                                         <thead>
                                             <tr>
 
@@ -379,29 +372,29 @@
                                                     *ngIf="activeIndx !== entryIdx">
                                                     <td>{{ entryIdx + 1 }}</td>
                                                     <td>
-                                                        <div class="productName">
+                                                        <div class="product-name">
                                                             <label *ngIf="!transaction.accountName"
-                                                                class="selectAccountLabel">Click to Select
+                                                                class="select-account-label">Click to Select
                                                                 Account</label> {{transaction.accountName}}
                                                             <span
                                                                 *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}}
                                                                 )</span>
 
                                                         </div>
-                                                        <div class="skuNumber">
+                                                        <div class="sku-number">
                                                             <label>SKU:</label>Number
                                                         </div>
-                                                        <div class="discription">
+                                                        <div class="description">
                                                             {{transaction.description}}
 
                                                         </div>
                                                         <p class="small text-muted"
                                                             *ngIf="transaction.sku_and_customfields">
                                                             {{transaction.sku_and_customfields}}</p>
-                                                        <div class="dateHsnCode">
+                                                        <div class="date-hsn-code">
                                                             <div class="row">
-                                                                <div class="col-xs-6" *ngIf="entry.entryDate">
-                                                                    <div class="entryDate">
+                                                                <div class="col-6" *ngIf="entry.entryDate">
+                                                                    <div class="entry-date">
                                                                         <label>Entry Date: </label>
                                                                         {{entry.entryDate | date: 'dd-MM-yyyy'}}
                                                                         <span class="edit-icon" *ngIf="!isUpdateMode">
@@ -412,9 +405,9 @@
 
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-xs-6"
+                                                                <div class="col-6"
                                                                     *ngIf="transaction.hsnNumber || transaction.sacNumber">
-                                                                    <div class="hsnCode text-right">
+                                                                    <div class="hsn-code text-right">
                                                                         <label> HSN/SAC:</label>
                                                                         <span>
                                                                             {{transaction.hsnOrSac === 'hsn' ? transaction.hsnNumber : transaction.sacNumber}}
@@ -462,7 +455,7 @@
                                                     </td>
                                                     <td class="text-right">{{entry.taxSum}}%</td>
                                                     <td class="text-right">
-                                                        <div style="display: flex;flex-direction: column;">
+                                                        <div class="d-flex flex-column">
                                                             <span>{{transaction.total | number:'1.2-2'}}</span>
                                                             <span *ngIf="entry.isOtherTaxApplicable">
                                                                 {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
@@ -470,7 +463,7 @@
                                                             </span>
                                                         </div>
                                                     </td>
-                                                    <td class="text-center" style="width:3%;">
+                                                    <td class="text-center" width="3%">
                                                         <span class="cp" (click)="removeTransaction(entryIdx)"
                                                             *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
                                                             <i class="icon-trash" aria-hidden="true"></i>
@@ -480,7 +473,7 @@
                                                 <tr *ngIf="activeIndx === entryIdx">
                                                     <td>{{ entryIdx + 1 }}</td>
                                                     <td>
-                                                        <div class="productName">
+                                                        <div class="product-name">
                                                             <div class="ng-select-wrap">
                                                                 <sh-select [options]="salesAccounts$ | async"
                                                                     [(ngModel)]="transaction.fakeAccForSelect2"
@@ -496,8 +489,7 @@
                                                                     <ng-template #optionTemplate let-option="option">
                                                                         <ng-container *ngIf="!option.additional?.stock">
                                                                             <a href="javascript:void(0)"
-                                                                                class="list-item"
-                                                                                style="border-bottom: 1px solid #ccc;">
+                                                                                class="list-item bd-rb">
                                                                                 <div class="item">{{ option.label }}
                                                                                 </div>
                                                                                 <div class="item-unique">
@@ -507,8 +499,7 @@
                                                                         </ng-container>
                                                                         <ng-container *ngIf="option.additional?.stock">
                                                                             <a href="javascript:void(0)"
-                                                                                class="list-item"
-                                                                                style="border-bottom: 1px solid #ccc;">
+                                                                                class="list-item bd-rb">
                                                                                 <div class="item">{{ option.label }}
                                                                                 </div>
                                                                                 <div class="item-unique">
@@ -524,11 +515,11 @@
                                                             </div>
 
                                                         </div>
-                                                        <div class="" *ngIf="transaction.fakeAccForSelect2">
-                                                            <div class="skuNumber">
+                                                        <div *ngIf="transaction.fakeAccForSelect2">
+                                                            <div class="sku-number">
                                                                 <label>SKU:</label>Number
                                                             </div>
-                                                            <div class="discription">
+                                                            <div class="description">
                                                                 <textarea type="text" placeholder="Add Description"
                                                                     name="transaction.description_{{entryIdx}}"
                                                                     class="form-control"
@@ -537,10 +528,10 @@
                                                                     *ngIf="transaction.sku_and_customfields">
                                                                     {{transaction.sku_and_customfields}}</p>
                                                             </div>
-                                                            <div class="dateHsnCode">
+                                                            <div class="date-hsn-code">
                                                                 <div class="row">
-                                                                    <div class="col-xs-6">
-                                                                        <div class="entryDate">
+                                                                    <div class="col-6">
+                                                                        <div class="entry-date">
                                                                             <label>Entry Date: </label>
                                                                             <span *ngIf="!isUpdateMode">
                                                                                 <input type="text"
@@ -566,9 +557,9 @@
 
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-xs-6">
-                                                                        <div class="wrap-hsnBox">
-                                                                            <div class="hsnCode text-right"
+                                                                    <div class="col-6">
+                                                                        <div class="wrap-hsn-box">
+                                                                            <div class="hsn-code text-right"
                                                                                 (click)="$event.stopPropagation();hsnDropdownShow=!hsnDropdownShow">
                                                                                 <label>HSN/SAC:</label>
                                                                                 <span>
@@ -578,7 +569,7 @@
                                                                                     {{transaction.hsnOrSac === 'hsn' ? transaction.hsnNumber : transaction.sacNumber }}
                                                                                     <span
                                                                                         *ngIf="!transaction.hsnNumber && !transaction.sacNumber"
-                                                                                        class="updateText cp">Update
+                                                                                        class="update-text cp">Update
                                                                                     </span>
                                                                                     <span class="edit-icon">
                                                                                         <img
@@ -589,7 +580,7 @@
                                                                             </div>
 
 
-                                                                            <div class="hsnCodeDropdown"
+                                                                            <div class="hsn-code-dropdown"
                                                                                 *ngIf="hsnDropdownShow">
                                                                                 <label>HSN/SAC:</label>
                                                                                 <input type="text" maxLength="10"
@@ -665,7 +656,7 @@
                                                     </td>
                                                     <td>
 
-                                                        <div class=" text-right">
+                                                        <div class="text-right">
                                                             <discount-list #discountComponent [isMenuOpen]="false"
                                                                 [discountAccountsDetails]="entry.discounts"
                                                                 (discountTotalUpdated)="entry.discountSum = $event; selectedDiscountEvent(transaction, entry)"
@@ -675,7 +666,7 @@
 
                                                     </td>
                                                     <td class="text-right">
-                                                        <sales-tax-list class="salesTax" [showTaxPopup]="false"
+                                                        <sales-tax-list class="sales-tax" [showTaxPopup]="false"
                                                             [applicableTaxes]="transaction.applicableTaxes"
                                                             [exceptTaxTypes]="exceptTaxTypes"
                                                             [allowedSelectionOfAType]="[{ type: ['GST', 'commongst', 'InputGST'], count:1 } ]"
@@ -690,8 +681,8 @@
                                                             [(ngModel)]="transaction.total" readonly
                                                             decimalDigitsDirective [DecimalPlaces]="2" />
 
-                                                        <div class="wrap-otherTax">
-                                                            <input type="checkbox" class="other-taxes-checkobx"
+                                                        <div class="wrap-other-tax">
+                                                            <input type="checkbox" class="other-taxes-checkbox"
                                                                 [(ngModel)]="entry.isOtherTaxApplicable"
                                                                 *ngIf="!entry.isOtherTaxApplicable"
                                                                 name="entry.isOtherTaxApplicable_{{entryIdx}}"
@@ -699,7 +690,7 @@
                                                                 (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
                                                             <label for="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                                 *ngIf="!entry.isOtherTaxApplicable"
-                                                                class="otherTaxLable" style="font-size:13px;">Other
+                                                                class="other-tax-label font-13">Other
                                                                 Tax?</label>
                                                         </div>
                                                         <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1">
@@ -711,11 +702,10 @@
                                                                         <img src="assets/images/edit-pencilicon.svg">
                                                                     </a>
                                                                 </span>
-                                                                <input class="text-right otherTaxsinput"
+                                                                <input class="text-right other-taxes-input"
                                                                     disabled="disabled" [(ngModel)]="entry.otherTaxSum"
                                                                     name="entry.otherTaxesSum" />
-                                                                <p
-                                                                    style="margin-top: 5px; font-size: 12px; text-transform: capitalize;">
+                                                                <p class="mr-t05 font-12 text-capitalize">
                                                                     {{ entry.otherTaxModal?.appliedOtherTax?.name}}</p>
                                                             </span>
 
@@ -724,7 +714,7 @@
                                                         <!--                  <ng-container-->
                                                         <!--                    *ngTemplateOutlet="otherTaxSidePane;context: {$implicit: selectedEntry }"></ng-container>-->
                                                     </td>
-                                                    <td class="action-panel-td text-center" style="width:3%;">
+                                                    <td class="action-panel-td text-center" width="3%">
                                                         <span class="cp" (click)="removeTransaction(entryIdx)"
                                                             *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
                                                             <i class="icon-trash" aria-hidden="true"></i>
@@ -736,8 +726,8 @@
 
                                         </tbody>
 
-                                        <div class="p-4 aqua-color add-line-bulk-item" style="width: max-content;">
-                                            <a class="" href="javascript:void 0" (click)="addBlankRow(null)">+ Add New
+                                        <div class="p-4 aqua-color add-line-bulk-item width-100">
+                                            <a href="javascript:void 0" (click)="addBlankRow(null)">+ Add New
                                                 Line</a>
                                         </div>
 
@@ -745,7 +735,7 @@
 
                                             <tr>
                                                 <td colspan="4">
-                                                    <div class="">
+                                                    <div>
                                                         <div class="collapse-pane clearfix">
                                                             <div class="collapse-pane-heading"
                                                                 (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
@@ -759,9 +749,9 @@
                                                                 </div>
                                                             <div class="ico-head">Other Details</div>
                                                             <div [collapse]="isOthrDtlCollapsed"
-                                                                class="clearfix max-600 pdL3 mr0">
+                                                                class="clearfix max-width-600 pd-l3 m-0">
                                                                 <div class="row">
-                                                                    <div class="form-group col-xs-4">
+                                                                    <div class="form-group col-4">
                                                                         <!-- <label>Ship Date</label> -->
                                                                         <input type="text" #shippingDate="ngModel"
                                                                             [placeholder]="giddhDateFormat" bsDatepicker
@@ -778,14 +768,14 @@
                                                                         </p>
                                                                         <!--[placeholder]="giddhDateFormat"-->
                                                                     </div>
-                                                                    <div class="form-group col-xs-4">
+                                                                    <div class="form-group col-4">
                                                                         <!-- <label>Ship Via</label> -->
                                                                         <input type="text" name="shippedVia"
                                                                             [(ngModel)]="invFormData.templateDetails.other.shippedVia"
                                                                             class="form-control"
                                                                             placeholder="Ship Via" />
                                                                     </div>
-                                                                    <div class="form-group col-xs-4">
+                                                                    <div class="form-group col-4">
                                                                         <!-- <label>Tracking No.</label> -->
                                                                         <input type="text" name="trackingNumber"
                                                                             [(ngModel)]="invFormData.templateDetails.other.trackingNumber"
@@ -794,21 +784,21 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
-                                                                    <div class="form-group col-xs-4">
+                                                                    <div class="form-group col-4">
                                                                         <!-- <label>Field 1</label> -->
                                                                         <input type="text" name="customField1"
                                                                             [(ngModel)]="invFormData.templateDetails.other.customField1"
                                                                             class="form-control"
                                                                             placeholder="Field 1" />
                                                                     </div>
-                                                                    <div class="form-group col-xs-4">
+                                                                    <div class="form-group col-4">
                                                                         <!-- <label>Field 2</label> -->
                                                                         <input type="text" name="customField2"
                                                                             [(ngModel)]="invFormData.templateDetails.other.customField2"
                                                                             class="form-control"
                                                                             placeholder="Field 2" />
                                                                     </div>
-                                                                    <div class="form-group col-xs-4">
+                                                                    <div class="form-group col-4">
                                                                         <!-- <label>Field 3</label> -->
                                                                         <input type="text" name="customField3"
                                                                             [(ngModel)]="invFormData.templateDetails.other.customField3"
@@ -819,19 +809,19 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="pd-t1 pl0 max-600" *ngIf="!isPurchaseInvoice">
+                                                    <div class="pd-t1 pl-0 max-width-600" *ngIf="!isPurchaseInvoice">
                                                         <label class="mr-b1">Message</label>
-                                                        <textarea style="height:120px !important" class="form-control"
+                                                        <textarea rows="3" class="form-control"
                                                             name="message2"
                                                             [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                                                     </div>
                                                     <!-- commented due to presently attachfile key is not available in request
         -->
-                                                    <div class="pd-t1 pl0 max-600 pos-rel" *ngIf="isPurchaseInvoice">
+                                                    <div class="pd-t1 pl-0 max-width-600 position-relative" *ngIf="isPurchaseInvoice">
                                                         <label class="mr-b1"><i
                                                                 class="icon-file-path"></i>
                                                             Attachment</label>
-                                                        <label class="custom-file-label form-control cp pos-rel"
+                                                        <label class="custom-file-label form-control cp position-relative"
                                                             for="invoiceFile"> <em *ngIf="!selectedFileName">Drag/Drop
                                                                 file or click here</em> <em *ngIf="selectedFileName"
                                                                 class="text-success">{{selectedFileName}}</em>
@@ -847,69 +837,69 @@
                                                     </div>
                                                 </td>
                                                 <td colspan="4">
-                                                    <section class="tableSec form-group">
-                                                        <div class="tableRow">
-                                                            <div class="tableCell">Total Amount</div>
-                                                            <div class="tableCell figureCell">
+                                                    <section class="table-sec form-group">
+                                                        <div class="table-row">
+                                                            <div class="table-cell">Total Amount</div>
+                                                            <div class="table-cell figure-cell">
                                                                 {{invFormData.voucherDetails.subTotal | number:'1.2-2'}}
                                                             </div>
                                                         </div>
-                                                        <div class="tableRow">
-                                                            <div class="tableCell">Discount</div>
-                                                            <div class="tableCell figureCell">
+                                                        <div class="table-row">
+                                                            <div class="table-cell">Discount</div>
+                                                            <div class="table-cell figure-cell">
                                                                 -{{invFormData.voucherDetails.totalDiscount | number:'1.2-2'}}
                                                             </div>
                                                         </div>
-                                                        <div class="tableRow">
-                                                            <div class="tableCell">Taxable Value</div>
-                                                            <div class="tableCell figureCell">
+                                                        <div class="table-row">
+                                                            <div class="table-cell">Taxable Value</div>
+                                                            <div class="table-cell figure-cell">
                                                                 {{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}
                                                             </div>
                                                         </div>
 
-                                                        <div class="tableRow">
-                                                            <div class="tableCell">Tax</div>
-                                                            <div class="tableCell figureCell">
+                                                        <div class="table-row">
+                                                            <div class="table-cell">Tax</div>
+                                                            <div class="table-cell figure-cell">
                                                                 {{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}
                                                             </div>
                                                         </div>
 
-                                                        <div class="tableRow">
-                                                            <div class="tableCell">CESS</div>
-                                                            <div class="tableCell figureCell">
+                                                        <div class="table-row">
+                                                            <div class="table-cell">CESS</div>
+                                                            <div class="table-cell figure-cell">
                                                                 {{invFormData.voucherDetails.cessTotal | number:'1.2-2'}}
                                                             </div>
                                                         </div>
 
-                                                        <div class="tableRow">
-                                                            <div class="tableCell">
+                                                        <div class="table-row">
+                                                            <div class="table-cell">
                                                                 <strong>Total</strong>
                                                             </div>
-                                                            <div class="tableCell figureCell">
+                                                            <div class="table-cell figure-cell">
                                                                 <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
                                                             </div>
                                                         </div>
 
-                                                        <div class="tableRow"
+                                                        <div class="table-row"
                                                             *ngIf="invFormData.voucherDetails.tcsTotal > 0">
-                                                            <div class="tableCell">TCS</div>
-                                                            <div class="tableCell figureCell">
+                                                            <div class="table-cell">TCS</div>
+                                                            <div class="table-cell figure-cell">
                                                                 {{invFormData.voucherDetails.tcsTotal | number:'1.2-2'}}
                                                             </div>
                                                         </div>
 
-                                                        <div class="tableRow"
+                                                        <div class="table-row"
                                                             *ngIf="invFormData.voucherDetails.tdsTotal > 0">
-                                                            <div class="tableCell">TDS</div>
-                                                            <div class="tableCell figureCell">
+                                                            <div class="table-cell">TDS</div>
+                                                            <div class="table-cell figure-cell">
                                                                 {{invFormData.voucherDetails.tdsTotal | number:'1.2-2'}}
                                                             </div>
                                                         </div>
 
 
-                                                        <div class="tableRow" *ngIf="isSalesInvoice || isCashInvoice">
+                                                        <div class="table-row" *ngIf="isSalesInvoice || isCashInvoice">
                                                             <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
-                                                            <div class="tableCell deposit-section">
+                                                            <div class="table-cell deposit-section">
                                                                 <!--
         <div class="btn-group" dropdown #depositDropdown="bs-dropdown" [autoClose]="false">
         -->
@@ -919,17 +909,17 @@
         {{ isPurchaseInvoice ? 'Payment' : 'Deposit' }}
         </button> -->
                                                                     <div (click)="clickedInside($event)"
-                                                                        id="deposit-dropdown" class=" form-group pd-1">
+                                                                        id="deposit-dropdown" class="form-group pd-1">
                                                                         <p>Deposit</p>
                                                                         <ul>
 
 
                                                                             <li role="menuitem">
-                                                                                <div class="">
-                                                                            <li role="menuitem" class="mr-t1 ">
-                                                                                <div class="clearfix paymentMode">
+                                                                                <div>
+                                                                            <li role="menuitem" class="mr-t1">
+                                                                                <div class="clearfix payment-mode">
 
-                                                                                    <sh-select class="pull-right "
+                                                                                    <sh-select class="pull-right"
                                                                                         name="depositAccountUniqueName"
                                                                                         [options]="bankAccounts$ | async"
                                                                                         [(ngModel)]="depositAccountUniqueName"
@@ -944,8 +934,7 @@
                                                                                         <ng-template #optionTemplate1
                                                                                             let-option="option">
                                                                                             <a href="javascript:void(0)"
-                                                                                                class="list-item"
-                                                                                                style="border-bottom: 1px solid #ccc;">
+                                                                                                class="list-item bd-rb">
                                                                                                 <div class="item">
                                                                                                     {{ option.label }}
                                                                                                 </div>
@@ -967,20 +956,20 @@
                                                                                     (blur)="txnChangeOccurred()"
                                                                                     placeholder="Amount"
                                                                                     name="depositAmount"
-                                                                                    class="form-control amountField text-right pull-right max100"
+                                                                                    class="form-control amount-field text-right pull-right max-width-100"
                                                                                     [(ngModel)]="depositAmount"
                                                                                     [readonly]='isCashInvoice'
-                                                                                    [ngClass]='{"amountFiledCash": isCashInvoice}' />
+                                                                                    [ngClass]='{"amount-filed-cash": isCashInvoice}' />
                                                                                 <span *ngIf="isCashInvoice"
-                                                                                    class="amountField pull-right max100"
-                                                                                    [ngClass]='{"amountFiledCash": isCashInvoice}'>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
+                                                                                    class="amount-field pull-right max-width-100"
+                                                                                    [ngClass]='{"amount-filed-cash": isCashInvoice}'>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
 
                                                                                 <label class="pull-right">Amount</label>
                                                                             </li>
                                                                             <li *ngIf="toggleFieldForSales && !isCashInvoice"
                                                                                 class="clearfix mr-t1">
                                                                                 <strong
-                                                                                    class="pull-right balanceDueText">{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
+                                                                                    class="pull-right balance-due-text">{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
                                                                                 <strong class="pull-right">Balance
                                                                                     Due</strong>
                                                                             </li>
@@ -988,11 +977,11 @@
 
 
                                                                     </ul>
-                                                                    <div class="tableRow" *ngIf="toggleFieldForSales">
-                                                                        <div class="tableCell">
+                                                                    <div class="table-row" *ngIf="toggleFieldForSales">
+                                                                        <div class="table-cell">
 
                                                                         </div>
-                                                                        <div class="tableCell figureCell">
+                                                                        <div class="table-cell figure-cell">
 
                                                                         </div>
                                                                     </div>
@@ -1001,11 +990,11 @@
 
                                                         </div>
                                 </div>
-                                <div class="tableRow" *ngIf="isPurchaseInvoice">
-                                    <div class="tableCell">
+                                <div class="table-row" *ngIf="isPurchaseInvoice">
+                                    <div class="table-cell">
                                         <strong>Balance Due </strong>
                                     </div>
-                                    <div class="tableCell figureCell">
+                                    <div class="table-cell figure-cell">
                                         <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
                                     </div>
                                 </div>
@@ -1021,7 +1010,7 @@
                     </div>
                     <!-- region dummy data -->
                     <ng-template #template>
-                        <div class="">
+                        <div>
                             <div class="modal-header">
                                 <h4 class="modal-title pull-left">Add bulk items</h4>
                                 <button type="button" class="close pull-right" aria-label="Close"
@@ -1032,117 +1021,117 @@
                             <div class="modal-body">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="leftContent">
-                                            <div class="searchBox">
+                                        <div class="left-content">
+                                            <div class="search-box">
                                                 <input type="text" placeholder="Search stock">
                                             </div>
-                                            <div class="productList">
-                                                <div class="singleProductWrapper">
+                                            <div class="product-list">
+                                                <div class="single-product-wrapper">
                                                     <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
                                                     <p>
                                                         <span class="stockSku"><label>SKU: </label>Number</span>
                                                         <span class="rateStock"><label>Rate:</label> </span>$2000/-
                                                     </p>
                                                 </div>
-                                                <div class="singleProductWrapper">
+                                                <div class="single-product-wrapper">
                                                     <h5>Sales (Dummy text Lorem ipsum)</h5>
                                                     <p>
 
                                                         <span class="rateStock"><label>Rate:</label> </span>$2000/-
                                                     </p>
                                                 </div>
-                                                <div class="singleProductWrapper">
+                                                <div class="single-product-wrapper">
                                                     <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
                                                     <p>
                                                         <span class="stockSku"><label>SKU: </label>Number</span>
                                                         <span class="rateStock"><label>Rate:</label> </span>$2000/-
                                                     </p>
                                                 </div>
-                                                <div class="singleProductWrapper">
+                                                <div class="single-product-wrapper">
                                                     <h5>Sales (100 POLYSTER NON LINING FABRIC)</h5>
                                                     <p>
                                                         <span class="stockSku"><label>SKU: </label>Number</span>
                                                         <span class="rateStock"><label>Rate:</label> </span>$2000/-
                                                     </p>
                                                 </div>
-                                                <div class="singleProductWrapper">
+                                                <div class="single-product-wrapper">
                                                     <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
                                                     <p>
                                                         <span class="stockSku"><label>SKU: </label>Number</span>
                                                         <span class="rateStock"><label>Rate:</label> </span>$2000/-
                                                     </p>
                                                 </div>
-                                                <div class="singleProductWrapper">
+                                                <div class="single-product-wrapper">
                                                     <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
                                                     <p>
                                                         <span class="stockSku"><label>SKU: </label>Number</span>
                                                         <span class="rateStock"><label>Rate:</label> </span>$2000/-
                                                     </p>
                                                 </div>
-                                                <div class="singleProductWrapper">
+                                                <div class="single-product-wrapper">
                                                     <h5>Sales (100 POLYSTER NON)</h5>
                                                     <p>
                                                         <span class="stockSku"><label>SKU: </label>Number</span>
                                                         <span class="rateStock"><label>Rate:</label> </span>$2000/-
                                                     </p>
                                                 </div>
-                                                <div class="singleProductWrapper">
+                                                <div class="single-product-wrapper">
                                                     <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
                                                     <p>
                                                         <span class="stockSku"><label>SKU: </label>Number</span>
                                                         <span class="rateStock"><label>Rate:</label> </span>$2000/-
                                                     </p>
                                                 </div>
-                                                <div class="singleProductWrapper">
+                                                <div class="single-product-wrapper">
                                                     <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
                                                     <p>
                                                         <span class="stockSku"><label>SKU: </label>Number</span>
                                                         <span class="rateStock"><label>Rate:</label> </span>$2000/-
                                                     </p>
                                                 </div>
-                                                <div class="singleProductWrapper">
+                                                <div class="single-product-wrapper">
                                                     <h5>Sales (Dummy text Lorem ipsum)</h5>
                                                     <p>
 
                                                         <span class="rateStock"><label>Rate:</label> </span>$2000/-
                                                     </p>
                                                 </div>
-                                                <div class="singleProductWrapper">
+                                                <div class="single-product-wrapper">
                                                     <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
                                                     <p>
                                                         <span class="stockSku"><label>SKU: </label>Number</span>
                                                         <span class="rateStock"><label>Rate:</label> </span>$2000/-
                                                     </p>
                                                 </div>
-                                                <div class="singleProductWrapper">
+                                                <div class="single-product-wrapper">
                                                     <h5>Sales (100 POLYSTER NON LINING FABRIC)</h5>
                                                     <p>
                                                         <span class="stockSku"><label>SKU: </label>Number</span>
                                                         <span class="rateStock"><label>Rate:</label> </span>$2000/-
                                                     </p>
                                                 </div>
-                                                <div class="singleProductWrapper">
+                                                <div class="single-product-wrapper">
                                                     <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
                                                     <p>
                                                         <span class="stockSku"><label>SKU: </label>Number</span>
                                                         <span class="rateStock"><label>Rate:</label> </span>$2000/-
                                                     </p>
                                                 </div>
-                                                <div class="singleProductWrapper">
+                                                <div class="single-product-wrapper">
                                                     <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
                                                     <p>
                                                         <span class="stockSku"><label>SKU: </label>Number</span>
                                                         <span class="rateStock"><label>Rate:</label> </span>$2000/-
                                                     </p>
                                                 </div>
-                                                <div class="singleProductWrapper">
+                                                <div class="single-product-wrapper">
                                                     <h5>Sales (100 POLYSTER NON)</h5>
                                                     <p>
                                                         <span class="stockSku"><label>SKU: </label>Number</span>
                                                         <span class="rateStock"><label>Rate:</label> </span>$2000/-
                                                     </p>
                                                 </div>
-                                                <div class="singleProductWrapper">
+                                                <div class="single-product-wrapper">
                                                     <h5>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)</h5>
                                                     <p>
                                                         <span class="stockSku"><label>SKU: </label>Number</span>
@@ -1154,13 +1143,13 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6 pl-0">
-                                        <div class="rightContent">
-                                            <h4>Selected Stocks <span class="selectdStockNumber">(4)</span></h4>
+                                        <div class="right-content">
+                                            <h4>Selected Stocks <span class="selected-stock-number">(4)</span></h4>
                                             <hr>
-                                            <div class="wrapSelectedStocks">
-                                                <div class="singleSelectdStock clearfix">
+                                            <div class="wrap-selected-stocks">
+                                                <div class="single-selected-stock clearfix">
                                                     <div class="pull-left">
-                                                        <div class="stockName">
+                                                        <div class="stock-name">
                                                             <p>Sales (100 POLYSTER NON TEX…)</p>
                                                         </div>
 
@@ -1185,9 +1174,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="singleSelectdStock clearfix">
+                                                <div class="single-selected-stock clearfix">
                                                     <div class="pull-left">
-                                                        <div class="stockName">
+                                                        <div class="stock-name">
                                                             <p>Sales (100 POLYSTER TEX…)</p>
                                                         </div>
 
@@ -1212,9 +1201,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="singleSelectdStock clearfix">
+                                                <div class="single-selected-stock clearfix">
                                                     <div class="pull-left">
-                                                        <div class="stockName">
+                                                        <div class="stock-name">
                                                             <p>Sales (text)</p>
                                                         </div>
 
@@ -1240,9 +1229,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="temapletFooter">
+                                            <div class="template-footer">
                                                 <hr>
-                                                <div class="btn-group bulkItemBtnGroup">
+                                                <div class="btn-group bulk-item-btn-group">
                                                     <button class="btn btn-sm btn-success" type="button"
                                                         (click)="hsnDropdownShow=!hsnDropdownShow">
                                                         Save
@@ -1263,7 +1252,7 @@
 
                     </section>
 
-                    <section class="clearfix mr-b2 whiteBg container-fluid">
+                    <section class="clearfix mr-b2 white-bg container-fluid">
                     </section>
 
 
@@ -1274,9 +1263,9 @@
         </div>
 
 
-        <div class="clearfix wrapperCustomerTable  pdT2">
-            <table class="table customerInvoiceTable"
-                [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }" style="display: none;">
+        <div class="clearfix wrapper-customer-table pd-t2">
+            <table class="table customer-invoice-table d-none"
+                [ngClass]="{' first-table' : !invFormData.voucherDetails.customerName }">
                 <tr [hidden]="isPurchaseInvoice">
                     <td width="150px">
                         <label>Customer Name </label>
@@ -1285,7 +1274,7 @@
                         <div class="clearfix">
 
                             <ng-container *ngIf="!isCashInvoice">
-                                <sales-sh-select style="width:48.5%; float: left;" name="voucherDetails.customerName"
+                                <sales-sh-select class="sh-drop float-left" name="voucherDetails.customerName"
                                     [options]="customerAcList$ | async"
                                     [(ngModel)]="invFormData.voucherDetails.customerName"
                                     [customFilter]="customMoveGroupFilter"
@@ -1297,16 +1286,14 @@
                                     (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
                                     [showClear]="!isUpdateMode" [disabled]="isUpdateMode">
                                     <ng-template #optionTemplate let-option="option">
-                                        <a href="javascript:void(0)" class="list-item"
-                                            style="border-bottom: 1px solid #ccc;">
+                                        <a href="javascript:void(0)" class="list-item bd-rb">
                                             <div class="item">{{ option.label }}</div>
                                             <div class="item-unique">{{ option.value }}</div>
                                         </a>
                                     </ng-template>
                                     <ng-template #notFoundLinkTemplate>
-                                        <a href="javascript:void(0)" class="list-item" [keyboardShortcut]="'alt+c'"
-                                            (onShortcutPress)="toggleAccountAsidePane()"
-                                            style="width:100%; display: flex;justify-content: space-between;">
+                                        <a href="javascript:void(0)" class="list-item width-100 d-flex justify-content-between" [keyboardShortcut]="'alt+c'"
+                                            (onShortcutPress)="toggleAccountAsidePane()">
                                             <div class="item">Add Customer</div>
                                             <div class="item">Alt+C</div>
                                         </a>
@@ -1316,20 +1303,20 @@
 
                             <ng-container *ngIf="isCashInvoice">
                                 <input type="text" #cashInvoiceInput name="voucherDetails.customerName"
-                                    class="form-control cashInvoiceInput"
+                                    class="form-control cash-invoice-input"
                                     [(ngModel)]="invFormData.voucherDetails.customerName" [readOnly]="isUpdateMode"
                                     autocomplete="notallowedhere">
                             </ng-container>
-                            <!-- <a class="copyInvoice" *ngIf="invFormData.voucherDetails.customerName"> <img src="../../assets/images/copy-icon.svg">Copy Previous Invoice</a> -->
+                            <!-- <a class="copy-invoice" *ngIf="invFormData.voucherDetails.customerName"> <img src="../../assets/images/copy-icon.svg">Copy Previous Invoice</a> -->
                         </div>
                         <!-- <div class="other-options">
   <a href="#">Unregistered Business</a> | <a href="#">Customer Details</a>
 </div> -->
                         <!-- flex row child start -->
 
-                        <!--            <div class="flex-row-child add-entryAgainst mrL2" *ngIf="!isCustomerSelected">-->
+                        <!--            <div class="flex-row-child add-entry-against mr-l2" *ngIf="!isCustomerSelected">-->
                         <!--              &lt;!&ndash;*ngIf="typeaheadNoResultsOfCustomer"&ndash;&gt;-->
-                        <!--              <div class="form-group noMarg">-->
+                        <!--              <div class="form-group no-margin">-->
                         <!--                <label>Add Entry Against</label>-->
                         <!--                <sh-select name="accountDetails.uniqueName" [options]="bankAccounts$ | async"-->
                         <!--                           [(ngModel)]="invFormData.accountDetails.uniqueName" (selected)="onSelectBankCash($event)"-->
@@ -1348,8 +1335,8 @@
                         <!-- flex row child end -->
                     </td>
                     <td>
-                        <div class=" text-right" *ngIf="invFormData.voucherDetails.customerName && !isCashInvoice">
-                            <p *ngIf="toggleFieldForSales" class="fs20 b">
+                        <div class="text-right" *ngIf="invFormData.voucherDetails.customerName && !isCashInvoice">
+                            <p *ngIf="toggleFieldForSales" class="font-20 b">
                                 <span class="balance-due">Balance Due: </span>
 
                                 <span class="sp-rupees">Rs
@@ -1364,11 +1351,11 @@
                     </td>
                     <td width="65%">
                         <div class="flex-row-child">
-                            <div class="form-group noMarg">
+                            <div class="form-group no-margin">
 
                                 <!-- [useInBuiltFilterForIOptionTypeItems]="true" -->
                                 <!--  -->
-                                <sales-sh-select style="width:48.5%;" name="voucherDetails.customerName"
+                                <sales-sh-select class="sh-drop" name="voucherDetails.customerName"
                                     [options]="customerAcList$ | async"
                                     [(ngModel)]="invFormData.voucherDetails.tempCustomerName"
                                     [customFilter]="customMoveGroupFilter"
@@ -1380,8 +1367,7 @@
                                     (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)"
                                     [showClear]="!isUpdateMode">
                                     <ng-template #optionTemplate let-option="option">
-                                        <a href="javascript:void(0)" class="list-item"
-                                            style="border-bottom: 1px solid #ccc;">
+                                        <a href="javascript:void(0)" class="list-item bd-rb">
                                             <div class="item">{{ option.label }}</div>
                                             <div class="item-unique">{{ option.value }}</div>
                                         </a>
@@ -1396,10 +1382,10 @@
                     <td></td>
                     <td>
                         <ng-container>
-                            <section class="form-inline  ">
-                                <div class=" wrap-billing-address clearfix">
+                            <section class="form-inline">
+                                <div class="wrap-billing-address clearfix">
                                     <div class="row">
-                                        <div class="col-xs-6">
+                                        <div class="col-6">
                                             <div class="form-group">
                                                 <label>Billing Address</label>
                                                 <div class="billing-address clearfix">
@@ -1408,7 +1394,7 @@
                                                         [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]"
                                                         rows="3" autocomplete="off" autofocus="off"
                                                         aria-autocomplete="none"></textarea>
-                                                    <div class="">
+                                                    <div>
                                                         <div class="col-sm-6 pd">
                                                             <!-- <label>Country</label> -->
 
@@ -1445,8 +1431,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xs-6">
-                                            <div class="form-group p0 width100">
+                                        <div class="col-6">
+                                            <div class="form-group p-0 width-100">
                                                 <label>
                                                     <input type="checkbox" (change)="autoFillShippingDetails()"
                                                         name="autoFillShipping" [attr.checked]="true"
@@ -1509,18 +1495,18 @@
 
             </table>
 
-            <table class="innerTable table customerInvoiceTable bg-white" style="display: none;">
+            <table class="inner-table table customer-invoice-table bg-white d-none">
 
                 <tr>
                     <td>
                         <label>Attention to</label>
                     </td>
                     <td>
-                        <div class="form-group pl0 m-r-15 col-xs-6">
+                        <div class="form-group pl-0 mr-r15 col-xs-6">
                             <!--col-xs-3 -->
 
                             <input type="text" name="accountDetails.attention" placeholder="Attention to"
-                                class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.attentionTo" />
+                                class="form-control attention-to" [(ngModel)]="invFormData.accountDetails.attentionTo" />
                         </div>
                     </td>
                     <td></td>
@@ -1533,7 +1519,7 @@
                     <td width="65%">
                         <div class="col-xs-6 pl-0">
                             <input type="email" placeholder="someone@example.com" name="accountDetails.email"
-                                class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.email" />
+                                class="form-control attention-to" [(ngModel)]="invFormData.accountDetails.email" />
                         </div>
 
                     </td>
@@ -1547,7 +1533,7 @@
                     <td>
                         <div class="col-xs-6 pl-0">
                             <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text"
-                                name="accountDetails.mobileNumber" class="form-control attentionTo"
+                                name="accountDetails.mobileNumber" class="form-control attention-to"
                                 [(ngModel)]="invFormData.accountDetails.contactNumber" />
                         </div>
 
@@ -1559,22 +1545,22 @@
                     <td>
                         <label> {{ !isPurchaseInvoice ? 'Invoice No.' : 'Purchase Invoice No.' }}</label>
                     </td>
-                    <td style="position:relative">
-                        <div class="col-xs-6 pl-0">
+                    <td class="position-relative row">
+                        <div class="col-6 pl-0">
                             <input type="text" name="accountDetails.invoiceNum"
-                                class="form-control invoiceDate attentionTo"
-                                [ngClass]="{'dateinvoice': !isPurchaseInvoice }"
+                                class="form-control invoice-date attention-to"
+                                [ngClass]="{'date-invoice': !isPurchaseInvoice }"
                                 [disabled]="isUpdateMode  || !useCustomInvoiceNumber"
                                 [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
                         </div>
-                        <div class="col-xs-6 invoice-date-due-date">
-                            <div class="form-inline ">
-                                <div class="form-group m-r-15">
+                        <div class="col-6 invoice-date-due-date">
+                            <div class="form-inline">
+                                <div class="form-group mr-r15">
                                     <!--col-xs-2-->
                                     <label>Invoice Date</label>
 
                                     <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel"
-                                        name="voucherDate" class="form-control dateinvoice" bsDatepicker
+                                        name="voucherDate" class="form-control date-invoice" bsDatepicker
                                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                         [(ngModel)]="invFormData.voucherDetails.voucherDate" [disabled]="isUpdateMode"
                                         [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" />
@@ -1585,11 +1571,11 @@
 
 
                                 </div>
-                                <div class="form-group m-l-10 m-r-15" *ngIf="isSalesInvoice || isPurchaseInvoice">
+                                <div class="form-group mr-l1 mr-r15" *ngIf="isSalesInvoice || isPurchaseInvoice">
                                     <label> {{isPurchaseInvoice ? 'Bill Due Date' : 'Due Date'}}</label>
 
                                     <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate"
-                                        class="form-control dateinvoice" bsDatepicker
+                                        class="form-control date-invoice" bsDatepicker
                                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                         [(ngModel)]="invFormData.voucherDetails.dueDate"
                                         [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)" />
@@ -1617,9 +1603,9 @@
 
     <section id="actionPane" class="text-center">
 
-        <div class="col-xs-12">
+        <div>
 
-            <div class="pull-right pr" *ngIf="!isUpdateMode">
+            <div class="pull-right position-relative" *ngIf="!isUpdateMode">
                 <button type="button" (click)="resetInvoiceForm(invoiceForm)"
                     class="btn btn-danger d-inline-block v-align-middle">Clear
                 </button>
@@ -1669,7 +1655,7 @@
 
             </div>
 
-            <div class="pull-right pr" *ngIf="isUpdateMode">
+            <div class="pull-right position-relative" *ngIf="isUpdateMode">
 
                 <button type="button" class="btn btn-danger d-inline-block v-align-middle"
                     (click)="cancelUpdate()">Cancel
@@ -1750,7 +1736,7 @@
         </button>
     </div>
     <div class="modal-body">
-        <perfect-scrollbar style="max-height: 740px !important; min-height: 740px;" [scrollIndicators]="true">
+        <perfect-scrollbar class="scroll-bar-form" [scrollIndicators]="true">
             <form #CreateInvoice="ngForm">
 
                 <div class="row">

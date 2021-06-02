@@ -1,4 +1,6 @@
 export interface DayBookResponseModel {
+    file?: any;
+    type?: string;
     entries: Entry[];
     page: number;
     count: number;

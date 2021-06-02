@@ -1,8 +1,10 @@
+@import "../../assets/css/color.scss";
+
 .invoice-control {
     .nav.nav-tabs {
         margin-bottom: 20px;
         padding: 12px 0px 0 15px !important;
-        background-color: #f7f8fd;
+        background-color: $alice-blue-light;
         z-index: 9;
         position: relative;
         top: -4px;
@@ -18,12 +20,12 @@
     border-right: 0px !important;
     border-left: 0px !important;
     border-bottom: 0px !important;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid $gainsboro;
     white-space: normal;
 }
 
 .table-border-bottom .last-row td {
-    background: #f2f2f2;
+    background: $white-smoke;
     padding: 14px 10px;
     font-weight: bold;
 }
@@ -33,17 +35,17 @@
 }
 
 .return-sel {
-    background-color: #f5f5f5;
+    background-color: $gray-95;
     border-radius: 18px;
     padding: 5px 15px;
     cursor: pointer;
     display: inline-block;
-    border: 1px solid #ddd;
+    border: 1px solid $gainsboro;
 }
 .tax-engine {
     background: none;
 }
-.advanceSearchByDate .btn-group > .dropdown-menu {
+.advance-search-by-date .btn-group > .dropdown-menu {
     margin-top: 0;
 }
 .month-picker {
@@ -57,7 +59,7 @@
         }
     }
 }
-.advanceSearchByDate.date-advance-search {
+.advance-search-by-date.date-advance-search {
     width: 280px;
 }
 
@@ -83,6 +85,12 @@
     right: -160px;
     top: 0;
     pointer-events: none;
+}
+.tax-heading {
+    max-width: 10%;
+}
+.tax-dropdown {
+    max-width: 30%;
 }
 @media(max-width:575px){
     .month-picker {

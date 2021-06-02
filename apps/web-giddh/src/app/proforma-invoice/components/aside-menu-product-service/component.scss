@@ -1,3 +1,5 @@
+@import "../../../../assets/css/color.scss";
+
 :host {
     position: fixed;
     left: auto;
@@ -23,7 +25,7 @@
     right: 10px;
     z-index: 9999999;
     background-color: transparent;
-    color: #fff;
+    color: $white;
     font-size: 17px;
     top: 18px;
     margin-right: 0;
@@ -41,15 +43,15 @@
     border-radius: 0;
     right: 58px;
     background-color: transparent;
-    border: 1px solid #fff;
-    color: #fff;
+    border: 1px solid $white;
+    color: $white;
     padding: 3px 14px;
     font-size: 14px;
 }
 #back:hover {
-    color: #1a237e;
-    background-color: #fff;
-    border-color: #fff;
+    color: $midnight-blue;
+    background-color: $white;
+    border-color: $white;
 }
 .aside-pane {
     display: flex;

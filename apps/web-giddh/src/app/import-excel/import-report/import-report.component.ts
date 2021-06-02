@@ -6,14 +6,14 @@ import { ImportExcelActions } from '../../actions/import-excel/import-excel.acti
 import { ImportExcelStatusPaginatedResponse, ImportExcelStatusResponse } from '../../models/api-models/import-excel';
 import { ReplaySubject } from 'rxjs';
 import { ImportExcelRequestStates } from '../../store/import-excel/import-excel.reducer';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
-import { ImportExcelService } from '../../services/import-excel.service';
 import { base64ToBlob } from '../../shared/helpers/helperFunctions';
-import { ToasterService } from '../../services/toaster.service';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment';
+import { GeneralService } from '../../services/general.service';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'import-report',
@@ -25,15 +25,23 @@ export class ImportReportComponent implements OnInit, OnDestroy {
     public importStatusResponse: ImportExcelStatusPaginatedResponse;
     public importRequestStatus: ImportExcelRequestStates;
     public importPaginatedRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
-
+    /** Stores the current company */
+    public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
-    constructor(private _router: Router, private store: Store<AppState>, private _importActions: ImportExcelActions,
-        private _importExcelService: ImportExcelService, private _toaster: ToasterService) {
+    constructor(
+        private _router: Router,
+        private store: Store<AppState>,
+        private _importActions: ImportExcelActions,
+        private generalService: GeneralService) {
         this.store.pipe(select(s => s.importExcel.importStatus), takeUntil(this.destroyed$)).subscribe(s => {
             if (s && s.results) {
                 s.results = s.results.map(res => {
-                    res.processDate = moment.utc(res.processDate, 'YYYY-MM-DD hh:mm:ss a').local().format('DD-MM-YYYY hh:mm:ss a');
+                    res.processDate = moment.utc(res.processDate, 'YYYY-MM-DD hh:mm:ss a').local().format(GIDDH_DATE_FORMAT + ' hh:mm:ss a');
                     return res;
                 })
             }
@@ -50,6 +58,13 @@ export class ImportReportComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.getStatus();
+        this.store.pipe(
+            select(state => state.session.activeCompany), take(1)
+        ).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
+            }
+        });
     }
 
     public importFiles() {
