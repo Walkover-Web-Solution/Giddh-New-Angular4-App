@@ -1590,16 +1590,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
-<<<<<<< HEAD
-            } else if (document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0 && !this.router.url.includes("/vendor")) {
-=======
                 document.querySelector('.primary-sidebar').classList.add('sidebar-collapse');
                 document.querySelector('.nav-left-bar').classList.add('width-60');
             } else if (
                 document.getElementsByTagName("tabset") &&
                 document.getElementsByTagName("tabset").length > 0 &&
                 !this.router.url.includes("/vendor") && (!document.getElementsByClassName("static-tabs-on-page") || (document.getElementsByClassName("static-tabs-on-page") && document.getElementsByClassName("static-tabs-on-page").length === 0))) {
->>>>>>> 14fd9d1694... shalinee | test | showing main navigation on setting page and align setting sidebar to right
                 document.querySelector('body').classList.add('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
@@ -1607,8 +1603,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('.primary-sidebar').classList.remove('sidebar-collapse');
                 document.querySelector('.nav-left-bar').classList.remove('width-60');
             }
-<<<<<<< HEAD
-=======
             /* this code is not working so that inventory sidebar is not working on mobile view, developer please check it */
             else if (document.getElementsByClassName("new-inventory-page") && document.getElementsByClassName("new-inventory-page").length > 0) {
                 this.sideBarStateChange(true);
@@ -1618,7 +1612,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             }
 
->>>>>>> 14fd9d1694... shalinee | test | showing main navigation on setting page and align setting sidebar to right
             else {
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
