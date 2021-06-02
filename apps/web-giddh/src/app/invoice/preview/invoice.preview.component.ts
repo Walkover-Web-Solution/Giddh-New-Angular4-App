@@ -491,7 +491,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.itemsListForDetails = allItems;
                         this.toggleBodyClass();
                         setTimeout(() => {
-                            const itemIndex = this.itemsListForDetails.findIndex(item => item.voucherNumber === res[1]);
+                            const itemIndex = allItems.findIndex(item => item.voucherNumber === res[1]);
                             this.selectedInvoiceForDetails = allItems[itemIndex];
                             this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
                         }, 1000);
