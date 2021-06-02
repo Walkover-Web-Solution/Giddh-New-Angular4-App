@@ -9151,6 +9151,9 @@ span#HW_badge_cont:nth-child(3) {
 .setting-sidebar-open .desktop-header.menu_open {
     padding-right: 240px !important;
 }
+.gst-sidebar-open .menu_open {
+    padding-left: 300px !important;
+}
 .desktop-header.menu_open {
     padding-left: 60px !important;
 }
@@ -9757,6 +9760,20 @@ input.mat-input-element {
     }
 }
 .gst-sidebar-open {
+    .nav-left-bar{
+        -moz-transition: all 100ms linear;
+        -webkit-transition: all 100ms linear;
+        -o-transition: all 100ms linear;
+        transition: all 100ms linear;
+        -moz-transform: translate3d(-100px, 0px, 0px);
+        -webkit-transform: translate3d(-100px, 0px, 0px);
+        -o-transform: translate(-100px, 0px);
+        -ms-transform: translate(-100px, 0px);
+        transform: translate3d(-100px, 0px, 0px);
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.2) !important;
+    }
+}
+.gst-sidebar-open {
     .gst-sidebar {
         left: -250px !important;
     }
@@ -9764,14 +9781,20 @@ input.mat-input-element {
         padding-left: 0;
     }
     .nav-left-bar {
-        display: none;
+        display: block;
+        z-index: 9991 !important;
+        -moz-transform: translate3d(0px, 0px, 0px);
+        -webkit-transform: translate3d(0px, 0px, 0px);
+        -o-transform: translate(0px, 0px);
+        -ms-transform: translate(0px, 0px);
+        transform: translate3d(0px, 0px, 0px);
     }
     .plan-wrapper {
         padding-left: 0;
     }
     .menu_open {
         .gst-sidebar {
-            left: 0 !important;
+            left: 60px !important;
         }
         #content-wrapper {
             padding-left: 240px;
