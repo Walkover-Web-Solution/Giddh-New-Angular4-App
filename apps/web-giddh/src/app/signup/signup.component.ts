@@ -27,6 +27,7 @@ import { DOCUMENT } from "@angular/common";
 import { ToasterService } from "../services/toaster.service";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { GeneralService } from "../services/general.service";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
     selector: "signup",
@@ -83,7 +84,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         private authService: AuthService,
         @Inject(DOCUMENT) private document: Document,
         private _toaster: ToasterService,
-        private _generalService: GeneralService
+        private _generalService: GeneralService,
+        private http : HttpClient
     ) {
         this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
@@ -381,23 +383,22 @@ export class SignupComponent implements OnInit, OnDestroy {
     public SignupWithPasswd(model: FormGroup) {
         let ObjToSend = model.value;
         let pattern = /^(?=.*[a-z])(?=.*\d)[A-Za-z\d$@$!%*?&_]{8,20}$/g;
-        if (pattern.test(ObjToSend.password)) {
+        if (ObjToSend) {
             this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
-        } else {
-            return this._toaster.errorToast("Password is weak");
+            this.loginAction.SignupWithPasswdResponse;
         }
     }
 
-    public validatePwd(value) {
-        // let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$/g;
-        let pattern = /^(?=.*[a-z])(?=.*\d)[A-Za-z\d$@$!%*?&_]{8,20}$/g;
-        if (pattern.test(value)) {
-            // this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
-            this.showPwdHint = false;
-        } else if (value) {
-            return this.showPwdHint = true;
-        } else {
-            this.showPwdHint = false;
-        }
-    }
+    // public validatePwd(value) {
+    //     // let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$/g;
+    //     let pattern = /^(?=.*[a-z])(?=.*\d)[A-Za-z\d$@$!%*?&_]{8,20}$/g;
+    //     if (pattern.test(value)) {
+    //         // this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
+    //         this.showPwdHint = false;
+    //     } else if (value) {
+    //         return this.showPwdHint = true;
+    //     } else {
+    //         this.showPwdHint = false;
+    //     }
+    // }
 }
