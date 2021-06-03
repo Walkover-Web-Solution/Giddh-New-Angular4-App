@@ -67,8 +67,6 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          CSC_LINK: ${{ secrets.CSC_LINK_WIN }}
-          CSC_KEY_PASSWORD: ${{ secrets.CSC_LINK_WIN_PASS }}
       - name: Install wget
         if: ${{ matrix.os == 'macos-latest' }}
         run: brew install wget
