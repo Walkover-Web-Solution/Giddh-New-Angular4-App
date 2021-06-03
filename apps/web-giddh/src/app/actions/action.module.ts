@@ -18,7 +18,6 @@ import { PermissionActions } from './permission/permission.action';
 import { InventoryAction } from './inventory/inventory.actions';
 import { SearchActions } from './search.actions';
 import { AuditLogsActions } from './audit-logs/audit-logs.actions';
-import { FlyAccountsActions } from './fly-accounts.actions';
 import { TBPlBsActions } from './tl-pl.actions';
 import { LedgerActions } from './ledger/ledger.actions';
 import { HomeActions } from './home/home.actions';
@@ -83,7 +82,6 @@ import { PurchaseOrderActions } from './purchase-order/purchase-order.action';
             AuditLogsActions,
             PermissionActions,
             ManufacturingActions,
-            FlyAccountsActions,
             TBPlBsActions,
             LedgerActions,
             DaybookActions,
