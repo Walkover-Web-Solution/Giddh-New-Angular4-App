@@ -396,6 +396,12 @@
                                         $link-water,
                                         $night-rider
                                     );
+                                    &.active {
+                                        @include highlight-color(
+                                            $cornflower,
+                                            $white
+                                        );
+                                    }
                                 }
                             }
                         }
