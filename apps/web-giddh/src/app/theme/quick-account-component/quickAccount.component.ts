@@ -9,7 +9,6 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { GroupsWithAccountsResponse } from 'apps/web-giddh/src/app/models/api-models/GroupsWithAccounts';
 import { LedgerActions } from 'apps/web-giddh/src/app/actions/ledger/ledger.actions';
-import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 import { States } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
@@ -39,7 +38,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _fb: FormBuilder, private _groupService: GroupService, private _toaster: ToasterService,
-        private ledgerAction: LedgerActions, private store: Store<AppState>, private _generalActions: GeneralActions) {
+        private ledgerAction: LedgerActions, private store: Store<AppState>) {
         this.isQuickAccountInProcess$ = this.store.pipe(select(p => p.ledger.isQuickAccountInProcess), takeUntil(this.destroyed$));
         this.isQuickAccountCreatedSuccessfully$ = this.store.pipe(select(p => p.ledger.isQuickAccountCreatedSuccessfully), takeUntil(this.destroyed$));
         this.groupsArrayStream$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));

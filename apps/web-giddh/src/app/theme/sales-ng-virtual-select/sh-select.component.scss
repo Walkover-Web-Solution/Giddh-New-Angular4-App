@@ -15,7 +15,6 @@
 
 .header.open {
     border-radius: 2px 2px 0 0;
-    /* box-shadow: 0 2px 3px 0 rgba(34, 36, 38, .15); */
     border-bottom: none;
     line-height: auto;
 }
@@ -27,25 +26,6 @@
 div {
     display: block;
 }
-
-/* input[type="text"] {
-    border: none !important;
-    vertical-align: middle !important;
-    width: 100%;
-    margin: 0 !important;
-    padding: 0px !important;
-    box-sizing: border-box;
-    background-color: white;
-    font-size: 1.0rem !important;
-    line-height: 2rem !important;
-    letter-spacing: 0.01rem !important;
-    font-family: 'RobotoDraft', 'Roboto', 'Helvetica Neue, Helvetica, Arial', sans-serif;
-    font-style: normal !important;
-    font-weight: 300 !important;
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-    text-rendering: optimizeLegibility !important;
-} */
 
 input[type="text"] {
     outline: none;
@@ -99,7 +79,6 @@ i.close.icon.clear:hover::after {
     border-radius: 4px;
     background-color: #f4f5f8;
     margin: 8px 0 5px 8px;
-    /* color: white; */
 }
 
 .chip-close-btn {

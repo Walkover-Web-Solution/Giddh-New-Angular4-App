@@ -112,9 +112,6 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         this.loadDefaultAccountsSuggestions();
 
         this.needReloadingLinkedAccounts$.subscribe(a => {
-            // if (a && this.isRefreshWithCredentials) {
-            //   this.closeModal();
-            // }
             if (a) {
                 this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
             }
@@ -228,7 +225,6 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                 this.providerAccountId = account.providerAccountId;
                 delete account['providerAccountId'];
             }
-            // this.selectedProvider = this.providerAccountId;
             this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(this.providerAccountId, account));
             return;
         }

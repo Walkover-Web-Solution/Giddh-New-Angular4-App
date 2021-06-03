@@ -27,7 +27,6 @@ import { AuthServiceConfig, GoogleLoginProvider, SocialLoginModule } from '../th
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { UniversalListModule } from '../theme/universal-list/universal.list.module';
 import { WelcomeComponent } from '../welcome/welcome.component';
 import { CheckPermissionDirective } from './../permissions/check-permission.directive';
 import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
@@ -172,7 +171,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         ModalModule,
         DatepickerModule,
         TypeaheadModule.forRoot(),
-        UniversalListModule,
         TooltipModule,
         BsDropdownModule,
         PopoverModule.forRoot(),

@@ -1,6 +1,3 @@
-/**
- * Created by yonifarin on 12/3/16.
- */
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BorderConfiguration, IOption } from './sh-options.interface';
@@ -280,12 +277,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
         this.clearFilter();
 
-        // if (!this.multiple) {
-        //     if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
-        //         callChanges = false;
-        //     }
-        // }
-
         if (callChanges && !this.multiple) {
             // check last selected value is there
             if (this.selectedValues[0]) {
@@ -319,9 +310,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }
 
     public focusFilter() {
-        if (this.isFilterEnabled && this.filter && this.filter !== '') {
-            // this.updateFilter(this.filter);
-        }
         setTimeout(() => {
             (this.inputFilter?.nativeElement as any)['focus'].apply(this.inputFilter?.nativeElement);
         }, 0);
@@ -356,41 +344,26 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                         this.toggleSelected(item);
                     }
                 }
-                // this.selectHighlightedOption();
-
             } else if (key === this.KEYS.UP) {
                 if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
                     let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
                     if (item !== null) {
-                        // this.toggleSelected(item);
                         this.menuEle.virtualScrollElm.scrollInto(item);
                         this.menuEle.virtualScrollElm.startupLoop = true;
                         this.menuEle.virtualScrollElm.refresh();
                         event.preventDefault();
                     }
                 }
-                // this.optionList.highlightPreviousOption();
-                // this.dropdown.moveHighlightedIntoView();
-                // if (!this.filterEnabled) {
-                //   event.preventDefault();
-                // }
             } else if (key === this.KEYS.DOWN) {
                 if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
                     let item = this.menuEle.virtualScrollElm.getNextHilightledOption();
                     if (item !== null) {
-                        // this.toggleSelected(item);
                         this.menuEle.virtualScrollElm.scrollInto(item);
                         this.menuEle.virtualScrollElm.startupLoop = true;
                         this.menuEle.virtualScrollElm.refresh();
                         event.preventDefault();
                     }
                 }
-                // ----
-                // this.optionList.highlightNextOption();
-                // this.dropdown.moveHighlightedIntoView();
-                // if (!this.filterEnabled) {
-                //   event.preventDefault();
-                // }
             }
         }
         this.cdRef.detectChanges();

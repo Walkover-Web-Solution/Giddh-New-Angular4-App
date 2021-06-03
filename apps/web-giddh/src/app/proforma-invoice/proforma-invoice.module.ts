@@ -6,7 +6,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { NgxUploaderModule } from 'ngx-uploader';
-
 import { SettingsServiceModule } from '../settings/settings-service.module';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
@@ -56,7 +55,6 @@ import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/
         KeyboardShortutModule,
         SalesShSelectModule,
         DecimalDigitsModule,
-        // SalesModule,
         CollapseModule,
         NgxUploaderModule,
         BsDropdownModule,
