@@ -330,12 +330,6 @@
                     "link": "/pages/search",
                     "icon": "icon-search-new",
                     "description": "गट निवडा आणि कालावधीसाठी शोधा"
-                },
-                {
-                    "label": "सेटिंग्ज",
-                    "link": "/pages/settings",
-                    "icon": "icon-settings-cog",
-                    "description": "विविध कर जोडा आणि व्यवस्थापित करा"
                 }
             ]
         }

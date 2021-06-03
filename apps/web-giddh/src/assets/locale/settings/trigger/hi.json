@@ -10,7 +10,7 @@
 	"entity_type": "इकाई प्रकार",
 	"entity_types": {
 		"group": "समूह",
-		"account": "लेखा"
+		"account": "खाता"
 	},
 	"webhook": "वेबहुक",
 	"filter_types": {
