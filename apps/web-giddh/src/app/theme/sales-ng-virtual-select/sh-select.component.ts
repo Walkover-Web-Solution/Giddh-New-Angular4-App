@@ -1,6 +1,3 @@
-/**
- * Created by yonifarin on 12/3/16.
- */
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnDestroy, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BorderConfiguration, IOption } from './sh-options.interface';
@@ -244,12 +241,6 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
             return;
         }
         this.clearFilter();
-
-        // if (!this.multiple) {
-        //     if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
-        //         callChanges = false;
-        //     }
-        // }
 
         if (this.multiple) {
             this.selectMultiple(item);

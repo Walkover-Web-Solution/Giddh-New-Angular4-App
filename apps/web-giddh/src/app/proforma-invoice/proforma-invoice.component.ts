@@ -648,6 +648,54 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private voucherTypeToNamePipe: VoucherTypeToNamePipe,
         private titleCasePipe: TitleCasePipe
     ) {
+        
+    }
+
+    public ngAfterViewInit() {
+        if (!this.isUpdateMode) {
+            this.toggleBodyClass();
+        }
+        this.selectAccount.changes.pipe(distinctUntilChanged((firstItem, nextItem) => {
+            return firstItem?.first?.filter === nextItem?.first?.filter;
+        }), takeUntil(this.destroyed$)).subscribe((queryChanges: QueryList<ShSelectComponent>) => {
+            if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
+                queryChanges?.first?.show();
+            }
+        });
+    }
+
+    /**
+     * Toggle the RCM checkbox based on user confirmation
+     *
+     * @param {*} event Click event
+     * @memberof ProformaInvoiceComponent
+     */
+    public toggleRcmCheckbox(event: any): void {
+        event.preventDefault();
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked, this.commonLocaleData);
+    }
+
+    /**
+     * RCM change handler, triggerreed when the user performs any
+     * action with the RCM popup
+     *
+     * @param {string} action Action performed by user
+     * @memberof ProformaInvoiceComponent
+     */
+    public handleRcmChange(action: string): void {
+        if (action === this.commonLocaleData?.app_yes) {
+            // Toggle the state of RCM as user accepted the terms of RCM modal
+            this.isRcmEntry = !this.isRcmEntry;
+            this.recalculateConvertedTotal();
+            this.calculateGrandTotal();
+            this.calculateBalanceDue();
+        }
+        if (this.rcmPopup) {
+            this.rcmPopup.hide();
+        }
+    }
+
+    public ngOnInit() {
         this.getInventorySettings();
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
@@ -705,53 +753,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.onSubmitInvoiceForm(form);
             }
         });
-    }
 
-    public ngAfterViewInit() {
-        if (!this.isUpdateMode) {
-            this.toggleBodyClass();
-        }
-        this.selectAccount.changes.pipe(distinctUntilChanged((firstItem, nextItem) => {
-            return firstItem?.first?.filter === nextItem?.first?.filter;
-        }), takeUntil(this.destroyed$)).subscribe((queryChanges: QueryList<ShSelectComponent>) => {
-            if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
-                queryChanges?.first?.show();
-            }
-        });
-    }
-
-    /**
-     * Toggle the RCM checkbox based on user confirmation
-     *
-     * @param {*} event Click event
-     * @memberof ProformaInvoiceComponent
-     */
-    public toggleRcmCheckbox(event: any): void {
-        event.preventDefault();
-        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked, this.commonLocaleData);
-    }
-
-    /**
-     * RCM change handler, triggerreed when the user performs any
-     * action with the RCM popup
-     *
-     * @param {string} action Action performed by user
-     * @memberof ProformaInvoiceComponent
-     */
-    public handleRcmChange(action: string): void {
-        if (action === this.commonLocaleData?.app_yes) {
-            // Toggle the state of RCM as user accepted the terms of RCM modal
-            this.isRcmEntry = !this.isRcmEntry;
-            this.recalculateConvertedTotal();
-            this.calculateGrandTotal();
-            this.calculateBalanceDue();
-        }
-        if (this.rcmPopup) {
-            this.rcmPopup.hide();
-        }
-    }
-
-    public ngOnInit() {
         this.isPendingSales = this.router.url.includes('/pages/invoice/preview/pending/sales' && '/pages/purchase-management/purchase/bill');
         this.autoFillShipping = true;
         this.isUpdateMode = false;
@@ -1300,16 +1302,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 this.depositAmountAfterUpdate = 0;
                             }
                         }
-
-                        // Getting from api old data "depositEntry" so here updating key with "depositEntryToBeUpdated"
-                        // if (obj.depositEntry || obj.depositEntryToBeUpdated) {
-                        //   if (obj.depositEntry) {
-                        //     obj.depositEntryToBeUpdated = obj.depositEntry;
-                        //     delete obj.depositEntry;
-                        //   }
-                        //   this.depositAmount = _.get(obj.depositEntryToBeUpdated, 'transactions[0].amount', 0);
-                        //   this.depositAccountUniqueName = _.get(obj.depositEntryToBeUpdated, 'transactions[0].particular.uniqueName', '');
-                        // }
 
                         // if last invoice is copied then don't copy voucherDate and dueDate
                         if (!this.isLastInvoiceCopied) {
@@ -2595,7 +2587,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             if (index !== null) {
                 this.entriesListBeforeTax = cloneDeep(this.invFormData.entries);
-                // this.selectedEntry = cloneDeep(this.invFormData.entries[index]);
             }
         }
         this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
@@ -2750,12 +2741,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateBalanceDue();
         this.checkVoucherEntries();
         this.transactionAmount = 0;
-        // /** In case of sales invoice if invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal */
-        // if (this.isSalesInvoice && this.totalAdvanceReceiptsAdjustedAmount && this.isUpdateMode) {
-        //     if (this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment() < 0) {
-        //         this.isAdjustAdvanceReceiptModalOpen();
-        //     }
-        // }
     }
 
     /**
@@ -2888,10 +2873,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (isNaN(count)) {
             count = 0;
         }
-        /** commention now due to this found bugs need to analysis on below commented code */
-        // if (!depositAmount) {
-        //     this.depositAmount = this.invFormData.voucherDetails.deposit;
-        // }
+        
         if ((this.isAccountHaveAdvanceReceipts || this.isInvoiceAdjustedWithAdvanceReceipts) && this.adjustPaymentData.totalAdjustedAmount) {
             this.adjustPaymentBalanceDueData = this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment();
         } else {
@@ -3207,7 +3189,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (o.stock && o.stock.unitRates && o.stock.unitRates.length) {
                 transaction.stockList = this.prepareUnitArr(o.stock.unitRates);
                 transaction.stockUnit = transaction.stockList[0].id;
-                // transaction.rate = transaction.stockList[0].rate;
                 transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             } else {
                 transaction.stockList.push(obj);
@@ -3533,8 +3514,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 break;
             }
             case ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint: {
-                // this.fireActionAfterGenOrUpdVoucher(voucherNo, ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint);
-                // this.router.navigate(['/pages', 'invoice', 'preview', this.parseVoucherType(this.invoiceType)]);
                 this.startLoader(false);
                 this.printVoucherModal.show();
                 break;
@@ -3542,7 +3521,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             case ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend: {
                 this.startLoader(false);
                 this.sendEmailModal.show();
-                // this.fireActionAfterGenOrUpdVoucher(voucherNo, ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend);
                 break;
             }
             case ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess: {
@@ -3625,7 +3603,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             if (this.isMulticurrencyAccount) {
                 if (this.isCashInvoice) {
-                    //this.getAccountDetails(event.value);
                     this.invFormData.accountDetails.currencySymbol = event.additional.currency.symbol || this.baseCurrencySymbol;
                     this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol;
                 }
@@ -4168,7 +4145,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             data.entries.forEach((entry) => {
                 entry.transactions.forEach((txn: SalesTransactionItemClass) => {
                     // convert date object
-                    // txn.date = this.convertDateForAPI(txn.date);
                     entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
                     // allowing below block of code for pending voucher to create because no need # in caseof pending voucher
@@ -4235,7 +4211,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         if (this.depositAmount && this.depositAmount > 0) {
             obj.paymentAction = {
-                // action: 'paid',
                 amount: Number(this.depositAmount) + this.depositAmountAfterUpdate
             };
             if (this.isCustomerSelected) {
@@ -4451,15 +4426,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     newTrxObj.accountUniqueName = `${trx.accountUniqueName}#${trx.stockDetails.uniqueName}`;
                     newTrxObj.fakeAccForSelect2 = `${trx.accountUniqueName}#${trx.stockDetails.uniqueName}`;
 
-                    // stock unit assign process
-                    // get account from flatten account
-                    // let selectedAcc = flattenAccounts.find(d => {
-                    //     return (d.uniqueName === trx.accountUniqueName);
-                    // });
-
-                    // if (selectedAcc) {
-                    // get stock from flatten account
-                    // let stock = selectedAcc.stocks.find(s => s.uniqueName === trx.stockDetails.uniqueName);
                     let stock = trx.stockDetails;
 
                     if (stock && newTrxObj) {
@@ -4481,7 +4447,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             }
                             newTrxObj.sku_and_customfields = description.join(', ');
                         }
-                        //------------------------
+
                         stock.unitRates = stock.unitRates || [];
                         const unitRate = stock.unitRates.find(rate => rate.code === stock.stockUnit.code);
 
@@ -4497,7 +4463,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             newTrxObj.stockList.push(stockUnit);
                         }
                     }
-                    // }
 
                     newTrxObj.quantity = trx.quantity;
                     newTrxObj.rate = trx.rate;
@@ -4586,10 +4551,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         return discountArray;
-    }
-
-    private isValidGstIn(no: string): boolean {
-        return /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]$/g.test(no);
     }
 
     private parseVoucherType(voucher: VoucherTypeEnum) {
@@ -4883,7 +4844,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.accountDetails.shippingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.shippingDetails);
         voucherClassConversion.accountDetails.billingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.billingDetails);
 
-        // voucherClassConversion.accountDetails.contactNumber = result.account.mobileNumber;
         voucherClassConversion.accountDetails.attentionTo = result.account.attentionTo;
         voucherClassConversion.accountDetails.email = result.account.email;
         voucherClassConversion.accountDetails.uniqueName = result.account.uniqueName;
