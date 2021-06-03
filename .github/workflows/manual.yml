@@ -1,4 +1,4 @@
-# This is a basic workflow that is manually triggered
+# This is a basic workflow that is manually triggered for desktop build creation
 
 name: Desktop build workflow
 
@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
-      card:
-        # Friendly description to be shown in the UI instead of 'name'
+      note:
+        # Friendly description to be shown in the UI instead contains details about the build
         description: "Note"
         # Default value if no value is explicitly provided
         default: "This build contains work from "
@@ -115,7 +115,7 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
           SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
-          SLACK_MESSAGE: "Build download URL: Mac - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.dmg"
+          SLACK_MESSAGE: "@channel ${{ github.event.inputs.card }}. Build download URL: Mac - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.dmg"
           SLACK_FOOTER: ''
           SLACK_TITLE: Giddh Desktop build
           SLACK_USERNAME: Giddh Desktop build
