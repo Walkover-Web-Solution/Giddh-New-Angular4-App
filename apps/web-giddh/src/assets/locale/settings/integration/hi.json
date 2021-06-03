@@ -98,6 +98,14 @@
 		"beneficiary_nick_name": "लाभार्थी निक नाम",
 		"beneficiary_account_no": "हिताधिकारी खाता नंबर।",
 		"ifsc": "आईएफएससी",
-		"add_beneficiary": "लाभार्थी जोड़ें"
+		"add_beneficiary": "लाभार्थी जोड़ें",
+        "corporate_id_label": "कॉर्पोरेट आईडी",
+        "corporate_id_placeholder": "कॉर्पोरेट आईडी दर्ज करें",
+        "client_amount_note": "ग्राहक कस्टम में एक ही राशि को एक से अधिक बार नहीं चुन सकता है।",
+        "approver_name_tooltip": "सत्यापित, गैर-सत्यापित और बैंक पंजीकृत उपयोगकर्ताओं की एक सूची जिसे ओटीपी भेजा जाएगा।",
+        "select_bank": "बैंक चुनें",
+        "unverifed": "असत्यापित",
+        "registered": "पंजीकृत",
+        "add_new_row": "+ नई पंक्ति जोड़ें"
 	}
 }

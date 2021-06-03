@@ -908,9 +908,10 @@
             </ng-container>
             <div *ngIf="voucherData && voucherData?.totalItems > paginationLimit"
                 [hidden]="(isGetAllRequestInProcess$ | async)" class="pagination-wrapper">
-                <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5"
-                    class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false"
-                    previousText="&#9664;" nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
+                <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5" class="pagination-sm"
+                    [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" [firstText]="commonLocaleData?.app_first"
+                    [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
+                    [lastText]="commonLocaleData?.app_last" (pageChanged)="pageChanged($event)"></pagination>
             </div>
 
 
@@ -1156,7 +1157,7 @@
                     <label>{{localeData?.cancel_reason}} <span class="red-text">*</span></label>
                     <sh-select name="cancellationReason" (onClear)="eInvoiceCancel.cancellationReason = ''" [(ngModel)]="eInvoiceCancel.cancellationReason" [options]="eInvoiceCancellationReasonOptions"></sh-select>
                 </div>
-                <div class="mr-b15">
+                <div class="cancel-remarks-section">
                     <label>{{localeData?.cancel_remarks}} <span class="red-text">*</span></label>
                     <textarea name="cancellationRemarks" [(ngModel)]="eInvoiceCancel.cancellationRemarks" maxlength="100" hasFocus #cancellationRemarks="hasFocus" class="form-control w-100" (blur)="handleBlurOnCancellationRemarks()"></textarea>
                     <ng-container *ngIf="cancellationRemarks?.isFocused">
