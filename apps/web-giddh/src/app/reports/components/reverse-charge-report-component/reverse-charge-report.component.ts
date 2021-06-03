@@ -30,6 +30,11 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     @ViewChild('invoiceNumberField', { static: true }) public invoiceNumberField;
     @ViewChild('supplierCountryField', { static: true }) public supplierCountryField;
 
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
+
     public showEntryDate = true;
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -114,7 +119,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public ngOnInit(): void {
-
+        document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakPointObservar.observe([
             '(max-width: 575px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -209,6 +214,32 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             }
         }, 200);
     }
+    /**
+     * Aside pane toggle fixed class
+     *
+     *
+     * @memberof GstComponent
+     */
+     public toggleBodyClass(): void {
+        if (this.asideGstSidebarMenuState === 'in') {
+            document.querySelector('body').classList.add('gst-sidebar-open');
+        } else {
+            document.querySelector('body').classList.remove('gst-sidebar-open');
+        }
+    }
+    /**
+      * This will toggle the settings popup
+      *
+      * @param {*} [event]
+      * @memberof GstComponent
+      */
+    public toggleGstPane(event?): void {
+        this.toggleBodyClass();
+        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
+            this.asideGstSidebarMenuState = "out";
+        }
+    }
+
 
     /**
      * This function will destroy the subscribers
@@ -218,6 +249,8 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('gst-sidebar-open');
+       // this.asideGstSidebarMenuState === 'out'
     }
 
     /**

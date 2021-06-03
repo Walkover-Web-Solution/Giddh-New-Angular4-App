@@ -47,21 +47,21 @@
             <ul class="mt-3">
                 <li>
                     <a href="javascript:void(0);"
-                        class="d-block clearfix" (click)="navigate(GstReport.Gstr2)">
+                        class="d-block clearfix">
                         <span><i class="icon-eway-bill-new"></i></span>
                         <span>E-way Bill </span>
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:void(0);"
-                        class="d-block clearfix" (click)="navigate(GstReport.Gstr2)">
+                    <a href="javascript:void(0);" [routerLink]="['/pages/reports/reverse-charge']"
+                        class="d-block clearfix">
                         <span><i class="icon-reverse-charge"></i></span>
                         <span>Reverse Charge</span>
                     </a>
                 </li>
                 <li>
                     <a href="javascript:void(0);"
-                        class="d-block clearfix" (click)="navigate(GstReport.Gstr2)">
+                        class="d-block clearfix" [routerLink]="['/home']">
                         <span><i class="icon-settings-cog"></i></span>
                         <span>Taxes</span>
                     </a>

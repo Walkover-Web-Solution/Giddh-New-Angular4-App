@@ -18,7 +18,6 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LocationService } from '../../../services/location.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
-
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'app-ewaybill-component',
@@ -29,6 +28,12 @@ import { GeneralService } from '../../../services/general.service';
 export class EWayBillComponent implements OnInit, OnDestroy {
     @ViewChild('cancelEwayForm', { static: true }) public cancelEwayForm: NgForm;
     @ViewChild('updateVehicleForm', { static: true }) public updateVehicleForm: NgForm;
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
+    /* this will check mobile screen size */
+    public isMobileScreen: boolean = false;
 
     public isGetAllEwaybillRequestInProcess$: Observable<boolean>;
     public isGetAllEwaybillRequestSuccess$: Observable<boolean>;
@@ -194,6 +199,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        document.querySelector('body').classList.add('gst-sidebar-open');
         // getALLEwaybillList();
         this.cancelEwaySuccess$.subscribe(p => {
             if (p) {
@@ -520,6 +526,31 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             this.getAllFilteredInvoice();
         }
     }
+    /**
+     * Aside pane toggle fixed class
+     *
+     *
+     * @memberof GstComponent
+     */
+     public toggleBodyClass(): void {
+        if (this.asideGstSidebarMenuState === 'in') {
+            document.querySelector('body').classList.add('gst-sidebar-open');
+        } else {
+            document.querySelector('body').classList.remove('gst-sidebar-open');
+        }
+    }
+    /**
+      * This will toggle the settings popup
+      *
+      * @param {*} [event]
+      * @memberof GstComponent
+      */
+    public toggleGstPane(event?): void {
+        this.toggleBodyClass();
+        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
+            this.asideGstSidebarMenuState = "out";
+        }
+    }
 
     /**
      * Releases memory
@@ -529,6 +560,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('gst-sidebar-open');
+        this.asideGstSidebarMenuState === 'out'
     }
 
     /**

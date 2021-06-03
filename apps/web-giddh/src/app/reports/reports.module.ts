@@ -40,6 +40,7 @@ import {
 import { SalesRegisterExpandComponent } from './components/salesRegister-expand-component/sales.register.expand.component';
 import { ReportsComponent } from './reports.component';
 import { ReportsRoutingModule } from './reports.routing.module';
+import { GstrSidebarModule } from '../shared/gst-sidebar/gst-sidebar.module';
 
 @NgModule({
     declarations: [
@@ -90,7 +91,8 @@ import { ReportsRoutingModule } from './reports.routing.module';
         TooltipModule,
         ElementViewChildModule,
         ModalModule.forRoot(),
-        SharedModule
+        SharedModule,
+        GstrSidebarModule
     ]
 })
 
