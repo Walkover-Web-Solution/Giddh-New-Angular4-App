@@ -159,7 +159,7 @@ table.ledger-footer-1 td[class*="col-"] {
 .ledg-head input[type="search"] {
     min-width: auto;
     padding-left: 27px !important;
-    border-radius: 20px !important;
+    border-radius: 5px !important;
 }
 .ledg-head {
     .single-search-box {
@@ -412,7 +412,7 @@ sh-select:focus {
     justify-content: center;
     border-top-width: 1px;
     background-color: $white;
-    border-radius: 50%;
+    border-radius: 5px;
 }
 .advance-search-block input {
     background: $solitude !important;
@@ -516,7 +516,7 @@ sh-select:focus {
     justify-content: center;
     align-items: center;
     margin-right: 7px;
-    border-radius: 50%;
+    border-radius: 5px;
     background-color: $white;
     img {
         width: 18px;

@@ -423,7 +423,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.itemsListForDetails = allItems;
                         this.toggleBodyClass();
                         setTimeout(() => {
-                            this.selectedInvoiceForDetails = allItems[0];
+                            const itemIndex = this.itemsListForDetails.findIndex(item => item.uniqueName === record.purchaseRecordUniqueName);
+                            this.selectedInvoiceForDetails = allItems[itemIndex];
                             this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
                             this.store.dispatch(this.purchaseRecordActions.resetUpdatePurchaseRecord());
                         }, 1000);
@@ -1911,7 +1912,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         let existingInvoices = [];
                         res[0].items = res[0].items?.map((item: ReceiptItem) => {
                             let dueDate = item.dueDate ? moment(item.dueDate, GIDDH_DATE_FORMAT) : null;
-    
+
                             if (dueDate) {
                                 if (dueDate.isAfter(moment()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
                                     item.dueDays = null;
@@ -1926,16 +1927,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                                 // For CR/DR note and Cash/Sales invoice
                                 item = this.addToolTiptext(item);
                             }
-    
+
                             item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item.uniqueName);
                             if (item.isSelected) {
                                 existingInvoices.push(item.uniqueName);
                             }
-    
+
                             this.itemsListForDetails.push(this.parseItemForVm(item));
                             return item;
                         });
-    
+
                         let selectedInvoices = [];
                         if (this.selectedInvoices && this.selectedInvoices.length > 0) {
                             this.selectedInvoices.forEach(invoice => {
@@ -1943,10 +1944,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                                     selectedInvoices.push(invoice);
                                 }
                             });
-    
+
                             this.selectedInvoices = selectedInvoices;
                         }
-    
+
                         let voucherData = _.cloneDeep(res[0]);
                         if (voucherData.items.length) {
                             // this.totalSale = voucherData.items.reduce((c, p) => {
@@ -1964,7 +1965,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             }
                             this.showExportButton = false;
                         }
-    
+
                         if (this.selectedInvoices && this.selectedInvoices.length > 0) {
                             voucherData.items.forEach((v) => {
                                 v.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, v.uniqueName);
@@ -1974,7 +1975,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.selectedItems = (this.updateSelectedItems) ? this.selectedInvoices : [];
                         this.updateSelectedItems = false;
                     }
-    
+
                     // get voucherDetailsNo so we can open that voucher in details mode
                     if (res[0] && res[1] && res[2]) {
                         this.selectedInvoiceForDetails = null;
@@ -1985,7 +1986,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             allItems.unshift(removedItem);
                             this.toggleBodyClass();
                             setTimeout(() => {
-                                this.selectedInvoiceForDetails = allItems[0];
+                                const itemIndex = allItems.findIndex(item => item.voucherNumber === res[1]);
+                                this.selectedInvoiceForDetails = allItems[itemIndex];
                                 this.itemsListForDetails = cloneDeep(allItems);
                                 this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
                             }, 1000);
@@ -1997,7 +1999,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             this.cdr.detectChanges();
                         }
                     }, 100);
-    
+
                     if (this.purchaseRecord && this.purchaseRecord.uniqueName) {
                         this.onSelectInvoice(this.purchaseRecord);
                     }

@@ -229,7 +229,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Stores the current company */
     public activeCompany: any;
     /** Border configuration for branch dropdown */
-    public branchDropdownBorderConfiguration: BorderConfiguration = { style: 'border-radius: 30px !important' };
+    public branchDropdownBorderConfiguration: BorderConfiguration = { style: 'border-radius: 5px !important' };
     /** True if current organization type is company */
     public showBranchSwitcher: boolean;
     /** Stores the current organization type */
@@ -1563,6 +1563,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         viewContainerRef.insert(componentInstanceView.hostView);
 
         let componentInstance = componentInstanceView.instance as PaginationComponent;
+        componentInstance.firstText = this.commonLocaleData?.app_first;
+        componentInstance.previousText = this.commonLocaleData?.app_previous;
+        componentInstance.nextText = this.commonLocaleData?.app_next;
+        componentInstance.lastText = this.commonLocaleData?.app_last;
         componentInstance.totalItems = s.count * s.totalPages;
         componentInstance.itemsPerPage = s.count;
         componentInstance.maxSize = 5;

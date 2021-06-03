@@ -1490,7 +1490,7 @@ modal-container.modal {
 .custom-datepicker {
     position: relative;
     .border-radius-2 {
-        border-radius: 2px;
+        border-radius: 5px;
     }
 }
 
@@ -1520,6 +1520,7 @@ modal-container.modal {
     padding-left: 30px !important;
     border: 1px solid $gainsboro;
     height: 36px;
+    border-radius: 5px;
 }
 
 .custom-datepicker i img {
@@ -1574,7 +1575,7 @@ modal-container.modal {
 .form-control {
     background: $white !important;
     border: 1px solid $gainsboro;
-    border-radius: 2px !important;
+    border-radius: 5px !important;
     padding: 6px !important;
     outline: 0;
     color: $nero !important;
@@ -1778,7 +1779,7 @@ fieldset[disabled] .btn-primary:hover {
 
 .btn {
     padding: 7px 10px;
-    border-radius: 2px;
+    border-radius: 5px;
     font-size: 14px;
     margin-right: 15px;
 }
@@ -5146,7 +5147,7 @@ label {
 }
 
 #customInvoice .template-editor .btn-group-lg > .btn {
-    border-radius: 0;
+    border-radius: 5px;
     border: 0;
     box-shadow: none;
     background: $whisper-color;
@@ -9821,14 +9822,7 @@ body.update-scroll-hidden {
 .menu_open .sales-register {
     width: calc(100% - 240px) !important;
 }
-body.page-has-tabs {
-    .hamburger-menu-icon{
-        &.page-has-heading{
-            width: 45px;
-            border-bottom: none;
-        }
-    }
-}
+
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
