@@ -122,10 +122,6 @@ export class BsComponent implements AfterViewInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public exportXLS(event) {
-        //
-    }
-
     public findIndex(activeFY, financialYears) {
         let tempFYIndex = 0;
         _.each(financialYears, (fy: any, index: number) => {
@@ -150,11 +146,7 @@ export class BsComponent implements AfterViewInit, OnDestroy {
     }
 
     public searchChanged(event: string) {
-        // this.cd.checkNoChanges();
         this.search = event;
         this.cd.detectChanges();
-        // setTimeout(() => {
-        //   this.search = event;
-        // }, 1);
     }
 }
