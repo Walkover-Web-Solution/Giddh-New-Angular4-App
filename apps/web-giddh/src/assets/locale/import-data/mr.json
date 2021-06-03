@@ -37,5 +37,7 @@
     "select_branch": "शाखा निवडा",
     "import_report_csv_downloaded_filename": "आयात-रिपोर्ट.csv",
     "is": "आहे",
-    "are": "आहेत"
+    "are": "आहेत",
+    "groups": "गट",
+    "accounts": "खाती"
 }
