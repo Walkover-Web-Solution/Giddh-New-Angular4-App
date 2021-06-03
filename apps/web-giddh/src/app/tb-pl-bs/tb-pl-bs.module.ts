@@ -22,7 +22,6 @@ import { TbExportPdfComponent } from './components/export/tb-export-pdf.componen
 import { TbExportXlsComponent } from './components/export/tb-export-xls.component';
 import { BsExportXlsComponent } from './components/export/bs-export-xls.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { DatePickerCustomModule } from '../theme/datepicker/date-picker.module';
 import { TbsearchPipe } from '../shared/header/pipe/tbsearch.pipe';
 import { LaddaModule } from 'angular2-ladda';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
@@ -34,6 +33,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { SharedModule } from '../shared/shared.module';
+
 @NgModule({
     declarations: [
         TbPlBsComponent,
@@ -67,7 +67,6 @@ import { SharedModule } from '../shared/shared.module';
         Daterangepicker,
         TbPlBsRoutingModule,
         TabsModule,
-        DatePickerCustomModule,
         LaddaModule,
         HighlightModule,
         RecTypeModule,
