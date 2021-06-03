@@ -665,6 +665,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
             this.activeLocale = response?.value;
         });
+
+        this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.commonLocaleData = response;
+
+                if (this.isTodaysDateSelected) {
+                    this.selectedDateRangeUi = this.commonLocaleData?.app_today;
+                }
+            }
+        });
     }
 
     /**

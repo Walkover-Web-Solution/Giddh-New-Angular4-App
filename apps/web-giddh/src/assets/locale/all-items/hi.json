@@ -330,12 +330,6 @@
                     "link": "/pages/search",
                     "icon": "icon-search-new",
                     "description": "समूह का चयन करें और समय अवधि खोजें"
-                },
-                {
-                    "label": "समायोजन",
-                    "link": "/pages/settings",
-                    "icon": "icon-settings-cog",
-                    "description": "विभिन्न कर जोड़ें और प्रबंधित करें"
                 }
             ]
         }
