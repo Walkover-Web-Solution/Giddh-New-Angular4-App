@@ -19,6 +19,7 @@ import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { BreakpointObserver } from '@angular/cdk/layout';
+
 @Component({
     selector: 'tb-pl-bs-filter',
     templateUrl: './tb-pl-bs-filter.component.html',
@@ -46,7 +47,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     @Output() public tbExportXLSEvent = new EventEmitter<string>();
     @Output() public tbExportCsvEvent = new EventEmitter<string>();
     @Output() public plBsExportXLSEvent = new EventEmitter<string>();
-    // public expandAll?: boolean = null;
     @Output()
     public expandAll: EventEmitter<boolean> = new EventEmitter<boolean>();
     public showClearSearch: boolean;
@@ -197,7 +197,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
                 } else {
                     this.universalDateICurrent = false;
                     // assign dates
-                    // this.assignStartAndEndDateForDateRangePicker(date[0], date[1]);
 
                     this.filterForm?.patchValue({
                         from: moment(a[0]).format(GIDDH_DATE_FORMAT),
@@ -279,12 +278,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
             if (activeCompany && this.universalDateICurrent) {
                 let activeFinancialYear = activeCompany.activeFinancialYear;
                 if (activeFinancialYear) {
-                    // commented for later use
-                    // this.datePickerOptions = {
-                    //     ...this.datePickerOptions,
-                    //     startDate: moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'), endDate: moment(), chosenLabel: undefined
-                    // };
-
                     // assign dates
                     this.filterForm?.patchValue({
                         from: moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day').format(GIDDH_DATE_FORMAT),
@@ -298,10 +291,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    public selectDateOption(v: IOption) {
-        // this.selectedDateOption = v.value || '';
     }
 
     public selectedDate(value: any) {
@@ -409,20 +398,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
             this.expandAll.emit(this.expand);
         }, 10);
         this.onPropertyChanged.emit(this.filterForm.value);
-    }
-
-    /**
-     * assign date to start and end date for date range picker
-     * @param from
-     * @param to
-     */
-    private assignStartAndEndDateForDateRangePicker(from, to) {
-        from = from || moment().subtract(30, 'd');
-        to = to || moment();
-        this.filterForm.get('selectedDateRange')?.patchValue({
-            startDate: moment(from, GIDDH_DATE_FORMAT),
-            endDate: moment(to, GIDDH_DATE_FORMAT)
-        });
     }
 
     /**

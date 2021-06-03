@@ -648,54 +648,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private voucherTypeToNamePipe: VoucherTypeToNamePipe,
         private titleCasePipe: TitleCasePipe
     ) {
-        
-    }
-
-    public ngAfterViewInit() {
-        if (!this.isUpdateMode) {
-            this.toggleBodyClass();
-        }
-        this.selectAccount.changes.pipe(distinctUntilChanged((firstItem, nextItem) => {
-            return firstItem?.first?.filter === nextItem?.first?.filter;
-        }), takeUntil(this.destroyed$)).subscribe((queryChanges: QueryList<ShSelectComponent>) => {
-            if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
-                queryChanges?.first?.show();
-            }
-        });
-    }
-
-    /**
-     * Toggle the RCM checkbox based on user confirmation
-     *
-     * @param {*} event Click event
-     * @memberof ProformaInvoiceComponent
-     */
-    public toggleRcmCheckbox(event: any): void {
-        event.preventDefault();
-        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked, this.commonLocaleData);
-    }
-
-    /**
-     * RCM change handler, triggerreed when the user performs any
-     * action with the RCM popup
-     *
-     * @param {string} action Action performed by user
-     * @memberof ProformaInvoiceComponent
-     */
-    public handleRcmChange(action: string): void {
-        if (action === this.commonLocaleData?.app_yes) {
-            // Toggle the state of RCM as user accepted the terms of RCM modal
-            this.isRcmEntry = !this.isRcmEntry;
-            this.recalculateConvertedTotal();
-            this.calculateGrandTotal();
-            this.calculateBalanceDue();
-        }
-        if (this.rcmPopup) {
-            this.rcmPopup.hide();
-        }
-    }
-
-    public ngOnInit() {
         this.getInventorySettings();
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
@@ -753,7 +705,53 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.onSubmitInvoiceForm(form);
             }
         });
+    }
 
+    public ngAfterViewInit() {
+        if (!this.isUpdateMode) {
+            this.toggleBodyClass();
+        }
+        this.selectAccount.changes.pipe(distinctUntilChanged((firstItem, nextItem) => {
+            return firstItem?.first?.filter === nextItem?.first?.filter;
+        }), takeUntil(this.destroyed$)).subscribe((queryChanges: QueryList<ShSelectComponent>) => {
+            if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
+                queryChanges?.first?.show();
+            }
+        });
+    }
+
+    /**
+     * Toggle the RCM checkbox based on user confirmation
+     *
+     * @param {*} event Click event
+     * @memberof ProformaInvoiceComponent
+     */
+    public toggleRcmCheckbox(event: any): void {
+        event.preventDefault();
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked, this.commonLocaleData);
+    }
+
+    /**
+     * RCM change handler, triggerreed when the user performs any
+     * action with the RCM popup
+     *
+     * @param {string} action Action performed by user
+     * @memberof ProformaInvoiceComponent
+     */
+    public handleRcmChange(action: string): void {
+        if (action === this.commonLocaleData?.app_yes) {
+            // Toggle the state of RCM as user accepted the terms of RCM modal
+            this.isRcmEntry = !this.isRcmEntry;
+            this.recalculateConvertedTotal();
+            this.calculateGrandTotal();
+            this.calculateBalanceDue();
+        }
+        if (this.rcmPopup) {
+            this.rcmPopup.hide();
+        }
+    }
+
+    public ngOnInit() {
         this.isPendingSales = this.router.url.includes('/pages/invoice/preview/pending/sales' && '/pages/purchase-management/purchase/bill');
         this.autoFillShipping = true;
         this.isUpdateMode = false;

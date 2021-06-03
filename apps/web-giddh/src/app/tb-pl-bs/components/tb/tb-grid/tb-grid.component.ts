@@ -54,9 +54,7 @@ export class TbGridComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnChanges(changes: SimpleChanges) {
         if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
-            //
             if (this.data$) {
-                // this.cd.detach();
                 this.zone.runOutsideAngular(() => {
                     this.toggleGroupVisibility(this.data$.groupDetails, changes.expandAll.currentValue);
                     if (this.data$) {

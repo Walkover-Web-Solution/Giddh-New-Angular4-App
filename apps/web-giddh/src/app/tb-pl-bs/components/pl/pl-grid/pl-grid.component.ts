@@ -60,9 +60,7 @@ export class PlGridComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnChanges(changes: SimpleChanges) {
         if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
-            //
             if (this.plData && this.cogsData) {
-                // this.cd.detach();
                 this.zone.run(() => {
                     if (this.plData) {
                         this.toggleVisibility(this.plData.expArr, changes.expandAll.currentValue);
@@ -102,18 +100,6 @@ export class PlGridComponent implements OnInit, OnChanges, OnDestroy {
                             }
                             this.toggleVisibility(this.cogsData.childGroups, changes.expandAll.currentValue);
                         }
-
-                        // this.toggleVisibility(this.cogsData.childGroups, changes.expandAll.currentValue);
-                        // _.each(this.cogsData.childGroups, (grp: any) => {
-                        //   if (grp.isIncludedInSearch) {
-                        //     grp.isVisible = true;
-                        //     _.each(grp.accounts, (acc: any) => {
-                        //       if (acc.isIncludedInSearch) {
-                        //         acc.isVisible = true;
-                        //       }
-                        //     });
-                        //   }
-                        // });
                     }
 
                     this.cd.detectChanges();
@@ -132,15 +118,6 @@ export class PlGridComponent implements OnInit, OnChanges, OnDestroy {
             }
         }, 200);
     }
-
-    // private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
-    //   _.each(data, (grp) => {
-    //     grp.isVisible = isVisible;
-    //     _.each(grp.accounts, (acc) => {
-    //       acc.isVisible = isVisible;
-    //     });
-    //     this.toggleVisibility(grp.childGroups, isVisible);
-    //   });
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
