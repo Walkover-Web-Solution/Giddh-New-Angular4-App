@@ -7,7 +7,7 @@ import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Compa
 import { CompanyActions } from '../actions/company.actions';
 import { ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { GeneralActions } from '../actions/general/general.actions';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'tb-pl-bs',
@@ -41,7 +41,7 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private _route: ActivatedRoute, private router: Router, private _generalActions: GeneralActions) {
+    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private _route: ActivatedRoute, private router: Router, private breakPointObservar: BreakpointObserver,) {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
@@ -55,9 +55,6 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
         } else {
             this.CanNewTBLoadOnThisEnv = false;
         }
-
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
 
         this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tab && val.tabIndex) {
