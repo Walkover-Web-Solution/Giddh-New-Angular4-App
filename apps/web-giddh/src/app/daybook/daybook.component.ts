@@ -54,15 +54,15 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     /** True, If advance search applied */
     public showAdvanceSearchIcon: boolean = false;
-    @ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
-    @ViewChild('exportDaybookModal', {static: true}) public exportDaybookModal: ModalDirective;
+    @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: ModalDirective;
+    @ViewChild('exportDaybookModal', { static: true }) public exportDaybookModal: ModalDirective;
     @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent, static: false }) public dateRangePickerCmp: DaterangePickerComponent;
     /** Daybook advance search component reference */
-    @ViewChild('daybookAdvanceSearch', {static: false}) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
+    @ViewChild('daybookAdvanceSearch', { static: false }) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
     /** Update ledger modal reference */
-    @ViewChild('updateLedgerModal', {static: false}) public updateLedgerModal: ModalDirective;
+    @ViewChild('updateLedgerModal', { static: false }) public updateLedgerModal: ModalDirective;
     /** Update ledger component reference */
-    @ViewChild(UpdateLedgerEntryPanelComponent, {static: true}) public updateLedgerComponent: UpdateLedgerEntryPanelComponent;
+    @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponent: UpdateLedgerEntryPanelComponent;
     /** True, if entry expanded (at least one entry) */
     public isEntryExpanded: boolean = false;
     /** Date format type */
@@ -120,6 +120,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public lc: LedgerVM;
     /** Company taxes list */
     public companyTaxesList: TaxResponse[] = [];
+    /** True if initial api got called */
+    public initialApiCalled: boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -170,7 +172,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     item.isExpanded = this.isAllExpanded;
                 });
 
-                if(this.todaySelected) {
+                if (this.todaySelected) {
                     this.daybookQueryRequest.from = moment(data.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                     this.daybookQueryRequest.to = moment(data.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
@@ -224,11 +226,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.daybookQueryRequest.branchUniqueName = (this.currentBranch) ? this.currentBranch.uniqueName : "";
-                this.initialRequest();
+                if (!this.initialApiCalled) {
+                    this.initialApiCalled = true;
+                    this.initialRequest();
+                }
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
             }
         });
@@ -293,7 +298,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
     public toggleExpand() {
         this.isAllExpanded = !this.isAllExpanded;
-        if(this.daybookData$) {
+        if (this.daybookData$) {
             this.daybookData$ = this.daybookData$.pipe(map(sc => {
                 sc.entries.map(e => e.isExpanded = this.isAllExpanded);
                 return sc;
@@ -317,7 +322,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
                 this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                     this.todaySelected = response;
-                    if(!response) {
+                    if (!response) {
                         this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
                         this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                         this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -337,7 +342,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public pageChanged(event: any): void {
-        if(this.daybookQueryRequest.page !== event.page) {
+        if (this.daybookQueryRequest.page !== event.page) {
             this.daybookQueryRequest.page = event.page;
             this.go(this.searchFilterData);
         }
@@ -398,7 +403,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public checkIsStockEntryAvailable(): any {
-        if(this.daybookData$) {
+        if (this.daybookData$) {
             this.daybookData$.pipe(takeUntil(this.destroyed$)).subscribe(item => {
                 this.isEntryExpanded = item.entries.some(entry => {
                     if (entry.isExpanded && entry.otherTransactions) {
@@ -449,7 +454,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -497,6 +502,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.lc.selectedTxnUniqueName = txn.uniqueName;
         this.updateLedgerModal.show();
         document.querySelector('body').classList.add('update-ledger-overlay');
+
+        setTimeout(() => {
+            this.updateLedgerComponent.loadDefaultSearchSuggestions();
+        }, 20);
     }
 
     /**

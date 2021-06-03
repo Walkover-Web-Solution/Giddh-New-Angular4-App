@@ -130,12 +130,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public searchStr$ = new Subject<string>();
     public searchStr: string = '';
     @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
-    @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
-    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
-    @ViewChild('mailModal', {static: false}) public mailModal: ModalDirective;
-    @ViewChild('messageBox', {static: false}) public messageBox: ElementRef;
-    @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
-    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
+    @ViewChild('paginationChild', { static: true }) public paginationChild: ElementViewContainerRef;
+    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
+    @ViewChild('mailModal', { static: false }) public mailModal: ModalDirective;
+    @ViewChild('messageBox', { static: false }) public messageBox: ElementRef;
+    @ViewChild('advanceSearch', { static: true }) public advanceSearch: ModalDirective;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
 
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public universalDate$: Observable<any>;
@@ -225,6 +225,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
+    /** This will store screen size */
+    public isMobileView: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -239,8 +241,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         private _groupWithAccountsAction: GroupWithAccountsAction,
         private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
         private _route: ActivatedRoute, private _generalAction: GeneralActions,
-        private _breakPointObservar: BreakpointObserver, private modalService: BsModalService,
-        private settingsProfileActions: SettingsProfileActions,  private groupService: GroupService,
+        private breakPointObservar: BreakpointObserver, private modalService: BsModalService,
+        private settingsProfileActions: SettingsProfileActions, private groupService: GroupService,
         private settingsBranchAction: SettingsBranchActions,
         public currencyPipe: GiddhCurrencyPipe) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
@@ -256,7 +258,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.selectedCompany = activeCompany;
             }
         });
@@ -300,6 +302,26 @@ export class ContactComponent implements OnInit, OnDestroy {
                 Object.assign({}, { class: 'payment-modal modal-xl' })
             );
         }
+    }
+
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof ContactComponent
+     */
+     public getPageHeading(): string {
+        if(this.isMobileView){
+            if(this.activeTab === 'aging-report') {
+                return this.localeData?.aging_report;
+            }
+            else if(this.activeTab !== 'aging-report') {
+                return this.localeData?.customer;
+            }
+         }
+         else {
+             return "";
+         }
     }
 
     public sort(key, ord = 'asc') {
@@ -357,10 +379,12 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
             });
 
-        this._breakPointObservar.observe([
-            '(max-width: 1023px)'
+        this.breakPointObservar.observe([
+            '(max-width: 1023px)',
+            '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
+            this.isMobileScreen = result?.breakpoints['(max-width: 1023px)'];
+            this.isMobileView = result?.breakpoints['(max-width: 767px)'];
         });
 
         combineLatest([this._route.params, this._route.queryParams])
@@ -443,7 +467,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             } else {
                 if (this._generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
             }
         });
@@ -534,7 +558,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.order = 'asc';
             this.activeTab = tabName;
 
-            if(this.universalDate) {
+            if (this.universalDate) {
                 this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
                 this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
@@ -659,7 +683,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public hideListItems() {
-        if(this.filterDropDownList) {
+        if (this.filterDropDownList) {
             this.filterDropDownList.hide();
         }
     }
@@ -837,7 +861,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 });
         }
 
-        if(this.mailModal) {
+        if (this.mailModal) {
             this.mailModal.hide();
         }
     }
@@ -877,7 +901,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public selectedDate(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -1105,23 +1129,23 @@ export class ContactComponent implements OnInit, OnDestroy {
             if (res && res.body && res.status === 'success') {
                 this.openingBalance = res.body.openingBalance;
 
-                if(this.activeTab === "customer" && this.openingBalance) {
-                    if(this.openingBalance.type === "CREDIT") {
-                        this.closingBalance = Number("-"+this.openingBalance.amount) || 0;
-                    } else if(this.openingBalance.type === "DEBIT") {
+                if (this.activeTab === "customer" && this.openingBalance) {
+                    if (this.openingBalance.type === "CREDIT") {
+                        this.closingBalance = Number("-" + this.openingBalance.amount) || 0;
+                    } else if (this.openingBalance.type === "DEBIT") {
                         this.closingBalance = Number(this.openingBalance.amount) || 0;
                     }
                 }
 
-                if(this.activeTab === "vendor" && this.openingBalance) {
-                    if(this.openingBalance.type === "CREDIT") {
+                if (this.activeTab === "vendor" && this.openingBalance) {
+                    if (this.openingBalance.type === "CREDIT") {
                         this.closingBalance = Number(this.openingBalance.amount) || 0;
-                    } else if(this.openingBalance.type === "DEBIT") {
-                        this.closingBalance = Number("-"+this.openingBalance.amount) || 0;
+                    } else if (this.openingBalance.type === "DEBIT") {
+                        this.closingBalance = Number("-" + this.openingBalance.amount) || 0;
                     }
                 }
 
-                if(this.activeTab === "customer") {
+                if (this.activeTab === "customer") {
                     this.closingBalance = Number((this.closingBalance + (res.body.debitTotal - res.body.creditTotal)).toFixed(this.giddhDecimalPlaces)) || 0;
                 } else {
                     this.closingBalance = Number((this.closingBalance + (res.body.creditTotal - res.body.debitTotal)).toFixed(this.giddhDecimalPlaces)) || 0;
@@ -1272,7 +1296,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.isBulkPaymentShow = false;
         this.selectedAccForPayment = null;
 
-        if(this.bulkPaymentModalRef) {
+        if (this.bulkPaymentModalRef) {
             this.bulkPaymentModalRef.hide();
         }
     }
@@ -1360,8 +1384,8 @@ export class ContactComponent implements OnInit, OnDestroy {
      *
      * @memberof ContactComponent
      */
-    public clearSelectedContacts(resetPage:boolean = true): void {
-        if(resetPage) {
+    public clearSelectedContacts(resetPage: boolean = true): void {
+        if (resetPage) {
             this.checkboxInfo = {
                 selectedPage: 1
             };
@@ -1375,11 +1399,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
 
-     /**
-     * API call to get custom field data
-     *
-     * @memberof ContactComponent
-     */
+    /**
+    * API call to get custom field data
+    *
+    * @memberof ContactComponent
+    */
     public getCompanyCustomField(): void {
         this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
@@ -1442,7 +1466,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public translationComplete(event: boolean): void {
-        if(event) {
+        if (event) {
             this.messageBody.header.email = this.commonLocaleData?.app_send_email;
             this.messageBody.header.sms = this.commonLocaleData?.app_send_sms;
 

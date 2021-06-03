@@ -115,4 +115,3 @@ jobs:
           SLACK_TITLE: Giddh Desktop Windows build
           SLACK_USERNAME: Giddh Desktop Windows build
           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
-

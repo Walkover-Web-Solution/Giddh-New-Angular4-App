@@ -1,39 +1,39 @@
-@import '../../../../../assets/css/color.scss';
+@import "../../../../../assets/css/color.scss";
 
-.modal-body .grp-col{
-    max-width:58.333%;
+.modal-body .grp-col {
+    max-width: 58.333%;
 }
 
-.custom-filed-list-wrapper{
+.custom-filed-list-wrapper {
     padding: 15px;
     height: 768px;
     overflow-y: auto;
-    form{
+    form {
         max-width: 1280px;
         width: 100%;
     }
-    label{
+    label {
         line-height: 2.3;
     }
-    .edit-close-btn{
-        .close-button{
+    .edit-close-btn {
+        .close-button {
             margin-right: 15px;
-            i{
+            i {
                 font-size: 18px;
             }
         }
-        i{
+        i {
             color: $black !important;
         }
     }
 }
 
-.height-in-vh{
+.height-in-vh {
     height: calc(100vh - 70px);
 }
 
-@media(max-height:800px){
-.custom-filed-list-wrapper{
+@media (max-height: 800px) {
+    .custom-filed-list-wrapper {
         height: 550px;
         overflow-y: auto;
     }

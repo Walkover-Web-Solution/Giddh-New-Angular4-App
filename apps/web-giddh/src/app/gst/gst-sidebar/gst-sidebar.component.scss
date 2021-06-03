@@ -1,4 +1,4 @@
-@import '../../../assets/css/color.scss';
+@import "../../../assets/css/color.scss";
 
 :host.gst-sidebar {
     position: fixed;
@@ -9,7 +9,7 @@
     width: 240px;
     left: 0;
     z-index: 999;
-    box-shadow: -2px -2px 15px rgba(0,0,0,.2)!important;
+    box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2) !important;
     .aside-pane {
         background: $white;
         overflow: initial;
@@ -30,20 +30,21 @@
                             padding: 7px 15px;
                             span {
                                 i {
-                                    color: grey;
+                                    color: $gray;
                                     margin-right: 10px;
                                     font-size: 14px;
                                 }
                             }
-                            &.disabled{
-                                span{
+                            &.disabled {
+                                span {
                                     color: $gray !important;
                                 }
                             }
                             &.active {
                                 background-color: $cornflower !important;
-                                span, span i{
-                                     color: $white !important;
+                                span,
+                                span i {
+                                    color: $white !important;
                                 }
                             }
                         }
@@ -67,7 +68,7 @@
             a {
                 cursor: pointer;
                 pointer-events: all;
-                &.disabled{
+                &.disabled {
                     pointer-events: none;
                 }
                 img {

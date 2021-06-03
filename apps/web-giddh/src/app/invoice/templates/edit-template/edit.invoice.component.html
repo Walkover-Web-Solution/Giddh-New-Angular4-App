@@ -7,7 +7,8 @@
             <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown">
                 <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                     aria-controls="dropdown-basic">
-                    {{ (voucherType === "debit note" || voucherType === "credit note") ? 'Credit/Debit Note' : voucherType | titlecase}}
+                    {{ (voucherType === "debit note" || voucherType === "credit note") ? 'Credit/Debit Note' :
+                    voucherType | titlecase}}
                     <span class="caret"></span>
                 </button>
                 <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
@@ -78,8 +79,8 @@
                         <span *ngIf="template.isDefaultForVoucher" class="badge btn-sky-blue mr-t2"><i
                                 class="icon-favorite-selected"></i> Default Template</span>
                         <span *ngIf="!template.isDefaultForVoucher" class="badge btn-success mr-t2 cp"
-                            (click)="onSetTemplateAsDefault(template,'voucher')"><i
-                                class="icon-favorite-selected"></i> Set as
+                            (click)="onSetTemplateAsDefault(template,'voucher')"><i class="icon-favorite-selected"></i>
+                            Set as
                             Default</span>
                     </div>
 
@@ -120,11 +121,12 @@
     <div class="sticky-footer pd-2">
         <!--<button class="btn btn-default">Preview</button>-->
         <div class="pull-right mr-r4" *ngIf="voucherType ==='sales' ">
-            <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate('invoice')">Save
+            <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'create'"
+                class="btn btn-success" (click)="createTemplate('invoice')">Save
             </button>
-            <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'update'" class="btn btn-success"
-                (click)="updateTemplate('invoice')">Update
-                Invoice
+            <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'update'"
+                class="btn btn-success" (click)="updateTemplate('invoice')">Update
+                Template
             </button>
             <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
         </div>
@@ -133,7 +135,7 @@
             </button>
             <button *ngIf="transactionMode == 'update'" class="btn btn-success"
                 (click)="updateTemplate('voucher')">Update
-                Voucher
+                Template
             </button>
             <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
         </div>

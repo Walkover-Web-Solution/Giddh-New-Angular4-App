@@ -1,27 +1,28 @@
-<div class="relative">
-    <hamburger-menu></hamburger-menu>
-    <div class="invoice-control" id="purchase-tab">
-        <tabset class="purchase-tabset">
-            <tab heading="Purchase Order" [active]="activeTab == 'order'" (selectTab)="onTabChanged('order')"
-            [id]="(activeTab == 'order') ? 'giddh-page-heading': ''">
-                <div *ngIf="activeTab == 'order'">
-                    <purchase-order (refreshPurchaseBill)="purchaseOrderOutput($event)"></purchase-order>
-                </div>
-            </tab>
-            <tab heading="Purchase Bill" [active]="activeTab == 'bill'" (selectTab)="onTabChanged('bill')"
-            [id]="(activeTab == 'bill') ? 'giddh-page-heading': ''">
-                <div *ngIf="activeTab == 'bill'" class="pd-t15">
-                    <app-invoice-preview [selectedVoucher]="'purchase'" [refreshPurchaseBill]="refreshPurchaseBill" (resetRefreshPurchaseBill)="purchaseOrderOutput($event)"></app-invoice-preview>
-                </div>
-            </tab>
-            <tab heading="Settings" [active]="activeTab == 'settings'" (selectTab)="onTabChanged('settings')"
-            [id]="(activeTab == 'settings') ? 'giddh-page-heading': ''">
-                <div>
-                    <purchase-setting></purchase-setting>
-                </div>
-            </tab>
-        </tabset>
+<ng-container appTranslate [file]="'purchase-record'" (localeData)="localeData = $event" [requireCommonData]="false">
+    <div class="relative">
+        <hamburger-menu [pageHeading]="getPageHeading()"></hamburger-menu>
+        <div class="invoice-control" id="purchase-tab">
+            <tabset class="purchase-tabset">
+                <tab [heading]="localeData?.purchase_order" [active]="activeTab == 'order'" (selectTab)="onTabChanged('order')"
+                    [id]="(activeTab == 'order') ? 'giddh-page-heading': ''">
+                    <div *ngIf="activeTab == 'order'">
+                        <purchase-order (refreshPurchaseBill)="purchaseOrderOutput($event)"></purchase-order>
+                    </div>
+                </tab>
+                <tab [heading]="localeData?.purchase_bill" [active]="activeTab == 'bill'" (selectTab)="onTabChanged('bill')"
+                    [id]="(activeTab == 'bill') ? 'giddh-page-heading': ''">
+                    <div *ngIf="activeTab == 'bill'" class="pd-t15">
+                        <app-invoice-preview [selectedVoucher]="'purchase'" [refreshPurchaseBill]="refreshPurchaseBill"
+                            (resetRefreshPurchaseBill)="purchaseOrderOutput($event)"></app-invoice-preview>
+                    </div>
+                </tab>
+                <tab [heading]="localeData?.settings" [active]="activeTab == 'settings'" (selectTab)="onTabChanged('settings')"
+                    [id]="(activeTab == 'settings') ? 'giddh-page-heading': ''">
+                    <div>
+                        <purchase-setting></purchase-setting>
+                    </div>
+                </tab>
+            </tabset>
+        </div>
     </div>
-</div>
-
-
+</ng-container>

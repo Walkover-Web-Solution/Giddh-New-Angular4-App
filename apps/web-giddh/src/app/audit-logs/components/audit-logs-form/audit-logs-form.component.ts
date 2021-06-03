@@ -135,7 +135,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                 this.auditLogFormVM.canManageCompany = false;
             }
         });
-        
+
         // To get audit log form filter
         this.getFormFilter();
         this.auditLogFormVM.reset();
@@ -420,7 +420,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -501,7 +501,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 

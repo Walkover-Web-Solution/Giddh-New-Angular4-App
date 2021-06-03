@@ -20,7 +20,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
-import { cloneDeep, forEach, isEqual, sumBy, filter, find, without, maxBy , findIndex} from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep, forEach, isEqual, sumBy, filter, find, without, maxBy, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import * as moment from 'moment';
 import { BsDatepickerConfig, BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
@@ -32,7 +32,6 @@ import { GeneralActions } from '../../../actions/general/general.actions';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { SalesActions } from '../../../actions/sales/sales.action';
 import { AccountResponse, AddAccountRequest, UpdateAccountRequest } from '../../../models/api-models/Account';
-import { CurrentPage } from '../../../models/api-models/Common';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
@@ -89,23 +88,23 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @Input() public commonLocaleData: any = {};
     @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 
-    @ViewChild('quickAccountComponent', {static: true}) public quickAccountComponent: ElementViewContainerRef;
-    @ViewChild('quickAccountModal', {static: true}) public quickAccountModal: ModalDirective;
+    @ViewChild('quickAccountComponent', { static: true }) public quickAccountComponent: ElementViewContainerRef;
+    @ViewChild('quickAccountModal', { static: true }) public quickAccountModal: ModalDirective;
 
-    @ViewChild('chequeEntryModal', {static: true}) public chequeEntryModal: ModalDirective;
+    @ViewChild('chequeEntryModal', { static: true }) public chequeEntryModal: ModalDirective;
 
-    @ViewChild('particular', {static: false}) public accountField: ElementRef;
-    @ViewChild('dateField', {static: true}) public dateField: ElementRef;
-    @ViewChild('narrationBox', {static: true}) public narrationBox: ElementRef;
-    @ViewChild('chequeNumberInput', {static: true}) public chequeNumberInput: ElementRef;
-    @ViewChild('chequeClearanceInputField', {static: true}) public chequeClearanceInputField: ElementRef;
-    @ViewChild('chqFormSubmitBtn', {static: true}) public chqFormSubmitBtn: ElementRef;
-    @ViewChild('submitButton', {static: true}) public submitButton: ElementRef;
-    @ViewChild('resetButton', {static: true}) public resetButton: ElementRef;
+    @ViewChild('particular', { static: false }) public accountField: ElementRef;
+    @ViewChild('dateField', { static: true }) public dateField: ElementRef;
+    @ViewChild('narrationBox', { static: true }) public narrationBox: ElementRef;
+    @ViewChild('chequeNumberInput', { static: true }) public chequeNumberInput: ElementRef;
+    @ViewChild('chequeClearanceInputField', { static: true }) public chequeClearanceInputField: ElementRef;
+    @ViewChild('chqFormSubmitBtn', { static: true }) public chqFormSubmitBtn: ElementRef;
+    @ViewChild('submitButton', { static: true }) public submitButton: ElementRef;
+    @ViewChild('resetButton', { static: true }) public resetButton: ElementRef;
 
-    @ViewChild('manageGroupsAccountsModal', {static: true}) public manageGroupsAccountsModal: ModalDirective;
+    @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: ModalDirective;
     /* Selector for receipt entry modal */
-    @ViewChild('receiptEntry', {static: true}) public receiptEntry: TemplateRef<any>;
+    @ViewChild('receiptEntry', { static: true }) public receiptEntry: TemplateRef<any>;
     /* Selector for adjustment type field */
     @ViewChildren('adjustmentTypesField') public adjustmentTypesField: ShSelectComponent;
     /** List of all 'DEBIT' amount fields when 'By' entries are made  */
@@ -334,7 +333,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.activeCompany = activeCompany;
                 this.currentCompanyUniqueName = activeCompany.uniqueName;
             }
@@ -724,7 +723,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         //         }
         //     }
         // } else {
-            this.calModAmt(amount, transactionObj, index);
+        this.calModAmt(amount, transactionObj, index);
         //}
     }
 
@@ -742,7 +741,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 if (this.requestObj.voucherType !== VOUCHERS.RECEIPT) {
                     this.newEntryObj('to');
                 } else {
-                    if(this.requestObj.transactions.length === 1) {
+                    if (this.requestObj.transactions.length === 1) {
                         this.newEntryObj('by');
                     }
                 }
@@ -1277,7 +1276,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public loadQuickAccountComponent() {
-        if(this.quickAccountModal && this.quickAccountModal.config) {
+        if (this.quickAccountModal && this.quickAccountModal.config) {
             this.quickAccountModal.config.backdrop = false;
         }
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
@@ -1712,7 +1711,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let invoiceRequired = false;
         let invoiceAmountError = false;
 
-        if(this.receiptEntries?.length > 0) {
+        if (this.receiptEntries?.length > 0) {
             this.receiptEntries.forEach(receipt => {
                 if (isValid) {
                     if (isNaN(parseFloat(receipt.amount))) {
@@ -1969,7 +1968,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public validateAndOpenAdjustmentPopup(transaction: any, template: TemplateRef<any>): void {
         if (this.requestObj.voucherType === VOUCHERS.RECEIPT && transaction && transaction.type === "to" && !transaction.voucherAdjustments) {
-            if(transaction.amount && Number(transaction.amount) > 0) {
+            if (transaction.amount && Number(transaction.amount) > 0) {
                 if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
                     this.pendingInvoicesListParams.accountUniqueNames = [];
                     this.pendingInvoicesListParams.accountUniqueNames.push(transaction.selectedAccount.UniqueName);
@@ -2009,7 +2008,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -2025,7 +2024,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.accountsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
-            const {group, exceptGroups} = this.tallyModuleService.getGroupByVoucher(this.requestObj.voucherType, this.selectedTransactionType);
+            const { group, exceptGroups } = this.tallyModuleService.getGroupByVoucher(this.requestObj.voucherType, this.selectedTransactionType);
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject: any = {
                 q: encodeURIComponent(query),

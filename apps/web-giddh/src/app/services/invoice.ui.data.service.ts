@@ -29,10 +29,14 @@ export class InvoiceUiDataService {
     public templateVoucherType: BehaviorSubject<string> = new BehaviorSubject(null);
     /** Stores the content form instance  */
     public contentForm: NgForm;
+    /** Stores the content form controls with errors  */
+    public contentFormErrors: number;
     /** Stores the image uniquename, if signature image got uploaded to the server but not updated with invoice, used
      * to avoid unused uploading of images on the server
     */
     public unusedImageSignature: string;
+    /** True, if logo update is successful */
+    public isLogoUpdateInProgress: boolean;
 
     private companyName: string;
     private companyAddress: string;
@@ -142,6 +146,7 @@ export class InvoiceUiDataService {
      */
     public resetCustomTemplate() {
         this.customTemplate.next(new CustomTemplateResponse());
+        this.isLogoUpdateInProgress = false;
     }
 
     public BRToNewLine(template) {
@@ -198,14 +203,6 @@ export class InvoiceUiDataService {
                     field: 'attentionTo',
                     width: null
                 };
-                if (selectedTemplate?.sections && selectedTemplate?.sections?.footer?.data?.message1?.label === '') {
-                    if (selectedTemplate?.templateType === 'gst_template_a') {
-                        selectedTemplate.sections.footer.data.message1.label = `All payments to be made in cash.\nContact us for queries on
-                        these quotations.`;
-                    } else if (selectedTemplate?.templateType === 'gst_template_e') {
-                        selectedTemplate.sections.footer.data.message1.label = `We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.`;
-                    }
-                }
                 if (!selectedTemplate.sections['header'].data['showCompanyAddress']) {
                     // Assign the default value based on value of warehouseAddress
                     selectedTemplate.sections['header'].data['showCompanyAddress'] = {
@@ -235,11 +232,11 @@ export class InvoiceUiDataService {
                 if (!selectedTemplate.sections['header'].data['gstComposition']) {
                     // Assign the default value based on value of warehouseAddress
                     selectedTemplate.sections['header'].data['gstComposition'] = defaultTemplate ?
-                    defaultTemplate.sections['header'].data['gstComposition'] : {
-                        label: '',
-                        display: true,
-                        width: null
-                    };
+                        defaultTemplate.sections['header'].data['gstComposition'] : {
+                            label: '',
+                            display: true,
+                            width: null
+                        };
                 }
                 if (!selectedTemplate.sections['footer'].data['textUnderSlogan']) {
                     // Assign the default value based of company name if not present
@@ -266,7 +263,7 @@ export class InvoiceUiDataService {
                         };
                 }
                 if (!selectedTemplate.sections['table'].data['showDescriptionInRows']) {
-                    selectedTemplate.sections['table'].data['showDescriptionInRows'] = defaultTemplate ? 
+                    selectedTemplate.sections['table'].data['showDescriptionInRows'] = defaultTemplate ?
                         defaultTemplate.sections['table'].data['showDescriptionInRows'] : {
                             label: '',
                             display: false,
@@ -298,6 +295,12 @@ export class InvoiceUiDataService {
     public setContentForm(form: NgForm): void {
         if (form) {
             this.contentForm = form;
+            this.contentFormErrors = 0;
+            Object.keys(form.controls).forEach(key => {
+                if (form.controls[key].errors) {
+                    this.contentFormErrors++;
+                }
+            });
         }
     }
 }

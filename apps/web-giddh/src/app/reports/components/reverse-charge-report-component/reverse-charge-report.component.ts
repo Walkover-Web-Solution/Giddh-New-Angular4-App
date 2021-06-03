@@ -26,9 +26,9 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 
 export class ReverseChargeReport implements OnInit, OnDestroy {
     public inlineSearch: any = '';
-    @ViewChild('suppliersNameField', {static: true}) public suppliersNameField;
-    @ViewChild('invoiceNumberField', {static: true}) public invoiceNumberField;
-    @ViewChild('supplierCountryField', {static: true}) public supplierCountryField;
+    @ViewChild('suppliersNameField', { static: true }) public suppliersNameField;
+    @ViewChild('invoiceNumberField', { static: true }) public invoiceNumberField;
+    @ViewChild('supplierCountryField', { static: true }) public supplierCountryField;
 
     public showEntryDate = true;
     public activeCompany: any;
@@ -183,7 +183,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
             }
         });
@@ -315,7 +315,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public checkIfFiltersApplied(): boolean {
-        if(this.reverseChargeReportPostRequest.invoiceNumber || this.reverseChargeReportPostRequest.supplierCountry || this.reverseChargeReportPostRequest.supplierName || this.reverseChargeReportPostRequest.voucherType || this.reverseChargeReportGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)) {
+        if (this.reverseChargeReportPostRequest.invoiceNumber || this.reverseChargeReportPostRequest.supplierCountry || this.reverseChargeReportPostRequest.supplierName || this.reverseChargeReportPostRequest.voucherType || this.reverseChargeReportGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)) {
             return true;
         } else {
             return false;
@@ -342,17 +342,17 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
         this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-        this.reverseChargeReportGetRequest.from =  this.fromDate;
+        this.reverseChargeReportGetRequest.from = this.fromDate;
         this.reverseChargeReportGetRequest.to = this.toDate;
         this.getReverseChargeReport(true);
     }
 
-     /**
-     *To show the datepicker
-     *
-     * @param {*} element
-     * @memberof ReverseChargeReport
-     */
+    /**
+    *To show the datepicker
+    *
+    * @param {*} element
+    * @memberof ReverseChargeReport
+    */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
@@ -379,7 +379,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -394,7 +394,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.reverseChargeReportGetRequest.from =  this.fromDate;
+            this.reverseChargeReportGetRequest.from = this.fromDate;
             this.reverseChargeReportGetRequest.to = this.toDate;
             this.getReverseChargeReport(true);
         }

@@ -1,11 +1,11 @@
 {
-  "baseUrl": "https://giddh.com/login",
-  "pageLoadTimeout" : 30000,
-  "env": {
-    "url": "https://giddh.com/login",
-    "dashBoardUrl" : "https://app.giddh.com/pages/home",
-    "authKey" : "vMvGKUiRYvyZqvwhljopR3R6-5XqBd-JWYu7GmO3xiZp-ySdHroKfx5cxM1KVsrOyz2HaL3DWYL6ko8yofhfsyHdp3a9MHQCJNlWFtdDLe0=",
-    "apiBaseURI" : "https://api.giddh.com/company/giddhain15947914057350u0jex",
-    "getLedgerAPI" : "/accounts/uitest/giddh-ledger"
-  }
+    "baseUrl": "https://giddh.com/login",
+    "pageLoadTimeout": 30000,
+    "env": {
+        "url": "https://giddh.com/login",
+        "dashBoardUrl": "https://app.giddh.com/pages/home",
+        "authKey": "vMvGKUiRYvyZqvwhljopR3R6-5XqBd-JWYu7GmO3xiZp-ySdHroKfx5cxM1KVsrOyz2HaL3DWYL6ko8yofhfsyHdp3a9MHQCJNlWFtdDLe0=",
+        "apiBaseURI": "https://api.giddh.com/company/giddhain15947914057350u0jex",
+        "getLedgerAPI": "/accounts/uitest/giddh-ledger"
+    }
 }

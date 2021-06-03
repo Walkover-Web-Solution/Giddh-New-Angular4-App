@@ -83,7 +83,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.exportRequest.balanceTypeAsSign = false;
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany && !this.activeFinancialYear) {
+            if (activeCompany && !this.activeFinancialYear) {
                 this.companyUniqueName = activeCompany.uniqueName;
                 this.activeFinancialYear = activeCompany.activeFinancialYear.uniqueName;
                 this.selectActiveFinancialYear();
@@ -427,7 +427,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 

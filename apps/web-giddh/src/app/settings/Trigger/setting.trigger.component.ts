@@ -1,5 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -16,39 +16,6 @@ import { SearchService } from '../../services/search.service';
 import { GroupService } from '../../services/group.service';
 import { API_COUNT_LIMIT } from '../../app.constant';
 
-const entityType = [
-    { label: 'Group', value: 'group' },
-    { label: 'Account', value: 'account' }
-];
-
-const actionType = [
-    { label: 'Webhook', value: 'webhook' }
-];
-
-const filterType = [
-    { label: 'Amount Greater Than', value: 'amountGreaterThan' },
-    { label: 'Amount Less Than', value: 'amountSmallerThan' },
-    { label: 'Amount Equals', value: 'amountEquals' },
-    { label: 'Description Equals', value: 'descriptionEquals' },
-    { label: 'Add', value: 'add' },
-    { label: 'Update', value: 'update' },
-    { label: 'Delete', value: 'delete' }
-];
-
-const scopeList = [
-    // G0-1393--Invoive and Entry not implemented from API
-    //{label: 'Invoice', value: 'invoice'},
-    //{label: 'Entry', value: 'entry'},
-    { label: 'Closing Balance', value: 'closing balance' }
-];
-
-const taxDuration = [
-    { label: 'Monthly', value: 'MONTHLY' },
-    { label: 'Quarterly', value: 'QUARTERLY' },
-    { label: 'Half-Yearly', value: 'HALFYEARLY' },
-    { label: 'Yearly', value: 'YEARLY' }
-];
-
 @Component({
     selector: 'setting-trigger',
     templateUrl: './setting.trigger.component.html',
@@ -57,7 +24,7 @@ const taxDuration = [
 
 export class SettingTriggerComponent implements OnInit, OnDestroy {
 
-    @ViewChild('triggerConfirmationModel', {static: true}) public triggerConfirmationModel: ModalDirective;
+    @ViewChild('triggerConfirmationModel', { static: true }) public triggerConfirmationModel: ModalDirective;
 
     public availableTriggers: any[] = [];
     public newTriggerObj: any = {};
@@ -74,10 +41,10 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     public accounts: IOption[];
     public groups: IOption[];
     public triggerToEdit = []; // It is for edit toogle
-    public entityList: IOption[] = entityType;
-    public filterList: IOption[] = filterType;
-    public actionList: IOption[] = actionType;
-    public scopeList: IOption[] = scopeList;
+    public entityList: IOption[] = [];
+    public filterList: IOption[] = [];
+    public actionList: IOption[] = [];
+    public scopeList: IOption[] = [];
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public forceClearEntityList$: Observable<IForceClear> = observableOf({ status: false });
     public forceClearFilterList$: Observable<IForceClear> = observableOf({ status: false });
@@ -119,6 +86,10 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private groupService: GroupService,
@@ -167,37 +138,37 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         let dataToSave = _.cloneDeep(data);
         dataToSave.action = 'webhook';
         if (!dataToSave.name) {
-            this._toaster.errorToast('Please enter trigger name.', 'Validation');
+            this._toaster.errorToast(this.localeData?.validations?.trigger_name, 'Validation');
             return;
         }
         if (!dataToSave.entity) {
-            this._toaster.errorToast('Please select entity type.', 'Validation');
+            this._toaster.errorToast(this.localeData?.validations?.entity_type, 'Validation');
             return;
         }
         if (!dataToSave.entityUniqueName) {
-            this._toaster.errorToast('Please select an entity.', 'Validation');
+            this._toaster.errorToast(this.localeData?.validations?.entity, 'Validation');
             return;
         }
         if (!dataToSave.scope) {
-            this._toaster.errorToast('Please select a scope.', 'Validation');
+            this._toaster.errorToast(this.localeData?.validations?.scope, 'Validation');
             return;
         }
         if (!dataToSave.filter) {
-            this._toaster.errorToast('Please select a filter.', 'Validation');
+            this._toaster.errorToast(this.localeData?.validations?.filter, 'Validation');
             return;
         }
         if (!dataToSave.action) {
-            this._toaster.errorToast('Please select an action.', 'Validation');
+            this._toaster.errorToast(this.localeData?.validations?.action, 'Validation');
             return;
         }
         if (!dataToSave.value && this.newTriggerObj.scope !== 'closing balance') {
-            this._toaster.errorToast('Please enter value.', 'Validation');
+            this._toaster.errorToast(this.localeData?.validations?.enter_value, 'Validation');
             return;
         } else {
             delete dataToSave['value'];
         }
         if (!dataToSave.url) {
-            this._toaster.errorToast('Please enter URL.', 'Validation');
+            this._toaster.errorToast(this.localeData?.validations?.enter_url, 'Validation');
             return;
         }
         this.store.dispatch(this._settingsTriggersActions.CreateTrigger(dataToSave));
@@ -206,7 +177,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     public deleteTax(taxToDelete) {
         this.newTriggerObj = taxToDelete;
         this.selectedTax = this.availableTriggers.find((tax) => tax.uniqueName === taxToDelete.uniqueName).name;
-        this.confirmationMessage = `Are you sure you want to delete ${this.selectedTax}?`;
+        let message = this.localeData?.delete_tax;
+        message = message?.replace("[SELECTED_TAX]", this.selectedTax);
+        this.confirmationMessage = message;
         this.confirmationFor = 'delete';
         this.triggerConfirmationModel.show();
     }
@@ -214,7 +187,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     public updateTrigger(taxIndex: number) {
         let selectedTrigger = _.cloneDeep(this.availableTriggers[taxIndex]);
         this.newTriggerObj = selectedTrigger;
-        this.confirmationMessage = `Are you sure want to update ${selectedTrigger.name}?`;
+        let message = this.localeData?.update_trigger;
+        message = message?.replace("[TRIGGER_NAME]", selectedTrigger.name);
+        this.confirmationMessage = message;
         this.confirmationFor = 'edit';
         this.triggerConfirmationModel.show();
     }
@@ -271,9 +246,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         this.forceClearEntityList$ = observableOf({ status: true });
     }
 
-	/**
-	 * onSelectScope
-	 */
+    /**
+     * onSelectScope
+     */
     public onSelectScope(event) {
         if (event.value === 'closing balance') {
             this.onSelectClosingBalance();
@@ -283,14 +258,22 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                 this.forceClearFilterList$ = observableOf({ status: true });
             }
         } else {
-            this.filterList = filterType;
+            this.filterList = [
+                { label: this.localeData?.filter_types?.amount_greater_than, value: 'amountGreaterThan' },
+                { label: this.localeData?.filter_types?.amount_less_than, value: 'amountSmallerThan' },
+                { label: this.localeData?.filter_types?.amount_equals, value: 'amountEquals' },
+                { label: this.localeData?.filter_types?.description_equals, value: 'descriptionEquals' },
+                { label: this.localeData?.filter_types?.add, value: 'add' },
+                { label: this.localeData?.filter_types?.update, value: 'update' },
+                { label: this.localeData?.filter_types?.delete, value: 'delete' }
+            ];
         }
     }
 
     public onSelectClosingBalance() {
         this.filterList = [
-            { label: 'Amount Greater Than', value: 'amountGreaterThan' },
-            { label: 'Amount Less Than', value: 'amountSmallerThan' },
+            { label: this.localeData?.filter_types?.amount_greater_than, value: 'amountGreaterThan' },
+            { label: this.localeData?.filter_types?.amount_less_than, value: 'amountSmallerThan' },
         ];
     }
 
@@ -431,7 +414,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -458,7 +441,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -510,5 +493,41 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof SettingTriggerComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.entityList = [
+                { label: this.localeData?.entity_types?.group, value: 'group' },
+                { label: this.localeData?.entity_types?.account, value: 'account' }
+            ];
+
+            this.actionList = [
+                { label: this.localeData?.webhook, value: 'webhook' }
+            ];
+
+            this.filterList = [
+                { label: this.localeData?.filter_types?.amount_greater_than, value: 'amountGreaterThan' },
+                { label: this.localeData?.filter_types?.amount_less_than, value: 'amountSmallerThan' },
+                { label: this.localeData?.filter_types?.amount_equals, value: 'amountEquals' },
+                { label: this.localeData?.filter_types?.description_equals, value: 'descriptionEquals' },
+                { label: this.localeData?.filter_types?.add, value: 'add' },
+                { label: this.localeData?.filter_types?.update, value: 'update' },
+                { label: this.localeData?.filter_types?.delete, value: 'delete' }
+            ];
+
+            this.scopeList = [
+                // G0-1393--Invoive and Entry not implemented from API
+                //{label: 'Invoice', value: 'invoice'},
+                //{label: 'Entry', value: 'entry'},
+                { label: this.localeData?.scope_list?.closing_balance, value: 'closing balance' }
+            ];
+        }
     }
 }

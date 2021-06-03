@@ -14,7 +14,7 @@ import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 export class ImportComponent implements OnInit {
 
     constructor(private store: Store<AppState>, private _companyActions: CompanyActions) {
-        
+
     }
 
     public ngOnInit() {

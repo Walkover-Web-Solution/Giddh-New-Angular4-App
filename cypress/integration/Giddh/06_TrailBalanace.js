@@ -14,7 +14,7 @@ describe('This is TrialBalance Search Test', () => {
     });
 
     before(() => {
-        cy.deleteAllLedgersAPI('uitest').then(()=>{
+        cy.deleteAllLedgersAPI('uitest').then(() => {
             cy.viewport(1366, 768)
             cy.loginWithEmail(testData.Email, testData.Password);
         })
@@ -22,15 +22,15 @@ describe('This is TrialBalance Search Test', () => {
 
     it('Verify Trial Balance using Global Search', () => {
         cy.createLedgerAPI('uitest').then((response) => {
-            if (response.status === 201){
-               cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
+            if (response.status === 201) {
+                cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
 
             }
             cy.searchOnTrialBalance('uitest', '199.99  Dr. ')
-             // allEntryUniqueName.forEach((item)=>{
-             //     console.log(item.entryUniqueName)
-             //     cy.log(item.entryUniqueName)
-             // })
+            // allEntryUniqueName.forEach((item)=>{
+            //     console.log(item.entryUniqueName)
+            //     cy.log(item.entryUniqueName)
+            // })
         })
 
     });

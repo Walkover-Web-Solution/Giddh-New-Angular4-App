@@ -20,37 +20,37 @@ import { ImportReportComponent } from './import-report/import-report.component';
 import { SharedModule } from '../shared/shared.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-	suppressScrollX: true
+    suppressScrollX: true
 };
 @NgModule({
-	declarations: [
-		// Components / Directives/ Pipes
-		ImportComponent,
-		ImportTypeSelectComponent,
-		ImportProcessComponent,
-		MapExcelDataComponent,
-		UploadFileComponent,
-		UploadSuccessComponent,
-		ImportWizardComponent,
+    declarations: [
+        // Components / Directives/ Pipes
+        ImportComponent,
+        ImportTypeSelectComponent,
+        ImportProcessComponent,
+        MapExcelDataComponent,
+        UploadFileComponent,
+        UploadSuccessComponent,
+        ImportWizardComponent,
         ImportReportComponent
-	],
-	exports: [ImportComponent],
-	providers: [{
-		provide: PERFECT_SCROLLBAR_CONFIG,
-		useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-	}],
-	imports: [
-		CommonModule,
-		FormsModule,
-		ImportExcelRoutingModule,
-		LaddaModule,
-		ShSelectModule,
-		TooltipModule,
-		BsDropdownModule,
-		PerfectScrollbarModule,
+    ],
+    exports: [ImportComponent],
+    providers: [{
+        provide: PERFECT_SCROLLBAR_CONFIG,
+        useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    }],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ImportExcelRoutingModule,
+        LaddaModule,
+        ShSelectModule,
+        TooltipModule,
+        BsDropdownModule,
+        PerfectScrollbarModule,
         PaginationModule,
         SharedModule
-	],
+    ],
 })
 export class ImportExcelModule {
 }

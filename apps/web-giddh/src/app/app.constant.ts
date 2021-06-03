@@ -9,7 +9,7 @@ export const Configuration = {
     APP_FOLDER
 };
 
-export const APP_DEFAULT_TITLE = 'Giddh -';
+export const APP_DEFAULT_TITLE = '';
 
 export const DEFAULT_TOASTER_OPTIONS = {
     closeButton: true, // show close button
@@ -229,7 +229,7 @@ export const VAT_SUPPORTED_COUNTRIES = [
     'QA', 'BH', 'AE', 'SA', 'OM', 'KW'
 ];
 
-export const API_POSTMAN_DOC_URL='https://apidoc.giddh.com/';
+export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
 
 /** Decimal point for rate field, irrespective of user profile preference
  * will be displayed up to 4 decimal places
@@ -263,7 +263,13 @@ if (PRODUCTION_ENV || isElectron || isCordova) {
 export enum AdjustedVoucherType {
     Receipt = 'rcpt',
     AdvanceReceipt = 'advance-receipt',
-    Sales = 'sal'
+    Sales = 'sal', // used in ledger
+    SalesInvoice = 'sales', // used in invoice preview module
+    Purchase = 'pur',
+    CreditNote = 'credit note',
+    DebitNote = 'debit note',
+    Payment = 'pay',
+    Journal = 'jr'
 }
 
 /** Collection of search field default text for empty results */

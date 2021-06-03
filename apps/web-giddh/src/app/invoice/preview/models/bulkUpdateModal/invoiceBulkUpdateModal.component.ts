@@ -34,8 +34,8 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('bulkUpdateForm', {static: true}) public bulkUpdateForm: NgForm;
-    @ViewChild('bulkUpdateImageSlogan', {static: true}) public bulkUpdateImageSlogan: ModalDirective;
+    @ViewChild('bulkUpdateForm', { static: true }) public bulkUpdateForm: NgForm;
+    @ViewChild('bulkUpdateImageSlogan', { static: true }) public bulkUpdateImageSlogan: ModalDirective;
 
     public fieldOptions: IOption[] = [];
     public templateSignaturesOptions: IOption[] = [];

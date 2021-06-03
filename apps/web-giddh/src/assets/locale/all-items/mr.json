@@ -1,115 +1,365 @@
 {
-    "page_heading": "All Items",
+    "page_heading": "सर्व आयटम",
     "items": [
         {
-            "label": "Customer",
+            "label": "ग्राहक",
             "icon": "icon-customer",
             "items": [
-                { "label": "Aging Report", "link": "/pages/contact/aging-report", "icon": "icon-aging-report-new", "description": "Amount Due in previous days & upcoming", "additional": { "tab": "aging-report", "tabIndex": 1 } },
-                { "label": "Cash Invoice", "link": "/pages/proforma-invoice/invoice/cash", "icon": "icon-invoice-new", "description": "Generate cash invoice" },
-                { "label": "Credit Note", "link": "/pages/invoice/preview/credit note", "icon": "icon-credit-note-new", "description": "Generate credit note & update A/c" },
-                { "label": "Customer", "link": "/pages/contact/customer", "icon": "icon-customer", "description": "Manage customers, send reminders via SMS/Email", "additional": { "tab": "customer", "tabIndex": 0 } },
-                { "label": "Invoice", "link": "/pages/invoice/preview/sales", "icon": "icon-invoice-new", "description": "Multicurrency, Recurring invoice, Cash invoice" },
-                { "label": "Receipt", "link": "/pages/reports/receipt", "icon": "icon-reciept-new", "description": "Advance, normal, total, & unused receipts" },
-                { "label": "Sales Invoice", "link": "/pages/proforma-invoice/invoice/sales", "icon": "icon-invoice-new", "description": "Generate sales invoice" },
-                { "label": "Sales Order", "link": "/pages/invoice/preview/estimates", "icon": "icon-sales-order1", "description": "Final sales order" },
-                { "label": "Sales Register", "link": "/pages/reports/sales-register", "icon": "icon-register-new", "description": "Net & cumulative sales" },
-                { "label": "Template", "link": "/pages/invoice/preview/templates/sales", "icon": "icon-template", "description": "Edit design & content of the template", "alwaysPresent": true }
+                {
+                    "label": "एजिंग रिपोर्ट",
+                    "link": "/pages/contact/aging-report",
+                    "icon": "icon-aging-report-new",
+                    "description": "मागील दिवस आणि आगामी काळात देय रक्कम",
+                    "additional": {
+                        "tab": "aging-report",
+                        "tabIndex": 1
+                    }
+                },
+                {
+                    "label": "रोख चलन",
+                    "link": "/pages/proforma-invoice/invoice/cash",
+                    "icon": "icon-invoice-new",
+                    "description": "रोखीची चलने तयार करा"
+                },
+                {
+                    "label": "क्रेडिट टीप",
+                    "link": "/pages/invoice/preview/credit note",
+                    "icon": "icon-credit-note-new",
+                    "description": "क्रेडिट नोट व्युत्पन्न करा आणि अद्यतनित करा"
+                },
+                {
+                    "label": "ग्राहक",
+                    "link": "/pages/contact/customer",
+                    "icon": "icon-customer",
+                    "description": "ग्राहक व्यवस्थापित करा, एसएमएस / ईमेलद्वारे स्मरणपत्रे पाठवा",
+                    "additional": {
+                        "tab": "customer",
+                        "tabIndex": 0
+                    }
+                },
+                {
+                    "label": "बीजक",
+                    "link": "/pages/invoice/preview/sales",
+                    "icon": "icon-invoice-new",
+                    "description": "मल्टीक्युरन्सी, आवर्ती चलन, रोख चलन"
+                },
+                {
+                    "label": "पावती",
+                    "link": "/pages/reports/receipt",
+                    "icon": "icon-reciept-new",
+                    "description": "आगाऊ, सामान्य, एकूण आणि न वापरलेल्या पावत्या"
+                },
+                {
+                    "label": "विक्री चलन",
+                    "link": "/pages/proforma-invoice/invoice/sales",
+                    "icon": "icon-invoice-new",
+                    "description": "विक्री बीजक उत्पन्न"
+                },
+                {
+                    "label": "विक्री ऑर्डर",
+                    "link": "/pages/invoice/preview/estimates",
+                    "icon": "icon-sales-order1",
+                    "description": "अंतिम विक्री ऑर्डर"
+                },
+                {
+                    "label": "विक्री नोंदणी",
+                    "link": "/pages/reports/sales-register",
+                    "icon": "icon-register-new",
+                    "description": "निव्वळ व संचयी विक्री"
+                },
+                {
+                    "label": "टेम्पलेट",
+                    "link": "/pages/invoice/preview/templates/sales",
+                    "icon": "icon-template",
+                    "description": "टेम्पलेटची रचना आणि सामग्री संपादित करा",
+                    "alwaysPresent": "True"
+                }
             ]
         },
         {
-            "label": "Vendor",
+            "label": "विक्रेता",
             "icon": "icon-vendor",
             "items": [
-                { "label": "Debit Note", "link": "/pages/invoice/preview/debit note", "icon": "icon-debit-note-new", "description": "Record debit note & update A/c" },
-                { "label": "Purchase Bill", "link": "/pages/proforma-invoice/invoice/purchase", "icon": "icon-invoice-new", "description": "Purchase request, purchase bill, modify PO" },
-                { "label": "Purchase Management", "link": "/pages/purchase-management/purchase/bill", "icon": "icon-purchase-management1", "description": "Purchase request, purchase bill, modify PO" },
-                { "label": "Purchase Order", "link": "/pages/purchase-management/purchase-order/new", "icon": "icon-purchase-order", "description": "Purchase request, purchase bill, modify PO" },
-                { "label": "Purchase Register", "link": "/pages/reports/purchase-register", "icon": "icon-register-new", "description": "Net & cumulative purchases" },
-                { "label": "Vendor", "link": "/pages/contact/vendor", "icon": "icon-vendor", "description": "Send Bulk SMS/Emails, Set reminders" }
+                {
+                    "label": "डेबिट नोट",
+                    "link": "/pages/invoice/preview/debit note",
+                    "icon": "icon-debit-note-new",
+                    "description": "डेबिट नोट रेकॉर्ड करा आणि अद्यतनित करा"
+                },
+                {
+                    "label": "खरेदी बिल",
+                    "link": "/pages/proforma-invoice/invoice/purchase",
+                    "icon": "icon-invoice-new",
+                    "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा"
+                },
+                {
+                    "label": "खरेदी व्यवस्थापन",
+                    "link": "/pages/purchase-management/purchase/bill",
+                    "icon": "icon-purchase-management1",
+                    "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा"
+                },
+                {
+                    "label": "खरेदी ऑर्डर",
+                    "link": "/pages/purchase-management/purchase-order/new",
+                    "icon": "icon-purchase-order",
+                    "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा"
+                },
+                {
+                    "label": "खरेदी नोंदणी",
+                    "link": "/pages/reports/purchase-register",
+                    "icon": "icon-register-new",
+                    "description": "निव्वळ आणि संचयी खरेदी"
+                },
+                {
+                    "label": "विक्रेता",
+                    "link": "/pages/contact/vendor",
+                    "icon": "icon-vendor",
+                    "description": "बल्क एसएमएस / ईमेल पाठवा, स्मरणपत्रे सेट करा"
+                }
             ]
         },
         {
-            "label": "Tax",
+            "label": "कर",
             "icon": "icon-tax-new",
             "items": [
-                { "label": "E-way bill", "link": "/pages/invoice/ewaybill", "icon": "icon-eway-bill-new", "description": "Generate directly from Giddh after" },
-                { "label": "GSTR", "link": "/pages/gstfiling", "icon": "icon-GSTR", "description": "File & view GSTR1, GSTR2 & GSTR3B" },
-                { "label": "Reverse Charge", "link": "/pages/reports/reverse-charge", "icon": "icon-reverse-charge", "description": "Report of total taxable value & total tax amount", "alwaysPresent": true },
-                { "label": "VAT Report", "link": "/pages/vat-report", "icon": "icon-vat", "description": "File & review VAT" }
+                {
+                    "label": "ई-वे बिल",
+                    "link": "/pages/invoice/ewaybill",
+                    "icon": "icon-eway-bill-new",
+                    "description": "नंतर थेट गीधमधून व्युत्पन्न करा"
+                },
+                {
+                    "label": "जीएसटीआर",
+                    "link": "/pages/gstfiling",
+                    "icon": "icon-GSTR",
+                    "description": "जीएसटीआर 1, जीएसटीआर 2 आणि जीएसटीआर 3 बी फाइल करा आणि पहा"
+                },
+                {
+                    "label": "उलट शुल्क",
+                    "link": "/pages/reports/reverse-charge",
+                    "icon": "icon-reverse-charge",
+                    "description": "एकूण करपात्र मूल्य आणि कराच्या एकूण रकमेचा अहवाल",
+                    "alwaysPresent": "True"
+                },
+                {
+                    "label": "व्हॅट अहवाल",
+                    "link": "/pages/vat-report",
+                    "icon": "icon-vat",
+                    "description": "व्हॅट फाइल आणि पुनरावलोकन करा"
+                }
             ]
         },
         {
-            "label": "Reports",
+            "label": "अहवाल",
             "icon": "icon-reports",
             "items": [
-                { "label": "Balance Sheet", "link": "/pages/trial-balance-and-profit-loss", "icon": "icon-balance-sheet-new", "description": "Download BS in Excel, multiple type of exports", "additional": { "tab": "balance-sheet", "tabIndex": 2 } },
-                { "label": "Daybook", "link": "/pages/daybook", "icon": "icon-daybook-new", "description": "Everyday entries that can be exported" },
-                { "label": "Profit and Loss", "link": "/pages/trial-balance-and-profit-loss", "icon": "icon-proft-loss-new", "description": "Download data in Excel, project wise report", "additional": { "tab": "profit-loss", "tabIndex": 1 } },
-                { "label": "Sales Bifurcation ", "link": "/pages/new-vs-old-invoices", "icon": "icon-sale-bifurcation", "description": "Compare new versus old invoices" },
-                { "label": "Trial balance", "link": "/pages/trial-balance-and-profit-loss", "icon": "icon-trial-balance-new", "description": "Download of all credit & debit balances", "additional": { "tab": "trial-balance", "tabIndex": 0 } },
-                { "label": "Columnar Report", "link": "/pages/reports/monthly-columnar-report", "icon": "icon-monthly-columnar-report", "description": "Monthly detailed report of each group" }
+                {
+                    "label": "ताळेबंद",
+                    "link": "/pages/trial-balance-and-profit-loss",
+                    "icon": "icon-balance-sheet-new",
+                    "description": "एक्सेलमध्ये बीएस डाउनलोड करा, एकाधिक प्रकारची निर्याती",
+                    "additional": {
+                        "tab": "balance-sheet",
+                        "tabIndex": 2
+                    }
+                },
+                {
+                    "label": "डेबुक",
+                    "link": "/pages/daybook",
+                    "icon": "icon-daybook-new",
+                    "description": "दररोजच्या नोंदी निर्यात केल्या जाऊ शकतात"
+                },
+                {
+                    "label": "नफा व तोटा",
+                    "link": "/pages/trial-balance-and-profit-loss",
+                    "icon": "icon-proft-loss-new",
+                    "description": "एक्सेल मध्ये डेटा डाउनलोड करा, प्रकल्प निहाय अहवाल",
+                    "additional": {
+                        "tab": "profit-loss",
+                        "tabIndex": 1
+                    }
+                },
+                {
+                    "label": "विक्री दुभाजक",
+                    "link": "/pages/new-vs-old-invoices",
+                    "icon": "icon-sale-bifurcation",
+                    "description": "नवीन विरूद्ध जुन्या पावत्या तुलना करा"
+                },
+                {
+                    "label": "चाचणी शिल्लक",
+                    "link": "/pages/trial-balance-and-profit-loss",
+                    "icon": "icon-trial-balance-new",
+                    "description": "सर्व क्रेडिट आणि डेबिट शिल्लक डाउनलोड करा",
+                    "additional": {
+                        "tab": "trial-balance",
+                        "tabIndex": 0
+                    }
+                },
+                {
+                    "label": "स्तंभीय अहवाल",
+                    "link": "/pages/reports/monthly-columnar-report",
+                    "icon": "icon-monthly-columnar-report",
+                    "description": "प्रत्येक गटाचा मासिक तपशीलवार अहवाल"
+                }
             ]
         },
         {
-            "label": "Import",
+            "label": "आयात करा",
             "icon": "icon-import",
             "items": [
-                { "label": "Accounts", "link": "/pages/import/account", "icon": "icon-proft-loss-new", "description": "Import excel and CSV and update existing one" },
-                { "label": "Company Import", "link": "/pages/company-import-export", "icon": "icon-company-impex", "description": "Company import & export" },
-                { "label": "Entries", "link": "/pages/import/entries", "icon": "icon-invoice-new", "description": "Multicurrency, Recurring invoice, Cash invoice" },
-                { "label": "Group", "link": "/pages/import/group", "icon": "icon-group-new", "description": "Import excel and CSV and update existing one" },
-                { "label": "Inventory", "link": "/pages/import/stock", "icon": "icon-inventory", "description": "Import/create stock, group & unit" },
-                { "label": "Trial Balance", "link": "/pages/import/trial-balance", "icon": "icon-trial-balance-new", "description": "Import all credit & debit balances" },
-                { "label": "TALLY Import", "link": "/pages/tallysync", "icon": "icon-tally-import1", "description": "Check your synced Tally data online" }
+                {
+                    "label": "खाती आयात",
+                    "link": "/pages/import/account",
+                    "icon": "icon-proft-loss-new",
+                    "description": "एक्सेल आणि सीएसव्ही आयात करा आणि विद्यमान अद्यतनित करा"
+                },
+                {
+                    "label": "कंपनी आयात",
+                    "link": "/pages/company-import-export",
+                    "icon": "icon-company-impex",
+                    "description": "कंपनी आयात आणि निर्यात"
+                },
+                {
+                    "label": "नोंदी",
+                    "link": "/pages/import/entries",
+                    "icon": "icon-invoice-new",
+                    "description": "मल्टीक्युरन्सी, आवर्ती चलन, रोख चलन"
+                },
+                {
+                    "label": "गट",
+                    "link": "/pages/import/group",
+                    "icon": "icon-group-new",
+                    "description": "एक्सेल आणि सीएसव्ही आयात करा आणि विद्यमान अद्यतनित करा"
+                },
+                {
+                    "label": "यादी",
+                    "link": "/pages/import/stock",
+                    "icon": "icon-inventory",
+                    "description": "स्टॉक / गट आणि युनिट आयात / तयार करा"
+                },
+                {
+                    "label": "चाचणी शिल्लक",
+                    "link": "/pages/import/trial-balance",
+                    "icon": "icon-trial-balance-new",
+                    "description": "सर्व क्रेडिट आणि डेबिट शिल्लक आयात करा"
+                },
+                {
+                    "label": "टॅली आयात करा",
+                    "link": "/pages/tallysync",
+                    "icon": "icon-tally-import1",
+                    "description": "आपला संकालित केलेला टॅली डेटा ऑनलाइन तपासा"
+                }
             ]
         },
         {
-            "label": "Inventory",
+            "label": "यादी",
             "icon": "icon-inventory",
             "items": [
-                { "label": "Branch Transfer", "link": "/pages/inventory/report", "icon": "icon-branch-transfer", "description": "Manage & Transfer inventory" },
-                { "label": "Inventory", "link": "/pages/inventory", "icon": "icon-inventory", "description": "Import/create stock, group & unit" },
-                { "label": "Manufacturing", "link": "/pages/inventory/manufacturing", "icon": "icon-manufacturing1", "description": "Find mfg. inventory status" },
-                { "label": "Warehouse", "link": "/pages/settings/warehouse", "icon": "icon-warehouse1", "description": "See all the warehouses" }
+                {
+                    "label": "शाखा हस्तांतरण",
+                    "link": "/pages/inventory/report",
+                    "icon": "icon-branch-transfer",
+                    "description": "यादी व्यवस्थापित करा आणि हस्तांतरण यादी"
+                },
+                {
+                    "label": "यादी",
+                    "link": "/pages/inventory",
+                    "icon": "icon-inventory",
+                    "description": "स्टॉक / गट आणि युनिट आयात / तयार करा"
+                },
+                {
+                    "label": "उत्पादन",
+                    "link": "/pages/inventory/manufacturing",
+                    "icon": "icon-manufacturing1",
+                    "description": "उत्पादन यादीची स्थिती शोधा"
+                },
+                {
+                    "label": "कोठार",
+                    "link": "/pages/settings/warehouse",
+                    "icon": "icon-warehouse1",
+                    "description": "सर्व गोदामे पहा"
+                }
             ]
         },
         {
-            "label": "Other",
+            "label": "इतर",
             "icon": "icon-other",
             "items": [
-                { "label": "Audit Logs New", "link": "/pages/audit-logs/new", "icon": "icon-audit-log", "description": "Chronological data of entries" },
-                { "label": "Cash Flow", "link": "/pages/reports/cash-flow-statement", "icon": "icon-cash-flow-statement", "description": "Download cash flow report" },
-                { "label": "Dashboard", "link": "/pages/home", "icon": "icon-dashboard-new", "description": "Overdues, P&L, Bank account, Ratio Analysis" },
-                { "label": "Journal Voucher *", "link": "/pages/journal-voucher", "icon": "icon-journal-voucher-new", "description": "Entries of Journal Voucher" },
-                { "label": "Onboarding", "link": "/pages/onboarding", "icon": "icon-onboarding-new", "description": "Import data from Tally, CSV/Excel" },
-                { "label": "Petty Cash", "link": "/pages/expenses-manager", "icon": "icon-petty-cash", "description": "Manage petty cash & transaction", "additional": { "tab": "pending", "tabIndex": 0 } },
-                { "label": "Search", "link": "/pages/search", "icon": "icon-search-new", "description": "Select group and search for a time span" },
-                { "label": "Settings", "link": "/pages/settings", "icon": "icon-settings-cog", "description": "Add & manage various taxes" }
+                {
+                    "label": "ऑडिट नोंदी नवीन",
+                    "link": "/pages/audit-logs/new",
+                    "icon": "icon-audit-log",
+                    "description": "प्रविष्टींचा कालक्रमानुसार डेटा"
+                },
+                {
+                    "label": "रोख प्रवाह",
+                    "link": "/pages/reports/cash-flow-statement",
+                    "icon": "icon-cash-flow-statement",
+                    "description": "रोख प्रवाह अहवाल डाउनलोड करा"
+                },
+                {
+                    "label": "डॅशबोर्ड",
+                    "link": "/pages/home",
+                    "icon": "icon-dashboard-new",
+                    "description": "ओव्हरड्यूज, पी अँड एल, बँक खाते, प्रमाण विश्लेषण"
+                },
+                {
+                    "label": "जर्नल व्हाउचर",
+                    "link": "/pages/journal-voucher",
+                    "icon": "icon-journal-voucher-new",
+                    "description": "जर्नल व्हाउचरच्या नोंदी"
+                },
+                {
+                    "label": "ऑनबोर्डिंग",
+                    "link": "/pages/onboarding",
+                    "icon": "icon-onboarding-new",
+                    "description": "टॅली, सीएसव्ही / एक्सेल वरून डेटा आयात करा"
+                },
+                {
+                    "label": "किरकोळ रोकड",
+                    "link": "/pages/expenses-manager",
+                    "icon": "icon-petty-cash",
+                    "description": "क्षुल्लक रोख आणि व्यवहार व्यवस्थापित करा",
+                    "additional": {
+                        "tab": "pending",
+                        "tabIndex": 0
+                    }
+                },
+                {
+                    "label": "शोधा",
+                    "link": "/pages/search",
+                    "icon": "icon-search-new",
+                    "description": "गट निवडा आणि कालावधीसाठी शोधा"
+                },
+                {
+                    "label": "सेटिंग्ज",
+                    "link": "/pages/settings",
+                    "icon": "icon-settings-cog",
+                    "description": "विविध कर जोडा आणि व्यवस्थापित करा"
+                }
             ]
         }
     ],
-    "switch_branch": "Switch Branch",
+    "switch_branch": "स्विच शाखा",
     "sb": "SB",
-    "search_branch": "Search Branch here",
-    "goto_company": "Go to company",
-    "create_branch": "Create Branch",
-    "accounts": "Accounts",
-    "show_more": "Show more",
-    "menu": "Menu",
-    "import_export_backup": "Import/Export Data (Backup)",
-    "switch_company": "Switch company",
-    "search_company": "Search Company here",
-    "create_company": "Create Company",
-    "profile": "Profile",
-    "user_profile": "User Profile",
-    "api": "API",
-    "logout": "Logout",
-    "to_navigate": "to navigate",
-    "to_select": "to select",
-    "to_dismiss": "to dismiss",
-    "settings_permission": "Settings > Permission",
-    "user_details": "User Details",
-    "inventory_inout": "Inventory In/Out",
-    "import_data": "Import Data"
+    "search_branch": "येथे शोध शाखा",
+    "goto_company": "कंपनीकडे जा",
+    "create_branch": "शाखा तयार करा",
+    "accounts": "खाती",
+    "show_more": "अजून दाखवा",
+    "menu": "मेनू",
+    "import_export_backup": "आयात / निर्यात डेटा (बॅकअप)",
+    "switch_company": "कंपनी स्विच करा",
+    "search_company": "येथे शोध कंपनी",
+    "create_company": "कंपनी तयार करा",
+    "profile": "प्रोफाइल",
+    "user_profile": "वापरकर्ता प्रोफाइल",
+    "logout": "लॉग आउट",
+    "to_navigate": "नॅव्हिगेट करण्यासाठी",
+    "to_select": "निवडण्यासाठी",
+    "to_dismiss": "डिसमिस करणे",
+    "settings_permission": "सेटिंग्ज> परवानगी",
+    "user_details": "वापरकर्त्याचा तपशील",
+    "inventory_inout": "यादी इन / आउट",
+    "import_data": "डेटा आयात करा"
 }

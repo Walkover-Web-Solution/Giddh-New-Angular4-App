@@ -75,17 +75,21 @@
 
                                     <div class="form-group col-4 col-sm-4">
                                         <span class="mr-r15">
-                                            <input type="radio" name="showCodeType" id="hsnCodeType" formControlName="showCodeType" value="hsn">
+                                            <input type="radio" name="showCodeType" id="hsnCodeType"
+                                                formControlName="showCodeType" value="hsn">
                                             <label for="hsnCodeType" class="ml-1">HSN Code</label>
                                         </span>
                                         <span>
-                                            <input type="radio" name="showCodeType" id="sacCodeType" formControlName="showCodeType" value="sac">
+                                            <input type="radio" name="showCodeType" id="sacCodeType"
+                                                formControlName="showCodeType" value="sac">
                                             <label for="sacCodeType" class="ml-1">SAC Code</label>
                                         </span>
                                         <input type="text" class="form-control" maxlength="10" decimalDigitsDirective
-                                            formControlName="hsnNumber" *ngIf="addStockForm.get('showCodeType').value === 'hsn'" />
-                                        <input type="text" class="form-control" maxlength="10" formControlName="sacNumber"
-                                            decimalDigitsDirective *ngIf="addStockForm.get('showCodeType').value === 'sac'" />
+                                            formControlName="hsnNumber"
+                                            *ngIf="addStockForm.get('showCodeType').value === 'hsn'" />
+                                        <input type="text" class="form-control" maxlength="10"
+                                            formControlName="sacNumber" decimalDigitsDirective
+                                            *ngIf="addStockForm.get('showCodeType').value === 'sac'" />
                                     </div>
 
                                     <!--                  <div class="form-group col-4">-->
@@ -282,9 +286,10 @@
                                                     (blur)="enableSales.focus()" #purchaseRate />
                                             </div>
                                             <div class="pull-right unit-add">
-                                                <button class="btn-link btn mr-0" (click)="addPurchaseUnitRates(i)" *ngIf="l"><i class="icon-plus add-row"></i></button>
-                                                <button class="btn-link btn" (click)="removePurchaseUnitRates(i)" *ngIf="!l"><i
-                                                        class="icon-cross delete"></i></button>
+                                                <button class="btn-link btn mr-0" (click)="addPurchaseUnitRates(i)"
+                                                    *ngIf="l"><i class="icon-plus add-row"></i></button>
+                                                <button class="btn-link btn" (click)="removePurchaseUnitRates(i)"
+                                                    *ngIf="!l"><i class="icon-cross delete"></i></button>
                                             </div>
                                         </div>
 
@@ -340,9 +345,10 @@
                                                     (blur)="isFsStock.focus()" #salesRate />
                                             </div>
                                             <div class="pull-right unit-add">
-                                                <button class="btn-link btn mr-0" (click)="addSaleUnitRates(i)" *ngIf="l"><i class="icon-plus add-row"></i></button>
-                                                <button class="btn-link btn mr-0" (click)="removeSaleUnitRates(i)" *ngIf="!l"><i
-                                                        class="icon-cross delete"></i></button>
+                                                <button class="btn-link btn mr-0" (click)="addSaleUnitRates(i)"
+                                                    *ngIf="l"><i class="icon-plus add-row"></i></button>
+                                                <button class="btn-link btn mr-0" (click)="removeSaleUnitRates(i)"
+                                                    *ngIf="!l"><i class="icon-cross delete"></i></button>
                                             </div>
                                         </div>
 
@@ -357,9 +363,9 @@
                             <div class="col-12 col-sm-12">
                                 <div class="checkbox">
                                     <label class="" for="isFsStock">
-                                        <input #isFsStock type="checkbox" class="focusBorder" formControlName="isFsStock"
-                                            id="isFsStock" #isFinishedStock [disabled]="" name="isFsStock"
-                                            (change)="showManufacturingQuantitySection()"> Is
+                                        <input #isFsStock type="checkbox" class="focusBorder"
+                                            formControlName="isFsStock" id="isFsStock" #isFinishedStock [disabled]=""
+                                            name="isFsStock" (change)="showManufacturingQuantitySection()"> Is
                                         it a finished stock? (Manufacturing/Combo)</label>
                                 </div>
                             </div>
@@ -431,8 +437,9 @@
                                                         [forceClearReactive]="forceClearStockUnit$ | async"></sh-select>
                                                 </td>
                                                 <td>
-                                                    <button class="btn-link btn mr-0" (click)="addItemInLinkedStocks(list, i, i)"
-                                                        *ngIf="l" [disabled]="disableStockButton"><i
+                                                    <button class="btn-link btn mr-0"
+                                                        (click)="addItemInLinkedStocks(list, i, i)" *ngIf="l"
+                                                        [disabled]="disableStockButton"><i
                                                             class="icon-plus add-row"></i></button>
                                                     <button class="btn-link" (click)="removeItemInLinkedStocks(i)"
                                                         *ngIf="!l"><i class="icon-cross delete"></i></button>

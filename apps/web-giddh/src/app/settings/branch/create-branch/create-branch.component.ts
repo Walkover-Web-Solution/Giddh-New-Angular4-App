@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -70,6 +70,12 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
 
     /** Unsubscribes from all the listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold profile JSON data */
+    public profileLocaleData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private commonService: CommonService,
@@ -119,7 +125,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         this.loadAddresses('GET', { count: 0 });
         this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/branch'));
 
-        this.imgPath =  (isElectron|| isCordova) ? 'assets/images/branch-image.svg' : AppUrl + APP_FOLDER + 'assets/images/branch-image.svg';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/branch-image.svg' : AppUrl + APP_FOLDER + 'assets/images/branch-image.svg';
     }
 
     /**
@@ -177,7 +183,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      */
     public handleFinalSelection(selectedAddresses: Array<any>): void {
         this.addresses.forEach(address => {
-            if (!selectedAddresses.includes(address.uniqueName)) {
+            if (!selectedAddresses?.includes(address.uniqueName)) {
                 address.isDefault = false;
             }
         });
@@ -230,7 +236,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         const requestObj = {
             name: this.branchForm.value.name,
             alias: this.branchForm.value.alias,
-            linkAddresses: this.addresses.filter(address => this.branchForm.value.address.includes(address.uniqueName)).map(filteredAddress => ({
+            linkAddresses: this.addresses.filter(address => this.branchForm.value.address?.includes(address.uniqueName)).map(filteredAddress => ({
                 uniqueName: filteredAddress.uniqueName,
                 isDefault: filteredAddress.isDefault
             }))
@@ -238,7 +244,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         this.settingsProfileService.createNewBranch(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
-                    this.toastService.successToast('Branch created successfully');
+                    this.toastService.successToast(this.localeData?.branch_created);
                     this.branchForm.reset();
                     this.router.navigate(['/pages/settings/branch']);
                 } else {
@@ -302,7 +308,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
-        const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+        const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity?.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
@@ -325,7 +331,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     label: response.body.name,
                     value: response.body.uniqueName
                 })
-                this.toastService.successToast('Address created successfully');
+                this.toastService.successToast(this.localeData?.address_created);
             } else {
                 this.toastService.errorToast(response.message);
             }

@@ -41,25 +41,25 @@ import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt
 export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, OnInit {
 
     /** Customer name search bar */
-    @ViewChild('customerName', {static: true}) public customerName: ElementRef;
+    @ViewChild('customerName', { static: true }) public customerName: ElementRef;
     /** Parent of customer name search bar */
-    @ViewChild('customerNameParent', {static: true}) public customerNameParent: ElementRef;
+    @ViewChild('customerNameParent', { static: true }) public customerNameParent: ElementRef;
     /** Receipt number search bar */
-    @ViewChild('receiptNumber', {static: true}) public receiptNumber: ElementRef;
+    @ViewChild('receiptNumber', { static: true }) public receiptNumber: ElementRef;
     /** Parent of receipt number search bar */
-    @ViewChild('receiptNumberParent', {static: true}) public receiptNumberParent: ElementRef;
+    @ViewChild('receiptNumberParent', { static: true }) public receiptNumberParent: ElementRef;
     /** Payment mode search bar */
-    @ViewChild('paymentMode', {static: true}) public paymentMode: ElementRef;
+    @ViewChild('paymentMode', { static: true }) public paymentMode: ElementRef;
     /** Parent of payment mode search bar */
-    @ViewChild('paymentModeParent', {static: true}) public paymentModeParent: ElementRef;
+    @ViewChild('paymentModeParent', { static: true }) public paymentModeParent: ElementRef;
     /** Invoice number search bar */
-    @ViewChild('invoiceNumber', {static: true}) public invoiceNumber: ElementRef;
+    @ViewChild('invoiceNumber', { static: true }) public invoiceNumber: ElementRef;
     /** Parent of invoice number search bar */
-    @ViewChild('invoiceNumberParent', {static: true}) public invoiceNumberParent: ElementRef;
+    @ViewChild('invoiceNumberParent', { static: true }) public invoiceNumberParent: ElementRef;
     /** Advance search modal instance */
-    @ViewChild('receiptAdvanceSearchFilterModal', {static: true}) public receiptAdvanceSearchFilterModal: ElementViewContainerRef;
+    @ViewChild('receiptAdvanceSearchFilterModal', { static: true }) public receiptAdvanceSearchFilterModal: ElementViewContainerRef;
     /** Container of Advance search modal instance */
-    @ViewChild('receiptAdvanceSearchModalContainer', {static: true}) public receiptAdvanceSearchModalContainer: ModalDirective;
+    @ViewChild('receiptAdvanceSearchModalContainer', { static: true }) public receiptAdvanceSearchModalContainer: ModalDirective;
 
     /** Moment method */
     public moment = moment;
@@ -290,7 +290,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
             }
         });
@@ -640,12 +640,12 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         }
     }
 
-     /**
-     *To show the datepicker
-     *
-     * @param {*} element
-     * @memberof AuditLogsFormComponent
-     */
+    /**
+    *To show the datepicker
+    *
+    * @param {*} element
+    * @memberof AuditLogsFormComponent
+    */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
@@ -672,7 +672,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AuditLogsFormComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -701,7 +701,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     public translationComplete(event: boolean): void {
-        if(event) {
+        if (event) {
             this.advanceReceiptAdvanceSearchAmountFilters = [
                 { label: this.commonLocaleData?.app_comparision_filters.greater_than, value: 'GREATER_THAN' },
                 { label: this.commonLocaleData?.app_comparision_filters.greater_than_equals, value: 'GREATER_THAN_OR_EQUALS' },

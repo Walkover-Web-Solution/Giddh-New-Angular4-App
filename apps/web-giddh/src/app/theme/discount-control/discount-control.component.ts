@@ -21,7 +21,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public ledgerAmount: number = 0;
     @Input() public totalAmount: number = 0;
     @Input() public showHeaderText: boolean = true;
-    @Output() public discountTotalUpdated: EventEmitter<{discount: any, isActive: boolean}> = new EventEmitter();
+    @Output() public discountTotalUpdated: EventEmitter<{ discount: any, isActive: boolean }> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Input() public discountSum: number;
     @Input() public maskInput: string;
@@ -32,9 +32,11 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     public discountFromVal: boolean = true;
     public discountPercentageModal: number = 0;
     public discountFixedValueModal: number = 0;
-    @ViewChild('disInptEle', {static: true}) public disInptEle: ElementRef;
+    @ViewChild('disInptEle', { static: true }) public disInptEle: ElementRef;
 
     @Input() public discountMenu: boolean;
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /** Mask format for decimal number and comma separation  */
     public inputMaskFormat: string = '';
 
@@ -98,9 +100,9 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-	/**
-	 * prepare discount obj
-	 */
+    /**
+     * prepare discount obj
+     */
     public prepareDiscountList() {
         let discountAccountsList: IDiscountList[] = [];
         this.discountAccountsList$.pipe(take(1)).subscribe(d => discountAccountsList = d);
@@ -128,8 +130,8 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', event: any) {
-        this.defaultDiscount.amount = parseFloat(String(event.target.value).replace(/[,'\s]/g,''));
-        this.defaultDiscount.discountValue = parseFloat(String(event.target.value).replace(/[,'\s]/g,''));
+        this.defaultDiscount.amount = parseFloat(String(event.target.value).replace(/[,'\s]/g, ''));
+        this.defaultDiscount.discountValue = parseFloat(String(event.target.value).replace(/[,'\s]/g, ''));
         this.defaultDiscount.discountType = type;
 
         this.change();
@@ -148,11 +150,11 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-	/**
-	 * on change of discount amount
-	 */
+    /**
+     * on change of discount amount
+     */
     public change(discount?: any, event?: boolean) {
-        this.discountTotalUpdated.emit({discount: discount, isActive: event});
+        this.discountTotalUpdated.emit({ discount: discount, isActive: event });
     }
 
     public trackByFn(index) {

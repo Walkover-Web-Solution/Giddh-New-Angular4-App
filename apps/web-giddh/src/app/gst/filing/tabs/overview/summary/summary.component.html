@@ -1,8 +1,8 @@
 <div class="transactions-overview">
 
     <div class="gstr-transactions-summary" *ngIf="isTransactionSummary">
-        <h4 class="clearfix gstr-summary-title">Transaction Summary</h4>
-        <p class="text-muted half pd-t05">A summary of all the transactions in the current filing period which are ready to be pushed to GSTN.</p>
+        <h4 class="clearfix gstr-summary-title">{{localeData?.filing?.transaction_summary}}</h4>
+        <p class="text-muted half pd-t05">{{localeData?.filing?.transaction_summary_filing}}</p>
     </div>
 
 
@@ -35,33 +35,33 @@
     <hr class="m-0" *ngIf="!isTransactionSummary && selectedGst === GstReport.Gstr2">
 
     <div class="gstr-transactions-summary">
-        <div class="text-uppercase title" *ngIf="!isTransactionSummary">Overall Summary</div>
+        <div class="text-uppercase title" *ngIf="!isTransactionSummary">{{localeData?.filing?.overall_summary}}</div>
 
-        <div class="" *ngIf="gstrOverviewData.count">
+        <div *ngIf="gstrOverviewData.count">
 
             <table class="table table-striped transactions-table transactions-summary-table on-mobile-view">
 
                 <thead>
                     <tr class="text-uppercase">
                         <!-- <th width="20px"></th> -->
-                        <th width="30%"> Description</th>
+                        <th width="30%"> {{localeData?.filing?.description}}</th>
                         <th class="text-center">
-                            <div class="rates"> Total Transactions</div>
+                            <div class="rates"> {{localeData?.filing?.total_transactions}}</div>
                         </th>
                         <th width="15%" class="text-right">
-                            <div class="rates"> Taxable Amount</div>
+                            <div class="rates"> {{localeData?.filing?.taxable_amount}}</div>
                         </th>
                         <th class="text-right">
-                            <div class="rates"> IGST</div>
+                            <div class="rates"> {{localeData?.filing?.igst}}</div>
                         </th>
                         <th class="text-right">
-                            <div class="rates"> CGST</div>
+                            <div class="rates"> {{localeData?.filing?.cgst}}</div>
                         </th>
                         <th class="text-right">
-                            <div class="rates"> SGST</div>
+                            <div class="rates"> {{localeData?.filing?.sgst}}</div>
                         </th>
                         <th class="text-right">
-                            <div class="rates"> Cess</div>
+                            <div class="rates"> {{localeData?.filing?.cess}}</div>
                         </th>
                     </tr>
                 </thead>
@@ -69,13 +69,16 @@
                 <tbody>
 
                     <ng-container *ngFor="let item of gstrOverviewData.summary">
-                        <tr (click)="viewTransactions(item)" class="row-hover" [ngClass]="{'cp-none': item.gstReturnType === 'hsnsac' ||  item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'}">
+                        <tr (click)="viewTransactions(item)" class="row-hover"
+                            [ngClass]="{'cp-none': item.gstReturnType === 'hsnsac' ||  item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'}">
                             <!-- <td></td> -->
-                            <td [ngSwitch]="true" data-title="description">
-                                <ng-container *ngSwitchCase="item.gstReturnType === 'b2b' || item.gstReturnType === 'b2bur'">
+                            <td [ngSwitch]="true" [attr.data-title]="localeData?.filing?.description">
+                                <ng-container
+                                    *ngSwitchCase="item.gstReturnType === 'b2b' || item.gstReturnType === 'b2bur'">
                                     <img src="{{imgPath}}b2b.svg" class="icon text-bottom" />
                                 </ng-container>
-                                <ng-container *ngSwitchCase="item.gstReturnType === 'b2cs' || item.gstReturnType === 'b2cl'">
+                                <ng-container
+                                    *ngSwitchCase="item.gstReturnType === 'b2cs' || item.gstReturnType === 'b2cl'">
                                     <img src="{{imgPath}}b2cs.svg" class="icon text-bottom" />
                                 </ng-container>
                                 <ng-container *ngSwitchCase="item.gstReturnType === 'export'">
@@ -84,10 +87,12 @@
                                 <ng-container *ngSwitchCase="item.gstReturnType === 'nil'">
                                     <img src="{{imgPath}}nil.svg" class="icon text-bottom" />
                                 </ng-container>
-                                <ng-container *ngSwitchCase="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers' || item.gstReturnType === 'cdnUr' || item.gstReturnType === 'cdnr' || item.gstReturnType === 'imps'">
+                                <ng-container
+                                    *ngSwitchCase="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers' || item.gstReturnType === 'cdnUr' || item.gstReturnType === 'cdnr' || item.gstReturnType === 'imps'">
                                     <img src="{{imgPath}}cdn.svg" class="icon text-bottom" />
                                 </ng-container>
-                                <ng-container *ngSwitchCase="item.gstReturnType === 'advance-receipt' || item.gstReturnType === 'advance-payments'">
+                                <ng-container
+                                    *ngSwitchCase="item.gstReturnType === 'advance-receipt' || item.gstReturnType === 'advance-payments'">
                                     <img src="{{imgPath}}adv.svg" class="icon text-bottom" />
                                 </ng-container>
 
@@ -103,47 +108,52 @@
                                 </ng-container>
                                 <span class="mr-l05"> {{item?.name}}</span>
                             </td>
-                            <td class="text-center" data-title="Total Transactions" *ngIf="item.gstReturnType !== 'CreditNote/DebitNote/RefundVouchers'">
+                            <td class="text-center" [attr.data-title]="localeData?.filing?.total_transactions"
+                                *ngIf="item.gstReturnType !== 'CreditNote/DebitNote/RefundVouchers'">
                                 <a href="javascript:void(0)">
                                     {{item?.totalTransactions}} </a>
                             </td>
-                            <td class="text-center" data-title="Total Transactions" *ngIf="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'">
+                            <td class="text-center" [attr.data-title]="localeData?.filing?.total_transactions"
+                                *ngIf="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'">
                                 -
                             </td>
-                            <td class="text-right" data-title="Taxable Amount"> <i class="icon-rupees font-11"></i>
+                            <td class="text-right" [attr.data-title]="localeData?.filing?.taxable_amount"> <i class="icon-rupees font-11"></i>
                                 <!-- {{item?.taxableAmount |giddhCurrency}} -->
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="item?.taxableAmount"
-                                        [currencySymbol]="false"
+                                    <amount-field [amount]="item?.taxableAmount" [currencySymbol]="false"
                                         [currencyCode]="false">
                                     </amount-field>
                                 </span>
                             </td>
-                            <td class="text-right" data-title="TIGST"> <i class="icon-rupees font-11"></i>
+                            <td class="text-right" [attr.data-title]="localeData?.filing?.igst"> <i class="icon-rupees font-11"></i>
                                 <!-- {{item?.igstAmount |giddhCurrency}} -->
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="item?.igstAmount" [currencySymbol]="false" [currencyCode]="false">
+                                    <amount-field [amount]="item?.igstAmount" [currencySymbol]="false"
+                                        [currencyCode]="false">
                                     </amount-field>
                                 </span>
                             </td>
-                            <td class="text-right" data-title="CGST"> <i class="icon-rupees font-11"></i>
+                            <td class="text-right" [attr.data-title]="localeData?.filing?.cgst"> <i class="icon-rupees font-11"></i>
                                 <!-- {{item?.cgstAmount |giddhCurrency}} -->
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="item?.cgstAmount" [currencySymbol]="false" [currencyCode]="false">
+                                    <amount-field [amount]="item?.cgstAmount" [currencySymbol]="false"
+                                        [currencyCode]="false">
                                     </amount-field>
                                 </span>
                             </td>
-                            <td class="text-right" data-title="SGST"> <i class="icon-rupees font-11"></i>
+                            <td class="text-right" [attr.data-title]="localeData?.filing?.sgst"> <i class="icon-rupees font-11"></i>
                                 <!-- {{item?.sgstAmount |giddhCurrency}} -->
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="item?.sgstAmount" [currencySymbol]="false" [currencyCode]="false">
+                                    <amount-field [amount]="item?.sgstAmount" [currencySymbol]="false"
+                                        [currencyCode]="false">
                                     </amount-field>
                                 </span>
                             </td>
-                            <td class="text-right" data-title="CESS"> <i class="icon-rupees font-11"></i>
+                            <td class="text-right" [attr.data-title]="localeData?.filing?.cess"> <i class="icon-rupees font-11"></i>
                                 <!-- {{item?.cessAmount |giddhCurrency}} -->
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="item?.cessAmount" [currencySymbol]="false" [currencyCode]="false">
+                                    <amount-field [amount]="item?.cessAmount" [currencySymbol]="false"
+                                        [currencyCode]="false">
                                     </amount-field>
                                 </span>
                             </td>
@@ -152,44 +162,49 @@
                         <ng-container *ngFor="let item of item?.transactions">
                             <tr (click)="viewTransactions(item)" class="row-hover secondary-row">
                                 <!-- <td></td> -->
-                                <td data-title="Description">
+                                <td [attr.data-title]="localeData?.filing?.description">
                                     <div class="secondary-row "> {{item?.name}}</div>
                                 </td>
-                                <td class="text-center" data-title="Total Transactions"><a href="javascript:void(0)">
+                                <td class="text-center" [attr.data-title]="localeData?.filing?.total_transactions"><a href="javascript:void(0)">
                                         {{item?.totalTransactions}} </a>
                                 </td>
-                                <td class="text-right" data-title="Taxable Amount"> <i class="icon-rupees font-11"></i>
+                                <td class="text-right" [attr.data-title]="localeData?.filing?.taxable_amount"> <i class="icon-rupees font-11"></i>
                                     <!-- {{item?.taxableAmount |giddhCurrency}} -->
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="item?.taxableAmount" [currencySymbol]="false" [currencyCode]="false">
+                                        <amount-field [amount]="item?.taxableAmount" [currencySymbol]="false"
+                                            [currencyCode]="false">
                                         </amount-field>
                                     </span>
                                 </td>
-                                <td class="text-right" data-title="IGST"> <i class="icon-rupees font-11"></i>
+                                <td class="text-right" [attr.data-title]="localeData?.filing?.igst"> <i class="icon-rupees font-11"></i>
                                     <!-- {{item?.igstAmount |giddhCurrency}} -->
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="item?.igstAmount" [currencySymbol]="false" [currencyCode]="false">
+                                        <amount-field [amount]="item?.igstAmount" [currencySymbol]="false"
+                                            [currencyCode]="false">
                                         </amount-field>
                                     </span>
                                 </td>
-                                <td class="text-right" data-title="CGST"> <i class="icon-rupees font-11"></i>
+                                <td class="text-right" [attr.data-title]="localeData?.filing?.cgst"> <i class="icon-rupees font-11"></i>
                                     <!-- {{item?.cgstAmount |giddhCurrency}} -->
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="item?.cgstAmount" [currencySymbol]="false" [currencyCode]="false">
+                                        <amount-field [amount]="item?.cgstAmount" [currencySymbol]="false"
+                                            [currencyCode]="false">
                                         </amount-field>
                                     </span>
                                 </td>
-                                <td class="text-right" data-title="SGST"> <i class="icon-rupees font-11"></i>
+                                <td class="text-right" [attr.data-title]="localeData?.filing?.sgst"> <i class="icon-rupees font-11"></i>
                                     <!-- {{item?.sgstAmount |giddhCurrency}} -->
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="item?.sgstAmount" [currencySymbol]="false" [currencyCode]="false">
+                                        <amount-field [amount]="item?.sgstAmount" [currencySymbol]="false"
+                                            [currencyCode]="false">
                                         </amount-field>
                                     </span>
                                 </td>
-                                <td class="text-right" data-title="CESS"> <i class="icon-rupees font-11"></i>
+                                <td class="text-right" [attr.data-title]="localeData?.filing?.cess"> <i class="icon-rupees font-11"></i>
                                     <!-- {{item?.cessAmount |giddhCurrency}} -->
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="item?.cessAmount" [currencySymbol]="false" [currencyCode]="false">
+                                        <amount-field [amount]="item?.cessAmount" [currencySymbol]="false"
+                                            [currencyCode]="false">
                                         </amount-field>
                                     </span>
                                 </td>
@@ -204,7 +219,7 @@
         <div class="" *ngIf="!gstrOverviewData.count">
             <div class="filings-empty-state">
                 <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
-                <div class="empty-msg"><span> No result found. </span></div>
+                <div class="empty-msg"><span> {{localeData?.filing?.no_result_found}} </span></div>
             </div>
         </div>
 

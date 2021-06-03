@@ -1,7 +1,7 @@
 @import "../../../assets/css/color.scss";
 
-.jobwork-main{
-    min-height:100%;
+.jobwork-main {
+    min-height: 100%;
 }
 
 .btn-group.open.show {
@@ -188,7 +188,7 @@ button[aria-expanded="true"] i {
     font-size: 18px;
     margin-left: 10px;
     border: 1px solid $chetwode-blue;
-    border-radius: 2px;
+    border-radius: 5px;
     color: $midnight-blue;
     background: $white;
 }
@@ -214,6 +214,6 @@ button.btn.btn-filter {
     justify-content: space-between;
 }
 
-.margin-datepicker{
+.margin-datepicker {
     margin-top: -7px !important;
 }

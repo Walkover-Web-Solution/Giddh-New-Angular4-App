@@ -13,10 +13,12 @@
                 <div class="select-top-selling">
                     <div class="btn-group" dropdown>
                         <button id="button-basic" dropdownToggle type="button"
-                            class="btn font-16 top-selling-btn no-btn dropdown-toggle p-0 mr-0" aria-controls="dropdown-basic">
+                            class="btn font-16 top-selling-btn no-btn dropdown-toggle p-0 mr-0"
+                            aria-controls="dropdown-basic">
                             Top 5 Selling <span class="caret"></span>
                         </button>
-                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                            aria-labelledby="button-basic">
                             <li role="menuitem"><a class="dropdown-item" href="#">Top 5 Selling</a></li>
                             <li role="menuitem"><a class="dropdown-item" href="#">Top 10 Selling</a></li>
                             <li role="menuitem"><a class="dropdown-item" href="#">Top 5 Purchase</a></li>
@@ -25,7 +27,8 @@
                         </ul>
                     </div>
                 </div>
-                <div class="close-selling-report cursor-pointer" [routerLink]="['/pages/new-inventory/inventory-dashboard']">
+                <div class="close-selling-report cursor-pointer"
+                    [routerLink]="['/pages/new-inventory/inventory-dashboard']">
                     <i class="icon-cross pd"></i>
                 </div>
             </div>
@@ -34,9 +37,8 @@
             <div class="filter-top-selling d-flex flex-column flex-sm-row justify-content-between">
                 <div class="select-by-radio font-14">
                     <span class="p-0 mr-3">
-                        <input id="location-wise" type="radio"
-                            name="selectOption" class="radio-custom cp ml-0"><label for="location-wise"
-                            class="radio-custom-label">Location wise</label>
+                        <input id="location-wise" type="radio" name="selectOption" class="radio-custom cp ml-0"><label
+                            for="location-wise" class="radio-custom-label">Location wise</label>
                     </span>
                     <span class="p-0 mr-3">
                         <input id="product-wise" type="radio" name="selectOption" class="radio-custom cp ml-0"><label
@@ -81,7 +83,7 @@
             <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
                 [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
                 [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
                 (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
                 [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
                 [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>

@@ -198,7 +198,7 @@ export class PurchaseOrderComponent implements OnDestroy {
         });
 
         this.selectedPo$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response && (this.pageUrl.includes('/purchase-orders/preview') || this.pageUrl.includes('/purchase-management/purchase'))) {
+            if (response && (this.pageUrl.includes('/purchase-orders/preview') || this.pageUrl.includes('/purchase-management/purchase'))) {
                 this.selectedPo = response;
             }
         });
@@ -295,7 +295,7 @@ export class PurchaseOrderComponent implements OnDestroy {
 
                         let purchaseOrders = _.cloneDeep(res.body);
 
-                        if(purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0) {
+                        if (purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0) {
                             purchaseOrders.items.map(item => {
                                 item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedPo, item.uniqueName);
                                 let grandTotalConversionRate = 0, grandTotalAmountForCompany, grandTotalAmountForAccount;
@@ -362,7 +362,7 @@ export class PurchaseOrderComponent implements OnDestroy {
      * @memberof PurchaseOrderComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -621,7 +621,7 @@ export class PurchaseOrderComponent implements OnDestroy {
                 if (res) {
                     if (res.status === 'success') {
 
-                        if(action === "create_purchase_bill") {
+                        if (action === "create_purchase_bill") {
                             this.refreshPurchaseBill.emit(true);
                         }
 
@@ -772,7 +772,7 @@ export class PurchaseOrderComponent implements OnDestroy {
      * @memberof PurchaseOrderComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.translationLoaded = true;
             this.bulkUpdateFields = [
                 { label: this.localeData?.order_date, value: BULK_UPDATE_FIELDS.purchasedate },
@@ -781,5 +781,30 @@ export class PurchaseOrderComponent implements OnDestroy {
             ];
             this.initPurchaseOrders();
         }
+    }
+
+    /**
+     * This will return delivery days text
+     *
+     * @param {number} dueDays
+     * @returns {string}
+     * @memberof PurchaseOrderComponent
+     */
+    public getDeliveryDaysText(dueDays: number): string {
+        let text = "";
+
+        if(dueDays > 0) {
+            if(dueDays === 1) {
+                text = this.localeData?.delivery_in_day;
+            } else {
+                text = this.localeData?.delivery_in_days;
+            }
+            text = text?.replace("[DAYS]", String(dueDays));
+        } else {
+            text = this.localeData?.delayed_by_days;
+            text = text?.replace("[DAYS]", String(this.formatNumber(dueDays)));
+        }
+        
+        return text;
     }
 }

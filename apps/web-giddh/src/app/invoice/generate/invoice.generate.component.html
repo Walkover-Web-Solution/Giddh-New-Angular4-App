@@ -1,8 +1,11 @@
-<ng-container appTranslate [file]="'invoice'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<ng-container appTranslate [file]="'invoice'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <ng-container *ngIf="!showEditMode">
         <div class="invoice-generate-container">
-            <div class="btn-dropdown-dr-cr" *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'">
-                <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()">
+            <div class="btn-dropdown-dr-cr"
+                *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'">
+                <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown"
+                    (mouseleave)="dp.hide()">
                     <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                         aria-controls="dropdown-basic">
                         {{ selectedVoucher | titlecase}}
@@ -11,11 +14,13 @@
                     <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
 
                         <li role="menuitem" (click)="changeDebitOrCredit('debit note')">
-                            <a class="dropdown-item cp" href="javascript:void(0)">{{commonLocaleData?.app_voucher_types?.debit_note}}</a>
+                            <a class="dropdown-item cp"
+                                href="javascript:void(0)">{{commonLocaleData?.app_voucher_types?.debit_note}}</a>
                         </li>
 
                         <li role="menuitem" (click)="changeDebitOrCredit('credit note')">
-                            <a class="dropdown-item cp" href="javascript:void(0)">{{commonLocaleData?.app_voucher_types?.credit_note}}</a>
+                            <a class="dropdown-item cp"
+                                href="javascript:void(0)">{{commonLocaleData?.app_voucher_types?.credit_note}}</a>
                         </li>
                     </ul>
                 </div>
@@ -28,23 +33,27 @@
                             <div class="input-group mr-r1 mb-0" id="dp-parent">
                                 <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
                                     <i class="icon-calender calendar-addon"></i>
-                                    <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker border-radius-2"/>
+                                    <input type="text" name="selectedDateRange"
+                                        [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker border-radius-2" />
                                 </div>
-                                <button class="clear-filter btn btn-filter align-items-center d-flex justify-content-center"
+                                <button
+                                    class="clear-filter btn btn-filter align-items-center d-flex justify-content-center"
                                     *ngIf="!isUniversalDateApplicable && isMobileView" (click)="resetDateSearch()">
                                     <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
                                 </button>
                             </div>
                             <span>
-                                <button *ngIf="!isCompany" [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary"
-                                    (click)="generateBulkInvoice(false)">
+                                <button *ngIf="!isCompany" [hidden]="selectedLedgerItems.length === 0"
+                                    class="btn btn-primary" (click)="generateBulkInvoice(false)">
                                     {{localeData?.generate_multiple}}
                                 </button>
-                                <button *ngIf="!isCompany" [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary"
-                                    (click)="generateBulkInvoice(true)">
+                                <button *ngIf="!isCompany" [hidden]="selectedLedgerItems.length === 0"
+                                    class="btn btn-primary" (click)="generateBulkInvoice(true)">
                                     {{localeData?.generate_compound}}
                                 </button>
-                                <button *ngIf="!isCompany && !isMobileView" placement="top" tooltip="Works only for single entry."
+                                <button *ngIf="!isCompany && !isMobileView" placement="top"
+                                    [tooltip]="localeData?.works_for_single_entry"
                                     [hidden]="selectedLedgerItems.length === 0  || !togglePrevGenBtn"
                                     class="btn btn-primary" (click)="previewInvoice()">{{localeData?.preview_generate}}
                                 </button>
@@ -52,13 +61,12 @@
                         </div>
                     </div>
                     <div class="align-items-center d-flex justify-content-center filter-width">
-                        <div class="clear-filter"
-                        [ngClass]="{'width-auto' : selectedLedgerItems.length === 0}"
-                        *ngIf="!isUniversalDateApplicable && !isMobileView" (click)="resetDateSearch()">
-                        <button class="btn btn-filter mr-0">
-                            <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
-                        </button>
-                    </div>
+                        <div class="clear-filter" [ngClass]="{'width-auto' : selectedLedgerItems.length === 0}"
+                            *ngIf="!isUniversalDateApplicable && !isMobileView" (click)="resetDateSearch()">
+                            <button class="btn btn-filter mr-0">
+                                <span class="icon-cross"></span> {{commonLocaleData?.app_clear_filter}}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -161,15 +169,17 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody *ngIf="!(getLedgerDataInProcess$ | async)" (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''" (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
+                <tbody *ngIf="!(getLedgerDataInProcess$ | async)"
+                    (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+                    (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
 
                     <tr *ngFor="let item of ledgersData?.results; let i = index;"
-                        [ngClass]="{'danger': item.hasGenerationErr}" (mouseover)="hoveredItemForAction = item.uniqueName">
+                        [ngClass]="{'danger': item.hasGenerationErr}"
+                        (mouseover)="hoveredItemForAction = item.uniqueName">
 
                         <td class="check-image" data-title="#"
                             *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedInvoices.length > 0">
-                            <div class="check-image d-flex justify-content-center"
-                                data-title="#">
+                            <div class="check-image d-flex justify-content-center" data-title="#">
                                 <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
                                     (click)="toggleItem(item, true)" />
                                 <img *ngIf="item.isSelected" src="assets/images/checked.png"
@@ -194,14 +204,15 @@
                                 <tr *ngFor="let transaction of item.transactions">
                                     <td class="p-0 border-none">
                                         {{transaction.particular.name }}
-                                        <span *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}})
+                                        <span
+                                            *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}})
                                         </span>
                                     </td>
                                 </tr>
                             </table>
                         </td>
 
-                        <td [attr.data-title]="commonLocaleData?.app_amount"  class="hide-on-mobile">
+                        <td [attr.data-title]="commonLocaleData?.app_amount" class="hide-on-mobile">
                             <table class="table nested-table amount-nested-table">
                                 <tr *ngFor="let transaction of item.transactions">
                                     <td class="text-right p-0 border-none">
@@ -221,7 +232,8 @@
 
                                     <td>
                                         {{transaction.particular.name }}
-                                        <span *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}})
+                                        <span
+                                            *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}})
                                         </span>
                                     </td>
                                     <td class="text-right">
@@ -238,11 +250,15 @@
                         <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
                             (clickOutside)="modalUniqueName = ''" [attr.data-title]="commonLocaleData?.app_account">
                             {{item.account.name}}
-                            <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component [accountUniqueName]="item.account.uniqueName" [from]="ledgerSearchRequest.from" [to]="ledgerSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName" [voucherType]="selectedVoucher">
+                            <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
+                                [accountUniqueName]="item.account.uniqueName" [from]="ledgerSearchRequest.from"
+                                [to]="ledgerSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName"
+                                [voucherType]="selectedVoucher">
                             </div>
                         </td>
 
-                        <td class="text-right" [attr.data-title]="commonLocaleData?.app_total" [tooltip]="totalPopupTemplate">
+                        <td class="text-right" [attr.data-title]="commonLocaleData?.app_total"
+                            [tooltip]="totalPopupTemplate">
                             {{item.accountCurrencySymbol}}{{item.total.amount | giddhCurrency}}</td>
                         <ng-template #totalPopupTemplate><span [innerHTML]="item.totalTooltipText"></span>
                         </ng-template>
@@ -253,7 +269,8 @@
 
                 </tbody>
                 <!-- -->
-                <tbody *ngIf="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)" id="centerAlign">
+                <tbody *ngIf="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)"
+                    id="centerAlign">
                     <tr>
                         <td colspan="8">
                             <giddh-page-loader></giddh-page-loader>
@@ -263,11 +280,15 @@
             </table>
         </div>
 
-        <div *ngIf="ledgersData?.totalItems > 20" [hidden]="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)" class="pagination-wrapper">
+        <div *ngIf="ledgersData?.totalItems > 20"
+            [hidden]="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)"
+            class="pagination-wrapper">
             <div class="text-center">
                 <pagination [totalItems]="ledgersData.totalItems" [(ngModel)]="ledgersData.page" [maxSize]="5"
                     class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false"
-                    (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last"></pagination>
+                    (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first"
+                    [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
+                    [lastText]="commonLocaleData?.app_last"></pagination>
             </div>
         </div>
 
@@ -298,7 +319,8 @@
             <!-- </div> -->
 
             <div class="invoice-edit-body ">
-                <proforma-invoice-component [accountUniqueName]="selectedAccountUniqueName" [selectedItem]="selectedItem"
+                <proforma-invoice-component [accountUniqueName]="selectedAccountUniqueName"
+                    [selectedItem]="selectedItem"
                     [invoiceNo]="(selectedVoucher !=='purchase' ) ? selectedItem?.voucherNumber : selectedItem?.uniqueName "
                     [invoiceType]="selectedVoucher
         " (cancelVoucherUpdate)="closeModel() ">
@@ -321,9 +343,13 @@
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">
             <div class="modal-body">
-                <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                                        [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                                        [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+                <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
+                    [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                    [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                    (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                    [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
             </div>
         </div>
     </ng-template>

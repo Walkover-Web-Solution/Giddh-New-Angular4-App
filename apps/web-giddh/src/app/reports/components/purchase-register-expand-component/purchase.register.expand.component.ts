@@ -10,6 +10,7 @@ import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { FormControl } from '@angular/forms';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'purchase-register-expand',
@@ -34,8 +35,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     // searching
-    @ViewChild('invoiceSearch', {static: true}) public invoiceSearch: ElementRef;
-    @ViewChild('filterDropDownList', {static: true}) public filterDropDownList: BsDropdownDirective;
+    @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
+    @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
     public voucherNumberInput: FormControl = new FormControl();
     public monthNames = [];
     public monthYear: string[] = [];
@@ -55,15 +56,22 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* This will hold if it's mobile screen or not */
+    public isMobileScreen: boolean = false;
 
-    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef) {
+    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver) {
         this.purchaseRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.PurchaseRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetPurchaseDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetPurchaseDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetPurchaseDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetPurchaseDetailsSuccess), takeUntil(this.destroyed$));
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
     }
 
     ngOnInit() {
-        this.imgPath = (isElectron||isCordova)  ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         this.getDetailedPurchaseRequestFilter.page = 1;
         this.getDetailedPurchaseRequestFilter.count = 50;
         this.getDetailedPurchaseRequestFilter.q = '';
@@ -249,7 +257,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterExpandComponent
      */
     public translationComplete(event: boolean): void {
-        if(event) {
+        if (event) {
             this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
 
             this.getCurrentMonthYear();

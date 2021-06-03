@@ -1,4 +1,5 @@
-<ng-container appTranslate [file]="'settings/taxes'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<ng-container appTranslate [file]="'settings/taxes'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="box clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="selectedTax = null;toggleTaxAsidePane()">
         <div class="d-flex justify-content-between">
             <h1 class="section-head m-0 pl-0 pb-0 pr-0">{{localeData?.added_taxes}}</h1>
@@ -35,16 +36,20 @@
                                 <td data-title="#">{{i + 1}}</td>
                                 <td *ngIf="!taxToEdit[i]" [attr.data-title]="localeData?.tax">{{tax.taxNumber}}</td>
                                 <td *ngIf="taxToEdit[i]" [attr.data-title]="localeData?.tax">{{tax.taxNumber}}</td>
-                                <td *ngIf="!taxToEdit[i]" [attr.data-title]="commonLocaleData?.app_name">{{tax.name}}</td>
-                                <td *ngIf="taxToEdit[i]" [attr.data-title]="commonLocaleData?.app_name">{{tax.name}}</td>
+                                <td *ngIf="!taxToEdit[i]" [attr.data-title]="commonLocaleData?.app_name">{{tax.name}}
+                                </td>
+                                <td *ngIf="taxToEdit[i]" [attr.data-title]="commonLocaleData?.app_name">{{tax.name}}
+                                </td>
                                 <td *ngIf="!tax.accounts[0] && !taxToEdit[i]">--</td>
-                                <td *ngIf="tax.accounts[0] && !taxToEdit[i]" [attr.data-title]="localeData?.linked_account">
+                                <td *ngIf="tax.accounts[0] && !taxToEdit[i]"
+                                    [attr.data-title]="localeData?.linked_account">
                                     <p *ngFor="let acc of tax.accounts;">
                                         {{acc.name}}
                                     </p>
                                 </td>
 
-                                <td *ngIf="tax.accounts[0] && taxToEdit[i]" [attr.data-title]="localeData?.linked_account">
+                                <td *ngIf="tax.accounts[0] && taxToEdit[i]"
+                                    [attr.data-title]="localeData?.linked_account">
                                     <p *ngFor="let acc of availableTaxes[i].accounts; let ind = index">
                                         <input [disabled]="true" class="form-control" type="text" [(ngModel)]="acc.name"
                                             name="acc_0_name{{i}}_{{ind}}">
@@ -53,13 +58,14 @@
 
                                 <td *ngIf="!tax.taxDetail || !tax.taxDetail.length">--</td>
                                 <td *ngIf="tax.taxDetail && tax.taxDetail.length && !taxToEdit[i]"
-                                [attr.data-title]="localeData?.applied_from">
+                                    [attr.data-title]="localeData?.applied_from">
                                     <div *ngFor="let t of tax.taxDetail">
                                         {{moment(t.date).format(giddhDateFormat)}}
                                     </div>
                                 </td>
 
-                                <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]" [attr.data-title]="localeData?.applied_from">
+                                <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]"
+                                    [attr.data-title]="localeData?.applied_from">
                                     <div *ngFor="let t of tax.taxDetail; let j = index; let last = last" class="mr-b1">
                                         <div class="input-group">
                                             <input type="text" [ngModel]="moment(t.date).format(giddhDateFormat)"
@@ -106,7 +112,8 @@
                                     </div>
                                 </td>
 
-                                <td *ngIf="!taxToEdit[i]" [attr.data-title]="localeData?.file_date">{{tax.taxFileDate}}</td>
+                                <td *ngIf="!taxToEdit[i]" [attr.data-title]="localeData?.file_date">{{tax.taxFileDate}}
+                                </td>
 
                                 <td *ngIf="taxToEdit[i]">
                                     <div class="custom-select position-relative">
@@ -124,19 +131,22 @@
                                     </div>
                                 </td>
 
-                                <td [attr.data-title]="commonLocaleData?.app_type">{{tax.taxType ? tax.taxType : commonLocaleData?.app_tax_types?.others}}</td>
+                                <td [attr.data-title]="commonLocaleData?.app_type">{{tax.taxType ? tax.taxType :
+                                    commonLocaleData?.app_tax_types?.others}}</td>
 
                                 <td class="text-center ico-btn" [attr.data-title]="commonLocaleData?.app_action">
 
                                     <div class="d-flex">
                                         <button (click)="selectedTax = tax;toggleTaxAsidePane()" type="button"
                                             class="btn btn-xs">
-                                            <i class="icon-edit-pencil" aria-hidden="true" [tooltip]="commonLocaleData?.app_edit"></i>
+                                            <i class="icon-edit-pencil" aria-hidden="true"
+                                                [tooltip]="commonLocaleData?.app_edit"></i>
                                         </button>
 
                                         <button *ngIf="!taxToEdit[i]" type="button" class="btn btn-xs"
                                             (click)="deleteTax(tax);">
-                                            <i class="fa fa-trash" aria-hidden="true" [tooltip]="commonLocaleData?.app_delete"></i>
+                                            <i class="fa fa-trash" aria-hidden="true"
+                                                [tooltip]="commonLocaleData?.app_delete"></i>
                                         </button>
                                     </div>
 
@@ -178,7 +188,8 @@
     <!-- region open tax aside -->
     <div class="aside-overlay" *ngIf="taxAsideMenuState === 'in'"></div>
     <aside-menu-create-tax-component [class]="taxAsideMenuState" [tax]="selectedTax" *ngIf="taxAsideMenuState === 'in'"
-        [@slideInOut]="taxAsideMenuState" [localeData]="localeData" [commonLocaleData]="commonLocaleData" (closeEvent)="toggleTaxAsidePane()"></aside-menu-create-tax-component>
+        [@slideInOut]="taxAsideMenuState" [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+        (closeEvent)="toggleTaxAsidePane()"></aside-menu-create-tax-component>
     <!-- endregion -->
 
 

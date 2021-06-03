@@ -45,7 +45,7 @@
         "daybook_import": "डेपुस्तक-आयात",
         "ledger_excel_import": "लेजर-एक्सेल-आयात"
     },
-    "entities" :{
+    "entities": {
         "all": "सर्व",
         "company": "कंपनी",
         "group": "गट",

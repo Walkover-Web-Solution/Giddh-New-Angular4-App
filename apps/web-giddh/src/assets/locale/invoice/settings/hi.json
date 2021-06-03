@@ -10,7 +10,7 @@
     "verify": "सत्यापित करें",
     "send_email_gmail": "जीमेल के माध्यम से ईमेल भेजें",
     "integrate_gmail": "जीमेल को एकीकृत करें",
-    "estimate": "आकलन",
+    "estimate": "अनुमान",
     "estimate_quotation": "अनुमान / उद्धरण",
     "heading_name": "प्रमुख नाम",
     "eg_placeholder": "जैसे। अनुमान / उद्धरण / प्रोफार्मा",
@@ -42,7 +42,7 @@
     "e_invoice_authentication_label": "ई-चालान प्रमाणीकरण",
     "e_invoice_username_label": "उपयोगकर्ता नाम",
     "e_invoice_password_label": "कुंजिका",
-    "e_invoice_gstin_label": "GSTIN",
+    "e_invoice_gstin_label": "जीएसटीआईएन",
     "e_invoice_fields_required_error_message": "ई-चालान प्रमाणीकरण के लिए सभी क्षेत्रों की आवश्यकता है",
-    "e_invoice_invalid_gstin_error_message": "कृपया एक मान्य GSTIN प्रदान करें"
+    "e_invoice_invalid_gstin_error_message": "कृपया एक मान्य जीएसटीआईएन प्रदान करें"
 }

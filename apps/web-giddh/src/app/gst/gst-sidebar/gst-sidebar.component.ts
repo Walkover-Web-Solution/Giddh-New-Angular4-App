@@ -23,11 +23,17 @@ export class GstrSidebarComponent {
     @Input() public activeCompanyGstNumber: EventEmitter<boolean> = new EventEmitter(true);
     /** Stores the selected GST module */
     @Input() public selectedGstModule: string = 'dashboard';
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
+    /** True if month filter is selected */
+    @Input() public isMonthSelected: boolean;
 
     constructor(
         private router: Router,
         private generalService: GeneralService
-    ) {}
+    ) { }
 
     /**
     * This will close the settings popup if clicked outside and is mobile screen
@@ -56,9 +62,10 @@ export class GstrSidebarComponent {
     /**
     * This is navigate menu item
     *
+    * @param {string} type Type of GST module
     * @memberof GstrSidebarComponent
     */
-    public navigate(type) {
+    public navigate(type: string): void {
         this.selectedGstModule = type;
         this.navigateEvent.emit(type);
     }

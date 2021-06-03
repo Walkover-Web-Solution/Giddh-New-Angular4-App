@@ -1,48 +1,50 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-
 import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
 import { GstDatePeriod, GstOverViewRequest } from '../../models/api-models/GstReconcile';
 import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { AppState } from '../../store';
 import { GstReport } from '../constants/gst.constant';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import * as moment from 'moment/moment';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
-	// tslint:disable-next-line:component-selector
-	selector: 'filing',
-	templateUrl: 'filing.component.html',
-	styleUrls: ['filing.component.scss'],
-	encapsulation: ViewEncapsulation.Emulated
+    // tslint:disable-next-line:component-selector
+    selector: 'filing',
+    templateUrl: 'filing.component.html',
+    styleUrls: ['filing.component.scss'],
+    encapsulation: ViewEncapsulation.Emulated
 })
 export class FilingComponent implements OnInit, OnDestroy {
-	@ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /* Aside pane state*/
     public asideMenuState: string = 'out';
     /* this will check mobile screen size */
     public isMobileScreen: boolean = false;
-	public currentPeriod: GstDatePeriod = null;
-	public selectedGst: string = null;
-	public gstNumber: string = null;
-	public activeCompanyGstNumber: string = '';
-	public selectedTab: string = '1. Overview';
-	public gstAuthenticated$: Observable<boolean>;
-	public isTransactionSummary: boolean = false;
-	public showTaxPro: boolean = false;
-	public fileReturn: {} = { isAuthenticate: false };
-	public selectedTabId: number = null;
-	public gstFileSuccess$: Observable<boolean> = of(false);
+    public currentPeriod: GstDatePeriod = null;
+    public selectedGst: string = null;
+    public gstNumber: string = null;
+    public activeCompanyGstNumber: string = '';
+    public selectedTab: string = '';
+    public gstAuthenticated$: Observable<boolean>;
+    public isTransactionSummary: boolean = false;
+    public showTaxPro: boolean = false;
+    public fileReturn: {} = { isAuthenticate: false };
+    public selectedTabId: number = null;
+    public gstFileSuccess$: Observable<boolean> = of(false);
     public fileReturnSucces: boolean = false;
     /** True, if HSN tab needs to be opened by default (required if a user clicks on HSN data in GSTR1) */
     public showHsn: boolean;
 
-	public gstr1OverviewDataInProgress$: Observable<boolean>;
+    public gstr1OverviewDataInProgress$: Observable<boolean>;
     public gstr2OverviewDataInProgress$: Observable<boolean>;
 
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
@@ -52,31 +54,40 @@ export class FilingComponent implements OnInit, OnDestroy {
         return GstReport;
     }
 
-	private gstr1OverviewDataFetchedSuccessfully$: Observable<boolean>;
-	private gstr2OverviewDataFetchedSuccessfully$: Observable<boolean>;
-	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private gstr1OverviewDataFetchedSuccessfully$: Observable<boolean>;
+    private gstr2OverviewDataFetchedSuccessfully$: Observable<boolean>;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** Stores the current period */
+    public getCurrentPeriod$: Observable<any> = of(null);
+    /** True, if month filter is selected */
+    public isMonthSelected: boolean = true;
 
-    constructor(private _cdr: ChangeDetectorRef,
+    constructor(
         private _route: Router,
         private activatedRoute: ActivatedRoute,
         private store: Store<AppState>,
         private _gstAction: GstReconcileActions,
-        private generalService: GeneralService) {
-		this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
-		this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
-		this.gstr1OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
-		this.gstr2OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
-		this.gstr1OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataInProgress), takeUntil(this.destroyed$));
-		this.gstr2OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataInProgress), takeUntil(this.destroyed$));
+        private generalService: GeneralService,
+        private breakpointObserver: BreakpointObserver) {
+        this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
+        this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
+        this.gstr1OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
+        this.gstr2OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
+        this.gstr1OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataInProgress), takeUntil(this.destroyed$));
+        this.gstr2OverviewDataInProgress$ = this.store.pipe(select(p => p.gstR.gstr2OverViewDataInProgress), takeUntil(this.destroyed$));
 
-		this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
+        this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
 
-		this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompanyGstNumber !== response) {
                 this.activeCompanyGstNumber = response;
             }
         });
-	}
+    }
     /**
      * Aside pane toggle fixed class
      *
@@ -104,55 +115,78 @@ export class FilingComponent implements OnInit, OnDestroy {
         }
     }
 
-	public ngOnInit() {
+    public ngOnInit() {
+        this.breakpointObserver
+        .observe(['(max-width: 768px)'])
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((state: BreakpointState) => {
+            this.isMobileScreen = state.matches;
+            if (!this.isMobileScreen) {
+                this.asideGstSidebarMenuState = 'in';
+            }
+        });
         this.toggleGstPane();
-		this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-			this.currentPeriod = {
-				from: params['from'],
-				to: params['to']
+        this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            this.currentPeriod = {
+                from: params['from'],
+                to: params['to']
             };
             if (params['selectedGst']) {
                 this.activeCompanyGstNumber = params['selectedGst'];
                 this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
             }
-			this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
+            this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
             if (this.selectedGst !== params['return_type']) {
                 this.selectedGst = params['return_type'];
                 this.loadGstReport(this.activeCompanyGstNumber);
             }
-			//
-			let tab = Number(params['tab']);
-			if (tab > -1) {
-				this.selectTabFromUrl(tab);
-			}
+            //
+            let tab = Number(params['tab']);
+            if (tab > -1) {
+                this.selectTabFromUrl(tab);
+            }
         });
 
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
 
-		// get activeCompany gst number
-		this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
+        // get activeCompany gst number
+        this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
             this.loadGstReport(result);
-		});
-	}
+        });
+        this.getCurrentPeriod$ = this.store.pipe(select(appStore => appStore.gstR.currentPeriod), takeUntil(this.destroyed$));
+        this.getCurrentPeriod$.subscribe(currentPeriod => {
+            if (currentPeriod && currentPeriod.from) {
+                let date = {
+                    startDate: moment(currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
+                    endDate: moment(currentPeriod.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
+                };
+                if (date.startDate === currentPeriod.from && date.endDate === currentPeriod.to) {
+                    this.isMonthSelected = true;
+                } else {
+                    this.isMonthSelected = false;
+                }
+            }
+        });
+    }
 
-	public selectTab(e, val, tabHeading) {
-		this.selectedTab = tabHeading;
-		this.isTransactionSummary = this.selectedTab !== '1. Overview';
-		this.showTaxPro = val;
+    public selectTab(e, val, tabHeading) {
+        this.selectedTab = tabHeading;
+        this.isTransactionSummary = this.selectedTab !== this.localeData?.filing?.tabs?.overview;
+        this.showTaxPro = val;
         this.fileReturnSucces = false;
-		// this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: this.selectedTabId}});
-	}
+        // this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: this.selectedTabId}});
+    }
 
-	public selectTabFromUrl(tab: number) {
-		if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[tab]) {
-			this.selectedTabId = tab;
-			this.staticTabs.tabs[this.selectedTabId].active = true;
-		}
-	}
+    public selectTabFromUrl(tab: number) {
+        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[tab]) {
+            this.selectedTabId = tab;
+            this.staticTabs.tabs[this.selectedTabId].active = true;
+        }
+    }
 
-	public ngOnDestroy(): void {
-		this.destroyed$.next(true);
-		this.destroyed$.complete();
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
     }
 
@@ -173,26 +207,26 @@ export class FilingComponent implements OnInit, OnDestroy {
      */
     public handleBackButton(): void {
         this.showHsn = false;
-        this.selectTab('', false, '1. Overview');
+        this.selectTab('', false, this.localeData?.filing?.tabs?.overview);
     }
 
     /**
      * Navigates to the overview or dashboard page
      *
-     * @param {*} type Type of report (gstr1, gstr2, gstr3b)
+     * @param {string} type Type of report (gstr1, gstr2, gstr3b)
      * @memberof FilingComponent
      */
-    public navigateToOverview(type) {
+    public navigateToOverview(type: string): void {
         this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0, selectedGst: this.activeCompanyGstNumber } });
     }
 
     /**
      * Navigates to GSTR 3B
      *
-     * @param {*} type Type of report (gstr1, gstr2, gstr3b)
+     * @param {string} type Type of report (gstr1, gstr2, gstr3b)
      * @memberof FilingComponent
      */
-    public navigateTogstR3B(type) {
+    public navigateTogstR3B(type: string): void {
         this._route.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: this.isCompany, selectedGst: this.activeCompanyGstNumber } });
     }
 
@@ -203,7 +237,7 @@ export class FilingComponent implements OnInit, OnDestroy {
      * @memberof FilingComponent
      */
     public handleNavigation(type: string): void {
-        switch(type) {
+        switch (type) {
             case GstReport.Gstr1: case GstReport.Gstr2:
                 this.navigateToOverview(type);
                 break;
@@ -249,5 +283,52 @@ export class FilingComponent implements OnInit, OnDestroy {
 
         // get session details
         this.store.dispatch(this._gstAction.GetGSPSession(this.activeCompanyGstNumber));
+
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+                }
+            }
+        });
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof FilingComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.selectedTab = this.localeData?.filing?.tabs?.overview;
+        }
+    }
+
+    /**
+     * This will return gst return filed text
+     *
+     * @returns {string}
+     * @memberof FilingComponent
+     */
+    public getGstReturnFiledText(): string {
+        let text = this.localeData?.filing?.gst_filed_success;
+        text = text?.replace("[PERIOD_FROM]", this.currentPeriod?.from)?.replace("[PERIOD_TO]", this.currentPeriod.to);
+        return text;
+    }
+
+    /**
+     * This will return loading selected gst text
+     *
+     * @param {*} selectedGst
+     * @returns {string}
+     * @memberof FilingComponent
+     */
+    public getLoadingGstText(selectedGst: any): string {
+        let text = this.localeData?.loading_gst_data;
+        text = text?.replace("[SELECTED_GST]", selectedGst);
+        return text;
     }
 }

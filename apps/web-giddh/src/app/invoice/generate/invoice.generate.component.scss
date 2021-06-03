@@ -134,7 +134,7 @@ tfoot {
 
 .invoice-generate-container {
     padding: 0 15px;
-    .btn-dropdown-dr-cr{
+    .btn-dropdown-dr-cr {
         height: 44px;
     }
 }
@@ -257,16 +257,17 @@ span.close-modal.cp.pull-right {
     width: 34px;
     background-color: $very-light-gray;
     border: 1px solid $gainsboro;
+    border-radius: 5px;
     margin-right: 8px;
     position: static;
     transform: inherit;
 }
-#mobile-nested-table{
+#mobile-nested-table {
     display: none;
 }
-.nested-table{
-    tr{
-        td{
+.nested-table {
+    tr {
+        td {
             white-space: normal;
             border-left: none !important;
             border-right: none !important;
@@ -274,19 +275,19 @@ span.close-modal.cp.pull-right {
     }
 }
 
-.width-auto{
-    width:auto;
+.width-auto {
+    width: auto;
 }
 
-.filter-width{
+.filter-width {
     width: 85%;
 }
 
-.pending-advance-search{
+.pending-advance-search {
     flex: 1 1 auto !important;
-        div#dp-parent {
-            margin-right:8px;
-        }
+    div#dp-parent {
+        margin-right: 8px;
+    }
 }
 // responsive
 @media (max-width: 1023px) {
@@ -300,39 +301,39 @@ span.close-modal.cp.pull-right {
     }
 }
 @media (max-width: 768px) {
-    .pending-table tr td#mobile-nested-table{
+    .pending-table tr td#mobile-nested-table {
         padding: 0 !important;
         margin: 0 !important;
         display: block;
-        tr{
+        tr {
             box-shadow: none;
             margin: 0;
             padding-top: 0;
-                th{
+            th {
                 display: inline-flex !important;
                 width: 50%;
                 border: none;
                 padding-top: 0 !important;
                 padding-bottom: 0 !important;
                 padding-left: 15px;
-                &:last-child{
+                &:last-child {
                     padding-left: 0 !important;
                 }
             }
-            td{
+            td {
                 padding: 5px 0 0 0 !important;
                 display: inline-flex;
                 width: 50%;
                 border: none;
                 margin-bottom: 10px;
-                &:first-child{
-                      padding-left: 15px !important;
-                          color: rgba(0, 0, 0, 0.55) !important;
+                &:first-child {
+                    padding-left: 15px !important;
+                    color: rgba(0, 0, 0, 0.55) !important;
                 }
             }
         }
     }
-    .pending-table tr td.hide-on-mobile{
+    .pending-table tr td.hide-on-mobile {
         display: none !important;
     }
     .basic.on-mobile-view {
@@ -353,30 +354,30 @@ span.close-modal.cp.pull-right {
         width: 50% !important;
         float: left;
     }
-    .pending-table.on-mobile-view{
-        tr{
-            td{
-                .table.nested-table{
-                    tr{
-                        td{
-                        padding: 8px 0 !important;
-                        width: 100%;
-                        display: flex;
-                        border-bottom: none;
-                        padding-left: 10px !important;
+    .pending-table.on-mobile-view {
+        tr {
+            td {
+                .table.nested-table {
+                    tr {
+                        td {
+                            padding: 8px 0 !important;
+                            width: 100%;
+                            display: flex;
+                            border-bottom: none;
+                            padding-left: 10px !important;
                         }
                     }
                 }
             }
         }
     }
-    .pending-table.on-mobile-view tr td .table.nested-table tr:first-child td{
+    .pending-table.on-mobile-view tr td .table.nested-table tr:first-child td {
         border-right: 1px solid $gainsboro !important;
     }
-    .pending-table.on-mobile-view tr td .table.nested-table tr td:last-child{
+    .pending-table.on-mobile-view tr td .table.nested-table tr td:last-child {
         border-bottom: none !important;
     }
-    .pending-table.on-mobile-view tr td .table.nested-table tr:first-child td{
+    .pending-table.on-mobile-view tr td .table.nested-table tr:first-child td {
         border-bottom: none !important;
     }
     .pending-table .nested-table > tbody tr td {
@@ -418,10 +419,9 @@ span.close-modal.cp.pull-right {
     .mobile-width-100 {
         width: 100%;
     }
-    .particular-nested-table tr td{
+    .particular-nested-table tr td {
         border-top: none !important;
     }
-
 }
 
 @media (max-width: 767px) {
@@ -490,7 +490,7 @@ span.close-modal.cp.pull-right {
         margin-bottom: 0;
         width: 100%;
     }
-    .flex-none{
+    .flex-none {
         flex: none;
     }
 }

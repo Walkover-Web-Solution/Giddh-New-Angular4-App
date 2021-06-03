@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import * as moment from 'moment';
-import { CurrentPage } from '../../../models/api-models/Common';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
@@ -21,14 +20,14 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
     styleUrls: [`./eWayBill.create.component.scss`]
 })
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
-    @ViewChild('eWayBillCredentials', {static: true}) public eWayBillCredentials: ModalDirective;
-    @ViewChild('generateInvForm', {static: true}) public generateEwayBillForm: NgForm;
-    @ViewChild('generateTransporterForm', {static: true}) public generateNewTransporterForm: NgForm;
-    @ViewChild('invoiceRemoveConfirmationModel', {static: true}) public invoiceRemoveConfirmationModel: ModalDirective;
-    @ViewChild('subgrp', {static: true}) public subgrp: any;
-    @ViewChild('doctypes', {static: true}) public doctype: any;
+    @ViewChild('eWayBillCredentials', { static: true }) public eWayBillCredentials: ModalDirective;
+    @ViewChild('generateInvForm', { static: true }) public generateEwayBillForm: NgForm;
+    @ViewChild('generateTransporterForm', { static: true }) public generateNewTransporterForm: NgForm;
+    @ViewChild('invoiceRemoveConfirmationModel', { static: true }) public invoiceRemoveConfirmationModel: ModalDirective;
+    @ViewChild('subgrp', { static: true }) public subgrp: any;
+    @ViewChild('doctypes', { static: true }) public doctype: any;
 
-    @ViewChild('trans', {static: true}) public transport: any;
+    @ViewChild('trans', { static: true }) public transport: any;
 
     public invoiceNumber: string = '';
     public invoiceBillingGstinNo: string = '';
@@ -348,7 +347,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.SubsupplyTypesList = [
                 { value: '1', label: this.localeData?.subsupply_types_list?.supply },
                 { value: '3', label: this.localeData?.subsupply_types_list?.export },

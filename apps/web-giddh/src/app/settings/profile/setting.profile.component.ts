@@ -23,6 +23,7 @@ import { CommonService } from '../../services/common.service';
 import { CompanyService } from '../../services/companyService.service';
 import { GeneralService } from '../../services/general.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { LocaleService } from '../../services/locale.service';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -34,7 +35,7 @@ export interface IGstObj {
     selector: 'setting-profile',
     templateUrl: './setting.profile.component.html',
     styleUrls: ['../../shared/header/components/company-add/company-add.component.scss', './setting.profile.component.scss'],
-    host: {'class': 'settings-profile'},
+    host: { 'class': 'settings-profile' },
     animations: [
         trigger('fadeInAndSlide', [
             transition(':enter', [
@@ -151,7 +152,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    
+    /** This holds the active locale */
+    public activeLocale: string = "";
+    /** This holds perforsonal information tab heading */
+    public personalInformationTabHeading: string = "";
+
     constructor(
         private commonService: CommonService,
         private companyService: CompanyService,
@@ -166,7 +171,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private settingsProfileService: SettingsProfileService,
         private settingsUtilityService: SettingsUtilityService,
         private router: Router,
-        public route: ActivatedRoute
+        public route: ActivatedRoute,
+        private localeService: LocaleService
     ) {
         this.getCountry();
         this.getCurrency();
@@ -176,7 +182,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         digitAfterDecimal.map(decimal => {
             this.decimalDigitSource.push({ value: decimal.value, label: decimal.name });
         });
-        this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress),takeUntil(this.destroyed$));
+        this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -242,7 +248,17 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
         });
 
-        this.imgPath =  (isElectron|| isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+
+        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            if(this.activeLocale && this.activeLocale !== response?.value) {
+                this.localeService.getLocale('settings/profile', response?.value).subscribe(response => {
+                    this.localeData = response;
+                    this.translationComplete(true);
+                });
+            }
+            this.activeLocale = response?.value;
+        });
     }
 
     public getInitialProfileData() {
@@ -292,7 +308,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         ...this.companyProfileObj,
                         country: {
                             countryName: response.countryV2 ? response.countryV2.countryName : '',
-                            countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode.toLowerCase() : '',
+                            countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode?.toLowerCase() : '',
                             currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
                             currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                         },
@@ -731,7 +747,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public getState(gst): string {
         let state = "";
-        if(gst.stateCode) {
+        if (gst.stateCode) {
             state = gst.stateCode + " - " + gst.stateName;
         }
         return state;
@@ -750,7 +766,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             } else {
                 this.patchProfile({ ...value });
             }
-        } else if (this.currentOrganizationType === OrganizationType.Branch ) {
+        } else if (this.currentOrganizationType === OrganizationType.Branch) {
             this.updateBranchProfile();
         }
     }
@@ -764,7 +780,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public updateBranchProfile(params?: any): void {
         this.currentBranchDetails.name = this.companyProfileObj.name;
         this.currentBranchDetails.alias = this.companyProfileObj.alias;
-        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(params? params : this.currentBranchDetails))
+        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(params ? params : this.currentBranchDetails))
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 if (response) {
@@ -820,7 +836,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public loadStates(countryCode: string): void {
-        this.companyService.getAllStates({country: countryCode}).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.companyService.getAllStates({ country: countryCode }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
                 this.addressConfiguration.stateList = [];
@@ -1082,7 +1098,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 uniqueName: profileObj.uniqueName,
                 country: {
                     countryName: profileObj.countryV2 ? profileObj.countryV2.countryName : '',
-                    countryCode: profileObj.countryV2 ? profileObj.countryV2.alpha2CountryCode.toLowerCase() : '',
+                    countryCode: profileObj.countryV2 ? profileObj.countryV2.alpha2CountryCode?.toLowerCase() : '',
                     currencyCode: profileObj.countryV2 && profileObj.countryV2.currency ? profileObj.countryV2.currency.code : '',
                     currencyName: profileObj.countryV2 && profileObj.countryV2.currency ? profileObj.countryV2.currency.symbol : ''
                 },
@@ -1167,4 +1183,25 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.addressTabPaginationData.count = response.count;
     }
 
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof SettingProfileComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+                if (organization) {
+                    if (organization.type === OrganizationType.Branch) {
+                        this.personalInformationTabHeading = this.localeData?.branch_information;
+                    } else {
+                        this.personalInformationTabHeading = this.localeData?.company_information;
+                    }
+                } else {
+                    this.personalInformationTabHeading = this.localeData?.company_information;
+                }
+            });
+        }
+    }
 }
