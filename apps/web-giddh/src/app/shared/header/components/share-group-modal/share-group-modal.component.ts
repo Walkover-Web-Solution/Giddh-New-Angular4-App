@@ -70,40 +70,12 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'group', groupUniqueName));
     }
 
-    // public callbackFunction(activeGroup: any, email: string, currentPermission: string, newPermission: string) {
-    //     let userRole = {
-    //       emailId: email,
-    //       entity: 'group',
-    //       entityUniqueName: activeGroup.uniqueName,
-    //       updateInBackground: true,
-    //       newPermission
-    //     };
-
-    //     this.store.dispatch(this.accountActions.updateEntityPermission(userRole, currentPermission));
-    // }
-
     public updatePermission(model: ShareRequestForm, event: any) {
         let data = _.cloneDeep(model);
         let newPermission = event.target.value;
         data.roleUniqueName = newPermission;
         this.store.dispatch(this.accountActions.updateEntityPermission(data, newPermission, 'group'));
     }
-
-    // public checkIfUserAlreadyHavingPermission(email: string, currentPermission: string, permissionUniqueName: string, activeGroup: any, event: any) {
-    //   this.activeGroupSharedWith$.take(1).subscribe((data) => {
-    //     if (data) {
-    //       let roleIndex = data.findIndex((p) => {
-    //         return p.role.uniqueName === permissionUniqueName;
-    //       });
-    //       if (roleIndex > -1) {
-    //         this._toasty.errorToast(`${email} already have ${permissionUniqueName} permission.`);
-    //         this.store.dispatch(this.groupWithAccountsAction.sharedGroupWith(activeGroup.uniqueName));
-    //       } else {
-    //         this.callbackFunction(activeGroup, email, currentPermission, permissionUniqueName);
-    //       }
-    //     }
-    //   });
-    // }
 
     public closeModal() {
         this.email = '';

@@ -1,13 +1,11 @@
 import { Observable, of, ReplaySubject } from 'rxjs';
-
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 
 @Component({
     selector: 'generic-aside-menu-account',
@@ -82,7 +80,6 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngOnInit() {
-        //
         this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
     }
 

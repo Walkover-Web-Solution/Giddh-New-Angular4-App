@@ -124,16 +124,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             });
             return Object.assign({}, state, newState);
         }
-        // case INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE: {
-        //   let newState = _.cloneDeep(state);
-        //   let res: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = action.payload;
-        //   if (res.status === 'success') {
-        //     newState.invoiceData = res.body;
-        //   } else {
-        //     newState.invoiceDataHasError = true;
-        //   }
-        //   return {...state, ...newState};
-        // }
+        
         case INVOICE_ACTIONS.PREVIEW_INVOICE:
         case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE: {
             return { ...state, invoiceData: null, invoiceDataHasError: false };
@@ -175,7 +166,6 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             let newState = _.cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res.status === 'success') {
-                // newState.isInvoiceGenerated = true;
                 newState.ledgers.results = _.remove(newState.ledgers.results, (item: ILedgersInvoiceResult) => {
                     return !item.isSelected;
                 });
@@ -251,18 +241,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             }
             return state;
         }
-        // case INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE: {
-        //   let newState = _.cloneDeep(state);
-        //   let res: BaseResponse<string, string> = action.payload;
-        //   if (res.status === 'success') {
-        //     let indx = newState.invoices.results.findIndex((o) => o.invoiceNumber === res.request);
-        //     if (indx > -1) {
-        //       newState.invoices.results.splice(indx, 1);
-        //     }
-        //     return Object.assign({}, state, newState);
-        //   }
-        //   return state;
-        // }
+        
         case INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE: {
             let newState = _.cloneDeep(state);
             let res: BaseResponse<InvoiceSetting, string> = action.payload;
@@ -299,17 +278,8 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE.SETTING.SAVE_INVOICE_WEBHOOK_RESPONSE: {
             let newState = _.cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
-            // let blankWebhook = {
-            //     url: '',
-            //     triggerAt: 0,
-            //     entity: '',
-            //     uniqueName: ''
-            // };
             if (res.status === 'success') {
                 newState.settings.webhooks = null;
-                // let newWebhook = res.queryString.webhook;
-                // newState.settings.webhooks.push(newWebhook);
-                // newState.settings.webhooks.push(blankWebhook);
                 return Object.assign({}, state, newState);
             }
             return state;
@@ -385,21 +355,6 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             let newState = _.cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res.status === 'success') {
-
-                // Client side modification can useful when using pagination
-                /* let status = res.queryString.action.action;
-                let uniqueName = res.queryString.invoiceUniqueName;
-                let indx = newState.invoices.results.findIndex((o) => o.uniqueName === uniqueName);
-                if (indx > -1) {
-                    newState.invoices.results[indx].voucherStatus = status;
-                    if (status === 'paid') {
-                        newState.invoices.results[indx].balanceDue = newState.invoices.results[indx].grandTotal - res.queryString.action.amount;
-                        if (newState.invoices.results[indx].grandTotal > newState.invoices.results[indx].balanceDue) {
-                            newState.invoices.results[indx].voucherStatus = 'Partial-Paid';
-                        }
-                    }
-                } */
-
                 // Just refreshing the list for now
                 newState.invoices = null;
                 newState.invoiceActionUpdated = true;
@@ -476,7 +431,6 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         }
         case INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED_RESPONSE: {
             let newState = _.cloneDeep(state);
-            let res: BaseResponse<string, string> = action.payload;
             newState.exportInvoiceInprogress = false;
             newState.exportInvoicebase64Data = action.payload;
             return Object.assign({}, state, newState);

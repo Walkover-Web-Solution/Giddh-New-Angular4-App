@@ -301,17 +301,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public changePrice(val: string) {
         this.currentTxn.inventory.unit.rate = Number(cloneDeep(val));
         this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
-        // this.amountChanged();
         this.calculateTotal();
-        // this.calculateCompoundTotal();
     }
 
     public changeQuantity(val: string) {
         this.currentTxn.inventory.quantity = Number(val);
         this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
-        // this.amountChanged();
         this.calculateTotal();
-        //this.calculateCompoundTotal();
     }
 
     public calculateAmount() {
@@ -350,7 +346,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.currentTxn.inventory.unit.rate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(2));
             }
         }
-        // this.calculateCompoundTotal();
         if (this.isTotalFirts || this.isAmountFirst) {
             return;
         } else {
@@ -457,7 +452,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             });
             if (activeAccount) {
-                //
                 this.store.dispatch(this.companyActions.getTax());
                 this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
             } else {
