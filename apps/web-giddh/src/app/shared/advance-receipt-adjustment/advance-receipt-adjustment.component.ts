@@ -224,11 +224,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public onCancel(): void {
-        // TODO: This warning is removed as this is suggestion from testing team please remove it after approval
-        // if (this.adjustPayment && this.adjustPayment.totalAdjustedAmount && this.adjustPayment.grandTotal && this.adjustPayment.totalAdjustedAmount - this.adjustPayment.grandTotal > 0) {
-        //     this.toaster.warningToast('The adjusted amount of the linked invoice\'s is more than this receipt due amount');
-        //     return;
-        // }
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
             this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.filter(item => {
                 return item.voucherNumber !== '' || item.adjustmentAmount.amountForAccount > 0;
@@ -743,28 +738,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      */
     public shouldDisableEdit(item: Adjustment): boolean {
         return this.isVoucherModule && item.voucherType && !(item.voucherType === 'receipt' && item.subVoucher === SubVoucher.AdvanceReceipt);
-    }
-
-    /**
-     * Used to format data as the adjustments array have two keys as
-     * 'balanceDue' and 'adjustmentAmount'. Former is received when any voucher
-     * is adjusted during creating entry and represents the BALANCE amount that can
-     * get adjusted and latter is received when any voucher
-     * is already adjusted and represents the ADJUSTED amount
-     *
-     * @private
-     * @memberof AdvanceReceiptAdjustmentComponent
-     */
-    private formatAdjustmentData(adjustmentData: Array<Adjustment>): void {
-        if (adjustmentData && adjustmentData.length) {
-            adjustmentData.forEach(adjustment => {
-                if (adjustment && adjustment.adjustmentAmount && adjustment.adjustmentAmount.amountForAccount) {
-                    adjustment.balanceDue = cloneDeep(adjustment.adjustmentAmount);
-                } else if (adjustment && adjustment.balanceDue && adjustment.balanceDue.amountForAccount) {
-                    adjustment.adjustmentAmount = cloneDeep(adjustment.balanceDue);
-                }
-            });
-        }
     }
 
     /**

@@ -17,10 +17,6 @@ import { SettingsDiscountActions } from 'apps/web-giddh/src/app/actions/settings
 import { ApplyTaxRequest } from 'apps/web-giddh/src/app/models/api-models/ApplyTax';
 import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
-import {
-    IFlattenGroupsAccountsDetail,
-} from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
-import { IGroupsWithAccounts } from 'apps/web-giddh/src/app/models/interfaces/groupsWithAccounts.interface';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
@@ -59,9 +55,6 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 
 @Component({
     selector: 'account-update-new-details',
-    styles: [`
-
-  `],
     templateUrl: './account-update-new-details.component.html',
     styleUrls: ['./account-update-new-details.component.scss'],
 })
@@ -326,7 +319,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     if (accountDetails.country.countryCode) {
                         this.getStates(accountDetails.country.countryCode, accountDetails.currency);
                         this.getOnboardingForm(accountDetails.country.countryCode);
-                        // let ss = this.getStateGSTCode(this.stateList, accountDetails.country.countryCode);
                     }
                 }
                 // render gst details if there's no details add one automatically
@@ -385,11 +377,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
             if (a === 'hsn') {
-                //sac.reset();
                 hsn.enable();
                 sac.disable();
             } else {
-                //hsn.reset();
                 sac.enable();
                 hsn.disable();
             }
@@ -407,28 +397,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.activeCompany = activeCompany;
             }
         });
-
-
-        // COMMENTED BELOW CODE TO REMOVE AUTOCOMPLETE ON ACCOUNT NAME SINCE API TEAM IS HANDING THE ACCOUNT UNIQUE NAME
-        // this.addAccountForm.get('name').valueChanges.pipe(debounceTime(100)).subscribe(name => {
-        //   let val: string = name;
-        //   val = uniqueNameInvalidStringReplace(val);
-        //   if (val) {
-        //     this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
-        //     this.isAccountNameAvailable$.subscribe(a => {
-        //       if (a !== null && a !== undefined) {
-        //         if (a) {
-        //           this.addAccountForm?.patchValue({ uniqueName: val });
-        //         } else {
-        //           let num = 1;
-        //           this.addAccountForm?.patchValue({ uniqueName: val + num });
-        //         }
-        //       }
-        //     });
-        //   } else {
-        //     this.addAccountForm?.patchValue({ uniqueName: '' });
-        //   }
-        // });
 
         if (this.autoFocusUpdate !== undefined) {
             setTimeout(() => {
@@ -669,18 +637,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public addGstDetailsForm(value: string) {         // commented code because we no need GSTIN No. to add new address
-        // if (value && !value.startsWith(' ', 0)) {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.push(this.initialGstDetailsForm(null));
         if (addresses.length > 4) {
             this.moreGstDetailsVisible = false;
         }
-        // } else {
-        //     this._toaster.clearAllToaster();
-        //     if (this.formFields['taxName']) {
-        //         this._toaster.errorToast(`Please fill ${this.formFields['taxName'].label} field first`);
-        //     }
-        // }
         return;
     }
 
@@ -745,14 +706,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                 });
             }
-            // else {
-            //     if (this.isIndia) {
-            //         statesEle.forceClearReactive.status = true;
-            //         statesEle.clear();
-            //         gstForm.get('stateCode')?.patchValue(null);
-            //         gstForm.get('state').get('code')?.patchValue(null);
-            //     }
-            // }
         }
     }
 
@@ -842,12 +795,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         }
         if (this.isHsnSacEnabledAcc) {
-            // delete accountRequest['country'];
             delete accountRequest['addresses'];
-            // delete accountRequest['hsnOrSac'];
-            // delete accountRequest['mobileNo'];
-            // delete accountRequest['email'];
-            // delete accountRequest['attentionTo'];
         } else {
             delete accountRequest['hsnOrSac'];
             delete accountRequest['hsnNumber'];
@@ -862,17 +810,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
             if (accountRequest.mobileCode && accountRequest.mobileNo) {
                 accountRequest.mobileNo = accountRequest.mobileNo;
-                // delete accountRequest['mobileCode'];
             }
         }
-
-        // if (this.showBankDetail) {
-        //     if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
-        //         accountRequest['accountBankDetails'] = [];
-        //     }
-        // } else {
-        //     delete accountRequest['accountBankDetails'];
-        // }
 
         if (!this.showVirtualAccount) {
             delete accountRequest['cashFreeVirtualAccountData'];
@@ -881,7 +820,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
-        // this.isShowBankDetails(this.activeGroupUniqueName);
+
         if (!this.showVirtualAccount) {
             delete accountRequest['cashFreeVirtualAccountData'];
         }
@@ -1197,9 +1136,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.hideDeleteMergedAccountModal();
     }
     public loadAccountData() {
-        let activeAccount: AccountResponseV2 = null;
         this.activeAccount$.pipe(take(1)).subscribe(p => {
-            activeAccount = p;
             if (!this.showBankDetail) {
                 if (p && p.parentGroups) {
                     p.parentGroups.forEach(grp => {
@@ -1222,7 +1159,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         });
         if (activeAccount) {
-            //
             this.store.dispatch(this.companyActions.getTax());
             this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
         } else {
@@ -1260,22 +1196,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             data.taxes.push.apply(data.taxes, this.taxGroupForm.value.taxes);
             data.uniqueName = activeAccount.uniqueName;
             this.store.dispatch(this.accountsAction.applyAccountTax(data));
-        } else {
-            // let data: ApplyTaxRequest = new ApplyTaxRequest();
-            // data.isAccount = false;
-            // data.taxes = [];
-            // this.activeGroupTaxHierarchy$.take(1).subscribe((t) => {
-            //   if (t) {
-            //     t.inheritedTaxes.forEach(tt => {
-            //       tt.applicableTaxes.forEach(ttt => {
-            //         data.taxes.push(ttt.uniqueName);
-            //       });
-            //     });
-            //   }
-            // });
-            // data.taxes.push(...(this.applyTaxSelect2.value as string[]));
-            // data.uniqueName = activeGroup.uniqueName;
-            // this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
         }
     }
 
@@ -1298,33 +1218,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount.uniqueName, obj));
         this.showDeleteMove = false;
         this.hideDeleteMergedAccountModal();
-        // this.accountForMoveSelect2.setElementValue('');
         this.hideMoveMergedAccountModal();
     }
 
     public getAccount() {
         this.loadDefaultGroupsSuggestions();
     }
-
-    /**
-     *
-     *NOTE:---This is for apply discount for an account don't remove this commented code pending due to API Team is working on it
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    // public applyDiscount(): void {
-    //     if (this.accountDetails) {
-    //         this.activeAccountName = this.accountDetails.uniqueName;
-    //     } else {
-    //         this.activeAccount$.pipe(take(1)).subscribe(a => this.activeAccountName = a.uniqueName);
-    //     }
-    //     if (this.activeAccountName) {
-    //         _.uniq(this.selectedDiscounts);
-    //         let assignDiscountObject: AssignDiscountRequestForAccount = new AssignDiscountRequestForAccount();
-    //         assignDiscountObject.accountUniqueName = this.activeAccountName;
-    //         assignDiscountObject.discountUniqueNames = this.selectedDiscounts;
-    //         this.store.dispatch(this.accountsAction.applyAccountDiscount(assignDiscountObject));
-    //     }
-    // }
 
     private getStateGSTCode(stateList, code: string) {
         return stateList.find(res => code === res.code);
@@ -1421,29 +1320,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 element.classList.remove('error-box');
             }
         }
-    }
-
-    /**
-     * Returns true if passed account belongs to creditor or debtor category
-     * required to make state mandatory
-     *
-     * @private
-     * @param {string} accountUniqueName Account unique name
-     * @returns {boolean} True if passed account belongs to creditor or debtor category
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    private isCreditorOrDebtor(accountUniqueName: string): boolean {
-        if (this.flatGroupsOptions && _.isArray(this.flatGroupsOptions) && this.flatGroupsOptions.length && accountUniqueName) {
-            const groupDetails: any = this.flatGroupsOptions.filter((group) => group.value === accountUniqueName).pop();
-            if (groupDetails) {
-                return groupDetails.additional.some((parentGroup) => {
-                    const groups = [parentGroup.uniqueName, groupDetails.value]
-                    return groups.includes('sundrydebtors') || groups.includes('sundrycreditors');
-                });
-            }
-            return false;
-        }
-        return false;
     }
 
     /**

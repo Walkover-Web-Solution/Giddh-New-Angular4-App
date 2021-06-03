@@ -216,11 +216,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
             if (a === 'hsn') {
-                //sac.reset();
                 hsn.enable();
                 sac.disable();
             } else {
-                //hsn.reset();
                 sac.enable();
                 hsn.disable();
             }
@@ -228,28 +226,19 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         // get country code value change
         this.addAccountForm.get('country').get('countryCode').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
-
             if (a) {
                 const addresses = this.addAccountForm.get('addresses') as FormArray;
                 if (addresses.controls.length === 0) {
                     this.addBlankGstForm();
                 }
-                // let addressFormArray = (this.addAccountForm.controls['addresses'] as FormArray);
                 if (a !== 'IN') {
                     this.isIndia = false;
-                    // Object.keys(addressFormArray.controls).forEach((key) => {
-                    //     if (parseInt(key) > 0) {
-                    //         addressFormArray.removeAt(1); // removing index 1 only because as soon as we remove any index, it automatically updates index
-                    //     }
-                    // });
                 } else {
                     if (addresses.controls.length === 0) {
                         this.addBlankGstForm();
                     }
                     this.isIndia = true;
                 }
-
-                // this.resetGstStateForm();
             }
         });
 
@@ -261,11 +250,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
             }
         });
-        // this.addAccountForm.get('foreignOpeningBalance').valueChanges.subscribe(a => {
-        //     if (!a) {
-        //         this.addAccountForm.get('foreignOpeningBalance')?.patchValue('0');
-        //     }
-        // });
+        
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
@@ -277,28 +262,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
 
         this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
-
-
-        // COMMENTED BELOW CODE TO REMOVE AUTOCOMPLETE ON ACCOUNT NAME SINCE API TEAM IS HANDING THE ACCOUNT UNIQUE NAME
-        // this.addAccountForm.get('name').valueChanges.pipe(debounceTime(100)).subscribe(name => {
-        //   let val: string = name;
-        //   val = uniqueNameInvalidStringReplace(val);
-        //   if (val) {
-        //     this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
-        //     this.isAccountNameAvailable$.subscribe(a => {
-        //       if (a !== null && a !== undefined) {
-        //         if (a) {
-        //           this.addAccountForm?.patchValue({ uniqueName: val });
-        //         } else {
-        //           let num = 1;
-        //           this.addAccountForm?.patchValue({ uniqueName: val + num });
-        //         }
-        //       }
-        //     });
-        //   } else {
-        //     this.addAccountForm?.patchValue({ uniqueName: '' });
-        //   }
-        // });
 
         if (this.autoFocus !== undefined) {
             setTimeout(() => {
@@ -471,19 +434,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public addGstDetailsForm(value?: string) {    // commented code because we no need GSTIN No. to add new address
-        // if (value && !value.startsWith(' ', 0)) {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.push(this.initialGstDetailsForm());
         if (addresses.length > 4) {
             this.moreGstDetailsVisible = false;
         }
-        // } else {
-        //     this._toaster.clearAllToaster();
-
-        //     if (this.formFields['taxName']) {
-        //         this._toaster.errorToast(`Please fill ${this.formFields['taxName'].label}`);
-        //     }
-        // }
         return;
     }
 
@@ -544,15 +499,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     }
                 });
             }
-            // else {
-            //     // statesEle.setDisabledState(false);
-            //     if (this.isIndia) {
-            //         statesEle.forceClearReactive.status = true;
-            //         statesEle.clear();
-            //         gstForm.get('stateCode')?.patchValue(null);
-            //         gstForm.get('state').get('code')?.patchValue(null);
-            //     }
-            // }
         }
     }
 
@@ -639,12 +585,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         }
         if (this.isHsnSacEnabledAcc) {
-            // delete accountRequest['country'];
             delete accountRequest['addresses'];
-            // delete accountRequest['hsnOrSac'];
-            // delete accountRequest['mobileNo'];
-            // delete accountRequest['email'];
-            // delete accountRequest['attentionTo'];
         } else {
             delete accountRequest['hsnOrSac'];
             delete accountRequest['hsnNumber'];
@@ -668,10 +609,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
-        // if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
-        //   this._toaster.errorToast('Mobile no. & email Id is mandatory');
-        //   return;
-        // }
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
             accountRequest
@@ -720,7 +657,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public selectedState(gstForm: FormGroup, event) {
         if (gstForm && event.label) {
-            let obj = this.getStateGSTCode(this.stateList, event.value)
             gstForm.get('stateCode')?.patchValue(event.value);
             gstForm.get('state').get('code')?.patchValue(event.value);
         }
@@ -1014,33 +950,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-     * Returns true if passed account belongs to creditor or debtor category
-     * required to make state mandatory
-     *
-     * @private
-     * @param {string} accountUniqueName Account unique name
-     * @returns {boolean} True if passed account belongs to creditor or debtor category
-     * @memberof AccountAddNewDetailsComponent
-     */
-    private isCreditorOrDebtor(accountUniqueName: string): boolean {
-        if (this.flatGroupsOptions && _.isArray(this.flatGroupsOptions) && this.flatGroupsOptions.length && accountUniqueName) {
-            const groupDetails: any = this.flatGroupsOptions.filter((group) => group.value === accountUniqueName).pop();
-            if (groupDetails) {
-                return groupDetails.additional.some((parentGroup) => {
-                    const groups = [parentGroup.uniqueName, groupDetails.value];
-                    return groups.includes('sundrydebtors') || groups.includes('sundrycreditors');
-                });
-            }
-            return false;
-        }
-        return false;
-    }
-
-    /**
-     * API call to get custom field data
-     *
-     * @memberof AccountAddNewDetailsComponent
-     */
+    * API call to get custom field data
+    *
+    * @memberof AccountAddNewDetailsComponent
+    */
     public getCompanyCustomField(): void {
         this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {

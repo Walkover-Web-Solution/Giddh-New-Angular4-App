@@ -71,18 +71,6 @@ export interface Taxes {
     }]
 }
 
-const taxesInitialState: Taxes = {
-    taxes: [{
-        label: '',
-        value: '',
-        types: [{
-            label: '',
-            value: ''
-        }],
-        countries: []
-    }]
-};
-
 export interface SettingsState {
     integration: IntegrationPage;
     profile: any;
@@ -195,7 +183,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         case SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE:
             let crtpytUpres: BaseResponse<string, PaymentClass> = action.payload;
             if (crtpytUpres.status === 'success') {
-                //newState.integration.paymentForm = crtpytUpres.request;
                 newState.isPaymentUpdationSuccess = true;
                 return Object.assign({}, state, newState);
             }
@@ -306,7 +293,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         case SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
             if (response.status === 'success') {
-                // newState.profile = _.cloneDeep(response.body);
                 newState.updateProfileSuccess = true;
                 newState.profileRequest = true;
                 newState.inventory = action.payload.request;
@@ -354,10 +340,8 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 _.map(newState.linkedAccounts.bankAccounts, (ac) => {
                     _.filter(ac.accounts, (account) => account.loginId !== response.request);
                 });
-                // newState.linkedAccounts.needReloadingLinkedAccounts = true;
             } else {
                 newState.linkedAccounts.isDeleteBankAccountIsInProcess = false;
-                // newState.linkedAccounts.needReloadingLinkedAccounts = false;
             }
             newState.linkedAccounts.needReloadingLinkedAccounts = !newState.linkedAccounts.needReloadingLinkedAccounts;
             return Object.assign({}, state, newState);
