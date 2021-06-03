@@ -26,8 +26,6 @@
                             (adjustedVoucherType === 'advance-receipt') ?
                             commonLocaleData?.app_voucher_types?.advance_receipt : getAdjustVoucherType() }}
                             Total: <i class="font-10"></i>
-                            <!-- {{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment?.grandTotal
-                                 | giddhCurrency}} -->
 
                             <span class="d-inline-flex justify-content-end">
                                 <amount-field [amount]="adjustPayment?.grandTotal"
@@ -45,8 +43,6 @@
                             commonLocaleData?.app_balance : commonLocaleData?.app_due }} <span
                                 class="text-light">{{localeData?.post_adj}}</span> <span class="nowrap"><i
                                     class="font-10"></i>
-                                <!-- {{invoiceFormDetails.accountDetails.currencySymbol}} {{ getBalanceDue() |
-                                giddhCurrency}} -->
                             </span>
                             <span class="d-inline-flex justify-content-end">
                                 <amount-field [amount]="getBalanceDue()"
@@ -244,8 +240,6 @@
                         </ng-container>
                         <span class="text-light" *ngIf="exceedDueAmount<0">
                             {{localeData?.excess_amount}}:
-                            <!-- {{invoiceFormDetails.accountDetails.currencySymbol}} -->
-                            <!-- {{-exceedDueAmount | giddhCurrency}} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="-exceedDueAmount"
                                     [currencySymbol]="invoiceFormDetails.accountDetails.currencySymbol"

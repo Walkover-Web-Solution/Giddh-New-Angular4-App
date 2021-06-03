@@ -6,7 +6,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
-import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IRevenueChartClosingBalanceResponse } from '../models/interfaces/dashboard.interface';
+import { IComparisionChartResponse, IRevenueChartClosingBalanceResponse } from '../models/interfaces/dashboard.interface';
 import * as _ from '../lodash-optimized';
 import { HomeActions } from '../actions/home/home.actions';
 import { Router } from '@angular/router';
@@ -26,9 +26,6 @@ import { GeneralService } from "../services/general.service";
 export class HomeComponent implements OnInit, OnDestroy {
     public needsToRedirectToLedger$: Observable<boolean>;
     public revenueChartData$: Observable<IRevenueChartClosingBalanceResponse>;
-    public networthComparisionChartData$: Observable<IComparisionChartResponse>;
-    public historyComparisionChartData$: Observable<IComparisionChartResponse>;
-    public expensesChartData$: Observable<IExpensesChartClosingBalanceResponse>;
     public comparisionChartData$: Observable<IComparisionChartResponse>;
     @ViewChild('revenue', { static: true }) public revenue: RevenueChartComponent;
     @ViewChild('profitloss', { static: true }) public profitloss: ProfitLossComponent;
@@ -50,9 +47,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         private _generalService: GeneralService
     ) {
         this.comparisionChartData$ = this.store.pipe(select(p => p.home.comparisionChart), takeUntil(this.destroyed$));
-        this.expensesChartData$ = this.store.pipe(select(p => p.home.expensesChart), takeUntil(this.destroyed$));
-        this.historyComparisionChartData$ = this.store.pipe(select(p => p.home.history_comparisionChart), takeUntil(this.destroyed$));
-        this.networthComparisionChartData$ = this.store.pipe(select(p => p.home.networth_comparisionChart), takeUntil(this.destroyed$));
         this.revenueChartData$ = this.store.pipe(select(p => p.home.revenueChart), takeUntil(this.destroyed$));
         this.needsToRedirectToLedger$ = this.store.pipe(select(p => p.login.needsToRedirectToLedger), takeUntil(this.destroyed$));
 

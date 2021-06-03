@@ -42,7 +42,6 @@ import { ShareAccountModalComponent } from './header/components/share-account-mo
 import { ShareGroupModalComponent } from './header/components/share-group-modal/share-group-modal.component';
 import { AccountFilterPipe } from './header/pipe/accountfilter.pipe';
 import { DecimalDigitsModule } from './helpers/directives/decimalDigits/decimalDigits.module';
-import { DisableFormFieldModule } from './helpers/directives/disableFormField/disableFormField.module';
 import { ElementViewChildModule } from './helpers/directives/elementViewChild/elementViewChild.module';
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { NgxMaskModule } from './helpers/directives/ngx-mask';
@@ -180,7 +179,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         ConfirmModalModule,
         LaddaModule,
         ElementViewChildModule,
-        DisableFormFieldModule,
         ShSelectModule,
         DecimalDigitsModule,
         DigitsOnlyModule,

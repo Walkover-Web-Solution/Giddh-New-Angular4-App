@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { GeneralService } from '../../services/general.service';
 
 @Component({
@@ -41,7 +41,7 @@ export class AmountFieldComponent implements OnInit, OnChanges {
     * @returns {string}
     * @memberof AmountFieldComponent
     */
-    public ngOnChanges(changes: SimpleChanges): void {
+    public ngOnChanges(): void {
         this.detectDirection();
     }
     /**

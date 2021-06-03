@@ -173,7 +173,6 @@ const removeZeroAmountAccount = (grpList: ChildGroup[]) => {
 // TB Functions
 const addVisibleFlag = (grpList: ChildGroup[]) => {
     _.each(grpList, (grp) => {
-        let count = 0;
         let tempAcc = [];
         grp.isVisible = false;
         _.each(grp.accounts, (account) => {
@@ -196,51 +195,9 @@ const removeZeroAmountGroup = (grpList) => {
             removeZeroAmountGroup(grp.childGroups);
         }
         return _.reject(grp.childGroups, (cGrp) => {
-            // if (cGrp.closingBalance.amount === 0 && cGrp.forwardedBalance.amount === 0 && cGrp.creditTotal === 0 && cGrp.debitTotal === 0) {
-            // //
-            // }
+            
         });
     });
-};
-
-const orderGroups = (data) => {
-    let assets;
-    let expenses;
-    let income;
-    let liabilities;
-    let orderedGroups;
-    orderedGroups = [];
-    assets = [];
-    liabilities = [];
-    income = [];
-    expenses = [];
-    _.each(data, (grp: any) => {
-        switch (grp.category) {
-            case 'assets':
-                return assets.push(grp);
-            case 'liabilities':
-                return liabilities.push(grp);
-            case 'income':
-                return income.push(grp);
-            case 'expenses':
-                return expenses.push(grp);
-            default:
-                return assets.push(grp);
-        }
-    });
-    _.each(liabilities, (liability) => {
-        return orderedGroups.push(liability);
-    });
-    _.each(assets, (asset) => {
-        return orderedGroups.push(asset);
-    });
-    _.each(income, (inc) => {
-        return orderedGroups.push(inc);
-    });
-    _.each(expenses, (exp) => {
-        return orderedGroups.push(exp);
-    });
-    return orderedGroups;
 };
 
 // PL Functions
@@ -279,7 +236,6 @@ const filterProfitLossData = (data, statement) => {
 };
 
 const prepareProfitLossData = (data) => {
-    // let plData: ProfitLossData = filterProfitLossData(data.groupDetails);
     if (data && data.groupInfo && data.groupInfo.groupDetails && data.incomeStatment) {
         let plData: ProfitLossData = filterProfitLossData(data.groupInfo.groupDetails, data.incomeStatment);
         plData.expenseTotal = calculateTotalExpense(plData.expArr);
@@ -291,11 +247,9 @@ const prepareProfitLossData = (data) => {
         plData.incomeStatment = data.incomeStatment;
         if (plData.incomeTotal >= plData.expenseTotal) {
             plData.inProfit = true;
-            // plData.expenseTotal += plData.closingBalance;
         }
         if (plData.incomeTotal < plData.expenseTotal) {
             plData.inProfit = false;
-            // plData.incomeTotal += plData.closingBalance;
         }
         if (data.closingBalance.type === 'CREDIT') {
             plData.closingBalanceClass = true;

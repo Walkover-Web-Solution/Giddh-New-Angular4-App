@@ -19,7 +19,6 @@ import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
@@ -656,9 +655,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 // direct account scenario
                 let url = `ledger/${item.uniqueName}`;
-                // if (!this.isLedgerAccSelected) {
-                //   this.navigateToUser = true;
-                // }
                 if (!isCtrlClicked) {
                     this.router.navigate([url]); // added link in routerLink
                 }
@@ -813,7 +809,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             event.preventDefault();
             event.stopPropagation();
         }
-        // this.companyDropdown.isOpen = false;
         if (this.subBranchDropdown) {
             this.subBranchDropdown.hide();
         }
@@ -957,12 +952,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null): void {
         if (entity === 'menus') {
-            //this.selectedPage = item.name;
             this.isLedgerAccSelected = false;
         } else if (entity === 'accounts') {
             this.isLedgerAccSelected = true;
             this.selectedLedgerName = item.uniqueName;
-            //this.selectedPage = 'ledger - ' + item.name;
         }
 
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
