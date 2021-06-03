@@ -205,7 +205,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     }));
                 }),
                 map((res) => {
-                    // let data = res.map(item => item.address_components[0].long_name);
                     let data = res.map(item => item.city);
                     this.dataSourceBackup = res;
                     return data;
@@ -223,16 +222,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             .pipe(debounceTime(3000), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((event: any) => {
                 if (this.isGstValid) {
-
-                    // let addresses = [];
-                    //
-                    // for(let addressLoop = 0; addressLoop < this.companyProfileObj.addresses.length; addressLoop++) {
-                    //   if(this.companyProfileObj.addresses[addressLoop].taxNumber && this.companyProfileObj.addresses[addressLoop].stateCode) {
-                    //     addresses.push(this.companyProfileObj.addresses[addressLoop]);
-                    //   }
-                    // }
-
-                    //this.patchProfile({addresses: addresses});
                     this.patchProfile({ addresses: this.companyProfileObj.addresses });
                 }
             });
@@ -342,7 +331,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         let isValid;
         if (addresses && addresses.length) {
             gstNumber = addresses[addresses.length - 1].taxNumber;
-            //isValid = (Number(gstNumber.substring(0, 2)) > 37 || Number(gstNumber.substring(0, 2)) < 1 || gstNumber.length !== 15) ? false : true;
 
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
@@ -397,7 +385,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
         delete dataToSave.financialYears;
         delete dataToSave.activeFinancialYear;
-        // dataToSave.contactNo = this.countryCode + '-' + dataToSave.contactNo;
         this.companyProfileObj = _.cloneDeep(dataToSave);
         if (this.gstDetailsBackup) {
             dataToSave.addresses = _.cloneDeep(this.gstDetailsBackup);
@@ -448,22 +435,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
         return '';
     }
-
-    // public checkGstNumValidation(ele: HTMLInputElement) {
-    //   let isInvalid: boolean = false;
-    //   if (ele.value) {
-    //     if (ele.value.length !== 15 || (Number(ele.value.substring(0, 2)) < 1) || (Number(ele.value.substring(0, 2)) > 37)) {
-    //       this._toasty.errorToast('Invalid GST number');
-    //       ele.classList.add('error-box');
-    //       this.isGstValid = false;
-    //     } else {
-    //       ele.classList.remove('error-box');
-    //       this.isGstValid = true;
-    //     }
-    //   } else {
-    //     ele.classList.remove('error-box');
-    //   }
-    // }
 
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
@@ -631,8 +602,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }, 100);
     }
     /**
-* checkNumberSystem
-*/
+    * checkNumberSystem
+    */
     public checkNumberSystem(event) {
         if (event) {
             this.patchProfile({ balanceDisplayFormat: this.companyProfileObj.balanceDisplayFormat });
@@ -919,13 +890,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
         }));
-        // if (this.currentOrganizationType === OrganizationType.Branch) {
-        //     linkEntity.push({
-        //         uniqueName: this.generalService.currentBranchUniqueName,
-        //         isDefault: false,
-        //         entity: 'BRANCH'
-        //     });
-        // }
+        
         const requestObj = {
             taxNumber: addressDetails.formValue.taxNumber,
             stateCode: addressDetails.formValue.state,
