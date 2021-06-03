@@ -66,13 +66,13 @@ jobs:
           key: "version"
           value: ${{ github.event.inputs.version }}
       - name: Creating Electron bundle for Windows (TEST)
-        if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment === 'test' }}
+        if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment == 'test' }}
         run: npm run package:windows:test
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Creating Electron bundle for Windows (PROD)
-        if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment === 'prod' }}
+        if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment == 'prod' }}
         run: npm run release:windows:ci
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -84,7 +84,7 @@ jobs:
         if: ${{ matrix.os == 'macos-latest' }}
         run: cd ./electron-sign && wget -q --no-check-certificate '${{ secrets.PROVISIONING_PROFILE_URL }}' -O embedded.provisionprofile
       - name: Creating Electron bundle for Mac (TEST)
-        if: ${{ matrix.os == 'macos-latest' && github.event.inputs.environment === 'test' }}
+        if: ${{ matrix.os == 'macos-latest' && github.event.inputs.environment == 'test' }}
         run: npm run package:mac:test
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -94,7 +94,7 @@ jobs:
           NOTARIZE_EMAIL: ${{ secrets.NOTARIZE_EMAIL }}
           NOTARIZE_PASS: ${{ secrets.NOTARIZE_PASS }}
       - name: Creating Electron bundle for Mac (PROD)
-        if: ${{ matrix.os == 'macos-latest' && github.event.inputs.environment === 'prod' }}
+        if: ${{ matrix.os == 'macos-latest' && github.event.inputs.environment == 'prod' }}
         run: npm run release:mac:ci
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
