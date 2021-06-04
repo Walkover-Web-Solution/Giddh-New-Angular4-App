@@ -35,8 +35,8 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v2
+        - name: Check out Git repository
+          uses: actions/checkout@v2
 #       - name: Install Node.js & NPM
 #         uses: actions/setup-node@v2
 #         with:
