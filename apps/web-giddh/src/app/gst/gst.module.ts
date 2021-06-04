@@ -39,7 +39,7 @@ import { ConfirmModalModule } from '../theme/confirm-modal';
 import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
 import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { GstrSidebarComponent } from './gst-sidebar/gst-sidebar.component';
+import { GstrSidebarComponent } from '../shared/gst-sidebar/gst-sidebar.component';
 
 @NgModule({
     declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component,
