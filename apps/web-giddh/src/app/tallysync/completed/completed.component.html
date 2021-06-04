@@ -197,11 +197,55 @@
                                 </div>
                             </div>
                         </li>
+                        <li class="list-group-item">
+                            <div class="clearfix">
+                                <div class="col-sm-2 col-xs-12">
+                                    <img src="./../../../assets/images/folder.svg" height="20" class="mr-r1" />
+                                    <span>{{ localeData?.vouchers }}</span>
+                                </div>
+                                <div class="col-sm-6 col-xs-8">
+                                    <small
+                                        ><em>{{ row.totalSavedVouchers }}/{{ row.totalTallyVouchers }}</em></small
+                                    >
+                                    <div class="progress">
+                                        <div
+                                            class="progress-bar"
+                                            role="progressbar"
+                                            aria-valuenow="row.totalSavedVouchers"
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            [ngStyle]="{ 'width': row.vouchersPercent }"
+                                        >
+                                            <span class="sr-only"
+                                                >{{ row.vouchersPercent }} {{ localeData?.complete }}</span
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-xs-4 text-success">
+                                    <div class="status">
+                                        <small class="mr-r1"
+                                            ><i class="fa fa-check"></i>{{ row.vouchersPercent }}
+                                            {{ localeData?.complete }}</small
+                                        >
+                                        <small class="text-danger" *ngIf="row.tallyErrorVouchers > 0"
+                                            >{{ row.vouchersErrorPercent }}
+                                            {{ localeData?.error_occured }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
                     </ul>
                 </div>
                 <div
                     class="panel-footer"
-                    *ngIf="row.tallyErrorEntries > 0 || row.tallyErrorAccounts > 0 || row.tallyErrorGroups > 0"
+                    *ngIf="
+                        row.tallyErrorEntries > 0 ||
+                        row.tallyErrorAccounts > 0 ||
+                        row.tallyErrorGroups > 0 ||
+                        row.tallyErrorVouchers > 0
+                    "
                 >
                     <span class="mr-r15">{{ localeData?.error_report }}</span>
                     <a href="javascript:;" class="running" (click)="downloadLog(row)"
