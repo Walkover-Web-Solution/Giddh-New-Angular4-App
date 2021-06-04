@@ -486,12 +486,14 @@ span.icon-export-icon {
                 display: flex;
                 align-items: center;
                 border: 1px solid $gainsboro;
+                border-radius: 5px;
                 display: none;
                 a {
                     width: 30px;
                     font-size: 20px;
                     color: $gray;
                     border-right: 1px solid $gainsboro;
+                    border-radius: 5px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
