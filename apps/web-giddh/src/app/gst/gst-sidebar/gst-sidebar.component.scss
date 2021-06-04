@@ -9,7 +9,8 @@
     width: 240px;
     left: 0;
     z-index: 999;
-    box-shadow: -2px -2px 15px rgba(0,0,0,.2)!important;
+    box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2) !important;
+    display: none;
     .aside-pane {
         background: $white;
         overflow: initial;
@@ -43,7 +44,7 @@
                             }
                             &.active {
                                 background-color: $cornflower !important;
-                                span, 
+                                span,
                                 span i{
                                     color: $white !important;
                                 }
