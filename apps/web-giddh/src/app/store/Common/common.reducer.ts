@@ -59,9 +59,9 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
             return Object.assign({}, state, {});
 
         case CommonActions.GET_ONBOARDING_FORM: {
-              return Object.assign({}, state, {
-                    getOnboardingFormInProcess: true
-                });
+            return Object.assign({}, state, {
+                getOnboardingFormInProcess: true
+            });
         }
         case CommonActions.GET_ONBOARDING_FORM_RESPONSE:
             let onboardingform: BaseResponse<OnboardingFormResponse, string> = action.payload;

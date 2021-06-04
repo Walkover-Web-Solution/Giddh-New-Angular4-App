@@ -434,7 +434,7 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
     let key = '';
     let reverse = '';
 
-    if(mode === 'all') {
+    if (mode === 'all') {
         key = 'debitTransactions';
         reverse = 'creditTransactions';
 

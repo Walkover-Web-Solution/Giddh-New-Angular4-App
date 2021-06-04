@@ -25,6 +25,8 @@ export class MobileSearchCompanyComponent implements OnInit, OnDestroy {
     public allCompanies: CompanyResponse[] = [];
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
 
     constructor(private store: Store<AppState>, private loginAction: LoginActions) {
 

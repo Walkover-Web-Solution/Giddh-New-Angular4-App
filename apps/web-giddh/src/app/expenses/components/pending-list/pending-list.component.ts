@@ -70,23 +70,23 @@ export class PendingListComponent implements OnInit, OnChanges {
         this.getPettycashReportSuccess$ = this.store.pipe(select(p => p.expense.getPettycashReportSuccess), takeUntil(this.destroyed$));
 
         observableCombineLatest([this.universalDate$, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
-			if (!Array.isArray(resp[0])) {
-				return;
-			}
-			let dateObj = resp[0];
-			this.todaySelected = resp[1];
-			if (dateObj && !this.todaySelected) {
-				let universalDate = _.cloneDeep(dateObj);
-				let from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-				let to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-				if (from && to) {
-					this.pettycashRequest.from = from;
-					this.pettycashRequest.to = to;
-					this.pettycashRequest.page = 1;
-					this.pettycashRequest.status = 'pending';
-				}
-			}
-		});
+            if (!Array.isArray(resp[0])) {
+                return;
+            }
+            let dateObj = resp[0];
+            this.todaySelected = resp[1];
+            if (dateObj && !this.todaySelected) {
+                let universalDate = _.cloneDeep(dateObj);
+                let from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                let to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                if (from && to) {
+                    this.pettycashRequest.from = from;
+                    this.pettycashRequest.to = to;
+                    this.pettycashRequest.page = 1;
+                    this.pettycashRequest.status = 'pending';
+                }
+            }
+        });
     }
 
     public ngOnInit() {
@@ -269,7 +269,7 @@ export class PendingListComponent implements OnInit, OnChanges {
      * @memberof PendingListComponent
      */
     public replaceTitle(title: string): string {
-        if(this.localeData && this.localeData?.search_field) {
+        if (this.localeData && this.localeData?.search_field) {
             return this.localeData?.search_field.replace("[FIELD]", title);
         } else {
             return title;

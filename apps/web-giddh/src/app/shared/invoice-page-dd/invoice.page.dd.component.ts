@@ -35,7 +35,7 @@ export class InvoicePageDDComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _activatedRoute: ActivatedRoute) {
-        
+
     }
 
     public ngOnInit(): void {

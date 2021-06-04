@@ -15,23 +15,20 @@
     padding-left: 20px;
 }
 
-
 /* width */
 
 .account-accordion::-webkit-scrollbar {
     width: 10px;
 }
 
-
 /* Track */
 
 .account-accordion::-webkit-scrollbar-track {
-    background:  $white-smoke;
+    background: $white-smoke;
 }
-
 
 /* Handle */
 
 .account-accordion::-webkit-scrollbar-thumb {
-    background:  $nobel;
+    background: $nobel;
 }

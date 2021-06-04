@@ -147,7 +147,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.sideBarStateChange(true);
         this.subscribeToLazyRouteLoading();
 
-        if(this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
+        if (this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
             this.store.dispatch(this.companyActions.RefreshCompanies());
         }
     }

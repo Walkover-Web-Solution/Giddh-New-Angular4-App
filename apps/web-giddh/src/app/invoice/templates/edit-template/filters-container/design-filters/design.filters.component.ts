@@ -14,7 +14,7 @@ import { InvoiceTemplatesService } from '../../../../../services/invoice.templat
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { IOption } from '../../../../../theme/ng-virtual-select/sh-options.interface';
 import { ActivatedRoute } from '@angular/router';
-import {Font} from "ngx-font-picker";
+import { Font } from "ngx-font-picker";
 
 export class TemplateDesignUISectionVisibility {
     public templates: boolean = false;
@@ -80,7 +80,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public showUploadButton: boolean = false;
     public showDeleteButton: boolean = false;
-    @ViewChild('fileInput', {static: true}) logoFile: ElementRef;
+    @ViewChild('fileInput', { static: true }) logoFile: ElementRef;
     public selectedFont: string = "";
     public selectedFontSize: string = "";
     /** Default image size */
@@ -165,7 +165,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         });
 
         this._invoiceUiDataService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
-			if (!path) {
+            if (!path) {
                 this.showDeleteButton = false;
                 this.showUploadButton = true;
                 this.logoAttached = false;
@@ -174,7 +174,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                 const preview: any = document.getElementById('logoImage');
                 preview.setAttribute('src', '');
             }
-		});
+        });
 
     }
 

@@ -38,7 +38,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     /* Search element */
-    @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
+    @ViewChild('searchElement', { static: true }) public searchElement: ElementRef;
     /* Confirm box */
     @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
     /** Attached document preview container instance */
@@ -116,13 +116,13 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         if (this.purchaseOrders && this.purchaseOrders.items) {
             this.filteredData = this.purchaseOrders.items;
 
-            if(this.poSearch) {
+            if (this.poSearch) {
                 this.filterPo(this.poSearch);
             }
         }
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.selectedCompany = activeCompany;
             }
         });
@@ -147,9 +147,9 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         });
 
         this.store.pipe(select(state => state.purchaseOrder.poSearch), takeUntil(this.destroyed$)).subscribe(res => {
-            if(res) {
+            if (res) {
                 this.poSearch = res;
-                if(this.searchElement && this.searchElement.nativeElement) {
+                if (this.searchElement && this.searchElement.nativeElement) {
                     this.searchElement.nativeElement.value = this.poSearch;
                 }
             }
@@ -157,7 +157,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
-                if(!event.url.includes('/purchase-order/edit')) {
+                if (!event.url.includes('/purchase-order/edit')) {
                     this.store.dispatch(this.purchaseOrderActions.serPurchaseOrderPreviewSearch(null));
                 }
             }
@@ -173,7 +173,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes.purchaseOrders && changes.purchaseOrders.currentValue && changes.purchaseOrders.currentValue.items) {
             this.filteredData = changes.purchaseOrders.currentValue.items;
-            if(this.poSearch) {
+            if (this.poSearch) {
                 this.filterPo(this.poSearch);
             }
         }

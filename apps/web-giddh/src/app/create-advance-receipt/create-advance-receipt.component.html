@@ -5,8 +5,8 @@
                 <label class="col-md-2 pd-t05">Customer Name<span class="text-danger">*</span></label>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" placeholder="Customer Name" [notFoundLink]="false"
-                        [multiple]="false" [ItemHeight]="33">
+                        <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" placeholder="Customer Name"
+                            [notFoundLink]="false" [multiple]="false" [ItemHeight]="33">
                             <ng-template #optionTemplate1 let-option="option">
                                 <a href="javascript:void(0)" class="list-item">
                                     Advance Receipt
@@ -58,14 +58,15 @@
                         <label class="col-md-5 pd-t05">Receipt Mode</label>
                         <div class="col-md-7 pd-l05">
                             <div class="form-group">
-                                <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" placeholder="Receipt Mode" [notFoundLink]="false"
-                            [multiple]="false" [ItemHeight]="33">
-                                <ng-template #optionTemplate1 let-option="option">
-                                    <a href="javascript:void(0)" class="list-item">
-                                        Advance Receipt
-                                    </a>
-                                </ng-template>
-                            </sh-select>
+                                <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher"
+                                    placeholder="Receipt Mode" [notFoundLink]="false" [multiple]="false"
+                                    [ItemHeight]="33">
+                                    <ng-template #optionTemplate1 let-option="option">
+                                        <a href="javascript:void(0)" class="list-item">
+                                            Advance Receipt
+                                        </a>
+                                    </ng-template>
+                                </sh-select>
                             </div>
                         </div>
                     </div>
@@ -86,8 +87,8 @@
                 <label class="col-md-2 pd-t05">Tax on Advance</label>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" placeholder="Tax on Advance" [notFoundLink]="false"
-                        [multiple]="false" [ItemHeight]="33">
+                        <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher"
+                            placeholder="Tax on Advance" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33">
                             <ng-template #optionTemplate1 let-option="option">
                                 <a href="javascript:void(0)" class="list-item">
                                     Advance Receipt
@@ -113,7 +114,8 @@
                         <label for=""><span class="icon-file-path"></span> Attach File</label>
                         <div class="row">
                             <div class="col-md-8">
-                                <button type="button" class="btn btn-attachment d-block width-100">Drag/Drop file or click here</button>
+                                <button type="button" class="btn btn-attachment d-block width-100">Drag/Drop file or
+                                    click here</button>
                             </div>
                         </div>
                     </div>
@@ -136,18 +138,20 @@
                 <button class="btn btn-danger d-inline-block v-align-middle" type="button">Clear </button>
                 <span class="d-inline-block v-align-middle relative">
                     <div class="btn-group dropup" dropdown [dropup]="isDropup">
-                        <button class="btn btn-default generate-invoice" type="button" >Generate  Sales
+                        <button class="btn btn-default generate-invoice" type="button">Generate Sales
                         </button>
-                    <button aria-controls="dropdown-split" id="button-basic" class="btn btn-default dropdown-toggle dropdown-toggle-split"  dropdown-toggle dropdownToggle type="button">
-                        <span class="caret"></span>
-                        <span class="sr-only">Split button!</span>
-                    </button>
-                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
-                        role="menu" aria-labelledby="button-basic">
-                      <li role="menuitem"><a class="dropdown-item" href="#">Create & Send</a></li>
-                      <li role="menuitem"><a class="dropdown-item" href="#">Create & Print</a></li>
-                    </ul>
-                </div>
+                        <button aria-controls="dropdown-split" id="button-basic"
+                            class="btn btn-default dropdown-toggle dropdown-toggle-split" dropdown-toggle dropdownToggle
+                            type="button">
+                            <span class="caret"></span>
+                            <span class="sr-only">Split button!</span>
+                        </button>
+                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                            aria-labelledby="button-basic">
+                            <li role="menuitem"><a class="dropdown-item" href="#">Create & Send</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="#">Create & Print</a></li>
+                        </ul>
+                    </div>
                 </span>
             </div>
         </div>

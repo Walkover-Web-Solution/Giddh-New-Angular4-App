@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, HostListener, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, HostListener, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
@@ -21,6 +21,10 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     public macAppVersion: string;
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private generalActions: GeneralActions, private authService: AuthenticationService) {
 
@@ -34,7 +38,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
-        this.imgPath = (isElectron||isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 
     /**

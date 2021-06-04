@@ -72,6 +72,12 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
 
     /** Unsubscribe from listener */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold profile JSON data */
+    public profileLocaleData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private commonService: CommonService,
@@ -144,7 +150,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.imgPath =  (isElectron|| isCordova) ? 'assets/images/warehouse-image.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-image.svg';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-image.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-image.svg';
     }
 
     /**
@@ -231,7 +237,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         this.settingsProfileService.createNewWarehouse(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
-                    this.toastService.successToast('Warehouse created successfully');
+                    this.toastService.successToast(this.localeData?.warehouse_created);
                     this.warehouseForm.reset();
                     this.router.navigate(['/pages/settings/warehouse']);
                 } else {
@@ -318,7 +324,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                     label: response.body.name,
                     value: response.body.uniqueName
                 })
-                this.toastService.successToast('Address created successfully');
+                this.toastService.successToast(this.profileLocaleData?.address_created);
             } else {
                 this.toastService.errorToast(response.message);
             }
