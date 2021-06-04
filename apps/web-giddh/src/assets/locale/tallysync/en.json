@@ -17,5 +17,6 @@
     "filter_criteria": "Please check your filter criteria",
     "company": "Company",
     "select_company": "Select Company",
-    "select_interval": "Select Interval"
+    "select_interval": "Select Interval",
+    "vouchers": "Vouchers"
 }
