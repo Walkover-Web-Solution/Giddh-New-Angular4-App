@@ -2,15 +2,12 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
-    OnChanges,
     OnDestroy,
-    OnInit,
-    SimpleChanges,
+    OnInit
 } from '@angular/core';
 import { NavigationCancel, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { LoaderState } from './loader';
 import { LoaderService } from './loader.service';
 
@@ -21,7 +18,7 @@ import { LoaderService } from './loader.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class LoaderComponent implements OnInit, OnDestroy, OnChanges {
+export class LoaderComponent implements OnInit, OnDestroy {
 
     public showLoader: boolean = false;
     public navigationEnd$: Observable<boolean> = of(true);
@@ -61,12 +58,5 @@ export class LoaderComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    /**
-     * ngOnChanges
-     */
-    public ngOnChanges(s: SimpleChanges) {
-        //
     }
 }

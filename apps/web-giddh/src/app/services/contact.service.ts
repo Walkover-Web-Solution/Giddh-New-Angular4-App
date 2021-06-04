@@ -1,6 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
-
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpWrapperService } from './httpWrapper.service';

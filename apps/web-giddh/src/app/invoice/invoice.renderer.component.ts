@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'name',
@@ -7,12 +7,8 @@ import { Component, OnInit } from '@angular/core';
   `
 })
 
-export class InvoiceRendererComponent implements OnInit {
+export class InvoiceRendererComponent {
     constructor() {
-        //
-    }
-
-    public ngOnInit() {
-        //
+        
     }
 }

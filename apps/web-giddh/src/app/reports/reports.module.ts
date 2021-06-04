@@ -25,8 +25,6 @@ import { ReportsDashboardComponent } from './components/report-dashboard/reports
 import { ReportsDetailsComponent } from './components/report-details-components/report.details.component';
 import { ReportsTableComponent } from './components/report-table-components/report.table.component';
 import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component';
-import { SalesRegisterComponent } from './components/sales-register-component/sales.register.component';
-import { SalesRegisterDetailsComponent } from './components/sales-register-details-component/sales.register.details.component';
 import { SalesRegisterExpandComponent } from './components/salesRegister-expand-component/sales.register.expand.component';
 import { ReportsComponent } from './reports.component';
 import { ReportsRoutingModule } from './reports.routing.module';
@@ -36,9 +34,7 @@ import { ReportsRoutingModule } from './reports.routing.module';
         ReportsComponent,
         ReportsDetailsComponent,
         ReportsTableComponent,
-        SalesRegisterComponent,
         SalesRegisterExpandComponent,
-        SalesRegisterDetailsComponent,
         ReportsDashboardComponent,
         PurchaseRegisterComponent,
         PurchaseRegisterTableComponent,
