@@ -130,6 +130,7 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                 case 'settings': return this.localeData?.tabs?.settings;
                 case 'estimates': return this.localeData?.tabs?.estimates;
                 case 'proformas': return this.localeData?.tabs?.proformas;
+                case 'invoice': return this.localeData?.tabs?.invoices;
                 case 'sales': return this.localeData?.tabs?.sales;
                 case 'recurring': return this.localeData?.tabs?.recurring;
                 case 'pending' :return this.localeData?.tabs?.pending;
