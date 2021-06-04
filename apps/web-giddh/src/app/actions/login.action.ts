@@ -660,7 +660,7 @@ export class LoginActions {
                     // this._router.navigate(['/pages/new-user']);
                     return { type: 'EmptyAction' };
                 } else {
-                    this._toaster.errorToast(action.payload.message, action.payload.code);
+                    this._toaster.errorToast(action.payload.message, action.payload.code,6000);
                 }
                 return { type: 'EmptyAction' };
             })));
