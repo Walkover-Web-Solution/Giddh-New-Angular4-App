@@ -4,8 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
-
+import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { InvoiceComponent } from './invoice.component';
 import { CommonModule } from '@angular/common';
@@ -16,7 +15,6 @@ import { InvoiceCreateComponent } from './create/invoice.create.component';
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
 import { InvoiceSettingComponent } from './settings/invoice.settings.component';
-
 import { FONT_PICKER_CONFIG, FontPickerConfigInterface, FontPickerModule } from 'ngx-font-picker';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { DesignFiltersContainerComponent } from './templates/edit-template/filters-container/design-filters/design.filters.component';
@@ -54,8 +52,6 @@ import { GenerateEWayBillComponent } from './preview/models/generateEWayBill/gen
 import { EWayBillCredentialsComponent } from './eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component';
 import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
-
-import { DownloadOrPreviewEwayComponent } from './eWayBill/download-or-preview-eway/download-or-preview-eway.component';
 import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview-details/invoice-preview-details.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
@@ -120,7 +116,6 @@ const INVOICE_ROUTES: Routes = [
         EWayBillCreateComponent,
         EWayBillComponent,
         EWayBillCredentialsComponent,
-        DownloadOrPreviewEwayComponent,
         InvoicePreviewDetailsComponent,
         ProformaListComponent,
         DownloadVoucherComponent

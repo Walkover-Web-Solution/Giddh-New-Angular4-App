@@ -151,8 +151,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @Input() public selectedItem: InvoicePreviewDetailsVm;
 
     @ViewChild(ElementViewContainerRef, { static: true }) public elementViewContainerRef: ElementViewContainerRef;
-    @ViewChild('createGroupModal', { static: true }) public createGroupModal: ModalDirective;
-    @ViewChild('createAcModal', { static: true }) public createAcModal: ModalDirective;
     @ViewChild('bulkItemsModal', { static: true }) public bulkItemsModal: ModalDirective;
     @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: ModalDirective;
     @ViewChild('printVoucherModal', { static: true }) public printVoucherModal: ModalDirective;
@@ -244,9 +242,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public asideMenuStateForOtherTaxes: string = 'out';
     public theadArrReadOnly: IContentCommon[] = [];
     public companyTaxesList: TaxResponse[] = [];
-    public showCreateAcModal: boolean = false;
-    public showCreateGroupModal: boolean = false;
-    public createAcCategory: string = null;
     public newlyCreatedAc$: Observable<INameUniqueName>;
     public newlyCreatedStockAc$: Observable<INameUniqueName>;
     public countrySource: IOption[] = [];
@@ -3431,28 +3426,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateBalanceDue();
     }
 
-    // get action type from aside window and open respective modal
-    public getActionFromAside(e?: any) {
-        if (e.type === 'groupModal') {
-            this.showCreateGroupModal = true;
-            // delay just for ng cause
-            setTimeout(() => {
-                this.createGroupModal.show();
-            }, 1000);
-        } else {
-            this.showCreateAcModal = true;
-            this.createAcCategory = e.type;
-            // delay just for ng cause
-            setTimeout(() => {
-                this.createAcModal.show();
-            }, 1000);
-        }
-    }
-
-    public closeCreateGroupModal(e?: any) {
-        this.createGroupModal.hide();
-    }
-
     public customMoveGroupFilter(term: string, item: IOption): boolean {
         let newItem = { ...item };
         if (!newItem.additional) {
@@ -3462,10 +3435,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             newItem.additional.mobileNo = newItem.additional.mobileNo || '';
         }
         return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.email.toLocaleLowerCase().indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase().indexOf(term) > -1);
-    }
-
-    public closeCreateAcModal() {
-        this.createAcModal.hide();
     }
 
     public closeDiscountPopup() {
@@ -5726,7 +5695,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }) {
 
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
-        // this.invFormData.voucherDetails.balanceDue = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
         if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
             this.advanceReceiptAdjustmentData.adjustments.forEach(adjustment => {
                 adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
@@ -7004,7 +6972,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @private
      * @memberof ProformaInvoiceComponent
      */
-    private openProductDropdown(): void {
+    public openProductDropdown(): void {
         if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
             setTimeout(() => {
                 const shSelectField: ShSelectComponent = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;

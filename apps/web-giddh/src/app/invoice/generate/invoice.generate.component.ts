@@ -230,8 +230,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                         this.getInvoiceTemplateDetails(voucher.templateDetails.templateUniqueName)
                     }
                     this.store.dispatch(this.generalActions.setAppTitle('/pages/invoice/preview/' + this.selectedVoucher));
-                    // this.showEditMode = !this.showEditMode;
-
                 }
             });
 
@@ -263,8 +261,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
                 this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                 this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                // assign date
-                // this.assignStartAndEndDateForDateRangePicker(dateObj[0], dateObj[1]);
 
                 this.isUniversalDateApplicable = true;
                 this.getLedgersOfInvoice();
@@ -274,9 +270,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
         this.universalDate$.subscribe(a => {
             if (a) {
-                // assign date
-                // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);
-
                 this.ledgerSearchRequest.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
                 this.ledgerSearchRequest.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
             }
@@ -385,7 +378,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account.uniqueName, model));
         }
 
-        // this.showEditMode = !this.showEditMode
         this.toggleBodyClass();
     }
 
@@ -493,10 +485,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
             toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         }
-        // else {
-        //   fromDate = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-        //   toDate = moment().format(GIDDH_DATE_FORMAT);
-        // }
+
         return {
             from: this.isUniversalDateApplicable ? fromDate : o.from,
             to: this.isUniversalDateApplicable ? toDate : o.to,
@@ -562,22 +551,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.getLedgersOfInvoice();
     }
 
-    public clickedOutside(event, el, field: 'accountUniqueName' | 'description' | 'particular') {
-        // if (this.invoiceSearchRequest[field] !== '') {
-        //   return;
-        // }
-        //
-        // if (this.childOf(event.target, el)) {
-        //   return;
-        // } else {
-        //   if (field === 'invoiceNumber') {
-        //     this.showInvoiceNoSearch = false;
-        //   } else {
-        //     this.showCustomerSearch = false;
-        //   }
-        // }
-    }
-
     /* tslint:disable */
     public childOf(c, p) {
         while ((c = c.parentNode) && c !== p) {
@@ -631,20 +604,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         if (!this._cdRef['destroyed']) {
             this._cdRef.detectChanges();
         }
-    }
-
-    /**
-     * assign date to start and end date for date range picker
-     * @param from
-     * @param to
-     */
-    private assignStartAndEndDateForDateRangePicker(from, to) {
-        from = from || moment().subtract(30, 'd');
-        to = to || moment();
-        this.selectedDateRange = {
-            startDate: moment(from, GIDDH_DATE_FORMAT),
-            endDate: moment(to, GIDDH_DATE_FORMAT)
-        };
     }
 
     public ngOnDestroy() {

@@ -21,8 +21,6 @@ import { download } from '@giddh-workspaces/utils';
 
 export class ExportLedgerComponent implements OnInit {
     @Input() public accountUniqueName: string = '';
-    // @Input() public from: string = '';
-    // @Input() public to: string = '';
     @Input() public advanceSearchRequest: any;
     @Output() public closeExportLedgerModal: EventEmitter<boolean> = new EventEmitter();
     /** Event emitter to show columnar report table */

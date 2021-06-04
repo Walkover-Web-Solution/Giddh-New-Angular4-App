@@ -95,7 +95,6 @@
                         <td [attr.data-title]="localeData?.unique_name">{{item?.uniqueName}}</td>
                         <td [attr.data-title]="localeData?.parent">{{item.parent}}</td>
                         <td [attr.data-title]="localeData?.opening_balance" class="text-right">
-                            <!-- {{item.openingBalance | giddhCurrency }} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item?.openingBalance" [currencySymbol]="false"
                                     [currencyCode]="false">
@@ -109,7 +108,6 @@
                             </span>
                         </td>
                         <td [attr.data-title]="localeData?.dr_total" class="text-right">
-                            <!-- {{item.debitTotal | giddhCurrency }} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item?.debitTotal" [currencySymbol]="false"
                                     [currencyCode]="false">
@@ -117,7 +115,6 @@
                             </span>
                         </td>
                         <td [attr.data-title]="localeData?.cr_total" class="text-right">
-                            <!-- {{item.creditTotal | giddhCurrency}} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item?.creditTotal" [currencySymbol]="false"
                                     [currencyCode]="false">
@@ -125,7 +122,6 @@
                             </span>
                         </td>
                         <td [attr.data-title]="localeData?.closing_balance" class="text-right">
-                            <!-- {{item.closingBalance | giddhCurrency }} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item?.closingBalance" [currencySymbol]="false"
                                     [currencyCode]="false">
