@@ -3,9 +3,9 @@ import { BulkVoucherExportService } from 'apps/web-giddh/src/app/services/bulkvo
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
-import { takeUntil ,take} from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
-import { Store ,select} from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 
 @Component({
@@ -38,18 +38,18 @@ export class BulkExportModal implements OnInit, OnDestroy {
     /** Selected download Voucher Copy Options */
     public copyTypes: any = [];
     /** Email Receivers */
-    public recipients: any = this.getEmail();
+    public recipients: any = "";
     /** Will handle if api call is in process */
     public isLoading: boolean = false;
 
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private loggedInUserEmail:any;
+
     constructor(
         private bulkVoucherExportService: BulkVoucherExportService,
         private generalService: GeneralService,
         private toaster: ToasterService,
-        public store: Store<AppState>) {
+        private store: Store<AppState>) {
 
     }
 
@@ -64,15 +64,22 @@ export class BulkExportModal implements OnInit, OnDestroy {
             { label: this.localeData?.invoice_copy_options?.customer, value: 'CUSTOMER' },
             { label: this.localeData?.invoice_copy_options?.transport, value: 'TRANSPORT' }
         ];
+        this.getEmail();
     }
-    public getEmail():any{
-        this.store.pipe(select(s => s.session.user), take(1)).subscribe(result => {
+    
+    /**
+     * Get company email
+     * @returns updated recipient value to company email
+     */
+    public getEmail(): any {
+        this.store.pipe(select(appState => appState.session.user), take(1)).subscribe(result => {
             if (result && result.user) {
-                this.loggedInUserEmail = result.user.email;
+                this.recipients = result.user.email;
             }
         });;
-        return this.loggedInUserEmail;
+        return this.recipients
     }
+
     /**
      * Export the vouchers
      *
