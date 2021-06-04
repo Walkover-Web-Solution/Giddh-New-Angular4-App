@@ -6,7 +6,7 @@ name: Desktop build workflow
 # or API.
 on:
   workflow_dispatch:
-    # Inputs the workflow accepts.
+    # Inputs the workflow accepts
     inputs:
       note:
         # Friendly description to be shown in the UI instead contains details about the build
