@@ -41,6 +41,7 @@ jobs:
         run: echo "BUILD_DEPLOYED_MSG=deployment" >> $GITHUB_ENV
       - if: ${{ github.event.inputs.environment == 'test' }}
         run: echo "BUILD_DEPLOYED_MSG=testing" >> $GITHUB_ENV
+      - run: echo ${{ env.BUILD_DEPLOYED_MSG }}
 #       - name: Install Node.js & NPM
 #         uses: actions/setup-node@v2
 #         with:
