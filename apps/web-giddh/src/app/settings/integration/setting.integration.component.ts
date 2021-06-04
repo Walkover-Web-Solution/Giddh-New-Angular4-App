@@ -211,7 +211,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             // set cashfree form data
             if (o.payoutForm && o.payoutForm.userName) {
                 this.payoutObj = _.cloneDeep(o.payoutForm);
-                // this.payoutObj.password = 'YOU_ARE_NOT_ALLOWED';
                 this.payoutAdded = true;
             } else {
                 this.payoutObj = new CashfreeClass();
@@ -219,7 +218,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
             if (o.autoCollect && o.autoCollect.userName) {
                 this.autoCollectObj = _.cloneDeep(o.autoCollect);
-                // this.autoCollectObj.password = 'YOU_ARE_NOT_ALLOWED';
                 this.autoCollectAdded = true;
             } else {
                 this.autoCollectObj = new CashfreeClass();
@@ -235,7 +233,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             if (o.amazonSeller && o.amazonSeller.length) {
                 this.amazonSellerRes = _.cloneDeep(o.amazonSeller);
                 this.amazonSellerForm.controls['sellers']?.patchValue(this.amazonSellerRes);
-                // this.amazonSellerForm.controls['sellers'].disable();
                 this.addAmazonSellerRow();
             }
         });
@@ -258,8 +255,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
             }
         });
-        //logic to get all registered account for integration tab
-        // this.store.dispatch(this._companyActions.getAllRegistrations());
 
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && o.account) {
@@ -321,7 +316,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     if (value[0].emailId === this.loggedInUserEmail) {
                         value[0].isLoggedInUser = true;
                     }
-                    // arr.push({ name: value[0].userName, rows: value });
                     arr.push({ label: value[0].userName, value: value[0].userUniqueName, additional: value });
                 });
                 let sortedArray = [];
@@ -336,7 +330,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     }
                 });
                 this.approvalNameList = sortedArray;
-                // this.approvalNameList = _.sortBy(sortedArray, ['label']);
             }
         });
         if (this.selectedCompanyUniqueName) {
@@ -356,22 +349,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }
         this.loadTabData();
     }
-
-    // public getInitialData() {
-    //     // this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
-    //     // this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
-    //     this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
-    //     this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
-    //     this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
-    //     this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
-    //     this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
-    //     // this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-    //     this.store.pipe(take(1)).subscribe(s => {
-    //         this.selectedCompanyUniqueName = s.session.companyUniqueName;
-    //         this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
-    //         this.getValidationForm('ICICI')
-    //     });
-    // }
 
     public setDummyData() {
         this.razorPayObj.userName = '';
@@ -575,7 +552,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public addAmazonSellerRow(i?: number, item?: any) {
-        const AmazonSellerControl = this.amazonSellerForm.controls['sellers'] as FormArray;
         const control = this.amazonSellerForm.controls['sellers'] as FormArray;
         if (item) {
             if (control.controls[i]) {
@@ -727,7 +703,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 // google
                 const t = ipcRenderer.send("authenticate-send-email", provider);
                 ipcRenderer.once('take-your-gmail-token', (sender, arg: any) => {
-                    // this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                     const dataToSave = {
                         "access_token": arg.access_token,
                         "expires_in": arg.expiry_date,
@@ -742,14 +717,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         }
                         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
                         this.router.navigateByUrl('/pages/settings/integration/email');
-                        // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
                     });
                 });
 
             } else {
                 // linked in
                 const t = ipcRenderer.send("authenticate", provider);
-                // this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
             }
 
         }
@@ -1004,7 +977,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             approvalUniqueName: '',
             maxBankLimit: 'custom',
         }
-        // return new UserAmountRangeRequests();
         return userAmountRanges;
     }
 
@@ -1155,7 +1127,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public addUserAmountRangesForm(): any {    // commented code because we no need GSTIN No. to add new address
-        // if (value && !value.startsWith(' ', 0)) {
         const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
         transactions.push(this.initialUserAmountRangesForm());
         return;
@@ -1323,9 +1294,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.loadDefaultAccountsSuggestions();
             this.loadDefaultBankAccountsSuggestions();
             this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
-            // this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
-            // this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
-            // this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
         }
     }
 
