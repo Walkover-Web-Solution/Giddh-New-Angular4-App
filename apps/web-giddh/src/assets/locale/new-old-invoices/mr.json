@@ -1,30 +1,30 @@
 {
     "page_heading": "नवीन व्ही / एस जुने पावत्या",
-    "select_year_label" : "वर्ष निवडा",
-    "select_year_placeholder" : "शोध वर्ष...",
-    "select_type_label" : "प्रकार निवडा",
-    "select_type_placeholder" : "शोध प्रकार...",
-    "invalid_type" : "कृपया प्रकार निवडा",
-    "select_month_label" : "महिना निवडा",
-    "select_month_placeholder" : "शोध महिना...",
-    "invalid_month" : "कृपया महिना निवडा",
-    "select_quarter_label" : "क्वार्टर निवडा",
-    "select_quarter_placeholder" : "शोध क्वार्टर...",
-    "invalid_quarter" : "कृपया क्वाटर निवडा",
-    "sales_from" : "कडून विक्री",
-    "clients" : "ग्राहक",
-    "no_invoices" : "पावत्यांची संख्या",
-    "bifurcation_clients" : "मधील ग्राहकांचे विभाजन [COLUMN_NAME]",
-    "from_new_clients" : "नवीन ग्राहकांकडून",
-    "from_old_clients" : "जुन्या ग्राहकांकडून",
-    "quarters" : {
-        "q1" : "Q1",
-        "q2" : "Q2",
-        "q3" : "Q3",
-        "q4" : "Q4"
+    "select_year_label": "वर्ष निवडा",
+    "select_year_placeholder": "शोध वर्ष...",
+    "select_type_label": "प्रकार निवडा",
+    "select_type_placeholder": "शोध प्रकार...",
+    "invalid_type": "कृपया प्रकार निवडा",
+    "select_month_label": "महिना निवडा",
+    "select_month_placeholder": "शोध महिना...",
+    "invalid_month": "कृपया महिना निवडा",
+    "select_quarter_label": "क्वार्टर निवडा",
+    "select_quarter_placeholder": "शोध क्वार्टर...",
+    "invalid_quarter": "कृपया क्वाटर निवडा",
+    "sales_from": "कडून विक्री",
+    "clients": "ग्राहक",
+    "no_invoices": "पावत्यांची संख्या",
+    "bifurcation_clients": "मधील ग्राहकांचे विभाजन [COLUMN_NAME]",
+    "from_new_clients": "नवीन ग्राहकांकडून",
+    "from_old_clients": "जुन्या ग्राहकांकडून",
+    "quarters": {
+        "q1": "Q1",
+        "q2": "Q2",
+        "q3": "Q3",
+        "q4": "Q4"
     },
-    "get_type_options" : {
-        "month" : "महिना",
-        "quarter" : "तिमाहीत"
+    "get_type_options": {
+        "month": "महिना",
+        "quarter": "तिमाहीत"
     }
 }

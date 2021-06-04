@@ -23,7 +23,7 @@
     "move": "पुनर्वास",
     "all_applicable_taxes_label": "सर्व लागू कर",
     "all_applicable_taxes_placeholder": "कर निवडा",
-    "all_inherited_taxes": "सभी इनहेरिटेड टैक्स",
+    "all_inherited_taxes": "सभी इनहेरिटेड कर",
     "no_inherited_taxes": "कोणताही वारसा मिळालेला कर नाही",
     "delete_group_title": "गट काढा",
     "delete_group_content": "आपली खात्री आहे की आपण हा गट हटवू इच्छिता? सर्व बाल गट देखील काढले जातील.",
@@ -86,5 +86,5 @@
     "export_group_ledger": "ग्रुप लेजर निर्यात करा",
     "field_type_placeholder": "फिल्टर करण्यासाठी टाइप करा",
     "bank_details_error_message": "आपण त्यापैकी कोणासाठी डेटा प्रदान केल्यास सर्व बँक फील्ड अनिवार्य आहेत",
-    "item_no": "Item #[ITEM_NO]"
+    "item_no": "आयटम #[ITEM_NO]"
 }

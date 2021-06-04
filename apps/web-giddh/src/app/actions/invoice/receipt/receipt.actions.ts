@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { CustomActions } from '../../../store/customActions';
 import { INVOICE_RECEIPT_ACTIONS } from './receipt.const';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
@@ -18,7 +18,7 @@ import { SalesRegisteDetailedResponse, ReportsDetailedRequestFilter, PurchaseReg
 export class InvoiceReceiptActions {
 
 
-    public UPDATE_INVOICE_RECEIPT_REQUEST$: Observable<Action> = createEffect( ()=>this.action$
+    public UPDATE_INVOICE_RECEIPT_REQUEST$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT),
             switchMap((action: CustomActions) => this._receiptService.UpdateReceipt(action.payload.accountUniqueName, action.payload.model)),
@@ -31,7 +31,7 @@ export class InvoiceReceiptActions {
             }))));
 
 
-    public GET_ALL_INVOICE_RECEIPT$: Observable<Action> =createEffect( ()=> this.action$
+    public GET_ALL_INVOICE_RECEIPT$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT),
             switchMap((action: CustomActions) => this._receiptService.GetAllReceipt(action.payload.body, action.payload.type)),
@@ -43,7 +43,7 @@ export class InvoiceReceiptActions {
             })));
 
 
-    public GET_VOUCHER_DETAILS$: Observable<Action> =createEffect( ()=> this.action$
+    public GET_VOUCHER_DETAILS$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS),
             switchMap((action: CustomActions) => this._receiptService.GetVoucherDetails(action.payload.accountUniqueName,
@@ -57,7 +57,7 @@ export class InvoiceReceiptActions {
                 return this.GetVoucherDetailsResponse(response);
             })));
 
-    public GET_VOUCHER_DETAILSV4$: Observable<Action> = createEffect( ()=>this.action$
+    public GET_VOUCHER_DETAILSV4$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILSV4),
             switchMap((action: CustomActions) => this._receiptService.getVoucherDetailsV4(action.payload.accountUniqueName,
@@ -71,7 +71,7 @@ export class InvoiceReceiptActions {
                 return this.GetVoucherDetailsResponseV4(response);
             })));
 
-    public DELETE_INVOICE_RECEIPT$: Observable<Action> =createEffect( ()=> this.action$
+    public DELETE_INVOICE_RECEIPT$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT),
             switchMap((action: CustomActions) => this._receiptService.DeleteReceipt(action.payload.accountUniqueName, action.payload.model)),
@@ -85,7 +85,7 @@ export class InvoiceReceiptActions {
             })));
 
 
-    public VoucherPreview$: Observable<Action> =createEffect( ()=> this.action$
+    public VoucherPreview$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_REQUEST),
             switchMap((action: CustomActions) => this._receiptService.DownloadVoucher(action.payload.model, action.payload.accountUniqueName)),
@@ -98,7 +98,7 @@ export class InvoiceReceiptActions {
                 return this.VoucherPreviewResponse(response);
             })));
 
-    public GetSalesRegistedDetails$: Observable<Action> =createEffect( ()=> this.action$
+    public GetSalesRegistedDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.GET_SALESRAGISTED_DETAILS),
             switchMap((action: CustomActions) => this._receiptService.getDetailedSalesRegister(action.payload)),
@@ -107,7 +107,7 @@ export class InvoiceReceiptActions {
             })));
 
 
-    public GetPurchaseRegistedDetails$: Observable<Action> =createEffect( ()=> this.action$
+    public GetPurchaseRegistedDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.GET_PURCHASE_REGISTERED_DETAILS),
             switchMap((action: CustomActions) => this._receiptService.getDetailedPurchaseRegister(action.payload)),
@@ -116,7 +116,7 @@ export class InvoiceReceiptActions {
             })));
 
 
-    public GetPurchaseRecordDetails$: Observable<Action> = createEffect( ()=>this.action$
+    public GetPurchaseRecordDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.GET_PURCHASE_RECORD_DETAILS),
             switchMap((action: CustomActions) => this._receiptService.GetPurchaseRecordDetails(action.payload.accountUniqueName, action.payload.purchaseRecordUniqueName)),

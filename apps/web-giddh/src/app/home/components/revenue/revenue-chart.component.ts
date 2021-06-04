@@ -72,7 +72,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
         });
@@ -108,7 +108,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.requestInFlight = true;
         let revenueGraphDataRequest = new RevenueGraphDataRequest();
         revenueGraphDataRequest = this.graphParams;
-        
+
         this.dashboardService.GetRevenueGraphData(revenueGraphDataRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.currentData = [];
             this.previousData = [];
@@ -189,7 +189,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
                 this.generateChart();
             } else {
-                if(response?.status === "error" && response?.message) {
+                if (response?.status === "error" && response?.message) {
                     this.toasterService.errorToast(response.message);
                 }
             }

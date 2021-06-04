@@ -14,11 +14,11 @@ import { take } from 'rxjs/operators';
 export class GiddhErrorHandler {
 
     constructor(
-        @Optional() @Inject(ServiceConfig)  private config: IServiceConfigArgs,
+        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
         private router: Router,
         private http: HttpWrapperService,
         private store: Store<AppState>
-    ) {}
+    ) { }
 
     public HandleCatch<TResponce, TRequest>(r: HttpErrorResponse, request?: any, queryString?: any): Observable<BaseResponse<TResponce, TRequest>> {
         let data: BaseResponse<TResponce, TRequest> = new BaseResponse<TResponce, TRequest>();
@@ -102,7 +102,7 @@ export class GiddhErrorHandler {
             uiPageUrl: this.router.url ? this.router.url.replace(/\/ledger\/.*/, '/ledger/account_unique_name') : '',
         };
         const url = `${this.config ? this.config.apiUrl : ''}${ERROR_LOG_API}`;
-        this.http.post(url, requestObject).pipe(take(1)).subscribe(() => {}, () => {});
+        this.http.post(url, requestObject).pipe(take(1)).subscribe(() => { }, () => { });
     }
 }
 

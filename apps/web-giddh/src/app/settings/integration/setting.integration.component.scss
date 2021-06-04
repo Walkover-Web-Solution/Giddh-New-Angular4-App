@@ -28,7 +28,7 @@
 }
 .disabled:after {
     background: transparent;
-    content: '';
+    content: "";
     display: block;
     width: 100%;
     height: 100%;
@@ -52,7 +52,7 @@
     padding: 6px;
     height: 100%;
     background: $white;
-    font-size:14px;
+    font-size: 14px;
 }
 .tooltip-box {
     position: absolute;
@@ -62,16 +62,17 @@
         color: $gray;
     }
 }
-.form-control, .linked-account{
-    width:100% !important;
+.form-control,
+.linked-account {
+    width: 100% !important;
 }
 
-.payment-text{
+.payment-text {
     color: $gray;
 }
 
 /*responsive*/
-@media(max-width:1359px) {
+@media (max-width: 1359px) {
     .xs-pd-l15 {
         padding-left: 15px !important;
     }
@@ -86,25 +87,25 @@
         font-size: 20px;
     }
 }
-.edit-save-button{
-    .btn{
+.edit-save-button {
+    .btn {
         width: 36px;
         height: 36px;
     }
 }
-@media(max-width:1199px){
-    .edit-save-button{
+@media (max-width: 1199px) {
+    .edit-save-button {
         display: flex;
         width: 100%;
         justify-content: flex-end;
         margin-right: 7px;
     }
-    .button-wrapper{
+    .button-wrapper {
         margin-top: 0;
         margin-bottom: 30px;
     }
 }
-@media(max-width:767px) {
+@media (max-width: 767px) {
     #inlnImg {
         margin-top: 0;
     }
@@ -131,39 +132,38 @@
         }
     }
     .plus-cross-btn {
-        label{
+        label {
             display: none;
         }
         i {
-           float: right;
-           margin-right: 15px;
+            float: right;
+            margin-right: 15px;
         }
     }
-    .update-btn-wrapper{
-        label{
+    .update-btn-wrapper {
+        label {
             display: none;
         }
-        .btn{
+        .btn {
             margin-right: 0;
             margin-left: 15px;
         }
     }
 }
 
-
-@media (max-width:1400px) and (min-width:992px){
-    .payment-col{
+@media (max-width: 1400px) and (min-width: 992px) {
+    .payment-col {
         flex: 0 0 33.333333% !important;
-        max-width:33.333333% !important;
+        max-width: 33.333333% !important;
     }
-    .payment-col1{
+    .payment-col1 {
         flex: 0 0 25% !important;
-        max-width:25% !important;
+        max-width: 25% !important;
     }
 }
 
-@media (max-width:1680px) and (min-width:1401px){
-    .amount-upto{
+@media (max-width: 1680px) and (min-width: 1401px) {
+    .amount-upto {
         flex: 0 0 20.666667% !important;
         max-width: 20.666667% !important;
     }

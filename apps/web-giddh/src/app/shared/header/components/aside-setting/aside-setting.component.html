@@ -1,12 +1,13 @@
-
+<ng-container appTranslate [file]="'aside-setting'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)">
         <div class="aside-help-header relative">
-            <h2>Settings</h2>
+            <h2>{{localeData?.page_heading}}</h2>
             <div id="close" class="cursor-pointer" (click)="closeAsidePane($event)"><i class="icon-cross"></i></div>
             <div class="search-field relative">
                 <i class="icon-search pos-abs"></i>
                 <input type="text" class="form-control" name="search" #searchField [(ngModel)]="search"
-                    (ngModelChange)="searchMenu($event)" placeholder="Search Settings">
+                    (ngModelChange)="searchMenu($event)" [placeholder]="localeData?.search_settings">
             </div>
         </div>
         <div class="help-aside-body">
@@ -14,11 +15,11 @@
                 <a href="javascript:;">
                     <span *ngIf="!isMobileScreen" (click)="goToPreviousPage()">
                         <i class="icon-back-arrow"></i>
-                        Back
+                        {{commonLocaleData?.app_back}}
                     </span>
                     <span *ngIf="isMobileScreen" (click)="closeAsidePane($event)">
                         <i class="icon-cross"></i>
-                        Setting
+                        {{localeData?.setting}}
                     </span>
                 </a>
             </div>
@@ -33,6 +34,5 @@
                 </ul>
             </div>
         </div>
-
     </div>
-
+</ng-container>

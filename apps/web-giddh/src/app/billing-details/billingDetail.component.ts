@@ -80,9 +80,13 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     public razorpayAuthKey = 'rzp_live_4UTBGkTT0iZmMW';
 
     /** Form instance */
-    @ViewChild('billingForm', {static: true}) billingForm: NgForm;
+    @ViewChild('billingForm', { static: true }) billingForm: NgForm;
 
     private activeCompany;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef,
         private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions, private settingsProfileService: SettingsProfileService) {
@@ -96,7 +100,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getCurrentCompanyData();
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.activeCompany = activeCompany;
                 this.getStates();
                 this.reFillForm();
@@ -195,7 +199,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             }
 
             if (!isValid) {
-                this._toasty.errorToast('Invalid ' + this.formFields['taxName'].label);
+                let text = this.commonLocaleData?.app_invalid_tax_name;
+                text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                this._toasty.errorToast(text);
                 ele.classList.add('error-box');
                 this.isGstValid = false;
             } else {
@@ -227,7 +233,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                         this._toasty.clearAllToaster();
                         if (this.formFields['taxName'] && !this.billingForm.form.get('gstin')?.valid) {
                             this.billingDetailsObj.stateCode = '';
-                            this._toasty.warningToast('Invalid .' + this.formFields['taxName'].label);
+                            let text = this.commonLocaleData?.app_invalid_tax_name;
+                            text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                            this._toasty.warningToast(text);
                         }
                     }
                 });
@@ -297,7 +305,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
     public payWithRazor(billingDetail: NgForm) {
         if (!(this.validateEmail(billingDetail.value.email))) {
-            this._toasty.warningToast('Enter valid Email ID', 'Warning');
+            this._toasty.warningToast(this.localeData?.invalid_email_error, this.commonLocaleData?.app_warning);
             return false;
         }
         if (billingDetail.valid && this.createNewCompany) {
@@ -382,7 +390,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             this.createNewCompany.subscriptionRequest.userUniqueName = this.activeCompany.subscription ? this.activeCompany.subscription.userDetails.uniqueName : '';
 
             // assign state code to billing details object
-            if(this.activeCompany.state) {
+            if (this.activeCompany.state) {
                 this.billingDetailsObj.stateCode = this.activeCompany.state;
             } else {
                 let selectedState = this.activeCompany.addresses.find((address) => address.isDefault);
@@ -470,12 +478,12 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.isMobileNumberValid = true;
             } else {
                 this.isMobileNumberValid = false;
-                this._toasty.errorToast('Invalid Contact number');
+                this._toasty.errorToast(this.localeData?.invalid_contact_number_error);
                 ele.classList.add('error-box');
             }
         } catch (error) {
             this.isMobileNumberValid = false;
-            this._toasty.errorToast('Invalid Contact number');
+            this._toasty.errorToast(this.localeData?.invalid_contact_number_error);
             ele.classList.add('error-box');
         }
     }
@@ -492,5 +500,17 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.store.dispatch(this.companyActions.setActiveCompanyData(response.body));
             }
         });
+    }
+
+    /**
+     * This will return hi user text
+     *
+     * @returns {string}
+     * @memberof BillingDetailComponent
+     */
+    public getHelloUserText(): string {
+        let text = this.localeData?.hello_user;
+        text = text?.replace("[USER]", this.logedInuser?.name);
+        return text;
     }
 }

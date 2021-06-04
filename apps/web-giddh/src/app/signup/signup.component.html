@@ -1,4 +1,5 @@
-<div class="flex-container" *ngIf="!((isSignupWithPasswordInProcess$ | async) || (isTwoWayAuthInProcess$ | async) ||  (isVerifyEmailInProcess$ | async) ||  (isLoginWithEmailInProcess$ | async) ||  (isLoginWithGoogleInProcess$ | async))">
+<div class="flex-container"
+    *ngIf="!((isSignupWithPasswordInProcess$ | async) || (isTwoWayAuthInProcess$ | async) ||  (isVerifyEmailInProcess$ | async) ||  (isLoginWithEmailInProcess$ | async) ||  (isLoginWithGoogleInProcess$ | async))">
     <div class="login-box">
         <div class="row mx-0">
             <div class="col-md-6 col-lg-6 col-sm-12 col-12 px-0">
@@ -57,7 +58,8 @@
 
 
                                     <!-- login with userName form -->
-                                    <form class="position-relative" id="signUpWithPwd" [formGroup]="signUpWithPasswdForm"
+                                    <form class="position-relative" id="signUpWithPwd"
+                                        [formGroup]="signUpWithPasswdForm"
                                         (ngSubmit)="SignupWithPasswd(signUpWithPasswdForm)"
                                         *ngIf="loginUsing === 'userName'"
                                         [hidden]="isSignupWithPasswordSuccess$ | async" autocomplete="off">
@@ -119,12 +121,13 @@
                                 </ul>
                                 <div class="login-with" *ngIf="loginUsing !== 'userName'">
                                     <!--  -->
-                                    Signup with <a class="bold" href="javascript:void(0);" (click)="loginUsing = 'userName'"> email and password</a>
+                                    Signup with <a class="bold" href="javascript:void(0);"
+                                        (click)="loginUsing = 'userName'"> email and password</a>
                                     <!-- ,<a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a> -->
                                 </div>
                                 <div class="d-flex align-items-center account mt-1">
-                                    <p class="mb-0 mr-2 bold text-light-2">Already have an account?</p> <a routerLink="/login"
-                                        class="btn btn-sm btn-secondary">Login</a>
+                                    <p class="mb-0 mr-2 bold text-light-2">Already have an account?</p> <a
+                                        routerLink="/login" class="btn btn-sm btn-secondary">Login</a>
                                 </div>
                             </div>
 
@@ -197,7 +200,8 @@
                         [formGroup]="mobileVerifyForm">
                         <div class="clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
                             <sh-select [options]="countryCodeList" class="form-inline"
-                                (selected)="setCountryCode($event)" [placeholder]="'CC'" formControlName="country"></sh-select>
+                                (selected)="setCountryCode($event)" [placeholder]="'CC'" formControlName="country">
+                            </sh-select>
                             <input class="form-control input-width-mobile" formControlName="mobileNumber" type="text"
                                 placeholder="Enter your Mobile No" required />
                         </div>
@@ -205,13 +209,13 @@
                             class="btn sharp btn-block btn-success btn-lg mr-t1"
                             (click)="getOtp(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['country'].value)"
                             [ladda]="isLoginWithMobileInProcess$ | async"
-                            [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{ !(isLoginWithMobileInProcess$ |
-              async) ? 'Get Otp' : 'Resend' }}
+                            [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{
+                            !(isLoginWithMobileInProcess$ |
+                            async) ? 'Get Otp' : 'Resend' }}
                         </button>
                         <div class="clearfix form-group form-group-lg" *ngIf="(isLoginWithMobileSubmited$ | async)">
                             <hr class="mrtb10">
-                            <input class="form-control square" placeholder="Enter OTP"
-                                formControlName="otp">
+                            <input class="form-control square" placeholder="Enter OTP" formControlName="otp">
                             <button type="login" class="btn sharp btn-block btn-success btn-lg mr-t1"
                                 [ladda]="isVerifyMobileInProcess$ | async"
                                 (click)="VerifyCode(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['otp'].value)"
@@ -241,8 +245,7 @@
                         [formGroup]="twoWayOthForm">
                         <div class="clearfix form-group form-group-lg">
                             <hr class="mrtb10">
-                            <input class="form-control square" placeholder="Enter OTP"
-                                formControlName="otp">
+                            <input class="form-control square" placeholder="Enter OTP" formControlName="otp">
                             <small>We have sent an OTP to your registered mobile number.</small>
                             <button type="login" class="btn sharp btn-block btn-success btn-lg mr-t1"
                                 [ladda]="isTwoWayAuthInProcess$ | async" (click)="verifyTwoWayCode()"
@@ -256,6 +259,7 @@
     </div>
 </div>
 <!-- two way auth popup -->
-<div *ngIf="(isSignupWithPasswordInProcess$ | async) || (isTwoWayAuthInProcess$ | async) ||  (isVerifyEmailInProcess$ | async) ||  (isLoginWithEmailInProcess$ | async) ||  (isLoginWithGoogleInProcess$ | async) ">
+<div
+    *ngIf="(isSignupWithPasswordInProcess$ | async) || (isTwoWayAuthInProcess$ | async) ||  (isVerifyEmailInProcess$ | async) ||  (isLoginWithEmailInProcess$ | async) ||  (isLoginWithGoogleInProcess$ | async) ">
     <giddh-page-loader></giddh-page-loader>
 </div>

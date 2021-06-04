@@ -36,9 +36,10 @@ import { OrganizationType } from '../../models/user-login-state';
 import { CompanyService } from '../../services/companyService.service';
 import { DbService } from '../../services/db.service';
 import { GeneralService } from '../../services/general.service';
+import { LocaleService } from '../../services/locale.service';
 import { AppState } from '../../store';
 import { AuthService } from '../../theme/ng-social-login-module';
-import { ALL_ITEMS, AllItem, AllItems } from '../helpers/allItems';
+import { AllItem, AllItems } from '../helpers/allItems';
 
 @Component({
     selector: 'primary-sidebar',
@@ -133,6 +134,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public searchCmp: string = '';
     /** Holds if company refresh is in progress */
     public isCompanyRefreshInProcess$: Observable<boolean>;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** This holds the active locale */
+    public activeLocale: string = "";
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -148,7 +155,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private loginAction: LoginActions,
         private socialAuthService: AuthService,
-        private groupWithAction: GroupWithAccountsAction
+        private groupWithAction: GroupWithAccountsAction, 
+        private localeService: LocaleService
     ) {
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
@@ -215,8 +223,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length) {
-            this.allItems = this.generalService.getVisibleMenuItems(changes.apiMenuItems.currentValue, ALL_ITEMS);
+        if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length && this.localeData?.page_heading) {
+            this.allItems = this.generalService.getVisibleMenuItems(changes.apiMenuItems.currentValue, this.localeData?.items);
         }
     }
 
@@ -349,11 +357,21 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 this.changeDetectorRef.detectChanges();
             }
 
-            if(event instanceof NavigationStart) {
-                if(this.companyDetailsDropDownWeb.isOpen) {
+            if (event instanceof NavigationStart) {
+                if (this.companyDetailsDropDownWeb.isOpen) {
                     this.companyDetailsDropDownWeb.hide();
                 }
             }
+        });
+
+        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            if(this.activeLocale && this.activeLocale !== response?.value) {
+                this.localeService.getLocale('all-items', response?.value).subscribe(response => {
+                    this.localeData = response;
+                    this.translationComplete(true);
+                });
+            }
+            this.activeLocale = response?.value;
         });
     }
 
@@ -858,7 +876,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public handleItemClick(item: AllItem): void {
-        if (item.label === 'Master') {
+        if (item.label === this.commonLocaleData?.app_master) {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
         }
     }
@@ -895,16 +913,16 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         let name = '';
         switch (url) {
             case 'SETTINGS?TAB=PERMISSION&TABINDEX=5':
-                name = 'Settings > Permission';
+                name = this.localeData?.settings_permission;
                 break;
             case 'user-details/profile':
-                name = 'User Details';
+                name = this.localeData?.user_details;
                 break;
             case 'inventory-in-out':
-                name = 'Inventory In/Out';
+                name = this.localeData?.inventory_inout;
                 break;
             case 'import/select-type':
-                name = 'Import Data';
+                name = this.localeData?.import_data;
                 break;
             default:
                 name = url;
@@ -986,5 +1004,17 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         event.stopPropagation();
         event.preventDefault();
         this.store.dispatch(this.companyActions.RefreshCompanies());
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof PrimarySidebarComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.allItems = this.generalService.getVisibleMenuItems(this.apiMenuItems, this.localeData?.items);
+        }
     }
 }

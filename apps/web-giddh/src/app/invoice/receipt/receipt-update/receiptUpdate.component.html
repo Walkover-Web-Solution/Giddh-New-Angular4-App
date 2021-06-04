@@ -162,19 +162,21 @@
                                     [(ngModel)]="transaction.description" /></td>
                             <td *ngIf="customThead[6]?.display">{{ transaction.rate}}</td>
                             <td *ngIf="customThead[7]?.display && transaction.category === 'income'">{{
-              getEntryTotalDiscount(entry.discounts) }}
+                                getEntryTotalDiscount(entry.discounts) }}
                             </td>
                             <td
-                                *ngIf="customThead[8]?.display || customThead[9]?.display && transaction.category === 'income'">{{
-              getEntryTaxableAmount(transaction, entry.discounts) }}
+                                *ngIf="customThead[8]?.display || customThead[9]?.display && transaction.category === 'income'">
+                                {{
+                                getEntryTaxableAmount(transaction, entry.discounts) }}
                             </td>
                             <td *ngIf="customThead[9]?.display && transaction.category === 'income'">{{
-              getTransactionTotalTax(entry.taxes)
-              }}
+                                getTransactionTotalTax(entry.taxes)
+                                }}
                             </td>
-                            <td *ngIf="customThead[10]?.display && transaction.category === 'income'">{{ getEntryTotal(entry,
-              transIndex)
-              }}
+                            <td *ngIf="customThead[10]?.display && transaction.category === 'income'">{{
+                                getEntryTotal(entry,
+                                transIndex)
+                                }}
                             </td>
 
                             <!-- empty tds -->

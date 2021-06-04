@@ -1,4 +1,4 @@
-@import '../../../../assets/css/color.scss';
+@import "../../../../assets/css/color.scss";
 
 .dropdown-icon {
     line-height: 0px;
@@ -32,34 +32,34 @@
 .list-head > li {
     vertical-align: middle;
 }
-.report-breadcrum{
+.report-breadcrum {
     position: absolute !important;
     top: 0;
     left: 0;
     width: 100%;
     padding: 7px 0px 10px 36px !important;
     border-bottom: 1px solid $gainsboro;
-    .nav-report{
-        li{
-            font-family: 'opensans-semibold';
+    .nav-report {
+        li {
+            font-family: "opensans-semibold";
             font-size: 20px;
-            a{
+            a {
                 color: $midnight-blue;
             }
         }
     }
 }
-@media(max-width:767px){
-    .report-breadcrum{
+@media (max-width: 767px) {
+    .report-breadcrum {
         position: static !important;
         padding-left: 15px !important;
-        .nav-report{
-            li{
+        .nav-report {
+            li {
                 font-size: 16px;
             }
         }
-        .custom-month-select{
-            .btn{
+        .custom-month-select {
+            .btn {
                 font-size: 16px;
             }
         }

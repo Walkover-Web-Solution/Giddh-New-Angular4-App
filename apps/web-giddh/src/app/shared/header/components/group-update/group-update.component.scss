@@ -1,4 +1,4 @@
-@import '../../../../../assets/css/color.scss';
+@import "../../../../../assets/css/color.scss";
 
 .form-group .item-padding.text-right {
     max-width: 100% !important;
@@ -17,19 +17,19 @@
     padding: 8px 16px;
     width: 95px;
 }
-.move-group-form{
+.move-group-form {
     width: calc(100% - 112px);
 }
-.all-taxes{
-  width: calc(100% - 115px);
+.all-taxes {
+    width: calc(100% - 115px);
 }
-.move-group-form .list-item{
-    border-bottom:1px solid $gainsboro;
+.move-group-form .list-item {
+    border-bottom: 1px solid $gainsboro;
 }
-.form-box .btn{
+.form-box .btn {
     width: 95px;
 }
-.collapse-icons{
+.collapse-icons {
     font-size: 10px;
     border: 1px solid $chetwode-blue;
     border-radius: 4px;
