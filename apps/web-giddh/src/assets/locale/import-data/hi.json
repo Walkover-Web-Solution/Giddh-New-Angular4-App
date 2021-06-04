@@ -19,7 +19,7 @@
     "imported_file_fields": "आयातित फ़ाइल फ़ील्ड्स",
     "giddh_fields": "गिद्ध फील्ड्स",
     "mandatory_fields": "अनिवार्य क्षेत्र बनाने के लिए",
-    "in_giddh_are": "Giddh में हैं:",
+    "in_giddh_are": "गिद्ध में हैं:",
     "done": "समाप्त",
     "successful": "सफल",
     "minimum_fields_message": "प्रत्येक समूह से कम से कम एक फ़ील्ड बनाने के लिए चुना जाना चाहिए",
@@ -37,5 +37,7 @@
     "select_branch": "शाखा का चयन करें",
     "import_report_csv_downloaded_filename": "आयात-रिपोर्ट.csv",
     "is": "है",
-    "are": "हैं"
+    "are": "हैं",
+    "groups": "समूह",
+    "accounts": "खाता"
 }

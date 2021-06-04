@@ -88,7 +88,7 @@
         "journal": "जर्नल",
         "contra": "कॉन्ट्रा",
         "debit_note": "डेबिट टीप",
-        "credit_note": "उधार पत्र",
+        "credit_note": "क्रेडिट टीप",
         "advance_receipt": "आगाऊ पावती"
     },
     "app_create": "तयार करा",
@@ -504,7 +504,7 @@
     "app_pin_code": "पिन कोड",
     "app_enter_pin_code": "पिन कोड प्रविष्ट करा",
     "app_cmd_g": "Cmd + G",
-    "app_esc": "सुटलेला",
+    "app_esc": "esc",
 	"app_escape": "सुटलेला",
 	"app_master": "मास्टर",
 	"app_type_filter": "फिल्टर करण्यासाठी टाइप करा",
@@ -524,7 +524,7 @@
     "app_ok": "ठीक आहे",
     "app_datepicker": {
         "select_financial_year": "आर्थिक वर्ष निवडा",
-        "days_upto_today": "आज पर्यंतचे दिवस",
+        "days_upto_today": "आज पर्यंत",
         "cancel": "रद्द करा",
         "done": "पूर्ण झाले",
         "am": "AM",
