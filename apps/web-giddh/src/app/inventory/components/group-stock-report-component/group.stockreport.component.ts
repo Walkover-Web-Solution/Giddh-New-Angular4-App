@@ -528,19 +528,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public DownloadGroupReports(type: string) {
         this.GroupStockReportRequest.reportDownloadType = type;
         this._toasty.infoToast('Upcoming feature');
-        // this.inventoryService.DownloadGroupReport(this.GroupStockReportRequest, this.groupUniqueName).subscribe(d => {
-        //   if (d.status === 'success') {
-        //     if (type === 'xls') {
-        //       let blob = base64ToBlob(d.body, 'application/xls', 512);
-        //       return saveAs(blob, `${this.groupUniqueName}.xlsx`);
-        //     } else {
-        //       let blob = base64ToBlob(d.body, 'application/csv', 512);
-        //       return saveAs(blob, `${this.groupUniqueName}.csv`);
-        //     }
-        //   } else {
-        //     this._toasty.errorToast(d.message);
-        //   }
-        // });
     }
 
     // region asidemenu toggle
@@ -573,12 +560,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public selectEntity(option: IOption) {
         this._toasty.infoToast('Upcoming feature');
         this.GroupStockReportRequest.branchDetails = option.label;
-        // if (option.value === 'warehouse') { // enable after new api for this 'inventoryEntity' key
-        //   this.isWarehouse = true;
-        // } else {
-        //   this.isWarehouse = false;
-        // }
-        // this.getGroupReport(true);
     }
 
     // From inventory type Dropdown

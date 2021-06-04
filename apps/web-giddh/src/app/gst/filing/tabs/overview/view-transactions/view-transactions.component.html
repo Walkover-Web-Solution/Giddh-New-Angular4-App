@@ -70,7 +70,6 @@
                         </ul>
                     </div>
                 </div>
-                <!--   -->
                 <div class="filter-row"
                     *ngIf="filterParam.entityType === 'billsAndExpenses' && selectedGst == GstReport.Gstr2">
                     <div class="name">{{getFilterTypeText()}}:</div>
@@ -87,32 +86,6 @@
                         </ul>
                     </div>
                 </div>
-                <!--                <div class="filter-row">-->
-                <!--                    <div class="name">Status: </div>-->
-
-                <!--                    <div class="btn-group filter" dropdown>-->
-                <!--                        <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">-->
-                <!--                            {{selectedFilter?.status}} <span class="caret"></span>-->
-                <!--                        </button>-->
-                <!--                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">-->
-                <!--                            <li *ngFor="let item of status"><a class="dropdown-item" href="javascript:void(0)" (click)="viewFilteredTxn('status', item.value)">{{item.label}}</a></li>-->
-                <!--                        </ul>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-
-                <!-- commented due to not avail in API
-        <div  class="filter-row">
-            <div class="name">Action on GSTN: </div>
-            <div class="filter"><button type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle "> All <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li><a>All</a></li>
-                    <li><a>To be Added</a></li>
-                    <li><a>To be Updated</a></li>
-                    <li><a>To be Deleted</a></li>
-                </ul>
-            </div>
-        </div>
-         -->
             </div>
         </div>
     </div>
@@ -227,7 +200,6 @@
                         </td>
                         <td>{{item.reverseCharge ? item.reverseCharge : '-'}}</td>
                         <td class="text-right">
-                            <!-- {{item.taxableAmount | giddhCurrency}} -->
                             <span class="d-inline-flex align-items-center">
                                 <i class="icon-rupees font-11"></i>
                                 <amount-field [amount]="item?.taxableAmount" [currencySymbol]="false"
@@ -236,7 +208,6 @@
                             </span>
                         </td>
                         <td class="text-right">
-                            <!-- {{item.igstAmount | giddhCurrency}} -->
                             <span class="d-inline-flex align-items-center">
                                 <i class="icon-rupees font-11"></i>
                                 <amount-field [amount]="item?.igstAmount" [currencySymbol]="false"
@@ -245,7 +216,6 @@
                             </span>
                         </td>
                         <td class="text-right">
-                            <!-- {{item.cgstAmount | giddhCurrency}} -->
                             <span class="d-inline-flex align-items-center">
                                 <i class="icon-rupees font-11"></i>
                                 <amount-field [amount]="item?.cgstAmount" [currencySymbol]="false"
@@ -254,7 +224,6 @@
                             </span>
                         </td>
                         <td class="text-right">
-                            <!-- {{item.sgstAmount | giddhCurrency}} -->
                             <span class="d-inline-flex align-items-center">
                                 <i class="icon-rupees font-11"></i>
                                 <amount-field [amount]="item?.sgstAmount" [currencySymbol]="false"
@@ -263,7 +232,6 @@
                             </span>
                         </td>
                         <td class="text-right">
-                            <!-- {{item.cessAmount | giddhCurrency}} -->
                             <span class="d-inline-flex align-items-center">
                                 <i class="icon-rupees font-11"></i>
                                 <amount-field [amount]="item?.cessAmount" [currencySymbol]="false"
@@ -272,7 +240,6 @@
                             </span>
                         </td>
                         <td class="text-right">
-                            <!-- {{item.totalAmount | giddhCurrency}} -->
                             <span class="d-inline-flex align-items-center">
                                 <i class="icon-rupees font-11"></i>
                                 <amount-field [amount]="item?.totalAmount" [currencySymbol]="false"
@@ -304,7 +271,6 @@
 
 <!-- loader -->
 <div class="filings-empty-state" *ngIf="(viewTransactionInProgress$ | async)">
-    <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
     <div class="spinner2">
         <div class="cube1"></div>
         <div class="cube2"></div>

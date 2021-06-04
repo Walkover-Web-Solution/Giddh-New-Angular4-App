@@ -622,12 +622,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.toggleAccountAsidePane();
     }
 
-    //  commenting for now may be use later for reference
-    // public openPaymentAside(acc: string) {
-    //     this.selectedAccForPayment = acc;
-    //     this.togglePaymentPane();
-    // }
-
     public toggleAccountAsidePane(event?): void {
         if (event) {
             event.preventDefault();
@@ -636,15 +630,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this.toggleBodyClass();
     }
-
-    //  commenting for now may be use later for reference
-    // public togglePaymentPane(event?) {
-    //     if (event) {
-    //         event.preventDefault();
-    //     }
-    //     this.paymentAsideMenuState = this.paymentAsideMenuState === 'out' ? 'in' : 'out';
-    //     this.toggleBodyClass();
-    // }
 
     public getUpdatedList(grpName?): void {
         if (grpName) {
@@ -773,7 +758,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 if (res.status === 'success') {
                     this.updateCommentIdx = null;
                     account.comment = cloneDeep(res.body.description);
-                    this.updateInList(account.uniqueName, account.comment);
                 }
             });
         }, 500);
@@ -782,7 +766,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     // Add Selected Value to Message Body
     public addValueToMsg(val: any) {
         this.typeInTextarea(val.value);
-        // this.messageBody.msg += ` ${val.value} `;
     }
 
     public typeInTextarea(newText) {
@@ -833,8 +816,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 sort: this.order
             }
         };
-        // uncomment it
-        // request.data = Object.assign({} , request.data, this.formattedQuery);
 
         if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
             return this._companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
@@ -863,15 +844,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         if (this.mailModal) {
             this.mailModal.hide();
-        }
-    }
-
-    /**
-     * updateInList
-     */
-    public updateInList(accountUniqueName, comment) {
-        if (this.activeTab === 'customer') {
-            //
         }
     }
 
@@ -1208,7 +1180,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         let offset = $('#edit-model-basic').position();
         if (offset) {
             let exactPositionTop = offset.top;
-            let exactPositionLeft = offset.left;
 
             $('#edit-model-basic').css('top', exactPositionTop);
         }
@@ -1262,13 +1233,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         let balancesColsArr = ['openingBalance'];
         let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f)).length;
         this.tableColsPan = length > 0 ? 4 : 3;
-    }
-
-    /*
-    * Register Account navigation
-    * */
-    private registerAccount() {
-        this.router.navigate(['settings'], { queryParams: { tab: 'integration', tabIndex: 1, subTab: 4 } });
     }
 
     private setStateDetails(url) {

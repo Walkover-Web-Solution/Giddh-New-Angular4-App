@@ -20,13 +20,6 @@
                                         (click)="downloadAllInventoryReports('allgroup', 'csv')" href="">CSV</a></li>
                             </ul>
                         </li>
-                        <!--                        <li role="menuitem" dropdown triggers="mouseover" placement="right" container="body" *ngIf="groupUniqueName">-->
-                        <!--                            <a dropdownToggle class="dropdown-item dropdown-toggle">Download groups</a>-->
-                        <!--                            <ul *dropdownMenu class="dropdown-menu" role="menu">-->
-                        <!--                                <li role="menuitem"><a class="dropdown-item" (click)="false" (click)="downloadAllInventoryReports('group', 'xlsx')" href="">XLS</a></li>-->
-                        <!--                                <li role="menuitem"><a class="dropdown-item" (click)="false" (click)="downloadAllInventoryReports('group', 'csv')" href="">CSV</a></li>-->
-                        <!--                            </ul>-->
-                        <!--                        </li>-->
 
                         <li role="menuitem" dropdown placement="right" container="body">
                             <a dropdownToggle class="dropdown-item dropdown-toggle">Download all stock wise</a>
@@ -37,13 +30,6 @@
                                         (click)="downloadAllInventoryReports('allstock', 'csv')" href="">CSV</a></li>
                             </ul>
                         </li>
-                        <!--                        <li role="menuitem" dropdown triggers="mouseover" placement="right" container="body" *ngIf="stockUniqueName">-->
-                        <!--                            <a dropdownToggle class="dropdown-item dropdown-toggle">Download stock</a>-->
-                        <!--                            <ul *dropdownMenu class="dropdown-menu" role="menu">-->
-                        <!--                                <li role="menuitem"><a class="dropdown-item" (click)="false" (click)="downloadAllInventoryReports('stock', 'xlsx')" href="">XLS</a></li>-->
-                        <!--                                <li role="menuitem"><a class="dropdown-item" (click)="false" (click)="downloadAllInventoryReports('stock', 'csv')" href="">CSV</a></li>-->
-                        <!--                            </ul>-->
-                        <!--                        </li>-->
                         <li role="menuitem" dropdown placement="right" container="body">
                             <a dropdownToggle class="dropdown-item dropdown-toggle" (click)="false">Download all account
                                 wise <span class="caret"></span></a>
@@ -58,9 +44,6 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="pd-1">
-      <button class="btn isActive btn-sm" id="warehouseBtn" type="button" (click)="showBranchScreen()">Branch Transfer</button>
-    </div> -->
         <stockgrp-list class="parent-group" [Groups]='stockGroupData'>
         </stockgrp-list>
     </div>

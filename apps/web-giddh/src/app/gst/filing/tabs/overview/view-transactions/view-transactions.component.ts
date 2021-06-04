@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ElementViewContainerRef } from '../../../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../../../store';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { takeUntil } from 'rxjs/operators';
 import { GStTransactionRequest, GstTransactionResult, GstTransactionSummary } from '../../../../../models/api-models/GstReconcile';
@@ -53,7 +53,6 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public invoiceType = [];
     public otherEntityType = [];
     public gstr2InvoiceType = [];
-    // public status = Status;
     public selectedEntityType: string = '';
     public companyGst$: Observable<string> = of('');
     public gstr2entityType = [];
@@ -78,7 +77,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private modalService: BsModalService,
+    constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private toaster: ToasterService,) {
@@ -167,7 +166,6 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             this.selectedInvoice = invoice;
             this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
         }
-        // this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.voucherNumber));
         this.loadDownloadOrSendMailComponent();
         this.downloadOrSendMailModel.show();
     }
@@ -216,13 +214,6 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                 this.selectedFilter.entityType = selected.label;
             }
         }
-
-        // if (this.filterParam.status) {
-        //   let selected = _.find(Status, o => o.value === filters.status);
-        //   if (selected) {
-        //     this.selectedFilter.status = selected.label;
-        //   }
-        // }
 
         if (this.filterParam.type) {
             let selected;

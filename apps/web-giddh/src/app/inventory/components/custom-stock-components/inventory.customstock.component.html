@@ -26,7 +26,6 @@
 
                             <div class="form-group col-xs-6 col-sm-6">
                                 <label>Unit Code<sup>*</sup></label>
-                                <!-- [disabled]="country === 'india' || (isStockUnitCodeAvailable$ | async)" -->
                                 <input placeholder="Unique name" type="text" name="code"
                                     [class.error-box]="unitCode?.errors?.pattern" [pattern]="stockUnitCodeRegex"
                                     #unitCode="ngModel" [(ngModel)]="customUnitObj.code"
@@ -56,10 +55,6 @@
                                                 Multiply</span>
                                         </label>
                                     </div>
-                                    <!-- <div class="btn-group unit_action" role="group" aria-label="...">
-                                    <button type="button" class="btn btn-default" [ngClass]="{'isSelected': isDivide}" (click)="changeType(true)"><img src="./assets/images/divide-ico.svg" /></button>
-                                    <button type="button" class="btn btn-default" [ngClass]="{'isSelected': !isDivide}" (click)="changeType(false)"><img src="./assets/images/multiply.svg" /></button>
-                                </div> -->
                                 </div>
                             </div>
 
