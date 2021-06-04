@@ -66,9 +66,11 @@ span.dr-label {
     .input-group {
         .input-group-addon {
             border-left: 1px solid $gainsboro !important;
+            border-radius: 5px;
         }
         input {
             border-left: 1px solid $gainsboro !important;
+            border-radius: 5px;
             border-right: none;
             &:focus {
                 border-left: 1px solid $chetwode-blue !important;
