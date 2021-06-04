@@ -1679,10 +1679,6 @@
                                                     [prefixInput]="invFormData.accountDetails.currencySymbol"
                                                     [suffixInput]="selectedSuffixForCurrency">
                                                 </tax-control>
-                                                <!-- TODO: After design finalization
-                                                                            <span class="eligible-ITC">Eligible for ITC <span
-                                                                                class="icon-edit"></span>
-                                                                        </span> -->
                                             </div>
 
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount">
@@ -3312,9 +3308,6 @@
 
                                 <!-- region purchase invoice -->
                                 <span class="d-inline-block v-align-middle" *ngIf="isPurchaseInvoice">
-                                    <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
-                                class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
-                            </button> -->
                                     <button *ngIf="!isCompany" type="button"
                                         [disabled]="isFileUploading || !hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength"
                                         (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
@@ -3449,8 +3442,7 @@
     <!--&lt;!&ndash; open product service aside &ndash;&gt;-->
     <aside-menu-product-service *ngIf="asideMenuStateForProductService === 'in'"
         [class]="asideMenuStateForProductService" [selectedVoucherType]="selectedVoucherType"
-        [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="onNoResultsClicked()"
-        (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
+        [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="onNoResultsClicked()"></aside-menu-product-service>
 
     <app-aside-recurring-entry *ngIf="asideMenuStateForRecurringEntry === 'in'" [voucherType]="invoiceType"
         [voucherNumber]="voucherNumber" [class]="asideMenuStateForRecurringEntry"
@@ -3515,30 +3507,6 @@
             </app-aside-menu-other-taxes>
         </div>
     </ng-template>
-
-    <!-- create Group modal -->
-    <section *ngIf="showCreateGroupModal">
-        <div bsModal #createGroupModal="bs-modal" class="modal fade" role="dialog" [keyboardShortcut]="'esc'"
-            (onShortcutPress)="closeCreateGroupModal()" [config]="modalConfig">
-            <div class="modal-dialog modal-md">
-                <div class="modal-content">
-                    <sales-add-group-modal (actionFired)="closeCreateGroupModal($event)"></sales-add-group-modal>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- create Ac modal -->
-    <section *ngIf="showCreateAcModal">
-        <div bsModal #createAcModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
-            <div class="modal-dialog modal-md">
-                <div class="modal-content">
-                    <create-account-modal [gType]="createAcCategory" (actionFired)="closeCreateAcModal()">
-                    </create-account-modal>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- region print voucher popup -->
     <div bsModal #printVoucherModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" [config]="modalConfig">

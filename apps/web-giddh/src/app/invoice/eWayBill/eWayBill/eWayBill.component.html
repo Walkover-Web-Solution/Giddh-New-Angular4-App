@@ -52,7 +52,6 @@
                                         </th>
 
                                         <th class="td-search-box nowrap" #searchCustomerContainer>
-                                            <!-- clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerUniqueName')" -->
                                             <div [hidden]="showSearchCustomer">
                                                 <span>{{commonLocaleData?.app_customer_name}}</span>
                                                 <i class="icon-search" (click)="toggleSearch('customerUniqueName')"></i>
@@ -132,7 +131,6 @@
                                             {{item?.customerGstin}}</td>
                                         <td [attr.data-title]="localeData?.ewaybill_no">
                                             <div>
-                                                <!-- <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectEwayDownload(item)">{{item?.ewbNo}}</a> -->
                                                 {{item?.ewbNo}}
                                                 <br>
                                                 <small *ngIf="item?.isManuallyGenerated"
@@ -144,7 +142,6 @@
                                         <td [attr.data-title]="commonLocaleData?.app_total"
                                             class="nowrap text-right pr-1">
                                             <i class="icon-rupees font-11"></i>
-                                            <!-- {{item?.totalValue | giddhCurrency}} -->
                                             <span class="d-inline-flex">
                                                 <amount-field [amount]="item?.totalValue" [currencySymbol]="false"
                                                     [currencyCode]="false">
@@ -196,127 +193,6 @@
 
 
             </tab>
-            <!-- <tab heading="Consolidated Eway Bill Details">
-            <div class="mr-t15 clearfix">
-                <div class="col-md-12">
-                    <div class="table-responsive">
-                        <table class="table basic table-bordered">
-                            <thead class="thead-background1">
-                                <tr>
-                                    <th>
-                                        EWB.No & Date
-                                    </th>
-
-                                    <th>
-                                        Supply Type
-                                    </th>
-
-                                    <th>
-                                        Doc. No & Date
-                                    </th>
-                                    <th>
-                                        Other Party GSTIN.
-                                    </th>
-                                    <th class="nowrap">
-                                        Transporter Details
-                                    </th>
-                                    <th class="nowrap">
-                                        From GSTIN Info
-                                    </th>
-                                    <th>
-                                        TO GSTIN Info
-                                    </th>
-                                    <th>
-                                        Status & Other Party<br> Rejected Status
-                                    </th>
-                                    <th>
-                                        No of Items
-                                    </th>
-                                    <th>
-                                        Main HSN Code
-                                    </th>
-                                    <th>
-                                        HSN Secs
-                                    </th>
-                                    <th>
-                                        Total Inv.Value
-                                    </th>
-                                    <th class="nowrap">
-                                        Valid Till Date
-                                    </th>
-                                    <th>
-                                        Mode of GEN.
-                                    </th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><a href="javascript:void(0)" (click)="openModalWithClass(consolidateModal)">611094634352</a><br> 11/04/19
-                                        <br> 17:46:00
-                                    </td>
-                                    <td>Out ward Supply</td>
-                                    <td></td>
-                                    <td>GST/19-/20/1</td>
-                                    <td>23AAAWL876DJKJ765D</td>
-                                    <td>123 Palsikar square indore MP India</td>
-                                    <td>Ankit sukhlia indore 452001</td>
-                                    <td>Active & -</td>
-                                    <td>1</td>
-                                    <td>34534</td>
-                                    <td>TV</td>
-                                    <td>180:0</td>
-                                    <td class="nowrap">12/04/2019</td>
-                                    <td>WEB</td>
-                                </tr>
-
-                                <tr>
-                                    <td>611094634352<br> 11/04/19
-                                        <br> 17:46:00
-                                    </td>
-                                    <td>Out ward Supply</td>
-                                    <td></td>
-                                    <td>GST/19-/20/1</td>
-                                    <td>23AAAWL876DJKJ765D</td>
-                                    <td>123 Palsikar square indore MP India</td>
-                                    <td>Ankit sukhlia indore 452001</td>
-                                    <td>Active & -</td>
-                                    <td>1</td>
-                                    <td>34534</td>
-                                    <td>TV</td>
-                                    <td>180:0</td>
-                                    <td class="nowrap">12/04/2019</td>
-                                    <td>WEB</td>
-                                </tr>
-
-                                <tr>
-                                    <td>611094634352<br> 11/04/19
-                                        <br> 17:46:00
-                                    </td>
-                                    <td>Out ward Supply</td>
-                                    <td></td>
-                                    <td>GST/19-/20/1</td>
-                                    <td>23AAAWL876DJKJ765D</td>
-                                    <td>123 Palsikar square indore MP India</td>
-                                    <td>Ankit sukhlia indore 452001</td>
-                                    <td>Active & -</td>
-                                    <td>1</td>
-                                    <td>34534</td>
-                                    <td>TV</td>
-                                    <td>180:0</td>
-                                    <td class="nowrap">12/04/2019</td>
-                                    <td>WEB</td>
-                                </tr>
-                        </table>
-                        <div class="no-data" *ngIf="EwaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)">
-                            <h1>No entries found within given criteria.</h1>
-                            <h1>Do search with some other dates</h1>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </tab> -->
         </tabset>
     </div>
 
@@ -376,13 +252,6 @@
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15 ">
-
-                            <!-- <span class="mr-1 ">  <input type="radio "class="radio-theme " style="margin-right: 10px "/> Regular</span>
-    <span>  <input type="radio "class="radio-theme " style="margin-right: 10px "/> Over Dimensional Cargo</span> -->
-
-
-
-
                             <span class="p-0 mr-3">
                                 <input id="regular" class="radio-custom cp ml-0" type="radio" name="vehicleType"
                                     required [(ngModel)]="updateEwayVehicleform.vehicleType" value="R">
@@ -420,17 +289,6 @@
                             <label class="pd-t07">{{localeData?.from_place_label}}</label>
                         </div>
                         <div class="col-md-8 col-lg-6 col-sm-12 mr-t15" id="form-place">
-                            <!-- <input type="text" required placeholder="" class="form-control input" /> -->
-                            <!-- <input [ngbTypeahead]="dataSource" type="text" autocomplete="off" (keyup)="onChangeCityName()" [(ngModel)]="company.city" name="city" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" required maxlength="50" placeholder="Branch City"
-                                    pattern="^[^\s]+(\s+[^\s]+)*$"> -->
-
-                            <!-- Commented for now can be replaced with new dynamic search sh-select
-                                <input [ngbTypeahead]="dataSource" class="form-control input " placeholder="Enter city"
-                                type="text" autocomplete="off" [(ngModel)]="updateEwayVehicleform.fromPlace"
-                                name="fromPlace" [resultTemplate]="rt" required maxlength="50">
-                            <ng-template #rt let-r="result" let-t="term">
-                                <span>{{ r }}</span>
-                            </ng-template> -->
                             <sh-select [options]="searchResults" name="fromPlace" required [isRequired]="true"
                                 maxlength="50" [(ngModel)]="updateEwayVehicleform.fromPlace" autocomplete="off"
                                 (dynamicSearchedQuery)="onSearchQueryChanged($event)" [enableDynamicSearch]="true"
@@ -458,7 +316,6 @@
                             <label class="pd-t07">{{localeData?.reason_label}}</label>
                         </div>
                         <div class="col-md-8 col-lg-6 col-sm-12 mr-t15 ">
-                            <!-- <sh-select class="input" [options]="ewayUpdateVehicleReason" required placeholder="select type" [multiple]="false" [isFilterEnabled]="true" name="reasonCode" [(ngModel)]="updateEwayVehicleform.reasonCode"></sh-select> -->
                             <sh-select class="input" [options]="ewayUpdateVehicleReasonList" required
                                 [isRequired]="true" [placeholder]="localeData?.reason_placeholder"
                                 [isFilterEnabled]="true" name="reasonCode"

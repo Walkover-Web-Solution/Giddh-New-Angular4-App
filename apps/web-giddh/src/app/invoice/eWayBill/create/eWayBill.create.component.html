@@ -28,8 +28,6 @@
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-
-                            <!-- <input type="text " placeholder="Mention Number " class="form-control input " /> -->
                             <sh-select class="input" #doctypes autocomplete="xyz" [options]="TransporterDocType"
                                 required [isRequired]="true" [placeholder]="localeData?.reason_placeholder"
                                 [isFilterEnabled]="true" name="docType" [(ngModel)]="generateEwayBillform.docType"
@@ -49,7 +47,6 @@
                                 autocomplete="off" [placeholder]="localeData?.gstin_receiver_placeholder"
                                 [(ngModel)]="generateEwayBillform.toGstIn"
                                 class="form-control input d-inline-block mr-2 " />
-                            <!-- <label class="d-inline-block mr-2">Select for Unregistered Person</label> <input type="checkbox" (change)="selectUnregistered($event)" class=" d-inline-block" /> -->
 
                         </div>
                     </div>
@@ -75,8 +72,6 @@
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-
-                            <!-- <input type="text " name="transporterName" [(ngModel)]="generateEwayBillform.transporterName" placeholder="Select Transporter " class="form-control input " /> -->
                             <sh-select class="input" #trans [showClear]="showClear"
                                 [options]="transporterDropdown$ | async" (keydown)="keydownPressed($event)"
                                 (selected)="selectTransporter($event)"
@@ -90,7 +85,6 @@
                                         [keyboardShortcut]="'alt+c'" (onShortcutPress)="keydownPressed()">
                                         <span (click)="OpenTransporterModel()"
                                             [ngClass]="{'active': keydownClassAdded}">Create New</span>
-                                        <!-- <span style="float: right;">Alt+C</span> -->
                                     </a>
                                 </ng-template>
                             </sh-select>
@@ -244,7 +238,6 @@
 
                     <div class="row ">
                         <div class="col-md-12 mt-4 ">
-                            <!-- <button class="btn btn-success " [disabled]="isUserAddedSuccessfully$ | async" type="button" (click)="toggleEwayBillCredentialsPopup() ">Save</button> -->
                             <button class="btn btn-success " [disabled]="generateInvForm.invalid"
                                 [ladda]="isEwaybillGenerateInProcess$ | async"
                                 (click)="onSubmitEwaybill(generateInvForm)">{{localeData?.save_generate}}</button>
@@ -343,7 +336,6 @@
 
                     <div class="form-group mt-3">
                         <div class="clearfix" *ngIf="!transportEditMode">
-                            <!-- <button class="btn btn-md btn-green mr-r1" (click)="saveTransportForm(generateTransporterForm)">Save</button> -->
                             <button class="btn btn-md btn-success mr-r1" [disabled]="generateTransporterForm.invalid"
                                 [ladda]="isGenarateTransporterInProcess$ | async"
                                 (click)="generateTransporter(generateTransporterForm)"
@@ -362,14 +354,6 @@
 
                 </div>
             </form>
-            <!-- <div class="aside-body pd-2 bg-white">
-                    <div class="input-group mr-b1">
-                        <input class="form-control" placeholder="Search Transporter">
-                        <span class="input-group-btn">
-                        <button class="btn btn-default text-light" type="button"><i class="icon-search2"></i>
-                        </button></span>
-                    </div>
-                </div> -->
 
             <div class="table-responsive">
                 <table class="table basic table-modal">
@@ -423,130 +407,4 @@
 
         </div>
     </div>
-
-    <!-- <button class="btn" (click)="clickEvent()">Click me</button> -->
-
-    <!-- asid modal start -->
-
-    <!--
-        ///// Transit Details modal start
-
-        <div class="right-modal">
-        <div class="aside-overlay"></div>
-        <div class="aside-pane aside-right">
-            <button type="button" class="btn btn-sm btn-primary" id="close">X</button>
-            <div class="aside-header"><h3 class="aside-title pd-1 pl-2">Create Account</h3></div>
-            <form class="form-horizontal">
-            <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
-                <div class="form-group">
-                    <label class="col-sm-3 pt-2">Mode</label>
-                    <div class="col-sm-9">
-                        <ul class="list-icon-group ">
-                            <li>
-                                <input id="Road" type="radio" name="transMode" value="1">
-                                <label for="Road"><img src="assets/icon/4.svg " /> Road</label>
-                            </li>
-                            <li>
-                                <input id="Rail" type="radio" name="transMode" value="2">
-                                <label for="Rail"><img src="assets/icon/3.svg " /> Rail</label>
-                            </li>
-                            <li>
-                                <input id="Air" type="radio" name="transMode" value="3">
-                                <label for="Air"><img src="assets/icon/1.svg " /> Air</label>
-                            </li>
-                            <li>
-                                <input id="Ship" type="radio" name="transMode" value="4">
-                                <label for="Ship"><img src="assets/icon/2.svg " /> Ship</label>
-                            </li>
-                        </ul>
-
-                    </div>
-                </div>
-
-
-                <div class="form-group">
-                    <label class="col-xs-3 pt-1">Vehicle Type</label>
-                    <div class="col-xs-9">
-                        <label class="radio-inline p-0"><input class="radio-theme cp ml-0" name="vehicleType"   value="R" type="radio" />Regular </label>
-                        <label class="radio-inline p-0"><input class="radio-theme cp ml-0" name="vehicleType"  value="O" type="radio"/>Over Dimensional Cargo</label>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-xs-3 control-label">Vehicle Type</label>
-                    <div class="col-xs-8">
-                        <input type="text" class="form-control" placeholder="MH02B8989">
-                    </div>
-                </div>
-
-
-            </div>
-
-            <div class="aside-body pd-2 bg-white">
-                <div class="form-group">
-                    <label class="col-xs-3 control-label">From State</label>
-                    <div class="col-xs-8">
-                        <div class="select-style width-100">
-                            <select>
-                                <option value="" selected>Select State</option>
-                                <option value="" selected>US</option>
-                                <option value="" selected>India</option>
-                                <option value="" selected>China</option>
-                                <option value="" selected>Canada</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-xs-3 control-label">From Place</label>
-                    <div class="col-xs-8">
-                        <div class="select-style width-100">
-                            <select>
-                                <option value="" selected>Enter Place</option>
-                                <option value="" selected>Indore</option>
-                                <option value="" selected>Ujjain</option>
-                                <option value="" selected>Bhopal</option>
-                                <option value="" selected>Badway</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-xs-3 control-label">Reason</label>
-                    <div class="col-xs-8">
-                        <div class="select-style width-100">
-                            <select>
-                                <option value="" selected>Select Reason</option>
-                                <option value="" selected>Select Reason</option>
-                                <option value="" selected>Select Reason</option>
-                                <option value="" selected>Select Reason</option>
-                                <option value="" selected>Select Reason</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-xs-3 control-label">Remark</label>
-                    <div class="col-xs-8">
-                        <textarea name="" rows="6" class="form-control"></textarea>
-                    </div>
-                </div>
-
-
-                <div class="form-group mt-5">
-                    <label class="col-xs-3 control-label"></label>
-                    <div class="col-xs-8">
-                        <button class="btn btn-md btn-success mr-r1" type="submit">Save</button>
-                        <button class="btn btn-md btn-danger" type="submit">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-            </div>
-    </div>
-
-    -->
 </ng-container>

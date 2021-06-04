@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, ElementRef, TemplateRef, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';

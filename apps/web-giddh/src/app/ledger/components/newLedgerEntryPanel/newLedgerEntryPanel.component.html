@@ -148,8 +148,6 @@
                                 [allowedSelectionOfAType]="allowedSelectionOfAType"
                                 [commonLocaleData]="commonLocaleData">
                             </tax-control>
-                            <!-- TODO: After design finalization
-                                <span class="eligible-ITC">Eligible for ITC <span class="icon-edit"></span> </span> -->
 
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
@@ -301,34 +299,6 @@
                                     [placeholder]="commonLocaleData?.app_invoice_no" class="form-control"
                                     [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
                             </td>
-
-                            <!-- <td class="pd-r1" *ngIf="blankLedger.voucherType == 'rcpt'">
-                                <div class="form-group">
-                                    <label class="default-color">Invoice No.</label>
-
-                                    <div class="btn-group btn-block invoice-btn" dropdown>
-
-                                        <button dropdownToggle type="button"
-                                            class="form-control text-left btn-block dropdown-toggle">
-                                            Select Invoices
-                                            <span class="select-drop pull-right mr-t1">
-                                                <i class="fa fa-caret-down"></i>
-                                            </span>
-                                        </button>
-
-                                        <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width-100" role="menu">
-                                            <li *ngIf="invoiceList.length==0">No results found</li>
-                                            <li *ngFor="let invoice of invoiceList">
-
-                                                <input type="checkbox" (click)="selectInvoice(invoice, $event)"
-                                                    [checked]="invoice.isSelected" /> {{invoice.label}}
-                                            </li>
-                                        </ul>
-
-                                    </div>
-
-                                </div>
-                            </td> -->
 
                             <td class="pd-r1"
                                 *ngIf="blankLedger.voucherType == 'credit note' || blankLedger.voucherType === 'debit note'">

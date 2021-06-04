@@ -594,7 +594,6 @@
                                 class="cp d-flex status-mobile flex-column min-wid-status">
                                 <div class="d-flex flex-row align-items-center">
                                     <span class="d-flex balance-status">{{ item.balanceStatus}}</span>
-                                    <!-- *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected" -->
                                     <div class="action-icon ml-auto"
                                         [ngClass]="{'item-selected': hoveredItemForAction === item.uniqueName || item.isSelected}">
                                         <a [tooltip]="commonLocaleData?.app_send_email"

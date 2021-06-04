@@ -28,7 +28,6 @@ import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { fromEvent, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, take, takeUntil } from 'rxjs/operators';
-
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { InvoiceReceiptActions } from '../../../../actions/invoice/receipt/receipt.actions';
 import { ProformaActions } from '../../../../actions/proforma/proforma.actions';
@@ -318,7 +317,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         }
     }
 
-
     /**
      * To call when voucher change for preview
      *
@@ -336,13 +334,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.showEditMode = false;
         this.getLinkedPurchaseOrders();
     }
-
-    // public openModal(template: TemplateRef<any>) {
-    //     this.modalRef = this.modalService.show(template,
-    //         Object.assign({}, { class: 'preview-lightbox modal-lg' })
-    //     );
-    //     $('.modal-backdrop').addClass('preview-lightbox-overlay');
-    // }
 
     public getVoucherVersions() {
         let request = new ProformaGetAllVersionRequest();

@@ -5,7 +5,6 @@ import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { ReportsDetailsComponent } from './components/report-details-components/report.details.component';
 import { SalesRegisterExpandComponent } from './components/salesRegister-expand-component/sales.register.expand.component';
 import { ReportsDashboardComponent } from "./components/report-dashboard/reports.dashboard.component";
-import { SalesRegisterDetailsComponent } from './components/sales-register-details-component/sales.register.details.component';
 import { PurchaseRegisterComponent } from './components/purchase-register-component/purchase.register.component';
 import { PurchaseRegisterExpandComponent } from './components/purchase-register-expand-component/purchase.register.expand.component';
 import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component';
@@ -23,7 +22,6 @@ import { CashFlowStatementComponent } from './components/cash-flow-statement-com
                 children: [
                     { path: '', redirectTo: 'reports-dashboard', pathMatch: 'full' },
                     { path: 'sales-register', component: ReportsDetailsComponent },
-                    { path: 'sales-detailed', component: SalesRegisterDetailsComponent },
                     { path: 'sales-detailed-expand', component: SalesRegisterExpandComponent },
                     { path: 'reports-dashboard', component: ReportsDashboardComponent },
                     { path: 'purchase-register', component: PurchaseRegisterComponent },

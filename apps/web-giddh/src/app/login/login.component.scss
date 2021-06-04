@@ -8,7 +8,6 @@ body.unresponsive {
 }
 
 .intro.login {
-    /* background: url('../images/new/login_bg.jpg') no-repeat top center scroll; */
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -188,10 +187,6 @@ button.close {
     text-shadow: none;
     opacity: 1;
 }
-
-/* .modal-body {
-    overflow: hidden;
-} */
 
 .email {
     background: $deep-sky-blue-hover;
@@ -392,7 +387,6 @@ small {
 .download-app ul li {
     display: inline-block;
     list-style: none;
-    /* margin-right: 20px; */
     border-radius: 2px;
 }
 
@@ -484,7 +478,6 @@ small {
 }
 .accounting-space h4 {
     color: $midnight-blue;
-    /*font-weight: 600;*/
     font-size: 20px;
 }
 .btn-outline-primary {

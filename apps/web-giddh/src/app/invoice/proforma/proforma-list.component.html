@@ -15,7 +15,6 @@
                         <div class="advance-icon cursor-pointer">
                             <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup()"
                                 [tooltip]="commonLocaleData?.app_advance_search"></span>
-                            <!-- -->
                         </div>
                         <div class="search-icon-block" (click)="openModal(template)">
                             <i class="icon-search"></i>
@@ -146,12 +145,6 @@
                                 #searchBox name="voucherNumberInput" [formControl]="voucherNumberInput" />
                         </div>
                     </div>
-                    <!-- <div class="col-sm-6 col-xs-6 full-width-on-mobile">
-                        <div class="input-container">
-                            <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox
-                                name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
-                        </div>
-                    </div> -->
                     <div class="col-sm-6 col-xs-6 mt-2 mt-md-0">
                         <button class="btn btn-sky-blue">{{commonLocaleData?.app_submit}}</button>
                     </div>
@@ -276,22 +269,11 @@
                                     {{ i + 1}} </div>
                             </td>
 
-                            <!-- <td data-title="Estimates No. #">
-            <div style="position: relative" class="d-flex">
-            <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectInvoice(item, i)">{{item.uniqueName}}</a>
-                    <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
-                            tooltip="Invoice sent" placement="left"/>
-            </div>
-        </td> -->
-
-
                             <td width="13%"
                                 [attr.data-title]="voucherType === 'proformas' ? localeData?.proforma_no : localeData?.estimate_no">
                                 <div class="d-flex position-relative">
                                     <a href="javascript:void(0);" class="btn-link-2"
                                         (click)="onSelectInvoice(item)">{{item.uniqueName}}</a>
-                                    <!--          <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"-->
-                                    <!--               tooltip="Invoice sent" placement="left"/>-->
                                 </div>
                                 <span *ngIf="item.expiredDays !== null">
                                     <small class="text-danger" *ngIf="item.expiredDays === 0">
@@ -316,7 +298,6 @@
                                 [attr.data-title]="voucherType === 'proformas' ? localeData?.proforma_date : localeData?.estimate_date">
                                 {{item.invoiceDate}}
                             </td>
-                            <!-- <td class="text-right" data-title="Total Amt.">{{item.grandTotal | giddhCurrency}}</td> -->
                             <td width="12%" class="text-right"
                                 [tooltip]="(voucherType === 'proformas' || voucherType === 'estimates') ? grandTotalPopupTemplate : ''"
                                 container="body" containerClass="invoice-preview">
@@ -382,47 +363,6 @@
                                             </ul>
                                         </div>
                                     </div>
-
-
-
-                                    <!-- <div *ngIf="hoveredItemUniqueName === item.uniqueName || clickedItemUniqueName === item.uniqueName">
-                    <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false"
-                    class="icon-ellipse select-action">
-                    <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right"
-                        aria-controls="dropdown-basic"></a>
-
-                    <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu"
-                        aria-labelledby="edit-model-basic">
-                        <ul class="select-action-dropdown">
-
-                        <li (click)="updateVoucherAction('Accepted', item)">
-                            <a class="cp" href="javascript:void(0)">Accepted</a>
-                        </li>
-
-                        <li (click)="updateVoucherAction('Decline', item)">
-                            <a class="cp" href="javascript:void(0)">Declined</a>
-                        </li>
-
-                        <li (click)="updateVoucherAction('ConvertToSalesOrder', item)"
-                            *ngIf="voucherType === 'estimate' || voucherType === 'estimates'">
-                            <a class="cp" href="javascript:void(0)">Convert to Proforma</a>
-                        </li>
-
-                        <li (click)="updateVoucherAction('ConvertToInvoice', item)">
-                            <a class="cp" href="javascript:void(0)">Convert to Invoice</a>
-                        </li>
-                        <li (click)="updateVoucherAction('Expired', item)">
-                            <a class="cp" href="javascript:void(0)">Expired</a>
-                        </li>
-
-                        </ul>
-
-                    </div>
-                    </div>
-                </div> -->
-
-
-
 
                                 </div>
 
