@@ -78,7 +78,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         private _cdRef: ChangeDetectorRef,
         private groupService: GroupService
     ) {
-        this.mc = new GroupAccountSidebarVM(this._cdRef, this.store);
+        this.mc = new GroupAccountSidebarVM(this.store);
         this.activeGroup = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
@@ -321,13 +321,11 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
             }
         } else {
             for (let grp of grps) {
-                // if(activeGroup){
                 if (activeGroup && grp.uniqueName === activeGroup.uniqueName) {
                     let newCOL = new ColumnGroupsAccountVM(grp);
                     newCOL.groups = [];
                     if (activeGroup.groups) {
                         for (let key of activeGroup.groups) {
-                            // key.isOpen = true;
                             newCOL.groups.push(key);
                         }
                         let grps1 = newCOL.groups || [];
@@ -416,26 +414,11 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
     public ShowAddNewForm(col: ColumnGroupsAccountVM) {
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
-        // if (col.uniqueName) {
         let activeGroup;
         this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
         this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
         this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
-        // } else {
-        //   let grp = col.groups.find(p => p.isOpen);
-        //   if (grp) {
-        //     this.getBreadCrumbPathFromGroup(this._groups, grp.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
-        //     this.breadcrumbUniqueNamePath.pop();
-        //     this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
-        //     if (this.breadcrumbUniqueNamePath && this.breadcrumbUniqueNamePath.length > 0) {
-        //       this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.breadcrumbUniqueNamePath[this.breadcrumbUniqueNamePath.length - 1]));
-        //     }
-        //   }
-        // }
-        // for (let index = 0; index < this.breadcrumbUniqueNamePath.length; index++) {
-        //   let inde = this.mc.columns[index].Items.findIndex(p => p.uniqueName === this.breadcrumbUniqueNamePath[index]);
-        //   this.mc.columns[index].Items[inde].isOpen = true;
-        // }
+        
         if (col.uniqueName) {
             this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(col.uniqueName));
         }

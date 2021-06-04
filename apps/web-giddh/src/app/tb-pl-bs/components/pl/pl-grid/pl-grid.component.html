@@ -33,7 +33,6 @@
                                                 </div>
                                             </div>
                                         </th>
-                                        <!-- <th class="col-3 ">Note</th> -->
                                         <th class="text-right" width="40%">
                                             {{commonLocaleData?.app_as_of}}
                                             <span
@@ -66,7 +65,6 @@
                                         </div>
                                         <div class="col-4  bd-rl group text-right pull-right">
                                             <span>
-                                                <!-- {{ cogsData?.closingBalance.amount | giddhCurrency }}  -->
                                                 <span class="d-inline-flex">
                                                     <amount-field [amount]="cogsData?.closingBalance.amount"
                                                         [currencySymbol]="false" [currencyCode]="false">
@@ -84,7 +82,6 @@
                                 </div>
                                 <div class="col-4  group text-right pull-right bd-rl pd-1">
                                     <strong>
-                                        <!-- {{ plData?.incomeStatment.grossProfit.amount | giddhCurrency }} -->
                                         <span class="d-inline-flex">
                                             <amount-field [amount]="plData?.incomeStatment.grossProfit.amount"
                                                 [currencySymbol]="false" [currencyCode]="false">
@@ -93,7 +90,6 @@
                                     </strong>
                                 </div>
                             </div>
-                            <!-- <hr class="bd-rt" /> -->
                         </div>
                     </div>
                     <div class="expenses">
@@ -102,7 +98,6 @@
                                 <!--Grid-->
                                 <ng-template #groupDetails let-list let-padding="padding">
                                     <ng-container *ngFor="let grp of list">
-                                        <!-- *ngIf="grp.isVisible || grp.isCreated" -->
                                         <section class="row-1" [hidden]="!grp.isVisible" pl-grid-row [groupDetail]="grp"
                                             [padding]="padding" [search]="search" [padding]="padding" [from]="from"
                                             [to]="to">
@@ -115,7 +110,6 @@
                                                 <div class="col-8  group pd-l1">{{localeData?.total_revenue}}</div>
                                                 <div class="col-4  bd-rl group text-right pull-right pd-l1">
                                                     <span>
-                                                        <!-- {{ plData?.incomeStatment.revenue.amount | giddhCurrency }} -->
                                                         <span class="d-inline-flex">
                                                             <amount-field
                                                                 [amount]="plData?.incomeStatment.revenue.amount"
@@ -132,7 +126,6 @@
                                                 {{localeData?.total_operating_expenses}}
                                             </div>
                                             <div class="col-4  group text-right pull-right bd-rl pd-l1">
-                                                <!-- {{ plData?.incomeStatment.operatingExpenses.amount | giddhCurrency }} -->
                                                 <span class="d-inline-flex">
                                                     <amount-field
                                                         [amount]="plData?.incomeStatment.operatingExpenses.amount"
@@ -148,7 +141,6 @@
                                             </div>
                                             <div class="col-4  group text-right pull-right bd-rl pd-1">
                                                 <strong class="font-16">
-                                                    <!-- {{ plData?.incomeStatment.operatingProfit.amount | giddhCurrency }} -->
                                                     <span class="d-inline-flex">
                                                         <amount-field
                                                             [amount]="plData?.incomeStatment.operatingProfit.amount"
@@ -165,7 +157,6 @@
                                                 </div>
                                                 <div class="col-4  bd-rl group text-right pull-right pd-l1">
                                                     <span>
-                                                        <!-- {{ plData?.incomeStatment.otherExpenses.amount | giddhCurrency }} -->
                                                         <span class="d-inline-flex">
                                                             <amount-field
                                                                 [amount]="plData?.incomeStatment.otherExpenses.amount"
@@ -176,12 +167,6 @@
                                                 </div>
                                             </div>
                                         </section>
-                                        <!-- <div class="group clearfix" *ngIf="grp.groupName && grp.uniqueName === 'otherexpenses'">
-                        <div class="col-4  group pd-l1" style="padding-left: 10px;">Total </div>
-                        <div class="col-3  bd-rl group text-right pull-right bd-rl pd-l1">
-                            <span> {{ plData?.incomeStatment.otherExpenses.amount | giddhCurrency }} </span>
-                        </div>
-                    </div> -->
                                     </ng-container>
                                 </ng-template>
                                 <ng-container
@@ -199,7 +184,6 @@
                             <strong>
                                 <span
                                     *ngIf="plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT' && plData?.incomeStatment.incomeBeforeTaxes.amount !== 0">-</span>
-                                <!-- {{ plData?.incomeStatment.incomeBeforeTaxes.amount | giddhCurrency }} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="plData?.incomeStatment.incomeBeforeTaxes.amount"
                                         [currencySymbol]="false" [currencyCode]="false">
@@ -215,7 +199,6 @@
                                 {{localeData?.taxes_30}}
                             </div>
                             <div class="col-4  group text-right pull-right bd-rl pd-l1">
-                                <!-- {{ plData?.incomeStatment.appliedTax | giddhCurrency }} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="plData?.incomeStatment.appliedTax" [currencySymbol]="false"
                                         [currencyCode]="false">

@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-
 import { OrganizationType } from '../../models/user-login-state';
 import { OrganizationProfile } from '../constants/settings.constant';
 

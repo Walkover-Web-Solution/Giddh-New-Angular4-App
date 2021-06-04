@@ -3,13 +3,10 @@ export const EBANKS = {
     GET_TOKEN: COMMON_URL + 'ebanks/token', // GET
     GET_ALL_ACCOUNTS: COMMON_URL + 'ebanks', // GET
     LINK_ACCOUNT: COMMON_URL + 'yodlee/ebanks/:accountId', // PUT
-    // UNLINK_ACCOUNT: COMMON_URL + 'ebanks/:accountId/unlink',
     UNLINK_ACCOUNT: COMMON_URL + 'yodlee/ebanks/:accountId?accountUniqueName=:accountUniqueName',
     REFRESH_ACCOUNTS: COMMON_URL + 'ebanks/refresh', // GET
     RECONNECT_ACCOUNT: COMMON_URL + 'login/:loginId/token/reconnect', // GET
-    // DELETE_BANK_ACCOUNT: COMMON_URL + 'login/:loginId', // DELETE
     DELETE_BANK_ACCOUNT: COMMON_URL + 'yodlee/yodlee-accounts?',
-    // REFREST_ACCOUNT: COMMON_URL + 'login/:loginId/token/refresh', // GET (OLD)
     REFREST_ACCOUNT: COMMON_URL + 'yodlee/refresh/:ebankItemId', // GET (NEW)
     ADD_GIDDH_ACCOUNT: COMMON_URL + 'yodlee/ebanks/:itemAccountId', // PUT
     REMOVE_GIDDH_ACCOUNT: COMMON_URL + 'yodlee/ebanks/:ItemAccountId/unlink', // DELETE
