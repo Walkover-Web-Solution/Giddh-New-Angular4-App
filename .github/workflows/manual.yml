@@ -38,75 +38,75 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
       - if: ${{ github.event.inputs.environment == 'prod' }}
-        run: echo "BUILD_DEPLOYED_MSG=' deployed to PROD'" >> $GITHUB_ENV
+        run: echo "BUILD_DEPLOYED_MSG=\' deployed to PROD\'" >> $GITHUB_ENV
       - if: ${{ github.event.inputs.environment == 'test' }}
-        run: echo "BUILD_DEPLOYED_MSG=' for testing'" >> $GITHUB_ENV
-      - name: Install Node.js & NPM
-        uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-      - uses: bahmutov/npm-install@v1
-        env:
-          CYPRESS_INSTALL_BINARY: 0
-        with:
-          useLockFile: false
-          useRollingCache: true
-          working-directory: .
-      - uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: false
-          useRollingCache: true
-          working-directory: ./apps/electron-giddh/src/
-      - name: Update app version in root package
-        uses: MerthinTechnologies/edit-json-action@v1
-        with:
-          filename: "./package.json"
-          key: "version"
-          value: ${{ github.event.inputs.version }}
-      - name: Update app version in sub-package
-        uses: MerthinTechnologies/edit-json-action@v1
-        with:
-          filename: "./apps/electron-giddh/src/package.json"
-          key: "version"
-          value: ${{ github.event.inputs.version }}
-      - name: Creating Electron bundle for Windows (TEST)
-        if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment == 'test' }}
-        run: npm run package:windows:test
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: Creating Electron bundle for Windows (PROD)
-        if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment == 'prod' }}
-        run: npm run release:windows:ci
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: Install wget
-        if: ${{ matrix.os == 'macos-latest' }}
-        run: brew install wget
-      - name: Fetching Provisioning profile
-        if: ${{ matrix.os == 'macos-latest' }}
-        run: cd ./electron-sign && wget -q --no-check-certificate '${{ secrets.PROVISIONING_PROFILE_URL }}' -O embedded.provisionprofile
-      - name: Creating Electron bundle for Mac (TEST)
-        if: ${{ matrix.os == 'macos-latest' && github.event.inputs.environment == 'test' }}
-        run: npm run package:mac:test
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          CSC_LINK: ${{ secrets.CSC_LINK_MAC }}
-          CSC_KEY_PASSWORD: ${{ secrets.CSC_LINK_MAC_PASS }}
-          NOTARIZE_EMAIL: ${{ secrets.NOTARIZE_EMAIL }}
-          NOTARIZE_PASS: ${{ secrets.NOTARIZE_PASS }}
-      - name: Creating Electron bundle for Mac (PROD)
-        if: ${{ matrix.os == 'macos-latest' && github.event.inputs.environment == 'prod' }}
-        run: npm run release:mac:ci
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          CSC_LINK: ${{ secrets.CSC_LINK_MAC }}
-          CSC_KEY_PASSWORD: ${{ secrets.CSC_LINK_MAC_PASS }}
-          NOTARIZE_EMAIL: ${{ secrets.NOTARIZE_EMAIL }}
-          NOTARIZE_PASS: ${{ secrets.NOTARIZE_PASS }}
+        run: echo "BUILD_DEPLOYED_MSG=\' for testing\'" >> $GITHUB_ENV
+#       - name: Install Node.js & NPM
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: "14"
+#       - uses: bahmutov/npm-install@v1
+#         env:
+#           CYPRESS_INSTALL_BINARY: 0
+#         with:
+#           useLockFile: false
+#           useRollingCache: true
+#           working-directory: .
+#       - uses: bahmutov/npm-install@v1
+#         with:
+#           useLockFile: false
+#           useRollingCache: true
+#           working-directory: ./apps/electron-giddh/src/
+#       - name: Update app version in root package
+#         uses: MerthinTechnologies/edit-json-action@v1
+#         with:
+#           filename: "./package.json"
+#           key: "version"
+#           value: ${{ github.event.inputs.version }}
+#       - name: Update app version in sub-package
+#         uses: MerthinTechnologies/edit-json-action@v1
+#         with:
+#           filename: "./apps/electron-giddh/src/package.json"
+#           key: "version"
+#           value: ${{ github.event.inputs.version }}
+#       - name: Creating Electron bundle for Windows (TEST)
+#         if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment == 'test' }}
+#         run: npm run package:windows:test
+#         env:
+#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#       - name: Creating Electron bundle for Windows (PROD)
+#         if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment == 'prod' }}
+#         run: npm run release:windows:ci
+#         env:
+#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#       - name: Install wget
+#         if: ${{ matrix.os == 'macos-latest' }}
+#         run: brew install wget
+#       - name: Fetching Provisioning profile
+#         if: ${{ matrix.os == 'macos-latest' }}
+#         run: cd ./electron-sign && wget -q --no-check-certificate '${{ secrets.PROVISIONING_PROFILE_URL }}' -O embedded.provisionprofile
+#       - name: Creating Electron bundle for Mac (TEST)
+#         if: ${{ matrix.os == 'macos-latest' && github.event.inputs.environment == 'test' }}
+#         run: npm run package:mac:test
+#         env:
+#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           CSC_LINK: ${{ secrets.CSC_LINK_MAC }}
+#           CSC_KEY_PASSWORD: ${{ secrets.CSC_LINK_MAC_PASS }}
+#           NOTARIZE_EMAIL: ${{ secrets.NOTARIZE_EMAIL }}
+#           NOTARIZE_PASS: ${{ secrets.NOTARIZE_PASS }}
+#       - name: Creating Electron bundle for Mac (PROD)
+#         if: ${{ matrix.os == 'macos-latest' && github.event.inputs.environment == 'prod' }}
+#         run: npm run release:mac:ci
+#         env:
+#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           CSC_LINK: ${{ secrets.CSC_LINK_MAC }}
+#           CSC_KEY_PASSWORD: ${{ secrets.CSC_LINK_MAC_PASS }}
+#           NOTARIZE_EMAIL: ${{ secrets.NOTARIZE_EMAIL }}
+#           NOTARIZE_PASS: ${{ secrets.NOTARIZE_PASS }}
   notify-success:
     if: ${{ success() }}
     needs: release
@@ -118,7 +118,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
+          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
           SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
           SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Mac - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.dmg"
           SLACK_FOOTER: ''
@@ -130,7 +130,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_ELECTRON_BUILDS_CHANNEL_ID }}
+          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
           SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
           SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Mac - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.dmg"
           SLACK_FOOTER: ''
@@ -148,7 +148,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
+          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
           SLACK_COLOR: "#e53935" # or a specific color like 'red' or '#ff00ff'
           SLACK_MESSAGE: "Build failed"
           SLACK_FOOTER: ''
@@ -160,7 +160,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_ELECTRON_BUILDS_CHANNEL_ID }}
+          SLACK_CHANNEL: ${{ secrets.PROFILE_ID }}
           SLACK_COLOR: "#e53935" # or a specific color like 'red' or '#ff00ff'
           SLACK_MESSAGE: "Build failed"
           SLACK_FOOTER: ''
