@@ -203,6 +203,12 @@ span.viasocket a {
     }
 }
 
+.btn-group{
+    .btn{
+        border-radius: 5px !important;
+    }
+}
+
 @media (max-width: 991px) {
     #invoice-setting .show-on-mobile {
         display: inline-block;
