@@ -552,12 +552,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.totalTdElementWidth = event.newWidth + 10;
     }
 
-    public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent) {
-        if (!e.value) {
+    public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent, clearAccount?: boolean) {
+        if (!e.value || clearAccount) {
             // if there's no selected account set selectedAccount to null
             txn.selectedAccount = null;
             txn.inventory = null;
             txn.particular.name = undefined;
+            txn.particular.uniqueName = undefined;
+            txn.amount = 0;
 
             // check if need to showEntryPanel
             // first check with opened ledger
@@ -842,7 +844,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         requestObj.exchangeRate = (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ? (1 / this.vm.selectedLedger.exchangeRate) : this.vm.selectedLedger.exchangeRate;
         requestObj.subVoucher = (this.isRcmEntry) ? SubVoucher.ReverseCharge : (this.isAdvanceReceipt) ? SubVoucher.AdvanceReceipt : '';
         requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
-        if (!this.isRcmEntry && !this.isAdvanceReceipt && !this.taxOnlyTransactions) {
+        if (!this.taxOnlyTransactions) {
             requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
         }
         requestObj.transactions.map((transaction: any) => {
@@ -988,7 +990,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (event.value === 'rcpt') {
             if (this.isPettyCash && !this.accountUniqueName) {
                 let message = this.localeData?.account_entry_error;
-                message = message.replace("[ACCOUNT]", this.pettyCashBaseAccountTypeString);
+                message = message?.replace("[ACCOUNT]", this.pettyCashBaseAccountTypeString);
                 this._toasty.errorToast(message);
                 return;
             }
@@ -1260,6 +1262,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (action === CONFIRMATION_ACTIONS.YES) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.isRcmEntry = !this.isRcmEntry;
+            this.vm.isRcmEntry = this.isRcmEntry;
+            this.vm.generateGrandTotal();
         }
         if (this.rcmPopup) {
             this.rcmPopup.hide();
@@ -1865,7 +1869,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public getTotalInCurrency(): string {
         let totalInCurrency = this.localeData?.total_in_currency;
-        totalInCurrency = totalInCurrency.replace("[CURRENCY]", this.vm.baseCurrencyDetails?.code);
+        totalInCurrency = totalInCurrency?.replace("[CURRENCY]", this.vm.baseCurrencyDetails?.code);
         return totalInCurrency;
     }
 

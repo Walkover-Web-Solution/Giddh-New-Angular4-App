@@ -127,6 +127,9 @@
     "search_particular": "Search Particular",
     "search_description": "Search Description",
     "currency_conversion": "In [BASE_CURRENCY]: [AMOUNT]<br />(Conversion Rate: [CONVERSION_RATE])",
+    "original_copy": "Original Copy",
+    "duplicate_copy": "Duplicate Copy",
+    "triplicate_copy": "Triplicate Copy",
     "create_e_invoice": "Create E-invoice",
     "e_invoice_status": "E-invoice Status",
     "e_invoice_statuses": {
@@ -136,7 +139,17 @@
         "cancelled": "The e-Invoiced transaction has been cancelled in both Giddh and the IRP. The IRN associated with it is no longer valid.",
         "mark_as_cancelled": "The e-Invoiced transaction has been marked as cancelled in Giddh Books alone. You’ll have to cancel it in the GST portal to make the IRN invalid.",
         "failed": "The transaction could not be pushed to the IRP.",
-        "na": "e-Invoice creation is not applicable for this transaction."
+        "na": "e-Invoice creation is not applicable for this transaction.",
+        "giddh_invoice_not_cancelled": "The e-Invoiced transaction has been cancelled in the IRP but not in Giddh. The IRN associated with it is no longer valid."
+    },
+    "cancel_e_invoice": "Cancel E-invoice",
+    "cancel_reason": "Cancel Reason",
+    "cancel_remarks": "Cancel Remarks",
+    "cancel_e_invoice_reasons": {
+        "duplicate": "Duplicate",
+        "data_entry_mistake": "Data entry mistake",
+        "order_cancelled": "Order Cancelled",
+        "other": "Others"
     },
     "tabs": {
         "estimates": "Estimates (Beta)",
@@ -153,5 +166,6 @@
     "no_advance_receipt": "There is no advanced receipt for adjustment.",
     "exchange_gain_loss_label": "In [BASE_CURRENCY]: [AMOUNT]<br />Exchange [PROFIT_TYPE]: ",
     "exchange_gain": "gain",
-    "exchange_loss": "loss"
+    "exchange_loss": "loss",
+    "works_for_single_entry": "Works only for single entry."
 }

@@ -54,41 +54,6 @@ import { SearchService } from '../../services/search.service';
 import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 import { LedgerService } from '../../services/ledger.service';
 
-const THEAD_ARR_READONLY = [
-    {
-        display: true,
-        label: '#'
-    },
-    {
-        display: true,
-        label: 'Product/Service  Description '
-    },
-    {
-        display: true,
-        label: 'Qty/Unit'
-    },
-    {
-        display: true,
-        label: 'Rate'
-    },
-    {
-        display: true,
-        label: 'Amount'
-    },
-    {
-        display: true,
-        label: 'Discount'
-    },
-    {
-        display: true,
-        label: 'Tax'
-    },
-    {
-        display: true,
-        label: 'Total'
-    }
-];
-
 /** Type of search: vendor and item (product/service) search */
 const SEARCH_TYPE = {
     VENDOR: 'vendor',
@@ -182,7 +147,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     /* This will hold the company country code */
     public companyCountryCode: string = '';
     /* This will hold the vendor not found text */
-    public vendorNotFoundText: string = 'Add Vendor';
+    public vendorNotFoundText: string = '';
     /* This will hold state of account aside popup */
     public accountAsideMenuState: string = 'out';
     /* This will hold state of product/service aside popup */
@@ -234,7 +199,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     /* This will hold company taxes list */
     public companyTaxesList: TaxResponse[] = [];
     /* This will hold list of all columns of entry table */
-    public theadArrReadOnly: IContentCommon[] = THEAD_ARR_READONLY;
+    public theadArrReadOnly: IContentCommon[] = [];
     /* This will hold list of all tax types */
     public allowedSelectionOfAType: any = { type: [], count: 1 };
     /* This will hold active index of entry */
@@ -389,6 +354,12 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public noResultsFoundLabel = SearchResultText.NewSearch;
     /** True, when bulk items are added */
     public showBulkLoader: boolean;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -460,13 +431,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
                 if (params['action'] === "new") {
                     this.resetForm();
-                    this.setCurrentPageTitle("New Purchase Order");
                     this.isUpdateMode = false;
                     this.autoFillVendorShipping = true;
                 }
 
                 if (params['action'] === "edit") {
-                    this.setCurrentPageTitle("Edit Purchase Order");
                     this.isUpdateMode = true;
                     this.autoFillVendorShipping = false;
                 }
@@ -539,6 +508,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     }
                     this.purchaseOrder.account.shippingDetails.panNumber = "";
                     this.purchaseOrder.account.shippingDetails.pincode = shippingDetails.pincode;
+                    this.checkForAutoFillShippingAddress('account');
                     this.copiedAccountDetails = true;
                 }
                 this.loadTaxesAndDiscounts(0);
@@ -616,32 +586,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 } else {
                     this.shouldShowTrnGstField = false;
                 }
-            }
-        });
-
-        // get tax list and assign values to local vars
-        this.store.pipe(select(state => state.company && state.company.isGetTaxesSuccess), takeUntil(this.destroyed$)).subscribe(isGetTaxes => {
-            if (isGetTaxes) {
-                this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe((tax: TaxResponse[]) => {
-                    if (tax) {
-                        this.companyTaxesList = tax;
-                        this.theadArrReadOnly.forEach((item: IContentCommon) => {
-                            // show tax label
-                            if (item.label === 'Tax') {
-                                item.display = true;
-                            }
-                            return item;
-                        });
-                        this.companyTaxesList.forEach((tax) => {
-                            if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
-                                this.allowedSelectionOfAType.type.push(tax.taxType);
-                            }
-                        });
-                    } else {
-                        this.companyTaxesList = [];
-                        this.allowedSelectionOfAType.type = [];
-                    }
-                });
             }
         });
 
@@ -782,8 +726,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     }
                 });
             }
-
-            this.autoFillVendorShipping = isEqual(this.purchaseOrder.account.billingDetails, this.purchaseOrder.account.shippingDetails);
+            this.checkForAutoFillShippingAddress('account');
         }
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
     }
@@ -1079,9 +1022,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.autoFillWarehouseAddress(warehouse);
         this.autoFillCompanyShipping = false;
 
-        if(this.purchaseOrder.company && this.purchaseOrder.company.billingDetails && this.purchaseOrder.company.shippingDetails && (this.purchaseOrder.company.billingDetails.address && this.purchaseOrder.company.billingDetails.address[0]) === (this.purchaseOrder.company.shippingDetails.address && this.purchaseOrder.company.shippingDetails.address[0]) && this.purchaseOrder.company.billingDetails.stateCode === this.purchaseOrder.company.shippingDetails.stateCode && this.purchaseOrder.company.billingDetails.gstNumber === this.purchaseOrder.company.shippingDetails.gstNumber) {
-            this.autoFillCompanyShipping = true;
-        }
+        this.checkForAutoFillShippingAddress('company');
     }
 
     /**
@@ -1280,9 +1221,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             if (!this.isValidTaxNumber) {
                 this.startLoader(false);
                 if (fieldName) {
-                    this.toaster.errorToast(`Invalid ${this.formFields['taxName'].label} in ${fieldName}! Please fix and try again`);
+                    let invalidTax = this.localeData?.invalid_tax_field;
+                    invalidTax = invalidTax.replace("[TAX_NAME]", this.formFields['taxName']?.label);
+                    invalidTax = invalidTax.replace("[FIELD_NAME]", fieldName);
+                    this.toaster.errorToast(invalidTax);
                 } else {
-                    this.toaster.errorToast(`Invalid ${this.formFields['taxName'].label}! Please fix and try again`);
+                    let invalidTax = this.localeData?.invalid_tax_field;
+                    invalidTax = invalidTax.replace("[TAX_NAME]", this.formFields['taxName']?.label);
+                    this.toaster.errorToast(invalidTax);
                 }
             }
         }
@@ -1923,7 +1869,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         } else {
             // if transaction is valid then add new row else show toasty
             if (!txn.isValid()) {
-                this.toaster.warningToast('Product/Service can\'t be empty');
+                this.toaster.warningToast(this.localeData?.no_product_error);
                 return;
             }
             let entry: SalesEntryClass = new SalesEntryClass();
@@ -2059,12 +2005,12 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         // special check if gst no filed is visible then and only then check for gst validation
         if (data.accountDetails && data.accountDetails.billingDetails && data.accountDetails.shippingDetails && data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
-            this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber, 'Billing Address');
+            this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber, this.localeData?.billing_address);
             if (!this.isValidTaxNumber) {
                 this.startLoader(false);
                 return;
             }
-            this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, 'Shipping Address');
+            this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, this.localeData?.shipping_address);
             if (!this.isValidTaxNumber) {
                 this.startLoader(false);
                 return;
@@ -2073,7 +2019,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
             this.startLoader(false);
-            this.toaster.errorToast('Expected delivery date cannot be less than Order Date');
+            this.toaster.errorToast(this.localeData?.delivery_date_error);
             return;
         }
 
@@ -2095,14 +2041,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         if (data.accountDetails) {
             if (!data.accountDetails.uniqueName) {
-                this.toaster.warningToast('Vendor Name can\'t be empty');
+                this.toaster.warningToast(this.localeData?.no_vendor_error);
                 this.startLoader(false);
                 return;
             }
             if (data.accountDetails.email) {
                 if (!EMAIL_REGEX_PATTERN.test(data.accountDetails.email)) {
                     this.startLoader(false);
-                    this.toaster.warningToast('Invalid Email Address.');
+                    this.toaster.warningToast(this.localeData?.invalid_email);
                     return;
                 }
             }
@@ -2136,7 +2082,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
                     // will get errors of string and if not error then true boolean
                     if (!txn.isValid()) {
-                        this.toaster.warningToast('Product/Service can\'t be empty');
+                        this.toaster.warningToast(this.localeData?.no_product_error);
                         txnErr = true;
                         return false;
                     } else {
@@ -2146,7 +2092,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             });
         } else {
             this.startLoader(false);
-            this.toaster.warningToast('At least a single entry needed to generate purchase order');
+            this.toaster.warningToast(this.localeData?.no_entry_error);
             return;
         }
 
@@ -2209,7 +2155,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.vendorAcList$ = observableOf(_.orderBy(this.defaultVendorSuggestions, 'label'));
                     this.salesAccounts$ = observableOf(_.orderBy(this.defaultItemSuggestions, 'label'));
                     this.resetForm();
-                    this.toaster.successToast("Purchase order created succesfully with voucher number - " + response.body.number);
+
+                    let poCreated = this.localeData?.po_created;
+                    poCreated = poCreated?.replace("[PO_NUMBER]", response.body.number);
+                    this.toaster.successToast(poCreated);
                 } else {
                     this.toaster.errorToast(response.message);
                 }
@@ -2218,7 +2167,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             this.purchaseOrderService.update(getRequestObject, updatedData).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.toaster.clearAllToaster();
                 if (response && response.status === "success") {
-                    this.toaster.successToast("Purchase order updated succesfully");
+                    this.toaster.successToast(this.localeData?.po_updated);
                     this.router.navigate(['/pages/purchase-management/purchase-orders/preview/' + this.purchaseOrderUniqueName]);
                 } else {
                     this.toaster.errorToast(response.message);
@@ -2551,10 +2500,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrderDetails = response.body;
                     let entriesUpdated = false;
 
-                    if (this.purchaseOrderDetails && this.purchaseOrderDetails.roundOffTotal && this.purchaseOrderDetails.roundOffTotal.amountForAccount === 0 && this.purchaseOrderDetails.roundOffTotal.amountForCompany === 0) {
-                        this.applyRoundOff = false;
-                    }
-
                     if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails && !this.getAccountInProgress) {
                         this.getAccountInProgress = true;
                         this.getAccountDetails(this.purchaseOrderDetails.account.uniqueName);
@@ -2588,7 +2533,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.company.shippingDetails.state.code = this.purchaseOrderDetails.company.shippingDetails.stateCode;
                     this.purchaseOrder.company.shippingDetails.state.name = this.purchaseOrderDetails.company.shippingDetails.stateName;
 
-                    this.autoFillCompanyShipping = isEqual(this.purchaseOrder.company.billingDetails, this.purchaseOrder.company.shippingDetails);
+                    this.checkForAutoFillShippingAddress('company');
 
                     if(this.isUpdateMode) {
                         this.purchaseOrder.voucherDetails.voucherDate = this.purchaseOrderDetails.date;
@@ -2700,18 +2645,18 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         // description with sku and custom fields
                         salesTransactionItemClass.sku_and_customfields = null;
                         let description = [];
-                        let skuCodeHeading = stock.skuCodeHeading ? stock.skuCodeHeading : 'SKU Code';
+                        let skuCodeHeading = stock.skuCodeHeading ? stock.skuCodeHeading : this.commonLocaleData?.app_sku_code;
 
                         if (stock.skuCode) {
                             description.push(skuCodeHeading + ':' + stock.skuCode);
                         }
 
-                        let customField1Heading = stock.customField1Heading ? stock.customField1Heading : 'Custom field 1';
+                        let customField1Heading = stock.customField1Heading ? stock.customField1Heading : this.localeData?.custom_field1;
                         if (stock.customField1Value) {
                             description.push(customField1Heading + ':' + stock.customField1Value);
                         }
 
-                        let customField2Heading = stock.customField2Heading ? stock.customField2Heading : 'Custom field 2';
+                        let customField2Heading = stock.customField2Heading ? stock.customField2Heading : this.localeData?.custom_field2;
                         if (stock.customField2Value) {
                             description.push(customField2Heading + ':' + stock.customField2Value);
                         }
@@ -2858,19 +2803,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
         });
         return validEntries;
-    }
-
-    /**
-     * This will set the current page title
-     *
-     * @param {string} title
-     * @memberof CreatePurchaseOrderComponent
-     */
-    public setCurrentPageTitle(title: string): void {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = title;
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
     }
 
     /**
@@ -3303,17 +3235,17 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         // description with sku and custom fields
         if ((additional.stock)) {
             let description = [];
-            let skuCodeHeading = additional.stock.skuCodeHeading ? additional.stock.skuCodeHeading : 'SKU Code';
+            let skuCodeHeading = additional.stock.skuCodeHeading ? additional.stock.skuCodeHeading : this.commonLocaleData?.app_sku_code;
             if (additional.stock.skuCode) {
                 description.push(skuCodeHeading + ':' + additional.stock.skuCode);
             }
 
-            let customField1Heading = additional.stock.customField1Heading ? additional.stock.customField1Heading : 'Custom field 1';
+            let customField1Heading = additional.stock.customField1Heading ? additional.stock.customField1Heading : this.localeData?.custom_field1;
             if (additional.stock.customField1Value) {
                 description.push(customField1Heading + ':' + additional.stock.customField1Value);
             }
 
-            let customField2Heading = additional.stock.customField2Heading ? additional.stock.customField2Heading : 'Custom field 2';
+            let customField2Heading = additional.stock.customField2Heading ? additional.stock.customField2Heading : this.localeData?.custom_field2;
             if (additional.stock.customField2Value) {
                 description.push(customField2Heading + ':' + additional.stock.customField2Value);
             }
@@ -3562,6 +3494,110 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 description?.nativeElement?.focus();
             }
         }, 200);
+    }
+
+    /**
+     * Checks for auto fill shipping address for account and company shipping address
+     *
+     * @private
+     * @param {string} sectionName Section name: company/account
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private checkForAutoFillShippingAddress(sectionName: string): void {
+        if (sectionName === 'account') {
+            if (this.purchaseOrder?.account?.billingDetails?.address[0] === this.purchaseOrder?.account?.shippingDetails?.address[0] &&
+                this.purchaseOrder?.account?.billingDetails?.stateCode === this.purchaseOrder?.account?.shippingDetails?.stateCode &&
+                this.purchaseOrder?.account?.billingDetails?.gstNumber === this.purchaseOrder?.account?.shippingDetails?.gstNumber &&
+                this.purchaseOrder?.account?.billingDetails?.pincode === this.purchaseOrder?.account?.shippingDetails?.pincode) {
+                this.autoFillVendorShipping = true;
+            } else {
+                this.autoFillVendorShipping = false;
+            }
+        } else if (sectionName === 'company') {
+            if (this.purchaseOrder?.company?.billingDetails?.address[0] === this.purchaseOrder?.company?.shippingDetails?.address[0] &&
+                this.purchaseOrder?.company?.billingDetails?.stateCode === this.purchaseOrder?.company?.shippingDetails?.stateCode &&
+                this.purchaseOrder?.company?.billingDetails?.gstNumber === this.purchaseOrder?.company?.shippingDetails?.gstNumber &&
+                this.purchaseOrder?.company?.billingDetails?.pincode === this.purchaseOrder?.company?.shippingDetails?.pincode) {
+                this.autoFillCompanyShipping = true;
+            } else {
+                this.autoFillCompanyShipping = false;
+            }
+        }
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.translationLoaded = true;
+
+            // get tax list and assign values to local vars
+            this.store.pipe(select(state => state.company && state.company.isGetTaxesSuccess), takeUntil(this.destroyed$)).subscribe(isGetTaxes => {
+                if (isGetTaxes) {
+                    this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe((tax: TaxResponse[]) => {
+                        if (tax) {
+                            this.companyTaxesList = tax;
+                            this.theadArrReadOnly.forEach((item: IContentCommon) => {
+                                // show tax label
+                                if (item.label === this.commonLocaleData?.app_tax) {
+                                    item.display = true;
+                                }
+                                return item;
+                            });
+                            this.companyTaxesList.forEach((tax) => {
+                                if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
+                                    this.allowedSelectionOfAType.type.push(tax.taxType);
+                                }
+                            });
+                        } else {
+                            this.companyTaxesList = [];
+                            this.allowedSelectionOfAType.type = [];
+                        }
+                    });
+                }
+            });
+
+            this.theadArrReadOnly = [
+                {
+                    display: true,
+                    label: '#'
+                },
+                {
+                    display: true,
+                    label: this.localeData?.product_service_description
+                },
+                {
+                    display: true,
+                    label: this.commonLocaleData?.app_quantity_unit
+                },
+                {
+                    display: true,
+                    label: this.commonLocaleData?.app_rate
+                },
+                {
+                    display: true,
+                    label: this.commonLocaleData?.app_amount
+                },
+                {
+                    display: true,
+                    label: this.commonLocaleData?.app_discount
+                },
+                {
+                    display: true,
+                    label: this.commonLocaleData?.app_tax
+                },
+                {
+                    display: true,
+                    label: this.commonLocaleData?.app_total
+                }
+            ];
+
+            this.vendorNotFoundText = this.localeData?.add_vendor;
+        }
     }
 
     /**

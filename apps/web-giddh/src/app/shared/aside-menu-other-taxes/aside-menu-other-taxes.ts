@@ -22,16 +22,15 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     public taxesOptions: IOption[] = [];
     public selectedTaxUniqueName: string;
 
-    public calculationMethodOptions: IOption[] = [
-        { label: 'On Taxable Value (Amt - Dis)', value: 'OnTaxableAmount' },
-        { label: 'On Total Value (Taxable + Gst + Cess)', value: 'OnTotalAmount' },
-    ];
+    public calculationMethodOptions: IOption[] = [];
 
     /** True if mobile screen */
     public isMobileScreen: boolean;
 
     /** To unsubscribe from subscription */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     constructor(
         private breakPointObservar: BreakpointObserver
@@ -49,6 +48,11 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
             .map(m => {
                 return { label: m.name, value: m.uniqueName };
             })
+
+        this.calculationMethodOptions = [
+            { label: this.commonLocaleData?.app_on_taxable_value, value: 'OnTaxableAmount' },
+            { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' },
+        ];       
     }
     public hideListItems() {
         this.saveTaxes();

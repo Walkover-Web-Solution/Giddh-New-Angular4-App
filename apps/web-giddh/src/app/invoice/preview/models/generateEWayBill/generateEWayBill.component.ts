@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { SelectedInvoices } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { TemplateRef } from '@angular/core';
@@ -10,17 +10,17 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 	styleUrls: [`./generateEWayBill.component.scss`]
 })
 
-export class GenerateEWayBillComponent implements OnInit {
+export class GenerateEWayBillComponent {
 	@Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
-	@Input() public ChildSelectedInvoicesList: any[];
+    @Input() public ChildSelectedInvoicesList: any[];
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 	public invoiceList: SelectedInvoices[] = [];
 	public modalRef: BsModalRef;
 
 	constructor(private router: Router, private modalService: BsModalService) {
-		
-	}
-
-	public ngOnInit(): void {
 		
 	}
 
@@ -30,7 +30,8 @@ export class GenerateEWayBillComponent implements OnInit {
 
 	public createEWayBill() {
 		this.router.navigate(['pages', 'invoice', 'ewaybill', 'create']);
-	}
+    }
+    
 	public openModal(template: TemplateRef<any>) {
 		this.modalRef = this.modalService.show(template, { class: 'modal-455' });
 	}

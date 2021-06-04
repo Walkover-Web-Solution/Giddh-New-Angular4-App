@@ -3,7 +3,6 @@ import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, take
 import {
     ChangeDetectorRef,
     Component,
-    ComponentFactoryResolver,
     ElementRef,
     Input,
     OnChanges,
@@ -58,14 +57,6 @@ import { CommonActions } from '../../actions/common.actions';
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
 const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase];
-
-const COMPARISON_FILTER = [
-    { label: 'Greater Than', value: 'greaterThan' },
-    { label: 'Less Than', value: 'lessThan' },
-    { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-    { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-    { label: 'Equals', value: 'equals' }
-];
 
 @Component({
     selector: 'app-invoice-preview',
@@ -265,6 +256,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public branches: Array<any>;
     /** This will hold if updated is account in master to refresh the list of vouchers */
     public isAccountUpdated: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
@@ -287,13 +282,21 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public gstEInvoiceEnable: boolean;
     /** True if selected items needs to be updated */
     public updateSelectedItems: boolean = false;
+    /** This will hold comparision filters */
+    public comparisionFilters: any[] = [];
+    /** Stores the E-invoice cancellation reason */
+    public eInvoiceCancel: { cancellationReason: string, cancellationRemarks?: string } = {
+        cancellationReason: '',
+        cancellationRemarks: '',
+    };
+    /** Stores the E-invoice cancellation options */
+    public eInvoiceCancellationReasonOptions = [];
 
     constructor(
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService,
         private _toaster: ToasterService,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private _activatedRoute: ActivatedRoute,
         private companyActions: CompanyActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
@@ -484,11 +487,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     let voucherIndex = (res[0] as ReciptResponse).items.findIndex(f => f.voucherNumber === res[1]);
                     if (voucherIndex > -1) {
                         let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
-                        allItems = uniqBy([allItems[voucherIndex], ...allItems], 'voucherNumber');
-                        this.itemsListForDetails = allItems;
+                        const removedItem = allItems.splice(voucherIndex, 1)[0];
+                        allItems.unshift(removedItem);
                         this.toggleBodyClass();
                         setTimeout(() => {
-                            this.selectedInvoiceForDetails = allItems[0];
+                            const itemIndex = allItems.findIndex(item => item.voucherNumber === res[1]);
+                            this.selectedInvoiceForDetails = allItems[itemIndex];
+                            this.itemsListForDetails = cloneDeep(allItems);
                             this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
                         }, 1000);
                     }
@@ -525,7 +530,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.itemsListForDetails = allItems;
                         this.toggleBodyClass();
                         setTimeout(() => {
-                            this.selectedInvoiceForDetails = allItems[0];
+                            const itemIndex = this.itemsListForDetails.findIndex(item => item.uniqueName === record.purchaseRecordUniqueName);
+                            this.selectedInvoiceForDetails = allItems[itemIndex];
                             this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
                             this.store.dispatch(this.purchaseRecordActions.resetUpdatePurchaseRecord());
                         }, 1000);
@@ -858,7 +864,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem.uniqueName, {
                     action: actionToPerform,
-                    voucherType: objItem.voucherType
+                    voucherType: objItem.voucherType ?? this.selectedVoucher
                 }));
             }
             this.selectedPerformAdjustPaymentAction = false;
@@ -959,12 +965,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             newIndex = allItems.findIndex(f => f.voucherNumber === invoice.voucherNumber);
         }
-        let removedItem = allItems.splice(newIndex, 1);
-        allItems = [...removedItem, ...allItems];
-        this.itemsListForDetails = allItems;
+        const removedItem = allItems.splice(newIndex, 1)[0];
+        allItems.unshift(removedItem);
 
         setTimeout(() => {
             this.selectedInvoiceForDetails = cloneDeep(allItems[0]);
+            this.itemsListForDetails = cloneDeep(allItems);
             this.toggleBodyClass();
         }, 200);
     }
@@ -995,7 +1001,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public downloadFile() {
         let blob = this.base64ToBlob(this.base64Data, 'application/pdf', 512);
-        return saveAs(blob, `Invoice-${this.selectedInvoice.account.uniqueName}.pdf`);
+        return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account.uniqueName}.pdf`);
     }
 
     public base64ToBlob(b64Data, contentType, sliceSize) {
@@ -1117,17 +1123,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         if (o.description) {
             model.description = o.description;
         }
-        if (o.entryTotalBy === COMPARISON_FILTER[0].value) {
+        if (o.entryTotalBy === this.comparisionFilters[0]?.value) {
             model.balanceMoreThan = true;
-        } else if (o.entryTotalBy === COMPARISON_FILTER[1].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[1]?.value) {
             model.balanceLessThan = true;
-        } else if (o.entryTotalBy === COMPARISON_FILTER[2].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[2]?.value) {
             model.balanceMoreThan = true;
             model.balanceEqual = true;
-        } else if (o.entryTotalBy === COMPARISON_FILTER[3].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[3]?.value) {
             model.balanceLessThan = true;
             model.balanceEqual = true;
-        } else if (o.entryTotalBy === COMPARISON_FILTER[4].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[4]?.value) {
             model.balanceEqual = true;
         }
 
@@ -1223,7 +1229,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
                     return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
                 } else {
-                    this._toaster.errorToast('Something went wrong! Please try again');
+                    this._toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 }
             });
     }
@@ -1370,7 +1376,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
         this.showAdvanceSearchIcon = true;
-        if (!request.invoiceDate && !request.dueDate) {
+        if (!request.invoiceDate && !request.dueDate || this.selectedVoucher === VoucherTypeEnum.purchase) {
             request.from = this.invoiceSearchRequest.from;
             request.to = this.invoiceSearchRequest.to;
         }
@@ -1513,7 +1519,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 if (res.status === 'success') {
                     let blob = this.base64ToBlob(res.body, 'application/xls', 512);
                     this.selectedInvoicesList = [];
-                    return saveAs(blob, `${dataTosend.accountUniqueName}All-invoices.xls`);
+                    return saveAs(blob, `${dataTosend.accountUniqueName}${this.localeData?.all_invoices}.xls`);
                 } else {
                     this._toaster.errorToast(res.message);
                 }
@@ -1605,28 +1611,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(2);
                 item.exchangeRate = balanceDueAmountConversionRate;
             }
-            item['grandTotalTooltipText'] = `In ${this.baseCurrency}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
-            if (item.gainLoss) {
-                item['balanceDueTooltipText'] = `In ${this.baseCurrency}: ${balanceDueAmountForCompany}<br />(Exchange ${item.gainLoss > 0 ? 'gain' : 'loss'}: ${Math.abs(item.gainLoss)})`;
-            } else {
-                item['balanceDueTooltipText'] = `In ${this.baseCurrency}: ${balanceDueAmountForCompany}<br />(Conversion Rate: ${balanceDueAmountConversionRate})`;
-            }
 
-            // let text = this.localeData?.currency_conversion;
-            // let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
-            // let balanceDueTooltipText;
-            // if (item.gainLoss) {
-            //     const gainLossText = this.localeData?.exchange_gain_loss_label?.
-            //         replace("[BASE_CURRENCY]", this.baseCurrency)?.
-            //         replace("[AMOUNT]", balanceDueAmountForCompany)?.
-            //         replace('[PROFIT_TYPE]', item.gainLoss > 0 ? this.localeData?.exchange_gain : this.localeData?.exchange_loss);
-            //     balanceDueTooltipText = `${gainLossText}: ${Math.abs(item.gainLoss)}`;
-            // } else {
-            //     balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
-            // }
+            let text = this.localeData?.currency_conversion;
+            let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
+            let balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
 
-            // item['grandTotalTooltipText'] = grandTotalTooltipText;
-            // item['balanceDueTooltipText'] = balanceDueTooltipText;
+            item['grandTotalTooltipText'] = grandTotalTooltipText;
+            item['balanceDueTooltipText'] = balanceDueTooltipText;
             if (this.gstEInvoiceEnable) {
                 item.eInvoiceStatusTooltip = this.getEInvoiceTooltipText(item);
             }
@@ -1756,7 +1747,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.selectedPerformAdjustPaymentAction = false;
                     } else {
                         this.isAccountHaveAdvanceReceipts = false;
-                        this._toaster.warningToast('There is no advanced receipt for adjustment.');
+                        this._toaster.warningToast(this.localeData?.no_advance_receipt);
                     }
                 }
             });
@@ -1901,6 +1892,42 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
+     * Returns the overdue days text
+     *
+     * @param {*} days
+     * @returns {string}
+     * @memberof InvoicePreviewComponent
+     */
+    public getOverdueDaysText(days: any): string {
+        let overdueDays = this.localeData?.overdue_days;
+        overdueDays = overdueDays?.replace("[DAYS]", days);
+        return overdueDays;
+    }
+
+    /**
+     * Returns the total text
+     *
+     * @returns {string}
+     * @memberof InvoicePreviewComponent
+     */
+    public getTotalText(): string {
+        return !(this.selectedVoucher === 'credit note' || this.selectedVoucher === 'debit note') ? (this.selectedVoucher === 'purchase') ? this.localeData?.total_purchases : this.localeData?.total_sale : this.commonLocaleData?.app_total + ':';
+    }
+
+    /**
+     * Returns the search field text
+     *
+     * @param {*} title
+     * @returns {string}
+     * @memberof InvoicePreviewComponent
+     */
+    public getSearchFieldText(title: any): string {
+        let searchField = this.localeData?.search_field;
+        searchField = searchField?.replace("[FIELD]", title);
+        return searchField;
+    }
+
+    /**
      * Creates the E-invoice in bulk
      *
      * @memberof InvoicePreviewComponent
@@ -1927,21 +1954,95 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private getEInvoiceTooltipText(item: ReceiptItem): string {
         switch (item.status?.toLowerCase()) {
             case EInvoiceStatus.YetToBePushed:
-                return 'The transaction is yet to be pushed to the IRP for e-Invoicing.';
+                return this.localeData.e_invoice_statuses.yet_to_be_pushed;
             case EInvoiceStatus.Pushed:
-                return 'The transaction was pushed to the IRP successfully, and a QR code and IRN has been generated for it.';
+                return this.localeData.e_invoice_statuses.pushed;
             case EInvoiceStatus.PushInitiated:
-                return 'The transaction is being pushed to the IRP as part of a bulk push action.';
+                return this.localeData.e_invoice_statuses.push_initiated;
             case EInvoiceStatus.Cancelled:
-                return 'The e-Invoiced transaction has been cancelled in both Giddh and the IRP. The IRN associated with it is no longer valid.';
+                // E-invoice got cancelled but invoice didn't cancel
+                return item.balanceStatus !== 'cancel' ? this.localeData.e_invoice_statuses.giddh_invoice_not_cancelled : this.localeData.e_invoice_statuses.cancelled;
             case EInvoiceStatus.MarkedAsCancelled:
-                return 'The e-Invoiced transaction has been marked as cancelled in Giddh Books alone. You’ll have to cancel it in the GST portal to make the IRN invalid.';
+                return this.localeData.e_invoice_statuses.mark_as_cancelled;
             case EInvoiceStatus.Failed:
-                return item.errorMessage ?? 'The transaction could not be pushed to the IRP.';
+                return item.errorMessage ?? this.localeData.e_invoice_statuses.failed;
             case EInvoiceStatus.NA:
                 // When invoice is B2C or B2B cancelled invoice
-                return item.errorMessage ?? 'e-Invoice creation is not applicable for this transaction.';
+                return item.errorMessage ?? this.localeData.e_invoice_statuses.na;
             default: return '';
         }
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof InvoicePreviewComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.comparisionFilters = [
+                { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
+                { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },
+                { label: this.commonLocaleData?.app_comparision_filters?.greater_than_equals, value: 'greaterThanOrEquals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.less_than_equals, value: 'lessThanOrEquals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' }
+            ];
+            this.eInvoiceCancellationReasonOptions = [
+                { label: this.localeData?.cancel_e_invoice_reasons?.duplicate, value: '1' },
+                { label: this.localeData?.cancel_e_invoice_reasons?.data_entry_mistake, value: '2' },
+                { label: this.localeData?.cancel_e_invoice_reasons?.order_cancelled, value: '3' },
+                { label: this.localeData?.cancel_e_invoice_reasons?.other, value: '4' }
+            ]
+        }
+    }
+
+    /**
+     * Resets the canel e-invoice form data
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public resetCancelEInvoice(): void {
+        this.eInvoiceCancel = {
+            cancellationReason: '',
+            cancellationRemarks: '',
+        };
+    }
+
+    /**
+     * Handler for e-invoice cancellation
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public submitEInvoiceCancellation(): void {
+        const requestObject: any = {
+            cnlRsn: this.eInvoiceCancel.cancellationReason,
+            cnlRem: this.eInvoiceCancel.cancellationRemarks?.trim()
+        };
+        if (this.selectedVoucher === VoucherTypeEnum.creditNote || this.selectedVoucher === VoucherTypeEnum.debitNote) {
+            requestObject.voucherType = this.selectedVoucher;
+            requestObject.voucherUniqueName = this.selectedInvoicesList[0].uniqueName;
+        } else if (this.selectedVoucher === VoucherTypeEnum.sales) {
+            requestObject.invoiceUniqueName = this.selectedInvoicesList[0].uniqueName;
+        }
+        this._invoiceService.cancelEInvoice(requestObject).pipe(take(1)).subscribe(response => {
+            this.getVoucher(this.isUniversalDateApplicable);
+            if (response.status === 'success') {
+                this._toaster.successToast(response.body);
+                this.modalRef?.hide();
+                this.resetCancelEInvoice();
+            } else if (response.status === 'error') {
+                this._toaster.errorToast(response.message, response.code);
+            }
+        });
+    }
+
+    /**
+     * Trims the cancellation remarks
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public handleBlurOnCancellationRemarks(): void {
+        this.eInvoiceCancel.cancellationRemarks = this.eInvoiceCancel?.cancellationRemarks.trim();
     }
 }
