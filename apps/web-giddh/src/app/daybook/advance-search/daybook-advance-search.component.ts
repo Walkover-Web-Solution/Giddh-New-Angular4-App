@@ -50,44 +50,6 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     public forceClearRange$: Observable<IForceClear> = observableOf({ status: false });
     /** Sh-select force clear observable for account type  */
     public forceClearParticulars$: Observable<IForceClear> = observableOf({ status: false });
-
-    public datePickerOptions: any = {
-        parentEl: '#date-range-picker-parent',
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'Last 1 Day': [
-                moment().subtract(1, 'days'),
-                moment()
-            ],
-            'Last 7 Days': [
-                moment().subtract(6, 'days'),
-                moment()
-            ],
-            'Last 30 Days': [
-                moment().subtract(29, 'days'),
-                moment()
-            ],
-            'Last 6 Months': [
-                moment().subtract(6, 'months'),
-                moment()
-            ],
-            'Last 1 Year': [
-                moment().subtract(12, 'months'),
-                moment()
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
-
     private moment = moment;
     private fromDate: string = '';
     private toDate: string = '';
@@ -235,7 +197,6 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         }
         let fromDate = this.fromDate;
         let toDate = this.toDate;
-        // this.store.dispatch(this._daybookActions.GetDaybook(dataToSend, this.fromDate, this.toDate));
         this.closeModelEvent.emit({
             action: exportFileAs ? 'export' : 'search',
             exportAs: exportFileAs,
@@ -246,7 +207,6 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         });
 
         exportFileAs = null;
-        // this.advanceSearchForm.reset();
     }
 
     /**

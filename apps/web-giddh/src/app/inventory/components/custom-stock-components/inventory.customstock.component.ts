@@ -107,10 +107,8 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             this.store.dispatch(this.sidebarAction.OpenGroup(activeGroup));
         }
 
-        // this.store.dispatch(this.inventoryAction.resetActiveGroup());
         this.store.dispatch(this.inventoryAction.resetActiveStock());
         this.store.dispatch(this.customStockActions.GetStockUnit());
-        // this.stockUnit$.subscribe(p => this.clearFields());
 
         this.createCustomStockSuccess$.subscribe((a) => {
             if (a) {
@@ -162,7 +160,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public editUnit(item: StockUnitRequest) {
         this.customUnitObj = Object.assign({}, item);
         this.selectedUnitName = item.name;
-        // this.setUnitName(this.customUnitObj.name);
         if (item.displayQuantityPerUnit) {
             this.customUnitObj.quantityPerUnit = giddhRoundOff(item.displayQuantityPerUnit, this.giddhDecimalPlaces);
         }
@@ -196,7 +193,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        // this.clearFields();
     }
 
     public setUnitName(name) {
@@ -231,7 +227,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         if (this.editMode) {
             return true;
         }
-        let groupName = null;
         let val: string = this.customUnitObj.code;
         if (val && this.stockUnitsList.includes({ label: val, value: val })) {
             val = uniqueNameInvalidStringReplace(val);

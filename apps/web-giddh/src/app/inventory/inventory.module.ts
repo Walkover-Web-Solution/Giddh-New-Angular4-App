@@ -31,7 +31,6 @@ import { InventoryGroupStockReportComponent } from './components/group-stock-rep
 import { InventoryHearderComponent } from './components/header-components/inventory-header-component';
 import { NewBranchTransferAddComponent } from './components/new-branch-transfer/new.branch.transfer.add.component';
 import { NewBranchTransferListComponent } from './components/new-branch-transfer/new.branch.transfer.list.component';
-import { InOutStockListComponent } from './components/sidebar-components/in-out-stock-list.component';
 import { InventorySidebarComponent } from './components/sidebar-components/inventory.sidebar.component';
 import { StockgrpListComponent } from './components/sidebar-components/stockgrplist.component';
 import { StockListComponent } from './components/sidebar-components/stockList.component';
@@ -66,7 +65,6 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
         AsidePaneComponent,
         AsideTransferPaneComponent,
         AsideBranchTransferPaneComponent,
-        InOutStockListComponent,
         InventoryUserComponent,
         TransferNoteComponent,
         InwardNoteComponent,
@@ -97,7 +95,6 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
         AsidePaneComponent,
         AsideTransferPaneComponent,
         AsideBranchTransferPaneComponent,
-        InOutStockListComponent,
         InventoryUserComponent,
         TransferNoteComponent,
         InwardNoteComponent,

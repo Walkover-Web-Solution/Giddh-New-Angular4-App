@@ -12,7 +12,6 @@ import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 import { base64ToBlob } from '../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment';
-import { GeneralService } from '../../services/general.service';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
@@ -36,8 +35,7 @@ export class ImportReportComponent implements OnInit, OnDestroy {
     constructor(
         private _router: Router,
         private store: Store<AppState>,
-        private _importActions: ImportExcelActions,
-        private generalService: GeneralService) {
+        private _importActions: ImportExcelActions) {
         this.store.pipe(select(s => s.importExcel.importStatus), takeUntil(this.destroyed$)).subscribe(s => {
             if (s && s.results) {
                 s.results = s.results.map(res => {

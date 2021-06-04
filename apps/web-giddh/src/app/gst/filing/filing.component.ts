@@ -129,11 +129,11 @@ export class FilingComponent implements OnInit, OnDestroy {
                 this.selectedGst = params['return_type'];
                 this.loadGstReport(this.activeCompanyGstNumber);
             }
-			//
-			let tab = Number(params['tab']);
-			if (tab > -1) {
-				this.selectTabFromUrl(tab);
-			}
+            
+            let tab = Number(params['tab']);
+            if (tab > -1) {
+                this.selectTabFromUrl(tab);
+            }
         });
 
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
@@ -163,8 +163,7 @@ export class FilingComponent implements OnInit, OnDestroy {
         this.isTransactionSummary = this.selectedTab !== this.localeData?.filing?.tabs?.overview;
         this.showTaxPro = val;
         this.fileReturnSucces = false;
-		// this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: this.selectedTabId}});
-	}
+    }
 
 	public selectTabFromUrl(tab: number) {
 		if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[tab]) {
