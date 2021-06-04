@@ -55,12 +55,12 @@
                                 </amount-field>
                             </span>
                             <span *ngIf="isMultiCurrencyAccount" class="d-flex justify-content-end company-currency">
-                                <amount-field [amount]="getConvertedBalanceDue()" [currencySymbol]="baseCurrencySymbol"
+                                <amount-field *ngIf="!(getBalanceDue() === 0 && (adjustedVoucherType === 'rcpt' || adjustedVoucherType === 'advance-receipt' || adjustedVoucherType === 'jr' || adjustedVoucherType === 'pay'))" [amount]="getConvertedBalanceDue()" [currencySymbol]="baseCurrencySymbol"
                                     [currencyCode]="companyCurrency">
                                 </amount-field>
                             </span>
                         </p>
-                        <p *ngIf="getBalanceDue() === 0 && getConvertedBalanceDue() !== 0 && adjustedVoucherType !== 'rcpt' && adjustedVoucherType !== 'advance-receipt' && adjustedVoucherType !== 'jr'">
+                        <p *ngIf="getBalanceDue() === 0 && getConvertedBalanceDue() !== 0 && adjustedVoucherType !== 'rcpt' && adjustedVoucherType !== 'advance-receipt' && adjustedVoucherType !== 'jr' && adjustedVoucherType !== 'pay'">
                             {{ getExchangeGainLossText() }}
                         </p>
                     </div>
