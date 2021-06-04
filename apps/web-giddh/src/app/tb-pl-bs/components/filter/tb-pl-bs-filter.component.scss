@@ -43,10 +43,11 @@
     color: $midnight-blue !important;
     border: 1px solid $gainsboro;
 }
-.download-data-icon{
-    display: flex;align-items: center;
+.download-data-icon {
+    display: flex;
+    align-items: center;
     justify-content: flex-end;
-    a{
+    a {
         display: flex;
         width: 36px;
         height: 36px;
@@ -58,10 +59,10 @@
         border: 1px solid $gainsboro;
     }
 }
-.d-inline-flex{
+.d-inline-flex {
     display: inline-flex;
 }
-.glyphicon-triangle-bottom{
+.glyphicon-triangle-bottom {
     z-index: 1;
     position: absolute;
     left: 152px;
@@ -69,7 +70,7 @@
     color: $very-light-gray;
     top: 14px;
 }
-.company-branch-dropdown{
+.company-branch-dropdown {
     width: 178px;
 }
 .linked-entities {
@@ -81,7 +82,7 @@
             margin-left: 6px;
             flex: 1;
             .item {
-                font-family:'opensans-semibold'
+                font-family: "opensans-semibold";
             }
         }
         .default-entity {
@@ -108,59 +109,59 @@
     border-right: 1px solid $gainsboro !important;
     cursor: pointer;
 }
-@media(max-width:1099px) and (min-width:1019px){
-    .financial-select-year{
+@media (max-width: 1099px) and (min-width: 1019px) {
+    .financial-select-year {
         margin-bottom: 15px;
-        .company-branch-dropdown{
+        .company-branch-dropdown {
             width: 158px;
         }
-        .expand-collapse-icon{
+        .expand-collapse-icon {
             position: absolute;
             bottom: -36px;
             right: 15px;
         }
     }
-    .download-data-icon{
+    .download-data-icon {
         padding-right: 60px !important;
     }
-
 }
 @media (min-width: 768px) {
     .form-inline.financial-select-year .form-group {
         min-width: auto !important;
     }
 }
-@media(max-width:991px){
-    .datepicker-field{
+@media (max-width: 991px) {
+    .datepicker-field {
         min-width: 220px !important;
         width: 220px !important;
     }
-    .download-data-icon{
-        a{
+    .download-data-icon {
+        a {
             width: 36px;
             height: 36px;
         }
     }
-     .form-inline.financial-select-year{
+    .form-inline.financial-select-year {
         flex-flow: row nowrap !important;
-     }
-     .download-data-icon{
+    }
+    .download-data-icon {
         margin: 10px 0 2px;
-     }
+    }
 }
-@media screen and (max-width:767px){
-    .tb-mobile-header{
-        .datepicker-field, .custom-datepicker{
+@media screen and (max-width: 767px) {
+    .tb-mobile-header {
+        .datepicker-field,
+        .custom-datepicker {
             min-width: 100% !important;
             width: 100% !important;
-            input{
+            input {
                 min-width: 100% !important;
                 width: 100% !important;
                 text-align: left;
                 padding-left: 40px !important;
             }
         }
-        .refresh-btn{
+        .refresh-btn {
             display: flex;
             width: 36px;
             height: 36px;
@@ -172,7 +173,7 @@
             border: 1px solid $gainsboro;
         }
     }
-    .list-inline > li{
+    .list-inline > li {
         font-size: 12px;
     }
 }

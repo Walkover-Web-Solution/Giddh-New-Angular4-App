@@ -5,6 +5,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { CommandKComponent, ScrollComponent } from '.';
 import { CommandKService } from '../../services/commandk.service';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { TranslateDirectiveModule } from '../translate/translate.directive.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: false,
@@ -16,7 +17,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CommonModule,
         FormsModule,
         ClickOutsideModule,
-        PerfectScrollbarModule
+        PerfectScrollbarModule,
+        TranslateDirectiveModule
     ],
     declarations: [
         CommandKComponent,

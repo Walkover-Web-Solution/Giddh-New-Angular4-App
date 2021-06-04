@@ -1,7 +1,7 @@
-@import '../../../../../assets/css/color.scss';
+@import "../../../../../assets/css/color.scss";
 
-.modal-body .grp-col{
-    max-width:58.333%;
+.modal-body .grp-col {
+    max-width: 58.333%;
 }
 .custom-filed-list-wrapper {
     padding: 15px;
@@ -27,11 +27,11 @@
     }
 }
 
-.height-in-vh{
+.height-in-vh {
     height: calc(100vh - 70px);
 }
 
-@media(max-height:768px) {
+@media (max-height: 768px) {
     .custom-filed-list-wrapper {
         height: 550px;
         overflow-y: auto;

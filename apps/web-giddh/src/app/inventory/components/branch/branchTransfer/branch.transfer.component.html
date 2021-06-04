@@ -40,7 +40,8 @@
                         <div class="col-6 form-group">
                             <label>Source <sup>*</sup></label>
                             <sh-select [options]="branches" [multiple]="false" [placeholder]="'Select Source'"
-                                #sourceSelect (selected)="sourceChanged($event)" formControlName="source" [isRequired]="true"></sh-select>
+                                #sourceSelect (selected)="sourceChanged($event)" formControlName="source"
+                                [isRequired]="true"></sh-select>
                             <span *ngIf="source.invalid && (source.dirty || source.touched)">
                                 <span *ngIf="source?.errors && source?.errors['required']" class="text-danger">Please
                                     select Source.</span>
@@ -50,7 +51,8 @@
                         <div class="col-6 form-group" *ngIf="mode === 'destination'">
                             <label>Product Name <sup>*</sup></label>
                             <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                                formControlName="productName" (selected)="productChanged($event)" [isRequired]="true"></sh-select>
+                                formControlName="productName" (selected)="productChanged($event)" [isRequired]="true">
+                            </sh-select>
                             <span *ngIf="productName.invalid && (productName.dirty || productName.touched)">
                                 <span *ngIf="productName.errors && productName.errors['required']"
                                     class="text-danger">Please select Product.</span>
@@ -60,7 +62,8 @@
                         <div class="col-6 form-group" *ngIf="mode === 'product'">
                             <label>Destination <sup>*</sup></label>
                             <sh-select [options]="otherBranches" [multiple]="false" [disabled]="!(source.value)"
-                                [placeholder]="'Select Destination'" formControlName="destination" [isRequired]="true"></sh-select>
+                                [placeholder]="'Select Destination'" formControlName="destination" [isRequired]="true">
+                            </sh-select>
                             <span *ngIf="destination.invalid && (destination.dirty || destination.touched)">
                                 <span *ngIf="destination.errors && destination.errors['required']"
                                     class="text-danger">Please select Destination.</span>

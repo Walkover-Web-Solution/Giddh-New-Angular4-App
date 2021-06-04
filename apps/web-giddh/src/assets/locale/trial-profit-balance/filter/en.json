@@ -1,10 +1,10 @@
 {
-    "liabilities" : "Liabilities",
-    "assets" : "Assets",
-    "income" : "Income",
-    "expenses" : "Expenses",
-    "reload_data" : "Reload Data",
-    "create_new_tag" : "Create New Tag",
-    "tag_name" : "Tag Name",
-    "tag_description" : "Tag Desciption (optional)"
+    "liabilities": "Liabilities",
+    "assets": "Assets",
+    "income": "Income",
+    "expenses": "Expenses",
+    "reload_data": "Reload Data",
+    "create_new_tag": "Create New Tag",
+    "tag_name": "Tag Name",
+    "tag_description": "Tag Desciption (optional)"
 }

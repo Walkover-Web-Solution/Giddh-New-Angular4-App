@@ -47,7 +47,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._homeActions.getRatioAnalysis(moment().format(GIDDH_DATE_FORMAT), this.refresh));
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 let financialYears = [];
 
                 this.activeFinancialYear = activeCompany.activeFinancialYear;
@@ -371,7 +371,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
      * @memberof RatioAnalysisChartComponent
      */
     public translationComplete(event: boolean): void {
-        if(event) {
+        if (event) {
             this.rationResponse$.pipe(skipWhile(response => (isNullOrUndefined(response)))).subscribe(response => {
                 this.ratioObj = response;
                 this.generateCharts();

@@ -1,8 +1,8 @@
 
-describe('This is SignUp Test', ()=> {
+describe('This is SignUp Test', () => {
 
     let testData = "";
-    before(()=> {
+    before(() => {
         cy.viewport(1366, 768)
         cy.fixture('example.json')
             .then((data) => {
@@ -13,7 +13,7 @@ describe('This is SignUp Test', ()=> {
 
 
     it('SingUp with Email', () => {
-        let r = "giddhautomation_signup"+ Math.random().toString(36).substring(7)+ "@gmail.com";
+        let r = "giddhautomation_signup" + Math.random().toString(36).substring(7) + "@gmail.com";
         console.log("random", r);
         cy.SignUp(r, testData.Password)
 

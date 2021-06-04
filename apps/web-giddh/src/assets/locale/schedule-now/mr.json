@@ -1,0 +1,8 @@
+{
+    "email_placeholder": "example@gmail.com",
+    "invalid_email": "अवैध ई - मेल पत्ता",
+    "default_country_code": "91",
+    "choose_time": "वेळ निवडा",
+    "email_subject": "गिद्ध - आता वेळापत्रक",
+    "call_scheduled": "आपला कॉल यशस्वीरित्या शेड्यूल केला गेला आहे."
+}

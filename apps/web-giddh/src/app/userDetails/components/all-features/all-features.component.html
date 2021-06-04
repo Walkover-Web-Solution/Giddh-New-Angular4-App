@@ -1,368 +1,363 @@
-<div class="modal-header">
-    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopup()">×</span>
-    <h3>All Features</h3>
-</div>
-<div id="my-frame" class="modal-body clearfix">
-    <p class="mb-2">All the plan come with all the features with <strong>90 days money back guarantee</strong>. Following are the available features in Giddh - Accounting Software.</p>
+<ng-container appTranslate [file]="'all-features'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <div class="modal-header">
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopup()">×</span>
+        <h3>{{localeData?.page_heading}}</h3>
+    </div>
+    <div id="my-frame" class="modal-body clearfix">
+        <p class="mb-2" [innerHTML]="localeData?.money_back_guarantee"></p>
 
-    <div class="row">
-        <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="row">
+            <div class="col-md-4 col-sm-4 col-xs-12">
 
-            <div class="mb-2">
-                <p class="bold font-14">Shortcut Key</p>
-                <ul class="all-features-list">
-                    <li>Command+g or Control+g</li>
-                    <li>Alt+c</li>
-                </ul>
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.shortcut_key}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.command_control_g}}</li>
+                        <li>{{commonLocaleData?.app_alt_c}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.unique_code}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.unique_name_everything}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{commonLocaleData?.app_sales}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.sales_invoice}}</li>
+                        <li>{{localeData?.copy_from_previous_invoice}}</li>
+                        <li>{{localeData?.generate_sales_update_account}}</li>
+                        <li>{{localeData?.recurring_invoice}}</li>
+                        <li>{{localeData?.eway_bill_generation}}</li>
+                        <li>{{localeData?.edit_invoice}}</li>
+                        <li>{{localeData?.invoice_copies}}</li>
+                        <li>{{localeData?.generate_bulk_invoice}}</li>
+                        <li>{{localeData?.generate_compound_invoice}}</li>
+                        <li>{{localeData?.bulk_update_invoice}}</li>
+                        <li>{{localeData?.default_expiry_date}}</li>
+                        <li>{{localeData?.invoice_lock_date}}</li>
+                        <li>{{localeData?.show_seal}}</li>
+                        <li>{{localeData?.auto_paid}}</li>
+                        <li>{{localeData?.auto_email}}</li>
+                        <li>{{localeData?.invoice_through_sms}}</li>
+                        <li>{{localeData?.custom_invoice_number}}</li>
+                        <li>{{localeData?.custom_invoice_template}}</li>
+                        <li>{{localeData?.integrate_gmail_invoice}}</li>
+                        <li>{{localeData?.set_default_email}}</li>
+                        <li>{{localeData?.download_invoice_ledger}}</li>
+                        <li>{{localeData?.customer_invoice_report}}</li>
+                        <li>{{localeData?.search_description}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.cash_invoice}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.generate_cash_invoice}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{commonLocaleData?.app_branch}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.add_remove_branch}}</li>
+                        <li>{{localeData?.inventory_branch_transfer}}</li>
+                        <li>{{localeData?.consolidate_report}}</li>
+                        <li>{{localeData?.separate_report}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{commonLocaleData?.app_warehouse}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.create_edit_warehouse}}</li>
+                        <li>{{localeData?.warehouse_management}}</li>
+                    </ul>
+                </div>
+
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.vendor_page}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.vendor_report_note}}</li>
+                        <li>{{localeData?.bulk_email_sms}}</li>
+                        <li>{{localeData?.download_report_csv}}</li>
+                        <li>{{localeData?.create_vendor}}</li>
+                        <li>{{localeData?.add_comment}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{commonLocaleData?.app_settings}}</p>
+                    <ul class="all-features-list">
+                        <li>{{commonLocaleData?.app_taxes}}</li>
+                        <li>{{localeData?.integration}}</li>
+                        <li>{{localeData?.payment_gateway}}</li>
+                        <li>{{localeData?.profile}}</li>
+                        <li>{{commonLocaleData?.app_financial_year}}</li>
+                        <li>{{localeData?.permission}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.tags}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.manage_tags}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.trigger}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.manage_trigger}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{commonLocaleData?.app_discount}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.manage_discount}}</li>
+                    </ul>
+                </div>
+
+                <div class="clearfix">
+                    <p class="bold font-14">{{localeData?.subscription}}</p>
+                    <ul class="all-features-list">
+                        <li>{{commonLocaleData?.app_buy_plan}}</li>
+                        <li>{{localeData?.update_plan}}</li>
+                        <li>{{localeData?.renew_plan}}</li>
+                        <li>{{localeData?.check_transactions}}</li>
+                    </ul>
+                </div>
             </div>
 
-            <div class="mb-2">
-                <p class="bold font-14">Unique Code</p>
-                <ul class="all-features-list">
-                    <li>Unique Name for everything</li>
-                </ul>
+            <div class="col-md-4 col-sm-4 col-xs-12">
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.estimate_proforma}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.custom_heading_name}}</li>
+                        <li>{{localeData?.default_expiry_days}}</li>
+                        <li>{{localeData?.next_step_estimate}}</li>
+                        <li>{{localeData?.auto_change_status}}</li>
+                        <li>{{localeData?.auto_email}}</li>
+                        <li>{{localeData?.enable_send_sms}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{commonLocaleData?.app_purchase}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.custom_heading_name}}</li>
+                        <li>{{localeData?.default_expiry_days}}</li>
+                        <li>{{localeData?.next_step_estimate}}</li>
+                        <li>{{localeData?.auto_change_status}}</li>
+                        <li>{{localeData?.auto_email}}</li>
+                        <li>{{localeData?.enable_send_sms}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.credit_debit_note}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.create_credit_note}}</li>
+                        <li>{{localeData?.edit_credit_note}}</li>
+                        <li>{{localeData?.custom_template_credit_debit_note}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.manage_group_accounts}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.create_financial_groups}}</li>
+                        <li>{{localeData?.create_financial_accounts}}</li>
+                        <li>{{localeData?.share_groups}}</li>
+                        <li>{{localeData?.export_groups}}</li>
+                        <li>{{localeData?.share_accounts}}</li>
+                        <li>{{localeData?.edit_groups_accounts}}</li>
+                        <li>{{localeData?.delete_groups_accounts}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.ledger}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.export_ledger}}</li>
+                        <li>{{localeData?.columnar_report}}</li>
+                        <li>{{localeData?.email_ledger}}</li>
+                        <li>{{localeData?.share_ledger}}</li>
+                        <li>{{localeData?.generate_vouchers_ledger}}</li>
+                        <li>{{localeData?.download_vouchers_ledger}}</li>
+                        <li>{{localeData?.edit_delete_entry}}</li>
+                        <li>{{localeData?.edit_voucher_generate}}</li>
+                        <li>{{localeData?.bulk_voucher_delete}}</li>
+                        <li>{{localeData?.attach_file}}</li>
+                        <li>{{localeData?.check_cancelled_entries}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.advance_search_ledger}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.temporary_merge_accounts}}</li>
+                        <li>{{localeData?.temporary_merge_groups}}</li>
+                        <li>{{localeData?.search_with_description}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.customer_page}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.customer_report_note}}</li>
+                        <li>{{localeData?.bulk_emails_sms}}</li>
+                        <li>{{localeData?.download_report_csv}}</li>
+                        <li>{{localeData?.create_customer}}</li>
+                        <li>{{localeData?.add_comment}}</li>
+                        <li>{{localeData?.aging_report}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.import_data}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.import_groups}}</li>
+                        <li>{{localeData?.import_accounts}}</li>
+                        <li>{{localeData?.import_inventory}}</li>
+                        <li>{{localeData?.import_entries}}</li>
+                        <li>{{localeData?.import_trial_balance}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.export_data}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.company_import_export}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.audit_logs}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.user_wise}}</li>
+                    </ul>
+                </div>
             </div>
 
-            <div class="mb-2">
-                <p class="bold font-14">Sales</p>
-                <ul class="all-features-list">
-                    <li>Sales Invoice</li>
-                    <li>Copy from previous invoice </li>
-                    <li>Generate Sales and update account</li>
-                    <li>Recurring Invoice
-                    <li>E-way Bill generation</li>
-                    <li>Edit Invoice
-                    <li>Invoices Copy like Transport, Customer and Original</li>
-                    <li>Generate Bulk Invoice
-                    <li>Generate Compound Invoice</li>
-                    <li>Bulk Update In Invoices</li>
-                    <li>Default Expiry Date
-                    <li>Invoice Lock Date</li>
-                    <li>Show seal according to the Status of payment</li>
-                    <li>Auto Paid
-                    <li>Auto email</li>
-                    <li>Invoice through SMS</li>
-                    <li>Custom Invoice Number</li>
-                    <li>Custom Invoice Template</li>
-                    <li>Integrate Gmail for Invoice</li>
-                    <li>Set Default Email for Sending Invoice </li>
-                    <li>Download Invoice From Ledger</li>
-                    <li>Customer Invoice Report
-                    <li>Search Through Description</li>
-                </ul>
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="mb-2">
+                    <p class="bold font-14">{{commonLocaleData?.app_inventory}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.create_stock_group}}</li>
+                        <li>{{localeData?.create_custom_unit}}</li>
+                        <li>{{localeData?.custom_field_inventory}}</li>
+                        <li>{{localeData?.fix_tax_stock}}</li>
+                        <li>{{localeData?.manage_receipt_note}}</li>
+                        <li>{{localeData?.manage_delivery_challan}}</li>
+                        <li>{{localeData?.account_wise_report}}</li>
+                        <li>{{localeData?.group_wise_report}}</li>
+                        <li>{{localeData?.stock_wise_report}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.manufacturing}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.define_manufacturing_process}}</li>
+                        <li>{{localeData?.create_manufacturing}}</li>
+                        <li>{{localeData?.manufacturing_report}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{commonLocaleData?.app_search}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.accounting_group_search}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.gstr}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.gstr1}}</li>
+                        <li>{{localeData?.gstr2}}</li>
+                        <li>{{localeData?.gstr3b}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{commonLocaleData?.app_report}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.daybook}}</li>
+                        <li>{{localeData?.trial_balance}}</li>
+                        <li>{{localeData?.profit_loss}}</li>
+                        <li>{{localeData?.balance_sheet}}</li>
+                        <li>{{localeData?.customer_report}}</li>
+                        <li>{{localeData?.aging_report}}</li>
+                        <li>{{localeData?.vendor_report}}</li>
+                        <li>{{commonLocaleData?.app_inventory}}</li>
+                        <li>{{localeData?.sales_register}}</li>
+                        <li>{{localeData?.purchase_register}}</li>
+                        <li>{{localeData?.new_vs_old_invoice}}</li>
+                        <li>{{localeData?.eway_bill}}</li>
+                        <li>{{localeData?.manufacturing}}</li>
+                        <li>{{commonLocaleData?.app_reverse_charge}}</li>
+                        <li>{{localeData?.petty_cash_management}}</li>
+                        <li>{{commonLocaleData?.app_receipt}}</li>
+                        <li>{{localeData?.delivery_challan}}</li>
+                        <li>{{localeData?.monthly_columnar_report}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.desktop_app}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.windows}}</li>
+                        <li>{{localeData?.mac}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.mobile_app}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.android}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.security}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.two_way_auth}}</li>
+                        <li>{{localeData?.auth_key}}</li>
+                        <li>{{localeData?.session}}</li>
+                        <li>{{localeData?.delete_company}}</li>
+                        <li>{{commonLocaleData?.app_upcoming}}</li>
+                        <li>{{localeData?.feature_request}}</li>
+                        <li>{{localeData?.changelog}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{commonLocaleData?.app_tally}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.tally_giddh_plugin}}</li>
+                    </ul>
+                </div>
+
+                <div class="mb-2">
+                    <p class="bold font-14">{{localeData?.support}}</p>
+                    <ul class="all-features-list">
+                        <li>{{localeData?.talk_to_sales}}</li>
+                        <li>{{commonLocaleData?.app_send_email}}</li>
+                        <li>{{localeData?.help_doc}}</li>
+                        <li>{{localeData?.schedule_demo}}</li>
+                    </ul>
+                </div>
+
             </div>
-
-
-
-
-            <div class="mb-2">
-                <p class="bold font-14">Cash Invoice</p>
-                <ul class="all-features-list">
-                    <li>Generate Cash Invoice</li>
-                </ul>
-            </div>
-
-            <div class="mb-2">
-                <p class="bold font-14">Branch</p>
-                <ul class="all-features-list">
-                    <li>Add and Remove Branch</li>
-                    <li>Inventory Branch Transfer</li>
-                    <li>Consolidate Report</li>
-                    <li>Separate Report</li>
-                </ul>
-            </div>
-
-            <div class="mb-2">
-                <p class="bold font-14">Warehouse</p>
-                <ul class="all-features-list">
-                    <li>Create, Edit Warehouse</li>
-                    <li>Warehouse Management</li>
-                </ul>
-            </div>
-
-
-            <div class="mb-2">
-              <p class="bold font-14">Vendor Page</p>
-              <ul class="all-features-list">
-                  <li>Vendor Report as per Purchase, Payment and Closing</li>
-                  <li>Bulk Emails and SMS</li>
-                  <li>Download Report CSV</li>
-                  <li>Create Vendor</li>
-                  <li>Add Comment</li>
-              </ul>
-          </div>
-
-          <div class="mb-2">
-              <p class="bold font-14">Settings</p>
-              <ul class="all-features-list">
-                  <li>TAXES</li>
-                  <li>INTEGRATION</li>
-                  <li>Payment Gateway</li>
-                  <li>Profile</li>
-                  <li>Financial Year</li>
-                  <li>Permission</li>
-              </ul>
-          </div>
-
-          <div class="mb-2">
-              <p class="bold font-14">Tags</p>
-              <ul class="all-features-list">
-                  <li>Create, Edit and Delete Tags</li>
-              </ul>
-          </div>
-
-          <div class="mb-2">
-              <p class="bold font-14">Trigger</p>
-              <ul class="all-features-list">
-                  <li>Create, Edit and Delete Trigger</li>
-              </ul>
-          </div>
-
-          <div class="mb-2">
-              <p class="bold font-14">Discount</p>
-              <ul class="all-features-list">
-                  <li>Create, Edit and Delete Discount</li>
-              </ul>
-          </div>
-
-          <div class="clearfix">
-            <p class="bold font-14">Subscription</p>
-            <ul class="all-features-list">
-                <li>Buy Plan</li>
-                <li>Update Plan</li>
-                <li>Renew Plan</li>
-                <li>Check Transactions</li>
-            </ul>
-        </div>
-
-
-        </div>
-
-        <div class="col-md-4 col-sm-4 col-xs-12">
-
-            <div class="mb-2">
-                <p class="bold font-14">Estimate/Proforma</p>
-                <ul class="all-features-list">
-                    <li>Custom Heading Name</li>
-                    <li>Set Default Expiry Days</li>
-                    <li>Next Step To Estimate</li>
-                    <li>Auto Change Status on Expiry</li>
-                    <li>Auto Email</li>
-                    <li>Enable Send Via SMS</li>
-                </ul>
-            </div>
-
-            <div class="mb-2">
-                <p class="bold font-14">Purchase</p>
-                <ul class="all-features-list">
-                    <li>Custom Heading Name</li>
-                    <li>Set Default Expiry Days</li>
-                    <li>Next Step To Estimate</li>
-                    <li>Auto Change Status on Expiry</li>
-                    <li>Auto Email</li>
-                    <li>Enable Send Via SMS</li>
-                </ul>
-            </div>
-
-            <div class="mb-2">
-                <p class="bold font-14">Credit Note/Debit Note</p>
-                <ul class="all-features-list">
-                    <li>Create Credit Note</li>
-                    <li>Edit Credit Note</li>
-                    <li>Custom Template For Credit Note/Debit Note</li>
-                </ul>
-            </div>
-
-            <div class="mb-2">
-                <p class="bold font-14">Manage Group and Accounts</p>
-                <ul class="all-features-list">
-                    <li>Create Financial Groups</li>
-                    <li>Create Financial Accounts</li>
-                    <li>Share Groups</li>
-                    <li>Export Groups</li>
-                    <li>Share Accounts</li>
-                    <li>Edit Groups and Accounts</li>
-                    <li>Delete Groups and Accounts</li>
-                </ul>
-            </div>
-
-            <div class="mb-2">
-                <p class="bold font-14">Ledger</p>
-                <ul class="all-features-list">
-                    <li>Export Ledger</li>
-                    <li>Columnar Report</li>
-                    <li>Email Ledger</li>
-                    <li>Share Ledger</li>
-                    <li>Generate Vouchers From Ledger</li>
-                    <li>Download Vouchers From Ledger</li>
-                    <li>Edit / Delete Entry</li>
-                    <li>Bulk Voucher Generate</li>
-                    <li>Bulk Voucher Delete</li>
-                    <li>Attach File</li>
-                    <li>Check Cancelled Entries</li>
-                </ul>
-            </div>
-
-            <div class="mb-2">
-                <p class="bold font-14">Advance Search in Ledger</p>
-                <ul class="all-features-list">
-                    <li>Temporary Merge Accounts</li>
-                    <li>Temporary Merge Groups</li>
-                    <li>Search With Description</li>
-                </ul>
-            </div>
-
-            <div class="mb-2">
-                <p class="bold font-14">Customer Page</p>
-                <ul class="all-features-list">
-                    <li>Customer Report as per Sales, Receipt and Closing</li>
-                    <li>Bulk Emails and SMS</li>
-                    <li>Download Report CSV</li>
-                    <li>Create Customer</li>
-                    <li>Add Comment</li>
-                    <li>Ageing Report</li>
-                </ul>
-            </div>
-
-
-          <div class="mb-2">
-            <p class="bold font-14">Import Data</p>
-            <ul class="all-features-list">
-                <li>Import Groups</li>
-                <li>Import Accounts</li>
-                <li>Import Inventory</li>
-                <li>Import Entries</li>
-                <li>Import Trial Balance</li>
-            </ul>
-        </div>
-
-        <div class="mb-2">
-            <p class="bold font-14">Export Data</p>
-            <ul class="all-features-list">
-                <li>Company Import/Export</li>
-            </ul>
-        </div>
-
-        <div class="mb-2">
-            <p class="bold font-14">Audit Logs</p>
-            <ul class="all-features-list">
-                <li>User Wise</li>
-            </ul>
-        </div>
-
-        </div>
-
-        <div class="col-md-4 col-sm-4 col-xs-12">
-            <div class="mb-2">
-                <p class="bold font-14">Inventory</p>
-                <ul class="all-features-list">
-                    <li>Create Stock Group</li>
-                    <li>Create Custom Unit</li>
-                    <li>Custome Field in Inventory</li>
-                    <li>Fix Tax with Stock</li>
-                    <li>Receipt Note (Create, Edit and Delete)</li>
-                    <li>Delivery Challan (Create, Edit and Delete)</li>
-                    <li>Account Wise Report</li>
-                    <li>Group Wise Report</li>
-                    <li>Stock Wise Report</li>
-                </ul>
-            </div>
-
-
-            <div class="mb-2">
-                <p class="bold font-14">Manufacturing</p>
-                <ul class="all-features-list">
-                    <li>Define Manufacturing Process</li>
-                    <li>Create Manufacturing </li>
-                    <li>Manufacturing Report</li>
-                </ul>
-            </div>
-
-            <div class="mb-2">
-                <p class="bold font-14">Search</p>
-                <ul class="all-features-list">
-                    <li>Accounting Group Search</li>
-                </ul>
-            </div>
-
-            <div class="mb-2">
-                <p class="bold font-14">GSTR</p>
-                <ul class="all-features-list">
-                    <li>GSTR1</li>
-                    <li>GSTR2</li>
-                    <li>GSTR3b</li>
-                </ul>
-            </div>
-
-            <div class="mb-2">
-                <p class="bold font-14">Report</p>
-                <ul class="all-features-list">
-                    <li>Daybook</li>
-                    <li>Trial Balance</li>
-                    <li>Profit and Loss</li>
-                    <li>Balance Sheet</li>
-                    <li>Customer Report</li>
-                    <li>Aging Report</li>
-                    <li>Vendor Report</li>
-                    <li>Inventory</li>
-                    <li>Sales Register</li>
-                    <li>Purchase Register</li>
-                    <li>New v/s Old Invoice</li>
-                    <li>E-way Bill</li>
-                    <li>Manufacturing</li>
-                    <li>Reverse Charge</li>
-                    <li>Petty Cash Management</li>
-                    <li>Receipt</li>
-                    <li>Delivery Challan</li>
-                    <li>Monthly Columnar Report</li>
-                </ul>
-            </div>
-
-            <div class="mb-2">
-                <p class="bold font-14">Desktop App</p>
-                <ul class="all-features-list">
-                    <li>Windows</li>
-                    <li>Mac</li>
-                </ul>
-            </div>
-
-            <div class="mb-2">
-                <p class="bold font-14">Mobile App</p>
-                <ul class="all-features-list">
-                    <li>Android</li>
-                </ul>
-            </div>
-
-            <div class="mb-2">
-                <p class="bold font-14">Security</p>
-                <ul class="all-features-list">
-                    <li>Two way authentication</li>
-                    <li>Auth Key</li>
-                    <li>Session</li>
-                    <li>Delete Company</li>
-                    <li>Upcoming</li>
-                    <li>Feature Request</li>
-                    <li>Changelog</li>
-                </ul>
-            </div>
-
-            <div class="mb-2">
-                <p class="bold font-14">Tally</p>
-                <ul class="all-features-list">
-                    <li>Tally to Giddh Plugin</li>
-                </ul>
-            </div>
-
-            <div class="mb-2">
-                <p class="bold font-14">Support</p>
-                <ul class="all-features-list">
-                    <li>Talk to Sales</li>
-                    <li>Send Email</li>
-                    <li>Help Doc</li>
-                    <li>Schedule a Demo</li>
-                </ul>
-            </div>
-
         </div>
     </div>
-</div>
+</ng-container>

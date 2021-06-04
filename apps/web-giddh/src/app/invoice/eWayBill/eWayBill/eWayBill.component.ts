@@ -5,7 +5,6 @@ import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil } from 'rxjs/operators';
 import { IEwayBillAllList, IEwayBillCancel, Result, UpdateEwayVehicle, IEwayBillfilter } from '../../../models/api-models/Invoice';
 import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
@@ -17,7 +16,6 @@ import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { NgForm, FormControl } from '@angular/forms';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LocationService } from '../../../services/location.service';
-import { createSelector } from 'reselect';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 
@@ -29,8 +27,8 @@ import { GeneralService } from '../../../services/general.service';
 })
 
 export class EWayBillComponent implements OnInit, OnDestroy {
-    @ViewChild('cancelEwayForm', {static: true}) public cancelEwayForm: NgForm;
-    @ViewChild('updateVehicleForm', {static: true}) public updateVehicleForm: NgForm;
+    @ViewChild('cancelEwayForm', { static: true }) public cancelEwayForm: NgForm;
+    @ViewChild('updateVehicleForm', { static: true }) public updateVehicleForm: NgForm;
 
     public isGetAllEwaybillRequestInProcess$: Observable<boolean>;
     public isGetAllEwaybillRequestSuccess$: Observable<boolean>;
@@ -55,8 +53,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public searchResults: Array<any> = [];
 
     // searching
-    @ViewChild('invoiceSearch', {static: true}) public invoiceSearch: ElementRef;
-    @ViewChild('customerSearch', {static: true}) public customerSearch: ElementRef;
+    @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
+    @ViewChild('customerSearch', { static: true }) public customerSearch: ElementRef;
     public voucherNumberInput: FormControl = new FormControl();
     public customerNameInput: FormControl = new FormControl();
     public showSearchInvoiceNo: boolean = false;
@@ -69,12 +67,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         cancelRsnCode: null,
         cancelRmrk: null,
     };
-    public ewayUpdateVehicleReasonList: IOption[] = [
-        { value: '1', label: 'Due to Break Down' },
-        { value: '2', label: 'Due to Transshipment' },
-        { value: '3', label: 'Others' },
-        { value: '4', label: 'First Time' },
-    ];
+    public ewayUpdateVehicleReasonList: IOption[] = [];
 
     public datePickerOptions: any = {
         hideOnEsc: true,
@@ -113,12 +106,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         endDate: moment()
     };
 
-    public ewayCancelReason: IOption[] = [
-        { value: '1', label: 'Duplicate' },
-        { value: '2', label: 'Order cancelled' },
-        { value: '3', label: 'Data Entry Mistake' },
-        { value: '4', label: 'Others' },
-    ];
+    public ewayCancelReason: IOption[] = [];
     public updateEwayVehicleform: UpdateEwayVehicle = {
         ewbNo: null,
         vehicleNo: null,
@@ -132,7 +120,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         vehicleType: null,
     };
 
-    @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
+    @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
     public selectedEway: Result;
     public states: any[] = [];
     /** directive to get reference of element */
@@ -157,6 +145,10 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
@@ -508,7 +500,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @memberof EWayBillComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -537,5 +529,29 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof EWayBillComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.ewayUpdateVehicleReasonList = [
+                { value: '1', label: this.localeData?.vehicle_reason_list?.break_down },
+                { value: '2', label: this.localeData?.vehicle_reason_list?.transshipment },
+                { value: '3', label: this.localeData?.vehicle_reason_list?.others },
+                { value: '4', label: this.localeData?.vehicle_reason_list?.first_time }
+            ];
+
+            this.ewayCancelReason = [
+                { value: '1', label: this.localeData?.cancel_reason_list?.duplicate },
+                { value: '2', label: this.localeData?.cancel_reason_list?.order_cancelled },
+                { value: '3', label: this.localeData?.cancel_reason_list?.data_entry_mistake },
+                { value: '4', label: this.localeData?.cancel_reason_list?.others }
+            ];
+        }
     }
 }

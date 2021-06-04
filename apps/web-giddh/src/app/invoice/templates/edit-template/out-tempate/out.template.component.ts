@@ -11,55 +11,55 @@ import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../
 // import { IsDivVisible, IsFieldVisible } from '../filters-container/content-filters/content.filters.component';
 
 @Component({
-	selector: 'invoice-template',
-	templateUrl: 'out.template.component.html',
-	styleUrls: ['out.template.component.css']
+    selector: 'invoice-template',
+    templateUrl: 'out.template.component.html',
+    styleUrls: ['out.template.component.css']
 })
 
 export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 
-	@Input() public isPreviewMode: boolean = true;
-	public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
-	public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
-	public logoSrc: string;
-	public imageSignatureSrc: string;
-	public showLogo: boolean = true;
-	public showImageSignature: boolean = false;
-	public showCompanyName: boolean;
-	public companyGSTIN: string;
-	public companyPAN: string;
-	public fieldsAndVisibility: any;
-	public companyUniqueName: string;
-	public voucherType = 'default';
+    @Input() public isPreviewMode: boolean = true;
+    public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
+    public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
+    public logoSrc: string;
+    public imageSignatureSrc: string;
+    public showLogo: boolean = true;
+    public showImageSignature: boolean = false;
+    public showCompanyName: boolean;
+    public companyGSTIN: string;
+    public companyPAN: string;
+    public fieldsAndVisibility: any;
+    public companyUniqueName: string;
+    public voucherType = 'default';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* Company unique name observable */
     public companyUniqueName$: Observable<string>;
     /* This will hold the value if Gst Composition will show/hide */
     public showGstComposition: boolean = false;
 
-	constructor(
-		private store: Store<AppState>,
-		private _invoiceUiDataService: InvoiceUiDataService,
-		private _activatedRoute: ActivatedRoute) {
-		let companyUniqueName = null;
-		let companies = null;
-		let defaultTemplate = null;
+    constructor(
+        private store: Store<AppState>,
+        private _invoiceUiDataService: InvoiceUiDataService,
+        private _activatedRoute: ActivatedRoute) {
+        let companyUniqueName = null;
+        let companies = null;
+        let defaultTemplate = null;
 
-		this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
-			companyUniqueName = ss.companyUniqueName;
-			companies = ss.companies;
-			this.companyUniqueName = ss.companyUniqueName;
+        this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
+            companyUniqueName = ss.companyUniqueName;
+            companies = ss.companies;
+            this.companyUniqueName = ss.companyUniqueName;
         });
 
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
 
-		this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
-			defaultTemplate = ss.defaultTemplate;
-		});
-		this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
-	}
+        this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
+            defaultTemplate = ss.defaultTemplate;
+        });
+        this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
+    }
 
-	public ngOnInit() {
+    public ngOnInit() {
         this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => {
             if (activeCompany?.countryV2?.countryName) {
                 this.showGstComposition = activeCompany.countryV2.countryName === 'India';

@@ -89,7 +89,7 @@ export class AsideMenuProductServiceComponent implements OnDestroy {
      */
     public addNewServiceAccount(item: AddAccountRequest): void {
         this.accountService.CreateAccountV2(item.accountRequest, item.activeGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response.status === "success") {
+            if (response.status === "success") {
                 this.toasterService.successToast(this.commonLocaleData?.app_account_created);
                 this.closeAsideEvent.emit();
             } else {

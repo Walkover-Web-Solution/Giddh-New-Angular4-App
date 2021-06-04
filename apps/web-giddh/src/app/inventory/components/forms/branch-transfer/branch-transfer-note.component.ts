@@ -46,7 +46,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
 
     @Input() public isLoading: boolean;
     @Input() public currentCompany: CompanyResponse;
-    @ViewChild('shDestination', {static: true}) public shDestination: ShSelectComponent;
+    @ViewChild('shDestination', { static: true }) public shDestination: ShSelectComponent;
 
     public hideForm = false;
     public stockListOptions: IOption[];

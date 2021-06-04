@@ -97,21 +97,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** Stores the active company details */
     @Input() activeCompany: any;
 
-    @ViewChild('deleteAttachedFileModal', {static: true}) public deleteAttachedFileModal: ModalDirective;
+    @ViewChild('deleteAttachedFileModal', { static: true }) public deleteAttachedFileModal: ModalDirective;
     /** fileinput element ref for clear value after remove attachment **/
-    @ViewChild('fileInputUpdate', {static: true}) public fileInputElement: ElementRef<any>;
-    @ViewChild('deleteEntryModal', {static: true}) public deleteEntryModal: ModalDirective;
-    @ViewChild('discount', {static: false}) public discountComponent: UpdateLedgerDiscountComponent;
-    @ViewChild('tax', {static: false}) public taxControll: TaxControlComponent;
-    @ViewChild('updateBaseAccount', {static: true}) public updateBaseAccount: ModalDirective;
-    @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
+    @ViewChild('fileInputUpdate', { static: true }) public fileInputElement: ElementRef<any>;
+    @ViewChild('deleteEntryModal', { static: true }) public deleteEntryModal: ModalDirective;
+    @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
+    @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
+    @ViewChild('updateBaseAccount', { static: true }) public updateBaseAccount: ModalDirective;
+    @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
     /** Advance receipt remove confirmation modal reference */
-    @ViewChild('advanceReceiptRemoveConfirmationModal', {static: true}) public advanceReceiptRemoveConfirmationModal: ModalDirective;
+    @ViewChild('advanceReceiptRemoveConfirmationModal', { static: true }) public advanceReceiptRemoveConfirmationModal: ModalDirective;
     /** Adjustment modal */
-    @ViewChild('adjustPaymentModal', {static: true}) public adjustPaymentModal: ModalDirective;
+    @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: ModalDirective;
 
     /** RCM popup instance */
-    @ViewChild('rcmPopup', {static: false}) public rcmPopup: PopoverDirective;
+    @ViewChild('rcmPopup', { static: false }) public rcmPopup: PopoverDirective;
 
     /** Warehouse data for warehouse drop down */
     public warehouses: Array<any>;
@@ -317,7 +317,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (response) {
                 this.branches = response;
             } else {
-                this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
             }
         });
         this.store.pipe(select(state => state.ledger.refreshLedger), takeUntil(this.destroyed$)).subscribe(response => {
@@ -652,7 +652,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                     rate: txn.selectedAccount.stock.rate,
                                     name: txn.selectedAccount.stock.name
                                 };
-                                txn.unitRate = txn.selectedAccount.stock.unitRates.map(unitRate => ({...unitRate, code: unitRate.stockUnitCode}));
+                                txn.unitRate = txn.selectedAccount.stock.unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
                                 stockName = defaultUnit.name;
                                 rate = defaultUnit.rate;
                                 stockUniqueName = txn.selectedAccount.stock.uniqueName;
@@ -775,7 +775,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public deleteTrxEntry() {
         let uniqueName = (this.vm.selectedLedger && this.vm.selectedLedger.particular) ? this.vm.selectedLedger.particular.uniqueName : undefined;
-        if(uniqueName) {
+        if (uniqueName) {
             this.store.dispatch(this._ledgerAction.deleteTrxEntry(uniqueName, this.entryUniqueName));
         }
         this.hideDeleteEntryModal();
@@ -971,13 +971,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this._toasty.errorToast(this.localeData?.base_account_change_error);
             return;
         }
-        if(this.updateBaseAccount) {
+        if (this.updateBaseAccount) {
             this.updateBaseAccount.show();
         }
     }
 
     public hideBaseAccountModal() {
-        if(this.updateBaseAccount) {
+        if (this.updateBaseAccount) {
             this.updateBaseAccount.hide();
         }
     }
@@ -1024,7 +1024,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
             return;
         }
-        if (this.vm.selectedLedger.voucherAdjustments && !this.vm.selectedLedger.voucherAdjustments.adjustments ) {
+        if (this.vm.selectedLedger.voucherAdjustments && !this.vm.selectedLedger.voucherAdjustments.adjustments) {
             this.vm.selectedLedger.voucherAdjustments.adjustments = [];
         }
         if ((this.isAdjustAdvanceReceiptSelected || this.isAdjustReceiptSelected || this.isAdjustVoucherSelected) && this.vm.selectedLedger.voucherAdjustments && (!this.vm.selectedLedger.voucherAdjustments.adjustments || !this.vm.selectedLedger.voucherAdjustments.adjustments.length || isUpdateMode)) {
@@ -1138,7 +1138,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public creditNoteInvoiceSelected(event: any): void {
         if (event && event.value && event.additional) {
-            if(this.vm.selectedLedger) {
+            if (this.vm.selectedLedger) {
                 this.vm.selectedLedger.invoiceLinkingRequest = {
                     linkedInvoices: [
                         {
@@ -1149,7 +1149,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             }
         } else {
-            if(this.vm.selectedLedger) {
+            if (this.vm.selectedLedger) {
                 this.vm.selectedLedger.invoiceLinkingRequest = null;
             }
         }
@@ -1306,11 +1306,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.selectedPrefixForCurrency = this.vm.isPrefixAppliedForCurrency ?
             this.vm.selectedCurrency === 0 ?
                 (this.vm.baseCurrencyDetails) ? this.vm.baseCurrencyDetails.symbol : (this.vm.foreignCurrencyDetails) ? this.vm.foreignCurrencyDetails.symbol : '' :
-            '' : '';
+                '' : '';
         this.vm.selectedSuffixForCurrency = this.vm.isPrefixAppliedForCurrency ?
             '' : this.vm.selectedCurrency === 0 ? (this.vm.baseCurrencyDetails) ? this.vm.baseCurrencyDetails.symbol :
-            (this.vm.foreignCurrencyDetails) ? this.vm.foreignCurrencyDetails.symbol : '' :
-            '';
+                (this.vm.foreignCurrencyDetails) ? this.vm.foreignCurrencyDetails.symbol : '' :
+                '';
     }
 
     private getCurrencyRate() {
@@ -1357,7 +1357,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
                         this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -1398,7 +1398,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.searchResults = uniqBy(searchResults, 'value');
                     } else {
                         const uniqueResults = uniqBy([...this.searchResults,
-                            ...searchResults], 'value');
+                        ...searchResults], 'value');
                         this.searchResults = uniqueResults;
                     }
                     this.searchResultsPaginationData.page = data.body.page;
@@ -1449,7 +1449,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private isStockItemPresent(): boolean {
-        if(this.vm.selectedLedger.transactions) {
+        if (this.vm.selectedLedger.transactions) {
             for (let index = 0; index < this.vm.selectedLedger.transactions.length; index++) {
                 if (this.vm.selectedLedger.transactions[index].inventory) {
                     return true;
@@ -1653,7 +1653,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}} event Adjustment handler
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public getAdjustedPaymentData(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
+    public getAdjustedPaymentData(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }): void {
         if (event && event.adjustPaymentData && event.adjustVoucherData) {
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             if (adjustments) {
@@ -1687,7 +1687,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}} event Close event
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public closeAdjustmentModal(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
+    public closeAdjustmentModal(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }): void {
         if (this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments && !this.vm.selectedLedger.voucherAdjustments.adjustments.length) {
             // No adjustments done clear the adjustment checkbox
             this.isAdjustReceiptSelected = false;
@@ -1720,7 +1720,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private prepareAdjustVoucherConfiguration(): void {
         let customerUniqueName = [];
         this.vm.selectedLedger.transactions.forEach(transaction => {
-            if (transaction.particular && transaction.particular.uniqueName){
+            if (transaction.particular && transaction.particular.uniqueName) {
                 const uniqueName = transaction.particular.uniqueName.split('#')[0];
                 customerUniqueName.push(uniqueName);
             }
@@ -1749,7 +1749,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 tdsTotal: 0,
                 balanceDue: this.vm.selectedLedger.total.amount,
                 grandTotal: this.vm.selectedLedger?.entryVoucherTotals?.amountForAccount,
-                customerName: this.vm.selectedLedger && this.vm.selectedLedger.particular? this.vm.selectedLedger.particular.name : '',
+                customerName: this.vm.selectedLedger && this.vm.selectedLedger.particular ? this.vm.selectedLedger.particular.name : '',
                 customerUniquename: customerUniqueName,
                 totalTaxableValue: this.vm.selectedLedger.actualAmount,
                 subTotal: this.vm.selectedLedger.total.amount,
@@ -1847,7 +1847,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private checkForOtherAccount(): void {
         // check we already have others account in flatten account, then don't do anything
-        this.searchService.searchAccountV2({q: 'others'}).subscribe(response => {
+        this.searchService.searchAccountV2({ q: 'others' }).subscribe(response => {
             const isThereOthersAcc = !!response?.body?.results?.length;
             if (!isThereOthersAcc) {
                 // add new dummy account in flatten account array
@@ -1917,7 +1917,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public translationComplete(event: boolean): void {
-        if(event) {
+        if (event) {
             this.vm.voucherTypeList = [{
                 label: this.commonLocaleData?.app_voucher_types?.sales,
                 value: 'sal'
@@ -1950,259 +1950,260 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
             // get flatten_accounts list && get transactions list && get ledger account list
             observableCombineLatest([this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((resp: any[]) => {
-                if (resp[0] && resp[1] && resp[2]) {
-                    // insure we have account details, if we are normal ledger mode and not petty cash mode ( special case for others entry in petty cash )
-                    if (this.isPettyCash && this.accountUniqueName && resp[1].status !== 'success') {
-                        return;
-                    }
-                    this.baseAccountDetails = resp[0];
-                    this.activeAccount = cloneDeep(resp[1].body);
-                    // Decides whether to show the RCM entry
-                    this.shouldShowRcmEntry = this.isRcmEntryPresent(resp[0].transactions);
-                    this.isTouristSchemeApplicable = this.checkTouristSchemeApplicable(resp[0], resp[1], resp[2]);
-                    this.shouldShowRcmTaxableAmount = resp[0].reverseChargeTaxableAmount !== undefined && resp[0].reverseChargeTaxableAmount !== null;
-                    if (this.shouldShowRcmTaxableAmount) {
-                        // Received taxable amount is a truthy value
-                        resp[0].reverseChargeTaxableAmount = this.generalService.convertExponentialToNumber(resp[0].reverseChargeTaxableAmount);
-                    }
-                    // Show the ITC section if value of ITC is received (itcAvailable) or it's an old transaction that is eligible for ITC (isItcEligible)
-                    this.shouldShowItcSection = !!resp[0].itcAvailable || resp[0].isItcEligible;
-                    this.taxOnlyTransactions = resp[0].taxOnlyTransactions;
-                    this.profileObj = resp[2];
-                    this.vm.giddhBalanceDecimalPlaces = resp[2].balanceDecimalPlaces;
-                    this.vm.inputMaskFormat = this.profileObj.balanceDisplayFormat ? this.profileObj.balanceDisplayFormat.toLowerCase() : '';
-
-                    // special check if we have petty cash mode and we receive an entry whose uniquename is null
-                    // so it means it's other account entry of petty cash
-                    // so for that we have to add a dummy account in flatten account array
-                    if (this.isPettyCash) {
-                        // this.loadDefaultSearchSuggestions();
-                        if (resp[0].othersCategory) {
-                            this.checkForOtherAccount();
+                .pipe(takeUntil(this.destroyed$))
+                .subscribe((resp: any[]) => {
+                    if (resp[0] && resp[1] && resp[2]) {
+                        // insure we have account details, if we are normal ledger mode and not petty cash mode ( special case for others entry in petty cash )
+                        if (this.isPettyCash && this.accountUniqueName && resp[1].status !== 'success') {
+                            return;
                         }
-                        this.prepareMultiCurrencyObject(this.activeAccount);
-                    }
+                        this.baseAccountDetails = resp[0];
+                        this.activeAccount = cloneDeep(resp[1].body);
+                        // Decides whether to show the RCM entry
+                        this.shouldShowRcmEntry = this.isRcmEntryPresent(resp[0].transactions);
+                        this.isTouristSchemeApplicable = this.checkTouristSchemeApplicable(resp[0], resp[1], resp[2]);
+                        this.shouldShowRcmTaxableAmount = resp[0].reverseChargeTaxableAmount !== undefined && resp[0].reverseChargeTaxableAmount !== null;
+                        if (this.shouldShowRcmTaxableAmount) {
+                            // Received taxable amount is a truthy value
+                            resp[0].reverseChargeTaxableAmount = this.generalService.convertExponentialToNumber(resp[0].reverseChargeTaxableAmount);
+                        }
+                        // Show the ITC section if value of ITC is received (itcAvailable) or it's an old transaction that is eligible for ITC (isItcEligible)
+                        this.shouldShowItcSection = !!resp[0].itcAvailable || resp[0].isItcEligible;
+                        this.taxOnlyTransactions = resp[0].taxOnlyTransactions;
+                        this.profileObj = resp[2];
+                        this.vm.giddhBalanceDecimalPlaces = resp[2].balanceDecimalPlaces;
+                        this.vm.inputMaskFormat = this.profileObj.balanceDisplayFormat ? this.profileObj.balanceDisplayFormat.toLowerCase() : '';
 
-                    let isStockableAccount: boolean = false;
-
-                    if (this.activeAccount) {
-                        if (this.activeAccount.currency && this.vm.isMultiCurrencyAvailable) {
-                            this.baseCurrency = this.activeAccount.currency;
+                        // special check if we have petty cash mode and we receive an entry whose uniquename is null
+                        // so it means it's other account entry of petty cash
+                        // so for that we have to add a dummy account in flatten account array
+                        if (this.isPettyCash) {
+                            // this.loadDefaultSearchSuggestions();
+                            if (resp[0].othersCategory) {
+                                this.checkForOtherAccount();
+                            }
+                            this.prepareMultiCurrencyObject(this.activeAccount);
                         }
 
-                        // check if current account category is type 'income' or 'expenses'
-                        let parentAcc = this.activeAccount.parentGroups[0].uniqueName;
-                        let incomeAccArray = ['revenuefromoperations', 'otherincome'];
-                        let expensesAccArray = ['operatingcost', 'indirectexpenses'];
-                        let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
+                        let isStockableAccount: boolean = false;
 
-                        // if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
-                        //     let appTaxes = [];
-                        //     this.activeAccount.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
-                        //     this.currentAccountApplicableTaxes = appTaxes;
+                        if (this.activeAccount) {
+                            if (this.activeAccount.currency && this.vm.isMultiCurrencyAvailable) {
+                                this.baseCurrency = this.activeAccount.currency;
+                            }
+
+                            // check if current account category is type 'income' or 'expenses'
+                            let parentAcc = this.activeAccount.parentGroups[0].uniqueName;
+                            let incomeAccArray = ['revenuefromoperations', 'otherincome'];
+                            let expensesAccArray = ['operatingcost', 'indirectexpenses'];
+                            let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
+
+                            // if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
+                            //     let appTaxes = [];
+                            //     this.activeAccount.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
+                            //     this.currentAccountApplicableTaxes = appTaxes;
+                            // }
+
+                            // check if account is stockable
+                            isStockableAccount = this.activeAccount.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
+                        }
+
+                        this.vm.getUnderstandingText(resp[0].particularType, resp[0].particular.name, this.localeData);
+
+                        //#region transaction assignment process
+                        this.vm.selectedLedger = resp[0];
+                        this.originalVoucherAdjustments = cloneDeep(this.vm.selectedLedger.voucherAdjustments);
+                        this.formatAdjustments();
+                        if (this.vm.selectedLedger && !this.invoiceList?.length && (this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.creditNote ||
+                            this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.debitNote)) {
+                            this.getInvoiceListsForCreditNote();
+                        }
+
+                        /** To check advance receipts adjustment for Tx (Using list of invoice is there or not)*/
+                        // if (this.vm && this.vm.selectedLedger && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices.length) {
+                        //     this.isAdjustedInvoicesWithAdvanceReceipt = true;
+                        //     this.calculateInclusiveTaxesForAdvanceReceiptsInvoices();
+                        // } else {
+                        //     this.isAdjustedInvoicesWithAdvanceReceipt = false;
                         // }
 
-                        // check if account is stockable
-                        isStockableAccount = this.activeAccount.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
-                    }
+                        // Check the RCM checkbox if API returns subvoucher as Reverse charge
+                        this.isRcmEntry = (this.vm.selectedLedger.subVoucher === SubVoucher.ReverseCharge);
+                        this.isAdvanceReceipt = (this.vm.selectedLedger.subVoucher === SubVoucher.AdvanceReceipt);
+                        this.vm.isRcmEntry = this.isRcmEntry;
+                        this.vm.isAdvanceReceipt = this.isAdvanceReceipt;
+                        this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
 
-                    this.vm.getUnderstandingText(resp[0].particularType, resp[0].particular.name, this.localeData);
-
-                    //#region transaction assignment process
-                    this.vm.selectedLedger = resp[0];
-                    this.originalVoucherAdjustments = cloneDeep(this.vm.selectedLedger.voucherAdjustments);
-                    this.formatAdjustments();
-                    if (this.vm.selectedLedger && !this.invoiceList?.length && (this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.creditNote ||
-                        this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.debitNote)) {
-                        this.getInvoiceListsForCreditNote();
-                    }
-
-                    /** To check advance receipts adjustment for Tx (Using list of invoice is there or not)*/
-                    // if (this.vm && this.vm.selectedLedger && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices.length) {
-                    //     this.isAdjustedInvoicesWithAdvanceReceipt = true;
-                    //     this.calculateInclusiveTaxesForAdvanceReceiptsInvoices();
-                    // } else {
-                    //     this.isAdjustedInvoicesWithAdvanceReceipt = false;
-                    // }
-
-                    // Check the RCM checkbox if API returns subvoucher as Reverse charge
-                    this.isRcmEntry = (this.vm.selectedLedger.subVoucher === SubVoucher.ReverseCharge);
-                    this.isAdvanceReceipt = (this.vm.selectedLedger.subVoucher === SubVoucher.AdvanceReceipt);
-                    this.vm.isRcmEntry = this.isRcmEntry;
-                    this.vm.isAdvanceReceipt = this.isAdvanceReceipt;
-                    this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
-
-                    if (this.vm.selectedLedger.voucher && this.vm.selectedLedger.voucher.shortCode === 'rcpt' && this.isAdvanceReceipt) {
-                        this.vm.selectedLedger.voucher.shortCode = 'advance-receipt';
-                    }
-
-                    this.makeAdjustmentCalculation();
-
-                    if (this.isPettyCash) {
-                        this.vm.selectedLedger.transactions.forEach(item => {
-                            item.type = (item.type === 'cr' || item.type === 'CREDIT') ? 'CREDIT' : 'DEBIT';
-                        });
-                        // create missing property for petty cash
-                        this.vm.selectedLedger.transactions.forEach(item => {
-                            item.type = (item.type === 'cr' || item.type === 'CREDIT') ? 'CREDIT' : 'DEBIT';
-                        });
-                        this.vm.selectedLedger.transactions.forEach(f => {
-                            f.isDiscount = false;
-                            f.isTax = false;
-
-                            // special case in petty cash mode
-                            // others account entry
-                            // need to assign dummy particular, when we found particular uniquename as null
-                            if (!f.particular.uniqueName) {
-                                f.particular.uniqueName = 'others';
-                                f.particular.name = 'others';
-                            }
-
-                        });
-                        this.vm.selectedLedger.taxes = [];
-                        this.vm.selectedLedger.discounts = [];
-                        this.vm.selectedLedger.attachedFile = '';
-                        this.vm.selectedLedger.voucher = { name: '', shortCode: '' };
-                        this.vm.selectedLedger.invoicesToBePaid = [];
-                    }
-
-                    this.vm.selectedLedger.exchangeRateForDisplay = giddhRoundOff(this.vm.selectedLedger.exchangeRate, this.vm.giddhBalanceDecimalPlaces);
-                    // this.vm.selectedLedger.exchangeRate = giddhRoundOff(this.vm.selectedLedger.exchangeRate, 4);
-
-                    // divide actual amount with exchangeRate because currently we are getting actualAmount in company currency
-                    this.vm.selectedLedger.actualAmount = giddhRoundOff(this.vm.selectedLedger.actualAmount / this.vm.selectedLedger.exchangeRate, this.vm.giddhBalanceDecimalPlaces);
-
-                    // other taxes assigning process
-                    let companyTaxes: TaxResponse[] = [];
-                    this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
-
-                    let otherTaxesModal = new SalesOtherTaxesModal();
-                    otherTaxesModal.itemLabel = resp[0].particular.name;
-
-                    let tax: TaxResponse;
-                    if (resp[0].tcsTaxes && resp[0].tcsTaxes.length) {
-                        tax = companyTaxes.find(f => f.uniqueName === resp[0].tcsTaxes[0]);
-                        this.vm.selectedLedger.otherTaxType = 'tcs';
-                    } else if (resp[0].tdsTaxes && resp[0].tdsTaxes.length) {
-                        tax = companyTaxes.find(f => f.uniqueName === resp[0].tdsTaxes[0]);
-                        this.vm.selectedLedger.otherTaxType = 'tds';
-                    }
-
-                    if (tax) {
-                        otherTaxesModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
-                    }
-
-                    // otherTaxesModal.appliedOtherTax = (resp[1].tcsTaxes.length ? resp[1].tcsTaxes : resp[1].tdsTaxes) || [];
-                    otherTaxesModal.tcsCalculationMethod = resp[0].tcsCalculationMethod || SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
-
-                    this.vm.selectedLedger.isOtherTaxesApplicable = !!(tax);
-                    this.vm.selectedLedger.otherTaxModal = otherTaxesModal;
-
-                    this.baseAccount$ = observableOf(resp[0].particular);
-                    this.baseAccountName$ = resp[0].particular.uniqueName;
-                    this.baseAcc = resp[0].particular.uniqueName;
-                    this.firstBaseAccountSelected = resp[0].particular.uniqueName;
-
-                    const initialAccounts: Array<IOption> = [];
-                    this.vm.selectedLedger.transactions.map(t => {
-                        if (this.vm.selectedLedger.discounts && this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
-                            let category = this.vm.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
-                            if (this.vm.isValidCategory(category)) {
-                                /**
-                                 * replace transaction amount with the actualAmount key that we got in response of get-ledger
-                                 * because of ui and api follow different calculation pattern,
-                                 * so transaction amount of income/ expenses account differ from both the side
-                                 * so overcome this issue api provides the actual amount which was added by user while creating entry
-                                 */
-                                t.amount = this.vm.selectedLedger.actualAmount;
-                                // if transaction is stock transaction then also update inventory amount and recalculate inventory rate
-                                if (t.inventory) {
-                                    t.inventory.amount = this.vm.selectedLedger.actualAmount;
-                                    t.inventory.rate = this.vm.selectedLedger.actualRate;
-                                }
-                            }
+                        if (this.vm.selectedLedger.voucher && this.vm.selectedLedger.voucher.shortCode === 'rcpt' && this.isAdvanceReceipt) {
+                            this.vm.selectedLedger.voucher.shortCode = 'advance-receipt';
                         }
-                        if (t.inventory) {
-                            const unitRates = cloneDeep(this.vm.selectedLedger.unitRates);
-                            if (unitRates && unitRates.length) {
-                                unitRates.forEach(rate => rate.code = rate.stockUnitCode);
-                                t.unitRate = unitRates;
-                            } else {
-                                t.unitRate = [{
-                                    code: t.inventory.unit.code,
-                                    rate: t.inventory.rate,
-                                    stockUnitCode: t.inventory.unit.code
-                                }];
-                            }
-                            initialAccounts.push({
-                                label: `${t.particular.name} (${t.inventory.stock.uniqueName})`,
-                                value: `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`,
-                                additional: {
-                                    stock: {
-                                        name: t.inventory.stock.name,
-                                    },
-                                    uniqueName: t.inventory.stock.uniqueName
-                                }
+
+                        this.makeAdjustmentCalculation();
+
+                        if (this.isPettyCash) {
+                            this.vm.selectedLedger.transactions.forEach(item => {
+                                item.type = (item.type === 'cr' || item.type === 'CREDIT') ? 'CREDIT' : 'DEBIT';
                             });
-                            t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
-                            // Show warehouse dropdown only for stock items
-                            const warehouseDetails = t.inventory.warehouse;
-                            if (warehouseDetails) {
-                                this.selectedWarehouse = warehouseDetails.uniqueName;
-                            } else {
-                                // If warehouse details are not received show default warehouse
-                                this.selectedWarehouse = String(this.defaultWarehouse);
-                            }
-                            this.shouldShowWarehouse = true;
-                        } else {
-                            initialAccounts.push({
-                                label: t.particular.name,
-                                value: t.particular.uniqueName,
-                                additional: {
-                                ...t,
-                                uniqueName: t.particular.uniqueName
-                            }});
+                            // create missing property for petty cash
+                            this.vm.selectedLedger.transactions.forEach(item => {
+                                item.type = (item.type === 'cr' || item.type === 'CREDIT') ? 'CREDIT' : 'DEBIT';
+                            });
+                            this.vm.selectedLedger.transactions.forEach(f => {
+                                f.isDiscount = false;
+                                f.isTax = false;
+
+                                // special case in petty cash mode
+                                // others account entry
+                                // need to assign dummy particular, when we found particular uniquename as null
+                                if (!f.particular.uniqueName) {
+                                    f.particular.uniqueName = 'others';
+                                    f.particular.name = 'others';
+                                }
+
+                            });
+                            this.vm.selectedLedger.taxes = [];
+                            this.vm.selectedLedger.discounts = [];
+                            this.vm.selectedLedger.attachedFile = '';
+                            this.vm.selectedLedger.voucher = { name: '', shortCode: '' };
+                            this.vm.selectedLedger.invoicesToBePaid = [];
                         }
-                    });
-                    initialAccounts.push(...this.defaultSuggestions);
-                    this.searchResults = orderBy(uniqBy(initialAccounts, 'value'), 'label');
-                    this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
 
-                    // check if entry allows to show discount and taxes box
-                    // first check with opened lager
-                    if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
-                        this.vm.showNewEntryPanel = true;
-                    } else {
-                        // now check if we transactions array have any income/expense/fixed assets entry
-                        let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
-                        this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
-                    }
+                        this.vm.selectedLedger.exchangeRateForDisplay = giddhRoundOff(this.vm.selectedLedger.exchangeRate, this.vm.giddhBalanceDecimalPlaces);
+                        // this.vm.selectedLedger.exchangeRate = giddhRoundOff(this.vm.selectedLedger.exchangeRate, 4);
 
-                    this.vm.reInitilizeDiscount(resp[0]);
-                    if (this.generalService.currentOrganizationType === OrganizationType.Branch || (this.branches && this.branches.length === 1)) {
-                        this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
-                        this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
-                    }
+                        // divide actual amount with exchangeRate because currently we are getting actualAmount in company currency
+                        this.vm.selectedLedger.actualAmount = giddhRoundOff(this.vm.selectedLedger.actualAmount / this.vm.selectedLedger.exchangeRate, this.vm.giddhBalanceDecimalPlaces);
 
-                    if (this.vm.stockTrxEntry) {
-                        this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
+                        // other taxes assigning process
+                        let companyTaxes: TaxResponse[] = [];
+                        this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
+
+                        let otherTaxesModal = new SalesOtherTaxesModal();
+                        otherTaxesModal.itemLabel = resp[0].particular.name;
+
+                        let tax: TaxResponse;
+                        if (resp[0].tcsTaxes && resp[0].tcsTaxes.length) {
+                            tax = companyTaxes.find(f => f.uniqueName === resp[0].tcsTaxes[0]);
+                            this.vm.selectedLedger.otherTaxType = 'tcs';
+                        } else if (resp[0].tdsTaxes && resp[0].tdsTaxes.length) {
+                            tax = companyTaxes.find(f => f.uniqueName === resp[0].tdsTaxes[0]);
+                            this.vm.selectedLedger.otherTaxType = 'tds';
+                        }
+
+                        if (tax) {
+                            otherTaxesModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
+                        }
+
+                        // otherTaxesModal.appliedOtherTax = (resp[1].tcsTaxes.length ? resp[1].tcsTaxes : resp[1].tdsTaxes) || [];
+                        otherTaxesModal.tcsCalculationMethod = resp[0].tcsCalculationMethod || SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+
+                        this.vm.selectedLedger.isOtherTaxesApplicable = !!(tax);
+                        this.vm.selectedLedger.otherTaxModal = otherTaxesModal;
+
+                        this.baseAccount$ = observableOf(resp[0].particular);
+                        this.baseAccountName$ = resp[0].particular.uniqueName;
+                        this.baseAcc = resp[0].particular.uniqueName;
+                        this.firstBaseAccountSelected = resp[0].particular.uniqueName;
+
+                        const initialAccounts: Array<IOption> = [];
+                        this.vm.selectedLedger.transactions.map(t => {
+                            if (this.vm.selectedLedger.discounts && this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
+                                let category = this.vm.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
+                                if (this.vm.isValidCategory(category)) {
+                                    /**
+                                     * replace transaction amount with the actualAmount key that we got in response of get-ledger
+                                     * because of ui and api follow different calculation pattern,
+                                     * so transaction amount of income/ expenses account differ from both the side
+                                     * so overcome this issue api provides the actual amount which was added by user while creating entry
+                                     */
+                                    t.amount = this.vm.selectedLedger.actualAmount;
+                                    // if transaction is stock transaction then also update inventory amount and recalculate inventory rate
+                                    if (t.inventory) {
+                                        t.inventory.amount = this.vm.selectedLedger.actualAmount;
+                                        t.inventory.rate = this.vm.selectedLedger.actualRate;
+                                    }
+                                }
+                            }
+                            if (t.inventory) {
+                                const unitRates = cloneDeep(this.vm.selectedLedger.unitRates);
+                                if (unitRates && unitRates.length) {
+                                    unitRates.forEach(rate => rate.code = rate.stockUnitCode);
+                                    t.unitRate = unitRates;
+                                } else {
+                                    t.unitRate = [{
+                                        code: t.inventory.unit.code,
+                                        rate: t.inventory.rate,
+                                        stockUnitCode: t.inventory.unit.code
+                                    }];
+                                }
+                                initialAccounts.push({
+                                    label: `${t.particular.name} (${t.inventory.stock.uniqueName})`,
+                                    value: `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`,
+                                    additional: {
+                                        stock: {
+                                            name: t.inventory.stock.name,
+                                        },
+                                        uniqueName: t.inventory.stock.uniqueName
+                                    }
+                                });
+                                t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
+                                // Show warehouse dropdown only for stock items
+                                const warehouseDetails = t.inventory.warehouse;
+                                if (warehouseDetails) {
+                                    this.selectedWarehouse = warehouseDetails.uniqueName;
+                                } else {
+                                    // If warehouse details are not received show default warehouse
+                                    this.selectedWarehouse = String(this.defaultWarehouse);
+                                }
+                                this.shouldShowWarehouse = true;
+                            } else {
+                                initialAccounts.push({
+                                    label: t.particular.name,
+                                    value: t.particular.uniqueName,
+                                    additional: {
+                                        ...t,
+                                        uniqueName: t.particular.uniqueName
+                                    }
+                                });
+                            }
+                        });
+                        initialAccounts.push(...this.defaultSuggestions);
+                        this.searchResults = orderBy(uniqBy(initialAccounts, 'value'), 'label');
+                        this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
+
+                        // check if entry allows to show discount and taxes box
+                        // first check with opened lager
+                        if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
+                            this.vm.showNewEntryPanel = true;
+                        } else {
+                            // now check if we transactions array have any income/expense/fixed assets entry
+                            let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
+                            this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
+                        }
+
+                        this.vm.reInitilizeDiscount(resp[0]);
+                        if (this.generalService.currentOrganizationType === OrganizationType.Branch || (this.branches && this.branches.length === 1)) {
+                            this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
+                            this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
+                        }
+
+                        if (this.vm.stockTrxEntry) {
+                            this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
+                        }
+                        this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax);
+                        //#endregion
+                        if (!this.vm.showNewEntryPanel || this.isAdvanceReceipt) {
+                            // Calculate entry total for credit and debit transactions when UI panel at the bottom to update
+                            // transaction is not visible or current transaction is advance receipt as discount field is not displayed
+                            // for advance receipt. Update Ledger calculates entry total only when discount value is set or changes therefore
+                            // additional condition is required to check for advance receipt to calculate entry total
+                            this.vm.getEntryTotal();
+                            this.vm.generateCompoundTotal();
+                        }
+                        this.vm.generatePanelAmount();
+                        this.activeAccountSubject.next(this.activeAccount);
                     }
-                    this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax);
-                    //#endregion
-                    if (!this.vm.showNewEntryPanel || this.isAdvanceReceipt) {
-                        // Calculate entry total for credit and debit transactions when UI panel at the bottom to update
-                        // transaction is not visible or current transaction is advance receipt as discount field is not displayed
-                        // for advance receipt. Update Ledger calculates entry total only when discount value is set or changes therefore
-                        // additional condition is required to check for advance receipt to calculate entry total
-                        this.vm.getEntryTotal();
-                        this.vm.generateCompoundTotal();
-                    }
-                    this.vm.generatePanelAmount();
-                    this.activeAccountSubject.next(this.activeAccount);
-                }
-            });
+                });
 
             this.availableItcList[0].label = this.localeData?.import_goods;
             this.availableItcList[1].label = this.localeData?.import_services;

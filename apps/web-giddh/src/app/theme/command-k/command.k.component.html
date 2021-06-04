@@ -1,107 +1,120 @@
-<section [clickOutsideEnabled]="true" [delayClickOutsideInit]="true" [exclude]="defaultExcludedTags"
-(clickOutside)="handleOutSideClick($event)">
-	<section #wrapper [class.isVisible]="isOpen" class="universal-data-list-wrapper">
-		<!-- header -->
-		<ng-container>
-			<ng-container *ngTemplateOutlet="searchEleTemplate"></ng-container>
-		</ng-container>
-		<!-- end header -->
+<ng-container appTranslate [file]="'command-k'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <section [clickOutsideEnabled]="true" [delayClickOutsideInit]="true" [exclude]="defaultExcludedTags"
+        (clickOutside)="handleOutSideClick($event)">
+        <section #wrapper [class.isVisible]="isOpen" class="universal-data-list-wrapper">
+            <!-- header -->
+            <ng-container>
+                <ng-container *ngTemplateOutlet="searchEleTemplate"></ng-container>
+            </ng-container>
+            <!-- end header -->
 
-		<ng-container *ngIf="searchedItems && searchedItems.length > 0">
-			<div #mainEle tabindex="0" class="universal-list-items">
-				<ng-container *ngIf="isOpen">
-					<ng-container>
-						<commandk-virtual-scroll [items]="searchedItems" [childHeight]="ItemHeight" (highLightedItemEmitter)="handleHighLightedItemEvent($event)"
-							[style.max-height.px]="(searchedItems?.length !== 0) ? ItemHeight * (searchedItems && (searchedItems.length < visibleItems ) ? searchedItems.length : visibleItems) : ItemHeight" (scroll)="onScroll($event)">
-							<div class="item" *ngFor="let r of searchedItems; let i = index; trackBy: trackByFn" (mouseover)="highlightItem(i)" (mouseout)="unhighlightItem()" (click)="itemSelected(r)"
-								[ngClass]="{'selected': r.loop === highlightedItem, 'active': r.isSelected }">
-								<a href="javascript:void(0)" class="d-flex flex-row align-items-center">
-									<div class="item-icon">
-										<ng-container [ngSwitch]="r.type">
-											<ng-container *ngSwitchCase="'MENU'">
-												<span class="icon-bar" id="icon-bar"></span>
-											</ng-container>
-											<ng-container *ngSwitchCase="'GROUP'">
-												<span class="icon-group-folder" id="icon-group-folder"></span>
-											</ng-container>
-											<ng-container *ngSwitchDefault>
-                                                <span class="icon-account" id="icon-account"></span>
-											</ng-container>
-										</ng-container>
-									</div>
-									<div class="item-details flex-grow-1">
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="width-65">
-                                                <p id="{{ (r.type.toLowerCase()) + '-' + (r.type === 'MENU' ? getPageUniqueName(r.route) : r.uniqueName) }}">{{r.name}}</p>
-                                                <ng-container [ngSwitch]="r.type">
-                                                    <ng-container *ngSwitchCase="'MENU'">
-                                                        <small>Menu</small>
-                                                    </ng-container>
-                                                </ng-container>
-                                                <ng-container *ngIf="r.parentGroups">
-                                                    <p class="small-para-details">
-                                                        <small>
-                                                            <span *ngFor="let item of r.parentGroups; let idx = index">
-                                                                <ng-container *ngIf="idx > 0">
-                                                                    <span>&nbsp;❯&nbsp;</span>
-                                                                </ng-container>
-                                                                {{item.name}}
-                                                            </span>
-                                                        </small>
-                                                    </p>
-                                                </ng-container>
-											</div>
-											<ng-container *ngIf="r.type === 'ACCOUNT'">
-													<span class="command-hover-text">{{r.uniqueName}}</span>
-												</ng-container>
-										</div>
-									</div>
-								</a>
-							</div>
-						</commandk-virtual-scroll>
-					</ng-container>
-					<!-- end -->
-				</ng-container>
-			</div>
-		</ng-container>
-		<!--  end main list -->
-		<ng-container *ngIf="noResultsFound">
-			<div #mainEle>
-				<div class="p-2">
-					<span>
-						<div class="jumper-results" [ngClass]="{'text-center': showChannelCreateBtn}">
-							<p class="block text-center mr-b2">No matches found. Did you spell it correctly?</p>
-							<ng-container *ngIf="showChannelCreateBtn">
-								<button class="btn btn-primary mr-r2" (click)="triggerAddManage()">Create Group</button>
-								<button class="btn btn-primary" (click)="triggerAddManage()">Create A/c</button>
-							</ng-container>
-						</div>
-					</span>
-				</div>
-			</div>
-		</ng-container>
-	</section>
-	<!-- end main section -->
-</section>
-
-<!-- input box template -->
-<ng-template #searchEleTemplate>
-    <div class="d-flex bd-rb">
-        <div #searchWrapEle class="search-wrapper" (click)="focusInSearchBox($event)">
-            <span class="icon-search-icon"><i class="icon-search"></i></span>
-            <span *ngFor="let item of listOfSelectedGroups; let idx = index">
-                <div class="vR">
-                    <div class="vN">
-                        <div class="vT">{{item.name}}</div>
+            <ng-container *ngIf="searchedItems && searchedItems.length > 0">
+                <div #mainEle tabindex="0" class="universal-list-items">
+                    <ng-container *ngIf="isOpen">
                         <ng-container>
-                            <span>&nbsp;❯&nbsp;</span>
+                            <commandk-virtual-scroll [items]="searchedItems" [childHeight]="ItemHeight"
+                                (highLightedItemEmitter)="handleHighLightedItemEvent($event)"
+                                [style.max-height.px]="(searchedItems?.length !== 0) ? ItemHeight * (searchedItems && (searchedItems.length < visibleItems ) ? searchedItems.length : visibleItems) : ItemHeight"
+                                (scroll)="onScroll($event)">
+                                <div class="item" *ngFor="let r of searchedItems; let i = index; trackBy: trackByFn"
+                                    (mouseover)="highlightItem(i)" (mouseout)="unhighlightItem()"
+                                    (click)="itemSelected(r)"
+                                    [ngClass]="{'selected': r.loop === highlightedItem, 'active': r.isSelected }">
+                                    <a href="javascript:void(0)" class="d-flex flex-row align-items-center">
+                                        <div class="item-icon">
+                                            <ng-container [ngSwitch]="r.type">
+                                                <ng-container *ngSwitchCase="'MENU'">
+                                                    <span class="icon-bar" id="icon-bar"></span>
+                                                </ng-container>
+                                                <ng-container *ngSwitchCase="'GROUP'">
+                                                    <span class="icon-group-folder" id="icon-group-folder"></span>
+                                                </ng-container>
+                                                <ng-container *ngSwitchDefault>
+                                                    <span class="icon-account" id="icon-account"></span>
+                                                </ng-container>
+                                            </ng-container>
+                                        </div>
+                                        <div class="item-details flex-grow-1">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="width-65">
+                                                    <p
+                                                        id="{{ (r.type.toLowerCase()) + '-' + (r.type === 'MENU' ? getPageUniqueName(r.route) : r.uniqueName) }}">
+                                                        {{r.name}}</p>
+                                                    <ng-container [ngSwitch]="r.type">
+                                                        <ng-container *ngSwitchCase="'MENU'">
+                                                            <small>{{localeData?.menu}}</small>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="r.parentGroups">
+                                                        <p class="small-para-details">
+                                                            <small>
+                                                                <span
+                                                                    *ngFor="let item of r.parentGroups; let idx = index">
+                                                                    <ng-container *ngIf="idx > 0">
+                                                                        <span>&nbsp;❯&nbsp;</span>
+                                                                    </ng-container>
+                                                                    {{item.name}}
+                                                                </span>
+                                                            </small>
+                                                        </p>
+                                                    </ng-container>
+                                                </div>
+                                                <ng-container *ngIf="r.type === 'ACCOUNT'">
+                                                    <span class="command-hover-text">{{r.uniqueName}}</span>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </commandk-virtual-scroll>
                         </ng-container>
+                        <!-- end -->
+                    </ng-container>
+                </div>
+            </ng-container>
+            <!--  end main list -->
+            <ng-container *ngIf="noResultsFound">
+                <div #mainEle>
+                    <div class="p-2">
+                        <span>
+                            <div class="jumper-results" [ngClass]="{'text-center': showChannelCreateBtn}">
+                                <p class="block text-center mr-b2">{{localeData?.no_records_found}}</p>
+                                <ng-container *ngIf="showChannelCreateBtn">
+                                    <button class="btn btn-primary mr-r2"
+                                        (click)="triggerAddManage()">{{commonLocaleData?.app_create_group}}</button>
+                                    <button class="btn btn-primary"
+                                        (click)="triggerAddManage()">{{commonLocaleData?.app_create_ac}}</button>
+                                </ng-container>
+                            </div>
+                        </span>
                     </div>
                 </div>
-            </span>
-            <input class="search-element" #searchEle type="text" placeholder="Search" (focus)="handleFocus()"
-                (keydown)="handleKeydown($event)" (keyup)="initSearch($event, $event.target.value)" (paste)="onPasteInSearch()" />
-        </div>
-        <i class="icon-cross close-navigation" (click)="close()"></i>
-    </div>
-</ng-template>
+            </ng-container>
+        </section>
+        <!-- end main section -->
+    </section>
+
+    <!-- input box template -->
+    <ng-template #searchEleTemplate>
+        <div class="d-flex bd-rb">
+            <div #searchWrapEle class="search-wrapper" (click)="focusInSearchBox($event)">
+                <span class="icon-search-icon"><i class="icon-search"></i></span>
+                <span *ngFor="let item of listOfSelectedGroups; let idx = index">
+                    <div class="vR">
+                        <div class="vN">
+                            <div class="vT">{{item.name}}</div>
+                            <ng-container>
+                                <span>&nbsp;❯&nbsp;</span>
+                            </ng-container>
+                        </div>
+                    </div>
+                </span>
+                <input class="search-element" #searchEle type="text" [placeholder]="commonLocaleData?.app_search"
+                    (focus)="handleFocus()" (keydown)="handleKeydown($event)"
+                    (keyup)="initSearch($event, $event.target.value)" (paste)="onPasteInSearch()" />
+            </div>
+            <i class="icon-cross close-navigation" (click)="close()"></i>
+        </div>    
+    </ng-template>
+</ng-container>

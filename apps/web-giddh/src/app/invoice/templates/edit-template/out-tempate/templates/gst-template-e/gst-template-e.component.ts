@@ -60,8 +60,8 @@ export class GstTemplateEComponent implements OnInit, OnDestroy, OnChanges {
                     this.columnsVisibled++;
                 }
                 if (changes.fieldsAndVisibility.currentValue.table.item && changes.fieldsAndVisibility.currentValue.table.item.display) {
-					this.columnsVisibled++;
-				}
+                    this.columnsVisibled++;
+                }
                 if (changes.fieldsAndVisibility.currentValue.table.hsnSac && changes.fieldsAndVisibility.currentValue.table.hsnSac.display) {
                     this.columnsVisibled++;
                 }
