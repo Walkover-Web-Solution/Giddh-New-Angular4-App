@@ -37,11 +37,6 @@ jobs:
     steps:
 #       - name: Check out Git repository
 #         uses: actions/checkout@v2
-      - if: ${{ github.event.inputs.environment == 'prod' }}
-        run: echo "BUILD_DEPLOYED_MSG=deployment" >> $GITHUB_ENV
-      - if: ${{ github.event.inputs.environment == 'test' }}
-        run: echo "BUILD_DEPLOYED_MSG=testing" >> $GITHUB_ENV
-      - run: echo ${{ env.BUILD_DEPLOYED_MSG }}
 #       - name: Install Node.js & NPM
 #         uses: actions/setup-node@v2
 #         with:
@@ -123,7 +118,7 @@ jobs:
           SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
           SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Mac - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.dmg"
           SLACK_FOOTER: ''
-          SLACK_TITLE: Giddh Desktop ${{ env.BUILD_DEPLOYED_MSG }} build
+          SLACK_TITLE: Giddh Desktop build for testing
           SLACK_USERNAME: Giddh Desktop build
           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
       - name: Slack Notification Success PROD
@@ -135,7 +130,7 @@ jobs:
           SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
           SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Mac - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh-${{ github.event.inputs.version }}.dmg"
           SLACK_FOOTER: ''
-          SLACK_TITLE: Giddh Desktop ${{ env.BUILD_DEPLOYED_MSG }} build
+          SLACK_TITLE: Giddh Desktop build build deployment to PROD
           SLACK_USERNAME: Giddh Desktop build
           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
   notify-failure:
@@ -153,8 +148,8 @@ jobs:
           SLACK_COLOR: "#e53935" # or a specific color like 'red' or '#ff00ff'
           SLACK_MESSAGE: "Build failed"
           SLACK_FOOTER: ''
-          SLACK_TITLE: Giddh Desktop Windows ${{ env.BUILD_DEPLOYED_MSG }} build
-          SLACK_USERNAME: Giddh Desktop Windows build
+          SLACK_TITLE: Giddh Desktop build for testing
+          SLACK_USERNAME: Giddh Desktop build
           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
       - name: Slack Notification Failure PROD
         if: ${{ github.event.inputs.environment == 'prod' }}
@@ -165,6 +160,6 @@ jobs:
           SLACK_COLOR: "#e53935" # or a specific color like 'red' or '#ff00ff'
           SLACK_MESSAGE: "Build failed"
           SLACK_FOOTER: ''
-          SLACK_TITLE: Giddh Desktop Windows ${{ env.BUILD_DEPLOYED_MSG }} build
-          SLACK_USERNAME: Giddh Desktop Windows build
+          SLACK_TITLE: Giddh Desktop build deployment to PROD
+          SLACK_USERNAME: Giddh Desktop build
           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
