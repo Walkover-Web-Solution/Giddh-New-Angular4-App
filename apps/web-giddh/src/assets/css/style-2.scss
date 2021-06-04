@@ -584,7 +584,7 @@ input {
 
 .history-btn {
     .btn {
-        padding: 5px 10px !important;
+        padding: 6px 10px !important;
     }
 }
 
@@ -1060,6 +1060,7 @@ ul.sub-list {
     border: 1px solid $gainsboro;
     background: none;
     border-left: 0 !important;
+    border-radius: 5px;
 }
 
 .advance-search .input-group .form-control {
@@ -1822,6 +1823,7 @@ fieldset[disabled] .btn-primary:hover {
     background: $whisper;
     color: $night-rider;
     border-color: $whisper;
+    border-radius: 5px !important;
 }
 
 /*btn end*/
@@ -5989,7 +5991,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     line-height: 32px;
     margin: 0;
     position: relative;
-    border-radius: 2px !important;
+    border-radius: 5px !important;
     overflow: hidden;
 }
 
@@ -5998,7 +6000,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     transition: all 0.3s ease;
     width: 100%;
     border: 1px solid $gainsboro;
-    border-radius: 2px;
+    border-radius: 5px;
     color: $dark-gray;
     padding: 0 7px;
     height: 34px;
@@ -9496,6 +9498,7 @@ ul.dropdown-menu.action-dropdown {
     border-radius: 2px !important;
     padding: 0 !important;
     border: 1px solid $gainsboro !important;
+    border-radius: 5px !important;
     display: flex !important;
     align-items: center !important;
 }
