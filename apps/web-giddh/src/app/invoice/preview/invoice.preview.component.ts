@@ -1611,10 +1611,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(2);
                 item.exchangeRate = balanceDueAmountConversionRate;
             }
-
             let text = this.localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
-            let balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
+            let balanceDueTooltipText;
+            if (item.gainLoss) {
+                const gainLossText = this.localeData?.exchange_gain_loss_label?.
+                    replace("[BASE_CURRENCY]", this.baseCurrency)?.
+                    replace("[AMOUNT]", balanceDueAmountForCompany)?.
+                    replace('[PROFIT_TYPE]', item.gainLoss > 0 ? this.localeData?.exchange_gain : this.localeData?.exchange_loss);
+                balanceDueTooltipText = `${gainLossText}: ${Math.abs(item.gainLoss)}`;
+            } else {
+                balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
+            }
 
             item['grandTotalTooltipText'] = grandTotalTooltipText;
             item['balanceDueTooltipText'] = balanceDueTooltipText;
