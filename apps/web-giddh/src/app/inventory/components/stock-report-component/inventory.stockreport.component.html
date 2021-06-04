@@ -8,26 +8,8 @@
                         <sh-select placeholder="Select Branch" formControlName="selectedEntity"
                             (selected)="selectEntity($event)" [(ngModel)]="selectedEntity" [options]="entities$ | async"
                             [ItemHeight]="33"></sh-select>
-                        <!-- html dropdown <select class="form-control" formControlName="selectedEntity" [(ngModel)]="selectedEntity"
-              (change)="selectEntity($event.target.value)">
-              <option value="headquarter">{{(selectedCompany$ | async)?.name}}</option>
-              <option *ngFor="let entity of entities$ | async" value="{{entity.uniqueName}}">
-                {{entity.name}}
-              </option>
-              <option value="allEntity">All Entities</option>
-            </select> -->
                     </div>
                 </div>
-                <!-- <div style="width: 230px;">
-          <div class="select-style middle">
-            <select class="form-control" [disabled]="isWarehouse" formControlName="selectedTransactionType"
-              [(ngModel)]="selectedTransactionType" (change)="selectTransactionType($event.target.value)">
-              <option *ngFor="let ttype of transactionTypes" value="{{ttype.uniqueName}}">
-                {{ttype.name}}
-              </option>
-            </select>
-          </div>
-        </div> -->
             </div>
 
         </div>
@@ -42,8 +24,6 @@
                 <div class="advance-icon cursor-pointer" (click)="onOpenAdvanceSearch()" tooltip="Advance Search">
                     <span class="icon-advance-filter"></span>
                 </div>
-
-                <!-- <i class="fa fa-refresh ml-1 cp" *ngIf="isFilterCorrect" (click)="resetFilter(true)"></i> -->
             </div>
             <div class="clear-filter">
                 <button class="btn btn-filter" *ngIf="isFilterCorrect" (click)="resetFilter()">
@@ -73,19 +53,6 @@
                         </li>
                     </ul>
                 </div>
-                <!-- <div class="btn-group btn-download" dropdown [autoClose]="true" placement="bottom right">
-                    <button id="button-alignment" dropdownToggle type="button"
-                        class="btn-link btn mr-t05 cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
-                        <i class="icon-download"></i> Download
-                    </button>
-                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download" role="menu" aria-labelledby="button-alignment">
-                        <li role="menuitem" (click)="downloadAllInventoryReports('stock', 'csv')"><a class="dropdown-item">CSV</a>
-                        </li>
-                        <li role="menuitem" (click)="downloadAllInventoryReports('stock', 'xlsx')"><a class="dropdown-item">XLS</a>
-                        </li>
-                    </ul>
-                </div>
-                <button class="btn btn-sky-blue" (click)="editStock()"  >Edit Stock</button> -->
                 <button *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
                     class="btn btn-sky-blue transfer-btn" data-toggle="tooltip" tooltip="Alt+N"
                     (click)="toggleTransferAsidePane()">New Transfer </button>
@@ -119,14 +86,6 @@
                             <div class="d-flex">
                                 <div class="">Date</div>
                                 <div class="icon-pointer">
-                                    <!-- <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                  (click)="sortButtonClicked('asc', 'entry_date')"
-                  [ngClass]="{'active-text-color': stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'asc'}">
-                </div>
-                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                  (click)="sortButtonClicked('desc', 'entry_date')"
-                  [ngClass]="{'active-text-color': stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'desc'}">
-                </div> -->
 
                                     <!-- default -->
                                     <div class="icon-sort-asc text-right "
@@ -177,7 +136,6 @@
                             <div class="input-container" [hidden]="!showAccountSearch">
                                 <input type="text" placeholder="Search Account" class="w100" #accountName
                                     [formControl]="accountUniqueNameInput" />
-                                <!-- <i class="icon-search" (click)="showAccountSearch = false;"></i> -->
                             </div>
                         </th>
 
@@ -251,15 +209,6 @@
                                         (click)="sortButtonClicked('desc', 'rate')"
                                         [ngClass]="{'active-text-color': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'}">
                                     </div>
-                                    <!--
-                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                  (click)="sortButtonClicked('asc', 'rate')"
-                  [ngClass]="{'active-text-color': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'}">
-                </div>
-                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                  (click)="sortButtonClicked('desc', 'rate')"
-                  [ngClass]="{'active-text-color': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'desc'}">
-                </div> -->
                                 </div>
                             </div>
                         </th>
@@ -316,32 +265,6 @@
                             </div>
                         </th>
 
-                        <!--          <th class="bd-rl ">-->
-                        <!--            <div class="d-flex">-->
-                        <!--              <div class="flex-fill"> Value</div>-->
-                        <!--              <div class="icon-pointer text-right">-->
-
-                        <!--                &lt;!&ndash; default &ndash;&gt;-->
-                        <!--                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'closing_val'"-->
-                        <!--                  (click)="sortButtonClicked('asc', 'closing_val')"-->
-                        <!--                  [ngClass]="{'active-text-color': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'}">-->
-                        <!--                </div>-->
-                        <!--                &lt;!&ndash; after sort click &ndash;&gt;-->
-                        <!--                <div class="fa fa-long-arrow-down"-->
-                        <!--                  *ngIf="stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'desc'"-->
-                        <!--                  (click)="sortButtonClicked('asc', 'closing_val')"-->
-                        <!--                  [ngClass]="{'active-text-color': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'desc'}">-->
-                        <!--                </div>-->
-                        <!--                <div class="fa fa-long-arrow-up"-->
-                        <!--                  *ngIf="stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'"-->
-                        <!--                  (click)="sortButtonClicked('desc', 'closing_val')"-->
-                        <!--                  [ngClass]="{'active-text-color': stockReportRequest.sortBy === 'closing_val' && stockReportRequest.sort === 'asc'}">-->
-                        <!--                </div>-->
-
-                        <!--              </div>-->
-                        <!--            </div>-->
-                        <!--          </th>-->
-
                     </tr>
                 </thead>
                 <tbody *ngIf="!stockReportInProcess && stockReport">
@@ -382,17 +305,10 @@
                             {{txn.closingQuantity | giddhCurrency}}<span
                                 class="unit-badge">{{stockReport.stockUnit}}</span>
                         </td>
-                        <!--          <td class="text-right bd-rr">-->
-                        <!--            {{txn.closingQuantity}}-->
-                        <!--          </td>-->
                     </tr>
                 </tbody>
 
                 <tbody *ngIf="stockReportInProcess">
-                    <!-- TODO: Show loader only when API request is in process and not base it on data of stock report
-                    For current use, integrated it with case when stock not found so as to avoid loader
-                -->
-                    <!-- in case of all entity with group -->
                     <tr>
                         <td colspan="10" class="text-center empty-table">
                             <giddh-page-loader></giddh-page-loader>
@@ -427,7 +343,6 @@
 
     <!-- sticky Footer -->
     <section class="mt-5" *ngIf="stockReport && stockReport.transactions && stockReport.transactions.length>0">
-        <!-- <span>{{activeGroupName}} Value:</span> -->
         <div class="sticky-footer sticky-footer-sale-amount">
             <div class="inner-content-footer">
 

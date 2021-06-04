@@ -96,7 +96,6 @@ export class ReconcileComponent implements OnInit, OnDestroy {
         request.refresh = refresh;
         request.action = action;
         request.gstin = this.activeCompanyGstNumber;
-        // request.count = 3;
         this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(request));
     }
 

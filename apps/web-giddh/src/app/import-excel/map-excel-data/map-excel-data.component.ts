@@ -60,7 +60,7 @@ export class MapExcelDataComponent implements OnInit {
     private _clonedMappings: Mappings;
 
     constructor(private _toaster: ToasterService) {
-        //
+        
     }
 
     public ngOnInit() {
