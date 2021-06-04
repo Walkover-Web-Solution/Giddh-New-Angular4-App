@@ -3,8 +3,10 @@ import { BulkVoucherExportService } from 'apps/web-giddh/src/app/services/bulkvo
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import { AppState } from 'apps/web-giddh/src/app/store';
 
 @Component({
     selector: 'invoice-bulk-export',
@@ -45,7 +47,8 @@ export class BulkExportModal implements OnInit, OnDestroy {
     constructor(
         private bulkVoucherExportService: BulkVoucherExportService,
         private generalService: GeneralService,
-        private toaster: ToasterService) {
+        private toaster: ToasterService,
+        private store: Store<AppState>) {
 
     }
 
@@ -55,6 +58,20 @@ export class BulkExportModal implements OnInit, OnDestroy {
             { label: this.localeData?.invoice_copy_options?.customer, value: 'CUSTOMER' },
             { label: this.localeData?.invoice_copy_options?.transport, value: 'TRANSPORT' }
         ];
+        this.getEmail();
+    }
+    
+    /**
+     * Get company email
+     * @returns updated recipient value to company email
+     */
+    public getEmail(): any {
+        this.store.pipe(select(appState => appState.session.user), take(1)).subscribe(result => {
+            if (result && result.user) {
+                this.recipients = result.user.email;
+            }
+        });
+        return this.recipients;
     }
 
     /**
