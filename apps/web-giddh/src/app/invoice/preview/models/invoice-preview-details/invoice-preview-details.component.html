@@ -64,8 +64,6 @@
 
                                     <div class="col-5 col-sm-5">
                                         <div class="invoice-amount pull-right">
-                                            <!-- {{item?.grandTotal | giddhCurrency}} -->
-
                                             <amount-field [amount]="item?.grandTotal" [currencySymbol]="false"
                                                 [currencyCode]="false">
                                             </amount-field>
@@ -480,67 +478,6 @@
     <div class="modal-dialog send-mail-modal">
 
         <div class="modal-content">
-
-            <!--  region new email design -->
-            <!--      <div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix" style="background-color: #525252">-->
-            <!--        <h3 class="modal-title bg" id="modal-title">Send Mail </h3>-->
-            <!--        <i aria-hidden="true" class="icon-cross text-right close-modal" (click)="showEmailSendModal.toggle()"></i>-->
-            <!--      </div>-->
-
-            <!--      <div class="modal-body">-->
-            <!--        <div class="form sendMailForm">-->
-            <!--          <div class="row mr-b1">-->
-            <!--            <div class="col-sm-2">-->
-            <!--              <label>Form : </label>-->
-            <!--            </div>-->
-            <!--            <div class="col-sm-10">-->
-            <!--              <input type="text" class="form-control">-->
-            <!--            </div>-->
-
-            <!--          </div>-->
-            <!--          <div class="row mr-b1">-->
-            <!--            <div class="col-sm-2">-->
-            <!--              <label>Send To: </label>-->
-            <!--            </div>-->
-            <!--            <div class="col-sm-10">-->
-            <!--              <input type="text" class="form-control">-->
-            <!--            </div>-->
-
-            <!--          </div>-->
-            <!--          <div class="row mr-b1">-->
-            <!--            <div class="col-sm-2 ">-->
-            <!--              <label>Subject : </label>-->
-            <!--            </div>-->
-            <!--            <div class="col-sm-10">-->
-            <!--              <input type="text" class="form-control">-->
-            <!--            </div>-->
-
-            <!--          </div>-->
-            <!--          <div class="row mr-b1">-->
-
-            <!--            <div class="col-sm-10 col-sm-offset-2">-->
-            <!--              <ckeditor-->
-            <!--                [(ngModel)]="ckeditorContent"-->
-            <!--                [config]="{uiColor: '#E4E5E6'}"-->
-            <!--                [readonly]="false"-->
-            <!--                debounce="500">-->
-            <!--              </ckeditor>-->
-            <!--            </div>-->
-
-            <!--          </div>-->
-            <!--          <div class="row mr-t2 mr-b1">-->
-            <!--            <div class="col-sm-10 col-sm-offset-2">-->
-            <!--              <div class="btn-group" role="group" aria-label="Basic example">-->
-            <!--                <button type="button" class="btn btn-success">Save</button>-->
-            <!--                <button type="button" class="btn btn-danger" (click)="showEmailSendModal.toggle()">Cancel</button>-->
-            <!--              </div>-->
-            <!--            </div>-->
-            <!--          </div>-->
-
-            <!--        </div>-->
-            <!--      </div>-->
-            <!-- endregion -->
-
             <app-send-email-invoice-component [voucherType]="voucherType"
                 (successEvent)="sendEmail.emit($event);showEmailSendModal.hide()" [selectedItem]="selectedItem"
                 (cancelEvent)="showEmailSendModal.hide()">

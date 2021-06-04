@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, Simp
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
-
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import * as moment from 'moment';
@@ -272,9 +271,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         if (item) {
             if (item.controls) {
                 let isValid = this.validateLinkedStock(item.value);
-                if (isValid) {
-                    // control.controls[i] = item;
-                } else {
+                if (!isValid) {
                     return this._toasty.errorToast('All fields are required.');
                 }
 
@@ -323,18 +320,6 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
                 description: this.description.value,
                 transactions: rawValues,
             };
-
-            // if (this.mode === 'sender') {
-            //   value.transactions = value.transactions.map(trx => {
-            //     trx.manufacturingDetails = {
-            //       manufacturingQuantity: this.manufacturingDetails.value.manufacturingQuantity,
-            //       manufacturingUnitCode: this.manufacturingDetails.value.manufacturingUnitCode,
-            //       linkedStocks: this.manufacturingDetails.value.linkedStocks,
-            //     };
-            //     return trx;
-            //   });
-            //   value.isManufactured = this.isManufactured.value;
-            // }
 
             if (this.mode === 'sender') {
                 value.transactions = value.transactions.map(trx => {

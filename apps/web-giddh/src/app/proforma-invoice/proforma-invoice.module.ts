@@ -23,18 +23,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { AsideMenuProductServiceComponent } from './components/aside-menu-product-service/component';
-import {
-    CreateAccountModalComponent,
-} from './components/aside-menu-product-service/components/create-account-modal/create.account.modal';
-import {
-    CreateAccountServiceComponent,
-} from './components/aside-menu-product-service/components/create-account-service/create.account.service';
-import {
-    SalesAddStockGroupComponent,
-} from './components/aside-menu-product-service/components/create-stock-group-modal/create.stock.group.modal';
-import {
-    SalesAddStockComponent,
-} from './components/aside-menu-product-service/components/create-stock/sales.create.stock.component';
+import { SalesAddStockComponent } from './components/aside-menu-product-service/components/create-stock/sales.create.stock.component';
 import { ProformaGstTreatmentComponent } from './components/proforma-gst-treatment/proforma-gst-treatment.component';
 import { ProformaLastInvoicesComponent } from './components/proforma-last-invoices/proforma-last-invoices.component';
 import { ProformaPrintInPlaceComponent } from './components/proforma-print-inplace/proforma-print-in-place.component';
@@ -43,7 +32,6 @@ import { ProformaInvoiceComponent } from './proforma-invoice.component';
 import { ProformaInvoiceRoutingModule } from './proforma-invoice.routing.module';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
 import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/has-focus.module';
-
 
 @NgModule({
     imports: [
@@ -75,16 +63,13 @@ import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/
         AdvanceReceiptAdjustmentModule,
         HasFocusDirectiveModule
     ],
-    exports: [ProformaInvoiceComponent, SalesAddStockComponent, SalesAddStockGroupComponent, AsideMenuProductServiceComponent],
+    exports: [ProformaInvoiceComponent, SalesAddStockComponent, AsideMenuProductServiceComponent],
     declarations: [
         ProformaInvoiceRendererComponent,
         ProformaInvoiceComponent,
         ProformaLastInvoicesComponent,
         ProformaGstTreatmentComponent,
         SalesAddStockComponent,
-        SalesAddStockGroupComponent,
-        CreateAccountModalComponent,
-        CreateAccountServiceComponent,
         AsideMenuProductServiceComponent,
         ProformaPrintInPlaceComponent
     ],

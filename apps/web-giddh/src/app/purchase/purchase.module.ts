@@ -9,7 +9,6 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-
 import { InvoiceRoutingModule } from '../invoice/invoice.routing.module';
 import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
 import {

@@ -134,10 +134,8 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                     this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
                     this.updateImageSignatureRequest.imageSignatureUniqueName = output.file.response.body.uniqueName;
                 }
-                // this.isFileUploading = false;
                 this._toaster.successToast(this.localeData?.file_uploaded);
             } else {
-                // this.isFileUploading = false;
                 this._toaster.errorToast(output.file.response.message);
             }
         }
@@ -159,10 +157,8 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
         };
         if (file) {
             reader.readAsDataURL(file);
-            // this.isSignatureAttached = true;
         } else {
             preview.src = '';
-            // this.isSignatureAttached = false;
         }
     }
 
@@ -204,7 +200,6 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
         }
 
     }
-
 
     /**
      *  to get all custom templates according to voucher type
@@ -326,8 +321,6 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
 
                     break;
                 case 'shippingDetails':
-                    //  this.bulkUpdateRequest(this.updateShippingDetailsRequest, 'notes');
-
                     break;
                 case 'customFields':
                     this.bulkUpdateRequest(this.updateCustomfieldsRequest, 'customfields');
