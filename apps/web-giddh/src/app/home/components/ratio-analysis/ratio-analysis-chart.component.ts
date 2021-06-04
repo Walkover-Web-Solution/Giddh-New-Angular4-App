@@ -145,7 +145,6 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             series: [{
                 name: this.localeData?.current_ratio,
                 type: undefined,
-                // showInLegend: false,
                 data: [[this.localeData?.current_assets, this.ratioObj.currentRatio * 100], [this.localeData?.current_liabilities, 100]],
             }],
         };
@@ -157,7 +156,6 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 polar: false,
                 width: 170,
                 height: '180px'
-                //   height: '250px'
             },
             title: {
                 verticalAlign: 'middle',
@@ -213,7 +211,6 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 useHTML: true
             },
             series: [{
-                // name: 'Debt Equity Ratio',
                 type: 'pie',
                 data: [[this.localeData?.current_liability + ' + ' + this.localeData?.noncurrent_liability, this.ratioObj.debtEquityRatio * 100], [this.localeData?.shareholders_fund, 100]],
 
@@ -227,7 +224,6 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 polar: false,
                 width: 170,
                 height: '180px'
-                //   height: '250px'
             },
             title: {
                 verticalAlign: 'middle',

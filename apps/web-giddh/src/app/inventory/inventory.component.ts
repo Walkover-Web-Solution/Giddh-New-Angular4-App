@@ -9,7 +9,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { select, Store } from '@ngrx/store';
-import { AfterViewInit, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../store';
 import * as _ from '../lodash-optimized';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
@@ -97,11 +97,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         private invoiceActions: InvoiceActions,
         private inventoryService: InventoryService,
         private settingsBranchActions: SettingsBranchActions,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private companyActions: CompanyActions,
         private settingsProfileActions: SettingsProfileActions,
         private invViewService: InvViewService,
-        private router: Router, private route: ActivatedRoute,
+        private router: Router, 
+        private route: ActivatedRoute,
         private stockReportActions: StockReportActions,
         private sideBarAction: SidebarAction,
         private settingsUtilityService: SettingsUtilityService,

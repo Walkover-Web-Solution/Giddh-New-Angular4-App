@@ -112,14 +112,6 @@ input.gsc-input {
     position: relative;
 }
 
-.tax-engine .gstr3b-header:before {
-    /* content: '';
-    position: absolute;
-    border-bottom: 1px solid $gainsboro;
-    top: 24px;
-    width: 100%; */
-}
-
 .tax-engine .gstr3b-header .sel-tab {
     border: 1px solid $gainsboro;
     border-radius: 25px;
@@ -441,7 +433,6 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
     color: $white;
     width: 22px;
     height: 22px;
-    /* padding-top: 3px; */
     text-align: center;
     display: inline-block;
     border-radius: 50%;

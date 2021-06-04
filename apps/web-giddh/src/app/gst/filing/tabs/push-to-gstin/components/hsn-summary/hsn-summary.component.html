@@ -73,42 +73,36 @@
                         <td [attr.data-title]="commonLocaleData?.app_quantity"> {{item.qty ? item.qty : '-'}} </td>
                         <td [attr.data-title]="commonLocaleData?.app_unit"> {{item.uqc ? item.uqc : '-'}} </td>
                         <td [attr.data-title]="localeData?.filing?.taxable_amount" class="text-right">
-                            <!-- {{item.txval | giddhCurrency }}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.txval" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
                         <td [attr.data-title]="localeData?.filing?.igst_amount" class="text-right">
-                            <!-- {{item.iamt | giddhCurrency }}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.iamt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
                         <td [attr.data-title]="localeData?.filing?.cgst_amount" class="text-right">
-                            <!-- {{item.camt | giddhCurrency }}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.camt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
                         <td [attr.data-title]="localeData?.filing?.sgst_amount" class="text-right">
-                            <!-- {{item.samt | giddhCurrency }}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.samt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
                         <td [attr.data-title]="commonLocaleData?.app_cess" class="text-right">
-                            <!-- {{item.csamt | giddhCurrency }}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.csamt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
                         <td [attr.data-title]="commonLocaleData?.app_total_amount" class="text-right">
-                            <!-- {{item.val | giddhCurrency }}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.val" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
@@ -118,12 +112,6 @@
                 </tbody>
 
             </table>
-
-            <!--      <div class="text-center" *ngIf="(hsnSummaryResponse$ | async)?.totalPages > 1">-->
-            <!--        <pagination [maxSize]="5" [totalItems]="(hsnSummaryResponse$ | async)?.totalItems" [itemsPerPage]="10"-->
-            <!--                    (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"-->
-            <!--                    [rotate]="false"></pagination>-->
-            <!--      </div>-->
         </div>
 
         <div *ngIf="!hsnSummary">
