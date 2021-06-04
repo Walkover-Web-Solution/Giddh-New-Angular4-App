@@ -38,9 +38,9 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
       - if: ${{ github.event.inputs.environment == 'prod' }}
-        run: echo "BUILD_DEPLOYED_MSG=\\' deployed to PROD\\'" >> $GITHUB_ENV
+        run: echo "BUILD_DEPLOYED_MSG= deployed to PROD" >> $GITHUB_ENV
       - if: ${{ github.event.inputs.environment == 'test' }}
-        run: echo "BUILD_DEPLOYED_MSG=\\' for testing\\'" >> $GITHUB_ENV
+        run: echo "BUILD_DEPLOYED_MSG= for testing" >> $GITHUB_ENV
 #       - name: Install Node.js & NPM
 #         uses: actions/setup-node@v2
 #         with:
