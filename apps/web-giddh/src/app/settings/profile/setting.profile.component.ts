@@ -24,6 +24,7 @@ import { CompanyService } from '../../services/companyService.service';
 import { GeneralService } from '../../services/general.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocaleService } from '../../services/locale.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -160,6 +161,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public activeLocale: string = "";
     /** This holds perforsonal information tab heading */
     public personalInformationTabHeading: string = "";
+    /* This will store screen size */
+    public isMobileScreen: boolean = false;
 
     constructor(
         private commonService: CommonService,
@@ -176,8 +179,15 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private settingsUtilityService: SettingsUtilityService,
         private router: Router,
         public route: ActivatedRoute,
-        private localeService: LocaleService
+        private localeService: LocaleService,
+        private breakPointObservar: BreakpointObserver
     ) {
+
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
 
         this.getCountry();
         this.getCurrency();
@@ -190,6 +200,30 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
         this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress), takeUntil(this.destroyed$));
 
+    }
+
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof SettingProfileComponent
+     */
+     public getPageHeading(): string {
+
+        if(this.isMobileScreen){
+             if(this.currentTab === 'personal'){
+                 this.personalInformationTabHeading;
+             }
+             else if(this.currentTab === 'address'){
+                this.companyProfileObj?.taxType ? (this.localeData?.address + this.companyProfileObj?.taxType) : this.localeData?.addresses
+             }
+             else if(this.currentTab === 'other'){
+                this.localeData?.other;
+             }
+        }
+        else {
+            return " ";
+        }
     }
 
     public ngOnInit() {
