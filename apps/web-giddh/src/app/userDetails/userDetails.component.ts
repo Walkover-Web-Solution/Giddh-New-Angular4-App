@@ -110,6 +110,33 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         }), takeUntil(this.destroyed$));
     }
 
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof UserDetailsComponent
+     */
+     public getPageHeading(): string {
+
+        if(this.isMobileScreen){
+             if(this.activeTab == 'auth-key'){
+                 this.localeData?.auth_key?.tab_heading;
+             }
+             else if(this.activeTab == 'mobile-number'){
+                this.localeData?.mobile_number?.tab_heading
+             }
+             else if(this.activeTab == 'session'){
+                this.localeData?.session?.tab_heading;
+             }
+             else if(this.activeTab == 'subscription'){
+                 this.localeData?.subscription?.tab_heading
+             }
+        }
+        else {
+            return " ";
+        }
+    }
+
     public ngOnInit() {
         this.breakPointObservar.observe([
             '(max-width:767px)'

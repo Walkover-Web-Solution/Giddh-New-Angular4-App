@@ -7,7 +7,7 @@ import { FinancialYearComponent } from './financial-year/financial-year.componen
 import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import { Component, OnInit, Output, ViewChild, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, ViewChild, OnDestroy, EventEmitter, Input } from '@angular/core';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
@@ -40,6 +40,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('permissionComp', { static: false }) public permissionComp: SettingPermissionComponent;
     @ViewChild('tagComp', { static: false }) public tagComp: SettingsTagsComponent;
     @ViewChild('bunchComp', { static: false }) public bunchComp: BunchComponent;
+
+
 
     public isUserSuperAdmin: boolean = false;
     public isUpdateCompanyInProgress$: Observable<boolean>;
