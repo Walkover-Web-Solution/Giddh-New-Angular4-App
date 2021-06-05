@@ -1780,7 +1780,7 @@ fieldset[disabled] .btn-primary:hover {
 
 .btn {
     padding: 7px 10px;
-    border-radius: 5px;
+    border-radius: 5px !important;
     font-size: 14px;
     margin-right: 15px;
 }
@@ -8342,6 +8342,7 @@ ul.dropdown-menu p.lead.pd {
     text-align: center;
     background-color: $whisper-light;
     border: 1px solid $gainsboro;
+    border-radius: 5px;
     border-left: none !important;
 }
 
