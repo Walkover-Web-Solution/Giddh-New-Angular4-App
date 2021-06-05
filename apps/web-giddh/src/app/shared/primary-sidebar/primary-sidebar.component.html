@@ -103,7 +103,7 @@
                         </p>
                     </div>
                     <ul class="list-style-none giddh-primary-items">
-                        <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems" dropdown [autoClose]="false"
+                        <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems" dropdown #dropdown="bs-dropdown" [autoClose]="false"
                             [attr.container]="!isOpen ? 'body' : ''">
                             <a href="javascript:void(0);" tooltip="{{menu?.label}}" *ngIf="menu?.items?.length"
                                 id="button-basic-02" dropdownToggle type="button" class="dropdown-toggle"
