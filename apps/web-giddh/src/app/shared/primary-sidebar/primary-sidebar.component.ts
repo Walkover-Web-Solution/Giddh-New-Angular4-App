@@ -9,9 +9,11 @@ import {
     OnDestroy,
     OnInit,
     Output,
+    QueryList,
     SimpleChanges,
     TemplateRef,
     ViewChild,
+    ViewChildren,
 } from '@angular/core';
 import { NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { createSelector, select, Store } from '@ngrx/store';
@@ -130,6 +132,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Stores the instance of company detail dropdown */
     @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
+    /** Stores the dropdown instances as querylist */
+    @ViewChildren('dropdown') itemDropdown: QueryList<BsDropdownDirective>;
     /** Search company name */
     public searchCmp: string = '';
     /** Holds if company refresh is in progress */
@@ -357,6 +361,15 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                         return true;
                     }
                 })));
+                const activeItemIndex = this.allItems.findIndex(item => item.isActive);
+                this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
+                    if (index === activeItemIndex) {
+                        dropdown.show();
+                    } else {
+                        dropdown.hide();
+                    }
+                });
+
                 this.changeDetectorRef.detectChanges();
             }
 
