@@ -27,11 +27,11 @@ import { InvoiceService } from '../../../services/invoice.service';
 
 export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
-    @ViewChild('templateModal', {static: true}) public templateModal: ModalDirective;
-    @ViewChild('customTemplateConfirmationModal', {static: true}) public customTemplateConfirmationModal: ModalDirective;
-    @ViewChild('invoiceTemplatePreviewModal', {static: true}) public invoiceTemplatePreviewModal: ModalDirective;
+    @ViewChild('templateModal', { static: true }) public templateModal: ModalDirective;
+    @ViewChild('customTemplateConfirmationModal', { static: true }) public customTemplateConfirmationModal: ModalDirective;
+    @ViewChild('invoiceTemplatePreviewModal', { static: true }) public invoiceTemplatePreviewModal: ModalDirective;
     public voucherType: string;
-    @ViewChild(InvoiceTemplateModalComponent, {static: true}) public invoiceTemplateModalComponent: InvoiceTemplateModalComponent;
+    @ViewChild(InvoiceTemplateModalComponent, { static: true }) public invoiceTemplateModalComponent: InvoiceTemplateModalComponent;
 
     public selectedVoucherType: VoucherTypeEnum;
     public templateId: string = 'common_template_a';
@@ -660,8 +660,8 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnInit() {
         this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(route => {
-            if(route && route.selectedType) {
-                if(route.selectedType === VoucherTypeEnum.creditNote || route.selectedType === VoucherTypeEnum.debitNote) {
+            if (route && route.selectedType) {
+                if (route.selectedType === VoucherTypeEnum.creditNote || route.selectedType === VoucherTypeEnum.debitNote) {
                     this.voucherTypeChanged(route.selectedType);
                 } else {
                     this.voucherTypeChanged("sales");
@@ -940,7 +940,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 this.invoiceTemplateModalComponent.editFiltersComponent.openTab('design');
             }
             if (this._invoiceUiDataService.unusedImageSignature) {
-                this.invoiceService.removeSignature(this._invoiceUiDataService.unusedImageSignature).subscribe(() => {});
+                this.invoiceService.removeSignature(this._invoiceUiDataService.unusedImageSignature).subscribe(() => { });
             }
             this._invoiceUiDataService.resetCustomTemplate();
             this._invoiceUiDataService.setLogoPath('');

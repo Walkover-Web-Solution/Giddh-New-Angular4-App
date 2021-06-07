@@ -63,14 +63,14 @@ span.dr-label {
 
 .upper-form {
     margin-bottom: 20px;
-    .input-group{
-        .input-group-addon{
-            border-left: 1px solid $very-light-gray !important;
+    .input-group {
+        .input-group-addon {
+            border-left: 1px solid $gainsboro !important;
         }
-        input{
+        input {
             border-left: 1px solid $gainsboro !important;
             border-right: none;
-            &:focus{
+            &:focus {
                 border-left: 1px solid $chetwode-blue !important;
             }
         }
@@ -89,12 +89,12 @@ form.gstin-form {
     align-items: center;
     margin: 20px 0;
 }
-.add-address-btn{
-     width: 130px;
+.add-address-btn {
+    width: 130px;
     display: flex;
     justify-content: center;
     align-items: center;
-    .icon-plus{
+    .icon-plus {
         margin-right: 10px;
     }
 }
@@ -121,16 +121,16 @@ form.gstin-form {
     width: 100% !important;
 }
 
-.width-select{
+.width-select {
     width: calc(100% - 112px);
 }
 
-.move-to-group{
-    .list-item{
-        border-bottom:1px solid $gainsboro;
+.move-to-group {
+    .list-item {
+        border-bottom: 1px solid $gainsboro;
     }
 }
-.name-of-field{
+.name-of-field {
     display: flex;
     align-items: center;
     label {
@@ -145,10 +145,11 @@ form.gstin-form {
     }
 }
 
-.contact-number-select{
+.contact-number-select {
     width: 60px;
     margin-right: 10px;
 }
-.merge-btn, .save-btn{
+.merge-btn,
+.save-btn {
     min-width: 100px;
 }

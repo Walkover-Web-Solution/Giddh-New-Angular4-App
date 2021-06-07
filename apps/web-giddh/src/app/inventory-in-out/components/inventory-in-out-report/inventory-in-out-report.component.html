@@ -18,8 +18,8 @@
             <!--<label class="d-block">Others</label> -->
             <sh-select name="entity" [options]="PERSON_FILTER" (selected)="compareChanged($event)"
                 [placeholder]="'Select'" [multiple]="false" ngModel required></sh-select>
-            <span class="text-danger position-absolute mr-t05"
-                *ngIf="f?.controls?.entity?.errors">Please Select Filter.</span>
+            <span class="text-danger position-absolute mr-t05" *ngIf="f?.controls?.entity?.errors">Please Select
+                Filter.</span>
         </div>
         <div class="form-group max-width-100" *ngIf="type === 'stock'">
             <input name="number" type="text" placeholder="Number" [(ngModel)]="filter.quantity" class="form-control" />

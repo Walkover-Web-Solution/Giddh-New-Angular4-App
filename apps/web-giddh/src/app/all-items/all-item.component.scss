@@ -1,55 +1,54 @@
 @import "../../assets/css/color.scss";
 
-.giddh-all-items-wrapper{
-    .search-any-item{
+.giddh-all-items-wrapper {
+    .search-any-item {
         max-width: 530px;
         width: 100%;
         margin: 10px auto;
-        .input-group{
-            i{
+        .input-group {
+            i {
                 font-size: 18px;
             }
-            .input-group-text{
+            .input-group-text {
                 border: none;
             }
-            input{
+            input {
                 height: 50px;
                 background-color: $solitude-new !important;
-                border:none;
+                border: none;
                 font-size: 16px;
             }
         }
-
     }
-    .all-item-block{
-        .main-item{
+    .all-item-block {
+        .main-item {
             border-bottom: 1px solid $solitude-new;
             margin-bottom: 20px;
-            h3{
+            h3 {
                 color: $persian-blue;
-                font-family: 'opensans-semibold';
-                i{
+                font-family: "opensans-semibold";
+                i {
                     font-size: 22px;
                 }
             }
-            .sub-item-block{
-                .single-menu-item{
+            .sub-item-block {
+                .single-menu-item {
                     cursor: pointer;
                     padding: 15px;
                     white-space: normal;
                     word-break: break-word;
                     min-height: 90px;
-                    h4{
+                    h4 {
                         font-size: 14px;
                         margin-bottom: 5px;
                         display: flex;
                         align-items: center;
                         color: $trout;
-                        i{
+                        i {
                             font-size: 22px;
                         }
                     }
-                    p{
+                    p {
                         color: $grey-chateau;
                         font-size: 12px;
                     }
@@ -57,36 +56,35 @@
                     &.active {
                         background-color: $cornflower;
                         h4,
-                        p{
+                        p {
                             color: $white;
                         }
                     }
                 }
-
             }
         }
     }
 }
 /*responsive starts here*/
-@media(max-width:1440px){
-    .giddh-all-items-wrapper{
-        .all-item-block{
-            .main-item{
-                .sub-item-block{
-                    .single-menu-item{
-                       min-height: 100px;
+@media (max-width: 1440px) {
+    .giddh-all-items-wrapper {
+        .all-item-block {
+            .main-item {
+                .sub-item-block {
+                    .single-menu-item {
+                        min-height: 100px;
                     }
                 }
             }
         }
     }
 }
-@media(max-width:768px){
-    .giddh-all-items-wrapper{
-        .all-item-block{
-            .main-item{
-                .sub-item-block{
-                    .single-menu-item{
+@media (max-width: 768px) {
+    .giddh-all-items-wrapper {
+        .all-item-block {
+            .main-item {
+                .sub-item-block {
+                    .single-menu-item {
                         padding: 15px 10px;
                     }
                 }
@@ -94,8 +92,8 @@
         }
     }
 }
-@media(max-width:767px){
-    .giddh-all-items-wrapper{
+@media (max-width: 767px) {
+    .giddh-all-items-wrapper {
         padding-top: 15px;
     }
 }

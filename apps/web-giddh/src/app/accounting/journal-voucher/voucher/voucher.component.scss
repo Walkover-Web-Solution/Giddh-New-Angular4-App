@@ -26,43 +26,43 @@
         }
     }
 }
-.debtor-details{
+.debtor-details {
     display: flex;
     cursor: default;
     font-size: 14px;
 }
-.debtor-details-form{
+.debtor-details-form {
     display: flex;
     font-size: 14px;
     background-color: $silver;
     padding: 10px 9px;
     margin-bottom: 10px;
-    .form-fields{
+    .form-fields {
         display: flex;
         align-items: center;
         .single-field {
             width: 20%;
             margin-right: 15px;
             min-width: 180px;
-            &.cr-dr-field{
+            &.cr-dr-field {
                 width: 5% !important;
             }
-            label{
+            label {
                 margin-bottom: 5px;
                 display: none;
             }
-            input.form-control{
+            input.form-control {
                 background-color: $white !important;
                 border: 1px solid $gainsboro;
                 border-radius: 2px !important;
             }
-            &.set-width{
+            &.set-width {
                 width: 30%;
             }
-            &:last-child{
+            &:last-child {
                 width: 5%;
             }
-            .icon-arrow-down{
+            .icon-arrow-down {
                 font-size: 14px;
                 position: absolute;
                 right: 5px;
@@ -71,19 +71,19 @@
             }
         }
 
-        .icon-cross{
+        .icon-cross {
             color: $gray;
             cursor: pointer;
             padding: 5px;
         }
-        .cr-dr-field ,  
-        .delete-row{
+        .cr-dr-field,
+        .delete-row {
             min-width: 30px;
             max-width: 30px;
         }
     }
 }
 
-.modal-dialog{
+.modal-dialog {
     width: 298px !important;
 }

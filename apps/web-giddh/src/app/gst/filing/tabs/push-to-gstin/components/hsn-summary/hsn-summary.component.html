@@ -1,138 +1,137 @@
 <div class="gstr-transactions-summary">
 
-	<h4 class="clearfix gstr-summary-title">HSN Summary</h4>
-	<p class="text-muted half pd-t05">This section includes the HSN-wise summary of the items you have
-		sold</p>
+    <h4 class="clearfix gstr-summary-title">{{localeData?.filing?.hsn_summary}}</h4>
+    <p class="text-muted half pd-t05">{{localeData?.filing?.hsn_summary_description}}</p>
 
-	<div>
+    <div>
 
-		<div *ngIf="hsnSummary">
-			<table class="transactions-table table-striped table zi-table on-mobile-view">
-				<thead>
-					<tr>
-						<th class="text-left">
-							<div class="position-relative">
-								<div class="pull-left over-flow"> HSN/SAC</div>
-							</div>
-						</th>
-						<th class="text-left">
-							<div class="position-relative">
-								<div class=" over-flow"> Description</div>
-							</div>
-						</th>
-						<th class="text-left">
-							<div class="position-relative">
-								<div class=" over-flow"> Quantity</div>
-							</div>
-						</th>
+        <div *ngIf="hsnSummary">
+            <table class="transactions-table table-striped table zi-table on-mobile-view">
+                <thead>
+                    <tr>
+                        <th class="text-left">
+                            <div class="position-relative">
+                                <div class="pull-left over-flow"> {{commonLocaleData?.app_hsn_sac}}</div>
+                            </div>
+                        </th>
+                        <th class="text-left">
+                            <div class="position-relative">
+                                <div class=" over-flow"> {{localeData?.filing?.description}}</div>
+                            </div>
+                        </th>
+                        <th class="text-left">
+                            <div class="position-relative">
+                                <div class=" over-flow"> {{commonLocaleData?.app_quantity}}</div>
+                            </div>
+                        </th>
 
-						<th class="text-left">
-							<div class="position-relative">
-								<div class=" over-flow"> Unit</div>
-							</div>
-						</th>
+                        <th class="text-left">
+                            <div class="position-relative">
+                                <div class=" over-flow"> {{commonLocaleData?.app_unit}}</div>
+                            </div>
+                        </th>
 
-						<th class="text-right">
-							<div class="position-relative">
-								<div class=" over-flow"> Taxable Amount</div>
-							</div>
-						</th>
+                        <th class="text-right">
+                            <div class="position-relative">
+                                <div class=" over-flow"> {{localeData?.filing?.taxable_amount}}</div>
+                            </div>
+                        </th>
 
-						<th class="text-right">
-							<div class="position-relative">
-								<div class=" over-flow"> IGST Amount</div>
-							</div>
-						</th>
-						<th class="text-right">
-							<div class="position-relative">
-								<div class=" over-flow"> CGST Amount</div>
-							</div>
-						</th>
-						<th class="text-right">
-							<div class="position-relative">
-								<div class=" over-flow"> SGST Amount</div>
-							</div>
-						</th>
-						<th class="text-right">
-							<div class="position-relative">
-								<div class=" over-flow"> CESS</div>
-							</div>
-						</th>
+                        <th class="text-right">
+                            <div class="position-relative">
+                                <div class=" over-flow"> {{localeData?.filing?.igst_amount}}</div>
+                            </div>
+                        </th>
+                        <th class="text-right">
+                            <div class="position-relative">
+                                <div class=" over-flow"> {{localeData?.filing?.cgst_amount}}</div>
+                            </div>
+                        </th>
+                        <th class="text-right">
+                            <div class="position-relative">
+                                <div class=" over-flow"> {{localeData?.filing?.sgst_amount}}</div>
+                            </div>
+                        </th>
+                        <th class="text-right">
+                            <div class="position-relative">
+                                <div class=" over-flow"> {{commonLocaleData?.app_cess}}</div>
+                            </div>
+                        </th>
 
-						<th class="text-right">
-							<div class="position-relative">
-								<div class=" over-flow"> Total Amount</div>
-							</div>
-						</th>
-					</tr>
-				</thead>
+                        <th class="text-right">
+                            <div class="position-relative">
+                                <div class=" over-flow"> {{commonLocaleData?.app_total_amount}}</div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
 
-				<tbody>
-					<tr *ngFor="let item of hsnSummary.data">
-						<td data-title="HSN/SAC"> {{item.hsn_sc ? item.hsn_sc : '-'}} </td>
-						<td data-title="Description"> {{item.desc ? item.desc : '-'}} </td>
-						<td data-title="Quantity"> {{item.qty ? item.qty : '-'}} </td>
-						<td data-title="Unit"> {{item.uqc ? item.uqc : '-'}} </td>
-						<td data-title="Taxable Amount" class="text-right">
+                <tbody>
+                    <tr *ngFor="let item of hsnSummary.data">
+                        <td [attr.data-title]="commonLocaleData?.app_hsn_sac"> {{item.hsn_sc ? item.hsn_sc : '-'}} </td>
+                        <td [attr.data-title]="localeData?.filing?.description"> {{item.desc ? item.desc : '-'}} </td>
+                        <td [attr.data-title]="commonLocaleData?.app_quantity"> {{item.qty ? item.qty : '-'}} </td>
+                        <td [attr.data-title]="commonLocaleData?.app_unit"> {{item.uqc ? item.uqc : '-'}} </td>
+                        <td [attr.data-title]="localeData?.filing?.taxable_amount" class="text-right">
                             <!-- {{item.txval | giddhCurrency }}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.txval" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-						<td data-title="IGST Amount" class="text-right">
+                        <td [attr.data-title]="localeData?.filing?.igst_amount" class="text-right">
                             <!-- {{item.iamt | giddhCurrency }}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.iamt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-						<td data-title="CGST Amount" class="text-right">
+                        <td [attr.data-title]="localeData?.filing?.cgst_amount" class="text-right">
                             <!-- {{item.camt | giddhCurrency }}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.camt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-						<td data-title="SGST Amount" class="text-right">
+                        <td [attr.data-title]="localeData?.filing?.sgst_amount" class="text-right">
                             <!-- {{item.samt | giddhCurrency }}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.samt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-						<td data-title="CESS" class="text-right">
+                        <td [attr.data-title]="commonLocaleData?.app_cess" class="text-right">
                             <!-- {{item.csamt | giddhCurrency }}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.csamt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-						<td data-title="Total Amount" class="text-right">
+                        <td [attr.data-title]="commonLocaleData?.app_total_amount" class="text-right">
                             <!-- {{item.val | giddhCurrency }}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.val" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-					</tr>
-				</tbody>
+                    </tr>
+                </tbody>
 
-			</table>
+            </table>
 
-			<!--      <div class="text-center" *ngIf="(hsnSummaryResponse$ | async)?.totalPages > 1">-->
-			<!--        <pagination [maxSize]="5" [totalItems]="(hsnSummaryResponse$ | async)?.totalItems" [itemsPerPage]="10"-->
-			<!--                    (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"-->
-			<!--                    [rotate]="false"></pagination>-->
-			<!--      </div>-->
-		</div>
+            <!--      <div class="text-center" *ngIf="(hsnSummaryResponse$ | async)?.totalPages > 1">-->
+            <!--        <pagination [maxSize]="5" [totalItems]="(hsnSummaryResponse$ | async)?.totalItems" [itemsPerPage]="10"-->
+            <!--                    (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"-->
+            <!--                    [rotate]="false"></pagination>-->
+            <!--      </div>-->
+        </div>
 
-		<div *ngIf="!hsnSummary">
-			<div class="filings-empty-state">
-				<img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
-				<div class="empty-msg"><span> There is no HSN-wise summary. </span></div>
-			</div>
-		</div>
+        <div *ngIf="!hsnSummary">
+            <div class="filings-empty-state">
+                <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
+                <div class="empty-msg"><span> {{localeData?.filing?.no_hsn_summary}} </span></div>
+            </div>
+        </div>
 
-	</div>
+    </div>
 </div>

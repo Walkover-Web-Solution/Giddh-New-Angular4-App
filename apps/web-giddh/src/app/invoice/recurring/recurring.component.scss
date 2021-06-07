@@ -4,7 +4,6 @@
 .recurring-form {
     flex: 1;
     display: flex;
-
 }
 .search-icon-block {
     width: 36px;
@@ -61,7 +60,7 @@
     flex: 1 1 auto;
 }
 
-.list-item{
+.list-item {
     border-bottom: 1px solid $gainsboro !important;
 }
 
@@ -93,7 +92,7 @@
 }
 .recurring-container {
     padding: 0 15px;
-    .form-inline{
+    .form-inline {
         margin-bottom: 10px !important;
     }
 }
@@ -108,9 +107,9 @@
     color: $nero;
 }
 
-.more-dropdown{
+.more-dropdown {
     height: 30px !important;
-    .dropdown-menu{
+    .dropdown-menu {
         right: -53px !important;
     }
 }
@@ -118,55 +117,51 @@
 .search-invoice-filed {
     display: none;
 }
-
-.more-dropdown{
+.more-dropdown {
     height: 30px !important;
-    .dropdown-menu{
+    .dropdown-menu {
         right: -53px !important;
     }
 }
-
-.search-invoice-filed {
-    display: none;
-}
-
-.giddh-table{
-    td{
+.giddh-table {
+    td {
         white-space: normal !important;
         word-break: break-word !important;
     }
 }
 // responsive
-@media(max-width:1190px){
+@media (max-width: 1190px) {
     .recurring-form {
         .input-group {
             width: 125px;
         }
     }
 }
-@media(max-width:1191px) and (min-width:1024px){
-    .recurring-form-wrapper{
+@media (max-width: 1191px) and (min-width: 1024px) {
+    .recurring-form-wrapper {
         display: flex;
         width: 100%;
-        .recurring-form{
+        .recurring-form {
             flex: auto;
             display: flex;
             width: 100%;
-            .form-group{
+            .form-group {
                 flex-flow: column wrap;
                 align-items: flex-start;
                 margin-bottom: 0;
                 width: 25%;
-                .input-group{
+                .input-group {
                     width: 100%;
                     display: flex;
-                        sh-select, input, div{
+                    sh-select,
+                    input,
+                    div {
                         min-width: 100%;
                         max-width: 100%;
                     }
                 }
             }
-            input{
+            input {
                 min-width: 100%;
                 max-width: 100%;
             }
@@ -178,14 +173,14 @@
         display: block;
     }
     .recurring-container {
-        .form-inline{
+        .form-inline {
             margin-bottom: 0 !important;
         }
     }
 }
 @media (max-width: 768px) {
-    .giddh-table{
-        td{
+    .giddh-table {
+        td {
             width: 100%;
         }
     }

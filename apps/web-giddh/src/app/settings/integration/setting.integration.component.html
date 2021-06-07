@@ -1,850 +1,975 @@
-<div class="clearfix">
-    <tabset [ngClass]="{'tab-integration': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab id="tab-integration">
-        <tab (selectTab)="loadSmsData($event); tabChanged('sms');">
-            <ng-template tabHeading>
-                <span class="icon-chat2"></span> SMS
-            </ng-template>
+<ng-container appTranslate [file]="'settings/integration'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+    <div class="clearfix">
+        <tabset [ngClass]="{'tab-integration': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab
+            id="tab-integration">
+            <tab (selectTab)="loadSmsData($event); tabChanged('sms');">
+                <ng-template tabHeading>
+                    <span class="icon-chat2"></span> {{localeData?.sms?.tab_heading}}
+                </ng-template>
 
-            <div class="box clearfix">
-                <h3 class="font-20 bold mb-2">MSG91</h3>
-                <form #msgform="ngForm" (ngSubmit)="onSubmitMsgform(msgform)" class="smsForm">
-                    <section ngModelGroup="smsFormObj" #smsFormObjCtrl="ngModelGroup">
-                        <div class="row">
-                            <div class="form-group col-md-5 col-lg-3">
+                <div class="box clearfix">
+                    <h3 class="font-20 bold mb-2">{{localeData?.sms?.form_heading}}</h3>
+                    <form #msgform="ngForm" (ngSubmit)="onSubmitMsgform(msgform)" class="smsForm">
+                        <section ngModelGroup="smsFormObj" #smsFormObjCtrl="ngModelGroup">
+                            <div class="row">
+                                <div class="form-group col-md-5 col-lg-3">
 
-                                <label>Auth Key</label>
-                                <br>
-                                <input type="text" placeholder="Enter auth-key" class="form-control" [ngModel]="smsFormObj.authKey" name="authKey" required />
-
-                            </div>
-                            <div class="form-group col-md-5 col-lg-3">
-                                <label>Sender ID</label>
-                                <br>
-                                <input type="text" placeholder="Enter sender Id" class="form-control" [ngModel]="smsFormObj.senderId" name="senderId" required />
-                            </div>
-                            <div class="form-group col-md-2 col-lg-3">
-                                <div class="empty-label">
-                                    <label>&nbsp;</label>
+                                    <label>{{localeData?.sms?.auth_key_label}}</label>
                                     <br>
-                                    <button type="submit" class="btn btn-success mr-r1" [disabled]="smsFormObjCtrl.invalid">Save
-                                    </button>
+                                    <input type="text" [placeholder]="localeData?.sms?.auth_key_placeholder"
+                                        class="form-control" [ngModel]="smsFormObj.authKey" name="authKey" required />
+
                                 </div>
-                            </div>
-                        </div>
-                    </section>
-                </form>
-            </div>
-        </tab>
-
-        <tab (selectTab)="loadEmailData($event); tabChanged('email');">
-            <ng-template tabHeading>
-                <span class="icon-mail"></span> Email
-            </ng-template>
-
-            <div class="box clearfix mb-2">
-                <h3 class="section-head">Gmail Integration</h3>
-                <div class="d-flex gmail-integration-message">
-
-                    <ng-container *ngIf="!(isGmailIntegrated$ | async)">
-                        <a *ngIf="!isElectron " class="btn btn-primary" [href]="gmailAuthCodeUrl$ | async">Connect with
-                            Gmail</a>
-
-                        <a *ngIf="isElectron " class="btn btn-primary" href="javascript:void(0);" (click)="gmailIntegration('google')">Connect with
-                            Gmail</a>
-                    </ng-container>
-
-                    <h4 *ngIf="(isGmailIntegrated$ | async)" class="text-success align-self-center">Gmail integrated successfully.</h4>
-                    <button *ngIf="(isGmailIntegrated$ | async)" class="btn btn-danger mr-l2" (click)="removegmailintegration.toggle()">Remove Account
-                    </button>
-                </div>
-            </div>
-
-            <!--remove account integration confirmation modal-->
-            <div bsModal #removegmailintegration="bs-modal" class="modal fade" role="dialog">
-                <div class="modal-dialog modal-xl">
-                    <div class="modal-content">
-                        <confirm-modal [title]="'Remove Gmail Integration'" [body]="'Are you sure you want to remove gmail account?'" (cancelCallBack)="removegmailintegration.toggle()" (successCallBack)="removeGmailAccount();removegmailintegration.toggle()"></confirm-modal>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="box clearfix">
-                <h3 class="font-20 bold mb-2">SendGrid</h3>
-                <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)" class="">
-                    <div class="row">
-                        <div class="form-group col-md-5 col-lg-3">
-
-                            <label>Auth Key</label>
-                            <br>
-                            <input type="text" placeholder="Enter auth-key" class="form-control" [ngModel]="emailFormObj.authKey" name="authKey" required />
-
-                        </div>
-                        <div class="form-group col-md-5 col-lg-3">
-                            <label>Email Subject</label>
-                            <br>
-                            <input type="text" placeholder="Enter email subject" class="form-control" [ngModel]="emailFormObj.subject" name="subject" required />
-                        </div>
-                        <div class="form-group col-md-2 col-lg-3 empty-label">
-
-                            <label>&nbsp;</label>
-                            <br>
-                            <button type="submit" class="btn btn-success mr-r1" [disabled]="emailform.invalid">Save
-                            </button>
-
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-
-        </tab>
-
-        <tab (selectTab)="loadCollectionData($event); tabChanged('collection');">
-            <ng-template tabHeading>
-                <span class="icon-card"></span> Collection
-            </ng-template>
-
-
-            <!-- <h3 class="section-head mr-t2">Invoice PaymentPaymentPayment</h3> -->
-            <div class="box clearfix mb-2">
-                <h3 class="font-20 bold mb-2">Razorpay Details</h3>
-                <form #razorPayform="ngForm" novalidate class="">
-                    <div class="row">
-                        <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                            <label>Key Id
-                                <span class="required">*</span>
-                            </label>
-                            <input class="form-control" type="text" placeholder="Key Id" name="razorPayObj.userName" [(ngModel)]="razorPayObj.userName" required autocomplete="off">
-
-                        </div>
-                        <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                            <label>Secret
-                                <span class="required">*</span>
-                            </label>
-                            <input class="form-control" type="password" placeholder="Secret key" name="razorPayObj.password" [(ngModel)]="razorPayObj.password" required autocomplete="off">
-                        </div>
-                    </div>
-                    <div>
-                        <div class="row">
-                            <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                <div>
-                                    <label>Link Account</label>
-                                    <div class="input-group">
-                                        <sh-select class="linked-account" placeholder="Link Account" name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName" [options]="accounts$ | async" (selected)="selectAccount($event)" [forceClearReactive]="forceClearLinkAccount$ | async"
-                                        [enableDynamicSearch]="true" [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)" [fixedValue]="razorPayObj?.account?.name" [defaultValue]="razorPayObj?.account?.name">
-                                        </sh-select>
-                                        <div class="input-group-addon cp" *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name">
-                                            <span (click)="unlinkAccountFromRazorPay()" class="icon-trash"></span>
-                                        </div>
+                                <div class="form-group col-md-5 col-lg-3">
+                                    <label>{{localeData?.sms?.sender_id_label}}</label>
+                                    <br>
+                                    <input type="text" [placeholder]="localeData?.sms?.sender_id_placeholder"
+                                        class="form-control" [ngModel]="smsFormObj.senderId" name="senderId" required />
+                                </div>
+                                <div class="form-group col-md-2 col-lg-3">
+                                    <div class="empty-label">
+                                        <label>&nbsp;</label>
+                                        <br>
+                                        <button type="submit" class="btn btn-success mr-r1"
+                                            [disabled]="smsFormObjCtrl.invalid">{{commonLocaleData?.app_save}}</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label" id="inlnImg">
+                        </section>
+                    </form>
+                </div>
+            </tab>
+
+            <tab (selectTab)="loadEmailData($event); tabChanged('email');">
+                <ng-template tabHeading>
+                    <span class="icon-mail"></span> {{localeData?.email?.tab_heading}}
+                </ng-template>
+
+                <div class="box clearfix mb-2">
+                    <h3 class="section-head">{{localeData?.email?.gmail_integration}}</h3>
+                    <div class="d-flex gmail-integration-message">
+
+                        <ng-container *ngIf="!(isGmailIntegrated$ | async)">
+                            <a *ngIf="!isElectron " class="btn btn-primary"
+                                [href]="gmailAuthCodeUrl$ | async">{{localeData?.email?.connect_gmail}}</a>
+
+                            <a *ngIf="isElectron " class="btn btn-primary" href="javascript:void(0);"
+                                (click)="gmailIntegration('google')">{{localeData?.email?.connect_gmail}}</a>
+                        </ng-container>
+
+                        <h4 *ngIf="(isGmailIntegrated$ | async)" class="text-success align-self-center">
+                            {{localeData?.email?.gmail_connected}}</h4>
+                        <button *ngIf="(isGmailIntegrated$ | async)" class="btn btn-danger mr-l2"
+                            (click)="removegmailintegration.toggle()">{{localeData?.email?.remove_account}}
+                        </button>
+                    </div>
+                </div>
+
+                <!--remove account integration confirmation modal-->
+                <div bsModal #removegmailintegration="bs-modal" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <confirm-modal [title]="localeData?.email?.remove_account_title"
+                                [body]="localeData?.email?.remove_account_message"
+                                (cancelCallBack)="removegmailintegration.toggle()"
+                                (successCallBack)="removeGmailAccount();removegmailintegration.toggle()">
+                            </confirm-modal>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="box clearfix">
+                    <h3 class="font-20 bold mb-2">{{localeData?.email?.form_heading}}</h3>
+                    <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)">
+                        <div class="row">
+                            <div class="form-group col-md-5 col-lg-3">
+
+                                <label>{{localeData?.email?.auth_key_label}}</label>
+                                <br>
+                                <input type="text" [placeholder]="localeData?.email?.auth_key_placeholder"
+                                    class="form-control" [ngModel]="emailFormObj.authKey" name="authKey" required />
+
+                            </div>
+                            <div class="form-group col-md-5 col-lg-3">
+                                <label>{{localeData?.email?.email_subject_label}}</label>
+                                <br>
+                                <input type="text" [placeholder]="localeData?.email?.email_subject_placeholder"
+                                    class="form-control" [ngModel]="emailFormObj.subject" name="subject" required />
+                            </div>
+                            <div class="form-group col-md-2 col-lg-3 empty-label">
+
                                 <label>&nbsp;</label>
                                 <br>
-                                <input type="checkbox" [(ngModel)]="razorPayObj.autoCapturePayment" name="autoCapturePayment" /> Automatic capture on payment
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-sm-12 form-group ">
-                            <button *ngIf="!updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid" (click)="saveRazorPayDetails()">Save
-                            </button>
-                            <button *ngIf="updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid" (click)="updateRazorPayDetails()">Update
-                            </button>
-                            <button *ngIf="updateRazor" class="btn btn-danger" (click)="deleteRazorPayDetails()">Delete
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-
-            <!-- <h3 class="section-head mr-t2">Cashfree Integration</h3> -->
-            <div class="clearfix mb-2" *ngIf="false">
-
-                <div class="box clearfix mb-2">
-                    <h3 class="font-20 bold mb-2">Smart Payout</h3>
-
-                    <form #payoutForm="ngForm" novalidate class="">
-                        <div class="row">
-                            <div class="form-group col-lg-4 col-md-6 col-xs-12">
-
-                                <label>Client Id
-                                    <span class="required">*</span>
-                                </label>
-                                <input class="form-control" type="text" placeholder="Client Id" name="payoutForm.userName" [(ngModel)]="payoutObj.userName" required autocomplete="off">
-                            </div>
-
-                            <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                <label>Client Secret Key
-                                    <span class="required">*</span>
-                                </label>
-                                <input class="form-control" type="password" placeholder="Client Secret key" name="payoutForm.password" [(ngModel)]="payoutObj.password" required autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="row">
-                                <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                    <div class="">
-                                        <label>Link Account</label>
-                                        <sh-select placeholder="Link Account" name="payoutObj.account" [(ngModel)]="payoutObj.fakeAccObj" [options]="bankAccounts$ | async" (selected)="selectCashfreeAccount($event, payoutObj)">
-                                        </sh-select>
-                                    </div>
-                                </div>
-                                <div class="form-group col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label">
-                                    <label>&nbsp;</label>
-                                    <br>
-                                    <input type="checkbox" [(ngModel)]="payoutObj.autoCapturePayment" name="payoutObj.autoCapturePayment" [checked]="autoCollectObj.account?.uniqueName" /> Automatic capture on payment
-                                </div>
+                                <button type="submit" class="btn btn-success mr-r1"
+                                    [disabled]="emailform.invalid">{{commonLocaleData?.app_save}}</button>
 
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-sm-12 form-group ">
-                                <button *ngIf="!payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid" (click)="submitCashfreeDetail(payoutObj)">Save
-                                </button>
-                                <button *ngIf="payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid" (click)="updateCashfreeDetail(payoutObj)">Update
-                                </button>
-                                <button *ngIf="payoutAdded" class="btn btn-danger" (click)="deleteCashFreeAccount()">Delete
-                                </button>
-                                <!--  -->
-                            </div>
-                        </div>
                     </form>
                 </div>
 
+            </tab>
 
-                <div class="box clearfix mb-2">
-                    <h3 class="font-20 bold mb-2">Auto Collect</h3>
-                    <form #autoCollectform="ngForm" novalidate class="">
-                        <div class="row">
-                            <div class="form-group col-lg-4 col-md-6 col-xs-12">
-
-                                <label>Client Id
-                                    <span class="required">*</span>
-                                </label>
-                                <input class="form-control" type="text" placeholder="Client Id" name="autoCollectform.userName" [(ngModel)]="autoCollectObj.userName" required autocomplete="off">
-
-                            </div>
-                            <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                <label>Client Secret Key
-                                    <span class="required">*</span>
-                                </label>
-                                <input class="form-control" type="password" placeholder="Client Secret key" name="autoCollectform.password" [(ngModel)]="autoCollectObj.password" required autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="row">
-                                <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                    <div class="">
-                                        <label>Link Account</label>
-                                        <sh-select placeholder="Link Account" name="autoCollectObj.account" [(ngModel)]="autoCollectObj.fakeAccObj" [options]="bankAccounts$ | async" (selected)="selectCashfreeAccount($event, autoCollectObj)"></sh-select>
-                                    </div>
-                                </div>
-                                <div class="form-group col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label">
-                                    <label>&nbsp;</label>
-                                    <br>
-                                    <input type="checkbox" [(ngModel)]="autoCollectObj.autoCapturePayment" name="autoCollectObj.autoCapturePayment" [checked]="autoCollectObj.account?.uniqueName" /> Automatic capture on payment
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-12 form-group ">
-                                <button type="submit" *ngIf="!autoCollectAdded" class="btn btn-success" [disabled]="autoCollectform.invalid" (click)="submitAutoCollect(autoCollectObj)">Save
-                                </button>
-                                <button type="submit" *ngIf="autoCollectAdded" class="btn btn-success" [disabled]="autoCollectform.invalid" (click)="updateAutoCollect(autoCollectObj)">Update
-                                </button>
-                                <button type="reset" *ngIf="autoCollectAdded" class="btn btn-danger" (click)="deleteAutoCollect()">Delete
-                                </button>
-                                <!--  -->
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-
-                <div class="box clearfix mb-2">
-                    <h3 class="font-20 bold mb-2">Payment Gateway</h3>
-                    <form #paymentGatewayForm="ngForm" novalidate class="">
-                        <div class="row">
-                            <div class="form-group col-lg-4 col-md-6 col-xs-12">
-
-                                <label>Client Id
-                                    <span class="required">*</span>
-                                </label>
-                                <input class="form-control" type="text" placeholder="Client Id" name="paymentGateway.userName" [(ngModel)]="paymentGateway.userName" required autocomplete="off">
-
-                            </div>
-                            <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                <label>Client Secret Key
-                                    <span class="required">*</span>
-                                </label>
-                                <input class="form-control" type="password" placeholder="Client Secret key" name="paymentGateway.password" [(ngModel)]="paymentGateway.password" required autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 form-group ">
-                                <button *ngIf="!paymentGatewayAdded" class="btn btn-success" [disabled]="paymentGatewayForm.invalid" (click)="submitPaymentGateway(paymentGateway)">Save
-                                </button>
-                                <button *ngIf="paymentGatewayAdded" class="btn btn-success" [disabled]="paymentGatewayForm.invalid" (click)="updatePaymentGateway(paymentGateway)">Update
-                                </button>
-                                <button *ngIf="paymentGatewayAdded" type="reset" class="btn btn-danger" (click)="deletePaymentGateway()">
-                                    Delete
-                                </button>
-                                <!-- *ngIf="autoCollectAdded" -->
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </tab>
-
-        <tab (selectTab)="loadEcommerceData($event); tabChanged('ecommerce');">
-            <ng-template tabHeading>
-                <span class="icon-ecomm"></span> E-Comm
-            </ng-template>
-
-            <div class="box clearfix" *ngIf="false">
-                <h3 class="font-20 bold mb-2">Amazon Seller</h3>
-                <form #formDiv name="amazonSellerForm" [formGroup]="amazonSellerForm" novalidate="" autocomplete="off">
-                    <ng-container formArrayName="sellers">
-                        <ng-container *ngFor="let item of amazonSellerForm.get('sellers')['controls']; let i=index;let f = first; let l = last">
-                            <div class="clearfix" [formGroupName]="i">
-                                <!-- <div class="mr-r1 pull-left" [ngClass]="{'mr-t3': f}">
-                            <input type="checkbox" />
-                        </div>  -->
-
-                                <div class="row">
-                                    <div class="form-group col-xl-2 col-md-6 col-xs-12">
-
-                                        <label *ngIf="f">Seller Id<span class="required">*</span></label>
-                                        <input class="form-control" type="text" placeholder="Seller Id" required autocomplete="off" formControlName="sellerId" [disabled]="i !== amazonEditItemIdx" />
-
-                                    </div>
-                                    <div class="form-group col-xl-2 col-md-6 col-xs-12">
-                                        <label *ngIf="f">Access Key<span class="required">*</span></label>
-                                        <input class="form-control" type="text" placeholder="Access key" required autocomplete="off" formControlName="accessKey" [disabled]="i !== amazonEditItemIdx" />
-                                    </div>
-                                    <div class="form-group col-xl-3 col-md-6 col-xs-12">
-                                        <label *ngIf="f">AuthToken<span class="required">*</span></label>
-                                        <input class="form-control" type="text" placeholder="AuthToken key" required autocomplete="off" formControlName="mwsAuthToken" [disabled]="i !== amazonEditItemIdx" />
-                                    </div>
-
-
-                                    <div class="form-group col-xl-3 col-md-6 col-xs-9">
-                                        <label *ngIf="f">Secret Key<span class="required">*</span></label>
-                                        <input class="form-control" type="text" placeholder="Secret key" required autocomplete="off" formControlName="secretKey" [disabled]="i !== amazonEditItemIdx" />
-                                    </div>
-                                    <div class="pull-left edit-save-button">
-                                        <label class="d-flex">&nbsp;</label>
-                                        <div class="button-wrapper">
-                                            <button type="button" class="btn btn-default" (click)="saveAmazonSeller(item)" *ngIf="l"><i
-                                                class="fa fa-check"></i></button>
-                                            <button type="button" class="btn btn-default" (click)="updateAmazonSeller(item)" *ngIf="i === amazonEditItemIdx && !l"><i
-                                                class="fa fa-check"></i></button>
-                                            <button type="button" class="btn btn-default" (click)="editAmazonSeller(i)" *ngIf="i !== amazonEditItemIdx && !l"><i
-                                                class="fa fa-edit"></i></button>
-                                            <button type="button" class="btn btn-danger" (click)="deleteAmazonSeller(item.get('sellerId').value, i)" *ngIf="!l"><i class="icon-trash"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                            </div>
-                        </ng-container>
-                    </ng-container>
-                </form>
-
-                <div class="row mt-1">
-                    <div class="col-sm-12 form-group ">
-                        <!-- <button class="btn btn-success" (click)="saveAmazonSeller()">Save</button> -->
-                        <button class="btn btn-success" (click)="addAmazonSellerRow()">Add more</button>
-                        <!-- <button class="btn btn-danger">Delete</button> -->
-                    </div>
-                </div>
-            </div>
-            <div class="mr-t2 box clearfix">
-                <h3 class="section-head mb-2">Shopify</h3>
-                <span *ngIf="isEcommerceShopifyUserVerified">Your company is successfully connected with Shopify.</span>
-                <a href="https://shopify.giddh.com/signup.php" target="_blank" *ngIf="!isEcommerceShopifyUserVerified">
-                    <span>Connect with Shopify</span></a>
-            </div>
-
-        </tab>
-        <tab (selectTab)="loadPaymentData($event); tabChanged('payment');" [hidden]="!isIndianCompany">
-            <div *ngIf="isIndianCompany">
+            <tab (selectTab)="loadCollectionData($event); tabChanged('collection');">
                 <ng-template tabHeading>
-                    <span class="icon-payment"></span> Payment
+                    <span class="icon-card"></span> {{localeData?.collection?.tab_heading}}
                 </ng-template>
-                <div *ngFor="let regAcc of registeredAccount; let parentIndex=index">
 
-                    <div class="box clearfix">
-                        <div class="d-flex justify-content-between">
-                            <h2 class="font-20 bold mb-2">ICICI Bank</h2>
-                            <div class="ico-btn">
-                                <button class="btn btn-xs" *ngIf="isBankUpdateInEdit !== parentIndex " (click)="editRegisterForm(parentIndex, regAcc)" type="button"><i class="icon-edit-pencil"></i></button>
-                                <button class="btn btn-xs" *ngIf="isBankUpdateInEdit === parentIndex " (click)="editRegisterForm(null)" type="button"><i class="icon-edit-pencil"></i></button>
-                                <button class="btn btn-xs mr-0" type="button" (click)="deRegisterForm(regAcc)"><i class="icon-trash"></i></button>
+
+                <!-- <h3 class="section-head mr-t2">Invoice PaymentPaymentPayment</h3> -->
+                <div class="box clearfix mb-2">
+                    <h3 class="font-20 bold mb-2">{{localeData?.collection?.razorpay_form_heading}}</h3>
+                    <form #razorPayform="ngForm" novalidate class="">
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                                <label>{{localeData?.collection?.key_id_label}}
+                                    <span class="required">*</span>
+                                </label>
+                                <input class="form-control" type="text"
+                                    [placeholder]="localeData?.collection?.key_id_placeholder"
+                                    name="razorPayObj.userName" [(ngModel)]="razorPayObj.userName" required
+                                    autocomplete="off">
+
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                                <label>{{localeData?.collection?.secret_key_label}}
+                                    <span class="required">*</span>
+                                </label>
+                                <input class="form-control" type="password"
+                                    [placeholder]="localeData?.collection?.secret_key_placeholder"
+                                    name="razorPayObj.password" [(ngModel)]="razorPayObj.password" required
+                                    autocomplete="off">
                             </div>
                         </div>
-                        <div *ngIf="isBankUpdateInEdit === parentIndex ">
-                            <form [formGroup]="addBankForm" (ngSubmit)="updateIciciDetails(addBankForm.value, parentIndex)">
-                                <div class="row">
-                                    <div class="form-group col-xl-2 col-md-6 payment-col">
-                                        <div class="">
-                                            <label>Corporate ID <span class="required">*</span></label>
-                                            <br>
-                                            <input type="text" placeholder="Enter Corporate ID" class="form-control" disabled formControlName="corpId" name="corpId" autocomplete="off" />
+                        <div>
+                            <div class="row">
+                                <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                                    <div>
+                                        <label>{{localeData?.collection?.link_account_label}}</label>
+                                        <div class="input-group">
+                                            <sh-select class="linked-account"
+                                                [placeholder]="localeData?.collection?.link_account_placeholder"
+                                                name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName"
+                                                [options]="accounts$ | async" (selected)="selectAccount($event)"
+                                                [forceClearReactive]="forceClearLinkAccount$ | async"
+                                                [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                                                (scrollEnd)="handleScrollEnd()"
+                                                (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                                                [fixedValue]="razorPayObj?.account?.name"
+                                                [defaultValue]="razorPayObj?.account?.name">
+                                            </sh-select>
+                                            <div class="input-group-addon cp"
+                                                *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name">
+                                                <span (click)="unlinkAccountFromRazorPay()" class="icon-trash"></span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-group col-xl-2 col-md-6 payment-col">
-                                        <label>User ID <span class="required">*</span></label>
-                                        <br>
-                                        <input type="text" placeholder="Enter User ID" class="form-control" disabled formControlName="userId" name="userId" required autocomplete="off" />
-                                    </div>
-                                    <div class="form-group col-xl-2 col-md-6 payment-col">
-                                        <label>Account Number <span class="required">*</span></label>
-                                        <br>
-                                        <input type="text" placeholder="Enter Account Number" class="form-control" disabled formControlName="accountNo" name="accountNo" autocomplete="off" />
-                                    </div>
-                                    <div class="form-group col-xl-2 col-md-6 payment-col">
-                                        <label>Alias ID</label>
-                                        <br>
-                                        <input type="text" placeholder="Enter Alias ID" class="form-control" name="aliasId" disabled formControlName="aliasId" />
-                                    </div>
-                                    <div class="form-group col-xl-2 col-md-6 payment-col">
-                                        <label>Accounts <span class="required">*</span></label>
-                                        <br>
-                                        <sh-select #paymentFormAccountName [options]="bankAccounts$ | async" name="accountUniqueName" formControlName="accountUniqueName" placeholder="Select Account" [ItemHeight]="33" autocomplete="off" [isRequired]="true">
-                                        </sh-select>
-                                    </div>
                                 </div>
-                                <ng-container formArrayName="userAmountRanges">
-                                    <ng-container *ngFor="let item of addBankForm.get('userAmountRanges')['controls'];let index = index;let f = first; let l = last" [formGroupName]="index">
-                                        <div class="row">
-                                            <div class="form-group col-xl-2 col-md-6 payment-col" *ngIf="item.get('maxBankLimit').value ==='max'">
-                                                <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
-                                                </ng-container>
-                                                <div class="custom-select max select-caret position-relative">
+                                <div class="form-group col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label" id="inlnImg">
+                                    <label>&nbsp;</label>
+                                    <br>
+                                    <input type="checkbox" [(ngModel)]="razorPayObj.autoCapturePayment"
+                                        name="autoCapturePayment" />
+                                    {{localeData?.collection?.automatic_capture_on_payment}}
+                                </div>
+                            </div>
+                        </div>
 
-                                                    <sh-select [options]="amountUpToList" formControlName="maxBankLimit" (selected)="selectedMaxOrCustomField( index, false, null , $event);checkFormValidations(addBankForm.value)" name="maxBankLimit" [isRequired]="true">
 
-                                                    </sh-select>
-                                                </div>
-                                                <p class="error-msg text-right"></p>
+                        <div class="row">
+                            <div class="col-sm-12 form-group ">
+                                <button *ngIf="!updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid"
+                                    (click)="saveRazorPayDetails()">{{commonLocaleData?.app_save}}
+                                </button>
+                                <button *ngIf="updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid"
+                                    (click)="updateRazorPayDetails()">{{commonLocaleData?.app_update}}
+                                </button>
+                                <button *ngIf="updateRazor" class="btn btn-danger"
+                                    (click)="deleteRazorPayDetails()">{{commonLocaleData?.app_delete}}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+                <!-- <h3 class="section-head mr-t2">Cashfree Integration</h3> -->
+                <div class="clearfix mb-2" *ngIf="false">
+
+                    <div class="box clearfix mb-2">
+                        <h3 class="font-20 bold mb-2">{{localeData?.collection?.smart_payout_form_heading}}</h3>
+
+                        <form #payoutForm="ngForm" novalidate>
+                            <div class="row">
+                                <div class="form-group col-lg-4 col-md-6 col-xs-12">
+
+                                    <label>{{localeData?.collection?.client_id_label}}
+                                        <span class="required">*</span>
+                                    </label>
+                                    <input class="form-control" type="text"
+                                        [placeholder]="localeData?.collection?.client_id_placeholder"
+                                        name="payoutForm.userName" [(ngModel)]="payoutObj.userName" required
+                                        autocomplete="off">
+                                </div>
+
+                                <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                                    <label>{{localeData?.collection?.client_secret_key_label}}
+                                        <span class="required">*</span>
+                                    </label>
+                                    <input class="form-control" type="password"
+                                        [placeholder]="localeData?.collection?.client_secret_key_placeholder"
+                                        name="payoutForm.password" [(ngModel)]="payoutObj.password" required
+                                        autocomplete="off">
+                                </div>
+                            </div>
+                            <div>
+                                <div class="row">
+                                    <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                                        <div>
+                                            <label>{{localeData?.collection?.link_account_label}}</label>
+                                            <sh-select [placeholder]="localeData?.collection?.link_account_placeholder"
+                                                name="payoutObj.account" [(ngModel)]="payoutObj.fakeAccObj"
+                                                [options]="bankAccounts$ | async"
+                                                (selected)="selectCashfreeAccount($event, payoutObj)">
+                                            </sh-select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label">
+                                        <label>&nbsp;</label>
+                                        <br>
+                                        <input type="checkbox" [(ngModel)]="payoutObj.autoCapturePayment"
+                                            name="payoutObj.autoCapturePayment"
+                                            [checked]="autoCollectObj.account?.uniqueName" />
+                                        {{localeData?.collection?.automatic_capture_on_payment}}
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12 form-group ">
+                                    <button *ngIf="!payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid"
+                                        (click)="submitCashfreeDetail(payoutObj)">{{commonLocaleData?.app_save}}
+                                    </button>
+                                    <button *ngIf="payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid"
+                                        (click)="updateCashfreeDetail(payoutObj)">{{commonLocaleData?.app_update}}
+                                    </button>
+                                    <button *ngIf="payoutAdded" class="btn btn-danger"
+                                        (click)="deleteCashFreeAccount()">{{commonLocaleData?.app_delete}}
+                                    </button>
+                                    <!--  -->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
+                    <div class="box clearfix mb-2">
+                        <h3 class="font-20 bold mb-2">{{localeData?.collection?.auto_collect_form_heading}}</h3>
+                        <form #autoCollectform="ngForm" novalidate class="">
+                            <div class="row">
+                                <div class="form-group col-lg-4 col-md-6 col-xs-12">
+
+                                    <label>{{localeData?.collection?.client_id_label}}
+                                        <span class="required">*</span>
+                                    </label>
+                                    <input class="form-control" type="text"
+                                        [placeholder]="localeData?.collection?.client_id_placeholder"
+                                        name="autoCollectform.userName" [(ngModel)]="autoCollectObj.userName" required
+                                        autocomplete="off">
+
+                                </div>
+                                <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                                    <label>{{localeData?.collection?.client_secret_key_label}}
+                                        <span class="required">*</span>
+                                    </label>
+                                    <input class="form-control" type="password"
+                                        [placeholder]="localeData?.collection?.client_secret_key_placeholder"
+                                        name="autoCollectform.password" [(ngModel)]="autoCollectObj.password" required
+                                        autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="">
+                                <div class="row">
+                                    <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                                        <div class="">
+                                            <label>{{localeData?.collection?.link_account_label}}</label>
+                                            <sh-select [placeholder]="localeData?.collection?.link_account_placeholder"
+                                                name="autoCollectObj.account" [(ngModel)]="autoCollectObj.fakeAccObj"
+                                                [options]="bankAccounts$ | async"
+                                                (selected)="selectCashfreeAccount($event, autoCollectObj)"></sh-select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label">
+                                        <label>&nbsp;</label>
+                                        <br>
+                                        <input type="checkbox" [(ngModel)]="autoCollectObj.autoCapturePayment"
+                                            name="autoCollectObj.autoCapturePayment"
+                                            [checked]="autoCollectObj.account?.uniqueName" />
+                                        {{localeData?.collection?.automatic_capture_on_payment}}
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12 form-group ">
+                                    <button type="submit" *ngIf="!autoCollectAdded" class="btn btn-success"
+                                        [disabled]="autoCollectform.invalid"
+                                        (click)="submitAutoCollect(autoCollectObj)">{{commonLocaleData?.app_save}}
+                                    </button>
+                                    <button type="submit" *ngIf="autoCollectAdded" class="btn btn-success"
+                                        [disabled]="autoCollectform.invalid"
+                                        (click)="updateAutoCollect(autoCollectObj)">{{commonLocaleData?.app_update}}
+                                    </button>
+                                    <button type="reset" *ngIf="autoCollectAdded" class="btn btn-danger"
+                                        (click)="deleteAutoCollect()">{{commonLocaleData?.app_delete}}
+                                    </button>
+                                    <!--  -->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
+                    <div class="box clearfix mb-2">
+                        <h3 class="font-20 bold mb-2">{{localeData?.collection?.payment_gateway_form_heading}}</h3>
+                        <form #paymentGatewayForm="ngForm" novalidate class="">
+                            <div class="row">
+                                <div class="form-group col-lg-4 col-md-6 col-xs-12">
+
+                                    <label>{{localeData?.collection?.client_id_label}}
+                                        <span class="required">*</span>
+                                    </label>
+                                    <input class="form-control" type="text"
+                                        [placeholder]="localeData?.collection?.client_id_placeholder"
+                                        name="paymentGateway.userName" [(ngModel)]="paymentGateway.userName" required
+                                        autocomplete="off">
+
+                                </div>
+                                <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                                    <label>{{localeData?.collection?.client_secret_key_label}}
+                                        <span class="required">*</span>
+                                    </label>
+                                    <input class="form-control" type="password"
+                                        [placeholder]="localeData?.collection?.client_secret_key_placeholder"
+                                        name="paymentGateway.password" [(ngModel)]="paymentGateway.password" required
+                                        autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 form-group ">
+                                    <button *ngIf="!paymentGatewayAdded" class="btn btn-success"
+                                        [disabled]="paymentGatewayForm.invalid"
+                                        (click)="submitPaymentGateway(paymentGateway)">{{commonLocaleData?.app_save}}
+                                    </button>
+                                    <button *ngIf="paymentGatewayAdded" class="btn btn-success"
+                                        [disabled]="paymentGatewayForm.invalid"
+                                        (click)="updatePaymentGateway(paymentGateway)">{{commonLocaleData?.app_update}}
+                                    </button>
+                                    <button *ngIf="paymentGatewayAdded" type="reset" class="btn btn-danger"
+                                        (click)="deletePaymentGateway()">
+                                        {{commonLocaleData?.app_delete}}
+                                    </button>
+                                    <!-- *ngIf="autoCollectAdded" -->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </tab>
+
+            <tab (selectTab)="loadEcommerceData($event); tabChanged('ecommerce');">
+                <ng-template tabHeading>
+                    <span class="icon-ecomm"></span> {{localeData?.ecommerce?.tab_heading}}
+                </ng-template>
+
+                <div class="box clearfix" *ngIf="false">
+                    <h3 class="font-20 bold mb-2">{{localeData?.ecommerce?.amazon_seller_form_heading}}</h3>
+                    <form #formDiv name="amazonSellerForm" [formGroup]="amazonSellerForm" novalidate=""
+                        autocomplete="off">
+                        <ng-container formArrayName="sellers">
+                            <ng-container
+                                *ngFor="let item of amazonSellerForm.get('sellers')['controls']; let i=index;let f = first; let l = last">
+                                <div class="clearfix" [formGroupName]="i">
+                                    <!-- <div class="mr-r1 pull-left" [ngClass]="{'mr-t3': f}">
+                                <input type="checkbox" />
+                            </div>  -->
+
+                                    <div class="row">
+                                        <div class="form-group col-xl-2 col-md-6 col-xs-12">
+
+                                            <label *ngIf="f">{{localeData?.ecommerce?.seller_id_label}}<span
+                                                    class="required">*</span></label>
+                                            <input class="form-control" type="text"
+                                                [placeholder]="localeData?.ecommerce?.seller_id_placeholder" required
+                                                autocomplete="off" formControlName="sellerId"
+                                                [disabled]="i !== amazonEditItemIdx" />
+
+                                        </div>
+                                        <div class="form-group col-xl-2 col-md-6 col-xs-12">
+                                            <label *ngIf="f">{{localeData?.ecommerce?.access_key_label}}<span
+                                                    class="required">*</span></label>
+                                            <input class="form-control" type="text"
+                                                [placeholder]="localeData?.ecommerce?.access_key_placeholder" required
+                                                autocomplete="off" formControlName="accessKey"
+                                                [disabled]="i !== amazonEditItemIdx" />
+                                        </div>
+                                        <div class="form-group col-xl-3 col-md-6 col-xs-12">
+                                            <label *ngIf="f">{{localeData?.ecommerce?.auth_token_label}}<span
+                                                    class="required">*</span></label>
+                                            <input class="form-control" type="text"
+                                                [placeholder]="localeData?.ecommerce?.auth_token_placeholder" required
+                                                autocomplete="off" formControlName="mwsAuthToken"
+                                                [disabled]="i !== amazonEditItemIdx" />
+                                        </div>
+
+
+                                        <div class="form-group col-xl-3 col-md-6 col-xs-9">
+                                            <label *ngIf="f">{{localeData?.ecommerce?.secret_key_label}}<span
+                                                    class="required">*</span></label>
+                                            <input class="form-control" type="text"
+                                                [placeholder]="localeData?.ecommerce?.secret_key_placeholder" required
+                                                autocomplete="off" formControlName="secretKey"
+                                                [disabled]="i !== amazonEditItemIdx" />
+                                        </div>
+                                        <div class="pull-left edit-save-button">
+                                            <label class="d-flex">&nbsp;</label>
+                                            <div class="button-wrapper">
+                                                <button type="button" class="btn btn-default"
+                                                    (click)="saveAmazonSeller(item)" *ngIf="l"><i
+                                                        class="fa fa-check"></i></button>
+                                                <button type="button" class="btn btn-default"
+                                                    (click)="updateAmazonSeller(item)"
+                                                    *ngIf="i === amazonEditItemIdx && !l"><i
+                                                        class="fa fa-check"></i></button>
+                                                <button type="button" class="btn btn-default"
+                                                    (click)="editAmazonSeller(i)"
+                                                    *ngIf="i !== amazonEditItemIdx && !l"><i
+                                                        class="fa fa-edit"></i></button>
+                                                <button type="button" class="btn btn-danger"
+                                                    (click)="deleteAmazonSeller(item.get('sellerId').value, i)"
+                                                    *ngIf="!l"><i class="icon-trash"></i></button>
                                             </div>
-                                            <div class="form-group col-xl-2 col-md-3 payment-col1" *ngIf="item.get('maxBankLimit').value!=='max'">
-                                                <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
-                                                </ng-container>
-                                                <div class="d-flex">
-                                                    <div class="mr-r05 custom-select cust select-caret position-relative">
+                                        </div>
+                                    </div>
 
-                                                        <sh-select [options]="amountUpToList" formControlName="maxBankLimit" (selected)="selectedMaxOrCustomField(  index, false, null , $event);checkFormValidations(addBankForm.value)" name="maxBankLimit" [isRequired]="true">
+
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </form>
+
+                    <div class="row mt-1">
+                        <div class="col-sm-12 form-group ">
+                            <!-- <button class="btn btn-success" (click)="saveAmazonSeller()">Save</button> -->
+                            <button class="btn btn-success"
+                                (click)="addAmazonSellerRow()">{{localeData?.ecommerce?.add_more}}</button>
+                            <!-- <button class="btn btn-danger">Delete</button> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="mr-t2 box clearfix">
+                    <h3 class="section-head mb-2">{{localeData?.ecommerce?.shopify_form_heading}}</h3>
+                    <span
+                        *ngIf="isEcommerceShopifyUserVerified">{{localeData?.ecommerce?.shopify_connected_message}}</span>
+                    <a href="https://shopify.giddh.com/signup.php" target="_blank"
+                        *ngIf="!isEcommerceShopifyUserVerified">
+                        <span>{{localeData?.ecommerce?.connect_shopify}}</span></a>
+                </div>
+
+            </tab>
+            <tab (selectTab)="loadPaymentData($event); tabChanged('payment');" [hidden]="!isIndianCompany">
+                <div *ngIf="isIndianCompany">
+                    <ng-template tabHeading>
+                        <span class="icon-payment"></span> {{localeData?.payment?.tab_heading}}
+                    </ng-template>
+                    <div *ngFor="let regAcc of registeredAccount; let parentIndex=index">
+
+                        <div class="box clearfix">
+                            <div class="d-flex justify-content-between">
+                                <h2 class="font-20 bold mb-2">{{localeData?.payment?.icici_bank_name}}</h2>
+                                <div class="ico-btn">
+                                    <button class="btn btn-xs" *ngIf="isBankUpdateInEdit !== parentIndex"
+                                        (click)="editRegisterForm(parentIndex, regAcc)" type="button"><i
+                                            class="icon-edit-pencil"></i></button>
+                                    <button class="btn btn-xs" *ngIf="isBankUpdateInEdit === parentIndex"
+                                        (click)="editRegisterForm(null)" type="button"><i
+                                            class="icon-edit-pencil"></i></button>
+                                    <button class="btn btn-xs mr-0" type="button" (click)="deRegisterForm(regAcc)"><i
+                                            class="icon-trash"></i></button>
+                                </div>
+                            </div>
+                            <div *ngIf="isBankUpdateInEdit === parentIndex ">
+                                <form [formGroup]="addBankForm"
+                                    (ngSubmit)="updateIciciDetails(addBankForm.value, parentIndex)">
+                                    <div class="row">
+                                        <div class="form-group col-xl-2 col-md-6 payment-col">
+                                            <div class="">
+                                                <label>{{localeData?.payment?.corporate_id_label}} <span
+                                                        class="required">*</span></label>
+                                                <br>
+                                                <input type="text"
+                                                    [placeholder]="localeData?.payment?.corporate_id_placeholder"
+                                                    class="form-control" disabled formControlName="corpId" name="corpId"
+                                                    autocomplete="off" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xl-2 col-md-6 payment-col">
+                                            <label>{{localeData?.payment?.user_id_label}} <span
+                                                    class="required">*</span></label>
+                                            <br>
+                                            <input type="text" [placeholder]="localeData?.payment?.user_id_placeholder"
+                                                class="form-control" disabled formControlName="userId" name="userId"
+                                                required autocomplete="off" />
+                                        </div>
+                                        <div class="form-group col-xl-2 col-md-6 payment-col">
+                                            <label>{{localeData?.payment?.account_number_label}} <span
+                                                    class="required">*</span></label>
+                                            <br>
+                                            <input type="text"
+                                                [placeholder]="localeData?.payment?.account_number_placeholder"
+                                                class="form-control" disabled formControlName="accountNo"
+                                                name="accountNo" autocomplete="off" />
+                                        </div>
+                                        <div class="form-group col-xl-2 col-md-6 payment-col">
+                                            <label>{{localeData?.payment?.alias_id_label}}</label>
+                                            <br>
+                                            <input type="text" [placeholder]="localeData?.payment?.alias_id_placeholder"
+                                                class="form-control" name="aliasId" disabled
+                                                formControlName="aliasId" />
+                                        </div>
+                                        <div class="form-group col-xl-2 col-md-6 payment-col">
+                                            <label>{{localeData?.payment?.accounts}} <span
+                                                    class="required">*</span></label>
+                                            <br>
+                                            <sh-select #paymentFormAccountName [options]="bankAccounts$ | async"
+                                                name="accountUniqueName" formControlName="accountUniqueName"
+                                                [placeholder]="commonLocaleData?.app_select_account" [ItemHeight]="33"
+                                                autocomplete="off" [isRequired]="true">
+                                            </sh-select>
+                                            <!-- <sh-select [options]="usersList" name="usersList" [multiple]="true" formControlName="emailIds" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select> -->
+                                        </div>
+                                    </div>
+                                    <ng-container formArrayName="userAmountRanges">
+                                        <ng-container
+                                            *ngFor="let item of addBankForm.get('userAmountRanges')['controls'];let index = index;let f = first; let l = last"
+                                            [formGroupName]="index">
+                                            <div class="row">
+                                                <div class="form-group col-xl-2 col-md-6 payment-col"
+                                                    *ngIf="item.get('maxBankLimit').value ==='max'">
+                                                    <ng-container *ngIf="index===0"> <label
+                                                            class="d-flex relative info-icon">{{localeData?.payment?.amount_upto}}
+                                                            <span class="required">*</span>
+                                                            <div class="tooltip-box"><i class="icon-info cursor-pointer"
+                                                                    [tooltip]="localeData?.payment?.client_amount_note"></i>
+                                                            </div>
+                                                        </label>
+                                                    </ng-container>
+                                                    <div class="custom-select max select-caret position-relative">
+
+                                                        <sh-select [options]="amountUpToList"
+                                                            formControlName="maxBankLimit"
+                                                            (selected)="selectedMaxOrCustomField( index, false, null , $event);checkFormValidations(addBankForm.value)"
+                                                            name="maxBankLimit" [isRequired]="true">
 
                                                         </sh-select>
                                                     </div>
-                                                    <div class="mr-l05">
-                                                        <input type="text" class="form-control" [ngClass]="{'error-box': checkIsAmountRepeat(addBankForm.get('userAmountRanges').value,item.get('amount').value,index, true)}" #amountElement decimalDigitsDirective (blur)="preventZero(item.get('amount').value, index, null, false)"
-                                                            maxlength="10" formControlName="amount" name="amount" placeholder="Amount">
+                                                    <p class="error-msg text-right"></p>
+                                                </div>
+                                                <div class="form-group col-xl-2 col-md-3 payment-col1"
+                                                    *ngIf="item.get('maxBankLimit').value!=='max'">
+                                                    <ng-container *ngIf="index===0"> <label
+                                                            class="d-flex relative info-icon">{{localeData?.payment?.amount_upto}}
+                                                            <span class="required">*</span>
+                                                            <div class="tooltip-box"><i class="icon-info cursor-pointer"
+                                                                    [tooltip]="localeData?.payment?.client_amount_note"></i>
+                                                            </div>
+                                                        </label>
+                                                    </ng-container>
+                                                    <div class="d-flex">
+                                                        <div
+                                                            class="mr-r05 custom-select cust select-caret position-relative">
+
+                                                            <sh-select [options]="amountUpToList"
+                                                                formControlName="maxBankLimit"
+                                                                (selected)="selectedMaxOrCustomField(  index, false, null , $event);checkFormValidations(addBankForm.value)"
+                                                                name="maxBankLimit" [isRequired]="true">
+
+                                                            </sh-select>
+                                                        </div>
+                                                        <div class="mr-l05">
+                                                            <input type="text" class="form-control"
+                                                                [ngClass]="{'error-box': checkIsAmountRepeat(addBankForm.get('userAmountRanges').value,item.get('amount').value,index, true)}"
+                                                                #amountElement decimalDigitsDirective
+                                                                (blur)="preventZero(item.get('amount').value, index, null, false)"
+                                                                maxlength="10" formControlName="amount" name="amount"
+                                                                [placeholder]="commonLocaleData?.app_amount">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-xl-2 col-md-6 payment-col1">
+                                                    <ng-container *ngIf="index===0">
+                                                        <label class="d-flex relative info-icon">{{localeData?.payment?.select_otp}} <span
+                                                                class="required">*</span>
+                                                            <div class="tooltip-box"><i class="icon-info cursor-pointer"
+                                                                    [tooltip]="localeData?.payment?.select_otp_tooltip"></i>
+                                                            </div>
+                                                        </label>
+                                                    </ng-container>
+                                                    <div class="custom-select select-caret position-relative">
+                                                        <sh-select [options]="typeOTPList" formControlName="otpType"
+                                                            (selected)="selectedOtpType($event,index, false)" required
+                                                            [isRequired]="true" name="otpType">
+                                                        </sh-select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-xl-2 col-md-6 payment-col">
+                                                    <ng-container *ngIf="index===0">
+                                                        <label class="d-flex relative info-icon">{{localeData?.payment?.approver_name}} <span
+                                                                class="required">*</span>
+                                                            <div class="tooltip-box"><i class="icon-info cursor-pointer"
+                                                                    [tooltip]="localeData?.payment?.approver_name_tooltip"></i>
+                                                            </div>
+                                                        </label>
+
+                                                    </ng-container>
+                                                    <div class="custom-select select-caret position-relative"
+                                                        *ngIf="item.get('otpType').value !=='BANK'">
+                                                        <sh-select [options]="approvalNameList" class="text-left"
+                                                            formControlName="approvalUniqueName"
+                                                            name="approvalUniqueName" [placeholder]="localeData?.payment?.select_bank"
+                                                            [customSorting]="customApproverNameListSorting"
+                                                            [multiple]="false" [isRequired]="true">
+                                                            <ng-template #optionTemplate let-option="option">
+                                                                <a href="javascript:void(0)"
+                                                                    *ngIf="option?.additional[0]?.mobileVerified"
+                                                                    class="list-item relative">
+                                                                    <div class="item">
+                                                                        <p>{{option?.label}}</p>
+                                                                        <p>{{option?.additional[0]?.mobileNumber}}</p>
+                                                                        <img src="assets/images/blue-check.svg"
+                                                                            class="check-search" alt="">
+                                                                    </div>
+                                                                </a>
+
+                                                                <fieldset disabled href="javascript:void(0)"
+                                                                    *ngIf="!option?.additional[0]?.mobileVerified"
+                                                                    class="list-item relative text-light disabled disabled-list-item">
+                                                                    <div class="item">
+                                                                        <p>{{option?.label}}</p>
+                                                                        <p>{{localeData?.payment?.unverifed}}</p>
+                                                                        <img src="assets/images/close-round.svg"
+                                                                            class="check-search" alt="">
+                                                                    </div>
+                                                                </fieldset>
+                                                            </ng-template>
+                                                        </sh-select>
+                                                    </div>
+                                                    <div class="custom-select select-caret position-relative"
+                                                        *ngIf="item.get('otpType').value ==='BANK'">
+                                                        <input type="text" class="form-control" disabled
+                                                            [placeholder]="localeData?.payment?.registered"
+                                                            formControlName="approvalUniqueName"
+                                                            name="approvalUniqueName">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
+                                                    <label *ngIf="index===0" class="d-flex hidden-1359">&nbsp;</label>
+                                                    <div class="mt-1 xs-pd-l15">
+                                                        <i (click)="removeUserAmountRangesForm(index);checkFormValidations(addBankForm.value)"
+                                                            class="icon-trash cursor-pointer"></i>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-xl-2 col-md-6 payment-col1">
-                                                <ng-container *ngIf="index===0">
-                                                    <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approver Name"></i></div></label>
-                                                </ng-container>
-                                                <div class="custom-select select-caret position-relative">
-                                                    <sh-select [options]="typeOTPList" formControlName="otpType" (selected)="selectedOtpType($event,index, false)" required [isRequired]="true" name="otpType">
+                                        </ng-container>
+                                    </ng-container>
+                                    <div>
+                                        <a href="javascript:void(0)"
+                                            (click)="addUserAmountRangesForm();checkFormValidations(addBankForm.value)"
+                                            class="btn btn-link pl-0">{{localeData?.payment?.add_new_row}}</a>
+                                    </div>
+                                    <!-- <div class="clearfix">
+                                <a href="javascript:void" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" (click)="openNewRegistartionForm()" class="btn btn-link pl-0">Add More ID</a>
+                            </div> -->
+                                    <div class="form-group">
+                                        <div class="empty-label">
+                                            <button type="submit" [disabled]="!addBankForm.valid || isUpdateInvalid"
+                                                class="btn btn-success mr-r1">{{commonLocaleData?.app_update}}</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <form #paymentFormUpdate="ngForm" *ngIf="isBankUpdateInEdit !== parentIndex ">
+                                <div class="row">
+                                    <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                                        <label>{{localeData?.payment?.corporate_id_label}} <span
+                                                class="required">*</span></label>
+                                        <br>
+                                        <input type="text" [placeholder]="localeData?.payment?.corporate_id_placeholder"
+                                            required name="corpId" class="form-control" [(ngModel)]="regAcc.corpId"
+                                            disabled />
+
+                                    </div>
+                                    <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                                        <label>{{localeData?.payment?.user_id_label}} <span
+                                                class="required">*</span></label>
+                                        <br>
+
+                                        <input type="text" [placeholder]="localeData?.payment?.user_id_placeholder"
+                                            name="userId" required class="form-control" [(ngModel)]="regAcc.userId"
+                                            disabled />
+
+                                    </div>
+                                    <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                                        <label>{{localeData?.payment?.account_number_label}} <span
+                                                class="required">*</span></label>
+                                        <br>
+
+                                        <input type="text"
+                                            [placeholder]="localeData?.payment?.account_number_placeholder"
+                                            name="accountNo" required class="form-control"
+                                            [(ngModel)]="regAcc.accountNo" disabled />
+                                    </div>
+                                    <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                                        <label>{{localeData?.payment?.alias_id_label}}</label>
+                                        <br>
+                                        <input type="text" [placeholder]="localeData?.payment?.alias_id_placeholder"
+                                            name="aliasId" class="form-control" [(ngModel)]="regAcc.aliasId" disabled />
+                                    </div>
+                                    <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col"
+                                        *ngIf="bankAccounts$ && regAcc?.account?.uniqueName">
+
+                                        <label>{{localeData?.payment?.accounts}} <span class="required">*</span></label>
+                                        <br>
+                                        <sh-select *ngIf="bankAccounts$ && regAcc?.account?.uniqueName"
+                                            [disabled]="isBankUpdateInEdit !== parentIndex" required
+                                            [options]="bankAccounts$ | async" name="accountUniqueName"
+                                            [defaultValue]="regAcc?.account?.name"
+                                            [(ngModel)]="regAcc.account.uniqueName"
+                                            [placeholder]="commonLocaleData?.app_select_account" [ItemHeight]="33"
+                                            autocomplete="off" [isRequired]="true"></sh-select>
+                                        <!-- <sh-select [disabled]="isBankUpdateInEdit !== parentIndex" [options]="usersList" name="usersList" [defaultValue]="regAcc?.combinedUserNames" [(ngModel)]="regAcc.emailId" placeholder="Select User" [ItemHeight]="33" autocomplete="off"   (selected)="selectUser($event)"></sh-select> -->
+                                    </div>
+                                </div>
+                                <!-- Added this new row make it dynamic -->
+                                <ng-container
+                                    *ngFor="let item of regAcc.userAmountRanges; let index = index; let firstIndex = first; let lastIndex = last">
+                                    <div class="row">
+                                        <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col"
+                                            *ngIf="item.maxBankLimit ==='max'">
+                                            <ng-container *ngIf="index===0"> <label
+                                                    class="d-flex relative info-icon">{{localeData?.payment?.amount_upto}}
+                                                    <span class="required">*</span>
+                                                    <div class="tooltip-box"><i class="icon-info cursor-pointer"
+                                                            [tooltip]="localeData?.payment?.client_amount_note"></i>
+                                                    </div>
+                                                </label>
+                                            </ng-container>
+                                            <div class="custom-select select-caret position-relative">
+                                                <sh-select [options]="amountUpToList" autocomplete="off" required
+                                                    [(ngModel)]="item.maxBankLimit"
+                                                    name="maxBankLimit{{parentIndex}}{{index}}"
+                                                    [disabled]="isBankUpdateInEdit !== parentIndex"
+                                                    (selected)="selectedMaxOrCustom(index, true, parentIndex);"
+                                                    (ngModelChange)="maxLimitOrCustomChanged($event, index , true, parentIndex)"
+                                                    [isRequired]="true">
+                                                </sh-select>
+                                            </div>
+                                            <p class="error-msg text-right"></p>
+                                        </div>
+                                        <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col"
+                                            *ngIf="item.maxBankLimit !== 'max'">
+                                            <ng-container *ngIf="index===0"> <label
+                                                    class="d-flex relative info-icon">{{localeData?.payment?.amount_upto}}
+                                                    <span class="required">*</span>
+                                                    <div class="tooltip-box"><i class="icon-info cursor-pointer"
+                                                            [tooltip]="localeData?.payment?.client_amount_note"></i>
+                                                    </div>
+                                                </label>
+                                            </ng-container>
+                                            <div class="d-flex">
+
+                                                <div
+                                                    class="mr-r05 custom-select select-caret position-relative width-100">
+                                                    <sh-select [options]="amountUpToList" autocomplete="off"
+                                                        [required]="item.maxBankLimit !== 'max'"
+                                                        [disabled]="isBankUpdateInEdit !== parentIndex"
+                                                        [fixedValue]="'Custom'" defaultValue="{{item.maxBankLimit}}"
+                                                        [(ngModel)]="item.maxBankLimit"
+                                                        (selected)="selectedMaxOrCustom(index, true, parentIndex);"
+                                                        (ngModelChange)="maxLimitOrCustomChanged($event, index , true, parentIndex)"
+                                                        name="maxBankLimit{{parentIndex}}{{index}}" [isRequired]="true">
                                                     </sh-select>
                                                 </div>
-                                            </div>
-                                            <div class="form-group col-xl-2 col-md-6 payment-col">
-                                                <ng-container *ngIf="index===0">
-                                                    <label class="d-flex relative info-icon">Approver Name <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i></div></label>
-
-                                                </ng-container>
-                                                <div class="custom-select select-caret position-relative" *ngIf="item.get('otpType').value !=='BANK'">
-                                                    <sh-select [options]="approvalNameList" class="text-left" formControlName="approvalUniqueName" name="approvalUniqueName" [placeholder]="'Select Bank'" [customSorting]="customApproverNameListSorting" [multiple]="false" [isRequired]="true">
-                                                        <ng-template #optionTemplate let-option="option">
-                                                            <a href="javascript:void(0)" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative">
-                                                                <div class="item">
-                                                                    <p>{{option?.label}}</p>
-                                                                    <p>{{option?.additional[0]?.mobileNumber}}</p>
-                                                                    <img src="assets/images/blue-check.svg" class="check-search" alt="">
-                                                                </div>
-                                                            </a>
-
-                                                            <fieldset disabled href="javascript:void(0)" *ngIf="!option?.additional[0]?.mobileVerified" class="list-item relative text-light disabled disabled-list-item">
-                                                                <div class="item">
-                                                                    <p>{{option?.label}}</p>
-                                                                    <p>Unverifed</p>
-                                                                    <img src="assets/images/close-round.svg" class="check-search" alt="">
-                                                                </div>
-                                                            </fieldset>
-                                                        </ng-template>
-                                                    </sh-select>
-                                                </div>
-                                                <div class="custom-select select-caret position-relative" *ngIf="item.get('otpType').value ==='BANK'">
-                                                    <input type="text" class="form-control" disabled placeholder="Registered" formControlName="approvalUniqueName" name="approvalUniqueName">
-                                                </div>
-                                            </div>
-                                            <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
-                                                <label *ngIf="index===0" class="d-flex hidden-1359">&nbsp;</label>
-                                                <div class="mt-1 xs-pd-l15">
-                                                    <i (click)="removeUserAmountRangesForm(index);checkFormValidations(addBankForm.value)" class="icon-trash cursor-pointer"></i>
+                                                <div class="mr-l05  width-100">
+                                                    <input type="text" class="form-control" #amountUpdateElement
+                                                        [required]="item.maxBankLimit !== 'max'" decimalDigitsDirective
+                                                        [disabled]="isBankUpdateInEdit !== parentIndex"
+                                                        [(ngModel)]="item.amount"
+                                                        (blur)="changeAmount(item, index, amountUpdateElement, true, parentIndex );preventZero(item.amount,index, parentIndex, true )"
+                                                        maxlength="10" name="amount{{parentIndex}}{{index}}"
+                                                        [placeholder]="commonLocaleData?.app_amount">
                                                 </div>
                                             </div>
                                         </div>
-                                    </ng-container>
+                                        <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                                            <ng-container *ngIf="index===0">
+                                                <label class="d-flex relative info-icon">{{localeData?.payment?.select_otp}} <span
+                                                        class="required">*</span>
+                                                    <div class="tooltip-box"><i class="icon-info cursor-pointer"
+                                                        [tooltip]="localeData?.payment?.select_otp_tooltip"></i>
+                                                    </div>
+                                                </label>
+                                            </ng-container>
+                                            <div class="custom-select select-caret position-relative">
+                                                <sh-select [options]="typeOTPList" [(ngModel)]="item.otpType"
+                                                    (ngModelChange)="selectedOtpType($event, index, true, parentIndex)"
+                                                    [disabled]="isBankUpdateInEdit !== parentIndex" required
+                                                    name="otpType{{parentIndex}}{{index}}" [isRequired]="true">
+                                                </sh-select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                                            <ng-container *ngIf="index===0">
+                                                <label class="d-flex relative info-icon">{{localeData?.payment?.approver_name}} <span
+                                                        class="required">*</span>
+                                                    <div class="tooltip-box"><i class="icon-info cursor-pointer"
+                                                            [tooltip]="localeData?.payment?.approver_name_tooltip"></i>
+                                                    </div>
+                                                </label>
+
+                                            </ng-container>
+                                            <div class="custom-select select-caret position-relative"
+                                                *ngIf="item.otpType!=='BANK'">
+                                                <input type="text" class="form-control" [placeholder]="localeData?.payment?.registered"
+                                                    disabled name="approvalUniqueName{{index}}"
+                                                    [value]="item.approvalDetails.name">
+                                            </div>
+                                            <div class="custom-select select-caret position-relative"
+                                                *ngIf="item.otpType==='BANK'">
+                                                <input type="text" class="form-control"
+                                                    [disabled]="item.otpType==='BANK' || isBankUpdateInEdit !== parentIndex"
+                                                    [placeholder]="localeData?.payment?.registered" name="approvalUniqueName{{index}}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0"
+                                            *ngIf="isBankUpdateInEdit === parentIndex">
+                                            <ng-container *ngIf="index===0"> <label
+                                                    class="d-flex hidden-1359">&nbsp;</label></ng-container>
+                                            <div class="mt-1 xs-pd-l15">
+                                                <i (click)="deleteAmountRangeRow(item, parentIndex+1)"
+                                                    class="icon-trash cursor-pointer"></i>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </ng-container>
-                                <div>
-                                    <a href="javascript:void(0)" (click)="addUserAmountRangesForm();checkFormValidations(addBankForm.value)" class="btn btn-link pl-0">+ Add New Row</a>
+
+                                <div *ngIf="isBankUpdateInEdit === parentIndex">
+                                    <a href="javascript:void(0)" (click)="addNewAmountRangeRow(parentIndex+1)"
+                                        class="btn btn-link pl-0 pt-0">{{localeData?.payment?.add_new_row}}</a>
                                 </div>
-                                <!-- <div class="clearfix">
-                            <a href="javascript:void" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" (click)="openNewRegistartionForm()" class="btn btn-link pl-0">Add More ID</a>
-                        </div> -->
-                                <div class="form-group">
-                                    <div class="empty-label">
+                                <!-- New code -->
+                                <div>
+                                    <div class="form-group update-btn-wrapper">
+                                        <label>&nbsp;</label>
                                         <br>
-                                        <button type="submit" [disabled]="!addBankForm.valid || isUpdateInvalid" class="btn btn-success mr-r1">Update</button>
+                                        <button type="button" class="btn btn-success mr-r1"
+                                            [disabled]="!paymentFormUpdate.form.valid"
+                                            (click)="updateIciciDetails(regAcc, parentIndex)">{{commonLocaleData?.app_update}}</button>
                                     </div>
                                 </div>
                             </form>
+                            <!-- <div style="display: inline" *ngIf="(isPaymentUpdationSuccess$ | async) && parentIndex === selecetdUpdateIndex">
+                                <div class="clearfix">
+                                    <div>Congratulations!! A request has been sent to your account, go to <a class="btn-link" href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
+                                    </div>
+                                </div>
+                                <div class="clearfix">
+                                    <div style="color: gray">Once it is done you can link your ICICI account/s and make payment directly through GIDDH.
+                                    </div>
+                                </div>
+                            </div> -->
                         </div>
-
-                        <form #paymentFormUpdate="ngForm" *ngIf="isBankUpdateInEdit !== parentIndex ">
+                        <br />
+                    </div>
+                    <!-- <div *ngIf="openNewRegistration && !(isPaymentAdditionSuccess$ | async)" class="box clearfix">
+                        <h3 class="font-20 bold mb-2">ICICI Bank</h3>
+                        <form #paymentForm="ngForm" (ngSubmit)="onSubmitPaymentform(paymentFormObj)">
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                    <label>Corporate ID <span class="required">*</span></label>
-                                    <br>
-                                    <input type="text" placeholder="Enter Corporate ID" required name="corpId" class="form-control" [(ngModel)]="regAcc.corpId" disabled />
-
+                                    <div class="">
+                                        <label>Corporate ID<span class="required">*</span></label>
+                                        <br>
+                                        <input type="text" placeholder="Enter Corporate ID" class="form-control" [(ngModel)]="paymentFormObj.corpId" name="corpId" required autocomplete="off" />
+                                    </div>
                                 </div>
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                     <label>User ID <span class="required">*</span></label>
                                     <br>
-
-                                    <input type="text" placeholder="Enter User ID" name="userId" required class="form-control" [(ngModel)]="regAcc.userId" disabled />
-
+                                    <input type="text" placeholder="Enter User ID" class="form-control" [(ngModel)]="paymentFormObj.userId" name="userId" required autocomplete="off" />
                                 </div>
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                     <label>Account Number <span class="required">*</span></label>
                                     <br>
-
-                                    <input type="text" placeholder="Enter Account Number" name="accountNo" required class="form-control" [(ngModel)]="regAcc.accountNo" disabled />
-
+                                    <input type="text" placeholder="Enter Account Number" class="form-control" [(ngModel)]="paymentFormObj.accountNo" name="accountNo" required autocomplete="off" />
                                 </div>
                                 <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                     <label>Alias ID</label>
                                     <br>
-
-                                    <input type="text" placeholder="Enter Alias ID" name="aliasId" class="form-control" [(ngModel)]="regAcc.aliasId" disabled />
-
+                                    <input type="text" placeholder="Enter Alias ID" class="form-control" name="aliasId" [(ngModel)]="paymentFormObj.aliasId" />
                                 </div>
-                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col" *ngIf="bankAccounts$ && regAcc?.account?.uniqueName">
-
+                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                     <label>Accounts <span class="required">*</span></label>
                                     <br>
-                                    <sh-select *ngIf="bankAccounts$ && regAcc?.account?.uniqueName" [disabled]="isBankUpdateInEdit !== parentIndex" required [options]="bankAccounts$ | async" name="accountUniqueName" [defaultValue]="regAcc?.account?.name" [(ngModel)]="regAcc.account.uniqueName"
-                                        placeholder="Select Account" [ItemHeight]="33" autocomplete="off" [isRequired]="true"></sh-select>
+                                    <sh-select #paymentFormAccountName [options]="accounts$ | async" required name="accountUniqueName" [(ngModel)]="paymentFormObj.accountUniqueName" [forceClearReactive]="forceClear$ | async" placeholder="Select Account" [ItemHeight]="33" autocomplete="off">
+                                    </sh-select>
                                 </div>
                             </div>
-                            <!-- Added this new row make it dynamic -->
-                            <ng-container *ngFor="let item of regAcc.userAmountRanges; let index = index; let firstIndex = first; let lastIndex = last">
+
+                            <ng-container *ngFor="let item of paymentFormObj.userAmountRanges; let index = index">
                                 <div class="row">
                                     <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col" *ngIf="item.maxBankLimit ==='max'">
-                                        <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
-                                        </ng-container>
-                                        <div class="custom-select select-caret position-relative">
-                                            <sh-select [options]="amountUpToList" autocomplete="off" required [(ngModel)]="item.maxBankLimit" name="maxBankLimit{{parentIndex}}{{index}}" [disabled]="isBankUpdateInEdit !== parentIndex" (selected)="selectedMaxOrCustom(index, true, parentIndex);" (ngModelChange)="maxLimitOrCustomChanged($event, index , true, parentIndex)" [isRequired]="true">
-                                            </sh-select>
-                                        </div>
-                                        <p class="error-msg text-right"></p>
-                                    </div>
-                                    <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col" *ngIf="item.maxBankLimit !== 'max'">
-                                        <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
-                                        </ng-container>
-                                        <div class="d-flex">
-
-                                            <div class="mr-r05 custom-select select-caret position-relative width-100">
-                                                <sh-select [options]="amountUpToList" autocomplete="off" [required]="item.maxBankLimit !== 'max'" [disabled]="isBankUpdateInEdit !== parentIndex" [fixedValue]="'Custom'" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom(index, true, parentIndex);"
-                                                    (ngModelChange)="maxLimitOrCustomChanged($event, index , true, parentIndex)" name="maxBankLimit{{parentIndex}}{{index}}" [isRequired]="true">
-                                                </sh-select>
-                                            </div>
-                                            <div class="mr-l05  width-100">
-                                                <input type="text" class="form-control" #amountUpdateElement [required]="item.maxBankLimit !== 'max'" decimalDigitsDirective [disabled]="isBankUpdateInEdit !== parentIndex" [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountUpdateElement, true, parentIndex );preventZero(item.amount,index, parentIndex, true )"
-                                                    maxlength="10" name="amount{{parentIndex}}{{index}}" placeholder="Amount">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                        <ng-container *ngIf="index===0">
-                                            <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in approver Name"></i></div></label>
-                                        </ng-container>
-                                        <div class="custom-select select-caret position-relative">
-                                            <sh-select [options]="typeOTPList" [(ngModel)]="item.otpType" (ngModelChange)="selectedOtpType($event, index, true, parentIndex)" [disabled]="isBankUpdateInEdit !== parentIndex" required name="otpType{{parentIndex}}{{index}}" [isRequired]="true">
-                                            </sh-select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                        <ng-container *ngIf="index===0">
-                                            <label class="d-flex relative info-icon">Approver Name <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i></div></label>
-
-                                        </ng-container>
-                                        <div class="custom-select select-caret position-relative" *ngIf="item.otpType!=='BANK'">
-                                            <input type="text" class="form-control" placeholder="Registered" disabled name="approvalUniqueName{{index}}" [value]="item.approvalDetails.name">
-                                        </div>
-                                        <div class="custom-select select-caret position-relative" *ngIf="item.otpType==='BANK'">
-                                            <input type="text" class="form-control" [disabled]="item.otpType==='BANK' || isBankUpdateInEdit !== parentIndex" placeholder="Registered" name="approvalUniqueName{{index}}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0" *ngIf="isBankUpdateInEdit === parentIndex">
-                                        <ng-container *ngIf="index===0"> <label class="d-flex hidden-1359">&nbsp;</label></ng-container>
-                                        <div class="mt-1 xs-pd-l15">
-                                            <i (click)="deleteAmountRangeRow(item, parentIndex+1)" class="icon-trash cursor-pointer"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </ng-container>
-
-                            <div *ngIf="isBankUpdateInEdit === parentIndex">
-                                <a href="javascript:void(0)" (click)="addNewAmountRangeRow(parentIndex+1)" class="btn btn-link pl-0 pt-0">+ Add New Row</a>
-                            </div>
-                            <!-- New code -->
-                            <div>
-                                <div class="form-group update-btn-wrapper">
-                                    <label>&nbsp;</label>
-                                    <br>
-                                    <button type="button" class="btn btn-success mr-r1" [disabled]="!paymentFormUpdate.form.valid" (click)="updateIciciDetails(regAcc, parentIndex)">Update
-                                </button>
-                                </div>
-                            </div>
-                        </form>
-                        <!-- <div style="display: inline" *ngIf="(isPaymentUpdationSuccess$ | async) && parentIndex === selecetdUpdateIndex">
-                            <div class="clearfix">
-                                <div>Congratulations!! A request has been sent to your account, go to <a class="btn-link" href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
-                                </div>
-                            </div>
-                            <div class="clearfix">
-                                <div style="color: gray">Once it is done you can link your ICICI account/s and make payment directly through GIDDH.
-                                </div>
-                            </div>
-                        </div> -->
-                    </div>
-                    <br/>
-                </div>
-                <!-- <div *ngIf="openNewRegistration && !(isPaymentAdditionSuccess$ | async)" class="box clearfix">
-                    <h3 class="font-20 bold mb-2">ICICI Bank</h3>
-                    <form #paymentForm="ngForm" (ngSubmit)="onSubmitPaymentform(paymentFormObj)">
-                        <div class="row">
-                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                <div class="">
-                                    <label>Corporate ID<span class="required">*</span></label>
-                                    <br>
-                                    <input type="text" placeholder="Enter Corporate ID" class="form-control" [(ngModel)]="paymentFormObj.corpId" name="corpId" required autocomplete="off" />
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                <label>User ID <span class="required">*</span></label>
-                                <br>
-                                <input type="text" placeholder="Enter User ID" class="form-control" [(ngModel)]="paymentFormObj.userId" name="userId" required autocomplete="off" />
-                            </div>
-                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                <label>Account Number <span class="required">*</span></label>
-                                <br>
-                                <input type="text" placeholder="Enter Account Number" class="form-control" [(ngModel)]="paymentFormObj.accountNo" name="accountNo" required autocomplete="off" />
-                            </div>
-                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                <label>Alias ID</label>
-                                <br>
-                                <input type="text" placeholder="Enter Alias ID" class="form-control" name="aliasId" [(ngModel)]="paymentFormObj.aliasId" />
-                            </div>
-                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                <label>Accounts <span class="required">*</span></label>
-                                <br>
-                                <sh-select #paymentFormAccountName [options]="accounts$ | async" required name="accountUniqueName" [(ngModel)]="paymentFormObj.accountUniqueName" [forceClearReactive]="forceClear$ | async" placeholder="Select Account" [ItemHeight]="33" autocomplete="off">
-                                </sh-select>
-                            </div>
-                        </div>
-
-                        <ng-container *ngFor="let item of paymentFormObj.userAmountRanges; let index = index">
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col" *ngIf="item.maxBankLimit ==='max'">
-                                    <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
-                                        <br></ng-container>
-                                    <div class="custom-select max select-caret position-relative">
-                                        <sh-select [options]="amountUpToList" [required]="item.maxBankLimit ==='max'" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);maxLimitOrCustomChanged($event, index , false)" name="maxBankLimit{{index}}">
-                                        </sh-select>
-                                    </div>
-                                    <p class="error-msg text-right"></p>
-                                </div>
-                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col" *ngIf="item.maxBankLimit !=='max'">
-                                    <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
-                                        <br></ng-container>
-                                    <div class="d-flex">
-                                        <div class="mr-r05 custom-select cust select-caret position-relative">
-                                            <sh-select [options]="amountUpToList" [required]="item.maxBankLimit !=='max'" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);maxLimitOrCustomChanged($event, index, false)" name="maxBankLimit{{index}}">
-                                            </sh-select>
-                                        </div>
-                                        <div class="mr-l05">
-                                            <input type="text" class="form-control" [maxlength]="maxLimit" #amountElement [required]="item.maxBankLimit !=='max'" decimalDigitsDirective [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountElement, false );" name="amount{{index}}" placeholder="Amount">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Select OTP <span class="required">*</span>
-                                    <i class="icon-info cursor-pointer" tooltip="Content here.."></i>
-                                </label></ng-container>
-                                    <div class="custom-select select-caret position-relative">
-                                        <sh-select [options]="typeOTPList" [(ngModel)]="item.otpType" (selected)="selectedOtpType($event,index, false)" required name="otpType{{index}}">
-                                        </sh-select>
-                                    </div>
-                                </div>
-                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Approver Name <span class="required">*</span>
-                                    <i class="icon-info cursor-pointer"  tooltip="Content here.."></i>
-                                </label></ng-container>
-                                    <div class="custom-select select-caret position-relative" *ngIf="item.otpType!=='BANK'">
-                                        <sh-select [options]="approvalNameList" class="text-left" [(ngModel)]="item.approvalUniqueName" name="approvalUniqueName{{index}}" [required]="item.otpType!=='BANK'" [placeholder]="'Select Bank'" [multiple]="false">
-                                            <ng-template #optionTemplate let-option="option">
-                                                <a href="javascript:void(0)" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative">
-                                                    <div class="item">
-                                                        <p>{{option?.label}}</p>
-                                                        <p>{{option?.additional[0]?.mobileNumber}}</p>
-                                                        <img src="assets/images/blue-check.svg" class="check-search" alt="">
-                                                    </div>
-                                                </a>
-
-                                                <fieldset disabled href="javascript:void(0)" *ngIf="!option?.additional[0]?.mobileVerified" class="list-item relative text-light disabled disabled-list-item">
-                                                    <div class="item">
-                                                        <p>{{option?.label}}</p>
-                                                        <p>Unverifed</p>
-                                                        <img src="assets/images/close-round.svg" class="check-search" alt="">
-                                                    </div>
-                                                </fieldset>
-                                            </ng-template>
-                                        </sh-select>
-                                    </div>
-                                    <div class="custom-select select-caret position-relative" *ngIf="item.otpType==='BANK'">
-                                        <input type="text" class="form-control" disabled placeholder="Registered" name="approvalUniqueName{{index}}">
-                                    </div>
-                                </div>
-                                <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
-                                    <label *ngIf="index===0" class="d-flex hidden-1359">&nbsp;</label>
-                                    <div class="mt-1 xs-pd-l15">
-                                        <i (click)="deleteAmountRangeRow(item)" class="icon-trash cursor-pointer"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </ng-container>
-                        <div>
-                            <a href="javascript:void(0)" (click)="addNewAmountRangeRow()" class="btn btn-link pl-0">+ Add New Row</a>
-                        </div>
-                        <div class="form-group">
-                            <div class="empty-label">
-                                <br>
-                                <button type="submit" class="btn btn-success mr-r1" [disabled]="!paymentForm.form.valid">Submit</button>
-                            </div>
-                        </div>
-                    </form>
-                    <div *ngIf="(isPaymentAdditionSuccess$ | async)">
-                        <div style="display: inline-block" class="clearfix">
-                            <div>Congratulations!! A request has been sent to your account, go to <a href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
-                            </div>
-                        </div>
-                        <div class="clearfix">
-                            <div style="color: gray">Once it is done you can link your ICICI account/s and make payment directly through GIDDH.
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-                <!-- Create or add bank account end -->
-                <div *ngIf="openNewRegistration" class="box clearfix mb-2">
-                    <h3 class="font-20 bold mb-2">ICICI Bank</h3>
-                    <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm.value)" *ngIf="!(isPaymentAdditionSuccess$ | async)">
-                        <div class="row">
-                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col amount-upto">
-                                <div>
-                                    <label>Corporate ID <span class="required">*</span></label>
-                                    <br>
-                                    <input type="text" placeholder="Enter Corporate ID" class="form-control" formControlName="corpId" name="corpId" autocomplete="off" />
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                <label>User ID <span class="required">*</span></label>
-                                <br>
-                                <input type="text" placeholder="Enter User ID" class="form-control" formControlName="userId" name="userId" required autocomplete="off" />
-                            </div>
-                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                <label>Account Number <span class="required">*</span></label>
-                                <br>
-                                <input type="text" placeholder="Enter Account Number" class="form-control" formControlName="accountNo" name="accountNo" autocomplete="off" />
-                            </div>
-                            <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col">
-                                <label>Alias ID</label>
-                                <br>
-                                <input type="text" placeholder="Enter Alias ID" class="form-control" name="aliasId" formControlName="aliasId" />
-                            </div>
-                            <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col">
-                                <label>Accounts <span class="required">*</span></label>
-                                <br>
-                                <sh-select #paymentFormAccountName [options]="bankAccounts$ | async" name="accountUniqueName" formControlName="accountUniqueName" [forceClearReactive]="forceClear$ | async" placeholder="Select Account" [ItemHeight]="33" autocomplete="off" [isRequired]="true">
-                                </sh-select>
-                            </div>
-                        </div>
-                        <ng-container formArrayName="userAmountRanges">
-                            <ng-container *ngFor="let item of addBankForm.get('userAmountRanges')['controls'];let index = index;let f = first; let l = last" [formGroupName]="index">
-                                <div class="row">
-                                    <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col amount-upto" *ngIf="item.get('maxBankLimit').value ==='max'">
-                                        <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
-                                        </ng-container>
+                                        <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
+                                            <br></ng-container>
                                         <div class="custom-select max select-caret position-relative">
-
-                                            <sh-select [options]="amountUpToList" formControlName="maxBankLimit" (selected)="selectedMaxOrCustomField( index, false, null , $event)" name="maxBankLimit" [isRequired]="true">
-
+                                            <sh-select [options]="amountUpToList" [required]="item.maxBankLimit ==='max'" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);maxLimitOrCustomChanged($event, index , false)" name="maxBankLimit{{index}}">
                                             </sh-select>
                                         </div>
                                         <p class="error-msg text-right"></p>
                                     </div>
-                                    <div class="form-group col-sm-6  col-xl-2 col-md-6 payment-col amount-upto" *ngIf="item.get('maxBankLimit').value!=='max'">
-                                        <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
-                                        </ng-container>
+                                    <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col" *ngIf="item.maxBankLimit !=='max'">
+                                        <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
+                                            <br></ng-container>
                                         <div class="d-flex">
                                             <div class="mr-r05 custom-select cust select-caret position-relative">
-
-                                                <sh-select [options]="amountUpToList" formControlName="maxBankLimit" (selected)="selectedMaxOrCustomField(  index, false, null , $event)" name="maxBankLimit" [isRequired]="true">
-
+                                                <sh-select [options]="amountUpToList" [required]="item.maxBankLimit !=='max'" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);maxLimitOrCustomChanged($event, index, false)" name="maxBankLimit{{index}}">
                                                 </sh-select>
                                             </div>
                                             <div class="mr-l05">
-                                                <input type="text" class="form-control" [ngClass]="{'error-box': checkIsAmountRepeat(addBankForm.get('userAmountRanges').value,item.get('amount').value,index, false)}" #amountElement decimalDigitsDirective (blur)="preventZero(item.get('amount').value, index, null, false)"
-                                                    maxlength="10" [mask]="inputMaskFormat" formControlName="amount" name="amount" placeholder="Amount">
+                                                <input type="text" class="form-control" [maxlength]="maxLimit" #amountElement [required]="item.maxBankLimit !=='max'" decimalDigitsDirective [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountElement, false );" name="amount{{index}}" placeholder="Amount">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col1">
-                                        <ng-container *ngIf="index===0">
-                                            <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approver Name"></i></div></label>
-                                        </ng-container>
+                                    <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                                        <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Select OTP <span class="required">*</span>
+                                        <i class="icon-info cursor-pointer" tooltip="Content here.."></i>
+                                    </label></ng-container>
                                         <div class="custom-select select-caret position-relative">
-                                            <sh-select [options]="typeOTPList" formControlName="otpType" (selected)="selectedOtpType($event,index, false)" required name="otpType" [isRequired]="true">
+                                            <sh-select [options]="typeOTPList" [(ngModel)]="item.otpType" (selected)="selectedOtpType($event,index, false)" required name="otpType{{index}}">
                                             </sh-select>
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col">
-                                        <ng-container *ngIf="index===0">
-                                            <label class="d-flex relative info-icon">Approver Name <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i></div></label>
-
-                                        </ng-container>
-                                        <div class="custom-select select-caret position-relative" *ngIf="item.get('otpType').value !=='BANK'">
-                                            <sh-select [options]="approvalNameList" class="text-left" formControlName="approvalUniqueName" name="approvalUniqueName" [placeholder]="'Select Bank'" [customSorting]="customApproverNameListSorting" [multiple]="false" [isRequired]="true">
+                                    <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                                        <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Approver Name <span class="required">*</span>
+                                        <i class="icon-info cursor-pointer"  tooltip="Content here.."></i>
+                                    </label></ng-container>
+                                        <div class="custom-select select-caret position-relative" *ngIf="item.otpType!=='BANK'">
+                                            <sh-select [options]="approvalNameList" class="text-left" [(ngModel)]="item.approvalUniqueName" name="approvalUniqueName{{index}}" [required]="item.otpType!=='BANK'" [placeholder]="'Select Bank'" [multiple]="false">
                                                 <ng-template #optionTemplate let-option="option">
                                                     <a href="javascript:void(0)" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative">
                                                         <div class="item">
@@ -864,45 +989,247 @@
                                                 </ng-template>
                                             </sh-select>
                                         </div>
-                                        <div class="custom-select select-caret position-relative" *ngIf="item.get('otpType').value ==='BANK'">
-                                            <input type="text" class="form-control" disabled placeholder="Registered" formControlName="approvalUniqueName" name="approvalUniqueName">
+                                        <div class="custom-select select-caret position-relative" *ngIf="item.otpType==='BANK'">
+                                            <input type="text" class="form-control" disabled placeholder="Registered" name="approvalUniqueName{{index}}">
                                         </div>
                                     </div>
-                                    <div class="form-group plus-cross-btn col-sm-1 col-md-1 pl-0 pr-0">
+                                    <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
                                         <label *ngIf="index===0" class="d-flex hidden-1359">&nbsp;</label>
                                         <div class="mt-1 xs-pd-l15">
-                                            <i (click)="removeUserAmountRangesForm(index)" class="icon-trash cursor-pointer"></i>
+                                            <i (click)="deleteAmountRangeRow(item)" class="icon-trash cursor-pointer"></i>
                                         </div>
                                     </div>
                                 </div>
                             </ng-container>
-                        </ng-container>
-                        <div>
-                            <a href="javascript:void(0)" (click)="addUserAmountRangesForm()" class="btn btn-link pl-0 pt-0">+ Add New Row</a>
-                        </div>
-                        <!-- <div class="clearfix">
-                            <a href="javascript:void" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" (click)="openNewRegistartionForm()" class="btn btn-link pl-0">Add More ID</a>
-                        </div> -->
-                        <div class="form-group">
-                            <div class="empty-label">
-                                <br>
-                                <button type="submit" [disabled]="addBankForm.invalid || isCreateInvalid" class="btn btn-success mr-r1">Submit</button>
+                            <div>
+                                <a href="javascript:void(0)" (click)="addNewAmountRangeRow()" class="btn btn-link pl-0">+ Add New Row</a>
+                            </div>
+                            <div class="form-group">
+                                <div class="empty-label">
+                                    <br>
+                                    <button type="submit" class="btn btn-success mr-r1" [disabled]="!paymentForm.form.valid">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div *ngIf="(isPaymentAdditionSuccess$ | async)">
+                            <div style="display: inline-block" class="clearfix">
+                                <div>Congratulations!! A request has been sent to your account, go to <a href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
+                                </div>
+                            </div>
+                            <div class="clearfix">
+                                <div style="color: gray">Once it is done you can link your ICICI account/s and make payment directly through GIDDH.
+                                </div>
                             </div>
                         </div>
-                    </form>
-                    <div *ngIf="(isPaymentAdditionSuccess$ | async)">
-                        <div class="clearfix d-inline-block">
-                            <div>Congratulations!! A request has been sent to your account, go to <a class="btn-link" href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
+                    </div> -->
+                    <!-- Create or add bank account end -->
+                    <div *ngIf="openNewRegistration" class="box clearfix mb-2">
+                        <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm.value)"
+                            *ngIf="!(isPaymentAdditionSuccess$ | async)">
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col amount-upto">
+                                    <div>
+                                        <label>{{localeData?.payment?.corporate_id_label}} <span
+                                                class="required">*</span></label>
+                                        <br>
+                                        <input type="text" [placeholder]="localeData?.payment?.corporate_id_placeholder"
+                                            class="form-control" formControlName="corpId" name="corpId"
+                                            autocomplete="off" />
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                                    <label>{{localeData?.payment?.user_id_label}} <span
+                                            class="required">*</span></label>
+                                    <br>
+                                    <input type="text" [placeholder]="localeData?.payment?.user_id_placeholder"
+                                        class="form-control" formControlName="userId" name="userId"
+                                        autocomplete="off" />
+                                </div>
+                                <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col">
+                                    <label>{{localeData?.payment?.account_number_label}} <span
+                                            class="required">*</span></label>
+                                    <br>
+                                    <input type="text" [placeholder]="localeData?.payment?.account_number_placeholder"
+                                        class="form-control" formControlName="accountNo" name="accountNo"
+                                        autocomplete="off" />
+                                </div>
+                                <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                                    <label>{{localeData?.payment?.alias_id_label}}</label>
+                                    <br>
+                                    <input type="text" [placeholder]="localeData?.payment?.alias_id_placeholder"
+                                        class="form-control" name="aliasId" formControlName="aliasId" />
+                                    <!-- <sh-select [options]="usersList" name="usersList" formControlName="emailIds" placeholder="Select User" [ItemHeight]="33" autocomplete="off" (selected)="selectUser($event)"></sh-select> -->
+                                </div>
+                                <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col">
+                                    <label>{{localeData?.payment?.accounts}} <span class="required">*</span></label>
+                                    <br>
+                                    <sh-select #paymentFormAccountName [options]="bankAccounts$ | async"
+                                        name="accountUniqueName" formControlName="accountUniqueName"
+                                        [forceClearReactive]="forceClear$ | async"
+                                        [placeholder]="commonLocaleData?.app_select_account" [ItemHeight]="33"
+                                        autocomplete="off" [isRequired]="true">
+                                    </sh-select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="clearfix">
-                            <div class="payment-text">Once it is done you can link your ICICI account/s and make payment directly through GIDDH.
+                            <ng-container formArrayName="userAmountRanges">
+                                <ng-container
+                                    *ngFor="let item of addBankForm.get('userAmountRanges')['controls'];let index = index;let f = first; let l = last"
+                                    [formGroupName]="index">
+                                    <div class="row">
+                                        <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col amount-upto"
+                                            *ngIf="item.get('maxBankLimit').value ==='max'">
+                                            <ng-container *ngIf="index===0"> <label
+                                                    class="d-flex relative info-icon">{{localeData?.payment?.amount_upto}}
+                                                    <span class="required">*</span>
+                                                    <div class="tooltip-box"><i class="icon-info cursor-pointer"
+                                                            [tooltip]="localeData?.payment?.client_amount_note"></i>
+                                                    </div>
+                                                </label>
+                                            </ng-container>
+                                            <div class="custom-select max select-caret position-relative">
+
+                                                <sh-select [options]="amountUpToList" formControlName="maxBankLimit"
+                                                    (selected)="selectedMaxOrCustomField( index, false, null , $event)"
+                                                    name="maxBankLimit" [isRequired]="true">
+
+                                                </sh-select>
+                                            </div>
+                                            <p class="error-msg text-right"></p>
+                                        </div>
+                                        <div class="form-group col-sm-6  col-xl-2 col-md-6 payment-col amount-upto"
+                                            *ngIf="item.get('maxBankLimit').value!=='max'">
+                                            <ng-container *ngIf="index===0"> <label
+                                                    class="d-flex relative info-icon">{{localeData?.payment?.amount_upto}}
+                                                    <span class="required">*</span>
+                                                    <div class="tooltip-box"><i class="icon-info cursor-pointer"
+                                                            [tooltip]="localeData?.payment?.client_amount_note"></i>
+                                                    </div>
+                                                </label>
+                                            </ng-container>
+                                            <div class="d-flex">
+                                                <div class="mr-r05 custom-select cust select-caret position-relative">
+
+                                                    <sh-select [options]="amountUpToList" formControlName="maxBankLimit"
+                                                        (selected)="selectedMaxOrCustomField(  index, false, null , $event)"
+                                                        name="maxBankLimit" [isRequired]="true">
+
+                                                    </sh-select>
+                                                </div>
+                                                <div class="mr-l05">
+                                                    <input type="text" class="form-control"
+                                                        [ngClass]="{'error-box': checkIsAmountRepeat(addBankForm.get('userAmountRanges').value,item.get('amount').value,index, false)}"
+                                                        #amountElement decimalDigitsDirective
+                                                        (blur)="preventZero(item.get('amount').value, index, null, false)"
+                                                        maxlength="10" [mask]="inputMaskFormat" formControlName="amount"
+                                                        name="amount" [placeholder]="commonLocaleData?.app_amount">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col1">
+                                            <ng-container *ngIf="index===0">
+                                                <label class="d-flex relative info-icon">{{localeData?.payment?.select_otp}} <span
+                                                        class="required">*</span>
+                                                    <div class="tooltip-box"><i class="icon-info cursor-pointer"
+                                                        [tooltip]="localeData?.payment?.select_otp_tooltip"></i>
+                                                    </div>
+                                                </label>
+                                            </ng-container>
+                                            <div class="custom-select select-caret position-relative">
+                                                <sh-select [options]="typeOTPList" formControlName="otpType"
+                                                    (selected)="selectedOtpType($event,index, false)" required
+                                                    name="otpType" [isRequired]="true">
+                                                </sh-select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col">
+                                            <ng-container *ngIf="index===0">
+                                                <label class="d-flex relative info-icon">{{localeData?.payment?.approver_name}} <span
+                                                        class="required">*</span>
+                                                    <div class="tooltip-box"><i class="icon-info cursor-pointer"
+                                                            [tooltip]="localeData?.payment?.approver_name_tooltip"></i>
+                                                    </div>
+                                                </label>
+
+                                            </ng-container>
+                                            <div class="custom-select select-caret position-relative"
+                                                *ngIf="item.get('otpType').value !=='BANK'">
+                                                <sh-select [options]="approvalNameList" class="text-left"
+                                                    formControlName="approvalUniqueName" name="approvalUniqueName"
+                                                    [placeholder]="localeData?.payment?.select_bank"
+                                                    [customSorting]="customApproverNameListSorting" [multiple]="false"
+                                                    [isRequired]="true">
+                                                    <ng-template #optionTemplate let-option="option">
+                                                        <a href="javascript:void(0)"
+                                                            *ngIf="option?.additional[0]?.mobileVerified"
+                                                            class="list-item relative">
+                                                            <div class="item">
+                                                                <p>{{option?.label}}</p>
+                                                                <p>{{option?.additional[0]?.mobileNumber}}</p>
+                                                                <img src="assets/images/blue-check.svg"
+                                                                    class="check-search" alt="">
+                                                            </div>
+                                                        </a>
+
+                                                        <fieldset disabled href="javascript:void(0)"
+                                                            *ngIf="!option?.additional[0]?.mobileVerified"
+                                                            class="list-item relative text-light disabled disabled-list-item">
+                                                            <div class="item">
+                                                                <p>{{option?.label}}</p>
+                                                                <p>{{localeData?.payment?.unverifed}}</p>
+                                                                <img src="assets/images/close-round.svg"
+                                                                    class="check-search" alt="">
+                                                            </div>
+                                                        </fieldset>
+                                                    </ng-template>
+                                                </sh-select>
+                                            </div>
+                                            <div class="custom-select select-caret position-relative"
+                                                *ngIf="item.get('otpType').value ==='BANK'">
+                                                <input type="text" class="form-control" disabled
+                                                    [placeholder]="localeData?.payment?.registered" formControlName="approvalUniqueName"
+                                                    name="approvalUniqueName">
+                                            </div>
+                                        </div>
+                                        <div class="form-group plus-cross-btn col-sm-1 col-md-1 pl-0 pr-0">
+                                            <label *ngIf="index===0" class="d-flex hidden-1359">&nbsp;</label>
+                                            <div class="mt-1 xs-pd-l15">
+                                                <i (click)="removeUserAmountRangesForm(index)"
+                                                    class="icon-trash cursor-pointer"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                            <div>
+                                <a href="javascript:void(0)" (click)="addUserAmountRangesForm()"
+                                    class="btn btn-link pl-0 pt-0">{{localeData?.payment?.add_new_row}}</a>
+                            </div>
+                            <!-- <div class="clearfix">
+                                <a href="javascript:void" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" (click)="openNewRegistartionForm()" class="btn btn-link pl-0">Add More ID</a>
+                            </div> -->
+                            <div class="form-group">
+                                <div class="empty-label">
+                                    <br>
+                                    <button type="submit" [disabled]="addBankForm.invalid || isCreateInvalid"
+                                        class="btn btn-success mr-r1">{{commonLocaleData?.app_submit}}</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div *ngIf="(isPaymentAdditionSuccess$ | async)">
+                            <div class="clearfix d-inline-block">
+                                <div [innerHTML]="localeData?.payment?.connection_request_message"></div>
+                            </div>
+                            <div class="clearfix">
+                                <div class="payment-text">{{localeData?.payment?.note}}
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)"
+                        class="btn btn-sky-blue mr-r1"
+                        (click)="openNewRegistartionForm()">{{localeData?.payment?.add_more}}</button>
                 </div>
-                <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" class="btn btn-sky-blue mr-r1" (click)="openNewRegistartionForm()">Add More ID</button>
-            </div>
-        </tab>
-    </tabset>
-</div>
+            </tab>
+        </tabset>
+    </div>
+</ng-container>

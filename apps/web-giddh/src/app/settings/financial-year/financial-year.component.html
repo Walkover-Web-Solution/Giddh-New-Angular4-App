@@ -1,98 +1,114 @@
-<div class="box clearfix">
-    <form>
-        <div class="row">
-            <div class="col-sm-12">
-                <h1 class="section-head">Financial Year(s) - {{ currentCompanyName }}</h1>
-                <div class="row">
-                    <div class="col-xl-7 col-md-12 col-xs-12">
-                     <div class="table-responsive">
-                        <table class="table-bordered basic table financial-year on-mobile-view">
-                            <thead>
-                                <tr>
-                                    <th>Sr. No.</th>
-                                    <th>From</th>
-                                    <th>To</th>
-                                    <th>Lock Status</th>
-                                </tr>
-                            </thead>
-                            <tbody *ngIf="financialYearObj && financialYearObj.financialYears">
-                                <tr *ngFor="let financialYear of financialYearObj.financialYears; let i = index">
-                                    <td data-title="#">{{i+1}}</td>
-                                    <td data-title="From">{{financialYear?.financialYearStarts}}</td>
-                                    <td data-title="#To">{{financialYear?.financialYearEnds}}</td>
-                                    <td data-title="Lock Status"
-                                        *ngIf="currentCompanyFinancialYearUN != financialYear?.uniqueName"
-                                        class="status">
-                                        <span *ngIf="financialYear?.isLocked"><span (click)="lockUnlockFinancialYear(financialYear);"><i class="fa fa-toggle-off fa-2x cp" aria-hidden="true"></i></span>
-                                            <label>Locked</label></span>
-                                        <span *ngIf="!financialYear?.isLocked"><span (click)="lockUnlockFinancialYear(financialYear);"><i class="fa fa-toggle-on fa-2x cp" aria-hidden="true"></i></span>
-                                            <label>Unlocked</label></span>
-                                    </td>
-                                    <td data-title="Lock Status"
-                                        *ngIf="currentCompanyFinancialYearUN == financialYear?.uniqueName">
-                                        Current Financial Year (can not be locked)
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tbody *ngIf="!financialYearObj || !financialYearObj.financialYears.length"
-                                class="on-mobile-view no-records">
-                                <tr>
-                                    <td colspan="4" class="text-center empty-table">
-                                        <h1>No Record Found !!</h1>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        </div>
-                    </div>
-                </div>
-                <hr class="clearfix">
-                <div class="financial-year-field row pt-1">
-                    <div class="form-group mt-1 col-xl-4 col-lg-8 col-md-12 col-sm-12 clearfix">
-                        <label>Switch Financial Year</label>
-                        <div class="row">
-                            <span class=" col-sm-7 col-xs-12">
-                                <sh-select placeholder="Select Financial Year" name="currentCompanyFinancialYearUN"
-                                    [ngModel]="currentCompanyFinancialYearUN" [options]="financialOptions"
-                                    (selected)="selectFinancialYearOption($event)" [width]="'100%'"  >
-                                </sh-select>
-                            </span>
-                            <span class="col-sm-4 col-xs-12">
-                                <button class="btn btn-success btn-sm " (click)="switchFY()">Save</button>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="form-group mt-1 col-xl-4 col-lg-8 col-md-12 col-sm-12 clearfix">
-                        <label>Add Financial Year</label>
-                        <div class="row">
-                            <span class=" col-sm-7 col-xs-12 ">
-                                <sh-select placeholder="Select Financial Year" [options]="yearOptions"
-                                    [forceClearReactive]="forceClear$ | async" (selected)="selectYear($event)">
-                                </sh-select>
-                            </span>
-                            <div class="col-sm-4 col-xs-12">
-                                <button class="btn btn-success btn-sm " (click)="addFY()">Save</button>
+<ng-container appTranslate [file]="'settings/financial-year'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+    <div class="box clearfix">
+        <form>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1 class="section-head">{{localeData?.page_heading}} - {{ currentCompanyName }}</h1>
+                    <div class="row">
+                        <div class="col-xl-7 col-md-12 col-xs-12">
+                            <div class="table-responsive">
+                                <table class="table-bordered basic table financial-year on-mobile-view">
+                                    <thead>
+                                        <tr>
+                                            <th>{{localeData?.sr_no}}</th>
+                                            <th>{{commonLocaleData?.app_from}}</th>
+                                            <th>{{commonLocaleData?.app_to}}</th>
+                                            <th>{{localeData?.lock_status}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody *ngIf="financialYearObj && financialYearObj.financialYears">
+                                        <tr
+                                            *ngFor="let financialYear of financialYearObj.financialYears; let i = index">
+                                            <td data-title="#">{{i+1}}</td>
+                                            <td [attr.data-title]="commonLocaleData?.app_from">
+                                                {{financialYear?.financialYearStarts}}</td>
+                                            <td [attr.data-title]="commonLocaleData?.app_to">
+                                                {{financialYear?.financialYearEnds}}</td>
+                                            <td [attr.data-title]="localeData?.lock_status"
+                                                *ngIf="currentCompanyFinancialYearUN != financialYear?.uniqueName"
+                                                class="status">
+                                                <span *ngIf="financialYear?.isLocked"><span
+                                                        (click)="lockUnlockFinancialYear(financialYear);"><i
+                                                            class="fa fa-toggle-off fa-2x cp"
+                                                            aria-hidden="true"></i></span>
+                                                    <label>{{localeData?.locked}}</label></span>
+                                                <span *ngIf="!financialYear?.isLocked"><span
+                                                        (click)="lockUnlockFinancialYear(financialYear);"><i
+                                                            class="fa fa-toggle-on fa-2x cp"
+                                                            aria-hidden="true"></i></span>
+                                                    <label>{{localeData?.unlocked}}</label></span>
+                                            </td>
+                                            <td [attr.data-title]="localeData?.lock_status"
+                                                *ngIf="currentCompanyFinancialYearUN == financialYear?.uniqueName">
+                                                {{localeData?.current_financial_year}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody *ngIf="!financialYearObj || !financialYearObj.financialYears.length"
+                                        class="on-mobile-view no-records">
+                                        <tr>
+                                            <td colspan="4" class="text-center empty-table">
+                                                <h1>{{commonLocaleData?.app_no_record_found}}</h1>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
+                    <hr class="clearfix">
+                    <div class="financial-year-field row pt-1">
+                        <div class="form-group mt-1 col-xl-4 col-lg-8 col-md-12 col-sm-12 clearfix">
+                            <label>{{localeData?.switch_financial_year}}</label>
+                            <div class="row">
+                                <span class=" col-sm-7 col-xs-12">
+                                    <sh-select [placeholder]="localeData?.select_financial_year"
+                                        name="currentCompanyFinancialYearUN" [ngModel]="currentCompanyFinancialYearUN"
+                                        [options]="financialOptions" (selected)="selectFinancialYearOption($event)"
+                                        [width]="'100%'"  >
+                                    </sh-select>
+                                </span>
+                                <span class="col-sm-4 col-xs-12">
+                                    <button class="btn btn-success btn-sm "
+                                        (click)="switchFY()">{{commonLocaleData?.app_save}}</button>
+                                </span>
+                            </div>
+                        </div>
 
-                    <div class="form-group mt-1 col-xl-4 col-lg-8 col-md-12 col-sm-12 clearfix">
-                        <label>Financial Year Period</label>
-                        <div class="row">
-                            <span class="col-sm-7 col-xs-12 ">
-                                <sh-select name="selectedFYPeriod" [ngModel]="selectedFYPeriod"
-                                    placeholder="Financial Year Period" (selected)="selectFYPeriod($event)"
-                                    [options]="FYPeriodOptions">
-                                </sh-select>
-                            </span>
-                            <div class="col-sm-4 col-xs-12">
-                                <button class="btn btn-success btn-sm " (click)="updateFYPeriod()">Save</button>
+                        <div class="form-group mt-1 col-xl-4 col-lg-8 col-md-12 col-sm-12 clearfix">
+                            <label>{{localeData?.add_financial_year}}</label>
+                            <div class="row">
+                                <span class=" col-sm-7 col-xs-12 ">
+                                    <sh-select [placeholder]="localeData?.select_financial_year" [options]="yearOptions"
+                                        [forceClearReactive]="forceClear$ | async" (selected)="selectYear($event)">
+                                    </sh-select>
+                                </span>
+                                <div class="col-sm-4 col-xs-12">
+                                    <button class="btn btn-success btn-sm "
+                                        (click)="addFY()">{{commonLocaleData?.app_save}}</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-1 col-xl-4 col-lg-8 col-md-12 col-sm-12 clearfix">
+                            <label>{{localeData?.financial_year_period}}</label>
+                            <div class="row">
+                                <span class="col-sm-7 col-xs-12 ">
+                                    <sh-select name="selectedFYPeriod" [ngModel]="selectedFYPeriod"
+                                        [placeholder]="localeData?.financial_year_period"
+                                        (selected)="selectFYPeriod($event)" [options]="FYPeriodOptions">
+                                    </sh-select>
+                                </span>
+                                <div class="col-sm-4 col-xs-12">
+                                    <button class="btn btn-success btn-sm "
+                                        (click)="updateFYPeriod()">{{commonLocaleData?.app_save}}</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
+</ng-container>

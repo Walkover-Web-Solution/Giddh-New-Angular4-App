@@ -759,9 +759,9 @@ export class InvoiceService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.delete(this.config.apiUrl +
             INVOICE_API.REMOVE_IMAGE_SIGNATURE
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':imgUniqueName', signatureUniqueName)).pipe(
-            catchError((error) => this.errorHandler.HandleCatch<string, any>(error)));
+                .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+                .replace(':imgUniqueName', signatureUniqueName)).pipe(
+                    catchError((error) => this.errorHandler.HandleCatch<string, any>(error)));
     }
 
     /**

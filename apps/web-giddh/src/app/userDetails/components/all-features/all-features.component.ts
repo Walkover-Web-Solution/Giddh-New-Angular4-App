@@ -8,6 +8,10 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 export class AllFeaturesComponent implements OnInit {
     @Output() public closeEvent = new EventEmitter<boolean>();
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor() {
 

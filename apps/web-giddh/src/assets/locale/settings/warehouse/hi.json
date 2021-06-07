@@ -1,5 +1,17 @@
 {
-    "new_warehouse" : "+ New Warehouse",
-    "set_default" : "Set as Default",
-    "address" : "Address"
+	"search_warehouse": "गोदाम खोजें",
+	"reset_search": "खोज रीसेट करें",
+	"create_warehouse": "गोदाम बनाएं",
+	"no_warehouse_found": "दिए गए मानदंडों के भीतर कोई गोदाम नहीं मिला।",
+	"linked_address": "लिंक किया गया पता",
+	"branch_image": "शाखा छवि",
+	"warehouse_updated": "वेयरहाउस सफलतापूर्वक अपडेट किया गया",
+	"warehouse_created": "गोदाम सफलतापूर्वक बनाया गया",
+	"create_warehouse_under": "के तहत गोदाम बनाएं",
+	"country_currency": "देश और मुद्रा",
+	"warehouse_image": "गोदाम छवि",
+	"warehouse_name": "गोदाम का नाम",
+	"addresses": "पतों",
+	"select_address": "पता चुनें",
+	"add_address": "पता जोड़ें"
 }

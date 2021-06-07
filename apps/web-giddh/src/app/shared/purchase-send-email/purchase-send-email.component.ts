@@ -50,7 +50,7 @@ export class PurchaseSendEmailModalComponent implements OnInit, OnDestroy {
         let getRequest = { companyUniqueName: this.sendEmailRequest.companyUniqueName, accountUniqueName: this.sendEmailRequest.accountUniqueName, uniqueName: this.sendEmailRequest.uniqueName };
         let postRequest = { emailId: [this.emailId] };
 
-        if(this.module === "purchase-order") {
+        if (this.module === "purchase-order") {
             this.purchaseOrderService.sendEmail(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
@@ -61,7 +61,7 @@ export class PurchaseSendEmailModalComponent implements OnInit, OnDestroy {
                     }
                 }
             });
-        } else if(this.module === "purchase-bill") {
+        } else if (this.module === "purchase-bill") {
             this.purchaseRecordService.sendEmail(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {

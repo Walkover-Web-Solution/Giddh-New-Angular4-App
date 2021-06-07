@@ -37,21 +37,23 @@ export class HomeComponent implements OnInit, OnDestroy {
     public historyComparisionChartData$: Observable<IComparisionChartResponse>;
     public expensesChartData$: Observable<IExpensesChartClosingBalanceResponse>;
     public comparisionChartData$: Observable<IComparisionChartResponse>;
-    @ViewChild('liveaccount', {static: true}) public liveaccount: LiveAccountsComponent;
-    @ViewChild('expence', {static: true}) public expence: ExpensesChartComponent;
-    @ViewChild('revenue', {static: true}) public revenue: RevenueChartComponent;
-    @ViewChild('compare', {static: true}) public compare: ComparisionChartComponent;
-    @ViewChild('history', {static: true}) public history: HistoryChartComponent;
-    @ViewChild('networth', {static: true}) public networth: NetworthChartComponent;
-    @ViewChild('profitloss', {static: true}) public profitloss: ProfitLossComponent;
-    @ViewChild('gst', {static: true}) public gst: gstComponent;
-    @ViewChild('bankaccount', {static: true}) public bankaccount: BankAccountsComponent;
-    @ViewChild('crdrlist', {static: true}) public crdrlist: CrDrComponent;
-    @ViewChild('totalSales', {static: true}) public totalSales: TotalSalesComponent;
+    @ViewChild('liveaccount', { static: true }) public liveaccount: LiveAccountsComponent;
+    @ViewChild('expence', { static: true }) public expence: ExpensesChartComponent;
+    @ViewChild('revenue', { static: true }) public revenue: RevenueChartComponent;
+    @ViewChild('compare', { static: true }) public compare: ComparisionChartComponent;
+    @ViewChild('history', { static: true }) public history: HistoryChartComponent;
+    @ViewChild('networth', { static: true }) public networth: NetworthChartComponent;
+    @ViewChild('profitloss', { static: true }) public profitloss: ProfitLossComponent;
+    @ViewChild('gst', { static: true }) public gst: gstComponent;
+    @ViewChild('bankaccount', { static: true }) public bankaccount: BankAccountsComponent;
+    @ViewChild('crdrlist', { static: true }) public crdrlist: CrDrComponent;
+    @ViewChild('totalSales', { static: true }) public totalSales: TotalSalesComponent;
 
     public subscribedPlan: SubscriptionsUser;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public hideallcharts: boolean = false;
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
@@ -69,7 +71,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.needsToRedirectToLedger$ = this.store.pipe(select(p => p.login.needsToRedirectToLedger), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 if (activeCompany.subscription) {
                     this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(activeCompany.subscription));
                     this.subscribedPlan = activeCompany.subscription;

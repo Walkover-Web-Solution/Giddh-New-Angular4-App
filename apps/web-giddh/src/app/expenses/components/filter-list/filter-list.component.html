@@ -29,7 +29,8 @@
                         <i class="icon-cash" *ngIf="filterItem.baseAccountCategory==='CASH'"></i>
                         <i class="icon-atm-card" *ngIf="filterItem.baseAccountCategory==='BANK'"></i>
                         <i class="icon-image" *ngIf="filterItem.fileNames"></i>
-                        <i class="text-gray" *ngIf="filterItem.baseAccountCategory==='OTHER'">{{commonLocaleData?.app_ac}}</i>
+                        <i class="text-gray"
+                            *ngIf="filterItem.baseAccountCategory==='OTHER'">{{commonLocaleData?.app_ac}}</i>
                     </p>
                 </div>
             </li>

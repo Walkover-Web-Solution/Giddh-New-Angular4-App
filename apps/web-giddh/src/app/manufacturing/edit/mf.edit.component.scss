@@ -1,19 +1,19 @@
 @import "../../../assets/css/color.scss";
-.resources-table{
+.resources-table {
     border-right: 1px solid $gainsboro;
 }
 .cost-per strong {
     white-space: normal;
     word-break: break-word;
 }
-.link-stock-table{
-    td{
+.link-stock-table {
+    td {
         white-space: normal;
         word-break: break-word;
     }
 }
-@media(max-width:991px){
-   .resources-table{
+@media (max-width: 991px) {
+    .resources-table {
         border-right: none;
     }
 }

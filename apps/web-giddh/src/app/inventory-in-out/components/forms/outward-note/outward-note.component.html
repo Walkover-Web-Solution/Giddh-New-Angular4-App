@@ -42,7 +42,8 @@
                 <div class="col-xs-6 form-group" *ngIf="mode === 'product'">
                     <label class="mr-b1">Receiver <sup>*</sup></label>
                     <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Receiver'"
-                        formControlName="inventoryUser" (selected)="userChanged($event)" [isRequired]="true"></sh-select>
+                        formControlName="inventoryUser" (selected)="userChanged($event)" [isRequired]="true">
+                    </sh-select>
                     <!-- <span *ngIf="inventoryUser.invalid">
               <span *ngIf="inventoryUser?.errors && inventoryUser?.errors['required']"
                     class="text-danger">Please select Receiver.</span>
@@ -85,14 +86,16 @@
                     <div class="col-xs-4 form-group" *ngIf="mode === 'product'">
                         <!-- <label class="mr-b1">Product Name</label> -->
                         <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                            (selected)="stockChanged($event,i)" [ItemHeight]="'33'" formControlName="stock" [isRequired]="true"></sh-select>
+                            (selected)="stockChanged($event,i)" [ItemHeight]="'33'" formControlName="stock"
+                            [isRequired]="true"></sh-select>
                         <!-- <span [hidden]="!item.controls['stock'].errors?.required"
                   class="text-danger">Please select Product.</span> -->
                     </div>
 
                     <div class="col-xs-4 form-group">
                         <sh-select [options]="stockUnitsOptions" [placeholder]="'Choose unit'"
-                            formControlName="stockUnit" [multiple]="false" [ItemHeight]="33" [isRequired]="true"></sh-select>
+                            formControlName="stockUnit" [multiple]="false" [ItemHeight]="33" [isRequired]="true">
+                        </sh-select>
                         <!-- <span [hidden]="!item.get('stockUnit')?.errors?.required" class="text-danger">Please select Unit.</span> -->
                     </div>
 
