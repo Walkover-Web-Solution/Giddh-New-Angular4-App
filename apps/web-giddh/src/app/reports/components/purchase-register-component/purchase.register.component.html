@@ -1,7 +1,7 @@
 <ng-container appTranslate [file]="'reports/purchase-register'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="relative">
-        <hamburger-menu></hamburger-menu>
+        <hamburger-menu [pageHeading]="isMobileScreen ? localeData?.page_heading_single: '' "></hamburger-menu>
         <div class="report-breadcrum">
             <ul class="list-inline d-inline-block middle nav-report">
                 <li class="active" id="giddh-page-heading-link"><a href="javascript:void(0)"

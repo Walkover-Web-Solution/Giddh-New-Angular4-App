@@ -272,6 +272,7 @@ i.icon-options {
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 5px;
 }
 
 i.icon-options:hover {
@@ -300,7 +301,7 @@ span.input-addon {
     background-color: $chetwode-blue;
     color: $white;
     font-size: 18px;
-    border-radius: 2px;
+    border-radius: 5px;
     height: 36px;
     top: 0;
 }

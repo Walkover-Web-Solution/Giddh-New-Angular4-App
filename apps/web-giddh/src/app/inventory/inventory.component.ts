@@ -13,7 +13,6 @@ import { AfterViewInit, Component, ComponentFactoryResolver, OnDestroy, OnInit, 
 import { AppState } from '../store';
 import * as _ from '../lodash-optimized';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { CompanyAddComponent } from '../shared/header/components';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyActions } from '../actions/company.actions';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
@@ -90,6 +89,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
+    /* This will hold if it's mobile screen or not */
+    public isMobileView: boolean = false;
     /** Holds the observable for universal date */
     public universalDate$: Observable<any>;
 
@@ -112,12 +113,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         private generalService: GeneralService
     ) {
         this.breakPointObservar.observe([
-            '(max-width:1024px)'
+            '(max-width: 1023px)',
+            '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (this.isMobileScreen && !result.matches) {
-                this.setDefaultGroup();
-            }
-            this.isMobileScreen = result.matches;
+            this.isMobileScreen = result?.breakpoints['(max-width: 1023px)'];
+            this.isMobileView = result?.breakpoints['(max-width: 767px)'];
         });
 
         this.activeStock$ = this.store.pipe(select(p => p.inventory.activeStock), takeUntil(this.destroyed$));
@@ -183,6 +183,29 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.loadBranchAndWarehouseDetails();
             }
         });
+    }
+
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof InventoryComponent
+     */
+     public getPageHeading(): string {
+        if(this.isMobileView){
+            if(this.activeTabIndex === 0) {
+                return "Inventory";
+            }
+            else if(this.activeTabIndex === 1) {
+                return "Job Work";
+            }
+            else if(this.activeTabIndex === 2) {
+                return "Manufacturing";
+            }
+            else if(this.activeTabIndex === 3) {
+                return "Report";
+            }
+        }
     }
 
     public ngOnInit() {
@@ -254,10 +277,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    public openCreateCompanyModal() {
-        this.loadAddCompanyComponent();
-    }
-
     public redirectUrlToActiveTab(type: string, event: any, activeTabIndex?: number, currentUrl?: string) {
         if (event) {
             if (!(event instanceof TabDirective)) {
@@ -298,14 +317,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }
         });
-    }
-
-    public loadAddCompanyComponent() {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddComponent);
-        let viewContainerRef = this.companyadd.viewContainerRef;
-        viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as CompanyAddComponent).createBranch = true;
     }
 
     public openAddBranchModal() {

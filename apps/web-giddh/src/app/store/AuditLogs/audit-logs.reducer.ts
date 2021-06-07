@@ -98,7 +98,6 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
                 newState.auditLogsRequest = auditLogsData.request;
                 newState.auditLogs = auditLogsData.body.results;
                 newState.getLogInProcess = false;
-                // newState.size = data.body.size;
                 newState.totalElements = auditLogsData.body.totalItems;
                 newState.totalPages = auditLogsData.body.totalPages;
                 return newState;

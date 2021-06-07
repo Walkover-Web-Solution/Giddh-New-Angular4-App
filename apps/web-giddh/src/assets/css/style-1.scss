@@ -637,6 +637,7 @@ aside-menu-account .container-fluid {
 
 .bdr {
     border: 1px solid $gainsboro;
+    border-radius: 5px;
 }
 
 .border-none {
@@ -1514,6 +1515,15 @@ li:last-child .angular-ui-tree-handle {
     color: $silver !important;
 }
 
+.new-icon-img{
+    img{
+        border: 1px solid $gainsboro;
+        background: $white;
+        padding: 5px;
+        border-radius: 5px;
+    }
+}
+
 .circle {
     width: 15px;
     height: 15px;
@@ -2006,7 +2016,7 @@ table.borderless th {
 .pdf-export,
 .xls-export {
     position: relative;
-    margin-right: 10px;
+    margin-left: 5px;
 }
 
 .ui-match {

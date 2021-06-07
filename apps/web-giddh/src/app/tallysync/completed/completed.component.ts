@@ -17,8 +17,7 @@ import { GeneralService } from '../../services/general.service';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { SettingsBranchService } from '../../services/settings.branch.service';
-import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { OrganizationType } from '../../models/user-login-state';
+
 @Component({
     selector: 'app-completed-preview',
     templateUrl: './completed.component.html',
@@ -125,7 +124,6 @@ export class CompletedComponent implements OnInit, OnDestroy {
         private tallysyncService: TallySyncService,
         private generalService: GeneralService,
         private settingsBranchService: SettingsBranchService,
-        private settingsBranchAction: SettingsBranchActions,
         private changeDetectorRef: ChangeDetectorRef
     ) {
 
@@ -164,28 +162,6 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.filter.timeRange = this.timeInterval[5].value;
         this.filter.startDate = moment(this.maxDate).format('DD-MM-YYYY');
         this.getReport();
-        /** Commented as currently the Tally plugin doesn't support branch wise import
-        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        this.currentCompanyBranches$.subscribe(response => {
-            if (response && response.length) {
-                this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
-                    value: branch.uniqueName,
-                    name: branch.name,
-                    parentBranch: branch.parentBranch
-                }));
-                const hoBranch = response.find(branch => !branch.parentBranch);
-                const currentBranchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
-                this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
-                this.filterForm.get('branchUniqueName')?.patchValue(this.currentBranch.uniqueName);
-                this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
-            } else {
-                if (this.generalService.companyUniqueName) {
-                    // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
-                }
-            }
-        });*/
     }
 
     public getReport() {
@@ -217,17 +193,21 @@ export class CompletedComponent implements OnInit, OnDestroy {
                     let tallyGroups = (element.totalSavedGroups * 100) / element.totalTallyGroups;
                     let tallyAccounts = (element.totalSavedAccounts * 100) / element.totalTallyAccounts;
                     let tallyEntries = (element.totalSavedEntries * 100) / element.totalTallyEntries;
+                    let tallyVouchers = (element.totalSavedVouchers * 100) / element.totalTallyVouchers;
                     element['groupsPercent'] = (isNaN(tallyGroups) ? 0 : tallyGroups).toFixed(2) + '%';
                     element['accountsPercent'] = (isNaN(tallyAccounts) ? 0 : tallyAccounts).toFixed(2) + '%';
                     element['entriesPercent'] = (isNaN(tallyEntries) ? 0 : tallyEntries).toFixed(2) + '%';
+                    element['vouchersPercent'] = (isNaN(tallyVouchers) ? 0 : tallyVouchers).toFixed(2) + '%';
 
                     //error
                     let tallyErrorGroups = (element.tallyErrorGroups * 100) / element.totalTallyGroups;
                     let tallyErrorAccounts = (element.tallyErrorAccounts * 100) / element.totalTallyAccounts;
                     let tallyErrorEntries = (element.tallyErrorEntries * 100) / element.totalTallyEntries;
+                    let tallyErrorVouchers = (element.tallyErrorVouchers * 100) / element.totalTallyVouchers;
                     element['groupsErrorPercent'] = (isNaN(tallyErrorGroups) ? 0 : tallyErrorGroups).toFixed(2) + '%';
                     element['accountsErrorPercent'] = (isNaN(tallyErrorAccounts) ? 0 : tallyErrorAccounts).toFixed(2) + '%';
                     element['entriesErrorPercent'] = (isNaN(tallyErrorEntries) ? 0 : tallyErrorEntries).toFixed(2) + '%';
+                    element['vouchersErrorPercent'] = (isNaN(tallyErrorVouchers) ? 0 : tallyErrorVouchers).toFixed(2) + '%';
                 })
             }
             this.isLoading = false;
@@ -275,8 +255,6 @@ export class CompletedComponent implements OnInit, OnDestroy {
         return new Blob(byteArrays, { type: contentType });
     }
 
-    // download
-
     /**
      *
      *
@@ -319,7 +297,6 @@ export class CompletedComponent implements OnInit, OnDestroy {
 
     public onDDElementCompanySelect(event: IOption) {
         this.filter.company = event.value;
-        // this.loadBranches(event.value);
     }
 
     public onValueChange(event: Date): void {
@@ -349,31 +326,4 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.currentBranch.name = selectedEntity.label;
         this.paginationRequest.branchUniqueName = this.filterForm.get('branchUniqueName').value;
     }
-
-    /**
-     * Loads the branches of the company selected
-     *
-     * @private
-     * @param {string} companyUniqueName Company unique name
-     * @memberof CompletedComponent
-     */
-    private loadBranches(companyUniqueName: string): void {
-        this.settingsBranchService.getBranchByCompany(companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if (response && response.body) {
-                this.currentCompanyBranches = response.body.map(branch => ({
-                    label: branch.alias,
-                    value: branch.uniqueName,
-                    name: branch.name,
-                    parentBranch: branch.parentBranch
-                }));
-                const hoBranch = response.body.find(branch => !branch.parentBranch);
-                this.currentBranch = _.cloneDeep(hoBranch);
-                this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
-                this.filterForm.get('branchUniqueName')?.patchValue(this.currentBranch.uniqueName);
-                this.filterForm.updateValueAndValidity();
-                this.changeDetectorRef.detectChanges();
-            }
-        })
-    }
-
 }

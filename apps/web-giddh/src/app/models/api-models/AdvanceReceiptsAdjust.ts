@@ -4,6 +4,7 @@ export class VoucherAdjustments {
     description: string;
     adjustments: Adjustment[] = [new Adjustment()];
     totalAdjustmentAmount?: number;
+    totalAdjustmentCompanyAmount?: number;
 }
 
 /** Due amount class used in voucher adjustment */

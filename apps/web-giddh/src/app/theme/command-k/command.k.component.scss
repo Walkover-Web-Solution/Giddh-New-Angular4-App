@@ -31,22 +31,15 @@
         margin-right: 2px;
         vertical-align: baseline;
         .vN {
-            // background-color: white;
-            // border: 1px solid #dadce0;
-            // border-radius: 10px;
             height: 24px;
             line-height: 21px;
             display: inline-flex;
-            // padding-left: 8px;
-            // padding-right: 4px;
             box-sizing: border-box;
             text-transform: capitalize;
             font-size: 14px;
             .vT {
-                // font-size: .75rem;
                 letter-spacing: 0.3px;
                 display: inline-block;
-                // color: #222;
                 max-width: 325px;
                 line-height: 22px;
                 max-height: 22px;
@@ -55,16 +48,6 @@
                 direction: ltr;
             }
             .vM {
-                // height: 16px;
-                // opacity: .54;
-                // width: 16px;
-                // background-image: url(https://www.gstatic.com/images/icons/material/system/1x/close_black_16dp.png);
-                // background-position: center;
-                // background-repeat: no-repeat;
-                // background-size: 16px;
-                // vertical-align: top;
-                // cursor: pointer;
-                // display: inline-block;
                 font-size: 22px;
                 margin-left: 6px;
             }
@@ -188,10 +171,8 @@
         }
     }
     .jumper-results {
-        // height: 50px;
         overflow: hidden;
         padding: 20px 24px;
-        // line-height: 50px;
     }
 }
 .close-navigation {

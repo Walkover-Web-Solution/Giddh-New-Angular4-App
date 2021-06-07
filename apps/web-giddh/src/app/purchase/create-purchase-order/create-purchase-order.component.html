@@ -1226,11 +1226,6 @@
                                 <div class="table-row">
                                     <div class="table-cell">{{commonLocaleData?.app_total_amount}}</div>
                                     <div class="table-cell figure-cell">
-                                        <!-- <span
-                                            *ngIf="isMulticurrencyAccount">
-                                            {{purchaseOrder.accountDetails.currencySymbol}}</span>
-                                            {{purchaseOrder.voucherDetails.subTotal | giddhCurrency}} -->
-
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="purchaseOrder.voucherDetails.subTotal"
                                                 [currencySymbol]="(isMulticurrencyAccount) ? purchaseOrder.accountDetails.currencySymbol :false"

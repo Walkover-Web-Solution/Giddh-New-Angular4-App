@@ -6,14 +6,12 @@ import {
     Input,
     OnChanges,
     OnDestroy,
-    OnInit,
     Output,
     SimpleChanges,
     ViewChild,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as moment from 'moment/moment';
-
 import * as _ from '../../../lodash-optimized';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
@@ -40,7 +38,7 @@ export class UpdateLedgerTaxData {
     styleUrls: [`./updateLedger-tax-control.component.scss`],
     providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
-export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnChanges {
+export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Input() public date: string;
@@ -83,13 +81,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     private selectedTaxes: UpdateLedgerTaxData[] = [];
 
     constructor() {
-        //
-    }
-
-    public ngOnInit(): void {
-        // this.sum = 0;
-        // this.prepareTaxObject();
-        // this.change();
+        
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -116,11 +108,6 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
      * prepare taxObject as per needed
      */
     public prepareTaxObject() {
-        // if updating don't recalculate
-        // if (this.taxRenderData.length) {
-        //     return;
-        // }
-
         if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
             this.taxes = this.taxes.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
         }
@@ -161,9 +148,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
                     taxObj.amount = tax.taxDetail[0].taxValue;
                 }
                 taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tax.uniqueName) > -1));
-                // if (taxObj.amount && taxObj.amount > 0) {
                 this.taxRenderData.push(taxObj);
-                // }
             }
         });
         if (this.taxRenderData?.length) {
@@ -176,7 +161,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     }
 
     public trackByFn(index) {
-        return index; // or item.id
+        return index;
     }
 
     public ngOnDestroy() {
@@ -276,7 +261,6 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
             return;
         }
         let focussableElements = '.entrypanel input[type=text]:not([disabled]),.entrypanel [tabindex]:not([disabled]):not([tabindex="-1"])';
-        // if (document.activeElement && document.activeElement.form) {
         let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
             (element) => {
                 // check for visibility while always include the current activeElement
@@ -289,17 +273,6 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
         }
         this.toggleTaxPopup(false);
         return false;
-    }
-
-    private isTaxApplicable(tax): boolean {
-        const today = moment(moment().format(GIDDH_DATE_FORMAT), GIDDH_DATE_FORMAT, true).valueOf();
-        let isApplicable = false;
-        _.each(tax.taxDetail, (det: any) => {
-            if (today >= moment(det.date, GIDDH_DATE_FORMAT, true).valueOf()) {
-                return isApplicable = true;
-            }
-        });
-        return isApplicable;
     }
 
     /**

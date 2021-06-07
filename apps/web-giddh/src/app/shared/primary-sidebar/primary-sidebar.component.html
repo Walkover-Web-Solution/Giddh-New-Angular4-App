@@ -6,7 +6,7 @@
                 <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
                     <span class="inner-span"></span>
                 </span>
-                <li class="company-name position-relative" dropdown #companyDetailsDropDownWeb="bs-dropdown"
+                <li class="company-name position-relative" dropdown #companyDetailsDropDownWeb="bs-dropdown" 
                     [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="companyDetailsDropDownWeb.hide()"
                     [exclude]="'.company-name'">
                     <h3 class="font-16 d-flex flex-column cursor-pointer" [checkPermission]="['MENU', 'MANAGE']"
@@ -34,7 +34,7 @@
             <div class="search-box position-relative mr-t2">
                 <div class="input-group flex-nowrap">
                     <div class="input-group-prepend" (click)="showNavigationModal()">
-                        <span class="input-group-text" id="addon-wrapping">
+                        <span class="input-group-text border-right-none" id="addon-wrapping">
                             <i class="icon-search-new"></i>
                         </span>
                     </div>
@@ -100,7 +100,7 @@
                         </p>
                     </div>
                     <ul class="list-style-none giddh-primary-items">
-                        <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems" dropdown
+                        <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems" dropdown [autoClose]="false"
                             [attr.container]="!isOpen ? 'body' : ''">
                             <a href="javascript:void(0);" tooltip="{{menu?.label}}" *ngIf="menu?.items?.length"
                                 id="button-basic-02" dropdownToggle type="button" class="dropdown-toggle"
@@ -248,20 +248,11 @@
 
                         <a id="button-basic" dropdownToggle href="javascript:void(0)"
                             class="dropdown-toggle cursor-pointer switch-branch-section font-14 branch-name">
-                            <!-- <ng-container *ngIf="currentBranch">
-                                <div class="branch-name-full w-100">
-                                    <span class="branch-ellipsis">{{currentBranch?.alias}} </span> <i class="icon-down-new"></i>
-                                </div>
-                            </ng-container> -->
                             <ng-container>
                                 <div class="switch-branch w-100">
                                     {{localeData?.switch_branch}} <i class="icon-arrow-down"></i>
                                 </div>
                             </ng-container>
-                            <!-- <ng-container>
-                                <div [tooltip]="localeData?.switch_branch" class="switch-branch-alice w-100  mt-2 a"> {{localeData?.sb}} <i
-                                        class="icon-right"></i> </div>
-                            </ng-container> -->
                         </a>
 
 
@@ -307,18 +298,12 @@
                             </li>
                         </ul>
                     </li>
-
-                    <!-- <li>
-                                                                                            <a href="javascript:void(0)" *ngIf="branchInitials" class="font-14 branch-alice">{{branchInitials}}</a>
-                                                                                        </li> -->
                 </ul>
             </div>
         <li class="mr-t05">
             <a href="javascript:void(0)"
                 (click)="analyzeMenus($event, '/pages/company-import-export')">{{localeData?.import_export_backup}}</a>
         </li>
-        <!-- #dropdown="bs-dropdown" -->
-
 
         <li role="separator" class="divider width-100"></li>
 

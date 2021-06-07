@@ -12,6 +12,7 @@ import { NgForm } from '@angular/forms';
 import { ToasterService } from '../../services/toaster.service';
 import { cloneDeep } from '../../lodash-optimized';
 import { AdjustedVoucherType, SubVoucher } from '../../app.constant';
+import { giddhRoundOff } from '../helpers/helperFunctions';
 
 /** Toast message when no advance receipt is found */
 const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
@@ -166,6 +167,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     this.adjustVoucherOptions = [];
                     if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
                         this.allAdvanceReceiptResponse.forEach(item => {
+                            this.handlePartiallyAdjustedVoucher(item);
                             if (item && item.voucherDate) {
                                 item.voucherDate = item.voucherDate.replace(/-/g, '/');
                                 item.voucherNumber = !item.voucherNumber ? '-' : item.voucherNumber;
@@ -176,12 +178,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                         });
                     } else {
                         // Vouchers for new adjustment not found fill the suggestions with already adjusted vouchers
-                        if (this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length) {
-                            this.advanceReceiptAdjustmentUpdatedData.adjustments.forEach(item => {
-                                this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                                this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                            });
-                        }
+                        this.pushExistingAdjustments();
                         if (this.isVoucherModule) {
                             this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                         } else {
@@ -236,11 +233,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public onCancel(): void {
-        // TODO: This warning is removed as this is suggestion from testing team please remove it after approval
-        // if (this.adjustPayment && this.adjustPayment.totalAdjustedAmount && this.adjustPayment.grandTotal && this.adjustPayment.totalAdjustedAmount - this.adjustPayment.grandTotal > 0) {
-        //     this.toaster.warningToast('The adjusted amount of the linked invoice\'s is more than this receipt due amount');
-        //     return;
-        // }
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
             this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.filter(item => {
                 return item.voucherNumber !== '' || item.adjustmentAmount.amountForAccount > 0;
@@ -775,28 +767,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Used to format data as the adjustments array have two keys as
-     * 'balanceDue' and 'adjustmentAmount'. Former is received when any voucher
-     * is adjusted during creating entry and represents the BALANCE amount that can
-     * get adjusted and latter is received when any voucher
-     * is already adjusted and represents the ADJUSTED amount
-     *
-     * @private
-     * @memberof AdvanceReceiptAdjustmentComponent
-     */
-    private formatAdjustmentData(adjustmentData: Array<Adjustment>): void {
-        if (adjustmentData && adjustmentData.length) {
-            adjustmentData.forEach(adjustment => {
-                if (adjustment && adjustment.adjustmentAmount && adjustment.adjustmentAmount.amountForAccount) {
-                    adjustment.balanceDue = cloneDeep(adjustment.adjustmentAmount);
-                } else if (adjustment && adjustment.balanceDue && adjustment.balanceDue.amountForAccount) {
-                    adjustment.adjustmentAmount = cloneDeep(adjustment.balanceDue);
-                }
-            });
-        }
-    }
-
-    /**
      * Resets the adjustment except linked adjustments
      *
      * @private
@@ -860,7 +830,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         if (isNaN(exchangeRate)) {
             return amountForAccount;
         }
-        return exchangeRate > 1 ? amountForAccount * exchangeRate : Number((amountForAccount / exchangeRate).toFixed(2));
+        return exchangeRate > 1 ? amountForAccount * exchangeRate : giddhRoundOff((amountForAccount / exchangeRate), 4);
     }
 
     /**
@@ -913,7 +883,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public isExchangeProfitable(): boolean {
         /* Exchange gain/loss logic: https://www.accountingtools.com/articles/foreign-exchange-accounting.html
              ______________________________________________________________________________________________________
-            |______________________________|_____________Imoort Goods_____________|__________Export Goods__________|
+            |______________________________|_____________Import Goods_____________|__________Export Goods__________|
             |______________________________|______________________________________|________________________________|
             |  Home currency weakens       |                Loss                  |                Gain            |
             |______________________________|______________________________________|________________________________|
@@ -926,6 +896,50 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         } else if (this.adjustedVoucherType === AdjustedVoucherType.Purchase || this.adjustedVoucherType === AdjustedVoucherType.DebitNote) {
             // Exchange gain if home currency weakens as this is Import goods case (purchase) where the due goes negative
             return this.getConvertedBalanceDue() >= 0;
+        }
+    }
+
+    /**
+     * Handles the partially adjusted voucher which has balance
+     * and is still applicable for further adjustment
+     *
+     * @private
+     * @param {Adjustment} item Item obtained in applicable vouchers
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    private handlePartiallyAdjustedVoucher(item: Adjustment): void {
+        if (this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length) {
+            // Find if the item is present in already adjusted voucher which means the item is already partially adjusted
+            const itemPresentInExistingAdjustment = this.advanceReceiptAdjustmentUpdatedData.adjustments.find(adjustment => adjustment.uniqueName === item.uniqueName);
+            if (itemPresentInExistingAdjustment && item.balanceDue?.amountForAccount) {
+                item.balanceDue.amountForAccount += itemPresentInExistingAdjustment.adjustmentAmount.amountForAccount;
+                item.adjustmentAmount.amountForAccount += itemPresentInExistingAdjustment.adjustmentAmount.amountForAccount;
+            } else {
+                this.pushExistingAdjustments(item);
+            }
+        }
+    }
+
+    /**
+     * Pushes the existing adjustments in dropdown
+     *
+     * @private
+     * @param {Adjustment} [item] If provied pushes only this individual item else pushes all the adjustments to dropdown
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    private pushExistingAdjustments(item?: Adjustment): void {
+        if (item) {
+            this.advanceReceiptAdjustmentUpdatedData?.adjustments?.forEach(item => {
+                this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+            });
+        } else {
+            if (this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length) {
+                this.advanceReceiptAdjustmentUpdatedData.adjustments.forEach(item => {
+                    this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                    this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                });
+            }
         }
     }
 }

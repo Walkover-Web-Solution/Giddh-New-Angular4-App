@@ -132,6 +132,7 @@
     background-color: $white;
     border: 1px solid $gainsboro;
     margin-right: 10px;
+    border-radius: 5px;
     span {
         border-left: 1px solid $gainsboro;
         padding: 5px;
@@ -204,6 +205,7 @@ span.close-modal.cp.pull-right {
     width: 34px;
     background-color: $gainsboro;
     border: 1px solid $gainsboro;
+    border-radius: 5px;
     position: static;
     transform: inherit;
 }
@@ -234,6 +236,7 @@ span.close-modal.cp.pull-right {
 .invoice-search-box input {
     flex: 1;
     border: 1px solid $gainsboro;
+    border-radius: 5px;
     height: 37px;
     padding: 0 30px;
     background-image: url("../../../assets/images/searchIcon.svg");
@@ -401,10 +404,7 @@ span.close-modal.cp.pull-right {
 .font-10 {
     font-size: 10px !important;
 }
-/*
-  .font-12 {
-  font-size: 12px !important;
-  } */
+
 .pb-1 {
     padding-bottom: 10px;
 }
@@ -483,7 +483,6 @@ p {
 
 #default .meta {
     padding: 0 15px;
-    /* margin-bottom: 10px; */
 }
 
 #default .meta tbody tr td,
@@ -640,11 +639,6 @@ p {
     border-left: 0px !important;
 }
 
-/* #default table.item tr th,
-  #default table.item tfoot tr th {
-  font-size: 10px;
-  } */
-
 #default table.item td {
     border-radius: 0;
     padding: 7px;
@@ -668,7 +662,6 @@ p {
     width: 50%;
     text-align: right;
     padding: 0 2px;
-    /* font-size: 11px; */
 }
 
 /* aside */

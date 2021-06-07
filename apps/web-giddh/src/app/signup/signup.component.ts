@@ -18,7 +18,6 @@ import {
 import {
     AuthService,
     GoogleLoginProvider,
-    LinkedinLoginProvider,
     SocialUser
 } from "../theme/ng-social-login-module/index";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
@@ -65,10 +64,6 @@ export class SignupComponent implements OnInit, OnDestroy {
     public isSignupWithPasswordSuccess$: Observable<boolean>;
     public retryCount: number = 0;
     public signupVerifyEmail$: Observable<string>;
-    private imageURL: string;
-    private email: string;
-    private name: string;
-    private token: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public showLinkedInButton: boolean = false;
     /** Used only to refer in the template */
@@ -109,16 +104,12 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => {
             return state.login.isVerifyEmailSuccess;
         }), takeUntil(this.destroyed$)).subscribe((value) => {
-            if (value) {
-                // this.router.navigate(['home']);
-            }
+            
         });
         this.store.pipe(select(state => {
             return state.login.isVerifyMobileSuccess;
         }), takeUntil(this.destroyed$)).subscribe((value) => {
-            if (value) {
-                // this.router.navigate(['home']);
-            }
+            
         });
         this.isSignupWithPasswordInProcess$ = this.store.pipe(select(state => {
             return state.login.isSignupWithPasswordInProcess;
@@ -213,7 +204,6 @@ export class SignupComponent implements OnInit, OnDestroy {
 
         this.signupVerifyEmail$.subscribe(a => {
             if (a) {
-
                 this.signupVerifyForm.get("email")?.patchValue(a);
             }
         });
@@ -296,29 +286,15 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.loginAction.SignupWithMobileRequest(data));
     }
 
-    /**
-     * Getting data from browser's local storage
-     */
-    public getData() {
-        this.token = localStorage.getItem("token");
-        this.imageURL = localStorage.getItem("image");
-        this.name = localStorage.getItem("name");
-        this.email = localStorage.getItem("email");
-    }
-
     public async signInWithProviders(provider: string) {
         if (Configuration.isElectron) {
 
             const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
-                const t = ipcRenderer.send("authenticate", provider);
                 ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
-                //
-                // const t = ipcRenderer.sendSync("authenticate", provider);
-                // this.store.dispatch(this.loginAction.signupWithGoogle(t));
             } else {
                 // linked in
                 const t = ipcRenderer.sendSync("authenticate", provider);
@@ -334,7 +310,6 @@ export class SignupComponent implements OnInit, OnDestroy {
                 },
                 (obj) => {
                     this.store.dispatch(this.loginAction.signupWithGoogle(obj.accessToken));
-                    // console.log(JSON.stringify(obj)); // do something useful instead of alerting
                 },
                 (msg) => {
                     console.log(('error: ' + msg));
@@ -346,8 +321,6 @@ export class SignupComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
             if (provider === "google") {
                 this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-            } else if (provider === "linkedin") {
-                this.authService.signIn(LinkedinLoginProvider.PROVIDER_ID);
             }
         }
     }
@@ -380,24 +353,25 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     public SignupWithPasswd(model: FormGroup) {
         let ObjToSend = model.value;
-        let pattern = /^(?=.*[a-z])(?=.*\d)[A-Za-z\d$@$!%*?&_]{8,20}$/g;
-        if (pattern.test(ObjToSend.password)) {
+        // let pattern = /^(?=.*[a-z])(?=.*\d)[A-Za-z\d$@$!%*?&_]{8,20}$/g;
+        if (ObjToSend) {
             this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
-        } else {
-            return this._toaster.errorToast("Password is weak");
         }
+        // } else {
+        //     return this._toaster.errorToast("Password is weak");
+        // }
     }
 
-    public validatePwd(value) {
-        // let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$/g;
-        let pattern = /^(?=.*[a-z])(?=.*\d)[A-Za-z\d$@$!%*?&_]{8,20}$/g;
-        if (pattern.test(value)) {
-            // this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
-            this.showPwdHint = false;
-        } else if (value) {
-            return this.showPwdHint = true;
-        } else {
-            this.showPwdHint = false;
-        }
-    }
+    // public validatePwd(value) {
+    //     // let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$/g;
+    //     let pattern = /^(?=.*[a-z])(?=.*\d)[A-Za-z\d$@$!%*?&_]{8,20}$/g;
+    //     if (pattern.test(value)) {
+    //         // this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
+    //         this.showPwdHint = false;
+    //     } else if (value) {
+    //         return this.showPwdHint = true;
+    //     } else {
+    //         this.showPwdHint = false;
+    //     }
+    // }
 }

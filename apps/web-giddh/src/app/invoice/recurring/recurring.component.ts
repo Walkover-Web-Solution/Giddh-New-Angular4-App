@@ -214,14 +214,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
             if (this.customerNameInput.value !== null && this.customerNameInput.value !== '') {
                 return;
             }
-        } else if (fieldName === 'accountUniqueName') {
-            // if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
-            //   return;
-            // }
         }
-        // if (this.filter[fieldName] !== '') {
-        //   return;
-        // }
 
         if (this.childOf(event.target, el)) {
             return;
@@ -278,13 +271,6 @@ export class RecurringComponent implements OnInit, OnDestroy {
         if (fieldName === 'customerName') {
             this.showCustomerNameSearch = true;
             this.showInvoiceNumberSearch = false;
-        } else {
-            // this.showCustomerNameSearch = true;
-            // this.showInvoiceNumberSearch = false;
-            //
-            // setTimeout(() => {
-            //   this.customerSearch.nativeElement.focus();
-            // }, 200);
         }
 
         setTimeout(() => {

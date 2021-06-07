@@ -18,13 +18,10 @@ import {
 } from '../../models/api-models/SettingsIntegraion';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { TabsetComponent, TabDirective } from "ngx-bootstrap/tabs";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { CurrentPage } from '../../models/api-models/Common';
-import { GeneralActions } from '../../actions/general/general.actions';
 import { Configuration } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
@@ -88,8 +85,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
     private isSellerAdded: Observable<boolean> = observableOf(false);
     private isSellerUpdate: Observable<boolean> = observableOf(false);
-    /** user who is logged in currently */
-    private loggedInUserEmail: string;
     /** List of integrated bank */
     public integratedBankList: IntegratedBankList;
     /** Add bank form reference */
@@ -174,7 +169,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private _companyActions: CompanyActions,
         private _authenticationService: AuthenticationService,
         private _fb: FormBuilder,
-        private _generalActions: GeneralActions,
         private settingsPermissionActions: SettingsPermissionActions,
         private changeDetectionRef: ChangeDetectorRef,
         private generalService: GeneralService,
@@ -193,7 +187,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(s => s.session.user), take(1)).subscribe(result => {
             if (result && result.user) {
                 this.generalService.user = result.user;
-                this.loggedInUserEmail = result.user.email;
             }
         });
     }
@@ -233,7 +226,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             // set cashfree form data
             if (o.payoutForm && o.payoutForm.userName) {
                 this.payoutObj = _.cloneDeep(o.payoutForm);
-                // this.payoutObj.password = 'YOU_ARE_NOT_ALLOWED';
                 this.payoutAdded = true;
             } else {
                 this.payoutObj = new CashfreeClass();
@@ -241,7 +233,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
             if (o.autoCollect && o.autoCollect.userName) {
                 this.autoCollectObj = _.cloneDeep(o.autoCollect);
-                // this.autoCollectObj.password = 'YOU_ARE_NOT_ALLOWED';
                 this.autoCollectAdded = true;
             } else {
                 this.autoCollectObj = new CashfreeClass();
@@ -257,7 +248,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             if (o.amazonSeller && o.amazonSeller.length) {
                 this.amazonSellerRes = _.cloneDeep(o.amazonSeller);
                 this.amazonSellerForm.controls['sellers']?.patchValue(this.amazonSellerRes);
-                // this.amazonSellerForm.controls['sellers'].disable();
                 this.addAmazonSellerRow();
             }
         });
@@ -280,8 +270,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
             }
         });
-        //logic to get all registered account for integration tab
-        // this.store.dispatch(this._companyActions.getAllRegistrations());
 
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && o.account) {
@@ -346,32 +334,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
 
-        // this.store.pipe(select(stores => stores.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(resp => {
-        //     if (resp) {
-        //         let data = _.cloneDeep(resp);
-        //         let sortedArr = _.groupBy(this.prepareDataForUI(data), 'emailId');
-        //         let arr: IOption[] = [];
-        //         forIn(sortedArr, (value) => {
-        //             if (value[0].emailId === this.loggedInUserEmail) {
-        //                 value[0].isLoggedInUser = true;
-        //             }
-        //             arr.push({ label: value[0].userName, value: value[0].userUniqueName, additional: value });
-        //         });
-        //         let sortedArray = [];
-        //         arr.forEach(item => {
-        //             if (item.additional[0].mobileVerified) {
-        //                 sortedArray.push(item);
-        //             }
-        //         });
-        //         arr.forEach(item => {
-        //             if (!item.additional[0].mobileVerified) {
-        //                 sortedArray.push(item);
-        //             }
-        //         });
-        //         this.approvalNameList = sortedArray;
-        //     }
-        // });
-
         if (this.selectedCompanyUniqueName) {
             this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
         }
@@ -401,22 +363,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.loadTabData();
     }
 
-    // public getInitialData() {
-    //     // this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
-    //     // this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
-    //     this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
-    //     this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
-    //     this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
-    //     this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
-    //     this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
-    //     // this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-    //     this.store.pipe(take(1)).subscribe(s => {
-    //         this.selectedCompanyUniqueName = s.session.companyUniqueName;
-    //         this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
-    //         this.getValidationForm('ICICI')
-    //     });
-    // }
-
     public setDummyData() {
         this.razorPayObj.userName = '';
         this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
@@ -436,7 +382,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.store.dispatch(this.settingsIntegrationActions.SaveEmailKey(f.value));
         }
     }
-
 
     /**
      *To submit form and send data to API Call
@@ -619,7 +564,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public addAmazonSellerRow(i?: number, item?: any) {
-        const AmazonSellerControl = this.amazonSellerForm.controls['sellers'] as FormArray;
         const control = this.amazonSellerForm.controls['sellers'] as FormArray;
         if (item) {
             if (control.controls[i]) {
@@ -773,7 +717,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 // google
                 const t = ipcRenderer.send("authenticate-send-email", provider);
                 ipcRenderer.once('take-your-gmail-token', (sender, arg: any) => {
-                    // this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                     const dataToSave = {
                         "access_token": arg.access_token,
                         "expires_in": arg.expiry_date,
@@ -788,14 +731,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         }
                         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
                         this.router.navigateByUrl('/pages/settings/integration/email');
-                        // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
                     });
                 });
 
             } else {
                 // linked in
                 const t = ipcRenderer.send("authenticate", provider);
-                // this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
             }
 
         }
@@ -1202,7 +1143,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public addUserAmountRangesForm(): any {    // commented code because we no need GSTIN No. to add new address
-        // if (value && !value.startsWith(' ', 0)) {
         const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
         transactions.push(this.initialUserAmountRangesForm());
         return;
@@ -1375,9 +1315,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.loadDefaultAccountsSuggestions();
             this.loadDefaultBankAccountsSuggestions();
             this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
-            // this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
-            // this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
-            // this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
         }
     }
 

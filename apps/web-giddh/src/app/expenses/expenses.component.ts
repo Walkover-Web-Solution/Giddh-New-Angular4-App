@@ -17,6 +17,7 @@ import { GeneralService } from '../services/general.service';
 import { PendingListComponent } from './components/pending-list/pending-list.component';
 import { RejectedListComponent } from './components/rejected-list/rejected-list.component';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'app-expenses',
@@ -43,55 +44,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
     public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public datePickerOptions: any = {
-        hideOnEsc: true,
-        // parentEl: '#dateRangePickerParent',
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'This Month to Date': [
-                moment().startOf('month'),
-                moment()
-            ],
-            'This Quarter to Date': [
-                moment().quarter(moment().quarter()).startOf('quarter'),
-                moment()
-            ],
-            'This Financial Year to Date': [
-                moment().startOf('year').subtract(9, 'year'),
-                moment()
-            ],
-            'This Year to Date': [
-                moment().startOf('year'),
-                moment()
-            ],
-            'Last Month': [
-                moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')
-            ],
-            'Last Quater': [
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-            ],
-            'Last Financial Year': [
-                moment().startOf('year').subtract(10, 'year'),
-                moment().endOf('year').subtract(10, 'year')
-            ],
-            'Last Year': [
-                moment().startOf('year').subtract(1, 'year'),
-                moment().endOf('year').subtract(1, 'year')
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
     public selectedDate = {
         dateFrom: '',
         dateTo: ''
@@ -135,6 +87,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This will store screen size */
+    public isMobileScreen: boolean = false;
 
     constructor(private store: Store<AppState>,
         private _expenceActions: ExpencesAction,
@@ -143,11 +97,34 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private _cdRf: ChangeDetectorRef,
         private _generalService: GeneralService,
-        private router: Router) {
+        private router: Router,
+        private breakPointObservar: BreakpointObserver) {
 
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
         this.store.dispatch(this.companyActions.getTax());
+
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
+    }
+
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof ExpensesComponent
+     */
+     public getPageHeading(): string {
+        if(this.currentSelectedTab === 'pending') {
+            return this.localeData?.pending;
+        }
+        else if(this.currentSelectedTab === 'rejected') {
+            return this.localeData?.rejected;
+        }
     }
 
     public ngOnInit() {
@@ -181,13 +158,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-
-                this.datePickerOptions = {
-                    ...this.datePickerOptions,
-                    startDate: moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-                    endDate: moment(universalDate[1], GIDDH_DATE_FORMAT).toDate(),
-                    chosenLabel: universalDate[2]
-                };
 
                 if (this.universalFrom && this.universalTo) {
                     this.pettycashRequest.from = this.universalFrom;
@@ -326,11 +296,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                 this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
-            this.datePickerOptions = {
-                ...this.datePickerOptions, startDate: res[0],
-                endDate: res[1],
-                chosenLabel: res[2]
-            };
         });
         this.pettycashRequest.from = this.universalFrom;
         this.pettycashRequest.to = this.universalTo;

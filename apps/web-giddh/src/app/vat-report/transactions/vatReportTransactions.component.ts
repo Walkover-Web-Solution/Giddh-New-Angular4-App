@@ -10,8 +10,6 @@ import { ToasterService } from '../../services/toaster.service';
 import { VatService } from "../../services/vat.service";
 import { saveAs } from "file-saver";
 import { PAGINATION_LIMIT } from '../../app.constant';
-import { CurrentPage } from '../../models/api-models/Common';
-import { GeneralActions } from '../../actions/general/general.actions';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { DownloadOrSendInvoiceOnMailComponent } from '../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
@@ -57,8 +55,8 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private invoiceService: InvoiceService, private generalService: GeneralService) {
-        this.setCurrentPageTitle();
+    constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private invoiceService: InvoiceService, private generalService: GeneralService) {
+        
     }
 
     /**
@@ -141,19 +139,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
             this.vatReportTransactionsRequest.page = event.page;
             this.getVatReportTransactions(false);
         }
-    }
-
-    /**
-     * This function will set the page heading
-     *
-     *
-     * @memberof VatReportTransactionsComponent
-     */
-    public setCurrentPageTitle(): void {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = "Vat Report";
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
     }
 
     /**
@@ -272,7 +257,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                     }
                     return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
                 } else {
-                    this.toasty.errorToast('Something went wrong Please try again!');
+                    this.toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 }
             });
     }
@@ -285,7 +270,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      */
     public downloadFile() {
         let blob = this.generalService.base64ToBlob(this.base64Data, 'application/pdf', 512);
-        return saveAs(blob, `Invoice-${this.selectedInvoice.account.uniqueName}.pdf`);
+        return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account.uniqueName}.pdf`);
     }
 
     /**

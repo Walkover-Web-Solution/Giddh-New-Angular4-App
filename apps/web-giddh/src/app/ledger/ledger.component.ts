@@ -229,7 +229,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Stores the current company */
     public activeCompany: any;
     /** Border configuration for branch dropdown */
-    public branchDropdownBorderConfiguration: BorderConfiguration = { style: 'border-radius: 30px !important' };
+    public branchDropdownBorderConfiguration: BorderConfiguration = { style: 'border-radius: 5px !important' };
     /** True if current organization type is company */
     public showBranchSwitcher: boolean;
     /** Stores the current organization type */
@@ -414,7 +414,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.lc.currentBlankTxn = txn;
                 let rate = 0;
                 let unitCode = '';
-                let unitName = '';
                 let stockName = '';
                 let stockUniqueName = '';
 
@@ -430,7 +429,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     stockName = defaultUnit.name;
                     rate = defaultUnit.rate;
                     stockUniqueName = txn.selectedAccount.stock.uniqueName;
-                    unitName = defaultUnit.name;
                     unitCode = defaultUnit.code;
                 }
                 if (stockName && stockUniqueName) {
@@ -473,96 +471,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
             }
         });
-        // this.lc.flattenAccountList.pipe(take(1)).subscribe(data => {
-        //     data.map(fa => {
-        //         // change (e.value[0]) to e.value to use in single select for ledger transaction entry
-        //         if (fa.value === e.value) {
-        //             txn.selectedAccount = fa.additional;
-        //             let rate = 0;
-        //             let unitCode = '';
-        //             let unitName = '';
-        //             let stockName = '';
-        //             let stockUniqueName = '';
-        //             let unitArray = [];
-
-        //             //#region unit rates logic
-        //             if (fa.additional && fa.additional.stock) {
-        //                 let defaultUnit = {
-        //                     stockUnitCode: fa.additional.stock.stockUnit.name,
-        //                     code: fa.additional.stock.stockUnit.code,
-        //                     rate: 0,
-        //                     name: fa.additional.stock.stockUnit.name
-        //                 };
-        //                 if (fa.additional.stock.accountStockDetails && fa.additional.stock.accountStockDetails.unitRates) {
-        //                     let cond = fa.additional.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === fa.additional.stock.stockUnit.code);
-        //                     if (cond) {
-        //                         defaultUnit.rate = cond.rate;
-        //                         rate = defaultUnit.rate;
-        //                     }
-
-        //                     unitArray = unitArray.concat(fa.additional.stock.accountStockDetails.unitRates.map(p => {
-        //                         return {
-        //                             stockUnitCode: p.stockUnitCode,
-        //                             code: p.stockUnitCode,
-        //                             rate: 0,
-        //                             name: p.stockUnitName
-        //                         };
-        //                     }));
-        //                     if (unitArray.findIndex(p => p.code === defaultUnit.code) === -1) {
-        //                         unitArray.push(defaultUnit);
-        //                     }
-        //                 } else {
-        //                     unitArray.push(defaultUnit);
-        //                 }
-
-        //                 txn.unitRate = unitArray;
-        //                 stockName = fa.additional.stock.name;
-        //                 stockUniqueName = fa.additional.stock.uniqueName;
-        //                 unitName = fa.additional.stock.stockUnit.name;
-        //                 unitCode = fa.additional.stock.stockUnit.code;
-        //             }
-        //             if (stockName && stockUniqueName) {
-        //                 txn.inventory = {
-        //                     stock: {
-        //                         name: stockName,
-        //                         uniqueName: stockUniqueName
-        //                     },
-        //                     quantity: 1,
-        //                     unit: {
-        //                         stockUnitCode: unitCode,
-        //                         code: unitCode,
-        //                         rate
-        //                     }
-        //                 };
-        //             }
-        //             if (rate > 0 && txn.amount === 0) {
-        //                 txn.amount = rate;
-        //             }
-        //             //#endregion
-
-        //             // region check multi currency allowed for selected account
-        //             // if (fa.additional.currency) {
-        //             //   if (!this.isLedgerAccountAllowsMultiCurrency) {
-        //             //     // means ledger account and company currencies are same
-        //             //     // now check if the selected account currency is different than company currency
-        //             //     if (this.lc.activeAccount.currency !== fa.additional.currency) {
-        //             //       this.isLedgerAccountAllowsMultiCurrency = true;
-        //             //
-        //             //       this.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
-        //             //       let accCurrency = this.lc.currencies.find(f => f.code === fa.additional.currency);
-        //             //       this.baseCurrencyDetails = {code: accCurrency.code, symbol: accCurrency.symbol};
-        //             //       this.getCurrencyRate();
-        //             //
-        //             //       this.selectedCurrency = 0;
-        //             //       this.assignPrefixAndSuffixForCurrency();
-        //             //     }
-        //             //   }
-        //             // }
-        //             // endregion
-        //             return;
-        //         }
-        //     });
-        // });
     }
 
     public hideEledgerWrap() {
@@ -575,9 +483,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public pageChanged(event: any): void {
-        // this.advanceSearchRequest.page = event.page;
         this.trxRequest.page = event.page;
-        // this.lc.currentPage = event.page;
 
         if (this.isAdvanceSearchImplemented) {
             this.advanceSearchRequest.page = event.page;
@@ -737,11 +643,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.currencyTogglerModel = false;
 
             if (params['accountUniqueName']) {
-                // this.advanceSearchComp.resetAdvanceSearchModal();
                 this.lc.accountUnq = params['accountUniqueName'];
                 this.needToShowLoader = true;
                 this.searchText = '';
-                // this.searchTermStream.next('');
                 this.resetBlankTransaction();
 
                 // set state details
@@ -761,8 +665,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                 });
                 this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
-                // init transaction request and call for transaction data
-                // this.advanceSearchRequest = new AdvanceSearchRequest();
                 this.creditSelectAll = false;
                 this.debitSelectAll = false;
                 this.debitCreditSelectAll = false;
@@ -775,9 +677,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             } else {
                 this.showLoader = false;
             }
-            // if (!s && this.showLoader) {
-            //   this.showLoader = false;
-            // }
         });
 
         this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$)).subscribe(res => {
@@ -865,7 +764,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.lc.showBankLedgerPanel = false;
                 this.isMoreDetailsOpened = false;
                 this.getTransactionData();
-                // this.getCurrencyRate();
                 this.resetBlankTransaction();
                 this.resetPreviousSearchResults();
                 // After the success of the entrance call for bank transactions
@@ -897,9 +795,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (yes) {
                 this.entryUniqueNamesForBulkAction = [];
                 this.getTransactionData();
-                // this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
-                //   moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
-                //   this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
             }
         });
 
@@ -1158,7 +1053,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.getCurrencyRate('blankLedger');
         }
         this.resetPreviousSearchResults();
-        // this.hideNewLedgerEntryPopup();
     }
 
     public showNewLedgerEntryPopup(trx: TransactionVM) {
@@ -1229,22 +1123,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let transactions: TransactionsResponse = null;
         this.store.pipe(select(t => t.ledger.transactionsResponse), take(1)).subscribe(trx => transactions = trx);
         if (transactions) {
-            // if (txn.isBaseAccount) {
-            //   // store the trx values in store
-            //   this.store.dispatch(this._ledgerActions.setAccountForEdit(txn.particular.uniqueName));
-            // } else {
-            //   // find trx from transactions array and store it in store
-            //   let debitTrx: ITransactionItem[] = transactions.debitTransactions.filter(f => f.entryUniqueName === txn.entryUniqueName);
-            //   let creditTrx: ITransactionItem[] = transactions.creditTransactions.filter(f => f.entryUniqueName === txn.entryUniqueName);
-            //   let finalTrx: ITransactionItem[] = [...debitTrx, ...creditTrx];
-            //   let baseAccount: ITransactionItem = finalTrx.find(f => f.isBaseAccount);
-            //   if (baseAccount) {
-            //     this.store.dispatch(this._ledgerActions.setAccountForEdit(baseAccount.particular.uniqueName));
-            //   } else {
-            //     // re activate account from url params
-            //     this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
-            //   }
-            // }
             this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
         }
         this.showUpdateLedgerForm = true;
@@ -1563,17 +1441,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
         viewContainerRef.insert(componentInstanceView.hostView);
 
         let componentInstance = componentInstanceView.instance as PaginationComponent;
+        componentInstance.firstText = this.commonLocaleData?.app_first;
+        componentInstance.previousText = this.commonLocaleData?.app_previous;
+        componentInstance.nextText = this.commonLocaleData?.app_next;
+        componentInstance.lastText = this.commonLocaleData?.app_last;
         componentInstance.totalItems = s.count * s.totalPages;
         componentInstance.itemsPerPage = s.count;
         componentInstance.maxSize = 5;
         componentInstance.writeValue(s.page);
         componentInstance.boundaryLinks = true;
         componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
-            // commenting this as we will use advance search api from now
-            // if (this.isAdvanceSearchImplemented) {
-            // this.advanceSearchPageChanged(e);
-            // return;
-            // }
             this.pageChanged(e); // commenting this as we will use advance search api from now
         });
     }
@@ -1601,7 +1478,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public search(term: string): void {
-        // this.ledgerSearchTerms.nativeElement.value = term;
         this.searchTermStream.next(term);
     }
 
@@ -1641,14 +1517,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public performBulkAction(actionType: string, fileInput?) {
         this.entryUniqueNamesForBulkAction = [];
-        // if (this.lc.showEledger) {
-        //   this.entryUniqueNamesForBulkAction.push(
-        //     ...this.lc.bankTransactionsData.map(bt => bt.transactions)
-        //       .reduce((prev, curr) => {
-        //         return prev.concat(curr);
-        //       }, []).filter(f => f.isChecked).map(m => m.particular)
-        //   );
-        // } else {
         let debitTrx: ITransactionItem[] = [];
         let creditTrx: ITransactionItem[] = [];
 
@@ -1664,7 +1532,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 ...debitTrx.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
                 ...creditTrx.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
             ]);
-        // }
         if (!this.entryUniqueNamesForBulkAction || !this.entryUniqueNamesForBulkAction.length) {
             this._toaster.errorToast(this.localeData?.select_one_entry, this.commonLocaleData?.app_error);
             return;
@@ -1845,16 +1712,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public toggleOtherTaxesAsidePane(modal) {
-
-        // if (!modalBool) {
-        //   this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
-        //   this.vm.selectedLedger.otherTaxesSum = 0;
-        //   this.vm.selectedLedger.tdsTcsTaxesSum = 0;
-        //   this.vm.selectedLedger.cessSum = 0;
-        //   this.vm.selectedLedger.otherTaxModal.itemLabel = '';
-        //   return;
-        // }
-
         this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
@@ -2345,11 +2202,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.needToShowLoader = true;
                     this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
 
-                    // let stockListFormFlattenAccount: IFlattenAccountsResultItem;
-                    // if (data[1]) {
-                    //     stockListFormFlattenAccount = data[1].find((acc) => acc.uniqueName === this.lc.accountUnq);
-                    // }
-
                     let accountDetails: AccountResponse | AccountResponseV2 = data[0];
                     let parentOfAccount = accountDetails.parentGroups[0];
 
@@ -2395,53 +2247,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
                         }
                     }
-
-                    // check if account is stockable
-                    // let isStockableAccount = parentOfAccount ?
-                    //     (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
-                    //         parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
-                    // let accountsArray: IOption[] = [];
-                    // if (isStockableAccount) {
-                    //     // stocks from ledger account
-                    //     data[1].map(acc => {
-                    //         // normal entry
-                    //         accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
-                    //         // check if taxable or roundoff account then don't assign stocks
-                    //         let notRoundOff = acc.uniqueName === 'roundoff';
-                    //         let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
-                    //         // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
-                    //         if (!isTaxAccount && !notRoundOff && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
-                    //             stockListFormFlattenAccount.stocks.map(as => {
-                    //                 // stock entry
-                    //                 accountsArray.push({
-                    //                     value: uuid.v4(),
-                    //                     label: `${acc.name}` + ` (${as.name})`,
-                    //                     additional: Object.assign({}, acc, { stock: as })
-                    //                 });
-                    //             });
-                    //         }
-                    //     });
-                    // } else {
-                    //     // stocks from account itself
-                    //     data[1].map(acc => {
-                    //         if (acc.stocks) {
-                    //             // normal entry
-                    //             accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
-                    //             // stock entry
-                    //             acc.stocks.map(as => {
-                    //                 accountsArray.push({
-                    //                     value: uuid.v4(),
-                    //                     // label: acc.name + '(' + as.uniqueName + ')',
-                    //                     label: `${acc.name}` + ` (${as.name})`,
-                    //                     additional: Object.assign({}, acc, { stock: as })
-                    //                 });
-                    //             });
-                    //         } else {
-                    //             accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
-                    //         }
-                    //     });
-                    // }
-                    // this.lc.flattenAccountList = observableOf(orderBy(accountsArray, 'label'));
                 }
             });
         }

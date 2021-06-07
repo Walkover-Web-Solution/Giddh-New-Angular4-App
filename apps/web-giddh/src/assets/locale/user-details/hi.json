@@ -51,7 +51,7 @@
 	},
 	"subscription": {
 		"tab_heading": "सदस्यता",
-		"days_remaining": "बचे हुए दिन",
+		"days_remaining": "दिन शेष",
 		"search_subscribed_plan": "सदस्यता प्लान खोजें",
 		"subscription_id": "सदस्यता पहचानपत्र",
 		"subscribed_on": "सदस्यता  दि गई",
@@ -107,7 +107,7 @@
 		"unlimited_contacts": "असीमित ग्राहक/विक्रेता",
 		"desktop_mobile_app": "डेस्कटॉप/मोबाइल ऐप",
 		"check_all_features": "सभी सुविधाओं की जाँच करें",
-		"prices_excluding_tax": "*कीमतें टैक्स को छोड़कर",
+		"prices_excluding_tax": "*कीमतें कर को छोड़कर",
 		"see_all_plans": "सभी योजनाएं देखें",
 		"see_all_free_plans": "सभी मुफ़्त प्लान देखें",
 		"activation_key": "सक्रियण कुंजी",
