@@ -53,7 +53,7 @@
         <account-add-new-details *ngIf="!(activeAccount$ | async) && (showAddNewAccount$ | async)"
             [activeGroupUniqueName]="activeGroupUniqueName$ | async" [fetchingAccUniqueName$]="fetchingAccUniqueName$"
             [isAccountNameAvailable$]="isAccountNameAvailable$" [createAccountInProcess$]="createAccountInProcess$"
-            [isFlattenRemoved]="true" (isGroupSelected)="isGroupSelected($event)"
+            (isGroupSelected)="isGroupSelected($event)"
             [createAccountIsSuccess$]="createAccountIsSuccess$" [isGstEnabledAcc]="isGstEnabledAcc"
             [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" (submitClicked)="addNewAccount($event)"
             [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount"

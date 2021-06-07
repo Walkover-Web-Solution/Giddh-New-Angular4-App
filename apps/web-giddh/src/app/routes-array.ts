@@ -66,7 +66,6 @@ export const ROUTES = [
                 data: { preload: true }
             },
             { path: 'audit-logs', loadChildren: () => import('./audit-logs/audit-logs.module').then(module => module.AuditLogsModule) },
-            { path: 'create-advance-receipt', loadChildren: () => import('./create-advance-receipt/create-advance-receipt.module').then(module => module.CreateAdvanceReceiptModule) },
             {
                 path: 'ledger/:accountUniqueName',
                 loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule),

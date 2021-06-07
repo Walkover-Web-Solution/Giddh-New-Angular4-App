@@ -1,5 +1,5 @@
 import { Observable, ReplaySubject } from 'rxjs';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as moment from 'moment/moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ToasterService } from '../../services/toaster.service';
@@ -16,7 +16,6 @@ import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Co
 import { GeneralService } from '../../services/general.service';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { PAGINATION_LIMIT } from '../../app.constant';
-import { SettingsBranchService } from '../../services/settings.branch.service';
 
 @Component({
     selector: 'app-completed-preview',
@@ -122,9 +121,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         private _toaster: ToasterService,
         private fb: FormBuilder,
         private tallysyncService: TallySyncService,
-        private generalService: GeneralService,
-        private settingsBranchService: SettingsBranchService,
-        private changeDetectorRef: ChangeDetectorRef
+        private generalService: GeneralService
     ) {
 
         this.filterForm = this.fb.group({
@@ -223,33 +220,12 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.downloadTallyErrorLogRequest.type = row['type'];
         this.tallysyncService.getErrorLog(row.company.uniqueName, this.downloadTallyErrorLogRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === 'success') {
-                let blobData = this.base64ToBlob(res.body, 'application/xlsx', 512);
+                let blobData = this.generalService.base64ToBlob(res.body, 'application/xlsx', 512);
                 return saveAs(blobData, `${row.company.name}-error-log.xlsx`);
             } else {
                 this._toaster.errorToast(res.message);
             }
         })
-    }
-
-    public base64ToBlob(b64Data, contentType, sliceSize) {
-        contentType = contentType || '';
-        sliceSize = sliceSize || 512;
-        let byteCharacters = atob(b64Data);
-        let byteArrays = [];
-        let offset = 0;
-        while (offset < byteCharacters.length) {
-            let slice = byteCharacters.slice(offset, offset + sliceSize);
-            let byteNumbers = new Array(slice.length);
-            let i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
-            }
-            let byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
-        }
-        return new Blob(byteArrays, { type: contentType });
     }
 
     /**

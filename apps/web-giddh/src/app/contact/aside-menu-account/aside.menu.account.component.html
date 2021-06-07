@@ -14,7 +14,7 @@
                 [isDebtorCreditor]="isDebtorCreditor" [createAccountInProcess$]="createAccountInProcess$"
                 (submitClicked)="addNewAcSubmit($event)" (isGroupSelected)="isGroupSelected($event)"
                 [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
-                [showBankDetail]="showBankDetail" [isCustomerCreation]="true" [isFlattenRemoved]="true">
+                [showBankDetail]="showBankDetail" [isCustomerCreation]="true">
             </account-add-new-details>
 
             <account-update-new-details *ngIf="activeGroupUniqueName && isUpdateAccount"
