@@ -9591,8 +9591,8 @@ body.update-scroll-hidden {
 
 @media (max-width: 575px) {
     .gst-sidebar-open .daterangepicker {
-        left: auto !important;
-        right: 90px !important;
+        left: 15px !important;
+        right: 0 !important;
     }
     .filter-band ul{
         left: auto !important;
@@ -9615,7 +9615,6 @@ body.update-scroll-hidden {
     }
     .daterangepicker.ltr .ranges {
         float: left;
-
         ul {
             li {
                 font-size: 11px;
@@ -9659,8 +9658,8 @@ body.update-scroll-hidden {
 
 @media (max-width: 375px) {
     .gst-sidebar-open .daterangepicker {
-        left: auto !important;
-        right: 20px !important;
+        left: 15px !important;
+        right: auto !important;
     }
     .setting-page.tb-pl-bs-tabs ul.nav.nav-tabs {
         overflow-x: auto;
