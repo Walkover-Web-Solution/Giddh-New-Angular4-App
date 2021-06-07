@@ -91,8 +91,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public isLedgerAccSelected: boolean = false;
     /** Holds the navigated accounts */
     public accountItemsFromIndexDB: any[] = DEFAULT_AC;
-    /** Stores the list of menu and accounts navigated */
-    private smartCombinedList$: Observable<any>;
     /** Company name initials (upto 2 characters) */
     public companyInitials: any = '';
     /** Branch alias/name initials (upto 2 characters) */
@@ -233,7 +231,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnInit(): void {
-        this.smartCombinedList$ = this.store.pipe(select(appStore => appStore.general.smartCombinedList), takeUntil(this.destroyed$));
         this.updateIndexDbSuccess$ = this.store.pipe(select(appStore => appStore.general.updateIndexDbComplete), takeUntil(this.destroyed$))
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
             if (selectedCmp?.uniqueName !== this.selectedCompanyDetails?.uniqueName) {
@@ -323,15 +320,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 } else {
                     this.userName = u.name[0] + u.name[1];
                     this.userFullName = name;
-                }
-            }
-        });
-        this.smartCombinedList$.subscribe(smartList => {
-            if (smartList && smartList.length) {
-                if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
-                    this.dbService.getItemDetails(this.activeCompanyForDb.uniqueName).toPromise().then(dbResult => {
-                        this.findListFromDb(dbResult);
-                    });
                 }
             }
         });
@@ -522,52 +510,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Prepares list of accounts and menus
-     *
-     * @param {IUlist[]} data Data with which list needs to be created
-     * @memberof PrimarySidebarComponent
-     */
-    public prepareSmartList(data: IUlist[]): void {
-        // hardcoded aiData
-        // '/pages/trial-balance-and-profit-loss'
-        let menuList: IUlist[] = [];
-        let groupList: IUlist[] = [];
-        let acList: IUlist[] = DEFAULT_AC;
-        let defaultMenu = cloneDeep(DEFAULT_MENUS);
-
-        // parse and push default menu to menulist for sidebar menu for initial usage
-        if (defaultMenu && defaultMenu.length > 0) {
-            defaultMenu.forEach(item => {
-                let newItem: IUlist = {
-                    name: item.name,
-                    uniqueName: item.uniqueName,
-                    additional: item.additional,
-                    type: 'MENU',
-                    time: +new Date(),
-                    pIndex: item.pIndex,
-                    isRemoved: item.isRemoved
-                };
-                menuList.push(newItem);
-            });
-        }
-
-        let combined = cloneDeep([...menuList, ...acList]);
-        this.store.dispatch(this.generalActions.setSmartList(combined));
-        if (!this.activeCompanyForDb) {
-            this.activeCompanyForDb = new CompAidataModel();
-        }
-        this.activeCompanyForDb.aidata = {
-            menus: menuList,
-            groups: groupList,
-            accounts: acList
-        };
-
-        // due to some issue
-        // this.selectedPage = menuList[0].name;
-        this.dbService.insertFreshData(this.activeCompanyForDb);
-    }
-
-    /**
      * Finds the item list from DB
      *
      * @param {ICompAidata} dbResult Current DB result
@@ -588,13 +530,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 this.accountItemsFromIndexDB = (dbResult && dbResult.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : [];
             }
         } else {
-            let data: IUlist[];
-            this.smartCombinedList$.pipe(take(1)).subscribe(listResult => {
-                data = listResult;
-            });
-            // make entry with smart list data
-            this.prepareSmartList(data);
-
             // slice default menus and account on small screen
             if (!(window.innerWidth > 1440 && window.innerHeight > 717)) {
                 this.accountItemsFromIndexDB = slice(this.accountItemsFromIndexDB, 0, 5);

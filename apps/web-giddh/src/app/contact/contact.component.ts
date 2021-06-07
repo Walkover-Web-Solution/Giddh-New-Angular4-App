@@ -1044,32 +1044,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         this._companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.searchLoader$ = observableOf(false);
             if (res.status === 'success') {
-                let blobData = this.base64ToBlob(res.body, 'text/csv', 512);
+                let blobData = this._generalService.base64ToBlob(res.body, 'text/csv', 512);
                 return saveAs(blobData, `${this.groupUniqueName}.csv`);
             }
         });
 
-    }
-
-    public base64ToBlob(b64Data, contentType, sliceSize) {
-        contentType = contentType || '';
-        sliceSize = sliceSize || 512;
-        let byteCharacters = atob(b64Data);
-        let byteArrays = [];
-        let offset = 0;
-        while (offset < byteCharacters.length) {
-            let slice = byteCharacters.slice(offset, offset + sliceSize);
-            let byteNumbers = new Array(slice.length);
-            let i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
-            }
-            let byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
-        }
-        return new Blob(byteArrays, { type: contentType });
     }
 
     /**

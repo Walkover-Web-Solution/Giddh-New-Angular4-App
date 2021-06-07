@@ -43,7 +43,7 @@ import { GeneralService } from '../../../services/general.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
-import { base64ToBlob, giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../store';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -903,7 +903,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         e.stopPropagation();
         this.ledgerService.DownloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
-                let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
+                let blob = this.generalService.base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
                 return saveAs(blob, d.body.name);
             } else {
                 this._toasty.errorToast(d.message);
@@ -919,7 +919,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         this.ledgerService.DownloadInvoice(downloadRequest, this.activeAccount.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
-                let blob = base64ToBlob(d.body, 'application/pdf', 512);
+                let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.activeAccount.name} - ${invoiceName}.pdf`);
             } else {
                 this._toasty.errorToast(d.message);
