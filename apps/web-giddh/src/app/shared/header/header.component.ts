@@ -12,7 +12,7 @@ import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
 import { CommonActions } from '../../actions/common.actions';
-import { ActiveFinancialYear, CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest, Organization, OrganizationDetails } from '../../models/api-models/Company';
+import { ActiveFinancialYear, CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest, Organization } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
@@ -141,7 +141,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public modelRefCrossLimit: BsModalRef;
 
     private activeCompanyForDb: ICompAidata;
-    private smartCombinedList$: Observable<any>;
     public isMobileSite: boolean;
     public currentCompanyPlanAmount: any;
     public companyCountry: CompanyCountry = {
@@ -399,7 +398,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.session$ = this.store.pipe(select(p => p.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
 
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(s => s.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
-        this.smartCombinedList$ = this.store.pipe(select(s => s.general.smartCombinedList), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.createNewCompanyUser = res;
@@ -584,17 +582,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (s) {
                 this.loadAddManageComponent();
                 this.manageGroupsAccountsModal.show();
-            }
-        });
-
-        // initial data binding for universal modal and for menu
-        this.smartCombinedList$.subscribe(smartList => {
-            if (smartList && smartList.length) {
-                if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
-                    this._dbService.getItemDetails(this.activeCompanyForDb.uniqueName).toPromise().then(dbResult => {
-                        this.findListFromDb(dbResult);
-                    });
-                }
             }
         });
 
@@ -936,44 +923,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.onItemSelected(acc);
     }
 
-    public prepareSmartList(data: IUlist[]) {
-        // hardcoded aiData
-        // '/pages/trial-balance-and-profit-loss'
-        let menuList: IUlist[] = [];
-        let groupList: IUlist[] = [];
-        let acList: IUlist[] = DEFAULT_AC;
-        let defaultMenu = cloneDeep(DEFAULT_MENUS);
-
-        // parse and push default menu to menulist for sidebar menu for initial usage
-        if (defaultMenu && defaultMenu.length > 0) {
-            defaultMenu.forEach(item => {
-                let newItem: IUlist = {
-                    name: item.name,
-                    uniqueName: item.uniqueName,
-                    additional: item.additional,
-                    type: 'MENU',
-                    time: +new Date(),
-                    pIndex: item.pIndex,
-                    isRemoved: item.isRemoved
-                };
-                menuList.push(newItem);
-            });
-        }
-
-        let combined = cloneDeep([...menuList, ...acList]);
-        this.store.dispatch(this._generalActions.setSmartList(combined));
-        if (!this.activeCompanyForDb) {
-            this.activeCompanyForDb = new CompAidataModel();
-        }
-        this.activeCompanyForDb.aidata = {
-            menus: menuList,
-            groups: groupList,
-            accounts: acList
-        };
-
-        this._dbService.insertFreshData(this.activeCompanyForDb);
-    }
-
     public findListFromDb(dbResult: ICompAidata) {
         if (!this.activeCompanyForDb) {
             return;
@@ -989,13 +938,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.accountItemsFromIndexDB = (dbResult && dbResult.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : [];
             }
         } else {
-            let data: IUlist[];
-            this.smartCombinedList$.pipe(take(1)).subscribe(listResult => {
-                data = listResult;
-            });
-            // make entry with smart list data
-            this.prepareSmartList(data);
-
             // slice default menus and account on small screen
             if (!(window.innerWidth > 1440 && window.innerHeight > 717)) {
                 this.accountItemsFromIndexDB = slice(this.accountItemsFromIndexDB, 0, 5);

@@ -16,6 +16,7 @@ import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service'
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { saveAs } from 'file-saver';
 import { GstReport } from '../../../../constants/gst.constant';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 
 export const filterTransaction = {
     entityType: '',
@@ -80,7 +81,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
-        private toaster: ToasterService,) {
+        private toaster: ToasterService,
+        private generalService: GeneralService) {
         this.viewTransaction$ = this.store.pipe(select(p => p.gstR.viewTransactionData), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
         this.viewTransactionInProgress$ = this.store.pipe(select(p => p.gstR.viewTransactionInProgress), takeUntil(this.destroyed$));
@@ -247,38 +249,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     * @memberof ViewTransactionsComponent
     */
     public downloadFile(): void {
-        let blob = this.base64ToBlob(this.base64Data, 'application/pdf', 512);
+        let blob = this.generalService.base64ToBlob(this.base64Data, 'application/pdf', 512);
         return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account.uniqueName}.pdf`);
-    }
-
-    /**
-     *  To convert base64 data to contentType format in chunks
-     *
-     * @param {any} b64Data base64 data string
-     * @param {string} contentType type to covert file
-     * @param {number} sliceSize chunk size
-     * @returns
-     * @memberof ViewTransactionsComponent
-     */
-    public base64ToBlob(b64Data: any, contentType: string, sliceSize: number): any {
-        contentType = contentType || '';
-        sliceSize = sliceSize || 512;
-        let byteCharacters = atob(b64Data);
-        let byteArrays = [];
-        let offset = 0;
-        while (offset < byteCharacters.length) {
-            let slice = byteCharacters.slice(offset, offset + sliceSize);
-            let byteNumbers = new Array(slice.length);
-            let i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
-            }
-            let byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
-        }
-        return new Blob(byteArrays, { type: contentType });
     }
 
     /**
