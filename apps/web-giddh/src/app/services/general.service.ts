@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { cloneDeep, find } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class GeneralService {
@@ -124,6 +125,10 @@ export class GeneralService {
     private _currencyType = '1,00,00,000';   // there will be four type of currencyType a.1,00,00,000 (INR),b.10,000,000,c.10\'000\'000,d.10 000 000
 
     private _sessionId: string;
+
+    constructor(
+        private router: Router
+    ) {}
 
     public resetGeneralServiceState() {
         this.user = null;
@@ -908,5 +913,37 @@ export class GeneralService {
             });
         });
         return visibleMenuItems;
+    }
+
+    /**
+     * Navigates to the route provided
+     *
+     * @param {*} route Route to navigate to
+     * @param {*} [parameter] Route params
+     * @memberof GeneralService
+     */
+    public finalNavigate(route: any, parameter?: any): void {
+        let isQueryParams: boolean;
+        if (screen.width <= 767 || isCordova) {
+            this.router.navigate(["/pages/mobile-home"]);
+        } else {
+            if (route.includes('?')) {
+                parameter = parameter || {};
+                isQueryParams = true;
+                const splittedRoute = route.split('?');
+                route = splittedRoute[0];
+                const paramString = splittedRoute[1];
+                const params = paramString?.split('&');
+                params?.forEach(param => {
+                    const [key, value] = param.split('=');
+                    parameter[key] = value;
+                });
+            }
+            if (isQueryParams) {
+                this.router.navigate([route], { queryParams: parameter });
+            } else {
+                this.router.navigate([route], parameter);
+            }
+        }
     }
 }
