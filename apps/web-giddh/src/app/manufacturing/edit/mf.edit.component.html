@@ -3,12 +3,6 @@
     <div class="col-sm-12 mr-t15 clearfix">
         <button class="btn btn-default pull-right" (click)="goBackToListPage()" type="button">Back</button>
     </div>
-    <!-- page Title -->
-    <!-- <div class="top-bar col-xs-12 col-sm-12 clearfix bdrB">
-        <h1 class="section-title d-inline-block"><strong>Manufacture of Product</strong><label *ngIf="isUpdateCase" class="mr-l2">No.
-                {{manufacturingDetails.voucherNumber}}</label></h1>
-        <button class="btn btn-default pull-right" (click)="goBackToListPage()" type="button">Back</button>
-    </div> -->
 
     <!-- form -->
     <div class="col-xl-10 col-lg-12 col-md-12">
@@ -49,37 +43,6 @@
                                     [bsValue]="bsValue" [bsConfig]="{dateInputFormat: giddhDateFormat}" />
                             </div>
                         </div>
-
-                        <!-- <div class="form-group mr-r1" [attachOutsideOnClick]="true" (clickOutside)="showFromDatePicker=false;">
-                            <label class="d-block">Date</label>
-                            <div class="input-group">
-                                <input type="text" name="from" [ngModel]="moment(manufacturingDetails.date).format(giddhDateFormat)" (focus)="showFromDatePicker = true;" class="form-control" required />
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default"
-                                        (click)="showFromDatePicker = !showFromDatePicker">
-                                        <i class="icon-calender"></i>
-                                    </button>
-                                </span>
-                            </div>
-                            <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                                <ul class="my-dropdown-menu calendar-dropdown">
-                                    <li>
-                                        <datepicker name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="manufacturingDetails.date" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>
-                                    </li>
-                                    <li class="pd-1 clearfix pdT pd-b05">
-                                        <span class="btn-group pull-left">
-                                            <button type="button" class="btn btn-xs btn-primary mr-r05"
-                                                (click)="setToday();showFromDatePicker = false;">Today</button>
-                                            <button type="button" class="btn btn-xs btn-success"
-                                                (click)="showFromDatePicker = false">Done</button>
-                                        </span>
-                                        <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showFromDatePicker = false;">Clear
-                                        </button>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </div> -->
                     </div>
                     <div class="col-xs-3 col-sm-3">
                         <div class="form-group">
@@ -125,9 +88,7 @@
                                     <ng-template #unitCode>
                                         <td>{{ stock.stockUnitCode }}</td>
                                     </ng-template>
-                                    <!--<td><input type="text" [(ngModel)]="stock.quantity" name="quantity_{{i}}"></td>-->
                                     <td>{{ stock.rate | number:'1.0-4'}}</td>
-                                    <!--<td><input type="text" [(ngModel)]="stock.rate" name="rate_{{i}}"></td>-->
                                     <td>{{ stock.amount | number:'1.0-2'}}</td>
                                     <td class="action"><i class="icon-cross" (click)="removeConsumptionItem(i)"
                                             aria-hidden="true"></i>
@@ -283,7 +244,6 @@
                                             </sh-select>
                                         </div>
                                     </td>
-                                    <!--|| transactionAccountUniqueName.invalid  || baseAccountUniqueName.invalid-->
                                     <td class="text-right w100">
                                         <div class="pd"><input type="text" (blur)="addExpense(otherExpenses)"
                                                 decimalDigitsDirective [DecimalPlaces]="2" required placeholder="Amount"

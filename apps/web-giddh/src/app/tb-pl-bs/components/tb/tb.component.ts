@@ -53,7 +53,6 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
                 from: value.activeFinancialYear.financialYearStarts,
                 to: this.selectedCompany.activeFinancialYear.financialYearEnds
             };
-            // this.filterData(this.request);
         }
     }
 
@@ -116,21 +115,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public exportCsv($event) {
-        //
-    }
-
-    public exportPdf($event) {
-        //
-    }
-
-    public exportXLS($event) {
-        //
-    }
-
     public expandAllEvent(event: boolean) {
-        // this.cd.checkNoChanges();
-        // this.expandAll = !this.expandAll;
         setTimeout(() => {
             this.expandAll = event;
             this.cd.detectChanges();
@@ -138,11 +123,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public searchChanged(event: string) {
-        // this.cd.checkNoChanges();
         this.search = event;
         this.cd.detectChanges();
-        // setTimeout(() => {
-        //   this.search = event;
-        // }, 1);
     }
 }

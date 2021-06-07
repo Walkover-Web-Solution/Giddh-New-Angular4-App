@@ -1,6 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
-
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -68,7 +67,7 @@ export class CompanyImportExportService {
         if (branchUniqueName) {
             url = url.concat(`?branchUniqueName=${branchUniqueName}`);
         }
-        // const header = new Header
+
         return this._http.post(url, formData, httpOptions).pipe(
             map((res) => {
                 let data: BaseResponse<string, string> = res;

@@ -1,5 +1,6 @@
 @import "../../../assets/css/color.scss";
 #invoice-setting {
+    margin-top: 55px;
     .single-tab-block {
         box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
         margin: 0 15px;
@@ -96,6 +97,7 @@
 .delete-verified-icon {
     padding: 6px 10px;
     border: 1px solid $gainsboro;
+    border-radius: 5px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -151,6 +153,7 @@
 }
 @media screen and (max-width: 767px) {
     #invoice-setting {
+        margin-top: 15px;
         .btn-wrapper {
             margin-top: 15px;
         }

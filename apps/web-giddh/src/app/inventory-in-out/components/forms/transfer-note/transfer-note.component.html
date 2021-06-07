@@ -22,9 +22,6 @@
                     <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
                         (selected)="stockChanged($event)" [ItemHeight]="'33'" formControlName="stock"
                         [isRequired]="true"></sh-select>
-                    <!-- <span *ngIf="stock.invalid">
-              <span *ngIf="stock?.errors && stock?.errors['required']" class="text-danger">Please select Product.</span>
-                    </span> -->
                 </div>
             </div>
 
@@ -34,10 +31,6 @@
                     <label>Sender's Name <sup>*</sup></label>
                     <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Sender'"
                         formControlName="inventoryUser" [ItemHeight]="'33'"></sh-select>
-                    <!-- <span *ngIf="inventoryUser.invalid">
-              <span *ngIf="inventoryUser?.errors && inventoryUser?.errors['required']"
-                    class="text-danger">Please select Sender.</span>
-                    </span> -->
                 </div>
 
                 <div class="col-xs-6 form-group">
@@ -45,7 +38,6 @@
                     <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Receiver'"
                         (selected)="recieverUniqueName = $event.value" [ItemHeight]="'33'" [isRequired]="true">
                     </sh-select>
-                    <!-- <span [hidden]="recieverUniqueName" class="text-danger">Please select Receiver.</span> -->
                 </div>
             </div>
 
@@ -55,15 +47,12 @@
                     <label>Quantity <sup>*</sup></label>
                     <input name="dateRange" type="text" class="form-control" formControlName="quantity"
                         [placeholder]="'Enter Quantity'" />
-                    <!-- <span *ngIf="quantity?.errors && quantity.errors['required']"
-                class="text-danger">Please enter quantity.</span> -->
                 </div>
 
                 <div class="col-xs-6 form-group">
                     <label>Unit <sup>*</sup></label>
                     <sh-select [options]="stockUnitsOptions" [placeholder]="'Choose unit'" formControlName="stockUnit"
                         [multiple]="false" [ItemHeight]="33" [isRequired]="true"></sh-select>
-                    <!-- <span *ngIf="stockUnit?.errors && stockUnit.errors['required']" class="text-danger">Please select Unit.</span> -->
                 </div>
 
             </div>
@@ -72,7 +61,6 @@
                 <div class="col-lg-8 form-group">
                     <label class="mr-b1">Description</label>
                     <input name="dateRange" formControlName="description" type="text" class="form-control">
-                    <!-- <textarea formControlName="description" type="text" class="form-control"></textarea> -->
                 </div>
             </div>
 

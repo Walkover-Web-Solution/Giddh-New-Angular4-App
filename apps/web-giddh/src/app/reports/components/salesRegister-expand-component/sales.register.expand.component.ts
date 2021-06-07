@@ -38,11 +38,9 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     // searching
     @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
-    // @ViewChild('customerSearch') public customerSearch: ElementRef;
     @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
 
     public voucherNumberInput: FormControl = new FormControl();
-    // public customerNameInput: FormControl = new FormControl();
     public monthNames = [];
     public monthYear: string[] = [];
     public modalUniqueName: string;
@@ -224,9 +222,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         let month = (dt.getMonth() + 1).toString(),
             year = dt.getFullYear();
 
-        // GET THE FIRST AND LAST DATE OF THE MONTH.
-        //let firstDay = new Date(year, month , 0).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
-        //let lastDay = new Date(year, month + 1, 1).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
         if (parseInt(month) < 10) {
             month = '0' + month;
         }
@@ -238,24 +233,14 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public toggleSearch(fieldName: string) {
         if (fieldName === 'invoiceNumber') {
             this.showSearchInvoiceNo = true;
-            // this.showSearchCustomer = false;
 
             setTimeout(() => {
                 if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
                     this.invoiceSearch.nativeElement.focus();
                 }
             }, 200);
-        }
-        // else if (fieldName === 'customerUniqueName') {
-        //   this.showSearchCustomer = true;
-        //   this.showSearchInvoiceNo = false;
-        //   setTimeout(() => {
-        //     this.customerSearch.nativeElement.focus();
-        //   }, 200);
-        // }
-        else {
+        } else {
             this.showSearchInvoiceNo = false;
-            // this.showSearchCustomer = false;
         }
         this.detectChange();
     }

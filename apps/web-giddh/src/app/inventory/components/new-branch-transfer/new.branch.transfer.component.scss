@@ -63,7 +63,6 @@ button.btn.btn-filter {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 12px;
-    margin-top: 5px;
 }
 .table-sec .table-row .figure-cell {
     width: 140px;
@@ -180,9 +179,12 @@ tfoot td .table-sec.form-group {
     padding: 5px 0;
 }
 /* new branch transfer list css  */
-.branch-transfer-report .input-group {
-    width: 230px;
-}
+.branch-transfer-report{
+    padding-top: 55px;
+    .input-group {
+        width: 230px;
+    }
+} 
 .branch-transfer-report .input-wrapper {
     display: block !important;
     width: 100% !important;
@@ -468,6 +470,9 @@ tfoot td .table-sec.form-group {
 @media (max-width: 767px) {
     .date-advance-search {
         margin-top: 5px;
+    }
+    .branch-transfer-report{
+        padding-top: 10px;
     }
 }
 @media (max-width: 575px) {

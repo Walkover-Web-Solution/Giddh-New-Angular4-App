@@ -1,6 +1,4 @@
-// import { MagicLinkComponent } from './magic-link/magic-link.component';
 import { NeedsAuthorization } from './decorators/needAuthorization';
-// import { SuccessComponent } from './settings/linked-accounts/success.component';
 import { PageComponent } from './page.component';
 import { Routes } from '@angular/router';
 import { NeedsAuthentication } from './decorators/needsAuthentication';
@@ -12,10 +10,8 @@ import { SocialLoginCallbackComponent } from './social-login-callback.component'
 import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
-import { NotFoundComponent } from './404/404-component';
 import { BrowserSupported } from './decorators/BrowserSupported';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
-import { SelectPlanComponent } from './selectPlan/selectPlan.component';
 import { BillingDetailComponent } from './billing-details/billingDetail.component';
 import { TokenVerifyComponent } from './login/token-verify.component';
 import { AppLoginSuccessComponent } from "./app-login-success/app-login-success";
@@ -29,10 +25,8 @@ import { DownloadComponent } from './download/download.component';
 export const ROUTES: Routes = [
     { path: 'download', component: DownloadComponent },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
-    { path: '404', component: NotFoundComponent },
     { path: 'app-login-success', component: AppLoginSuccessComponent, pathMatch: 'full' },
     { path: 'token-verify', component: TokenVerifyComponent },
-    { path: 'create-invoice', loadChildren: () => import('./create/create.module').then(module => module.CreateModule) },
     { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule), canActivate: [BrowserSupported, UserAuthenticated] },
 
     { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule) },
@@ -69,7 +63,6 @@ export const ROUTES: Routes = [
     { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
     { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
     { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
-    { path: 'select-plan', component: SelectPlanComponent },
     { path: 'billing-detail', component: BillingDetailComponent },
     { path: 'billing-detail/buy-plan', component: BillingDetailComponent },
     {
@@ -86,8 +79,6 @@ export const ROUTES: Routes = [
                 path: 'purchase',
                 redirectTo: 'purchase-management'
             },
-
-            { path: 'about', loadChildren: () => import('./about/about.module').then(module => module.AboutModule) },
             { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(module => module.InventoryModule), canActivate: [NeedsAuthorization] },
             { path: 'new-inventory', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule), canActivate: [NeedsAuthorization] },
 
@@ -112,7 +103,6 @@ export const ROUTES: Routes = [
             { path: 'create-group', component: InventoryCreateGroupComponent, canActivate: [NeedsAuthorization] },
             { path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization] },
             { path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization] },
-            { path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization] },
             { path: 'billing-detail', component: BillingDetailComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-home', component: MobileHomeComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-home-sidebar', component: MobileHomeSidebarComponent, canActivate: [NeedsAuthorization] },

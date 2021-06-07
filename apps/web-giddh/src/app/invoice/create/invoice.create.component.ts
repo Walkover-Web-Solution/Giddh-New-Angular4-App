@@ -59,7 +59,7 @@ let THEAD_ARR_READONLY = [
 ];
 
 @Component({
-    styleUrls: ['../../sales/create/sales.invoice.component.scss', './invoice.create.component.scss'],
+    styleUrls: ['./invoice.create.component.scss'],
     selector: 'invoice-create',
     templateUrl: './invoice.create.component.html'
 })
@@ -73,7 +73,6 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     public headerCond: ISection;
     public templateHeader: any = {};
     public invTempCond: InvoiceTemplateDetailsResponse;
-    // public customThead: IContent[] = THEAD;
     public updtFlag: boolean = false;
     public totalBalance: number = null;
     public invoiceDataFound: boolean = false;
@@ -191,10 +190,6 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
                         this.invFormData.other = new OtherSalesItemClass();
                     }
 
-                    // replace br to /n in case of message
-                    // if (this.invFormData.other.message2 && this.invFormData.other.message2.length > 0) {
-                    //   this.invFormData.other.message2 = this.invFormData.other.message2.replace(/<br \/>/g, '\n');
-                    // }
                     this.setMaxDueDate(this.invFormData.entries);
                     this.invoiceDataFound = true;
                 } else {
@@ -209,8 +204,6 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
                 if (o) {
                     this.invTempCond = _.cloneDeep(o);
                     let obj = _.cloneDeep(o);
-                    // this.tableCond = _.find(obj.sections, {sectionName: 'table'});
-                    // this.headerCond = _.find(obj.sections, {sectionName: 'header'});
                     this.tableCond = obj.sections;
                     this.headerCond = obj.sections;
                     this.prepareThead();
@@ -269,15 +262,6 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
 
     public prepareTemplateHeader() {
         this.templateHeader = _.cloneDeep(this.headerCond.header.data);
-        // let obj = _.cloneDeep(this.headerCond.header.data);
-        // let dummyObj = {};
-        // _.forEach(obj, (item: IContent) => {
-        //   dummyObj[item.field] = item;
-        // });
-        // // sorting object
-        // Object.keys(dummyObj).sort().forEach((key) => {
-        //   this.templateHeader[key] = dummyObj[key];
-        // });
     }
 
     public selectedTaxEvent(arr: string[]) {
@@ -288,23 +272,6 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
         this.selectedTaxes = arr;
         entry.taxList = arr;
         entry.taxes = [];
-        // if (this.selectedTaxes.length > 0) {
-        //   this.companyTaxesList$.pipe(take(1)).subscribe(data => {
-        //     data.map((item: any) => {
-        //       if (_.indexOf(arr, item.uniqueName) !== -1 && item.accounts.length > 0) {
-        //         let o: IInvoiceTax = {
-        //           accountName: item.accounts[0].name,
-        //           accountUniqueName: item.accounts[0].uniqueName,
-        //           rate: item.taxDetail[0].taxValue,
-        //           amount: item.taxDetail[0].taxValue,
-        //           uniqueName: item.uniqueName
-        //         };
-        //         entry.taxes.push(o);
-        //         // entry.taxSum += o.amount;
-        //       }
-        //     });
-        //   });
-        // }
     }
 
     public selectedDiscountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
@@ -312,9 +279,6 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
         // call taxableValue method
         txn.setAmount(entry);
         this.txnChangeOccurred();
-        // entry.discountSum = _.sumBy(entry.discounts, (o) => {
-        //   return o.amount;
-        // });
     }
 
     public generateTotalAmount(txns: SalesTransactionItemClass[]) {
@@ -419,14 +383,6 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
 
     public prepareThead() {
         this.theadArrReadOnly = _.cloneDeep(this.tableCond.table.data);
-        // let obj = _.cloneDeep(this.tableCond.table.data);
-        // _.map(this.customThead, (item: IContent) => {
-        //   let res = _.find(this.tableCond.table.data, {field: item.field});
-        //   if (res) {
-        //     item.display = res.display;
-        //     item.label = res.label;
-        //   }
-        // });
     }
 
     public setActiveIndxs(indx: number) {
@@ -459,11 +415,6 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     public onSubmitInvoiceForm() {
         let model: GenerateInvoiceRequestClass = new GenerateInvoiceRequestClass();
         let data: any = _.cloneDeep(this.invFormData);
-
-        // replace /n to br in case of message
-        // if (data.other.message2 && data.other.message2.length > 0) {
-        //   data.other.message2 = data.other.message2.replace(/\n/g, '<br />');
-        // }
 
         // convert address string to array
         data.accountDetails['billingDetails'].address = this.getArrayFromString(data.accountDetails['billingDetails'].address);

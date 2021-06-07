@@ -1,5 +1,4 @@
 import { empty as observableEmpty, Observable, of } from 'rxjs';
-
 import { catchError, map } from 'rxjs/operators';
 import { ShareRequestForm } from '../models/api-models/Permission';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountUnMergeRequest, FlattenAccountsResponse, ShareAccountRequest, ShareEntityRequest } from '../models/api-models/Account';
@@ -29,7 +28,7 @@ export class AccountService implements OnInit {
     }
 
     public ngOnInit() {
-        //
+        
     }
 
     /**

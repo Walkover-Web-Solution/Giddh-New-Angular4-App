@@ -1,6 +1,5 @@
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-// import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -112,12 +111,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                     URL.revokeObjectURL(this.pdfFileURL);
                     this.pdfFileURL = URL.createObjectURL(file);
                     this.sanitizedPdfFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
-                    if (this.isCordova) {
-                        // todo: show PDF
-                    }
-                    //   this.pdfViewer.pdfSrc =  new Blob([ e.srcElement.result], { type: "application/pdf" }); // pdfSrc can be Blob or Uint8Array
-                    //  this.pdfViewer.refresh();
-
                 });
 
                 reader.readAsDataURL(o);
@@ -149,7 +142,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(p => p.receipt.voucher), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o && o.voucherDetails) {
-                // this.showEditButton = o.voucherDetails.uniqueName ? true : false;
                 this.accountUniqueName = o.accountDetails.uniqueName;
                 this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails.templateUniqueName));
             }

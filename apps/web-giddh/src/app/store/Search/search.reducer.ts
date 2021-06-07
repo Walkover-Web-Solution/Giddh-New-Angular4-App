@@ -46,7 +46,6 @@ export function searchReducer(state = initialState, action: CustomActions): Sear
             return Object.assign({}, state, initialState);
         }
         case SearchActions.SEARCH_RESPONSE: {
-            // let searchResp: BaseResponse<SearchResponse[], SearchRequest> = action.payload;
             let searchResp: BaseResponse<any, SearchRequest> = action.payload;
             if (searchResp.status === 'success') {
                 return Object.assign({}, state, {
@@ -94,50 +93,6 @@ export function searchReducer(state = initialState, action: CustomActions): Sear
     }
 }
 
-// const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
-//   let listofUN;
-//   listofUN = rawList.map((obj) => {
-//     let uniqueList: AccountFlat[] = [];
-//     if (!(_.isNull(obj.childGroups)) && obj.childGroups.length > 0) {
-//       uniqueList = flattenSearchGroupsAndAccounts(obj.childGroups as SearchResponse[]) as AccountFlat[];
-//       _.each(obj.accounts, (account) => {
-//         let accountFlat: AccountFlat = {
-//           parent: obj.groupName,
-//           closeBalanceType: account.closingBalance.type,
-//           closingBalance: Number(account.closingBalance.amount),
-//           openBalanceType: account.openingBalance.type,
-//           creditTotal: Number(account.creditTotal),
-//           debitTotal: Number(account.debitTotal),
-//           openingBalance: Number(account.openingBalance),
-//           uniqueName: account.uniqueName,
-//           name: account.name
-//         };
-//         uniqueList.push(accountFlat);
-//         return accountFlat.openingBalance = account.openingBalance.amount;
-//       });
-//       return uniqueList;
-//     } else {
-//       _.each(obj.accounts, (account) => {
-//         let accountFlat: AccountFlat = {
-//           parent: obj.groupName,
-//           closeBalanceType: account.closingBalance.type,
-//           closingBalance: Number(account.closingBalance.amount),
-//           openBalanceType: account.openingBalance.type,
-//           creditTotal: Number(account.creditTotal),
-//           debitTotal: Number(account.debitTotal),
-//           openingBalance: Number(account.openingBalance),
-//           uniqueName: account.uniqueName,
-//           name: account.name
-//         };
-//         uniqueList.push(accountFlat);
-//         return accountFlat.openingBalance = account.openingBalance.amount;
-//       });
-//       return uniqueList;
-//     }
-//   });
-//   return _.flatten(listofUN);
-// };
-
 const flattenSearchGroupsAndAccounts = (accountList, groupName) => {
     let uniqueList: AccountFlat[] = [];
     _.each(accountList, (account) => {
@@ -157,32 +112,3 @@ const flattenSearchGroupsAndAccounts = (accountList, groupName) => {
     });
     return uniqueList;
 };
-
-// const flattenSearchGroupsAndAccounts = (rawList) => {
-//   let listofUN;
-//   listofUN = _.map(rawList, (obj: any) => {
-//     let uniqueList;
-//     if (!(_.isNull(obj.childGroups)) && obj.childGroups.length > 0) {
-//       uniqueList = flattenSearchGroupsAndAccounts(obj.childGroups);
-//       _.each(obj.accounts, (account) => {
-//         account.parent = obj.groupName;
-//         account.closeBalType = account.closingBalance.type;
-//         account.closingBalance = account.closingBalance.amount;
-//         account.openBalType = account.openingBalance.type;
-//         return account.openingBalance = account.openingBalance.amount;
-//       });
-//       uniqueList.push(obj.accounts);
-//       return uniqueList;
-//     } else {
-//       _.each(obj.accounts, (account) => {
-//         account.parent = obj.groupName;
-//         account.closeBalType = account.closingBalance.type;
-//         account.closingBalance = account.closingBalance.amount;
-//         account.openBalType = account.openingBalance.type;
-//         return account.openingBalance = account.openingBalance.amount;
-//       });
-//       return obj.accounts;
-//     }
-//   });
-//   return _.flatten(listofUN);
-// };

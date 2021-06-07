@@ -29,7 +29,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    padding: 10px 0px 0 50px !important;
+    padding: 10px 0px 0 15px !important;
     border-bottom: 1px solid $gainsboro;
 }
 .inventory-control ::ng-deep.nav-tabs > li > a:hover {
@@ -91,12 +91,18 @@
         width: 100%;
     }
 }
+.inventory-head{
+    padding-top: 55px;
+}
 @media (max-width: 767px) {
     .inventory-control ::ng-deep.nav.nav-tabs {
         position: fixed !important;
         width: 100%;
         top: 90px;
         padding: 5px 0px 0 15px !important;
+    }
+    .inventory-head{
+        padding-top: 15px;
     }
 }
 @media (max-width: 1024px) {

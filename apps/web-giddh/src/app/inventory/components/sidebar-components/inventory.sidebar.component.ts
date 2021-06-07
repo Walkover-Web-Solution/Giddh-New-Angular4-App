@@ -1,10 +1,7 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { fromEvent as observableFromEvent, Observable, ReplaySubject, Subscription } from 'rxjs';
+import { fromEvent as observableFromEvent, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
-
-import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { InventoryDownloadRequest } from '../../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
@@ -16,7 +13,7 @@ import { AppState } from '../../../store';
 import { InvViewService } from '../../inv.view.service';
 
 @Component({
-    selector: 'inventory-sidebar',  // <home></home>
+    selector: 'inventory-sidebar',
     templateUrl: './inventory.sidebar.component.html',
     styleUrls: ['inventory.sidebar.component.scss']
 })
@@ -37,7 +34,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
     /**
      * TypeScript public modifiers
      */
-    constructor(private store: Store<AppState>, private sidebarAction: SidebarAction, private inventoryAction: InventoryAction, private router: Router,
+    constructor(private store: Store<AppState>, private sidebarAction: SidebarAction,
         private inventoryService: InventoryService,
         private invViewService: InvViewService,
         private _toasty: ToasterService,
