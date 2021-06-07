@@ -10058,6 +10058,9 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 768px) {
+    .tax-engine .transactions-list .filter-row + .filter-row {
+        margin-left: 5px;
+    }
     .menu_open .sales-register {
         width: 100% !important;
         padding-right: 0 !important;
@@ -10885,6 +10888,10 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 375px) {
+    .gst-sidebar-open .daterangepicker {
+        left: auto !important;
+        right: 20px !important;
+    }
     .setting-page.tb-pl-bs-tabs ul.nav.nav-tabs {
         overflow-x: auto;
         white-space: nowrap;

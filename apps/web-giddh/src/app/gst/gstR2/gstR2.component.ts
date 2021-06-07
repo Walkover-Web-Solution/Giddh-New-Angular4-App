@@ -55,7 +55,7 @@ export class FileGstR2Component implements OnInit, OnDestroy {
     }
     public ngOnInit() {
         this.breakpointObserver
-        .observe(['(max-width: 768px)'])
+        .observe(['(max-width: 767px)'])
         .pipe(takeUntil(this.destroyed$))
         .subscribe((state: BreakpointState) => {
             this.isMobileScreen = state.matches;

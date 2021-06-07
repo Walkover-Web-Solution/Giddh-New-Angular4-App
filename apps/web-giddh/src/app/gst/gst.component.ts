@@ -137,7 +137,7 @@ export class GstComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.breakpointObserver
-        .observe(['(max-width: 768px)'])
+        .observe(['(max-width: 767px)'])
         .pipe(takeUntil(this.destroyed$))
         .subscribe((state: BreakpointState) => {
             this.isMobileScreen = state.matches;
