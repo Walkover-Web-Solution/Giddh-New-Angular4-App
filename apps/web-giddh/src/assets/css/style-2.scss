@@ -3831,7 +3831,7 @@ input[type=radio]:checked:after {
 
 #inventory-sidebar {
     background-color: transparent;
-    padding: 10px 0;
+    padding: 55px 0;
 }
 
 #inventory-sidebar .input-group {
@@ -5407,7 +5407,7 @@ input[type="checkbox"][disabled] {
 }
 
 .top-bar {
-    padding-top: 15px !important;
+    padding-top: 10px !important;
     padding-bottom: 15px !important;
     border-bottom: 0px solid $white;
     /* padding-left: 240px; */
@@ -8273,7 +8273,7 @@ ul.dropdown-menu p.lead.pd {
     top: 0;
     left: 0;
     width: 100%;
-    padding: 10px 0px 0 50px !important;
+    padding: 10px 0px 0 15px !important;
     border-bottom: 1px solid $gainsboro;
 }
 
@@ -8902,7 +8902,7 @@ input.checkbox-custom[type="checkbox"] {
     }
 }
 #setting-tab > .tab-container > .tab-content {
-    padding-top: 15px;
+    padding-top: 55px;
 }
 
 /*datepicker common css*/
@@ -9648,7 +9648,7 @@ input.mat-input-element {
 }
 .top-bar.aging-top-bar,
 .top-bar.customer-top-bar {
-    padding-top: 18px !important;
+    padding-top: 55px !important;
 }
 .top-bar.customer-top-bar.vendor-top-bar {
     padding-top: 15px !important;
@@ -10365,6 +10365,16 @@ body.update-scroll-hidden {
         white-space: nowrap;
         overflow-y: hidden;
     }
+
+    .top-bar.aging-top-bar,
+    .top-bar.customer-top-bar {
+        padding-top: 18px !important;
+    }
+
+    #setting-tab > .tab-container > .tab-content {
+        padding-top: 15px !important;
+    }
+    
 }
 @media (max-width: 1199px) {
     .ledger-book .left-col-new .entry-modal {

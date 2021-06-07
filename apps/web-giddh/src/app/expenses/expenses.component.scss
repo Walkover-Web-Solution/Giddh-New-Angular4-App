@@ -35,6 +35,9 @@
     justify-content: center;
     color: $gray;
 }
+.expense-head{
+    padding-top: 55px;
+}
 // .petty-cash::ng-deep.nav {
 //  position: static !important;
 // }
@@ -44,5 +47,8 @@
     }
     .main-edit-expense {
         display: block;
+    }
+    .expense-head{
+        padding-top: 20px;
     }
 }
