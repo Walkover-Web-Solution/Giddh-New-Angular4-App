@@ -118,6 +118,9 @@
         }
     }
 }
+.mf-report-head{
+    margin-top: 55px;
+}
 
 @media (min-width: 1441px) and (max-width: 1920px) {
     .manufacturing-head {
@@ -206,6 +209,9 @@
             flex: 0 0 100%;
             max-width: 100%;
         }
+    }
+    .mf-report-head{
+        margin-top: 15px;
     }
 }
 
