@@ -303,7 +303,7 @@
 
             <!-- region Aging Report -->
             <tab heading="{{localeData?.aging_report}}" [id]="(activeTab === 'aging-report') ? 'giddh-page-heading': ''"
-                (selectTab)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'" (click)="dropdown.isOpen = !dropdown.isOpen">
+                (selectTab)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
                 <!--    <div *ngIf="activeTab === 'aging'">-->
                 <aging-report [localeData]="localeData" [commonLocaleData]="commonLocaleData"
                     (creteNewCustomerEvent)="openAddAndManage('customer')"></aging-report>

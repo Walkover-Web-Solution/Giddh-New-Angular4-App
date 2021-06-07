@@ -6,7 +6,7 @@
                 <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
                     <span class="inner-span"></span>
                 </span>
-                <li class="company-name position-relative" dropdown #companyDetailsDropDownWeb="bs-dropdown" 
+                <li class="company-name position-relative" dropdown #companyDetailsDropDownWeb="bs-dropdown"
                     [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="companyDetailsDropDownWeb.hide()"
                     [exclude]="'.company-name'">
                     <h3 class="font-16 d-flex flex-column cursor-pointer" [checkPermission]="['MENU', 'MANAGE']"
