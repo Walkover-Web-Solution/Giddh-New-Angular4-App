@@ -528,12 +528,19 @@ hr {
     .month-picker {
         position: absolute;
         top: 100px !important;
-        left: auto !important;
-        right: 0 !important;
+        left: 0 !important;
+        right: auto !important;
     }
     .view-summary-btn {
         float: none !important;
         display: block;
         margin-top: 10px;
+    }
+    .list-inline.list-middle{
+        display: flex;
+        flex-direction: column;
+        li{
+            margin-bottom: 8px;
+        }
     }
 }
