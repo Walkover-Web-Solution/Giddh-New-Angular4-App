@@ -227,7 +227,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Stores the current company */
     public activeCompany: any;
     /** Border configuration for branch dropdown */
-    public branchDropdownBorderConfiguration: BorderConfiguration = { style: 'border-radius: 30px !important' };
+    public branchDropdownBorderConfiguration: BorderConfiguration = { style: 'border-radius: 5px !important' };
     /** True if current organization type is company */
     public showBranchSwitcher: boolean;
     /** Stores the current organization type */

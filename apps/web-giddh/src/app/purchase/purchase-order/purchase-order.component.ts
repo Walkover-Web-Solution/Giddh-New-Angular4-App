@@ -780,4 +780,29 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             ];
         }
     }
+
+    /**
+     * This will return delivery days text
+     *
+     * @param {number} dueDays
+     * @returns {string}
+     * @memberof PurchaseOrderComponent
+     */
+    public getDeliveryDaysText(dueDays: number): string {
+        let text = "";
+
+        if(dueDays > 0) {
+            if(dueDays === 1) {
+                text = this.localeData?.delivery_in_day;
+            } else {
+                text = this.localeData?.delivery_in_days;
+            }
+            text = text?.replace("[DAYS]", String(dueDays));
+        } else {
+            text = this.localeData?.delayed_by_days;
+            text = text?.replace("[DAYS]", String(this.formatNumber(dueDays)));
+        }
+        
+        return text;
+    }
 }
