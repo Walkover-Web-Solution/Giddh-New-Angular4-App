@@ -10,7 +10,11 @@ import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.a
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { ReceiptVoucherDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { Router } from '@angular/router';
+<<<<<<< HEAD
 import { findIndex, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
+=======
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+>>>>>>> 53da19b6e4 (shalinee | TEST | showing download invoice modal on responsive view)
 
 @Component({
     selector: 'download-or-send-mail-invoice',
@@ -56,6 +60,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** this will store screen size */
+    public isMobileScreen : boolean = false;
 
     constructor(
         private _toasty: ToasterService,
@@ -63,8 +69,16 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private _invoiceActions: InvoiceActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
-        private _router: Router
+        private _router: Router,
+        private breakpointObserver: BreakpointObserver
     ) {
+        this.breakpointObserver
+        .observe(['(max-width: 768px)'])
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((state: BreakpointState) => {
+            this.isMobileScreen = state.matches;
+        });
+
         this.isErrOccured$ = this.store.pipe(select(p => p.invoice.invoiceDataHasError), distinctUntilChanged(), takeUntil(this.destroyed$));
         this.voucherDetailsInProcess$ = this.store.pipe(select(p => p.receipt.voucherDetailsInProcess), takeUntil(this.destroyed$));
         this.voucherPreview$ = this.store.pipe(select(p => p.receipt.base64Data), distinctUntilChanged(), takeUntil(this.destroyed$));
