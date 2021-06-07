@@ -34,3 +34,13 @@
     position: relative;
     z-index: 999;
 }
+
+@media screen and (max-width:1019px){
+    .hamburger-menu-icon {
+        li {
+            button {
+                margin: 10px 0 10px 4px;
+            }
+        }
+    }
+}
