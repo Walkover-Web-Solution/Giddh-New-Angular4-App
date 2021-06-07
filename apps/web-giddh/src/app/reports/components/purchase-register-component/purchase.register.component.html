@@ -2,7 +2,7 @@
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="relative">
         <hamburger-menu></hamburger-menu>
-        <div class="report-breadcrum">
+        <div class="report-breadcrum d-none">
             <ul class="list-inline d-inline-block middle nav-report">
                 <li class="active" id="giddh-page-heading-link"><a href="javascript:void(0)"
                         (click)="goToDashboard()">{{commonLocaleData?.app_report}}</a> <span
@@ -11,7 +11,7 @@
             </ul>
         </div>
     </div>
-    <div class="container-fluid font-14 mr-t15">
+    <div class="container-fluid font-14 mr-t1">
         <div class="select-financial-year mr-b15">
             <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
                 class="xs-mb-1 inner-button linked-entities">
