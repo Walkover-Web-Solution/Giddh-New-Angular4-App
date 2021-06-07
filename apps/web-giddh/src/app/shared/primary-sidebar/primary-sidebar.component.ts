@@ -24,12 +24,12 @@ import { GeneralActions } from '../../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { LoginActions } from '../../actions/login.action';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { clone, cloneDeep, find, slice } from '../../lodash-optimized';
+import { clone, find, slice } from '../../lodash-optimized';
 import { AccountResponse } from '../../models/api-models/Account';
-import { ActiveFinancialYear, CompanyResponse, Organization, OrganizationDetails } from '../../models/api-models/Company';
+import { CompanyResponse, Organization, OrganizationDetails } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { CompAidataModel } from '../../models/db';
-import { DEFAULT_AC, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
+import { DEFAULT_AC, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
 import { OrganizationType } from '../../models/user-login-state';
 import { CompanyService } from '../../services/companyService.service';
@@ -63,12 +63,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public selectedCompanyDetails: CompanyResponse;
     /** Current organization type */
     public currentOrganizationType: OrganizationType;
-
     /** store current selected company */
     public selectedCompany: Observable<CompanyResponse>;
-    /** Stores the current financial year data */
-    public activeFinancialYear: ActiveFinancialYear;
-
     /** Stores the details of the current branch */
     public currentBranch: any;
     /** Avatar image */
@@ -238,8 +234,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 this.selectedCompanyDetails = selectedCmp;
                 this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
                 this.branchInitials = this.generalService.getInitialsFromString(this.currentBranch?.alias || this.currentBranch?.name);
-                this.activeFinancialYear = selectedCmp.activeFinancialYear;
-                this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
+                this.store.dispatch(this.companyActions.setActiveFinancialYear(selectedCmp.activeFinancialYear));
 
                 this.activeCompanyForDb = new CompAidataModel();
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
