@@ -9592,6 +9592,10 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 375px) {
+    .gst-sidebar-open .daterangepicker {
+        left: auto !important;
+        right: 20px !important;
+    }
     .setting-page.tb-pl-bs-tabs ul.nav.nav-tabs {
         overflow-x: auto;
         white-space: nowrap;

@@ -501,6 +501,9 @@ hr {
 }
 /*responsive*/
 @media (max-width: 767px) {
+    .daterangePicker{
+        right: 0;
+    }
     .return-content {
         background-color: $white;
     }
@@ -521,7 +524,6 @@ hr {
 .return-content .sales-colm {
     width: 100%;
 }
-
 @media (max-width: 575px) {
     .month-picker {
         position: absolute;
