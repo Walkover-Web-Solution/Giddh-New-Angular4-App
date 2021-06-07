@@ -53,10 +53,10 @@
         color: $primary !important;
     }
 }
-@media(max-width:991px){
+@media (max-width: 991px) {
     .import-type {
         flex-wrap: wrap;
-        li{
+        li {
             width: 27%;
             margin: 0 15px 30px;
         }

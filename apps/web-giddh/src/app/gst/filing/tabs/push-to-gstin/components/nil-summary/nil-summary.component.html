@@ -1,10 +1,6 @@
 <div class="gstr-transactions-summary">
-    <h4 class="clearfix gstr-summary-title">Nil Summary</h4>
-    <p class="text-muted half pd-t05">This section displays the sale of goods and services that are
-        nil
-        rated.&nbsp;Nil rated goods and services are those that have 0% GST but allows you to claim ITC on the filing
-        paid
-        on inputs</p>
+    <h4 class="clearfix gstr-summary-title">{{localeData?.filing?.nil_summary}}</h4>
+    <p class="text-muted half pd-t05">{{localeData?.filing?.nil_summary_description}}</p>
     <div>
         <div *ngIf="nilSummary && nilSummary.inv">
             <table class="transactions-table table-striped  table zi-table on-mobile-view">
@@ -12,22 +8,22 @@
                     <tr>
                         <th class="text-left">
                             <div class="position-relative">
-                                <div class="pull-left over-flow">Supply Type</div>
+                                <div class="pull-left over-flow">{{localeData?.filing?.supply_type}}</div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="position-relative">
-                                <div class="over-flow">Nil Amount</div>
+                                <div class="over-flow">{{localeData?.filing?.nil_amount}}</div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="position-relative">
-                                <div class="over-flow">Exempt Amount</div>
+                                <div class="over-flow">{{localeData?.filing?.exempt_amount}}</div>
                             </div>
                         </th>
                         <th class="text-right">
                             <div class="position-relative">
-                                <div class="over-flow">Non GST Amount</div>
+                                <div class="over-flow">{{localeData?.filing?.non_gst_amount}}</div>
                             </div>
                         </th>
                     </tr>
@@ -36,22 +32,22 @@
 
                 <tbody>
                     <tr *ngFor="let item of nilSummary.inv">
-                        <td data-title="Supply Type"> {{item.sply_ty ? item.sply_ty : '-'}} </td>
-                        <td data-title="Nil Amount" class="text-right">
+                        <td [attr.data-title]="localeData?.filing?.supply_type"> {{item.sply_ty ? item.sply_ty : '-'}} </td>
+                        <td [attr.data-title]="localeData?.filing?.nil_amount" class="text-right">
                             <!-- {{item.nil_amt | giddhCurrency} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.nil_amt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-                        <td data-title="Exempt Amount" class="text-right">
+                        <td [attr.data-title]="localeData?.filing?.exempt_amount" class="text-right">
                             <!-- {{item.expt_amt | giddhCurrency}}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.expt_amt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
-                        <td data-title="Non GST Amount" class="text-right">
+                        <td [attr.data-title]="localeData?.filing?.non_gst_amount" class="text-right">
                             <!-- {{item.ngsup_amt | giddhCurrency}}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.ngsup_amt" [currencySymbol]="false" [currencyCode]="false">
@@ -75,7 +71,7 @@
         <div *ngIf="!nilSummary">
             <div class="filings-empty-state">
                 <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
-                <div class="empty-msg"><span> There is no NIL-wise summary. </span></div>
+                <div class="empty-msg"><span> {{localeData?.filing?.no_nil_summary}} </span></div>
             </div>
         </div>
 

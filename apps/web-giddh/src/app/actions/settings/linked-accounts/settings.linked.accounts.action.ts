@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -16,7 +16,7 @@ import { CustomActions } from '../../../store/customActions';
 export class SettingsLinkedAccountsActions {
 
 
-    public GetEbankAccounts$: Observable<Action> = createEffect( ()=> this.action$
+    public GetEbankAccounts$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS),
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.GetYodleeAccounts()),
@@ -29,7 +29,7 @@ export class SettingsLinkedAccountsActions {
             }))));
 
 
-    public RefreshEbankAccounts$: Observable<Action> = createEffect( ()=> this.action$
+    public RefreshEbankAccounts$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS),
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.RefreshAllEbankAccounts()),
@@ -42,7 +42,7 @@ export class SettingsLinkedAccountsActions {
             }))));
 
 
-    public ReconnectEbankAccount$: Observable<Action> = createEffect( ()=> this.action$
+    public ReconnectEbankAccount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT),
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.ReconnectAccount(action.payload)),
@@ -55,7 +55,7 @@ export class SettingsLinkedAccountsActions {
             }))));
 
 
-    public DeleteAccount$: Observable<Action> = createEffect( ()=> this.action$
+    public DeleteAccount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT),
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.DeleteBankAccount(action.payload.loginId, action.payload.deleteWithAccountId)),
@@ -68,7 +68,7 @@ export class SettingsLinkedAccountsActions {
             }))));
 
 
-    public RefreshAccount$: Observable<Action> = createEffect( () => this.action$
+    public RefreshAccount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_BANK_ACCOUNT),
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.RefreshBankAccount(action.payload.ebankItemId, action.payload.requestObj)),
@@ -81,7 +81,7 @@ export class SettingsLinkedAccountsActions {
             }))));
 
 
-    public LinkAccount$: Observable<Action> = createEffect( ()=> this.action$
+    public LinkAccount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.LINK_BANK_ACCOUNT),
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.LinkBankAccount(action.payload.data, action.payload.loginId)),
@@ -94,7 +94,7 @@ export class SettingsLinkedAccountsActions {
             }))));
 
 
-    public UnlinkAccount$: Observable<Action> = createEffect( ()=> this.action$
+    public UnlinkAccount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT),
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.UnlinkBankAccount(action.payload.loginId, action.payload.accountUniqueName)),
@@ -107,7 +107,7 @@ export class SettingsLinkedAccountsActions {
             }))));
 
 
-    public UpdateDate$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateDate$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.UPDATE_DATE),
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.UpdateDate(action.payload.date, action.payload.loginId)),

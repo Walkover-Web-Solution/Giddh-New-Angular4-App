@@ -73,7 +73,7 @@ form label {
     margin-top: 15px;
 }
 /*new css of new payemtndesign*/
-.modal-title{
+.modal-title {
     color: $white;
 }
 .btn-success {
@@ -91,42 +91,41 @@ form label {
 .pt-25 {
     padding-top: 25px;
 }
-.payment-top-form{
-    .form-group{
+.payment-top-form {
+    .form-group {
         margin-bottom: 0;
-        .resend-btn{
+        .resend-btn {
             position: absolute;
             right: 0;
         }
     }
-    .otp-success-msg{
+    .otp-success-msg {
         color: $light-sea-green;
         font-size: 14px;
     }
 }
-.selected-bank-details{
+.selected-bank-details {
     border-top: 1px solid $gainsboro;
     padding-top: 25px;
     margin-top: 5px;
-    .account-holder-name{
+    .account-holder-name {
         display: flex;
         font-size: 14px;
-        .due-amount{
+        .due-amount {
             max-width: 100%;
             width: 100%;
         }
-        p{
-            &:first-child{
+        p {
+            &:first-child {
                 max-width: 450px;
                 width: 100%;
             }
-            span{
+            span {
                 float: right;
             }
-
         }
     }
-    .bank-details-wrapper{
+    .bank-details-wrapper {
         border: 1px solid $gainsboro;
         border-radius: 2px;
         margin-top: 3px;
@@ -138,16 +137,16 @@ form label {
             background-color: $whisper-color;
             padding: 10px;
             border-right: 1px solid $gainsboro;
-            .label-value-data{
+            .label-value-data {
                 display: flex;
                 align-items: center;
                 margin: 5px 0;
-                label{
+                label {
                     margin-right: 5px;
                 }
                 .form-control[disabled],
-                .form-control[readonly], 
-                fieldset[disabled] .form-control{
+                .form-control[readonly],
+                fieldset[disabled] .form-control {
                     background-color: transparent !important;
                     display: inline;
                     width: auto;
@@ -157,15 +156,15 @@ form label {
                 }
             }
         }
-        .amount-remark-section{
+        .amount-remark-section {
             padding: 15px;
             width: 100%;
-            .form-group{
+            .form-group {
                 margin-bottom: 0;
             }
-            .remark-block{
+            .remark-block {
                 width: 100%;
-                textarea{
+                textarea {
                     min-height: 36px;
                 }
             }
@@ -191,9 +190,7 @@ form label {
     }
 }
 @media (max-width: 767px) {
-    .selected-bank-details
-    .bank-details-wrapper
-    .readonly-bank-details {
+    .selected-bank-details .bank-details-wrapper .readonly-bank-details {
         max-width: 100% !important;
     }
 
@@ -214,7 +211,7 @@ form label {
     }
 }
 @media (max-width: 480px) {
-    .payment-top-form .d-flex .form-group, 
+    .payment-top-form .d-flex .form-group,
     .payment-top-form .d-flex .form-group:last-child {
         min-width: 100%;
     }

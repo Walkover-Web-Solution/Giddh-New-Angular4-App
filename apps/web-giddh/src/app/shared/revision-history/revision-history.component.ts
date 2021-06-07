@@ -143,16 +143,16 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
         if (change.optType === "CREATE") {
             if (type === "po") {
                 let poCreated = this.localeData?.po_created;
-                poCreated = poCreated.replace("[VALUE]", change.newValue);
+                poCreated = poCreated?.replace("[VALUE]", change.newValue);
                 message += poCreated;
             } else {
                 let pbCreated = this.localeData?.pb_created;
-                pbCreated = pbCreated.replace("[VALUE]", change.newValue);
+                pbCreated = pbCreated?.replace("[VALUE]", change.newValue);
                 message += pbCreated;
             }
         } else {
             let valueChanged = this.localeData?.value_changed;
-            valueChanged = valueChanged.replace("[FIELD]", revisionField).replace("[VALUE]", change.newValue);
+            valueChanged = valueChanged?.replace("[FIELD]", revisionField)?.replace("[VALUE]", change.newValue);
             message += valueChanged;
         }
 
@@ -239,7 +239,7 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
      * @memberof RevisionHistoryComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             this.translationLoaded = true;
         }
     }
@@ -253,7 +253,7 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
      */
     public getByUserText(user: any): string {
         let byUser = this.localeData?.by_user;
-        byUser = byUser.replace("[USER]", user);
+        byUser = byUser?.replace("[USER]", user);
         return byUser;
     }
 }

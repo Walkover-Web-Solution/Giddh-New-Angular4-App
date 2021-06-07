@@ -30,7 +30,7 @@ import { CashFlowStatementComponent } from './components/cash-flow-statement-com
                     { path: 'sales-detailed', component: SalesRegisterDetailsComponent },
                     { path: 'sales-detailed-expand', component: SalesRegisterExpandComponent },
                     { path: 'reports-dashboard', component: ReportsDashboardComponent },
-                    { path: 'purchase-register', component: PurchaseRegisterComponent},
+                    { path: 'purchase-register', component: PurchaseRegisterComponent },
                     { path: 'purchase-detailed-expand', component: PurchaseRegisterExpandComponent },
                     { path: 'reverse-charge', component: ReverseChargeReport },
                     { path: 'monthly-columnar-report', component: ColumnarReportComponent },

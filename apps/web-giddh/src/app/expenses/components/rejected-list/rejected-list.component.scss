@@ -1,4 +1,4 @@
-@import '../../../../assets/css/color.scss';
+@import "../../../../assets/css/color.scss";
 .basic > thead > tr > th {
     position: relative;
 }
@@ -19,7 +19,7 @@
     cursor: pointer;
     top: 12px;
 }
-.action-btns{
+.action-btns {
     display: flex;
 }
 .btn-icon {

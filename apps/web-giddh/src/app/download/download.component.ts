@@ -16,6 +16,8 @@ export class DownloadComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* it will store image path */
     public imgPath: string = '';
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private route: ActivatedRoute) {
     }
@@ -30,7 +32,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response && response.url) {
+            if (response && response.url) {
                 this.downloadUrl = response.url;
             }
         });

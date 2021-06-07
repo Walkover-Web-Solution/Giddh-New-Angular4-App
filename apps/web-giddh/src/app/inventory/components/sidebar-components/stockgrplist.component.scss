@@ -17,7 +17,7 @@
 
 .btn-link {
     padding-top: 0 !important;
-    &:hover{
+    &:hover {
         text-decoration: none;
     }
 }
@@ -36,8 +36,8 @@
     padding-right: 0;
     display: flex;
     align-items: center;
-    a{
-        a{
+    a {
+        a {
             padding: 12px 15px;
         }
     }
@@ -73,51 +73,50 @@ stock-list ::ng-deep.in-list a div {
             &:hover {
                 a {
                     color: $chetwode-blue !important;
-
                 }
                 background-color: $lavender;
             }
-        span{
-                .btn{
-                    padding:10px !important
+            span {
+                .btn {
+                    padding: 10px !important;
                 }
             }
         }
     }
 }
-.main-group{
-    .item-group{
-        a{
+.main-group {
+    .item-group {
+        a {
             display: flex;
             align-items: center;
             flex: 1;
             color: $nero;
-            i{
-                margin:0 15px;
+            i {
+                margin: 0 15px;
                 font-size: 9px;
             }
         }
     }
 }
-@media(max-width:1024px){
-    .main-group{
-        .item-group{
-            a{
-                i{
-                    margin:0 15px;
-                    font-size:14px;
-                    padding:5px;
+@media (max-width: 1024px) {
+    .main-group {
+        .item-group {
+            a {
+                i {
+                    margin: 0 15px;
+                    font-size: 14px;
+                    padding: 5px;
                 }
             }
         }
     }
 }
-@media (max-width:768px){
-    .stock-grp-list{
+@media (max-width: 768px) {
+    .stock-grp-list {
         max-height: calc(100vh - 245px) !important;
     }
 }
-.inventory-group-name{
+.inventory-group-name {
     float: left;
     width: 90%;
     white-space: normal;

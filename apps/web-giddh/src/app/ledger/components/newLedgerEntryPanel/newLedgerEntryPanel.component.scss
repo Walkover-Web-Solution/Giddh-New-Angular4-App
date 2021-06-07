@@ -95,7 +95,7 @@ span.eligible-ITC {
     width: 115px;
     font-size: 12px;
 }
-.advance-receipt-edit{
+.advance-receipt-edit {
     i {
         color: $deep-sky-blue;
     }
@@ -108,11 +108,11 @@ span.eligible-ITC {
     pointer-events: none;
 }
 
-#ledger-unit{
+#ledger-unit {
     width: 78px;
 }
 
-.collapse-icons{
+.collapse-icons {
     font-size: 10px;
     border: 1px solid $black;
     padding: 2px;
@@ -173,19 +173,32 @@ span.eligible-ITC {
 }
 
 /* Rotate animation for spinner in uploading file */
-.more-details td, 
-.ledger-panel td{
+.more-details td,
+.ledger-panel td {
     padding: 0;
     border-top: none;
 }
 .rotate {
-    -webkit-animation:spin 4s linear infinite;
-    -moz-animation:spin 4s linear infinite;
-    animation:spin 4s linear infinite;
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
 }
-@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg) } }
+@-moz-keyframes spin {
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
 .sh-template {
     border-bottom: 1px solid $gainsboro;
 }

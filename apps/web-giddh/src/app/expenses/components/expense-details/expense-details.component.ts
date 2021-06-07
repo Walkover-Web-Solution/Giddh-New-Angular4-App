@@ -58,8 +58,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
     @Input() public selectedRowItem: any;
     @Output() public refreshPendingItem: EventEmitter<boolean> = new EventEmitter();
-    @ViewChild(UpdateLedgerEntryPanelComponent, {static: false}) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
-    @ViewChild('entryAgainstAccountDropDown', {static: false}) public entryAgainstAccountDropDown: ShSelectComponent;
+    @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
+    @ViewChild('entryAgainstAccountDropDown', { static: false }) public entryAgainstAccountDropDown: ShSelectComponent;
 
     public selectedItem: ExpenseResults;
     public rejectReason = new FormControl();
@@ -667,7 +667,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                         this.defaultDebtorAccountPaginationData.page = this.debtorAccountsSearchResultsPaginationData.page;
                         this.defaultDebtorAccountPaginationData.totalPages = this.debtorAccountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -770,7 +770,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                         this.defaultDebtorAccountPaginationData.page = this.creditorAccountsSearchResultsPaginationData.page;
                         this.defaultDebtorAccountPaginationData.totalPages = this.creditorAccountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -873,7 +873,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                         this.defaultCashBankAccountPaginationData.page = this.cashBankAccountsSearchResultsPaginationData.page;
                         this.defaultCashBankAccountPaginationData.totalPages = this.cashBankAccountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -913,7 +913,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public buildCreatorString(): void {
-        if(this.selectedItem && this.selectedItem.createdBy) {
+        if (this.selectedItem && this.selectedItem.createdBy) {
             this.byCreator = this.localeData?.by_creator;
             this.byCreator = this.byCreator.replace("[CREATOR_NAME]", this.selectedItem.createdBy.name);
         } else {

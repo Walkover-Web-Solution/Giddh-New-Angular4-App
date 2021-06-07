@@ -187,12 +187,12 @@ export class GroupService {
                 url = url.concat(`&branchUniqueName=${branchUniqueName !== this.companyUniqueName ? branchUniqueName : ''}`);
             }
             return this._http.get(url).pipe(map((res) => {
-                    let data: BaseResponse<FlattenGroupsAccountsResponse, string> = res;
-                    data.request = '';
-                    data.queryString = { q, page, count, showEmptyGroups };
-                    // data.response.results.forEach(p => p.isOpen = false);
-                    return data;
-                }), catchError((e) => this.errorHandler.HandleCatch<FlattenGroupsAccountsResponse, string>(e, '', { q, page, count, showEmptyGroups })));
+                let data: BaseResponse<FlattenGroupsAccountsResponse, string> = res;
+                data.request = '';
+                data.queryString = { q, page, count, showEmptyGroups };
+                // data.response.results.forEach(p => p.isOpen = false);
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<FlattenGroupsAccountsResponse, string>(e, '', { q, page, count, showEmptyGroups })));
         } else {
             return observableEmpty();
         }
@@ -264,13 +264,13 @@ export class GroupService {
         }), catchError((exception) => this.errorHandler.HandleCatch<string, any>(exception, model)));
     }
 
-     /**
-     * API call to get custom fields for company
-     *
-     * @param {*} model
-     * @returns {Observable<BaseResponse<any, string>>}
-     * @memberof GroupService
-     */
+    /**
+    * API call to get custom fields for company
+    *
+    * @param {*} model
+    * @returns {Observable<BaseResponse<any, string>>}
+    * @memberof GroupService
+    */
     public getCompanyCustomField(): Observable<BaseResponse<any, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;

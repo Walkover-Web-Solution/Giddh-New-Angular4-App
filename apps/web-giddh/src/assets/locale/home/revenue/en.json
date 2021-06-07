@@ -1,17 +1,17 @@
 {
-    "chart_title" : {
-        "income" : "Income",
-        "expenses" : "Expenses",
-        "sales" : "Sales",
-        "payment" : "Payment",
-        "receipt" : "Receipt"
+    "chart_title": {
+        "income": "Income",
+        "expenses": "Expenses",
+        "sales": "Sales",
+        "payment": "Payment",
+        "receipt": "Receipt"
     },
-    "highest" : "Highest",
-    "lowest" : "Lowest",
-    "date_range" : "Date Range",
-    "compare_to" : "Compare to",
-    "select_dates" : "Select Dates",
-    "daily" : "Daily",
-    "weekly" : "Weekly",
-    "monthly" : "Monthly"
+    "highest": "Highest",
+    "lowest": "Lowest",
+    "date_range": "Date Range",
+    "compare_to": "Compare to",
+    "select_dates": "Select Dates",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly"
 }

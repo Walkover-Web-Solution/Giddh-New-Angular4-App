@@ -1,107 +1,109 @@
-<div id="share-modal" class="share-grp">
-	<div class="modal-header">
-		<h3 *ngIf="!createBranch">Create New Company</h3>
-		<h3 *ngIf="createBranch">{{isUpdateMode ? 'Update' : 'Create New'}} Branch</h3>
-		<span aria-hidden="true" class="close" data-dismiss="modal"
-			(click)="removeCompanySessionData(); closeModal();">×</span>
-	</div>
-	<div class="modal-body p-0" id="SharePop">
-		<div class="welcome-wrapper">
-			<div class="giddh-logo-welcome">
-				<img src="{{imgPath}}assets/images/giddh-big-logo.svg">
-			</div>
-			<div class="welcome-header">
-				<h1>Welcome {{ this.logedInuser.name}},</h1>
-			</div>
-		</div>
-		<div class="form-group clearfix add-company-detail pd-b5">
-			<!--<h3 class="pd-b1">Share with</h3>-->
-			<div class="add-mailer">
-				<!--create company from-->
-				<form name="form" #companyForm="ngForm" class="clearfix" novalidate="" autocomplete="off">
-					<div class="company-form-body row">
+<ng-container appTranslate [file]="'create-company'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <div id="share-modal" class="share-grp">
+        <div class="modal-header">
+            <h3 *ngIf="!createBranch">{{localeData?.page_heading}}</h3>
+            <h3 *ngIf="createBranch">{{isUpdateMode ? localeData?.update_branch : localeData?.create_new_branch}}</h3>
+            <span aria-hidden="true" class="close" data-dismiss="modal"
+                (click)="removeCompanySessionData(); closeModal();">×</span>
+        </div>
+        <div class="modal-body p-0" id="SharePop">
+            <div class="welcome-wrapper">
+                <div class="giddh-logo-welcome">
+                    <img src="{{imgPath}}assets/images/giddh-big-logo.svg">
+                </div>
+                <div class="welcome-header">
+                    <h1>{{ getWelcomeUserText() }}</h1>
+                </div>
+            </div>
+            <div class="form-group clearfix add-company-detail pd-b5">
+                <!--<h3 class="pd-b1">Share with</h3>-->
+                <div class="add-mailer">
+                    <!--create company from-->
+                    <form name="form" #companyForm="ngForm" class="clearfix" novalidate="" autocomplete="off">
+                        <div class="company-form-body row">
 
-						<div class="col-xs-12 col-sm-12 mr-t5">
-							<div class="input-group form-group d-block mr-b3">
-								<p *ngIf="!createBranch">Enter your company name to start hassle free accounting with
-									Giddh.</p>
-								<p *ngIf="createBranch && !isUpdateMode">Enter your branch name to start hassle free accounting with
-									Giddh.</p>
-								<p *ngIf="createBranch && isUpdateMode">Update your branch name & alias</p>
-							</div>
-						</div>
-						<div class="col-xs-12 col-sm-12 mr-b3">
-							<label for="name" class="mr-t4">{{createBranch ? 'Branch' : 'Company'}} Name<sup>*</sup></label>
-							<input name="name" id="name" type="text" required placeholder="Name"
-								[(ngModel)]="company.name" class="form-control" (blur)="makeMeCaptialize(company.name)">
-							<!-- /btn-account -->
-						</div>
+                            <div class="col-xs-12 col-sm-12 mr-t5">
+                                <div class="input-group form-group d-block mr-b3">
+                                    <p *ngIf="!createBranch">{{localeData?.create_company_note}}</p>
+                                    <p *ngIf="createBranch && !isUpdateMode">{{localeData?.create_branch_note}}</p>
+                                    <p *ngIf="createBranch && isUpdateMode">{{localeData?.update_branch_note}}</p>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 mr-b3">
+                                <label for="name" class="mr-t4">{{createBranch ? commonLocaleData?.app_branch_name : commonLocaleData?.app_company_name}}<sup>*</sup></label>
+                                <input name="name" id="name" type="text" required [placeholder]="commonLocaleData?.app_name"
+                                    [(ngModel)]="company.name" class="form-control" (blur)="makeMeCaptialize(company.name)">
+                                <!-- /btn-account -->
+                            </div>
 
-						<div class="col-xs-6 col-sm-6 mr-b3 ">
-							<span>
-								<label for="country" class="d-block">Country<sup>*</sup></label>
-								<sh-select [disabled]="createBranch ? 'disabled' : null"  id="country" [options]="countrySource$ | async" [isFilterEnabled]="true"
-									name="country" [(ngModel)]="company.country" class="pull-left select-caret width-100"
-                                [required]='true' [isRequired]="true" (selected)="selectCountry($event)"
-									[defaultValue]="selectedCountry">
-								</sh-select>
-							</span>
-						</div>
-						<div class="col-xs-6 col-sm-6 mr-b3 ">
-							<label for="">Currency <sup>*</sup></label>
-							<div class="custom-select select-caret position-relative">
-								<sh-select [disabled]="createBranch ? 'disabled' : null" name="baseCurrency" [options]="currencySource$ | async" required [isRequired]="true"
-									[isFilterEnabled]="true" [(ngModel)]="company.baseCurrency"
-									[defaultValue]="company.baseCurrency"></sh-select>
-							</div>
-						</div>
-						<div *ngIf="!createBranch" class="col-xs-12 col-sm-12 mr-b3">
-							<span>
-								<label for="contactNo" class="d-block">Mobile Number<sup>*</sup></label>
-								<div class="d-flex welcome-select create-select">
-									<sh-select class="pull-left select-caret phone-code-caret" required [isRequired]="true" name="phoneCode" [placeholder]="+91"
-										[options]="countryPhoneCode" [(ngModel)]="company.phoneCode"
-										[defaultValue]="company.phoneCode">
-									</sh-select>
-									<input type="text" pattern="[0-9]*" class="form-control pull-right mr-r1" required
-										placeholder="9998899988" id="contactNo" autocomplete="off"
-										(blur)="isValidMobileNumber()" [(ngModel)]="company.contactNo"
-										name="contactNo" #mobileNoEl />
-								</div>
-							</span>
+                            <div class="col-xs-6 col-sm-6 mr-b3 ">
+                                <span>
+                                    <label for="country" class="d-block">{{commonLocaleData?.app_country}}<sup>*</sup></label>
+                                    <sh-select [disabled]="createBranch ? 'disabled' : null" id="country"
+                                        [options]="countrySource$ | async" [isFilterEnabled]="true" name="country"
+                                        [(ngModel)]="company.country" class="pull-left select-caret w-100" [required]='true'
+                                        [isRequired]="true" (selected)="selectCountry($event)"
+                                        [defaultValue]="selectedCountry">
+                                    </sh-select>
+                                </span>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 mr-b3 ">
+                                <label for="">{{commonLocaleData?.app_currency}} <sup>*</sup></label>
+                                <div class="custom-select select-caret position-relative">
+                                    <sh-select [disabled]="createBranch ? 'disabled' : null" name="baseCurrency"
+                                        [options]="currencySource$ | async" required [isRequired]="true"
+                                        [isFilterEnabled]="true" [(ngModel)]="company.baseCurrency"
+                                        [defaultValue]="company.baseCurrency"></sh-select>
+                                </div>
+                            </div>
+                            <div *ngIf="!createBranch" class="col-xs-12 col-sm-12 mr-b3">
+                                <span>
+                                    <label for="contactNo" class="d-block">{{commonLocaleData?.app_mobile_number}}<sup>*</sup></label>
+                                    <div class="d-flex welcome-select create-select">
+                                        <sh-select class="pull-left select-caret phone-code-caret" required
+                                            [isRequired]="true" name="phoneCode" [placeholder]="commonLocaleData?.app_country_code"
+                                            [options]="countryPhoneCode" [(ngModel)]="company.phoneCode"
+                                            [defaultValue]="company.phoneCode">
+                                        </sh-select>
+                                        <input type="text" pattern="[0-9]*" class="form-control pull-right mr-r1" required
+                                            [placeholder]="localeData?.mobile_no_placeholder" id="contactNo" autocomplete="off"
+                                            (blur)="isValidMobileNumber()" [(ngModel)]="company.contactNo" name="contactNo"
+                                            #mobileNoEl />
+                                    </div>
+                                </span>
+                            </div>
+                            <div *ngIf="createBranch" class="col-md-12 mr-b3">
+                                <span>
+                                    <label for="aliasName" class="d-block">{{localeData?.alias}}<sup>*</sup></label>
+                                    <div class="d-flex welcome-select ">
+                                        <input type="text" class="form-control mr-r1" required id="alias-name"
+                                            autocomplete="off" [(ngModel)]="company.nameAlias" name="aliasName" />
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 mr-t1">
+                                <button class="btn btn-sky-blue ml-0" type="submit" (click)="createCompany(null)"
+                                    [disabled]="companyForm.invalid || isLoading"
+                                    [ladda]="isCompanyCreationInProcess$ | async">{{isUpdateMode ? commonLocaleData?.app_update : commonLocaleData?.app_next}}
+                                </button>
+                            </div>
                         </div>
-                        <div *ngIf="createBranch" class="col-md-12 mr-b3">
-							<span>
-								<label for="aliasName" class="d-block">Alias<sup>*</sup></label>
-								<div class="d-flex welcome-select ">
-									<input type="text" class="form-control mr-r1" required
-										id="alias-name" autocomplete="off"
-										[(ngModel)]="company.nameAlias"
-										name="aliasName" />
-								</div>
-							</span>
-                        </div>
-						<div class="col-xs-12 col-sm-12 mr-t1">
-							<button class="btn btn-sky-blue ml-0" type="submit"
-								(click)="createCompany(null)" [disabled]="companyForm.invalid || isLoading"
-								[ladda]="isCompanyCreationInProcess$ | async">{{isUpdateMode ? 'Update' : 'Next'}}
-							</button>
-						</div>
-					</div>
-				</form>
-			</div>
-			<!-- add mailer -->
-		</div>
-	</div>
-</div>
-<!--logout modal-->
-<div bsModal #logoutModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
-	<div class="modal-dialog modal-xl">
-		<div class="modal-content">
-			<confirm-modal [title]="'Log Out'"
-				[body]="'In order to be able to use Giddh, you must create a company. Are you sure you want to cancel and logout?'"
-				(successCallBack)="logoutUser()" (cancelCallBack)="hideLogoutModal()">
-			</confirm-modal>
-		</div>
-	</div>
-</div>
+                    </form>
+                </div>
+                <!-- add mailer -->
+            </div>
+        </div>
+    </div>
+    <!--logout modal-->
+    <div bsModal #logoutModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <confirm-modal [title]="localeData?.logout"
+                    [body]="localeData?.create_company_close"
+                    (successCallBack)="logoutUser()" (cancelCallBack)="hideLogoutModal()">
+                </confirm-modal>
+            </div>
+        </div>
+    </div>
+</ng-container>

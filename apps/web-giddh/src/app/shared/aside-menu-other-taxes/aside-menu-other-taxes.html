@@ -1,5 +1,5 @@
-<div class="aside-pane aside-pane-other-tax text-left" (clickOutside)="hideListItems()" [clickOutsideEnabled]="!isMobileScreen" [keyboardShortcut]="'esc'"
-    (onShortcutPress)="saveTaxes()">
+<div class="aside-pane aside-pane-other-tax text-left" (clickOutside)="hideListItems()"
+    [clickOutsideEnabled]="!isMobileScreen" [keyboardShortcut]="'esc'" (onShortcutPress)="saveTaxes()">
 
     <button id="close" type="button" (click)="saveTaxes()"><i class="icon-cross"></i></button>
 
@@ -17,13 +17,12 @@
                         <label>{{commonLocaleData?.app_select_tax}}<span class="text-danger">*</span></label>
 
                         <div class="mr-b2">
-                            <sh-select name="selectTax" [placeholder]="commonLocaleData?.app_select_tax" [options]="taxesOptions"
-                                [(ngModel)]="selectedTaxUniqueName" (selected)="applyTax($event)" (onClear)="onClear()"
-                                [showClear]="true">
+                            <sh-select name="selectTax" [placeholder]="commonLocaleData?.app_select_tax"
+                                [options]="taxesOptions" [(ngModel)]="selectedTaxUniqueName"
+                                (selected)="applyTax($event)" (onClear)="onClear()" [showClear]="true">
                             </sh-select>
 
-                            <label class="label-tax"
-                                *ngIf="otherTaxesModal?.appliedOtherTax?.name">
+                            <label class="label-tax" *ngIf="otherTaxesModal?.appliedOtherTax?.name">
                                 {{ otherTaxesModal?.appliedOtherTax?.name | uppercase}}
                             </label>
                         </div>

@@ -100,9 +100,9 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     public states: any[] = [];
     public isMobileScreen: boolean = true;
     public hsnDropdownShow: boolean = false;
-    @ViewChild('discountComponent', {static: true}) public discountComponent: DiscountListComponent;
+    @ViewChild('discountComponent', { static: true }) public discountComponent: DiscountListComponent;
     /** Form instance */
-    @ViewChild('invoiceForm', {static: true}) invoiceForm: NgForm;
+    @ViewChild('invoiceForm', { static: true }) invoiceForm: NgForm;
     // public methods above
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

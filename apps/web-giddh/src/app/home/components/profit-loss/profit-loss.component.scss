@@ -8,7 +8,7 @@
 }
 
 .total-expenses-text {
-    color:$grandis
+    color: $grandis;
 }
 
 span.month-dropdown {
@@ -35,7 +35,6 @@ span.month-dropdown {
     display: inline-flex;
     color: $dark-gray;
     align-items: center;
-
 }
 
 .dashboard-filter .icon-collapse-icon {
@@ -57,7 +56,7 @@ span.icon-rupees {
 .panel-body small {
     color: $dark-gray;
 }
-.profit-loss-chart{
+.profit-loss-chart {
     margin: 0 auto !important;
 }
 .dashboard-datepicker {
@@ -66,44 +65,44 @@ span.icon-rupees {
     border-radius: 30px;
     border: 1px solid $gainsboro;
 }
-@media (max-width: 1300px) and (min-width:991px){
-    .panel-heading{
+@media (max-width: 1300px) and (min-width: 991px) {
+    .panel-heading {
         align-items: baseline;
         flex-direction: column;
-        .dashboard-filter{
+        .dashboard-filter {
             flex-direction: row-reverse;
             margin-top: 5px;
-            i{
+            i {
                 margin-left: 15px;
             }
         }
     }
 }
-@media(max-width:767px){
+@media (max-width: 767px) {
     .total-income {
         margin-bottom: 10px;
     }
 }
-@media(max-width:480px){
-    .dashboard-filter{
+@media (max-width: 480px) {
+    .dashboard-filter {
         display: flex;
         float: none !important;
         margin-top: 10px;
     }
-      .panel-heading{
+    .panel-heading {
         align-items: baseline;
         flex-direction: column;
-        .dashboard-filter{
+        .dashboard-filter {
             flex-direction: row-reverse;
             margin-top: 5px;
-             i{
+            i {
                 margin-left: 15px;
             }
         }
     }
 }
-@media(max-width:360px){
-    .due-amount, 
+@media (max-width: 360px) {
+    .due-amount,
     .total-amount {
         font-size: 14px;
     }

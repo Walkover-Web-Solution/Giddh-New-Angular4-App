@@ -132,7 +132,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
             }
         });
@@ -144,8 +144,10 @@ export class UploadFileComponent implements OnInit, OnDestroy {
      * @memberof UploadFileComponent
      */
     public setTitle(): void {
-        if (this.entity === 'group' || this.entity === 'account') {
-            this.title = this.entity + 's';
+        if (this.entity === 'group') {
+            this.title = this.localeData?.groups;
+        } else if(this.entity === 'account') {
+            this.title = this.localeData?.accounts;
         } else if (this.entity === 'stock') {
             this.title = this.localeData?.inventories;
         } else if (this.entity === 'trial-balance') {

@@ -20,7 +20,7 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 })
 
 export class CashFlowStatementComponent implements OnInit, OnDestroy {
-    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
 
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
@@ -53,7 +53,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
     /* This will store if loading is active or not */
     public isLoading: boolean = false;
     /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = {x: 0, y: 0};
+    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -93,7 +93,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
 
         /* This will get the company details */
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany) {
+            if (activeCompany) {
                 this.downloadRequest.companyUniqueName = activeCompany.uniqueName;
                 this.activeCompany = activeCompany;
             }
@@ -116,7 +116,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
      * @memberof CashFlowStatementComponent
      */
     public showGiddhDatepicker(element: any): void {
-        if(element) {
+        if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
         this.modalRef = this.modalService.show(
@@ -141,7 +141,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
      * @memberof CashFlowStatementComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -173,7 +173,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
 
         this.cashFlowStatementService.downloadReport(this.downloadRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
-            if(res) {
+            if (res) {
                 if (res.status === "success") {
                     let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
                     return saveAs(blob, this.localeData?.downloaded_filename);

@@ -1,14 +1,14 @@
 {
-    "chart_title" : "प्रमाण विश्लेषण",
-    "current_ratio" : "वर्तमान प्रमाण",
-    "current_assets" : "सध्याची मालमत्ता",
-    "current_liabilities" : "चालू देयता",
-    "debt_equity_ratio" : "कर्ज इक्विटी प्रमाण",
-    "current_liability" : "चालू देयता",
-    "noncurrent_liability" : "नॉन चालू दायित्व.",
-    "shareholders_fund" : "भागधारकांचा निधी",
-    "proprietary_ratio" : "मालकी गुणोत्तर",
-    "total_assets" : "एकूण मालमत्ता",
-    "fixed_assets_ratio" : "निश्चित मालमत्ता प्रमाण",
-    "fixed_assets" : "स्थिर मालमत्ता"
+    "chart_title": "प्रमाण विश्लेषण",
+    "current_ratio": "वर्तमान प्रमाण",
+    "current_assets": "सध्याची मालमत्ता",
+    "current_liabilities": "चालू देयता",
+    "debt_equity_ratio": "कर्ज इक्विटी प्रमाण",
+    "current_liability": "चालू देयता",
+    "noncurrent_liability": "नॉन चालू दायित्व.",
+    "shareholders_fund": "भागधारकांचा निधी",
+    "proprietary_ratio": "मालकी गुणोत्तर",
+    "total_assets": "एकूण मालमत्ता",
+    "fixed_assets_ratio": "निश्चित मालमत्ता प्रमाण",
+    "fixed_assets": "स्थिर मालमत्ता"
 }

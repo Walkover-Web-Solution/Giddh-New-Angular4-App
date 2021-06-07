@@ -27,7 +27,7 @@
                     border-right: none !important;
                 }
             }
-            p.address-row{
+            p.address-row {
                 margin-bottom: 0;
                 max-width: 400px;
                 white-space: normal;
@@ -70,19 +70,19 @@
     }
 }
 
-.linked-with{
+.linked-with {
     white-space: normal;
     word-break: break-word;
-    span.pb-1{
+    span.pb-1 {
         display: flex;
     }
-    i{
+    i {
         color: $gray;
-        margin-right:5px;
+        margin-right: 5px;
         margin-top: 4px;
         float: left;
     }
-    span.entity-alias{
+    span.entity-alias {
         margin-right: 0;
         margin-top: 0;
         float: right;
@@ -90,7 +90,7 @@
     }
 }
 
-@media(max-width:768px){
+@media (max-width: 768px) {
     .giddh-table {
         tr {
             td {
@@ -100,36 +100,36 @@
             }
         }
     }
-    .linked-with{
+    .linked-with {
         width: 100% !important;
-        .wrap-linked-company{
+        .wrap-linked-company {
             flex-direction: column;
-            .ml-auto{
+            .ml-auto {
                 margin-left: 0 !important;
-                .action-icon{
+                .action-icon {
                     width: 70px;
                 }
             }
         }
     }
-    .address-list-top{
-        .search-container{
+    .address-list-top {
+        .search-container {
             width: calc(100% - 120px);
         }
     }
 }
 
-@media(max-width:767px){
-    .setting-profile-container{
+@media (max-width: 767px) {
+    .setting-profile-container {
         padding-top: 15px;
     }
-    .linked-with{
+    .linked-with {
         width: 100% !important;
-        .wrap-linked-company{
+        .wrap-linked-company {
             flex-direction: column;
-            .ml-auto{
+            .ml-auto {
                 margin-left: 0 !important;
-                .action-icon{
+                .action-icon {
                     width: 70px;
                 }
             }
@@ -151,12 +151,12 @@
     }
 }
 
-@media (max-width:575px){
-    .address-list-top{
-        display:block !important;
-        .btn-sky-blue{
-            float:right;
-            margin-top:5px;
+@media (max-width: 575px) {
+    .address-list-top {
+        display: block !important;
+        .btn-sky-blue {
+            float: right;
+            margin-top: 5px;
         }
     }
 }
@@ -165,40 +165,36 @@
     transform: inherit !important;
 }
 
-
 /* branch profile */
-.branch-profile-address-content{
+.branch-profile-address-content {
     background-color: $white;
     border: 1px solid $gainsboro;
     padding: 15px;
     margin-bottom: 15px;
     .single-branch-detail {
         font-size: 14px;
-        h4{
+        h4 {
             font-size: 16px;
-            font-family: 'opensans-bold';
+            font-family: "opensans-bold";
             margin-bottom: 10px;
             color: $midnight-blue;
-            i{
-                margin-right:10px;
+            i {
+                margin-right: 10px;
             }
         }
-        label{
-            color:$gray;
+        label {
+            color: $gray;
             line-height: 2.3;
         }
-        .set-default{
-            .selected-defualt{
-                i{
+        .set-default {
+            .selected-defualt {
+                i {
                     color: $chetwode-blue;
                 }
             }
-            .icon-unlink{
+            .icon-unlink {
                 color: $gray;
             }
         }
     }
 }
-
-
-
