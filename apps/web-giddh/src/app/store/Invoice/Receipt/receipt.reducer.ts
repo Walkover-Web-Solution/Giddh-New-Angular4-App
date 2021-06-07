@@ -4,7 +4,7 @@ import { InvoiceReceiptFilter, ReciptDeleteRequest, ReciptRequest, ReciptRequest
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { INVOICE_ACTIONS } from 'apps/web-giddh/src/app/actions/invoice/invoice.const';
 import { ILedgersInvoiceResult, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from 'apps/web-giddh/src/app/models/api-models/Invoice';
-import { GenericRequestForGenerateSCD, VoucherClass, VoucherTypeEnum } from '../../../models/api-models/Sales';
+import { VoucherClass, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import * as _ from '../../../lodash-optimized';
 import { SalesRegisteDetailedResponse, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
 
@@ -58,7 +58,6 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
     switch (action.type) {
 
         case INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT: {
-            let res: BaseResponse<ReciptResponse, ReciptRequestParams> = action.payload;
             return Object.assign({}, state, {
                 isGetAllRequestSuccess: false,
                 isGetAllRequestInProcess: true
@@ -258,7 +257,6 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         case INVOICE_ACTIONS.RESET_INVOICE_DATA: {
             return Object.assign({}, state, {
                 voucher: null
-                // base64Data:
             });
         }
         case INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE: {

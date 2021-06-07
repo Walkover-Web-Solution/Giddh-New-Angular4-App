@@ -523,9 +523,6 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             ];
 
             this.scopeList = [
-                // G0-1393--Invoive and Entry not implemented from API
-                //{label: 'Invoice', value: 'invoice'},
-                //{label: 'Entry', value: 'entry'},
                 { label: this.localeData?.scope_list?.closing_balance, value: 'closing balance' }
             ];
         }

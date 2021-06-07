@@ -3,8 +3,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal'
 import { IOption } from '../../theme/ng-select/ng-select';
 import * as moment from 'moment/moment';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { GeneralService } from '../../services/general.service';
@@ -57,7 +55,7 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private modalService: BsModalService, private breakPointObservar: BreakpointObserver, private store: Store<AppState>, private generalService: GeneralService) {
+    constructor(private modalService: BsModalService, private breakPointObservar: BreakpointObserver, private generalService: GeneralService) {
 
     }
 

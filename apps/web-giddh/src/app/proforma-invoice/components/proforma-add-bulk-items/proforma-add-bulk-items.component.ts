@@ -232,16 +232,11 @@ export class ProformaAddBulkItemsComponent implements OnDestroy {
                     map((e: any) => e.target.value),
                     takeUntil(this.destroyed$)
                 ).subscribe((res: string) => {
-                    // this.filteredData = this.normalData.filter(item => {
-                    // 	return item.name.toLowerCase().includes(res.toLowerCase()) || item.uniqueName.toLowerCase().includes(res.toLowerCase());
-                    // });
                     if (res) {
                         this.onSearchQueryChanged(res, 1);
                     }
                 });
             }, 100);
         }
-
-        // this.parseDataToDisplay(this.data);
     }
 }

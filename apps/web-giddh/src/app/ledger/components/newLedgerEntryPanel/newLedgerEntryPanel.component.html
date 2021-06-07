@@ -62,9 +62,6 @@
                                 (ngModelChange)="changePrice($event)" name="unitPrice"
                                 (keyup)="isInclusiveEntry = false" class="form-control text-right" />
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
-
-                                <!-- <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                 {{ currentTxn?.convertedRate | giddhCurrency: ratePrecision: true}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedRate"
                                         [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
@@ -96,8 +93,6 @@
                                 [(ngModel)]="currentTxn.advanceReceiptAmount" (focus)="hideDiscountTax()"
                                 (keyup)="amountChanged();calculateTotal()" />
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                                <!--  <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                 {{ currentTxn?.convertedAmount | giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedAmount"
                                         [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
@@ -124,8 +119,6 @@
                                 (hideOtherPopups)="hideTax()" (discountTotalUpdated)="calculateDiscount($event);">
                             </ledger-discount>
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                                <!-- <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                 {{ currentTxn?.convertedDiscount | giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedDiscount"
                                         [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
@@ -168,12 +161,8 @@
                                 [allowedSelectionOfAType]="allowedSelectionOfAType"
                                 [commonLocaleData]="commonLocaleData">
                             </tax-control>
-                            <!-- TODO: After design finalization
-                                <span class="eligible-ITC">Eligible for ITC <span class="icon-edit"></span> </span> -->
 
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                                <!-- <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                 {{ currentTxn.convertedTax |giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedTax"
                                         [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
@@ -199,8 +188,6 @@
                                 [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"
                                 [disabled]="isAdvanceReceipt ? 'disabled' : null" />
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                                <!--<ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                  {{ currentTxn.convertedTotal | giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedTotal"
                                         [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
@@ -298,8 +285,6 @@
                     <td class="text-right">
                         <span class="primary-color">
                             {{ getTotalInCurrency() }}:
-                            <!-- <span>{{ selectedCurrency === 0 ? baseCurrencyDetails?.symbol : foreignCurrencyDetails?.symbol }}</span>
-                            {{ blankLedger.compoundTotal | giddhCurrency }} -->
                             <span class="d-inline-flex">
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="blankLedger.compoundTotal"
@@ -338,34 +323,6 @@
                                     [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
                             </td>
 
-                            <!-- <td class="pd-r1" *ngIf="blankLedger.voucherType == 'rcpt'">
-                                <div class="form-group">
-                                    <label class="default-color">Invoice No.</label>
-
-                                    <div class="btn-group btn-block invoice-btn" dropdown>
-
-                                        <button dropdownToggle type="button"
-                                            class="form-control text-left btn-block dropdown-toggle">
-                                            Select Invoices
-                                            <span class="select-drop pull-right mr-t1">
-                                                <i class="fa fa-caret-down"></i>
-                                            </span>
-                                        </button>
-
-                                        <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width-100" role="menu">
-                                            <li *ngIf="invoiceList.length==0">No results found</li>
-                                            <li *ngFor="let invoice of invoiceList">
-
-                                                <input type="checkbox" (click)="selectInvoice(invoice, $event)"
-                                                    [checked]="invoice.isSelected" /> {{invoice.label}}
-                                            </li>
-                                        </ul>
-
-                                    </div>
-
-                                </div>
-                            </td> -->
-
                             <td class="pd-r1"
                                 *ngIf="blankLedger.voucherType == 'credit note' || blankLedger.voucherType === 'debit note'">
                                 <div class="form-group">
@@ -387,7 +344,6 @@
                                                 </div>
                                                 <div class="item-unique">
                                                     ({{commonLocaleData?.app_due}}:
-                                                    <!-- {{ option.additional?.balanceDue.amountForAccount | giddhCurrency }} -->
                                                     <span class="d-inline-flex">
                                                         <amount-field
                                                             [amount]="option.additional?.balanceDue.amountForAccount"
@@ -433,7 +389,6 @@
                                 <span class="text-gray advance-receipt-edit mr-l05">
                                     <i class="icon-edit-pencil"></i>
                                     {{localeData?.adjusted_amount}}:
-                                    <!-- {{currentTxn?.voucherAdjustments?.totalAdjustmentAmount}} -->
                                     <span class="d-inline-flex">
                                         <amount-field [amount]="currentTxn?.voucherAdjustments?.totalAdjustmentAmount"
                                             [currencySymbol]="false" [currencyCode]="false">
@@ -539,8 +494,6 @@
                     <div class="clearfix">
                         <p class="primary-color" *ngIf="isLedgerAccountAllowsMultiCurrency">
                             {{getTotalInMultiCurrency()}}:
-                            <!-- {{  selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }}
-                                 {{ blankLedger.convertedCompoundTotal | giddhCurrency }} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="blankLedger.convertedCompoundTotal"
                                     [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
@@ -655,14 +608,6 @@
     [commonLocaleData]="commonLocaleData" (closeModal)="toggleOtherTaxesAsidePane(true)"
     (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true); emitOtherTaxes();">
 </app-aside-menu-sales-other-taxes>
-
-<!-- <ng-template #totalWithCurrencySymbol>
-
-    <span>
-        {{ selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }}
-    </span>
-
-</ng-template> -->
 
 <ng-template #rcmEntryCheckbox>
     <div *ngIf="currentTxn?.shouldShowRcmEntry" class="rcm-entry pd-b1 mt-b1">

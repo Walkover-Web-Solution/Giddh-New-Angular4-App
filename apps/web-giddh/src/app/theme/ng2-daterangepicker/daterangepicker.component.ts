@@ -135,10 +135,6 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnCha
         if ('options' in changes && changes.options.currentValue && changes.options.currentValue !== changes.options.previousValue) {
             this.render();
             this.attachEvents();
-            // if (this.activeRange && this.datePicker) {
-            //   this.datePicker.setStartDate(this.activeRange.start);
-            //   this.datePicker.setEndDate(this.activeRange.end);
-            // }
         }
     }
 

@@ -14,24 +14,6 @@
 
     <div class="aside-body">
         <div class="aside-pane-form">
-            <!-- <div class="form-group pd-t2">
-
-            <label class="mr-b1">Select Group</label>
-
-            <div class="ng-select-wrap select-list">
-
-                <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." name="activeGroupUniqueName"
-                    [(ngModel)]="activeGroupUniqueName" [options]="flatAccountWGroupsList$ | async" style="width:100%">
-                    <ng-template #optionTemplate let-option="option">
-                        <div class="account-list-item">{{option?.label}}</div>
-                        <div class="account-list-item font-12">{{option?.value}}</div>
-                    </ng-template>
-                </ng-select>
-
-            </div>
-        </div> -->
-
-
             <ng-container *ngIf="!selectedAccountUniqueName && activeGroupUniqueName">
                 <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName"
                     (isGroupSelected)="isGroupSelected($event)" [fetchingAccUniqueName$]="fetchingAccUniqueName$"

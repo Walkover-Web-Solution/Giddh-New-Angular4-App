@@ -60,7 +60,7 @@ export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
                 voucherNumber: [this.selectedItem.voucherNumber]
             };
             let accountUniqueName: string = this.selectedItem.uniqueName;
-            //
+
             this._receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result) {
                     this.selectedItem.blob = result;

@@ -68,7 +68,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
     public isStockWithRateInprogress$: Observable<boolean> = observableOf(false);
     /** set default value to date picker */
     public bsValue = new Date();
-    private initialQuantity: number = 1;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
@@ -141,7 +140,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
                     manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
                     manufacturingObj.date = moment(manufacturingObj.date, GIDDH_DATE_FORMAT).toDate();
                     manufacturingObj.multipleOf = (manufacturingObj.manufacturingQuantity / manufacturingObj.manufacturingMultipleOf);
-                    // delete manufacturingObj.manufacturingQuantity;
                     manufacturingObj.linkedStocks.forEach((item) => {
                         item.quantity = (item.manufacturingQuantity / manufacturingObj.manufacturingMultipleOf);
                     });
@@ -153,7 +151,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
                         this.initialQuantityObj = manufacturingObj.linkedStocks;
                     }
                     manufacturingObj.warehouseUniqueName = manufacturingObj?.warehouse?.uniqueName;
-                    // manufacturingObj.activeStockGroupUniqueName = o.activeStockGroup;
                     this.manufacturingDetails = manufacturingObj;
                     if (this.manufacturingDetails.date && typeof this.manufacturingDetails.date === 'object') {
                         this.manufacturingDetails.date = String(moment(this.manufacturingDetails.date).format(GIDDH_DATE_FORMAT));
@@ -233,8 +230,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
                     // In create only
                     let manufacturingDetailsObjData = _.cloneDeep(res.stockWithRate.manufacturingDetails);
                     manufacturingDetailsObj.linkedStocks = _.cloneDeep(res.stockWithRate.manufacturingDetails.linkedStocks);
-                    // this.initialQuantityObj = manufacturingDetailsObj.linkedStocks;
-                    // manufacturingDetailsObj.multipleOf = _.cloneDeep(o.stockWithRate.manufacturingDetails.manufacturingMultipleOf);
                     manufacturingDetailsObj.multipleOf = (manufacturingDetailsObjData.manufacturingQuantity / manufacturingDetailsObjData.manufacturingMultipleOf);
                     manufacturingDetailsObj.manufacturingQuantity = manufacturingDetailsObjData.manufacturingQuantity;
                     manufacturingDetailsObj.manufacturingMultipleOf = manufacturingDetailsObjData.manufacturingMultipleOf;
@@ -261,7 +256,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
             let selectedValue = _.cloneDeep(data.value);
             this.selectedProduct = selectedValue;
             let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
-            // manufacturingObj.stockUniqueName = selectedValue;
             manufacturingObj.uniqueName = selectedValue;
             this.manufacturingDetails = manufacturingObj;
             this.store.dispatch(this.manufacturingActions.GetStockWithRate(manufacturingObj.stockUniqueName));
@@ -285,7 +279,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
                 stockName: data.stockUniqueName,
                 stockUniqueName: data.stockUniqueName,
                 quantity: data.quantity
-                // stockUnitCode: 'm' // TODO: Remove hardcoded value
             };
 
             if (this.isUpdateCase) {
@@ -302,7 +295,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
                 manufacturingObj.linkedStocks = [val];
             }
 
-            // manufacturingObj.stockUniqueName = this.selectedProduct;
             this.manufacturingDetails = manufacturingObj;
             this.linkedStocks = new IStockItemDetail();
             this.needForceClearProductList$ = observableOf({ status: true });
@@ -339,7 +331,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
             } else {
                 manufacturingObj.otherExpenses = [objToPush];
             }
-            // manufacturingObj.manufacturingMultipleOf = manufacturingObj.manufacturingMultipleOf;
+            
             this.manufacturingDetails = manufacturingObj;
 
             this.otherExpenses = {};
@@ -366,12 +358,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
         dataToSave.linkedStocks.forEach((obj) => {
             obj.manufacturingUnit = obj.stockUnitCode;
             obj.manufacturingQuantity = obj.quantity;
-            // delete obj.stockUnitCode;
-            // delete obj.quantity;
         });
-        // dataToSave.grandTotal = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
-        // dataToSave.multipleOf = dataToSave.quantity;
-        // delete dataToSave.manufacturingMultipleOf;
         this.store.dispatch(this.manufacturingActions.CreateMfItem(dataToSave));
     }
 
@@ -381,9 +368,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
             dataToSave.date = String(moment(dataToSave.date).format(GIDDH_DATE_FORMAT));
         }
         delete dataToSave.warehouse;
-        // dataToSave.grandTotal = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
-        // dataToSave.multipleOf = dataToSave.quantity;
-        // dataToSave.manufacturingUniqueName =
         this.store.dispatch(this.manufacturingActions.UpdateMfItem(dataToSave));
     }
 
@@ -473,7 +457,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
 
     public getStockUnit(selectedItem, itemQuantity) {
         if (selectedItem && itemQuantity && Number(itemQuantity) > 0) {
-            let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
             this._inventoryService.GetStockUniqueNameWithDetail(selectedItem).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
 
                 if (res.status === 'success') {
@@ -519,38 +502,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
     public clearDate() {
         this.manufacturingDetails.date = '';
     }
-
-    // /**   will be useful in version 2
-    //  *TODO:  To return account details
-    //  *
-    //  * @param {string} uniqueName Unique name of
-    //  * @param {string} category
-    //  * @returns
-    //  * @memberof MfEditComponent
-    //  */
-    // public getAccountName(uniqueName: string, category: string) {
-    //         let name;
-    //         let uniqueNameOfAcc;
-    //         if (category === 'liabilityGroupAccounts') {
-    //             this.liabilityGroupAccounts$.subscribe((data) => {
-    //                 let account = data.find((acc) => acc.value === uniqueName);
-    //                 if (account) {
-    //                     name = account.label;
-    //                     uniqueNameOfAcc = account.value;
-    //                 }
-    //             });
-    //         } else if (category === 'expenseGroupAccounts') {
-    //             this.expenseGroupAccounts$.subscribe((data) => {
-    //                 let account = data.find((acc) => acc.value === uniqueName);
-    //                 if (account) {
-    //                     name = account.label;
-    //                     uniqueNameOfAcc = account.value;
-    //                 }
-    //             });
-    //         }
-    //         return observableOf(uniqueNameOfAcc);
-    //     }
-
+    
     /**
      * To toggle add expense entry block
      *

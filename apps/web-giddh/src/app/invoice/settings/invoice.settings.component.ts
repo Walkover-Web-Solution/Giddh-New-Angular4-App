@@ -173,7 +173,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                     this.razorpayObj = _.cloneDeep(setting.razorPayform);
                     this.razorpayObj.password = 'YOU_ARE_NOT_ALLOWED';
                     this.updateRazor = true;
-                    // this.razorpayObj.account.name = _.cloneDeep(setting.razorPayform.account.uniqueName) || '';
                 } else {
                     this.updateRazor = false;
                 }
@@ -251,9 +250,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public UpdateForm(form = null) {
 
         let razorpayObj: RazorPayDetailsResponse = _.cloneDeep(this.settingResponse.razorPayform) || new RazorPayDetailsResponse();
-        // check whether form is updated or not
-        // if (!_.isEqual(form, this.invoiceLastState)) {
-        // if (!_.isEqual(form, this.invoiceLastState)) {
 
         if (this.webhooks && this.webhooks.length > 0 && !this.webhooks[this.webhooks.length - 1].url && !this.webhooks[this.webhooks.length - 1].triggerAt) {
             this.webhooks.splice(this.webhooks.length - 1);
@@ -344,7 +340,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * Reset Form
      */
     public resetForm() {
-        // this.invoiceSetting = this.invoiceLastState;
         this.initSettingObj();
     }
 
@@ -478,6 +473,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
     private saveGmailAuthCode(authCode: string) {
         const dataToSave = {
             code: authCode,
@@ -496,6 +492,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             this.router.navigateByUrl('/pages/invoice/preview/settings/email');
         });
     }
+    
     private getRedirectUrl(baseHref: string) {
         if (TEST_ENV) {
             return `${baseHref}pages/invoice/preview/sales?tab=settings&tabIndex=4`;

@@ -653,7 +653,6 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                     uniqueName: accountData.body.uniqueName
                 };
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let result = false;
                 if (groupArray) {
                     addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
                 }
@@ -692,7 +691,6 @@ const toggleActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
             }
             if (grp.groups) {
                 myChildElementIsOpen = toggleActiveGroupFunc(grp.groups, uniqueName);
-                // grp.isOpen = myChildElementIsOpen;
                 if (grp.isOpen) {
                     return myChildElementIsOpen;
                 }
@@ -726,7 +724,6 @@ const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
     return result;
 };
 const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseResponse<GroupResponse, GroupCreateRequest>, myChildElementIsOpen: boolean): boolean => {
-    // let myChildElementIsOpen = false;
     if (groups) {
         for (let grp of groups) {
             if (grp.uniqueName === gData.request.parentGroupUniqueName) {

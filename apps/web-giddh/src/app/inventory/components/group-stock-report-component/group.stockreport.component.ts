@@ -32,7 +32,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
 
 @Component({
-    selector: 'invetory-group-stock-report',  // <home></home>
+    selector: 'invetory-group-stock-report',
     templateUrl: './group.stockreport.component.html',
     styleUrls: ['./group.stockreport.component.scss'],
     animations: [

@@ -13,7 +13,6 @@ import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { fromEvent, merge, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil, take } from 'rxjs/operators';
-
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
@@ -63,55 +62,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
 
     /** Moment method */
     public moment = moment;
-    /** Date picker options for date filter */
-    public datePickerOptions: any = {
-        hideOnEsc: true,
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'This Month to Date': [
-                moment().startOf('month'),
-                moment()
-            ],
-            'This Quarter to Date': [
-                moment().quarter(moment().quarter()).startOf('quarter'),
-                moment()
-            ],
-            'This Financial Year to Date': [
-                moment().startOf('year').subtract(9, 'month'),
-                moment()
-            ],
-            'This Year to Date': [
-                moment().startOf('year'),
-                moment()
-            ],
-            'Last Month': [
-                moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')
-            ],
-            'Last Quater': [
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-            ],
-            'Last Financial Year': [
-                moment().startOf('year').subtract(10, 'year'),
-                moment().endOf('year').subtract(10, 'year')
-            ],
-            'Last Year': [
-                moment().startOf('year').subtract(1, 'year'),
-                moment().endOf('year').subtract(1, 'year')
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
     /** Receipt type for filter */
     public receiptType: Array<any>;
     public modalRef: BsModalRef;
@@ -236,12 +186,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((applicationDate) => {
             if (applicationDate) {
                 this.universalDate = applicationDate;
-                this.datePickerOptions = {
-                    ...this.datePickerOptions,
-                    startDate: moment(applicationDate[0], GIDDH_DATE_FORMAT).toDate(),
-                    endDate: moment(applicationDate[1], GIDDH_DATE_FORMAT).toDate(),
-                    chosenLabel: applicationDate[2]
-                }
                 let universalDate = _.cloneDeep(applicationDate);
                 this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
                 this.selectedDateRangeUi = moment(applicationDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(applicationDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -407,19 +351,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     }
 
     /**
-     * Date picker change handler
-     *
-     * @param {*} event Selected dates
-     * @memberof AdvanceReceiptReportComponent
-     */
-    public onDateChange(event: any): void {
-        this.datePickerOptions.startDate = event.picker.startDate._d;
-        this.datePickerOptions.endDate = event.picker.endDate._d;
-        this.showClearFilter = true;
-        this.fetchReceiptsData();
-    }
-
-    /**
      * Pagination change handler
      *
      * @param {*} event Selected page details
@@ -448,12 +379,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     public resetAdvanceSearch(): void {
         this.showClearFilter = false;
-        this.datePickerOptions = {
-            ...this.datePickerOptions,
-            startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-            endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate(),
-            chosenLabel: this.universalDate[2]
-        }
         this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
         this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -687,8 +612,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.datePickerOptions.startDate = this.fromDate;
-            this.datePickerOptions.endDate = this.toDate;
             this.showClearFilter = true;
             this.fetchReceiptsData();
         }

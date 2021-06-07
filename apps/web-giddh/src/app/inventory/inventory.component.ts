@@ -13,7 +13,6 @@ import { AfterViewInit, Component, ComponentFactoryResolver, OnDestroy, OnInit, 
 import { AppState } from '../store';
 import * as _ from '../lodash-optimized';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { CompanyAddComponent } from '../shared/header/components';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyActions } from '../actions/company.actions';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
@@ -278,10 +277,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    public openCreateCompanyModal() {
-        this.loadAddCompanyComponent();
-    }
-
     public redirectUrlToActiveTab(type: string, event: any, activeTabIndex?: number, currentUrl?: string) {
         if (event) {
             if (!(event instanceof TabDirective)) {
@@ -322,14 +317,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }
         });
-    }
-
-    public loadAddCompanyComponent() {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddComponent);
-        let viewContainerRef = this.companyadd.viewContainerRef;
-        viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as CompanyAddComponent).createBranch = true;
     }
 
     public openAddBranchModal() {

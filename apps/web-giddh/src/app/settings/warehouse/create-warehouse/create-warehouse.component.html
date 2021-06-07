@@ -46,49 +46,6 @@
                             {{commonLocaleData?.app_max_100_characters_allowed_limit}}
                         </span>
                     </div>
-                    <!-- <div class="warehouse-form-field">
-                        <label>
-                            Link Entity
-                        </label>
-                        <div class="form-group linked-entities">
-                            <sh-select [options]="addressConfiguration?.linkedEntities" name="linkedEntities"
-                                formControlName="linkedEntity" (clearSingleItem)="handleFinalSelection($event)"
-                                [isFilterEnabled]="true" [multiple]="true
-                                " placeholder="Select Entity">
-                                <ng-template #optionTemplate let-option="option">
-                                    <ng-container>
-                                        <a (click)="selectEntity(option)" href="javascript:void(0)" class="list-item d-flex">
-                                            <span><input type="checkbox"
-                                                    [checked]="warehouseForm?.get('linkedEntity')?.value?.includes(option.value)"
-                                                    [value]="option.value"></span>&nbsp;
-                                            <span class="entity-icon">
-                                                <i class="icon-branch-icon pull-right"
-                                                    *ngIf="option.entity === 'BRANCH' && !option.isHeadQuarter"
-                                                    tooltip="Branch"></i>
-                                                <i class="icon-branch-icon pull-right"
-                                                    *ngIf="option.entity === 'BRANCH' && option.isHeadQuarter"
-                                                    tooltip="HO Branch"></i>
-                                                <i class="icon-warehouse-icon pull-right" *ngIf="option.entity === 'WAREHOUSE'"
-                                                    tooltip="Warehouse"></i>
-                                            </span>
-                                            <span class="entity-details">
-                                                <div class="item">{{ option.label || '-' }}</div>
-                                                <div class="item-unique">
-                                                    {{ option.name || '-' }}
-                                                </div>
-                                            </span>
-                                            <span class="default-entity">
-                                                <i (click)="setDefault(option, $event)" *ngIf="!option.isDefault"
-                                                    class="icon-no-selected mr-r05"></i>
-                                                <i (click)="setDefault(option, $event)" *ngIf="option.isDefault"
-                                                    class="icon-favorite-selected mr-r05"></i>
-                                            </span>
-                                        </a>
-                                    </ng-container>
-                                </ng-template>
-                            </sh-select>
-                        </div>
-                    </div> -->
                     <div class="warehouse-form-field">
                         <label>
                             {{localeData?.addresses}}
@@ -125,16 +82,6 @@
                             </sales-sh-select>
                         </div>
                     </div>
-                    <!-- static code added for the pincode -->
-                    <!-- <div class="warehouse-form-field">
-                        <label>
-                            PIN Code
-                        </label>
-                        <div class="form-group">
-                            <input type="text" class="form-control" autocomplete="false" name="pinCodeNum" />
-                        </div>
-                    </div> -->
-                    <!-- end -->
                 </div>
                 <div class="footer-btn row">
                     <div class="button-group">

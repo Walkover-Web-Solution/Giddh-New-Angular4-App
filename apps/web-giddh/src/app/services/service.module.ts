@@ -45,7 +45,6 @@ import { ContactService } from './contact.service';
 import { SettingsTriggersService } from './settings.triggers.service';
 import { RecurringVoucherService } from './recurring-voucher.service';
 import { ImportExcelService } from './import-excel.service';
-import { SettingsBunchService } from './settings.bunch.service';
 import { SettingsDiscountService } from './settings.discount.service';
 import { NewVsOldInvoicesService } from './new-vs-old-invoices.service';
 import { CompanyImportExportService } from './companyImportExportService';
@@ -123,7 +122,6 @@ export class ServiceModule {
                 SettingsTriggersService,
                 RecurringVoucherService,
                 ImportExcelService,
-                SettingsBunchService,
                 SettingsDiscountService,
                 NewVsOldInvoicesService,
                 AgingreportingService,
