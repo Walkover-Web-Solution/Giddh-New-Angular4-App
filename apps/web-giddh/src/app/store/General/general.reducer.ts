@@ -6,8 +6,7 @@ import {
     AccountMoveRequest,
     AccountRequestV2,
     AccountResponse,
-    AccountResponseV2,
-    FlattenAccountsResponse
+    AccountResponseV2
 } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { States } from '../../models/api-models/Company';
@@ -26,8 +25,6 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
 import { IUlist } from '../../models/interfaces/ulist.interface';
 import { INameUniqueName } from '../../models/api-models/Inventory';
 import { SALES_ACTIONS } from '../../actions/sales/sales.const';
@@ -38,9 +35,6 @@ export interface GeneralState {
     flattenAccounts: IFlattenAccountsResultItem[];
     states: States;
     addAndManageClosed: boolean;
-    flattenGroups: IFlattenGroupsAccountsDetail[];
-    smartCombinedList: IUlist[];
-    smartList: IUlist[];
     sideMenuBarOpen: boolean;
     headerTitle: { uniqueName: string, additional: { tab: string, tabIndex: number } };
     currentPage: CurrentPage;
@@ -56,9 +50,6 @@ const initialState: GeneralState = {
     flattenAccounts: null,
     states: null,
     addAndManageClosed: false,
-    flattenGroups: [],
-    smartCombinedList: [],
-    smartList: [],
     sideMenuBarOpen: false,
     headerTitle: null,
     currentPage: null,
@@ -87,23 +78,6 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             }
             return state;
         }
-        case GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS_RESPONSE: {
-            let result: BaseResponse<FlattenAccountsResponse, string> = action.payload;
-            if (result.status === 'success') {
-                let arr = result.body.results;
-                arr.map((item: any) => {
-                    let o: any = provideStrings(item.parentGroups);
-                    item.nameStr = o.nameStr;
-                    item.uNameStr = o.uNameStr;
-                    return item;
-                });
-                return {
-                    ...state,
-                    flattenAccounts: arr
-                };
-            }
-            return state;
-        }
         case GENERAL_ACTIONS.GENERAL_GET_ALL_STATES_RESPONSE: {
             let result: BaseResponse<States, string> = action.payload;
             if (result.status === 'success') {
@@ -117,46 +91,6 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         case GENERAL_ACTIONS.RESET_STATES_LIST: {
             return { ...state, states: null };
         }
-        // NEW LOGIC FOR FLATTEN ACCOUNTS AND GROUPS
-        case GENERAL_ACTIONS.RESET_SMART_LIST: {
-            return { ...state, smartList: [] };
-        }
-
-        case GENERAL_ACTIONS.SET_SMART_LIST: {
-            let data: IUlist[] = action.payload;
-            const newState = _.cloneDeep(state);
-            return { ...newState, smartList: data };
-        }
-
-        case GENERAL_ACTIONS.RESET_COMBINED_LIST: {
-            return { ...state, smartCombinedList: [] };
-        }
-
-        case GENERAL_ACTIONS.SET_COMBINED_LIST: {
-            let data: IUlist[] = action.payload;
-            return { ...state, smartCombinedList: data };
-        }
-
-        case GENERAL_ACTIONS.FLATTEN_GROUPS_REQ: {
-            return { ...state, flattenGroups: [] };
-        }
-
-        case GENERAL_ACTIONS.FLATTEN_GROUPS_RES: {
-            let result: BaseResponse<IPaginatedResponse, string> = action.payload;
-            if (result.status === 'success') {
-                let arr = result.body.results;
-                arr.map((item: any) => {
-                    let o: any = provideStrings(item.parentGroups);
-                    item.nameStr = o.nameStr;
-                    item.uNameStr = o.uNameStr;
-                    return item;
-                });
-                return { ...state, flattenGroups: arr };
-            }
-            return state;
-        }
-
-        // END NEW LOGIC
 
         // groups with accounts actions
         case GroupWithAccountsAction.CREATE_GROUP_RESPONSE:

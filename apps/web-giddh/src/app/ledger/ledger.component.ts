@@ -36,7 +36,7 @@ import { LedgerService } from '../services/ledger.service';
 import { ToasterService } from '../services/toaster.service';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { base64ToBlob, giddhRoundOff } from '../shared/helpers/helperFunctions';
+import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AppState } from '../store';
 import { BorderConfiguration, IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
@@ -987,7 +987,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         e.stopPropagation();
         this._ledgerService.DownloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
-                let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
+                let blob = this.generalService.base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
                 download(d.body.name, blob, `image/${d.body.fileType}`)
             } else {
                 this._toaster.errorToast(d.message);
@@ -1005,7 +1005,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this._ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
-                let blob = base64ToBlob(d.body, 'application/pdf', 512);
+                let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
                 download(`${activeAccount.name} - ${invoiceName}.pdf`, blob, 'application/pdf');
             } else {
                 this._toaster.errorToast(d.message);
