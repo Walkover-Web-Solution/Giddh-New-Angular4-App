@@ -1,7 +1,6 @@
 @import "../../../assets/css/color.scss";
 
 .other-information {
-    margin-top: 15px;
     label {
         padding-bottom: 5px;
     }
@@ -24,6 +23,9 @@
 @media (max-width: 767px) {
     .other-setting-container {
         padding-top: 15px;
+    }
+    .other-information {
+        margin-top: 15px;
     }
 }
 

@@ -9,9 +9,11 @@ import {
     OnDestroy,
     OnInit,
     Output,
+    QueryList,
     SimpleChanges,
     TemplateRef,
     ViewChild,
+    ViewChildren,
 } from '@angular/core';
 import { NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { createSelector, select, Store } from '@ngrx/store';
@@ -123,6 +125,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Stores the instance of company detail dropdown */
     @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
+    /** Stores the dropdown instances as querylist */
+    @ViewChildren('dropdown') itemDropdown: QueryList<BsDropdownDirective>;
     /** Search company name */
     public searchCmp: string = '';
     /** Holds if company refresh is in progress */
@@ -229,7 +233,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnInit(): void {
         this.updateIndexDbSuccess$ = this.store.pipe(select(appStore => appStore.general.updateIndexDbComplete), takeUntil(this.destroyed$))
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if (selectedCmp?.uniqueName !== this.selectedCompanyDetails?.uniqueName) {
+            if (selectedCmp && selectedCmp?.uniqueName === this.generalService.companyUniqueName) {
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
                 this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
@@ -244,7 +248,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     this.activeCompanyForDb.name = selectedCmp.name;
                     this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
                 }
-                if (this.activeCompanyForDb?.uniqueName) {
+                if (this.generalService.companyUniqueName) {
                     this.dbService.getAllItems(this.activeCompanyForDb.uniqueName, 'accounts').subscribe(accountList => {
                         if (accountList?.length) {
                             if (window.innerWidth > 1440 && window.innerHeight > 717) {
@@ -252,10 +256,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                             } else {
                                 this.accountItemsFromIndexDB = accountList.slice(0, 5);
                             }
-                            this.changeDetectorRef.detectChanges();
                         } else {
                             this.accountItemsFromIndexDB = DEFAULT_AC;
                         }
+                        this.changeDetectorRef.detectChanges();
                     });
                 }
             }
@@ -339,6 +343,15 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                         return true;
                     }
                 })));
+                const activeItemIndex = this.allItems.findIndex(item => item.isActive);
+                this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
+                    if (index === activeItemIndex) {
+                        dropdown.show();
+                    } else {
+                        dropdown.hide();
+                    }
+                });
+
                 this.changeDetectorRef.detectChanges();
             }
 
@@ -397,16 +410,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         this.setOrganizationDetails(OrganizationType.Branch, details);
         this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(take(1)).subscribe(response => {
             if (response && response.body) {
-                if (screen.width <= 767 || isCordova) {
-                    window.location.href = '/pages/mobile-home';
-                } else if (isElectron) {
-                    this.router.navigate([response.body.lastState]);
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 200);
-                } else {
-                    window.location.href = response.body.lastState;
-                }
+                this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+                    this.generalService.finalNavigate(response.body.lastState);
+                });
             }
         });
     }
