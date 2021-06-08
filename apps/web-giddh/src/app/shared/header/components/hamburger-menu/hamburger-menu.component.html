@@ -5,7 +5,6 @@
             placement="right">
             <i class="icon-bar"></i>
         </button>
-        <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="pageHeading?.trim()"><span>{{pageHeading}}</span>
-        </h4>
+        <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="pageHeading?.trim() && isMobileView"><span>{{pageHeading}}</span></h4>
     </li>
 </ul>
