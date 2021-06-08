@@ -565,22 +565,6 @@ export class InvoiceService {
         return url;
     }
 
-    //  public DownloadEwayBill(ewayBillNo: any, isPreview: boolean = false): any {
-    //   this.user = this._generalService.user;
-    //   this.companyUniqueName = this._generalService.companyUniqueName;
-    //   return this._http.get(this.config.apiUrl + EWAYBILL_API.DOWNLOAD_EWAY
-    //    .replace(':companyUniqueName', this.companyUniqueName)
-    //     .replace(':ewaybillNumber', encodeURIComponent(ewayBillNo))
-    //     , {responseType: isPreview ? 'text' : 'blob'}).pipe(
-    //       map((res) => {
-    //       let data: BaseResponse<any, any> = res;
-    //       // data.queryString = accountUniqueName;
-    //       // data.request = model;
-    //       return data;
-    //     }),
-    //     catchError((e) => this.errorHandler.HandleCatch<any, any>(e))
-    //   );
-    // }
     // Download Eway
     public DownloadEwayBills(ewayBillNo: any): Observable<BaseResponse<string, any>> {
         this.user = this._generalService.user;
