@@ -10,6 +10,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyService } from '../../../services/companyService.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { map, take, takeUntil } from 'rxjs/operators';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'search-grid',
@@ -113,7 +114,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     /**
      * TypeScript public modifiers
      */
-    constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService) {
+    constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService, private generalService: GeneralService) {
         this.searchResponse$ = this.store.pipe(select(p => p.search.value), takeUntil(this.destroyed$));
         this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
@@ -294,37 +295,12 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             this._companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.searchLoader$ = of(false);
                 if (res.status === 'success') {
-                    let blobData = this.base64ToBlob(res.body, 'text/csv', 512);
+                    let blobData = this.generalService.base64ToBlob(res.body, 'text/csv', 512);
                     return saveAs(blobData, `${p.groupName}.csv`);
                 }
             });
 
         });
-    }
-
-    public base64ToBlob(b64Data, contentType, sliceSize) {
-        contentType = contentType || '';
-        sliceSize = sliceSize || 512;
-        let byteCharacters = atob(b64Data);
-        let byteArrays = [];
-        let offset = 0;
-        if (byteCharacters) {
-            while (offset < byteCharacters.length) {
-                let slice = byteCharacters.slice(offset, offset + sliceSize);
-                let byteNumbers = new Array((slice ? slice.length : 0));
-                let i = 0;
-                if (slice) {
-                    while (i < slice.length) {
-                        byteNumbers[i] = slice.charCodeAt(i);
-                        i++;
-                    }
-                }
-                let byteArray = new Uint8Array(byteNumbers);
-                byteArrays.push(byteArray);
-                offset += sliceSize;
-            }
-        }
-        return new Blob(byteArrays, { type: contentType });
     }
 
     // Add Selected Value to Message Body

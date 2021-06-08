@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy, ElementRef } from '@angular/core';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
-import { base64ToBlob } from '../helpers/helperFunctions';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'purchase-order-preview-modal',
@@ -41,7 +41,8 @@ export class PurchaseOrderPreviewModalComponent implements OnInit, OnDestroy {
 
     constructor(
         public purchaseOrderService: PurchaseOrderService,
-        private domSanitizer: DomSanitizer
+        private domSanitizer: DomSanitizer,
+        private generalService: GeneralService
     ) {
 
     }
@@ -77,7 +78,7 @@ export class PurchaseOrderPreviewModalComponent implements OnInit, OnDestroy {
 
         this.purchaseOrderService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
+                let blob: Blob = this.generalService.base64ToBlob(response.body, 'application/pdf', 512);
                 const file = new Blob([blob], { type: 'application/pdf' });
                 URL.revokeObjectURL(this.pdfFileURL);
                 this.pdfFileURL = URL.createObjectURL(file);
