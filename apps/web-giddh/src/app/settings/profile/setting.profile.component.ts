@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import * as _ from '../../lodash-optimized';
@@ -57,6 +57,8 @@ export interface IGstObj {
     ]
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
+    @Output() public pageHeading: EventEmitter<string> = new EventEmitter();
+
     public countrySource: IOption[] = [];
     public countrySource$: Observable<IOption[]> = observableOf([]);
     public currencies: IOption[] = [];
@@ -202,22 +204,23 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @param {boolean} event
      * @memberof SettingProfileComponent
      */
-     public getPageHeading(): string {
+    public getPageHeading(): void {
+        let pageHeading = "";
 
-        if(this.isMobileScreen){
-             if(this.currentTab === 'personal'){
-                 this.personalInformationTabHeading;
-             }
-             else if(this.currentTab === 'address'){
-                this.companyProfileObj?.taxType ? (this.localeData?.address + this.companyProfileObj?.taxType) : this.localeData?.addresses
-             }
-             else if(this.currentTab === 'other'){
-                this.localeData?.other;
-             }
+        if (this.isMobileScreen) {
+            switch (this.currentTab) {
+                case 'personal':
+                    pageHeading = this.personalInformationTabHeading;
+                    break;
+                case 'address':
+                    pageHeading = this.companyProfileObj?.taxType ? (this.localeData?.address + this.companyProfileObj?.taxType) : this.localeData?.addresses;
+                    break;
+                case 'other':
+                    pageHeading = this.localeData?.other;
+                    break;
+            }
         }
-        else {
-            return " ";
-        }
+        this.pageHeading.emit(pageHeading);
     }
 
     public ngOnInit() {
@@ -815,7 +818,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
             }
         }
-
+        this.getPageHeading();
         this.router.navigateByUrl('/pages/settings/profile/' + tabName);
     }
 
@@ -1202,6 +1205,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     this.personalInformationTabHeading = this.localeData?.company_information;
                 }
             });
+
+            this.getPageHeading();
         }
     }
 }
