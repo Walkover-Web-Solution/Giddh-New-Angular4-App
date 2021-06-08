@@ -66,7 +66,6 @@
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedRate"
-                                        [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
                                         [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code"
                                         [ratePrecision]="true">
                                     </amount-field>
@@ -98,7 +97,6 @@
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedAmount"
-                                        [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
                                         [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
                                     </amount-field>
                                 </span>
@@ -126,7 +124,6 @@
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedDiscount"
-                                        [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
                                         [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
                                     </amount-field>
                                 </span>
@@ -171,7 +168,6 @@
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedTax"
-                                        [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
                                         [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
                                     </amount-field>
                                 </span>
@@ -197,7 +193,6 @@
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedTotal"
-                                        [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
                                         [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
                                     </amount-field>
                                 </span>
@@ -535,7 +530,7 @@
 
                 <div class="pull-right">
                     <div class="clearfix">
-                        <p class="primary-color" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                        <p class="primary-color d-flex" *ngIf="isLedgerAccountAllowsMultiCurrency">
                             {{getTotalInMultiCurrency()}}:
                              <amount-field [amount]="blankLedger.convertedCompoundTotal"
                                 [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
