@@ -147,6 +147,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @Input() public invoiceSearch: any = "";
     /** PDF file url created with blob */
     public sanitizedPdfFileUrl: any = '';
+    /** Attached PDF file url created with blob */
+    public attachedPdfFileUrl: any = '';
     /** PDF src */
     public pdfFileURL: any = '';
     /** This will hold the attached file in Purchase Bill */
@@ -410,7 +412,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                                 const file = new Blob([this.attachedAttachmentBlob], { type: 'application/pdf' });
                                 URL.revokeObjectURL(this.pdfFileURL);
                                 this.pdfFileURL = URL.createObjectURL(file);
-                                this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                                this.attachedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                                 this.detectChanges();
                             }, 250);
                             this.isVoucherDownloadError = false;
