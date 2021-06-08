@@ -33,9 +33,9 @@
                         </div>
                     </div>
                     <div *ngIf="activeTab === 'profile'">
-                        <hamburger-menu></hamburger-menu>
+                        <hamburger-menu [pageHeading]="profileTabHeading"></hamburger-menu>
                         <div class="setting-container">
-                            <setting-profile #profileComponent></setting-profile>
+                            <setting-profile (pageHeading)="profileTabHeading = $event" #profileComponent></setting-profile>
                             <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)"
                                 class="auto-save float-right">
                                 <i class="icon-refresh mr-r05 font-14 rotate"></i>{{commonLocaleData?.app_saving}}

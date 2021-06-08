@@ -64,6 +64,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** This holds heading for profile tab */
+    public profileTabHeading: string = "";
 
     constructor(
         private store: Store<AppState>,
