@@ -1,72 +1,67 @@
-<div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)" asideGstSidebarMenuState>
-    <div class="help-aside-body">
-        <!-- <div class="back-to-main-slider">
-            <a href="javascript:;">
-                <span (click)="goToPreviousPage()">
-                    <i class="icon-back-arrow"></i>
-                    {{commonLocaleData?.app_back}}
-                </span>
-            </a>
-        </div> -->
-        <div class="gst-menu-items">
-            <p class="font-12 mb-2 pd-l2 pd-r2"><span class="d-inline-flex align-items-center cursor-pointer" tabindex="0"> GSTR <i class="icon-down-new mr-l05"></i></span></p>
+<ng-container appTranslate [file]="'gst/sidebar'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)" asideGstSidebarMenuState>
+        <div class="help-aside-body">
+            <div class="gst-menu-items">
+                <p class="font-12 mb-2 pd-l2 pd-r2"><span class="d-inline-flex align-items-center cursor-pointer" tabindex="0"> {{localeData?.heading}} <i class="icon-down-new mr-l05"></i></span></p>
 
-            <ul class="mb-3">
-                <li>
-                    <a class="d-block clearfix" routerLinkActive #rla="routerLinkActive" [class.active]="rla.isActive"
-                        [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/pages/gstfiling']">
-                        <span><i class="icon-dashboard-new"></i></span>
-                        <span>{{localeData?.dashboard}}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0);" [attr.disabled]="!activeCompanyGstNumber || !isMonthSelected"
-                        [ngClass]="{'disabled': !activeCompanyGstNumber || !isMonthSelected, 'active': selectedGstModule === GstReport.Gstr3b}"
-                        class="d-block clearfix" (click)="navigate(GstReport.Gstr3b)">
-                        <span><i class="icon-GSTR"></i></span>
-                        <span>{{localeData?.gstr3b_summary}}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0);"
-                        [ngClass]="{'disabled': !activeCompanyGstNumber, 'active': selectedGstModule === GstReport.Gstr1}"
-                        class="d-block clearfix" (click)="navigate(GstReport.Gstr1)">
-                        <span><i class="icon-GSTR"></i></span>
-                        <span>{{localeData?.gstr1_label}}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0);"
-                        [ngClass]="{'disabled': !activeCompanyGstNumber || !isMonthSelected, 'active': selectedGstModule === GstReport.Gstr2}"
-                        class="d-block clearfix" (click)="navigate(GstReport.Gstr2)">
-                        <span><i class="icon-GSTR"></i></span>
-                        <span>{{localeData?.gstr2_label}}</span>
-                    </a>
-                </li>
-            </ul>
-            <ul class="mt-3">
-                <li>
-                    <a href="javascript:void(0);"
-                        class="d-block clearfix">
-                        <span><i class="icon-eway-bill-new"></i></span>
-                        <span>E-way Bill </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0);" [routerLink]="['/pages/reports/reverse-charge']"
-                        class="d-block clearfix">
-                        <span><i class="icon-reverse-charge"></i></span>
-                        <span>Reverse Charge</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0);"
-                        class="d-block clearfix" [routerLink]="['/home']">
-                        <span><i class="icon-settings-cog"></i></span>
-                        <span>Setting</span>
-                    </a>
-                </li>
-            </ul>
+                <ul class="mb-3">
+                    <li>
+                        <a class="d-block clearfix" routerLinkActive #rla="routerLinkActive" [class.active]="rla.isActive"
+                            [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/pages/gstfiling']">
+                            <span><i class="icon-dashboard-new"></i></span>
+                            <span>{{localeData?.dashboard}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" [attr.disabled]="!activeCompanyGstNumber || !isMonthSelected"
+                            [ngClass]="{'disabled': !activeCompanyGstNumber || !isMonthSelected, 'active': selectedGstModule === GstReport.Gstr3b}"
+                            class="d-block clearfix" (click)="navigate(GstReport.Gstr3b)">
+                            <span><i class="icon-GSTR"></i></span>
+                            <span>{{localeData?.gstr3b_summary}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);"
+                            [ngClass]="{'disabled': !activeCompanyGstNumber, 'active': selectedGstModule === GstReport.Gstr1}"
+                            class="d-block clearfix" (click)="navigate(GstReport.Gstr1)">
+                            <span><i class="icon-GSTR"></i></span>
+                            <span>{{localeData?.gstr1_label}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);"
+                            [ngClass]="{'disabled': !activeCompanyGstNumber || !isMonthSelected, 'active': selectedGstModule === GstReport.Gstr2}"
+                            class="d-block clearfix" (click)="navigate(GstReport.Gstr2)">
+                            <span><i class="icon-GSTR"></i></span>
+                            <span>{{localeData?.gstr2_label}}</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="mt-3">
+                    <li>
+                        <a href="javascript:void(0);" [routerLink]="['/pages/invoice/ewaybill']"
+                            class="d-block clearfix">
+                            <span><i class="icon-eway-bill-new"></i></span>
+                            <span>{{localeData?.eway_bill}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" [routerLink]="['/pages/reports/reverse-charge']"
+                            class="d-block clearfix">
+                            <span><i class="icon-reverse-charge"></i></span>
+                            <span>{{localeData?.reverse_charge}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);"
+                            class="d-block clearfix" [routerLink]="['/pages/settings/taxes']">
+                            <span><i class="icon-settings-cog"></i></span>
+                            <span>{{localeData?.setting}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
+</ng-container>
