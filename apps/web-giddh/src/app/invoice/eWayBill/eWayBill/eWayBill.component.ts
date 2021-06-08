@@ -18,6 +18,9 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LocationService } from '../../../services/location.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Router } from '@angular/router';
+
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'app-ewaybill-component',
@@ -163,7 +166,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private modalService: BsModalService,
         private _location: LocationService,
         private _cd: ChangeDetectorRef,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private breakpointObserver: BreakpointObserver,
+        private router: Router
     ) {
         this.EwayBillfilterRequest.count = 20;
         this.EwayBillfilterRequest.page = 1;
@@ -188,6 +193,16 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 this.statesSource$ = observableOf(this.states);
             }
         });
+
+        this.breakpointObserver
+        .observe(['(max-width: 767px)'])
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((state: BreakpointState) => {
+            this.isMobileScreen = state.matches;
+            if (!this.isMobileScreen) {
+                this.asideGstSidebarMenuState = 'in';
+            }
+        });
     }
 
     public selectedDate(value: any) {
@@ -200,6 +215,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
+        this.toggleGstPane();
         // getALLEwaybillList();
         this.cancelEwaySuccess$.subscribe(p => {
             if (p) {
@@ -542,12 +558,11 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     /**
       * This will toggle the settings popup
       *
-      * @param {*} [event]
       * @memberof GstComponent
       */
-    public toggleGstPane(event?): void {
+    public toggleGstPane(): void {
         this.toggleBodyClass();
-        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
+        if (this.isMobileScreen && this.asideGstSidebarMenuState === 'in') {
             this.asideGstSidebarMenuState = "out";
         }
     }
@@ -586,5 +601,14 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 { value: '4', label: this.localeData?.cancel_reason_list?.others }
             ];
         }
+    }
+
+    /**
+     * Handles GST Sidebar Navigation
+     *
+     * @memberof EWayBillComponent
+     */
+    public handleNavigation(): void {
+        this.router.navigate(['pages', 'gstfiling']);   
     }
 }

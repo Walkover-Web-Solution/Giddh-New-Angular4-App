@@ -217,6 +217,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public commonLocaleData: any = {};
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** True if sidebar is expanded */
+    public isSidebarExpanded: boolean = false;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -484,6 +486,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         //this.sideBarStateChange(true);
         this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
             this.sideBarStateChange(response);
+
+            if(response) {
+                this.expandSidebar(true);
+            } else {
+                this.collapseSidebar(true);
+            }
         });
         this.generalService.isMobileSite.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.isMobileSite = s;
@@ -834,8 +842,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             if (this.asideSettingMenuState === "in") {
                 document.querySelector('body').classList.add('mobile-setting-sidebar');
-            }
-            else {
+            } else {
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
         }, (this.asideSettingMenuState === 'out') ? 100 : 0);
@@ -1581,17 +1588,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
                 this.sideBarStateChange(true);
                 document.querySelector('body').classList.add('on-setting-page');
-                document.querySelector('.primary-sidebar').classList.add('sidebar-collapse');
-                document.querySelector('.nav-left-bar').classList.add('width-60');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-user-page');
-            } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page").length > 0) {
+                this.collapseSidebar(true);
+            } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page").length > 0
+            ) {
                 document.querySelector('body').classList.add('on-user-page');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
-                document.querySelector('.primary-sidebar').classList.add('sidebar-collapse');
-                document.querySelector('.nav-left-bar').classList.add('width-60');
+                this.collapseSidebar(true);
             } else if (
                 document.getElementsByTagName("tabset") &&
                 document.getElementsByTagName("tabset").length > 0 &&
@@ -1600,8 +1606,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
-                document.querySelector('.primary-sidebar').classList.remove('sidebar-collapse');
-                document.querySelector('.nav-left-bar').classList.remove('width-60');
+                this.expandSidebar(true);
             }
             /* this code is not working so that inventory sidebar is not working on mobile view, developer please check it */
             else if (document.getElementsByClassName("new-inventory-page") && document.getElementsByClassName("new-inventory-page").length > 0) {
@@ -1609,33 +1614,46 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.add('inventory-sidebar');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-user-page');
-
-            }
-            else if(document.getElementsByClassName("gst-sidebar-open") && document.getElementsByClassName("gst-sidebar-open").length > 0){
-                document.querySelector('.primary-sidebar').classList.add('sidebar-collapse');
-                document.querySelector('.nav-left-bar').classList.add('width-60');
-            }
-
-            else {
+            } else {
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
-                document.querySelector('.primary-sidebar').classList.remove('sidebar-collapse');
-                document.querySelector('.nav-left-bar').classList.remove('width-60');
+                this.expandSidebar(true);
+            }
+
+            if(document.getElementsByClassName("gst-sidebar-open") && document.getElementsByClassName("gst-sidebar-open").length > 0) {
+                this.collapseSidebar(true);
             }
         }, 500);
 
     }
 
-    public removeClass(){
+    public expandSidebar(forceExpand: boolean = false): void {
+        if(forceExpand) {
+            this.sideBarStateChange(true);
+        }
+        this.isSidebarExpanded = true;
         document.querySelector('.primary-sidebar').classList.remove('sidebar-collapse');
         document.querySelector('.nav-left-bar').classList.remove('width-60');
     }
-    public addClass(){
-        document.querySelector('.primary-sidebar').classList.add('sidebar-collapse');
-        document.querySelector('.nav-left-bar').classList.add('width-60');
+
+    public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
+        if(closeOnHover && this.isSidebarExpanded && document.getElementsByClassName("gst-sidebar-open") && document.getElementsByClassName("gst-sidebar-open").length > 0) {
+            forceCollapse = true;
+        }
+
+        if(forceCollapse && !this.isSidebarExpanded) {
+            this.sideMenu.isopen = false;
+        }
+
+        if(!this.sideMenu.isopen || forceCollapse) {
+            this.isSidebarExpanded = false;
+            document.querySelector('.primary-sidebar').classList.add('sidebar-collapse');
+            document.querySelector('.nav-left-bar').classList.add('width-60');
+        }
     }
+
     /**
      * This will show the datepicker
      *
