@@ -3,8 +3,6 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthenticationService } from '../services/authentication.service';
 
-// import { GeneralService } from './services/general.service';
-
 @Component({
     selector: 'browser-support',
     styleUrls: ['./browserDetect.component.scss'],
@@ -16,7 +14,7 @@ export class BrowserDetectComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _authService: AuthenticationService) {
-        //
+        
     }
 
     public ngOnInit() {

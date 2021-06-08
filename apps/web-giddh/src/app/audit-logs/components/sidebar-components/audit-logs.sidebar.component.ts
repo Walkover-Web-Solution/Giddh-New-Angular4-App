@@ -181,11 +181,8 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
 
     public getLogfilters() {
         let reqBody: LogsRequest = new LogsRequest();
-        // reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format(GIDDH_DATE_FORMAT) : '';
-        // reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format(GIDDH_DATE_FORMAT) : '';
         reqBody.operation = this.vm.selectedOperation === 'All' ? '' : this.vm.selectedOperation;
         reqBody.entity = this.vm.selectedEntity === 'All' ? '' : this.vm.selectedEntity;
-        // reqBody.entryDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format(GIDDH_DATE_FORMAT) : '';
         reqBody.userUniqueName = this.vm.selectedUserUnq;
         reqBody.accountUniqueName = this.vm.selectedAccountUnq;
         reqBody.groupUniqueName = this.vm.selectedGroupUnq;

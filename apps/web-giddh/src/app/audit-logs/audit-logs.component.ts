@@ -5,12 +5,11 @@ import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/co
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { ReplaySubject, Observable } from 'rxjs';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as moment from 'moment';
 import { GeneralService } from '../services/general.service';
-import { GeneralActions } from '../actions/general/general.actions';
 import { AuditLogsFormComponent } from './components/audit-logs-form/audit-logs-form.component';
 import { GetAuditLogsRequest } from '../models/api-models/Logs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
@@ -61,7 +60,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private route: ActivatedRoute, private generalActions: GeneralActions, private generalService: GeneralService, private modalService: BsModalService, private router: Router) {
+    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private route: ActivatedRoute, private generalService: GeneralService, private modalService: BsModalService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.auditLogsRequest$ = this.store.pipe(select(state => state.auditlog.auditLogsRequest), takeUntil(this.destroyed$));
     }

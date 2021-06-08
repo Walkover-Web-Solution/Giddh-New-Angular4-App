@@ -1,5 +1,5 @@
 // tslint:disable:variable-name
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -15,7 +15,7 @@ import { GstReport } from '../../constants/gst.constant';
     styleUrls: [`./gst-aside-menu.component.scss`],
     templateUrl: './gst-aside-menu.component.html'
 })
-export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
+export class GstAsideMenuComponent implements OnInit, OnDestroy {
 
     @Input() public selectedService: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -144,12 +144,6 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
                 this.taxProForm.gstin = a;
             }
         });
-    }
-
-    public ngOnChanges(changes) {
-        if ('selectedService' in changes && changes['selectedService'].currentValue) {
-            // alert('selectedService ' + changes['selectedService'].currentValue);
-        }
     }
 
     public closeAsidePane(event) {

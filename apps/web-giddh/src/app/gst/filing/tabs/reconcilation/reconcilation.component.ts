@@ -52,14 +52,12 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     public gstMatchedData$: Observable<ReconcileActionState>;
     public gstPartiallyMatchedData$: Observable<ReconcileActionState>;
     public reconcileActiveTab: GstReconcileActionsEnum = GstReconcileActionsEnum.notfoundonportal;
-    public pullFromGstInProgress$: Observable<boolean>;
     public imgPath: string = '';
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private store: Store<AppState>,
-        private _reconcileActions: GstReconcileActions,
+        private _reconcileActions: GstReconcileActions
     ) {
         this.gstReconcileInvoiceRequestInProcess$ = this.store.pipe(select(s => s.gstReconcile.isGstReconcileInvoiceInProcess), takeUntil(this.destroyed$));
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
@@ -68,7 +66,6 @@ export class ReconcileComponent implements OnInit, OnDestroy {
             publishReplay(1), refCount());
         this.gstMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.matched), takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.gstPartiallyMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$), publishReplay(1), refCount());
-        this.pullFromGstInProgress$ = this.store.pipe(select(p => p.gstReconcile.isPullFromGstInProgress), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -97,7 +94,6 @@ export class ReconcileComponent implements OnInit, OnDestroy {
         request.refresh = refresh;
         request.action = action;
         request.gstin = this.activeCompanyGstNumber;
-        // request.count = 3;
         this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(request));
     }
 
