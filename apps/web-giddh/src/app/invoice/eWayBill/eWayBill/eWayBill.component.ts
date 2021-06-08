@@ -240,7 +240,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                     }));
                 }),
                 map((res) => {
-                    // let data = res.map(item => item.address_components[0].long_name);
                     let data = res.map(item => item.city);
                     this.dataSourceBackup = res;
                     return data;
@@ -418,14 +417,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         if (this.showAdvanceSearchIcon) {
             this.EwayBillfilterRequest.sort = type
             this.EwayBillfilterRequest.sortBy = columnName;
-            // this.advanceSearchFilter.from = this.invoiceSearchRequest.from;
-            // this.advanceSearchFilter.to = this.invoiceSearchRequest.to;
             this.store.dispatch(this.invoiceActions.GetAllEwayfilterRequest(this.preparemodelForFilterEway()));
-        } else {
-            // if (this.invoiceSearchRequest.sort !== type || this.invoiceSearchRequest.sortBy !== columnName) {
-            //   this.invoiceSearchRequest.sort = type;
-            //   this.invoiceSearchRequest.sortBy = columnName;
-            //   this.getVoucher(this.isUniversalDateApplicable);
         }
     }
 

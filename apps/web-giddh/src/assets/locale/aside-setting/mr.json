@@ -55,7 +55,7 @@
                     "icon": "<i class='icon-branch1'></i>"
                 },
                 {
-                    "label": "सवलत",
+                    "label": "सूट",
                     "link": "/pages/settings/discount",
                     "icon": "<i class='icon-discount-new'></i>"
                 },
@@ -115,7 +115,7 @@
             ],
             [
                 {
-                    "label": "सवलत",
+                    "label": "सूट",
                     "link": "/pages/settings/discount",
                     "icon": "<i class='icon-discount-new'></i>"
                 },

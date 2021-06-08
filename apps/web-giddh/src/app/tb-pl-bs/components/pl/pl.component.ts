@@ -41,7 +41,6 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
                 from: value.activeFinancialYear.financialYearStarts,
                 to: value.activeFinancialYear.financialYearEnds
             };
-            // this.filterData(this.request);
         }
     }
 
@@ -104,8 +103,6 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
                         cg.isOpen = false;
                         cg.uniqueName = f;
                         cg.groupName = (f) ? f.replace(/([a-z0-9])([A-Z])/g, '$1 $2') : "";
-                        // removed following line in favour of G0-908
-                        // cg.category = f === 'closingInventory' ? 'expenses' : 'income';
                         cg.category = f === 'income';
                         cg.closingBalance = {
                             amount: cogs[f],
@@ -177,12 +174,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngAfterViewInit() {
-        //
         this.cd.detectChanges();
-    }
-
-    public exportXLS(event) {
-        //
     }
 
     public filterData(request: ProfitLossRequest) {
@@ -196,7 +188,6 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
             delete request.tagName;
         }
         this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
-        // this.store.dispatch(this.tlPlActions.GetCogs({from: request.from, to: request.to}));
     }
 
     public ngOnDestroy(): void {
@@ -228,11 +219,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public searchChanged(event: string) {
-        // this.cd.checkNoChanges();
         this.search = event;
         this.cd.detectChanges();
-        // setTimeout(() => {
-        //   this.search = event;
-        // }, 1);
     }
 }

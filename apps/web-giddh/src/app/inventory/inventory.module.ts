@@ -4,13 +4,8 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-
-import {
-    AsideBranchTransferPaneComponent,
-} from '../inventory/components/aside-branch-transfer-pane/aside-branch-transfer-pane.component';
-import {
-    AsideCustomStockComponent,
-} from '../inventory/components/aside-custom-stock.components/aside-custom-stock.component';
+import { AsideBranchTransferPaneComponent } from '../inventory/components/aside-branch-transfer-pane/aside-branch-transfer-pane.component';
+import { AsideCustomStockComponent } from '../inventory/components/aside-custom-stock.components/aside-custom-stock.component';
 import { AsideInventoryComponent } from '../inventory/components/aside-inventory.components/aside-inventory.components';
 import { AsidePaneComponent } from '../inventory/components/aside-pane/aside-pane.components';
 import { AsideTransferPaneComponent } from '../inventory/components/aside-transfer-pane/aside-transfer-pane.component';
@@ -27,13 +22,7 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { InventoryAddGroupComponent } from './components/add-group-components/inventory.addgroup.component';
 import { InventoryAddStockComponent } from './components/add-stock-components/inventory.addstock.component';
-import {
-    AsideSenderReceiverDetailsPaneComponent,
-} from './components/aside-sender-receiver-details/aside-sender-receiver-details.component';
-import { BranchHeaderComponent } from './components/branch/branchHeader/branch.header.component';
-import { BranchTransferComponent } from './components/branch/branchTransfer/branch.transfer.component';
 import { InventoryCustomStockComponent } from './components/custom-stock-components/inventory.customstock.component';
-import { BranchTransferNoteComponent } from './components/forms/branch-transfer/branch-transfer-note.component';
 import { InventoryUserComponent } from './components/forms/inventory-user/transfer-inventory-user.component';
 import { InwardNoteComponent } from './components/forms/inward-note/inward-note.component';
 import { OutwardNoteComponent } from './components/forms/outward-note/outward-note.component';
@@ -71,8 +60,6 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
         InventoryUpdateGroupComponent,
         InventoryGroupStockReportComponent,
         InventoryWelcomeComponent,
-        BranchTransferComponent,
-        BranchHeaderComponent,
         JobworkComponent,
         JobworkWelcomeComponent,
         AsidePaneComponent,
@@ -81,14 +68,12 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
         InOutStockListComponent,
         InventoryUserComponent,
         TransferNoteComponent,
-        BranchTransferNoteComponent,
         InwardNoteComponent,
         OutwardNoteComponent,
         JobworkSidebarComponent,
         ManufacturingComponent,
         NewBranchTransferAddComponent,
         NewBranchTransferListComponent,
-        AsideSenderReceiverDetailsPaneComponent,
         DateFormatterPipe
     ],
     exports: [
@@ -106,7 +91,6 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
         InventoryUpdateGroupComponent,
         InventoryGroupStockReportComponent,
         InventoryWelcomeComponent,
-        BranchTransferComponent,
         JobworkComponent,
         JobworkWelcomeComponent,
         AsidePaneComponent,
@@ -115,7 +99,6 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
         InOutStockListComponent,
         InventoryUserComponent,
         TransferNoteComponent,
-        BranchTransferNoteComponent,
         InwardNoteComponent,
         OutwardNoteComponent,
         JobworkSidebarComponent,

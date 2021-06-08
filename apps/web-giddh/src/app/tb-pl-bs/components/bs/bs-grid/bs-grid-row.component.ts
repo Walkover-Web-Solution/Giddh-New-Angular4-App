@@ -1,12 +1,12 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ChildGroup } from '../../../../models/api-models/Search';
 
 @Component({
-    selector: '[bs-grid-row]',  // <home></home>
+    selector: '[bs-grid-row]',
     templateUrl: './bs-grid-row.component.html',
     styleUrls: [`./bs-grid-row.component.scss`],
 })
-export class BsGridRowComponent implements OnInit, OnChanges {
+export class BsGridRowComponent implements OnChanges {
     @Input() public groupDetail: ChildGroup;
     @Input() public search: string;
     @Input() public padding: string;
@@ -14,7 +14,7 @@ export class BsGridRowComponent implements OnInit, OnChanges {
     @Input() public to: string = '';
 
     constructor(private cd: ChangeDetectorRef) {
-        //
+        
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -24,10 +24,6 @@ export class BsGridRowComponent implements OnInit, OnChanges {
         if (changes.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
             this.cd.detectChanges();
         }
-    }
-
-    public ngOnInit() {
-        //
     }
 
     public entryClicked(acc) {

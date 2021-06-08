@@ -23,20 +23,5 @@
         <ng-container *ngSwitchCase="'createAccount'">
             <inventory-user (onSave)="createAccount($event)" (onCancel)="onCancel()"></inventory-user>
         </ng-container>
-        <!-- <ng-container *ngSwitchDefault>
-
-        <div class="aside-header">
-            <h3 class="aside-title">Select Type</h3>
-        </div>
-        <div class="aside-body">
-            <div class="buttons-container">
-                <button type="button" class="btn btn-default" (click)="view='inward'">Inward Note</button>
-                <button type="button" class="btn btn-default" (click)="view='outward'">Outward Note</button>
-                <button type="button" class="btn btn-default" (click)="view='transfer'">Transfer Note</button>
-                <button type="button" class="btn btn-default" (click)="view='createStock'">Create Stock</button>
-                <button type="button" class="btn btn-default" (click)="view='createAccount'">Create Account</button>
-            </div>
-        </div>
-    </ng-container> -->
     </div>
 </div>

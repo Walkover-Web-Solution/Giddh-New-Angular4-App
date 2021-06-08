@@ -134,8 +134,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         dataToSend: {}
     };
     public localStorageSelectedDate: string = '';
-    private isUniversalDateApplicable: boolean = false;
-
     public showVoucherNoSearch: boolean = false;
     public voucherNumberInput: FormControl = new FormControl();
 
@@ -325,9 +323,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 this.advanceSearchFilter.estimateNumber = s;
             }
             this.getAll();
-            // if (s === '') {
-            //   this.showVoucherNoSearch = false;
-            // }
         });
 
         this.customerNameInput.valueChanges.pipe(
@@ -337,9 +332,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         ).subscribe(s => {
             this.advanceSearchFilter.q = s;
             this.getAll();
-            // if (s === '') {
-            //   this.showCustomerSearch = false;
-            // }
         });
 
         this.store.pipe(select(s => s.invoice.settings), takeUntil(this.destroyed$)).subscribe(settings => {
@@ -370,11 +362,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                             this.fromDate = moment(dateRange.fromDate).format(GIDDH_DATE_FORMAT);
                             this.toDate = moment(dateRange.toDate).format(GIDDH_DATE_FORMAT);
                             // assign start and end date
-                            // this.assignStartAndEndDateForDateRangePicker(storedSelectedDate.fromDates, storedSelectedDate.toDates);
                             this.advanceSearchFilter.from = storedSelectedDate.fromDates;
                             this.advanceSearchFilter.to = storedSelectedDate.toDates;
-                            this.isUniversalDateApplicable = false;
-
                         } else {
                             this.datePickerOptions = {
                                 ...this.datePickerOptions, startDate: moment(a[0], GIDDH_DATE_FORMAT).toDate(),
@@ -385,12 +374,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                             this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                             this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
                             this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
-                            // assign start and end date
-                            // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);
 
                             this.advanceSearchFilter.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
                             this.advanceSearchFilter.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
-                            this.isUniversalDateApplicable = true;
                         }
                     } else {
                         this.datePickerOptions = {
@@ -399,15 +385,12 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                             chosenLabel: a[2]
                         };
 
-                        // assign start and end date
-                        // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);
                         this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
                         this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                         this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
                         this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
                         this.advanceSearchFilter.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
                         this.advanceSearchFilter.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
-                        this.isUniversalDateApplicable = true;
                     }
                 } else {
                     this.datePickerOptions = {
@@ -420,12 +403,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                     this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                     this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                    // assign start and end date
-                    // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);
 
                     this.advanceSearchFilter.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
                     this.advanceSearchFilter.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
-                    this.isUniversalDateApplicable = true;
                 }
                 this.getAll();
             }
@@ -454,21 +434,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             }
         });
 
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                if (activeCompany.activeFinancialYear) {
-                    this.datePickerOptions.ranges['This Financial Year to Date'] = [
-                        moment(activeCompany.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'),
-                        moment()
-                    ];
-                    this.datePickerOptions.ranges['Last Financial Year'] = [
-                        moment(activeCompany.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year'),
-                        moment(activeCompany.activeFinancialYear.financialYearEnds, GIDDH_DATE_FORMAT).subtract(1, 'year')
-                    ];
-                }
-            }
-        });
-
         this.store.pipe(select(state => state.common.isAccountUpdated), takeUntil(this.destroyed$)).subscribe(response => {
             if (!response) {
                 if (this.isAccountUpdated) {
@@ -490,7 +455,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             } else {
                 this.localStorageSelectedDate = 'estimateSelectedDate';
             }
-            // this.getAll();
             this.selectedVoucher = null;
         }
     }
@@ -635,16 +599,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             this.advanceSearchFilter.sortBy = columnName;
             this.getAll();
         }
-        // this.sortRequestForUi.sort = type;
-        // this.sortRequestForUi.sortBy = columnName;
     }
 
     public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
         this.showResetAdvanceSearchIcon = true;
-        // if (!request.invoiceDate && !request.dueDate) {
-        //   request.from = this.advanceSearchFilter.from;
-        //   request.to = this.advanceSearchFilter.to;
-        // }
         this.getAll();
     }
 
@@ -685,9 +643,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
         }
-
-        // assign start and end date
-        // this.assignStartAndEndDateForDateRangePicker(null, null);
 
         this.getAll();
     }

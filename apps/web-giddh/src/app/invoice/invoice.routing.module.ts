@@ -4,8 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
-
+import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { InvoiceComponent } from './invoice.component';
 import { CommonModule } from '@angular/common';
@@ -16,7 +15,6 @@ import { InvoiceCreateComponent } from './create/invoice.create.component';
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
 import { InvoiceSettingComponent } from './settings/invoice.settings.component';
-
 import { FONT_PICKER_CONFIG, FontPickerConfigInterface, FontPickerModule } from 'ngx-font-picker';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { DesignFiltersContainerComponent } from './templates/edit-template/filters-container/design-filters/design.filters.component';
@@ -29,7 +27,6 @@ import { InvoiceTemplateModalComponent } from './templates/edit-template/modals/
 import { InvoiceEmailFilterComponent } from './templates/edit-template/filters-container/email-filter/email-filter.component';
 import { InvoiceTemplatePreviewModelComponent } from './templates/edit-template/modals/template-preview-modal/template-preview.modal.component';
 import { EsignModalComponent } from './preview/models/e-Sign/e-Sign.component';
-import { InvoicePageDDComponent } from '../shared/invoice-page-dd/invoice.page.dd.component';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
@@ -42,9 +39,6 @@ import { RecurringComponent } from './recurring/recurring.component';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TextMaskModule } from 'angular2-text-mask';
-import { ReceiptComponent } from './receipt/receipt.component';
-import { PreviewDownloadReceiptComponent } from './receipt/models/preview-download-receipt.component';
-import { ReceiptUpdateComponent } from './receipt/receipt-update/receiptUpdate.component';
 import { WebviewDirective } from './webview.directive';
 import { Daterangepicker } from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
@@ -53,14 +47,11 @@ import { BulkExportModal } from './preview/models/bulk-export-modal/bulk-export.
 import { InvoiceRendererComponent } from './invoice.renderer.component';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { InvoiceBulkUpdateModalComponent } from './preview/models/bulkUpdateModal/invoiceBulkUpdateModal.component';
-import { PurchaseBillTemplateComponent } from './preview/models/purchase-bill-template-preview/purchase-bill-template-preview.component'
 import { EWayBillCreateComponent } from './eWayBill/create/eWayBill.create.component';
 import { GenerateEWayBillComponent } from './preview/models/generateEWayBill/generateEWayBill.component';
 import { EWayBillCredentialsComponent } from './eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component';
 import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
-
-import { DownloadOrPreviewEwayComponent } from './eWayBill/download-or-preview-eway/download-or-preview-eway.component';
 import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview-details/invoice-preview-details.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
@@ -93,7 +84,6 @@ const INVOICE_ROUTES: Routes = [
             { path: 'preview/:voucherType', component: InvoiceComponent },
             { path: 'preview/:voucherType/:selectedType', component: InvoiceComponent },
             { path: 'preview/:voucherType/:voucherNoForDetail/:voucherAction', component: InvoiceComponent },
-            //{ path: 'receipt', component: ReceiptComponent },
             { path: 'ewaybill/create', component: EWayBillCreateComponent },
 
         ]
@@ -119,22 +109,16 @@ const INVOICE_ROUTES: Routes = [
         InvoiceEmailFilterComponent,
         InvoiceTemplatePreviewModelComponent,
         EsignModalComponent,
-        InvoicePageDDComponent,
         RecurringComponent,
-        ReceiptComponent,
-        ReceiptUpdateComponent,
-        PreviewDownloadReceiptComponent,
         WebviewDirective,
         InvoiceAdvanceSearchComponent,
         BulkExportModal,
         InvoiceRendererComponent,
         InvoiceBulkUpdateModalComponent,
-        PurchaseBillTemplateComponent,
         GenerateEWayBillComponent,
         EWayBillCreateComponent,
         EWayBillComponent,
         EWayBillCredentialsComponent,
-        DownloadOrPreviewEwayComponent,
         InvoicePreviewDetailsComponent,
         ProformaListComponent,
         DownloadVoucherComponent,
@@ -189,8 +173,7 @@ const INVOICE_ROUTES: Routes = [
         InvoicePreviewComponent,
         DeleteInvoiceConfirmationModelComponent
     ],
-    entryComponents: [DownloadOrSendInvoiceOnMailComponent, PreviewDownloadReceiptComponent,
-        ReceiptUpdateComponent],
+    entryComponents: [DownloadOrSendInvoiceOnMailComponent],
     providers: [InvoiceUiDataService, {
         provide: FONT_PICKER_CONFIG,
         useValue: DEFAULT_FONT_PICKER_CONFIG

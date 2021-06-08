@@ -653,7 +653,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 d.isCompanyCreated = false;
                 return Object.assign({}, state, d);
             }
-            // return state;
         }
         case CompanyActions.USER_SELECTED_PLANS:
             return Object.assign({}, state, { userSelectedSubscriptionPlan: action.payload });
@@ -677,7 +676,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             return Object.assign({}, state, {
                 isRefreshing: true,
                 isCompanyCreated: false
-                // isCompanyCreated: state.isCompanyCreated
             });
         case CompanyActions.REFRESH_COMPANIES_RESPONSE:
             let companies: BaseResponse<CompanyResponse[], string> = action.payload;

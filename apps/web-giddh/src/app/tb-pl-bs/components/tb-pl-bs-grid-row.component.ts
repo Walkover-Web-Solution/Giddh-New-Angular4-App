@@ -1,13 +1,12 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { Account, ChildGroup } from '../../models/api-models/Search';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { SearchService } from '../../services/search.service';
 
 @Component({
-    selector: '[tb-pl-bs-grid-row]',  // <home></home>
+    selector: '[tb-pl-bs-grid-row]',
     styleUrls: ['./tb-pl-bs-grid-row.component.scss'],
     templateUrl: './tb-pl-bs-grid-row.component.html',
 })

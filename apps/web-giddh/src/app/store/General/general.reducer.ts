@@ -439,7 +439,6 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
 }
 
 const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseResponse<GroupResponse, GroupCreateRequest>, myChildElementIsOpen: boolean): boolean => {
-    // let myChildElementIsOpen = false;
     for (let grp of groups) {
         if (grp.uniqueName === gData.request.parentGroupUniqueName) {
             let newData = new GroupsWithAccountsResponse();

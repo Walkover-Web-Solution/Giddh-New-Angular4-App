@@ -360,6 +360,7 @@ span.close-modal.cp.pull-right {
 .invoice-search-box input {
     flex: 1;
     border: 1px solid $gainsboro;
+    border-radius: 5px;
     height: 37px;
     padding: 0 30px;
     background-image: url("../../../../../assets/images/searchIcon.svg");

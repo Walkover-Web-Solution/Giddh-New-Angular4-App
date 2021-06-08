@@ -75,7 +75,6 @@ const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStoc
 /**
  * Setting the InitialState for this Reducer's Store
  */
-// stocks: [{ uniqueName: 'sabji', name: 'Sabji' }, { uniqueName: 'kadi', name: 'Kadi' }]
 const initialState: InventoryState = {
     groupsWithStocks: [],
     stocksList: null,
@@ -675,7 +674,6 @@ const setRecursivlyStock = (groups: IGroupsWithStocksHierarchyMinItem[], group: 
                     st = Object.assign({}, st, {
                         isActive: st.uniqueName === stockUniqueName
                     });
-                    // st.isActive = ();
                 }
             }
             el.isActive = true;

@@ -10,7 +10,6 @@ import { ToasterService } from '../../services/toaster.service';
 import { VatService } from "../../services/vat.service";
 import { saveAs } from "file-saver";
 import { PAGINATION_LIMIT } from '../../app.constant';
-import { GeneralActions } from '../../actions/general/general.actions';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { DownloadOrSendInvoiceOnMailComponent } from '../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
@@ -56,7 +55,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private invoiceService: InvoiceService, private generalService: GeneralService) {
+    constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private invoiceService: InvoiceService, private generalService: GeneralService) {
         
     }
 

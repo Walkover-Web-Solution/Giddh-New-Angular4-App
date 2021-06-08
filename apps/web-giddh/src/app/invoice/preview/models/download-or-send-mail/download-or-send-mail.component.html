@@ -5,19 +5,8 @@
                 (click)="goToedit('sales')">{{commonLocaleData?.app_edit}}</button>
             <button type="button" class="btn btn-md btn-default mr-r1"
                 (click)="showMore = ! showMore; showEsign= false;">{{commonLocaleData?.app_more}} <span class="caret"></span></button>
-            <!-- <button type="button" class="btn btn-md btn-default mr-r1" (click)="showEmailTextarea = !showEmailTextarea; showMore = false;">Send Email</button> -->
-            <!-- <button type="button" class="btn btn-md btn-default mr-r1" (click)="showEsign = !showEsign; showMore = false;">E-Signature</button> -->
         </span>
         <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel('closed')"></i>
-        <!-- drop down for email area -->
-        <!-- <div class="dropdown-menu" [ngClass]="{open: showEmailTextarea}">
-            <div class="form-group">
-                <textarea class="form-control" #emailList placeholder="Enter email addresses"></textarea>
-            </div>
-            <div class="pd-l2 pd-r2">
-                <button type="button" class="btn btn-md btn-success mr-b2" (click)="onSendInvoiceOnMail(emailList.value)">Send</button>
-            </div>
-        </div> -->
 
         <!-- drop down for Esignature area -->
         <div class="dropdown-menu mr-l3" [ngClass]="{open: showEsign}">

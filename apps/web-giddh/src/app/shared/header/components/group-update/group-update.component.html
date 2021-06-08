@@ -16,17 +16,6 @@
         </div>
 
         <div class="row">
-            <!-- <div class="form-group col-xs-6"  *ngIf=" uniqueName === 'currentassets' || uniqueName==='currentliabilities' " >
-
-        <div style="max-width:130px" class="item-padding text-right" (click)="$event.stopPropagation()"
-              (mouseenter)="hideTax()">
-            <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
-                             [ledgerAmount]="currentTxn.amount"
-                             (hideOtherPopups)="hideTax()"
-                             (discountTotalUpdated)="currentTxn.discount = $event;calculateTotal();">
-            </ledger-discount>
-          </div>
-      </div>  -->
             <div class="form-group col-xs-12 col-sm-6" *ngIf="!((activeGroup$ | async)?.fixed)">
                 <label for="" class="some">{{localeData?.balance_for_trigger}}</label>
                 <div [ngClass]="{'input-group': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">
@@ -86,7 +75,6 @@
                 [options]="searchedGroups" [isFilterEnabled]="true" class="pull-left move-group-form"
                 [enableDynamicSearch]="true" [isPaginationEnabled]="true" (scrollEnd)="handleGroupScrollEnd()"
                 (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)">
-                <!--template for move group typeahead [customFilter]="customMoveGroupFilter"-->
                 <ng-template #optionTemplate let-option="option">
                     <a href="javascript:void(0)" class="list-item">
                         <div class="item">{{ option.label }}</div>
@@ -133,7 +121,6 @@
                     </div>
                 </div>
             </form>
-            <!-- *ngIf="showEditTaxSection" -->
             <div class="edit-tax-section">
                 <div class="form-group">
                     <div class="tax-label">

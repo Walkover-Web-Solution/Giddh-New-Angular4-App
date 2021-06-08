@@ -1,4 +1,3 @@
-import { ICommonResponseOfManufactureItem, IManufacturingItemRequest, IManufacturingUnqItemObj } from '../../../models/interfaces/manufacturing.interface';
 import { MANUFACTURING_ACTIONS } from '../../actions/manufacturing/manufacturing.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from '../../lodash-optimized';

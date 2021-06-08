@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map, switchMap } from 'rxjs/operators';
-
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { LocaleService } from '../../../services/locale.service';
 import { SettingsWarehouseService } from '../../../services/settings.warehouse.service';
