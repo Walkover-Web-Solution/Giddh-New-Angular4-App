@@ -110,33 +110,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         }), takeUntil(this.destroyed$));
     }
 
-    /**
-     * This will return page heading based on active tab
-     *
-     * @param {boolean} event
-     * @memberof UserDetailsComponent
-     */
-     public getPageHeading(): string {
-
-        if(this.isMobileScreen){
-             if(this.activeTab == 'auth-key'){
-                 this.localeData?.auth_key?.tab_heading;
-             }
-             else if(this.activeTab == 'mobile-number'){
-                this.localeData?.mobile_number?.tab_heading
-             }
-             else if(this.activeTab == 'session'){
-                this.localeData?.session?.tab_heading;
-             }
-             else if(this.activeTab == 'subscription'){
-                 this.localeData?.subscription?.tab_heading
-             }
-        }
-        else {
-            return " ";
-        }
-    }
-
     public ngOnInit() {
         this.breakPointObservar.observe([
             '(max-width:767px)'
@@ -375,5 +348,33 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = `pages/user-details/${tabName}`;
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+    }
+
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof UserDetailsComponent
+     */
+     public getPageHeading(): string {
+        let pageHeading = "";
+
+        if (this.isMobileScreen) {
+            switch (this.activeTab) {
+                case 'auth-key':
+                    pageHeading = this.localeData?.auth_key?.tab_heading;
+                    break;
+                case 'mobile-number':
+                    pageHeading = this.localeData?.mobile_number?.tab_heading;
+                    break;
+                case 'session':
+                    pageHeading = this.localeData?.session?.tab_heading;
+                    break;
+                case 'subscription':
+                    pageHeading = this.localeData?.subscription?.tab_heading;
+                    break;
+            }
+        }
+        return pageHeading;
     }
 }
