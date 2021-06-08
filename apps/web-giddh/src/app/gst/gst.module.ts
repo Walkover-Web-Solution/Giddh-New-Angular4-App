@@ -38,7 +38,7 @@ import { GstRoutingModule } from './gst.routing.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { GstrSidebarComponent } from '../shared/gst-sidebar/gst-sidebar.component';
+import { GstrSidebarModule } from '../shared/gst-sidebar/gst-sidebar.module';
 
 @NgModule({
     declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component,
@@ -46,7 +46,7 @@ import { GstrSidebarComponent } from '../shared/gst-sidebar/gst-sidebar.componen
         ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
         OverviewSummaryComponent, TransactionSummaryComponent,
         PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent,
-        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, GstrSidebarComponent],
+        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent],
     imports: [
         GstRoutingModule,
         CollapseModule,
@@ -70,13 +70,13 @@ import { GstrSidebarComponent } from '../shared/gst-sidebar/gst-sidebar.componen
         ConfirmModalModule,
         SharedModule,
         ShSelectModule,
-
+        GstrSidebarModule
     ],
     providers: [],
     entryComponents: [
         PaginationComponent
     ],
-    exports: [ViewTransactionsComponent, GstrSidebarComponent]
+    exports: [ViewTransactionsComponent]
 })
 export class GstModule {
 }
