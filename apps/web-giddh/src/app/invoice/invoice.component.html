@@ -55,7 +55,7 @@
 
                     <!--<invoice-page-dd (pageChanged)="goToRoute($event)" (selectVoucher)="voucherChange($event)"></invoice-page-dd>-->
                     <div id="setting-tab" class="w-100">
-                        <hamburger-menu [pageHeading]="getPageHeading()"></hamburger-menu>
+                        <hamburger-menu *ngIf="localeData?.tabs" [pageHeading]="getPageHeading()"></hamburger-menu>
                         <ng-template [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
 
 
