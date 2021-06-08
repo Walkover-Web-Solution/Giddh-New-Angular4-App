@@ -11,7 +11,6 @@ import { INVOICE_RECEIPT_ACTIONS } from 'apps/web-giddh/src/app/actions/invoice/
 import { LEDGER } from 'apps/web-giddh/src/app/actions/ledger/ledger.const';
 
 export interface InvoiceState {
-    invoices: GetAllInvoicesPaginatedResponse;
     base64Data: string;
     ledgers: GetAllLedgersOfInvoicesResponse;
     invoiceData: PreviewInvoiceResponseClass;
@@ -38,7 +37,6 @@ export interface InvoiceState {
 }
 
 export const initialState: InvoiceState = {
-    invoices: null,
     base64Data: null,
     ledgers: null,
     invoiceData: null,
@@ -64,15 +62,6 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
     switch (action.type) {
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);
-        }
-        case INVOICE_ACTIONS.GET_ALL_INVOICES_RESPONSE: {
-            let newState = _.cloneDeep(state);
-            let res: BaseResponse<GetAllInvoicesPaginatedResponse, CommonPaginatedRequest> = action.payload;
-            if (res.status === 'success') {
-                newState.invoices = res.body;
-                return Object.assign({}, state, newState);
-            }
-            return Object.assign({}, state, newState);
         }
         case INVOICE_ACTIONS.DOWNLOAD_INVOICE_RESPONSE: {
             let newState = _.cloneDeep(state);
@@ -377,28 +366,6 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE.RECURRING.UPDATE_RECURRING_INVOICE: {
             const s = { ...state, recurringInvoiceData: { ...state.recurringInvoiceData, isRequestInFlight: true, isRequestSuccess: false } };
             return s;
-        }
-        case INVOICE.RECURRING.DELETE_RECURRING_INVOICE: {
-            const s = { ...state, recurringInvoiceData: { ...state.recurringInvoiceData, isDeleteRequestInFlight: true, isRequestSuccess: false } };
-            return s;
-        }
-        case INVOICE.RECURRING.DELETE_RECURRING_INVOICE_RESPONSE: {
-            if (action.payload) {
-                const invoice = state.recurringInvoiceData.recurringInvoices.recurringVoucherDetails
-                    .find(p => p.uniqueName === action.payload);
-                invoice.status = 'inactive';
-                const recurringVoucherDetails = state.recurringInvoiceData.recurringInvoices.recurringVoucherDetails
-                    .filter(p => p.uniqueName !== action.payload)
-                    .concat(invoice);
-                return {
-                    ...state, recurringInvoiceData: {
-                        ...state.recurringInvoiceData,
-                        recurringInvoices: { ...state.recurringInvoiceData.recurringInvoices, recurringVoucherDetails },
-                        isDeleteRequestInFlight: false, isRequestSuccess: true
-                    }
-                };
-            }
-            return { ...state, recurringInvoiceData: { ...state.recurringInvoiceData, isDeleteRequestInFlight: false, isRequestSuccess: false } };
         }
         case INVOICE.RECURRING.UPDATE_RECURRING_INVOICE_RESPONSE: {
             if (action.payload) {
