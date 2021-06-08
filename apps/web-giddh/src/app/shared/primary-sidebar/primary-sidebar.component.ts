@@ -361,14 +361,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                         return true;
                     }
                 })));
-                const activeItemIndex = this.allItems.findIndex(item => item.isActive);
-                this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
-                    if (index === activeItemIndex) {
-                        dropdown.show();
-                    } else {
-                        dropdown.hide();
-                    }
-                });
+                this.openActiveItem();
 
                 this.changeDetectorRef.detectChanges();
             }
@@ -1024,6 +1017,33 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public translationComplete(event: any): void {
         if (event) {
             this.allItems = this.generalService.getVisibleMenuItems(this.apiMenuItems, this.localeData?.items);
+        }
+    }
+
+    /**
+     * Opens the active item and closes the rest
+     *
+     * @param {*} [itemIndex] Current item index
+     * @memberof PrimarySidebarComponent
+     */
+    public openActiveItem(itemIndex?: any): void {
+        if (itemIndex !== undefined) {
+            this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
+                if (index === itemIndex) {
+                    dropdown.show();
+                } else {
+                    dropdown.hide();
+                }
+            });
+        } else {
+            const activeItemIndex = this.allItems.findIndex(item => item.isActive);
+            this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
+                if (index === activeItemIndex) {
+                    dropdown.show();
+                } else {
+                    dropdown.hide();
+                }
+            });
         }
     }
 }
