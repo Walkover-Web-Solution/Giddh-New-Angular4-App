@@ -1,7 +1,7 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { InvoiceService } from '../../services/invoice.service';
@@ -20,7 +20,6 @@ import {
     IEwayBillCancel,
     IEwayBillfilter,
     IEwayBillTransporter,
-    IGetAllInvoicesResponse,
     InvoiceFilterClass,
     InvoiceTemplateDetailsResponse,
     PreviewInvoiceRequest,
@@ -39,24 +38,6 @@ import { GeneralService } from '../../services/general.service';
 
 @Injectable()
 export class InvoiceActions {
-
-    // GET_ALL All Invoices
-
-    public GetAllInvoices$: Observable<Action> = createEffect(() => this.action$
-        .pipe(
-            ofType(INVOICE_ACTIONS.GET_ALL_INVOICES),
-            switchMap((action: CustomActions) => this._invoiceService.GetAllInvoices(action.payload.model, action.payload.body)),
-            map(response => {
-                return this.GetAllInvoicesResponse(response);
-            })));
-
-
-    public GetAllInvoicesResponse$: Observable<Action> = createEffect(() => this.action$
-        .pipe(
-            ofType(INVOICE_ACTIONS.GET_ALL_INVOICES_RESPONSE),
-            map(response => {
-                return { type: 'EmptyAction' };
-            })));
 
     // get all ledgers for invoice
 
@@ -128,19 +109,6 @@ export class InvoiceActions {
                 payload: res
             }))));
 
-    // Generate Bulk Invoice
-    // @Effect()
-    // public GenerateBulkInvoice$: Observable<Action> = this.action$
-    //   .ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE)
-    //   .switchMap((action: CustomActions) =>  this._invoiceService.GenerateBulkInvoice(action.payload.reqObj, action.payload.body))
-    //   .map(res => this.validateResponse<string, GenerateBulkInvoiceRequest[]>(res, {
-    //     type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE,
-    //     payload: res
-    //   }, true, {
-    //       type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE,
-    //       payload: res
-    //     }));
-
     public GenerateBulkInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE),
@@ -148,7 +116,6 @@ export class InvoiceActions {
             map(response => {
                 return this.GenerateBulkInvoiceResponse(response);
             })));
-
 
     public GenerateBulkInvoiceResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -179,7 +146,6 @@ export class InvoiceActions {
                 return this.DeleteInvoiceResponse(response);
             })));
 
-
     public DeleteInvoiceResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE),
@@ -203,7 +169,6 @@ export class InvoiceActions {
                 return this.ActionOnInvoiceResponse(response);
             })));
 
-
     public ActionOnInvoiceResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE),
@@ -217,7 +182,6 @@ export class InvoiceActions {
                 return { type: 'EmptyAction' }; // Refresh the list
             })));
 
-
     public GetTemplateDetailsOfInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS),
@@ -229,8 +193,6 @@ export class InvoiceActions {
                 type: INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE,
                 payload: res
             }))));
-
-    // *********************************** MUSTAFA //***********************************\\
 
     /**
      * GET_ALL INVOICE SETTING
@@ -392,7 +354,6 @@ export class InvoiceActions {
                 payload: res
             }))));
 
-
     public DownloadInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.DOWNLOAD_INVOICE),
@@ -400,7 +361,6 @@ export class InvoiceActions {
                 return this._invoiceService.DownloadInvoice(action.payload.accountUniqueName, action.payload.dataToSend).pipe(
                     map(response => this.DownloadInvoiceResponse(response)));
             })));
-
 
     public DownloadInvoiceResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -429,7 +389,6 @@ export class InvoiceActions {
                     map(response => this.DownloadExportedInvoiceResponse(response)));
             })));
 
-
     public SendInvoiceOnMail$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.SEND_MAIL),
@@ -437,7 +396,6 @@ export class InvoiceActions {
                 return this._invoiceService.SendInvoiceOnMail(action.payload.accountUniqueName, action.payload.dataToSend).pipe(
                     map(response => this.SendInvoiceOnMailResponse(response)));
             })));
-
 
     public SendInvoiceOnMailResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -452,7 +410,6 @@ export class InvoiceActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public SendInvoiceOnSms$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.SEND_SMS),
@@ -460,7 +417,6 @@ export class InvoiceActions {
                 return this._invoiceService.SendInvoiceOnSms(action.payload.accountUniqueName, action.payload.dataToSend, action.payload.voucherNumber).pipe(
                     map(response => this.SendInvoiceOnSmsResponse(response)));
             })));
-
 
     public SendInvoiceOnSmsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -519,13 +475,11 @@ export class InvoiceActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public UpdateEwayVehicle$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE),
             switchMap((action: CustomActions) => this._invoiceService.updateEwayVehicle(action.payload)),
             map(response => this.UpdateEwayVehicleResponse(response))));
-
 
     public LoginEwaybillUser$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -536,7 +490,6 @@ export class InvoiceActions {
             })));
 
     //  EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER
-
 
     public LoginEwaybillUserResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -639,7 +592,6 @@ export class InvoiceActions {
 
     // Get all eway bill request
 
-
     public getALLEwaybillList$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS),
@@ -692,9 +644,6 @@ export class InvoiceActions {
                 if (data && data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 }
-                // if (data && data.status === 'success' && data.body.results.length === 0 ) {
-                //   this._toasty.errorToast('No entries found within given criteria.');
-                // }
                 return { type: 'EmptyAction' };
             })));
     // transporter effects
@@ -706,7 +655,6 @@ export class InvoiceActions {
             map(response => {
                 return this.deleteTransporteResponse(response);
             })));
-
 
     public deleteTransporterResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -721,61 +669,13 @@ export class InvoiceActions {
                 return { type: 'EmptyAction' };
             })));
 
-
-
     public GetAllEwayfilterRequest$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.GET_All_FILTERED_LIST_EWAYBILLS),
             switchMap((action: CustomActions) => this._invoiceService.getAllEwaybillsfilterList(action.payload.body)),
             map((response: BaseResponse<IEwayBillAllList, IEwayBillfilter>) => {
-                if (response.status === 'success') {
-
-                } else {
-                    // this.showToaster(response.message, 'error');
-                }
                 return this.GetAllEwayfilterResponse(response);
             })));
-    //      @Effect()
-    // public addEwayBillTransporter$: Observable<Action> = this.action$
-    //   .ofType(EWAYBILL_ACTIONS.ADD_TRANSPORTER).pipe(
-    //     switchMap((action: CustomActions) => this._invoiceService.GenerateInvoice(action.payload.accountUniqueName, action.payload.body)),
-    //     map(res => this.validateResponse<GenerateInvoiceRequestClass, string>(res, {
-    //       type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
-    //       payload: res
-    //     }, true, {
-    //       type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
-    //       payload: res
-    //     })));
-
-    //      @Effect()
-    // private downloadEwayBill$: Observable<Action> = this.action$
-    //   .ofType(EWAYBILL_ACTIONS.DOWNLOAD_EWAYBILL).pipe(
-    //     switchMap((action: CustomActions) => this._invoiceService.DownloadEwayBills(action.payload)),
-    //     map((response: BaseResponse<any, any>) => {
-    //       if (response) {
-    //         // this.showToaster('');
-    //       } else {
-    //        // this.showToaster(response.message, 'error');
-    //       }
-    //       return this.ewaybillPreviewResponse(response);
-    //     }));
-
-    // *********************************** MUSTAFA //***********************************\\
-
-    // write above except kunal
-    // get all templates
-    // @Effect()
-    // public GetUserTemplates$ = this.action$
-    //   .ofType(INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES)
-    //   .switchMap((action: CustomActions) =>  this._invoiceTemplatesService.getTemplates())
-    //   .map((response: BaseResponse<CustomTemplateResponse[], string>) => {
-    //     if (response.status === 'error') {
-    //       this._toasty.errorToast(response.message, response.code);
-    //     } else {
-    //        return this.getSampleTemplateResponse(response.body);
-    //     }
-    //     return { type: 'EmptyAction' };
-    //   });
 
     // GET_ALL SAMPLE TEMPLATES
 
@@ -786,7 +686,6 @@ export class InvoiceActions {
             map(response => {
                 return this.getSampleTemplateResponse(response);
             })));
-
 
     public getSampleTemplateResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -830,7 +729,6 @@ export class InvoiceActions {
                 return this.setTemplateAsDefaultResponse(response);
             })));
 
-
     public setTemplateAsDefaultResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE),
@@ -853,7 +751,6 @@ export class InvoiceActions {
             map(response => {
                 return this.deleteTemplateResponse(response);
             })));
-
 
     public deleteTemplateResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -895,18 +792,6 @@ export class InvoiceActions {
             map(res => this.validateResponse<RecurringInvoice, string>(res, this.updateRecurringInvoiceResponse(res.body), true,
                 this.updateRecurringInvoiceResponse(null), this.localeService.translate("app_messages.recurring_invoice_updated")))));
 
-    /**
-     * DELETE Recurring Vouchers
-     */
-
-    public DeleteRecurringVouchers$: Observable<Action> = createEffect(() => this.action$
-        .pipe(
-            ofType(INVOICE.RECURRING.DELETE_RECURRING_INVOICE),
-            switchMap((action: CustomActions) => this._recurringService.deleteRecurringVouchers(action.payload)),
-            map(res => this.validateResponse<string, string>(res, this.deleteRecurringInvoiceResponse(res.request),
-                true,
-                this.deleteRecurringInvoiceResponse(null)))));
-
     public GenerateBulkEInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE),
@@ -933,20 +818,6 @@ export class InvoiceActions {
     public downloadFile(data: Response, type: string, fileName) {
         let blob = this.generalService.base64ToBlob(data, 'application/' + type, 512);
         return saveAs(blob, `${fileName}.` + type);
-    }
-
-    public GetAllInvoices(model: CommonPaginatedRequest, body): CustomActions {
-        return {
-            type: INVOICE_ACTIONS.GET_ALL_INVOICES,
-            payload: { model, body }
-        };
-    }
-
-    public GetAllInvoicesResponse(model: BaseResponse<IGetAllInvoicesResponse, CommonPaginatedRequest>): CustomActions {
-        return {
-            type: INVOICE_ACTIONS.GET_ALL_INVOICES_RESPONSE,
-            payload: model
-        };
     }
 
     public GetAllRecurringInvoices(filter?, page: number = 1, count: number = 20): CustomActions {
@@ -1110,13 +981,6 @@ export class InvoiceActions {
         };
     }
 
-    public setTemplateData(section: any) {
-        return {
-            payload: section,
-            type: INVOICE.TEMPLATE.SET_TEMPLATE_DATA
-        };
-    }
-
     public getTemplateState(): CustomActions {
         return {
             type: INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES
@@ -1165,347 +1029,10 @@ export class InvoiceActions {
         };
     }
 
-    public getCurrentTemplateSate(uniqueName: string): CustomActions {
-        return {
-            payload: uniqueName,
-            type: INVOICE.TEMPLATE.GET_CURRENT_TEMPLATE
-        };
-    }
-
     public getSampleTemplateResponse(response): CustomActions {
         return {
             type: INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES_RESPONSE,
             payload: response
-        };
-    }
-
-    public setTemplateId(id: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.SELECT_TEMPLATE,
-            payload: { id }
-        };
-    }
-
-    public setFont(font: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.SET_FONT,
-            payload: { font }
-        };
-    }
-
-    public setColor(primaryColor: string, secondaryColor: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.SET_COLOR,
-            payload: { templateColor: primaryColor, tableColor: secondaryColor }
-        };
-    }
-
-    public updateGSTIN(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_GSTIN,
-            payload: { data }
-        };
-    }
-
-    public updatePAN(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_PAN,
-            payload: { data }
-        };
-    }
-
-    public update(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_PAN,
-            payload: { data }
-        };
-    }
-
-    public setColumnWidth(width: number, colName: string): CustomActions {
-        return {
-            type: INVOICE.CONTENT.SET_COLUMN_WIDTH,
-            payload: { width, colName }
-        };
-
-    }
-
-    public updateInvoiceDate(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_INVOICE_DATE,
-            payload: { data }
-        };
-    }
-
-    public updateInvoiceNo(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_INVOICE_NO,
-            payload: { data }
-        };
-    }
-
-    public updateShippingDate(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_SHIPPING_DATE,
-            payload: { data }
-        };
-    }
-
-    public updateShippingNo(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_SHIPPING_NO,
-            payload: { data }
-        };
-    }
-
-    public updateShippingVia(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_SHIPPING_VIA,
-            payload: { data }
-        };
-    }
-
-    public updateTrackingDate(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_TRACKING_DATE,
-            payload: { data }
-        };
-    }
-
-    public updateTrackingNo(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_TRACKING_NO,
-            payload: { data }
-        };
-    }
-
-    public updateCustomerName(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_CUSTOMER_NAME,
-            payload: { data }
-        };
-    }
-
-    public updateCustomerEmail(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_CUSTOMER_EMAIL,
-            payload: { data }
-        };
-    }
-
-    public updateCustomerMobileNo(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_CUSTOMER_MOBILE_NO,
-            payload: { data }
-        };
-    }
-
-    public updateDueDate(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_DUE_DATE,
-            payload: { data }
-        };
-    }
-
-    public updateBillingState(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_BILLING_STATE,
-            payload: { data }
-        };
-    }
-
-    public updateBillingAddress(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_BILLING_ADDRESS,
-            payload: { data }
-        };
-    }
-
-    public updateBillingGSTIN(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_BILLING_GSTIN,
-            payload: { data }
-        };
-    }
-
-    public updateShippingState(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_SHIPPING_STATE,
-            payload: { data }
-        };
-    }
-
-    public updateShippingAddress(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_SHIPPING_ADDRESS,
-            payload: { data }
-        };
-    }
-
-    public updateShippingGSTIN(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_SHIPPING_GSTIN,
-            payload: { data }
-        };
-    }
-
-    public updateCustomField1(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_CUSTOM_FIELD_1,
-            payload: { data }
-        };
-    }
-
-    public updateCustomField2(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_CUSTOM_FIELD_2,
-            payload: { data }
-        };
-    }
-
-    public updateCustomField3(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_CUSTOM_FIELD_3,
-            payload: { data }
-        };
-    }
-
-    // public updateFormNameInvoice(ti: TaxInvoiceLabel): CustomActions {
-    //   return {
-    //     type: INVOICE.TEMPLATE.UPDATE_FORM_NAME_INVOICE,
-    //     payload: { ti }
-    //   };
-    // }
-
-    // public updateFormNameTaxInvoice(ti: TaxInvoiceLabel): CustomActions {
-    //   return {
-    //     type: INVOICE.TEMPLATE.UPDATE_FORM_NAME_TAX_INVOICE,
-    //     payload: { ti }
-    //   };
-    // }
-
-    public updateSnoLabel(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_SNOLABEL,
-            payload: { data }
-        };
-    }
-
-    public updateDateLabel(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_DATE_LABEL,
-            payload: { data }
-        };
-    }
-
-    public updateItemLabel(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_ITEM_LABEL,
-            payload: { data }
-        };
-    }
-
-    public updateHsnSacLabel(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_HSNSAC_LABEL,
-            payload: { data }
-        };
-    }
-
-    public updateItemCodeLabel(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_ITEM_CODE_LABEL,
-            payload: { data }
-        };
-    }
-
-    public updateDescLabel(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_DESC_LABEL,
-            payload: { data }
-        };
-    }
-
-    public updateRateLabel(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_RATE_LABEL,
-            payload: { data }
-        };
-    }
-
-    public updateDiscountLabel(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_DISCOUNT_LABEL,
-            payload: { data }
-        };
-    }
-
-    public updateTaxableValueLabel(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_TAXABLE_VALUE_LABEL,
-            payload: { data }
-        };
-    }
-
-    public updateTaxLabel(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_TAX_LABEL,
-            payload: { data }
-        };
-    }
-
-    public updateTotalLabel(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_TOTAL_LABEL,
-            payload: { data }
-        };
-    }
-
-    public updateQuantityLabel(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_QUANTITY_LABEL,
-            payload: { data }
-        };
-    }
-
-    public setTopPageMargin(data: number): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_TOP_MARGIN,
-            payload: { data }
-        };
-    }
-
-    public setLeftPageMargin(data: number): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_LEFT_MARGIN,
-            payload: { data }
-        };
-    }
-
-    public setBottomPageMargin(data: number): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_BOTTOM_MARGIN,
-            payload: { data }
-        };
-    }
-
-    public setRightPageMargin(data: number): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_RIGHT_MARGIN,
-            payload: { data }
-        };
-    }
-
-    public updateMessage1(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_MESSAGE1,
-            payload: { data }
-        };
-    }
-
-    public updateMessage2(data: string): CustomActions {
-        return {
-            type: INVOICE.TEMPLATE.UPDATE_MESSAGE2,
-            payload: { data }
         };
     }
 
@@ -1643,20 +1170,6 @@ export class InvoiceActions {
         return {
             type: INVOICE.RECURRING.UPDATE_RECURRING_INVOICE_RESPONSE,
             payload: model
-        };
-    }
-
-    public deleteRecurringInvoice(uniqueName: string): CustomActions {
-        return {
-            type: INVOICE.RECURRING.DELETE_RECURRING_INVOICE,
-            payload: uniqueName
-        };
-    }
-
-    public deleteRecurringInvoiceResponse(res: string): CustomActions {
-        return {
-            type: INVOICE.RECURRING.DELETE_RECURRING_INVOICE_RESPONSE,
-            payload: res
         };
     }
 
@@ -1818,20 +1331,6 @@ export class InvoiceActions {
             payload: response
         };
     }
-
-    //  public downloadEwayBill(model: string): CustomActions {
-    //     return {
-    //       type: EWAYBILL_ACTIONS.DOWNLOAD_EWAYBILL,
-    //       payload: model
-    //     };
-    //   }
-
-    //    public ewaybillPreviewResponse(response) {
-    //      return {
-    //       type: EWAYBILL_ACTIONS.DOWNLOAD_EWAYBILL_RESPONSE,
-    //       payload: response
-    //     };
-    //   }
 
     public GetAllEwayfilterRequest(model: IEwayBillfilter): CustomActions {
         return {

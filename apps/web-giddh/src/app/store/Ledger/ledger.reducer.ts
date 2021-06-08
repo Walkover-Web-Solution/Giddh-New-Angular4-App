@@ -2,8 +2,6 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { DownloadLedgerRequest, LedgerResponse, LedgerUpdateRequest, TransactionsRequest, TransactionsResponse } from '../../models/api-models/Ledger';
 import { AccountResponse, AccountSharedWithResponse } from '../../models/api-models/Account';
 import { LEDGER } from '../../actions/ledger/ledger.const';
-import { FlattenGroupsAccountsResponse } from '../../models/api-models/Group';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
@@ -16,7 +14,6 @@ export interface LedgerState {
     transactionInprogress: boolean;
     accountInprogress: boolean;
     downloadInvoiceInProcess?: boolean;
-    discountAccountsList?: IFlattenGroupsAccountsDetail;
     ledgerCreateSuccess?: boolean;
     ledgerCreateInProcess?: boolean;
     selectedTxnForEditUniqueName: string;
@@ -131,15 +128,6 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 return Object.assign({}, state, { downloadInvoiceInProcess: false });
             }
             return Object.assign({}, state, { downloadInvoiceInProcess: false });
-        case LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE:
-            let discountData: BaseResponse<FlattenGroupsAccountsResponse, string> = action.payload;
-            if (discountData.status === 'success' && discountData.body.results.length > 0) {
-                return Object.assign({}, state, {
-                    discountAccountsList: discountData.body.results.find(r => r.groupUniqueName === 'discount')
-                });
-            } else {
-                return { ...state, discountAccountsList: null };
-            }
         case LEDGER.CREATE_BLANK_LEDGER_REQUEST:
             return Object.assign({}, state, {
                 ledgerCreateSuccess: false,
@@ -189,15 +177,6 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 return {
                     ...state,
                     activeAccountSharedWith: sharedAccountData.body
-                };
-            }
-            return state;
-        case LEDGER.LEDGER_UNSHARE_ACCOUNT_RESPONSE:
-            let unSharedAccData: BaseResponse<string, string> = action.payload;
-            if (unSharedAccData.status === 'success') {
-                return {
-                    ...state,
-                    activeAccountSharedWith: state.activeAccountSharedWith.filter(ac => unSharedAccData.request !== ac.userEmail)
                 };
             }
             return state;
@@ -275,7 +254,6 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 transactionInprogress: false,
                 accountInprogress: false,
                 downloadInvoiceInProcess: false,
-                discountAccountsList: null,
                 ledgerCreateSuccess: false,
                 isDeleteTrxEntrySuccessfull: false,
                 ledgerCreateInProcess: false,
