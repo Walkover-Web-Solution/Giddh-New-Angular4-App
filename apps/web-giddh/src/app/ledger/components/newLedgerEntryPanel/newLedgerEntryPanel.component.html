@@ -65,7 +65,7 @@
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="currentTxn?.convertedRate"
+                                    <amount-field [amount]="currentTxn?.convertedRate" [currencySymbol]="false"
                                         [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code"
                                         [ratePrecision]="true">
                                     </amount-field>
@@ -96,7 +96,7 @@
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="currentTxn?.convertedAmount"
+                                    <amount-field [amount]="currentTxn?.convertedAmount" [currencySymbol]="false"
                                         [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
                                     </amount-field>
                                 </span>
@@ -123,7 +123,7 @@
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="currentTxn?.convertedDiscount"
+                                    <amount-field [amount]="currentTxn?.convertedDiscount" [currencySymbol]="false"
                                         [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
                                     </amount-field>
                                 </span>
@@ -167,7 +167,7 @@
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="currentTxn?.convertedTax"
+                                    <amount-field [amount]="currentTxn?.convertedTax" [currencySymbol]="false"
                                         [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
                                     </amount-field>
                                 </span>
@@ -192,7 +192,7 @@
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 <span class="d-inline-flex">
-                                    <amount-field [amount]="currentTxn?.convertedTotal"
+                                    <amount-field [amount]="currentTxn?.convertedTotal" [currencySymbol]="false"
                                         [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
                                     </amount-field>
                                 </span>
