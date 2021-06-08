@@ -456,12 +456,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     }
 
     public initReport() {
-        // this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
-        // this.toDate = moment().format(this._DDMMYYYY);
-        // this.stockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
-        // this.stockReportRequest.to = moment().format(this._DDMMYYYY);
-        // this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
-        // this.datePickerOptions.endDate = moment().toDate();
         this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
         this.stockReportRequest.stockUniqueName = this.stockUniqueName;
         this.stockReportRequest.transactionType = 'all';
@@ -648,20 +642,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public downloadStockReports(type: string) {
         this.stockReportRequest.reportDownloadType = type;
         this._toasty.infoToast('Upcoming feature');
-        // this.inventoryService.DownloadStockReport(this.stockReportRequest, this.stockUniqueName, this.groupUniqueName)
-        //   .subscribe(d => {
-        //     if (d.status === 'success') {
-        //       if (type == 'xls') {
-        //         let blob = base64ToBlob(d.body, 'application/xls', 512);
-        //         return saveAs(blob, `${this.stockUniqueName}.xlsx`);
-        //       } else {
-        //         let blob = base64ToBlob(d.body, 'application/csv', 512);
-        //         return saveAs(blob, `${this.stockUniqueName}.csv`);
-        //       }
-        //     } else {
-        //       this._toasty.errorToast(d.message);
-        //     }
-        //   });
     }
 
     // region asidemenu toggle
@@ -684,13 +664,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     // From Entity Dropdown
     public selectEntity(option: IOption) {
         this._toasty.infoToast('Upcoming feature');
-        // this.stockReportRequest.branchDetails = option;
-        // if (option.value === 'warehouse') {
-        //   this.isWarehouse = true;
-        // } else {
-        //   this.isWarehouse = false;
-        // }
-        // this.getStockReport(true);
     }
 
     // From inventory type Dropdown

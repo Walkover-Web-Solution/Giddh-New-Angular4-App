@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ElementViewContainerRef } from '../../../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../../../store';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { takeUntil } from 'rxjs/operators';
 import { GStTransactionRequest, GstTransactionResult, GstTransactionSummary } from '../../../../../models/api-models/GstReconcile';
@@ -17,6 +17,7 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 import { saveAs } from 'file-saver';
 import { GstReport } from '../../../../constants/gst.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 
 export const filterTransaction = {
     entityType: '',
@@ -54,7 +55,6 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public invoiceType = [];
     public otherEntityType = [];
     public gstr2InvoiceType = [];
-    // public status = Status;
     public selectedEntityType: string = '';
     public companyGst$: Observable<string> = of('');
     public gstr2entityType = [];
@@ -82,10 +82,11 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private modalService: BsModalService,
+    constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private toaster: ToasterService,
+        private generalService: GeneralService,
         private breakpointObserver: BreakpointObserver) {
         this.viewTransaction$ = this.store.pipe(select(p => p.gstR.viewTransactionData), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
@@ -178,7 +179,6 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             this.selectedInvoice = invoice;
             this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
         }
-        // this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.voucherNumber));
         this.loadDownloadOrSendMailComponent();
         this.downloadOrSendMailModel.show();
     }
@@ -228,13 +228,6 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             }
         }
 
-        // if (this.filterParam.status) {
-        //   let selected = _.find(Status, o => o.value === filters.status);
-        //   if (selected) {
-        //     this.selectedFilter.status = selected.label;
-        //   }
-        // }
-
         if (this.filterParam.type) {
             let selected;
             if (this.selectedGst === GstReport.Gstr1) {
@@ -267,38 +260,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     * @memberof ViewTransactionsComponent
     */
     public downloadFile(): void {
-        let blob = this.base64ToBlob(this.base64Data, 'application/pdf', 512);
+        let blob = this.generalService.base64ToBlob(this.base64Data, 'application/pdf', 512);
         return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account.uniqueName}.pdf`);
-    }
-
-    /**
-     *  To convert base64 data to contentType format in chunks
-     *
-     * @param {any} b64Data base64 data string
-     * @param {string} contentType type to covert file
-     * @param {number} sliceSize chunk size
-     * @returns
-     * @memberof ViewTransactionsComponent
-     */
-    public base64ToBlob(b64Data: any, contentType: string, sliceSize: number): any {
-        contentType = contentType || '';
-        sliceSize = sliceSize || 512;
-        let byteCharacters = atob(b64Data);
-        let byteArrays = [];
-        let offset = 0;
-        while (offset < byteCharacters.length) {
-            let slice = byteCharacters.slice(offset, offset + sliceSize);
-            let byteNumbers = new Array(slice.length);
-            let i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
-            }
-            let byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
-        }
-        return new Blob(byteArrays, { type: contentType });
     }
 
     /**

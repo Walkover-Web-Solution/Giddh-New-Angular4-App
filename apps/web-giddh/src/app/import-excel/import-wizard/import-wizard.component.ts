@@ -52,7 +52,6 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         // if file uploaded successfully
         if (excelState.requestState === ImportExcelRequestStates.UploadFileSuccess) {
             this.step++;
-            // this.onNext(excelState.importExcelData);
         }
 
         // if import is done successfully
@@ -120,9 +119,5 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
             data.branchUniqueName = this.currentBranch;
         }
         this.store.dispatch(this._importActions.processImportRequest(this.entity, data));
-    }
-
-    private resetStoreData() {
-        this.store.dispatch(this._importActions.resetImportExcelState());
     }
 }

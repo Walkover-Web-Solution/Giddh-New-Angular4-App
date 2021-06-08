@@ -17,7 +17,7 @@
             <ng-container *ngIf="!selectedAccountUniqueName && activeGroupUniqueName">
                 <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName"
                     (isGroupSelected)="isGroupSelected($event)" [fetchingAccUniqueName$]="fetchingAccUniqueName$"
-                    [isAccountNameAvailable$]="isAccountNameAvailable$" [isFlattenRemoved]="true"
+                    [isAccountNameAvailable$]="isAccountNameAvailable$"
                     [createAccountInProcess$]="createAccountInProcess$" [isDebtorCreditor]="isDebtorCreditor"
                     [isBankAccount]="isBankAccount" [flatGroupsOptions]="flatAccountWGroupsList"
                     (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc"

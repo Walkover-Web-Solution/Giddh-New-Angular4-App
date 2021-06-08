@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ToasterService } from '../../services/toaster.service';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { CustomActions } from '../../store/customActions';
 import { IMPORT_EXCEL } from './import-excel.const';
@@ -24,7 +24,6 @@ export class ImportExcelActions {
                     this._toasty.errorToast(res.message);
                 }
                 return this.uploadFileResponse(res);
-                // return this.validateResponse(res, this.uploadFileResponse(res.body), true, this.uploadFileResponse(res.body));
             })));
 
     public processImport$: Observable<Action> = createEffect(() => this.action$
@@ -35,7 +34,6 @@ export class ImportExcelActions {
             }), map((res) => {
                 return this.validateResponse(res, this.processImportResponse(res.body), true, this.processImportResponse(null));
             })));
-
 
     public getImportStatus$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -50,7 +48,7 @@ export class ImportExcelActions {
             })));
 
     constructor(private action$: Actions, private _toasty: ToasterService, private _importExcelService: ImportExcelService) {
-        //
+        
     }
 
     public uploadFileRequest(entity: string, data: any): CustomActions {

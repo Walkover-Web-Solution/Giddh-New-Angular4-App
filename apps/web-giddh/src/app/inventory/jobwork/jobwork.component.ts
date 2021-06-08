@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { InventoryReportActions } from '../../actions/inventory/inventory.report.actions';
@@ -258,17 +257,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
                 this.showReceiverSearch = false;
             }
         });
-        // this.productUniqueNameInput.valueChanges.pipe(  // enable after api change for product search
-        //   debounceTime(700),
-        //   distinctUntilChanged(),
-        //   takeUntil(this.destroyed$)
-        // ).subscribe(s => {
-        //   this.filter.productName = s;
-        //   this.applyFilters(1, true);
-        //   if (s === '') {
-        //     this.showReceiverSearch = false;
-        //   }
-        // });
 
         // on load first time
         this.stocksList$.subscribe(res => {
