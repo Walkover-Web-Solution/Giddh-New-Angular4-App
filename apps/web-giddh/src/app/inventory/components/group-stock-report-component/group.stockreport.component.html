@@ -135,45 +135,10 @@
                 <div class="select-style middle">
                     <sh-select placeholder="Select Branch" name="entity" [(ngModel)]="selectedEntity"
                         (selected)="selectEntity($event)" [options]="entities$ | async" [ItemHeight]="33"></sh-select>
-                    <!-- html dropdown <select class="form-control" (change)="selectEntity($event.target.value)">
-            <option value="headquarter">{{(selectedCompany$ | async)?.name}}</option>
-            <option value="warehouse">Warehouse</option>
-            <option *ngFor="let entity of entities$ | async" value="{{entity.uniqueName}}">
-              {{entity.name}}
-            </option>
-            <option value="allEntity">All Entities</option>
-          </select> -->
                 </div>
             </div>
-            <!-- <div style="width: 230px;">
-        <div class="select-style middle">
-          <select class="form-control" [disabled]="isWarehouse" (change)="selectTransactionType($event.target.value)">
-            <option *ngFor="let ttype of transactionTypes" value="{{ttype.uniqueName}}">
-              {{ttype.name}}
-            </option>
-          </select>
-        </div>
-      </div> -->
         </div>
     </div>
-    <!-- hide  -->
-    <!-- <div class="headquater-dropdown">
-    <div class="btn-group mr-b2" dropdown>
-      <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle"
-        aria-controls="dropdown-basic">
-        Headquarters <span class="caret"></span>
-      </button>
-      <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-        <li role="menuitem"><a class="dropdown-item">Walkover Web Solution</a></li>
-        <li role="menuitem"><a class="dropdown-item">MSG91</a></li>
-        <li role="menuitem"><a class="dropdown-item">Branch 2</a></li>
-        <li role="menuitem"><a class="dropdown-item">Warehouse 1</a>
-        </li>
-        <li role="menuitem"><a class="dropdown-item">All Entites</a>
-        </li>
-      </ul>
-    </div>
-  </div> -->
     <div class="fb-1-container mr-b1 mt-3">
         <div class="d-flex justify-content-between w-100">
             <div class="d-flex wrap-head-report">
@@ -183,7 +148,6 @@
                 <div class="advance-icon cursor-pointer" tooltip="Advance Search" (click)="onOpenAdvanceSearch()">
                     <span class="icon-advance-filter"></span>
                 </div>
-                <!-- <i *ngIf="isFilterCorrect" class="icon-refresh ml-1 cp" (click)="resetFilter()"></i> -->
             </div>
             <div class="clear-filter" *ngIf="isFilterCorrect">
                 <button class="btn btn-filter" (click)="resetFilter()">
@@ -212,8 +176,6 @@
                         </li>
                     </ul>
                 </div>
-                <!-- <button class="btn btn-sky-blue" data-toggle="tooltip" tooltip="Alt+i" (click)="editGroup()">Edit group
-                </button> -->
                 <button *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
                     class="btn btn-sky-blue transfer-btn" data-toggle="tooltip" tooltip="Alt+N"
                     (click)="toggleTransferAsidePane()">New Transfer </button>
@@ -237,9 +199,6 @@
                             <!-- in case of all entity with group -->
                         <th colspan="2" class="bd-rr" width="17%"
                             *ngIf="GroupStockReportRequest.branchDetails!='allEntity'">
-                            <!-- <div class="d-flex">
-                                    <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions" class="form-control stock-input" (applyDaterangepicker)="selectedDate($event)" />
-                                </div> -->
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                                 <i><img src="assets/images/custom-calender.svg"></i>
                                 <input type="text" name="selectedDateRange"
@@ -263,7 +222,6 @@
                             <div class="input-container" [hidden]="!showProductSearch">
                                 <input type="text" placeholder="Search Product" class="w100" #productName
                                     [formControl]="productUniqueNameInput" />
-                                <!-- <i class="icon-search" (click)="showProductSearch = false;"></i> -->
                             </div>
                         </th>
                         <!-- in case of all entity with group -->
@@ -592,7 +550,6 @@
         <!-- sticky Footer -->
         <section class="mt-5 footer-sticky"
             *ngIf="groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length>0">
-            <!-- <span>{{activeGroupName}} Value:</span> -->
             <div class="sticky-footer sticky-footer-sale-amount">
                 <div class="inner-content-footer">
                     <div class="row">
@@ -738,10 +695,6 @@
                     <div class="row">
                         <div class="col-sm-4">Date Range</div>
                         <div class="col-sm-8">
-                            <!-- <div class="input-group">
-                                <input type="text" name="daterangeInput1" daterangepicker [options]="datePickerOptions" class="form-control" (applyDaterangepicker)="selectedDate($event, 'advance')" />
-                                <div class="input-group-addon"><span class="icon-calender bg-white"></span></div>
-                            </div> -->
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                                 <i><img src="assets/images/custom-calender.svg"></i>
                                 <input type="text" name="selectedDateRange"

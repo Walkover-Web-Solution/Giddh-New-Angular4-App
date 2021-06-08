@@ -266,7 +266,6 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      */
     public getOperationsFilterData(entityType: string): any {
         this.auditLogFormVM.filters = [];
-        // this.forceClearOperations$ = observableOf({ status: true });
         if (entityType) {
             let selectedEntityObject = this.auditLogFilterForm.filter(element => {
                 if (element.entity.label.toLocaleLowerCase() === entityType.toLocaleLowerCase()) {

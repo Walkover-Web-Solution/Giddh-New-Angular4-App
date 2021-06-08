@@ -86,7 +86,6 @@
                             <td>
                                 <p>{{commonLocaleData?.app_upcoming}}</p>
                                 <h3>
-                                    <!-- {{ totalFutureDueAmounts | giddhCurrency }}/- -->
                                     <span class="d-inline-flex">
                                         <amount-field [amount]="totalFutureDueAmounts" [currencySymbol]="false"
                                             [currencyCode]="false">
@@ -97,7 +96,6 @@
                             <td>
                                 <p>{{commonLocaleData?.app_due}}</p>
                                 <h3>
-                                    <!-- {{ totalDueAmounts | giddhCurrency }}/- -->
                                     <span class="d-inline-flex">
                                         <amount-field [amount]="totalDueAmounts" [currencySymbol]="false"
                                             [currencyCode]="false">
@@ -215,7 +213,6 @@
                     <td [attr.data-title]="commonLocaleData?.app_name">{{ entry.name }}</td>
                     <td [attr.data-title]="localeData?.group_name">{{ entry.groupName }}</td>
                     <td [attr.data-title]="commonLocaleData?.app_due_amount" class="text-right">
-                        <!-- {{ entry.futureDueAmount |giddhCurrency}} -->
                         <span class="d-flex justify-content-end">
                             <amount-field [amount]="entry.futureDueAmount" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -224,7 +221,6 @@
                     </td>
                     <td [attr.data-title]="'0 - ' + (agingDropDownoptions$| async)?.fourth + ' ' + commonLocaleData?.app_days"
                         class="text-right">
-                        <!-- {{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }} -->
                         <span class="d-flex justify-content-end">
                             <amount-field [amount]="entry.currentAndPastDueAmount[0].dueAmount" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -234,7 +230,6 @@
                     </td>
                     <td [attr.data-title]="(agingDropDownoptions$| async)?.fourth + 1 + ' - ' + ((agingDropDownoptions$| async)?.fifth) + ' ' + commonLocaleData?.app_days"
                         class="text-right"> <span (click)="openAgingDropDown()">
-                            <!-- {{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}} -->
                             <span class="d-flex justify-content-end">
                                 <amount-field [amount]="entry.currentAndPastDueAmount[1].dueAmount"
                                     [currencySymbol]="false" [currencyCode]="false">
@@ -244,7 +239,6 @@
                     </td>
                     <td [attr.data-title]="((agingDropDownoptions$| async)?.fifth + 1) + ' - ' + ((agingDropDownoptions$| async)?.sixth) + ' ' +  commonLocaleData?.app_days"
                         class="text-right">
-                        <!-- {{ entry.currentAndPastDueAmount[2].dueAmount |giddhCurrency}} -->
                         <span class="d-flex justify-content-end">
                             <amount-field [amount]="entry.currentAndPastDueAmount[2].dueAmount" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -253,7 +247,6 @@
                     </td>
                     <td [attr.data-title]="((agingDropDownoptions$| async)?.sixth + 1) + ' ' + commonLocaleData?.app_days"
                         class="text-right">
-                        <!-- {{ entry.currentAndPastDueAmount[3].dueAmount |giddhCurrency}} -->
                         <span class="d-flex justify-content-end">
                             <amount-field [amount]="entry.currentAndPastDueAmount[3].dueAmount" [currencySymbol]="false"
                                 [currencyCode]="false">
@@ -262,7 +255,6 @@
 
                     </td>
                     <td [attr.data-title]="commonLocaleData?.app_total_amount" class="text-right">
-                        <!-- {{ entry.totalDueAmount |giddhCurrency}} -->
                         <span class="d-flex justify-content-end">
                             <amount-field [amount]="entry.totalDueAmount" [currencySymbol]="false"
                                 [currencyCode]="false">

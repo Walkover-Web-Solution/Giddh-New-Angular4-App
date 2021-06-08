@@ -50,8 +50,6 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
         this.sidebarRect = window.screen.height;
     }
 
-    // @HostListener('window:load', ['$event'])
-
     public ngOnInit() {
         this.invViewService.getActiveDate().pipe(takeUntil(this.destroyed$)).subscribe(v => {
             this.fromDate = v.from;
@@ -79,10 +77,8 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public showBranchScreen() {
-        // this.store.dispatch(this.inventoryAction.ResetInventoryState());
         this.store.dispatch(this.sidebarAction.ShowBranchScreen(true));
         this.store.dispatch(this.sidebarAction.ShowBranchScreenSideBar(true));
-        // this.router.navigate(['inventory']);
     }
 
     public downloadAllInventoryReports(reportType: string, reportFormat: string) {

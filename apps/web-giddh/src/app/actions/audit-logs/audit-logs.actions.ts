@@ -2,14 +2,10 @@ import { map, switchMap } from 'rxjs/operators';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { LogsService } from '../../services/logs.service';
 import { ToasterService } from '../../services/toaster.service';
-import { AppState } from '../../store';
 import { LogsRequest, LogsResponse, GetAuditLogsRequest, AuditLogsResponse } from '../../models/api-models/Logs';
-/**
- * Created by ad on 04-07-2017.
- */
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AUDIT_LOGS_ACTIONS, AUDIT_LOGS_ACTIONS_V2 } from './audit-logs.const';
 import { CustomActions } from '../../store/customActions';
@@ -61,7 +57,6 @@ export class AuditLogsActions {
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,
-        private store: Store<AppState>,
         private logService: LogsService) {
     }
 
