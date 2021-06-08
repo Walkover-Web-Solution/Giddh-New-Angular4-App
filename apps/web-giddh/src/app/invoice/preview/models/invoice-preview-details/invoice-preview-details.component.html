@@ -396,13 +396,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <div *ngIf="selectedItem?.voucherType === 'purchase' && attachedPdfFileUrl && !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)"
+                                #attachedDocumentPreview class="pdf-preview" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
+                                <iframe #pdfContainer width="100%" height="100%" [src]="attachedPdfFileUrl"></iframe>
+                            </div>
                             <div #attachedDocumentPreview class="pdf-preview">
                                 <iframe #pdfContainer
                                     *ngIf="sanitizedPdfFileUrl && !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)"
                                     width="100%" height="100%" [src]="sanitizedPdfFileUrl"></iframe>
                             </div>
+
                             <div class="expand-file"
-                                *ngIf="selectedItem?.voucherType === 'purchase' && imagePreviewSource">
+                                *ngIf="selectedItem?.voucherType === 'purchase' && (imagePreviewSource || attachedPdfFileUrl)">
                                 <a href="javascript:;" *ngIf="!isAttachmentExpanded" class="cp"
                                     (click)="isAttachmentExpanded = true;"><span><img
                                             src="assets/images/expand.svg"></span>{{commonLocaleData?.app_expand}}</a>
