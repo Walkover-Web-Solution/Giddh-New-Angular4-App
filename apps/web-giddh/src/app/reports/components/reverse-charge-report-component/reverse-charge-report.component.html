@@ -1,8 +1,8 @@
 <ng-container appTranslate [file]="'reports/reverse-charge'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
-    <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
-        <gstr-sidebar (navigateEvent)="handleNavigation($event)" [activeCompanyGstNumber]="activeCompanyGstNumber" (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [isMonthSelected]="isMonthSelected" class="gst-sidebar"></gstr-sidebar>
+        <gstr-sidebar (navigateEvent)="handleNavigation()" (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'" class="gst-sidebar"></gstr-sidebar>
     </div>
     <div class="reverse-table-report">
         <div class="container-fluid">
