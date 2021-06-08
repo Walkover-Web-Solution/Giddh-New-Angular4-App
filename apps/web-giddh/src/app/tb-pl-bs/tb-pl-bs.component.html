@@ -11,7 +11,7 @@
         </tab>
         <tab heading="{{localeData?.tabs?.profit_loss}}"
             (selectTab)="preventTabChangeWithRoute = false;tabChanged('profit-loss', 1); CanPLLoad = true;CanTBLoad = false;CanBSLoad = false;"
-             [id]="(CanPLLoad) ? 'giddh-page-heading': ''">
+            [id]="(CanPLLoad) ? 'giddh-page-heading': ''">
             <div class="container-fluid pd-t15">
                 <pl [selectedCompany]="selectedCompany" *ngIf="CanPLLoad"></pl>
             </div>

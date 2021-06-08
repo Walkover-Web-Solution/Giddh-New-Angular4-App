@@ -9,7 +9,7 @@ import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { DayBookRequestModel } from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
-import {IForceClear} from "../../models/api-models/Sales";
+import { IForceClear } from "../../models/api-models/Sales";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -29,21 +29,21 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-	@Input() public startDate: any;
-	@Input() public endDate: any;
-	@Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
-	@ViewChild('dateRangePickerDir', { read: DaterangePickerComponent, static: true }) public dateRangePickerDir: DaterangePickerComponent;
+    @Input() public startDate: any;
+    @Input() public endDate: any;
+    @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
+    @ViewChild('dateRangePickerDir', { read: DaterangePickerComponent, static: true }) public dateRangePickerDir: DaterangePickerComponent;
 
-	public advanceSearchObject: DayBookRequestModel = null;
-	public advanceSearchForm: FormGroup;
-	public showOtherDetails: boolean = false;
-	public showChequeDatePicker: boolean = false;
-	public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: GIDDH_DATE_FORMAT };
-	public accounts$: Observable<IOption[]>;
-	public groups$: Observable<IOption[]>;
-	public voucherTypeList: Observable<IOption[]>;
-	public stockListDropDown$: Observable<IOption[]>;
-	public comparisonFilterDropDown$: Observable<IOption[]>;
+    public advanceSearchObject: DayBookRequestModel = null;
+    public advanceSearchForm: FormGroup;
+    public showOtherDetails: boolean = false;
+    public showChequeDatePicker: boolean = false;
+    public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: GIDDH_DATE_FORMAT };
+    public accounts$: Observable<IOption[]>;
+    public groups$: Observable<IOption[]>;
+    public voucherTypeList: Observable<IOption[]>;
+    public stockListDropDown$: Observable<IOption[]>;
+    public comparisonFilterDropDown$: Observable<IOption[]>;
     /** Sh-select force clear observable for voucher type  */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     /** Sh-select force clear observable for amount range  */
@@ -88,9 +88,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         endDate: moment()
     };
 
-	private moment = moment;
-	private fromDate: string = '';
-	private toDate: string = '';
+    private moment = moment;
+    private fromDate: string = '';
+    private toDate: string = '';
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
@@ -107,7 +107,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
-	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Mask format for decimal number and comma separation  */
     public inputMaskFormat: string = '';
 
@@ -148,7 +148,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     /** Stores the value of stocks */
     public stocks: IOption[];
 
-	constructor(
+    constructor(
         private inventoryService: InventoryService,
         private store: Store<AppState>,
         private fb: FormBuilder,
@@ -157,10 +157,10 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         private searchService: SearchService,
     ) {
         this.initializeDaybookAdvanceSearchForm();
-		this.setVoucherTypes();
-	}
+        this.setVoucherTypes();
+    }
 
-	public ngOnInit() {
+    public ngOnInit() {
         this.loadDefaultAccountsSuggestions();
         this.loadDefaultStocksSuggestions();
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -175,16 +175,16 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' },
             { label: this.commonLocaleData?.app_comparision_filters?.exclude, value: 'exclude' }
         ]);
-	}
+    }
 
-	public ngOnChanges(changes: SimpleChanges) {
-        if('startDate' in changes && changes.startDate.currentValue && 'endDate' in changes && changes.endDate.currentValue) {
+    public ngOnChanges(changes: SimpleChanges) {
+        if ('startDate' in changes && changes.startDate.currentValue && 'endDate' in changes && changes.endDate.currentValue) {
             let dateRange = { fromDate: '', toDate: '' };
             dateRange = this.generalService.dateConversionToSetComponentDatePicker(changes.startDate.currentValue, changes.endDate.currentValue);
             this.selectedDateRange = { startDate: moment(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: moment(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
             this.selectedDateRangeUi = moment(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
         }
-	}
+    }
 
     public setVoucherTypes() {
         this.voucherTypeList = observableOf([{
@@ -214,16 +214,16 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         }]);
     }
 
-	public onCancel() {
-		this.fromDate = this.startDate;
-		this.toDate = this.endDate;
-		this.closeModelEvent.emit({
-			cancle: true
-		});
+    public onCancel() {
+        this.fromDate = this.startDate;
+        this.toDate = this.endDate;
+        this.closeModelEvent.emit({
+            cancle: true
+        });
         if (this.modalRef) {
             this.hideGiddhDatepicker();
         }
-	}
+    }
 
     /**
      * go
@@ -252,29 +252,29 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     /**
      * onDDElementSelect
      */
-	public onDDElementSelect(type: string, data: any[]) {
-		let values = [];
-		data.forEach(element => {
-			values.push(element.value);
-		});
-		switch (type) {
-			case 'particulars':
-				this.advanceSearchForm.get('particulars')?.patchValue(values);
-				break;
-			case 'accountUniqueNames':
-				this.advanceSearchForm.get('accountUniqueNames')?.patchValue(values);
-				break;
-			case 'vouchers':
-				this.advanceSearchForm.get('vouchers')?.patchValue(values);
-				break;
-			case 'inventory':
-				this.advanceSearchForm.get('inventory.inventories')?.patchValue(values);
-				break;
-			case 'groupUniqueNames':
-				this.advanceSearchForm.get('groupUniqueNames')?.patchValue(values);
-				break;
-		}
-	}
+    public onDDElementSelect(type: string, data: any[]) {
+        let values = [];
+        data.forEach(element => {
+            values.push(element.value);
+        });
+        switch (type) {
+            case 'particulars':
+                this.advanceSearchForm.get('particulars')?.patchValue(values);
+                break;
+            case 'accountUniqueNames':
+                this.advanceSearchForm.get('accountUniqueNames')?.patchValue(values);
+                break;
+            case 'vouchers':
+                this.advanceSearchForm.get('vouchers')?.patchValue(values);
+                break;
+            case 'inventory':
+                this.advanceSearchForm.get('inventory.inventories')?.patchValue(values);
+                break;
+            case 'groupUniqueNames':
+                this.advanceSearchForm.get('groupUniqueNames')?.patchValue(values);
+                break;
+        }
+    }
 
     /**
      * onDDClear
@@ -286,129 +286,129 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     /**
      * onRangeSelect
      */
-	public onRangeSelect(type: string, data: IOption) {
-		switch (type + '-' + data.value) {
-			case 'amount-greaterThan':
-				this.advanceSearchForm.get('includeAmount')?.patchValue(true);
-				this.advanceSearchForm.get('amountGreaterThan')?.patchValue(true);
-				this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
-				this.advanceSearchForm.get('amountEqualTo')?.patchValue(false);
-				break;
-			case 'amount-lessThan':
-				this.advanceSearchForm.get('includeAmount')?.patchValue(true);
-				this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
-				this.advanceSearchForm.get('amountLessThan')?.patchValue(true);
-				this.advanceSearchForm.get('amountEqualTo')?.patchValue(false);
-				break;
-			case 'amount-greaterThanOrEquals':
-				this.advanceSearchForm.get('includeAmount')?.patchValue(true);
-				this.advanceSearchForm.get('amountGreaterThan')?.patchValue(true);
-				this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
-				this.advanceSearchForm.get('amountEqualTo')?.patchValue(true);
-				break;
-			case 'amount-lessThanOrEquals':
-				this.advanceSearchForm.get('includeAmount')?.patchValue(true);
-				this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
-				this.advanceSearchForm.get('amountLessThan')?.patchValue(true);
-				this.advanceSearchForm.get('amountEqualTo')?.patchValue(true);
-				break;
-			case 'amount-equals':
-				this.advanceSearchForm.get('includeAmount')?.patchValue(true);
-				this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
-				this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
-				this.advanceSearchForm.get('amountEqualTo')?.patchValue(true);
-				break;
-			case 'amount-exclude':
-				this.advanceSearchForm.get('includeAmount')?.patchValue(false);
-				this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
-				this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
-				this.advanceSearchForm.get('amountEqualTo')?.patchValue(true);
-				break;
-			case 'inventoryQty-greaterThan':
-				this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(false);
-				break;
-			case 'inventoryQty-lessThan':
-				this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(false);
-				break;
-			case 'inventoryQty-greaterThanOrEquals':
-				this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(true);
-				break;
-			case 'inventoryQty-lessThanOrEquals':
-				this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(true);
-				break;
-			case 'inventoryQty-equals':
-				this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(true);
-				break;
-			case 'inventoryQty-exclude':
-				this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(true);
-				break;
-			case 'inventoryVal-greaterThan':
-				this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(false);
-				break;
-			case 'inventoryVal-lessThan':
-				this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(false);
-				break;
-			case 'inventoryVal-greaterThanOrEquals':
-				this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(true);
-				break;
-			case 'inventoryVal-lessThanOrEquals':
-				this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(true);
-				break;
-			case 'inventoryVal-equals':
-				this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
-				this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(true);
-				break;
-			case 'inventoryVal-exclude':
-				this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
-				this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(true);
-				break;
-		}
-	}
+    public onRangeSelect(type: string, data: IOption) {
+        switch (type + '-' + data.value) {
+            case 'amount-greaterThan':
+                this.advanceSearchForm.get('includeAmount')?.patchValue(true);
+                this.advanceSearchForm.get('amountGreaterThan')?.patchValue(true);
+                this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountEqualTo')?.patchValue(false);
+                break;
+            case 'amount-lessThan':
+                this.advanceSearchForm.get('includeAmount')?.patchValue(true);
+                this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountLessThan')?.patchValue(true);
+                this.advanceSearchForm.get('amountEqualTo')?.patchValue(false);
+                break;
+            case 'amount-greaterThanOrEquals':
+                this.advanceSearchForm.get('includeAmount')?.patchValue(true);
+                this.advanceSearchForm.get('amountGreaterThan')?.patchValue(true);
+                this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountEqualTo')?.patchValue(true);
+                break;
+            case 'amount-lessThanOrEquals':
+                this.advanceSearchForm.get('includeAmount')?.patchValue(true);
+                this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountLessThan')?.patchValue(true);
+                this.advanceSearchForm.get('amountEqualTo')?.patchValue(true);
+                break;
+            case 'amount-equals':
+                this.advanceSearchForm.get('includeAmount')?.patchValue(true);
+                this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountEqualTo')?.patchValue(true);
+                break;
+            case 'amount-exclude':
+                this.advanceSearchForm.get('includeAmount')?.patchValue(false);
+                this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountEqualTo')?.patchValue(true);
+                break;
+            case 'inventoryQty-greaterThan':
+                this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(false);
+                break;
+            case 'inventoryQty-lessThan':
+                this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(false);
+                break;
+            case 'inventoryQty-greaterThanOrEquals':
+                this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(true);
+                break;
+            case 'inventoryQty-lessThanOrEquals':
+                this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(true);
+                break;
+            case 'inventoryQty-equals':
+                this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(true);
+                break;
+            case 'inventoryQty-exclude':
+                this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(true);
+                break;
+            case 'inventoryVal-greaterThan':
+                this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(false);
+                break;
+            case 'inventoryVal-lessThan':
+                this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(false);
+                break;
+            case 'inventoryVal-greaterThanOrEquals':
+                this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(true);
+                break;
+            case 'inventoryVal-lessThanOrEquals':
+                this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(true);
+                break;
+            case 'inventoryVal-equals':
+                this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(true);
+                break;
+            case 'inventoryVal-exclude':
+                this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(true);
+                break;
+        }
+    }
 
     /**
      * toggleOtherDetails
      */
-	public toggleOtherDetails() {
-		let val: boolean = !this.advanceSearchForm.get('includeDescription').value;
-		this.advanceSearchForm.get('includeDescription')?.patchValue(val);
-		if (!val) {
-			this.advanceSearchForm.get('description')?.patchValue(null);
-		}
-	}
+    public toggleOtherDetails() {
+        let val: boolean = !this.advanceSearchForm.get('includeDescription').value;
+        this.advanceSearchForm.get('includeDescription')?.patchValue(val);
+        if (!val) {
+            this.advanceSearchForm.get('description')?.patchValue(null);
+        }
+    }
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
@@ -500,7 +500,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      * @memberof DaybookAdvanceSearchModelComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }
@@ -650,7 +650,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 
@@ -677,7 +677,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                         this.defaultStockPaginationData.page = this.stocksSearchResultsPaginationData.page;
                         this.defaultStockPaginationData.totalPages = this.stocksSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 

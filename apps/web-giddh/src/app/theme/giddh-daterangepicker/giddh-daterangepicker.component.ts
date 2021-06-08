@@ -25,7 +25,7 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
     /** Taking end date */
     @Input() public inputEndDate: any = '';
     /* Instance of date picker */
-    @ViewChild('picker', {static: true}) picker: MatDatepicker<Date>;
+    @ViewChild('picker', { static: true }) picker: MatDatepicker<Date>;
     /* This will hold start date */
     public startDate: any = '';
     /* This will hold end date */
@@ -87,7 +87,7 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
         }
         if (changes.inputEndDate && changes.inputEndDate.currentValue) {
             this.endDate = changes.inputEndDate.currentValue.toDate();
-            this.dateSelected.emit({startDate: this.startDate, endDate: this.endDate});
+            this.dateSelected.emit({ startDate: this.startDate, endDate: this.endDate });
         }
     }
 
@@ -108,10 +108,10 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
      * @memberof GiddhDaterangepickerComponent
      */
     public dateChange(type: string, event: MatDatepickerInputEvent<Date>): void {
-        if(type === "start") {
+        if (type === "start") {
             this.startDate = moment(event.value, GIDDH_DATE_FORMAT).toDate();
         }
-        if(type === "end") {
+        if (type === "end") {
             this.endDate = moment(event.value, GIDDH_DATE_FORMAT).toDate();
         }
     }
@@ -122,7 +122,7 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
      * @memberof GiddhDaterangepickerComponent
      */
     public openDatepicker(): void {
-        if(this.picker) {
+        if (this.picker) {
             this.picker.open();
         }
     }

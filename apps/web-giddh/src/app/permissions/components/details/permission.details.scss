@@ -1,11 +1,11 @@
-@import '../../../../assets/css/color.scss';
-.panel-body{
+@import "../../../../assets/css/color.scss";
+.panel-body {
     padding: 0 !important;
 }
-.panel-heading{
+.panel-heading {
     padding: 10px 0 !important;
-    background:transparent !important;
+    background: transparent !important;
 }
-.panel-body .table td{
+.panel-body .table td {
     border-bottom: 1px solid $gainsboro;
 }

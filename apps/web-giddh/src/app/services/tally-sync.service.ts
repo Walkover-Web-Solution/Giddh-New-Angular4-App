@@ -22,7 +22,7 @@ export class TallySyncService {
         const companyUniqueName = this._generalService.companyUniqueName;
         const url = this.config.apiUrl + TALLY_SYNC_API.COMPLETED
             .replace(':companyUniqueName', companyUniqueName);
-        return this._http.get(url,model).pipe(map((res) => {
+        return this._http.get(url, model).pipe(map((res) => {
             return res.body;
         }), catchError((e) => this.errorHandler.HandleCatch<TallySyncResponseData, string>(e)));
     }

@@ -1,4 +1,4 @@
-@import '../../../../assets/css/color.scss';
+@import "../../../../assets/css/color.scss";
 
 .clear-filter-close {
     justify-content: flex-end;
@@ -21,12 +21,22 @@
     font-size: 30px;
     cursor: pointer;
 }
-.collapse-icons{
+.collapse-icons {
     font-size: 10px;
     border: 1px solid $chetwode-blue;
     border-radius: 4px;
     padding: 2px;
     top: 0 !important;
+}
+.input-group{
+    input{
+        border-top-right-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+    }
+    .input-group-addon{
+        border-top-left-radius: 0px !important;
+        border-bottom-left-radius: 0px !important;
+    }
 }
 @media (min-width: 1200px) {
     .container {
@@ -66,24 +76,24 @@
         position: relative;
         padding-left: 80px !important;
     }
-    .advance-search{
-        p{
+    .advance-search {
+        p {
             line-height: 18px;
             margin-bottom: 10px;
         }
-        .mb-2{
+        .mb-2 {
             margin-bottom: 10px !important;
         }
-        .mt-2{
+        .mt-2 {
             margin-top: 10px;
         }
-        .mr-b1{
+        .mr-b1 {
             margin-bottom: 0;
         }
     }
 }
-@media screen and (max-width:575px) {
-    .switch-wrapper{
+@media screen and (max-width: 575px) {
+    .switch-wrapper {
         padding-right: 15px !important;
         margin-bottom: 15px;
     }

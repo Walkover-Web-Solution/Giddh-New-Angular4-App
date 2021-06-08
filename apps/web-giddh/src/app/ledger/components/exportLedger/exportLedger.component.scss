@@ -1,10 +1,10 @@
-.radio-inline{
+.radio-inline {
     margin-left: 6px;
 }
-.export-type{
+.export-type {
     display: flex;
 }
-.show-columnar-button{
+.show-columnar-button {
     display: inline-block;
 }
 @media (max-width: 767px) {
@@ -14,11 +14,11 @@
     }
     .export-type {
         flex-direction: column;
-        span{
+        span {
             margin-right: 15px !important;
         }
     }
-    .show-columnar-button{
+    .show-columnar-button {
         display: none;
     }
 }

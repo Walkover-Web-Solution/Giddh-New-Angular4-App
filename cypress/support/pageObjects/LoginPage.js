@@ -4,23 +4,23 @@ class LoginPage {
         return cy.xpath('//span[@class=\'login-with-google\']')
     }
 
-    getLoginWithEmail(){
+    getLoginWithEmail() {
         return cy.xpath('//a[contains(text(),\'email and password\')]');
     }
 
-    signUpButton(){
+    signUpButton() {
         return cy.xpath('//a[normalize-space()=\'Signup\']');
     }
 
-    enterEmailId(){
+    enterEmailId() {
         return cy.get('#email');
     }
 
-    enterPassword(){
+    enterPassword() {
         return cy.xpath('//input[@placeholder=\'Password\']');
     }
 
-    clickLoginButton(){
+    clickLoginButton() {
         return cy.get('#demo > .btn')
     }
 

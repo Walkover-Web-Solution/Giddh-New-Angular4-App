@@ -21,9 +21,9 @@ export class ImportStatementComponent implements OnDestroy {
     /** Variable for File Upload */
     public selectedFile: any;
     /** Object for API request parameters */
-    public getRequest: any = {entity: 'pdf', companyUniqueName: '', accountUniqueName: ''};
+    public getRequest: any = { entity: 'pdf', companyUniqueName: '', accountUniqueName: '' };
     /** Object for API post parameters */
-    public postRequest: any = {file: '', password: ''};
+    public postRequest: any = { file: '', password: '' };
 
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -48,7 +48,7 @@ export class ImportStatementComponent implements OnDestroy {
         let isValidFileType = validExtensions.some(extension => type === extension);
 
         if (!isValidFileType) {
-            if(file && file.length > 0) {
+            if (file && file.length > 0) {
                 this.toaster.errorToast(this.localeData?.import_error);
             }
             this.selectedFile = null;

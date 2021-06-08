@@ -7,7 +7,7 @@ import { cloneDeep, map as lodashMap } from '../../lodash-optimized';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { PaginationComponent } from 'ngx-bootstrap/pagination';
-import {ModalOptions} from 'ngx-bootstrap/modal';
+import { ModalOptions } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
@@ -65,9 +65,9 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public agingAdvanceSearchModal: AgingAdvanceSearchModal = new AgingAdvanceSearchModal();
     public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
 
-    @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
-    @ViewChild('paginationChild', {static: false}) public paginationChild: ElementViewContainerRef;
-    @ViewChild('filterDropDownList', {static: true}) public filterDropDownList: BsDropdownDirective;
+    @ViewChild('advanceSearch', { static: true }) public advanceSearch: ModalDirective;
+    @ViewChild('paginationChild', { static: false }) public paginationChild: ElementViewContainerRef;
+    @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
     /** Advance search component instance */
     @ViewChild('agingReportAdvanceSearch', { read: ContactAdvanceSearchComponent, static: true }) public agingReportAdvanceSearch: ContactAdvanceSearchComponent;
     @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
@@ -261,7 +261,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.isAdvanceSearchApplied = false;
         this.getDueReport();
 
-        if(this.agingReportAdvanceSearch) {
+        if (this.agingReportAdvanceSearch) {
             this.agingReportAdvanceSearch.reset();
         }
     }

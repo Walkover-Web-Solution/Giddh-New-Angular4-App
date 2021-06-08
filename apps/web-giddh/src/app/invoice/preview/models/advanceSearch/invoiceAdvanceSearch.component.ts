@@ -57,7 +57,7 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
     public dateFieldPosition: any = { x: 0, y: 0 };
 
     constructor(private generalService: GeneralService, private modalService: BsModalService) {
-        
+
     }
 
     public ngOnInit() {
@@ -280,7 +280,7 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
      * @memberof InvoiceAdvanceSearchComponent
      */
     public dateSelectedCallback(value?: any): void {
-        if(value && value.event === "cancel") {
+        if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
         }

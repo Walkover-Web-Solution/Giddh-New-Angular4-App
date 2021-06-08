@@ -1,21 +1,20 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
-import { Action, Store } from '@ngrx/store';
-import { AppState } from '../../../store/roots';
+import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { Router } from '@angular/router';
 import { SETTINGS_TRIGGERS_ACTIONS } from './settings.triggers.const';
 import { SettingsTriggersService } from '../../../services/settings.triggers.service';
 import { CustomActions } from '../../../store/customActions';
+import { LocaleService } from '../../../services/locale.service';
 
 @Injectable()
 export class SettingsTriggersActions {
 
 
-    public CreateTrigger$: Observable<Action> = createEffect( ()=> this.action$
+    public CreateTrigger$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.CREATE_TRIGGERS),
             switchMap((action: CustomActions) => {
@@ -24,7 +23,7 @@ export class SettingsTriggersActions {
             })));
 
 
-    public CreateTriggerResponse$: Observable<Action> =createEffect( ()=>  this.action$
+    public CreateTriggerResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.CREATE_TRIGGERS_RESPONSE),
             map((response: CustomActions) => {
@@ -32,14 +31,14 @@ export class SettingsTriggersActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Trigger Created Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.trigger_created"));
                     return this.GetTriggers();
                 }
                 return { type: 'EmptyAction' };
             })));
 
 
-    public UpdateTrigger$: Observable<Action> =createEffect( ()=>  this.action$
+    public UpdateTrigger$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.UPDATE_TRIGGERS),
             switchMap((action: CustomActions) => {
@@ -48,7 +47,7 @@ export class SettingsTriggersActions {
             })));
 
 
-    public UpdateTriggerResponse$: Observable<Action> =createEffect( ()=>  this.action$
+    public UpdateTriggerResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.UPDATE_TRIGGERS_RESPONSE),
             map((response: CustomActions) => {
@@ -56,14 +55,14 @@ export class SettingsTriggersActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Trigger Updated Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.trigger_updated"));
                     return this.GetTriggers();
                 }
                 return { type: 'EmptyAction' };
             })));
 
 
-    public DeleteTrigger$: Observable<Action> =createEffect( ()=>  this.action$
+    public DeleteTrigger$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.DELETE_TRIGGERS),
             switchMap((action: CustomActions) => {
@@ -72,7 +71,7 @@ export class SettingsTriggersActions {
             })));
 
 
-    public DeleteTriggerResponse$: Observable<Action> =createEffect( ()=>  this.action$
+    public DeleteTriggerResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.DELETE_TRIGGERS_RESPONSE),
             map((response: CustomActions) => {
@@ -80,14 +79,14 @@ export class SettingsTriggersActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Trigger Deleted Successfully.');
+                    this.toasty.successToast(this.localeService.translate("app_messages.trigger_deleted"));
                     return this.GetTriggers();
                 }
                 return { type: 'EmptyAction' };
             })));
 
 
-    public GetTrigger$: Observable<Action> =createEffect( ()=>  this.action$
+    public GetTrigger$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS),
             switchMap((action: CustomActions) => {
@@ -97,8 +96,7 @@ export class SettingsTriggersActions {
 
     constructor(private action$: Actions,
         private toasty: ToasterService,
-        private router: Router,
-        private store: Store<AppState>,
+        private localeService: LocaleService,
         private settingsTriggersService: SettingsTriggersService) {
     }
 

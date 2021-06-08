@@ -35,6 +35,8 @@ export class InvoiceUiDataService {
      * to avoid unused uploading of images on the server
     */
     public unusedImageSignature: string;
+    /** True, if logo update is successful */
+    public isLogoUpdateInProgress: boolean;
 
     private companyName: string;
     private companyAddress: string;
@@ -144,6 +146,7 @@ export class InvoiceUiDataService {
      */
     public resetCustomTemplate() {
         this.customTemplate.next(new CustomTemplateResponse());
+        this.isLogoUpdateInProgress = false;
     }
 
     public BRToNewLine(template) {
@@ -229,11 +232,11 @@ export class InvoiceUiDataService {
                 if (!selectedTemplate.sections['header'].data['gstComposition']) {
                     // Assign the default value based on value of warehouseAddress
                     selectedTemplate.sections['header'].data['gstComposition'] = defaultTemplate ?
-                    defaultTemplate.sections['header'].data['gstComposition'] : {
-                        label: '',
-                        display: true,
-                        width: null
-                    };
+                        defaultTemplate.sections['header'].data['gstComposition'] : {
+                            label: '',
+                            display: true,
+                            width: null
+                        };
                 }
                 if (!selectedTemplate.sections['footer'].data['textUnderSlogan']) {
                     // Assign the default value based of company name if not present

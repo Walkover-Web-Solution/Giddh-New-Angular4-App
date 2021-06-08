@@ -1,25 +1,23 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { SalesService } from '../../services/sales.service';
 import { SALES_ACTIONS } from './sales.const';
-import { Router } from '@angular/router';
 import { AccountRequestV2, AccountResponseV2, AddAccountRequest, FlattenAccountsResponse, UpdateAccountRequest } from '../../models/api-models/Account';
 import { AccountService } from '../../services/account.service';
-import { GroupService } from '../../services/group.service';
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
 import { InventoryService } from '../../services/inventory.service';
 import { INameUniqueName } from '../../models/api-models/Inventory';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { CustomActions } from '../../store/customActions';
-import {IUpdateDbRequest} from "../../models/interfaces/ulist.interface";
-import {GeneralActions} from "../general/general.actions";
-import {GeneralService} from "../../services/general.service";
+import { IUpdateDbRequest } from "../../models/interfaces/ulist.interface";
+import { GeneralActions } from "../general/general.actions";
+import { GeneralService } from "../../services/general.service";
+import { LocaleService } from '../../services/locale.service';
 
 /**
  * Created by ad on 04-07-2017.
@@ -28,7 +26,7 @@ import {GeneralService} from "../../services/general.service";
 @Injectable()
 export class SalesActions {
 
-    public GetAccountDetails$: Observable<Action> = createEffect( ()=> this.action$
+    public GetAccountDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SALES_ACTIONS.GET_ACCOUNT_DETAILS),
             switchMap((action: CustomActions) => this._accountService.GetAccountDetailsV2(action.payload)),
@@ -37,7 +35,7 @@ export class SalesActions {
             })));
 
 
-    public GetAccountDetailsResponse$: Observable<Action> = createEffect( ()=> this.action$
+    public GetAccountDetailsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE),
             map((action: CustomActions) => {
@@ -51,14 +49,14 @@ export class SalesActions {
             })));
 
 
-    public GetGroupsListForSales$: Observable<Action> = createEffect( ()=> this.action$
+    public GetGroupsListForSales$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SALES_ACTIONS.GET_HIERARCHICAL_STOCK_GROUPS),
             switchMap((action: CustomActions) => this._inventoryService.GetGroupsWithStocksFlatten()),
             map(response => this.getGroupsListForSalesResponse(response))));
 
 
-    public GetGroupsListForSalesResponse$: Observable<Action> = createEffect( ()=> this.action$
+    public GetGroupsListForSalesResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SALES_ACTIONS.GET_HIERARCHICAL_STOCK_GROUPS_RESPONSE),
             map((action: CustomActions) => {
@@ -72,7 +70,7 @@ export class SalesActions {
 
     // get purhase Ac list
 
-    public getFlattenAcOfPurchase$: Observable<Action> = createEffect( ()=> this.action$
+    public getFlattenAcOfPurchase$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SALES_ACTIONS.GET_PURCHASE_AC_LIST),
             switchMap((action: CustomActions) => this._accountService.GetFlatternAccountsOfGroup(action.payload)),
@@ -86,7 +84,7 @@ export class SalesActions {
 
     // get sales Ac list
 
-    public getFlattenAcOfSales$: Observable<Action> = createEffect( ()=> this.action$
+    public getFlattenAcOfSales$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SALES_ACTIONS.GET_SALES_AC_LIST),
             switchMap((action: CustomActions) => this._accountService.GetFlatternAccountsOfGroup(action.payload)),
@@ -99,7 +97,7 @@ export class SalesActions {
             }))));
 
 
-    public CreateAccountDetails$: Observable<Action> = createEffect( ()=> this.action$
+    public CreateAccountDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SALES_ACTIONS.ADD_ACCOUNT_DETAILS),
             switchMap((action: CustomActions) => this._accountService.CreateAccountV2(action.payload.accountRequest, action.payload.activeGroupUniqueName)),
@@ -108,7 +106,7 @@ export class SalesActions {
             })));
 
 
-    public CreateAccountResponseDetails$: Observable<Action> =createEffect( ()=> this.action$
+    public CreateAccountResponseDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE),
             map((action: CustomActions) => {
@@ -119,7 +117,7 @@ export class SalesActions {
                         type: 'EmptyAction'
                     };
                 } else {
-                    this._toasty.successToast('Account Created Successfully');
+                    this._toasty.successToast(this.localeService.translate("app_messages.account_created"));
                     // if (action.payload.body.errorMessageForCashFreeVirtualAccount) {
                     //     this._toasty.warningToast('Virtual account could not be created for Account "' + action.payload.body.name + '", ' + action.payload.body.errorMessageForCashFreeVirtualAccount);
                     // }
@@ -131,12 +129,12 @@ export class SalesActions {
             })));
 
 
-    public UpdateAccountDetails$: Observable<Action> = createEffect( ()=> this.action$
+    public UpdateAccountDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS),
             switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.accountRequest, action.payload.value)),
             map(response => {
-                if(response && response.body && response.queryString) {
+                if (response && response.body && response.queryString) {
                     const updateIndexDb: IUpdateDbRequest = {
                         newUniqueName: response.body.uniqueName,
                         oldUniqueName: response.queryString.accountUniqueName,
@@ -152,7 +150,7 @@ export class SalesActions {
             })));
 
 
-    public UpdateAccountDetailsResponse$: Observable<Action> = createEffect( ()=> this.action$
+    public UpdateAccountDetailsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE),
             map((action: CustomActions) => {
@@ -161,18 +159,16 @@ export class SalesActions {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    this._toasty.successToast('Account Updated Successfully');
+                    this._toasty.successToast(this.localeService.translate("app_messages.account_updated"));
                 }
                 return { type: 'EmptyAction' };
             })));
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,
-        private _router: Router,
+        private localeService: LocaleService,
         private store: Store<AppState>,
-        private _salesService: SalesService,
         private _accountService: AccountService,
-        private _groupService: GroupService,
         private _generalActions: GeneralActions,
         private _generalServices: GeneralService,
         private _inventoryService: InventoryService

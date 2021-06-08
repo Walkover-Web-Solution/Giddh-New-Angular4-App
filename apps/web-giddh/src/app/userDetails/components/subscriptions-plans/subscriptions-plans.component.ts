@@ -24,6 +24,10 @@ import { ToasterService } from '../../../services/toaster.service';
 
 export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     @Input() public subscriptions: any;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public logedInUser: UserDetails;
     public subscriptionPlans: CreateCompanyUsersPlan[] = [];
     public currentCompany: any;
@@ -58,13 +62,13 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     /* This will contain the default plans of free companies */
     public defaultFreePlan: any;
     /* This will contain the tooltip content of transaction limit */
-    public transactionLimitTooltipContent: string = "It is the maximum number of transactions (each contains a debit entry and a credit entry) allowed in a plan. Beyond this, charges apply (0.10 INR/transaction).";
+    public transactionLimitTooltipContent: string = "";
     /* This will contain the tooltip content of unlimited users */
-    public unlimitedUsersTooltipContent: string = "No limit on the number of users you can add for any role.";
+    public unlimitedUsersTooltipContent: string = "";
     /* This will contain the tooltip content of unlimited customers */
-    public unlimitedCustomersVendorsTooltipContent: string = "No limit on the number of customers or vendors you add in your books.";
+    public unlimitedCustomersVendorsTooltipContent: string = "";
     /* This will contain the tooltip content of desktop and mobile app */
-    public desktopMobileAppTooltipContent: string = "Other than cloud access, install Giddh desktop app for Mac and Windows; mobile app for Android and iPhone.";
+    public desktopMobileAppTooltipContent: string = "";
     /* This will contain the plan unique name of default trial plan */
     public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
     /* This will contain the plan name of popular plan */
@@ -127,6 +131,11 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.transactionLimitTooltipContent = this.localeData?.subscription?.transaction_limit_content;
+        this.unlimitedUsersTooltipContent = this.localeData?.subscription?.unlimited_users_content;
+        this.unlimitedCustomersVendorsTooltipContent = this.localeData?.subscription?.unlimited_customers_content;
+        this.desktopMobileAppTooltipContent = this.localeData?.subscription?.desktop_mobile_app_content;
+
         this._route.navigate(['/pages', 'user-details', 'subscription'], {
             queryParams: {
                 showPlans: true
@@ -151,11 +160,11 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         });
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
-            if(val && val.showPlans === "true") {
+            if (val && val.showPlans === "true") {
                 this.isShowPlans = true;
             }
 
-            if((!val || val.showPlans !== "true") && this.isShowPlans) {
+            if ((!val || val.showPlans !== "true") && this.isShowPlans) {
                 this.backClicked();
                 this.isShowPlans = false;
                 this.selectNewPlan = false;
@@ -201,11 +210,11 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
 
     public patchProfile(obj) {
         this.settingsProfileService.PatchProfile(obj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response && response.status === "error") {
+            if (response && response.status === "error") {
                 this.toasty.errorToast(response.message);
             } else {
                 this.store.dispatch(this.settingsProfileActions.handleFreePlanSubscribed(true));
-                this.toasty.successToastWithHtml("Welcome onboard!<br>Accounting begins now...");
+                this.toasty.successToastWithHtml(this.commonLocaleData?.app_messages?.welcome_onboard);
                 this.backClicked();
             }
         });
@@ -269,5 +278,17 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      */
     public closeFeaturesModal(): void {
         this.modalRef.hide();
+    }
+
+    /**
+     * This will return welcome user text
+     *
+     * @returns {string}
+     * @memberof SubscriptionsPlansComponent
+     */
+    public getWelcomeUserText(): string {
+        let text = this.localeData?.subscription?.hi_user;
+        text = text?.replace("[USER_NAME]", this.logedInUser?.name);
+        return text;
     }
 }

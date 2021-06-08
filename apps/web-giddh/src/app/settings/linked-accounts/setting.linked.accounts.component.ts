@@ -24,10 +24,10 @@ import { SearchService } from '../../services/search.service';
 })
 export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
-    @ViewChild('connectBankModel', {static: true}) public connectBankModel: ModalDirective;
-    @ViewChild('confirmationModal', {static: true}) public confirmationModal: ModalDirective;
-    @ViewChild('yodleeFormHTML', {static: true}) public yodleeFormHTML: HTMLFormElement;
-    @ViewChild('yodleeIframe', {static: true}) public yodleeIframe: HTMLIFrameElement;
+    @ViewChild('connectBankModel', { static: true }) public connectBankModel: ModalDirective;
+    @ViewChild('confirmationModal', { static: true }) public confirmationModal: ModalDirective;
+    @ViewChild('yodleeFormHTML', { static: true }) public yodleeFormHTML: HTMLFormElement;
+    @ViewChild('yodleeIframe', { static: true }) public yodleeIframe: HTMLIFrameElement;
 
     public iframeSource: string = null;
     public ebankAccounts: BankAccountsResponse[] = [];
@@ -62,6 +62,10 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     private selectedAccount: IEbankAccount;
     private actionToPerform: string;
     private dataToUpdate: object;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
@@ -177,7 +181,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                         accountId = (this.selectedAccount && this.selectedAccount.providerAccount) ? this.selectedAccount.providerAccount.providerAccountId : 0;
                         deleteWithAccountId = false;
                     }
-                    if(accountId) {
+                    if (accountId) {
                         this.store.dispatch(this.settingsLinkedAccountsActions.DeleteBankAccount(accountId, deleteWithAccountId));
                     }
                     break;
@@ -210,11 +214,11 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         if (bankName && account) {
             this.selectedBank = _.cloneDeep(bank);
             this.selectedAccount = _.cloneDeep(account);
-            this.confirmationMessage = `Are you sure you want to delete ${bankName} ? All accounts linked with the same bank will be deleted.`;
+            let message = this.localeData?.delete_bank_message;
+            message = message?.replace("[BANK]", bankName);
+            this.confirmationMessage = message;
             this.actionToPerform = 'DeleteAddedBank';
             this.confirmationModal.show();
-        } else {
-        //
         }
     }
 
@@ -228,7 +232,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(this.providerAccountId, account));
             return;
         }
-        if(account && account.providerAccount) {
+        if (account && account.providerAccount) {
             this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(account.providerAccount.providerAccountId, {}));
         }
     }
@@ -242,7 +246,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             };
 
             this.selectedAccount = _.cloneDeep(account);
-            this.confirmationMessage = `Are you sure you want to link ${data.value} ?`;
+            let message = this.localeData?.link_account_message;
+            message = message?.replace("[ACCOUNT]", data.value);
+            this.confirmationMessage = message;
             this.actionToPerform = 'LinkAccount';
             this.confirmationModal.show();
         }
@@ -250,16 +256,19 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
     public onUnlinkBankAccount(account) {
         this.selectedAccount = _.cloneDeep(account);
-        this.confirmationMessage = `Are you sure you want to unlink ${account.giddhAccount.name} ?`;
+        let message = this.localeData?.unlink_account_message;
+        message = message?.replace("[ACCOUNT]", account.giddhAccount.name);
+        this.confirmationMessage = message;
         this.actionToPerform = 'UnlinkAccount';
         this.confirmationModal.show();
     }
 
     public onUpdateDate(date, account) {
         this.dateToUpdate = moment(date).format(GIDDH_DATE_FORMAT);
-
         this.selectedAccount = _.cloneDeep(account);
-        this.confirmationMessage = `Do you want to get ledger entries for this account from ${this.dateToUpdate} ?`;
+        let message = this.localeData?.get_ledger_entries;
+        message = message?.replace("[DATE]", this.dateToUpdate);
+        this.confirmationMessage = message;
         this.actionToPerform = 'UpdateDate';
         this.confirmationModal.show();
     }
@@ -347,7 +356,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
-            });
+                });
         }
     }
 

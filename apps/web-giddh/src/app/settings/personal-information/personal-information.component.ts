@@ -39,13 +39,17 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /** Emits the saved value */
     @Output() public saveProfile: EventEmitter<any> = new EventEmitter();
 
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor() {}
+    constructor() { }
 
     /**
      * Initializes the component

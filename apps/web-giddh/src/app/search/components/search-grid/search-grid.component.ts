@@ -81,8 +81,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             value: '%s_AN',
         },
     ];
-    @ViewChild('mailModal', {static: true}) public mailModal: ModalDirective;
-    @ViewChild('messageBox', {static: true}) public messageBox: ElementRef;
+    @ViewChild('mailModal', { static: true }) public mailModal: ModalDirective;
+    @ViewChild('messageBox', { static: true }) public messageBox: ElementRef;
     public searchRequest$: Observable<SearchRequest>;
     public isAllChecked: boolean = false;
 
@@ -404,12 +404,12 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         let byteCharacters = atob(b64Data);
         let byteArrays = [];
         let offset = 0;
-        if(byteCharacters) {
+        if (byteCharacters) {
             while (offset < byteCharacters.length) {
                 let slice = byteCharacters.slice(offset, offset + sliceSize);
                 let byteNumbers = new Array((slice ? slice.length : 0));
                 let i = 0;
-                if(slice) {
+                if (slice) {
                     while (i < slice.length) {
                         byteNumbers[i] = slice.charCodeAt(i);
                         i++;

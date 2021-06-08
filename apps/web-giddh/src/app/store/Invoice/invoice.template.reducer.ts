@@ -105,17 +105,17 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
-                     tcs: { // this is for template a
+                    tcs: { // this is for template a
                         label: 'TCS',
                         display: true,
                         width: null
                     },
-                     tds: { // this is for template a
+                    tds: { // this is for template a
                         label: 'TDS',
                         display: true,
                         width: null
                     },
-                     taxBifurcation: { // this is for template a
+                    taxBifurcation: { // this is for template a
                         label: 'Tax Bifurcation',
                         display: true,
                         width: null

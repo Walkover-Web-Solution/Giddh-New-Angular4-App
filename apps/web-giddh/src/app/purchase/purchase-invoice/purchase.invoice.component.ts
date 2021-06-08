@@ -1,7 +1,7 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PaginationComponent } from 'ngx-bootstrap/pagination';
-import {BsDropdownConfig} from 'ngx-bootstrap/dropdown';
+import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import * as  moment from 'moment/moment';
 import * as  _ from '../../lodash-optimized';
 import { GeneratePurchaseInvoiceRequest, IInvoicePurchaseItem, IInvoicePurchaseResponse, ITaxResponse } from '../../services/purchase-invoice.service';
@@ -21,9 +21,9 @@ import { AlertConfig } from 'ngx-bootstrap/alert';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import {IUpdateDbRequest} from "../../models/interfaces/ulist.interface";
-import {GeneralService} from "../../services/general.service";
-import {GeneralActions} from "../../actions/general/general.actions";
+import { IUpdateDbRequest } from "../../models/interfaces/ulist.interface";
+import { GeneralService } from "../../services/general.service";
+import { GeneralActions } from "../../actions/general/general.actions";
 
 const otherFiltersOptions = [
     { name: 'GSTIN Empty', uniqueName: 'GSTIN Empty' },
@@ -73,10 +73,10 @@ const fileGstrOptions = [
 })
 
 export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
-    @ViewChild('pgGstNotFoundOnPortal', {static: true}) public pgGstNotFoundOnPortal: ElementViewContainerRef;
-    @ViewChild('pgGstNotFoundOnGiddh', {static: true}) public pgGstNotFoundOnGiddh: ElementViewContainerRef;
-    @ViewChild('pgPartiallyMatched', {static: true}) public pgPartiallyMatched: ElementViewContainerRef;
-    @ViewChild('pgMatched', {static: true}) public pgMatched: ElementViewContainerRef;
+    @ViewChild('pgGstNotFoundOnPortal', { static: true }) public pgGstNotFoundOnPortal: ElementViewContainerRef;
+    @ViewChild('pgGstNotFoundOnGiddh', { static: true }) public pgGstNotFoundOnGiddh: ElementViewContainerRef;
+    @ViewChild('pgPartiallyMatched', { static: true }) public pgPartiallyMatched: ElementViewContainerRef;
+    @ViewChild('pgMatched', { static: true }) public pgMatched: ElementViewContainerRef;
 
     public allPurchaseInvoicesBackup: IInvoicePurchaseResponse;
     public allPurchaseInvoices: IInvoicePurchaseResponse = new IInvoicePurchaseResponse();
@@ -141,7 +141,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         this.purchaseInvoiceRequestObject.taxes = [];
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany && activeCompany.gstDetails && activeCompany.gstDetails[0]) {
+            if (activeCompany && activeCompany.gstDetails && activeCompany.gstDetails[0]) {
                 this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
             }
         });

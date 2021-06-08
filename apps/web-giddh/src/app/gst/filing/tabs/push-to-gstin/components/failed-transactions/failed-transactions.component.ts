@@ -13,6 +13,10 @@ import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() public failedTransactions: Gstr1SummaryErrors[] = [];
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public filteredTransactions: Gstr1SummaryErrors[] = [];
     public imgPath: string = '';
 
@@ -20,12 +24,11 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor() {
-        //
+        
     }
 
     public ngOnInit() {
-        //this.imgPath = (isElectron||isCordova)  ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
-        this.imgPath = (isElectron|| isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
     }
 
     /**
