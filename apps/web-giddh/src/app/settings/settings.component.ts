@@ -15,7 +15,6 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { SettingsTagsComponent } from './tags/tags.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BunchComponent } from './bunch/bunch.component';
 import { AuthenticationService } from '../services/authentication.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
@@ -39,7 +38,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('eBankComp', { static: false }) public eBankComp: SettingLinkedAccountsComponent;
     @ViewChild('permissionComp', { static: false }) public permissionComp: SettingPermissionComponent;
     @ViewChild('tagComp', { static: false }) public tagComp: SettingsTagsComponent;
-    @ViewChild('bunchComp', { static: false }) public bunchComp: BunchComponent;
 
 
 
@@ -239,12 +237,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public tagsTabSelected(e) {
         if (e.heading === 'Tags') {
             this.tagComp.getTags();
-        }
-    }
-
-    public bunchTabSelected(e) {
-        if (e.heading === 'bunch') {
-            this.bunchComp.getAllBunch();
         }
     }
 

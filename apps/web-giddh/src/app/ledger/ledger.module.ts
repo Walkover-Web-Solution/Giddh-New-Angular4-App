@@ -14,7 +14,6 @@ import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination'
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ClipboardModule } from 'ngx-clipboard';
 import { NgxUploaderModule } from 'ngx-uploader';
-
 import { InventoryModule } from '../inventory/inventory.module';
 import { SalesModule } from '../sales/sales.module';
 import { SettingsServiceModule } from '../settings/settings-service.module';
@@ -33,14 +32,9 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
-import { BaseAccountComponent } from './components/baseAccountModal/baseAccountModal.component';
 import { ExportLedgerComponent } from './components/exportLedger/exportLedger.component';
-import {
-    LedgerColumnarReportTableComponent,
-} from './components/ledger-columnar-report-table/ledger.columnar.report.table.component';
-import {
-    LedgerAsidePaneAccountComponent,
-} from './components/ledgerAsidePane/component/ledger-aside-pane-account/ledger-aside.pane.account.component';
+import { LedgerColumnarReportTableComponent } from './components/ledger-columnar-report-table/ledger.columnar.report.table.component';
+import { LedgerAsidePaneAccountComponent } from './components/ledgerAsidePane/component/ledger-aside-pane-account/ledger-aside.pane.account.component';
 import { LedgerAsidePaneComponent } from './components/ledgerAsidePane/ledgerAsidePane.component';
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
 import { ShareLedgerComponent } from './components/shareLedger/shareLedger.component';
@@ -50,15 +44,12 @@ import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryP
 import { LedgerComponent } from './ledger.component';
 import { LedgerRoutingModule } from './ledger.routing.module';
 import { ImportStatementComponent } from './components/import-statement/import-statement.component';
-import { AmountFieldComponent } from '../shared/amount-field/amount-field.component';
 
-// import { ElementViewContainerRef } from '../shared/helpers/pipes/element.viewchild.directive';
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
         LedgerComponent,
         NewLedgerEntryPanelComponent,
-        //LedgerDiscountComponent,
         UpdateLedgerEntryPanelComponent,
         ShareLedgerComponent,
         ExportLedgerComponent,
@@ -67,7 +58,6 @@ import { AmountFieldComponent } from '../shared/amount-field/amount-field.compon
         AdvanceSearchModelComponent,
         LedgerAsidePaneComponent,
         LedgerAsidePaneAccountComponent,
-        BaseAccountComponent,
         LedgerColumnarReportTableComponent,
         ImportStatementComponent,
     ],

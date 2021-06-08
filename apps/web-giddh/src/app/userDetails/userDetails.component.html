@@ -39,7 +39,6 @@
                         <form name="mobileForm" novalidate>
                             <h1 class="section-head">{{localeData?.mobile_number?.add_edit_mobile_number}}</h1>
                             <div class="mr-t05">
-                                <!-- ng-minlength="10" pattern="/^[0-9]{1,10}$/"  -->
                                 <input decimalDigitsDirective maxlength="10" class="form-control max-width-350 pull-left "
                                     type="text" ng-required="true" [placeholder]="localeData?.mobile_number?.mobile_no_example" name="mobileForm.phoneNumber"
                                     [(ngModel)]="phoneNumber" />
@@ -56,7 +55,6 @@
                             <hr>
                             <h1 class="mr-t2 max-width-350">
                                 <span>{{localeData?.mobile_number?.verification_code_label}}</span>
-                                <!--<button class="btn-link pull-right pr-0">{{localeData?.mobile_number?.resend}}</button>-->
                             </h1>
                             <div class="mr-t05">
                                 <input class="form-control max-width-350 pull-left" type="text"
@@ -199,11 +197,6 @@
                     <subscriptions [activeTab]="activeTab" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></subscriptions>
                 </div>
             </tab>
-
-            <!-- <tab heading="Company" [active]="activeTab == 'company'" (selectTab)="onTabChanged('company')">
-                <user-detail-company></user-detail-company>
-            </tab> -->
-            <!-- end of session tab -->
 
         </tabset>
         <!-- end of tab set -->

@@ -7,7 +7,7 @@ import { API_TO_CALL, CHART_CALLED_FROM, HOME } from './home.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ToasterService } from '../../services/toaster.service';
 import { DashboardService } from '../../services/dashboard.service';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IRevenueChartClosingBalanceResponse, ITotalOverDuesResponse } from '../../models/interfaces/dashboard.interface';
 import { BankAccountsResponse, DashboardResponse, GroupHistoryRequest, GroupHistoryResponse, RefreshBankAccountResponse, GraphTypesResponse, RevenueGraphDataRequest, RevenueGraphDataResponse } from '../../models/api-models/Dashboard';
 import { cloneDeep } from '../../lodash-optimized';

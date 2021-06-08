@@ -150,8 +150,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             if (ledgerResponse.status === 'success') {
                 return Object.assign({}, state, {
                     ledgerCreateSuccess: true,
-                    ledgerCreateInProcess: false,
-                    // transactionsResponse: prepareTransactionOnCreate(ledgerResponse.body, state.transactionsResponse)
+                    ledgerCreateInProcess: false
                 });
             }
             return Object.assign({}, state, {
@@ -311,7 +310,6 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             return Object.assign({}, state, { ledgerBulkActionSuccess: true });
         }
         case LEDGER.GET_CURRENCY_RATE_RESPONSE: {
-            let res = action.payload;
             return state;
         }
         case LEDGER.SELECT_DESELECT_ALL_ENTRIES: {
@@ -503,25 +501,4 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
     }
 
     return newResponse;
-};
-
-const prepareTransactionOnCreate = (txnArr, ledgerTransactions) => {
-    _.forEach(txnArr, (txn) => {
-        _.map(txn.transactions, (o) => {
-            o.entryDate = txn.entryDate;
-            o.entryUniqueName = txn.uniqueName;
-            o.voucherNo = txn.voucherNo;
-            o.voucherNumber = txn.voucherNumber;
-            o.voucherGenerated = txn.voucherGenerated;
-            o.voucherGeneratedType = txn.voucher.name;
-            o.attachedFileName = txn.attachedFileName;
-            o.attachedFile = txn.attachedFile;
-            if (o.type === 'DEBIT') {
-                return ledgerTransactions.debitTransactions.push(o);
-            } else {
-                return ledgerTransactions.creditTransactions.push(o);
-            }
-        });
-    });
-    return ledgerTransactions;
 };

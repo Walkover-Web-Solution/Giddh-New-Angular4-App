@@ -1,5 +1,4 @@
 import { empty as observableEmpty, Observable } from 'rxjs';
-
 import { catchError, map } from 'rxjs/operators';
 import {
     ICurrencyResponse,

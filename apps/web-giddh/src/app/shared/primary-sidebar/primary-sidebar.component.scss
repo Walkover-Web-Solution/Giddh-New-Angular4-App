@@ -210,6 +210,10 @@
             padding-left: 0 !important;
             border-right: none !important;
             background-color: $solitude-new !important;
+            border-top-left-radius: 0px !important;
+            border-bottom-left-radius: 0px !important;
+            border-top-right-radius: 0px !important;
+            border-bottom-right-radius: 0px !important;
             &:focus {
                 border-color: $gainsboro !important;
             }
@@ -226,7 +230,10 @@
             align-items: center;
             background-color: $solitude-new;
             border: 1px solid $gainsboro;
+            border-radius: 5px;
             border-left: none;
+            border-top-left-radius: 0px !important;
+            border-bottom-left-radius: 0px !important;
         }
     }
     .wrap-menus {
@@ -571,8 +578,6 @@
                 .branch-name {
                     .branch-name-full {
                         display: none;
-                    }
-                    .switch-branch {
                     }
                     .switch-branch-alice {
                         display: flex !important;

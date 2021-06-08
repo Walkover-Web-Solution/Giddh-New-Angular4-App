@@ -250,7 +250,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             };
             this.toggleAsidePane();
         });
-        // this.openCreateCompanyModal(true);
     }
 
     public hideAddCompanyModal() {
@@ -283,18 +282,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public openAddBranchModal() {
-        // this.removeCompanySessionData();
-        // this.openCreateCompanyModal();
         this.router.navigate(['pages/settings/create-branch']);
-    }
-
-    public onHide() {
-        // let companyUniqueName = null;
-        // this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
-        // let stateDetailsRequest = new StateDetailsRequest();
-        // stateDetailsRequest.companyUniqueName = companyUniqueName;
-        // stateDetailsRequest.lastState = 'settings';
-        // this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     public hideAddBranchModal() {

@@ -1,4 +1,4 @@
-import { Observable, of, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
 import { cloneDeep, filter, find, sumBy } from '../../../lodash-optimized';
@@ -12,7 +12,7 @@ import { AccountResponse } from '../../../models/api-models/Account';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { RATE_FIELD_PRECISION, SubVoucher } from '../../../app.constant';
+import { RATE_FIELD_PRECISION } from '../../../app.constant';
 import { take } from 'rxjs/operators';
 
 export class UpdateLedgerVm {
@@ -435,7 +435,6 @@ export class UpdateLedgerVm {
         }
 
         this.getEntryTotal();
-        // this.generatePanelAmount();
 
         if (this.discountComponent) {
             this.discountComponent.ledgerAmount = this.totalAmount;

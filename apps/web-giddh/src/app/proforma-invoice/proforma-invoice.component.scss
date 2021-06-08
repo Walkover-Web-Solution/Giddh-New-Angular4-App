@@ -1704,6 +1704,9 @@ span.eligible-ITC {
     .form-inline .wrap-billing-address .form-group.deliver-same-address {
         display: flex !important;
     }
+    .pro-invoice-heading{
+        margin-left: -30px;
+    }
 }
 @media (max-width: 1199px) {
     .invoice-date-due-date {

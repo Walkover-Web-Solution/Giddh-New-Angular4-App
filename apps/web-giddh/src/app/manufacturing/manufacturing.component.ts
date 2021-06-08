@@ -15,7 +15,7 @@ export class ManufacturingComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
-        //
+        
     }
 
     public ngOnInit(): void {

@@ -3,7 +3,7 @@ import { ReplaySubject } from 'rxjs';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
-    selector: 'welcome-jobwork',  // <home></home>
+    selector: 'welcome-jobwork',
     templateUrl: './welcome-jobwork.component.html',
     animations: [
         trigger('slideInOut', [

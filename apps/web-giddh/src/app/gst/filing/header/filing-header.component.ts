@@ -175,10 +175,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         if (selectedService) {
-            if (selectedService === 'RECONCILE') {
-                let checkIsAuthenticated;
-                this.gstAuthenticated$.pipe(take(1)).subscribe(auth => checkIsAuthenticated = auth);
-            }
             this.selectedService = selectedService;
         }
         this.GstAsidePaneState = this.GstAsidePaneState === 'out' ? 'in' : 'out';

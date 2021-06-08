@@ -17,7 +17,6 @@ import { Store, select } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import * as _ from '../../lodash-optimized';
 import { TaxResponse } from '../../models/api-models/Company';
 import { ITaxDetail } from '../../models/interfaces/tax.interface';
@@ -338,17 +337,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    private isTaxApplicable(tax): boolean {
-        const today = moment(moment().format(GIDDH_DATE_FORMAT), GIDDH_DATE_FORMAT, true).valueOf();
-        let isApplicable = false;
-        _.each(tax.taxDetail, (det: any) => {
-            if (today >= moment(det.date, GIDDH_DATE_FORMAT, true).valueOf()) {
-                return isApplicable = true;
-            }
-        });
-        return isApplicable;
-    }
-
     /**
      * calculate sum of selected tax amount
      * @returns {number}
@@ -365,12 +353,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      */
     private generateSelectedTaxes(): string[] {
         return this.taxRenderData.filter(p => p.isChecked).map(p => p.uniqueName);
-    }
-
-    public taxInputBlur(event) {
-        if (event && event.relatedTarget && this.taxInputElement && !this.taxInputElement?.nativeElement.contains(event.relatedTarget)) {
-            // this.toggleTaxPopup(false);
-        }
     }
 
     /**

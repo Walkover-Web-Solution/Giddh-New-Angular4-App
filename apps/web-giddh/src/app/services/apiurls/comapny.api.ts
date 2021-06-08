@@ -3,9 +3,7 @@ export const COMPANY_API = {
     SET_STATE_DETAILS: 'state-details',
     COMPANY_LIST: 'users/:uniqueName/v2/companies',
     CREATE_COMPANY: 'company',
-    // SEND_EMAIL: 'company/:companyUniqueName/accounts/bulk-email/?from=:from&to=:to',
     SEND_EMAIL: 'v2/company/:companyUniqueName/groups/:groupUniqueName/email-account-closing-balance?from=:from&to=:to&sortBy=:sortBy&sort=:sort',
-    // SEND_SMS: 'company/:companyUniqueName/accounts/bulk-sms/?from=:from&to=:to',
     SEND_SMS: 'v2/company/:companyUniqueName/groups/:groupUniqueName/sms-account-closing-balance?from=:from&to=:to&sortBy=:sortBy&sort=:sort',
     DELETE_COMPANY: 'company/:companyUniqueName',
     TAX: 'company/:companyUniqueName/tax', // get call

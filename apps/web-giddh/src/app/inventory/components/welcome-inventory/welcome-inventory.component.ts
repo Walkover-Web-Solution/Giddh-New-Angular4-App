@@ -3,7 +3,7 @@ import { ReplaySubject } from 'rxjs';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
-    selector: 'welcome-inventory',  // <home></home>
+    selector: 'welcome-inventory',
     templateUrl: './welcome-inventory.component.html',
     styleUrls: ['./welcome-inventory.scss'],
     animations: [
