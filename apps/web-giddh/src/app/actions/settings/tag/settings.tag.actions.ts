@@ -1,21 +1,20 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
-import { Action, Store } from '@ngrx/store';
-import { AppState } from '../../../store/roots';
+import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { Router } from '@angular/router';
 import { SETTINGS_TAG_ACTIONS } from './settings.tag.const';
 import { CustomActions } from '../../../store/customActions';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { TagRequest } from '../../../models/api-models/settingsTags';
+import { LocaleService } from '../../../services/locale.service';
 
 @Injectable()
 export class SettingsTagActions {
 
-    public GetAllTags$: Observable<Action> =createEffect( ()=> this.action$
+    public GetAllTags$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS),
             switchMap((action: CustomActions) => this.settingsTagService.GetAllTags()),
@@ -23,7 +22,7 @@ export class SettingsTagActions {
                 return { type: SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE, payload: res };
             })));
 
-    public GetAllTagsResponse$: Observable<Action> =createEffect(()=> this.action$
+    public GetAllTagsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE),
             map((response: CustomActions) => {
@@ -31,7 +30,7 @@ export class SettingsTagActions {
             })));
 
 
-    public CreateTag$: Observable<Action> =createEffect( ()=> this.action$
+    public CreateTag$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.CREATE_TAG),
             switchMap((action: CustomActions) => {
@@ -40,7 +39,7 @@ export class SettingsTagActions {
             })));
 
 
-    public CreateTagResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public CreateTagResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.CREATE_TAG_RESPONSE),
             map((response: CustomActions) => {
@@ -48,13 +47,13 @@ export class SettingsTagActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Tag created successfully.', 'Success');
+                    this.toasty.successToast(this.localeService.translate("app_messages.tag_created"), this.localeService.translate("app_success"));
                 }
                 return this.GetALLTags();
             })));
 
 
-    public UpdateTag$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateTag$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.UPDATE_TAG),
             switchMap((action: CustomActions) => {
@@ -63,7 +62,7 @@ export class SettingsTagActions {
             })));
 
 
-    public UpdateTagResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public UpdateTagResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.UPDATE_TAG_RESPONSE),
             map((response: CustomActions) => {
@@ -71,13 +70,13 @@ export class SettingsTagActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Tag updated successfully.', 'Success');
+                    this.toasty.successToast(this.localeService.translate("app_messages.tag_updated"), this.localeService.translate("app_success"));
                 }
                 return this.GetALLTags();
             })));
 
 
-    public DeleteTag$: Observable<Action> =createEffect( ()=> this.action$
+    public DeleteTag$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.DELETE_TAG),
             switchMap((action: CustomActions) => {
@@ -86,7 +85,7 @@ export class SettingsTagActions {
             })));
 
 
-    public DeleteTagResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public DeleteTagResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.DELETE_TAG_RESPONSE),
             map((response: CustomActions) => {
@@ -94,7 +93,7 @@ export class SettingsTagActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    this.toasty.successToast('Tag deleted successfully.', 'Success');
+                    this.toasty.successToast(this.localeService.translate("app_messages.tag_deleted"), this.localeService.translate("app_success"));
                 }
                 return this.GetALLTags();
             })));
@@ -126,8 +125,7 @@ export class SettingsTagActions {
 
     constructor(private action$: Actions,
         private toasty: ToasterService,
-        private router: Router,
-        private store: Store<AppState>,
+        private localeService: LocaleService,
         private settingsTagService: SettingsTagService) {
     }
 

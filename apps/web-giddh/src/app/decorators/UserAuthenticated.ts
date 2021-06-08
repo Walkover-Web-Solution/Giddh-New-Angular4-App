@@ -1,6 +1,6 @@
 import { AppState } from '../store';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-import {Injectable, NgZone} from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { userLoginStateEnum } from '../models/user-login-state';
@@ -8,7 +8,7 @@ import { ROUTES } from '../routes-array';
 
 @Injectable()
 export class UserAuthenticated implements CanActivate {
-    constructor(public _router: Router, private store: Store<AppState>, private zone:NgZone) {
+    constructor(public _router: Router, private store: Store<AppState>, private zone: NgZone) {
     }
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {

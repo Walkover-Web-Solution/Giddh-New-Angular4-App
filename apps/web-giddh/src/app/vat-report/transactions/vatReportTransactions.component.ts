@@ -10,7 +10,6 @@ import { ToasterService } from '../../services/toaster.service';
 import { VatService } from "../../services/vat.service";
 import { saveAs } from "file-saver";
 import { PAGINATION_LIMIT } from '../../app.constant';
-import { CurrentPage } from '../../models/api-models/Common';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -28,9 +27,9 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
 })
 
 export class VatReportTransactionsComponent implements OnInit, OnDestroy {
-    @ViewChild('downloadOrSendMailModel', {static: true}) public downloadOrSendMailModel: ModalDirective;
-    @ViewChild('downloadOrSendMailComponent', {static: true}) public downloadOrSendMailComponent: ElementViewContainerRef;
-    @ViewChild('invoiceGenerateModel', {static: true}) public invoiceGenerateModel: ModalDirective;
+    @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: ModalDirective;
+    @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
+    @ViewChild('invoiceGenerateModel', { static: true }) public invoiceGenerateModel: ModalDirective;
 
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -58,7 +57,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private invoiceService: InvoiceService, private generalService: GeneralService) {
-        this.setCurrentPageTitle();
+        
     }
 
     /**
@@ -144,26 +143,13 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This function will set the page heading
-     *
-     *
-     * @memberof VatReportTransactionsComponent
-     */
-    public setCurrentPageTitle(): void {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = "Vat Report";
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
-    }
-
-    /**
      * This will get called and open the invoice in popup if we click on any invoice number
      *
      * @param {*} invoice
      * @memberof VatReportTransactionsComponent
      */
     public onSelectInvoice(invoice): void {
-        if(invoice.voucherType === VoucherTypeEnum.purchase) {
+        if (invoice.voucherType === VoucherTypeEnum.purchase) {
             this.router.navigate(['pages', 'purchase-management', 'purchase', invoice.accountUniqueName, invoice.purchaseRecordUniqueName]);
         } else {
             if (invoice.voucherNumber) {
@@ -272,7 +258,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                     }
                     return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
                 } else {
-                    this.toasty.errorToast('Something went wrong Please try again!');
+                    this.toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 }
             });
     }
@@ -285,7 +271,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      */
     public downloadFile() {
         let blob = this.generalService.base64ToBlob(this.base64Data, 'application/pdf', 512);
-        return saveAs(blob, `Invoice-${this.selectedInvoice.account.uniqueName}.pdf`);
+        return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account.uniqueName}.pdf`);
     }
 
     /**

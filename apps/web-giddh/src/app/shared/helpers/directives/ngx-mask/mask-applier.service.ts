@@ -240,7 +240,7 @@ export class MaskApplierService {
                 // tslint:disable-next-line
                 let i: number = 0, inputSymbol: string = inputArray[0];
                 i < inputArray.length;
-                i++ , inputSymbol = inputArray[i]
+                i++, inputSymbol = inputArray[i]
             ) {
                 if (cursor === maskExpression.length) {
                     break;

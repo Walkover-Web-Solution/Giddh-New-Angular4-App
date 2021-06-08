@@ -22,8 +22,8 @@ import { SUPPORT_TEAM_NUMBERS } from '../app.constant';
 })
 
 export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
-    @ViewChild('talkSalesModal', {static: true}) public talkSalesModal: ModalDirective;
-    @ViewChild('supportTab', {static: true}) public supportTab: TabsetComponent;
+    @ViewChild('talkSalesModal', { static: true }) public talkSalesModal: ModalDirective;
+    @ViewChild('supportTab', { static: true }) public supportTab: TabsetComponent;
     /* Schedule now modal */
     @ViewChild('scheduleNowModel') public scheduleNowModel: ModalDirective;
     public sideMenu: { isopen: boolean } = { isopen: true };
@@ -51,7 +51,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath =  (isElectron||isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();

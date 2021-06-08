@@ -25,8 +25,8 @@ export class DeleteRoleConfirmationModelComponent implements OnInit {
     public ngOnInit(): void {
         this.confirmationMessage = this.localeData?.role_delete_content;
 
-        if(this.selectedRoleForDelete && this.selectedRoleForDelete.name) {
-            this.confirmationMessage = this.confirmationMessage.replace("[ROLE]", "<b>"+this.selectedRoleForDelete.name+"</b>");
+        if (this.selectedRoleForDelete && this.selectedRoleForDelete.name) {
+            this.confirmationMessage = this.confirmationMessage.replace("[ROLE]", "<b>" + this.selectedRoleForDelete.name + "</b>");
         } else {
             this.confirmationMessage = this.confirmationMessage.replace("[ROLE]", "");
         }

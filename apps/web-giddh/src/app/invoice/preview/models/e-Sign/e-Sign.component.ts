@@ -14,6 +14,8 @@ import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
 
 export class EsignModalComponent implements OnInit, OnDestroy {
     @Input() public base64Data: string;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
     @Output() public confirmDeleteEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
@@ -51,7 +53,7 @@ export class EsignModalComponent implements OnInit, OnDestroy {
                 eSignForm.submit();
                 this.closeModelEvent.emit(true);
             } else {
-                this._toasty.errorToast('Invalid Aadhar No:' + this.eSignModel.AadhaarNumber);
+                this._toasty.errorToast(this.localeData?.invalid_aadhar_no + this.eSignModel.AadhaarNumber);
             }
         } else {
             eSignForm.submit();

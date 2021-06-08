@@ -34,7 +34,7 @@ export class BranchHeaderComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        
+
     }
 
     public toggleBodyClass() {

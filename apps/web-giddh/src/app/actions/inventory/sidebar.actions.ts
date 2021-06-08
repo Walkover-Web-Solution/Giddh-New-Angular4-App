@@ -4,7 +4,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StockDetailResponse, StockGroupResponse } from '../../models/api-models/Inventory';
 import { InventoryActionsConst } from './inventory.const';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -17,7 +17,7 @@ import { InventoryAction } from './inventory.actions';
 @Injectable()
 export class SidebarAction {
 
-    public GetInventoryGroup$: Observable<Action> =createEffect( ()=> this.action$
+    public GetInventoryGroup$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryActionsConst.GetInventoryGroup),
             tap(a => console.log('called')),
@@ -48,7 +48,7 @@ export class SidebarAction {
     //   }));
 
 
-    public GetInventoryStock$: Observable<Action> = createEffect( ()=> this.action$
+    public GetInventoryStock$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryActionsConst.GetInventoryStock),
             switchMap((action: CustomActions) => {
@@ -64,7 +64,7 @@ export class SidebarAction {
             })));
 
 
-    public GetInventoryStockResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public GetInventoryStockResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryActionsConst.GetInventoryStockResponse),
             map((action: CustomActions) => {
@@ -79,7 +79,7 @@ export class SidebarAction {
             })));
 
 
-    public GetGroupUniqueName$: Observable<Action> =createEffect( ()=> this.action$
+    public GetGroupUniqueName$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryActionsConst.GetGroupUniqueName),
             switchMap((action: CustomActions) => this._inventoryService.GetGroupsStock(action.payload)),
@@ -88,7 +88,7 @@ export class SidebarAction {
             })));
 
 
-    public GetGroupUniqueNameResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public GetGroupUniqueNameResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryActionsConst.GetGroupUniqueNameResponse),
             map((action: CustomActions) => {
@@ -96,7 +96,7 @@ export class SidebarAction {
             })));
 
 
-    public GetGroupsWithStocksHierarchyMin$: Observable<Action> =createEffect( ()=> this.action$
+    public GetGroupsWithStocksHierarchyMin$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMin),
             switchMap((action: CustomActions) => this._inventoryService.GetGroupsWithStocksHierarchyMin(action.payload)),
@@ -105,7 +105,7 @@ export class SidebarAction {
             })));
 
 
-    public GetGroupsWithStocksHierarchyMinResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public GetGroupsWithStocksHierarchyMinResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse),
             map((action: CustomActions) => {
@@ -117,7 +117,7 @@ export class SidebarAction {
             })));
 
 
-    public SearchGroupsWithStocks$: Observable<Action> =createEffect( ()=> this.action$
+    public SearchGroupsWithStocks$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryActionsConst.SearchGroupsWithStocks),
             switchMap((action: CustomActions) => this._inventoryService.SearchStockGroupsWithStocks(action.payload)),
@@ -126,7 +126,7 @@ export class SidebarAction {
             })));
 
 
-    public SearchGroupsWithStocksResponse$: Observable<Action> =createEffect( ()=> this.action$
+    public SearchGroupsWithStocksResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryActionsConst.SearchGroupsWithStocksResponse),
             map((action: CustomActions) => {

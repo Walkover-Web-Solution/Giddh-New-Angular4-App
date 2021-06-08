@@ -34,10 +34,10 @@ export class InventoryHeaderComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this._store.pipe(select(p => p.inventoryInOutState.entrySuccess), takeUntil(this.destroyed$)).subscribe(p => {
-                if (p) {
-                    this.toggleGroupStockAsidePane('');
-                }
-            });
+            if (p) {
+                this.toggleGroupStockAsidePane('');
+            }
+        });
     }
 
     public toggleGroupStockAsidePane(view, event?): void {
@@ -64,6 +64,6 @@ export class InventoryHeaderComponent implements OnInit, OnDestroy {
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
-        this.destroyed$.complete();       
-	}
+        this.destroyed$.complete();
+    }
 }

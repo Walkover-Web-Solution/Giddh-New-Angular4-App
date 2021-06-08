@@ -13,7 +13,9 @@
                         </div>
                         <div class="col-sm-9 col-xs-12 custom-datepicker" (click)="showGiddhDatepicker($event)">
                             <i class="icon-calender calendar-addon"></i>
-                            <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker border-radius-2" />
+                            <input type="text" name="selectedDateRange"
+                                [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker border-radius-2" />
                         </div>
                     </div>
 
@@ -31,7 +33,8 @@
                             <div class="row">
                                 <div class="col-6 col-sm-6">
                                     <div class="checkbox square-switch mr-b1">
-                                        <input type="checkbox" id="includeParticulars" formControlName="includeParticulars" />
+                                        <input type="checkbox" id="includeParticulars"
+                                            formControlName="includeParticulars" />
                                         <label for="includeParticulars">
                                             <span class="pull-left"
                                                 *ngIf="advanceSearchForm.get('includeParticulars').value">{{commonLocaleData?.app_include}}</span>
@@ -42,9 +45,16 @@
                                 </div>
                                 <div class="col-6 col-sm-6">
                                     <div class="form-group">
-                                        <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear('particulars')" [forceClearReactive]="forceClearParticulars$ | async" (selected)="onDDElementSelect('particulars', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="commonLocaleData?.app_select_accounts"
-                                        [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
-                                        (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)" [ItemHeight]="33"></sh-select>
+                                        <sh-select [options]="accounts$ | async" name="particulars"
+                                            (onClear)="onDDClear('particulars')"
+                                            [forceClearReactive]="forceClearParticulars$ | async"
+                                            (selected)="onDDElementSelect('particulars', $event)"
+                                            [isFilterEnabled]="true" [multiple]="true"
+                                            [placeholder]="commonLocaleData?.app_select_accounts"
+                                            [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                                            [doNotResetSelectedValues]="true" (scrollEnd)="handleScrollEnd()"
+                                            (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                                            [ItemHeight]="33"></sh-select>
                                     </div>
                                 </div>
                             </div>
@@ -75,7 +85,10 @@
                                 </div>
                                 <div class="col-6 col-sm-6">
                                     <div class="form-group">
-                                        <sh-select [options]="voucherTypeList | async" name="particulars" (onClear)="onDDClear('vouchers')" [forceClearReactive]="forceClear$ | async" (selected)="onDDElementSelect('vouchers', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="commonLocaleData?.app_select_accounts"
+                                        <sh-select [options]="voucherTypeList | async" name="particulars"
+                                            (onClear)="onDDClear('vouchers')" [forceClearReactive]="forceClear$ | async"
+                                            (selected)="onDDElementSelect('vouchers', $event)" [isFilterEnabled]="true"
+                                            [multiple]="true" [placeholder]="commonLocaleData?.app_select_accounts"
                                             [ItemHeight]="33">
                                         </sh-select>
                                     </div>
@@ -93,12 +106,18 @@
                             <div class="row">
                                 <div class="col-6 col-sm-6">
                                     <div class="form-group">
-                                        <sh-select [showClear]="false" [width]="'100%'" (selected)="onRangeSelect('amount', $event)" [forceClearReactive]="forceClearRange$ | async" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="commonLocaleData?.app_select_range" [ItemHeight]="33"></sh-select>
+                                        <sh-select [showClear]="false" [width]="'100%'"
+                                            (selected)="onRangeSelect('amount', $event)"
+                                            [forceClearReactive]="forceClearRange$ | async"
+                                            [options]="comparisonFilterDropDown$ | async" name="particulars"
+                                            [placeholder]="commonLocaleData?.app_select_range" [ItemHeight]="33">
+                                        </sh-select>
                                     </div>
                                 </div>
                                 <div class="col-6 col-sm-6">
                                     <div class="form-group">
-                                        <input type="text" decimalDigitsDirective [mask]="inputMaskFormat" formControlName="amount" class="form-control">
+                                        <input type="text" decimalDigitsDirective [mask]="inputMaskFormat"
+                                            formControlName="amount" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -128,7 +147,8 @@
                                         <div class="col-sm-6">
 
                                             <div class="checkbox square-switch">
-                                                <input type="checkbox" id="includeInventory" formControlName="includeInventory" />
+                                                <input type="checkbox" id="includeInventory"
+                                                    formControlName="includeInventory" />
                                                 <label for="includeInventory">
                                                     <span class="pull-left"
                                                         *ngIf="advanceSearchForm.get('inventory.includeInventory').value">{{commonLocaleData?.app_include}}</span>
@@ -139,33 +159,54 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear('inventory')" (selected)="onDDElementSelect('inventory', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="commonLocaleData?.app_select_accounts" [ItemHeight]="33"
-                                                [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
-                                                (scrollEnd)="handleStockScrollEnd()" (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"></sh-select>
+                                                <sh-select [options]="stockListDropDown$ | async" name="inventory"
+                                                    (onClear)="onDDClear('inventory')"
+                                                    (selected)="onDDElementSelect('inventory', $event)"
+                                                    [isFilterEnabled]="true" [multiple]="true"
+                                                    [placeholder]="commonLocaleData?.app_select_accounts"
+                                                    [ItemHeight]="33" [enableDynamicSearch]="true"
+                                                    [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
+                                                    (scrollEnd)="handleStockScrollEnd()"
+                                                    (dynamicSearchedQuery)="onStockSearchQueryChanged($event)">
+                                                </sh-select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <sh-select [showClear]="false" [width]="'100%'" (selected)="onRangeSelect('inventoryQty', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="commonLocaleData?.app_select_range" [ItemHeight]="33"></sh-select>
+                                                <sh-select [showClear]="false" [width]="'100%'"
+                                                    (selected)="onRangeSelect('inventoryQty', $event)"
+                                                    [options]="comparisonFilterDropDown$ | async" name="particulars"
+                                                    [placeholder]="commonLocaleData?.app_select_range"
+                                                    [ItemHeight]="33"></sh-select>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="quantity" [mask]="inputMaskFormat" [placeholder]="commonLocaleData?.app_quantity">
+                                                <input type="text" class="form-control" decimalDigitsDirective
+                                                    [DecimalPlaces]="4" formControlName="quantity"
+                                                    [mask]="inputMaskFormat"
+                                                    [placeholder]="commonLocaleData?.app_quantity">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <sh-select [showClear]="false" [width]="'100%'" (selected)="onRangeSelect('inventoryVal', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="commonLocaleData?.app_select_range" [ItemHeight]="33"></sh-select>
+                                                <sh-select [showClear]="false" [width]="'100%'"
+                                                    (selected)="onRangeSelect('inventoryVal', $event)"
+                                                    [options]="comparisonFilterDropDown$ | async" name="particulars"
+                                                    [placeholder]="commonLocaleData?.app_select_range"
+                                                    [ItemHeight]="33"></sh-select>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <input type="text" decimalDigitsDirective [DecimalPlaces]="3" class="form-control" formControlName="itemValue" [mask]="inputMaskFormat" [placeholder]="commonLocaleData?.app_value">
+                                                <input type="text" decimalDigitsDirective [DecimalPlaces]="3"
+                                                    class="form-control" formControlName="itemValue"
+                                                    [mask]="inputMaskFormat"
+                                                    [placeholder]="commonLocaleData?.app_value">
                                             </div>
                                         </div>
                                     </div>
@@ -180,12 +221,15 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <input type="text" [placeholder]="localeData?.cheque_number" formControlName="chequeNumber" class="form-control">
+                                            <input type="text" [placeholder]="localeData?.cheque_number"
+                                                formControlName="chequeNumber" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <input type="text" [placeholder]="localeData?.clearance_date" name="from" formControlName="dateOnCheque" bsDatepicker class="form-control" [bsConfig]="bsConfig" />
+                                            <input type="text" [placeholder]="localeData?.clearance_date" name="from"
+                                                formControlName="dateOnCheque" bsDatepicker class="form-control"
+                                                [bsConfig]="bsConfig" />
                                         </div>
                                     </div>
                                 </div>
@@ -204,7 +248,8 @@
                     </div>
                 </ng-container>
                 <div class="col-xs-12 col-sm-12 text-right">
-                    <button class="btn btn-success" type="button" (click)="go()">{{commonLocaleData?.app_search}}</button>
+                    <button class="btn btn-success" type="button"
+                        (click)="go()">{{commonLocaleData?.app_search}}</button>
                     <!-- <button class="btn btn-update" type="button" (click)="onSearch()">Search & Export</button> -->
                 </div>
             </div>
@@ -215,8 +260,12 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
                 [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
         </div>
     </div>

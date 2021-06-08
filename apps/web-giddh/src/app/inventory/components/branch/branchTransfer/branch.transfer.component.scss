@@ -7,15 +7,15 @@
     right: 0;
     bottom: 0;
     width: 100%;
-    max-width:580px;
+    max-width: 580px;
     z-index: 99999;
-  }
+}
 
-  #close {
+#close {
     display: none;
-  }
+}
 
-  :host.in #close {
+:host.in #close {
     display: block;
     position: fixed;
     left: -41px;
@@ -23,35 +23,35 @@
     z-index: 5;
     border: 0;
     border-radius: 0;
-  }
+}
 
-  :host .container-fluid {
+:host .container-fluid {
     padding-left: 0;
     padding-right: 0;
-  }
+}
 
-  :host .aside-pane {
+:host .aside-pane {
     width: 100%;
-    max-width:580px;
+    max-width: 580px;
     background: $white;
-  }
+}
 
-  .aside-pane {
+.aside-pane {
     width: 100%;
-  }
+}
 
-  .flexy-child {
+.flexy-child {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-  }
+}
 
-  .flexy-child-1 {
+.flexy-child-1 {
     flex-grow: 1;
-  }
+}
 
-  .vertical-align-middle {
+.vertical-align-middle {
     position: absolute;
     top: 50%;
     bottom: 0;
@@ -62,26 +62,26 @@
     transform: translateY(-50%);
     text-align: center;
     margin: 0 auto;
-  }
+}
 
-  .destination-right{
+.destination-right {
     margin-right: 20% !important;
 }
 
-.product-right{
+.product-right {
     margin-right: 24% !important;
 }
 
-.quantity-right{
+.quantity-right {
     margin-right: 9% !important;
 }
 
-.unit-right{
+.unit-right {
     margin-right: 9% !important;
 }
 
-.form-items{
-    .form-group{
+.form-items {
+    .form-group {
         margin-right: 2% !important;
     }
 }
