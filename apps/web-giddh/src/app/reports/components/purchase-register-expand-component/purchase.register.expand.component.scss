@@ -283,6 +283,7 @@ table th {
     font-size: 18px;
     color: $midnight-blue;
     border: 1px solid $gainsboro;
+    border-radius: 5px;
 }
 .top-bar {
     .icon-options {
@@ -290,6 +291,7 @@ table th {
         height: 36px;
         border: 1px solid $gainsboro;
         background-color: $white;
+        border-radius: 5px;
         color: $gray;
         font-size: 20px;
         position: relative;
