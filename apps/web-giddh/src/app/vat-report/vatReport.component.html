@@ -1,49 +1,19 @@
 <section appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
-    <nav class="navbar">
-        <div class="relative w-100">
-            <hamburger-menu [pageHeading]="localeData?.tab_heading"></hamburger-menu>
-            <div class="invoice-control w-100">
-                <div class="row mr-0 ml-0">
-                    <div class="vat-report w-100" id="setting-tab">
-                        <tabset #staticTabs>
-                            <tab heading="{{commonLocaleData?.tab_heading}}">
-                                <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
-                                    class="row mb-3 mt-3">
-                                    <div class="tax-heading col-md-3 col-sm-3 col-12">
-                                        <label>{{commonLocaleData?.entity}}:</label>
-                                    </div>
-                                    <div class="tax-dropdown col-md-9 col-sm-9 col-12 linked-entities">
-                                        <div class="form-group">
-                                            <sh-select [options]="currentCompanyBranches"
-                                                [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
-                                                [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
-                                                [isFilterEnabled]="true" [placeholder]="localeData?.select_entity"
-                                                [fixedValue]="currentBranch?.alias">
-                                                <ng-template #optionTemplate let-option="option">
-                                                    <ng-container>
-                                                        <a href="javascript:void(0)" class="list-item d-flex">
-                                                            <span class="entity-icon">
-                                                                <i class="icon-branch-icon pull-right"
-                                                                    *ngIf="!option.isCompany"
-                                                                    tooltip="{{commonLocaleData?.app_branch}}"></i>
-                                                                <i class="icon-company-profile pull-right"
-                                                                    *ngIf="option.isCompany"
-                                                                    tooltip="{{commonLocaleData?.app_company}}"></i>
-                                                            </span>
-                                                            <span class="entity-details">
-                                                                <div class="item giddh-limit single-line-clamp">{{
-                                                                    option.label || '-' }}</div>
-                                                                <div class="item-unique giddh-limit single-line-clamp">
-                                                                    {{ option.name || '-' }}
-                                                                </div>
-                                                            </span>
-                                                        </a>
-                                                    </ng-container>
-                                                </ng-template>
-                                            </sh-select>
-                                        </div>
-                                    </div>
+    <div class="relative w-100">
+        <hamburger-menu  [pageHeading]="localeData?.tab_heading"></hamburger-menu>
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
+            <gstr-sidebar (navigateEvent)="handleNavigation()" (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'" class="gst-sidebar"></gstr-sidebar>
+        </div>
+        <div class="invoice-control w-100">
+            <div class="row mr-0 ml-0">
+                <div class="vat-report w-100" id="setting-tab">
+                    <tabset #staticTabs>
+                        <tab heading="{{commonLocaleData?.tab_heading}}">
+                            <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                                class="row mb-3 mt-3">
+                                <div class="tax-heading col-md-3 col-sm-3 col-12">
+                                    <label>{{commonLocaleData?.entity}}:</label>
                                 </div>
                                 <div *ngIf="taxes?.length" class="row mb-3 mt-2">
                                     <div class="tax-heading col-md-3 col-sm-3 col-12">

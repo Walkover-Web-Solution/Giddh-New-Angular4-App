@@ -17,6 +17,7 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { InvoiceModule } from '../invoice/invoice.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
+import { GstrSidebarModule } from '../shared/gst-sidebar/gst-sidebar.module';
 
 @NgModule({
     declarations: [
@@ -43,7 +44,8 @@ import { SharedModule } from '../shared/shared.module';
         ElementViewChildModule,
         InvoiceModule,
         ShSelectModule,
-        SharedModule
+        SharedModule,
+        GstrSidebarModule
     ],
     exports: [
         VatReportRoutingModule
