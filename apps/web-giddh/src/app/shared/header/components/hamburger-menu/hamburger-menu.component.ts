@@ -21,6 +21,7 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True, when mobile screen size is detected */
     public isMobileView: boolean = false;
 
     constructor(private store: Store<AppState>, private generalActions: GeneralActions, private breakPointObservar: BreakpointObserver) {
@@ -43,7 +44,7 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileView = result?.breakpoints['(max-width: 767px)'];
+            this.isMobileView = result?.matches;
         });
     }
 
