@@ -349,6 +349,10 @@
                                         *ngIf="checkIfPipeSymbolRequired(i)">|</span></a>
                             </div>
                         </div>
+
+                        <div class="pd-l15 position-absolute">
+                            <h5 class="pd-b05 font-16"><strong>Uploaded Bill</strong></h5>
+                        </div>
                     </div>
 
                     <div class="invoice-image-section">
@@ -394,10 +398,11 @@
                                 </div>
                             </div>
                             <div *ngIf="selectedItem?.voucherType === 'purchase' && attachedPdfFileUrl && !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)"
-                                #attachedDocumentPreview class="pdf-preview" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
+                                #attachedDocumentPreview class="img-expand-collapse pdf-preview mt-0" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
                                 <iframe #pdfContainer width="100%" height="100%" [src]="attachedPdfFileUrl"></iframe>
-                            </div>
+                            </div>                               
                             <div #attachedDocumentPreview class="pdf-preview">
+                                <h5 class="text-left pd-l15 font-16 pd-t1 pd-b1"><strong>Giddh/Auto Generated Bill</strong></h5>
                                 <iframe #pdfContainer
                                     *ngIf="sanitizedPdfFileUrl && !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)"
                                     width="100%" height="100%" [src]="sanitizedPdfFileUrl"></iframe>
