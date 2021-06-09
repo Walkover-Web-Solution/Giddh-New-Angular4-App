@@ -220,6 +220,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /** True if sidebar is expanded */
     public isSidebarExpanded: boolean = false;
 
+    public getPageUrl: boolean = false;
     /**
      * Returns whether the back button in header should be displayed or not
      *
@@ -834,6 +835,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
+        this.getPageUrl = this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details")
+        if (this.getPageUrl) {
+           return
+        }
+
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
             this.asideHelpSupportMenuState = 'out';
@@ -842,10 +848,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             if (this.asideSettingMenuState === "in") {
                 document.querySelector('body').classList.add('mobile-setting-sidebar');
-            } else {
+            }
+            else {
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
-        }, (this.asideSettingMenuState === 'out') ? 100 : 0);
+
+
+        }, ((this.asideSettingMenuState === 'out') ? 100 : 0) && (this.asideInventorySidebarMenuState === 'out') ? 100 : 0);
+
     }
 
     /**

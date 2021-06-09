@@ -1,5 +1,5 @@
-<ul class="nav navbar-nav hamburger-menu-icon" [ngClass]="{'page-has-heading': pageHeading}">
-    <li class="hamburger-menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
+<ul class="nav navbar-nav hamburger-menu-icon" [ngClass]="{'page-has-heading': pageHeading?.trim()}">
+    <li class="hamburger-menu cp" [ngClass]="{'disable-icon': !allowSidebarToggle}" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
         <button class="btn mr-0" id="hamburger-menu"
             [tooltip]="sideMenu.isopen ? commonLocaleData?.app_collapse : commonLocaleData?.app_expand"
             placement="right">

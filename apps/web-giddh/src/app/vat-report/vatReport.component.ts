@@ -19,7 +19,7 @@ import { IOption } from '../theme/ng-select/ng-select';
 import { GstReconcileService } from '../services/GstReconcile.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
-
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vatReport.component.scss'],
@@ -66,6 +66,12 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
+    /* this will check mobile screen size */
+    public isMobileScreen: boolean = false;
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -77,11 +83,31 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private _route: Router,
         private settingsBranchAction: SettingsBranchActions,
+        private breakpointObserver: BreakpointObserver
     ) {
 
     }
 
     public ngOnInit() {
+        this.breakpointObserver
+        .observe(['(max-width: 767px)'])
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((state: BreakpointState) => {
+            this.isMobileScreen = state.matches;
+            if (!this.isMobileScreen) {
+                this.asideGstSidebarMenuState = 'in';
+            }
+        });
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+                }
+            }
+        });
+
         this.currentOrganizationType = this._generalService.currentOrganizationType;
         this.loadTaxDetails();
         this.saveLastState(this._generalService.companyUniqueName);
@@ -148,10 +174,36 @@ export class VatReportComponent implements OnInit, OnDestroy {
             this.getVatReport();
         }
     }
-
+     /**
+     * Aside pane toggle fixed class
+     *
+     *
+     * @memberof GstComponent
+     */
+      public toggleBodyClass(): void {
+        if (this.asideGstSidebarMenuState === 'in') {
+            document.querySelector('body').classList.add('gst-sidebar-open');
+        } else {
+            document.querySelector('body').classList.remove('gst-sidebar-open');
+        }
+    }
+    /**
+      * This will toggle the settings popup
+      *
+      * @param {*} [event]
+      * @memberof GstComponent
+      */
+    public toggleGstPane(event?): void {
+        this.toggleBodyClass();
+        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
+            this.asideGstSidebarMenuState = "out";
+        }
+    }
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('gst-sidebar-open');
+        this.asideGstSidebarMenuState === 'out'
     }
 
     public getVatReport(event?: any) {
