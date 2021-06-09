@@ -63,14 +63,14 @@
                         <h1 class="border-btm">{{commonLocaleData?.app_select_inventory_type}}</h1>
                         <span>{{commonLocaleData?.app_inventory_type}}</span>
                         <div class="pd-b1 clearfix">
-                            <span class="p-0 mr-r3 d-inline-block">
+                            <span class="p-0 mr-3 d-inline-block">
                                 <input id="product" class="radio-custom cp ml-0" type="radio"
                                     [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
                                     (change)="updateInventorySetting(true)" name="inventoryType">
                                 <label for="product"
                                     class="radio-custom-label">{{commonLocaleData?.app_product}}</label>
                             </span>
-                            <span class="p-0 mr-r3 d-inline-block">
+                            <span class="p-0 mr-3 d-inline-block">
                                 <input id="service" class="radio-custom cp ml-0" type="radio"
                                     [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
                                     (change)="updateInventorySetting(false)" name="inventoryType">
