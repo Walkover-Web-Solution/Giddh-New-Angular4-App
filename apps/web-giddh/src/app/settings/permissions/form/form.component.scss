@@ -24,7 +24,7 @@
 .lh-34 {
     line-height: 34px;
 }
-.permissionForm {
+.permission-form {
     .form-group {
         width: 100%;
         display: inline-block;
@@ -45,7 +45,7 @@
     }
 }
 
-.permissionForm .btn-group.open .dropdown-toggle {
+.permission-form .btn-group.open .dropdown-toggle {
     box-shadow: none;
     background: transparent;
 }
@@ -115,7 +115,7 @@ i.icon-cross {
         float: none !important;
         margin-top: 10px;
     }
-    .permissionForm {
+    .permission-form {
         .form-group {
             margin-bottom: 15px;
         }
@@ -126,7 +126,7 @@ i.icon-cross {
 }
 
 @media (max-width: 1024px) {
-    .permissionForm {
+    .permission-form {
         .form-group {
             margin-left: 0;
             margin-top: 5px;
@@ -158,7 +158,7 @@ i.icon-cross {
 }
 
 @media (max-width: 768px) {
-    .permissionForm {
+    .permission-form {
         .form-group {
             width: 100%;
             display: block;

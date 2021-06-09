@@ -1,3 +1,5 @@
+@import "../../../assets/css/color.scss";
+
 table {
     table-layout: fixed;
 }
@@ -42,5 +44,5 @@ table {
 }
 
 .basic > thead > tr > th {
-    border: 1px solid #ccc;
+    border: 1px solid $gainsboro;
 }

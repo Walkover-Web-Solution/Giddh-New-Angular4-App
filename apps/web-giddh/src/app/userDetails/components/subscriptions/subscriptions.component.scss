@@ -161,9 +161,9 @@
     color: $light-green;
     font-size: 14px;
 }
-.green-dote,
+.green-dot,
 .red-dot,
-.orange-dote {
+.orange-dot {
     width: 9px;
     height: 9px;
     display: inline-block;
@@ -173,7 +173,7 @@
 .red-dot {
     background-color: $red;
 }
-.orange-dote {
+.orange-dot {
     background-color: $orange;
 }
 .basic > tbody > tr td:first-child,

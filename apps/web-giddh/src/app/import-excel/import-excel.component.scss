@@ -65,7 +65,7 @@
     color: $whisper;
 }
 
-.sample_file-btn {
+.sample-file-btn {
     z-index: 9;
     position: relative;
 }
@@ -90,7 +90,7 @@
     justify-content: flex-end;
     margin: 0 15px;
     border: 1px solid $gainsboro;
-    background: #fafafa;
+    background: $gray-95;
     padding: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -110,7 +110,7 @@
 }
 
 .has-error .form-control {
-    border-color: red !important;
+    border-color: $red !important;
 }
 @media (max-width: 991px) {
     .import-type {
