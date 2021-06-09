@@ -1,6 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
-
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -145,7 +144,7 @@ export class TlPlService {
         return this._http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_TRIAL_BALANCE_EXCEL
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), request).pipe(
                 map((res) => {
-                    let data = this.b64toBlob(res.body, 'application/xml', 512);
+                    let data = this._generalService.base64ToBlob(res.body, 'application/xml', 512);
                     saveAs(data, request.filename);
                     return res;
                 }),
@@ -165,7 +164,7 @@ export class TlPlService {
         return this._http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_BALANCE_SHEET_EXCEL
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
-                    let data = this.b64toBlob(res.body, 'application/xml', 512);
+                    let data = this._generalService.base64ToBlob(res.body, 'application/xml', 512);
                     saveAs(data, request.filename);
                     return res;
                 }),
@@ -185,42 +184,10 @@ export class TlPlService {
         return this._http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_PROFIT_LOSS_EXCEL
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
-                    let data = this.b64toBlob(res.body, 'application/xml', 512);
+                    let data = this._generalService.base64ToBlob(res.body, 'application/xml', 512);
                     saveAs(data, request.filename);
                     return res;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
-    }
-
-    public b64toBlob = (b64Data, contentType, sliceSize) => {
-        let blob;
-        let byteArray;
-        let byteArrays;
-        let byteCharacters;
-        let byteNumbers;
-        let i;
-        let offset;
-        let slice;
-        contentType = contentType || '';
-        sliceSize = sliceSize || 512;
-        byteCharacters = atob(b64Data);
-        byteArrays = [];
-        offset = 0;
-        while (offset < byteCharacters.length) {
-            slice = byteCharacters.slice(offset, offset + sliceSize);
-            byteNumbers = new Array(slice.length);
-            i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
-            }
-            byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
-        }
-        blob = new Blob(byteArrays, {
-            type: contentType
-        });
-        return blob;
     }
 }

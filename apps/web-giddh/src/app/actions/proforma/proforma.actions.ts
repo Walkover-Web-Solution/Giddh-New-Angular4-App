@@ -15,7 +15,6 @@ import { LocaleService } from '../../services/locale.service';
 @Injectable()
 export class ProformaActions {
 
-
     public GENERATE_PROFORMA$: Observable<Action> =
         createEffect(() => this.action$.pipe(
             ofType(PROFORMA_ACTIONS.GENERATE_PROFORMA_REQUEST),
@@ -44,7 +43,6 @@ export class ProformaActions {
             })
         ));
 
-
     public GET_ALL$: Observable<Action> =
         createEffect(() => this.action$.pipe(
             ofType(PROFORMA_ACTIONS.GET_ALL_PROFORMA_REQUEST),
@@ -57,7 +55,6 @@ export class ProformaActions {
             })
         ));
 
-
     public GET_DETAILS$: Observable<Action> =
         createEffect(() => this.action$.pipe(
             ofType(PROFORMA_ACTIONS.GET_PROFORMA_DETAILS_REQUEST),
@@ -69,7 +66,6 @@ export class ProformaActions {
                 return this.getProformaDetailsResponse(response);
             })
         ));
-
 
     public UPDATE_PROFORMA$: Observable<Action> =
         createEffect(() => this.action$.pipe(
@@ -85,7 +81,6 @@ export class ProformaActions {
             })
         ));
 
-
     public DELETE_PROFORMA$: Observable<Action> =
         createEffect(() => this.action$.pipe(
             ofType(PROFORMA_ACTIONS.DELETE_PROFORMA_REQUEST),
@@ -99,7 +94,6 @@ export class ProformaActions {
                 return this.deleteProformaResponse(response);
             })
         ));
-
 
     public UPDATE_PROFORMA_ACTION$: Observable<Action> =
         createEffect(() => this.action$.pipe(
@@ -127,7 +121,6 @@ export class ProformaActions {
             })
         ));
 
-
     public GENERATE_INVOICE$: Observable<Action> =
         createEffect(() => this.action$.pipe(
             ofType(PROFORMA_ACTIONS.GENERATE_INVOICE_FROM_PROFORMA_OR_ESTIMATES),
@@ -139,7 +132,6 @@ export class ProformaActions {
                 return this.generateInvoiceResponse(response);
             })
         ));
-
 
     public GENERATE_PROFORMA_FROM_ESTIMATES$: Observable<Action> =
         createEffect(() => this.action$.pipe(
@@ -154,7 +146,6 @@ export class ProformaActions {
                 return this.generateProformaFromEstimateResponse(response);
             })
         ));
-
 
     public SEND_EMAIL$: Observable<Action> =
         createEffect(() => this.action$.pipe(
@@ -369,21 +360,4 @@ export class ProformaActions {
     }
 
     // endregion
-
-    private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false,
-        errorAction: CustomActions = { type: 'EmptyAction' }, message?: string): CustomActions {
-        if (response.status === 'error') {
-            if (showToast) {
-                this._toasty.errorToast(response.message);
-            }
-            return errorAction;
-        } else {
-            if (showToast && typeof response.body === 'string') {
-                this._toasty.successToast(response.body);
-            } else if (message) {
-                this._toasty.successToast(message);
-            }
-        }
-        return successAction;
-    }
 }

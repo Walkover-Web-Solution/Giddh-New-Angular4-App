@@ -2,7 +2,6 @@ import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
-
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { EXCEPTION_API } from './apiurls/exception-log.api';
 import { GiddhErrorHandler } from './catchManager/catchmanger';

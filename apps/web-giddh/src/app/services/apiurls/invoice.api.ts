@@ -7,9 +7,7 @@ let PART_B_V2 = 'accounts/:accountUniqueName/vouchers/';
 let URI_ONLY_FOR_INVOICE = PART_A + PART_B;
 
 export const INVOICE_API = {
-    GET_ALL_INVOICES: COMMON_URL + 'invoices?',
     GET_ALL_LEDGERS_FOR_INVOICE: COMMON_URL + 'ledgers?',
-    // GENERATE_BULK_INVOICE: COMMON_URL + 'invoices/bulk-generate?combined', // By Nidhi
     GENERATE_BULK_INVOICE: COMMON_URL_V4 + 'accounts/:accountuniquename/vouchers/bulk-generate?combined',
     GET_INVOICE_TEMPLATES: COMMON_URL + 'templates/all',
     GET_INVOICE_TEMPLATE: COMMON_URL + 'templates-v2/templateUniqueName', // get call for single
@@ -45,23 +43,16 @@ export const INVOICE_API_2 = {
 export const EWAYBILL_API = {
     GENERATE_EWAYBILL: EWAYBILL_COMMON_URL,
     LOGIN_EWAYBILL_USER: EWAYBILL_COMMON_URL + '/user',
-
-    GET_ALL_GENERATED_EWAYBILLS: EWAYBILL_COMMON_URL + '/:ewaybillNumber',
     DOWNLOAD_EWAY: EWAYBILL_COMMON_URL + '/:ewaybillNumber' + '/download',
-    //  DOWNLOAD_DETAILED_EWAY: EWAYBILL_COMMON_URL + '/:ewaybillNumber' + '/download-detailed?type=file' ,
     DOWNLOAD_DETAILED_EWAY: EWAYBILL_COMMON_URL + '/:ewaybillNumber' + '/download-detailed',
     CANCEL_EWAY_BILL: EWAYBILL_COMMON_URL + '/cancel',
     UPDATE_EWAY_VEHICLE: EWAYBILL_COMMON_URL + '/vehicle',
     VALIDATE_INVOICE_EWAYBILL: EWAYBILL_COMMON_URL + '/validate-invoice',
-
     ADD_TRANSPORTER: COMMON_URL + 'transporters',  // get all transporter
-    GET_TRANSPORTER_BYID: COMMON_URL + 'transporters/:transporterId',
     GET_ALL_TRANSPORTER: COMMON_URL + 'transporters?page=:pageNo',
     UPDATE_TRANSPORTER: COMMON_URL + 'transporters?transporterId=:transporterId', // FOR DELETE TRANSPORTER ALSO
-    DELETE_TRANSPORTER: COMMON_URL + 'transporters?transporterId=:transporterId',
-
+    DELETE_TRANSPORTER: COMMON_URL + 'transporters?transporterId=:transporterId'
 };
-
 
 export const BULK_UPDATE_VOUCHER = {
     BULK_UPDATE_VOUCHER_ACTION: COMMON_URL + 'vouchers/bulk-update?action=:actionType'

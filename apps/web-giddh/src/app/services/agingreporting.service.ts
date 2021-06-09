@@ -1,5 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
-import { Inject, Injectable, OnInit, Optional } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './httpWrapper.service';
 import { DueAmountReportQueryRequest, DueAmountReportRequest, DueAmountReportResponse, DueRangeRequest } from '../models/api-models/Contact';
 import { empty, Observable } from 'rxjs';
@@ -10,17 +10,13 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 
 @Injectable()
-export class AgingreportingService implements OnInit {
+export class AgingreportingService {
     private companyUniqueName: string;
 
     constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService,
         private _generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this.companyUniqueName = this._generalService.companyUniqueName;
-    }
-
-    public ngOnInit() {
-        //
     }
 
     public CreateDueDaysRange(model: DueRangeRequest): Observable<BaseResponse<string, DueRangeRequest>> {
