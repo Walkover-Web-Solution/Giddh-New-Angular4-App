@@ -5,22 +5,15 @@ export const INVENTORY_API = {
     USER: {
         CREATE: COMMON_USER,
         UPDATE: COMMON_USER + '/:inventoryUserUniqueName',
-        GET: COMMON_USER + '/:inventoryUserUniqueName',
-        DELETE: COMMON_USER + '/:inventoryUserUniqueName',
         GET_ALL: COMMON_USER + '?q=:q&refresh=:refresh&page=:page&count=:count'
     },
     ENTRY: {
-        CREATE: COMMON_ENTRY,
-        UPDATE: COMMON_ENTRY + '/:inventoryEntryUniqueName',
-        GET: COMMON_ENTRY + '/:inventoryEntryUniqueName',
-        DELETE: COMMON_ENTRY + '/:inventoryEntryUniqueName',
+        CREATE: COMMON_ENTRY
     },
     TRANSFER_ENTRY: {
         CREATE: COMMON_TRANSFER_ENTRY,
     },
     REPORT: 'company/:companyUniqueName/stock/:stockUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count',
-    REPORT_ALL: 'company/:companyUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count',
-
     CREATE_STOCK_GROUP: 'company/:companyUniqueName/stock-group', // post call
     UPDATE_STOCK_GROUP: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // put call
     DELETE_STOCK_GROUP: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // DELETE call
@@ -45,24 +38,18 @@ export const INVENTORY_API = {
     GET_STOCK_WITH_UNIQUENAME: 'company/:companyUniqueName/stock/:stockUniqueName', // GET call
     GET_STOCK_UNIT_WITH_NAME: 'company/:companyUniqueName/stock-unit/:uName', // GET call
     MOVE_STOCK: 'company/:companyUniqueName/stock/:stockUniqueName/move', // PUT call
-
     DOWNLOAD_INVENTORY_GROUP_REPORT: 'company/:companyUniqueName/stock-group/:stockGroupUniquename/download-inventory-report-v2?format=:format&from=:from&to=:to&sortBy=:sortBy&sort=:sort',
     DOWNLOAD_INVENTORY_STOCK_REPORT: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/download-stock-inventory-report-v3?from=:from&to=:to&page=:page&count=:count&format=:format&sortBy=:sortBy&sort=:sort',
     DOWNLOAD_INVENTORY_ALL_GROUP_REPORT: 'v2/company/:companyUniqueName/download-all-inventory-report-v2?format=:format&from=:from&to=:to&sortBy=:sortBy&sort=:sort',
     DOWNLOAD_INVENTORY_HIERARCHICAL_STOCKS_REPORT: 'v2/company/:companyUniqueName/download-all-inventory-hierarchy?from=:from&to=:to&format=:format&sortBy=:sortBy&sort=:sort&page=:page&count=:count',
     DOWNLOAD_INVENTORY_STOCKS_ARRANGED_BY_ACCOUNT_REPORT: 'v2/company/:companyUniqueName/download-inventory-arrangedby-accounts?from=:from&to=:to&format=:format&sort=:sort&sortBy=:sortBy',
-
     DOWNLOAD_JOBWORK_BY_STOCK: 'company/:companyUniqueName/stock/:stockUniqueName/download-job-work-report/mail-v2?format=:format&from=:from&to=:to&sort=:sort&sortBy=:sortBy',
     DOWNLOAD_JOBWORK_BY_PERSON: 'company/:companyUniqueName/inventory-users/download-job-work-report/mail-v2?format=:format&from=:from&to=:to&sort=:sort&sortBy=:sortBy',
-
-
     STOCK_REPORT_V2: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/report-v2?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&transaction_type=:transactionType', // post for filter rest all get
-
     GROUP_STOCK_REPORT_V2: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/inventory-report-v2?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy', // post for filter rest all get // it was slow on prod
     GROUP_STOCK_REPORT_V3: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/inventory-report-v3?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy', // post for filter rest all get
     REPORT_V2: 'company/:companyUniqueName/stock/:stockUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count&sort=:sort&sortBy=:sortBy',
     REPORT_ALL_V2: 'company/:companyUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count&sort=:sort&sortBy=:sortBy',
-
     BRANCH_TRANSFER: {
         TRANSFER: 'inventory-transfer/'
     },

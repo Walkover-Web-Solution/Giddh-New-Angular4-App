@@ -288,17 +288,6 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
             newState.isSocialLogoutAttempted = false;
             return newState;
         }
-        // important if logged in via social accounts for web only
-        case LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE: {
-            let newState = _.cloneDeep(state);
-            let LINKEDIN_RESPONSE: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = action.payload as BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel>;
-            if (LINKEDIN_RESPONSE.status === 'success') {
-                newState.isLoggedInWithSocialAccount = true;
-            } else {
-                newState.isLoggedInWithSocialAccount = false;
-            }
-            return newState;
-        }
         case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
             let newState = _.cloneDeep(state);
             let GOOGLE_RESPONSE: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
@@ -490,18 +479,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 });
             }
         }
-        case LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE: {
-            let data: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = action.payload as BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel>;
-            if (data.status === 'success') {
-                return Object.assign({}, state, {
-                    user: data.body
-                });
-            } else {
-                return Object.assign({}, state, {
-                    user: null
-                });
-            }
-        }
         case LoginActions.VerifyEmailResponce: {
             let data: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
             if (data.status === 'success') {
@@ -683,15 +660,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 return Object.assign({}, state, {
                     isRefreshing: false,
                     companies: action.payload.body
-                });
-            }
-            return state;
-        case CompanyActions.DELETE_COMPANY_RESPONSE:
-            let uniqueName: BaseResponse<string, string> = action.payload;
-            if (uniqueName.status === 'success') {
-                let array = state.companies.filter(cmp => cmp.uniqueName !== uniqueName.body);
-                return Object.assign({}, state, {
-                    companies: array
                 });
             }
             return state;

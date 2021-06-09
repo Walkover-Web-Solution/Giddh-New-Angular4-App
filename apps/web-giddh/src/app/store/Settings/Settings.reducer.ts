@@ -426,15 +426,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             }
             return Object.assign({}, state, newState);
         }
-        case SETTINGS_BRANCH_ACTIONS.GET_PARENT_COMPANY_RESPONSE: {
-            let response: BaseResponse<any, any> = action.payload;
-            if (response.status === 'success') {
-                newState.parentCompany = response.body;
-            } else {
-                newState.parentCompany = null;
-            }
-            return Object.assign({}, state, newState);
-        }
         case SETTINGS_TAG_ACTIONS.GET_ALL_TAGS: {
             return {
                 ...state,

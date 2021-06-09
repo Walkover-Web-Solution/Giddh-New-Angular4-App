@@ -16,7 +16,6 @@ import { LocaleService } from '../../services/locale.service';
 @Injectable()
 export class SettingsIntegrationActions {
 
-
     public GetSMSKey$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY),
@@ -28,7 +27,6 @@ export class SettingsIntegrationActions {
                 type: SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE,
                 payload: res
             }))));
-
 
     public GetEmailKey$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -42,7 +40,6 @@ export class SettingsIntegrationActions {
                 payload: res
             }))));
 
-
     public SaveSMSKey$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY),
@@ -54,7 +51,6 @@ export class SettingsIntegrationActions {
                 type: SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY_RESPONSE,
                 payload: res
             }))));
-
 
     public SaveEmailKey$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -113,14 +109,12 @@ export class SettingsIntegrationActions {
                 let data: BaseResponse<any, string> = response.payload;
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
-                    // this.store.dispatch(this._companyAction.getAllRegistrations());
                 } else {
                     this.store.dispatch(this._companyAction.getAllRegistrations());
                     this.toasty.successToast(data.body.message);
                 }
                 return { type: 'EmptyAction' };
             })));
-
 
     public GetRazorPayDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -134,7 +128,6 @@ export class SettingsIntegrationActions {
                 payload: res
             }))));
 
-
     public SaveRazorPayDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS),
@@ -146,7 +139,6 @@ export class SettingsIntegrationActions {
                 type: SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS_RESPONSE,
                 payload: res
             }))));
-
 
     public DeleteRazorPayDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -160,7 +152,6 @@ export class SettingsIntegrationActions {
                 payload: res
             }))));
 
-
     public UpdateRazorPayDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS),
@@ -173,13 +164,11 @@ export class SettingsIntegrationActions {
                 payload: res
             }))));
 
-
     public SaveCashfreeDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS),
             switchMap((action: CustomActions) => this.settingsIntegrationService.SaveCashFreeDetail(action.payload)),
             map(response => this.SaveCashfreeDetailsResponse(response))));
-
 
     public SaveCashfreeDetailsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -195,13 +184,11 @@ export class SettingsIntegrationActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public DeleteCashfreeDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_CASHFREE_DETAILS),
             switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteCashFreeDetail()),
             map(response => this.DeleteCashfreeDetailsResponse(response))));
-
 
     public DeleteCashfreeDetailsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -215,7 +202,6 @@ export class SettingsIntegrationActions {
                 }
                 return { type: 'EmptyAction' };
             })));
-
 
     public AddAutoCollectUser$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -237,13 +223,11 @@ export class SettingsIntegrationActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public DeleteAutoCollectUser$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER),
             switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteAutoCollectUser()),
             map(response => this.DeleteAutoCollectUserResponse(response))));
-
 
     public DeleteAutoCollectUserResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -259,22 +243,18 @@ export class SettingsIntegrationActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public GetCashfreeDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS),
             switchMap((action: CustomActions) => this.settingsIntegrationService.GetCashFreeDetail()),
             map(response => this.GetCashfreeDetailsResponse(response))));
 
-
     public GetCashfreeDetailsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE),
             map((response: CustomActions) => {
-                let data: BaseResponse<any, any> = response.payload;
                 return { type: 'EmptyAction' };
             })));
-
 
     public GetAutoCollectDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -282,22 +262,18 @@ export class SettingsIntegrationActions {
             switchMap((action: CustomActions) => this.settingsIntegrationService.GetAutoCollectUser()),
             map(response => this.GetAutoCollectDetailsResponse(response))));
 
-
     public GetAutoCollectDetailsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE),
             map((response: CustomActions) => {
-                let data: BaseResponse<any, any> = response.payload;
                 return { type: 'EmptyAction' };
             })));
-
 
     public UpdateCashfreeDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS),
             switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateCashFreeDetail(action.payload)),
             map(response => this.UpdateCashfreeDetailsResponse(response))));
-
 
     public UpdateCashfreeDetailsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -313,29 +289,24 @@ export class SettingsIntegrationActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public GetPaymentGateway$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY),
             switchMap((action: CustomActions) => this.settingsIntegrationService.GetPaymentGateway()),
             map(response => this.GetPaymentGatewayResponse(response))));
 
-
     public GetPaymentGatewayResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY_RESPONSE),
             map((response: CustomActions) => {
-                let data: BaseResponse<any, any> = response.payload;
                 return { type: 'EmptyAction' };
             })));
-
 
     public AddPaymentGateway$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY),
             switchMap((action: CustomActions) => this.settingsIntegrationService.AddPaymentGateway(action.payload)),
             map(response => this.AddPaymentGatewayResponse(response))));
-
 
     public AddPaymentGatewayResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -350,13 +321,11 @@ export class SettingsIntegrationActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public UpdatePaymentGateway$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY),
             switchMap((action: CustomActions) => this.settingsIntegrationService.UpdatePaymentGateway(action.payload)),
             map(response => this.UpdatePaymentGatewayResponse(response))));
-
 
     public UpdatePaymentGatewayResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -371,13 +340,11 @@ export class SettingsIntegrationActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public DeletePaymentGateway$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY),
             switchMap((action: CustomActions) => this.settingsIntegrationService.DeletePaymentGateway()),
             map(response => this.DeletePaymentGatewayResponse(response))));
-
 
     public DeletePaymentGatewayResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -392,13 +359,11 @@ export class SettingsIntegrationActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public UpdateAutoCollectUser$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AUTOCOLLECT_USER),
             switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateAutoCollectUser(action.payload)),
             map(response => this.UpdateAutoCollectUserResponse(response))));
-
 
     public UpdateAutoCollectUserResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -407,19 +372,15 @@ export class SettingsIntegrationActions {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
-                } else {
-                    // this.toasty.successToast(data.body, '');
                 }
                 return { type: 'EmptyAction' };
             })));
-
 
     public AddAmazonSeller$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER),
             switchMap((action: CustomActions) => this.settingsIntegrationService.AddAmazonSeller(action.payload))
             , map(response => this.AddAmazonSellerResponse(response))));
-
 
     public AddAmazonSellerResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -434,13 +395,11 @@ export class SettingsIntegrationActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public UpdateAmazonSeller$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER),
             switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateAmazonSeller(action.payload))
             , map(response => this.UpdateAmazonSellerResponse(response))));
-
 
     public UpdateAmazonSellerResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -455,13 +414,11 @@ export class SettingsIntegrationActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public DeleteAmazonSeller$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER),
             switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteAmazonSeller(action.payload))
             , map(response => this.DeleteAmazonSellerResponse(response))));
-
 
     public DeleteAmazonSellerResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -476,19 +433,16 @@ export class SettingsIntegrationActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public GetAmazonSellers$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER),
             switchMap((action: CustomActions) => this.settingsIntegrationService.GetAmazonSeller())
             , map(response => this.GetAmazonSellersResponse(response))));
 
-
     public GetAmazonSellersResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER_RESPONSE),
             map((response: CustomActions) => {
-                let data: BaseResponse<any, any> = response.payload;
                 return { type: 'EmptyAction' };
             })));
 
@@ -498,13 +452,11 @@ export class SettingsIntegrationActions {
             switchMap((action: CustomActions) => this.settingsIntegrationService.GetGmailIntegrationStatus()),
             map(response => this.GetGmailIntegrationStatusResponse(response))));
 
-
     public RemoveICICI$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.REMOVE_ICICI_PAYMENT),
             switchMap((action: CustomActions) => this.settingsIntegrationService.RemoveICICI(action.payload))
             , map(response => this.RemovePaymentInfoResponse(response))));
-
 
     public RemoveICICIResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -520,13 +472,11 @@ export class SettingsIntegrationActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public RemoveGmailIntegration$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.REMOVE_GMAIL_INTEGRATION),
             switchMap((action: CustomActions) => this.settingsIntegrationService.RemoveGmailIntegration())
             , map(response => this.RemoveGmailIntegrationResponse(response))));
-
 
     public RemoveGmailIntegrationResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -574,18 +524,21 @@ export class SettingsIntegrationActions {
             payload: value
         };
     }
+
     public SavePaymentInfo(value: PaymentClass): CustomActions {
         return {
             type: SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY,
             payload: value
         };
     }
+
     public UpdatePaymentInfo(value): CustomActions {
         return {
             type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY,
             payload: value
         };
     }
+    
     public GetRazorPayDetails(): CustomActions {
         return {
             type: SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS,
