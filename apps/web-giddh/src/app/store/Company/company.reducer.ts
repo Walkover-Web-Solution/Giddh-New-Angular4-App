@@ -23,7 +23,6 @@ export interface CurrentCompanyState {
     isTaxCreatedSuccessfully: boolean;
     isTaxUpdatingInProcess: boolean;
     isTaxUpdatedSuccessfully: boolean;
-    isCompanyActionInProgress: boolean;
     isAccountInfoLoading: boolean;
     isTcsTdsApplicable: boolean;
     isGetAllIntegratedBankInProgress: boolean;
@@ -59,7 +58,6 @@ const initialState: CurrentCompanyState = {
     isTaxCreatedSuccessfully: false,
     isTaxUpdatingInProcess: false,
     isTaxUpdatedSuccessfully: false,
-    isCompanyActionInProgress: false,
     isAccountInfoLoading: false,
     isTcsTdsApplicable: false,
     isGetAllIntegratedBankInProgress: false
@@ -180,18 +178,6 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                 };
             }
             break;
-        }
-        case CompanyActions.DELETE_COMPANY: {
-            return {
-                ...state,
-                isCompanyActionInProgress: true
-            };
-        }
-        case CompanyActions.DELETE_COMPANY_RESPONSE: {
-            return {
-                ...state,
-                isCompanyActionInProgress: false
-            };
         }
         case CompanyActions.GET_REGISTRATION_ACCOUNT:
             return Object.assign({}, state, {

@@ -1,5 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
-import { Inject, Injectable, OnInit, Optional } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { HttpWrapperService } from './httpWrapper.service';
 import { GeneralService } from './general.service';
@@ -10,17 +10,13 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api-models/new-vs-old-invoices';
 
 @Injectable()
-export class NewVsOldInvoicesService implements OnInit {
+export class NewVsOldInvoicesService {
     private companyUniqueName: string;
 
     constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService,
         private _generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this.companyUniqueName = this._generalService.companyUniqueName;
-    }
-
-    public ngOnInit() {
-        //
     }
 
     public GetNewVsOldInvoices(queryRequest: NewVsOldInvoicesRequest): Observable<BaseResponse<NewVsOldInvoicesResponse, string>> {

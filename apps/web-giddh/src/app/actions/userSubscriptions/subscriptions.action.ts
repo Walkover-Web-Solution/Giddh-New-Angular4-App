@@ -1,9 +1,8 @@
 import { Observable } from 'rxjs';
-
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Router } from '@angular/router';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -21,13 +20,11 @@ export class SubscriptionsActions {
     public static SubscribedCompaniesList = 'SubscribedCompaniesList';
     public static SubscribedCompaniesListResponse = 'SubscribedCompaniesListResponse';
 
-
     public SubscriptionsActions: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(SubscriptionsActions.SubscribedCompanies),
             switchMap((action: CustomActions) => this.subscriptions.getSubScribedCompanies()),
             map(response => this.SubscribedCompaniesResponse(response))));
-
 
     public SubscribedUserTransactions$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
@@ -35,13 +32,11 @@ export class SubscriptionsActions {
             switchMap((action: CustomActions) => this.subscriptions.GetSubScribedUserTransaction(action.payload)),
             map(response => this.SubscribedUserTransactionsResponse(response))));
 
-
     public SubscribedCompanyTransactions$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(SubscriptionsActions.SubscribedCompanyTransactions),
             switchMap((action: CustomActions) => this.subscriptions.GetSubScribedCompanyTransaction(action.payload)),
             map(response => this.SubscribedCompanyTransactionsResponse(response))));
-
 
     public SubscribedCompaniesList$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
@@ -104,6 +99,7 @@ export class SubscriptionsActions {
             payload: { subscription, company }
         };
     }
+    
     public SubscribedCompanyTransactionsResponse(resp: BaseResponse<any, any>): CustomActions {
         return {
             type: SubscriptionsActions.SubscribedCompanyTransactionsResponse,

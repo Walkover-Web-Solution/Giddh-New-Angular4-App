@@ -45,8 +45,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
-    @Input() public fetchingAccUniqueName$: Observable<boolean>;
-    @Input() public isAccountNameAvailable$: Observable<boolean>;
     @Input() public createAccountInProcess$: Observable<boolean>;
     @Input() public createAccountIsSuccess$: Observable<boolean>;
     @Input() public isGstEnabledAcc: boolean = false;
