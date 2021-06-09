@@ -27,7 +27,6 @@ import { IForceClear } from "../../../../models/api-models/Sales";
 import { CountryRequest, OnboardingFormRequest } from "../../../../models/api-models/Common";
 import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
-import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
@@ -83,8 +82,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * used to fetch groups
     */
     @Input() public isCustomerCreation: boolean;
-    /** True, if the module doesn't depend on flatten APIs */
-    @Input() public isFlattenRemoved: boolean;
     /** True if bank category account is selected */
     @Input() public isBankAccount: boolean = true;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
@@ -121,7 +118,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public GSTIN_OR_TRN: string;
     public selectedCountry: string;
     public selectedCountryCode: string;
-    private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
     public isStateRequired: boolean = false;
     public bankIbanNumberMaxLength: string = '18';
     public bankIbanNumberMinLength: string = '9';
@@ -170,7 +166,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private invoiceService: InvoiceService) {
-        this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.getCountry();
         this.getCallingCodes();
@@ -294,36 +289,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public getAccount() {
-        if (this.isLedgerModule || this.isFlattenRemoved) {
-            this.loadDefaultGroupsSuggestions();
-        } else {
-            this.flattenGroups$.subscribe(flattenGroups => {
-                if (flattenGroups) {
-                    let items: IOption[] = flattenGroups.filter(grps => {
-                        return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-                    }).map((m: any) => ({ value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups }));
-                    this.flatGroupsOptions = items;
-                    if (this.flatGroupsOptions.length > 0 && this.activeGroupUniqueName) {
-                        let selectedGroupDetails;
-
-                        this.flatGroupsOptions.forEach(res => {
-                            if (res.value === this.activeGroupUniqueName) {
-                                selectedGroupDetails = res;
-                            }
-                        })
-                        if (selectedGroupDetails) {
-                            if (selectedGroupDetails.additional) {
-                                let parentGroup = selectedGroupDetails.additional.length > 1 ? selectedGroupDetails.additional[1] : '';
-                                if (parentGroup) {
-                                    this.isParentDebtorCreditor(parentGroup.uniqueName);
-                                }
-                            }
-                        }
-                        this.toggleStateRequired();
-                    }
-                }
-            });
-        }
+        this.loadDefaultGroupsSuggestions();
     }
 
     public setCountryByCompany(company: CompanyResponse) {

@@ -1,7 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';

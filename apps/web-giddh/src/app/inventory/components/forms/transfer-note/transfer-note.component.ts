@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
@@ -16,7 +16,7 @@ import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/default
   `],
 })
 
-export class TransferNoteComponent implements OnChanges, OnInit {
+export class TransferNoteComponent implements OnChanges {
     @Output() public onCancel = new EventEmitter();
     @Output() public onSave = new EventEmitter<{ entry: InventoryEntry, user: Partial<InventoryUser> }>();
 
@@ -35,7 +35,6 @@ export class TransferNoteComponent implements OnChanges, OnInit {
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
-    // public inventoryEntryDateValid;
     constructor(private _fb: FormBuilder) {
         this.form = this._fb.group({
             inventoryEntryDate: [moment().format(GIDDH_DATE_FORMAT), Validators.required],
@@ -79,10 +78,6 @@ export class TransferNoteComponent implements OnChanges, OnInit {
 
     public get transactions(): FormArray {
         return this.form.get('transactions') as FormArray;
-    }
-
-    public ngOnInit() {
-        //
     }
 
     public ngOnChanges(changes: SimpleChanges): void {

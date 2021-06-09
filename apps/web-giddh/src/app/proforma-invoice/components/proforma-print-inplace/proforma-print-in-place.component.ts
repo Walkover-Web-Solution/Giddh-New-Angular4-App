@@ -2,13 +2,13 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, 
 import { DownloadVoucherRequest } from '../../../models/api-models/recipt';
 import { ProformaDownloadRequest } from '../../../models/api-models/proforma';
 import { VoucherTypeEnum } from '../../../models/api-models/Sales';
-import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
 import { ToasterService } from '../../../services/toaster.service';
 import { ProformaService } from '../../../services/proforma.service';
 import { ReceiptService } from '../../../services/receipt.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'proforma-print-in-place-component',
@@ -41,7 +41,8 @@ export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
         private _toasty: ToasterService,
         private _proformaService: ProformaService,
         private _receiptService: ReceiptService,
-        private domSanitizer: DomSanitizer
+        private domSanitizer: DomSanitizer,
+        private generalService: GeneralService
     ) { }
 
     ngOnInit() {
@@ -95,7 +96,7 @@ export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
 
             this._proformaService.download(request, this.voucherType).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result && result.status === 'success') {
-                    let blob: Blob = base64ToBlob(result.body, 'application/pdf', 512);
+                    let blob: Blob = this.generalService.base64ToBlob(result.body, 'application/pdf', 512);
                     const file = new Blob([blob], { type: 'application/pdf' });
                     URL.revokeObjectURL(this.pdfFileURL);
                     this.pdfFileURL = URL.createObjectURL(file);

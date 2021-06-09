@@ -63,7 +63,6 @@
                         <td>{{log.log?.entryDate}}</td>
                         <td>{{transaction.particular?.name}} ({{transaction.particular?.uniqueName}})</td>
                         <td>
-                            <!-- {{transaction.amount | giddhCurrency}} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="transaction.amount" [currencySymbol]="false"
                                     [currencyCode]="false">
@@ -94,7 +93,6 @@
                         <td>{{log.log.updated.entryDate}}</td>
                         <td>{{transaction.particular?.name}} ({{transaction.particular?.uniqueName}})</td>
                         <td>
-                            <!-- {{transaction.amount}} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="transaction.amount" [currencySymbol]="false"
                                     [currencyCode]="false">
@@ -123,7 +121,6 @@
                         <td>{{log.log.old.entryDate}}</td>
                         <td>{{transaction.particular?.name}} ({{transaction.particular?.uniqueName}})</td>
                         <td>
-                            <!-- {{transaction.amount}} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="transaction.amount" [currencySymbol]="false"
                                     [currencyCode]="false">

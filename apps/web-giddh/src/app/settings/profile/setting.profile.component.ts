@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import * as _ from '../../lodash-optimized';
@@ -24,6 +24,7 @@ import { CompanyService } from '../../services/companyService.service';
 import { GeneralService } from '../../services/general.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocaleService } from '../../services/locale.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -56,6 +57,8 @@ export interface IGstObj {
     ]
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
+    @Output() public pageHeading: EventEmitter<string> = new EventEmitter();
+
     public countrySource: IOption[] = [];
     public countrySource$: Observable<IOption[]> = observableOf([]);
     public currencies: IOption[] = [];
@@ -156,6 +159,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public activeLocale: string = "";
     /** This holds perforsonal information tab heading */
     public personalInformationTabHeading: string = "";
+    /* This will store screen size */
+    public isMobileScreen: boolean = false;
 
     constructor(
         private commonService: CommonService,
@@ -172,8 +177,16 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private settingsUtilityService: SettingsUtilityService,
         private router: Router,
         public route: ActivatedRoute,
-        private localeService: LocaleService
+        private localeService: LocaleService,
+        private breakPointObservar: BreakpointObserver
     ) {
+
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
         this.getCountry();
         this.getCurrency();
         currencyNumberSystems.map(currency => {
@@ -183,6 +196,31 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             this.decimalDigitSource.push({ value: decimal.value, label: decimal.name });
         });
         this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress), takeUntil(this.destroyed$));
+    }
+
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof SettingProfileComponent
+     */
+    public getPageHeading(): void {
+        let pageHeading = "";
+
+        if (this.isMobileScreen) {
+            switch (this.currentTab) {
+                case 'personal':
+                    pageHeading = this.personalInformationTabHeading;
+                    break;
+                case 'address':
+                    pageHeading = this.companyProfileObj?.taxType ? (this.localeData?.address + this.companyProfileObj?.taxType) : this.localeData?.addresses;
+                    break;
+                case 'other':
+                    pageHeading = this.localeData?.other;
+                    break;
+            }
+        }
+        this.pageHeading.emit(pageHeading);
     }
 
     public ngOnInit() {
@@ -780,7 +818,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
             }
         }
-
+        this.getPageHeading();
         this.router.navigateByUrl('/pages/settings/profile/' + tabName);
     }
 
@@ -1167,6 +1205,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     this.personalInformationTabHeading = this.localeData?.company_information;
                 }
             });
+
+            this.getPageHeading();
         }
     }
 }

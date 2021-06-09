@@ -117,28 +117,53 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {boolean} event
      * @memberof InvoiceComponent
      */
-    public getPageHeading(): string {
+     public getPageHeading(): string {
+        let pageHeading = "";
 
-        if(this.isMobileScreen){
+        if (this.isMobileScreen) {
             switch (this.activeTab) {
                 case 'debit note':
-                return this.localeData?.tabs?.debit_note;
-                case 'credit note': return this.localeData?.tabs?.credit_note;
-                case 'pending': return this.localeData?.tabs?.pending;
-                case 'templates': return this.localeData?.tabs?.templates;
-                case 'settings': return this.localeData?.tabs?.settings;
-                case 'estimates': return this.localeData?.tabs?.estimates;
-                case 'proformas': return this.localeData?.tabs?.proformas;
-                case 'sales': return this.localeData?.tabs?.sales;
-                case 'recurring': return this.localeData?.tabs?.recurring;
-                case 'pending' :return this.localeData?.tabs?.pending;
-                case 'templates': return this.localeData?.tabs?.templates;
-                case 'settings' :return this.localeData?.tabs?.settings;
+                    pageHeading = this.localeData?.tabs?.debit_note;
+                    break;
+                case 'credit note':
+                    pageHeading = this.localeData?.tabs?.credit_note;
+                    break;
+                case 'pending':
+                    pageHeading = this.localeData?.tabs?.pending;
+                    break;
+                case 'templates':
+                    pageHeading = this.localeData?.tabs?.templates;
+                    break;
+                case 'settings':
+                    pageHeading = this.localeData?.tabs?.settings;
+                    break;
+                case 'estimates':
+                    pageHeading = this.localeData?.tabs?.estimates;
+                    break;
+                case 'proformas':
+                    pageHeading = this.localeData?.tabs?.proformas;
+                    break;
+                case 'invoice':
+                    pageHeading = this.localeData?.tabs?.invoices;
+                    break;
+                case 'sales':
+                    pageHeading = this.localeData?.tabs?.invoices;
+                    break;
+                case 'recurring':
+                    pageHeading = this.localeData?.tabs?.recurring;
+                    break;
+                case 'pending':
+                    pageHeading = this.localeData?.tabs?.pending;
+                    break;
+                case 'templates':
+                    pageHeading = this.localeData?.tabs?.templates;
+                    break;
+                case 'settings':
+                    pageHeading = this.localeData?.tabs?.settings;
+                    break;
             }
         }
-        else {
-            return " ";
-        }
+        return pageHeading;
     }
 
     public ngOnDestroy() {
