@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
     styles: [`
   `],
     template: `
+        <giddh-page-loader></giddh-page-loader>
   `
 })
 export class DummyComponent {

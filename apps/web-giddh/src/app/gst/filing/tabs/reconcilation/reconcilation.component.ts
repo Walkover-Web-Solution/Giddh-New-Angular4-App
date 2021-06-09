@@ -13,7 +13,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 @Component({
 	selector: 'reconcile',
 	templateUrl: './reconcilation.component.html',
-	styleUrls: ['reconcilation.component.scss'],
+	styleUrls: ['./reconcilation.component.scss'],
 	providers: [
 		{
 			provide: BsDropdownConfig, useValue: { autoClose: true },
