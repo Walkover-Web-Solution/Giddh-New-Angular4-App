@@ -1,5 +1,5 @@
 import { Observable, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -80,7 +80,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
         this.shouldShowBankDetail(this.accountDetails.uniqueName);
 
-        // this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
         this.activeGroup$.subscribe((a) => {
             if (a) {
                 this.virtualAccountEnable$.subscribe(s => {
@@ -140,8 +139,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
         this.store.dispatch(this.accountsAction.deleteAccount(this.activeAccountDetails.uniqueName, activeGrpName));
         this.hideDeleteAccountModal();
-        // this.getUpdateList.emit(activeGrpName);
-
     }
 
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {

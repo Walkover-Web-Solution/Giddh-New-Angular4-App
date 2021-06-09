@@ -1,9 +1,10 @@
+@import "../../../assets/css/color.scss";
+
 table {
     table-layout: fixed;
 }
 
 .basic > thead > tr > th {
-    // overflow: hidden;
     width: 140px;
     white-space: inherit;
 }
@@ -43,5 +44,5 @@ table {
 }
 
 .basic > thead > tr > th {
-    border: 1px solid #ccc;
+    border: 1px solid $gainsboro;
 }

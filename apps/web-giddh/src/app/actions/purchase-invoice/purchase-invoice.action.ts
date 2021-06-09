@@ -11,6 +11,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ToasterService } from '../../services/toaster.service';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { LocaleService } from '../../services/locale.service';
+import { GeneralService } from '../../services/general.service';
 
 @Injectable()
 export class InvoicePurchaseActions {
@@ -403,32 +404,12 @@ export class InvoicePurchaseActions {
     constructor(private action$: Actions,
         private toasty: ToasterService,
         private localeService: LocaleService,
-        private purchaseInvoiceService: PurchaseInvoiceService) {
-    }
-
-    public base64ToBlob(b64Data, contentType, sliceSize) {
-        contentType = contentType || '';
-        sliceSize = sliceSize || 512;
-        let byteCharacters = atob(b64Data);
-        let byteArrays = [];
-        let offset = 0;
-        while (offset < byteCharacters.length) {
-            let slice = byteCharacters.slice(offset, offset + sliceSize);
-            let byteNumbers = new Array(slice.length);
-            let i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
-            }
-            let byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
-        }
-        return new Blob(byteArrays, { type: contentType });
+        private purchaseInvoiceService: PurchaseInvoiceService,
+        private generalService: GeneralService) {
     }
 
     public downloadFile(data: Response, month: any, gstNumber: string, type: string, gstType) {
-        let blob = this.base64ToBlob(data, 'application/xls', 512);
+        let blob = this.generalService.base64ToBlob(data, 'application/xls', 512);
         return saveAs(blob, `${type}-${month.from}-${month.to}-${gstNumber}.xlsx`);
 
     }

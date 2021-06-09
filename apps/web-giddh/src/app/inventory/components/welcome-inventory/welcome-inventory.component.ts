@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
@@ -19,18 +19,13 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
         ]),
     ]
 })
-export class InventoryWelcomeComponent implements OnInit, OnDestroy {
+export class InventoryWelcomeComponent implements OnDestroy {
     public asideMenuState: string = 'out';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor() {
-        //
+        
     }
-
-    public ngOnInit() {
-        //
-    }
-
 
     // region asidemenu toggle
     public toggleBodyClass() {

@@ -35,6 +35,7 @@ import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
 import { RecurringVoucherService } from '../../services/recurring-voucher.service';
 import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.service';
 import { LocaleService } from '../../services/locale.service';
+import { GeneralService } from '../../services/general.service';
 
 @Injectable()
 export class InvoiceActions {
@@ -924,33 +925,13 @@ export class InvoiceActions {
         private _invoiceTemplatesService: InvoiceTemplatesService,
         private _toasty: ToasterService,
         private _router: Router,
-        private localeService: LocaleService
+        private localeService: LocaleService,
+        private generalService: GeneralService
     ) {
     }
 
-    public base64ToBlob(b64Data, contentType, sliceSize) {
-        contentType = contentType || '';
-        sliceSize = sliceSize || 512;
-        let byteCharacters = atob(b64Data);
-        let byteArrays = [];
-        let offset = 0;
-        while (offset < byteCharacters.length) {
-            let slice = byteCharacters.slice(offset, offset + sliceSize);
-            let byteNumbers = new Array(slice.length);
-            let i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
-            }
-            let byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
-        }
-        return new Blob(byteArrays, { type: contentType });
-    }
-
     public downloadFile(data: Response, type: string, fileName) {
-        let blob = this.base64ToBlob(data, 'application/' + type, 512);
+        let blob = this.generalService.base64ToBlob(data, 'application/' + type, 512);
         return saveAs(blob, `${fileName}.` + type);
     }
 

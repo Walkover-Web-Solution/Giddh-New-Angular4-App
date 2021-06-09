@@ -285,7 +285,7 @@ form {
     font-size: 12px;
 }
 
-.fs11 {
+.font-11 {
     font-size: 11px;
 }
 
@@ -380,12 +380,12 @@ input[type="text"] {
     height: 36px !important;
 }
 
-a.copyInvoice {
+a.copy-invoice {
     color: $primary;
     margin-left: 10px;
 }
 
-a.copyInvoice img {
+a.copy-invoice img {
     margin-right: 6px;
 }
 
@@ -448,10 +448,10 @@ a.copyInvoice img {
     color: $primary;
 }
 
-.otherDetailTable th,
-.otherDetailTable td,
-.otherDetailTable tr,
-.otherDetailTable tbody {
+.other-detail-table th,
+.other-detail-table td,
+.other-detail-table tr,
+.other-detail-table tbody {
     border-top: none !important;
 }
 
@@ -606,7 +606,7 @@ section.static-purchase-table {
     margin-left: 48%;
 }
 
-.mt-b1 {
+.mt-1 {
     margin-top: 10px;
 }
 
@@ -635,22 +635,22 @@ section.static-purchase-table {
 }
 
 // new table css
-section.newtable {
+section.new-table {
     background-color: $whisper-color;
     margin-bottom: 30px;
     margin: 0 15px 30px;
 }
 
-.newtable .thead {
+.new-table .thead {
     border-right: 1px solid $gainsboro;
     padding: 8px 10px;
 }
 
-.newtable .thead:first-child {
+.new-table .thead:first-child {
     padding-left: 30px;
 }
 
-.newtable .row > div {
+.new-table .row > div {
     padding: 0;
 }
 
@@ -986,11 +986,6 @@ span.eligible-ITC {
 
 .other-detail-card .collapse-pane-heading {
     padding-bottom: 20px;
-}
-
-.total-amount-description {
-    max-width: 400px;
-    width: 100%;
 }
 
 .total-amount-description {

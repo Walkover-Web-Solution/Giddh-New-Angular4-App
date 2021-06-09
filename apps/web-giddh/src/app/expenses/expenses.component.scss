@@ -2,7 +2,7 @@
 .left-expense {
     width: 400px;
     box-shadow: 3px 3px 6px $black-russian;
-    background: #fff;
+    background: $white;
     position: relative;
 }
 .main-expense-details {
@@ -38,9 +38,6 @@
 .expense-head{
     padding-top: 55px;
 }
-// .petty-cash::ng-deep.nav {
-//  position: static !important;
-// }
 @media only screen and (max-width: 767px) {
     .left-expense {
         width: 100%;

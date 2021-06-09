@@ -4001,10 +4001,6 @@ select.form-control {
     overflow: hidden;
 }
 
-.noPad {
-    padding: 0;
-}
-
 .grp-col {
     float: left;
     overflow-x: auto;
@@ -10059,6 +10055,9 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 768px) {
+    .tax-engine .transactions-list .filter-row + .filter-row {
+        margin-left: 5px;
+    }
     .menu_open .sales-register {
         width: 100% !important;
         padding-right: 0 !important;
@@ -10244,7 +10243,7 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
-    .on-setting-page, .gst-sidebar-open {
+    .on-setting-page, .gst-sidebar-open , .on-user-page{
         .hamburger-menu-icon{
             left: 80px !important;
             width: calc(100% - 160px) !important;
@@ -10378,7 +10377,7 @@ body.update-scroll-hidden {
     #setting-tab > .tab-container > .tab-content {
         padding-top: 15px !important;
     }
-    
+
 }
 @media (max-width: 1199px) {
     .ledger-book .left-col-new .entry-modal {
@@ -10834,8 +10833,8 @@ body.update-scroll-hidden {
 
 @media (max-width: 575px) {
     .gst-sidebar-open .daterangepicker {
-        left: auto !important;
-        right: 90px !important;
+        left: 15px !important;
+        right: 0 !important;
     }
     .filter-band ul{
         left: auto !important;
@@ -10858,7 +10857,6 @@ body.update-scroll-hidden {
     }
     .daterangepicker.ltr .ranges {
         float: left;
-
         ul {
             li {
                 font-size: 11px;
@@ -10896,6 +10894,10 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 375px) {
+    .gst-sidebar-open .daterangepicker {
+        left: 15px !important;
+        right: auto !important;
+    }
     .setting-page.tb-pl-bs-tabs ul.nav.nav-tabs {
         overflow-x: auto;
         white-space: nowrap;

@@ -4,7 +4,7 @@
     <div [ngStyle]="{'display': !showLoader ? 'block' : 'none'}">
         <!-- region page change menu -->
         <div class="d-flex border-bottom mobile-view-padding">
-            <hamburger-menu></hamburger-menu>
+            <hamburger-menu [pageHeading]="((isCashInvoice) ? localeData?.invoice_types?.cash : getInvoiceType()) | titlecase"></hamburger-menu>
             <div class="form-group mr-b05 clearfix pro-invoice-heading">
 
                 <div class="clearfix">
@@ -1347,7 +1347,7 @@
 
 
                                                 </div>
-                                                <div class="tax-incurrency"
+                                                <div class="tax-in-currency"
                                                     *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount">
                                                     {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                                                     <span class="differ-currency d-flex justify-content-end"
@@ -1574,7 +1574,7 @@
                                         class="text-right item-rate">
                                         <div class="td-wrapper">
 
-                                            <div class="flex-grow-1">
+                                            <div class="flex-fill">
                                                 <input type="text" [disabled]="!transaction.isStockTxn"
                                                     (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)"
                                                     [placeholder]="commonLocaleData?.app_rate"
@@ -1601,7 +1601,7 @@
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();"
                                         class="text-right item-amount">
                                         <div class="td-wrapper">
-                                            <div class="flex-grow-1">
+                                            <div class="flex-fill">
                                                 <input type="text"
                                                     (blur)="calculateWhenTrxAltered(entry, transaction, true, $event)"
                                                     (click)="transactionAmountClicked(transaction)"
@@ -1635,7 +1635,7 @@
 
                                     <td (click)="closeTaxControlPopup();" class="item-discount">
                                         <div class="td-wrapper">
-                                            <div class="text-right flex-grow-1">
+                                            <div class="text-right flex-fill">
                                                 <discount-control-component #discountComponent [discountMenu]="false"
                                                     [discountAccountsDetails]="entry.discounts"
                                                     [discountSum]="entry.discountSum" [showHeaderText]="false"
@@ -1662,7 +1662,7 @@
                                     <td (click)="closeDiscountPopup();"
                                         class="position-relative dropdown-container item-tax">
                                         <div class="td-wrapper">
-                                            <div class="text-right flex-grow-1">
+                                            <div class="text-right flex-fill">
                                                 <tax-control #taxControlComponent [taxes]="companyTaxesList"
                                                     [date]="entry.entryDate" [taxRenderData]="entry.taxes"
                                                     [totalForTax]="transaction.taxableValue"
@@ -1696,7 +1696,7 @@
                                         class="text-right item-total delete-btn-absolute">
                                         <div class="td-wrapper">
 
-                                            <div class="flex-grow-1">
+                                            <div class="flex-fill">
                                                 <input type="text" name="transaction.total_{{entryIdx}}"
                                                     class="form-control text-right" [(ngModel)]="transaction.total"
                                                     decimalDigitsDirective
@@ -1742,7 +1742,7 @@
                                                 </div>
                                             </div>
                                             <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount"
-                                                class="tax-incurrency">
+                                                class="tax-in-currency">
                                                 {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                                 <span>
                                                     <amount-field [amount]="entry.otherTaxSum * exchangeRate"
@@ -2717,7 +2717,7 @@
                                                 <div class="card-rate">
                                                     <label
                                                         class="card-label text-right">{{commonLocaleData?.app_rate}}</label>
-                                                    <div class="flex-grow-1">
+                                                    <div class="flex-fill">
                                                         <input type="text" [disabled]="!transaction.isStockTxn"
                                                             (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction, false, $event)"
                                                             [placeholder]="commonLocaleData?.app_rate"
@@ -2755,7 +2755,7 @@
 
                                                     <label
                                                         class="card-label text-right">{{commonLocaleData?.app_amount}}</label>
-                                                    <div class="flex-grow-1">
+                                                    <div class="flex-fill">
                                                         <input type="tel"
                                                             (blur)="calculateWhenTrxAltered(entry, transaction, true, $event)"
                                                             (click)="transactionAmountClicked(transaction)"
@@ -2792,7 +2792,7 @@
                                                 <div class="card-discount">
                                                     <label
                                                         class="card-label text-right">{{commonLocaleData?.app_discount}}</label>
-                                                    <div class="text-right flex-grow-1">
+                                                    <div class="text-right flex-fill">
 
                                                         <discount-control-component #discountComponent
                                                             [discountMenu]="false"
@@ -2913,7 +2913,7 @@
                                                         </div>
                                                     </div>
                                                     <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount"
-                                                        class="tax-incurrency d-flex">
+                                                        class="tax-in-currency d-flex">
                                                         {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                                         <span class="mr-l05">
                                                             <amount-field [amount]="entry.otherTaxSum * exchangeRate "

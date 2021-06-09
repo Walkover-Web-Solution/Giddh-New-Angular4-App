@@ -32,9 +32,6 @@
 
         <div class="col-lg-6 col-sm-3 col-12">
             <ul class="list-inline list-middle download-drop-down">
-                <!-- <li>
-            <a href="javscript:void(0)" [routerLink]="['error-sheet']" class="btn grey-color"><img src="assets/images/gst/error-link.svg" alt=""> Error Sheet</a>
-        </li> -->
                 <li>
                     <div class="btn-group" dropdown #dropdown="bs-dropdown">
                         <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue mr-0"><i
@@ -115,8 +112,6 @@
                 {{ gstAuthenticated ? localeData?.filing?.authenticated :
                     localeData?.filing?.authenticate}}
             </button>
-
-            <!-- <button class="btn btn-primary pull-right" (click)="toggleSettingAsidePane(null, 'RECONCILE')" *ngIf="!(gstAuthenticated$ | async)">GST Reconcile</button> -->
             <button class="btn btn-primary pull-right" [disabled]="!gstAuthenticated" (click)="pullFromGstIn($event)"
                 *ngIf="showTaxPro">{{localeData?.filing?.pull_from_gstn}}
             </button>
@@ -134,10 +129,9 @@
 
 
 <!-- region cancel confirmation modal -->
-<div bsModal #cancelConfirmationModel="bs-modal" class="modal zIndexForAside fade" role="dialog"
+<div bsModal #cancelConfirmationModel="bs-modal" class="modal z-index-for-aside fade" role="dialog"
     [config]="{ ignoreBackdropClick: true }">
     <div class="modal-dialog modal-md second">
-        <!-- modal-liq-90 class is removed for now-->
         <div class="modal-content">
             <confirm-modal [body]="localeData?.filing?.cancel_title"
                 (successCallBack)="cancelConfirmationModel.hide();toggleSettingAsidePane(null);"

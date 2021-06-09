@@ -2,7 +2,7 @@
     <h2 class="">Create Account</h2>
 </div>
 <div class="form-body width-bg clearfix margin-child-label">
-    <div class="form-bg clearfix">
+    <div class="clearfix">
         <form [formGroup]="form" autocomplete="off" class="form-group">
             <div class="row">
                 <div class="col-6">
@@ -18,18 +18,6 @@
                     <button class="btn btn-success" [ladda]="isLoading" (click)="save()">Save</button>
                 </div>
             </div>
-
-            <!-- <div class="row">
-  <div class="col-lg-3 form-group mr-r1">
-    <label class="d-block">&nbsp;</label>
-    <button class="btn btn-sm" (click)="onCancel.emit($event)">Cancel</button>
-  </div>
-
-  <div class="col-lg-3 form-group mr-r1">
-    <label class="d-block">&nbsp;</label>
-    <button class="btn btn-success btn-sm" [ladda]="isLoading" (click)="save()">Save</button>
-  </div>
-</div> -->
         </form>
     </div>
 </div>

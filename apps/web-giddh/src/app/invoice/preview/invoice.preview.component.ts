@@ -533,16 +533,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if (activeCompany) {
                 this.activeFinancialYear = activeCompany.activeFinancialYear;
                 this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
-                if (this.activeFinancialYear) {
-                    this.datePickerOptions.ranges['This Financial Year to Date'] = [
-                        moment(this.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'),
-                        moment()
-                    ];
-                    this.datePickerOptions.ranges['Last Financial Year'] = [
-                        moment(this.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year'),
-                        moment(this.activeFinancialYear.financialYearEnds, GIDDH_DATE_FORMAT).subtract(1, 'year')
-                    ];
-                }
             }
         });
 
@@ -892,29 +882,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @param invoiceUniqueName
      */
     public downloadFile() {
-        let blob = this.base64ToBlob(this.base64Data, 'application/pdf', 512);
+        let blob = this.generalService.base64ToBlob(this.base64Data, 'application/pdf', 512);
         return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account.uniqueName}.pdf`);
-    }
-
-    public base64ToBlob(b64Data, contentType, sliceSize) {
-        contentType = contentType || '';
-        sliceSize = sliceSize || 512;
-        let byteCharacters = atob(b64Data);
-        let byteArrays = [];
-        let offset = 0;
-        while (offset < byteCharacters.length) {
-            let slice = byteCharacters.slice(offset, offset + sliceSize);
-            let byteNumbers = new Array(slice.length);
-            let i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
-            }
-            let byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
-        }
-        return new Blob(byteArrays, { type: contentType });
     }
 
     /**
@@ -1400,7 +1369,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.exportedInvoiceBase64res$.pipe(debounceTime(800), take(1)).subscribe(res => {
             if (res) {
                 if (res.status === 'success') {
-                    let blob = this.base64ToBlob(res.body, 'application/xls', 512);
+                    let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
                     this.selectedInvoicesList = [];
                     return saveAs(blob, `${dataTosend.accountUniqueName}${this.localeData?.all_invoices}.xls`);
                 } else {

@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnDestroy, Output, OnInit } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { UploadExceltableResponse } from 'apps/web-giddh/src/app/models/api-models/import-excel';
-import { base64ToBlob } from 'apps/web-giddh/src/app/shared/helpers/helperFunctions';
 import { AppState } from '../../store';
 import { Store } from '@ngrx/store';
 import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'upload-success',
@@ -30,7 +30,7 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
     public importedCountMessage: string = "";
     public failedReportMessage: string = "";
 
-    constructor(private store: Store<AppState>, private _importActions: ImportExcelActions, private _activateRoute: ActivatedRoute) {
+    constructor(private store: Store<AppState>, private _importActions: ImportExcelActions, private _activateRoute: ActivatedRoute, private generalService: GeneralService) {
 
     }
 
@@ -64,7 +64,7 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
     public downloadImportFile() {
         // rows less than 400 download report
         if (!this.UploadExceltableResponse.message && this.UploadExceltableResponse.response) {
-            let blob = base64ToBlob(this.UploadExceltableResponse.response, 'application/vnd.ms-excel', 512);
+            let blob = this.generalService.base64ToBlob(this.UploadExceltableResponse.response, 'application/vnd.ms-excel', 512);
             return saveAs(blob, this.localeData?.import_report_csv_downloaded_filename);
         }
 

@@ -4,6 +4,7 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import { ReplaySubject } from 'rxjs';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 import { takeUntil, take } from 'rxjs/operators';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'hamburger-menu',
@@ -19,8 +20,10 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True, when mobile screen size is detected */
+    public isMobileView: boolean = false;
 
-    constructor(private store: Store<AppState>, private generalActions: GeneralActions) {
+    constructor(private store: Store<AppState>, private generalActions: GeneralActions, private breakPointObservar: BreakpointObserver) {
 
     }
 
@@ -36,6 +39,11 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.commonLocaleData), take(1)).subscribe((response) => {
             this.commonLocaleData = response;
+        });
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileView = result?.matches;
         });
     }
 

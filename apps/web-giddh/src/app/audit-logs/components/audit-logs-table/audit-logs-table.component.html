@@ -355,51 +355,6 @@
                     </div>
                     <!-- etries log block end -->
 
-                    <!-- Stock group block -->
-                    <!--commenting due to voucher block already exit  -->
-                    <!-- <div class="single-address-row" *ngIf="log?.details?.voucherAccount && log?.details?.voucherAccount.name">
-                        <ng-container>
-                            <div class="mr-r05" *ngIf="log?.details?.voucherAccount.name">
-                                <label>
-                               Account:
-                            </label>
-                                <p class="address-field"> {{log?.details?.voucherAccount.name}}
-                                </p>
-                            </div>
-                            <div class="mr-r05" *ngIf="log?.details?.voucherType">
-                                <label>
-                               Voucher:
-                            </label>
-                                <p class="address-field"> {{log?.details?.voucherType}}
-                                </p>
-                            </div>
-                            <div class="mr-r05" *ngIf="log?.details?.voucherNumber">
-                                <label>
-                                Voucher Number:
-                            </label>
-                                <p class="mr-l05"> {{log?.details?.voucherNumber}}</p>
-                            </div>
-                            <div class="mr-r05" *ngIf="log?.details?.subTotal">
-                                <label>
-                                Sub Total:
-                            </label>
-                                <p class="mr-l05"> {{log?.details?.subTotal?.amountForAccount |giddhCurrency }}</p>
-                            </div>
-                            <div class="mr-r05" *ngIf="log?.details?.totalTax">
-                                <label>
-                                Tax:
-                            </label>
-                                <p class="mr-l05"> {{log?.details?.totalTax?.amountForAccount |giddhCurrency }}</p>
-                            </div>
-                            <div class="mr-r05" *ngIf="log?.details?.grandTotal">
-                                <label>
-                                Total:
-                            </label>
-                                <p class="mr-l05"> {{log?.details?.grandTotal?.amountForAccount |giddhCurrency }}</p>
-                            </div>
-                        </ng-container>
-                    </div> -->
-                    <!-- Stock group block end -->
                     <ng-container
                         *ngIf="log?.details?.parentGroup || (auditLogsRequest$ | async).entity === 'STOCK_GROUP'">
                         <div class="single-address-row">
@@ -811,34 +766,6 @@
                             </div>
                         </ng-container>
                         <!-- Old stock group logs end -->
-
-                        <!-- <div class="single-address-row" *ngIf="showSingleAddress">
-                        <div class="mr-r05">
-                            <label>
-                                Address:
-                            </label>
-                            <p class="address-field">405-406, Capt. C. S. Naidu Arcade Near Greater Kailash Hospital
-                            </p>
-                        </div>
-                        <div class="mr-r05">
-                            <label>
-                                State:
-                            </label>
-                            <p class="mr-l05">Madhya Pradesh</p>
-                        </div>
-                        <div class="mr-r05">
-                            <label>
-                                GSTIN:
-                            </label>
-                            <p class="mr-l05">1234567890gst</p>
-                        </div>
-                        <div class="mr-r05">
-                            <label>
-                                Country:
-                            </label>
-                            <p class="mr-l05">India</p>
-                        </div>
-                    </div> -->
                     </div>
                     <div class="angle-right-icon" (click)="openAllAddress(parentIndex)"
                         *ngIf="log?.old?.details?.addresses?.length>1">
