@@ -25,7 +25,8 @@
                         </span>
                         <span class="mobile-back-btn" (click)="redirectToMobileHome()"><i
                                 class="icon-back-arrow"></i></span>
-                        <span *ngIf="currentPageUrl?.indexOf('pages/gstfiling') > -1" (click)="openGstSideMenu()" class="gst-menu-icon"> <i class="icon-bar"></i> </span>
+                        <span *ngIf="currentPageUrl?.indexOf('pages/gstfiling') > -1 || currentPageUrl?.indexOf('pages/reports/reverse-charge') ||
+                                     currentPageUrl?.indexOf('pages/invoice/ewaybill')" (click)="openGstSideMenu()" class="gst-menu-icon"> <i class="icon-bar"></i> </span>
                     </li>
                 </ul>
             </div>
@@ -54,7 +55,7 @@
                         <a href="javascript:void(0);" id="add-manage" (click)="showManageGroupsModal()"><i
                                 class="icon-master-new1"></i> {{commonLocaleData?.app_master}}</a>
                     </li>
-                    <li *ngIf="!isMobileScreen" class="header-utility-icons" (click)="toggleSidebarPane(true, false)">
+                    <li *ngIf="!isMobileScreen" [ngClass]="{'disable-icon' : getPageUrl}" class="header-utility-icons" (click)="toggleSidebarPane(true, false)">
                         <a href="javascript:void(0);"><i class="icon-settings-cog"></i></a>
                     </li>
                     <li class="header-utility-icons">

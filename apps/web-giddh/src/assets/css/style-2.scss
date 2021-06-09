@@ -9826,6 +9826,15 @@ body.update-scroll-hidden {
 .menu_open .sales-register {
     width: calc(100% - 240px) !important;
 }
+.nav-left-bar{
+    &.width-60  {
+        .sidebar-collapse {
+            .sub-menu{
+                display: none !important;
+            }
+        }
+    }
+}
 
 /* responsive  starts here*/
 
@@ -9928,6 +9937,17 @@ body.update-scroll-hidden {
 @media (max-width: 1019px) {
     .hide-sub-sidebar .sidebar-handle {
         left: 0 !important;
+    }
+}
+
+@media (min-width:768px) and (max-width: 1019px) {
+    .gst-sidebar-open {
+        .gst-sidebar {
+            left: 60px !important;
+        }
+        #content-wrapper {
+            padding-left: 300px;
+        }
     }
 }
 
@@ -10294,6 +10314,11 @@ body.update-scroll-hidden {
         margin-bottom: 15px;
     }
     .gst-sidebar-open{
+        .menu_open{
+            .gst-sidebar{
+                left: 0 !important;
+            }
+        }
         .gst-sidebar{
             left: 0 !important;
         }
@@ -10415,7 +10440,7 @@ body.update-scroll-hidden {
     #setting-tab > .tab-container > .tab-content {
         padding-top: 15px !important;
     }
-    
+
 }
 @media (max-width: 1199px) {
     .ledger-book .left-col-new .entry-modal {

@@ -119,9 +119,22 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakPointObservar.observe([
-            '(max-width: 575px)'
+            '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
+            if (!this.isMobileScreen) {
+                this.asideGstSidebarMenuState = 'in';
+            }
+        });
+
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+                }
+            }
         });
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -248,7 +261,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-       // this.asideGstSidebarMenuState === 'out'
+        this.asideGstSidebarMenuState === 'out'
     }
 
     /**
@@ -448,6 +461,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public handleNavigation(): void {
-        this.router.navigate(['pages', 'gstfiling']);   
+        this.router.navigate(['pages', 'gstfiling']);
     }
 }
