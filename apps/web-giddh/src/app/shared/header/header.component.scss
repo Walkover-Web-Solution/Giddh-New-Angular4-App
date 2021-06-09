@@ -985,6 +985,12 @@ ul.sub-list {
                 padding: 3px !important;
                 font-size: 22px;
             }
+            &.disable-icon{
+                i{
+                    color: $gainsboro !important;
+                    cursor: no-drop;
+                }
+            }
         }
     }
 }

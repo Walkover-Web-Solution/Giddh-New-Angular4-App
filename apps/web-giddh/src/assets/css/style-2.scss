@@ -9820,6 +9820,16 @@ body.update-scroll-hidden {
         padding-left: 0 !important;
     }
 }
+.nav-left-bar{
+    &.width-60  {
+        .sidebar-collapse {
+            .sub-menu{
+                display: none !important;
+            }
+        }
+    }
+}
+
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
@@ -9993,6 +10003,17 @@ body.update-scroll-hidden {
 @media (max-width: 1019px) {
     .hide-sub-sidebar .sidebar-handle {
         left: 0 !important;
+    }
+}
+
+@media (min-width:768px) and (max-width: 1019px) {
+    .gst-sidebar-open {
+        .gst-sidebar {
+            left: 60px !important;
+        }
+        #content-wrapper {
+            padding-left: 300px;
+        }
     }
 }
 
@@ -10342,7 +10363,42 @@ body.update-scroll-hidden {
     .all-features-modal{
         height: 100vh;
     }
-    .invoice-modal-content{
+    .tax-engine .transactions-overview .gstr-transactions-summary .title {
+        margin-bottom: 15px;
+    }
+    .gst-sidebar-open{
+        .menu_open{
+            .gst-sidebar{
+                left: 0 !important;
+            }
+        }
+        .gst-sidebar{
+            left: 0 !important;
+        }
+    }
+    .gst-sidebar-wrapper{
+        &:after{
+            position: absolute;
+            content: "";
+            background-color: $black;
+            width: 100%;
+            height: 100vh;
+            z-index: 999;
+            top: -10px;
+            left: 0;
+            opacity: 0.5;
+        }
+    }
+    .tax-engine .transactions-list .filter-row .name {
+        min-width: 120px;
+    }
+    #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs {
+        display: inline-block;
+    }
+    .e-waybill-tabs.custom-tabs .nav-tabs {
+        position: fixed !important;
+    }
+    .invoice-modal-content {
         left: 0 !important;
         width: 100% !important;
     }

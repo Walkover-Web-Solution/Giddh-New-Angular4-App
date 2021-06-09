@@ -203,6 +203,15 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 this.asideGstSidebarMenuState = 'in';
             }
         });
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+                }
+            }
+        });
     }
 
     public selectedDate(value: any) {
@@ -609,6 +618,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @memberof EWayBillComponent
      */
     public handleNavigation(): void {
-        this.router.navigate(['pages', 'gstfiling']);   
+        this.router.navigate(['pages', 'gstfiling']);
     }
 }
