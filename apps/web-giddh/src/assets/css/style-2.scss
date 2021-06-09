@@ -9823,6 +9823,15 @@ body.update-scroll-hidden {
         }
     }
 }
+.nav-left-bar{
+    &.width-60  {
+        .sidebar-collapse {
+            .sub-menu{
+                display: none !important;
+            }
+        }
+    }
+}
 
 /* responsive  starts here*/
 
