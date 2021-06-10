@@ -1,11 +1,11 @@
-<ng-container appTranslate [file]="'gst/sidebar'" (localeData)="localeData = $event"
+<ng-container appTranslate [file]="'tax-sidebar'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
     <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)" asideGstSidebarMenuState>
         <div class="help-aside-body">
             <div class="gst-menu-items">
-                <p class="font-12 mb-2 pd-l2 pd-r2"><span class="d-inline-flex align-items-center cursor-pointer" tabindex="0"> {{localeData?.heading}} <i class="icon-down-new mr-l05"></i></span></p>
+                <p class="font-12 mb-2 pd-l2 pd-r2"><span class="d-inline-flex align-items-center cursor-pointer" tabindex="0"> {{(showGstMenus) ? localeData?.gstr_heading : localeData?.vat_heading }} <i class="icon-down-new mr-l05"></i></span></p>
 
-                <ul class="mb-3">
+                <ul class="mb-3" *ngIf="showGstMenus">
                     <li>
                         <a class="d-block clearfix" routerLinkActive #rla="routerLinkActive" [class.active]="rla.isActive"
                             [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/pages/gstfiling']">
@@ -60,7 +60,7 @@
                             <span>{{localeData?.setting}}</span>
                         </a>
                     </li>
-                    <li>
+                    <li *ngIf="showVatMenus">
                         <a href="javascript:void(0);"
                             class="d-block clearfix" [routerLink]="['/pages/vat-report']">
                             <span><i class="icon-gst-vat"></i></span>
