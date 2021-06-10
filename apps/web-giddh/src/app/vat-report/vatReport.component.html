@@ -1,9 +1,9 @@
 <section appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
     <div class="relative">
-        <hamburger-menu></hamburger-menu>
+        <hamburger-menu [allowSidebarToggle]="false"></hamburger-menu>
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
-            <gstr-sidebar (navigateEvent)="handleNavigation()" (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'" class="gst-sidebar"></gstr-sidebar>
+            <tax-sidebar (navigateEvent)="handleNavigation()" (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
         <div class="invoice-control w-100">
             <div class="row mr-0 ml-0">

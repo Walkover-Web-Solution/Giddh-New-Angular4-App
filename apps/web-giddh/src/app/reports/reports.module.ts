@@ -28,7 +28,7 @@ import { ReverseChargeReport } from './components/reverse-charge-report-componen
 import { SalesRegisterExpandComponent } from './components/salesRegister-expand-component/sales.register.expand.component';
 import { ReportsComponent } from './reports.component';
 import { ReportsRoutingModule } from './reports.routing.module';
-import { GstrSidebarModule } from '../shared/gst-sidebar/gst-sidebar.module';
+import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 
 @NgModule({
     declarations: [
@@ -75,7 +75,7 @@ import { GstrSidebarModule } from '../shared/gst-sidebar/gst-sidebar.module';
         ElementViewChildModule,
         ModalModule.forRoot(),
         SharedModule,
-        GstrSidebarModule
+        TaxSidebarModule
     ]
 })
 
