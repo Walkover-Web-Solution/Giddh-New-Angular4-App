@@ -16,8 +16,7 @@
         <div class="aside-pane-form">
             <ng-container *ngIf="!selectedAccountUniqueName && activeGroupUniqueName">
                 <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName"
-                    (isGroupSelected)="isGroupSelected($event)" [fetchingAccUniqueName$]="fetchingAccUniqueName$"
-                    [isAccountNameAvailable$]="isAccountNameAvailable$"
+                    (isGroupSelected)="isGroupSelected($event)"
                     [createAccountInProcess$]="createAccountInProcess$" [isDebtorCreditor]="isDebtorCreditor"
                     [isBankAccount]="isBankAccount" [flatGroupsOptions]="flatAccountWGroupsList"
                     (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc"
@@ -28,7 +27,6 @@
 
             <ng-container *ngIf="selectedAccountUniqueName && activeGroupUniqueName">
                 <account-update-new-details [activeGroupUniqueName]="activeGroupUniqueName"
-                    [fetchingAccUniqueName$]="fetchingAccUniqueName$"
                     [createAccountInProcess$]="createAccountInProcess$"
                     [updateAccountInProcess$]="updateAccountInProcess$" [isGstEnabledAcc]="isGstEnabledAcc"
                     [isDebtorCreditor]="isDebtorCreditor" [flatGroupsOptions]="flatAccountWGroupsList"

@@ -1,4 +1,4 @@
-<form name="permissionForm" [formGroup]="permissionForm" [ngClass]="{'permissionForm': isHorizntl}"
+<form name="permissionForm" [formGroup]="permissionForm" [ngClass]="{'permission-form': isHorizntl}"
     (ngSubmit)="submitPermissionForm()">
     <div class="row">
         <div class="col-xl-10 col-md-12">
@@ -36,7 +36,7 @@
 
                                 <div class="clearfix pd-1 option-box">
 
-                                    <span class="p-0 mr-3"
+                                    <span class="p-0 mr-r3"
                                         (click)="isOpenedInModal ? handleTimeSpanChange('daterange'): ''">
                                         <input id="dateRange" class="radio-custom cp ml-0" type="radio"
                                             name="periodOptions" formControlName="periodOptions" value="daterange">
@@ -44,7 +44,7 @@
                                             class="radio-custom-label">{{commonLocaleData?.app_date_range}}</label>
                                     </span>
 
-                                    <span class="p-0 mr-3"
+                                    <span class="p-0 mr-r3"
                                         (click)="isOpenedInModal ? handleTimeSpanChange('pastperiod'): ''">
                                         <input id="pastPeriod" class="radio-custom cp ml-0" type="radio"
                                             name="periodOptions" formControlName="periodOptions" value="pastperiod">
@@ -98,7 +98,7 @@
                                 <div class="clearfix option-box pd-1">
 
                                     <span (click)="isOpenedInModal ? handleIpAddressChange('cidr_range'): ''"
-                                        class="p-0 mr-3">
+                                        class="p-0 mr-r3">
                                         <input id="cidrRange" class="radio-custom cp ml-0" type="radio" name="ipOptions"
                                             formControlName="ipOptions" value="cidr_range">
                                         <label for="cidrRange"
@@ -106,7 +106,7 @@
                                     </span>
 
                                     <span (click)="isOpenedInModal ? handleIpAddressChange('ip_address'): ''"
-                                        class="p-0 mr-3">
+                                        class="p-0 mr-r3">
                                         <input id="address" class="radio-custom cp ml-0" type="radio" name="ipOptions"
                                             formControlName="ipOptions" value="ip_address">
                                         <label for="address"

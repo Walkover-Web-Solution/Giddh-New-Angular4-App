@@ -2,19 +2,14 @@ import { StockReportActions } from './inventory/stocks-report.actions';
 import { VerifyMobileActions } from './verifyMobile.actions';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { EffectsModule } from '@ngrx/effects';
-
 import { CompanyActions } from './company.actions';
 import { LoginActions } from './login.action';
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
-
 import { AccountsAction } from './accounts.actions';
 import { SidebarAction } from './inventory/sidebar.actions';
 import { DaybookActions } from './daybook/daybook.actions';
 import { CustomStockUnitAction } from './inventory/customStockUnit.actions';
 import { PermissionActions } from './permission/permission.action';
-/**
- * Home Module
- */
 import { InventoryAction } from './inventory/inventory.actions';
 import { SearchActions } from './search.actions';
 import { AuditLogsActions } from './audit-logs/audit-logs.actions';

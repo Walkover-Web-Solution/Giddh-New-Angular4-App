@@ -1,5 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
@@ -51,22 +51,6 @@ export class SettingsBranchService {
     }
 
     /**
-     * Retrieves the branches of a company
-     *
-     * @param {string} companyUniqueName Company unique name
-     * @returns {Observable<BaseResponse<any, any>>} Observable to perform further actions
-     * @memberof SettingsBranchService
-     */
-    public getBranchByCompany(companyUniqueName: string): Observable<BaseResponse<any, any>> {
-        if (companyUniqueName) {
-            let url = this.config.apiUrl + COMPANY_API.GET_ALL_BRANCHES;
-            url = url.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
-            return this._http.get(url).pipe(catchError((error => this.errorHandler.HandleCatch<any, any>(error))));
-        }
-        return of(null);
-    }
-
-    /**
      * Create Branches
      */
     public CreateBranches(model): Observable<BaseResponse<any, any>> {
@@ -86,19 +70,6 @@ export class SettingsBranchService {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.delete(this.config.apiUrl + SETTINGS_BRANCH_API.REMOVE_BRANCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':childUniqueName', encodeURIComponent(branchUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<any, any> = res;
-            data.queryString = {};
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
-    }
-
-    /*
-      * Get all branches
-      */
-    public GetParentCompany(): Observable<BaseResponse<any, any>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + SETTINGS_BRANCH_API.GET_PARENT_COMPANY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.queryString = {};
             return data;

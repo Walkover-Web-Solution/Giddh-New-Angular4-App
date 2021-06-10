@@ -8,7 +8,6 @@ import { Configuration } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
-    LinkedInRequestModel,
     SignupwithEmaillModel,
     SignupWithMobile,
     VerifyEmailModel,
@@ -65,7 +64,6 @@ export class SignupComponent implements OnInit, OnDestroy {
     public retryCount: number = 0;
     public signupVerifyEmail$: Observable<string>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public showLinkedInButton: boolean = false;
     /** Used only to refer in the template */
     public isCordova: boolean = isCordova;
     /** To Observe is google login inprocess */
@@ -169,13 +167,6 @@ export class SignupComponent implements OnInit, OnDestroy {
                         switch (user.provider) {
                             case "GOOGLE": {
                                 this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
-                                break;
-                            }
-                            case "LINKEDIN": {
-                                let obj: LinkedInRequestModel = new LinkedInRequestModel();
-                                obj.email = user.email;
-                                obj.token = user.token;
-                                this.store.dispatch(this.loginAction.signupWithLinkedin(obj));
                                 break;
                             }
                             default: {
@@ -295,10 +286,6 @@ export class SignupComponent implements OnInit, OnDestroy {
                 ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
-            } else {
-                // linked in
-                const t = ipcRenderer.sendSync("authenticate", provider);
-                this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
             }
 
         } else if (Configuration.isCordova) {
