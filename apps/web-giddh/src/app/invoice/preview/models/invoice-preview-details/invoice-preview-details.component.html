@@ -353,7 +353,7 @@
                             </div>
                         </div>
 
-                        <div class="pd-l15 position-absolute">
+                        <div class="pd-l15">
                             <h5 class="pd-b05 font-16"><strong>Uploaded Bill</strong></h5>
                         </div>
                     </div>
@@ -377,7 +377,7 @@
 
                             <div *ngIf="!shouldShowUploadAttachment && selectedItem?.voucherType === 'purchase' && attachedDocumentType?.type === 'image'"
                                 class="img-expand-collapse" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
-                                <img class="image-preview img-expand" [src]="imagePreviewSource" />
+                                <img class="image-preview img-expand w-100" [src]="imagePreviewSource" />
                             </div>
                             <div *ngIf="shouldShowUploadAttachment && !isCompany"
                                 class="upload-excel max-width-500 center-block box dashed-border">
@@ -401,7 +401,7 @@
                                 </div>
                             </div>
                             <div *ngIf="selectedItem?.voucherType === 'purchase' && attachedPdfFileUrl && !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)"
-                                #attachedDocumentPreview class="img-expand-collapse pdf-preview mt-0" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
+                                #attachedDocumentPreview class="pdf-expand-collapse pdf-preview mt-0" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
                                 <iframe #pdfContainer width="100%" height="100%" [src]="attachedPdfFileUrl"></iframe>
                             </div>                               
                             <div #attachedDocumentPreview class="pdf-preview">
