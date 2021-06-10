@@ -60,12 +60,6 @@ export function ManufacturingReducer(state = initialState, action: CustomActions
                 return Object.assign({}, state, newState);
             }
         }
-        case MANUFACTURING_ACTIONS.GET_MF_ITEM_DETAILS: {
-            return state;
-        }
-        case MANUFACTURING_ACTIONS.GET_MF_ITEM_DETAILS_RESPONSE: {
-            return state;
-        }
         case MANUFACTURING_ACTIONS.CREATE_MF_ITEM: {
             return state;
         }

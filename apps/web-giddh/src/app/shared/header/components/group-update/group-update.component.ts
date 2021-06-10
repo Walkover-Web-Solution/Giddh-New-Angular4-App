@@ -53,8 +53,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public taxGroupForm: FormGroup;
     public activeGroup$: Observable<GroupResponse>;
     public activeGroupUniqueName$: Observable<string>;
-    public fetchingGrpUniqueName$: Observable<boolean>;
-    public isGroupNameAvailable$: Observable<boolean>;
     public isTaxableGroup$: Observable<boolean>;
     public showEditGroup$: Observable<boolean>;
     public activeGroupSelected$: Observable<string[]>;
@@ -111,8 +109,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
-        this.fetchingGrpUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingGrpUniqueName), takeUntil(this.destroyed$));
-        this.isGroupNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isGroupNameAvailable), takeUntil(this.destroyed$));
         this.showEditGroup$ = this.store.pipe(select(state => state.groupwithaccounts.showEditGroup), takeUntil(this.destroyed$));
         this.activeGroupSelected$ = this.store.pipe(select(state => {
             if (state.groupwithaccounts.activeAccount) {

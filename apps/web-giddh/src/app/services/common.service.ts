@@ -55,6 +55,7 @@ export class CommonService {
                 return data;
             }));
     }
+    
     public GetPartyType(): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.PARTY_TYPE;
         return this._http.get(url).pipe(

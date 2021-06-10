@@ -4,9 +4,8 @@ import { CommonService } from '../services/common.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CountryRequest, CountryResponse, CurrencyResponse, CallingCodesResponse, OnboardingFormRequest, OnboardingFormResponse } from '../models/api-models/Common';
 import { Injectable } from '@angular/core';
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
 import { LocaleService } from '../services/locale.service';
 
@@ -147,6 +146,7 @@ export class CommonActions {
             payload: value
         };
     }
+
     public GetPartyType(): CustomActions {
         return {
             type: CommonActions.GET_PARTY_TYPE,
@@ -159,6 +159,7 @@ export class CommonActions {
             payload: value
         };
     }
+    
     public resetOnboardingForm(): CustomActions {
         return {
             type: CommonActions.RESET_ONBOARDING_FORM_RESPONSE
