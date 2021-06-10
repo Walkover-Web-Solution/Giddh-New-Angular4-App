@@ -67,15 +67,15 @@ svg.icon.icon-xxlg-md {
     width: 40px;
 }
 
-.return-content{
+.return-content {
     .return-top {
         display: inline-block;
         margin-left: 1%;
-        .font-xlarge{
+        .font-xlarge {
             margin: 3px auto;
         }
     }
-} 
+}
 
 .text-middle {
     vertical-align: middle;
@@ -170,7 +170,7 @@ svg.icon {
 .text-overdue {
     color: $chetwode-blue;
     margin: 20px 0px 0px;
-    i{
+    i {
         padding: 0 4%;
     }
 }
@@ -466,7 +466,7 @@ hr {
     padding-left: 0;
     margin-left: -5px;
     list-style: none;
-    >li {
+    > li {
         display: inline-block;
         padding-right: 5px;
         padding-left: 5px;

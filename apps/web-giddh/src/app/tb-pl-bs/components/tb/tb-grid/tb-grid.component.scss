@@ -27,7 +27,7 @@
 .list-inline {
     padding-left: 0;
     list-style: none;
-    >li {
+    > li {
         display: inline-block;
         padding-right: 5px;
     }
@@ -35,24 +35,24 @@
 .table-footer th {
     border-top: none !important;
 }
-.tb-section{
+.tb-section {
     padding-left: 7px;
     background-color: $white;
-    .search-container{
+    .search-container {
         padding: 0;
         display: flex;
         align-items: center;
-        .show-clear-search{
+        .show-clear-search {
             width: 103%;
             margin-left: -7px;
-            display: flex
+            display: flex;
         }
     }
-    .table-th{
+    .table-th {
         padding: 14px 8px 14px 0;
     }
 
-    .table-th-closing{
+    .table-th-closing {
         padding: 14px 20px 14px 0;
     }
 }
@@ -60,15 +60,15 @@
     .tb-wrapper {
         width: 100%;
         margin: auto;
-        .table-container{
+        .table-container {
             overflow-x: auto;
         }
     }
 }
-@media screen and (max-width:767px) {
+@media screen and (max-width: 767px) {
     .list-inline {
-        >li {
-          font-size: 12px;
+        > li {
+            font-size: 12px;
         }
     }
 }

@@ -11,17 +11,19 @@ import { DocIssueSummary, DocIssueSummaryDetailsDocs } from '../../../../../../m
 export class DocumentIssuedComponent implements OnInit, OnChanges, OnDestroy {
     // tslint:disable:variable-name
     @Input() public doc_issues: DocIssueSummary = new DocIssueSummary();
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
     public doc_issuesVM: DocIssueSummaryDetailsDocs[] = [];
     public imgPath: string = '';
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor() {
-        //
+        
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron|| isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
     }
 
     /**

@@ -22,40 +22,41 @@
     color: $dim-gray;
     margin-bottom: 10px;
 }
-.discount-item{
-     input[type="checkbox"]{
-         height: 19px;
-     }
+.discount-item {
+    input[type="checkbox"] {
+        height: 19px;
+    }
 }
 
-.my-dropdown-menu{
+.my-dropdown-menu {
     padding: 10px;
 }
-.percent-label, .value-label{
+.percent-label,
+.value-label {
     width: 50px;
 }
-.percent-wrapper{
-    .form-control{
+.percent-wrapper {
+    .form-control {
         width: 110px;
         padding-right: 20px !important;
     }
-   .fa-percent{
-       top: 9px;
-       right: 6px;
-       color: $gray;
-   }
+    .fa-percent {
+        top: 9px;
+        right: 6px;
+        color: $gray;
+    }
 }
-.value-box{
-    .form-control{
+.value-box {
+    .form-control {
         width: 110px;
     }
 }
-.discount-list{
-   list-style: none;
-   overflow: auto;
-   max-height: 100px;
-   .discount-item{
-       padding: 5px;
-       margin-bottom: 5px;
-   }
+.discount-list {
+    list-style: none;
+    overflow: auto;
+    max-height: 100px;
+    .discount-item {
+        padding: 5px;
+        margin-bottom: 5px;
+    }
 }

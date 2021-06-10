@@ -53,7 +53,7 @@
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border-radius: 2px;
+    border-radius: 5px;
     color: $midnight-blue;
     background: $white;
 }
@@ -78,7 +78,7 @@ span.input-addon {
     background-color: $chetwode-blue;
     color: $white;
     font-size: 18px;
-    border-radius: 2px;
+    border-radius: 5px;
     top: 0;
 }
 tr.aging-table-top {
@@ -90,7 +90,7 @@ tr.aging-table-top td {
 .aging-table-top + tr > th {
     border-bottom: none !important;
 }
-.refresh-btn{
+.refresh-btn {
     width: 36px;
     height: 36px;
     display: inline-flex;
@@ -100,13 +100,14 @@ tr.aging-table-top td {
     border: 1px solid $gainsboro;
     margin-left: 10px !important;
 }
-.customer-right-wrap{
-    .customer-right, .total-result{
+.customer-right-wrap {
+    .customer-right,
+    .total-result {
         padding-right: 90px !important;
     }
 }
 
-.name-width{
+.name-width {
     width: 210px;
 }
 
@@ -144,33 +145,33 @@ tr.aging-table-top td {
     }
 }
 @media (max-width: 767px) {
-    .customer-right-wrap{
+    .customer-right-wrap {
         padding-left: 15px;
-        .text-right{
-            text-align: left!important;
-            padding-left: 5px!important;
+        .text-right {
+            text-align: left !important;
+            padding-left: 5px !important;
         }
-        .customer-right{
+        .customer-right {
             background: $white;
             padding: 0;
             float: none;
-            table{
-                float: none!important;
-                width: 100%!important;
-                tr{
-                    td{
+            table {
+                float: none !important;
+                width: 100% !important;
+                tr {
+                    td {
                         margin-bottom: 5px;
                         padding: 0 5px;
                         color: $gray;
                         width: 100%;
                         display: flex;
-                        p{
+                        p {
                             font-size: 14px;
                             margin-bottom: 2px;
                             float: left;
                             width: 110px;
                         }
-                        h3{
+                        h3 {
                             font-size: 14px;
                         }
                     }
@@ -195,15 +196,15 @@ tr.aging-table-top td {
         max-width: calc(100% - 90px);
         width: 100%;
     }
-    .advance-clear-filter-icons{
+    .advance-clear-filter-icons {
         display: flex;
-        span{
+        span {
             width: 36px;
             height: 36px;
             justify-content: center;
             align-items: center;
             display: flex;
-            i{
+            i {
                 color: $gray;
             }
         }
@@ -212,7 +213,7 @@ tr.aging-table-top td {
         margin-bottom: 10px;
         padding-left: 15px;
     }
-    .customer-right-wrap{
+    .customer-right-wrap {
         padding-left: 15px;
     }
     .customer-right table {
@@ -260,17 +261,17 @@ tr.aging-table-top td {
     .customer-right table tr td h3 {
         font-size: 14px;
     }
-    .aging-form-inline{
+    .aging-form-inline {
         flex-direction: column;
         display: flex;
-        .linked-entities{
+        .linked-entities {
             margin-right: 0;
             margin-bottom: 0;
             width: 100%;
         }
-        .btn-group{
+        .btn-group {
             width: 100%;
-            .btn{
+            .btn {
                 width: 100%;
             }
         }
@@ -299,7 +300,6 @@ tr.aging-table-top td {
     }
 }
 @media (max-width: 575px) {
-
     .btn-group.plus-btn {
         float: none;
         width: 100%;
@@ -308,17 +308,17 @@ tr.aging-table-top td {
         float: none;
         width: 100%;
     }
-    .aging-form-inline{
+    .aging-form-inline {
         flex-direction: column;
         display: flex;
-        .linked-entities{
+        .linked-entities {
             margin-right: 0;
             margin-bottom: 0;
             width: 100%;
         }
-        .btn-group{
+        .btn-group {
             width: 100%;
-            .btn{
+            .btn {
                 width: 100%;
             }
         }

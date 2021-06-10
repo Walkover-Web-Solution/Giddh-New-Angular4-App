@@ -65,7 +65,7 @@
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
-    background: #ffece094;
+    background: $chablis;
 }
 
 .account-detail-custom-title {
@@ -82,7 +82,7 @@
     color: $gray;
     margin-top: 7px;
     font-size: 14px !important;
-    font-family: 'opensans-regular' !important;
+    font-family: "opensans-regular" !important;
 }
 
 .height-82px {
@@ -121,13 +121,13 @@ ul.list-unstyled li a {
     margin-bottom: 5px;
 }
 .sale-register {
-     .transaction-count-data {
-         p {
-            &:first-child{
+    .transaction-count-data {
+        p {
+            &:first-child {
                 min-width: 140px;
             }
         }
-     }
+    }
 }
 .main-sale-register-box .sale-register-box {
     margin-left: 30px;
@@ -271,7 +271,7 @@ table th {
 .table-middle th .d-flex {
     align-items: center;
 }
-.expand-collapse-btn{
+.expand-collapse-btn {
     margin-bottom: 0 !important;
 }
 .expand-collapse-btn a {
@@ -286,6 +286,7 @@ table th {
     font-size: 18px;
     color: $midnight-blue;
     border: 1px solid $gainsboro;
+    border-radius: 5px;
 }
 .top-bar {
     .icon-options {
@@ -293,6 +294,7 @@ table th {
         height: 36px;
         border: 1px solid $gainsboro;
         background-color: $white;
+        border-radius: 5px;
         color: $gray;
         font-size: 20px;
         position: relative;
@@ -311,49 +313,49 @@ table th {
     }
 }
 
-.list-inline>li {
+.list-inline > li {
     display: inline-block;
     padding-right: 5px;
     padding-left: 5px;
 }
-.report-breadcrum{
+.report-breadcrum {
     position: absolute !important;
     top: 0;
     left: 0;
     width: 100%;
     padding: 7px 0px 10px 36px !important;
     border-bottom: 1px solid $gainsboro;
-    .nav-report{
-        li{
-            font-family: 'opensans-semibold';
+    .nav-report {
+        li {
+            font-family: "opensans-semibold";
             font-size: 20px;
-            a{
+            a {
                 color: $midnight-blue;
             }
         }
     }
-    .custom-month-select{
-        font-family: 'opensans-semibold';
+    .custom-month-select {
+        font-family: "opensans-semibold";
         color: $midnight-blue;
-        .btn{
+        .btn {
             font-size: 19px;
             padding: 0;
         }
-        li{
-            font-family: 'opensans-regular';
+        li {
+            font-family: "opensans-regular";
         }
     }
 }
 
-.voucher-width{
+.voucher-width {
     width: 210px !important;
 }
-@media screen and (max-width:1019px) {
+@media screen and (max-width: 1019px) {
     .sales-register {
         width: 100%;
     }
 }
-@media screen and (max-width:991px) {
+@media screen and (max-width: 991px) {
     .sales-register {
         display: block;
         width: 100%;
@@ -368,11 +370,11 @@ table th {
         }
     }
 }
-@media screen and (max-width:768px) {
-    .giddh-table{
-        tbody{
-            tr{
-                td.voucher-type-td{
+@media screen and (max-width: 768px) {
+    .giddh-table {
+        tbody {
+            tr {
+                td.voucher-type-td {
                     width: 100%;
                 }
             }
@@ -383,23 +385,23 @@ table th {
     }
 }
 @media (max-width: 767px) {
-    .report-breadcrum{
+    .report-breadcrum {
         position: static !important;
         padding-left: 15px !important;
         padding-top: 0 !important;
-        .nav-report{
-            li{
+        .nav-report {
+            li {
                 font-size: 16px;
             }
         }
-        .custom-month-select{
-            .btn{
+        .custom-month-select {
+            .btn {
                 font-size: 16px;
             }
         }
     }
 }
-@media screen and (max-width:575px) {
+@media screen and (max-width: 575px) {
     .main-sale-register-box {
         .sale-register-box {
             width: 100%;

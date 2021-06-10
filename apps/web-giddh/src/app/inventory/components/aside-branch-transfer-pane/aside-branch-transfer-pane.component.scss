@@ -1,4 +1,4 @@
-@import '../../../../assets/css/color.scss';
+@import "../../../../assets/css/color.scss";
 
 :host.in {
     left: auto;
@@ -129,7 +129,8 @@
     min-height: 600px;
 }
 @media (max-width: 768px) {
-    :host, :host.in {
+    :host,
+    :host.in {
         max-width: 600px;
     }
     :host .aside-pane {
@@ -137,7 +138,8 @@
     }
 }
 @media (max-width: 575px) {
-    :host, :host.in {
+    :host,
+    :host.in {
         max-width: 370px;
     }
     :host .aside-pane {
@@ -145,7 +147,8 @@
     }
 }
 @media (max-width: 375px) {
-    :host, :host.in{
+    :host,
+    :host.in {
         max-width: 310px;
     }
     :host .aside-pane {
@@ -153,7 +156,8 @@
     }
 }
 @media (max-width: 320px) {
-    :host , :host.in {
+    :host,
+    :host.in {
         max-width: 280px;
     }
     :host .aside-pane {

@@ -12,14 +12,12 @@ import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-
 import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
-import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
-import { ALL_ITEMS, AllItem } from '../shared/helpers/allItems';
+import { AllItem } from '../shared/helpers/allItems';
 import { AppState } from '../store';
 
 @Component({
@@ -44,6 +42,10 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     public itemIndex: number = -1;
     /** Subject to unsubscribe from listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -109,7 +111,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
         if (event.key === 'Enter' && this.menuIndex !== -1 && this.itemIndex !== -1) {
             const currentFocusedItem = items[this.menuIndex]?.items[this.itemIndex];
             if (currentFocusedItem) {
-                this.router.navigate([currentFocusedItem.link], { queryParams: currentFocusedItem.additional});
+                this.router.navigate([currentFocusedItem.link], { queryParams: currentFocusedItem.additional });
             }
         }
     }
@@ -121,14 +123,6 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.store.dispatch(this.generalActions.getSideMenuItems());
-        this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(items => {
-            if (items) {
-                const allItems = this.generalService.getVisibleMenuItems(items, ALL_ITEMS);
-                this.allItems$ = of(allItems);
-                this.filteredItems$ = of(allItems);
-                this.changeDetectorRef.detectChanges();
-            }
-        });
         this.searchField?.nativeElement?.focus();
         this.saveLastState();
     }
@@ -200,7 +194,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      * @memberof AllGiddhItemComponent
      */
     public handleItemClick(item: AllItem): void {
-        if (item.label === 'Master') {
+        if (item.label === this.commonLocaleData?.app_master) {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
         }
     }
@@ -218,5 +212,24 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
         stateDetailsRequest.lastState = `/pages/${state}`;
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof AllGiddhItemComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(items => {
+                if (items) {
+                    const allItems = this.generalService.getVisibleMenuItems(items, this.localeData?.items);
+                    this.allItems$ = of(allItems);
+                    this.filteredItems$ = of(allItems);
+                    this.changeDetectorRef.detectChanges();
+                }
+            });
+        }
     }
 }

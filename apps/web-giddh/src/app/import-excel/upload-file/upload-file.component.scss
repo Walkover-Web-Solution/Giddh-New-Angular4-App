@@ -1,6 +1,6 @@
 @import "../../../assets/css/color.scss";
-.upload-and-map-content{
-    h2{
+.upload-and-map-content {
+    h2 {
         font-size: 32px;
     }
 }
@@ -13,7 +13,7 @@
     justify-content: center;
     margin: 20px auto 0 !important;
 }
-.center-block{
+.center-block {
     margin: 0 auto;
 }
 .max-width-500 {
@@ -111,7 +111,6 @@
     padding: 8px;
     border-radius: 4px;
     color: $very-light-gray;
-
 }
 .linked-entities {
     .list-item {
@@ -122,7 +121,7 @@
             margin-left: 6px;
             flex: 1;
             .item {
-                font-family:'opensans-semibold'
+                font-family: "opensans-semibold";
             }
         }
         .default-entity {
@@ -137,13 +136,13 @@
         }
     }
 }
-@media(max-width:991px){
+@media (max-width: 991px) {
     .import-type {
-       flex-wrap: wrap;
-       li{
+        flex-wrap: wrap;
+        li {
             width: 27%;
             margin: 0 15px 30px;
-       }
+        }
     }
 }
 @media (max-width: 767px) {

@@ -86,7 +86,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public financialOptions: IOption[] = [];
     public selectedCompany: CompanyResponse;
     private interval: any;
-    public currentActiveFinacialYear: IOption = {label: '', value: ''};
+    public currentActiveFinacialYear: IOption = { label: '', value: '' };
 
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
@@ -111,7 +111,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         private _toaster: ToasterService,
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService) {
-        
+
     }
 
     ngOnInit() {
@@ -169,7 +169,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
                 }
             }
         });
@@ -439,7 +439,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterComponent
      */
     public translationComplete(event: boolean): void {
-        if(event) {
+        if (event) {
             this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
 
             this.setCurrentFY();

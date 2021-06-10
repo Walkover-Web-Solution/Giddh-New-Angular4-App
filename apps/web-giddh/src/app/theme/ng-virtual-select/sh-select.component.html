@@ -1,11 +1,12 @@
 <div #dd [style.width]="width" class="position-relative">
-    <div [attr.style]="borderConfiguration?.style" class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'"
-        (click)="showSearchSuggestion ? show($event) : ''" [class.open]="isOpen" tabindex="0" (focus)="showSearchSuggestion ? show($event) : ''" (blur)="hide($event)"
+    <div [attr.style]="borderConfiguration?.style" class="header" #mainContainer [class.sh-select-disabled]="disabled"
+        [class.inline]="mode==='inline'" (click)="showSearchSuggestion ? show($event) : ''" [class.open]="isOpen"
+        tabindex="0" (focus)="showSearchSuggestion ? show($event) : ''" (blur)="hide($event)"
         (keydown)="keydownUp($event)">
 
 
         <!--region multiple-->
-        <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}"  class="bdr bg-white">
+        <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" class="bdr bg-white">
             <ng-container *ngIf="selectedValues?.length && !showCheckbox">
                 <span class="chip" *ngFor="let sl of selectedValues">
                     {{ sl.label }}
@@ -15,19 +16,21 @@
             </ng-container>
 
             <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
-            <input type="text" autocomplete="disabled" class="pd-l1 form-control" [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0"
-                [attr.style]="borderConfiguration?.style"
-                (click)="showSearchSuggestion ? show($event) : '';" [placeholder]="selectedValues?.length > 0 && !showCheckbox ? filter : placeholder"
-                [(ngModel)]="filter" (ngModelChange)="handleInputChange($event)">
+            <input type="text" autocomplete="disabled" class="pd-l1 form-control"
+                [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0"
+                [attr.style]="borderConfiguration?.style" (click)="showSearchSuggestion ? show($event) : '';"
+                [placeholder]="selectedValues?.length > 0 && !showCheckbox ? filter : placeholder" [(ngModel)]="filter"
+                (ngModelChange)="handleInputChange($event)">
         </div>
         <!--endregion-->
 
         <!--region single-->
         <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
-        <input type="text" autocomplete="disabled" [attr.readonly]="readonlyInput ? 'readonly' : null" class="form-control pd-r15" #inputFilter tabindex="0"
-            *ngIf="!multiple" [hidden]="((!isOpen || !isFilterEnabled))" (click)="showSearchSuggestion ? show($event) : '';"
-            [attr.style]="borderConfiguration?.style"
-            [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="handleInputChange($event)">
+        <input type="text" autocomplete="disabled" [attr.readonly]="readonlyInput ? 'readonly' : null"
+            class="form-control pd-r15" #inputFilter tabindex="0" *ngIf="!multiple"
+            [hidden]="((!isOpen || !isFilterEnabled))" (click)="showSearchSuggestion ? show($event) : '';"
+            [attr.style]="borderConfiguration?.style" [placeholder]="placeholder" [(ngModel)]="filter"
+            (ngModelChange)="handleInputChange($event)">
 
         <div (click)="showSearchSuggestion ? show($event) : '';" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
             <ng-container *ngIf="selectedValues?.length">
@@ -37,8 +40,8 @@
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">
-                <input autocomplete="disabled" [attr.readonly]="readonlyInput ? 'readonly' : null" class="form-control focused pd-r15"
-                    [attr.style]="borderConfiguration?.style"
+                <input autocomplete="disabled" [attr.readonly]="readonlyInput ? 'readonly' : null"
+                    class="form-control focused pd-r15" [attr.style]="borderConfiguration?.style"
                     (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [disabled]="disabled"
                     [value]="filter" />
             </ng-container>
@@ -54,6 +57,7 @@
         (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink"
         [noResultLinkTemplate]="notFoundLinkTemplate" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText"
         [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
-        [showNotFoundLinkAsDefault]="showNotFoundLinkAsDefault" [dropdownMinHeight]="dropdownMinHeight" [showCheckbox]="showCheckbox" [isRequired]="isRequired" [filter]="filter">
+        [showNotFoundLinkAsDefault]="showNotFoundLinkAsDefault" [dropdownMinHeight]="dropdownMinHeight"
+        [showCheckbox]="showCheckbox" [isRequired]="isRequired" [filter]="filter">
     </sh-select-menu>
 </div>

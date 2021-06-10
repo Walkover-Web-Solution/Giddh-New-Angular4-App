@@ -95,8 +95,8 @@ $greyClr: #6d6d6d;
     }
 }
 
-.item-unique{
-    font-size:12px;
+.item-unique {
+    font-size: 12px;
 }
 // select box
 .pure-css-select-wrapper {
@@ -240,9 +240,8 @@ $greyClr: #6d6d6d;
     display: inline-block !important;
 }
 
-
-.w-100{
-    width:100% !important;
+.w-100 {
+    width: 100% !important;
 }
 
 a[type="button"] {
@@ -303,7 +302,7 @@ a[type="button"] {
 .list-item {
     font-size: 14px;
     border-bottom: 1px solid $gainsboro;
-    display:flex !important;
+    display: flex !important;
 }
 
 .font-12 {
@@ -326,7 +325,6 @@ a[type="button"] {
             text-align: right;
             padding-bottom: 7px;
             display: table-cell;
-
         }
         .figure-cell {
             width: 140px;
@@ -417,7 +415,7 @@ textarea:focus {
     display: block;
     font-size: 26px;
     line-height: 1.2;
-    font-family: 'opensans-semibold';
+    font-family: "opensans-semibold";
 }
 
 .sp-rupees span.icon-rupees {
@@ -998,10 +996,12 @@ section.static-invoice-table {
 .wrap-billing-address.clearfix {
     margin-top: 15px;
     margin-bottom: 5px;
-    input, .sales-country-label, sales-sh-select input{
+    input,
+    .sales-country-label,
+    sales-sh-select input {
         padding: 0 !important;
     }
-    .bottom-border-only{
+    .bottom-border-only {
         padding-left: 0 !important;
     }
 }
@@ -1070,12 +1070,12 @@ section.new-table {
     padding: 3px 5px;
 }
 
-.add-bulk-button{
+.add-bulk-button {
     color: $silver;
 }
 
-.textarea-height{
-    height:120px !important;
+.textarea-height {
+    height: 120px !important;
 }
 
 .card-invoice-table-wrapper,
@@ -1084,7 +1084,8 @@ section.new-table {
 .total-amount-description {
     display: none;
 }
-.custom-file-label::after, .dropdown-toggle::after{
+.custom-file-label::after,
+.dropdown-toggle::after {
     display: none !important;
 }
 // card css
@@ -1635,46 +1636,45 @@ span.eligible-ITC {
 .for-mobile-screen {
     display: none;
 }
-.payment-mode-amount{
+.payment-mode-amount {
     flex-direction: row-reverse;
 }
-.dropdown-menu-right{
+.dropdown-menu-right {
     top: 0 !important;
 }
 #button-dropup {
-    .caret{
+    .caret {
         transform: rotate(180deg);
     }
 }
 
-.sales-select{
-    width:62.7% !important;
+.sales-select {
+    width: 62.7% !important;
 }
-.height-rate{
-    height:1px;
+.height-rate {
+    height: 1px;
 }
 
 .other-detail-card {
-    textarea{
+    textarea {
         min-height: 100px;
     }
 }
-.bill-add{
-    label{
-    min-width: 110px;
-
+.bill-add {
+    label {
+        min-width: 110px;
+    }
 }
-}
-.change-address-dropdown{
-    ul{
+.change-address-dropdown {
+    ul {
         margin-top: 22px;
         min-width: 240px;
         left: 0 !important;
         right: auto !important;
         max-height: 200px;
         overflow-y: auto;
-        li{
-            a{
+        li {
+            a {
                 white-space: normal;
                 word-break: break-word;
             }
@@ -1682,7 +1682,7 @@ span.eligible-ITC {
     }
 }
 /* resposnvie */
-@media(max-width:1199px){
+@media (max-width: 1199px) {
     .invoice-date-due-date {
         min-width: 430px;
         max-width: 430px;
@@ -1696,12 +1696,15 @@ span.eligible-ITC {
     .form-inline .wrap-billing-address .form-group {
         display: block !important;
     }
-    .form-inline .wrap-billing-address .form-group.deliver-same-address{
+    .form-inline .wrap-billing-address .form-group.deliver-same-address {
         display: flex !important;
     }
+    .pro-invoice-heading{
+        margin-left: 0px;
+    }
 }
-@media(max-width:1199px){
-    .invoice-date-due-date{
+@media (max-width: 1199px) {
+    .invoice-date-due-date {
         margin-left: 40%;
     }
     .form-inline .wrap-billing-address .form-group {
@@ -1736,12 +1739,11 @@ span.eligible-ITC {
 }
 
 @media (max-width: 1024px) {
-
     .hsn-code-dropdown {
         left: 0px;
     }
 
-    .pending-sales-balance-due{
+    .pending-sales-balance-due {
         position: relative;
         right: 35px;
     }
@@ -1760,11 +1762,11 @@ span.eligible-ITC {
         padding: 0 15px;
         display: block;
     }
-        .balance-due-absolute {
+    .balance-due-absolute {
         display: none;
     }
-    .collapse-pane{
-        .form-group{
+    .collapse-pane {
+        .form-group {
             margin-bottom: 15px !important;
         }
     }
@@ -1828,11 +1830,11 @@ span.eligible-ITC {
     }
 }
 @media (max-width: 767px) {
-    .mobile-view-padding{
-        padding:0 15px;
+    .mobile-view-padding {
+        padding: 0 15px;
         margin-bottom: 10px;
     }
-    .more-btn-dropdown{
+    .more-btn-dropdown {
         padding-top: 0 !important;
     }
     .invoice-date-due-date {
@@ -1864,7 +1866,7 @@ span.eligible-ITC {
     .wrap-billing-address .bill-add {
         width: 100%;
         max-width: 100%;
-        padding-right: 30px !important
+        padding-right: 30px !important;
     }
     .sp-rupees {
         font-size: 20px;
@@ -1880,18 +1882,18 @@ span.eligible-ITC {
 }
 
 @media (max-width: 575px) {
-.change-address-dropdown{
-    ul{
-        left: auto !important;
-        right: 0 !important;
-        li{
-            a{
-                white-space: normal;
-                word-break: break-word;
+    .change-address-dropdown {
+        ul {
+            left: auto !important;
+            right: 0 !important;
+            li {
+                a {
+                    white-space: normal;
+                    word-break: break-word;
+                }
             }
         }
     }
-}
     #actionPane .btn-group.dropup {
         display: block;
         margin-top: 5px;
@@ -1980,14 +1982,26 @@ span.eligible-ITC {
     }
 }
 
-
 /* Rotate animation for spinner in uploading file */
 
 .rotate {
-    -webkit-animation:spin 4s linear infinite;
-    -moz-animation:spin 4s linear infinite;
-    animation:spin 4s linear infinite;
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
 }
-@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg) } }
+@-moz-keyframes spin {
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}

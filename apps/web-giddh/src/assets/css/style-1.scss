@@ -441,7 +441,7 @@ aside-menu-account .container-fluid {
     padding-top: 10px;
 }
 
-.pd-t2{
+.pd-t2 {
     padding-top: 20px;
 }
 
@@ -509,11 +509,11 @@ aside-menu-account .container-fluid {
     padding-bottom: 50px;
 }
 
-.pd-r5{
+.pd-r5 {
     padding-right: 50px;
 }
 
-.pd-l5{
+.pd-l5 {
     padding-left: 50px;
 }
 
@@ -612,7 +612,7 @@ aside-menu-account .container-fluid {
 .mr-t5 {
     margin-top: 50px;
 }
-.mr-b5{
+.mr-b5 {
     margin-bottom: 50px;
 }
 .mr-b4 {
@@ -637,16 +637,25 @@ aside-menu-account .container-fluid {
 
 .bdr {
     border: 1px solid $gainsboro;
+    border-radius: 5px;
 }
 
 .border-none {
     border: none;
 }
 
-.bd-r-bottom-none{border-bottom:none;}
-.bd-r-top-none{border-top:none;}
-.bd-r-left-none{border-left:none;}
-.bd-r-right-none{border-right:none;}
+.bd-r-bottom-none {
+    border-bottom: none;
+}
+.bd-r-top-none {
+    border-top: none;
+}
+.bd-r-left-none {
+    border-left: none;
+}
+.bd-r-right-none {
+    border-right: none;
+}
 .bd-rt {
     border-top: 1px solid $gainsboro;
 }
@@ -667,11 +676,11 @@ aside-menu-account .container-fluid {
     border-radius: 0;
 }
 
-.dark-grey-bg{
+.dark-grey-bg {
     background: $davy-grey !important;
 }
 
-.bg-grey{
+.bg-grey {
     background: $whisper-color;
 }
 
@@ -708,11 +717,11 @@ aside-menu-account .container-fluid {
     background: 0 0;
 }
 
-.min-width-100{
+.min-width-100 {
     min-width: 100px;
 }
 
-.width-2000{
+.width-2000 {
     width: 2000px;
 }
 
@@ -720,7 +729,7 @@ aside-menu-account .container-fluid {
     overflow: hidden;
 }
 
-.overflow-visible{
+.overflow-visible {
     overflow: visible;
 }
 
@@ -753,10 +762,6 @@ aside-menu-account .container-fluid {
 
 .cp {
     cursor: pointer;
-}
-
-.pdBth1510 {
-    padding: 15px 10px;
 }
 
 .thead {
@@ -1277,7 +1282,7 @@ li:last-child .angular-ui-tree-handle {
 
 .table .table {
     margin-bottom: 0;
-    background-color:transparent;
+    background-color: transparent;
 }
 
 .ledger-table.table .nopad {
@@ -1413,7 +1418,6 @@ li:last-child .angular-ui-tree-handle {
 
 /*helpers*/
 
-
 .max-width-100 {
     max-width: 100px;
 }
@@ -1504,10 +1508,19 @@ li:last-child .angular-ui-tree-handle {
     background: $gray-95;
 }
 
-.tb-pl-bs-data{
+.tb-pl-bs-data {
     height: 60vh !important;
     font-size: 31px !important;
     color: $silver !important;
+}
+
+.new-icon-img{
+    img{
+        border: 1px solid $gainsboro;
+        background: $white;
+        padding: 5px;
+        border-radius: 5px;
+    }
 }
 
 .circle {
@@ -2002,7 +2015,7 @@ table.borderless th {
 .pdf-export,
 .xls-export {
     position: relative;
-    margin-right: 10px;
+    margin-left: 5px;
 }
 
 .ui-match {
@@ -2242,10 +2255,10 @@ i.cls-alert {
 .min150 {
     min-width: 150px;
 }
-.min160{
+.min160 {
     min-width: 160px;
 }
-.min-height-100{
+.min-height-100 {
     min-height: 100px;
 }
 .account-card {
@@ -2530,7 +2543,7 @@ background: #f9f9f9;
         margin: 0;
     }
     hamburger-menu .navbar-nav {
-        float:none;
+        float: none;
     }
     .navbar-nav.navbar-right {
         float: right;
@@ -3658,10 +3671,6 @@ tr.db-bnk-account > td.reconnectDiv {
     font-size: 18px;
 }
 
-.no-padding {
-    padding: 0px !important;
-}
-
 .padding-0 {
     padding-left: 0;
     padding-right: 0;
@@ -4696,9 +4705,9 @@ border-bottom: 1px solid $whisper-color;
     background-color: $white;
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.15);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
-    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
 }
 
 /*invoice pages global styles  */
@@ -4817,7 +4826,7 @@ border-bottom: 1px solid $whisper-color;
     color: rgba(0, 0, 0, 0.8) !important;
     text-transform: capitalize;
     padding: 10px 15px;
-    border-bottom: 1px solid transparent
+    border-bottom: 1px solid transparent;
 }
 
 strong {
@@ -4956,7 +4965,8 @@ perfect-scrollbar.ps-show-active
     user-select: none;
 }
 
-.custom-item:hover , .discount-item:hover {
+.custom-item:hover,
+.discount-item:hover {
     background-color: $lavender !important;
     color: $chetwode-blue !important;
     &:hover {
@@ -5066,21 +5076,21 @@ form#groupDetailForm {
     .modal-dialog.universal_modal .shortcuts {
         display: none;
     }
-    .pd-t1-md{
+    .pd-t1-md {
         padding-top: 10px;
     }
 }
-@media(max-width:1024px){
-    #inventory-sidebar{
+@media (max-width: 1024px) {
+    #inventory-sidebar {
         .parent-group {
-            >.stock-grp-list {
-                >li {
+            > .stock-grp-list {
+                > li {
                     display: block !important;
                 }
             }
         }
     }
-    .no-data{
+    .no-data {
         height: 60vh;
         justify-content: center;
         align-items: center;
@@ -5089,15 +5099,15 @@ form#groupDetailForm {
         margin: 0 !important;
     }
 }
-@media screen and (max-width:768px) {
-    .table-container.trial-balance{
-        .table-responsive{
+@media screen and (max-width: 768px) {
+    .table-container.trial-balance {
+        .table-responsive {
             display: table;
         }
         section {
-            div{
-                div{
-                    &:first-child{
+            div {
+                div {
+                    &:first-child {
                         white-space: normal !important;
                         word-break: break-word;
                         width: 20% !important;
@@ -5108,13 +5118,12 @@ form#groupDetailForm {
                     width: 30% !important;
                     max-width: 30% !important;
                     min-width: 150px;
-
                 }
             }
         }
         .table-footer {
-            th{
-                &:first-child{
+            th {
+                &:first-child {
                     white-space: normal !important;
                     word-break: break-word;
                     width: 20% !important;
@@ -5128,7 +5137,7 @@ form#groupDetailForm {
                 border-right: none !important
             }
         }
-        .row{
+        .row {
             flex-wrap: nowrap;
         }
     }
@@ -5187,13 +5196,14 @@ form#groupDetailForm {
     }
 }
 
-@media (min-width: 768px) and (max-width:1019px){
-    bs-datepicker-container{
+@media (min-width: 768px) and (max-width: 1019px) {
+    bs-datepicker-container {
         left: 100px !important;
     }
 }
 
-
-.valid-tooltip, .tooltip, .tooltip-inner{
-    font-size:12px !important;
+.valid-tooltip,
+.tooltip,
+.tooltip-inner {
+    font-size: 12px !important;
 }

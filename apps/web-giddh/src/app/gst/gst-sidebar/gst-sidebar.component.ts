@@ -20,11 +20,15 @@ export class GstrSidebarComponent {
     /** this is store navigate event */
     @Output() public navigateEvent: EventEmitter<string> = new EventEmitter();
     /** this is store actvie company gst number */
-    @Input() public activeCompanyGstNumber: EventEmitter<boolean> = new EventEmitter(true);
+    @Input() public activeCompanyGstNumber: string;
     /** Stores the selected GST module */
     @Input() public selectedGstModule: string = 'dashboard';
     /** True if month filter is selected */
     @Input() public isMonthSelected: boolean;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     constructor(
         private router: Router,
