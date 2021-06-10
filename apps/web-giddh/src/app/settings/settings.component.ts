@@ -400,7 +400,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     /**
      * Handles GST Sidebar Navigation
      *
-     * @memberof ReverseChargeReport
+     * @memberof SettingsComponent
      */
      public handleNavigation(): void {
         this.router.navigate(['pages', 'gstfiling']);
