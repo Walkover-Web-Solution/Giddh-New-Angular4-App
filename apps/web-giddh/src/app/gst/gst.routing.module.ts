@@ -27,7 +27,7 @@ const GST_ROUTES: Routes = [
         CommonModule,
         ReactiveFormsModule,
         RouterModule.forChild(GST_ROUTES),
-        CurrencyModule
+        CurrencyModule,
     ],
     exports: [
         RouterModule,

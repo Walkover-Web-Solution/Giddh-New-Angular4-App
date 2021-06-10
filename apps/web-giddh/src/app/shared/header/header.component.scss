@@ -314,6 +314,9 @@ a[vr-item]:focus {
 .nav-left-bar.open {
     left: 0;
     width: 240px;
+    &.width-60{
+        width: 60px;
+    }
 }
 
 .left-sub-menu ul > li > a {
@@ -958,6 +961,12 @@ ul.sub-list {
             i {
                 padding: 3px !important;
                 font-size: 22px;
+            }
+            &.disable-icon{
+                i{
+                    color: $gainsboro !important;
+                    cursor: no-drop;
+                }
             }
         }
     }

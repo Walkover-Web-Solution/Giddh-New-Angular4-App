@@ -1,7 +1,7 @@
 <ng-container appTranslate [file]="'all-items'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="primary-sidebar py-3 position-relative" [ngClass]="{'sidebar-collapse': !isOpen}">
-        <div class="company-branch-block pd-l2 pd-r2 position-relative">
+        <div class="company-branch-block pd-l2 pd-r2 position-relative" [ngClass]="{'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1}">
             <ul class="list-style-none branch-connection">
                 <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
                     <span class="inner-span"></span>
@@ -47,8 +47,8 @@
                 </div>
             </div>
         </div>
-        <div class="wrap-menus">
-            <div class="account-block mr-t2 mr-b2 pd-l2 pd-r2">
+        <div class="wrap-menus  mr-t2">
+            <div class="account-block mr-b2 pd-l2 pd-r2">
                 <div class="account-collapse">
                     <p class="font-12 d-flex justify-content-between">{{localeData?.accounts}} <i
                             class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i> </p>

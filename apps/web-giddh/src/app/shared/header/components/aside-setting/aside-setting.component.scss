@@ -28,7 +28,8 @@
     min-height: 100vh;
     background: $white;
     width: 240px;
-    left: 0;
+    left: auto;
+    right: 0;
     z-index: 999;
     .aside-help-header {
         display: none;
@@ -159,7 +160,8 @@
     min-height: 100vh;
     background: $white;
     width: 240px;
-    left: 0;
+    left: auto;
+    right: 0;
     z-index: 999;
     box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2) !important;
     &:after {
@@ -227,7 +229,8 @@
         min-height: 100vh;
         background: $white;
         width: 240px;
-        left: 0;
+        left: auto;
+        right: 0;
         z-index: 999999;
         width: 270px;
         .back-to-main-slider {
