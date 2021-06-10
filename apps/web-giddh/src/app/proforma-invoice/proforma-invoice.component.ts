@@ -1368,10 +1368,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (!obj.accountDetails.currencySymbol) {
                             obj.accountDetails.currencySymbol = '';
                         }
+                        if (this.isPendingVoucherType) {
+                            obj.accountDetails.name = results[0].account.name;
+                            obj.voucherDetails.customerName = results[0].account.name;
+                            this.loadBankCashAccounts(obj?.accountDetails?.currency?.code);
+                        }
                         this.invFormData = obj;
                         this.buildBulkData(this.invFormData.entries.length, 0);
                         this.checkVoucherEntries();
-                        if (this.isCreditNote) {
+                        if (this.isCreditNote || this.isDebitNote) {
                             this.getInvoiceListsForCreditNote();
                         }
                     } else {
@@ -1428,7 +1433,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (this.isMultiCurrencyModule() || this.isPurchaseInvoice) {
                         this.initializeWarehouse();
                     }
-                    if (this.isSalesInvoice) {
+                    if (this.isSalesInvoice || this.isPendingVoucherType) {
                         this.loadBankCashAccounts(tempSelectedAcc.currency);
                     }
                     this.store.dispatch(this.accountActions.resetActiveAccount());
@@ -2897,10 +2902,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (isNaN(count)) {
             count = 0;
         }
-        /** commention now due to this found bugs need to analysis on below commented code */
-        // if (!depositAmount) {
-        //     this.depositAmount = this.invFormData.voucherDetails.deposit;
-        // }
         if ((this.isAccountHaveAdvanceReceipts || this.isInvoiceAdjustedWithAdvanceReceipts) && this.adjustPaymentData.totalAdjustedAmount) {
             this.adjustPaymentBalanceDueData = this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment();
         } else {

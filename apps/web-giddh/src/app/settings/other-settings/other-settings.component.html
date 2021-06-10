@@ -24,7 +24,7 @@
         </div>
     </div>
     <div *ngIf="organizationType === 'COMPANY'" class="row pb-2">
-        <div class="col-lg-12 col-xl-7 other-information">
+        <div class="col-lg-12 col-xl-7 other-information mr-t4">
             <div class="clearfix">
                 <div class="form-group row">
                     <div class="col-md-12 col-lg-6 col-12">
@@ -53,7 +53,7 @@
                                 <div class="form-group">
                                     <label>{{localeData?.inventory_type}}</label>
                                     <div class="mr-t1">
-                                        <span class="pd0 mr-r3">
+                                        <span class="p-0 mr-r3">
                                             <input id="radio-1" class="radio-custom cp ml-0" name="radio-group"
                                                 type="radio" [checked]="profileData?.manageInventory"
                                                 (change)="inventoryTypeUpdated(true)" name="inventoryType" checked>
@@ -61,7 +61,7 @@
                                                 class="radio-custom-label">{{commonLocaleData?.app_product}}</label>
                                         </span>
                                         <span class="p-0">
-                                            <input id="radio-2" class="radio-custom cp ml0" name="radio-group"
+                                            <input id="radio-2" class="radio-custom cp ml-0" name="radio-group"
                                                 type="radio" [checked]="!profileData?.manageInventory"
                                                 (change)="inventoryTypeUpdated(false)" name="inventoryType">
                                             <label for="radio-2"

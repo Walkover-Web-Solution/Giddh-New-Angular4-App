@@ -22,6 +22,7 @@ import { GeneralActions } from '../../actions/general/general.actions';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SearchService } from '../../services/search.service';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     templateUrl: './mf.edit.component.html',
@@ -110,6 +111,10 @@ export class MfEditComponent implements OnInit, OnDestroy {
     public liabilitiesAssetAccounts: IOption[];
     /* Stores warehouses for a company */
     public warehouses: Array<any> = [];
+    /** Stores the current organization type */
+    public currentOrganizationType: string;
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
 
     constructor(
         private store: Store<AppState>,
@@ -119,6 +124,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
         private _inventoryService: InventoryService,
         private generalAction: GeneralActions,
         private router: Router,
+        private generalService: GeneralService,
         private _toasty: ToasterService,
         private searchService: SearchService,
         private warehouseActions: WarehouseActions
@@ -171,6 +177,8 @@ export class MfEditComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.isInventoryPage = this.router.url.includes('/pages/inventory');
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         if (this.isUpdateCase) {
             let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
             this.store.dispatch(this.inventoryAction.GetStockWithUniqueName(manufacturingDetailsObj.stockUniqueName));
@@ -339,7 +347,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
             } else {
                 manufacturingObj.otherExpenses = [objToPush];
             }
-            // manufacturingObj.manufacturingMultipleOf = manufacturingObj.manufacturingMultipleOf;
             this.manufacturingDetails = manufacturingObj;
 
             this.otherExpenses = {};
@@ -519,37 +526,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
     public clearDate() {
         this.manufacturingDetails.date = '';
     }
-
-    // /**   will be useful in version 2
-    //  *TODO:  To return account details
-    //  *
-    //  * @param {string} uniqueName Unique name of
-    //  * @param {string} category
-    //  * @returns
-    //  * @memberof MfEditComponent
-    //  */
-    // public getAccountName(uniqueName: string, category: string) {
-    //         let name;
-    //         let uniqueNameOfAcc;
-    //         if (category === 'liabilityGroupAccounts') {
-    //             this.liabilityGroupAccounts$.subscribe((data) => {
-    //                 let account = data.find((acc) => acc.value === uniqueName);
-    //                 if (account) {
-    //                     name = account.label;
-    //                     uniqueNameOfAcc = account.value;
-    //                 }
-    //             });
-    //         } else if (category === 'expenseGroupAccounts') {
-    //             this.expenseGroupAccounts$.subscribe((data) => {
-    //                 let account = data.find((acc) => acc.value === uniqueName);
-    //                 if (account) {
-    //                     name = account.label;
-    //                     uniqueNameOfAcc = account.value;
-    //                 }
-    //             });
-    //         }
-    //         return observableOf(uniqueNameOfAcc);
-    //     }
 
     /**
      * To toggle add expense entry block

@@ -320,7 +320,7 @@ td.border-right-none {
     align-items: center;
     font-size: 18px;
     border: 1px solid $chetwode-blue;
-    border-radius: 2px;
+    border-radius: 5px;
     color: $midnight-blue;
     background: $white;
 }
@@ -370,6 +370,7 @@ button.btn.btn-filter {
 }
 .icon-btn {
     border: 1px solid $gainsboro;
+    border-radius: 5px;
     height: 36px;
     width: 36px;
     margin-top: 0;

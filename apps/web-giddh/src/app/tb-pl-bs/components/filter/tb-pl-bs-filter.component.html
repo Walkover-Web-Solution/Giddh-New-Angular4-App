@@ -99,11 +99,11 @@
                         class="pull-right">
                     </tb-export-csv>
                     <tb-export-xls *ngIf="tbExportXLS" [trialBalanceRequest]="filterForm.value"
-                        class="pull-right mr-r15">
+                        class="pull-right mr-r05">
                     </tb-export-xls>
                     <tb-export-pdf *ngIf="tbExportPdf" [trialBalanceRequest]="filterForm.value"
                         [selectedCompany]="selectedCompany" (tbExportPdfEvent)="tbExportPdfEvent.emit($event)"
-                        class="pull-right mr-r15"></tb-export-pdf>
+                        class="pull-right mr-r05"></tb-export-pdf>
                     <pl-export-xls *ngIf="plBsExportXLS" [fy]="filterForm.controls['fy'].value"
                         [filters]="filterForm.value" class="pull-right"></pl-export-xls>
                     <bs-export-xls *ngIf="BsExportXLS" [fy]="filterForm.controls['fy'].value"

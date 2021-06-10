@@ -584,7 +584,7 @@ input {
 
 .history-btn {
     .btn {
-        padding: 5px 10px !important;
+        padding: 6px 10px !important;
     }
 }
 
@@ -1060,6 +1060,7 @@ ul.sub-list {
     border: 1px solid $gainsboro;
     background: none;
     border-left: 0 !important;
+    border-radius: 5px;
 }
 
 .advance-search .input-group .form-control {
@@ -1439,12 +1440,18 @@ modal-container.modal {
 }
 
 .all-features-modal {
-    width: 60%;
-    margin-top: 0px;
+    margin: 0 auto !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 100px);
+    max-width: 940px !important;
+    width: 100% !important;
     .modal-body {
-        padding: 15px 30px;
-        height: 80vh;
+        padding: 15px 20px;
+        height: 450px;
         overflow-y: auto;
+        margin-right: 5px;
     }
 }
 
@@ -1484,7 +1491,7 @@ modal-container.modal {
 .custom-datepicker {
     position: relative;
     .border-radius-2 {
-        border-radius: 2px;
+        border-radius: 5px;
     }
 }
 
@@ -1514,6 +1521,7 @@ modal-container.modal {
     padding-left: 30px !important;
     border: 1px solid $gainsboro;
     height: 36px;
+    border-radius: 5px;
 }
 
 .custom-datepicker i img {
@@ -1568,7 +1576,7 @@ modal-container.modal {
 .form-control {
     background: $white !important;
     border: 1px solid $gainsboro;
-    border-radius: 2px !important;
+    border-radius: 5px !important;
     padding: 6px !important;
     outline: 0;
     color: $nero !important;
@@ -1772,7 +1780,7 @@ fieldset[disabled] .btn-primary:hover {
 
 .btn {
     padding: 7px 10px;
-    border-radius: 2px;
+    border-radius: 5px !important;
     font-size: 14px;
     margin-right: 15px;
 }
@@ -1821,6 +1829,7 @@ fieldset[disabled] .btn-primary:hover {
     background: $whisper;
     color: $night-rider;
     border-color: $whisper;
+    border-radius: 5px !important;
 }
 
 /*btn end*/
@@ -3822,7 +3831,7 @@ input[type=radio]:checked:after {
 
 #inventory-sidebar {
     background-color: transparent;
-    padding: 10px 0;
+    padding: 55px 0;
 }
 
 #inventory-sidebar .input-group {
@@ -3990,10 +3999,6 @@ select.form-control {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-}
-
-.noPad {
-    padding: 0;
 }
 
 .grp-col {
@@ -5140,7 +5145,7 @@ label {
 }
 
 #customInvoice .template-editor .btn-group-lg > .btn {
-    border-radius: 0;
+    border-radius: 5px;
     border: 0;
     box-shadow: none;
     background: $whisper-color;
@@ -5402,7 +5407,7 @@ input[type="checkbox"][disabled] {
 }
 
 .top-bar {
-    padding-top: 15px !important;
+    padding-top: 10px !important;
     padding-bottom: 15px !important;
     border-bottom: 0px solid $white;
     /* padding-left: 240px; */
@@ -5988,7 +5993,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     line-height: 32px;
     margin: 0;
     position: relative;
-    border-radius: 2px !important;
+    border-radius: 5px !important;
     overflow: hidden;
 }
 
@@ -5997,7 +6002,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     transition: all 0.3s ease;
     width: 100%;
     border: 1px solid $gainsboro;
-    border-radius: 2px;
+    border-radius: 5px;
     color: $dark-gray;
     padding: 0 7px;
     height: 34px;
@@ -8268,7 +8273,7 @@ ul.dropdown-menu p.lead.pd {
     top: 0;
     left: 0;
     width: 100%;
-    padding: 10px 0px 0 50px !important;
+    padding: 10px 0px 0 15px !important;
     border-bottom: 1px solid $gainsboro;
 }
 
@@ -8333,6 +8338,7 @@ ul.dropdown-menu p.lead.pd {
     text-align: center;
     background-color: $whisper-light;
     border: 1px solid $gainsboro;
+    border-radius: 5px;
     border-left: none !important;
 }
 
@@ -8895,7 +8901,7 @@ input.checkbox-custom[type="checkbox"] {
     }
 }
 #setting-tab > .tab-container > .tab-content {
-    padding-top: 15px;
+    padding-top: 55px;
 }
 
 /*datepicker common css*/
@@ -9495,6 +9501,7 @@ ul.dropdown-menu.action-dropdown {
     border-radius: 2px !important;
     padding: 0 !important;
     border: 1px solid $gainsboro !important;
+    border-radius: 5px !important;
     display: flex !important;
     align-items: center !important;
 }
@@ -9640,7 +9647,7 @@ input.mat-input-element {
 }
 .top-bar.aging-top-bar,
 .top-bar.customer-top-bar {
-    padding-top: 18px !important;
+    padding-top: 55px !important;
 }
 .top-bar.customer-top-bar.vendor-top-bar {
     padding-top: 15px !important;
@@ -10221,6 +10228,9 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
+    .all-features-modal{
+        height: 100vh;
+    }
     .e-waybill-tabs.custom-tabs .nav-tabs {
         position: fixed !important;
     }
@@ -10310,6 +10320,16 @@ body.update-scroll-hidden {
         white-space: nowrap;
         overflow-y: hidden;
     }
+
+    .top-bar.aging-top-bar,
+    .top-bar.customer-top-bar {
+        padding-top: 18px !important;
+    }
+
+    #setting-tab > .tab-container > .tab-content {
+        padding-top: 15px !important;
+    }
+    
 }
 @media (max-width: 1199px) {
     .ledger-book .left-col-new .entry-modal {
