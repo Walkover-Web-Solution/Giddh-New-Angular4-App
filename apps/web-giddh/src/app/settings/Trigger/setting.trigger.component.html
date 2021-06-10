@@ -1,154 +1,182 @@
-<div class="box clearfix">
-    <h1 class="section-head pt-0">Create New Trigger(Webhook)</h1>
-    <div class="row">
-        <form (ngSubmit)="onSubmit(newTriggerObj)" class="col-lg-10 col-md-12 col-xs-12 ">
-            <div class="row">
-                <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                    <label>Name</label><br>
-                    <input type="text" placeholder="Name" autocomplete="off" [(ngModel)]="newTriggerObj.name" name="name" class="form-control" />
-                </div>
-                <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                    <label>Select Entity Type</label><br>
-                    <sh-select (onClear)="onResetEntityType()" (selected)="onEntityTypeSelected($event)" [forceClearReactive]="forceClear$ | async" [options]="entityList" [isFilterEnabled]="false" name="entityType" [(ngModel)]="newTriggerObj.entity" [placeholder]="'Select Entity Type'"
-                        [ItemHeight]="33">
-                    </sh-select>
-                </div>
-                <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                    <label>Select Entity</label><br>
-                    <sh-select [disabled]="!newTriggerObj.entity" [forceClearReactive]="forceClearEntityList$ | async" [options]="entityOptions$ | async" name="entityOptions" [(ngModel)]="newTriggerObj.entityUniqueName" [placeholder]="'Select Entity'" [ItemHeight]="33"
-                    [enableDynamicSearch]="true" [isPaginationEnabled]="true"
-                        (scrollEnd)="newTriggerObj.entity === 'account' ? handleScrollEnd() : handleGroupScrollEnd()" (dynamicSearchedQuery)="newTriggerObj.entity === 'account' ? onAccountSearchQueryChanged($event) : onGroupSearchQueryChanged($event)">
-                    </sh-select>
-                </div>
-                <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                    <label>Filter</label><br>
-                    <sh-select [forceClearReactive]="forceClearFilterList$ | async" [options]="filterList" [isFilterEnabled]="true"
-                        name="filter" [(ngModel)]="newTriggerObj.filter" [placeholder]="'Select Filter'" [ItemHeight]="33">
-                    </sh-select>
-                </div>
-                <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                    <label>Scope</label><br>
-                    <sh-select [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" placeholder="Select Scope"
-                        name="scope" [(ngModel)]="newTriggerObj.scope" [options]="scopeList" (selected)="onSelectScope($event)">
-                        <option>selected</option>
-                    </sh-select>
-                </div>
-                <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                    <label>URL</label><br>
-                    <input type="text" [(ngModel)]="newTriggerObj.url" name="url" placeholder="URL" class="form-control" />
-                </div>
-                <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                    <label>Description</label><br>
-                    <textarea class="form-control" [(ngModel)]="newTriggerObj.description" name="description"></textarea>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <button type="submit" class="btn btn-success">Add</button>
-                    <button type="button" (click)="onCancel()" class="btn btn-cancel">Cancel</button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="col-sm-12 pd-t2">
+<ng-container appTranslate [file]="'settings/trigger'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+    <div class="box clearfix">
+        <h1 class="section-head pt-0">{{localeData?.tab_heading}}</h1>
         <div class="row">
-            <h1 class="section-head pd-t1">Added Triggers</h1>
-            <div class="table-responsive">
-                <table class="table table-bordered trigger-table basic mr-b05 on-mobile-view">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Entity type</th>
-                            <th>Entity</th>
-                            <th>Scope</th>
-                            <th>Filter</th>
-                            <th>Action</th>
-                            <th>URL</th>
-                            <th>Description</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody *ngIf="!isLoading && availableTriggers.length">
-                        <tr *ngFor="let trigger of availableTriggers; let i = index">
-                            <td data-title="#">{{i+1}}</td>
-                            <td data-title="Name">
-                                <span *ngIf="!triggerToEdit[i]">{{trigger.name}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.name">
-                            </td>
-                            <td data-title="Entity Type">
-                                <span *ngIf="!triggerToEdit[i]">{{trigger.entity}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.entity">
-                            </td>
-                            <td data-title="Entity">
-                                <span *ngIf="!triggerToEdit[i]">{{trigger.entityUniqueName}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.entityUniqueName">
-                            </td>
-                            <td data-title="Scope">
-                                <span *ngIf="!triggerToEdit[i]">{{trigger.scope}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.scope">
-                            </td>
-                            <td data-title="Filter">
-                                <span *ngIf="!triggerToEdit[i]">{{trigger.filter}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.filter">
-                            </td>
-                            <td data-title="Action">
-                                <span *ngIf="!triggerToEdit[i]">{{trigger.action}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.action">
-                            </td>
-                            <!-- <td data-title="Value">
-                                <span *ngIf="!triggerToEdit[i]">{{trigger.value}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                                    [(ngModel)]="trigger.value">
-                            </td> -->
-                            <td data-title="URL">
-                                <span *ngIf="!triggerToEdit[i]">{{trigger.url}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.url">
-                            </td>
-                            <td data-title="Description">
-                                <span *ngIf="!triggerToEdit[i]">{{trigger.description}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.description">
-                            </td>
+            <form (ngSubmit)="onSubmit(newTriggerObj)" class="col-lg-10 col-md-12 col-xs-12 ">
+                <div class="row">
+                    <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                        <label>{{commonLocaleData?.app_name}}</label><br>
+                        <input type="text" [placeholder]="commonLocaleData?.app_name" autocomplete="off"
+                            [(ngModel)]="newTriggerObj.name" name="name" class="form-control" />
+                    </div>
+                    <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                        <label>{{localeData?.select_entity_type}}</label><br>
+                        <sh-select (onClear)="onResetEntityType()" (selected)="onEntityTypeSelected($event)"
+                            [forceClearReactive]="forceClear$ | async" [options]="entityList" [isFilterEnabled]="false"
+                            name="entityType" [(ngModel)]="newTriggerObj.entity"
+                            [placeholder]="localeData?.select_entity_type" [ItemHeight]="33">
+                        </sh-select>
+                    </div>
+                    <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                        <label>{{commonLocaleData?.app_select_entity}}</label><br>
+                        <sh-select [disabled]="!newTriggerObj.entity"
+                            [forceClearReactive]="forceClearEntityList$ | async" [options]="entityOptions$ | async"
+                            name="entityOptions" [(ngModel)]="newTriggerObj.entityUniqueName"
+                            [placeholder]="commonLocaleData?.app_select_entity" [ItemHeight]="33"
+                            [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                            (scrollEnd)="newTriggerObj.entity === 'account' ? handleScrollEnd() : handleGroupScrollEnd()"
+                            (dynamicSearchedQuery)="newTriggerObj.entity === 'account' ? onAccountSearchQueryChanged($event) : onGroupSearchQueryChanged($event)">
+                        </sh-select>
+                    </div>
+                    <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                        <label>{{commonLocaleData?.app_filter}}</label><br>
+                        <sh-select [forceClearReactive]="forceClearFilterList$ | async" [options]="filterList"
+                            [isFilterEnabled]="true" name="filter" [(ngModel)]="newTriggerObj.filter"
+                            [placeholder]="localeData?.filter_placeholder" [ItemHeight]="33">
+                        </sh-select>
+                    </div>
+                    <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                        <label>{{localeData?.scope_label}}</label><br>
+                        <sh-select [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true"
+                            [placeholder]="localeData?.scope_placeholder" name="scope" [(ngModel)]="newTriggerObj.scope"
+                            [options]="scopeList" (selected)="onSelectScope($event)">
+                            <option>selected</option>
+                        </sh-select>
+                    </div>
+                    <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                        <label>{{localeData?.url}}</label><br>
+                        <input type="text" [(ngModel)]="newTriggerObj.url" name="url" [placeholder]="localeData?.url"
+                            class="form-control" />
+                    </div>
+                    <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                        <label>{{commonLocaleData?.app_description}}</label><br>
+                        <textarea class="form-control" [(ngModel)]="newTriggerObj.description"
+                            name="description"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button type="submit" class="btn btn-success">{{commonLocaleData?.app_add}}</button>
+                        <button type="button" (click)="onCancel()"
+                            class="btn btn-cancel">{{commonLocaleData?.app_cancel}}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 pd-t2">
+            <div class="row">
+                <h1 class="section-head pd-t1">{{localeData?.added_triggers}}</h1>
+                <div class="table-responsive">
+                    <table class="table table-bordered trigger-table basic mr-b05 on-mobile-view">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>{{commonLocaleData?.app_name}}</th>
+                                <th>{{localeData?.entity_type}}</th>
+                                <th>{{commonLocaleData?.app_entity}}</th>
+                                <th>{{localeData?.scope_label}}</th>
+                                <th>{{commonLocaleData?.app_filter}}</th>
+                                <th>{{commonLocaleData?.app_action}}</th>
+                                <th>{{localeData?.url}}</th>
+                                <th>{{commonLocaleData?.app_description}}</th>
+                                <th class="text-center">{{commonLocaleData?.app_action}}</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="!isLoading && availableTriggers.length">
+                            <tr *ngFor="let trigger of availableTriggers; let i = index">
+                                <td data-title="#">{{i+1}}</td>
+                                <td [attr.data-title]="commonLocaleData?.app_name">
+                                    <span *ngIf="!triggerToEdit[i]">{{trigger.name}}</span>
+                                    <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
+                                        [(ngModel)]="trigger.name">
+                                </td>
+                                <td [attr.data-title]="localeData?.entity_type">
+                                    <span *ngIf="!triggerToEdit[i]">{{trigger.entity}}</span>
+                                    <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
+                                        [(ngModel)]="trigger.entity">
+                                </td>
+                                <td [attr.data-title]="commonLocaleData?.app_entity">
+                                    <span *ngIf="!triggerToEdit[i]">{{trigger.entityUniqueName}}</span>
+                                    <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
+                                        [(ngModel)]="trigger.entityUniqueName">
+                                </td>
+                                <td [attr.data-title]="localeData?.scope_label">
+                                    <span *ngIf="!triggerToEdit[i]">{{trigger.scope}}</span>
+                                    <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
+                                        [(ngModel)]="trigger.scope">
+                                </td>
+                                <td [attr.data-title]="commonLocaleData?.app_filter">
+                                    <span *ngIf="!triggerToEdit[i]">{{trigger.filter}}</span>
+                                    <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
+                                        [(ngModel)]="trigger.filter">
+                                </td>
+                                <td [attr.data-title]="commonLocaleData?.app_action">
+                                    <span *ngIf="!triggerToEdit[i]">{{trigger.action}}</span>
+                                    <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
+                                        [(ngModel)]="trigger.action">
+                                </td>
+                                <!-- <td data-title="Value">
+                                    <span *ngIf="!triggerToEdit[i]">{{trigger.value}}</span>
+                                    <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
+                                        [(ngModel)]="trigger.value">
+                                </td> -->
+                                <td [attr.data-title]="localeData?.url">
+                                    <span *ngIf="!triggerToEdit[i]">{{trigger.url}}</span>
+                                    <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
+                                        [(ngModel)]="trigger.url">
+                                </td>
+                                <td [attr.data-title]="commonLocaleData?.app_description">
+                                    <span *ngIf="!triggerToEdit[i]">{{trigger.description}}</span>
+                                    <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
+                                        [(ngModel)]="trigger.description">
+                                </td>
 
-                            <td class="text-center ico-btn" data-title="Action">
-                                <button *ngIf="!triggerToEdit[i]" type="button" class="btn btn-xs" (click)="triggerToEdit = [];triggerToEdit[i] = true"><i class="icon-edit-pencil"
-                                        aria-hidden="true" tooltip="Edit"></i></button>
-                                <button *ngIf="!triggerToEdit[i]" type="button" class="btn btn-xs" (click)="deleteTax(trigger);"><i class="fa fa-trash" aria-hidden="true"
-                                        tooltip="Delete"></i></button>
-                                <button *ngIf="triggerToEdit[i]" type="button" class="btn btn-xs" (click)="updateTrigger(i); triggerToEdit[i] = false"><i class="fa fa-check"
-                                        aria-hidden="true" tooltip="Save"></i></button>
-                                <button *ngIf="triggerToEdit[i]" type="button" class="btn btn-xs" (click)="triggerToEdit[i] = false"><i class="icon-cross" aria-hidden="true"
-                                        tooltip="Reset"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody *ngIf="!isLoading && !availableTriggers.length" class="on-mobile-view no-records">
-                        <tr>
-                            <td colspan="11" class="text-center empty-table">
-                                <h1>No Record Found !! {{availableTriggers}}</h1>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody *ngIf="isLoading">
-                        <tr>
-                            <td colspan="11" class="text-center empty-table">
-                                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                <td class="text-center ico-btn" [attr.data-title]="commonLocaleData?.app_action">
+                                    <button *ngIf="!triggerToEdit[i]" type="button" class="btn btn-xs"
+                                        (click)="triggerToEdit = [];triggerToEdit[i] = true"><i class="icon-edit-pencil"
+                                            aria-hidden="true" [tooltip]="commonLocaleData?.app_edit"></i></button>
+                                    <button *ngIf="!triggerToEdit[i]" type="button" class="btn btn-xs"
+                                        (click)="deleteTax(trigger);"><i class="fa fa-trash" aria-hidden="true"
+                                            [tooltip]="commonLocaleData?.app_delete"></i></button>
+                                    <button *ngIf="triggerToEdit[i]" type="button" class="btn btn-xs"
+                                        (click)="updateTrigger(i); triggerToEdit[i] = false"><i class="fa fa-check"
+                                            aria-hidden="true" [tooltip]="commonLocaleData?.app_save"></i></button>
+                                    <button *ngIf="triggerToEdit[i]" type="button" class="btn btn-xs"
+                                        (click)="triggerToEdit[i] = false"><i class="icon-cross" aria-hidden="true"
+                                            [tooltip]="commonLocaleData?.app_reset"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody *ngIf="!isLoading && !availableTriggers.length" class="on-mobile-view no-records">
+                            <tr>
+                                <td colspan="11" class="text-center empty-table">
+                                    <h1>{{commonLocaleData?.app_no_record_found}}</h1>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody *ngIf="isLoading">
+                            <tr>
+                                <td colspan="11" class="text-center empty-table">
+                                    <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Trigger Confirmation Model model -->
+    <div bsModal #triggerConfirmationModel="bs-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-md">
+            <!-- modal-liq-90 class is removed for now-->
+            <div class="modal-content">
+                <delete-tax-confirmation-model [message]="confirmationMessage" [commonLocaleData]="commonLocaleData"
+                    (userConfirmationEvent)="userConfirmation($event)">
+                </delete-tax-confirmation-model>
             </div>
         </div>
     </div>
-
-</div>
-<!-- Trigger Confirmation Model model -->
-<div bsModal #triggerConfirmationModel="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-md">
-        <!-- modal-liq-90 class is removed for now-->
-        <div class="modal-content">
-            <delete-tax-confirmation-model [message]="confirmationMessage" (userConfirmationEvent)="userConfirmation($event)">
-            </delete-tax-confirmation-model>
-        </div>
-    </div>
-</div>
+</ng-container>

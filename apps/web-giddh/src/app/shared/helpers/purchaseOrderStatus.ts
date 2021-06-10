@@ -1,18 +1,18 @@
 export const PURCHASE_ORDER_STATUS = {
-    'open' : 'open',
-    'received' : 'received',
-    'partiallyReceived' : 'partially-received',
-    'expired' : 'expired',
-    'cancelled' : 'cancelled'
+    'open': 'open',
+    'received': 'received',
+    'partiallyReceived': 'partially-received',
+    'expired': 'expired',
+    'cancelled': 'cancelled'
 }
 
 export const BULK_UPDATE_FIELDS = {
-    'purchasedate' : 'purchasedate',
-    'duedate' : 'duedate',
-    'warehouse' : 'warehouse',
-    'expire' : 'expire',
-    'delete' : 'delete',
-    'create_purchase_bill' : 'create_purchase_bill'
+    'purchasedate': 'purchasedate',
+    'duedate': 'duedate',
+    'warehouse': 'warehouse',
+    'expire': 'expire',
+    'delete': 'delete',
+    'create_purchase_bill': 'create_purchase_bill'
 }
 
 export interface PurchaseOrderStatus {

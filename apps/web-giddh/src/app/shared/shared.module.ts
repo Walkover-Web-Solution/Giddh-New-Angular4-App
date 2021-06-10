@@ -1,5 +1,5 @@
-import { CommonModule, formatDate } from '@angular/common';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { CommonModule, formatDate, registerLocaleData } from '@angular/common';
+import { LOCALE_ID, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';
@@ -91,13 +91,20 @@ import { AmountFieldComponent } from './amount-field/amount-field.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TranslateDirective } from '../theme/translate/translate.directive';
 import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.component';
-
 import { ScheduleNowComponent } from './schedule-now/schedule-now.component';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import localeEn from '@angular/common/locales/en-GB';
+import localeHi from '@angular/common/locales/hi';
+import localeMr from '@angular/common/locales/mr';
+registerLocaleData(localeEn);
+registerLocaleData(localeHi);
+registerLocaleData(localeMr);
+
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
 
 const getGoogleCredentials = () => {
-    if (PRODUCTION_ENV || isElectron  || isCordova) {
+    if (PRODUCTION_ENV || isElectron || isCordova) {
         return {
             GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
         };
@@ -111,7 +118,7 @@ const getGoogleCredentials = () => {
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
 };
-const SOCIAL_CONFIG = (isElectron|| isCordova) ? null : new AuthServiceConfig([
+const SOCIAL_CONFIG = (isElectron || isCordova) ? null : new AuthServiceConfig([
     {
         id: GoogleLoginProvider.PROVIDER_ID,
         // provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')
@@ -183,8 +190,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         PurchaseSendEmailModalComponent,
         HamburgerMenuComponent,
         GiddhDaterangepickerComponent,
-        AmountFieldComponent,
-        TranslateDirective,
         GiddhPageLoaderComponent,
         AmountFieldComponent,
         ScheduleNowComponent,
@@ -230,7 +235,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatFormFieldModule,
         MatNativeDateModule,
         MatInputModule,
-        CurrencyModule
+        CurrencyModule,
+        TranslateDirectiveModule
     ],
     exports: [
         CommonModule,
@@ -283,12 +289,12 @@ export class PickDateAdapter extends NativeDateAdapter {
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
         HamburgerMenuComponent,
+        GiddhPageLoaderComponent,
         AmountFieldComponent,
         CurrencyModule,
-        TranslateDirective,
+        PrimarySidebarComponent,
         ScheduleNowComponent,
-        GiddhPageLoaderComponent,
-        PrimarySidebarComponent
+        TranslateDirectiveModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
@@ -313,6 +319,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatNativeDateModule,
         { provide: MAT_DATE_FORMATS, useValue: GIDDH_DATEPICKER_FORMAT },
         { provide: DateAdapter, useClass: PickDateAdapter },
+        { provide: LOCALE_ID, useValue: 'en'}
     ]
 })
 export class SharedModule {

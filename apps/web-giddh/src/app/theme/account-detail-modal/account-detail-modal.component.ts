@@ -30,60 +30,31 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     // take voucher type from parent component
     @Input() public voucherType: VoucherTypeEnum;
 
-    @ViewChild('mailModal', {static: true}) public mailModal: ModalDirective;
-    @ViewChild('messageBox', {static: true}) public messageBox: ElementRef;
+    @ViewChild('mailModal', { static: true }) public mailModal: ModalDirective;
+    @ViewChild('messageBox', { static: true }) public messageBox: ElementRef;
 
     public messageBody = {
         header: {
-            email: 'Send Email',
-            sms: 'Send Sms',
+            email: '',
+            sms: '',
             set: ''
         },
         btn: {
-            email: 'Send Email',
-            sms: 'Send Sms',
+            email: '',
+            sms: '',
             set: '',
         },
         type: '',
         msg: '',
         subject: ''
     };
-    public dataVariables = [
-        {
-            name: 'Opening Balance',
-            value: '%s_OB',
-        },
-        {
-            name: 'Closing Balance',
-            value: '%s_CB',
-        },
-        {
-            name: 'Credit Total',
-            value: '%s_CT',
-        },
-        {
-            name: 'Debit Total',
-            value: '%s_DT',
-        },
-        {
-            name: 'From Date',
-            value: '%s_FD',
-        },
-        {
-            name: 'To Date',
-            value: '%s_TD',
-        },
-        {
-            name: 'Magic Link',
-            value: '%s_ML',
-        },
-        {
-            name: 'Account Name',
-            value: '%s_AN',
-        },
-    ];
+    public dataVariables = [];
     @Input() public accInfo: IFlattenAccountsResultItem;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private _companyServices: CompanyService,
         private _toaster: ToasterService, private _groupWithAccountsAction: GroupWithAccountsAction, private _accountService: AccountService,
@@ -210,12 +181,12 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
             }
         };
 
-        if (this.messageBody.btn.set === 'Send Email') {
+        if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
             return this._companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
                     r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
                 });
-        } else if (this.messageBody.btn.set === 'Send Sms') {
+        } else if (this.messageBody.btn.set === this.localeData?.send_sms) {
             let temp = request;
             delete temp.data['subject'];
             return this._companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
@@ -244,9 +215,9 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = location.origin + location.pathname + `#./pages/${part}/${this.accountUniqueName}`;
             console.log(ipcRenderer.send('open-url', url));
-        } else if(isCordova){
+        } else if (isCordova) {
             // todo: go to routes
-        }else {
+        } else {
             (window as any).open(url);
         }
     }
@@ -259,5 +230,56 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof AccountDetailModalComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.messageBody.header.email = this.commonLocaleData?.app_send_email;
+            this.messageBody.header.sms = this.localeData?.send_sms;
+
+            this.messageBody.btn.email = this.commonLocaleData?.app_send_email;
+            this.messageBody.btn.sms = this.localeData?.send_sms;
+
+            this.dataVariables = [
+                {
+                    name: this.localeData?.opening_balance,
+                    value: '%s_OB',
+                },
+                {
+                    name: this.localeData?.closing_balance,
+                    value: '%s_CB',
+                },
+                {
+                    name: this.localeData?.credit_total,
+                    value: '%s_CT',
+                },
+                {
+                    name: this.localeData?.debit_total,
+                    value: '%s_DT',
+                },
+                {
+                    name: this.localeData?.from_date,
+                    value: '%s_FD',
+                },
+                {
+                    name: this.localeData?.to_date,
+                    value: '%s_TD',
+                },
+                {
+                    name: this.localeData?.magic_link,
+                    value: '%s_ML',
+                },
+                {
+                    name: this.commonLocaleData?.app_account_name,
+                    value: '%s_AN',
+                }
+            ];
+        }
     }
 }

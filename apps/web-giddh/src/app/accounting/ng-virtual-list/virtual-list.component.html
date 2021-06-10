@@ -36,6 +36,7 @@
         [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)"
         (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink"
         [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight"
-        [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [isPaginationEnabled]="isPaginationEnabled"
-        [dropdownMinHeight]="dropdownMinHeight" (scrollEnd)="scrollEnd.emit()"></virtual-list-menu>
+        [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
+        [isPaginationEnabled]="isPaginationEnabled" [dropdownMinHeight]="dropdownMinHeight"
+        (scrollEnd)="scrollEnd.emit()"></virtual-list-menu>
 </div>

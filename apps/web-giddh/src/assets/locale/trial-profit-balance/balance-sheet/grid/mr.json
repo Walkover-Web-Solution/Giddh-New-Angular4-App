@@ -1,8 +1,8 @@
 {
-    "no_data_found" : "क्षमस्व, कोणताही डेटा आढळला नाही!",
-    "particular" : "विशेष",
-    "equity_liabilities" : "मी क्षमता आणि उत्तरदायित्व",
-    "total_liabilities" : "एकूण देयता",
-    "ii_assets" : "II एसेट",
-    "total_assets" : "एकूण मालमत्ता"
+    "no_data_found": "क्षमस्व, कोणताही डेटा आढळला नाही!",
+    "particular": "विशेष",
+    "equity_liabilities": "मी क्षमता आणि उत्तरदायित्व",
+    "total_liabilities": "एकूण देयता",
+    "ii_assets": "II एसेट",
+    "total_assets": "एकूण मालमत्ता"
 }

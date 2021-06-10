@@ -101,21 +101,23 @@
                         <div class="pull-left mr-l1 mr-t1 choose-size">
                             <div class="d-block" [class.cursor-disable]="isFileUploaded">
                                 <p>Size</p>
-                                <input [(ngModel)]="defaultImageSize" name="chooseSize" type="radio" id="fontS" value="S" [disabled]="isFileUploaded"
-                                    (click)="onValueChange('logoSize', '60')" checked>
+                                <input [(ngModel)]="defaultImageSize" name="chooseSize" type="radio" id="fontS"
+                                    value="S" [disabled]="isFileUploaded" (click)="onValueChange('logoSize', '60')"
+                                    checked>
                                 <label for="fontS">S</label>
-                                <input [(ngModel)]="defaultImageSize" name="chooseSize" type="radio" id="fontM" value="M" [disabled]="isFileUploaded"
-                                    (click)="onValueChange('logoSize', '80')">
+                                <input [(ngModel)]="defaultImageSize" name="chooseSize" type="radio" id="fontM"
+                                    value="M" [disabled]="isFileUploaded" (click)="onValueChange('logoSize', '80')">
                                 <label for="fontM">M</label>
-                                <input [(ngModel)]="defaultImageSize" name="chooseSize" type="radio" id="fontL" value="L" [disabled]="isFileUploaded"
-                                    (click)="onValueChange('logoSize', '100')">
+                                <input [(ngModel)]="defaultImageSize" name="chooseSize" type="radio" id="fontL"
+                                    value="L" [disabled]="isFileUploaded" (click)="onValueChange('logoSize', '100')">
                                 <label for="fontL">L</label>
                             </div>
                             <div class="d-block">
                                 <a class="primary-color" [attr.disabled]="isFileUploaded"
                                     [class.cursor-disable]="isFileUploaded" [hidden]="!logoAttached"
                                     (click)="toogleLogoVisibility()"><span [hidden]="showLogo">Show</span><span
-                                        [hidden]="!showLogo">Hide</span> logo</a> </div>
+                                        [hidden]="!showLogo">Hide</span> logo</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -168,8 +170,9 @@
                 <i class="ico-txt"></i> <label>Select different fonts</label>
                 <div class="row font-selector mr-t1 form-group">
                     <div class="col-9">
-                        <sh-select [defaultValue]="selectedFont" [options]="presetFonts" (selected)="onFontSelect($event)"
-                            [placeholder]="'Choose font'" [multiple]="false" [ItemHeight]="33"></sh-select>
+                        <sh-select [defaultValue]="selectedFont" [options]="presetFonts"
+                            (selected)="onFontSelect($event)" [placeholder]="'Choose font'" [multiple]="false"
+                            [ItemHeight]="33"></sh-select>
                     </div>
                 </div>
             </li>
@@ -181,8 +184,9 @@
                     <i class="ico-txt"></i> <label>Select different fonts size</label>
                     <div class="row font-selector mr-t1 form-group">
                         <div class="col-9">
-                            <sh-select [defaultValue]="selectedFontSize" [options]="presetFontsSize" (selected)="onFontSizeSelect($event)"
-                                [placeholder]="'Choose font size'" [multiple]="false" [ItemHeight]="33"></sh-select>
+                            <sh-select [defaultValue]="selectedFontSize" [options]="presetFontsSize"
+                                (selected)="onFontSizeSelect($event)" [placeholder]="'Choose font size'"
+                                [multiple]="false" [ItemHeight]="33"></sh-select>
                         </div>
                     </div>
                 </li>

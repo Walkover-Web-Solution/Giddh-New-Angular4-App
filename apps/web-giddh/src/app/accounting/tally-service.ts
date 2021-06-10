@@ -225,7 +225,7 @@ export class TallyModuleService {
         let expenseAccounts = [];
         let salesAccounts = [];
 
-        if(account) {
+        if (account) {
             let cashAccount = account.parentGroups.find((pg) => pg.uniqueName === 'cash');
             if (cashAccount) {
                 cashAccounts.push(account);
@@ -271,49 +271,49 @@ export class TallyModuleService {
                 case 'Journal':
                     // accounts = this.flattenAccounts.value;
                     // As discussed with Manish, Cash and Bank account should not come in Journal entry
-                    if(this.purchaseAccounts.value) {
+                    if (this.purchaseAccounts.value) {
                         accounts = this.purchaseAccounts.value.concat(this.expenseAccounts.value).concat(this.taxAccounts.value).concat(this.salesAccounts.value);
-                    } else if(this.expenseAccounts.value) {
+                    } else if (this.expenseAccounts.value) {
                         accounts = this.expenseAccounts.value.concat(this.taxAccounts.value).concat(this.salesAccounts.value);
-                    } else if(this.taxAccounts.value) {
+                    } else if (this.taxAccounts.value) {
                         accounts = this.taxAccounts.value.concat(this.salesAccounts.value);
                     } else {
                         accounts = this.salesAccounts.value;
                     }
                     break;
                 case 'Purchase':
-                    if(this.bankAccounts.value) {
+                    if (this.bankAccounts.value) {
                         accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.taxAccounts.value);
-                    } else if(this.cashAccounts.value) {
+                    } else if (this.cashAccounts.value) {
                         accounts = this.cashAccounts.value.concat(this.expenseAccounts.value).concat(this.taxAccounts.value);
-                    } else if(this.expenseAccounts.value) {
+                    } else if (this.expenseAccounts.value) {
                         accounts = this.expenseAccounts.value.concat(this.taxAccounts.value);
                     } else {
                         accounts = this.taxAccounts.value;
                     }
                     break;
                 case 'Sales':
-                    if(this.bankAccounts.value) {
+                    if (this.bankAccounts.value) {
                         accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.salesAccounts.value);
-                    } else if(this.cashAccounts.value) {
+                    } else if (this.cashAccounts.value) {
                         accounts = this.cashAccounts.value.concat(this.expenseAccounts.value).concat(this.salesAccounts.value);
-                    } else if(this.expenseAccounts.value) {
+                    } else if (this.expenseAccounts.value) {
                         accounts = this.expenseAccounts.value.concat(this.salesAccounts.value);
                     } else {
                         accounts = this.salesAccounts.value;
                     }
                     break;
                 case 'Credit note':
-                    if(this.taxAccounts.value) {
+                    if (this.taxAccounts.value) {
                         accounts = this.taxAccounts.value.concat(this.salesAccounts.value);
                     } else {
                         accounts = this.salesAccounts.value;
                     }
                     break;
                 case 'Debit note':
-                    if(this.purchaseAccounts.value) {
+                    if (this.purchaseAccounts.value) {
                         accounts = this.purchaseAccounts.value.concat(this.taxAccounts.value).concat(this.expenseAccounts.value);
-                    } else if(this.taxAccounts.value) {
+                    } else if (this.taxAccounts.value) {
                         accounts = this.taxAccounts.value.concat(this.expenseAccounts.value);
                     } else {
                         accounts = this.expenseAccounts.value;
@@ -476,9 +476,9 @@ export class TallyModuleService {
      */
     public getCurrentBalance(companyUniqueName: string, accountUniqueName: string, fromDate: string, toDate: string): Observable<any> {
         const contextPath = LEDGER_API.GET_BALANCE.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-        .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-        .replace(':from', fromDate).replace(':to', toDate)
-        .replace(':accountCurrency', 'true');
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+            .replace(':from', fromDate).replace(':to', toDate)
+            .replace(':accountCurrency', 'true');
         return this.http.get(`${this.config.apiUrl}${contextPath}`);
     }
 

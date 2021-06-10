@@ -67,5 +67,9 @@
     "po_created": "व्हाउचर नंबरसह खरेदी ऑर्डर यशस्वीरित्या तयार केली - [PO_NUMBER]",
     "po_updated": "खरेदी ऑर्डर यशस्वीरित्या अद्यतनित केले",
     "custom_field1": "सानुकूल फील्ड 1",
-    "custom_field2": "सानुकूल फील्ड 2"
+    "custom_field2": "सानुकूल फील्ड 2",
+    "currency_conversion": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />(रूपांतरण दर: [CONVERSION_RATE])",
+    "delayed_by_days": "[DAYS] दिवसांनी विलंब",
+    "delivery_in_day": "[DAYS] दिवसांत वितरण",
+    "delivery_in_days": "[DAYS] दिवसांत वितरण"
 }

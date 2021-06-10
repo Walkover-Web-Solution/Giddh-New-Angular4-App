@@ -25,12 +25,12 @@ export class AmountFieldComponent implements OnInit, OnChanges {
 
     }
 
-     /**
-     * detect direction method calling
-     * @param {string} path
-     * @returns {string}
-     * @memberof AmountFieldComponent
-     */
+    /**
+    * detect direction method calling
+    * @param {string} path
+    * @returns {string}
+    * @memberof AmountFieldComponent
+    */
     public ngOnInit(): void {
         this.detectDirection();
     }

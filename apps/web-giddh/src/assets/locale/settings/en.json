@@ -1,15 +1,13 @@
 {
-    "tabs" : {
-        "taxes" : "Taxes",
-        "integration" : "Integration",
-        "linked_accounts" : "Linked Accounts",
-        "profile" : "Profile",
-        "financial_year" : "Financial Year",
-        "permission" : "Permission",
-        "branch" : "Branch",
-        "tags" : "Tags",
-        "trigger" : "Trigger",
-        "discount" : "Discount",
-        "warehouse" : "Warehouse"
-    }
+    "setting_taxes": "Setting > Taxes",
+    "setting_integration": "Setting > Integration",
+    "setting_linked_accounts": "Setting > Linked accounts",
+    "setting_financial_year": "Setting > Financial year",
+    "setting_permission": "Setting > Permission",
+    "setting_branch": "Setting > Branch",
+    "setting_tag": "Setting > Tag",
+    "setting_trigger": "Setting > Trigger",
+    "setting_discount": "Setting > Discount",
+    "setting_warehouse": "Setting > Warehouse",
+    "gmail_account_added": "Gmail account added successfully."
 }

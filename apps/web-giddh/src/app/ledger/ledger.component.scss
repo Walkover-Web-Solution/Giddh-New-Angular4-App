@@ -1,59 +1,62 @@
 @import "../../assets/css/color.scss";
-.wrap-transaction-map{
-    border:1px solid $gainsboro;
+.wrap-transaction-map {
+    border: 1px solid $gainsboro;
     border-bottom: none !important;
-    .ledger-book{
+    .ledger-book {
         box-shadow: none;
-        .left-col-new{
+        .left-col-new {
             border-right: 1px solid $gainsboro;
         }
-        .checkbox-span{
+        .checkbox-span {
             height: 49px;
             min-height: 49px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
-        .ledger-row{
-            &:hover{
+        .ledger-row {
+            &:hover {
                 background-color: transparent;
             }
         }
     }
 }
-#ledger-transaction-left-list , #ledger-transaction-right-list {
-    td{
+#ledger-transaction-left-list,
+#ledger-transaction-right-list {
+    td {
         padding: 0 !important;
-        &:first-child{
+        &:first-child {
             border-bottom: none !important;
         }
-        .d-flex.align-item-center{
+        .d-flex.align-item-center {
             align-items: stretch !important;
         }
-        input, sh-select, .form-control{
+        input,
+        sh-select,
+        .form-control {
             min-height: 49px;
             height: 49px;
-            border:0 !important;
-
+            border: 0 !important;
         }
-        input[type="checkbox"]{
+        input[type="checkbox"] {
             min-height: 20px;
             height: 20px;
         }
-
     }
 }
- #ledger-transaction-left-list td,
- #ledger-transaction-right-list td {
+#ledger-transaction-left-list td,
+#ledger-transaction-right-list td {
     border-bottom: 1px solid $gainsboro;
 }
-#ledger-transaction-right-list tr, #ledger-transaction-left-list tr{
-        border-bottom: 1px solid $gainsboro;
+#ledger-transaction-right-list tr,
+#ledger-transaction-left-list tr {
+    border-bottom: 1px solid $gainsboro;
 }
-#ledger-transaction-right-list tr td:last-child, #ledger-transaction-left-list tr td:last-child{
+#ledger-transaction-right-list tr td:last-child,
+#ledger-transaction-left-list tr td:last-child {
     border-right: none !important;
 }
-.transaction-mapped-table thead th{
+.transaction-mapped-table thead th {
     padding: 10px 15px !important;
     border-bottom: 1px solid $gainsboro !important;
 }
@@ -77,7 +80,7 @@ input {
     display: flex;
     align-items: center;
 }
- table.ledger-footer-1 td[class*="col-"]{
+table.ledger-footer-1 td[class*="col-"] {
     justify-content: flex-end;
 }
 .ledg-head table td.pd-r25 {
@@ -103,25 +106,26 @@ input {
 .ledg-head.entry-popup table td.pd-r25 {
     padding-right: 25px !important;
 }
-.transaction-mapped-table{
-    .top-head-table{
+.transaction-mapped-table {
+    .top-head-table {
         border-top: none;
     }
-    thead{
-        th{
+    thead {
+        th {
             border-bottom: none;
         }
     }
-    .transaction-mapped-head{
-        border-top:none !important
+    .transaction-mapped-head {
+        border-top: none !important;
     }
     .ledger-main {
-        .ledger-row.row{
-            td, th{
+        .ledger-row.row {
+            td,
+            th {
                 border-bottom: 1px solid $gainsboro !important;
                 border-top: none !important;
             }
-            td[class*="col-"]{
+            td[class*="col-"] {
                 padding-left: 0 !important;
                 padding-right: 0 !important;
             }
@@ -131,12 +135,12 @@ input {
     //     margin-left: 0;
     //     margin-right: 0 ;
     // }
-    .ledger-head{
-        th{
+    .ledger-head {
+        th {
             padding-left: 15px;
         }
     }
-    tr{
+    tr {
         td.upper-td {
             padding: 0 !important;
             border: none !important;
@@ -155,7 +159,7 @@ input {
 .ledg-head input[type="search"] {
     min-width: auto;
     padding-left: 27px !important;
-    border-radius: 20px !important;
+    border-radius: 5px !important;
 }
 .ledg-head {
     .single-search-box {
@@ -205,14 +209,14 @@ input {
 .ledger-footer-1 {
     position: absolute;
     bottom: 0;
-    width:50%;
+    width: 50%;
 }
 
-.left-align{
+.left-align {
     left: 0;
 }
 
-.right-align{
+.right-align {
     right: 0;
 }
 
@@ -220,15 +224,15 @@ input {
     color: $jacksons-purple;
     padding-top: 5px;
     padding-bottom: 10px;
-    &.first-child{
-        span{
+    &.first-child {
+        span {
             position: relative;
             right: 15px;
         }
     }
 }
-.ledger-head th:first-child{
-    span{
+.ledger-head th:first-child {
+    span {
         position: relative;
         right: 15px;
     }
@@ -281,7 +285,7 @@ input {
     padding: 15px 11px !important;
     font-weight: 400;
     border-bottom: 1px solid $gainsboro;
-    font-family: 'opensans-semibold';
+    font-family: "opensans-semibold";
     font-size: 14px;
     border-top: 1px solid $gainsboro;
 }
@@ -355,7 +359,7 @@ input {
     font-size: 13px;
     height: 48px;
     line-height: 1;
-    &.focus-unset{
+    &.focus-unset {
         padding-left: 7px !important;
     }
 }
@@ -413,7 +417,7 @@ sh-select:focus {
     justify-content: center;
     border-top-width: 1px;
     background-color: $white;
-    border-radius: 50%;
+    border-radius: 5px;
 }
 .advance-search-block input {
     background: $solitude !important;
@@ -439,7 +443,7 @@ sh-select:focus {
     padding: 6px 9px;
     color: $white;
 }
-.left-col-new table.width-100.h-table#blank-ledger-container .no-left-border{
+.left-col-new table.width-100.h-table#blank-ledger-container .no-left-border {
     border-left: none !important;
 }
 .ledger-book .ledger-footer-1 .total-col .border-top {
@@ -516,7 +520,7 @@ sh-select:focus {
     justify-content: center;
     align-items: center;
     margin-right: 7px;
-    border-radius: 50%;
+    border-radius: 5px;
     background-color: $white;
     img {
         width: 18px;
@@ -619,13 +623,13 @@ sh-select:focus {
     position: unset !important;
     align-items: center;
 }
-.icon-download-circle{
-    font-size:15px;
+.icon-download-circle {
+    font-size: 15px;
     top: 0 !important;
     margin-top: 1px !important;
 }
 
-.padding-ledger{
+.padding-ledger {
     padding: 1px 0 !important;
 }
 
@@ -693,7 +697,7 @@ sh-select:focus {
                 padding-right: 15px;
                 border-left: 1px solid $gainsboro;
             }
-            &:last-child{
+            &:last-child {
                 border-right: 1px solid $gainsboro;
             }
         }
@@ -727,7 +731,7 @@ sh-select:focus {
         border-bottom: none;
     }
 }
-.ledger-book.fade:not(.show){
+.ledger-book.fade:not(.show) {
     opacity: 1 !important;
 }
 .multicurrency-amount {
@@ -738,19 +742,19 @@ sh-select:focus {
     text-align: right;
     white-space: normal;
 }
-.ledg-head table .ledger-main .ledger-row:last-child td[class*="col-"]{
+.ledg-head table .ledger-main .ledger-row:last-child td[class*="col-"] {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
-.ledger-row{
-    .text-ellipsis{
+.ledger-row {
+    .text-ellipsis {
         min-width: 160px;
         max-width: 400px;
         width: 100%;
     }
 }
 
-.list-item{
+.list-item {
     border-bottom: 1px solid $gainsboro;
 }
 
@@ -780,7 +784,7 @@ sh-select:focus {
             flex: 1;
             text-align: left;
             .item {
-                font-family:'opensans-semibold'
+                font-family: "opensans-semibold";
             }
         }
         .default-entity {
@@ -799,7 +803,7 @@ sh-select:focus {
         line-height: normal;
     }
 }
-.show-if-ledger-open{
+.show-if-ledger-open {
     height: 300px;
 }
 @media only screen and (max-width: 1540px) {
@@ -814,7 +818,7 @@ sh-select:focus {
         margin: 0 auto;
         padding: 15px;
     }
-    .show-if-update-ledger-open{
+    .show-if-update-ledger-open {
         height: 230px;
     }
     .debit-credit-amount{
@@ -829,19 +833,20 @@ sh-select:focus {
         max-width: 1280px;
     }
 }
-@media(min-width:1020px) and (max-width:1200px){
-    .linked-entities{
+@media (min-width: 1020px) and (max-width: 1200px) {
+    .linked-entities {
         position: absolute;
         top: 41px;
         right: 0;
     }
-    .mr-b5{
+    .mr-b5 {
         margin-bottom: 50px !important;
     }
 }
-@media(max-width:1190px){
-    .date-advance-search{
-        &:before, &:after{
+@media (max-width: 1190px) {
+    .date-advance-search {
+        &:before,
+        &:after {
             display: none;
         }
     }
@@ -852,10 +857,9 @@ sh-select:focus {
         width: 100%;
         max-width: 100%;
     }
-
 }
 @media (max-width: 991px) {
-    .linked-entities{
+    .linked-entities {
         margin-top: 10px;
         margin-bottom: 0;
     }
@@ -889,7 +893,7 @@ sh-select:focus {
         display: flex !important;
         flex-direction: column;
     }
-    .download-invoice-ledger{
+    .download-invoice-ledger {
         position: absolute !important;
     }
 }
@@ -943,7 +947,7 @@ sh-select:focus {
         display: block;
     }
     .right-col-new .ledger-head {
-        background: $alice-blue-light
+        background: $alice-blue-light;
     }
     .ledger-row td:empty {
         display: none !important;
@@ -1089,11 +1093,11 @@ sh-select:focus {
     .hidden-xs {
         display: none !important;
     }
-    .ledger-head th{
+    .ledger-head th {
         padding-top: 0;
     }
 }
-  /*comment for now
+/*comment for now
 @media (min-width: 768px) {
     .ledger-book:before {
         content: " ";
@@ -1118,7 +1122,7 @@ sh-select:focus {
     justify-content: flex-end !important;
 }
 @media (max-width: 767px) {
-    .linked-entities{
+    .linked-entities {
         width: 100%;
     }
     .ledger-head {
@@ -1168,8 +1172,8 @@ sh-select:focus {
         width: 100% !important;
         margin-bottom: 5px;
     }
-    .balance-detail{
-        .text-right{
+    .balance-detail {
+        .text-right {
             text-align: left !important;
             margin-bottom: 8px;
         }
@@ -1195,9 +1199,9 @@ sh-select:focus {
         }
     }
 }
-@media (min-width:768px) and (max-width: 991px){
-    .ledger-datepicker{
-        img{
+@media (min-width: 768px) and (max-width: 991px) {
+    .ledger-datepicker {
+        img {
             padding-top: 5px;
         }
     }
