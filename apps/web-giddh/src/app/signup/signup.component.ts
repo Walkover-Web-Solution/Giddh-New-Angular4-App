@@ -59,7 +59,6 @@ export class SignupComponent implements OnInit, OnDestroy {
     public selectedBanner: string = null;
     public loginUsing: string = null;
     public signUpWithPasswdForm: FormGroup;
-    public showPwdHint: boolean = false;
     public isSignupWithPasswordInProcess$: Observable<boolean>;
     public signupVerifyForm: FormGroup;
     public isSignupWithPasswordSuccess$: Observable<boolean>;
@@ -383,24 +382,8 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     public SignupWithPasswd(model: FormGroup) {
         let ObjToSend = model.value;
-        let pattern = /^(?=.*[a-z])(?=.*\d)[A-Za-z\d$@$!%*?&_]{8,20}$/g;
-        if (pattern.test(ObjToSend.password)) {
+        if (ObjToSend) {
             this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
-        } else {
-            return this._toaster.errorToast("Password is weak");
-        }
-    }
-
-    public validatePwd(value) {
-        // let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$/g;
-        let pattern = /^(?=.*[a-z])(?=.*\d)[A-Za-z\d$@$!%*?&_]{8,20}$/g;
-        if (pattern.test(value)) {
-            // this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
-            this.showPwdHint = false;
-        } else if (value) {
-            return this.showPwdHint = true;
-        } else {
-            this.showPwdHint = false;
         }
     }
 }
