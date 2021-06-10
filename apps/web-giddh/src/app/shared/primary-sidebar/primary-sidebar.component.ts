@@ -952,21 +952,21 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public openActiveItem(itemIndex?: any): void {
         if (itemIndex !== undefined) {
             this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
-                if (index === itemIndex) {
-                    dropdown.show();
-                } else {
+                if (index !== itemIndex) {
                     dropdown.hide();
                 }
             });
         } else {
-            const activeItemIndex = this.allItems.findIndex(item => item.isActive);
-            this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
-                if (index === activeItemIndex) {
-                    dropdown.show();
-                } else {
-                    dropdown.hide();
-                }
-            });
+            if (this.isOpen) {
+                const activeItemIndex = this.allItems.findIndex(item => item.isActive);
+                this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
+                    if (index === activeItemIndex) {
+                        dropdown.show();
+                    } else {
+                        dropdown.hide();
+                    }
+                });
+            }
         }
     }
 }
