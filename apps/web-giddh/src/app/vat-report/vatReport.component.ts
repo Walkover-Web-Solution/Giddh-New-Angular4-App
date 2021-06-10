@@ -89,6 +89,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.toggleGstPane();
+
         this.breakpointObserver
         .observe(['(max-width: 767px)'])
         .pipe(takeUntil(this.destroyed$))
@@ -174,31 +176,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             this.getVatReport();
         }
     }
-     /**
-     * Aside pane toggle fixed class
-     *
-     *
-     * @memberof GstComponent
-     */
-      public toggleBodyClass(): void {
-        if (this.asideGstSidebarMenuState === 'in') {
-            document.querySelector('body').classList.add('gst-sidebar-open');
-        } else {
-            document.querySelector('body').classList.remove('gst-sidebar-open');
-        }
-    }
-    /**
-      * This will toggle the settings popup
-      *
-      * @param {*} [event]
-      * @memberof GstComponent
-      */
-    public toggleGstPane(event?): void {
-        this.toggleBodyClass();
-        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
-            this.asideGstSidebarMenuState = "out";
-        }
-    }
+
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -354,7 +332,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
      * Loads the tax details of a company
      *
      * @private
-     * @memberof GstComponent
+     * @memberof VatReportComponent
      */
     private loadTaxDetails(): void {
         this.isTaxApiInProgress = true;
@@ -367,5 +345,41 @@ export class VatReportComponent implements OnInit, OnDestroy {
             }
             this.isTaxApiInProgress = false;
         });
+    }
+
+    /**
+     * Aside pane toggle fixed class
+     *
+     *
+     * @memberof VatReportComponent
+     */
+     public toggleBodyClass(): void {
+        if (this.asideGstSidebarMenuState === 'in') {
+            document.querySelector('body').classList.add('gst-sidebar-open');
+        } else {
+            document.querySelector('body').classList.remove('gst-sidebar-open');
+        }
+    }
+
+    /**
+      * This will toggle the settings popup
+      *
+      * @param {*} [event]
+      * @memberof VatReportComponent
+      */
+    public toggleGstPane(event?): void {
+        this.toggleBodyClass();
+        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
+            this.asideGstSidebarMenuState = "out";
+        }
+    }
+
+    /**
+     * Handles GST Sidebar Navigation
+     *
+     * @memberof VatReportComponent
+     */
+     public handleNavigation(): void {
+        this._route.navigate(['pages', 'gstfiling']);
     }
 }

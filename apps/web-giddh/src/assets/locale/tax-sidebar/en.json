@@ -1,5 +1,6 @@
 {
-    "heading": "GSTR",
+    "gstr_heading": "GSTR",
+    "vat_heading": "VAT",
     "dashboard": "Dashboard",
     "gstr3b_summary": "GSTR 3B Summary",
     "gstr1_label": "GSTR-1",

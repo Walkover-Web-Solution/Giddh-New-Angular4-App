@@ -19,6 +19,7 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { InvoiceService } from '../../services/invoice.service';
 import { GeneralService } from '../../services/general.service';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
     selector: 'app-vat-report-transactions',
@@ -55,9 +56,13 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
+    /* this will check mobile screen size */
+    public isMobileScreen: boolean = false;
 
-    constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private invoiceService: InvoiceService, private generalService: GeneralService) {
-        
+    constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private invoiceService: InvoiceService, private generalService: GeneralService, private breakpointObserver: BreakpointObserver) {
+
     }
 
     /**
@@ -66,6 +71,18 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public ngOnInit(): void {
+        this.toggleGstPane();
+
+        this.breakpointObserver
+        .observe(['(max-width: 767px)'])
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((state: BreakpointState) => {
+            this.isMobileScreen = state.matches;
+            if (!this.isMobileScreen) {
+                this.asideGstSidebarMenuState = 'in';
+            }
+        });
+
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.vatReportTransactionsRequest.from = params['from'];
             this.vatReportTransactionsRequest.to = params['to'];
@@ -98,6 +115,8 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('gst-sidebar-open');
+        this.asideGstSidebarMenuState === 'out'
     }
 
     /**
@@ -281,5 +300,41 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      */
     public navigateToPreviousPage(): void {
         this.router.navigate(['/pages/vat-report'], { state: { taxNumber: this.vatReportTransactionsRequest.taxNumber, from: this.vatReportTransactionsRequest.from, to: this.vatReportTransactionsRequest.to } })
+    }
+
+    /**
+     * Aside pane toggle fixed class
+     *
+     *
+     * @memberof VatReportTransactionsComponent
+     */
+    public toggleBodyClass(): void {
+        if (this.asideGstSidebarMenuState === 'in') {
+            document.querySelector('body').classList.add('gst-sidebar-open');
+        } else {
+            document.querySelector('body').classList.remove('gst-sidebar-open');
+        }
+    }
+
+    /**
+      * This will toggle the settings popup
+      *
+      * @param {*} [event]
+      * @memberof VatReportTransactionsComponent
+      */
+    public toggleGstPane(event?): void {
+        this.toggleBodyClass();
+        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
+            this.asideGstSidebarMenuState = "out";
+        }
+    }
+
+    /**
+     * Handles GST Sidebar Navigation
+     *
+     * @memberof VatReportTransactionsComponent
+     */
+     public handleNavigation(): void {
+        this.router.navigate(['pages', 'gstfiling']);
     }
 }

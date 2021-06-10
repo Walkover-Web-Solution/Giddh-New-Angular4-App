@@ -38,7 +38,7 @@ import { GstRoutingModule } from './gst.routing.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { GstrSidebarModule } from '../shared/gst-sidebar/gst-sidebar.module';
+import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 
 @NgModule({
     declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component,
@@ -70,7 +70,7 @@ import { GstrSidebarModule } from '../shared/gst-sidebar/gst-sidebar.module';
         ConfirmModalModule,
         SharedModule,
         ShSelectModule,
-        GstrSidebarModule
+        TaxSidebarModule
     ],
     providers: [],
     entryComponents: [
