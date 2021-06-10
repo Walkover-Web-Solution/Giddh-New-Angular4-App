@@ -2,9 +2,9 @@
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    .file-type-label,
-    .select-file-lable {
-        min-width: 250px;
+        .file-type-label, 
+        .select-file-label{
+            min-width: 250px;
     }
     label {
         font-size: 14px;
@@ -27,7 +27,7 @@
         justify-content: space-between;
         flex-direction: row;
         .file-type-label,
-        .select-file-lable {
+        .select-file-label {
             min-width: 180px;
         }
         .back-to-import {
