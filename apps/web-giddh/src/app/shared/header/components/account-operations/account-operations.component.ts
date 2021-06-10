@@ -97,12 +97,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public accounts$: Observable<IOption[]>;
     public groupExportLedgerQueryRequest: DaybookQueryRequest = new DaybookQueryRequest();
     public showTaxDropDown: boolean = false;
-
     public showAddAccountForm$: Observable<boolean>;
-    public fetchingGrpUniqueName$: Observable<boolean>;
-    public isGroupNameAvailable$: Observable<boolean>;
-    public fetchingAccUniqueName$: Observable<boolean>;
-    public isAccountNameAvailable$: Observable<boolean>;
     public createAccountInProcess$: Observable<boolean>;
     public createAccountIsSuccess$: Observable<boolean>;
     public updateAccountInProcess$: Observable<boolean>;
@@ -201,12 +196,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountTaxHierarchy), takeUntil(this.destroyed$));
         this.companyTaxes$ = this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$));
         this.showAddAccountForm$ = this.store.pipe(select(state => state.groupwithaccounts.addAccountOpen), takeUntil(this.destroyed$));
-        this.fetchingGrpUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingGrpUniqueName), takeUntil(this.destroyed$));
-        this.isGroupNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isGroupNameAvailable), takeUntil(this.destroyed$));
 
         // account-add component's property
-        this.fetchingAccUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingAccUniqueName), takeUntil(this.destroyed$));
-        this.isAccountNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isAccountNameAvailable), takeUntil(this.destroyed$));
         this.createAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$));
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
         this.updateAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountInProcess), takeUntil(this.destroyed$));

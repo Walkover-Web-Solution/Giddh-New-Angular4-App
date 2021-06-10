@@ -1,7 +1,5 @@
 let COMMON_URL = 'company/:companyUniqueName/';
 export const EBANKS = {
-    GET_TOKEN: COMMON_URL + 'ebanks/token', // GET
-    GET_ALL_ACCOUNTS: COMMON_URL + 'ebanks', // GET
     LINK_ACCOUNT: COMMON_URL + 'yodlee/ebanks/:accountId', // PUT
     UNLINK_ACCOUNT: COMMON_URL + 'yodlee/ebanks/:accountId?accountUniqueName=:accountUniqueName',
     REFRESH_ACCOUNTS: COMMON_URL + 'ebanks/refresh', // GET

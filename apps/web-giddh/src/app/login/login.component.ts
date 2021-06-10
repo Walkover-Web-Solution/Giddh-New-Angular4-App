@@ -8,7 +8,6 @@ import { Configuration } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
-    LinkedInRequestModel,
     SignupwithEmaillModel,
     SignupWithMobile,
     VerifyEmailModel,
@@ -76,9 +75,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-    //Button to hide linkedIn button till functionality is available
-    public showLinkedInButton = false;
     /** Modal config */
     public modalConfig: {
         backdrop: 'static'
@@ -204,13 +200,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                         switch (user.provider) {
                             case "GOOGLE": {
                                 this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
-                                break;
-                            }
-                            case "LINKEDIN": {
-                                let obj: LinkedInRequestModel = new LinkedInRequestModel();
-                                obj.email = user.email;
-                                obj.token = user.token;
-                                this.store.dispatch(this.loginAction.signupWithLinkedin(obj));
                                 break;
                             }
                             default: {
