@@ -148,7 +148,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                     }
                 }, 0);
             }
-            
+
             if(this.activeTab === "taxes") {
                 this.asideSettingMenuState = "out";
                 document.querySelector('body').classList.remove('setting-sidebar-open');
@@ -399,9 +399,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
     /**
      * Handles GST Sidebar Navigation
      *
-     * @memberof ReverseChargeReport
+     * @memberof SettingsComponent
      */
      public handleNavigation(): void {
-        this.router.navigate(['pages', 'gstfiling']);   
+        this.router.navigate(['pages', 'gstfiling']);
     }
 }
