@@ -225,7 +225,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.toggleGstPane();
-        // getALLEwaybillList();
         this.cancelEwaySuccess$.subscribe(p => {
             if (p) {
                 this.store.dispatch(this.invoiceActions.getALLEwaybillList());
@@ -551,11 +550,12 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             this.getAllFilteredInvoice();
         }
     }
+
     /**
      * Aside pane toggle fixed class
      *
      *
-     * @memberof GstComponent
+     * @memberof EWayBillComponent
      */
      public toggleBodyClass(): void {
         if (this.asideGstSidebarMenuState === 'in') {
@@ -564,10 +564,11 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             document.querySelector('body').classList.remove('gst-sidebar-open');
         }
     }
+
     /**
-      * This will toggle the settings popup
+      * This will toggle the  GST popup
       *
-      * @memberof GstComponent
+      * @memberof EWayBillComponent
       */
     public toggleGstPane(): void {
         this.toggleBodyClass();

@@ -219,7 +219,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public activeLocale: string = "";
     /** True if sidebar is expanded */
     public isSidebarExpanded: boolean = false;
-
+    /** This will hold current page url */
     public getPageUrl: boolean = false;
     /**
      * Returns whether the back button in header should be displayed or not
@@ -837,7 +837,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
         this.getPageUrl = this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details")
         if (this.getPageUrl) {
-           return
+           return;
         }
 
         setTimeout(() => {
@@ -1635,13 +1635,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.expandSidebar(true);
             }
 
-            if(document.getElementsByClassName("gst-sidebar-open") && document.getElementsByClassName("gst-sidebar-open").length > 0) {
+            if(document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
                 this.collapseSidebar(true);
             }
         }, 500);
 
     }
 
+    /**
+    * This will expand sidebar
+    *
+    * @memberof HeaderComponent
+    */
     public expandSidebar(forceExpand: boolean = false): void {
         if(forceExpand) {
             this.sideBarStateChange(true);
@@ -1651,8 +1656,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         document.querySelector('.nav-left-bar').classList.remove('width-60');
     }
 
+    /**
+    * This will collpase sidebar
+    *
+    * @memberof HeaderComponent
+    */
     public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
-        if(closeOnHover && this.isSidebarExpanded && document.getElementsByClassName("gst-sidebar-open") && document.getElementsByClassName("gst-sidebar-open").length > 0) {
+        if(closeOnHover && this.isSidebarExpanded && document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
             forceCollapse = true;
         }
 
