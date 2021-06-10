@@ -55,7 +55,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     /**
      * Initializes the component
      *
-     * @memberof GstrSidebarComponent
+     * @memberof TaxSidebarComponent
      */
     public ngOnInit(): void {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -74,7 +74,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     /**
      * This function will destroy the subscribers
      *
-     * @memberof GstrSidebarComponent
+     * @memberof TaxSidebarComponent
      */
      public ngOnDestroy(): void {
         this.destroyed$.next(true);
@@ -85,7 +85,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     * This will close the settings popup if clicked outside and is mobile screen
     *
     * @param {*} [event]
-    * @memberof GstrSidebarComponent
+    * @memberof TaxSidebarComponent
     */
     public closeAsidePaneIfMobile(event?): void {
         if (this.isMobileScreen && event && event.target.className !== "icon-bar") {
@@ -95,7 +95,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     /**
     * This will navigate the user to previous page
     *
-    * @memberof GstrSidebarComponent
+    * @memberof TaxSidebarComponent
     */
     public goToPreviousPage(): void {
         if (this.generalService.getSessionStorage("previousPage") && !this.router.url.includes("/dummy")) {
@@ -109,7 +109,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     * This is navigate menu item
     *
     * @param {string} type Type of GST module
-    * @memberof GstrSidebarComponent
+    * @memberof TaxSidebarComponent
     */
     public navigate(type: string): void {
         this.selectedGstModule = type;

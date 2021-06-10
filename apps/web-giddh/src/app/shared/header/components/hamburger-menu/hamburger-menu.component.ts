@@ -15,6 +15,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 export class HamburgerMenuComponent implements OnInit, OnDestroy {
     /* This inputs the heading which is needed to show */
     @Input() public pageHeading: string = '';
+    /** This will hold sidebar toggle state */
     @Input() public allowSidebarToggle: boolean = true;
 
     /* This will show sidebar is open */

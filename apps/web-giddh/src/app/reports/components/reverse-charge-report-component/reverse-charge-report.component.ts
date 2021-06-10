@@ -232,11 +232,12 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             }
         }, 200);
     }
+
     /**
      * Aside pane toggle fixed class
      *
      *
-     * @memberof GstComponent
+     * @memberof ReverseChargeReport
      */
      public toggleBodyClass(): void {
         if (this.asideGstSidebarMenuState === 'in') {
@@ -245,11 +246,12 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             document.querySelector('body').classList.remove('gst-sidebar-open');
         }
     }
+
     /**
-      * This will toggle the settings popup
+      * This will toggle the GST popup
       *
       * @param {*} [event]
-      * @memberof GstComponent
+      * @memberof ReverseChargeReport
       */
     public toggleGstPane(event?): void {
         this.toggleBodyClass();
@@ -268,7 +270,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out'
+        this.asideGstSidebarMenuState === 'out';
     }
 
     /**
