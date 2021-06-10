@@ -262,7 +262,7 @@
                                 </div>
 
                                 <div class="bg-white clearfix">
-                                    <div class="customer-right  clearfix width-100">
+                                    <div class="customer-right clearfix width-100">
                                         <table class="text-right">
                                             <tr>
                                                 <td *ngIf="showFieldFilter.openingBalance">
@@ -400,15 +400,15 @@
     <div class="abc " *ngIf="accountAsideMenuState === 'in'">
         <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc"
             [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount"
-            class="account-aside-menu-state  transinherit" [@slideInOut]="accountAsideMenuState"
+            class="account-aside-menu-state  transform-inherit" [@slideInOut]="accountAsideMenuState"
             [commonLocaleData]="commonLocaleData" (closeAsideEvent)="toggleAccountAsidePane($event)"
             (getUpdateList)="getUpdatedList($event)">
         </aside-menu-account>
     </div>
 
     <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
-    <div class="abc vendorPayNow" *ngIf="paymentAsideMenuState === 'in'">
-        <payment-aside class="account-aside-menu-state transinherit" [selectedAccForPayment]="selectedAccForPayment"
+    <div class="abc vendor-pay-now" *ngIf="paymentAsideMenuState === 'in'">
+        <payment-aside class="account-aside-menu-state transform-inherit" [selectedAccForPayment]="selectedAccForPayment"
             [localeData]="localeData" [commonLocaleData]="commonLocaleData">
         </payment-aside>
     </div>
