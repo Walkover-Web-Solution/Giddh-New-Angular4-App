@@ -572,6 +572,9 @@
         }
         .company-branch-block {
             padding: 20px 10px !important;
+            &.padding-14{
+                padding: 14px 10px !important;
+            }
             .branch-connection {
                 .outer-span {
                     display: none;
