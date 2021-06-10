@@ -23,11 +23,6 @@
             ],
             [
                 {
-                    "label": "Taxes",
-                    "link": "/pages/settings/taxes",
-                    "icon": "<i class='icon-tax-new'></i>"
-                },
-                {
                     "label": "Integration",
                     "link": "/pages/settings/integration",
                     "icon": "<i class='icon-integration1'></i>"
@@ -97,11 +92,6 @@
                 }
             ],
             [
-                {
-                    "label": "Taxes",
-                    "link": "/pages/settings/taxes",
-                    "icon": "<i class='icon-tax-new'></i>"
-                },
                 {
                     "label": "Integration",
                     "link": "/pages/settings/integration",
