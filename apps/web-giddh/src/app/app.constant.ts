@@ -296,7 +296,7 @@ export const RESTRICTED_BRANCH_ROUTES = [
 ];
 
 export const SUPPORT_TEAM_NUMBERS = [
-    "+918889500411", "+918889500350", "+918889378604"
+    "+918889500350", "+918889378604"
 ];
 
 /** Settings integration tabs */

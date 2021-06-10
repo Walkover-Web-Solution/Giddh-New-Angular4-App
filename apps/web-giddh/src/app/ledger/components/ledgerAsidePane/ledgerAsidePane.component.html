@@ -3,7 +3,7 @@
     <div class="form-header" *ngIf="!hideFirstScreen">
         <h3>{{commonLocaleData?.app_add}}</h3>
     </div>
-    <button id="close" [ngClass]="!hideFirstScreen ? 'close-btn-absolute' : 'defaultBtn' " (click)="closeAsidePane()"><i
+    <button id="close" [ngClass]="!hideFirstScreen ? 'close-btn-absolute' : 'default-button' " (click)="closeAsidePane()"><i
             class="icon-cross"></i></button>
     <button id="back" (click)="backButtonPressed()" *ngIf="hideFirstScreen">{{commonLocaleData?.app_back}}</button>
     <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" *ngIf="!hideFirstScreen" vr-item>

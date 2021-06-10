@@ -227,7 +227,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Stores the current company */
     public activeCompany: any;
     /** Border configuration for branch dropdown */
-    public branchDropdownBorderConfiguration: BorderConfiguration = { style: 'border-radius: 30px !important' };
+    public branchDropdownBorderConfiguration: BorderConfiguration = { style: 'border-radius: 5px !important' };
     /** True if current organization type is company */
     public showBranchSwitcher: boolean;
     /** Stores the current organization type */
@@ -2014,28 +2014,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private handleTaxableAmountVisibility(transaction: TransactionVM): void {
         this.shouldShowRcmTaxableAmount = false;
         this.shouldShowItcSection = false;
-        let currentCompany;
-        this.store.pipe(select(appState => appState.session), take(1)).subscribe((sessionData) => {
-            currentCompany = sessionData.companies.find((company) => company.uniqueName === sessionData.companyUniqueName).country;
-        });
         if (!this.lc || !this.lc.activeAccount || !this.lc.activeAccount.parentGroups || this.lc.activeAccount.parentGroups.length < 2) {
             return;
         }
         if (!transaction.selectedAccount || !transaction.selectedAccount.parentGroups || transaction.selectedAccount.parentGroups.length < 2) {
             return;
         }
-        const currentLedgerSecondParent = this.lc.activeAccount.parentGroups[1].uniqueName;
-        const selectedAccountSecondParent = transaction.selectedAccount.parentGroups[1].uniqueName;
+        const currentLedgerSecondParent: any = this.lc.activeAccount.parentGroups[1].uniqueName ?? this.lc.activeAccount.parentGroups[1];
+        const selectedAccountSecondParent: any = transaction.selectedAccount.parentGroups[1].uniqueName ?? transaction.selectedAccount.parentGroups[1];
         this.checkTouristSchemeApplicable(currentLedgerSecondParent, selectedAccountSecondParent);
         if (currentLedgerSecondParent === 'reversecharge' && transaction.type === 'CREDIT') {
             // Current ledger is of reverse charge and user has entered the transaction on the right side (CREDIT) of the ledger
             if (selectedAccountSecondParent === 'dutiestaxes') {
                 /* Particular account belongs to the Duties and taxes then check the country based on which
                     respective sections will be displayed */
-                if (currentCompany === 'United Arab Emirates') {
+                if (this.activeCompany?.country === 'United Arab Emirates') {
                     this.shouldShowRcmTaxableAmount = true;
                 }
-                if (currentCompany === 'India') {
+                if (this.activeCompany?.country === 'India') {
                     this.shouldShowItcSection = true;
                 }
             }
@@ -2044,10 +2040,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (selectedAccountSecondParent === 'reversecharge') {
                 /* Particular account belongs to the Reverse charge then check the country based on which
                     respective sections will be displayed */
-                if (currentCompany === 'United Arab Emirates') {
+                if (this.activeCompany?.country === 'United Arab Emirates') {
                     this.shouldShowRcmTaxableAmount = true;
                 }
-                if (currentCompany === 'India') {
+                if (this.activeCompany?.country === 'India') {
                     this.shouldShowItcSection = true;
                 }
             }

@@ -48,6 +48,7 @@ div {
 
 input[type="text"] {
     outline: none;
+    border-radius: 5px !important;
 }
 
 [hidden] {
@@ -84,6 +85,7 @@ i.close.icon.clear:hover::after {
     background-color: $whisper;
     color: $bay-of-many;
     cursor: not-allowed;
+    border-radius: 5px;
 }
 
 .chip {
@@ -110,7 +112,7 @@ i.close.icon.clear:hover::after {
 .chip-close-btn:hover {
     font-weight: 700;
     opacity: 0.5;
-    color: black;
+    color: $black;
 }
 
 .header .form-control[readonly] {

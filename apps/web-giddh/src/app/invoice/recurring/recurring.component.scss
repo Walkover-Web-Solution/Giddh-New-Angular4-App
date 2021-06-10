@@ -13,7 +13,7 @@
     align-items: center;
     font-size: 18px;
     border: 1px solid $gainsboro;
-    border-radius: 2px;
+    border-radius: 5px;
     color: $gray;
     background: $white;
     align-items: center;
@@ -62,10 +62,6 @@
 
 .list-item {
     border-bottom: 1px solid $gainsboro !important;
-}
-
-.d-flex {
-    display: flex;
 }
 
 .active-text-color {
