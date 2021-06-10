@@ -70,13 +70,6 @@
                                                 (ngModelChange)="validatePwd($event)" formControlName="password"
                                                 name="password" placeholder="Password" [minlength]="8" [maxlength]="20"
                                                 autocomplete="false" />
-                                            <!-- <div class="hint" [hidden]="!showPwdHint">
-                                                <ul>
-                                                    <li>Provide minimum 8 and maximum 20 characters.</li>
-                                                    <li>1 number and 1 special character (@$!%*?&_).</li>
-                                                    
-                                                </ul>
-                                            </div> -->
                                             <button class="btn btn-success btn-lg btn-block mr-t1" type="submit"
                                                 [disabled]="!signUpWithPasswdForm.controls['email'].valid || !signUpWithPasswdForm.controls['password'].value">
                                                 Signup
