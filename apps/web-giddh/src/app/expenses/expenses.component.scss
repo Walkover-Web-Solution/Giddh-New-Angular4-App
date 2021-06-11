@@ -12,10 +12,10 @@
 }
 .main-edit-expense {
     display: flex;
-    padding-top: 55px;
 }
 .input-calender {
     width: 225px;
+    top: 55px;
 }
 .input-calender > span {
     background: none;
@@ -49,5 +49,8 @@
     }
     .expense-head{
         padding-top: 20px;
+    }
+    .input-calender {
+        top: 15px;
     }
 }
