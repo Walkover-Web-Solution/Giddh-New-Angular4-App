@@ -64,9 +64,7 @@
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedRate"
-                                        [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
-                                        [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code"
-                                        [ratePrecision]="true">
+                                        [currencySymbol]="false" [currencyCode]="false" [ratePrecision]="true">
                                     </amount-field>
                                 </span>
                             </p>
@@ -95,8 +93,7 @@
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedAmount"
-                                        [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
-                                        [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
+                                        [currencySymbol]="false" [currencyCode]="false">
                                     </amount-field>
                                 </span>
                             </p>
@@ -121,8 +118,7 @@
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedDiscount"
-                                        [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
-                                        [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
+                                        [currencySymbol]="false" [currencyCode]="false">
                                     </amount-field>
 
 
@@ -165,8 +161,7 @@
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedTax"
-                                        [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
-                                        [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
+                                        [currencySymbol]="false" [currencyCode]="false">
                                     </amount-field>
                                 </span>
                             </p>
@@ -190,8 +185,7 @@
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="currentTxn?.convertedTotal"
-                                        [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
-                                        [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
+                                        [currencySymbol]="false" [currencyCode]="false">
                                     </amount-field>
                                 </span>
 
