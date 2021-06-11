@@ -167,5 +167,7 @@
     "exchange_gain_loss_label": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />एक्सचेंज [PROFIT_TYPE]: ",
     "exchange_gain": "मिळवणे",
     "exchange_loss": "तोटा",
-    "works_for_single_entry": "केवळ एकल प्रवेशासाठी कार्य करते."
+    "works_for_single_entry": "केवळ एकल प्रवेशासाठी कार्य करते.",
+    "uploaded_purchase_bill": "बिल अपलोड केले",
+    "auto_generated_purchase_bill": "गिद्ध/ऑटो वयुत्पन्न बिल"
 }
