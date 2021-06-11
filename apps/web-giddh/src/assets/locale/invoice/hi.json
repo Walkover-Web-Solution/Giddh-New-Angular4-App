@@ -142,6 +142,15 @@
 		"na": "इस लेनदेन के लिए ई-चालान निर्माण लागू नहीं है।",
         "giddh_invoice_not_cancelled": "ई-चालान लेनदेन आईआरपी में रद्द कर दिया गया है लेकिन गिद्ध में नहीं। इससे जुड़ा IRN अब मान्य नहीं है।"
     },
+    "e_invoice_statuses_label": {
+        "yet_to_be_pushed": "Yet-to-be Pushed",
+        "pushed": "Pushed",
+        "push_initiated": "Push Initiated",
+        "cancelled": "Cancelled",
+        "mark_as_cancelled": "Marked as Cancelled",
+        "failed": "Failed",
+        "na": "NA"
+    },
     "cancel_e_invoice": "रद्द करें ई-चालान",
     "cancel_reason": "कारण रद्द करें",
     "cancel_remarks": "टिप्पणी रद्द करें",
