@@ -34,6 +34,7 @@
     margin-right: 0;
     margin: 0 5px;
     border: 1px solid $gainsboro;
+    border-radius: 5px;
     height: 34px;
     width: 34px;
     background-color: $white;
@@ -48,4 +49,8 @@
 }
 .icon-pointer {
     cursor: pointer;
+}
+
+.rejected-tabs{
+    padding-top: 55px;
 }
