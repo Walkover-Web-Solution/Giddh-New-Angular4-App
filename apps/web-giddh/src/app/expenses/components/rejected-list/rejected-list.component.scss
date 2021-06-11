@@ -53,3 +53,9 @@
 .rejected-tabs{
     padding-top: 55px;
 }
+
+@media only screen and (max-width:767px){
+    .rejected-tabs {
+        padding-top: 15px;
+    }
+}
