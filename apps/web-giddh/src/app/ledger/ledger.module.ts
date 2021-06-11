@@ -7,7 +7,7 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { QuickAccountModule } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination';
@@ -24,7 +24,6 @@ import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { NumberToWordsModule } from '../shared/helpers/pipes/numberToWords/numberToWords.module';
-import { SharedModule } from '../shared/shared.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
@@ -44,6 +43,10 @@ import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryP
 import { LedgerComponent } from './ledger.component';
 import { LedgerRoutingModule } from './ledger.routing.module';
 import { ImportStatementComponent } from './components/import-statement/import-statement.component';
+import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { AccountAddNewDetailsModule } from '../shared/header/components/account-add-new-details/account-add-new-details.module';
+import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 
 @NgModule({
     declarations: [
@@ -92,7 +95,6 @@ import { ImportStatementComponent } from './components/import-statement/import-s
         ClickOutsideModule,
         QuickAccountModule.forRoot(),
         InventoryModule,
-        SharedModule,
         CurrencyModule,
         SelectModule.forRoot(),
         SalesModule,
@@ -100,7 +102,12 @@ import { ImportStatementComponent } from './components/import-statement/import-s
         NgxMaskModule.forRoot(),
         SettingsServiceModule,
         AdvanceReceiptAdjustmentModule,
-        NgxDaterangepickerMd.forRoot()
+        NgxDaterangepickerMd.forRoot(),
+        AmountFieldComponentModule,
+        TranslateDirectiveModule,
+        AccountAddNewDetailsModule,
+        KeyboardShortutModule,
+        BsDatepickerModule
     ],
 })
 export class LedgerModule {

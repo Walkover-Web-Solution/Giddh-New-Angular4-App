@@ -33,7 +33,6 @@ import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-t
 import { HeaderComponent } from './header';
 import { PrimarySidebarComponent } from './primary-sidebar/primary-sidebar.component';
 import { AccountOperationsComponent, CompanyAddNewUiComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
-import { AccountAddNewDetailsComponent } from './header/components/account-add-new-details/account-add-new-details.component';
 import { AccountUpdateNewDetailsComponent } from './header/components/account-update-new-details/account-update-new-details.component';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
 import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
@@ -66,13 +65,14 @@ import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-
 import { HamburgerMenuComponent } from './header/components/hamburger-menu/hamburger-menu.component';
 import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
 import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.component';
-import { AmountFieldComponent } from './amount-field/amount-field.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { ScheduleNowComponent } from './schedule-now/schedule-now.component';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import localeEn from '@angular/common/locales/en-GB';
 import localeHi from '@angular/common/locales/hi';
 import localeMr from '@angular/common/locales/mr';
+import { AmountFieldComponentModule } from './amount-field/amount-field.module';
+import { AccountAddNewDetailsModule } from './header/components/account-add-new-details/account-add-new-details.module';
 registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
@@ -141,7 +141,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         CheckPermissionDirective,
         ExportGroupLedgerComponent,
         AsideMenuOtherTaxes,
-        AccountAddNewDetailsComponent,
         AccountUpdateNewDetailsComponent,
         WelcomeComponent,
         ConfirmationModalComponent,
@@ -156,7 +155,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         HamburgerMenuComponent,
         GiddhDaterangepickerComponent,
         GiddhPageLoaderComponent,
-        AmountFieldComponent,
         PrimarySidebarComponent,
         ScheduleNowComponent
     ],
@@ -198,7 +196,9 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatNativeDateModule,
         MatInputModule,
         CurrencyModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        AmountFieldComponentModule,
+        AccountAddNewDetailsModule
     ],
     exports: [
         CommonModule,
@@ -230,7 +230,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         CKEditorModule,
         AsideMenuOtherTaxes,
         MfReportComponent,
-        AccountAddNewDetailsComponent,
         AccountUpdateNewDetailsComponent,
         WelcomeComponent,
         TabsModule,
@@ -249,18 +248,18 @@ export class PickDateAdapter extends NativeDateAdapter {
         PurchaseSendEmailModalComponent,
         HamburgerMenuComponent,
         GiddhPageLoaderComponent,
-        AmountFieldComponent,
         CurrencyModule,
         PrimarySidebarComponent,
         ScheduleNowComponent,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        AmountFieldComponentModule,
+        AccountAddNewDetailsModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
         CompanyAddNewUiComponent,
         AccountOperationsComponent,
         GroupsAccountSidebarComponent,
-        AccountAddNewDetailsComponent,
         OnBoardingComponent,
         AccountUpdateNewDetailsComponent
     ],
