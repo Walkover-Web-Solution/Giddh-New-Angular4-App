@@ -9,9 +9,11 @@ import {
     OnDestroy,
     OnInit,
     Output,
+    QueryList,
     SimpleChanges,
     TemplateRef,
     ViewChild,
+    ViewChildren,
 } from '@angular/core';
 import { NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { createSelector, select, Store } from '@ngrx/store';
@@ -130,6 +132,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Stores the instance of company detail dropdown */
     @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
+    /** Stores the dropdown instances as querylist */
+    @ViewChildren('dropdown') itemDropdown: QueryList<BsDropdownDirective>;
     /** Search company name */
     public searchCmp: string = '';
     /** Holds if company refresh is in progress */
@@ -357,6 +361,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                         return true;
                     }
                 })));
+                this.openActiveItem();
+
                 this.changeDetectorRef.detectChanges();
             }
 
@@ -1011,6 +1017,33 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public translationComplete(event: any): void {
         if (event) {
             this.allItems = this.generalService.getVisibleMenuItems(this.apiMenuItems, this.localeData?.items);
+        }
+    }
+
+    /**
+     * Opens the active item and closes the rest
+     *
+     * @param {*} [itemIndex] Current item index
+     * @memberof PrimarySidebarComponent
+     */
+    public openActiveItem(itemIndex?: any): void {
+        if (itemIndex !== undefined) {
+            this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
+                if (index !== itemIndex) {
+                    dropdown.hide();
+                }
+            });
+        } else {
+            if (this.isOpen) {
+                const activeItemIndex = this.allItems.findIndex(item => item.isActive);
+                this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
+                    if (index === activeItemIndex) {
+                        dropdown.show();
+                    } else {
+                        dropdown.hide();
+                    }
+                });
+            }
         }
     }
 }
