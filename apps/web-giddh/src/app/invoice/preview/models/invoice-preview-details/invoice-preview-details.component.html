@@ -353,8 +353,8 @@
                             </div>
                         </div>
 
-                        <div class="pd-l15">
-                            <h5 class="pd-b05 font-16"><strong>Uploaded Bill</strong></h5>
+                        <div *ngIf="selectedItem?.voucherType === 'purchase' && !shouldShowUploadAttachment" class="pd-l15">
+                            <h5 class="pd-b05 font-16"><strong>{{localeData?.uploaded_purchase_bill}}</strong></h5>
                         </div>
                     </div>
 
@@ -379,7 +379,7 @@
                                 class="img-expand-collapse" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
                                 <img class="image-preview img-expand w-100" [src]="imagePreviewSource" />
                             </div>
-                            <div *ngIf="shouldShowUploadAttachment && !isCompany"
+                            <div *ngIf="shouldShowUploadAttachment && !isCompany && !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)"
                                 class="upload-excel max-width-500 center-block box dashed-border">
                                 <input type="file" id="csv-upload-input" [placeholder]="localeData?.upload_excel_csv"
                                     droppable="true" class="form-control" [options]="fileUploadOptions" ngFileSelect
@@ -403,12 +403,13 @@
                             <div *ngIf="selectedItem?.voucherType === 'purchase' && attachedPdfFileUrl && !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)"
                                 #attachedDocumentPreview class="pdf-expand-collapse pdf-preview mt-0" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
                                 <iframe #pdfContainer width="100%" height="100%" [src]="attachedPdfFileUrl"></iframe>
-                            </div>                               
+                            </div>
                             <div #attachedDocumentPreview class="pdf-preview">
-                                <h5 class="text-left pd-l15 font-16 pd-t1 pd-b1"><strong>Giddh/Auto Generated Bill</strong></h5>
+                                <h5 *ngIf="selectedItem?.voucherType === 'purchase'" class="text-left pd-l15 font-16 pd-t1 pd-b1"><strong>{{localeData?.auto_generated_purchase_bill}}</strong></h5>
                                 <iframe #pdfContainer
                                     *ngIf="sanitizedPdfFileUrl && !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)"
                                     width="100%" height="100%" [src]="sanitizedPdfFileUrl"></iframe>
+                                <giddh-page-loader *ngIf="!sanitizedPdfFileUrl && selectedItem?.voucherType === 'purchase'" [cssClass]="'mb-0 mt-0'"></giddh-page-loader>
                             </div>
 
                             <div class="expand-file"
