@@ -614,7 +614,7 @@
                                 </ng-container>
                             </td>
                         </tr>
-                        <tr *ngIf="customTemplate.sections['table'].data['item'].display">
+                        <tr *ngIf="customTemplate.sections['table'].data['item'].display && customTemplate.sections['table'].data['showDescriptionInRows']">
                             <td class="pb-3" colspan="2">
                                 <label>
                                     <input type="checkbox" name="showDescriptionInRows"
