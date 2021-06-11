@@ -796,6 +796,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 delete data?.sections?.header?.data?.showCompanyAddress;
                 delete data?.sections?.header?.data?.showQrCode;
                 delete data?.sections?.header?.data?.showIrnNumber;
+                delete data?.sections?.table?.data?.showDescriptionInRows;
                 delete data?.sections?.footer?.data?.showNotesAtLastPage;
                 delete data?.sections?.footer?.data?.showMessage2;
                 delete data?.sections?.footer?.data?.textUnderSlogan;
