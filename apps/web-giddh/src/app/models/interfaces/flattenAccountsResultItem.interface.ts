@@ -10,7 +10,3 @@ export interface IFlattenAccountsResultItem extends IAccountsInfo, IHelpersForSe
     currencySymbol?: string;
     isDummy?: boolean; // added for when we need to add dummy account and want to identify that this is dummy account
 }
-
-export interface IFlattenAccountItem extends IFlattenAccountsResultItem {
-    stock: any;
-}
