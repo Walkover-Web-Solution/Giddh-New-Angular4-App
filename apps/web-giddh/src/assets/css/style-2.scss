@@ -8419,7 +8419,37 @@ body.update-scroll-hidden {
         }
     }
 }
-
+.company-branch-dorpdown{
+    .custom-tabs{
+        ul{
+            &.nav.nav-tabs{
+                position: inherit !important;
+                background-color: transparent;
+                padding-left: 0 !important;
+                margin: 0 -20px;
+                flex-wrap: nowrap;
+                width: initial;
+                display: flex;
+                justify-content: space-between;
+                li{
+                    &.active{
+                        a{
+                            color: #1a237e !important;
+                            border-bottom: 2px solid #1a237e !important;
+                        }
+                    }
+                    padding-right: 0;
+                    a{
+                        padding: 0 20px !important;
+                        min-width: 110px;
+                        font-family: 'opensans-regular';
+                        color: $grey-chateau !important;
+                    }
+                }
+            }
+        }
+    }
+}
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
