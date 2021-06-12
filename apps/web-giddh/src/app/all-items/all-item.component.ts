@@ -224,7 +224,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
         if (event) {
             this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(items => {
                 if (items) {
-                    const allItems = this.generalService.getVisibleMenuItems(items, this.localeData?.items);
+                    const allItems = this.generalService.getVisibleMenuItems("all-items", items, this.localeData?.items);
                     this.allItems$ = of(allItems);
                     this.filteredItems$ = of(allItems);
                     this.changeDetectorRef.detectChanges();
