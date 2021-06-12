@@ -10,7 +10,6 @@ import { Location } from '@angular/common';
 import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { IStockItemDetail } from '../../models/interfaces/stocksItem.interface';
-import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -23,6 +22,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SearchService } from '../../services/search.service';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { GeneralService } from '../../services/general.service';
+import { cloneDeep, forEach } from '../../lodash-optimized';
 
 @Component({
     templateUrl: './mf.edit.component.html',
@@ -140,7 +140,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
         this.store.pipe(select(manufacturingStore => manufacturingStore.manufacturing), takeUntil(this.destroyed$)).subscribe((res: any) => {
             if (res.stockToUpdate) {
                 this.isUpdateCase = true;
-                let manufacturingObj = _.cloneDeep(res.reportData.results.find((stock) => stock.uniqueName === res.stockToUpdate));
+                let manufacturingObj = cloneDeep(res.reportData.results.find((stock) => stock.uniqueName === res.stockToUpdate));
                 if (manufacturingObj) {
                     this.selectedProductName = `${manufacturingObj.stockName} (${manufacturingObj.stockUniqueName})`;
                     manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
@@ -177,13 +177,13 @@ export class MfEditComponent implements OnInit, OnDestroy {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         if (this.isUpdateCase) {
-            let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
+            let manufacturingDetailsObj = cloneDeep(this.manufacturingDetails);
             this.store.dispatch(this.inventoryAction.GetStockWithUniqueName(manufacturingDetailsObj.stockUniqueName));
         }
         // dispatch stockList request
         this.store.pipe(select(p => p.inventory), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (this.isUpdateCase && o.activeStock && o.activeStock.manufacturingDetails) {
-                let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
+                let manufacturingDetailsObj = cloneDeep(this.manufacturingDetails);
                 manufacturingDetailsObj.multipleOf = o.activeStock.manufacturingDetails.manufacturingMultipleOf;
                 this.manufacturingDetails = manufacturingDetailsObj;
             }
@@ -192,8 +192,8 @@ export class MfEditComponent implements OnInit, OnDestroy {
         // get manufacturing stocks
         this.stockListDropDown$ = this.store.pipe(select(
             createSelector([(state: AppState) => state.inventory.manufacturingStockListForCreateMF], (manufacturingStockListForCreateMF) => {
-                let data = _.cloneDeep(manufacturingStockListForCreateMF);
-                let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
+                let data = cloneDeep(manufacturingStockListForCreateMF);
+                let manufacturingDetailsObj = cloneDeep(this.manufacturingDetails);
                 if (data) {
                     if (data.results) {
                         let units = data.results;
@@ -212,9 +212,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
         // get All stocks
         this.allStocksDropDown$ = this.store.pipe(select(
             createSelector([(state: AppState) => state.inventory.stocksList], (allStocks) => {
-                let data = _.cloneDeep(allStocks);
+                let data = cloneDeep(allStocks);
 
-                let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
+                let manufacturingDetailsObj = cloneDeep(this.manufacturingDetails);
                 if (data) {
                     if (data.results) {
                         let units = data.results;
@@ -231,13 +231,13 @@ export class MfEditComponent implements OnInit, OnDestroy {
             })), takeUntil(this.destroyed$));
         // get stock with rate details
         this.store.pipe(select(manufacturingStore => manufacturingStore.manufacturing), takeUntil(this.destroyed$)).subscribe((res: any) => {
-            let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
+            let manufacturingDetailsObj = cloneDeep(this.manufacturingDetails);
             if (!this.isUpdateCase) {
                 if (res.stockWithRate && res.stockWithRate.manufacturingDetails) {
                     this.initialQuantityObj = []; // Reset initaila quantity of selected stock
                     // In create only
-                    let manufacturingDetailsObjData = _.cloneDeep(res.stockWithRate.manufacturingDetails);
-                    manufacturingDetailsObj.linkedStocks = _.cloneDeep(res.stockWithRate.manufacturingDetails.linkedStocks);
+                    let manufacturingDetailsObjData = cloneDeep(res.stockWithRate.manufacturingDetails);
+                    manufacturingDetailsObj.linkedStocks = cloneDeep(res.stockWithRate.manufacturingDetails.linkedStocks);
                     manufacturingDetailsObj.multipleOf = (manufacturingDetailsObjData.manufacturingQuantity / manufacturingDetailsObjData.manufacturingMultipleOf);
                     manufacturingDetailsObj.manufacturingQuantity = manufacturingDetailsObjData.manufacturingQuantity;
                     manufacturingDetailsObj.manufacturingMultipleOf = manufacturingDetailsObjData.manufacturingMultipleOf;
@@ -261,9 +261,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
         this.selectedProductName = data.label;
         this.manufacturingDetails.manufacturingMultipleOf = 1;
         if (data.value) {
-            let selectedValue = _.cloneDeep(data.value);
+            let selectedValue = cloneDeep(data.value);
             this.selectedProduct = selectedValue;
-            let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
+            let manufacturingObj = cloneDeep(this.manufacturingDetails);
             manufacturingObj.uniqueName = selectedValue;
             this.manufacturingDetails = manufacturingObj;
             this.store.dispatch(this.manufacturingActions.GetStockWithRate(manufacturingObj.stockUniqueName));
@@ -295,7 +295,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
                 val.stockUnitCode = data.stockUnitCode;
             }
 
-            let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
+            let manufacturingObj = cloneDeep(this.manufacturingDetails);
 
             if (manufacturingObj.linkedStocks) {
                 manufacturingObj.linkedStocks.push(val);
@@ -332,7 +332,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
                     }
                 ]
             };
-            let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
+            let manufacturingObj = cloneDeep(this.manufacturingDetails);
 
             if (manufacturingObj.otherExpenses) {
                 manufacturingObj.otherExpenses.push(objToPush);
@@ -357,7 +357,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
     }
 
     public createEntry() {
-        let dataToSave = _.cloneDeep(this.manufacturingDetails);
+        let dataToSave = cloneDeep(this.manufacturingDetails);
         dataToSave.stockUniqueName = this.selectedProduct;
         if (dataToSave.date && typeof dataToSave.date === 'object') {
             dataToSave.date = String(moment(dataToSave.date).format(GIDDH_DATE_FORMAT));
@@ -371,7 +371,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
     }
 
     public updateEntry() {
-        let dataToSave = _.cloneDeep(this.manufacturingDetails);
+        let dataToSave = cloneDeep(this.manufacturingDetails);
         if (dataToSave.date && typeof dataToSave.date === 'object') {
             dataToSave.date = String(moment(dataToSave.date).format(GIDDH_DATE_FORMAT));
         }
@@ -385,19 +385,19 @@ export class MfEditComponent implements OnInit, OnDestroy {
 
     public getTotal(from, field) {
         let total: number = 0;
-        let manufacturingDetails = _.cloneDeep(this.manufacturingDetails);
+        let manufacturingDetails = cloneDeep(this.manufacturingDetails);
         if (from === 'linkedStocks' && this.manufacturingDetails.linkedStocks) {
-            _.forEach(manufacturingDetails.linkedStocks, (item) => total = total + Number(item[field]));
+            forEach(manufacturingDetails.linkedStocks, (item) => total = total + Number(item[field]));
         }
         if (from === 'otherExpenses' && this.manufacturingDetails.otherExpenses) {
-            _.forEach(manufacturingDetails.otherExpenses, (item) => total = total + Number(item.transactions[0][field]));
+            forEach(manufacturingDetails.otherExpenses, (item) => total = total + Number(item.transactions[0][field]));
         }
 
         return total;
     }
 
     public getCostPerProduct() {
-        let manufacturingDetails = _.cloneDeep(this.manufacturingDetails);
+        let manufacturingDetails = cloneDeep(this.manufacturingDetails);
         let quantity;
         if (manufacturingDetails.multipleOf) {
             quantity = manufacturingDetails.manufacturingMultipleOf * manufacturingDetails.multipleOf;
@@ -415,7 +415,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
 
     public closeConfirmationPopup(userResponse: boolean) {
         if (userResponse) {
-            let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
+            let manufacturingObj = cloneDeep(this.manufacturingDetails);
             this.store.dispatch(this.manufacturingActions.DeleteMfItem({
                 stockUniqueName: manufacturingObj.stockUniqueName,
                 manufacturingUniqueName: manufacturingObj.uniqueName
@@ -435,7 +435,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
 
     public onQuantityChange(val: any) {
         let value = val;
-        let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
+        let manufacturingObj = cloneDeep(this.manufacturingDetails);
 
         if (!this.initialQuantityObj.length) {
             this.initialQuantityObj = [];
@@ -483,7 +483,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
 
                     this._inventoryService.GetRateForStoke(selectedItem, data).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                         if (response.status === 'success') {
-                            this.linkedStocks.rate = _.cloneDeep(response.body.rate);
+                            this.linkedStocks.rate = cloneDeep(response.body.rate);
                             setTimeout(() => {
                                 this.addConsumption(this.linkedStocks);
                             }, 10);

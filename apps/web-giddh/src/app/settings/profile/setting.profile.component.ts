@@ -5,7 +5,6 @@ import { select, Store } from '@ngrx/store';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
 import { Organization, States, StatesRequest } from '../../models/api-models/Company';
 import { LocationService } from '../../services/location.service';
@@ -24,6 +23,7 @@ import { CompanyService } from '../../services/companyService.service';
 import { GeneralService } from '../../services/general.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocaleService } from '../../services/locale.service';
+import { cloneDeep, uniqBy, without } from '../../lodash-optimized';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -290,7 +290,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(p => p.settings.inventory), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
-                let inventorySetting = _.cloneDeep(o);
+                let inventorySetting = cloneDeep(o);
                 this.CompanySettingsObj = inventorySetting;
             }
         });
@@ -334,7 +334,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public addGst() {
-        let addresses = _.cloneDeep(this.companyProfileObj.addresses);
+        let addresses = cloneDeep(this.companyProfileObj.addresses);
         let gstNumber;
         let isValid;
         if (addresses && addresses.length) {
@@ -356,7 +356,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
 
         if (isValid) {
-            let companyDetails = _.cloneDeep(this.companyProfileObj);
+            let companyDetails = cloneDeep(this.companyProfileObj);
             let newGstObj = {
                 taxNumber: '',
                 stateCode: '',
@@ -373,7 +373,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public stateSelected(v, indx) {
-        let profileObj = _.cloneDeep(this.companyProfileObj);
+        let profileObj = cloneDeep(this.companyProfileObj);
         let selectedStateCode = v.value;
         let selectedState = this.states.find((state) => state.value === selectedStateCode);
         if (selectedState && selectedState.value) {
@@ -384,20 +384,19 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public updateProfile(data) {
-
-        let dataToSave = _.cloneDeep(data);
+        let dataToSave = cloneDeep(data);
         if (dataToSave.addresses.length > 0) {
             for (let entry of dataToSave.addresses) {
                 if (!entry.taxNumber && !entry.stateCode && !entry.address) {
-                    dataToSave.addresses = _.without(dataToSave.addresses, entry);
+                    dataToSave.addresses = without(dataToSave.addresses, entry);
                 }
             }
         }
         delete dataToSave.financialYears;
         delete dataToSave.activeFinancialYear;
-        this.companyProfileObj = _.cloneDeep(dataToSave);
+        this.companyProfileObj = cloneDeep(dataToSave);
         if (this.gstDetailsBackup) {
-            dataToSave.addresses = _.cloneDeep(this.gstDetailsBackup);
+            dataToSave.addresses = cloneDeep(this.gstDetailsBackup);
         }
 
         this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
@@ -405,13 +404,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public updateInventorySetting(data) {
-        let dataToSaveNew = _.cloneDeep(this.CompanySettingsObj);
+        let dataToSaveNew = cloneDeep(this.CompanySettingsObj);
         dataToSaveNew.companyInventorySettings = { manageInventory: data };
         this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
     }
 
     public removeGstEntry(indx) {
-        let profileObj = _.cloneDeep(this.companyProfileObj);
+        let profileObj = cloneDeep(this.companyProfileObj);
         if (indx > -1) {
             profileObj.addresses.splice(indx, 1);
             if (this.gstDetailsBackup) {
@@ -487,7 +486,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
                 let s = state.find(st => st.value === stateCode);
-                _.uniqBy(s, 'value');
+                uniqBy(s, 'value');
                 if (s) {
                     this.companyProfileObj.addresses[index].stateCode = s.value;
                 } else {
@@ -546,7 +545,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             this.showAllGST = !this.showAllGST;
             if (this.gstDetailsBackup) {
                 if (this.showAllGST) {
-                    this.companyProfileObj.addresses = _.cloneDeep(this.gstDetailsBackup);
+                    this.companyProfileObj.addresses = cloneDeep(this.gstDetailsBackup);
                 } else {
                     this.companyProfileObj.addresses = this.companyProfileObj.addresses.slice(0, 3);
                 }
@@ -559,7 +558,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public checkCountry(event) {
         if (event) {
-            let country: any = _.cloneDeep(this.companyProfileObj.country || '');
+            let country: any = cloneDeep(this.companyProfileObj.country || '');
             country = country.toLocaleLowerCase();
             if (event.value === 'IN') {
                 this.countryIsIndia = true;
@@ -1049,12 +1048,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     private handleCompanyProfileResponse(response: any): void {
         if (response.profileRequest || 1 === 1) {
-            let profileObj = _.cloneDeep(response);
+            let profileObj = cloneDeep(response);
             if (profileObj.contactNo && profileObj.contactNo.indexOf('-') > -1) {
                 profileObj.contactNo = profileObj.contactNo.substring(profileObj.contactNo.indexOf('-') + 1);
             }
             if (profileObj.addresses && profileObj.addresses.length > 3) {
-                this.gstDetailsBackup = _.cloneDeep(profileObj.addresses);
+                this.gstDetailsBackup = cloneDeep(profileObj.addresses);
                 this.showAllGST = false;
                 profileObj.addresses = profileObj.addresses.slice(0, 3);
             }

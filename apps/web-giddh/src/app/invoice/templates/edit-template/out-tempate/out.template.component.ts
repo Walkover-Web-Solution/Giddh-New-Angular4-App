@@ -4,11 +4,9 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { ReplaySubject, Observable } from 'rxjs';
-import * as _ from '../../../../lodash-optimized';
 import { CustomTemplateResponse } from '../../../../models/api-models/Invoice';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../services/invoice.ui.data.service';
-
-// import { IsDivVisible, IsFieldVisible } from '../filters-container/content-filters/content.filters.component';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'invoice-template',
@@ -74,19 +72,19 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
             this.voucherType = a.voucherType;
         });
         this._invoiceUiDataService.templateVoucherType.pipe(takeUntil(this.destroyed$)).subscribe((voucherType: string) => {
-            this.voucherType = _.cloneDeep(voucherType);
+            this.voucherType = cloneDeep(voucherType);
         });
 
         this._invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
-            this.fieldsAndVisibility = _.cloneDeep(obj);
+            this.fieldsAndVisibility = cloneDeep(obj);
         });
 
         this._invoiceUiDataService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
-            this.logoSrc = _.cloneDeep(path);
+            this.logoSrc = cloneDeep(path);
         });
 
         this._invoiceUiDataService.isLogoVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
-            this.showLogo = _.cloneDeep(yesOrNo);
+            this.showLogo = cloneDeep(yesOrNo);
         });
 
         this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
@@ -112,7 +110,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
                 this.showImageSignature = false;
                 this.imageSignatureSrc = '';
             }
-            this.inputTemplate = _.cloneDeep(template);
+            this.inputTemplate = cloneDeep(template);
             if (this.inputTemplate.fontSize) {
                 this.inputTemplate.fontSmall = this.inputTemplate.fontSize - 4;
                 this.inputTemplate.fontDefault = this.inputTemplate.fontSize;
@@ -122,7 +120,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
         });
 
         this._invoiceUiDataService.isCompanyNameVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
-            this.showCompanyName = _.cloneDeep(yesOrNo);
+            this.showCompanyName = cloneDeep(yesOrNo);
         });
 
         this.companyGSTIN = this._invoiceUiDataService.companyGSTIN.getValue();
@@ -136,7 +134,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
             };
         } else {
             this._invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
-                this.templateUISectionVisibility = _.cloneDeep(info);
+                this.templateUISectionVisibility = cloneDeep(info);
             });
         }
 
@@ -148,7 +146,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
                     footer: true
                 };
             } else {
-                this.templateUISectionVisibility = _.cloneDeep(info);
+                this.templateUISectionVisibility = cloneDeep(info);
             }
         });
     }

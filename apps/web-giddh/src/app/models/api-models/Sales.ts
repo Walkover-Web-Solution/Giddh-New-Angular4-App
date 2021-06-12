@@ -1,5 +1,4 @@
-import * as _ from '../../lodash-optimized';
-import { isNull, pick } from '../../lodash-optimized';
+import { cloneDeep, forEach, isNull, pick } from '../../lodash-optimized';
 import { LedgerDiscountClass } from './SettingsDiscount';
 import { LedgerResponseDiscountClass } from './Ledger';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
@@ -262,7 +261,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public getTotalTaxOfEntry(taxArr: TaxControlData[]): number {
         let count: number = 0;
         if (taxArr.length > 0) {
-            _.forEach(taxArr, (item: TaxControlData) => {
+            forEach(taxArr, (item: TaxControlData) => {
                 count += item.amount;
             });
             return this.checkForInfinity(count);
@@ -280,10 +279,10 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
         if (tax > 0) {
             let a = this.getTaxableValue(entry) * (tax / 100);
             a = this.checkForInfinity(a);
-            let b = _.cloneDeep(this.getTaxableValue(entry));
+            let b = cloneDeep(this.getTaxableValue(entry));
             count = a + b;
         } else {
-            count = _.cloneDeep(this.getTaxableValue(entry));
+            count = cloneDeep(this.getTaxableValue(entry));
         }
         return giddhRoundOff(count, 2);
     }

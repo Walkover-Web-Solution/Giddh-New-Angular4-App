@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import * as _ from '../../../../lodash-optimized';
+import { orderBy } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Pipe({ name: 'ghSortBy' })
 export class GhSortByPipePipe implements PipeTransform {
@@ -11,6 +11,6 @@ export class GhSortByPipePipe implements PipeTransform {
         if (value.length <= 1) {
             return value;
         } // array with only one item
-        return _.orderBy(value, [column], [order]);
+        return orderBy(value, [column], [order]);
     }
 }

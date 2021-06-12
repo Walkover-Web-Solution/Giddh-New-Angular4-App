@@ -1,7 +1,6 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -19,6 +18,7 @@ import { TaxResponse } from '../../models/api-models/Company';
 import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { NgForm } from '@angular/forms';
+import { cloneDeep, forEach, map, maxBy } from '../../lodash-optimized';
 
 let THEAD_ARR_READONLY = [
     {
@@ -134,7 +134,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
         this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
             if (o) {
                 this.companyTaxesList$ = observableOf(o);
-                _.map(this.theadArrReadOnly, (item: IContentCommon) => {
+                map(this.theadArrReadOnly, (item: IContentCommon) => {
                     // show tax label
                     if (item.label === 'Tax') {
                         item.display = true;
@@ -154,7 +154,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
             distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((o: any) => {
                 if (o && o.voucherDetails) {
-                    this.invFormData = _.cloneDeep(o);
+                    this.invFormData = cloneDeep(o);
 
                     if (this.invFormData.entries && this.invFormData.entries.length > 0) {
                         for (let loop = 0; loop < this.invFormData.entries.length; loop++) {
@@ -202,8 +202,8 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
             distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((o: InvoiceTemplateDetailsResponse) => {
                 if (o) {
-                    this.invTempCond = _.cloneDeep(o);
-                    let obj = _.cloneDeep(o);
+                    this.invTempCond = cloneDeep(o);
+                    let obj = cloneDeep(o);
                     this.tableCond = obj.sections;
                     this.headerCond = obj.sections;
                     this.prepareThead();
@@ -261,7 +261,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     }
 
     public prepareTemplateHeader() {
-        this.templateHeader = _.cloneDeep(this.headerCond.header.data);
+        this.templateHeader = cloneDeep(this.headerCond.header.data);
     }
 
     public selectedTaxEvent(arr: string[]) {
@@ -283,7 +283,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
 
     public generateTotalAmount(txns: SalesTransactionItemClass[]) {
         let res: number = 0;
-        _.forEach(txns, (txn: SalesTransactionItemClass) => {
+        forEach(txns, (txn: SalesTransactionItemClass) => {
             if (txn.quantity && txn.rate) {
                 res += this.checkForInfinity(txn.rate) * this.checkForInfinity(txn.quantity);
             } else {
@@ -303,7 +303,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
         let TAXABLE_VALUE: number = 0;
         let GRAND_TOTAL: number = 0;
         setTimeout(() => {
-            _.forEach(this.invFormData.entries, (entry) => {
+            forEach(this.invFormData.entries, (entry) => {
                 // get discount
                 DISCOUNT += Number(entry.discountSum);
 
@@ -349,7 +349,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
      */
     public generateTotalTaxableValue(txns: SalesTransactionItemClass[]) {
         let res: number = 0;
-        _.forEach(txns, (txn: SalesTransactionItemClass) => {
+        forEach(txns, (txn: SalesTransactionItemClass) => {
             res += this.checkForInfinity(txn.taxableValue);
         });
         return res;
@@ -361,7 +361,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
      */
     public generateTotalTaxAmount(txns: SalesTransactionItemClass[]) {
         let res: number = 0;
-        _.forEach(txns, (txn: SalesTransactionItemClass) => {
+        forEach(txns, (txn: SalesTransactionItemClass) => {
             if (txn.total === 0) {
                 res += 0;
             } else {
@@ -382,7 +382,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     }
 
     public prepareThead() {
-        this.theadArrReadOnly = _.cloneDeep(this.tableCond.table.data);
+        this.theadArrReadOnly = cloneDeep(this.tableCond.table.data);
     }
 
     public setActiveIndxs(indx: number) {
@@ -414,7 +414,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
 
     public onSubmitInvoiceForm() {
         let model: GenerateInvoiceRequestClass = new GenerateInvoiceRequestClass();
-        let data: any = _.cloneDeep(this.invFormData);
+        let data: any = cloneDeep(this.invFormData);
 
         // convert address string to array
         data.accountDetails['billingDetails'].address = this.getArrayFromString(data.accountDetails['billingDetails'].address);
@@ -448,7 +448,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
                 };
                 this.store.dispatch(this.receiptActions.UpdateInvoiceReceiptRequest(request, model.voucher.accountDetails.uniqueName));
             } else {
-                this.store.dispatch(this._ledgerActions.GenerateBulkLedgerInvoice({ combined: false }, [{ accountUniqueName: model.voucher.accountDetails.uniqueName, entries: _.cloneDeep(model.uniqueNames) }], 'invoice'));
+                this.store.dispatch(this._ledgerActions.GenerateBulkLedgerInvoice({ combined: false }, [{ accountUniqueName: model.voucher.accountDetails.uniqueName, entries: cloneDeep(model.uniqueNames) }], 'invoice'));
             }
             this.updtFlag = false;
         } else {
@@ -458,7 +458,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
 
     public getEntryUniqueNames(entryArr: GstEntry[]): string[] {
         let arr: string[] = [];
-        _.forEach(entryArr, (item: GstEntry) => {
+        forEach(entryArr, (item: GstEntry) => {
             arr.push(item.uniqueName);
         });
         return arr;
@@ -467,7 +467,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     public getTransactionTotalTax(taxArr: IInvoiceTax[]): any {
         let count: number = 0;
         if (taxArr.length > 0) {
-            _.forEach(taxArr, (item: IInvoiceTax) => {
+            forEach(taxArr, (item: IInvoiceTax) => {
                 count += item.amount;
             });
         }
@@ -507,7 +507,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     public getEntryTotalDiscount(discountArr: ICommonItemOfTransaction[]): any {
         let count: number = 0;
         if (discountArr.length > 0) {
-            _.forEach(discountArr, (item: ICommonItemOfTransaction) => {
+            forEach(discountArr, (item: ICommonItemOfTransaction) => {
                 count += Math.abs(item.amount);
             });
         }
@@ -531,12 +531,12 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     public autoFillShippingDetails() {
         // auto fill shipping address
         if (this.autoFillShipping) {
-            this.invFormData.accountDetails.shippingDetails = _.cloneDeep(this.invFormData.accountDetails.billingDetails);
+            this.invFormData.accountDetails.shippingDetails = cloneDeep(this.invFormData.accountDetails.billingDetails);
         }
     }
 
     public getStateCode(type: string, statesEle: SelectComponent) {
-        let gstVal = _.cloneDeep(this.invFormData.accountDetails[type].gstNumber);
+        let gstVal = cloneDeep(this.invFormData.accountDetails[type].gstNumber);
         if (gstVal && gstVal.length >= 2) {
             this.statesSource$.pipe(take(1)).subscribe(st => {
                 let s = st.find(item => item.value === gstVal.substr(0, 2));
@@ -561,7 +561,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
      * setMaxDueDate
      */
     public setMaxDueDate(entries) {
-        let maxDateEnrty = _.maxBy(entries, (o) => {
+        let maxDateEnrty = maxBy(entries, (o) => {
             if (o.entryDate) {
                 return o.entryDate;
             }

@@ -9,8 +9,8 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { Observable, ReplaySubject } from 'rxjs';
-import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
+import { clone, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'share-group-modal',
@@ -60,7 +60,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
             entity: 'group',
             entityUniqueName: activeGrp.uniqueName,
         };
-        let selectedPermission = _.clone(this.selectedPermission);
+        let selectedPermission = clone(this.selectedPermission);
         this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission.toLowerCase()));
         this.email = '';
         this.selectedPermission = '';
@@ -71,7 +71,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     }
 
     public updatePermission(model: ShareRequestForm, event: any) {
-        let data = _.cloneDeep(model);
+        let data = cloneDeep(model);
         let newPermission = event.target.value;
         data.roleUniqueName = newPermission;
         this.store.dispatch(this.accountActions.updateEntityPermission(data, newPermission, 'group'));

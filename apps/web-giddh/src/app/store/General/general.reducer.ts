@@ -17,7 +17,6 @@ import {
     MoveGroupRequest,
     MoveGroupResponse
 } from '../../models/api-models/Group';
-import * as _ from '../../lodash-optimized';
 import { cloneDeep } from '../../lodash-optimized';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';

@@ -1,6 +1,5 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { HOME } from '../../actions/home/home.const';
-import * as _ from '../../lodash-optimized';
 import { GraphTypesResponse } from '../../models/api-models/Dashboard';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
