@@ -9757,6 +9757,58 @@ input.mat-input-element {
         }
     }
 }
+.gst-sidebar-open {
+    .nav-left-bar{
+        -moz-transition: all 100ms linear;
+        -webkit-transition: all 100ms linear;
+        -o-transition: all 100ms linear;
+        transition: all 100ms linear;
+        -moz-transform: translate3d(-100px, 0px, 0px);
+        -webkit-transform: translate3d(-100px, 0px, 0px);
+        -o-transform: translate(-100px, 0px);
+        -ms-transform: translate(-100px, 0px);
+        transform: translate3d(-100px, 0px, 0px);
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.2) !important;
+    }
+}
+.gst-sidebar-open {
+    .gst-sidebar {
+        left: 60px !important;
+    }
+    #content-wrapper {
+        padding-left: 300px;
+    }
+    .nav-left-bar {
+        display: block;
+        z-index: 9991 !important;
+        -moz-transform: translate3d(0px, 0px, 0px);
+        -webkit-transform: translate3d(0px, 0px, 0px);
+        -o-transform: translate(0px, 0px);
+        -ms-transform: translate(0px, 0px);
+        transform: translate3d(0px, 0px, 0px);
+    }
+    .plan-wrapper {
+        padding-left: 0;
+    }
+    .menu_open {
+        .gst-sidebar {
+            left: 60px !important;
+        }
+        #content-wrapper {
+            padding-left: 240px;
+        }
+        .plan-wrapper {
+            padding-left: 60px;
+        }
+    }
+}
+body.update-scroll-hidden {
+    overflow-y: hidden;
+}
+.e-waybill-tabs.custom-tabs .nav-tabs {
+    position: static !important;
+    padding-left: 15px !important;
+}
 .e-waybill-tabs.custom-tabs .nav-tabs {
     position: static !important;
     padding-left: 15px !important;
@@ -9770,8 +9822,6 @@ body.update-scroll-hidden {
         padding-left: 0 !important;
     }
 }
-<<<<<<< HEAD
-=======
 .nav-left-bar{
     &.width-60  {
         .sidebar-collapse {
@@ -9782,7 +9832,6 @@ body.update-scroll-hidden {
     }
 }
 
->>>>>>> 6775479693... shalinee | test | UI fixes done and added gst sidebar on VAT report
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
