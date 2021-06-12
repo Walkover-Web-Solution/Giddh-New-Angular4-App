@@ -1224,7 +1224,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public toggleRcmCheckbox(event: any): void {
         event.preventDefault();
-        if (this.currentOrganizationType === 'COMPANY' && (this.branches && this.branches.length > 1)) {
+        if (!this.isPettyCash && this.currentOrganizationType === 'COMPANY' && (this.branches && this.branches.length > 1)) {
             return;
         }
         this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked, this.commonLocaleData);
