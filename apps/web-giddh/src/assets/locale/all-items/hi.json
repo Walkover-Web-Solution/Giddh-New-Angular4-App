@@ -121,8 +121,33 @@
         {
             "label": "कर",
             "icon": "icon-tax-new",
-            "items": [],
-            "link": "/pages/gstfiling"
+            "items": [
+                {
+                    "label": "ई-वे बिल",
+                    "link": "/pages/invoice/ewaybill",
+                    "icon": "icon-eway-bill-new",
+                    "description": "बाद में गिद्ध से सीधे उत्पन्न करें"
+                },
+                {
+                    "label": "जीएसटीआर",
+                    "link": "/pages/gstfiling",
+                    "icon": "icon-GSTR",
+                    "description": "फाइल करें और देखें GSTR1, GSTR2 और GSTR3B"
+                },
+                {
+                    "label": "रिवर्स चार्ज",
+                    "link": "/pages/reports/reverse-charge",
+                    "icon": "icon-reverse-charge",
+                    "description": "कुल कर योग्य मूल्य और कुल कर राशि की रिपोर्ट",
+                    "alwaysPresent": "True"
+                },
+                {
+                    "label": "वैट रिपोर्ट",
+                    "link": "/pages/vat-report",
+                    "icon": "icon-vat",
+                    "description": "फ़ाइल और समीक्षा वैट"
+                }
+            ]
         },
         {
             "label": "रिपोर्ट्स",
