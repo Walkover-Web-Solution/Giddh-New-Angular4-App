@@ -779,12 +779,27 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.fontDefault = data.fontSize;
                 data.fontMedium = data.fontSize - 2;
             }
-            if (!data.sections['footer'].data['textUnderSlogan'].display || !data?.sections['footer']?.data['textUnderSlogan']?.label) {
+            if (!data.sections['footer'].data['textUnderSlogan']?.display || !data?.sections['footer']?.data['textUnderSlogan']?.label) {
                 // If user checks the checkbox but didn't provide label then remove the selection
-                data.sections['footer'].data['textUnderSlogan'].display = false;
-                data.sections['footer'].data['textUnderSlogan'].label = '';
+                if (!data.sections['footer'].data['textUnderSlogan']) {
+                    data.sections['footer'].data['textUnderSlogan'] = {
+                        label: '',
+                        display: false
+                    };
+                } else {
+                    data.sections['footer'].data['textUnderSlogan'].display = false;
+                    data.sections['footer'].data['textUnderSlogan'].label = '';
+                }
             }
             delete data['uniqueName'];
+            if (data.templateType?.toLowerCase() !== 'gst_template_a' && data.templateType?.toLowerCase() !== 'gst_template_e') {
+                delete data?.sections?.header?.data?.showCompanyAddress;
+                delete data?.sections?.header?.data?.showQrCode;
+                delete data?.sections?.header?.data?.showIrnNumber;
+                delete data?.sections?.footer?.data?.showNotesAtLastPage;
+                delete data?.sections?.footer?.data?.showMessage2;
+                delete data?.sections?.footer?.data?.textUnderSlogan;
+            }
 
             this._invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {

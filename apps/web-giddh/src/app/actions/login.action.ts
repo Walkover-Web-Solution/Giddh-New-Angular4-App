@@ -531,7 +531,7 @@ export class LoginActions {
                 if (action.payload.status === 'success') {
                     this._toaster.successToast(this.localeService.translate("app_messages.otp_sent_email"));
                 } else {
-                    this._toaster.errorToast(action.payload.message, action.payload.code);
+                    this._toaster.errorToast(action.payload.message, action.payload.code,6000);
                 }
                 return { type: 'EmptyAction' };
             })));
