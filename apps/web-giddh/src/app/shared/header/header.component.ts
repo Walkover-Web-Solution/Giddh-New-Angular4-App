@@ -93,7 +93,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
     public noGroups: boolean;
     public activeFinancialYear: ActiveFinancialYear;
-    public sideMenu: { isopen: boolean } = { isopen: false };
+    public sideMenu: { isopen: boolean, isExpanded: boolean } = { isopen: false, isExpanded: false };
     public companyMenu: { isopen: boolean } = { isopen: false };
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     public companies$: Observable<CompanyResponse[]>;
@@ -219,8 +219,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public activeLocale: string = "";
     /** True if sidebar is expanded */
     public isSidebarExpanded: boolean = false;
-    /** This will hold current page url */
-    public getPageUrl: boolean = false;
+    /** This will hold if setting icon is disabled */
+    public isSettingsIconDisabled: boolean = false;
     /**
      * Returns whether the back button in header should be displayed or not
      *
@@ -835,8 +835,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
-        this.getPageUrl = this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details")
-        if (this.getPageUrl) {
+        this.isSettingsIconDisabled = (this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/settings/taxes")) || this.router.url.includes("/pages/user-details")
+        if (this.isSettingsIconDisabled) {
            return;
         }
 
@@ -1597,14 +1597,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.add('on-setting-page');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-user-page');
-                this.collapseSidebar(true);
             } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page").length > 0
             ) {
                 document.querySelector('body').classList.add('on-user-page');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
-                this.collapseSidebar(true);
             } else if (
                 document.getElementsByTagName("tabset") &&
                 document.getElementsByTagName("tabset").length > 0 &&
@@ -1613,7 +1611,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
-                this.expandSidebar(true);
             }
             /* this code is not working so that inventory sidebar is not working on mobile view, developer please check it */
             else if (document.getElementsByClassName("new-inventory-page") && document.getElementsByClassName("new-inventory-page").length > 0) {
@@ -1626,11 +1623,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
-                this.expandSidebar(true);
             }
 
             if(document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
                 this.collapseSidebar(true);
+            } else {
+                if(this.sideMenu.isopen) {
+                    this.sideMenu.isExpanded = true;
+                    this.expandSidebar(true);
+                }
             }
         }, 500);
 
@@ -1646,8 +1647,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.sideBarStateChange(true);
         }
         this.isSidebarExpanded = true;
-        document.querySelector('.primary-sidebar').classList.remove('sidebar-collapse');
-        document.querySelector('.nav-left-bar').classList.remove('width-60');
+        document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
+        document.querySelector('.nav-left-bar')?.classList?.remove('width-60');
     }
 
     /**
@@ -1660,14 +1661,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             forceCollapse = true;
         }
 
-        if(forceCollapse && !this.isSidebarExpanded) {
-            this.sideMenu.isopen = false;
+        if(forceCollapse) {
+            this.sideMenu.isExpanded = false;
+        } else {
+            if(!this.sideMenu.isopen) {
+                this.sideMenu.isExpanded = false;
+            } else {
+                this.sideMenu.isExpanded = true;
+            }
         }
 
-        if(!this.sideMenu.isopen || forceCollapse) {
+        if(!this.sideMenu.isExpanded || forceCollapse) {
             this.isSidebarExpanded = false;
-            document.querySelector('.primary-sidebar').classList.add('sidebar-collapse');
-            document.querySelector('.nav-left-bar').classList.add('width-60');
+            document.querySelector('.primary-sidebar')?.classList?.add('sidebar-collapse');
+            document.querySelector('.nav-left-bar')?.classList?.add('width-60');
         }
     }
 
