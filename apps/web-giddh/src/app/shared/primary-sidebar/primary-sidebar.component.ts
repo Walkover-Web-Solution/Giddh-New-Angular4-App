@@ -221,7 +221,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length && this.localeData?.page_heading) {
-            this.allItems = this.generalService.getVisibleMenuItems(changes.apiMenuItems.currentValue, this.localeData?.items);
+            this.allItems = this.generalService.getVisibleMenuItems("sidebar", changes.apiMenuItems.currentValue, this.localeData?.items);
         }
     }
 
@@ -939,7 +939,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public translationComplete(event: any): void {
         if (event) {
-            this.allItems = this.generalService.getVisibleMenuItems(this.apiMenuItems, this.localeData?.items);
+            this.allItems = this.generalService.getVisibleMenuItems("sidebar", this.apiMenuItems, this.localeData?.items);
         }
     }
 
