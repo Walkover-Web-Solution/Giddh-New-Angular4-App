@@ -5,13 +5,13 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
-import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
 import { IForceClear } from "../../models/api-models/Sales";
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import { SalesService } from '../../services/sales.service';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'aside-menu-create-tax-component',
@@ -148,7 +148,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     }
 
     public onSubmit() {
-        let dataToSave = _.cloneDeep(this.newTaxObj);
+        let dataToSave = cloneDeep(this.newTaxObj);
 
         if (dataToSave.taxType === 'tcs' || dataToSave.taxType === 'tds') {
             if (this.tax && this.tax.uniqueName) {

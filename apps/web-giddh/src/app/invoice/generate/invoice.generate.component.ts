@@ -16,7 +16,6 @@ import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import {
     GenBulkInvoiceFinalObj,
@@ -38,6 +37,7 @@ import { GeneralActions } from '../../actions/general/general.actions';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { cloneDeep, find, forEach, groupBy, indexOf, map, orderBy, uniq } from '../../lodash-optimized';
 
 const COUNTS = [
     { label: '12', value: '12' },
@@ -190,8 +190,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             takeUntil(this.destroyed$))
             .subscribe((res: GetAllLedgersForInvoiceResponse) => {
                 if (res && res.results) {
-                    let response = _.cloneDeep(res);
-                    response.results = _.orderBy(response.results, (item: ILedgersInvoiceResult) => {
+                    let response = cloneDeep(res);
+
+                    response.results = orderBy(response.results, (item: ILedgersInvoiceResult) => {
                         return moment(item.entryDate, GIDDH_DATE_FORMAT);
                     }, 'desc');
 
@@ -254,7 +255,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         // Refresh report data according to universal date
         this.store.pipe(select((state: AppState) => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
-                this.universalDate = _.cloneDeep(dateObj);
+                this.universalDate = cloneDeep(dateObj);
                 this.ledgerSearchRequest.dateRange = this.universalDate;
                 this.fromDate = moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate().toString();
                 this.toDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate().toString();
@@ -333,7 +334,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             this.allItemsSelected = false;
         }
         if (this.ledgersData && this.ledgersData.results && this.ledgersData.results.length) {
-            this.ledgersData.results = _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+            this.ledgersData.results = map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
                 item.isSelected = this.allItemsSelected ? true : false;
 
                 if (this.allItemsSelected) {
@@ -362,12 +363,12 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
     public previewInvoice() {
         let model = {
-            uniqueNames: _.uniq(this.selectedLedgerItems)
+            uniqueNames: uniq(this.selectedLedgerItems)
         };
-        let res = _.find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+        let res = find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
             return item.uniqueName === this.selectedLedgerItems[0];
         });
-        this.selectedItem = _.cloneDeep(res);
+        this.selectedItem = cloneDeep(res);
         if (this.selectedItem && this.selectedItem.account && this.selectedItem.account.uniqueName) {
             this.selectedAccountUniqueName = this.selectedItem.account.uniqueName;
         } else {
@@ -402,17 +403,17 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             return false;
         }
         let arr: GenBulkInvoiceGroupByObj[] = [];
-        _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult): void => {
+        forEach(this.ledgersData.results, (item: ILedgersInvoiceResult): void => {
             if (item.isSelected) {
                 arr.push({ accUniqueName: item.account.uniqueName, uniqueName: item.uniqueName });
             }
         });
-        let res = _.groupBy(arr, 'accUniqueName');
+        let res = groupBy(arr, 'accUniqueName');
         let model: GenerateBulkInvoiceRequest[] = [];
-        _.forEach(res, (item: any): void => {
+        forEach(res, (item: any): void => {
             let obj: GenBulkInvoiceFinalObj = new GenBulkInvoiceFinalObj();
             obj.entries = [];
-            _.forEach(item, (o: GenBulkInvoiceGroupByObj): void => {
+            forEach(item, (o: GenBulkInvoiceGroupByObj): void => {
                 obj.accountUniqueName = o.accUniqueName;
                 obj.entries.push(o.uniqueName);
             });
@@ -451,7 +452,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
     public prepareModelForLedgerApi() {
         let model: InvoiceFilterClass = {};
-        let o = _.cloneDeep(this.ledgerSearchRequest);
+        let o = cloneDeep(this.ledgerSearchRequest);
         if (o && o.accountUniqueName) {
             model.accountUniqueName = o.accountUniqueName;
         }
@@ -478,7 +479,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public prepareQueryParamsForLedgerApi() {
-        let o = _.cloneDeep(this.ledgerSearchRequest);
+        let o = cloneDeep(this.ledgerSearchRequest);
         let fromDate = null;
         let toDate = null;
         if (this.universalDate && this.universalDate.length) {
@@ -507,7 +508,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public countAndToggleVar() {
         let total: number = this.ledgersData.results.length;
         let count: number = 0;
-        _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+        forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
             if (item.isSelected) {
                 count++;
             }
@@ -519,8 +520,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
     public insertItemsIntoArr() {
         if (this.ledgersData) {
-            _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-                let idx = _.indexOf(this.selectedLedgerItems, item.uniqueName);
+            forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+                let idx = indexOf(this.selectedLedgerItems, item.uniqueName);
                 if (item.isSelected) {
                     if (idx === -1) {
                         this.selectedLedgerItems.push(item.uniqueName);

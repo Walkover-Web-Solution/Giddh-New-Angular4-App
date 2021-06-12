@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
 import { BalanceSheetData } from '../../../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../../../models/api-models/Search';
-import * as _ from '../../../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { FormControl } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ReplaySubject } from 'rxjs';
+import { each } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'bs-grid',
@@ -51,10 +51,10 @@ export class BsGridComponent implements OnInit, OnChanges, OnDestroy {
                         this.toggleVisibility(this.bsData.liabilities, changes.expandAll.currentValue);
                         // always make first level visible ....
                         if (this.bsData.liabilities) {
-                            _.each(this.bsData.liabilities, (grp: any) => {
+                            each(this.bsData.liabilities, (grp: any) => {
                                 if (grp.isIncludedInSearch) {
                                     grp.isVisible = true;
-                                    _.each(grp.accounts, (acc: any) => {
+                                    each(grp.accounts, (acc: any) => {
                                         if (acc.isIncludedInSearch) {
                                             acc.isVisible = true;
                                         }
@@ -63,10 +63,10 @@ export class BsGridComponent implements OnInit, OnChanges, OnDestroy {
                             });
                         }
                         if (this.bsData.assets) {
-                            _.each(this.bsData.assets, (grp: any) => {
+                            each(this.bsData.assets, (grp: any) => {
                                 if (grp.isIncludedInSearch) {
                                     grp.isVisible = true;
-                                    _.each(grp.accounts, (acc: any) => {
+                                    each(grp.accounts, (acc: any) => {
                                         if (acc.isIncludedInSearch) {
                                             acc.isVisible = true;
                                         }
@@ -126,11 +126,11 @@ export class BsGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
-        _.each(data, (grp: ChildGroup) => {
+        each(data, (grp: ChildGroup) => {
             if (grp.isIncludedInSearch) {
                 grp.isCreated = true;
                 grp.isVisible = isVisible;
-                _.each(grp.accounts, (acc: Account) => {
+                each(grp.accounts, (acc: Account) => {
                     if (acc.isIncludedInSearch) {
                         acc.isCreated = true;
                         acc.isVisible = isVisible;
