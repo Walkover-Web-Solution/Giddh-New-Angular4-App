@@ -5,6 +5,7 @@ export interface AllItem {
     description: string;
     alwaysPresent?: boolean;
     additional?: any;
+    hide?: string;
 }
 
 export interface AllItems {
