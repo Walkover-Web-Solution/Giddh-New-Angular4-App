@@ -6,7 +6,8 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { RecurringInvoice } from '../models/interfaces/RecurringInvoice';
-import { RECURRING_VOUCHER_API } from '../models/api-models/recurring-voucher.api';
+import { RECURRING_VOUCHER_API } from './apiurls/recurring-voucher.api';
+
 
 @Injectable()
 export class RecurringVoucherService {

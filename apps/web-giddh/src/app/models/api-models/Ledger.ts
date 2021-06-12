@@ -128,23 +128,6 @@ export class LedgerResponse {
     public unitRates?: Array<any>;
     public entryVoucherTotals?: any;
 }
-/** Model for Ledger Advance receipts for invoices */
-export class VoucherAdjustmentsForInvoice {
-    adjustedInvoices: AdjustedInvoice[];
-    totalAdjustmentAmount: number;
-    description: string;
-}
-
-/** Model for invoices list for ledger Advance receipts */
-export class AdjustedInvoice {
-    invoiceNumber: string;
-    invoiceUniqueName: string;
-    adjustedAmount: AdjustedAmount;
-    invoiceDate: string;
-    taxAmount?: number;
-    taxRate: number;
-    taxUniqueName: string[];
-}
 
 /** Model adjusted amounts for invoices */
 export class AdjustedAmount {

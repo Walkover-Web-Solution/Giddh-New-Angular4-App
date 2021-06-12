@@ -1,9 +1,3 @@
-export interface IGetEbankTokenResponse {
-    connectUrl: string;
-    token: string;
-    token_URL: string;
-}
-
 export interface IGetAllEbankAccountResponse {
     accounts: IEbankAccount[];
     siteId: number;
