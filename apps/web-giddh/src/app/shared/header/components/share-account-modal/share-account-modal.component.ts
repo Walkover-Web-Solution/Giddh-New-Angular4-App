@@ -8,8 +8,8 @@ import { AppState } from '../../../../store/roots';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { AccountsAction } from '../../../../actions/accounts.actions';
-import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
+import { clone, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'share-account-modal',
@@ -58,7 +58,7 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
             entity: 'account',
             entityUniqueName: activeAccount.uniqueName,
         };
-        let selectedPermission = _.clone(this.selectedPermission);
+        let selectedPermission = clone(this.selectedPermission);
         this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission.toLowerCase()));
         this.email = '';
         this.selectedPermission = '';
@@ -69,7 +69,7 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     }
 
     public updatePermission(model: ShareRequestForm, event: any) {
-        let data = _.cloneDeep(model);
+        let data = cloneDeep(model);
         let newPermission = event.target.value;
         data.roleUniqueName = newPermission;
         this.store.dispatch(this.accountActions.updateEntityPermission(data, newPermission, 'account'));

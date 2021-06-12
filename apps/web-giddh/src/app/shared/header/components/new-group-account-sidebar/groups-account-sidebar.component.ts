@@ -9,13 +9,13 @@ import { Store, select } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { ColumnGroupsAccountVM, GroupAccountSidebarVM, IGroupOrAccount } from './VM';
-import * as _ from '../../../../lodash-optimized';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { VsForDirective } from '../../../../theme/ng2-vs-for/ng2-vs-for';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
+import { cloneDeep, each } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'groups-account-sidebar',
@@ -237,7 +237,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
     }
 
     public resetData() {
-        this._groups = this.orderByCategory(_.cloneDeep(this.groups));
+        this._groups = this.orderByCategory(cloneDeep(this.groups));
 
         this.mc.columns = [];
         this.mc.columns.push(new ColumnGroupsAccountVM(new GroupsWithAccountsResponse()));
@@ -433,7 +433,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         const liabilities = [];
         const income = [];
         const expenses = [];
-        _.each(groups, (grp) => {
+        each(groups, (grp) => {
             switch (grp.category) {
                 case 'assets':
                     return assets.push(grp);
@@ -447,10 +447,10 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
                     return assets.push(grp);
             }
         });
-        _.each(liabilities, liability => orderedGroups.push(liability));
-        _.each(assets, asset => orderedGroups.push(asset));
-        _.each(income, inc => orderedGroups.push(inc));
-        _.each(expenses, exp => orderedGroups.push(exp));
+        each(liabilities, liability => orderedGroups.push(liability));
+        each(assets, asset => orderedGroups.push(asset));
+        each(income, inc => orderedGroups.push(inc));
+        each(expenses, exp => orderedGroups.push(exp));
         return orderedGroups;
     }
 

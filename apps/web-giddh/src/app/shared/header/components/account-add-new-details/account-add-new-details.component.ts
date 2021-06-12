@@ -19,7 +19,6 @@ import { select, Store } from '@ngrx/store';
 import { AccountRequestV2, CustomFieldsData } from '../../../../models/api-models/Account';
 import { ToasterService } from '../../../../services/toaster.service';
 import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
-import * as _ from '../../../../lodash-optimized';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { IForceClear } from "../../../../models/api-models/Sales";
@@ -34,6 +33,7 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'account-add-new-details',
@@ -250,7 +250,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
                     this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
                 }
-                this.companyCurrency = _.clone(this.activeCompany.baseCurrency);
+                this.companyCurrency = clone(this.activeCompany.baseCurrency);
             }
         });
 
@@ -524,7 +524,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.addAccountForm.get('foreignOpeningBalance')?.patchValue('0');
         }
         if (this.showBankDetail) {
-            const bankDetails = _.cloneDeep(this.addAccountForm.get('accountBankDetails')?.value);
+            const bankDetails = cloneDeep(this.addAccountForm.get('accountBankDetails')?.value);
             const isValid = this.generalService.checkForValidBankDetails(bankDetails?.pop(), this.selectedCountryCode);
             if (!isValid) {
                 this._toaster.errorToast(this.localeData?.bank_details_error_message);
@@ -1058,7 +1058,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                             ...this.flatGroupsOptions,
                             ...searchResults
                         ];
-                        this.flatGroupsOptions = _.uniqBy(results, 'value');
+                        this.flatGroupsOptions = uniqBy(results, 'value');
                     }
                     this.groupsSearchResultsPaginationData.page = data.body.page;
                     this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;

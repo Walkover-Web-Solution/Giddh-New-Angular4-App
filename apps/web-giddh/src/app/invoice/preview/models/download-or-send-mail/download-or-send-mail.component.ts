@@ -6,11 +6,11 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import * as _ from '../../../../lodash-optimized';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { ReceiptVoucherDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { Router } from '@angular/router';
+import { findIndex, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'download-or-send-mail-invoice',
@@ -160,7 +160,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
      * onSendInvoiceOnMail
      */
     public onSendInvoiceOnMail(email: string) {
-        if (_.isEmpty(email)) {
+        if (isEmpty(email)) {
             this._toasty.warningToast(this.localeData?.enter_valid_email_error);
             return;
         }
@@ -177,7 +177,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
      * onSendInvoiceOnSms
      */
     public onSendInvoiceOnSms(numbers: string) {
-        if (_.isEmpty(numbers)) {
+        if (isEmpty(numbers)) {
             this._toasty.warningToast(this.localeData?.enter_valid_number_error);
             return;
         }
@@ -196,7 +196,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         if (event.target.checked) {
             this.invoiceType.push(val);
         } else {
-            let idx = _.findIndex(this.invoiceType, (o) => o === val);
+            let idx = findIndex(this.invoiceType, (o) => o === val);
             return this.invoiceType.splice(idx, 1);
         }
     }
