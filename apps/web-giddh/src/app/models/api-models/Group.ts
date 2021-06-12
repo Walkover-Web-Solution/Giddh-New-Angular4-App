@@ -1,4 +1,3 @@
-import { User } from 'oidc-client';
 import { ICreateGroup } from '../interfaces/groupCreate.interface';
 import { INameUniqueName } from './Inventory';
 import { IUserInfo } from '../interfaces/userInfo.interface';
@@ -60,17 +59,6 @@ export class GroupUpateRequest {
 }
 
 /**
- * Model for Share group api request
- * API:: (Share-group) company/:companyUniqueName/groups/:groupUniqueName/share
- * takes email as value for user field
- * its response will be success message in body
- */
-export class ShareGroupRequest {
-    public role: string;
-    public user: string;
-}
-
-/**
  * Model for Shared-with api response
  * API:: (group-shared-with) company/:companyUniqueName/groups/:groupUniqueName/shared-with
  * its response will be array of GroupSharedWithResponse
@@ -104,13 +92,6 @@ export class MoveGroupResponse {
     public name: string;
 }
 
-export class FlattenGroupsAccountsRequest {
-    public q: string = '';
-    public page: number = 1;
-    public count: number = 1000;
-    public showEmptyGroups: string = '';
-}
-
 /*
  * Model for flatten-groups-accounts api response
  * GET call
@@ -125,10 +106,6 @@ export class FlattenGroupsAccountsResponse implements IPaginatedResponse {
     public size: number;
     public totalItems: number;
     public totalPages: number;
-}
-
-export class UnShareGroupRequest {
-    public user: string;
 }
 
 /*

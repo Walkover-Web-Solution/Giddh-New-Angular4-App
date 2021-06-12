@@ -7,7 +7,6 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
-import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
 import { isNullOrUndefined } from 'util';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
@@ -18,7 +17,6 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 })
 
 export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
-    @Input() public comparisionChartData: Observable<IComparisionChartResponse>;
     @Input() public refresh: boolean = false;
 
     public requestInFlight = true;
