@@ -142,6 +142,15 @@
 		"na": "या व्यवहारासाठी ई-इनव्हॉईस निर्मिती लागू नाही.",
         "giddh_invoice_not_cancelled": "ई-इनव्हॉईज्ड व्यवहार आयआरपीमध्ये रद्द केला गेला आहे, परंतु गिद्धमध्ये नाही. त्याच्याशी संबंधित आयआरएन यापुढे वैध नाही."
     },
+    "e_invoice_statuses_label": {
+        "yet_to_be_pushed": "Yet-to-be Pushed",
+        "pushed": "Pushed",
+        "push_initiated": "Push Initiated",
+        "cancelled": "Cancelled",
+        "mark_as_cancelled": "Marked as Cancelled",
+        "failed": "Failed",
+        "na": "NA"
+    },
     "cancel_e_invoice": "ई-चलन रद्द करा",
     "cancel_reason": "कारण रद्द करा",
     "cancel_remarks": "टिप्पण्या रद्द करा",
@@ -167,5 +176,7 @@
     "exchange_gain_loss_label": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />एक्सचेंज [PROFIT_TYPE]: ",
     "exchange_gain": "मिळवणे",
     "exchange_loss": "तोटा",
-    "works_for_single_entry": "केवळ एकल प्रवेशासाठी कार्य करते."
+    "works_for_single_entry": "केवळ एकल प्रवेशासाठी कार्य करते.",
+    "uploaded_purchase_bill": "बिल अपलोड केले",
+    "auto_generated_purchase_bill": "गिद्ध/ऑटो वयुत्पन्न बिल"
 }

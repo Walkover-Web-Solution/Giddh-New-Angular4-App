@@ -935,7 +935,7 @@
                     <div class="modal-content">
                         <invoice-advance-search-component #advanceSearchComponent
                             [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : (selectedVoucher === 'purchase') ? selectedVoucher : 'invoice'"
-                            [request]="advanceSearchFilter" [localeData]="localeData"
+                            [request]="advanceSearchFilter" [localeData]="localeData" [isEInvoiceEnabled]="gstEInvoiceEnable"
                             [commonLocaleData]="commonLocaleData" (applyFilterEvent)="applyAdvanceSearch($event)"
                             (closeModelEvent)="toggleAdvanceSearchPopup(true)">
                         </invoice-advance-search-component>
