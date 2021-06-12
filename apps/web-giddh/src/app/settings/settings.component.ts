@@ -386,6 +386,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
      */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('setting-sidebar-open');
+        document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideSettingMenuState = "out";
         this.asideGstSidebarMenuState = "out";
         this.destroyed$.next(true);

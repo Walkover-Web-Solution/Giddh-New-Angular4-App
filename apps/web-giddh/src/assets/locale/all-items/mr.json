@@ -121,8 +121,33 @@
         {
             "label": "कर",
             "icon": "icon-tax-new",
-            "items": [],
-            "link": "/pages/gstfiling"
+            "items": [
+                {
+                    "label": "ई-वे बिल",
+                    "link": "/pages/invoice/ewaybill",
+                    "icon": "icon-eway-bill-new",
+                    "description": "नंतर थेट गीधमधून व्युत्पन्न करा"
+                },
+                {
+                    "label": "जीएसटीआर",
+                    "link": "/pages/gstfiling",
+                    "icon": "icon-GSTR",
+                    "description": "जीएसटीआर 1, जीएसटीआर 2 आणि जीएसटीआर 3 बी फाइल करा आणि पहा"
+                },
+                {
+                    "label": "उलट शुल्क",
+                    "link": "/pages/reports/reverse-charge",
+                    "icon": "icon-reverse-charge",
+                    "description": "एकूण करपात्र मूल्य आणि कराच्या एकूण रकमेचा अहवाल",
+                    "alwaysPresent": "True"
+                },
+                {
+                    "label": "व्हॅट अहवाल",
+                    "link": "/pages/vat-report",
+                    "icon": "icon-vat",
+                    "description": "व्हॅट फाइल आणि पुनरावलोकन करा"
+                }
+            ]
         },
         {
             "label": "अहवाल",
