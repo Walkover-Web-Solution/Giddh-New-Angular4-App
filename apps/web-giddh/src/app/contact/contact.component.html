@@ -260,7 +260,7 @@
                                 </div>
 
                                 <div class="bg-white clearfix">
-                                    <div class="customer-right  clearfix width-100">
+                                    <div class="customer-right clearfix width-100">
                                         <table class="text-right">
                                             <tr>
                                                 <td *ngIf="showFieldFilter.openingBalance">
@@ -268,25 +268,48 @@
                                                     <h3><span
                                                             *ngIf="activeTab === 'customer' && openingBalance?.type === 'CREDIT' && formatAmountInCurrency(openingBalance?.amount) > 0">-</span><span
                                                             *ngIf="activeTab === 'vendor' && openingBalance?.type === 'DEBIT' && formatAmountInCurrency(openingBalance?.amount) > 0">-</span>
-                                                        {{openingBalance?.amount | giddhCurrency}}/-</h3>
+                                                            <span class="d-inline-flex">
+                                                                <amount-field [amount]="openingBalance?.amount"
+                                                                    [currencySymbol]="false" [currencyCode]="false">
+                                                                </amount-field>
+                                                            </span>/-
+                                                        </h3>
                                                 </td>
                                                 <td>
                                                     <p *ngIf="activeTab === 'vendor'">{{commonLocaleData?.app_purchase}}
                                                     </p>
                                                     <p *ngIf="activeTab === 'customer'">{{commonLocaleData?.app_sales}}
                                                     </p>
-                                                    <h3>{{totalSales |giddhCurrency }}/-</h3>
+                                                    <h3>
+                                                        <span class="d-inline-flex">
+                                                            <amount-field [amount]="totalSales" [currencySymbol]="false"
+                                                                [currencyCode]="false">
+                                                            </amount-field>
+                                                        </span>/-
+                                                    </h3>
                                                 </td>
                                                 <td>
                                                     <p *ngIf="activeTab === 'vendor'">{{commonLocaleData?.app_payment}}
                                                     </p>
                                                     <p *ngIf="activeTab === 'customer'">
                                                         {{commonLocaleData?.app_receipt}}</p>
-                                                    <h3>{{totalReceipts | giddhCurrency}}/-</h3>
+                                                    <h3>
+                                                        <span class="d-inline-flex">
+                                                            <amount-field [amount]="totalReceipts"
+                                                                [currencySymbol]="false" [currencyCode]="false">
+                                                            </amount-field>
+                                                        </span>/-
+                                                    </h3>
                                                 </td>
                                                 <td>
                                                     <p>{{localeData?.closing}}</p>
-                                                    <h3>{{closingBalance | giddhCurrency}}/-</h3>
+                                                    <h3>
+                                                        <span class="d-inline-flex">
+                                                            <amount-field [amount]="closingBalance"
+                                                                [currencySymbol]="false" [currencyCode]="false">
+                                                            </amount-field>
+                                                        </span>/-
+                                                    </h3>
                                                 </td>
                                             </tr>
                                         </table>
@@ -695,18 +718,36 @@
                             <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.openingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0}"
                                 [attr.data-title]="localeData?.opening" *ngIf="showFieldFilter.openingBalance">
                                 <span
-                                    *ngIf="account.openingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0">-</span>{{account.openingBalance?.amount
-                                |giddhCurrency}}
+                                    *ngIf="account.openingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0">-</span>
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="account.openingBalance?.amount" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
                             </td>
                             <td class="word-wrap text-right" [attr.data-title]="commonLocaleData?.app_receipts">
-                                {{account.debitTotal |giddhCurrency}}</td>
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="account.debitTotal" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                    </amount-field>
+                                </span>
+                            </td>
                             <td class="word-wrap text-right" [attr.data-title]="commonLocaleData?.app_sales">
-                                {{account.creditTotal |giddhCurrency}}</td>
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="account.creditTotal" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                    </amount-field>
+                                </span>
+                            </td>
                             <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.closingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0}"
                                 [attr.data-title]="localeData?.closing">
                                 <span
-                                    *ngIf="account.closingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0">-</span>{{account.closingBalance?.amount
-                                |giddhCurrency}}
+                                    *ngIf="account.closingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0">-</span>
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="account.closingBalance?.amount" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
                             </td>
                             <td class="text-lowercase word-wrap" *ngIf="showFieldFilter.email"
                                 [attr.data-title]="commonLocaleData?.app_email">
@@ -915,18 +956,37 @@
                             <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.openingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0}"
                                 [attr.data-title]="localeData?.opening" *ngIf="showFieldFilter.openingBalance">
                                 <span
-                                    *ngIf="account.openingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0">-</span>{{account.openingBalance?.amount
-                                | giddhCurrency}}
+                                    *ngIf="account.openingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0">-</span>
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="account.openingBalance?.amount" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
                             </td>
                             <td class="word-wrap text-right" [attr.data-title]="commonLocaleData?.app_purchase">
-                                {{account.creditTotal |giddhCurrency}}</td>
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="account.creditTotal" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                    </amount-field>
+                                </span>
+                            </td>
                             <td class="word-wrap text-right" [attr.data-title]="commonLocaleData?.app_payment">
-                                {{account.debitTotal |giddhCurrency}}</td>
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="account.debitTotal" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                    </amount-field>
+                                </span>
+                            </td>
                             <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.closingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0}"
                                 [attr.data-title]="localeData?.closing">
                                 <span
-                                    *ngIf="account.closingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0">-</span>{{account.closingBalance?.amount
-                                | giddhCurrency}}
+                                    *ngIf="account.closingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0">-</span>
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="account.closingBalance?.amount" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+
                             </td>
                             <td class="word-wrap text-lowercase" *ngIf="showFieldFilter.email "
                                 [attr.data-title]="commonLocaleData?.app_email">

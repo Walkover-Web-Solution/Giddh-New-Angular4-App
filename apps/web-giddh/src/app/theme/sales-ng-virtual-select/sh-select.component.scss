@@ -77,7 +77,7 @@ i.close.icon.clear:hover::after {
     font-size: 14px;
     line-height: 30px;
     border-radius: 4px;
-    background-color: #f4f5f8;
+    background-color: $solitude;
     margin: 8px 0 5px 8px;
 }
 
@@ -93,7 +93,7 @@ i.close.icon.clear:hover::after {
 .chip-close-btn:hover {
     font-weight: 700;
     opacity: 0.5;
-    color: black;
+    color: $black;
 }
 
 .sh-select-disabled .selected-val,
