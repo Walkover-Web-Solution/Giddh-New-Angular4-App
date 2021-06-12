@@ -153,7 +153,6 @@ export class AccountDetailsClass {
     public mobileNumber?: string;
 
     constructor(attrs?: any) {
-        //this.country = new CountryClass();
         this.currency = new CurrencyClass(attrs);
         this.billingDetails = new GstDetailsClass();
         this.shippingDetails = new GstDetailsClass();
@@ -193,9 +192,7 @@ export class AccountDetailsClass {
                 this.shippingDetails.panNumber = '';
             }
         } else {
-            //this.attentionTo = null;
             this.email = '';
-            //this.mobileNo = '';
         }
     }
 }
@@ -396,7 +393,6 @@ export class OtherSalesItemClass {
         this.customField1 = null;
         this.customField2 = null;
         this.customField3 = null;
-        // this.message2 = null;
     }
 }
 
@@ -434,7 +430,6 @@ export interface GenericRequestForGenerateSCD extends GenericRequest {
     entryUniqueNames?: string[];
     taxes?: string[];
     voucher: VoucherClass;
-    // account?: AccountDetailsClass;
     updateAccountDetails?: boolean;
     paymentAction?: IPaymentAction;
     depositAccountUniqueName?: string;
@@ -442,13 +437,9 @@ export interface GenericRequestForGenerateSCD extends GenericRequest {
     validateTax?: boolean;
     applyApplicableTaxes?: boolean;
     action?: string;
-    // dueDate?: string;
     oldVersions?: any[];
     entries?: SalesEntryClassMulticurrency[],
-    // date?: string,
     exchangeRate?: number,
-    // type?: string,
-    // number?: string,
     uniqueName?: string,
     templateDetails?: TemplateDetailsClass
     deposit?: AmountClassMulticurrency;
@@ -620,16 +611,6 @@ export class CodeStockMulticurrency {
 
 export class Currency {
     code: string;
-}
-
-export class SalesStockItemMulticurrency {
-    name: string;
-    uniqueName: string;
-    quantity: number = 1;
-    rate: number = 0;
-    skuCode: string;
-    skuCodeHeading?: string;
-    stockUnit?: string;
 }
 
 export class StateCode {

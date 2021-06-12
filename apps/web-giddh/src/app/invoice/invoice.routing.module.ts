@@ -24,7 +24,6 @@ import { DeleteInvoiceConfirmationModelComponent } from './preview/models/confir
 import { InvoiceGenerateModelComponent } from './generate/model/invoice.generate.model.component';
 import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
 import { InvoiceTemplateModalComponent } from './templates/edit-template/modals/template-modal/template-modal.component';
-import { InvoiceEmailFilterComponent } from './templates/edit-template/filters-container/email-filter/email-filter.component';
 import { InvoiceTemplatePreviewModelComponent } from './templates/edit-template/modals/template-preview-modal/template-preview.modal.component';
 import { EsignModalComponent } from './preview/models/e-Sign/e-Sign.component';
 import { SelectModule } from '../theme/ng-select/ng-select';
@@ -106,7 +105,6 @@ const INVOICE_ROUTES: Routes = [
         InvoiceGenerateModelComponent,
         DownloadOrSendInvoiceOnMailComponent,
         InvoiceTemplateModalComponent,
-        InvoiceEmailFilterComponent,
         InvoiceTemplatePreviewModelComponent,
         EsignModalComponent,
         RecurringComponent,

@@ -9,7 +9,6 @@ import { SETTINGS_PROFILE_ACTIONS } from './../../actions/settings/profile/setti
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
 import {
-    LinkedInRequestModel,
     SignupWithMobile,
     UserDetails,
     VerifyEmailModel,

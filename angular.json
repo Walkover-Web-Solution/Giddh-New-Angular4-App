@@ -121,8 +121,7 @@
                             "apps/web-giddh/src/assets/css/style-2.scss",
                             "apps/web-giddh/src/assets/css/ladda-themeless.min.css",
                             "apps/web-giddh/src/assets/css/perfect-scrollbar.component.css",
-                            "apps/web-giddh/src/assets/css/toastr.css",
-                            "apps/web-giddh/src/assets/css/busy.css"
+                            "apps/web-giddh/src/assets/css/toastr.css"
                         ],
                         "scripts": [
                             "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
@@ -399,8 +398,7 @@
                             "apps/web-giddh/src/assets/css/style-2.scss",
                             "apps/web-giddh/src/assets/css/ladda-themeless.min.css",
                             "apps/web-giddh/src/assets/css/perfect-scrollbar.component.css",
-                            "apps/web-giddh/src/assets/css/toastr.css",
-                            "apps/web-giddh/src/assets/css/busy.css"
+                            "apps/web-giddh/src/assets/css/toastr.css"
                         ],
                         "scripts": [
                             "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
@@ -612,8 +610,7 @@
                             "apps/web-giddh/src/assets/css/style-2.scss",
                             "apps/web-giddh/src/assets/css/ladda-themeless.min.css",
                             "apps/web-giddh/src/assets/css/perfect-scrollbar.component.css",
-                            "apps/web-giddh/src/assets/css/toastr.css",
-                            "apps/web-giddh/src/assets/css/busy.css"
+                            "apps/web-giddh/src/assets/css/toastr.css"
                         ],
                         "scripts": [
                             "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
