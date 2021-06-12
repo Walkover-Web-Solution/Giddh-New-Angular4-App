@@ -1,8 +1,9 @@
 <ng-container appTranslate [file]="'all-items'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="primary-sidebar py-3 position-relative" [ngClass]="{'sidebar-collapse': !isOpen}">
-        <div class="company-branch-block pd-l2 pd-r2 position-relative" [ngClass]="{'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1}">
-            <ul class="list-style-none branch-connection">
+        <div class="company-branch-block pd-l2 pd-r2 position-relative" [ngClass]="{'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1}" dropdown [autoClose]="false">
+            <ul class="list-style-none branch-connection" id="button-company-branch" dropdownToggle class="dropdown-toggle"
+            aria-controls="dropdown-basic-company-branch">
                 <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
                     <span class="inner-span"></span>
                 </span>
@@ -20,127 +21,138 @@
                                     <span class="branch-ellipsis" *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"><span>{{currentBranch?.alias}}</span> </span>
                                     <i class="icon-branch-connect" *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"></i>
                                 </span>
-                                <span class="d-flex"> <i class="icon-down-new"></i> </span>
+                                <span class="d-flex">
+                                    <i class="icon-down-new"></i>
+                                    <i class="icon-cross"></i>
+                                </span>
                             </div>
                         </div>
                     </h3>
-                    <ul class="dropdown-menu user-dropdown-header" role="menu" *dropdownMenu>
+                    <ul class="dropdown-menu user-dropdown-header" role="menu" *dropdownMenu hidden>
                         <ng-container *ngTemplateOutlet="headDropdownMenu"></ng-container>
                     </ul>
                 </li>
             </ul>
+            <div id="dropdown-basic-company-branch" *dropdownMenu class="dropdown-menu company-branch-nav"
+            role="menu" aria-labelledby="button-company-branch">
+                <company-branch ></company-branch>
+            </div>
         </div>
-        <div class="search-block mr-b1 pd-l2 pd-r2">
-            <div class="search-box position-relative mr-t2">
-                <div class="input-group flex-nowrap">
-                    <div class="input-group-prepend" (click)="showNavigationModal()">
-                        <span class="input-group-text border-right-none" id="addon-wrapping">
-                            <i class="icon-search-new"></i>
+
+        <div>
+            <div class="search-block mr-b1 pd-l2 pd-r2">
+                <div class="search-box position-relative mr-t2">
+                    <div class="input-group flex-nowrap">
+                        <div class="input-group-prepend" (click)="showNavigationModal()">
+                            <span class="input-group-text border-right-none" id="addon-wrapping">
+                                <i class="icon-search-new"></i>
+                            </span>
+                        </div>
+                        <input (click)="showNavigationModal()" type="text" class="form-control"
+                            [placeholder]="commonLocaleData?.app_search" [attr.aria-label]="commonLocaleData?.app_search"
+                            aria-describedby="addon-wrapping">
+                        <span class="input-group-append" (click)="showNavigationModal()">
+                            {{commonLocaleData?.app_cmd_g}}
                         </span>
                     </div>
-                    <input (click)="showNavigationModal()" type="text" class="form-control"
-                        [placeholder]="commonLocaleData?.app_search" [attr.aria-label]="commonLocaleData?.app_search"
-                        aria-describedby="addon-wrapping">
-                    <span class="input-group-append" (click)="showNavigationModal()">
-                        {{commonLocaleData?.app_cmd_g}}
-                    </span>
                 </div>
             </div>
-        </div>
-        <div class="wrap-menus  mr-t2">
-            <div class="account-block mr-b2 pd-l2 pd-r2">
-                <div class="account-collapse">
-                    <p class="font-12 d-flex justify-content-between">{{localeData?.accounts}} <i
-                            class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i> </p>
-                    <ul class="left-fixed-header list-style-none font-14 lh33 mr-t05">
-                        <li *ngFor="let acc of accountItemsFromIndexDB">
-                            <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}"
-                                [routerLinkActive]="['active']"
-                                [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName"
-                                (click)="analyzeAccounts($event, acc); companyDetailsDropDownWeb.hide();">{{acc.name}}
-                                {{commonLocaleData?.app_ac}}</a>
-                        </li>
-                        <li><a (click)="showNavigationModal()"
-                                class="show-more cursor-pointer">{{localeData?.show_more}}</a></li>
-                    </ul>
-                </div>
-                <div class="account-dropdown btn-group" dropdown #accountDropdown="bs-dropdown"
-                    [attr.container]="!isOpen ? 'body' : ''">
-                    <a href="javascript:void(0);" id="button-basic-01" dropdownToggle type="button"
-                        class="dropdown-toggle" aria-controls="dropdown-basic-01">
-                        <span [tooltip]="localeData?.accounts"><i class="icon-accounts-new"></i> </span>
-                        <i class="icon-right mr-l1 font-14"></i>
-                    </a>
-                    <ul id="dropdown-basic-01" *dropdownMenu
-                        class="dropdown-menu account-dropdown-collapse list-style-none sub-menu" role="menu"
-                        aria-labelledby="button-basic-01">
-                        <li *ngFor="let acc of accountItemsFromIndexDB">
-                            <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}"
-                                (click)="analyzeAccounts($event, acc); accountDropdown?.hide();">{{acc.name}}
-                                {{commonLocaleData?.app_ac}}</a>
-                        </li>
-                        <li><a (click)="showNavigationModal()"
-                                class="show-more cursor-pointer">{{localeData?.show_more}}</a></li>
-                    </ul>
-                </div>
-
-
-            </div>
-            <div class="menu-block">
-                <div class="menu-item-wrapper font-14">
-                    <div class="menu-item  pd-l2 pd-r2">
-                        <p class="font-12">
-                            <span [routerLink]="['/pages/giddh-all-items']"
-                                class="d-inline-flex align-items-center cursor-pointer">
-                                {{localeData?.menu}}
-                                <i class="icon-down-new mr-l05"></i> </span>
-                            <span class="text-gray cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
-                                <i class="icon-go font-18"></i>
-                            </span>
-                        </p>
+            <div class="wrap-menus mr-t2">
+                <div class="account-block mr-b2 pd-l2 pd-r2">
+                    <div class="account-collapse">
+                        <p class="font-12 d-flex justify-content-between">{{localeData?.accounts}} <i
+                                class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i> </p>
+                        <ul class="left-fixed-header list-style-none font-14 lh33 mr-t05">
+                            <li *ngFor="let acc of accountItemsFromIndexDB">
+                                <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}"
+                                    [routerLinkActive]="['active']"
+                                    [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName"
+                                    (click)="analyzeAccounts($event, acc); companyDetailsDropDownWeb.hide();">{{acc.name}}
+                                    {{commonLocaleData?.app_ac}}</a>
+                            </li>
+                            <li><a (click)="showNavigationModal()"
+                                    class="show-more cursor-pointer">{{localeData?.show_more}}</a></li>
+                        </ul>
                     </div>
-                    <ul class="list-style-none giddh-primary-items">
-                        <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems;index as itemIndex" dropdown #dropdown="bs-dropdown" [autoClose]="isOpen ? false : true"
-                            [attr.container]="!isOpen ? 'body' : ''" (click)="openActiveItem(itemIndex)">
-                            <a href="javascript:void(0);" tooltip="{{menu?.label}}" *ngIf="menu?.items?.length"
-                                id="button-basic-02" dropdownToggle type="button" class="dropdown-toggle"
-                                aria-controls="dropdown-basic-02" [class.active]="menu?.isActive">
-                                <span><i [ngClass]="menu?.icon"></i>
-                                    <span class="item-name">{{menu?.label}}</span>
+                    <div class="account-dropdown btn-group" dropdown #accountDropdown="bs-dropdown"
+                        [attr.container]="!isOpen ? 'body' : ''">
+                        <a href="javascript:void(0);" id="button-basic-01" dropdownToggle type="button"
+                            class="dropdown-toggle" aria-controls="dropdown-basic-01">
+                            <span [tooltip]="localeData?.accounts"><i class="icon-accounts-new"></i> </span>
+                            <i class="icon-right mr-l1 font-14"></i>
+                        </a>
+                        <ul id="dropdown-basic-01" *dropdownMenu
+                            class="dropdown-menu account-dropdown-collapse list-style-none sub-menu" role="menu"
+                            aria-labelledby="button-basic-01">
+                            <li *ngFor="let acc of accountItemsFromIndexDB">
+                                <a href="javascript:void(0);" routerLink="ledger/{{acc.uniqueName}}"
+                                    (click)="analyzeAccounts($event, acc); accountDropdown?.hide();">{{acc.name}}
+                                    {{commonLocaleData?.app_ac}}</a>
+                            </li>
+                            <li><a (click)="showNavigationModal()"
+                                    class="show-more cursor-pointer">{{localeData?.show_more}}</a></li>
+                        </ul>
+                    </div>
+
+
+                </div>
+                <div class="menu-block">
+                    <div class="menu-item-wrapper font-14">
+                        <div class="menu-item  pd-l2 pd-r2">
+                            <p class="font-12">
+                                <span [routerLink]="['/pages/giddh-all-items']"
+                                    class="d-inline-flex align-items-center cursor-pointer">
+                                    {{localeData?.menu}}
+                                    <i class="icon-down-new mr-l05"></i> </span>
+                                <span class="text-gray cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
+                                    <i class="icon-go font-18"></i>
                                 </span>
-                                <i class="icon-right mr-l1 font-14"></i>
-                            </a>
-                            <a href="javascript:void(0);" *ngIf="menu?.items?.length === 0 && menu?.link"
-                                [routerLink]="[menu?.link]" [queryParams]="menu?.additional" id="button-basic-02"
-                                dropdownToggle type="button" class="dropdown-toggle" aria-controls="dropdown-basic-02">
-                                <span><i [ngClass]="menu?.icon"></i>
-                                    <span class="item-name">{{menu?.label}}</span>
-                                </span>
-                            </a>
-                            <ng-container *ngIf="menu?.items?.length">
-                                <ul id="dropdown-basic-02" *dropdownMenu
-                                    class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
-                                    aria-labelledby="button-basic-02">
-                                    <li *ngFor="let item of menu?.items; trackBy: trackItems">
-                                        <a *ngIf="item?.link" href="javascript:void(0);"
-                                            [class.active]="rla?.isActive || isRouteWithParamsActive(item?.link)"
-                                            [routerLink]="[item?.link]" routerLinkActive #rla="routerLinkActive"
-                                            [routerLinkActiveOptions]="{exact: true}"
-                                            [queryParams]="item?.additional"><i [ngClass]="item.icon"></i>
-                                            {{item?.label}}
-                                        </a>
-                                        <a *ngIf="!item?.link" href="javascript:void(0);"
-                                            (click)="handleItemClick(item)"><i [ngClass]="item.icon"></i>
-                                            {{item?.label}}
-                                        </a>
-                                    </li>
-                                </ul>
-                            </ng-container>
-                        </li>
-                    </ul>
+                            </p>
+                        </div>
+                        <ul class="list-style-none giddh-primary-items">
+                            <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems;index as itemIndex" dropdown #dropdown="bs-dropdown" [autoClose]="isOpen ? false : true"
+                                [attr.container]="!isOpen ? 'body' : ''" (click)="openActiveItem(itemIndex)">
+                                <a href="javascript:void(0);" tooltip="{{menu?.label}}" *ngIf="menu?.items?.length"
+                                    id="button-basic-02" dropdownToggle type="button" class="dropdown-toggle"
+                                    aria-controls="dropdown-basic-02" [class.active]="menu?.isActive">
+                                    <span><i [ngClass]="menu?.icon"></i>
+                                        <span class="item-name">{{menu?.label}}</span>
+                                    </span>
+                                    <i class="icon-right mr-l1 font-14"></i>
+                                </a>
+                                <a href="javascript:void(0);" *ngIf="menu?.items?.length === 0 && menu?.link"
+                                    [routerLink]="[menu?.link]" [queryParams]="menu?.additional" id="button-basic-02"
+                                    dropdownToggle type="button" class="dropdown-toggle" aria-controls="dropdown-basic-02">
+                                    <span><i [ngClass]="menu?.icon"></i>
+                                        <span class="item-name">{{menu?.label}}</span>
+                                    </span>
+                                </a>
+                                <ng-container *ngIf="menu?.items?.length">
+                                    <ul id="dropdown-basic-02" *dropdownMenu
+                                        class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
+                                        aria-labelledby="button-basic-02">
+                                        <li *ngFor="let item of menu?.items; trackBy: trackItems">
+                                            <a *ngIf="item?.link" href="javascript:void(0);"
+                                                [class.active]="rla?.isActive || isRouteWithParamsActive(item?.link)"
+                                                [routerLink]="[item?.link]" routerLinkActive #rla="routerLinkActive"
+                                                [routerLinkActiveOptions]="{exact: true}"
+                                                [queryParams]="item?.additional"><i [ngClass]="item.icon"></i>
+                                                {{item?.label}}
+                                            </a>
+                                            <a *ngIf="!item?.link" href="javascript:void(0);"
+                                                (click)="handleItemClick(item)"><i [ngClass]="item.icon"></i>
+                                                {{item?.label}}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </ng-container>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 
     <ng-template #headDropdownMenu>

@@ -1,0 +1,189 @@
+@import '../../../../assets/css/color.scss';
+.company-branch-dorpdown{
+    padding: 0 20px;
+    .search-box {
+        .input-group-text {
+            background-color: $solitude-new;
+            padding: 8px !important;
+        }
+        input {
+            border-left: none;
+            padding-left: 0 !important;
+            background-color: $solitude-new !important;
+            border-top-left-radius: 0px !important;
+            border-bottom-left-radius: 0px !important;
+            border-top-right-radius: 0px !important;
+            border-bottom-right-radius: 0px !important;
+            &:focus {
+                border-color: $gainsboro !important;
+            }
+        }
+        .input-group-append {
+            font-size: 12px;
+            color: $grey-chateau;
+            right: 10px;
+            top: 0;
+            padding: 0 5px;
+            height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: $solitude-new;
+            border: 1px solid $gainsboro;
+            border-radius: 5px;
+            border-left: none;
+            border-top-left-radius: 0px !important;
+            border-bottom-left-radius: 0px !important;
+        }
+    }
+    .company-list{
+        height: calc(66vh - 60px) !important;
+        overflow: auto;
+        margin: 0 -20px;
+        padding: 0 20px;
+        ul{
+            li{
+                padding: 8px 0;
+                cursor: pointer;
+                color: $trout;
+                &.btn-group{
+                    display: flex;
+                    flex-direction: column;
+                    &.open{
+                        background-color: $dark-alice-blue;
+                        margin: 0 -20px;
+                        p.show-more-branches {
+                            padding: 6px 15px;
+                        }
+                        p.create-branch{
+                            padding: 10px 15px;
+                        }
+                        .dropdown-toggle{
+                            padding: 0 20px;
+                        }
+                    }
+                    .dropdown-menu{
+                        position: static !important;
+                        box-shadow: none;
+                        border: none;
+                        margin: 0 ;
+                        background-color: transparent;
+                        padding: 0;
+                        li{
+                            padding:  0;
+                            a{
+                                background-color: transparent;
+                                padding:8px 15px;
+                                &:hover{
+                                    background-color: initial !important;
+                                    color: initial !important;
+
+                                }
+                                &.head-branch{
+                                    color: $cornflower;
+                                }
+                            }
+
+                            &:hover{
+                                a{
+                                    background-color: $sunshine !important;
+                                }
+                            }
+                        }
+                    }
+                    p.show-more-branches {
+                        color: $midnight-blue;
+                        padding: 10px 0;
+                        text-decoration: underline;
+                    }
+                    p.create-branch{
+                        color: $orange;
+                        padding: 6px 0;
+                    }
+                }
+            }
+        }
+        &.branch-list{
+            ul{
+                margin: 0 -20px;
+                li{
+                    padding: 0;
+                    cursor: pointer;
+                    a{
+                        background-color: transparent;
+                        padding:8px 20px;
+                        color: $trout;
+                        &:hover{
+                            background-color: initial !important;
+                            color: initial !important;
+
+                        }
+                    }
+                    &:hover{
+                        a{
+                            background-color: $sunshine !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .profile-user{
+        position: fixed;
+        bottom: -7px;
+        width: 240px;
+        left: 0;
+        padding: 0;
+        border-top: 1px solid $gainsboro;
+        background-color: $white;
+        .profile-name{
+            padding: 14px 15px;
+            cursor: pointer;
+            min-width: 120px;
+            .profile-alice {
+                display: inline-flex;
+                width: 24px;
+                height: 24px;
+                background-color: $cornflower;
+                border-radius: 30px;
+                font-size: 12px;
+                justify-content: center;
+                align-items: center;
+                color: $white;
+            }
+        }
+        .profile-logout{
+            button{
+                background-color: $dark-fog;
+                border: 1px solid $dark-fog;
+                padding: 14px 15px;
+                color: $trout;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-width: 120px;
+            }
+        }
+    }
+    .custom-tabs{
+        .icon-copmany-branch-connect{
+            position: absolute;
+            top: 14px;
+            left: 90px;
+        }
+    }
+}
+.digit-blue{
+    color: $cornflower;
+}
+.digit-orange{
+    color: $orange-new;
+}
+
+@media screen and (max-height: 768px) {
+    .company-branch-dorpdown{
+        .company-list {
+            height: calc(60vh - 60px) !important;
+        }
+    }
+}

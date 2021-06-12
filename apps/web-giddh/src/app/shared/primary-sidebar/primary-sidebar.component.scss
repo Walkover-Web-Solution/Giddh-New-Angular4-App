@@ -9,6 +9,9 @@
     .company-branch-block {
         background-color: $solitude-light;
         padding: 14px 0;
+        #button-company-branch{
+            list-style: none;
+        }
         .branch-connection {
             span.outer-span {
                 width: 12px;
@@ -50,6 +53,18 @@
             .icon-down-new {
                 position: relative;
                 right: 5px;
+            }
+            .icon-cross{
+                display: none;
+            }
+            &.open{
+                .icon-down-new {
+                    display: none;
+                }
+                .icon-cross{
+                    display: flex;
+                    font-size: 12px;
+                }
             }
             .head-nav {
                 background: $white-smoke;
@@ -198,6 +213,13 @@
             .switch-branch-alice {
                 display: none;
             }
+        }
+        .company-branch-nav{
+            height: calc(100vh - 130px);
+            box-shadow: none;
+            border: none;
+            margin: 0;
+            padding: 0;
         }
     }
     .search-box {
@@ -640,6 +662,9 @@
                 .btn-group {
                     width: 100%;
                 }
+            }
+            .company-branch-nav{
+                display: none;
             }
         }
         .account-dropdown-collapse {

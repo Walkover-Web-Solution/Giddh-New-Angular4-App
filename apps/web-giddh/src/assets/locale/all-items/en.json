@@ -331,5 +331,7 @@
     "settings_permission": "Settings > Permission",
     "user_details": "User Details",
     "inventory_inout": "Inventory In/Out",
-    "import_data": "Import Data"
+    "import_data": "Import Data",
+    "search_company": "Search Companies"
+
 }
