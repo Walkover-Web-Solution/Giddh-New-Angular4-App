@@ -76,7 +76,6 @@
                             "file-saver",
                             "angular2-text-mask",
                             "ngrx-store-localstorage",
-                            "util",
                             "css-element-queries",
                             "jspdf",
                             "jspdf-autotable",
@@ -302,13 +301,7 @@
                         "host": "localhost",
                         "baseHref": "http://localhost:3000",
                         "port": 3000,
-                        "browserTarget": "web-giddh:build",
-                        "customWebpackConfig": {
-                            "path": "apps/web-giddh/webpack.partial.js",
-                            "mergeRules": {
-                                "externals": "replace"
-                            }
-                        }
+                        "browserTarget": "web-giddh:build"
                     },
                     "configurations": {
                         "prod": {

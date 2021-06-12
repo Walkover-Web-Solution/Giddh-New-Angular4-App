@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "npm run postinstall.web && ng serve web-giddh",
+    "start": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng serve web-giddh",
     "build": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=local --sourceMap=false ",
     "build-prod": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=prod --sourceMap=false --output-hashing=all --extract-css=true && node tools/web/postbuild --path=dist/apps/web-giddh-prod && npm run rm_bak_files",
     "build-stage": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=stage --sourceMap=false --output-hashing=all --extract-css=true && node tools/web/postbuild --path=dist/apps/web-giddh-stage && npm run rm_bak_files",
@@ -136,7 +136,6 @@
     "ngx-toastr": "13.0.0",
     "ngx-uploader": "10.0.0",
     "node": "^12.16.0",
-    "node-sass": "4.14.1",
     "reflect-metadata": "0.1.12",
     "reselect": "4.0.0",
     "rxjs": "6.6.3",
@@ -145,7 +144,7 @@
     "zone.js": "0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.1102.14",
+    "@angular-devkit/build-angular": "^12.0.4",
     "@angular/cli": "^12.0.4",
     "@angular/compiler-cli": "12.0.4",
     "@angular/language-service": "12.0.4",

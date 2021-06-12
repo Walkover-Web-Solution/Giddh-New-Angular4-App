@@ -49,7 +49,7 @@ export class AuthService {
                         this._user = user;
                         this._authState.next(user);
                     }).catch((err) => {
-                        
+
                     });
                 }
             });
@@ -90,7 +90,7 @@ export class AuthService {
         });
     }
 
-    public signOut(): Promise<any> {
+    public signOut(): Promise<void> {
         this.loadingService.show();
         return new Promise((resolve, reject) => {
             if (this._user && this._user.provider) {
