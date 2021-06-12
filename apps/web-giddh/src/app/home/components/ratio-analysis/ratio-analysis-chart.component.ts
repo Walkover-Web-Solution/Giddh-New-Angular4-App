@@ -8,7 +8,6 @@ import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
-import { isNullOrUndefined } from 'util';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
@@ -343,7 +342,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
      */
     public translationComplete(event: boolean): void {
         if (event) {
-            this.rationResponse$.pipe(skipWhile(response => (isNullOrUndefined(response)))).subscribe(response => {
+            this.rationResponse$.pipe(skipWhile(response => (response === null || response === undefined))).subscribe(response => {
                 this.ratioObj = response;
                 this.generateCharts();
                 this.requestInFlight = false;

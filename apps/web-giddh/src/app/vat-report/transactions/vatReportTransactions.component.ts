@@ -61,7 +61,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
 
     constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private invoiceService: InvoiceService, private generalService: GeneralService, private breakpointObserver: BreakpointObserver) {
-        
+
     }
 
     /**
@@ -71,7 +71,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.toggleGstPane();
-        
+
         this.breakpointObserver
         .observe(['(max-width: 767px)'])
         .pipe(takeUntil(this.destroyed$))
@@ -211,7 +211,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @param {{ action: string }} userResponse
      * @memberof VatReportTransactionsComponent
      */
-    public closeDownloadOrSendMailPopup(userResponse: { action: string }): void {
+    public closeDownloadOrSendMailPopup(userResponse: any): void {
         this.downloadOrSendMailModel.hide();
         if (userResponse.action === 'update') {
             this.store.dispatch(this.invoiceActions.VisitToInvoiceFromPreview());
@@ -240,7 +240,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @param {{ action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }} userResponse
      * @memberof VatReportTransactionsComponent
      */
-    public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }): void {
+    public onDownloadOrSendMailEvent(userResponse: any): void {
         if (userResponse.action === 'download') {
             this.downloadFile();
         } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
@@ -300,7 +300,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public navigateToPreviousPage(): void {
         this.router.navigate(['/pages/vat-report'], { state: { taxNumber: this.vatReportTransactionsRequest.taxNumber, from: this.vatReportTransactionsRequest.from, to: this.vatReportTransactionsRequest.to } })
     }
-    
+
     /**
      * Aside pane toggle fixed class
      *
