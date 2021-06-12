@@ -5,7 +5,7 @@ import { LEDGER } from '../../actions/ledger/ledger.const';
 import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import * as _ from '../../lodash-optimized';
+import { cloneDeep } from '../../lodash-optimized';
 
 export interface LedgerState {
     account?: AccountResponse;
@@ -298,7 +298,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         }
         case LEDGER.SELECT_GIVEN_ENTRIES: {
             let res = action.payload as string[];
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let debitTrx = newState.transactionsResponse.debitTransactions;
             debitTrx = debitTrx.map(f => {
                 res.forEach(c => {
@@ -331,7 +331,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
 
         case LEDGER.DESELECT_GIVEN_ENTRIES: {
             let res = action.payload as string[];
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             let debitTrx = newState.transactionsResponse.debitTransactions;
             debitTrx = debitTrx.map(f => {
                 res.forEach(c => {

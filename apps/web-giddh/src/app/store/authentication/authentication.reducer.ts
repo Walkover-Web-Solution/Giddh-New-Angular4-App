@@ -23,7 +23,6 @@ import {
     StateDetailsRequest,
     StateDetailsResponse
 } from '../../models/api-models/Company';
-import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';

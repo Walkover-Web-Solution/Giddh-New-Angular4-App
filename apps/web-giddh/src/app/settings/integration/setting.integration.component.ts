@@ -6,7 +6,6 @@ import { FormArray, FormBuilder, FormGroup, NgForm, Validators } from '@angular/
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
-import * as _ from '../../lodash-optimized';
 import {
     AmazonSellerClass,
     CashfreeClass,
@@ -35,7 +34,7 @@ import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ESCAPE } from '@angular/cdk/keycodes';
-import { isEqual } from '../../lodash-optimized';
+import { cloneDeep, find, isEmpty, isEqual } from '../../lodash-optimized';
 
 export declare const gapi: any;
 
@@ -211,7 +210,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             // set razor pay form data
             if (o.razorPayForm) {
                 if (typeof o.razorPayForm !== "string") {
-                    this.razorPayObj = _.cloneDeep(o.razorPayForm);
+                    this.razorPayObj = cloneDeep(o.razorPayForm);
                     if (this.razorPayObj && this.razorPayObj.account === null) {
                         this.razorPayObj.account = { name: null, uniqueName: null };
                         this.forceClearLinkAccount$ = observableOf({ status: true });
@@ -225,28 +224,28 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
             // set cashfree form data
             if (o.payoutForm && o.payoutForm.userName) {
-                this.payoutObj = _.cloneDeep(o.payoutForm);
+                this.payoutObj = cloneDeep(o.payoutForm);
                 this.payoutAdded = true;
             } else {
                 this.payoutObj = new CashfreeClass();
                 this.payoutAdded = false;
             }
             if (o.autoCollect && o.autoCollect.userName) {
-                this.autoCollectObj = _.cloneDeep(o.autoCollect);
+                this.autoCollectObj = cloneDeep(o.autoCollect);
                 this.autoCollectAdded = true;
             } else {
                 this.autoCollectObj = new CashfreeClass();
                 this.autoCollectAdded = false;
             }
             if (o.paymentGateway && o.paymentGateway.userName) {
-                this.paymentGateway = _.cloneDeep(o.paymentGateway);
+                this.paymentGateway = cloneDeep(o.paymentGateway);
                 this.paymentGatewayAdded = true;
             } else {
                 this.paymentGateway = new CashfreeClass();
                 this.paymentGatewayAdded = false;
             }
             if (o.amazonSeller && o.amazonSeller.length) {
-                this.amazonSellerRes = _.cloneDeep(o.amazonSeller);
+                this.amazonSellerRes = cloneDeep(o.amazonSeller);
                 this.amazonSellerForm.controls['sellers']?.patchValue(this.amazonSellerRes);
                 this.addAmazonSellerRow();
             }
@@ -313,7 +312,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
 
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res && !_.isEmpty(res)) {
+            if (res && !isEmpty(res)) {
                 if (res && res.ecommerceDetails && res.ecommerceDetails.length > 0) {
                     res.ecommerceDetails.forEach(item => {
                         if (item && item.ecommerceType && item.ecommerceType.name && item.ecommerceType.name === "shopify") {
@@ -393,7 +392,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         if (fomValue) {
             this.selecetdUpdateIndex = null;
-            let requestObject = _.cloneDeep(fomValue);
+            let requestObject = cloneDeep(fomValue);
             if (requestObject.userAmountRanges) {
                 requestObject.userAmountRanges.map(element => {
                     element.maxBankLimit = (element.maxBankLimit === 'max') ? 'true' : 'false';
@@ -412,7 +411,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public selectAccount(event: IOption) {
         if (event.value) {
             this.accounts$.subscribe((arr: IOption[]) => {
-                let res = _.find(arr, (o) => o.value === event.value);
+                let res = find(arr, (o) => o.value === event.value);
                 if (res) {
                     this.razorPayObj.account.name = res.text;
                 }
@@ -421,18 +420,18 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public saveRazorPayDetails() {
-        let data = _.cloneDeep(this.razorPayObj);
+        let data = cloneDeep(this.razorPayObj);
         this.store.dispatch(this.settingsIntegrationActions.SaveRazorPayDetails(data));
     }
 
     public updateRazorPayDetails() {
-        let data = _.cloneDeep(this.razorPayObj);
+        let data = cloneDeep(this.razorPayObj);
         this.store.dispatch(this.settingsIntegrationActions.UpdateRazorPayDetails(data));
     }
 
     public unlinkAccountFromRazorPay() {
         if (this.razorPayObj.account && this.razorPayObj.account.name && this.razorPayObj.account.uniqueName) {
-            let data = _.cloneDeep(this.razorPayObj);
+            let data = cloneDeep(this.razorPayObj);
             data.account.uniqueName = null;
             data.account.name = null;
             this.store.dispatch(this.settingsIntegrationActions.UpdateRazorPayDetails(data));
@@ -459,7 +458,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public submitCashfreeDetail(f) {
         if (f.userName && f.password) {
-            let objToSend = _.cloneDeep(f);
+            let objToSend = cloneDeep(f);
             this.store.dispatch(this.settingsIntegrationActions.SaveCashfreeDetails(objToSend));
         }
     }
@@ -470,21 +469,21 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public updateCashfreeDetail(f) {
         if (f.userName && f.password) {
-            let objToSend = _.cloneDeep(f);
+            let objToSend = cloneDeep(f);
             this.store.dispatch(this.settingsIntegrationActions.UpdateCashfreeDetails(objToSend));
         }
     }
 
     public submitAutoCollect(f) {
         if (f.userName && f.password) {
-            let objToSend = _.cloneDeep(f);
+            let objToSend = cloneDeep(f);
             this.store.dispatch(this.settingsIntegrationActions.AddAutoCollectUser(objToSend));
         }
     }
 
     public updateAutoCollect(f) {
         if (f.userName && f.password) {
-            let objToSend = _.cloneDeep(f);
+            let objToSend = cloneDeep(f);
             this.store.dispatch(this.settingsIntegrationActions.UpdateAutoCollectUser(objToSend));
         }
     }
@@ -523,7 +522,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public saveAmazonSeller(obj) {
         let sellers = [];
-        sellers.push(_.cloneDeep(obj.value));
+        sellers.push(cloneDeep(obj.value));
         this.store.dispatch(this.settingsIntegrationActions.AddAmazonSeller(sellers));
     }
 
@@ -534,7 +533,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (!obj.value.sellerId) {
             return;
         }
-        let sellerObj = _.cloneDeep(obj.value);
+        let sellerObj = cloneDeep(obj.value);
         delete sellerObj['secretKey'];
         this.store.dispatch(this.settingsIntegrationActions.UpdateAmazonSeller(sellerObj));
     }
@@ -677,7 +676,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public updateIciciDetails(regAcc: IntegratedBankList, index: number) {
         this.selecetdUpdateIndex = index;
         this.store.dispatch(this.settingsIntegrationActions.ResetICICIFlags());
-        let registeredAccountObj = _.cloneDeep(regAcc);
+        let registeredAccountObj = cloneDeep(regAcc);
         registeredAccountObj.userAmountRanges.map(item => {
             item.maxBankLimit = item.maxBankLimit === "max" ? 'true' : 'false';
         });

@@ -1,9 +1,9 @@
 import { AccountFlat, SearchDataSet, SearchRequest } from '../../models/api-models/Search';
 import { SearchActions } from '../../actions/search.actions';
-import * as _ from '../../lodash-optimized';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
+import { each } from '../../lodash-optimized';
 
 export interface SearchState {
     value?: AccountFlat[];
@@ -95,7 +95,7 @@ export function searchReducer(state = initialState, action: CustomActions): Sear
 
 const flattenSearchGroupsAndAccounts = (accountList, groupName) => {
     let uniqueList: AccountFlat[] = [];
-    _.each(accountList, (account) => {
+    each(accountList, (account) => {
         let accountFlat: AccountFlat = {
             parent: groupName,
             closeBalanceType: account.closingBalance.type,

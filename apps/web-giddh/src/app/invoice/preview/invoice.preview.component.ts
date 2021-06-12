@@ -18,8 +18,7 @@ import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import * as _ from '../../lodash-optimized';
-import { cloneDeep, uniqBy } from '../../lodash-optimized';
+import { cloneDeep, map, uniqBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
@@ -507,7 +506,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         endDate: moment(dateObj[1], GIDDH_DATE_FORMAT).toDate(),
                         chosenLabel: dateObj[2]
                     };
-                    let universalDate = _.cloneDeep(dateObj);
+                    let universalDate = cloneDeep(dateObj);
                     this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                     this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -754,7 +753,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public onDeleteBtnClick() {
-        let allInvoices = _.cloneDeep(this.voucherData.items);
+        let allInvoices = cloneDeep(this.voucherData.items);
         this.selectedInvoice = allInvoices.find((o) => o.uniqueName === this.selectedItems[0]);
         this.invoiceConfirmationModel.show();
     }
@@ -838,7 +837,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * onSelectInvoice
      */
     public onSelectInvoice(invoice: ReceiptItem) {
-        this.selectedInvoice = _.cloneDeep(invoice);
+        this.selectedInvoice = cloneDeep(invoice);
 
         let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
         let newIndex;
@@ -968,8 +967,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     public prepareModelForInvoiceReceiptApi(isUniversalDateSelected): InvoiceReceiptFilter {
         let model: any = {};
-        let o = _.cloneDeep(this.invoiceSearchRequest);
-        let advanceSearch = _.cloneDeep(this.advanceSearchFilter);
+        let o = cloneDeep(this.invoiceSearchRequest);
+        let advanceSearch = cloneDeep(this.advanceSearchFilter);
 
         if (o.voucherNumber) {
             model.voucherNumber = o.voucherNumber;
@@ -1100,7 +1099,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.allItemsSelected = type;
         this.selectedItems = [];
         if (this.voucherData && this.voucherData.items && this.voucherData.items.length) {
-            this.voucherData.items = _.map(this.voucherData.items, (item: ReceiptItem) => {
+            this.voucherData.items = map(this.voucherData.items, (item: ReceiptItem) => {
                 item.isSelected = this.allItemsSelected;
                 let isAvailable = false;
                 if (this.selectedInvoicesList && this.selectedInvoicesList.length > 0) {
@@ -1343,7 +1342,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public validateInvoiceForEway() {
-        let allInvoices = _.cloneDeep(this.voucherData.items);
+        let allInvoices = cloneDeep(this.voucherData.items);
         this.selectedInvoice = allInvoices.find((o) => o.uniqueName === this.selectedItems[0]);
         this.validateInvoiceobj.invoiceNumber = this.selectedInvoice.voucherNumber;
         this._invoiceService.validateInvoiceForEwaybill(this.validateInvoiceobj).pipe(takeUntil(this.destroyed$)).subscribe(res => {
@@ -1636,7 +1635,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public deletePurchaseBill(billUniqueName: any): void {
-        let allInvoices = _.cloneDeep(this.voucherData.items);
+        let allInvoices = cloneDeep(this.voucherData.items);
         this.selectedInvoice = allInvoices.find((inv) => inv.uniqueName === billUniqueName);
         this.invoiceConfirmationModel.show();
     }
@@ -1879,7 +1878,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             this.selectedInvoices = selectedInvoices;
                         }
 
-                        let voucherData = _.cloneDeep(res[0]);
+                        let voucherData = cloneDeep(res[0]);
                         if (voucherData.items.length) {
                             this.showExportButton = voucherData.items.every(s => s.account.uniqueName === voucherData.items[0].account.uniqueName);
                         } else {
@@ -1921,7 +1920,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         }
                     }
                     setTimeout(() => {
-                        this.voucherData = _.cloneDeep(res[0]);
+                        this.voucherData = cloneDeep(res[0]);
                         if (!this.cdr['destroyed']) {
                             this.cdr.detectChanges();
                         }
