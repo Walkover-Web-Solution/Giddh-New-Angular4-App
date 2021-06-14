@@ -130,10 +130,24 @@
                     "hide": "sidebar"
                 },
                 {
-                    "label": "GSTR",
+                    "label": "GSTR1",
                     "link": "/pages/gstfiling",
                     "icon": "icon-GSTR",
-                    "description": "File & view GSTR1, GSTR2 & GSTR3B",
+                    "description": "File & view GSTR1",
+                    "hide": "sidebar"
+                },
+                {
+                    "label": "GSTR2",
+                    "link": "/pages/gstfiling",
+                    "icon": "icon-GSTR",
+                    "description": "File & view GSTR2",
+                    "hide": "sidebar"
+                },
+                {
+                    "label": "GSTR3B",
+                    "link": "/pages/gstfiling",
+                    "icon": "icon-GSTR",
+                    "description": "File & view GSTR3B",
                     "hide": "sidebar"
                 },
                 {
@@ -149,6 +163,13 @@
                     "link": "/pages/vat-report",
                     "icon": "icon-vat",
                     "description": "File & review VAT",
+                    "hide": "sidebar"
+                },
+                {
+                    "label": "Setting",
+                    "link": "/pages/settings/taxes",
+                    "icon": "icon-settings-cog",
+                    "description": "Tax setting",
                     "hide": "sidebar"
                 }
             ],

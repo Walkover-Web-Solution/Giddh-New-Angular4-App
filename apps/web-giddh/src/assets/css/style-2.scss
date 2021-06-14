@@ -8285,7 +8285,7 @@ input.mat-input-element {
     padding-left: 240px !important;
 }
 .setting-sidebar-open #content-wrapper {
-    padding-left: 0;
+    padding-left: 60px;
 }
 .share-grp.account-share-modal,
 .group-share-modal {
@@ -8667,6 +8667,14 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 768px) {
+    .setting-sidebar-open {
+        #content-wrapper{
+            padding-right: 0;
+            &.menu_open{
+                padding-right: 0;
+            }
+        }
+    }
     .tax-engine .transactions-list .filter-row + .filter-row {
         margin-left: 5px;
     }

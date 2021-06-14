@@ -67,6 +67,17 @@
         li {
             padding: 6px 20px;
             margin-bottom: 0px;
+            &.disabled {
+                &:hover {
+                    background-color: transparent;
+                    span{
+                        i{
+                            color: $gray !important;
+                        }
+                    }
+                }
+
+            }
             a {
                 cursor: pointer;
                 pointer-events: all;
@@ -95,13 +106,19 @@
             }
             &:hover {
                 background-color: $lavender;
+                span{
+                    i{
+                        color: $nero !important;
+                    }
+                }
             }
+
         }
     }
 }
-.gst-menu-items ul li:hover a span i {
-    color: $nero !important;
-}
+// .gst-menu-items ul li:hover a span i {
+//     color: $nero !important;
+// }
 @media (max-width: 767px) {
     :host.gst-sidebar {
         z-index: 9999;
