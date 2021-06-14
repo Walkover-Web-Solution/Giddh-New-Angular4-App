@@ -6,7 +6,6 @@ import { CustomStockUnitAction } from '../../../actions/inventory/customStockUni
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
-import * as _ from '../../../lodash-optimized';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { InventoryService } from '../../../services/inventory.service';
@@ -15,6 +14,7 @@ import { AppState } from '../../../store/roots';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { StockUnits } from './stock-unit';
 import { ToasterService } from '../../../services/toaster.service';
+import { clone, cloneDeep, isEmpty } from '../../../lodash-optimized';
 
 @Component({
     selector: 'inventory-custom-stock',
@@ -72,8 +72,8 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         });
 
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profileData) => {
-            if (!_.isEmpty(profileData)) {
-                this.companyProfile = _.cloneDeep(profileData);
+            if (!isEmpty(profileData)) {
+                this.companyProfile = cloneDeep(profileData);
                 this.giddhDecimalPlaces = this.companyProfile.balanceDecimalPlaces || 2;
                 this.inventoryService.getUnitCodeRegex('stockUnit', this.companyProfile.country || '').pipe(takeUntil(this.destroyed$)).subscribe((data: any) => {
                     if (data && data.body) {
@@ -126,29 +126,29 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     }
 
     public saveUnit(): any {
-        let customUnitObj = _.clone(this.customUnitObj);
+        let customUnitObj = clone(this.customUnitObj);
         if (!this.editMode) {
             if (this.isIndia && this.selectedUnitName) {
-                customUnitObj.name = _.cloneDeep(this.selectedUnitName);
+                customUnitObj.name = cloneDeep(this.selectedUnitName);
             }
             if (this.isDivide) {
-                customUnitObj.quantityPerUnit = 1 * _.cloneDeep(customUnitObj.quantityPerUnit);
+                customUnitObj.quantityPerUnit = 1 * cloneDeep(customUnitObj.quantityPerUnit);
                 customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(4));
             } else {
-                customUnitObj.quantityPerUnit = 1 / _.cloneDeep(customUnitObj.quantityPerUnit);
+                customUnitObj.quantityPerUnit = 1 / cloneDeep(customUnitObj.quantityPerUnit);
                 customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(16));
             }
-            this.store.dispatch(this.customStockActions.CreateStockUnit(_.cloneDeep(customUnitObj)));
+            this.store.dispatch(this.customStockActions.CreateStockUnit(cloneDeep(customUnitObj)));
         } else {
             if (this.isDivide) {
-                customUnitObj.quantityPerUnit = 1 * _.cloneDeep(customUnitObj.quantityPerUnit);
+                customUnitObj.quantityPerUnit = 1 * cloneDeep(customUnitObj.quantityPerUnit);
                 customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(4));
             } else {
-                customUnitObj.quantityPerUnit = 1 / _.cloneDeep(customUnitObj.quantityPerUnit);
+                customUnitObj.quantityPerUnit = 1 / cloneDeep(customUnitObj.quantityPerUnit);
                 customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(16));
             }
 
-            this.store.dispatch(this.customStockActions.UpdateStockUnit(_.cloneDeep(customUnitObj), this.editCode));
+            this.store.dispatch(this.customStockActions.UpdateStockUnit(cloneDeep(customUnitObj), this.editCode));
             this.customUnitObj.name = null;
         }
     }
@@ -256,11 +256,11 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public noUnitFound(selectElem) {
         if (selectElem) {
             let val: string = selectElem.filter;
-            this.customUnitObj.name = _.cloneDeep(val);
+            this.customUnitObj.name = cloneDeep(val);
             this.selectedUnitName = '';
             if (!this.editMode && val) {
                 val = uniqueNameInvalidStringReplace(val);
-                this.customUnitObj.code = _.cloneDeep(val);
+                this.customUnitObj.code = cloneDeep(val);
             }
         }
     }

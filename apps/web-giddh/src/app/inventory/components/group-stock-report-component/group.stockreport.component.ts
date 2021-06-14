@@ -11,7 +11,6 @@ import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxj
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, takeUntil } from 'rxjs/operators';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
-import * as _ from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import {
     GroupStockReportRequest,
@@ -30,6 +29,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
+import { cloneDeep, isEqual, orderBy } from '../../../lodash-optimized';
 
 @Component({
     selector: 'invetory-group-stock-report',
@@ -257,7 +257,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
-                const stockGroup = _.cloneDeep(a);
+                const stockGroup = cloneDeep(a);
                 const stockList = [];
                 this.activeGroupName = stockGroup.name;
                 stockGroup.stocks.forEach((stock) => {
@@ -386,7 +386,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      * @memberof InventoryGroupStockReportComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes.currentBranchAndWarehouse && !_.isEqual(changes.currentBranchAndWarehouse.previousValue, changes.currentBranchAndWarehouse.currentValue)) {
+        if (changes.currentBranchAndWarehouse && !isEqual(changes.currentBranchAndWarehouse.previousValue, changes.currentBranchAndWarehouse.currentValue)) {
             if (this.currentBranchAndWarehouse) {
                 this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouse.warehouse !== 'all-entities') ? this.currentBranchAndWarehouse.warehouse : null;
                 this.GroupStockReportRequest.branchUniqueName = this.currentBranchAndWarehouse.isCompany ? undefined : this.currentBranchAndWarehouse.branch;
@@ -424,7 +424,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.groupUniqueNameFromURL = null;
         this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouse.warehouse !== 'all-entities') ? this.currentBranchAndWarehouse.warehouse : null;
         this.GroupStockReportRequest.branchUniqueName = this.currentBranchAndWarehouse.isCompany ? undefined : this.currentBranchAndWarehouse.branch;
-        this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
+        this.store.dispatch(this.stockReportActions.GetGroupStocksReport(cloneDeep(this.GroupStockReportRequest)));
     }
 
     public getGroupReport(resetPage: boolean) {
@@ -437,7 +437,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         if (!this.GroupStockReportRequest.stockGroupUniqueName) {
             return;
         }
-        this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
+        this.store.dispatch(this.stockReportActions.GetGroupStocksReport(cloneDeep(this.GroupStockReportRequest)));
     }
 
     /**
@@ -456,7 +456,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                     newEntities.forEach(element => {
                         element['label'] = element.name;
                     });
-                    this.entities$ = observableOf(_.orderBy(newEntities, 'name'));
+                    this.entities$ = observableOf(orderBy(newEntities, 'name'));
                 } else if (newEntities.length === 0) {
                     this.entities$ = observableOf(null);
                 }
@@ -649,7 +649,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
                 this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
-                let universalDate = _.cloneDeep(a);
+                let universalDate = cloneDeep(a);
                 this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
                 this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }

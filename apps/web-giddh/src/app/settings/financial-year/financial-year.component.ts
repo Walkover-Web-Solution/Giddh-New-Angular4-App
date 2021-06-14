@@ -4,7 +4,6 @@ import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../store/roots';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
-import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { IFinancialYearResponse } from '../../services/settings.financial-year.service';
@@ -13,6 +12,7 @@ import { CompanyActions } from '../../actions/company.actions';
 import { createSelector } from 'reselect';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IForceClear } from '../../models/api-models/Sales';
+import { cloneDeep, isNull, range } from '../../lodash-optimized';
 
 export interface IGstObj {
     newGstNumber: string;
@@ -74,7 +74,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     public setYearRange() {
         let endYear = moment().year();
         let startYear = moment().subtract(7, 'year').year();
-        let yearArray = _.range(startYear, endYear);
+        let yearArray = range(startYear, endYear);
         this.yearOptions = yearArray.map(year => {
             return { label: String(year), value: year };
         });
@@ -86,8 +86,8 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
         this.store.pipe(select(createSelector([(state: AppState) => state.settings.financialYears], (o) => {
             this.setYearRange();
             if (o) {
-                this.financialYearObj = _.cloneDeep(o);
-                let yearOptions = _.cloneDeep(this.yearOptions);
+                this.financialYearObj = cloneDeep(o);
+                let yearOptions = cloneDeep(this.yearOptions);
                 o.financialYears.forEach((fyear) => {
                     let year = moment(fyear.financialYearStarts, GIDDH_DATE_FORMAT).year();
                     let yearIndx = yearOptions.findIndex((y: any) => y.value === year);
@@ -95,16 +95,16 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                         yearOptions.splice(yearIndx, 1);
                     }
                 });
-                this.yearOptions = _.cloneDeep(yearOptions);
+                this.yearOptions = cloneDeep(yearOptions);
                 this.forceClear$ = observableOf({ status: true });
-            } else if (_.isNull(o)) {
+            } else if (isNull(o)) {
                 this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
             }
         })), takeUntil(this.destroyed$)).subscribe();
     }
 
     public lockUnlockFinancialYear(financialYear: ActiveFinancialYear) {
-        let year = _.cloneDeep(financialYear);
+        let year = cloneDeep(financialYear);
         let dataToSend = {
             lockAll: true,
             uniqueName: year.uniqueName

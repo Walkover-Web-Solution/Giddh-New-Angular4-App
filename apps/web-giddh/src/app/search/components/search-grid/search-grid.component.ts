@@ -5,12 +5,12 @@ import * as moment from 'moment/moment';
 import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../../../models/api-models/Search';
 import { AppState } from '../../../store';
 import { saveAs } from 'file-saver';
-import * as _ from '../../../lodash-optimized';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyService } from '../../../services/companyService.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../../../services/general.service';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'search-grid',
@@ -94,7 +94,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     // reversing sort
     public set sortReverse(value: boolean) {
         this._sortReverse = value;
-        this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => _.cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType]))));
+        this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType]))));
     }
 
     // pagination related
@@ -206,7 +206,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.checkboxInfo[this.checkboxInfo.selectedPage] = isAllChecked;
 
         this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
-            let entries = _.cloneDeep(p);
+            let entries = cloneDeep(p);
             this.isAllChecked = isAllChecked;
 
             entries.forEach((entry) => {

@@ -5,11 +5,11 @@ import { INameUniqueName } from '../../../../models/api-models/Inventory';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { GroupCreateRequest, GroupResponse, GroupUpateRequest } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { BaseResponse } from 'apps/web-giddh/src/app/models/api-models/BaseResponse';
-import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { GroupsWithAccountsResponse } from 'apps/web-giddh/src/app/models/api-models/GroupsWithAccounts';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { Store, select } from '@ngrx/store';
 import { AccountRequestV2, AccountResponseV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
+import { cloneDeep, sortBy } from 'apps/web-giddh/src/app/lodash-optimized';
 
 export class GroupAccountSidebarVM {
     public columns: ColumnGroupsAccountVM[];
@@ -27,10 +27,10 @@ export class GroupAccountSidebarVM {
     public selectGroup(item: IGroupsWithAccounts, currentIndex: number, isSearching: boolean = false) {
         this.columns.splice(currentIndex + 1, this.columns.length - currentIndex + 1);
         if (item.groups) {
-            item.groups = _.sortBy(item.groups, ['uniqueName', 'name']);
+            item.groups = sortBy(item.groups, ['uniqueName', 'name']);
         }
         if (item.accounts) {
-            item.accounts = _.sortBy(item.accounts, ['uniqueName', 'name']);
+            item.accounts = sortBy(item.accounts, ['uniqueName', 'name']);
         }
         if (item.groups || item.accounts) {
             this.columns.push(new ColumnGroupsAccountVM(item));
@@ -58,7 +58,7 @@ export class GroupAccountSidebarVM {
                     uniqueName: resp.body.uniqueName,
                     isVisible: true
                 };
-                let Items = _.cloneDeep(this.columns[columnLength - 1].Items);
+                let Items = cloneDeep(this.columns[columnLength - 1].Items);
                 Items.push(grp);
                 this.columns[columnLength - 1].Items = Items;
                 break;
@@ -66,7 +66,7 @@ export class GroupAccountSidebarVM {
 
             case eventsConst.groupUpdated: {
                 let resp: BaseResponse<GroupResponse, GroupUpateRequest> = payload;
-                let Items = _.cloneDeep(this.columns[columnLength - 2].Items);
+                let Items = cloneDeep(this.columns[columnLength - 2].Items);
                 this.columns[columnLength - 2].Items = Items.map(p => {
                     if (p.uniqueName === resp.queryString.groupUniqueName) {
                         p = {
@@ -119,7 +119,7 @@ export class GroupAccountSidebarVM {
              */
             case eventsConst.accountAdded: {
                 let resp: BaseResponse<AccountResponseV2, AccountRequestV2> = payload;
-                let Items = _.cloneDeep(this.columns[columnLength - 1].Items);
+                let Items = cloneDeep(this.columns[columnLength - 1].Items);
                 let acc: IGroupOrAccount = {
                     accounts: [],
                     groups: [],
@@ -135,7 +135,7 @@ export class GroupAccountSidebarVM {
 
             case eventsConst.accountUpdated: {
                 let resp: BaseResponse<AccountResponseV2, AccountRequestV2> = payload;
-                let Items = _.cloneDeep(this.columns[columnLength - 1].Items);
+                let Items = cloneDeep(this.columns[columnLength - 1].Items);
                 this.columns[columnLength - 1].Items = Items.map(p => {
                     if (p.uniqueName === resp.queryString.accountUniqueName) {
                         p = {

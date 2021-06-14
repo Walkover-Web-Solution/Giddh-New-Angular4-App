@@ -916,18 +916,6 @@
                     </div>
                 </div>
             </div>
-            <!-- modal dialog -->
-            <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
-                tabindex="-1">
-                <div class="modal-dialog gray modal-liquid">
-                    <div class="modal-content">
-                        <invoice-generate-model *ngIf="showInvoiceGenerateModal"
-                            (closeEvent)="closeInvoiceModel($event)">
-                        </invoice-generate-model>
-                    </div>
-                </div>
-            </div>
-
             <!--advance_seearch Modal-->
             <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
                 tabindex="-1">

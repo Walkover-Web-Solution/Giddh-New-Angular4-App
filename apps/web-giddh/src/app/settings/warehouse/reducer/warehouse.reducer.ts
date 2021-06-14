@@ -1,4 +1,4 @@
-import * as _ from '../../../lodash-optimized';
+import { cloneDeep } from '../../../lodash-optimized';
 import { CustomActions } from '../../../store/customActions';
 import { WarehouseActions } from '../action/warehouse.action';
 
@@ -39,7 +39,7 @@ export function warehouseReducer(state: WarehouseState = initialState, action: C
             return { ...state, warehouseCreated: false };
         case WarehouseActions.GET_ALL_WAREHOUSE_RESPONSE:
             if (action.payload) {
-                return { ...state, warehouses: _.cloneDeep(action.payload.body) };
+                return { ...state, warehouses: cloneDeep(action.payload.body) };
             }
             return state;
         case WarehouseActions.UPDATE_WAREHOUSE_RESPONSE:
