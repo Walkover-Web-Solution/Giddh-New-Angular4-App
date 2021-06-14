@@ -130,10 +130,24 @@
                     "hide": "sidebar"
                 },
                 {
-                    "label": "जीएसटीआर",
+                    "label": "जीएसटीआर 1",
                     "link": "/pages/gstfiling",
                     "icon": "icon-GSTR",
-                    "description": "जीएसटीआर 1, जीएसटीआर 2 आणि जीएसटीआर 3 बी फाइल करा आणि पहा",
+                    "description": "जीएसटीआर 1 फाइल करा आणि पहा",
+                    "hide": "sidebar"
+                },
+                {
+                    "label": "जीएसटीआर 2",
+                    "link": "/pages/gstfiling",
+                    "icon": "icon-GSTR",
+                    "description": "जीएसटीआर 2 फाइल करा आणि पहा",
+                    "hide": "sidebar"
+                },
+                {
+                    "label": "जीएसटीआर 3B",
+                    "link": "/pages/gstfiling",
+                    "icon": "icon-GSTR",
+                    "description": "जीएसटीआर 3B फाइल करा आणि पहा",
                     "hide": "sidebar"
                 },
                 {
@@ -149,6 +163,13 @@
                     "link": "/pages/vat-report",
                     "icon": "icon-vat",
                     "description": "व्हॅट फाइल आणि पुनरावलोकन करा",
+                    "hide": "sidebar"
+                },
+                {
+                    "label": "सेटिंग्ज",
+                    "link": "/pages/settings/taxes",
+                    "icon": "icon-settings-cog",
+                    "description": "कर सेटिंग्ज",
                     "hide": "sidebar"
                 }
             ]
