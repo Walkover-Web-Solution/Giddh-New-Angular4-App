@@ -10123,11 +10123,16 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 768px) {
+    .setting-sidebar{
+        display: none;
+    }
     .setting-sidebar-open {
         #content-wrapper{
             padding-right: 0;
+            padding-left: 60px;
             &.menu_open{
                 padding-right: 0;
+                padding-left: 60px;
             }
         }
     }
@@ -10315,6 +10320,9 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
+    .setting-sidebar{
+        display: block;
+    }
     .on-setting-page .nav-left-bar.open,
     .on-user-page .nav-left-bar.open on-user-page {
         left: 0 !important;
