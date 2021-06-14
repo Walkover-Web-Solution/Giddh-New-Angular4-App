@@ -538,9 +538,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 groups: [],
                 accounts: DEFAULT_AC
             };
-
-            // due to some issue
-            // this.selectedPage = menuList[0].name;
             this.dbService.insertFreshData(this.activeCompanyForDb);
             // slice default menus and account on small screen
             if (!(window.innerWidth > 1440 && window.innerHeight > 717)) {
