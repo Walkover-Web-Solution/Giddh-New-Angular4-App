@@ -111,7 +111,6 @@
                             }
                         ],
                         "styles": [
-                            "xplat/web/scss/_spacing.scss",
                             "apps/web-giddh/src/assets/css/bootstrap.css",
                             "apps/web-giddh/src/assets/css/ngx-bootstrap/bs-datepicker.css",
                             "apps/web-giddh/src/assets/css/font-awesome.css",
@@ -388,7 +387,6 @@
                             }
                         ],
                         "styles": [
-                            "xplat/web/scss/_spacing.scss",
                             "apps/web-giddh/src/assets/css/bootstrap.css",
                             "apps/web-giddh/src/assets/css/ngx-bootstrap/bs-datepicker.css",
                             "apps/web-giddh/src/assets/css/font-awesome.css",
@@ -600,7 +598,6 @@
                             }
                         ],
                         "styles": [
-                            "xplat/web/scss/_spacing.scss",
                             "apps/web-giddh/src/assets/css/bootstrap.css",
                             "apps/web-giddh/src/assets/css/ngx-bootstrap/bs-datepicker.css",
                             "apps/web-giddh/src/assets/css/font-awesome.css",
