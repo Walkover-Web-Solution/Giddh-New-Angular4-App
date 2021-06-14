@@ -344,7 +344,8 @@
                                                                         <span class="pd-l05 checkbox-span">
                                                                             <input type="checkbox"
                                                                                 id="{{'transaction-mapped-select-entry-dr-' + i}}"
-                                                                                (click)="selectEntryForBulkAction($event, item)" />
+                                                                                (click)="selectEntryForBulkAction($event, item)"
+                                                                                [disabled]="(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"/>
                                                                         </span>
                                                                         <span class="mr-l05">
                                                                             <input class="form-control" [maxlength]="10"
@@ -371,6 +372,7 @@
                                                                             (viewInitEvent)="debitShSelect?.show()"
                                                                             [options]="searchResults"
                                                                             [(ngModel)]="txn.particular"
+                                                                            [disabled]="(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
                                                                             [isPaginationEnabled]="true"
                                                                             (scrollEnd)="handleScrollEnd()"
                                                                             (dynamicSearchedQuery)="onSearchQueryChanged($event)"
@@ -497,7 +499,8 @@
                                                                             <input type="checkbox"
                                                                                 id="{{'transaction-mapped-select-entry-cr-' + i}}"
                                                                                 [(ngModel)]="txn.isChecked"
-                                                                                (click)="selectEntryForBulkAction($event, item)" />
+                                                                                (click)="selectEntryForBulkAction($event, item)"
+                                                                                [disabled]="(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"/>
                                                                         </span>
                                                                         <span class="mr-l05">
                                                                             <input class="form-control" [maxlength]="10"
@@ -525,6 +528,7 @@
                                                                             (viewInitEvent)="creditShSelect?.show()"
                                                                             [options]="searchResults"
                                                                             [(ngModel)]="txn.particular"
+                                                                            [disabled]="(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
                                                                             (selected)="selectAccount($event,txn)"
                                                                             [isPaginationEnabled]="true"
                                                                             (scrollEnd)="handleScrollEnd()"
@@ -763,9 +767,6 @@
                             {{localeData?.pages}}</span>
 
                         <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
-                            <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
-        [boundaryLinks]="true">
-        </pagination> -->
                         </div>
 
                     </div>
@@ -1467,9 +1468,6 @@
                         <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }}
                             {{localeData?.pages}}</span>
                         <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
-                            <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
-        [boundaryLinks]="true">
-        </pagination> -->
                         </div>
 
                     </div>
