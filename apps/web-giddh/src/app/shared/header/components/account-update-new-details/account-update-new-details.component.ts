@@ -25,7 +25,6 @@ import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { GeneralActions } from '../../../../actions/general/general.actions';
-import * as _ from '../../../../lodash-optimized';
 import {
     AccountMergeRequest,
     AccountMoveRequest,
@@ -52,6 +51,7 @@ import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service'
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { INameUniqueName } from 'apps/web-giddh/src/app/models/api-models/Inventory';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { clone, cloneDeep, differenceBy, flattenDeep, uniq } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'account-update-new-details',
@@ -223,7 +223,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this.selectedCompanyCountryName = activeCompany.countryV2.alpha2CountryCode + ' - ' + activeCompany.country;
                     this.companyCountry = activeCompany.countryV2.alpha2CountryCode;
                 }
-                this.companyCurrency = _.clone(activeCompany.baseCurrency);
+                this.companyCurrency = clone(activeCompany.baseCurrency);
             }
         });
         this.discountList$ = this.store.pipe(select(s => s.settings.discount.discountList), takeUntil(this.destroyed$));
@@ -292,7 +292,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                                 }
                             }
                         }
-                        _.uniq(this.selectedDiscounts);
+                        uniq(this.selectedDiscounts);
                     });
                 }
 
@@ -467,16 +467,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         if (activeAccountTaxHierarchy) {
 
                             if (activeAccountTaxHierarchy.inheritedTaxes) {
-                                let inheritedTaxes = _.flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
+                                let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
                                 let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
                                 // set value in tax group form
                                 this.taxGroupForm.setValue({ taxes: allTaxes });
                             } else {
                                 this.taxGroupForm.setValue({ taxes: applicableTaxes });
                             }
-                            return _.differenceBy(taxes.map(p => {
+                            return differenceBy(taxes.map(p => {
                                 return { label: p.name, value: p.uniqueName };
-                            }), _.flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
+                            }), flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
                                 return { label: p.name, value: p.uniqueName };
                             }), 'value');
 
@@ -763,7 +763,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addAccountForm.get('foreignOpeningBalance')?.patchValue('0');
         }
         if (this.showBankDetail) {
-            const bankDetails = _.cloneDeep(this.addAccountForm.get('accountBankDetails')?.value);
+            const bankDetails = cloneDeep(this.addAccountForm.get('accountBankDetails')?.value);
             const isValid = this.generalService.checkForValidBankDetails(bankDetails?.pop(), this.selectedCountryCode);
             if (!isValid) {
                 this._toaster.errorToast(this.localeData?.bank_details_error_message);
@@ -1332,7 +1332,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState.uniqueName);
         }
         if (this.activeAccountName) {
-            _.uniq(this.selectedDiscounts);
+            uniq(this.selectedDiscounts);
             let assignDiscountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
             assignDiscountObject.uniqueName = this.activeAccountName;
             assignDiscountObject.discounts = this.selectedDiscounts;
@@ -1540,7 +1540,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public getInvoiceSettings(): void {
         this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
-                let invoiceSettings = _.cloneDeep(response.body);
+                let invoiceSettings = cloneDeep(response.body);
                 this.inventorySettings = invoiceSettings.companyInventorySettings;
 
                 if (!this.addAccountForm.get("hsnOrSac")?.value) {

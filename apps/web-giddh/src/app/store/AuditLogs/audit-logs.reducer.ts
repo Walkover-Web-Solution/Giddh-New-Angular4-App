@@ -1,7 +1,6 @@
 import { LogsRequest, LogsResponse, AuditLogsResponse, GetAuditLogsRequest } from '../../models/api-models/Logs';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ILogsItem } from '../../models/interfaces/logs.interface';
-import * as _ from '../../lodash-optimized';
 import { AUDIT_LOGS_ACTIONS, AUDIT_LOGS_ACTIONS_V2 } from '../../actions/audit-logs/audit-logs.const';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';

@@ -5,11 +5,11 @@ import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 import { BalanceSheetData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
-import * as _ from '../../../lodash-optimized';
 import { Observable, ReplaySubject } from 'rxjs';
 import { BsGridComponent } from './bs-grid/bs-grid.component';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { ToasterService } from '../../../services/toaster.service';
+import { cloneDeep, each } from '../../../lodash-optimized';
 
 @Component({
     selector: 'bs',
@@ -60,7 +60,7 @@ export class BsComponent implements AfterViewInit, OnDestroy {
         this.showLoader = this.store.pipe(select(p => p.tlPl.bs.showLoader), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.tlPl.bs.data), takeUntil(this.destroyed$)).subscribe((p) => {
             if (p) {
-                let data = _.cloneDeep(p) as BalanceSheetData;
+                let data = cloneDeep(p) as BalanceSheetData;
                 if (data && data.message) {
                     setTimeout(() => {
                         this._toaster.clearAllToaster();
@@ -91,11 +91,11 @@ export class BsComponent implements AfterViewInit, OnDestroy {
     }
 
     public InitData(d: ChildGroup[]) {
-        _.each(d, (grp: ChildGroup) => {
+        each(d, (grp: ChildGroup) => {
             grp.isVisible = false;
             grp.isCreated = false;
             grp.isIncludedInSearch = true;
-            _.each(grp.accounts, (acc: Account) => {
+            each(grp.accounts, (acc: Account) => {
                 acc.isIncludedInSearch = true;
                 acc.isCreated = false;
                 acc.isVisible = false;
@@ -114,7 +114,7 @@ export class BsComponent implements AfterViewInit, OnDestroy {
         this.from = request.from;
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
-        this.store.dispatch(this.tlPlActions.GetBalanceSheet(_.cloneDeep(request)));
+        this.store.dispatch(this.tlPlActions.GetBalanceSheet(cloneDeep(request)));
     }
 
     public ngOnDestroy(): void {
@@ -124,7 +124,7 @@ export class BsComponent implements AfterViewInit, OnDestroy {
 
     public findIndex(activeFY, financialYears) {
         let tempFYIndex = 0;
-        _.each(financialYears, (fy: any, index: number) => {
+        each(financialYears, (fy: any, index: number) => {
             if (fy.uniqueName === activeFY.uniqueName) {
                 if (index === 0) {
                     tempFYIndex = index;

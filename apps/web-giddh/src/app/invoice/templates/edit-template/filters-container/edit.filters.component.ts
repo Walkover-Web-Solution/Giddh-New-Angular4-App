@@ -12,7 +12,6 @@ export class EditFiltersContainersComponent implements OnChanges {
     @Output() public selectTab: EventEmitter<any> = new EventEmitter();
     public ifDesignSelected: boolean = true;
     public ifContentSelected: boolean = false;
-    public ifEmailSelected: boolean = false;
 
     /**
      * Returns the error count of fields
@@ -35,19 +34,11 @@ export class EditFiltersContainersComponent implements OnChanges {
         if (tab === 'design') {
             this.ifDesignSelected = true;
             this.ifContentSelected = false;
-            this.ifEmailSelected = false;
         }
 
         if (tab === 'content') {
             this.ifDesignSelected = false;
             this.ifContentSelected = true;
-            this.ifEmailSelected = false;
-        }
-
-        if (tab === 'email') {
-            this.ifDesignSelected = false;
-            this.ifContentSelected = false;
-            this.ifEmailSelected = true;
         }
         this.selectTab.emit(tab);
     }

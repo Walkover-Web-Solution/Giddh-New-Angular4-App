@@ -17,7 +17,6 @@ import {
     MoveGroupRequest,
     MoveGroupResponse
 } from '../../models/api-models/Group';
-import * as _ from '../../lodash-optimized';
 import { cloneDeep } from '../../lodash-optimized';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
@@ -25,7 +24,6 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { IUlist } from '../../models/interfaces/ulist.interface';
 import { INameUniqueName } from '../../models/api-models/Inventory';
 import { SALES_ACTIONS } from '../../actions/sales/sales.const';
 import { CurrentPage } from '../../models/api-models/Common';

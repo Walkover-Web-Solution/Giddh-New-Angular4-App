@@ -1,6 +1,5 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
-import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import * as isCidr from 'is-cidr';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
@@ -15,6 +14,7 @@ import { SettingsPermissionService } from '../../../services/settings.permission
 import * as moment from 'moment';
 import { GeneralService } from '../../../services/general.service';
 import { IForceClear } from '../../../models/api-models/Sales';
+import { cloneDeep, forEach, isEmpty, isNull } from '../../../lodash-optimized';
 // some local const
 const DATE_RANGE = 'daterange';
 const PAST_PERIOD = 'pastperiod';
@@ -114,7 +114,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         // get roles
         this.store.pipe(select(s => s.permission), takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.roles) {
-                let roles = _.cloneDeep(p.roles);
+                let roles = cloneDeep(p.roles);
                 let allRoleArray = [];
                 roles.forEach((role) => {
                     allRoleArray.push({
@@ -122,7 +122,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                         value: role.uniqueName
                     });
                 });
-                this.allRoles = _.cloneDeep(allRoleArray);
+                this.allRoles = cloneDeep(allRoleArray);
             } else {
                 this.store.dispatch(this._permissionActions.GetRoles());
             }
@@ -218,7 +218,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             let allowedCidrs = this.permissionForm.get('allowedCidrs') as FormArray;
 
             if (data.allowedIps.length > 0) {
-                _.forEach(data.allowedIps, (val) => {
+                forEach(data.allowedIps, (val) => {
                     allowedIps.push(this.initRangeForm(val));
                 });
             } else {
@@ -226,7 +226,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             }
 
             if (data.allowedCidrs.length > 0) {
-                _.forEach(data.allowedCidrs, (val) => {
+                forEach(data.allowedCidrs, (val) => {
                     allowedCidrs.push(this.initRangeForm(val));
                 });
             } else {
@@ -277,7 +277,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         let arow = this.permissionForm.get(type) as FormArray;
         for (let control of arow.controls) {
             let val = control.get('range').value;
-            if (_.isNull(val) || _.isEmpty(val)) {
+            if (isNull(val) || isEmpty(val)) {
                 errFound = true;
                 msg = undefined;
             }
@@ -311,16 +311,16 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
     public submitPermissionForm() {
         let obj: any = {};
-        let form: ShareRequestForm = _.cloneDeep(this.permissionForm.value);
+        let form: ShareRequestForm = cloneDeep(this.permissionForm.value);
         let CidrArr = [];
         let IpArr = [];
-        _.forEach(form.allowedCidrs, (n) => {
+        forEach(form.allowedCidrs, (n) => {
             if (n.range) {
                 CidrArr.push(n.range);
             }
         });
 
-        _.forEach(form.allowedIps, (n) => {
+        forEach(form.allowedIps, (n) => {
             if (n.range) {
                 IpArr.push(n.range);
             }

@@ -102,7 +102,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public moreLogsDisplayed: boolean = true;
     public voucherVersions: ProformaVersionItem[] = [];
     public filteredVoucherVersions: ProformaVersionItem[] = [];
-    public ckeditorContent;
     public invoiceDetailWrapperHeight: number;
     public invoiceDetailViewHeight: number;
     public invoiceImageSectionViewHeight: number;

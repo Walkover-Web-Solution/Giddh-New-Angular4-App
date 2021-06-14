@@ -4,7 +4,6 @@ import { Store, select } from '@ngrx/store';
 import { Component, Inject, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsLinkedAccountsService } from '../../services/settings.linked.accounts.service';
@@ -16,6 +15,7 @@ import { IServiceConfigArgs, ServiceConfig } from '../../services/service.config
 import { GeneralService } from '../../services/general.service';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SearchService } from '../../services/search.service';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'setting-linked-accounts',
@@ -92,7 +92,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(p => p.settings), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.linkedAccounts && o.linkedAccounts.bankAccounts) {
-                this.ebankAccounts = _.cloneDeep(o.linkedAccounts.bankAccounts);
+                this.ebankAccounts = cloneDeep(o.linkedAccounts.bankAccounts);
             }
         });
 
@@ -140,7 +140,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         this._settingsLinkedAccountsService.GetYodleeToken().pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 if (data.body.user) {
-                    let token = _.cloneDeep(data.body.user.accessTokens[0]);
+                    let token = cloneDeep(data.body.user.accessTokens[0]);
                     this.yodleeForm?.patchValue({
                         rsession: data.body.rsession,
                         app: token.appId,
@@ -209,8 +209,8 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
     public onDeleteAddedBank(bankName, account, bank) {
         if (bankName && account) {
-            this.selectedBank = _.cloneDeep(bank);
-            this.selectedAccount = _.cloneDeep(account);
+            this.selectedBank = cloneDeep(bank);
+            this.selectedAccount = cloneDeep(account);
             let message = this.localeData?.delete_bank_message;
             message = message?.replace("[BANK]", bankName);
             this.confirmationMessage = message;
@@ -241,7 +241,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                 uniqueName: data.value
             };
 
-            this.selectedAccount = _.cloneDeep(account);
+            this.selectedAccount = cloneDeep(account);
             let message = this.localeData?.link_account_message;
             message = message?.replace("[ACCOUNT]", data.value);
             this.confirmationMessage = message;
@@ -251,7 +251,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     }
 
     public onUnlinkBankAccount(account) {
-        this.selectedAccount = _.cloneDeep(account);
+        this.selectedAccount = cloneDeep(account);
         let message = this.localeData?.unlink_account_message;
         message = message?.replace("[ACCOUNT]", account.giddhAccount.name);
         this.confirmationMessage = message;
@@ -261,7 +261,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
     public onUpdateDate(date, account) {
         this.dateToUpdate = moment(date).format(GIDDH_DATE_FORMAT);
-        this.selectedAccount = _.cloneDeep(account);
+        this.selectedAccount = cloneDeep(account);
         let message = this.localeData?.get_ledger_entries;
         message = message?.replace("[DATE]", this.dateToUpdate);
         this.confirmationMessage = message;

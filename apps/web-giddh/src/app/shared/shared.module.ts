@@ -6,7 +6,6 @@ import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { CKEditorModule } from 'ng2-ckeditor';
 import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -186,7 +185,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         TextCaseChangeModule,
         HighlightModule,
         TabsModule,
-        CKEditorModule,
         NgxMaskModule,
         CommandKModule,
         NgxDaterangepickerMd.forRoot(),
@@ -227,7 +225,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         TextCaseChangeModule,
         KeyboardShortutModule,
         CompanyAddNewUiComponent,
-        CKEditorModule,
         AsideMenuOtherTaxes,
         MfReportComponent,
         AccountUpdateNewDetailsComponent,
