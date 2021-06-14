@@ -124,25 +124,6 @@
             </div>
         </div>
     </div>
-    <!--CMD + G modal  -->
-    <ng-template #navigationModal>
-
-        <div class="modal-body" #mdl>
-            <command-k (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
-                (groupEmitter)="makeGroupEntryInDB($event)" (selectedItemEmitter)="onItemSelected($event)"
-                [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" (closeEmitter)="modelRef.hide()"></command-k>
-
-            <div class="shortcuts">
-                <strong>↑</strong> <strong>↓</strong>&nbsp; {{commonLocaleData?.app_to_navigate}} <strong class="mr-l1"
-                    [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
-                {{commonLocaleData?.app_to_select}} <strong class="mr-l1"
-                    [attr.aria-label]="commonLocaleData?.app_escape">{{commonLocaleData?.app_esc}}</strong>&nbsp;
-                {{commonLocaleData?.app_to_dismiss}}
-            </div>
-
-        </div>
-
-    </ng-template>
     <ng-template #expiredPlanModel>
         <div class="modal-header">
             <h3 class="modal-title pull-left">{{localeData?.ready_to_upgrade}}</h3>
