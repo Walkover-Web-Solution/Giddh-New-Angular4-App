@@ -379,7 +379,7 @@
                                 class="img-expand-collapse" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
                                 <img class="image-preview img-expand w-100" [src]="imagePreviewSource" />
                             </div>
-                            <div *ngIf="shouldShowUploadAttachment && !isCompany && !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)"
+                            <div *ngIf="shouldShowUploadAttachment && !isCompany && !(attachedPdfFileUrl || imagePreviewSource)"
                                 class="upload-excel max-width-500 center-block box dashed-border">
                                 <input type="file" id="csv-upload-input" [placeholder]="localeData?.upload_excel_csv"
                                     droppable="true" class="form-control" [options]="fileUploadOptions" ngFileSelect
