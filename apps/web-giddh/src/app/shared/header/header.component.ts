@@ -270,11 +270,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
-                if ((event.url.includes("/pages/settings") || event.url.includes("/gstfiling") || event.url.includes("/pages/user-details")) && !this.generalService.getSessionStorage("previousPage")) {
+                if ((event.url.includes("/pages/settings") || event.url.includes("/gstfiling") || event.url.includes("/pages/user-details") || event.url.includes("/billing-detail")) && !this.generalService.getSessionStorage("previousPage")) {
                     this.generalService.setSessionStorage("previousPage", this.currentPageUrl);
                 }
 
-                if (!event.url.includes("/pages/settings") && !event.url.includes("/gstfiling") && !event.url.includes("/pages/user-details") && this.generalService.getSessionStorage("previousPage")) {
+                if (!event.url.includes("/pages/settings") && !event.url.includes("/gstfiling") && !event.url.includes("/pages/user-details") && !event.url.includes("/billing-detail") && this.generalService.getSessionStorage("previousPage")) {
                     this.generalService.removeSessionStorage("previousPage");
                 }
                 if (this.subBranchDropdown) {
@@ -283,7 +283,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.addClassInBodyIfPageHasTabs();
             }
             if (event instanceof NavigationEnd) {
-                if (!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details")) {
+                if (!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details") && !this.router.url.includes("/billing-detail")) {
                     this.currentPageUrl = this.router.url;
                 }
                 this.setCurrentPage();
