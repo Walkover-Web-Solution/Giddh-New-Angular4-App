@@ -22,6 +22,9 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** True when E-invoice settings are turned on */
+    @Input() public isEInvoiceEnabled: boolean;
+
     @Output() public applyFilterEvent: EventEmitter<InvoiceFilterClassForInvoicePreview> = new EventEmitter<InvoiceFilterClassForInvoicePreview>();
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChildren(ShSelectComponent) public allShSelect: ShSelectComponent[];
@@ -55,6 +58,8 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
     public universalDate$: Observable<any>;
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** Stores the E-invoice status */
+    public eInvoiceStatusDropdownOptions: IOption[] = [];
 
     constructor(private generalService: GeneralService, private modalService: BsModalService) {
 
@@ -243,6 +248,17 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
                 this.request.expireFrom = this.fromDate;
                 this.request.expireTo = this.toDate;
             }
+        }
+        if (changes.localeData && changes.localeData?.currentValue !== changes.localeData?.previousValue) {
+            this.eInvoiceStatusDropdownOptions = [
+                { label: this.localeData?.e_invoice_statuses_label?.yet_to_be_pushed, value: this.localeData?.e_invoice_statuses_label?.yet_to_be_pushed },
+                { label: this.localeData?.e_invoice_statuses_label?.pushed, value: this.localeData?.e_invoice_statuses_label?.pushed },
+                { label: this.localeData?.e_invoice_statuses_label?.push_initiated, value: this.localeData?.e_invoice_statuses_label?.push_initiated },
+                { label: this.localeData?.e_invoice_statuses_label?.cancelled, value: this.localeData?.e_invoice_statuses_label?.cancelled },
+                { label: this.localeData?.e_invoice_statuses_label?.mark_as_cancelled, value: this.localeData?.e_invoice_statuses_label?.mark_as_cancelled },
+                { label: this.localeData?.e_invoice_statuses_label?.failed, value: this.localeData?.e_invoice_statuses_label?.failed },
+                { label: this.localeData?.e_invoice_statuses_label?.na, value: this.localeData?.e_invoice_statuses_label?.na }
+            ];
         }
     }
 
