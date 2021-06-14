@@ -270,11 +270,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
-                if ((event.url.includes("/pages/settings") || event.url.includes("/gstfiling") || event.url.includes("/pages/user-details")) && !this.generalService.getSessionStorage("previousPage")) {
+                if ((event.url.includes("/pages/settings") || event.url.includes("/gstfiling") || event.url.includes("/pages/user-details") || event.url.includes("/billing-detail")) && !this.generalService.getSessionStorage("previousPage")) {
                     this.generalService.setSessionStorage("previousPage", this.currentPageUrl);
                 }
 
-                if (!event.url.includes("/pages/settings") && !event.url.includes("/gstfiling") && !event.url.includes("/pages/user-details") && this.generalService.getSessionStorage("previousPage")) {
+                if (!event.url.includes("/pages/settings") && !event.url.includes("/gstfiling") && !event.url.includes("/pages/user-details") && !event.url.includes("/billing-detail") && this.generalService.getSessionStorage("previousPage")) {
                     this.generalService.removeSessionStorage("previousPage");
                 }
                 if (this.subBranchDropdown) {
@@ -283,7 +283,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.addClassInBodyIfPageHasTabs();
             }
             if (event instanceof NavigationEnd) {
-                if (!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details")) {
+                if (!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details") && !this.router.url.includes("/billing-detail")) {
                     this.currentPageUrl = this.router.url;
                 }
                 this.setCurrentPage();
@@ -590,13 +590,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
 
-        // if invalid menu item clicked then navigate to default route and remove invalid entry from db
-        this.generalService.invalidMenuClicked.pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data) {
-                this.onItemSelected(data.next, data);
-            }
-        });
-
         this.store.pipe(select(s => s.general.headerTitle)).pipe(takeUntil(this.destroyed$)).subscribe(menu => {
             if (menu) {
                 let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
@@ -752,11 +745,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngAfterViewChecked() {
         this.changeDetection.detectChanges();
-    }
-
-    public handleNewTeamCreationEmitter(e: any) {
-        this.modelRef.hide();
-        this.showManageGroupsModal();
     }
 
     /**
@@ -924,19 +912,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.analyzeMenus(null, name, additional);
     }
 
-    public analyzeAccounts(e: any, acc) {
-        if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
-            this.onItemSelected(acc, null, true);
-            return;
-        }
-        e.preventDefault();
-        e.stopPropagation();
-        if (this.subBranchDropdown) {
-            this.subBranchDropdown.hide();
-        }
-        this.onItemSelected(acc);
-    }
-
     public findListFromDb(dbResult: ICompAidata) {
         if (!this.activeCompanyForDb) {
             return;
@@ -1077,46 +1052,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    public makeGroupEntryInDB(item: IUlist) {
-        // save data to db
-        item.time = +new Date();
-        this.doEntryInDb('groups', item);
-    }
-
-    public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null, isCtrlClicked?: boolean) {
-        this.oldSelectedPage = cloneDeep(this.selectedPage);
-        if (this.modelRef) {
-            this.modelRef.hide();
-        }
-        setTimeout(() => {
-            if (item && item.type === 'MENU') {
-                if (item.additional && item.additional.tab) {
-                    if (item.uniqueName.includes('?')) {
-                        item.uniqueName = item.uniqueName.split('?')[0];
-                    }
-                    this.router.navigate([item.uniqueName], {
-                        queryParams: {
-                            tab: item.additional.tab,
-                            tabIndex: item.additional.tabIndex
-                        }
-                    });
-                } else {
-                    this.router.navigate([item.uniqueName]);
-                }
-            } else {
-                // direct account scenario
-                let url = `ledger/${item.uniqueName}`;
-                if (!isCtrlClicked) {
-                    this.router.navigate([url]); // added link in routerLink
-                }
-            }
-            // save data to db
-            item.time = +new Date();
-            let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
-            this.doEntryInDb(entity, item, fromInvalidState);
-        }, 200);
     }
 
     public filterCompanyList(ev) {
@@ -1291,27 +1226,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     private adjustNavigationBar() {
         this.sideBarStateChange(this.isLargeWindow);
-    }
-
-    public showNavigationModal() {
-        this.navigationModalVisible = true;
-        const _combine = combineLatest([
-            this.modalService.onShow,
-            this.modalService.onShown,
-            this.modalService.onHide,
-            this.modalService.onHidden
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(() => this.changeDetection.markForCheck());
-
-        this.subscriptions.push(
-            this.modalService.onHidden.pipe(takeUntil(this.destroyed$)).subscribe((reason: string) => {
-                this.navigationModalVisible = false;
-                this.unsubscribe();
-            })
-        );
-
-        this.subscriptions.push(_combine);
-        let config: ModalOptions = { class: 'universal_modal', show: true, keyboard: true, animated: false };
-        this.modelRef = this.modalService.show(this.navigationModal, config);
     }
 
     private getElectronAppVersion() {

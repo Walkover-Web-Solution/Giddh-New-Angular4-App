@@ -364,6 +364,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             }
             this.activeLocale = response?.value;
         });
+        // if invalid menu item clicked then navigate to default route and remove invalid entry from db
+        this.generalService.invalidMenuClicked.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data) {
+                this.onItemSelected(data.next, data);
+            }
+        });
     }
 
     /**
@@ -524,6 +530,15 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 this.accountItemsFromIndexDB = (dbResult && dbResult.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : [];
             }
         } else {
+            if (!this.activeCompanyForDb) {
+                this.activeCompanyForDb = new CompAidataModel();
+            }
+            this.activeCompanyForDb.aidata = {
+                menus: [],
+                groups: [],
+                accounts: DEFAULT_AC
+            };
+            this.dbService.insertFreshData(this.activeCompanyForDb);
             // slice default menus and account on small screen
             if (!(window.innerWidth > 1440 && window.innerHeight > 717)) {
                 this.accountItemsFromIndexDB = slice(this.accountItemsFromIndexDB, 0, 5);
