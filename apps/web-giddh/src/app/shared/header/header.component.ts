@@ -860,7 +860,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
 
 
-        }, ((this.asideSettingMenuState === 'out') ? 100 : 0) && (this.asideInventorySidebarMenuState === 'out') ? 100 : 0);
+        }, ((this.asideSettingMenuState === 'out') ? 100 : 0));
 
     }
 
