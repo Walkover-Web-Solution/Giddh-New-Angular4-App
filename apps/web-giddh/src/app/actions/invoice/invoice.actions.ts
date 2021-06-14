@@ -862,13 +862,6 @@ export class InvoiceActions {
         };
     }
 
-    public VisitToInvoiceFromPreview(): CustomActions {
-        return {
-            type: INVOICE_ACTIONS.VISIT_FROM_PREVIEW,
-            payload: {}
-        };
-    }
-
     public PreviewOfGeneratedInvoice(accountUniqueName: string, invoiceNumber: string): CustomActions {
         return {
             type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE,
