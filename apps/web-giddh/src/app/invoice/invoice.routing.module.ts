@@ -11,7 +11,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InvoiceGenerateComponent } from './generate/invoice.generate.component';
 import { InvoicePreviewComponent } from './preview/invoice.preview.component';
-import { InvoiceCreateComponent } from './create/invoice.create.component';
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
 import { InvoiceSettingComponent } from './settings/invoice.settings.component';
@@ -21,7 +20,6 @@ import { DesignFiltersContainerComponent } from './templates/edit-template/filte
 import { EditFiltersContainersComponent } from './templates/edit-template/filters-container/edit.filters.component';
 import { InvoiceUiDataService } from '../services/invoice.ui.data.service';
 import { DeleteInvoiceConfirmationModelComponent } from './preview/models/confirmation/confirmation.model.component';
-import { InvoiceGenerateModelComponent } from './generate/model/invoice.generate.model.component';
 import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
 import { InvoiceTemplateModalComponent } from './templates/edit-template/modals/template-modal/template-modal.component';
 import { InvoiceTemplatePreviewModelComponent } from './templates/edit-template/modals/template-preview-modal/template-preview.modal.component';
@@ -93,13 +91,11 @@ const INVOICE_ROUTES: Routes = [
         InvoicePreviewComponent,
         InvoiceGenerateComponent,
         EditInvoiceComponent,
-        InvoiceCreateComponent,
         DesignFiltersContainerComponent,
         EditFiltersContainersComponent,
         InvoiceSettingComponent,
         DeleteInvoiceConfirmationModelComponent,
         InvoicePaymentModelComponent,
-        InvoiceGenerateModelComponent,
         DownloadOrSendInvoiceOnMailComponent,
         InvoiceTemplateModalComponent,
         InvoiceTemplatePreviewModelComponent,
@@ -162,8 +158,6 @@ const INVOICE_ROUTES: Routes = [
         RouterModule,
         TooltipModule,
         DownloadOrSendInvoiceOnMailComponent,
-        InvoiceGenerateModelComponent,
-        InvoiceCreateComponent,
         InvoicePreviewComponent,
         DeleteInvoiceConfirmationModelComponent
     ],

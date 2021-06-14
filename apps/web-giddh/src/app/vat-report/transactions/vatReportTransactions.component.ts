@@ -27,7 +27,6 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
 export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: ModalDirective;
     @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
-    @ViewChild('invoiceGenerateModel', { static: true }) public invoiceGenerateModel: ModalDirective;
 
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -193,10 +192,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      */
     public closeDownloadOrSendMailPopup(userResponse: { action: string }): void {
         this.downloadOrSendMailModel.hide();
-        if (userResponse.action === 'update') {
-            this.store.dispatch(this.invoiceActions.VisitToInvoiceFromPreview());
-            this.invoiceGenerateModel.show();
-        } else if (userResponse.action === 'closed') {
+        if (userResponse.action === 'closed') {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }
     }
@@ -208,7 +204,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public closeInvoiceModel(e): void {
-        this.invoiceGenerateModel.hide();
         setTimeout(() => {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }, 2000);
