@@ -8667,6 +8667,14 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 768px) {
+    .setting-sidebar-open {
+        #content-wrapper{
+            padding-right: 0;
+            &.menu_open{
+                padding-right: 0;
+            }
+        }
+    }
     .tax-engine .transactions-list .filter-row + .filter-row {
         margin-left: 5px;
     }
