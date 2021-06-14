@@ -1426,7 +1426,9 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public formatAmountInCurrency(amount: any): any {
         let formattedAmount = this.currencyPipe.transform(amount);
-        formattedAmount = formattedAmount.replace(/,/g, "");
+        formattedAmount = formattedAmount?.replace(/,/g, "");
+        formattedAmount = formattedAmount?.replace(/'/g, "");
+        formattedAmount = formattedAmount?.replace(/ /g, "");
         return formattedAmount;
     }
 
