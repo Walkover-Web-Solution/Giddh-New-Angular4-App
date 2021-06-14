@@ -150,6 +150,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
             }
 
             if(this.activeTab === "taxes") {
+                this.asideGstSidebarMenuState = "in";
                 this.asideSettingMenuState = "out";
                 document.querySelector('body').classList.remove('setting-sidebar-open');
                 document.querySelector('body').classList.add('gst-sidebar-open');
