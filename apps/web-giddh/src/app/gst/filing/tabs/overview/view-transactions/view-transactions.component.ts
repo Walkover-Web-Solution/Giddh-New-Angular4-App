@@ -47,7 +47,6 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
 
     @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: ModalDirective;
     @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
-    @ViewChild('invoiceGenerateModel', { static: true }) public invoiceGenerateModel: ModalDirective;
 
     public viewTransaction$: Observable<GstTransactionResult> = of(null);
     public gstr1entityType = [];
@@ -188,16 +187,12 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
 
     public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
         this.downloadOrSendMailModel.hide();
-        if (userResponse.action === 'update') {
-            this.store.dispatch(this.invoiceActions.VisitToInvoiceFromPreview());
-            this.invoiceGenerateModel.show();
-        } else if (userResponse.action === 'closed') {
+        if (userResponse.action === 'closed') {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }
     }
 
     public closeInvoiceModel(e) {
-        this.invoiceGenerateModel.hide();
         setTimeout(() => {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }, 2000);
