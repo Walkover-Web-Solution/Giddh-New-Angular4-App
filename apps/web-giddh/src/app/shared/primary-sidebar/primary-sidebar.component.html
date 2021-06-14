@@ -1,6 +1,6 @@
 <ng-container appTranslate [file]="'all-items'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
-    <div class="primary-sidebar py-3 position-relative" [ngClass]="{'sidebar-collapse': !isOpen}">
+    <div class="primary-sidebar py-3 position-relative">
         <div class="company-branch-block pd-l2 pd-r2 position-relative" [ngClass]="{'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1}">
             <ul class="list-style-none branch-connection">
                 <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
