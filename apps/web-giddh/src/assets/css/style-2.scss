@@ -9041,7 +9041,6 @@ span#HW_badge_cont:nth-child(3) {
 .date-field {
     flex-direction: column;
 }
-
 .mobile-home {
     background-color: $lavender;
     .fixed-padding,
@@ -10320,6 +10319,21 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
+    .setting-sidebar-open {
+        #content-wrapper{
+            padding-left: 0 !important;
+            &.menu_open{
+                padding-left: 0 !important;
+            }
+        }
+    }
+    .gst-sidebar-open{
+        &.on-setting-page{
+            .gst-menu-icon{
+                display: none !important;
+            }
+        }
+    }
     .setting-sidebar{
         display: block;
     }
