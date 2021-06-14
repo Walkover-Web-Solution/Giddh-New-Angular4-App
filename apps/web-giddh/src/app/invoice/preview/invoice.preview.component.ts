@@ -67,7 +67,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('invoiceConfirmationModel', { static: true }) public invoiceConfirmationModel: ModalDirective;
     @ViewChild('performActionOnInvoiceModel', { static: true }) public performActionOnInvoiceModel: ModalDirective;
     @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: ModalDirective;
-    @ViewChild('invoiceGenerateModel', { static: true }) public invoiceGenerateModel: ModalDirective;
     @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
     @ViewChild('advanceSearch', { static: true }) public advanceSearch: ModalDirective;
     @ViewChild(DaterangePickerComponent, { static: true }) public dp: DaterangePickerComponent;
@@ -190,9 +189,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public exportedInvoiceBase64res$: Observable<any>;
     public isFabclicked: boolean = false;
     public exportInvoiceType: string = '';
-
     public sortRequestForUi: { sortBy: string, sort: string } = { sortBy: '', sort: '' };
-    public showInvoiceGenerateModal: boolean = false;
     public appSideMenubarIsOpen: boolean;
 
     public invoiceSelectedDate: any = {
@@ -858,18 +855,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
         this.downloadOrSendMailModel.hide();
-        this.showInvoiceGenerateModal = userResponse.action === 'update';
-        if (userResponse.action === 'update') {
-            this.store.dispatch(this.invoiceActions.VisitToInvoiceFromPreview());
-            this.invoiceGenerateModel.show();
-        } else if (userResponse.action === 'closed') {
+        if (userResponse.action === 'closed') {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }
     }
 
     public closeInvoiceModel(e) {
-        this.invoiceGenerateModel.hide();
-        this.showInvoiceGenerateModal = false;
         setTimeout(() => {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }, 2000);

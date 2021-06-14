@@ -16,7 +16,6 @@ export interface InvoiceState {
     invoiceDataHasError: boolean;
     invoiceTemplateConditions: InvoiceTemplateDetailsResponse;
     isInvoiceGenerated: boolean;
-    visitedFromPreview: boolean;
     settings: InvoiceSetting;
     isLoadingInvoices: boolean;
     isBulkInvoiceGenerated: boolean;
@@ -42,7 +41,6 @@ export const initialState: InvoiceState = {
     invoiceDataHasError: false,
     invoiceTemplateConditions: null,
     isInvoiceGenerated: false,
-    visitedFromPreview: false,
     settings: null,
     isLoadingInvoices: false,
     isBulkInvoiceGenerated: false,
@@ -127,9 +125,6 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             }
             return { ...state, ...newState };
         }
-        case INVOICE_ACTIONS.VISIT_FROM_PREVIEW: {
-            return Object.assign({}, state, { visitedFromPreview: true });
-        }
         case INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE_RESPONSE: {
             return Object.assign({}, state, {
                 isInvoiceGenerated: true
@@ -140,7 +135,6 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                 isInvoiceGenerated: false,
                 invoiceTemplateConditions: null,
                 invoiceData: null,
-                visitedFromPreview: false,
                 isBulkInvoiceGenerated: false,
                 isBulkInvoiceGeneratedWithoutErrors: false
             });
