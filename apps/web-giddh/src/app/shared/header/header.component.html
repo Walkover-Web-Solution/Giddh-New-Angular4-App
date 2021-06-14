@@ -55,7 +55,7 @@
                         <a href="javascript:void(0);" id="add-manage" (click)="showManageGroupsModal()"><i
                                 class="icon-master-new1"></i> {{commonLocaleData?.app_master}}</a>
                     </li>
-                    <li *ngIf="!isMobileScreen" [ngClass]="{'disable-icon' : isSettingsIconDisabled}" class="header-utility-icons" (click)="toggleSidebarPane(true, false)">
+                    <li *ngIf="!isMobileScreen" [ngClass]="{'disable-icon' : isSettingsIconDisabled && !isIpadScreen}" class="header-utility-icons" (click)="toggleSidebarPane(true, false)">
                         <a href="javascript:void(0);"><i class="icon-settings-cog"></i></a>
                     </li>
                     <li class="header-utility-icons">
