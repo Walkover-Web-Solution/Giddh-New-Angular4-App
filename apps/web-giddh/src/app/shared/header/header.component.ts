@@ -221,6 +221,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isSidebarExpanded: boolean = false;
     /** This will hold if setting icon is disabled */
     public isSettingsIconDisabled: boolean = false;
+    /* This will hold if resolution is more than 767 to consider as ipad screen */
+    public isIpadScreen: boolean = false;
     /**
      * Returns whether the back button in header should be displayed or not
      *
@@ -470,9 +472,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.getCurrentCompanyData();
         this._breakpointObserver.observe([
-            '(max-width: 767px)'
+            '(max-width: 767px)',
+            '(max-width: 768px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
+            this.isMobileScreen = result?.breakpoints['(max-width: 767px)'];
+            this.isIpadScreen = result?.breakpoints['(max-width: 768px)'];
         });
 
         this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
@@ -835,9 +839,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
-        this.isSettingsIconDisabled = (this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/settings/taxes")) || this.router.url.includes("/pages/user-details")
-        if (this.isSettingsIconDisabled) {
-           return;
+        if(!this.isIpadScreen) {
+            this.isSettingsIconDisabled = (this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/settings/taxes")) || this.router.url.includes("/pages/user-details")
+            if (this.isSettingsIconDisabled) {
+                return;
+            }
         }
 
         setTimeout(() => {
@@ -1625,7 +1631,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
 
-            if(document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
+            if(document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0) {
                 this.collapseSidebar(true);
             } else {
                 if(this.sideMenu.isopen) {
@@ -1657,7 +1663,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
-        if(closeOnHover && this.isSidebarExpanded && document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
+        if(closeOnHover && this.isSidebarExpanded && (document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0)) {
             forceCollapse = true;
         }
 
