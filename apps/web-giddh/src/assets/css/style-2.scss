@@ -10265,7 +10265,7 @@ body.update-scroll-hidden {
     .on-setting-page .nav-left-bar {
         display: none;
     }
-    .on-setting-page, .gst-sidebar-open {
+    .on-setting-page, .gst-sidebar-open, .on-user-page{
         .hamburger-menu-icon{
             left: 80px !important;
             width: calc(100% - 160px) !important;
@@ -10274,8 +10274,6 @@ body.update-scroll-hidden {
     .all-features-modal{
         height: 100vh;
     }
-<<<<<<< HEAD
-=======
     .tax-engine .transactions-overview .gstr-transactions-summary .title {
         margin-bottom: 15px;
     }
@@ -10308,7 +10306,6 @@ body.update-scroll-hidden {
     #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs {
         display: inline-block;
     }
->>>>>>> 6775479693... shalinee | test | UI fixes done and added gst sidebar on VAT report
     .e-waybill-tabs.custom-tabs .nav-tabs {
         position: fixed !important;
     }
