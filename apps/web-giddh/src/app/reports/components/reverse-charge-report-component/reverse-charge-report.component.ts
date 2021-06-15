@@ -107,6 +107,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
+        private router: Router,
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
