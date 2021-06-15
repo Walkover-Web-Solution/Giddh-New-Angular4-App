@@ -167,5 +167,7 @@
     "exchange_gain_loss_label": "In [BASE_CURRENCY]: [AMOUNT]<br />Exchange [PROFIT_TYPE]: ",
     "exchange_gain": "gain",
     "exchange_loss": "loss",
-    "works_for_single_entry": "Works only for single entry."
+    "works_for_single_entry": "Works only for single entry.",
+    "uploaded_purchase_bill": "Uploaded Bill",
+    "auto_generated_purchase_bill": "Giddh/Auto Generated Bill"
 }
