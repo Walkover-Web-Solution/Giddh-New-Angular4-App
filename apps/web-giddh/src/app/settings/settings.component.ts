@@ -256,12 +256,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
         }
     }
 
-    public bunchTabSelected(e) {
-        if (e.heading === 'bunch') {
-            this.bunchComp.getAllBunch();
-        }
-    }
-
     public tabChanged(tab: string) {
         if ((tab === 'integration' || tab === 'profile') && this.integrationtab) {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));

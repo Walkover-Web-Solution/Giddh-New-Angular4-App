@@ -66,8 +66,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /* this will check mobile screen size */
