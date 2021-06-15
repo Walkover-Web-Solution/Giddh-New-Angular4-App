@@ -1,4 +1,4 @@
-import { Component, ContentChild, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewChild, } from '@angular/core';
+import { Component, ContentChild, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 
 export interface ChangeEvent {
     start?: number;
@@ -62,7 +62,7 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public childHeight: number;
     @Input() public bufferAmount: number = 0;
     @Input() public scrollAnimationTime: number = 0;
-    @Input() public doNotCheckAngularZone: boolean = true; // false;
+    @Input() public doNotCheckAngularZone: boolean = true;
 
     public viewPortItems: any[];
     public previousStart: number;

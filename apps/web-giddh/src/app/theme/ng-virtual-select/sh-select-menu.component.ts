@@ -58,9 +58,6 @@ export class ShSelectMenuComponent implements OnChanges {
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-        // if (changes['isOpen'] && changes['isOpen'].currentValue) {
-        //   this.dyHeight = Number(window.getComputedStyle(this.listContainer.nativeElement).height);
-        // }
         if (changes['isRequired'] && changes['isRequired'].currentValue !== changes['isRequired'].previousValue) {
             this.autoSelectIfSingleValueAvailable();
         }

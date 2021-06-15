@@ -1,9 +1,6 @@
-import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, OnInit, Optional } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-
-import { LoaderService } from '../loader/loader.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import {
@@ -36,18 +33,13 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
-export class ReceiptService implements OnInit {
+export class ReceiptService {
     private companyUniqueName: string;
     private user: UserDetails;
 
-    constructor(private _generalService: GeneralService, private _http: HttpWrapperService,
-        private _httpClient: HttpClient, private errorHandler: GiddhErrorHandler,
-        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs, private _loaderService: LoaderService) {
+    constructor(private _generalService: GeneralService, private _http: HttpWrapperService, private errorHandler: GiddhErrorHandler,
+        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this.companyUniqueName = this._generalService.companyUniqueName;
-    }
-
-    public ngOnInit() {
-        //
     }
 
     public UpdateReceipt(accountUniqueName: string, model: ReciptRequest): Observable<BaseResponse<string, ReciptRequest>> {
@@ -146,28 +138,6 @@ export class ReceiptService implements OnInit {
             }),
             catchError((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName))
         )
-        // let sessionId = this._generalService.sessionId;
-        // let args: any = {headers: {}};
-        // if (sessionId) {
-        //   args.headers['Session-Id'] = sessionId;
-        // }
-        // args.headers['Content-Type'] = 'application/json';
-        // args.headers['Accept'] = 'application/json';
-        // args.headers = new HttpHeaders(args.headers);
-        //
-        // return this._httpClient.request('delete', this.config.apiUrl + RECEIPT_API.DELETE
-        //   .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        //   .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)),
-        //   {
-        //     body: queryRequest,
-        //     headers: args.headers,
-        //   }).pipe(
-        //   map((res) => {
-        //     let data: any = res;
-        //     data.request = queryRequest;
-        //     data.queryString = {accountUniqueName};
-        //     return data;
-        //   }), catchError((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName)));
     }
 
     public DownloadVoucher(model: DownloadVoucherRequest, accountUniqueName: string, isPreview: boolean = false): any {

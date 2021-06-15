@@ -14,27 +14,6 @@
         </div>
     </div>
 
-    <!-- <header class="clearfix header-container desktop-header" *ngIf="false"
-        [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen }">
-        <nav class="navbar ">
-            <div class="container-fluid pd-t1 pd-b1">
-                <div class="navbar-header">
-                    <ul class="nav navbar-nav">
-                    </ul>
-
-                    <div class="giddh_logo">
-
-                    </div>
-
-                    <div class="pull-right">
-                        <button *ngIf="shouldShowBackButton" (click)="navigateToPreviousRoute()"
-                            class="btn btn-primary mr-r15">{{commonLocaleData?.app_back}}</button>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header> -->
-
     <!-- New header starts -->
     <div class="fixed-padding">
         <div class="primary-main-header" id="primary-new-header"
@@ -119,8 +98,7 @@
     </div>
     <!--add and manage group account modal -->
     <div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }"
-        class="modal fade full-screen-modal manage-account-popup add-manage-group-acc" role="dialog"
-        (onShown)="onShown()">
+        class="modal fade full-screen-modal manage-account-popup add-manage-group-acc" role="dialog">
         <div class="modal-dialog modal-xl modal-liq-90 mr-0 width-100 h-100">
             <div class="modal-content full-screen-modal">
                 <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
@@ -148,25 +126,6 @@
             </div>
         </div>
     </div>
-    <!--CMD + G modal  -->
-    <ng-template #navigationModal>
-
-        <div class="modal-body" #mdl>
-            <command-k (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
-                (groupEmitter)="makeGroupEntryInDB($event)" (selectedItemEmitter)="onItemSelected($event)"
-                [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" (closeEmitter)="modelRef.hide()"></command-k>
-
-            <div class="shortcuts">
-                <strong>↑</strong> <strong>↓</strong>&nbsp; {{commonLocaleData?.app_to_navigate}} <strong class="mr-l1"
-                    [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
-                {{commonLocaleData?.app_to_select}} <strong class="mr-l1"
-                    [attr.aria-label]="commonLocaleData?.app_escape">{{commonLocaleData?.app_esc}}</strong>&nbsp;
-                {{commonLocaleData?.app_to_dismiss}}
-            </div>
-
-        </div>
-
-    </ng-template>
     <ng-template #expiredPlanModel>
         <div class="modal-header">
             <h3 class="modal-title pull-left">{{localeData?.ready_to_upgrade}}</h3>

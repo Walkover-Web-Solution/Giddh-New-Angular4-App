@@ -13,10 +13,10 @@ import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonActions } from '../../actions/common.actions';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { base64ToBlob } from '../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-order.action';
 import { DomSanitizer } from '@angular/platform-browser';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'purchase-order-preview',
@@ -99,7 +99,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         private commonActions: CommonActions,
         private invoiceActions: InvoiceActions,
         private purchaseOrderActions: PurchaseOrderActions,
-        private domSanitizer: DomSanitizer
+        private domSanitizer: DomSanitizer,
+        private generalService: GeneralService
     ) {
         this.getInventorySettings();
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
@@ -460,7 +461,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
 
         this.purchaseOrderService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
-                let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
+                let blob: Blob = this.generalService.base64ToBlob(response.body, 'application/pdf', 512);
                 this.attachedDocumentBlob = blob;
                 const file = new Blob([blob], { type: 'application/pdf' });
                 URL.revokeObjectURL(this.pdfFileURL);

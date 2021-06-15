@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
-
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { LocaleService } from '../../../services/locale.service';
 import { SettingsTaxesService } from '../../../services/settings.taxes.service';
@@ -25,7 +23,6 @@ export class SettingsTaxesActions {
                     map(response => this.CreateTaxResponse(response)));
             })));
 
-
     public CreateTaxResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE),
@@ -39,7 +36,6 @@ export class SettingsTaxesActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public UpdateTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX),
@@ -47,7 +43,6 @@ export class SettingsTaxesActions {
                 return this.settingsTaxesService.UpdateTax(action.payload, action.payload.uniqueName).pipe(
                     map(response => this.UpdateTaxResponse(response)));
             })));
-
 
     public UpdateTaxResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -62,7 +57,6 @@ export class SettingsTaxesActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public DeleteTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX),
@@ -76,7 +70,6 @@ export class SettingsTaxesActions {
                     map(response => this.DeleteTaxResponse(response)));
             })));
 
-
     public DeleteTaxResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE),
@@ -89,7 +82,6 @@ export class SettingsTaxesActions {
                 }
                 return { type: 'EmptyAction' };
             })));
-
 
     public GetTaxList$: Observable<Action> = createEffect(() => this.action$
         .pipe(

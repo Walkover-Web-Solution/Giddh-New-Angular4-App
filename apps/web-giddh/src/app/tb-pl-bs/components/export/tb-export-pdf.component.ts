@@ -30,7 +30,6 @@ class FormatPdf implements IFormatable {
 
     constructor(private request: TrialBalanceRequest, private localeData) {
         this.colX = 10;
-        // this.colY = 50;
     }
 
     public setHeader(selectedCompany: CompanyResponse) {

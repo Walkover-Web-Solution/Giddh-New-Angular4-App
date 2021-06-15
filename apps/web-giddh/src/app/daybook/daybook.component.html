@@ -120,7 +120,6 @@
                                     <td class="text-right" [attr.data-title]="localeData?.voucher_no">{{ entry.voucherNo
                                         }}</td>
                                     <td class="text-right" [attr.data-title]="localeData?.debit_amount">
-                                        <!-- {{ entry.debitAmount || 0 |giddhCurrency }} -->
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="entry.debitAmount || 0" [currencySymbol]="false"
                                                 [currencyCode]="false">
@@ -128,7 +127,6 @@
                                         </span>
                                     </td>
                                     <td class="text-right" [attr.data-title]="localeData?.credit_amount">
-                                        <!-- {{ entry.creditAmount || 0 |giddhCurrency}} -->
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="entry.creditAmount || 0" [currencySymbol]="false"
                                                 [currencyCode]="false">
@@ -146,7 +144,6 @@
                                         <td class="hide-td"></td>
                                         <td class="text-right" [attr.data-title]="localeData?.debit_amount">
                                             <span *ngIf="details.type === 'DEBIT'">
-                                                <!-- {{ details.amount || 0 |giddhCurrency}} -->
                                                 <span class="d-flex justify-content-end">
                                                     <amount-field [amount]="details.amount || 0"
                                                         [currencySymbol]="false" [currencyCode]="false">
@@ -157,7 +154,6 @@
                                         </td>
                                         <td class="text-right" [attr.data-title]="localeData?.credit_amount">
                                             <span *ngIf="details.type === 'CREDIT'">
-                                                <!-- {{ details.amount|| 0  |giddhCurrency}} -->
                                                 <span class="d-flex justify-content-end">
                                                     <amount-field [amount]="(details.amount || 0)"
                                                         [currencySymbol]="false" [currencyCode]="false">
@@ -177,7 +173,6 @@
                                             <td>{{details.inventory?details.inventory.unit.name:''}}
                                             </td>
                                             <td *ngIf="details.inventory" class=" text-right">
-                                                <!-- {{details.inventory.rate |giddhCurrency}} -->
                                                 <span class="d-flex justify-content-end">
                                                     <amount-field [amount]="details.inventory.rate"
                                                         [currencySymbol]="false" [currencyCode]="false">

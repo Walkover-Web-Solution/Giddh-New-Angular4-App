@@ -150,7 +150,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
                 if (res.status === "success") {
-                    let blobData = this.base64ToBlob(res.body, "application/xlsx", 512);
+                    let blobData = this.generalService.base64ToBlob(res.body, "application/xlsx", 512);
                     return saveAs(
                         blobData,
                         `${row.company.name}-error-log.xlsx`
@@ -160,28 +160,6 @@ export class InprogressComponent implements OnInit, OnDestroy {
                 }
             });
     }
-
-    public base64ToBlob(b64Data, contentType, sliceSize) {
-        contentType = contentType || "";
-        sliceSize = sliceSize || 512;
-        let byteCharacters = atob(b64Data);
-        let byteArrays = [];
-        let offset = 0;
-        while (offset < byteCharacters.length) {
-            let slice = byteCharacters.slice(offset, offset + sliceSize);
-            let byteNumbers = new Array(slice.length);
-            let i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
-            }
-            let byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
-        }
-        return new Blob(byteArrays, { type: contentType });
-    }
-
 
     /**
      *

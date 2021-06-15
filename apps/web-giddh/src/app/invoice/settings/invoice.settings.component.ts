@@ -2,7 +2,6 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { CompanyCashFreeSettings, CompanyEmailSettings, EstimateSettings, InvoiceSetting, InvoiceSettings, InvoiceWebhooks, ProformaSettings } from '../../models/interfaces/invoice.setting.interface';
 import { AppState } from '../../store';
@@ -17,6 +16,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CommonActions } from '../../actions/common.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
+import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
 
 @Component({
     selector: 'app-invoice-setting',
@@ -134,46 +134,45 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public initSettingObj() {
         this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
             if (setting && setting.invoiceSettings && setting.webhooks) {
-                this.originalEmail = _.cloneDeep(setting.invoiceSettings.email);
+                this.originalEmail = cloneDeep(setting.invoiceSettings.email);
 
                 this.settingResponse = setting;
-                this.estimateSetting = _.cloneDeep(setting.estimateSettings);
-                this.invoiceSetting = _.cloneDeep(setting.invoiceSettings);
-                this.proformaSetting = _.cloneDeep(setting.proformaSettings);
+                this.estimateSetting = cloneDeep(setting.estimateSettings);
+                this.invoiceSetting = cloneDeep(setting.invoiceSettings);
+                this.proformaSetting = cloneDeep(setting.proformaSettings);
                 this.invoiceSetting.autoPaid = this.invoiceSetting.autoPaid === 'runtime';
 
                 // using last state to compare data before dispatching action
-                this.invoiceLastState = _.cloneDeep(setting.invoiceSettings);
-                this.webhookLastState = _.cloneDeep(setting.webhooks);
+                this.invoiceLastState = cloneDeep(setting.invoiceSettings);
+                this.webhookLastState = cloneDeep(setting.webhooks);
 
-                let webhookArray = _.cloneDeep(setting.webhooks);
+                let webhookArray = cloneDeep(setting.webhooks);
 
                 // using filter to get webhooks for 'invoice' only
                 this.invoiceWebhook = webhookArray.filter((obj) => obj.entity === 'invoice');
-                this.invoiceWebhook.push(_.cloneDeep(this.webhookMock));
+                this.invoiceWebhook.push(cloneDeep(this.webhookMock));
 
 
                 this.estimateWebhook = webhookArray.filter((obj) => obj.entity === 'estimate');
-                this.estimateWebhook.push(_.cloneDeep(this.webhookMock));
+                this.estimateWebhook.push(cloneDeep(this.webhookMock));
 
 
                 this.proformaWebhook = webhookArray.filter((obj) => obj.entity === 'proforma');
-                this.proformaWebhook.push(_.cloneDeep(this.webhookMock));
+                this.proformaWebhook.push(cloneDeep(this.webhookMock));
 
 
                 if (webhookArray.length > 0) {
                     this.webhooks = webhookArray;
                 } else {
                     // adding blank webhook row on load
-                    this.webhooks = [_.cloneDeep(this.webhookMock)];
+                    this.webhooks = [cloneDeep(this.webhookMock)];
                 }
 
 
-                if (setting.razorPayform && !_.isEmpty(setting.razorPayform)) {
-                    this.razorpayObj = _.cloneDeep(setting.razorPayform);
+                if (setting.razorPayform && !isEmpty(setting.razorPayform)) {
+                    this.razorpayObj = cloneDeep(setting.razorPayform);
                     this.razorpayObj.password = 'YOU_ARE_NOT_ALLOWED';
                     this.updateRazor = true;
-                    // this.razorpayObj.account.name = _.cloneDeep(setting.razorPayform.account.uniqueName) || '';
                 } else {
                     this.updateRazor = false;
                 }
@@ -184,7 +183,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 }
 
                 if (setting.companyEmailSettings) {
-                    this.companyEmailSettings.sendThroughGmail = _.cloneDeep(setting.companyEmailSettings.sendThroughGmail);
+                    this.companyEmailSettings.sendThroughGmail = cloneDeep(setting.companyEmailSettings.sendThroughGmail);
                 } else {
                     this.companyEmailSettings.sendThroughGmail = false;
                 }
@@ -195,7 +194,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 } else {
                     this.isLockDateSet = false;
                 }
-                this.companyCashFreeSettings = _.cloneDeep(setting.companyCashFreeSettings);
+                this.companyCashFreeSettings = cloneDeep(setting.companyCashFreeSettings);
                 this.cdr.detectChanges();
             } else if (!setting || !setting.webhooks) {
                 this.store.dispatch(this.invoiceActions.getInvoiceSetting());
@@ -214,7 +213,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public addNewWebhook(webhook, entityType?: string) {
         webhook['entity'] = entityType;
-        let objToSave = _.cloneDeep(webhook);
+        let objToSave = cloneDeep(webhook);
         if (!objToSave.url || !objToSave.triggerAt) {
             this._toasty.warningToast(this.localeData?.webhook_required_error);
             return false;
@@ -250,10 +249,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public UpdateForm(form = null) {
 
-        let razorpayObj: RazorPayDetailsResponse = _.cloneDeep(this.settingResponse.razorPayform) || new RazorPayDetailsResponse();
-        // check whether form is updated or not
-        // if (!_.isEqual(form, this.invoiceLastState)) {
-        // if (!_.isEqual(form, this.invoiceLastState)) {
+        let razorpayObj: RazorPayDetailsResponse = cloneDeep(this.settingResponse.razorPayform) || new RazorPayDetailsResponse();
 
         if (this.webhooks && this.webhooks.length > 0 && !this.webhooks[this.webhooks.length - 1].url && !this.webhooks[this.webhooks.length - 1].triggerAt) {
             this.webhooks.splice(this.webhooks.length - 1);
@@ -261,13 +257,13 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         // perform operation to update 'invoice' webhooks
         this.mergeWebhooks(this.webhooks);
 
-        this.formToSave = _.cloneDeep(this.settingResponse);
-        this.formToSave.invoiceSettings = _.cloneDeep(this.invoiceSetting);
-        this.formToSave.estimateSettings = _.cloneDeep(this.estimateSetting);
-        this.formToSave.proformaSettings = _.cloneDeep(this.proformaSetting);
-        this.formToSave.webhooks = _.cloneDeep(this.webhooks);
+        this.formToSave = cloneDeep(this.settingResponse);
+        this.formToSave.invoiceSettings = cloneDeep(this.invoiceSetting);
+        this.formToSave.estimateSettings = cloneDeep(this.estimateSetting);
+        this.formToSave.proformaSettings = cloneDeep(this.proformaSetting);
+        this.formToSave.webhooks = cloneDeep(this.webhooks);
         this.formToSave.companyEmailSettings = {
-            sendThroughGmail: _.cloneDeep(this.companyEmailSettings.sendThroughGmail) ? _.cloneDeep(this.companyEmailSettings.sendThroughGmail) : false,
+            sendThroughGmail: cloneDeep(this.companyEmailSettings.sendThroughGmail) ? cloneDeep(this.companyEmailSettings.sendThroughGmail) : false,
             sendThroughSendgrid: false
         };
         delete this.formToSave.sendThroughGmail;
@@ -302,11 +298,11 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             this.formToSave.invoiceSettings.autoPaid = 'never';
         }
 
-        this.formToSave.companyCashFreeSettings = _.cloneDeep(this.companyCashFreeSettings);
+        this.formToSave.companyCashFreeSettings = cloneDeep(this.companyCashFreeSettings);
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
         // }
 
-        if (!_.isEqual(this.razorpayObj, razorpayObj) && form && form.createPaymentEntry) {
+        if (!isEqual(this.razorpayObj, razorpayObj) && form && form.createPaymentEntry) {
             this.saveRazorPay(this.razorpayObj, form);
         }
     }
@@ -316,14 +312,14 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
 
     public saveRazorPay(razorForm, form) {
-        this.razorpayObj.account = _.cloneDeep(this.accountToSend);
+        this.razorpayObj.account = cloneDeep(this.accountToSend);
         this.razorpayObj.autoCapturePayment = true;
         this.razorpayObj.companyName = '';
         if (form.createPaymentEntry && (!this.razorpayObj.userName || !this.razorpayObj.account)) {
             this._toasty.warningToast(this.localeData?.razorpay_error);
             return false;
         }
-        let razorpayObj = _.cloneDeep(this.razorpayObj);
+        let razorpayObj = cloneDeep(this.razorpayObj);
         if (this.updateRazor) {
             delete razorpayObj.password;
             this.store.dispatch(this.invoiceActions.updateRazorPayDetail(razorpayObj));
@@ -336,15 +332,14 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * Merge Webhook before saving Form
      */
     public mergeWebhooks(webhooks) {
-        let _webhooks = _.cloneDeep(webhooks);
-        this.webhooks = _.concat(_webhooks, this.proformaWebhook, this.invoiceWebhook, this.estimateWebhook);
+        let _webhooks = cloneDeep(webhooks);
+        this.webhooks = concat(_webhooks, this.proformaWebhook, this.invoiceWebhook, this.estimateWebhook);
     }
 
     /**
      * Reset Form
      */
     public resetForm() {
-        // this.invoiceSetting = this.invoiceLastState;
         this.initSettingObj();
     }
 
@@ -372,7 +367,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * select account to link with razorpay
      */
     public selectLinkAccount(data) {
-        let arrOfAcc = _.cloneDeep(this.accountList);
+        let arrOfAcc = cloneDeep(this.accountList);
         if (data.value) {
             let result = arrOfAcc.filter((obj) => obj.uniqueName === data.value);
             this.accountToSend.name = result[0].name;
@@ -400,7 +395,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         if (!emailId) {
             return false;
         } else {
-            let emailTodelete = _.cloneDeep(emailId);
+            let emailTodelete = cloneDeep(emailId);
             emailTodelete = null;
             this.store.dispatch(this.invoiceActions.deleteInvoiceEmail(emailTodelete));
         }
@@ -412,12 +407,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public checkDueDays(value: number, indx: number, flag: string) {
         if (indx !== null) {
             if (indx > -1 && value > 90 && flag === 'length') {
-                let webhooks = _.cloneDeep(this.webhooks);
+                let webhooks = cloneDeep(this.webhooks);
                 webhooks[indx].triggerAt = 90;
                 this.webhooks = webhooks;
             }
             if (indx > -1 && isNaN(value) && flag === 'alpha') {
-                let webhooks = _.cloneDeep(this.webhooks);
+                let webhooks = cloneDeep(this.webhooks);
                 webhooks[indx].triggerAt = Number(String(webhooks[indx].triggerAt).replace(/\D/g, '')) !== 0 ? Number(String(webhooks[indx].triggerAt).replace(/\D/g, '')) : null;
                 this.webhooks = webhooks;
             }
@@ -436,7 +431,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public validateDefaultDueDate(defaultDueDate: string) {
         if (defaultDueDate) {
-            let invoiceSetting = _.cloneDeep(this.invoiceSetting);
+            let invoiceSetting = cloneDeep(this.invoiceSetting);
             if (isNaN(Number(defaultDueDate)) && defaultDueDate.indexOf('-') === -1) {
                 invoiceSetting.duePeriod = Number(defaultDueDate.replace(/\D/g, '')) !== 0 && !isNaN(Number(defaultDueDate.replace(/\D/g, ''))) ? Number(defaultDueDate.replace(/\D/g, '')) : null;
                 setTimeout(() => {
@@ -478,6 +473,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
     private saveGmailAuthCode(authCode: string) {
         const dataToSave = {
             code: authCode,
@@ -496,6 +492,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             this.router.navigateByUrl('/pages/invoice/preview/settings/email');
         });
     }
+    
     private getRedirectUrl(baseHref: string) {
         if (TEST_ENV) {
             return `${baseHref}pages/invoice/preview/sales?tab=settings&tabIndex=4`;

@@ -1,5 +1,5 @@
 import { Observable, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -33,8 +33,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     public flatGroupsOptions: IOption[];
     public isGstEnabledAcc: boolean = true; // true only for groups will not under other
     public isHsnSacEnabledAcc: boolean = false; // true only for groups under revenuefromoperations || otherincome || operatingcost || indirectexpenses
-    public fetchingAccUniqueName$: Observable<boolean>;
-    public isAccountNameAvailable$: Observable<boolean>;
     public createAccountInProcess$: Observable<boolean>;
     // update acc
     public activeAccount$: Observable<AccountResponseV2>;
@@ -59,8 +57,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         private _groupWithAccountsAction: GroupWithAccountsAction,
     ) {
         // account-add component's property
-        this.fetchingAccUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingAccUniqueName), takeUntil(this.destroyed$));
-        this.isAccountNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isAccountNameAvailable), takeUntil(this.destroyed$));
         this.createAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$));
 
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
@@ -80,7 +76,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
         this.shouldShowBankDetail(this.accountDetails.uniqueName);
 
-        // this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
         this.activeGroup$.subscribe((a) => {
             if (a) {
                 this.virtualAccountEnable$.subscribe(s => {
@@ -140,8 +135,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
         this.store.dispatch(this.accountsAction.deleteAccount(this.activeAccountDetails.uniqueName, activeGrpName));
         this.hideDeleteAccountModal();
-        // this.getUpdateList.emit(activeGrpName);
-
     }
 
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {

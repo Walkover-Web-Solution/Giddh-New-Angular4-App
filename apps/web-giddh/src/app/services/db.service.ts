@@ -3,7 +3,7 @@ import { select, Store } from '@ngrx/store';
 import { from, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { GIDDH_DB } from '../models/db';
-import { ICompAidata, Igtbl, IUlist } from '../models/interfaces/ulist.interface';
+import { ICompAidata, IUlist } from '../models/interfaces/ulist.interface';
 import { OrganizationType } from '../models/user-login-state';
 import { AppState } from '../store';
 import { GeneralService } from './general.service';
@@ -14,11 +14,7 @@ export class DbService {
         private store: Store<AppState>,
         private generalService: GeneralService
     ) {
-        //
-    }
 
-    public extractDataForUI(data: Igtbl): IUlist[] {
-        return [...data['menus'].slice(0, 3), ...data['groups'].slice(0, 3), ...data['accounts'].slice(0, 3)];
     }
 
     public getItemDetails(key: any): Observable<ICompAidata> {
@@ -38,6 +34,7 @@ export class DbService {
     public addItem(key: string, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }, isSmallScreen: boolean, isCompany: boolean): Promise<ICompAidata> {
         return GIDDH_DB.addItem(key, entity, model, fromInvalidState, isSmallScreen, isCompany);
     }
+
     public removeItem(key: string, entity: string, uniqueName: string) {
         let branches = [];
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
@@ -45,6 +42,7 @@ export class DbService {
         });
         return GIDDH_DB.removeItem(key, entity, uniqueName, this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1);
     }
+
     public deleteAllData(): void {
         GIDDH_DB.forceDeleteDB();
     }
@@ -52,5 +50,4 @@ export class DbService {
     public clearAllData(): void {
         GIDDH_DB.clearAllData();
     }
-
 }

@@ -6,7 +6,6 @@ import { HttpClient } from '@angular/common/http';
 import { HttpWrapperService } from './httpWrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
-import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { SUBSCRIPTIONS_API } from './apiurls/subscriptions.api';
 import * as moment from 'moment';
@@ -21,7 +20,6 @@ export class SubscriptionsService {
         public _httpClient: HttpClient,
         public _http: HttpWrapperService,
         public _router: Router,
-        private _generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 
     }
@@ -49,7 +47,6 @@ export class SubscriptionsService {
                 let data: BaseResponse<string, string> = res;
                 data.request = '';
                 data.queryString = {};
-                // data.response.results.forEach(p => p.isOpen = false);
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
@@ -68,7 +65,6 @@ export class SubscriptionsService {
                 let data: BaseResponse<string, string> = res;
                 data.request = '';
                 data.queryString = {};
-                // data.response.results.forEach(p => p.isOpen = false);
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
@@ -80,7 +76,6 @@ export class SubscriptionsService {
                 let data: BaseResponse<string, string> = res;
                 data.request = '';
                 data.queryString = {};
-                // data.response.results.forEach(p => p.isOpen = false);
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }

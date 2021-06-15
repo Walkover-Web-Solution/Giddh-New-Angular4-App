@@ -1,22 +1,17 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
-import * as _ from '../../../../../../lodash-optimized';
-import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
-import { InvoiceUiDataService } from '../../../../services/invoice.ui.data.service';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
 import { SettingsProfileActions } from '../../../../../../actions/settings/profile/settings.profile.action';
 import { AppState } from 'apps/web-giddh/src/app/store';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'gst-template-d',
     templateUrl: './gst-template-d.component.html',
-    styleUrls: ['./gst-template-d.component.css'],
-    // encapsulation: ViewEncapsulation.None
+    styleUrls: ['./gst-template-d.component.css']
 })
 
 export class GstTemplateDComponent implements OnInit, OnDestroy, OnChanges {
@@ -86,7 +81,7 @@ export class GstTemplateDComponent implements OnInit, OnDestroy, OnChanges {
         //
         this.companySetting$.subscribe(a => {
             if (a && a.address) {
-                this.companyAddress = _.cloneDeep(a.address);
+                this.companyAddress = cloneDeep(a.address);
             } else if (!a) {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }

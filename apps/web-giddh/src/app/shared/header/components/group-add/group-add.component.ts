@@ -22,8 +22,6 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     @Input() public path: string[] = [];
     public activeGroupUniqueName$: Observable<string>;
     public groupDetailForm: FormGroup;
-    public fetchingGrpUniqueName$: Observable<boolean>;
-    public isGroupNameAvailable$: Observable<boolean>;
     public showAddNewGroup$: Observable<boolean>;
     public isCreateGroupInProcess$: Observable<boolean>;
     public isCreateGroupSuccess$: Observable<boolean>;
@@ -34,8 +32,6 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
         this.showAddNewGroup$ = this.store.pipe(select(state => state.groupwithaccounts.showAddNewGroup), takeUntil(this.destroyed$));
-        this.fetchingGrpUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingGrpUniqueName), takeUntil(this.destroyed$));
-        this.isGroupNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isGroupNameAvailable), takeUntil(this.destroyed$));
         this.isCreateGroupInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.isCreateGroupInProcess), takeUntil(this.destroyed$));
         this.isCreateGroupSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.isCreateGroupSuccess), distinctUntilChanged(), takeUntil(this.destroyed$));
     }

@@ -11,14 +11,3 @@ export class EledgerResponse {
     public transactionId: string;
     public date: string;
 }
-
-/*
- * Model for trash eledger transaction api request
- * PUT call
- * API:: ( mail ledger ) company/:companyUniqueName/accounts/:accountUniqueName/eledgers/map/:transactionId
- * Response will be success message
- */
-
-export class EledgerMapRequest {
-    public uniqueName: string;
-}
