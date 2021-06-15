@@ -203,6 +203,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 this.asideGstSidebarMenuState = 'in';
             }
         });
+
         this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
             if (this.isMobileScreen) {
                 if (shouldOpen) {
