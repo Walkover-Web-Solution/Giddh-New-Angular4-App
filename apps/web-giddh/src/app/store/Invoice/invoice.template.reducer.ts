@@ -341,6 +341,11 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: '10'
                     },
+                    showDescriptionInRows: {
+                        label: '',
+                        display: false,
+                        width: null
+                    },
                     hsnSac: {
                         label: 'HSN/SAC',
                         display: true,
