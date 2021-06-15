@@ -50,12 +50,6 @@ export interface OtherExpenses extends IOnlyUniqueName {
     transactions: ITransaction[];
 }
 
-export class COtherExpenses implements IOnlyUniqueName {
-    public baseAccount: INameUniqueName;
-    public transactions: ITransaction[];
-    public uniqueName: string;
-}
-
 export interface IManufacturingUnqItemObj {
     stockUniqueName: string;
     manufacturingUniqueName: string;
@@ -109,9 +103,6 @@ export class ManufacturingItemRequest {
  * Model for get stocks with rates and response of request
 */
 
-// StocksResponse
-// this.store.dispatch(this.inventoryAction.GetStock());
-
 export interface IMfStockSearchRequest {
     product?: string;
     searchOperation?: string;
@@ -125,12 +116,3 @@ export interface IMfStockSearchRequest {
     branchUniqueName?: string;
     warehouseUniqueName?: any;
 }
-
-/*
-product( string: uniquename stock ) ,
-searchOperation(greaterThan , lessThan, greaterThanOrEquals, lessThanOrEquals, equals),
-searchBy (quantityInward , quantityOutward, voucherNumber),
-searchValue( any integer number),
-from (date string),
-to(date string)
-*/

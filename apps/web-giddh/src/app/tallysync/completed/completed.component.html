@@ -9,31 +9,6 @@
                         #shCompany formControlName="filterCompany" (selected)="onDDElementCompanySelect($event)">
                     </sh-select>
                 </div>
-                <!-- Commented as currently the Tally plugin doesn't support branch wise import -->
-                <!-- <div *ngIf="currentCompanyBranches?.length" class="col-lg-3 col-md-12 form-group company linked-entities">
-                    <label>Branch</label>
-                    <sh-select [options]="currentCompanyBranches" formControlName="branchUniqueName" [showClear]="false"
-                        [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
-                        placeholder="Select Entity" [fixedValue]="currentBranch?.alias" name="entity">
-                        <ng-template #optionTemplate let-option="option">
-                            <ng-container>
-                                <a href="javascript:void(0)" class="list-item d-flex">
-                                    <span class="entity-icon">
-                                        <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
-                                        <i class="icon-branch-icon pull-right" *ngIf="!option.parentBranch && !option.isCompany"
-                                            tooltip="HO Branch"></i>
-                                    </span>
-                                    <span class="entity-details">
-                                        <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                        <div class="item-unique giddh-limit single-line-clamp">
-                                            {{ option.name || '-' }}
-                                        </div>
-                                    </span>
-                                </a>
-                            </ng-container>
-                        </ng-template>
-                    </sh-select>
-                </div> -->
                 <div class="col-lg-3 col-md-12 form-group date">
                     <label>{{commonLocaleData?.app_date}}</label>
                     <input name="filterDate" formControlName="filterDate" type="text" autocomplete="off"

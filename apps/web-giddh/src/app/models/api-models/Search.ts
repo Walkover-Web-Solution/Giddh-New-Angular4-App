@@ -1,7 +1,3 @@
-/**
- * Created by ad on 07-07-2017.
- */
-
 export interface ForwardedBalance {
     amount: number;
     type: string;
@@ -40,18 +36,6 @@ export interface AccountFlat {
     name: string;
     parent: string;
     isSelected?: boolean;
-}
-
-export interface GroupFlat {
-    creditTotal: number;
-    debitTotal: number;
-    closeBalanceType: string;
-    openBalanceType: string;
-    closingBalance: number;
-    openingBalance: number;
-    uniqueName: string;
-    name: string;
-    parent: string;
 }
 
 export class ChildGroup {

@@ -28,7 +28,6 @@ import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { fromEvent, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, take, takeUntil } from 'rxjs/operators';
-
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { InvoiceReceiptActions } from '../../../../actions/invoice/receipt/receipt.actions';
 import { ProformaActions } from '../../../../actions/proforma/proforma.actions';
@@ -44,7 +43,6 @@ import { InvoiceSetting } from '../../../../models/interfaces/invoice.setting.in
 import { ProformaService } from '../../../../services/proforma.service';
 import { ReceiptService } from '../../../../services/receipt.service';
 import { ToasterService } from '../../../../services/toaster.service';
-import { base64ToBlob } from '../../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../../store';
 import { ProformaListComponent } from '../../../proforma/proforma-list.component';
 
@@ -104,7 +102,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public moreLogsDisplayed: boolean = true;
     public voucherVersions: ProformaVersionItem[] = [];
     public filteredVoucherVersions: ProformaVersionItem[] = [];
-    public ckeditorContent;
     public invoiceDetailWrapperHeight: number;
     public invoiceDetailViewHeight: number;
     public invoiceImageSectionViewHeight: number;
@@ -318,7 +315,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         }
     }
 
-
     /**
      * To call when voucher change for preview
      *
@@ -336,13 +332,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.showEditMode = false;
         this.getLinkedPurchaseOrders();
     }
-
-    // public openModal(template: TemplateRef<any>) {
-    //     this.modalRef = this.modalService.show(template,
-    //         Object.assign({}, { class: 'preview-lightbox modal-lg' })
-    //     );
-    //     $('.modal-backdrop').addClass('preview-lightbox-overlay');
-    // }
 
     public getVoucherVersions() {
         let request = new ProformaGetAllVersionRequest();
@@ -404,7 +393,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         const fileExtention = data.body.fileType.toLowerCase();
                         if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                             // Attached file type is image
-                            this.attachedAttachmentBlob = base64ToBlob(data.body.uploadedFile, `image/${fileExtention}`, 512);
+                            this.attachedAttachmentBlob = this._generalService.base64ToBlob(data.body.uploadedFile, `image/${fileExtention}`, 512);
                             let objectURL = `data:image/${fileExtention};base64,` + data.body.uploadedFile;
                             this.imagePreviewSource = this.sanitizer.bypassSecurityTrustUrl(objectURL);
                             this.attachedDocumentType = { name: data.body.name, type: 'image', value: fileExtention };
@@ -412,7 +401,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         } else if (FILE_ATTACHMENT_TYPE.PDF.includes(fileExtention)) {
                             // Attached file type is PDF
                             this.attachedDocumentType = { name: data.body.name, type: 'pdf', value: fileExtention };
-                            this.attachedAttachmentBlob = base64ToBlob(data.body.uploadedFile, 'application/pdf', 512);
+                            this.attachedAttachmentBlob = this._generalService.base64ToBlob(data.body.uploadedFile, 'application/pdf', 512);
                             setTimeout(() => {
                                 this.selectedItem.blob = this.attachedAttachmentBlob;
                                 const file = new Blob([this.attachedAttachmentBlob], { type: 'application/pdf' });
@@ -424,7 +413,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                             this.isVoucherDownloadError = false;
                         } else {
                             // Unsupported type
-                            this.attachedAttachmentBlob = base64ToBlob(data.body.uploadedFile, '', 512);
+                            this.attachedAttachmentBlob = this._generalService.base64ToBlob(data.body.uploadedFile, '', 512);
                             this.attachedDocumentType = { name: data.body.name, type: 'unsupported', value: fileExtention };
                         }
                     }
@@ -446,7 +435,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
             this.purchaseRecordService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.status === "success" && response.body) {
-                    let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
+                    let blob: Blob = this._generalService.base64ToBlob(response.body, 'application/pdf', 512);
                     this.attachedDocumentBlob = blob;
                     const file = new Blob([blob], { type: 'application/pdf' });
                     URL.revokeObjectURL(this.pdfFileURL);
@@ -472,7 +461,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
                 this._proformaService.download(request, this.selectedItem.voucherType).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                     if (result && result.status === 'success') {
-                        let blob: Blob = base64ToBlob(result.body, 'application/pdf', 512);
+                        let blob: Blob = this._generalService.base64ToBlob(result.body, 'application/pdf', 512);
                         this.selectedItem.blob = blob;
                         const file = new Blob([blob], { type: 'application/pdf' });
                         URL.revokeObjectURL(this.pdfFileURL);

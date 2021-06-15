@@ -384,8 +384,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.initCalendar();
 
         document.querySelector(".giddh-datepicker-modal").parentElement.classList.add("giddh-calendar");
-
-
     }
 
     /**
@@ -589,10 +587,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
         // generate AM/PM
         if (!this.timePicker24Hour) {
-
-            const am_html = '';
-            const pm_html = '';
-
             if (minDate && selected.clone().hour(12).minute(0).second(0).isBefore(minDate)) {
                 this.timepickerVariables[side].amDisabled = true;
             }
@@ -703,7 +697,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             calendar: calendar
         };
         if (this.showDropdowns) {
-            // debugger;
             const currentMonth = calendar[1][1].month();
             const currentYear = calendar[1][1].year();
             const maxYear = (maxDate && maxDate.year()) || (currentYear + 5);
@@ -1343,14 +1336,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             }
         }
 
-        // if (this.singleDatePicker) {
-        //     this.setEndDate(this.startDate);
-        //     this.updateElement();
-        //     if (this.autoApply) {
-        //         this.clickApply();
-        //     }
-        // }
-
         this.updateView();
 
         // This is to cancel the blur event handler if the mouse was in one of the inputs
@@ -1618,9 +1603,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                         if ((this.endDate && this.startDate && this.endDate.isSame(this.startDate, 'day'))) {
                             classes.push('start-date-reset');
                         }
-                        if (this.ActiveDate !== ActiveDateEnum.Start) {
-                            // classes.push('activatedDate');
-                        }
                         classes.push('active', 'start-date');
                     }
 
@@ -1629,17 +1611,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 if (this.endDate != null && calendar[row][col].format('YYYY-MM-DD') === this.endDate.format('YYYY-MM-DD')) {
                     if ((this.calendarVariables[side].calendar[1][1].month() === this.calendarVariables[side].calendar[row][col].month())) {
                         if (!(this.endDate && this.startDate && this.endDate.isSame(this.startDate, 'day'))) {
-                            if (this.ActiveDate !== ActiveDateEnum.End) {
-                                // classes.push('activatedDate');
-                            }
                             classes.push('active', 'end-date');
                         }
                     }
                 }
-                // highlight dates in-between the selected dates
-                // if (this.endDate != null && calendar[row][col] > this.startDate && calendar[row][col] < this.endDate) {
-                //     classes.push('in-range');
-                // }
                 // apply custom classes for this date
                 const isCustom = this.isCustomDate(calendar[row][col]);
                 if (isCustom !== false) {

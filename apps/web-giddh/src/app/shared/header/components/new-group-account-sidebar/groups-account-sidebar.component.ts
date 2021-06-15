@@ -9,13 +9,13 @@ import { Store, select } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { ColumnGroupsAccountVM, GroupAccountSidebarVM, IGroupOrAccount } from './VM';
-import * as _ from '../../../../lodash-optimized';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { VsForDirective } from '../../../../theme/ng2-vs-for/ng2-vs-for';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
+import { cloneDeep, each } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'groups-account-sidebar',
@@ -78,7 +78,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         private _cdRef: ChangeDetectorRef,
         private groupService: GroupService
     ) {
-        this.mc = new GroupAccountSidebarVM(this._cdRef, this.store);
+        this.mc = new GroupAccountSidebarVM(this.store);
         this.activeGroup = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
@@ -237,7 +237,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
     }
 
     public resetData() {
-        this._groups = this.orderByCategory(_.cloneDeep(this.groups));
+        this._groups = this.orderByCategory(cloneDeep(this.groups));
 
         this.mc.columns = [];
         this.mc.columns.push(new ColumnGroupsAccountVM(new GroupsWithAccountsResponse()));
@@ -321,13 +321,11 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
             }
         } else {
             for (let grp of grps) {
-                // if(activeGroup){
                 if (activeGroup && grp.uniqueName === activeGroup.uniqueName) {
                     let newCOL = new ColumnGroupsAccountVM(grp);
                     newCOL.groups = [];
                     if (activeGroup.groups) {
                         for (let key of activeGroup.groups) {
-                            // key.isOpen = true;
                             newCOL.groups.push(key);
                         }
                         let grps1 = newCOL.groups || [];
@@ -416,26 +414,11 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
     public ShowAddNewForm(col: ColumnGroupsAccountVM) {
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
-        // if (col.uniqueName) {
         let activeGroup;
         this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
         this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
         this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
-        // } else {
-        //   let grp = col.groups.find(p => p.isOpen);
-        //   if (grp) {
-        //     this.getBreadCrumbPathFromGroup(this._groups, grp.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
-        //     this.breadcrumbUniqueNamePath.pop();
-        //     this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
-        //     if (this.breadcrumbUniqueNamePath && this.breadcrumbUniqueNamePath.length > 0) {
-        //       this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.breadcrumbUniqueNamePath[this.breadcrumbUniqueNamePath.length - 1]));
-        //     }
-        //   }
-        // }
-        // for (let index = 0; index < this.breadcrumbUniqueNamePath.length; index++) {
-        //   let inde = this.mc.columns[index].Items.findIndex(p => p.uniqueName === this.breadcrumbUniqueNamePath[index]);
-        //   this.mc.columns[index].Items[inde].isOpen = true;
-        // }
+        
         if (col.uniqueName) {
             this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(col.uniqueName));
         }
@@ -450,7 +433,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         const liabilities = [];
         const income = [];
         const expenses = [];
-        _.each(groups, (grp) => {
+        each(groups, (grp) => {
             switch (grp.category) {
                 case 'assets':
                     return assets.push(grp);
@@ -464,10 +447,10 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
                     return assets.push(grp);
             }
         });
-        _.each(liabilities, liability => orderedGroups.push(liability));
-        _.each(assets, asset => orderedGroups.push(asset));
-        _.each(income, inc => orderedGroups.push(inc));
-        _.each(expenses, exp => orderedGroups.push(exp));
+        each(liabilities, liability => orderedGroups.push(liability));
+        each(assets, asset => orderedGroups.push(asset));
+        each(income, inc => orderedGroups.push(inc));
+        each(expenses, exp => orderedGroups.push(exp));
         return orderedGroups;
     }
 

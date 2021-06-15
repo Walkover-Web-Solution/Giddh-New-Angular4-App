@@ -91,12 +91,7 @@
                 <ng-container *ngIf="isHsnSacEnabledAcc">
                     <div class="row">
                         <div class="col-8 col-sm-8 form-group">
-                            <!-- <label class="d-block">HSN</label> -->
                             <div class="input-group d-flex">
-                                <!-- <span class="input-group-addon">
-                                <input type="radio" class="" formControlName="hsnOrSac" value='hsn' name="hsnOrSac">
-                            </span>
-                            <input type="text" class="form-control" digitsOnlyDirective formControlName="hsnNumber" class="form-control" name="hsnNumber" maxLength="10"> -->
                                 <div class="d-flex">
                                     <span class="mr-r15">
                                         <input type="radio" class="radio-custom radio-theme" name="hsnOrSac"
@@ -119,15 +114,6 @@
                                     *ngIf="addAccountForm.get('hsnOrSac').value === 'sac'" />
                             </div>
                         </div>
-                        <!-- <div class="col-xs-6 col-sm-6 form-group">
-                        <label class="d-block">SAC</label>
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <input type="radio" formControlName="hsnOrSac" value='sac' name="hsnOrSac" />
-                            </span>
-                            <input type="text" digitsOnlyDirective formControlName="sacNumber" class="form-control " name="sacNumber" maxLength="10">
-                        </div>
-                    </div> -->
                     </div>
                 </ng-container>
             </div>
@@ -294,31 +280,8 @@
                                     *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors">{{localeData?.email_id_error}}</span>
                             </div>
                         </div>
-                        <!-- <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>PAN</label>
-                            <input type="text" disabled class="form-control" placeholder="PAN Number">
-                        </div>
-                    </div> -->
-                    </div>
-                    <!-- <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Other Details</label>
-                            <input type="text" disabled class="form-control" placeholder="Other">
-                        </div>
-                    </div>
-
-                </div> -->
-                </div>
-                <!-- <div class="row">
-                <div class="col-sm-12 mr-t3">
-                    <div class="button-group">
-                        <button class="btn btn-cancel">Cancel</button>
-                        <button class="btn btn-success">Save</button>
                     </div>
                 </div>
-            </div> -->
             </tab>
 
 
@@ -433,31 +396,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- <div class="row ">
-                    <div class="col-sm-10 ">
-                        <div class="form-group ">
-                            <label>Move to Group</label>
-                            <input type="text " class="form-control " placeholder="Group Name ">
-                        </div>
-                    </div>
-                    <div class="col-sm-2 pl-0 ">
-                        <label>&nbsp;</label>
-                        <button class="btn btn-sky-blue ">Move</button>
-                    </div>
-                </div>
-                <div class="row ">
-                    <div class="col-sm-10 ">
-                        <div class="form-group ">
-                            <label>Select account to merge with</label>
-                            <input type="text " class="form-control " placeholder="Select account ">
-                        </div>
-                    </div>
-                    <div class="col-sm-2 pl-0 ">
-                        <label>&nbsp;</label>
-                        <button class="btn btn-sky-blue ">Merge</button>
-                    </div>
-                </div> -->
                 </div>
 
             </tab>
@@ -522,23 +460,6 @@
     </form>
     <div class="form" *ngIf="isOtherSelectedTab">
         <div>
-            <!-- <div class="col-xs-12 mr-b2 select-box">
-                <div class="form-group ">
-                    <label>Default discount <span
-                            class="primary-color"></span></label>
-                    <div class="clearfix">
-                        <span>
-                            <sh-select class="pull-left" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" [placeholder]="'Select discounts'" style="width: calc(100% - 93px);"></sh-select>
-                        </span>
-                        <span class="pull-right">
-                            <button  class="btn btn-primary merge-btn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscount()">Apply</button>
-                        </span>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
             <div *ngIf="(activeAccount$ | async)" class="form-group">
                 <form name="moveAccountForm" class="clearfix move-to-group" novalidate (submit)="moveAccount()"
                     [formGroup]="moveAccountForm">
@@ -676,7 +597,6 @@
                         </div>
                     </form>
 
-                    <!-- *ngIf="showEditTaxSection" -->
                     <div class="edit-tax-section">
                         <div class="form-group">
                             <div class="tax-label">

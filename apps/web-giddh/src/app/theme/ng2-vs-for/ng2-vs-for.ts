@@ -160,8 +160,6 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
         } else {
             this.postDigest(this.refresh.bind(this));
         }
-        // this.slicedCollection = value.slice(1, -1);
-        // this.view.setLocal('vsCollection', this.slicedCollection);
     }
 
     public _slicedCollection: any[] = [];
@@ -173,7 +171,6 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
     set slicedCollection(value: any[]) {
         this._slicedCollection = value;
         this.view.context.vsCollection = this._slicedCollection;
-        // this.view.setLocal('vsCollection', this._slicedCollection);
     }
 
     public ngOnChanges() {
@@ -251,38 +248,6 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
         };
 
         window.addEventListener('resize', this.onWindowResize);
-
-        // TODO: figure out how to trigger some events here...
-
-        // $scope.$on('vsRepeatTrigger', refresh);
-
-        // $scope.$on('vsRepeatResize', function() {
-        //     autoSize = true;
-        //     setAutoSize();
-        // });
-
-        // $scope.$on('vsRenderAll', function() {//e , quantum) {
-        //     if ($$options.latch) {
-        //         setTimeout(function() {
-        //             // var __endIndex = Math.min($scope.endIndex + (quantum || 1), originalLength);
-        //             var __endIndex = originalLength;
-        //             _maxEndIndex = Math.max(__endIndex, _maxEndIndex);
-        //             $scope.endIndex = $$options.latch ? _maxEndIndex : __endIndex;
-        //             this.slicedCollection = originalCollection.slice($scope.startIndex, $scope.endIndex);
-        //             _prevEndIndex = $scope.endIndex;
-
-        //             $scope.$$postDigest(function() {
-        //                 var layoutProp = $$horizontal ? 'width' : 'height';
-        //                 $beforeContent.css(layoutProp, 0);
-        //                 $afterContent.css(layoutProp, 0);
-        //             });
-
-        //             $scope.$apply(function() {
-        //                 $scope.$emit('vsRenderAllDone');
-        //             });
-        //         });
-        //     }
-        // });
     }
 
     public ngOnDestroy() {
@@ -455,12 +420,8 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
 
         if (digestRequired) {
             this.slicedCollection = this.originalCollection.slice(this.startIndex, this.endIndex);
-            // this.view.setLocal('vsStartIndex', this.startIndex);
             this.view.context.vsStartIndex = this.startIndex;
 
-            // TODO figure out these events
-            // Emit the event
-            // $scope.$emit('vsRepeatInnerCollectionUpdated', this.startIndex, this.endIndex, this._prevStartIndex, this._prevEndIndex);
             this._prevStartIndex = this.startIndex;
             this._prevEndIndex = this.endIndex;
 
@@ -497,7 +458,6 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
         let size1 = this.sizesCumulative[itemIndex];
         this.parent.scrollTop = size1;
         this.updateInnerCollection();
-        // this.refresh();
     }
 
     public _getOffset(index: number) {

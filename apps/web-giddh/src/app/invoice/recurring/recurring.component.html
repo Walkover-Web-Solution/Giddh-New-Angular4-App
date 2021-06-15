@@ -63,7 +63,6 @@
                                     <div class="input-group">
                                         <input type="text" [placeholder]="localeData?.search_invoice_no" class="w100"
                                             [formControl]="invoiceNumberInput" #invoiceSearch class="form-control" />
-                                        <!--<i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>-->
                                     </div>
                                 </div>
                             </div>
@@ -74,7 +73,6 @@
                                         <input type="text" [placeholder]="localeData?.search_customer_name" class="w100"
                                             name="customerName" [formControl]="customerNameInput" #customerSearch
                                             class="form-control" />
-                                        <!-- <i class="icon-search" (click)="showCustomerNameSearch = false;"></i> -->
                                     </div>
                                 </div>
                             </div>
@@ -137,7 +135,6 @@
                             <div class="input-group">
                                 <input type="text" [placeholder]="localeData?.search_invoice_no" class="w100"
                                     [formControl]="invoiceNumberInput" #invoiceSearch class="form-control" />
-                                <!--<i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>-->
                             </div>
                         </div>
                     </div>
@@ -148,7 +145,6 @@
                                 <input type="text" [placeholder]="localeData?.search_customer_name" class="w100"
                                     name="customerName" [formControl]="customerNameInput" #customerSearch
                                     class="form-control" />
-                                <!-- <i class="icon-search" (click)="showCustomerNameSearch = false;"></i> -->
                             </div>
                         </div>
                     </div>
@@ -224,15 +220,6 @@
                 <thead class="thead-background1">
                     <tr>
 
-                        <!-- <th width="4%" *ngIf="selectedItems.length > 0">
-                            <div class="check-image d-flex justify-content-center">
-                                <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
-                                    (click)="toggleAllItems(true)">
-                                <img src="assets/images/checked.png" *ngIf="allItemsSelected"
-                                    (click)="toggleAllItems(false)">
-                            </div>
-                        </th> -->
-
                         <th width="4%">
                             <div class="check-image d-flex justify-content-center">
                                 #
@@ -251,7 +238,6 @@
                             <div class="input-container" [hidden]="!showInvoiceNumberSearch">
                                 <input type="text" [placeholder]="localeData?.search_invoice_no" class="w100"
                                     [formControl]="invoiceNumberInput" #invoiceSearch />
-                                <!--<i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>-->
                             </div>
 
                         </th>
@@ -330,16 +316,6 @@
                     <tr *ngFor="let col of recurringVoucherDetails;let i = index"
                         (mouseover)="hoveredItemForAction = col.uniqueName">
 
-                        <!-- <td *ngIf="hoveredItemForAction === col.uniqueName || col.isSelected || selectedItems.length > 0"
-                            data-title="#">
-                            <div class="check-image d-flex justify-content-center">
-                                <img *ngIf="!col?.isSelected" src="assets/images/unchecked.png"
-                                    (click)="toggleItem(col, true)" />
-                                <img *ngIf="col?.isSelected" src="assets/images/checked.png"
-                                    (click)="toggleItem(col, false)" />
-                            </div>
-                        </td> -->
-
                         <td width="4%" data-title="#">
                             <div class="justify-content-sm d-flex justify-content-center">{{ i + 1}}</div>
                         </td>
@@ -357,7 +333,6 @@
                         <td [attr.data-title]="localeData?.next_invoice_date">{{ col.nextCronDate || '-' }}</td>
                         <td [attr.data-title]="commonLocaleData?.app_status">{{ col.status || '-' | titlecase }}</td>
                         <td [attr.data-title]="localeData?.invoice_amount" class=" text-right">
-                            <!-- {{ col.voucherTotal | giddhCurrency   }} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="col.voucherTotal" [currencySymbol]="false"
                                     [currencyCode]="false">

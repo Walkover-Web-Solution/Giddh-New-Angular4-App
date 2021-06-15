@@ -6,7 +6,6 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { UserDetails } from "../models/api-models/loginModels";
 import { CountryRequest, CountryResponse, CurrencyResponse, CallingCodesResponse, OnboardingFormRequest, OnboardingFormResponse } from '../models/api-models/Common';
-import { GiddhErrorHandler } from "./catchManager/catchmanger";
 import { HttpWrapperService } from "./httpWrapper.service";
 import { Observable } from "rxjs";
 
@@ -14,7 +13,7 @@ import { Observable } from "rxjs";
 export class CommonService {
     private user: UserDetails;
 
-    constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private _http: HttpWrapperService, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this.user = this._generalService.user;
     }
 
@@ -47,6 +46,7 @@ export class CommonService {
                 return data;
             }));
     }
+    
     public GetPartyType(): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.PARTY_TYPE;
         return this._http.get(url).pipe(
