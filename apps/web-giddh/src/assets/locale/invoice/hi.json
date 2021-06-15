@@ -176,5 +176,7 @@
     "exchange_gain_loss_label": "[BASE_CURRENCY] में: [AMOUNT] <br /> विनिमय [PROFIT_TYPE]: ",
     "exchange_gain": "लाभ",
     "exchange_loss": "हानि",
-    "works_for_single_entry": "केवल एकल प्रविष्टि के लिए काम करता है।"
+    "works_for_single_entry": "केवल एकल प्रविष्टि के लिए काम करता है।",
+    "uploaded_purchase_bill": "अपलोड किया गया बिल",
+    "auto_generated_purchase_bill": "गिद्ध/ऑटो जनरेटेड बिल"
 }
