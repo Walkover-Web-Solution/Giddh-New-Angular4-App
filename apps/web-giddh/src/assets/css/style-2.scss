@@ -10260,7 +10260,7 @@ body.update-scroll-hidden {
     .on-setting-page .nav-left-bar {
         display: none;
     }
-    .on-setting-page, .gst-sidebar-open {
+    .on-setting-page, .gst-sidebar-open, .on-user-page{
         .hamburger-menu-icon{
             left: 80px !important;
             width: calc(100% - 160px) !important;
