@@ -68,7 +68,7 @@ const initialState: GeneralState = {
     updateIndexDbInProcess: false,
     openSideMenu: true,
     menuItems: [],
-    openGstSideMenu: false,
+    openGstSideMenu: false
 };
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {
@@ -426,6 +426,12 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                 ...state,
                 menuItems: action.payload
             }
+        }
+        case GENERAL_ACTIONS.OPEN_GST_SIDE_MENU: {
+            return {
+                ...state,
+                openGstSideMenu: action.payload
+            };
         }
         default:
             return state;
