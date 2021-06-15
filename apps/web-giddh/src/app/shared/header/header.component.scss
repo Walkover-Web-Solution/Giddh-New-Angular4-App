@@ -1046,6 +1046,12 @@ ul.sub-list {
     }
 }
 @media (max-width: 767px) {
+    .gst-menu-icon, .setting-menu-icon {
+        padding: 4px 8px;
+        display: none;
+        width: 32px;
+        text-align: center;
+    }
     .fixed-padding {
         padding-top: 90px;
         #primary-new-header.primary-main-header {

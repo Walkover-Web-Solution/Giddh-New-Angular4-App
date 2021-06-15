@@ -151,6 +151,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public currentState: any = '';
     public isCalendlyModelActivate: boolean = false;
     public forceOpenNavigation: boolean = false;
+    /** True, if GST side menu is opened in responsive mode */
+    public isGstSideMenuOpened: boolean = false;
     /** VAT supported countries to show the Vat Report section in all modules */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
     @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
@@ -232,6 +234,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public get shouldShowBackButton(): boolean {
         return this.router.url && (ROUTES_WITH_HEADER_BACK_BUTTON.includes(this.router.url));
+    }
+
+    /**
+    * Opens the GST side menu in responsive mode
+    *
+    * @memberof HeaderComponent
+    */
+     public openGstSideMenu(): void {
+        this.isGstSideMenuOpened = !this.isGstSideMenuOpened;
+        this.store.dispatch(this._generalActions.openGstSideMenu(this.isGstSideMenuOpened));
     }
 
     // tslint:disable-next-line:no-empty

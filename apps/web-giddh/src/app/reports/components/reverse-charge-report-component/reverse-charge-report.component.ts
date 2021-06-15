@@ -17,7 +17,6 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Router } from '@angular/router';
 
 @Component({
     selector: 'reverse-charge-report',
@@ -110,7 +109,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
-        private router: Router
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
