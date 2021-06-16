@@ -92,6 +92,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
             this.closeAsideEvent.emit(event);
         }
     }
+
     /**
     * This will navigate the user to previous page
     *

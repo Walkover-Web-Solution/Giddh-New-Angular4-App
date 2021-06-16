@@ -210,7 +210,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isSidebarExpanded: boolean = false;
     /** This will hold if setting icon is disabled */
     public isSettingsIconDisabled: boolean = false;
-    /* This will hold if resolution is more than 767 to consider as ipad screen */
+    /* This will hold if resolution is more than 768 to consider as ipad screen */
     public isIpadScreen: boolean = false;
     /**
      * Returns whether the back button in header should be displayed or not
@@ -807,7 +807,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
 
         }, ((this.asideSettingMenuState === 'out') ? 100 : 0) && (this.asideInventorySidebarMenuState === 'out') ? 100 : 0);
-
     }
 
     /**
