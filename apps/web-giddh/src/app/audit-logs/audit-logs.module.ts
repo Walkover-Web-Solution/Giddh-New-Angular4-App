@@ -14,7 +14,6 @@ import { AuditLogsFormComponent } from './components/audit-logs-form/audit-logs-
 import { AuditLogsGridComponent } from './components/audit-logs-grid/audit-logs-grid.component';
 import { AuditLogsTableComponent } from './components/audit-logs-table/audit-logs-table.component';
 import { AuditLogsSidebarComponent } from './components/sidebar-components/audit-logs.sidebar.component';
-import { AuditLogsServiceModule } from './services/audit-logs.service.module';
 
 @NgModule({
     declarations: [
@@ -38,7 +37,6 @@ import { AuditLogsServiceModule } from './services/audit-logs.service.module';
         DatepickerModule,
         LaddaModule,
         ShSelectModule,
-        AuditLogsServiceModule,
         CurrencyModule,
         DatepickerWrapperModule,
         HamburgerMenuComponentModule
