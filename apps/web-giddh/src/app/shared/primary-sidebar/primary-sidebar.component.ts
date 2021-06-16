@@ -663,6 +663,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.subBranchDropdown.isOpen = false;
         }
         this.generalService.companyUniqueName = selectedCompanyUniqueName;
+        this.generalService.voucherApiVersion = undefined;
         const details = {
             branchDetails: {
                 uniqueName: ''
