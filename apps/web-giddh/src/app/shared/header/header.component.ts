@@ -210,7 +210,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isSidebarExpanded: boolean = false;
     /** This will hold if setting icon is disabled */
     public isSettingsIconDisabled: boolean = false;
-    /* This will hold if resolution is more than 767 to consider as ipad screen */
+    /* This will hold if resolution is more than 768 to consider as ipad screen */
     public isIpadScreen: boolean = false;
     /**
      * Returns whether the back button in header should be displayed or not
@@ -807,7 +807,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
 
         }, ((this.asideSettingMenuState === 'out') ? 100 : 0) && (this.asideInventorySidebarMenuState === 'out') ? 100 : 0);
-
     }
 
     /**
@@ -1731,5 +1730,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let text = this.localeData?.transaction_limit_crossed;
         text = text?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt);
         return text;
+    }
+
+    /**
+     * This will show/hide gst menu icon
+     *
+     * @returns {string}
+     * @memberof HeaderComponent
+     */
+    public showGstIcon(): boolean {
+        if (this.currentPageUrl?.indexOf('pages/gstfiling') > -1 ||
+            this.currentPageUrl?.indexOf('pages/reports/reverse-charge') > -1 ||
+            this.currentPageUrl?.indexOf('pages/invoice/ewaybill') > -1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -81,34 +81,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         });
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
     }
-    /**
-    * Aside pane toggle fixed class
-    *
-    *
-    * @memberof FileGstR3Component
-    */
-    public toggleBodyClass(): void {
-        if (this.asideGstSidebarMenuState === 'in') {
-            document.querySelector('body').classList.add('gst-sidebar-open');
-        } else {
-            document.querySelector('body').classList.remove('gst-sidebar-open');
-        }
-    }
-    /**
-      * This will toggle the settings popup
-      *
-      * @param {*} [event]
-      * @memberof FileGstR3Component
-      */
-    public toggleGstPane(event?): void {
-        this.toggleBodyClass();
-
-        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
-            this.asideGstSidebarMenuState = "out";
-        }
-    }
-
     public ngOnInit(): void {
+        document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
         .observe(['(max-width: 767px)'])
         .pipe(takeUntil(this.destroyed$))
@@ -118,7 +92,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 this.asideGstSidebarMenuState = 'in';
             }
         });
-        this.toggleGstPane();
         this.activatedRoute.queryParams.pipe(take(1)).subscribe(params => {
             this.currentPeriod = {
                 from: params['from'],
