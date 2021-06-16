@@ -71,8 +71,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public ngOnInit(): void {
-        this.toggleGstPane();
-
+        document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
         .observe(['(max-width: 767px)'])
         .pipe(takeUntil(this.destroyed$))
@@ -300,33 +299,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      */
     public navigateToPreviousPage(): void {
         this.router.navigate(['/pages/vat-report'], { state: { taxNumber: this.vatReportTransactionsRequest.taxNumber, from: this.vatReportTransactionsRequest.from, to: this.vatReportTransactionsRequest.to } })
-    }
-
-    /**
-     * Aside pane toggle fixed class
-     *
-     *
-     * @memberof VatReportTransactionsComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideGstSidebarMenuState === 'in') {
-            document.querySelector('body').classList.add('gst-sidebar-open');
-        } else {
-            document.querySelector('body').classList.remove('gst-sidebar-open');
-        }
-    }
-
-    /**
-      * This will toggle the settings popup
-      *
-      * @param {*} [event]
-      * @memberof VatReportTransactionsComponent
-      */
-    public toggleGstPane(event?): void {
-        this.toggleBodyClass();
-        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
-            this.asideGstSidebarMenuState = "out";
-        }
     }
 
     /**

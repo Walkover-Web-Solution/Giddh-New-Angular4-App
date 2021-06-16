@@ -224,7 +224,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
-        this.toggleGstPane();
         this.cancelEwaySuccess$.subscribe(p => {
             if (p) {
                 this.store.dispatch(this.invoiceActions.getALLEwaybillList());
@@ -552,32 +551,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Aside pane toggle fixed class
-     *
-     *
-     * @memberof EWayBillComponent
-     */
-     public toggleBodyClass(): void {
-        if (this.asideGstSidebarMenuState === 'in') {
-            document.querySelector('body').classList.add('gst-sidebar-open');
-        } else {
-            document.querySelector('body').classList.remove('gst-sidebar-open');
-        }
-    }
-
-    /**
-      * This will toggle the  GST popup
-      *
-      * @memberof EWayBillComponent
-      */
-    public toggleGstPane(): void {
-        this.toggleBodyClass();
-        if (this.isMobileScreen && this.asideGstSidebarMenuState === 'in') {
-            this.asideGstSidebarMenuState = "out";
-        }
-    }
-
-    /**
      * Releases memory
      *
      * @memberof EWayBillComponent
@@ -586,7 +559,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out'
+        this.asideGstSidebarMenuState === 'out';
     }
 
     /**

@@ -1980,4 +1980,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         text = text?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt);
         return text;
     }
+    public showGstIcon(): boolean {
+        if(this.currentPageUrl?.indexOf('pages/gstfiling') > -1 ||
+           this.currentPageUrl?.indexOf('pages/reports/reverse-charge') > -1 ||
+           this.currentPageUrl?.indexOf('pages/invoice/ewaybill') > -1)
+        {
+            return true;
+        }
+         else {
+             return false;
+         }
+    }
 }

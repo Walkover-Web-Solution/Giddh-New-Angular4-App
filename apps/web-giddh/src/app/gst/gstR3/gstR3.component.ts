@@ -17,7 +17,7 @@ import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReport } from '../constants/gst.constant';
-
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
     selector: 'file-gstr3',
@@ -71,6 +71,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private _gstAction: GstReconcileActions,
         private activatedRoute: ActivatedRoute,
         private _invoicePurchaseActions: InvoicePurchaseActions,
+        private breakpointObserver: BreakpointObserver
     ) {
         //
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
@@ -84,35 +85,17 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         });
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
     }
-    /**
-    * Aside pane toggle fixed class
-    *
-    *
-    * @memberof FileGstR3Component
-    */
-    public toggleBodyClass(): void {
-        if (this.asideGstSidebarMenuState === 'in') {
-            document.querySelector('body').classList.add('gst-sidebar-open');
-        } else {
-            document.querySelector('body').classList.remove('gst-sidebar-open');
-        }
-    }
-    /**
-      * This will toggle the settings popup
-      *
-      * @param {*} [event]
-      * @memberof FileGstR3Component
-      */
-    public toggleGstPane(event?): void {
-        this.toggleBodyClass();
-
-        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
-            this.asideGstSidebarMenuState = "out";
-        }
-    }
-
     public ngOnInit(): void {
-        this.toggleGstPane();
+        document.querySelector('body').classList.add('gst-sidebar-open');
+        this.breakpointObserver
+        .observe(['(max-width: 767px)'])
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((state: BreakpointState) => {
+            this.isMobileScreen = state.matches;
+            if (!this.isMobileScreen) {
+                this.asideGstSidebarMenuState = 'in';
+            }
+        });
         this.activatedRoute.queryParams.pipe(take(1)).subscribe(params => {
             this.currentPeriod = {
                 from: params['from'],
