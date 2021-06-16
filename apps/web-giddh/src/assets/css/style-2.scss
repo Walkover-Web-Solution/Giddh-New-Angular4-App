@@ -7703,10 +7703,7 @@ span#HW_badge_cont:nth-child(3) {
 .menu_open aside-setting.setting-sidebar {
     right: 0 !important;
 }
-.on-setting-page aside-setting.setting-sidebar,
-.on-user-page aside-setting.setting-sidebar {
-   // left: -250px;
-}
+
 .setting-sidebar-open #content-wrapper.menu_open {
     padding-right: 240px;
     padding-left: 60px !important;
@@ -7725,7 +7722,9 @@ span#HW_badge_cont:nth-child(3) {
     padding-left: 60px !important;
 }
 .setting-sidebar-open {
-    padding-left: 60px;
+    #content-wrapper{
+        padding-left: 60px;
+    }
     &.on-user-page{
         #content-wrapper{
             padding-left: 60px;
