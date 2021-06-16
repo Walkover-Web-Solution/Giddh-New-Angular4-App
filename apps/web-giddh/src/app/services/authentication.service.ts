@@ -7,7 +7,6 @@ import { GMAIL_API, LOGIN_API } from './apiurls/login.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import {
     AuthKeyResponse,
-    LinkedInRequestModel,
     SignupWithMobile,
     UserDetails,
     VerifyEmailModel,
@@ -236,7 +235,7 @@ export class AuthenticationService {
             responseType: 'text'
         }).pipe(map((res) => {
             return res;
-        }), catchError((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, LinkedInRequestModel>(e, args)));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, args)));
     }
 
     public forgotPassword(userId): Observable<BaseResponse<string, any>> {
@@ -320,6 +319,6 @@ export class AuthenticationService {
             responseType: 'text'
         }).pipe(map((res) => {
             return res;
-        }), catchError((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, LinkedInRequestModel>(e, args)));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, args)));
     }
 }

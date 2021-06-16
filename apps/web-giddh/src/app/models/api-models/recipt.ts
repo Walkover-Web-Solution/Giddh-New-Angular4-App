@@ -19,14 +19,6 @@ export class ReceiptVoucherDetailsRequest {
     public voucherType: string;
 }
 
-export class ReciptRequestParams {
-    public page: number;
-    public count: number;
-    public from: string;
-    public to: string;
-    public type: string;
-}
-
 export interface ReceiptAccount {
     uniqueName: string;
     accountType?: any;

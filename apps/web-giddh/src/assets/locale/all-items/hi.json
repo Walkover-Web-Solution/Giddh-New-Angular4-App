@@ -121,8 +121,58 @@
         {
             "label": "कर",
             "icon": "icon-tax-new",
-            "items": [],
-            "link": "/pages/gstfiling"
+            "items": [
+                {
+                    "label": "ई-वे बिल",
+                    "link": "/pages/invoice/ewaybill",
+                    "icon": "icon-eway-bill-new",
+                    "description": "बाद में गिद्ध से सीधे उत्पन्न करें",
+                    "hide": "sidebar"
+                },
+                {
+                    "label": "जीएसटीआर 1",
+                    "link": "/pages/gstfiling",
+                    "icon": "icon-GSTR",
+                    "description": "फाइल करें और देखें GSTR1, GSTR2 और GSTR3B",
+                    "hide": "sidebar"
+                },
+                {
+                    "label": "जीएसटीआर 2",
+                    "link": "/pages/gstfiling",
+                    "icon": "icon-GSTR",
+                    "description": "फाइल करें और देखें GSTR2",
+                    "hide": "sidebar"
+                },
+                {
+                    "label": "जीएसटीआर 3B",
+                    "link": "/pages/gstfiling",
+                    "icon": "icon-GSTR",
+                    "description": "फाइल करें और देखें GSTR3",
+                    "hide": "sidebar"
+                },
+                {
+                    "label": "रिवर्स चार्ज",
+                    "link": "/pages/reports/reverse-charge",
+                    "icon": "icon-reverse-charge",
+                    "description": "कुल कर योग्य मूल्य और कुल कर राशि की रिपोर्ट",
+                    "alwaysPresent": true,
+                    "hide": "sidebar"
+                },
+                {
+                    "label": "वैट रिपोर्ट",
+                    "link": "/pages/vat-report",
+                    "icon": "icon-vat",
+                    "description": "फ़ाइल और समीक्षा वैट",
+                    "hide": "sidebar"
+                },
+                {
+                    "label": "सेटिंग्स",
+                    "link": "/pages/settings/taxes",
+                    "icon": "icon-settings-cog",
+                    "description": "कर सेटिंग्स",
+                    "hide": "sidebar"
+                }
+            ]
         },
         {
             "label": "रिपोर्ट्स",

@@ -2,7 +2,6 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { TaxResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
 import { SETTINGS_TAXES_ACTIONS } from '../../actions/settings/taxes/settings.taxes.const';
-import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
 import * as moment from 'moment/moment';
 import { IntegratedBankList, IRegistration } from "../../models/interfaces/registration.interface";

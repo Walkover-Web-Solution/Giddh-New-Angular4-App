@@ -24,8 +24,6 @@ export class ImportStatementComponent implements OnDestroy {
     public getRequest: any = { entity: 'pdf', companyUniqueName: '', accountUniqueName: '' };
     /** Object for API post parameters */
     public postRequest: any = { file: '', password: '' };
-    /** True, when file is encrypted and password is mandatory */
-    public isFileEncrypted: boolean;
 
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -44,11 +42,10 @@ export class ImportStatementComponent implements OnDestroy {
      * @returns {void}
      * @memberof ImportStatementComponent
      */
-    public onFileChange(event: any): void {
-        const file: FileList = event.target.files;
-        const validExtensions = ['pdf'];
-        const type = (file && file.item(0)) ? this.generalService.getFileExtension(file.item(0).name) : 'null';
-        const isValidFileType = validExtensions.some(extension => type === extension);
+    public onFileChange(file: FileList): void {
+        let validExtensions = ['pdf'];
+        let type = (file && file.item(0)) ? this.generalService.getFileExtension(file.item(0).name) : 'null';
+        let isValidFileType = validExtensions.some(extension => type === extension);
 
         if (!isValidFileType) {
             if (file && file.length > 0) {
@@ -58,17 +55,6 @@ export class ImportStatementComponent implements OnDestroy {
             this.postRequest.file = null;
             return;
         }
-        const input = event.target;
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            const contents: any = event.target.result;
-            if (contents.indexOf('/Encrypt') !== -1) {
-                this.isFileEncrypted = true;
-            } else {
-                this.isFileEncrypted = false;
-            }
-        };
-        reader.readAsText(input.files[0]);
 
         this.postRequest.file = file.item(0);
     }

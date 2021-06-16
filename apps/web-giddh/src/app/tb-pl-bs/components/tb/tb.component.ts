@@ -1,7 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import * as _ from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
@@ -11,6 +10,7 @@ import { TbGridComponent } from './tb-grid/tb-grid.component';
 import { createSelector } from 'reselect';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { ToasterService } from '../../../services/toaster.service';
+import { cloneDeep, each } from '../../../lodash-optimized';
 
 @Component({
     selector: 'tb',
@@ -58,7 +58,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public ngOnInit() {
         this.data$ = this.store.pipe(select(createSelector((p: AppState) => p.tlPl.tb.data, (p: AccountDetails) => {
-            let d = _.cloneDeep(p) as AccountDetails;
+            let d = cloneDeep(p) as AccountDetails;
             if (d) {
                 if (d.message) {
                     setTimeout(() => {
@@ -80,11 +80,11 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public InitData(d: ChildGroup[]) {
-        _.each(d, (grp: ChildGroup) => {
+        each(d, (grp: ChildGroup) => {
             grp.isVisible = false;
             grp.isCreated = false;
             grp.isIncludedInSearch = true;
-            _.each(grp.accounts, (acc: Account) => {
+            each(grp.accounts, (acc: Account) => {
                 acc.isIncludedInSearch = true;
                 acc.isCreated = false;
                 acc.isVisible = false;
@@ -104,9 +104,9 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
         if (this.isV2) {
-            this.store.dispatch(this.tlPlActions.GetV2TrialBalance(_.cloneDeep(request)));
+            this.store.dispatch(this.tlPlActions.GetV2TrialBalance(cloneDeep(request)));
         } else {
-            this.store.dispatch(this.tlPlActions.GetTrialBalance(_.cloneDeep(request)));
+            this.store.dispatch(this.tlPlActions.GetTrialBalance(cloneDeep(request)));
         }
     }
 

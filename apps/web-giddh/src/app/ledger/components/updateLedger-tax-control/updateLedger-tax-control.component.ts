@@ -12,13 +12,13 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as moment from 'moment/moment';
-import * as _ from '../../../lodash-optimized';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
 import { ITaxDetail } from '../../../models/interfaces/tax.interface';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { difference, orderBy } from '../../../lodash-optimized';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -130,7 +130,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
                 taxObj.type = tax.taxType;
                 taxObj.uniqueName = tax.uniqueName;
                 if (this.date) {
-                    let taxObject = _.orderBy(tax.taxDetail, (p: ITaxDetail) => {
+                    let taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
                         return moment(p.date, GIDDH_DATE_FORMAT);
                     }, 'desc');
                     let exactDate = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT).isSame(moment(this.date, GIDDH_DATE_FORMAT)));
@@ -239,7 +239,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
 
         let diff: boolean;
         if (this.selectedTaxes && this.selectedTaxes.length > 0) {
-            let taxDifference = _.difference(this.selectedTaxes, this.applicableTaxes);
+            let taxDifference = difference(this.selectedTaxes, this.applicableTaxes);
             diff = taxDifference && taxDifference.length > 0;
         } else {
             diff = this.applicableTaxes && this.applicableTaxes.length > 0;

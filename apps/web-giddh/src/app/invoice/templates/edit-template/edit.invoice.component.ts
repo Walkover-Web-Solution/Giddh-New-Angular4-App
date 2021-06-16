@@ -5,7 +5,6 @@ import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { CustomTemplateResponse, GetInvoiceTemplateDetailsResponse, ISection } from '../../../models/api-models/Invoice';
-import * as _ from '../../../lodash-optimized';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { InvoiceTemplatesService } from '../../../services/invoice.templates.service';
 import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
@@ -14,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { InvoiceTemplateModalComponent } from './modals/template-modal/template-modal.component';
 import { VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { InvoiceService } from '../../../services/invoice.service';
+import { cloneDeep } from '../../../lodash-optimized';
 
 /**
  * Created by kunalsaxena on 6/29/17.
@@ -684,7 +684,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         // Get custom created templates
         this.store.pipe(select(c => c.invoiceTemplate), takeUntil(this.destroyed$)).subscribe((s) => {
             if (s && s.customCreatedTemplates) {
-                this.customCreatedTemplates = _.cloneDeep(s.customCreatedTemplates);
+                this.customCreatedTemplates = cloneDeep(s.customCreatedTemplates);
                 this.customCreatedTemplates.sort((a, b) => {
                     if (a.uniqueName < b.uniqueName) {
                         return -1;
@@ -761,10 +761,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
      * createTemplate
      */
     public createTemplate(vouchertyp: string) {
-        let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
+        let data = cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
         data.type = vouchertyp;
         this.templateType = vouchertyp;
-        let copiedTemplate = _.cloneDeep(data);
+        let copiedTemplate = cloneDeep(data);
         if (data.name) {
             data = this.newLineToBR(data);
             data.sections['header'].data['companyName'].label = '';
@@ -821,7 +821,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
      * updateTemplate
      */
     public updateTemplate(templateType: string) {
-        let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
+        let data = cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
         if (data.name) {
             data.updatedAt = null;
             data.updatedBy = null;
@@ -898,7 +898,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName, 'preview', customCreatedTemplates, defaultTemplate);
-        // let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
+        // let data = cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
         this.showinvoiceTemplatePreviewModal = true;
         this.invoiceTemplatePreviewModal.show();
     }
@@ -927,7 +927,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onSetTemplateAsDefault(template, templateType: string) {
         if (template) {
-            let selectedTemplate = _.cloneDeep(template);
+            let selectedTemplate = cloneDeep(template);
             this.store.dispatch(this.invoiceActions.setTemplateAsDefault(selectedTemplate.uniqueName, templateType));
         }
     }
@@ -938,7 +938,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     public onDeleteTemplate(template) {
         if (template) {
             this.confirmationFlag = 'deleteConfirmation';
-            let selectedTemplate = _.cloneDeep(template);
+            let selectedTemplate = cloneDeep(template);
             this.deleteTemplateConfirmationMessage = `Are you sure you want to delete "<b>${selectedTemplate.name}</b>" template?`;
             this.selectedTemplateUniqueName = selectedTemplate.uniqueName;
             this.customTemplateConfirmationModal.show();

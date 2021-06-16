@@ -7,7 +7,7 @@ import { ToasterService } from '../services/toaster.service';
 import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
 import { LoginActions } from '../actions/login.action';
 import { AuthenticationService } from '../services/authentication.service';
-import { CompanyResponse, GetCouponResp, StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
 import { cloneDeep } from '../lodash-optimized';
 import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -44,7 +44,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public payAlert: any[] = [];
     public directPay: boolean = false;
     public disableRazorPay: boolean = false;
-    public coupRes: GetCouponResp = new GetCouponResp();
     public contactNo$: Observable<string>;
     public subscriptions: any;
     public transactions: any;

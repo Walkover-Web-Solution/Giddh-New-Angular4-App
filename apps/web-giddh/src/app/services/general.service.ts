@@ -24,6 +24,8 @@ export class GeneralService {
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    /** Stores the version number for new voucher APIs (1 for old APIs and 2 for new APIs) */
+    public voucherApiVersion: 1 | 2 = 1;
 
     get user(): UserDetails {
         return this._user;
@@ -769,18 +771,19 @@ export class GeneralService {
     /**
      * Returns the visible menu items to be shown for menu panel (as per permission)
      *
+     * @param {string} module name
      * @param {Array<any>} apiItems List of permissible items obtained from API
      * @param {Array<AllItems>} itemList List of all the items of menu
      * @returns {Array<AllItems>} Array of permissible menu items
      * @memberof GeneralService
      */
-    public getVisibleMenuItems(apiItems: Array<any>, itemList: Array<AllItems>): Array<AllItems> {
+    public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
         itemList.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
             menuItem.items.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem.uniqueName === item.link);
-                if (isValidItem || item.alwaysPresent) {
+                if ((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
                     visibleMenuItems[menuIndex].items.push(item);
                 }

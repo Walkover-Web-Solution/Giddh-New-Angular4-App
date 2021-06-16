@@ -9,28 +9,7 @@ export class AdvanceSearchRequest {
     public accountUniqueName: string = '';
     public sort: string = 'asc';
     public branchUniqueName: string = '';
-
-    // set from(value: string) {
-    //   if (this.dataToSend.bsRangeValue.length > 0) {
-    //     this.dataToSend.bsRangeValue[0] = moment(value, GIDDH_DATE_FORMAT).toDate();
-    //   } else {
-    //     this.dataToSend.bsRangeValue = [];
-    //     this.dataToSend.bsRangeValue.push(moment(value, GIDDH_DATE_FORMAT).toDate());
-    //   }
-    // }
     public reversePage: boolean = false;
-
-    // set to(value: string) {
-    //   if (this.dataToSend.bsRangeValue.length > 1) {
-    //     this.dataToSend.bsRangeValue[1] = moment(value, GIDDH_DATE_FORMAT).toDate();
-    //   } else {
-    //     if (this.dataToSend.bsRangeValue.length === 0) {
-    //       this.dataToSend.bsRangeValue = [];
-    //       this.dataToSend.bsRangeValue.push(moment(value, GIDDH_DATE_FORMAT).subtract(30, 'days').toDate());
-    //     }
-    //     this.dataToSend.bsRangeValue.push(moment(value, GIDDH_DATE_FORMAT).toDate());
-    //   }
-    // }
 
     constructor() {
         this.dataToSend = new AdvanceSearchModel();
@@ -58,7 +37,6 @@ export class AdvanceSearchRequest {
 }
 
 export class AdvanceSearchModel {
-    // [moment().subtract(30, 'days').toDate(), moment().toDate()]
     public bsRangeValue: any[];
     public uniqueNames: string[] = [];
     public isInvoiceGenerated: null;
