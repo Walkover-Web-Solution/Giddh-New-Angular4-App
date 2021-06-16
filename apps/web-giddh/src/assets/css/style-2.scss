@@ -7720,6 +7720,16 @@ span#HW_badge_cont:nth-child(3) {
 .desktop-header.menu_open {
     padding-left: 60px !important;
 }
+.setting-sidebar-open {
+    #content-wrapper{
+        padding-left: 60px;
+    }
+    &.on-user-page{
+        #content-wrapper{
+            padding-left: 60px;
+        }
+    }
+}
 /*flex css start*/
 .flex-column {
     flex-direction: column;
@@ -8272,9 +8282,9 @@ input.mat-input-element {
 .plan-wrapper {
     padding-left: 60px;
 }
-.on-setting-page .plan-wrapper,
-.on-user-page .plan-wrapper {
-    padding-left: 0;
+.setting-sidebar-open.on-setting-page .plan-wrapper,
+.setting-sidebar-open.on-user-page .plan-wrapper {
+    padding-left: 60px !important;
 }
 .plan-wrapper.menu_open {
     padding-left: 240px !important;
@@ -8354,7 +8364,7 @@ input.mat-input-element {
         transform: translate3d(0px, 0px, 0px);
     }
     .plan-wrapper {
-        padding-left: 0;
+        padding-left: 300px !important;
     }
     .menu_open {
         .gst-sidebar {

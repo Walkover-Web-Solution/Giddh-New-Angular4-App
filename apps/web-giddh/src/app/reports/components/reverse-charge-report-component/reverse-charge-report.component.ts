@@ -227,34 +227,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     }
 
     /**
-     * Aside pane toggle fixed class
-     *
-     *
-     * @memberof ReverseChargeReport
-     */
-     public toggleBodyClass(): void {
-        if (this.asideGstSidebarMenuState === 'in') {
-            document.querySelector('body').classList.add('gst-sidebar-open');
-        } else {
-            document.querySelector('body').classList.remove('gst-sidebar-open');
-        }
-    }
-
-    /**
-      * This will toggle the GST popup
-      *
-      * @param {*} [event]
-      * @memberof ReverseChargeReport
-      */
-    public toggleGstPane(event?): void {
-        this.toggleBodyClass();
-        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
-            this.asideGstSidebarMenuState = "out";
-        }
-    }
-
-
-    /**
      * This function will destroy the subscribers
      *
      * @memberof ReverseChargeReport
