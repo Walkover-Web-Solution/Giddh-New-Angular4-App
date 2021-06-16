@@ -38,6 +38,7 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
 import { cloneDeep, find, forEach, groupBy, indexOf, map, orderBy, uniq } from '../../lodash-optimized';
+import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
 const COUNTS = [
     { label: '12', value: '12' },
@@ -151,6 +152,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         { label: '', value: 'lessThanOrEquals' },
         { label: '', value: 'equals' }
     ];
+    /** True, if company supports new voucher version */
+    public isNewVoucherVersion: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -178,7 +181,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-
+        this.isNewVoucherVersion = this.generalService.voucherApiVersion === 2;
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
@@ -748,5 +751,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
             this.comparisionFilters = this.filtersForEntryTotal;
         }
+    }
+
+    public voucherTypeChanged(voucherType: VoucherTypeEnum): void {
+        this.setVoucherType(this.selectedVoucher);
     }
 }

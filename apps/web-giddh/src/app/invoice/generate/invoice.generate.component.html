@@ -3,7 +3,7 @@
     <ng-container *ngIf="!showEditMode">
         <div class="invoice-generate-container">
             <div class="btn-dropdown-dr-cr"
-                *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'">
+                *ngIf="isNewVoucherVersion">
                 <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown"
                     (mouseleave)="dp.hide()">
                     <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
@@ -21,6 +21,10 @@
                         <li role="menuitem" (click)="changeDebitOrCredit('credit note')">
                             <a class="dropdown-item cp"
                                 href="javascript:void(0)">{{commonLocaleData?.app_voucher_types?.credit_note}}</a>
+                        </li>
+                        <li role="menuitem" (click)="changeDebitOrCredit('sales')">
+                            <a class="dropdown-item cp"
+                                href="javascript:void(0)">{{commonLocaleData?.app_voucher_types?.sales}}</a>
                         </li>
                     </ul>
                 </div>
@@ -294,7 +298,7 @@
 
     </div>
     <!-- endregion -->
-    
+
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">
             <div class="modal-body">
