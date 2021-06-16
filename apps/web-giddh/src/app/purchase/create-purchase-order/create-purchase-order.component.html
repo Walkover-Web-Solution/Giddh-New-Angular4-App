@@ -882,10 +882,11 @@
                             <div *ngIf="transaction.fakeAccForSelect2">
                                 <div class="description mt-1">
                                     <textarea rows="3" type="text" [placeholder]="localeData?.add_description"
-                                        name="transaction.description_{{entryIdx}}" class="form-control"
-                                        [(ngModel)]="transaction.description" #description></textarea>
-                                    <p class="small text-muted sku-and-custom-fields"
-                                        *ngIf="transaction.sku_and_customfields">
+                                        name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description"
+                                        [maxlength]="entryDescriptionLength" #description></textarea>
+                                    <p class="font-12">{{commonLocaleData?.app_characters_left}}: {{entryDescriptionLength -
+                                        transaction.description?.length}}</p>
+                                    <p class="small text-muted sku-and-customfields" *ngIf="transaction.sku_and_customfields">
                                         {{transaction.sku_and_customfields}}</p>
                                 </div>
 
@@ -1616,8 +1617,9 @@
                                                 <textarea rows="3" type="text"
                                                     [placeholder]="localeData?.add_description" #description
                                                     name="transaction.description_{{entryIdx}}" class="form-control"
-                                                    [(ngModel)]="transaction.description"></textarea>
-                                                <p class="small text-muted sku-custom-fields"
+                                                    [(ngModel)]="transaction.description" [maxlength]="entryDescriptionLength"></textarea>
+                                                <p class="font-12">{{commonLocaleData?.app_characters_left}}: {{entryDescriptionLength - transaction.description?.length}}</p>    
+                                                <p class="small text-muted sku-and-customfields"
                                                     *ngIf="transaction.sku_and_customfields">
                                                     {{transaction.sku_and_customfields}}</p>
                                             </div>
