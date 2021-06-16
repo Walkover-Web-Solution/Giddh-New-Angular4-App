@@ -145,6 +145,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @Input() public invoiceSearch: any = "";
     /** PDF file url created with blob */
     public sanitizedPdfFileUrl: any = '';
+    /** Attached PDF file url created with blob */
+    public attachedPdfFileUrl: any = '';
     /** PDF src */
     public pdfFileURL: any = '';
     /** This will hold the attached file in Purchase Bill */
@@ -363,6 +365,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     voucherNumber: [this.selectedItem.voucherNumber]
                 };
                 let accountUniqueName: string = this.selectedItem.account.uniqueName;
+                this.sanitizedPdfFileUrl = null;
                 this._receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                     if (result) {
                         this.selectedItem.blob = result;
@@ -380,6 +383,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 }, (err) => {
                     this.handleDownloadError(err);
                 });
+                this.detectChanges();
             }
         } else if (this.voucherType === VoucherTypeEnum.purchase) {
             const requestObject: any = {
@@ -389,7 +393,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             this.purchaseRecordService.downloadAttachedFile(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
                 if (data && data.body) {
                     this.shouldShowUploadAttachment = false;
+                    this.attachedPdfFileUrl = null;
+                    this.imagePreviewSource = null;
                     if (data.body.fileType) {
+                        this.isAttachmentExpanded = false;
                         const fileExtention = data.body.fileType.toLowerCase();
                         if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                             // Attached file type is image
@@ -407,7 +414,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                                 const file = new Blob([this.attachedAttachmentBlob], { type: 'application/pdf' });
                                 URL.revokeObjectURL(this.pdfFileURL);
                                 this.pdfFileURL = URL.createObjectURL(file);
-                                this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                                this.attachedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                                 this.detectChanges();
                             }, 250);
                             this.isVoucherDownloadError = false;
@@ -419,6 +426,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     }
                 } else {
                     this.shouldShowUploadAttachment = true;
+                    this.attachedPdfFileUrl = null;
+                    this.imagePreviewSource = null;
                 }
                 this.isVoucherDownloading = false;
                 this.detectChanges();
@@ -433,6 +442,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
             let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.selectedItem.account.uniqueName, uniqueName: this.selectedItem.uniqueName };
 
+            this.sanitizedPdfFileUrl = null;
             this.purchaseRecordService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.status === "success" && response.body) {
                     let blob: Blob = this._generalService.base64ToBlob(response.body, 'application/pdf', 512);
@@ -447,6 +457,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     this.pdfPreviewHasError = true;
                 }
             });
+            this.detectChanges();
         } else {
             if (this.selectedItem) {
                 let request: ProformaDownloadRequest = new ProformaDownloadRequest();
@@ -459,6 +470,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     request.estimateNumber = this.selectedItem.voucherNumber;
                 }
 
+                this.sanitizedPdfFileUrl = null;
                 this._proformaService.download(request, this.selectedItem.voucherType).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                     if (result && result.status === 'success') {
                         let blob: Blob = this._generalService.base64ToBlob(result.body, 'application/pdf', 512);
@@ -477,6 +489,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 }, (err) => {
                     this.handleDownloadError(err);
                 });
+                this.detectChanges();
             }
         }
     }
