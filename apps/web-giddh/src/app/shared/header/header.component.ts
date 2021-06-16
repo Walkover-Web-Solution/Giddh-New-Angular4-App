@@ -658,7 +658,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (response && response.status === "success" && response.body) {
                 this.store.dispatch(this.settingsProfileAction.handleCompanyProfileResponse(response));
                 let res = response.body;
-                this.generalService.voucherApiVersion = response.voucherVersion;
+                this.generalService.voucherApiVersion = res.voucherVersion;
                 this.store.dispatch(this.companyActions.setActiveCompanyData(res));
 
                 if (res.countryV2 !== null && res.countryV2 !== undefined) {
