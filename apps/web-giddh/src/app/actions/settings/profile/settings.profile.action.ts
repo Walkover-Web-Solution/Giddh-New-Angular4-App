@@ -12,6 +12,7 @@ import { SETTINGS_PROFILE_ACTIONS } from './settings.profile.const';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { CustomActions } from '../../../store/customActions';
 import { LocaleService } from '../../../services/locale.service';
+import { GeneralService } from '../../../services/general.service';
 
 @Injectable()
 export class SettingsProfileActions {
@@ -20,13 +21,17 @@ export class SettingsProfileActions {
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO),
             switchMap((action: CustomActions) => this.settingsProfileService.GetProfileInfo()),
-            map(res => this.validateResponse<any, string>(res, {
-                type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
-                payload: res
-            }, true, {
-                type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
-                payload: res
-            }))));
+            map((res: any) => {
+                this.generalService.voucherApiVersion = res.body.voucherVersion;
+                return this.validateResponse<any, string>(res, {
+                    type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
+                    payload: res
+                }, true, {
+                    type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
+                    payload: res
+                });
+            })
+        ));
 
     public UpdateProfile$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -132,7 +137,8 @@ export class SettingsProfileActions {
         private localeService: LocaleService,
         private store: Store<AppState>,
         private settingsProfileService: SettingsProfileService,
-        private companyActions: CompanyActions) {
+        private companyActions: CompanyActions,
+        private generalService: GeneralService) {
     }
 
     public GetProfileInfo(): CustomActions {
