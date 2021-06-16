@@ -22,7 +22,6 @@ export class SettingsProfileActions {
             ofType(SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO),
             switchMap((action: CustomActions) => this.settingsProfileService.GetProfileInfo()),
             map((res: any) => {
-                this.generalService.voucherApiVersion = res?.body?.voucherVersion;
                 return this.validateResponse<any, string>(res, {
                     type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
                     payload: res
