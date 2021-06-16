@@ -12,6 +12,7 @@ import { AppState } from '../../store';
 import { GstReport } from '../constants/gst.constant';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -70,7 +71,8 @@ export class FilingComponent implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private store: Store<AppState>,
         private _gstAction: GstReconcileActions,
-        private generalService: GeneralService) {
+        private generalService: GeneralService,
+        private breakpointObserver: BreakpointObserver) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
         this.gstr1OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
@@ -85,40 +87,22 @@ export class FilingComponent implements OnInit, OnDestroy {
                 this.activeCompanyGstNumber = response;
             }
         });
-	}
-    /**
-     * Aside pane toggle fixed class
-     *
-     *
-     * @memberof FilingComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideGstSidebarMenuState === 'in') {
-            document.querySelector('body').classList.add('gst-sidebar-open');
-        } else {
-            document.querySelector('body').classList.remove('gst-sidebar-open');
-        }
     }
-    /**
-      * This will toggle the settings popup
-      *
-      * @param {*} [event]
-      * @memberof FilingComponent
-      */
-    public toggleGstPane(event?): void {
-        this.toggleBodyClass();
-
-        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
-            this.asideGstSidebarMenuState = "out";
-        }
-    }
-
-	public ngOnInit() {
-        this.toggleGstPane();
-		this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-			this.currentPeriod = {
-				from: params['from'],
-				to: params['to']
+    public ngOnInit() {
+        document.querySelector('body').classList.add('gst-sidebar-open');
+        this.breakpointObserver
+        .observe(['(max-width: 767px)'])
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((state: BreakpointState) => {
+            this.isMobileScreen = state.matches;
+            if (!this.isMobileScreen) {
+                this.asideGstSidebarMenuState = 'in';
+            }
+        });
+        this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            this.currentPeriod = {
+                from: params['from'],
+                to: params['to']
             };
             if (params['selectedGst']) {
                 this.activeCompanyGstNumber = params['selectedGst'];
@@ -129,11 +113,11 @@ export class FilingComponent implements OnInit, OnDestroy {
                 this.selectedGst = params['return_type'];
                 this.loadGstReport(this.activeCompanyGstNumber);
             }
-			//
-			let tab = Number(params['tab']);
-			if (tab > -1) {
-				this.selectTabFromUrl(tab);
-			}
+
+            let tab = Number(params['tab']);
+            if (tab > -1) {
+                this.selectTabFromUrl(tab);
+            }
         });
 
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
