@@ -1736,7 +1736,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-     * This will store current page url
+     * This will show/hide gst menu icon
      *
      * @returns {string}
      * @memberof HeaderComponent
