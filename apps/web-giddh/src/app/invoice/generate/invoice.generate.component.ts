@@ -758,8 +758,4 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             this.comparisionFilters = this.filtersForEntryTotal;
         }
     }
-
-    public voucherTypeChanged(voucherType: VoucherTypeEnum): void {
-        this.setVoucherType(this.selectedVoucher);
-    }
 }
