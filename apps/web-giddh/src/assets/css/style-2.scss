@@ -9151,8 +9151,10 @@ span#HW_badge_cont:nth-child(3) {
     padding-left: 60px !important;
 }
 .setting-sidebar-open {
-    #content-wrapper{
-        padding-left: 60px;
+    &.on-setting-page{
+        #content-wrapper{
+            padding-left: 60px;
+        }
     }
     &.on-user-page{
         #content-wrapper{
