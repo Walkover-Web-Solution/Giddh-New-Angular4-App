@@ -7721,6 +7721,14 @@ span#HW_badge_cont:nth-child(3) {
 .desktop-header.menu_open {
     padding-left: 60px !important;
 }
+.setting-sidebar-open {
+    padding-left: 60px;
+    &.on-user-page{
+        #content-wrapper{
+            padding-left: 60px;
+        }
+    }
+}
 /*flex css start*/
 .flex-column {
     flex-direction: column;
