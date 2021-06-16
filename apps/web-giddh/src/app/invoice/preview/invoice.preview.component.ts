@@ -968,6 +968,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         if (o.page) {
             advanceSearch.page = o.page;
         }
+        model = { ...model, ...advanceSearch };
 
         if (o.balanceDue) {
             model.balanceDue = o.balanceDue;

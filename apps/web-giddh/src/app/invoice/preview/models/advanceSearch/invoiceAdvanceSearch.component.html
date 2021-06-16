@@ -136,6 +136,28 @@
                         </div>
                     </div>
                 </div>
+                <div *ngIf="isEInvoiceEnabled" class="row mt-2">
+
+                    <div class="col-md-4 col-sm-12">
+                        <label>{{localeData?.e_invoice_status}}</label>
+                    </div>
+
+                    <div class="col-md-8 col-sm-12">
+
+                        <div class="status-description row mr-0 ml-0">
+
+                            <div class="col-md-8 col-sm-12 pl-0 pr-0 pl-0">
+                                <sh-select [placeholder]="commonLocaleData?.app_select_action" [multiple]="true"
+                                    [options]="eInvoiceStatusDropdownOptions" name="balanceStatus"
+                                    [(ngModel)]="request.status" [ItemHeight]="33"></sh-select>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 pr-0">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
 
                 <div class="row mt-2">
 
@@ -211,6 +233,28 @@
                                 <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total"
                                     type="tel">
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="type === 'drcr' && isEInvoiceEnabled" class="row mt-2">
+
+                    <div class="col-md-4 col-sm-12">
+                        <label>{{localeData?.e_invoice_status}}</label>
+                    </div>
+
+                    <div class="col-md-8 col-sm-12">
+
+                        <div class="status-description row mr-0 ml-0">
+
+                            <div class="col-md-8 col-sm-12 pl-0 pr-0 pl-0">
+                                <sh-select [placeholder]="commonLocaleData?.app_select_action" [multiple]="true"
+                                    [options]="eInvoiceStatusDropdownOptions" name="balanceStatus"
+                                    [(ngModel)]="request.status" [ItemHeight]="33"></sh-select>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 pr-0">
+                            </div>
+
                         </div>
                     </div>
                 </div>
