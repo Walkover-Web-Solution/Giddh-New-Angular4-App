@@ -223,7 +223,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isSidebarExpanded: boolean = false;
     /** This will hold if setting icon is disabled */
     public isSettingsIconDisabled: boolean = false;
-    /* This will hold if resolution is more than 767 to consider as ipad screen */
+    /* This will hold if resolution is 768 consider as ipad screen */
     public isIpadScreen: boolean = false;
     /**
      * Returns whether the back button in header should be displayed or not
@@ -870,7 +870,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             else {
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
-        }, (this.asideSettingMenuState === 'out') ? 100 : 0);
+
+        }, ((this.asideSettingMenuState === 'out') ? 100 : 0));
     }
 
     /**
@@ -1624,12 +1625,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             } else if (
                 document.getElementsByTagName("tabset") &&
                 document.getElementsByTagName("tabset").length > 0 &&
-                !this.router.url.includes("/vendor") && (!document.getElementsByClassName("static-tabs-on-page") || (document.getElementsByClassName("static-tabs-on-page") && document.getElementsByClassName("static-tabs-on-page").length === 0))) {
+                !this.router.url.includes("/vendor")) {
                 document.querySelector('body').classList.add('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
+<<<<<<< HEAD
             /* this code is not working so that inventory sidebar is not working on mobile view, developer please check it */
             else if (document.getElementsByClassName("new-inventory-page") && document.getElementsByClassName("new-inventory-page").length > 0) {
                 this.sideBarStateChange(true);
@@ -1637,6 +1639,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-user-page');
             } else {
+=======
+            else {
+>>>>>>> ff5994878d... shalinee | stage | resolved PR issue raised by prateek-mishra
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
