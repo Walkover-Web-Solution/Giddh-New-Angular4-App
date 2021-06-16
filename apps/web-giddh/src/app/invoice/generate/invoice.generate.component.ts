@@ -38,7 +38,6 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
 import { cloneDeep, find, forEach, groupBy, indexOf, map, orderBy, uniq } from '../../lodash-optimized';
-import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
 const COUNTS = [
     { label: '12', value: '12' },
