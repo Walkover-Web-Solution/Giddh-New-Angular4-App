@@ -1992,12 +1992,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public showGstIcon(): boolean {
-        if (this.currentPageUrl?.indexOf('pages/gstfiling') > -1 ||
+        return (this.currentPageUrl?.indexOf('pages/gstfiling') > -1 ||
             this.currentPageUrl?.indexOf('pages/reports/reverse-charge') > -1 ||
-            this.currentPageUrl?.indexOf('pages/invoice/ewaybill') > -1) {
-            return true;
-        } else {
-            return false;
-        }
+            this.currentPageUrl?.indexOf('pages/invoice/ewaybill') > -1);
     }
 }
