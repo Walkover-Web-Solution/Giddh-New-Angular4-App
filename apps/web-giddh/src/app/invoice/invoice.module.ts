@@ -11,7 +11,7 @@ import { SharedModule } from '../shared/shared.module';
         ProformaInvoiceModule,
         DigitsOnlyModule,
         PurchaseModule,
-        SharedModule,
+        SharedModule
     ],
     exports: [
         InvoiceRoutingModule,
