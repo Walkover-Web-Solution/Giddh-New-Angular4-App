@@ -1383,7 +1383,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         setTimeout(() => {
             if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
-                this.sideBarStateChange(true);
                 document.querySelector('body').classList.add('on-setting-page');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-user-page');
@@ -1404,7 +1403,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
             /* this code is not working so that inventory sidebar is not working on mobile view, developer please check it */
             else if (document.getElementsByClassName("new-inventory-page") && document.getElementsByClassName("new-inventory-page").length > 0) {
-                this.sideBarStateChange(true);
                 document.querySelector('body').classList.add('inventory-sidebar');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-user-page');
