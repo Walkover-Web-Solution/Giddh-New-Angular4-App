@@ -116,7 +116,7 @@ export class LoginActions {
                             type: 'EmptyAction'
                         };
                     } else {
-                        return this.LoginSuccess(response);
+                        return this.LoginSuccess(response, true);
                     }
                 } else {
                     return {
@@ -249,9 +249,9 @@ export class LoginActions {
     public loginSuccess$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.LoginSuccess),
-            switchMap((action) => {
+            switchMap((action: CustomActions) => {
                 console.log("Login Init");
-                return observableZip(this._companyService.getStateDetails('', true), this._companyService.CompanyList());
+                return observableZip(this._companyService.getStateDetails('', true), this._companyService.CompanyList(), [action.payload]);
             }), map((results: any[]) => {
                 console.log("Login Success");
                 /* check if local storage is cleared or not for first time
@@ -295,10 +295,10 @@ export class LoginActions {
                         }
                         cmpUniqueName = stateDetail.body.companyUniqueName;
                         if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
-                            return this.finalThingTodo(stateDetail, companies);
+                            return this.finalThingTodo(stateDetail, companies, results[2]);
                         } else {
                             // old user fail safe scenerio
-                            return this.doSameStuffs(companies);
+                            return this.doSameStuffs(companies, results[2]);
                         }
                     } else {
                         /**
@@ -306,7 +306,7 @@ export class LoginActions {
                          * find the entity and redirect user according to terms.
                          * shared entities [GROUP, COMPANY, ACCOUNT]
                          */
-                        return this.doSameStuffs(companies);
+                        return this.doSameStuffs(companies, results[2]);
                     }
                 }
             })));
@@ -761,13 +761,13 @@ export class LoginActions {
         };
     }
 
-    public LoginSuccess(response?: any): CustomActions {
+    public LoginSuccess(response?: any, isSocialLogin?: boolean): CustomActions {
         if (response && response.body && response.body.session) {
             this._generalService.setCookie("giddh_session_id", response.body.session.id, 30);
         }
         return {
             type: LoginActions.LoginSuccess,
-            payload: null
+            payload: isSocialLogin
         };
     }
 
@@ -942,7 +942,7 @@ export class LoginActions {
         };
     }
 
-    private doSameStuffs(companies) {
+    private doSameStuffs(companies, isSocialLogin?: boolean) {
         let respState = new BaseResponse<StateDetailsResponse, string>();
         respState.body = new StateDetailsResponse();
         companies.body = sortBy(companies.body, ['name']);
@@ -977,10 +977,10 @@ export class LoginActions {
         } catch (error) {
             respState.body.lastState = 'home';
         }
-        return this.finalThingTodo(respState, companies);
+        return this.finalThingTodo(respState, companies, isSocialLogin);
     }
 
-    private finalThingTodo(stateDetail: any, companies: any) {
+    private finalThingTodo(stateDetail: any, companies: any, isSocialLogin?: boolean) {
         this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => {
             let request = { userUniqueName: response.user.uniqueName, companyUniqueName: stateDetail.body.companyUniqueName };
             this.store.dispatch(this.companyActions.getCompanyUser(request));
@@ -988,11 +988,11 @@ export class LoginActions {
         this.store.dispatch(this.companyActions.GetStateDetailsResponse(stateDetail));
         this.store.dispatch(this.companyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-        this.finalNavigate(stateDetail.body.lastState);
+        this.finalNavigate(stateDetail.body.lastState, false, isSocialLogin);
         return { type: 'EmptyAction' };
     }
 
-    public finalNavigate(route: any, parameter?: any): void {
-        this._generalService.finalNavigate(route, parameter);
+    public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean): void {
+        this._generalService.finalNavigate(route, parameter, isSocialLogin);
     }
 }
