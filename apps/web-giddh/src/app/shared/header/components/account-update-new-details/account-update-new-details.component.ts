@@ -676,12 +676,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
         let gstVal: string = gstForm.get('gstNumber').value;
         gstForm.get('gstNumber').setValue(gstVal?.trim());
-        if (gstVal.length) {
-            if (gstVal.length !== 15) {
+        if (gstVal?.length) {
+            if (gstVal?.length !== 15) {
                 gstForm.get('partyType').reset('NOT APPLICABLE');
             }
 
-            if (gstVal.length >= 2) {
+            if (gstVal?.length >= 2) {
                 this.statesSource$.pipe(take(1)).subscribe(state => {
                     let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
@@ -1098,7 +1098,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 obj.uniqueName = acc;
                 finalData.push(obj);
             });
-            this.store.dispatch(this.accountsAction.mergeAccount(activeAccount.uniqueName, finalData));
+            this.store.dispatch(this.accountsAction.mergeAccount(activeAccount?.uniqueName, finalData));
             this.showDeleteMove = false;
         } else {
             this._toaster.errorToast(this.localeData?.merge_account_error);
