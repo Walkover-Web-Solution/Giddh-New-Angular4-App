@@ -14,7 +14,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import * as _ from '../../lodash-optimized';
+import { cloneDeep, each, isEmpty, orderBy } from '../../lodash-optimized';
 import { BranchFilterRequest, CompanyResponse } from '../../models/api-models/Company';
 import { GeneralService } from '../../services/general.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -127,8 +127,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.settings && state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
-            if (profile && !_.isEmpty(profile)) {
-                let companyInfo = _.cloneDeep(profile);
+            if (profile && !isEmpty(profile)) {
+                let companyInfo = cloneDeep(profile);
                 this.currentBranch = companyInfo.name;
                 this.currentBranchNameAlias = companyInfo.nameAlias;
             }
@@ -148,7 +148,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches], (companies, branches) => {
             if (branches) {
                 if (branches.length) {
-                    this.unFilteredBranchList = _.orderBy(branches, 'name');
+                    this.unFilteredBranchList = orderBy(branches, 'name');
                     this.branches$ = observableOf(this.unFilteredBranchList);
                 } else if (branches.length === 0) {
                     this.unFilteredBranchList = [];
@@ -158,8 +158,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             }
             if (companies && companies.length && branches) {
                 let companiesWithSuperAdminRole = [];
-                _.each(companies, (cmp) => {
-                    _.each(cmp.userEntityRoles, (company) => {
+                each(companies, (cmp) => {
+                    each(cmp.userEntityRoles, (company) => {
                         if (company.entity.entity === 'COMPANY' && company.role.uniqueName === 'super_admin') {
                             if (branches && branches.length) {
                                 let existIndx = branches.findIndex((b) => b.uniqueName === cmp.uniqueName);
@@ -172,7 +172,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                         }
                     });
                 });
-                this.companies$ = observableOf(_.orderBy(companiesWithSuperAdminRole, 'name'));
+                this.companies$ = observableOf(orderBy(companiesWithSuperAdminRole, 'name'));
             }
         })), takeUntil(this.destroyed$)).subscribe();
     }
@@ -250,7 +250,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             };
             this.toggleAsidePane();
         });
-        // this.openCreateCompanyModal(true);
     }
 
     public hideAddCompanyModal() {
@@ -283,18 +282,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public openAddBranchModal() {
-        // this.removeCompanySessionData();
-        // this.openCreateCompanyModal();
         this.router.navigate(['pages/settings/create-branch']);
-    }
-
-    public onHide() {
-        // let companyUniqueName = null;
-        // this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
-        // let stateDetailsRequest = new StateDetailsRequest();
-        // stateDetailsRequest.companyUniqueName = companyUniqueName;
-        // stateDetailsRequest.lastState = 'settings';
-        // this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     public hideAddBranchModal() {
@@ -309,7 +297,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.selectedCompaniesName = [];
         if (ev.target.checked) {
             this.companies$.pipe(take(1)).subscribe((companies) => {
-                _.each(companies, (company) => {
+                each(companies, (company) => {
                     this.selectedCompaniesUniquename.push(company.uniqueName);
                     this.selectedCompaniesName.push(company);
                 });

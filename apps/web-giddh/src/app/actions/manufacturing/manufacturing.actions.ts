@@ -1,7 +1,7 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ManufacturingService } from '../../services/manufacturing.service';
@@ -57,24 +57,6 @@ export class ManufacturingActions {
                 return { type: 'EmptyAction' };
             })));
 
-    // GET_ALL MANUFACTURING ITEM DETAIL
-
-    public GetMFItemDetail$: Observable<Action> = createEffect(() => this.action$
-        .pipe(
-            ofType(MANUFACTURING_ACTIONS.GET_MF_ITEM_DETAILS),
-            switchMap((action: CustomActions) => this._manufacturingService.GetManufacturingItem(action.payload)),
-            map(response => {
-                return this.GetMfItemDetailsResponse(response);
-            })));
-
-
-    public GetMFItemDetailResponse$: Observable<Action> = createEffect(() => this.action$
-        .pipe(
-            ofType(MANUFACTURING_ACTIONS.GET_MF_ITEM_DETAILS_RESPONSE),
-            map(response => {
-                return { type: 'EmptyAction' };
-            })));
-
     // CREATE MANUFACTURING ITEM
 
     public CreateMFItem$: Observable<Action> = createEffect(() => this.action$
@@ -84,7 +66,6 @@ export class ManufacturingActions {
                 return this._manufacturingService.CreateManufacturingItem(action.payload, action.payload.stockUniqueName).pipe(
                     map(response => this.CreateMfItemResponse(response)));
             })));
-
 
     public CreateMFItemResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -181,19 +162,6 @@ export class ManufacturingActions {
     public GetMfReportResponse(value): CustomActions {
         return {
             type: MANUFACTURING_ACTIONS.MF_REPORT_RESPONSE,
-            payload: value
-        };
-    }
-
-    public GetMfItemDetails(): CustomActions {
-        return {
-            type: MANUFACTURING_ACTIONS.GET_MF_ITEM_DETAILS
-        };
-    }
-
-    public GetMfItemDetailsResponse(value): CustomActions {
-        return {
-            type: MANUFACTURING_ACTIONS.GET_MF_ITEM_DETAILS_RESPONSE,
             payload: value
         };
     }

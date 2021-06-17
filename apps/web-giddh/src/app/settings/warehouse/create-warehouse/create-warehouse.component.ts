@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { OnboardingFormRequest } from '../../../models/api-models/Common';
 import { CommonService } from '../../../services/common.service';
 import { CompanyService } from '../../../services/companyService.service';
@@ -92,8 +91,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     ) {
         this.warehouseForm = this.formBuilder.group({
             name: ['', Validators.required],
-            address: [''],
-            // linkedEntity: [[]]
+            address: ['']
         });
         this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.name) {
@@ -221,18 +219,12 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      * @memberof CreateWarehouseComponent
      */
     public handleFormSubmit(): void {
-        // const linkEntity = this.addressConfiguration.linkedEntities.filter(entity => (this.warehouseForm.value.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
-        //     uniqueName: filteredEntity.uniqueName,
-        //     isDefault: filteredEntity.isDefault,
-        //     entity: filteredEntity.entity
-        // }));
         const requestObj = {
             name: this.warehouseForm.value.name,
             linkAddresses: this.addresses?.filter(address => this.warehouseForm.value.address.includes(address.uniqueName))?.map(filteredAddress => ({
                 uniqueName: filteredAddress.uniqueName,
                 isDefault: filteredAddress.isDefault
-            })),
-            // linkEntity
+            }))
         };
         this.settingsProfileService.createNewWarehouse(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

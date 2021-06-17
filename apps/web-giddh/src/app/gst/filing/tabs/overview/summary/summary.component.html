@@ -5,33 +5,6 @@
         <p class="text-muted half pd-t05">{{localeData?.filing?.transaction_summary_filing}}</p>
     </div>
 
-
-    <!--  <div class="gstr-reconciliations-summary" *ngIf="!isTransactionSummary && selectedGst === GstReport.Gstr2">-->
-    <!--    <div class="row">-->
-    <!--      <div class="col-md-10">-->
-    <!--        <div class="row">-->
-    <!--          <div class="col-md-12 text-uppercase title">Reconciliation Details</div>-->
-    <!--          <div class="transaction-info col-md-3 "><span style="color: #39c296;"-->
-    <!--                                                        class="font-xxlarge over-flow">{{(gstMatchedData$ | async)?.count}}</span>-->
-    <!--            <br>Matched Transactions-->
-    <!--          </div>-->
-    <!--          <div class="transaction-info col-md-3 "><span style="color: #f75398;"-->
-    <!--                                                        class="font-xxlarge over-flow">{{(gstPartiallyMatchedData$ | async)?.count}}</span>-->
-    <!--            <br>Mismatched Transactions-->
-    <!--          </div>-->
-    <!--          <div class="transaction-info col-md-3 "><span style="color: #b590ff;"-->
-    <!--                                                        class="font-xxlarge over-flow">{{(gstNotFoundOnGiddhData$ | async)?.count}}</span>-->
-    <!--            <br> Missing in Giddh-->
-    <!--          </div>-->
-    <!--          <div class="transaction-info col-md-3 "><span style="color: #fa9c00;"-->
-    <!--                                                        class="font-xxlarge over-flow">{{(gstNotFoundOnPortalData$ | async)?.count}}</span>-->
-    <!--            <br>Missing in GSTN-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <!--  </div>-->
-
     <hr class="m-0" *ngIf="!isTransactionSummary && selectedGst === GstReport.Gstr2">
 
     <div class="gstr-transactions-summary">
@@ -43,7 +16,6 @@
 
                 <thead>
                     <tr class="text-uppercase">
-                        <!-- <th width="20px"></th> -->
                         <th width="30%"> {{localeData?.filing?.description}}</th>
                         <th class="text-center">
                             <div class="rates"> {{localeData?.filing?.total_transactions}}</div>
@@ -71,7 +43,6 @@
                     <ng-container *ngFor="let item of gstrOverviewData.summary">
                         <tr (click)="viewTransactions(item)" class="row-hover"
                             [ngClass]="{'cp-none': item.gstReturnType === 'hsnsac' ||  item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'}">
-                            <!-- <td></td> -->
                             <td [ngSwitch]="true" [attr.data-title]="localeData?.filing?.description">
                                 <ng-container
                                     *ngSwitchCase="item.gstReturnType === 'b2b' || item.gstReturnType === 'b2bur'">
@@ -118,7 +89,6 @@
                                 -
                             </td>
                             <td class="text-right" [attr.data-title]="localeData?.filing?.taxable_amount"> <i class="icon-rupees font-11"></i>
-                                <!-- {{item?.taxableAmount |giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="item?.taxableAmount" [currencySymbol]="false"
                                         [currencyCode]="false">
@@ -126,7 +96,6 @@
                                 </span>
                             </td>
                             <td class="text-right" [attr.data-title]="localeData?.filing?.igst"> <i class="icon-rupees font-11"></i>
-                                <!-- {{item?.igstAmount |giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="item?.igstAmount" [currencySymbol]="false"
                                         [currencyCode]="false">
@@ -134,7 +103,6 @@
                                 </span>
                             </td>
                             <td class="text-right" [attr.data-title]="localeData?.filing?.cgst"> <i class="icon-rupees font-11"></i>
-                                <!-- {{item?.cgstAmount |giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="item?.cgstAmount" [currencySymbol]="false"
                                         [currencyCode]="false">
@@ -142,7 +110,6 @@
                                 </span>
                             </td>
                             <td class="text-right" [attr.data-title]="localeData?.filing?.sgst"> <i class="icon-rupees font-11"></i>
-                                <!-- {{item?.sgstAmount |giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="item?.sgstAmount" [currencySymbol]="false"
                                         [currencyCode]="false">
@@ -150,7 +117,6 @@
                                 </span>
                             </td>
                             <td class="text-right" [attr.data-title]="localeData?.filing?.cess"> <i class="icon-rupees font-11"></i>
-                                <!-- {{item?.cessAmount |giddhCurrency}} -->
                                 <span class="d-inline-flex">
                                     <amount-field [amount]="item?.cessAmount" [currencySymbol]="false"
                                         [currencyCode]="false">
@@ -161,7 +127,6 @@
 
                         <ng-container *ngFor="let item of item?.transactions">
                             <tr (click)="viewTransactions(item)" class="row-hover secondary-row">
-                                <!-- <td></td> -->
                                 <td [attr.data-title]="localeData?.filing?.description">
                                     <div class="secondary-row "> {{item?.name}}</div>
                                 </td>
@@ -169,7 +134,6 @@
                                         {{item?.totalTransactions}} </a>
                                 </td>
                                 <td class="text-right" [attr.data-title]="localeData?.filing?.taxable_amount"> <i class="icon-rupees font-11"></i>
-                                    <!-- {{item?.taxableAmount |giddhCurrency}} -->
                                     <span class="d-inline-flex">
                                         <amount-field [amount]="item?.taxableAmount" [currencySymbol]="false"
                                             [currencyCode]="false">
@@ -177,7 +141,6 @@
                                     </span>
                                 </td>
                                 <td class="text-right" [attr.data-title]="localeData?.filing?.igst"> <i class="icon-rupees font-11"></i>
-                                    <!-- {{item?.igstAmount |giddhCurrency}} -->
                                     <span class="d-inline-flex">
                                         <amount-field [amount]="item?.igstAmount" [currencySymbol]="false"
                                             [currencyCode]="false">
@@ -185,7 +148,6 @@
                                     </span>
                                 </td>
                                 <td class="text-right" [attr.data-title]="localeData?.filing?.cgst"> <i class="icon-rupees font-11"></i>
-                                    <!-- {{item?.cgstAmount |giddhCurrency}} -->
                                     <span class="d-inline-flex">
                                         <amount-field [amount]="item?.cgstAmount" [currencySymbol]="false"
                                             [currencyCode]="false">
@@ -193,7 +155,6 @@
                                     </span>
                                 </td>
                                 <td class="text-right" [attr.data-title]="localeData?.filing?.sgst"> <i class="icon-rupees font-11"></i>
-                                    <!-- {{item?.sgstAmount |giddhCurrency}} -->
                                     <span class="d-inline-flex">
                                         <amount-field [amount]="item?.sgstAmount" [currencySymbol]="false"
                                             [currencyCode]="false">
@@ -201,7 +162,6 @@
                                     </span>
                                 </td>
                                 <td class="text-right" [attr.data-title]="localeData?.filing?.cess"> <i class="icon-rupees font-11"></i>
-                                    <!-- {{item?.cessAmount |giddhCurrency}} -->
                                     <span class="d-inline-flex">
                                         <amount-field [amount]="item?.cessAmount" [currencySymbol]="false"
                                             [currencyCode]="false">

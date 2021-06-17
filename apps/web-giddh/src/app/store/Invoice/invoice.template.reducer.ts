@@ -1,6 +1,4 @@
-import { ICommonResponseOfManufactureItem, IManufacturingItemRequest, IManufacturingUnqItemObj } from '../../../models/interfaces/manufacturing.interface';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import * as _ from '../../lodash-optimized';
 import { CustomTemplateResponse } from '../../models/api-models/Invoice';
 import { INVOICE } from '../../actions/invoice/invoice.const';
 import { CustomActions } from '../customActions';
@@ -358,31 +356,11 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
-                    //  tcs: {  // this is for template e
-                    //     label: 'TCS',
-                    //     display: true,
-                    //     width: null
-                    // },
-                    //  tds: { // this is for template e
-                    //     label: 'TDS',
-                    //     display: true,
-                    //     width: null
-                    // },
-                    //  totalDue: { // this is for template e
-                    //     label: 'Total Due',
-                    //     display: true,
-                    //     width: null
-                    // },
                     totalQuantity: { // this is for template e
                         label: 'Total Quantity',
                         display: true,
                         width: null
-                    },
-                    // taxBifurcation: { // this is for template e
-                    //     label: 'Tax Bifurcation',
-                    //     display: true,
-                    //     width: null
-                    // },
+                    }
                 }
             }
         },

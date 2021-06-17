@@ -10,19 +10,6 @@ export interface Headers {
     numColumns: number;
 }
 
-export interface MapHeader {
-    columnNumber: number;
-    columnHeader: string;
-    isSelected: boolean;
-}
-
-export interface MappingInfo {
-    uniqueName: MapHeader[];
-    name: MapHeader[];
-    description: MapHeader[];
-    parentGroupUniqueName: MapHeader[];
-}
-
 export class Mappings {
     public columnNumber: number;
     public columnHeader: string;
@@ -38,12 +25,6 @@ export interface MapValue {
 export interface DataItem {
     row: MapValue[];
     rowNumber: number;
-}
-
-export interface DataResult {
-    results: DataItem[];
-    page: number;
-    count: number;
 }
 
 export interface ResponseData {

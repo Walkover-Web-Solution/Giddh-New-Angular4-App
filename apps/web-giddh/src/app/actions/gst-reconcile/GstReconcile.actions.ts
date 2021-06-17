@@ -10,9 +10,9 @@ import { GstReconcileService } from '../../services/GstReconcile.service';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { saveAs } from 'file-saver';
-import { base64ToBlob } from '../../shared/helpers/helperFunctions';
 import { GstReport } from '../../gst/constants/gst.constant';
 import { LocaleService } from '../../services/locale.service';
+import { GeneralService } from '../../services/general.service';
 
 @Injectable()
 export class GstReconcileActions {
@@ -59,9 +59,7 @@ export class GstReconcileActions {
                 return this._reconcileService.GstReconcileGetInvoices(action.payload)
                     .pipe(
                         map((response: BaseResponse<GstReconcileInvoiceResponse, GstReconcileInvoiceRequest>) => {
-                            if (response.status === 'success') {
-                                // this._toasty.successToast('su');
-                            } else {
+                            if (response.status !== 'success') {
                                 this._toasty.errorToast(response.message);
                             }
                             return this.GstReconcileInvoiceResponse(response);
@@ -76,9 +74,7 @@ export class GstReconcileActions {
                 return this._reconcileService.GetGstrOverview(action.payload.type, action.payload.model)
                     .pipe(
                         map((response: BaseResponse<GstOverViewResult, GstOverViewRequest>) => {
-                            if (response.status === 'success') {
-                                // this._toasty.successToast('su');
-                            } else {
+                            if (response.status !== 'success') {
                                 this._toasty.errorToast(response.message);
                             }
                             return this.GetOverViewResponse(response);
@@ -93,9 +89,7 @@ export class GstReconcileActions {
                 return this._reconcileService.GetGstrOverview(action.payload.type, action.payload.model)
                     .pipe(
                         map((response: BaseResponse<GstOverViewResult, GstOverViewRequest>) => {
-                            if (response.status === 'success') {
-                                // this._toasty.successToast('su');
-                            } else {
+                            if (response.status !== 'success') {
                                 this._toasty.errorToast(response.message);
                             }
                             return this.GetOverViewResponse(response);
@@ -109,11 +103,6 @@ export class GstReconcileActions {
                 return this._reconcileService.GetGstr3BOverview(action.payload.type, action.payload.model)
                     .pipe(
                         map((response: BaseResponse<Gstr3bOverviewResult, GstOverViewRequest>) => {
-                            // if (response.status === 'success') {
-                            //    this._toasty.successToast('su GetGstr3BOverview');
-                            // } else {
-                            //   this._toasty.errorToast(response.message);
-                            // }
                             return this.GetGstr3BOverViewResponse(response);
                         }));
             })));
@@ -137,9 +126,7 @@ export class GstReconcileActions {
                 return this._reconcileService.GetSummaryTransaction(action.payload.type, action.payload.model)
                     .pipe(
                         map((response: BaseResponse<GstTransactionResult, GStTransactionRequest>) => {
-                            if (response.status === 'success') {
-                                // this._toasty.successToast('su');
-                            } else {
+                            if (response.status !== 'success') {
                                 this._toasty.errorToast(response.message);
                             }
                             return this.GetSummaryTransactionResponse(response);
@@ -154,9 +141,7 @@ export class GstReconcileActions {
                 return this._reconcileService.GetGstr1SummaryDetails(action.payload)
                     .pipe(
                         map((response: BaseResponse<Gstr1SummaryResponse, Gstr1SummaryRequest>) => {
-                            if (response.status === 'success') {
-                                //
-                            } else {
+                            if (response.status !== 'success') {
                                 this._toasty.errorToast(response.message);
                             }
                             return this.GetGSTR1SummaryDetailsResponse(response);
@@ -265,8 +250,9 @@ export class GstReconcileActions {
     constructor(private action$: Actions,
         private _toasty: ToasterService,
         private localeService: LocaleService,
-        private _reconcileService: GstReconcileService) {
-        //
+        private _reconcileService: GstReconcileService,
+        private generalService: GeneralService) {
+        
     }
 
     public GstReconcileOtpRequest(userName: string): CustomActions {
@@ -311,18 +297,6 @@ export class GstReconcileActions {
         };
     }
 
-    public ResetGstReconcileState() {
-        return {
-            type: GST_RECONCILE_ACTIONS.RESET_GST_RECONCILE_STATE
-        };
-    }
-
-    public showPullFromGstInModal() {
-        return {
-            type: GST_RECONCILE_ACTIONS.PULL_FROM_GSTIN
-        };
-    }
-
     /**
      * GetOverView
      */
@@ -351,7 +325,6 @@ export class GstReconcileActions {
         };
     }
     public GetGstr3BOverViewResponse(res: BaseResponse<Gstr3bOverviewResult, GstOverViewRequest>) {
-        let type = res.queryString.type;
         return {
             type: GSTR_ACTIONS.GET_GSTR3B_OVERVIEW_RESPONSE,
             payload: res
@@ -420,7 +393,7 @@ export class GstReconcileActions {
     }
 
     public downloadFile(data: BaseResponse<any, GstrSheetDownloadRequest>) {
-        let blob = base64ToBlob(data.body, 'application/xls', 512);
+        let blob = this.generalService.base64ToBlob(data.body, 'application/xls', 512);
         return saveAs(blob, `${data.queryString.sheetType}-${data.queryString.from}-${data.queryString.to}-${data.queryString.gstin}.xlsx`);
     }
 
