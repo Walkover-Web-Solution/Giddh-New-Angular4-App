@@ -16,8 +16,6 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
-import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
-import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
@@ -72,6 +70,8 @@ import localeHi from '@angular/common/locales/hi';
 import localeMr from '@angular/common/locales/mr';
 import { AmountFieldComponentModule } from './amount-field/amount-field.module';
 import { AccountAddNewDetailsModule } from './header/components/account-add-new-details/account-add-new-details.module';
+import { LedgerDiscountModule } from '../ledger/components/ledgerDiscount/ledgerDiscount.module';
+import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
 registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
@@ -123,7 +123,6 @@ export class PickDateAdapter extends NativeDateAdapter {
     declarations: [
         MfReportComponent,
         LayoutComponent,
-        LedgerDiscountComponent,
         HeaderComponent,
         AsideHelpSupportComponent,
         AsideSettingComponent,
@@ -142,7 +141,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         AsideMenuOtherTaxes,
         AccountUpdateNewDetailsComponent,
         WelcomeComponent,
-        ConfirmationModalComponent,
         DeleteTemplateConfirmationModelComponent,
         DatepickerWrapperComponent,
         LoaderComponent,
@@ -196,7 +194,9 @@ export class PickDateAdapter extends NativeDateAdapter {
         CurrencyModule,
         TranslateDirectiveModule,
         AmountFieldComponentModule,
-        AccountAddNewDetailsModule
+        AccountAddNewDetailsModule,
+        LedgerDiscountModule,
+        ConfirmationModalModule
     ],
     exports: [
         CommonModule,
@@ -208,11 +208,9 @@ export class PickDateAdapter extends NativeDateAdapter {
         LaddaModule,
         LayoutComponent,
         ShSelectModule,
-        LedgerDiscountComponent,
         ModalModule,
         HeaderComponent,
         ManageGroupsAccountsComponent,
-        ConfirmationModalComponent,
         AccountFilterPipe,
         SelectModule,
         PaginationModule,
@@ -250,7 +248,9 @@ export class PickDateAdapter extends NativeDateAdapter {
         ScheduleNowComponent,
         TranslateDirectiveModule,
         AmountFieldComponentModule,
-        AccountAddNewDetailsModule
+        AccountAddNewDetailsModule,
+        LedgerDiscountModule,
+        ConfirmationModalModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

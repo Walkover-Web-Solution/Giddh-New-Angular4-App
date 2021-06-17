@@ -37,9 +37,6 @@ import { LedgerAsidePaneAccountComponent } from './components/ledgerAsidePane/co
 import { LedgerAsidePaneComponent } from './components/ledgerAsidePane/ledgerAsidePane.component';
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
 import { ShareLedgerComponent } from './components/shareLedger/shareLedger.component';
-import { UpdateLedgerTaxControlComponent } from './components/updateLedger-tax-control/updateLedger-tax-control.component';
-import { UpdateLedgerDiscountComponent } from './components/updateLedgerDiscount/updateLedgerDiscount.component';
-import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { LedgerComponent } from './ledger.component';
 import { LedgerRoutingModule } from './ledger.routing.module';
 import { ImportStatementComponent } from './components/import-statement/import-statement.component';
@@ -47,27 +44,25 @@ import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { AccountAddNewDetailsModule } from '../shared/header/components/account-add-new-details/account-add-new-details.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
+import { LedgerDiscountModule } from './components/ledgerDiscount/ledgerDiscount.module';
+import { UpdateLedgerEntryPanelModule } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.module';
 
 @NgModule({
     declarations: [
-        // Components / Directives/ Pipes
         LedgerComponent,
         NewLedgerEntryPanelComponent,
-        UpdateLedgerEntryPanelComponent,
         ShareLedgerComponent,
         ExportLedgerComponent,
-        UpdateLedgerTaxControlComponent,
-        UpdateLedgerDiscountComponent,
         AdvanceSearchModelComponent,
         LedgerAsidePaneComponent,
         LedgerAsidePaneAccountComponent,
         LedgerColumnarReportTableComponent,
-        ImportStatementComponent,
+        ImportStatementComponent
     ],
     exports: [
-        LedgerComponent, UpdateLedgerEntryPanelComponent
+        LedgerComponent
     ],
-    entryComponents: [UpdateLedgerEntryPanelComponent, PaginationComponent],
+    entryComponents: [PaginationComponent],
     providers: [],
     imports: [
         CommonModule,
@@ -107,7 +102,9 @@ import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShor
         TranslateDirectiveModule,
         AccountAddNewDetailsModule,
         KeyboardShortutModule,
-        BsDatepickerModule
+        BsDatepickerModule,
+        LedgerDiscountModule,
+        UpdateLedgerEntryPanelModule
     ],
 })
 export class LedgerModule {
