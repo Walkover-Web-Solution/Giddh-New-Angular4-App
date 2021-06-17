@@ -253,13 +253,12 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                     company.branches = this.branchList;
                     this.companyBranches = company;
                     this.branchRefreshInProcess = false;
-                    this.changeDetectorRef.detectChanges();
-
-                    console.log(this.branchList);
 
                     if (this.searchBranch) {
                         this.filterBranchList(this.searchBranch);
                     }
+
+                    this.changeDetectorRef.detectChanges();
                 }
             });
         }
