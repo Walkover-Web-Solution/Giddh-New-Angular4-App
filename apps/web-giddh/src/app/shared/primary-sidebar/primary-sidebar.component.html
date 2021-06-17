@@ -38,7 +38,7 @@
             </ul>
             <div id="dropdown-basic-company-branch" *dropdownMenu class="dropdown-menu company-branch-nav"
             role="menu" aria-labelledby="button-company-branch">
-                <company-branch ></company-branch>
+                <company-branch [localeData]="localeData" [commonLocaleData]="commonLocaleData" (createNewCompany)="createNewCompany()"></company-branch>
             </div>
         </div>
 
