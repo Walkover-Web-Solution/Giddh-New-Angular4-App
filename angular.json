@@ -292,6 +292,24 @@
                                     "maximumError": "10mb"
                                 }
                             ]
+                        },
+                        "development": {
+                            "outputPath": "dist/apps/web-giddh",
+                            "customWebpackConfig": {
+                                "path": "apps/web-giddh/webpack.partial.js",
+                                "mergeRules": {
+                                    "externals": "replace"
+                                }
+                            },
+                            "baseHref": "http://localhost:3000",
+                            "optimization": false,
+                            "outputHashing": "none",
+                            "sourceMap": true,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": false,
+                            "vendorChunk": false,
+                            "buildOptimizer": false
                         }
                     }
                 },
@@ -306,8 +324,12 @@
                     "configurations": {
                         "prod": {
                             "browserTarget": "web-giddh:build:prod"
+                        },
+                        "development": {
+                            "browserTarget": "web-giddh:build:development"
                         }
-                    }
+                    },
+                    "defaultConfiguration": "development"
                 },
                 "lint": {
                     "builder": "@angular-builders/custom-webpack:tslint",
