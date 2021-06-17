@@ -599,7 +599,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 obj.uniqueName = acc;
                 finalData.push(obj);
             });
-            this.store.dispatch(this.accountsAction.mergeAccount(activeAccount.uniqueName, finalData));
+            this.store.dispatch(this.accountsAction.mergeAccount(activeAccount?.uniqueName, finalData));
             this.showDeleteMove = false;
         } else {
             this._toaster.errorToast(this.localeData?.merge_account_error);

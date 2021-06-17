@@ -124,7 +124,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
         let gstVal: string = gstForm.get('gstNumber').value;
-        if (gstVal.length >= 2) {
+        if (gstVal?.length >= 2) {
             this.statesSource$.pipe(take(1)).subscribe(state => {
                 let s = state.find(st => st.value === gstVal.substr(0, 2));
                 statesEle.disabled = true;
