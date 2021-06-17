@@ -18,91 +18,94 @@
             </div>
         </div>
     </div>
-    <tabset class="custom-tabs position-relative" #staticTabs>
-        <i class="icon-copmany-branch-connect"></i>
-        <tab [heading]="commonLocaleData?.app_company" [customClass]="'icon-company'" (selectTab)="tabChanged('branch')">
-            <div>
-                <p class="font-12 d-flex justify-content-between mt-2">
-                    <span>{{companyList?.length}} {{localeData?.companies}}</span>
-                    <span class="digit-blue cursor-pointer"
-                        (click)="refreshCompanies($event)">{{localeData?.refresh_manually}}</span>
-                </p>
-                <p class="font-14 mt-2 digit-blue cursor-pointer" (click)="openModalCreateNewCompany()">
-                    {{localeData?.create_company}}</p>
-            </div>
-            <div class="company-list mt-2">
-                <ul class="list-style-none font-14"
-                    *ngIf="companyListForFilter && companyListForFilter.length && !(isCompanyRefreshInProcess$ | async)">
-                    <li class="btn-group" dropdown *ngFor="let company of companyListForFilter; let i = index">
-                        <span id="button-basic" dropdownToggle class="dropdown-toggle d-flex align-items-center" aria-controls="dropdown-basic"
-                            (click)="getCompanyBranches(company)"> <i class="icon-company mr-2"></i>
-                            <span class="company-name-right">{{ company.name }}</span>
-                        </span>
-                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
-                            aria-labelledby="button-basic">
-                            <li class="create-branch mt-1" [routerLink]="['/pages/settings/create-branch']"
-                                *ngIf="activeCompany?.uniqueName === company.uniqueName">{{localeData?.create_branch}}
-                            </li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center head-branch" href="javascript:;"
-                                    (keydown.enter)="changeCompany(company.uniqueName, false)"
-                                    (click)="changeCompany(company.uniqueName, false)">
-                                    <i class="icon-head-branch mr-2"></i>
-                                    <span class="d-flex flex-column">
-                                        <span>{{ company.name }}</span>
-                                    </span>
-                                </a>
-                            </li>
-                            <ng-container *ngIf="company.branches?.length > 0">
-                                <li role="menuitem" *ngFor="let branch of company.branches | slice:0:5; let i = index;">
-                                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"
-                                        (click)="changeBranch(company.uniqueName, branch?.uniqueName, $event)">
-                                        <i class="icon-branch-connect mr-2"></i>
+     <!-- branch design option 1 -->
+     <div class="company-branch-opt-1">
+        <tabset class="custom-tabs position-relative" #staticTabs>
+            <i class="icon-copmany-branch-connect"></i>
+            <tab [heading]="commonLocaleData?.app_company" [customClass]="'icon-company'" (selectTab)="tabChanged('branch')">
+                <div>
+                    <p class="font-12 d-flex justify-content-between mt-2">
+                        <span>{{companyList?.length}} {{localeData?.companies}}</span>
+                        <span class="digit-blue cursor-pointer"
+                            (click)="refreshCompanies($event)">{{localeData?.refresh_manually}}</span>
+                    </p>
+                    <p class="font-14 mt-2 digit-blue cursor-pointer" (click)="openModalCreateNewCompany()">
+                        {{localeData?.create_company}}</p>
+                </div>
+                <div class="company-list mt-2">
+                    <ul class="list-style-none font-14"
+                        *ngIf="companyListForFilter && companyListForFilter.length && !(isCompanyRefreshInProcess$ | async)">
+                        <li class="btn-group" dropdown *ngFor="let company of companyListForFilter; let i = index">
+                            <span id="button-basic" dropdownToggle class="dropdown-toggle d-flex align-items-center" aria-controls="dropdown-basic"
+                                (click)="getCompanyBranches(company)"> <i class="icon-company mr-2"></i>
+                                <span class="company-name-right">{{ company.name }}</span>
+                            </span>
+                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                aria-labelledby="button-basic">
+                                <li class="create-branch mt-1" [routerLink]="['/pages/settings/create-branch']"
+                                    *ngIf="activeCompany?.uniqueName === company.uniqueName">{{localeData?.create_branch}}
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center head-branch" href="javascript:;"
+                                        (keydown.enter)="changeCompany(company.uniqueName, false)"
+                                        (click)="changeCompany(company.uniqueName, false)">
+                                        <i class="icon-head-branch mr-2"></i>
                                         <span class="d-flex flex-column">
-                                            <span>{{ branch.alias }}</span>
-                                            <span class="font-12 d-flex">{{ company.name }}</span>
+                                            <span>{{ company.name }}</span>
                                         </span>
                                     </a>
                                 </li>
-                            </ng-container>
-                            <li class="show-more-branches font-12" *ngIf="company.branches?.length > 5"
-                                (click)="showAllBranches(company)">{{localeData?.show_more}}</li>
-                        </ul>
-                    </li>
-                </ul>
-                <giddh-page-loader *ngIf="(isCompanyRefreshInProcess$ | async)"></giddh-page-loader>
-            </div>
-        </tab>
-        <tab [heading]="commonLocaleData?.app_branch" [customClass]="'icon-branch1'" [disabled]="!companyBranches?.name"
-            (selectTab)="tabChanged('branch')">
-            <div>
-                <p class="font-12 d-flex justify-content-between mt-2">
-                    <span>{{branchList?.length}} {{localeData?.branches}}</span>
-                    <span class="digit-blue cursor-pointer"
-                        (click)="getCompanyBranches(companyBranches, true)">{{localeData?.refresh_manually}}</span>
-                </p>
-                <p class="font-14 mt-2 digit-orange cursor-pointer" [routerLink]="['/pages/settings/create-branch']"
-                    *ngIf="activeCompany?.uniqueName === companyBranches?.uniqueName">{{localeData?.create_branch}}</p>
-            </div>
-            <div class="company-list branch-list mt-2">
-                <ul class="list-style-none font-14" *ngIf="!branchRefreshInProcess">
-                    <li *ngFor="let branch of companyBranches?.branches;">
-                        <a class="d-flex align-items-center" href="javascript:;"
-                            (click)="changeBranch(companyBranches.uniqueName, branch?.uniqueName, $event)">
-                            <i class="icon-branch-connect mr-2"></i>
-                            <span class="d-flex flex-column">
-                                <span>
-                                    {{branch?.alias}}
+                                <ng-container *ngIf="company.branches?.length > 0">
+                                    <li role="menuitem" *ngFor="let branch of company.branches | slice:0:5; let i = index;">
+                                        <a class="dropdown-item d-flex align-items-center" href="javascript:;"
+                                            (click)="changeBranch(company.uniqueName, branch?.uniqueName, $event)">
+                                            <i class="icon-branch-connect mr-2"></i>
+                                            <span class="d-flex flex-column">
+                                                <span>{{ branch.alias }}</span>
+                                                <span class="font-12 d-flex">{{ company.name }}</span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ng-container>
+                                <li class="show-more-branches font-12" *ngIf="company.branches?.length > 5"
+                                    (click)="showAllBranches(company)">{{localeData?.show_more}}</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <giddh-page-loader *ngIf="(isCompanyRefreshInProcess$ | async)"></giddh-page-loader>
+                </div>
+            </tab>
+            <tab [heading]="commonLocaleData?.app_branch" [customClass]="'icon-branch1'" [disabled]="!companyBranches?.name"
+                (selectTab)="tabChanged('branch')">
+                <div>
+                    <p class="font-12 d-flex justify-content-between mt-2">
+                        <span>{{branchList?.length}} {{localeData?.branches}}</span>
+                        <span class="digit-blue cursor-pointer"
+                            (click)="getCompanyBranches(companyBranches, true)">{{localeData?.refresh_manually}}</span>
+                    </p>
+                    <p class="font-14 mt-2 digit-orange cursor-pointer" [routerLink]="['/pages/settings/create-branch']"
+                        *ngIf="activeCompany?.uniqueName === companyBranches?.uniqueName">{{localeData?.create_branch}}</p>
+                </div>
+                <div class="company-list branch-list mt-2">
+                    <ul class="list-style-none font-14" *ngIf="!branchRefreshInProcess">
+                        <li *ngFor="let branch of companyBranches?.branches;">
+                            <a class="d-flex align-items-center" href="javascript:;"
+                                (click)="changeBranch(companyBranches.uniqueName, branch?.uniqueName, $event)">
+                                <i class="icon-branch-connect mr-2"></i>
+                                <span class="d-flex flex-column">
+                                    <span>
+                                        {{branch?.alias}}
+                                    </span>
+                                    <span class="font-12 d-flex">{{companyBranches?.name}}</span>
                                 </span>
-                                <span class="font-12 d-flex">{{companyBranches?.name}}</span>
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-                <giddh-page-loader *ngIf="branchRefreshInProcess"></giddh-page-loader>
-            </div>
-        </tab>
-    </tabset>
+                            </a>
+                        </li>
+                    </ul>
+                    <giddh-page-loader *ngIf="branchRefreshInProcess"></giddh-page-loader>
+                </div>
+            </tab>
+        </tabset>
+    </div>
     <div class="profile-user font-12 d-flex justify-content-between align-items-center">
         <div class="profile-name cursor-pointer d-flex align-items-center"
             [routerLink]="['/pages/user-details/mobile-number']">
@@ -111,6 +114,101 @@
         </div>
         <div class="profile-logout font-14">
             <button (click)="logout()"><i class="icon-logout mr-2 font-18"></i> {{localeData?.logout}}</button>
+        </div>
+    </div>
+     <!-- branch design option 2 -->
+     <div class="company-branch-opt-2" hidden>
+        <div class="total-company">
+            <p class="font-12 d-flex justify-content-between mt-2">
+            <span class="company-count">120 Companies</span>
+            <span class="digit-blue cursor-pointer">Refresh Manually</span>
+            </p>
+            <p class="font-14 mt-2 digit-blue cursor-pointer">+ Create Company</p>
+        </div>
+        <div class="company-list mt-2">
+            <ul class="list-style-none font-14">
+                <li>
+                    <span class="d-flex justify-content-between align-items-center company-name"
+                    aria-controls="dropdown-basic">
+                        <span class="p-0">
+                            <i class="icon-company mr-2"></i> Tesla
+                        </span>
+                        <i class="icon-down-new"></i>
+                    </span>
+                </li>
+                <li>
+                    <span class="d-flex justify-content-between align-items-center company-name"
+                    aria-controls="dropdown-basic">
+                        <span class="p-0">
+                            <i class="icon-company mr-2"></i> Tesla
+                        </span>
+                        <i class="icon-down-new"></i>
+                    </span>
+                </li>
+                <li class="btn-group" dropdown>
+                    <span id="button-basic" dropdownToggle class="dropdown-toggle active d-flex justify-content-between align-items-center company-name"
+                    aria-controls="dropdown-basic">
+                        <span class="p-0">
+                            <i class="icon-company mr-2"></i> Tesla
+                        </span>
+                        <i class="icon-down-new"></i>
+                    </span>
+                    <div class="d-flex flex-column total-branches">
+                        <p class="font-12 d-flex justify-content-between">
+                            <span class="pr-0 pt-0">120 Branches</span>
+                            <span class="digit-blue cursor-pointer pl-0 pt-0">Refresh Manually</span>
+                        </p>
+                        <p class="font-14 digit-orange cursor-pointer  pd-l2 pr-r2">+ Create Branch</p>
+                    </div>
+                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+                    role="menu" aria-labelledby="button-basic">
+                        <li role="menuitem">
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="icon-branch-connect mr-2"></i>
+                                <span class="d-flex flex-column">
+                                    <span>Delhi</span>
+                                    <span class="font-12 d-flex">Uttar Pradesh</span>
+                                </span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="icon-branch-connect mr-2"></i>
+                                <span class="d-flex flex-column">
+                                    <span>Kanpur</span>
+                                    <span class="font-12 d-flex">Uttar Pradesh</span>
+                                </span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item d-flex align-items-center head-branch" href="#">
+                                <i class="icon-head-branch mr-2"></i>
+                                <span class="d-flex flex-column">
+                                    <span>Uttar Pradesh  (6)</span>
+                                </span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="icon-branch-connect mr-2"></i>
+                                <span class="d-flex flex-column">
+                                    <span>Rajasthan</span>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <span class=" d-flex justify-content-between align-items-center company-name"
+                    aria-controls="dropdown-basic">
+                        <span class="p-0">
+                            <i class="icon-company mr-2"></i> Tesla
+                        </span>
+                        <i class="icon-down-new"></i>
+                    </span>
+                </li>
+
+            </ul>
         </div>
     </div>
 </div>
