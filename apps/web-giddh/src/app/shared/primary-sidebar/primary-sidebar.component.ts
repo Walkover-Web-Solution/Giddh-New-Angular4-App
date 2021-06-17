@@ -291,8 +291,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
             this.companies$ = observableOf(orderedCompanies);
-            this.store.dispatch(this.companyActions.setTotalNumberofCompanies(orderedCompanies.length));
         });
+        
         this.user$ = this.store.pipe(select(createSelector([(state: AppState) => state.session.user], (user) => {
             if (user && user.user && user.user.name && user.user.name.length > 1) {
                 let name = user.user.name;

@@ -55,7 +55,7 @@
                         p.show-more-branches {
                             padding: 6px 15px;
                         }
-                        p.create-branch{
+                        li.create-branch{
                             padding: 10px 15px;
                         }
                         .dropdown-toggle{
@@ -96,7 +96,7 @@
                         padding: 10px 0;
                         text-decoration: underline;
                     }
-                    p.create-branch{
+                    li.create-branch{
                         color: $orange;
                         padding: 6px 0;
                     }

@@ -376,6 +376,7 @@ export class BranchFilterRequest {
     from: string;
     to: string;
     query?: string;
+    companyUniqueName?: string;
 }
 
 export interface OrganizationDetails {
