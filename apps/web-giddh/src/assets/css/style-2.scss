@@ -9719,7 +9719,8 @@ input.mat-input-element {
 .setting-sidebar-open.on-user-page .plan-wrapper {
     padding-left: 60px !important;
 }
-.setting-sidebar-open .plan-wrapper.menu_open{
+.setting-sidebar-open .plan-wrapper,
+.setting-sidebar-open.on-user-page .plan-wrapper{
     padding-right: 240px !important;
 }
 .plan-wrapper.menu_open {
