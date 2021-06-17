@@ -219,7 +219,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             let gstVal: string = gstNo.value;
             this.billingDetailsObj.gstin = gstVal;
 
-            if (gstVal.length >= 2) {
+            if (gstVal?.length >= 2) {
                 this.statesSource$.pipe(take(1)).subscribe(state => {
                     let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
                     let s = state.find(st => st.value === stateCode);
