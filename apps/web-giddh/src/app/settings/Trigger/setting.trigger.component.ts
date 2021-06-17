@@ -4,7 +4,6 @@ import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
-import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { TaxResponse } from '../../models/api-models/Company';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -15,6 +14,7 @@ import { SettingsTriggersActions } from '../../actions/settings/triggers/setting
 import { SearchService } from '../../services/search.service';
 import { GroupService } from '../../services/group.service';
 import { API_COUNT_LIMIT } from '../../app.constant';
+import { cloneDeep, each } from '../../lodash-optimized';
 
 @Component({
     selector: 'setting-trigger',
@@ -112,7 +112,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         this.store.pipe(select(p => p.settings.triggers), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o) {
                 this.forceClear$ = observableOf({ status: true });
-                this.availableTriggers = _.cloneDeep(o);
+                this.availableTriggers = cloneDeep(o);
             }
         });
 
@@ -125,7 +125,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                 groups.map(d => {
                     groupsRes.push({ label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName });
                 });
-                this.groups = _.cloneDeep(groupsRes);
+                this.groups = cloneDeep(groupsRes);
             }
         });
 
@@ -135,7 +135,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     }
 
     public onSubmit(data) {
-        let dataToSave = _.cloneDeep(data);
+        let dataToSave = cloneDeep(data);
         dataToSave.action = 'webhook';
         if (!dataToSave.name) {
             this._toaster.errorToast(this.localeData?.validations?.trigger_name, 'Validation');
@@ -185,7 +185,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     }
 
     public updateTrigger(taxIndex: number) {
-        let selectedTrigger = _.cloneDeep(this.availableTriggers[taxIndex]);
+        let selectedTrigger = cloneDeep(this.availableTriggers[taxIndex]);
         this.newTriggerObj = selectedTrigger;
         let message = this.localeData?.update_trigger;
         message = message?.replace("[TRIGGER_NAME]", selectedTrigger.name);
@@ -204,7 +204,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             if (this.confirmationFor === 'delete') {
                 this.store.dispatch(this._settingsTriggersActions.DeleteTrigger(this.newTriggerObj.uniqueName));
             } else if (this.confirmationFor === 'edit') {
-                _.each(this.newTriggerObj.taxDetail, (tax) => {
+                each(this.newTriggerObj.taxDetail, (tax) => {
                     tax.date = moment(tax.date).format(GIDDH_DATE_FORMAT);
                 });
                 this.store.dispatch(this._settingsTriggersActions.UpdateTrigger(this.newTriggerObj));
@@ -213,13 +213,13 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     }
 
     public addMoreDateAndPercentage(taxIndex: number) {
-        let taxes = _.cloneDeep(this.availableTriggers);
+        let taxes = cloneDeep(this.availableTriggers);
         taxes[taxIndex].taxDetail.push({ date: null, taxValue: null });
         this.availableTriggers = taxes;
     }
 
     public removeDateAndPercentage(parentIndex: number, childIndex: number) {
-        let taxes = _.cloneDeep(this.availableTriggers);
+        let taxes = cloneDeep(this.availableTriggers);
         taxes[parentIndex].taxDetail.splice(childIndex, 1);
         this.availableTriggers = taxes;
     }
@@ -523,9 +523,6 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             ];
 
             this.scopeList = [
-                // G0-1393--Invoive and Entry not implemented from API
-                //{label: 'Invoice', value: 'invoice'},
-                //{label: 'Entry', value: 'entry'},
                 { label: this.localeData?.scope_list?.closing_balance, value: 'closing balance' }
             ];
         }

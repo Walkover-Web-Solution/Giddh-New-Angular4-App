@@ -1,6 +1,3 @@
-/**
- * Created by kunalsaxena on 9/1/17.
- */
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
@@ -217,7 +214,6 @@ export class GstComponent implements OnInit, OnDestroy {
                 to: moment(ev.picker.endDate._d).format(GIDDH_DATE_FORMAT)
             };
             this.isMonthSelected = false;
-            // this.selectedMonth = null;
         } else {
             this.currentPeriod = {
                 from: moment(ev).startOf('month').format(GIDDH_DATE_FORMAT),

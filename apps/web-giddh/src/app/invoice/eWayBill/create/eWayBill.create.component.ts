@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import * as moment from 'moment';
-import { GeneralActions } from '../../../actions/general/general.actions';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
@@ -103,7 +102,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
-        private _cdRef: ChangeDetectorRef, private _generalActions: GeneralActions) {
+        private _cdRef: ChangeDetectorRef) {
         this.isEwaybillGenerateInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybillInProcess), takeUntil(this.destroyed$));
         this.isEwaybillGeneratedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybilSuccess), takeUntil(this.destroyed$));
         this.isGenarateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInProcess), takeUntil(this.destroyed$));
@@ -258,7 +257,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
 
     public editTransporter(trans: any) {
-        let transportEditObject: IEwayBillTransporter = Object.assign({}, trans);
         this.seTransporterDetail(trans);
         this.transportEditMode = true;
     }

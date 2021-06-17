@@ -38,7 +38,6 @@ import { InventoryService } from '../../../services/inventory.service';
 export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges {
 
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
-    // @ViewChild('dp') public dateRangePicker: BsDaterangepickerDirective;
     public bsRangeValue: string[];
     @Input() public advanceSearchRequest: AdvanceSearchRequest;
     @Output() public closeModelEvent: EventEmitter<{ advanceSearchData, isClose }> = new EventEmitter(null);
@@ -52,7 +51,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public voucherTypeList: Observable<IOption[]>;
     public stockListDropDown$: Observable<IOption[]>;
     public comparisonFilterDropDown$: Observable<IOption[]>;
-    private moment = moment;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** datepickerTemplate element reference  */
     @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;

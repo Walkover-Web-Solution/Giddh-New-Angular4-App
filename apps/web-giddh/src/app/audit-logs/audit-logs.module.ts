@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { DatepickerModule } from 'ngx-bootstrap/datepicker';
-
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';

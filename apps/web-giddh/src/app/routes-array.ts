@@ -4,7 +4,6 @@ export const ROUTES = [
     { path: '404' },
     { path: 'app-login-success' },
     { path: 'token-verify' },
-    { path: 'create-invoice', loadChildren: () => import('./create/create.module').then(module => module.CreateModule) },
     { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule) },
     { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule) },
     { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
@@ -54,7 +53,6 @@ export const ROUTES = [
             { path: 'invoice', loadChildren: () => import('./invoice/invoice.module').then(module => module.InvoiceModule) },
             { path: 'daybook', loadChildren: () => import('./daybook/daybook.module').then(module => module.DaybookModule) },
             { path: 'purchase', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule) },
-            { path: 'about', loadChildren: () => import('./about/about.module').then(module => module.AboutModule) },
             { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(module => module.InventoryModule) },
             {
                 path: 'inventory-in-out',
@@ -68,7 +66,6 @@ export const ROUTES = [
                 data: { preload: true }
             },
             { path: 'audit-logs', loadChildren: () => import('./audit-logs/audit-logs.module').then(module => module.AuditLogsModule) },
-            { path: 'create-advance-receipt', loadChildren: () => import('./create-advance-receipt/create-advance-receipt.module').then(module => module.CreateAdvanceReceiptModule) },
             {
                 path: 'ledger/:accountUniqueName',
                 loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule),

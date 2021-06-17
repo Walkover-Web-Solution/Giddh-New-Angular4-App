@@ -15,9 +15,7 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public autoFocus: boolean = false;
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public animatePaneAside: EventEmitter<any> = new EventEmitter();
-    // @Input() public openGroupPane: boolean;
-
-    // public
+    
     public isAddStockOpen: boolean = false;
     public isAddGroupOpen: boolean = false;
     public hideFirstStep: boolean = false;
@@ -134,9 +132,7 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
         this.isAddGroupOpen = false;
         this.addGroup = false;
         this.addStock = false;
-        if (e) {
-            //
-        } else {
+        if (!e) {
             this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(false));
             this.closeAsideEvent.emit();
             let objToSend = { isOpen: false, isGroup: false, isUpdate: false };

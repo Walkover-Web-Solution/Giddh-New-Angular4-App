@@ -83,8 +83,6 @@
                                                     <span class="caret rotate-90"></span>
                                                 </div>
                                             </label>
-                                            <!-- (applyDaterangepicker)="periodChanged($event)" -->
-                                            <!-- [options]="datePickerOptions" -->
                                             <input id="daterangeInput" type="text" name="daterangeInput"
                                                 [options]="{'autoApply': true}" #dateRangePickerCmp daterangepicker
                                                 class="form-control daterangePicker"
@@ -116,44 +114,6 @@
                 <!-- ============================ GSTR3B SUMMARY ================================== -->
                 <div class="return-content" [ngClass]="{'content-disabled': !isMonthSelected || !activeCompanyGstNumber}">
                     <span class="btn-toolbar  pull-right">
-                        <!-- Rohit told me not remove this commented code  -->
-                        <!-- <div class="btn-group" dropdown #downloadReport="bs-dropdown" [autoClose]="false"
-                    (clickOutside)="downloadReport.hide()" [attachOutsideOnClick]="true">
-                    <button dropdownToggle type="button" class="btn dropdown-toggle grey-color no-btn"> <i
-                    class="icon-download"></i> Download</button>
-                    <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-                        aria-labelledby="button-triggers-manual" style="min-width: 350px;">
-                        <div class="pd-l2 pd-r2 pd-1">
-                            <div class="form-group">
-                                <label>Email Id <i class='fa fa-info-circle' tooltip-placement="top"
-                                                tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
-                                <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control" required
-                                    autocomplete="off" placeholder="Email address"/>
-                            </div>
-                            <div class="clearfix">
-                                <button class="btn btn-default" (click)="emailSheet(false)" [disabled]="!userEmail">Email Sheet</button>
-                                <button class="btn btn-default" (click)="emailSheet(true)" [disabled]="!userEmail">Email Detailed Sheet</button>
-                            </div>
-                        </div>
-                    </ul>
-                </div> -->
-
-                        <!-- <div class="btn-group" dropdown>
-                    <button type="button" class="btn btn-default mr-0">File Via</button>
-                    <button id="button-split" type="button" dropdownToggle
-                            class="btn btn-default dropdown-toggle dropdown-toggle-split"
-                            aria-controls="dropdown-split">
-                        <span class="caret"></span>
-                    <span class="sr-only">Split button!</span>
-                    </button>
-                    <ul id="dropdown-split" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-split">
-                        <li role="menuitem"><a class="dropdown-item" (click)="returnGstr3B = { via: 'VAYANA' }">Giddh Provider 11</a></li>
-                        <li role="menuitem"><a class="dropdown-item" (click)="returnGstr3B = { via: 'TAXPRO' }">Giddh Provider 2</a>
-                        </li>
-
-                    </ul>
-                </div> -->
-                        <!-- <button class="btn btn-primary" (click)="returnGstr3B = { isAuthenticate: true }"> File Now </button> -->
                     </span>
                     <div><img src="{{imgPath}}summary.svg" class="icon gstr-icon text-middle" />
                         <div class="return-top text-middle">
@@ -187,7 +147,6 @@
                                         </ng-container>
 
                                     </b> &nbsp;&nbsp;
-                                    <!-- <span class="label text-uppercase return-filed "> Filed </span> -->
                                 </div>
                                 <p class="text-muted"> {{localeData?.outward_supplies_details}} </p>
                             </div>
@@ -349,9 +308,6 @@
                                         </svg>
                                         <div class="font-large"><b>{{localeData?.create_transactions}}</b></div>
                                     </div>
-                                    <!-- <div class="col-md-3 col-sm-3 col-xs-3 text-center filing-steps cursor-pointer"><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon filing-step-icon"><path fill="#F41371" d="M230.1 153.9l20.9-19.5V248c0 2.8 2.2 5 5 5s5-2.2 5-5V133.6l20.6 22.1c1 1.1 2.3 1.6 3.7 1.6 1.2 0 2.4-.4 3.4-1.3 2-1.9 2.1-5 .2-7.1l-28.3-30.3c-.9-1-2.2-1.5-3.5-1.6-1.3 0-2.6.4-3.6 1.3l-30.3 28.3c-2 1.9-2.1 5-.2 7.1 2 2 5.1 2.1 7.1.2z"></path><path fill="#444" d="M406.5 251.5c-1-.9-2.3-1.4-3.7-1.4l-42.8 2c-1.4.1-2.7.7-3.6 1.8l-38.6 46H202.9l-42.1-46.2c-.9-1-2.1-1.6-3.4-1.6l-48.1-2.4c-1.4-.1-2.7.4-3.7 1.4-1 .9-1.6 2.3-1.6 3.6V392c0 2.8 2.2 5 5 5h294c2.8 0 5-2.2 5-5V255.2c0-1.4-.6-2.7-1.5-3.7zm-251.7 10.6l42.2 46.3c.9 1 2.3 1.6 3.7 1.6h119.5c1.5 0 2.9-.7 3.8-1.8l38.6-46.1 35.4-1.7V351H114v-91l40.8 2.1zM114 387v-26h284v26H114z"></path></svg>
-                            <div class="font-large"><b>2. Push to GSTN</b></div>
-                        </div> -->
                                     <div class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
                                         (click)="navigateToTab(1, GstReport.Gstr2)">
                                         <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
@@ -368,9 +324,6 @@
                                         </svg>
                                         <div class="font-large"><b>{{localeData?.reconcile_transactions}}</b></div>
                                     </div>
-                                    <!-- <div class="col-md-3 col-sm-3 col-xs-3 text-center filing-steps cursor-pointer"><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon filing-step-icon"><path fill="#444" d="M407.7 161.4L313 67.3c-.9-.9-2.2-1.5-3.5-1.5H127.8c-2.8 0-5 2.2-5 5v14.4h-15c-2.8 0-5 2.2-5 5v353.7c0 2.8 2.2 5 5 5h276.4c2.8 0 5-2.2 5-5v-14.4h15c2.8 0 5-2.2 5-5V164.9c0-1.3-.5-2.6-1.5-3.5zm-8.5 258.1h-10V184.2c0-.3 0-.6-.1-.9v-.1c-.1-.3-.1-.5-.2-.7 0-.1-.1-.2-.1-.3-.1-.2-.2-.4-.3-.5 0-.1-.1-.2-.2-.2-.2-.2-.3-.4-.5-.6l-.1-.1L293 86.6c-.2-.2-.4-.4-.7-.5-.1 0-.1-.1-.2-.1-.2-.1-.4-.2-.5-.3-.1 0-.2-.1-.3-.1-.2-.1-.5-.2-.7-.2h-.1c-.3-.1-.6-.1-.9-.1H132.8v-9.4h174.6l91.8 91.2v252.4zM294.5 102.2l77.6 77.1h-77.6v-77.1zM103 290c0-2.8 2.2-5 5-5h4.8V95.2h171.7v89.1c0 2.8 2.2 5 5 5h89.7V285h4.8c2.8 0 5 2.2 5 5s-2.2 5-5 5h-4.8v143.8H112.8V295H108c-2.8 0-5-2.2-5-5z"></path><path fill="#8E54FF" d="M108 295h127.6c-3.2 5.8-6.7 11.4-10.4 16.7-1.6 2.3-1 5.4 1.3 7 .9.6 1.9.9 2.8.9 1.6 0 3.1-.8 4.1-2.2 4.1-6 8-12.3 11.7-18.8 5.3 12.5 15.4 20.5 19.2 23.2.9.6 1.9.9 2.9.9 1.6 0 3.1-.7 4.1-2.1 1.6-2.3 1.1-5.4-1.2-7-3.1-2.2-11.3-8.7-15.6-18.5H384c2.8 0 5-2.2 5-5s-2.2-5-5-5H271.9c4.8-3.5 8-8 8.8-13.3.2-1.2 1.7-11.7-6.6-17.9-7.3-5.5-16.1-2.6-17.1-2.2-4 1.4-7 4.1-9.2 7.5-1.9-3.2-4.5-5.9-7.8-7.6-.9-.5-9.3-4.5-17.3 0-9 5.1-8.8 15.7-8.8 16.9.2 6.3 4 12.2 10 16.5H108c-2.8 0-5 2.2-5 5s2.2 5 5 5zm152.4-34s1.5-.5 3.4-.5c1.4 0 3.1.3 4.4 1.3 3.5 2.6 2.7 8.2 2.7 8.3-.8 5-7.8 10.7-19 11.4.2-1.6.3-3.2.3-4.9 1-6.8 3.5-13.9 8.2-15.6zm-32.7-.8c1.1-.6 2.2-.8 3.3-.8 2.4 0 4.5 1 4.5 1 4.4 2.2 6.6 8.9 6.7 15.6-.2 1.7-.3 3.4-.4 4.9 0 .2-.1.4-.1.6h-.2c-11.3-2.1-17.3-8.4-17.5-13.5 0 0-.1-5.6 3.7-7.8z"></path></svg>
-                            <div class="font-large"><b>4. File return</b></div>
-                        </div> -->
                                 </div>
                             </div>
                             <!---->

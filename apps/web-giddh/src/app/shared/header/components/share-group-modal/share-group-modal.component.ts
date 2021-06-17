@@ -9,8 +9,8 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { Observable, ReplaySubject } from 'rxjs';
-import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
+import { clone, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'share-group-modal',
@@ -60,7 +60,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
             entity: 'group',
             entityUniqueName: activeGrp.uniqueName,
         };
-        let selectedPermission = _.clone(this.selectedPermission);
+        let selectedPermission = clone(this.selectedPermission);
         this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission.toLowerCase()));
         this.email = '';
         this.selectedPermission = '';
@@ -70,40 +70,12 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'group', groupUniqueName));
     }
 
-    // public callbackFunction(activeGroup: any, email: string, currentPermission: string, newPermission: string) {
-    //     let userRole = {
-    //       emailId: email,
-    //       entity: 'group',
-    //       entityUniqueName: activeGroup.uniqueName,
-    //       updateInBackground: true,
-    //       newPermission
-    //     };
-
-    //     this.store.dispatch(this.accountActions.updateEntityPermission(userRole, currentPermission));
-    // }
-
     public updatePermission(model: ShareRequestForm, event: any) {
-        let data = _.cloneDeep(model);
+        let data = cloneDeep(model);
         let newPermission = event.target.value;
         data.roleUniqueName = newPermission;
         this.store.dispatch(this.accountActions.updateEntityPermission(data, newPermission, 'group'));
     }
-
-    // public checkIfUserAlreadyHavingPermission(email: string, currentPermission: string, permissionUniqueName: string, activeGroup: any, event: any) {
-    //   this.activeGroupSharedWith$.take(1).subscribe((data) => {
-    //     if (data) {
-    //       let roleIndex = data.findIndex((p) => {
-    //         return p.role.uniqueName === permissionUniqueName;
-    //       });
-    //       if (roleIndex > -1) {
-    //         this._toasty.errorToast(`${email} already have ${permissionUniqueName} permission.`);
-    //         this.store.dispatch(this.groupWithAccountsAction.sharedGroupWith(activeGroup.uniqueName));
-    //       } else {
-    //         this.callbackFunction(activeGroup, email, currentPermission, permissionUniqueName);
-    //       }
-    //     }
-    //   });
-    // }
 
     public closeModal() {
         this.email = '';

@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { CustomActions } from '../../store/customActions';
 import { ToasterService } from '../../services/toaster.service';
@@ -10,6 +10,7 @@ import { saveAs } from 'file-saver';
 import { DaybookQueryRequest, DayBookRequestModel } from '../../models/api-models/DaybookRequest';
 import { DayBookResponseModel } from '../../models/api-models/Daybook';
 import { Observable } from 'rxjs';
+import { GeneralService } from '../../services/general.service';
 
 @Injectable()
 export class DaybookActions {
@@ -47,7 +48,7 @@ export class DaybookActions {
                             if (res.body.type === "message") {
                                 this._toasty.successToast(res.body.file);
                             } else {
-                                let blob = this.base64ToBlob(res.body.file, res.queryString.requestType, 512);
+                                let blob = this.generalService.base64ToBlob(res.body.file, res.queryString.requestType, 512);
                                 let type = res.queryString.requestType === 'application/pdf' ? '.pdf' : '.xls';
                                 saveAs(blob, 'response' + type);
                             }
@@ -69,7 +70,7 @@ export class DaybookActions {
                             if (res.body.type === "message") {
                                 this._toasty.successToast(res.body.file);
                             } else {
-                                let blob = this.base64ToBlob(res.body.file, res.queryString.requestType, 512);
+                                let blob = this.generalService.base64ToBlob(res.body.file, res.queryString.requestType, 512);
                                 let type = res.queryString.requestType === 'application/pdf' ? '.pdf' : '.xls';
                                 saveAs(blob, 'response' + type);
                             }
@@ -83,28 +84,8 @@ export class DaybookActions {
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,
+        private generalService: GeneralService,
         private _daybookService: DaybookService) {
-    }
-
-    public base64ToBlob(b64Data, contentType, sliceSize) {
-        contentType = contentType || '';
-        sliceSize = sliceSize || 512;
-        let byteCharacters = atob(b64Data);
-        let byteArrays = [];
-        let offset = 0;
-        while (offset < byteCharacters.length) {
-            let slice = byteCharacters.slice(offset, offset + sliceSize);
-            let byteNumbers = new Array(slice.length);
-            let i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
-            }
-            let byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
-        }
-        return new Blob(byteArrays, { type: contentType });
     }
 
     public GetDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): CustomActions {

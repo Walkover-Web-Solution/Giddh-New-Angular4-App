@@ -10,7 +10,7 @@ import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
 import { ActivatedRoute } from '@angular/router';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
@@ -139,7 +139,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         if (s && s.fileReturn && s.fileReturn.currentValue && s.fileReturn.currentValue.isAuthenticate) {
             if (this.gstAuthenticated) {
                 this.fileGstReturnV2();
-                // this.isVayanaAuthenticated ? this.fileGstReturn('VAYANA') : this.fileGstReturn('TAXPRO');
             } else {
                 this.toggleSettingAsidePane(null, 'VAYANA');
             }
@@ -175,10 +174,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         if (selectedService) {
-            if (selectedService === 'RECONCILE') {
-                let checkIsAuthenticated;
-                this.gstAuthenticated$.pipe(take(1)).subscribe(auth => checkIsAuthenticated = auth);
-            }
             this.selectedService = selectedService;
         }
         this.GstAsidePaneState = this.GstAsidePaneState === 'out' ? 'in' : 'out';

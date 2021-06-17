@@ -10,8 +10,6 @@ import { ReverseChargeService } from '../../../services/reversecharge.service';
 import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { Router } from '@angular/router';
-import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -103,8 +101,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         private toasty: ToasterService,
         private cdRef: ChangeDetectorRef,
         private reverseChargeService: ReverseChargeService,
-        private router: Router,
-        private generalActions: GeneralActions,
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private modalService: BsModalService,
