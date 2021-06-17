@@ -2045,7 +2045,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.firstBaseAccountSelected = resp[0].particular.uniqueName;
 
                         const initialAccounts: Array<IOption> = [];
-                        this.vm.selectedLedger.transactions.map(t => {
+                        this.vm.selectedLedger.transactions?.map(t => {
                             if (this.vm.selectedLedger.discounts && this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
                                 let category = this.vm.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
                                 if (this.vm.isValidCategory(category)) {

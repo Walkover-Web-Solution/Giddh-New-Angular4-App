@@ -802,7 +802,7 @@ export class GeneralService {
         const visibleMenuItems = cloneDeep(itemList);
         itemList.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
-            menuItem.items.forEach(item => {
+            menuItem.items?.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem.uniqueName === item.link);
                 if (isValidItem || item.alwaysPresent) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
