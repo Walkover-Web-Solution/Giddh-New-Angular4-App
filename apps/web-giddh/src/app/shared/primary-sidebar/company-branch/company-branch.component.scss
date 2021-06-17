@@ -51,7 +51,12 @@
             display: none;
         }
     }
-    .company-list {
+    .total-company{
+        .company-count{
+            color: $comet;
+        }
+    }
+    .company-list{
         height: calc(66vh - 60px) !important;
         overflow: auto;
         margin: 0 -20px;
@@ -160,10 +165,10 @@
     }
     .profile-user {
         position: fixed;
-        bottom: -20px;
+        bottom: -14px;
         width: 240px;
         left: 0;
-        padding: 0;
+        padding: 5px 0 0;
         border-top: 1px solid $gainsboro;
         background-color: $white;
         z-index: 990;
@@ -185,14 +190,15 @@
         }
         .profile-logout{
             button{
-                background-color: $dark-fog;
-                border: 1px solid $dark-fog;
+                background-color: $white;
+                border: 1px solid $white;
                 padding: 14px 15px;
                 color: $trout;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 min-width: 120px;
+                border-left-color: $dark-fog;
             }
         }
     }
@@ -203,12 +209,68 @@
             left: 100px;
         }
     }
+    .company-branch-opt-2{
+        .company-list{
+            height: calc(75vh - 120px) !important;
+            ul{
+                position: relative;
+                li{
+                    padding: 0;
+                    margin: 0 -20px;
+                    span{
+                        padding: 8px 20px;
+                        color: $slate;
+                        &.company-name {
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: space-between !important;
+                        }
+                    }
+                    &.btn-group{
+                        &.open{
+                            span{
+                                &.dropdown-toggle{
+                                    padding: 8px 20px;
+                                }
+                                &.active{
+                                    background-color: $dark-alice-blue;
+                                    &.sticky-company{
+                                        position: sticky;
+                                        top: 0;
+                                        z-index: 991;
+                                    }
+                                }
+                                .icon-down-new{
+                                    transform: rotate(180deg)
+                                }
+                            }
+                            background-color: transparent;
+                            ul{
+                                padding: 0 20px;
+                                li{
+                                    span{
+                                        padding: 0;
+                                    }
+                                }
+                            }
+                            .total-branches{
+                                padding-top: 5px;
+                            }
+                        }
+                    }
+                    a{
+                        padding: 8px 20px !important;
+                    }
+                }
+            }
+        }
+    }
 }
-.digit-blue {
-    color: $cornflower;
+.digit-blue{
+    color: $cornflower !important;
 }
-.digit-orange {
-    color: $orange-new;
+.digit-orange{
+    color: $orange-new !important;
 }
 
 @media screen and (max-height: 768px) {
