@@ -1777,7 +1777,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
             let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
             if (tax) {
-                if (!modal.appliedOtherTax.name) {
+                if (!modal.appliedOtherTax?.name) {
                     entry.otherTaxModal.appliedOtherTax.name = tax.name;
                 }
                 if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
