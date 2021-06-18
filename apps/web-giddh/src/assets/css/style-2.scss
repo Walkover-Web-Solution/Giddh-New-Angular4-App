@@ -8418,8 +8418,8 @@ body.update-scroll-hidden {
     }
 }
 .company-branch-dropdown{
-    .custom-tabs{
-        ul{
+    .custom-tabs {
+        ul {
             &.nav.nav-tabs{
                 position: inherit !important;
                 background-color: transparent;
@@ -8437,12 +8437,45 @@ body.update-scroll-hidden {
                         }
                     }
                     padding-right: 0;
+                    &.icon-company{
+                        &:before{
+                            position: absolute;
+                            left: 20px;
+                        }
+                    }
                     a{
                         padding: 0 10px !important;
                         min-width: 110px;
                         font-family: 'opensans-regular';
                         color: $grey-chateau !important;
                         padding-left: 40px !important;
+                        padding-top: 5px !important;
+                    }
+                }
+            }
+            .nav-item{
+                &.icon-company{
+                    &.active{
+                        &::before{
+                            color: $midnight-blue;
+                        }
+                    }
+                    &::before{
+                        position: absolute !important;
+                        left: 20px !important;
+                        top: 5px;
+                    }
+                }
+                &.icon-branch1{
+                    &.active{
+                        &::before{
+                            color: $midnight-blue;
+                        }
+                    }
+                    &::before{
+                        position: absolute !important;
+                        left: 20px !important;
+                        top: 5px;
                     }
                 }
             }
