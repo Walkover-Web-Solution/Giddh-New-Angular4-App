@@ -81,7 +81,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         private _route: Router, private companyActions: CompanyActions,
         private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService, private toasty: ToasterService, public route: ActivatedRoute) {
 
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && !_.isEmpty(response)) {
                 let companyInfo = _.cloneDeep(response);
@@ -131,6 +130,8 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+        
         this.transactionLimitTooltipContent = this.localeData?.subscription?.transaction_limit_content;
         this.unlimitedUsersTooltipContent = this.localeData?.subscription?.unlimited_users_content;
         this.unlimitedCustomersVendorsTooltipContent = this.localeData?.subscription?.unlimited_customers_content;

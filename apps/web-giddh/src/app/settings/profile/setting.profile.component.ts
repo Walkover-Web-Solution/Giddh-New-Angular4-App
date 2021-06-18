@@ -192,6 +192,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             this.isMobileScreen = result.matches;
         });
 
+        this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress), takeUntil(this.destroyed$));
+    }
+
+    public ngOnInit() {
         this.getCountry();
         this.getCurrency();
 
@@ -201,36 +205,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         digitAfterDecimal.map(decimal => {
             this.decimalDigitSource.push({ value: decimal.value, label: decimal.name });
         });
-        this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress), takeUntil(this.destroyed$));
 
-    }
-
-    /**
-     * This will return page heading based on active tab
-     *
-     * @param {boolean} event
-     * @memberof SettingProfileComponent
-     */
-    public getPageHeading(): void {
-        let pageHeading = "";
-
-        if (this.isMobileScreen) {
-            switch (this.currentTab) {
-                case 'personal':
-                    pageHeading = this.personalInformationTabHeading;
-                    break;
-                case 'address':
-                    pageHeading = this.companyProfileObj?.taxType ? (this.localeData?.address + this.companyProfileObj?.taxType) : this.localeData?.addresses;
-                    break;
-                case 'other':
-                    pageHeading = this.localeData?.other;
-                    break;
-            }
-        }
-        this.pageHeading.emit(pageHeading);
-    }
-
-    public ngOnInit() {
         this.initProfileObj();
         this.dataSource = (text$: Observable<any>): Observable<any> => {
             return text$.pipe(
@@ -1228,5 +1203,30 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
             this.getPageHeading();
         }
+    }
+
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof SettingProfileComponent
+     */
+     public getPageHeading(): void {
+        let pageHeading = "";
+
+        if (this.isMobileScreen) {
+            switch (this.currentTab) {
+                case 'personal':
+                    pageHeading = this.personalInformationTabHeading;
+                    break;
+                case 'address':
+                    pageHeading = this.companyProfileObj?.taxType ? (this.localeData?.address + this.companyProfileObj?.taxType) : this.localeData?.addresses;
+                    break;
+                case 'other':
+                    pageHeading = this.localeData?.other;
+                    break;
+            }
+        }
+        this.pageHeading.emit(pageHeading);
     }
 }

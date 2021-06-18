@@ -95,6 +95,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                 return s.session.user.countryCode;
             }
         }), takeUntil(this.destroyed$));
+        
         this.isAddNewMobileNoInProcess$ = this.store.pipe(select(s => s.login.isAddNewMobileNoInProcess), takeUntil(this.destroyed$));
         this.isAddNewMobileNoSuccess$ = this.store.pipe(select(s => s.login.isAddNewMobileNoSuccess), takeUntil(this.destroyed$));
         this.isVerifyAddNewMobileNoInProcess$ = this.store.pipe(select(s => s.login.isVerifyAddNewMobileNoInProcess), takeUntil(this.destroyed$));

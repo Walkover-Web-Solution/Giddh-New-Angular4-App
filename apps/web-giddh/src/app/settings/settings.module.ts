@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
-
 import { ContactModule } from '../contact/contact.module';
 import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
-import { OmitByKeyPipeModule } from '../shared/helpers/pipes/omitBy/omitBy.module';
 import { SharedModule } from '../shared/shared.module';
 import { BranchComponent } from './branch/branch.component';
 import { DiscountComponent } from './discount/discount.component';
@@ -77,7 +75,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ContactModule,
         ReactiveFormsModule,
         CurrencyModule,
-        OmitByKeyPipeModule,
         SettingsServiceModule,
         PerfectScrollbarModule,
         TextMaskModule,
