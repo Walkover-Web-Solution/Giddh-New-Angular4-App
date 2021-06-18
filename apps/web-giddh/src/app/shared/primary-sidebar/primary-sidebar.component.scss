@@ -8,7 +8,9 @@
     padding-top: 0 !important;
     .company-branch-block {
         background-color: $solitude-light;
-        padding: 14px 0;
+        ul.branch-connection{
+            padding: 14px 0;
+        }
         #button-company-branch{
             list-style: none;
         }
@@ -55,16 +57,8 @@
                 right: 5px;
             }
             .icon-cross{
-                display: none;
-            }
-            &.open{
-                .icon-down-new {
-                    display: none;
-                }
-                .icon-cross{
-                    display: flex;
-                    font-size: 12px;
-                }
+                display: flex;
+                font-size: 12px;
             }
             .head-nav {
                 background: $white-smoke;
@@ -220,6 +214,8 @@
             border: none;
             margin: 0;
             padding: 0;
+            width: 100%;
+            display: block;
         }
     }
     .search-box {
@@ -581,9 +577,13 @@
                     }
                 }
             }
+
         }
     }
     &.sidebar-collapse {
+        .company-branch-nav{
+            display: none !important;
+        }
         .company-full-name {
             margin-top: 5px;
             display: none !important;
@@ -664,7 +664,7 @@
                 }
             }
             .company-branch-nav{
-                display: none;
+                display: block;
             }
         }
         .account-dropdown-collapse {
