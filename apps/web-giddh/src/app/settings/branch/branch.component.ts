@@ -122,6 +122,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private settingsUtilityService: SettingsUtilityService,
         private toasterService: ToasterService
     ) {
+        
+    }
+
+    public ngOnInit() {
         this.getOnboardingForm();
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -175,9 +179,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.companies$ = observableOf(orderBy(companiesWithSuperAdminRole, 'name'));
             }
         })), takeUntil(this.destroyed$)).subscribe();
-    }
-
-    public ngOnInit() {
+        
         this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 if (res.isBranch) {

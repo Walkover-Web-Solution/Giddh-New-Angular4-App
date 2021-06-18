@@ -102,32 +102,16 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
-        this.store.dispatch(this.companyActions.getTax());
 
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
-
-    }
-
-    /**
-     * This will return page heading based on active tab
-     *
-     * @param {boolean} event
-     * @memberof ExpensesComponent
-     */
-     public getPageHeading(): string {
-        if(this.currentSelectedTab === 'pending') {
-            return this.localeData?.pending;
-        }
-        else if(this.currentSelectedTab === 'rejected') {
-            return this.localeData?.rejected;
-        }
     }
 
     public ngOnInit() {
+        this.store.dispatch(this.companyActions.getTax());
         this.getActiveTab();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -428,6 +412,21 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                 this.pettycashRequest.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
             }
             this.getPettyCashRejectedReports(this.pettycashRequest);
+        }
+    }
+
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof ExpensesComponent
+     */
+    public getPageHeading(): string {
+        if (this.currentSelectedTab === 'pending') {
+            return this.localeData?.pending;
+        }
+        else if (this.currentSelectedTab === 'rejected') {
+            return this.localeData?.rejected;
         }
     }
 }

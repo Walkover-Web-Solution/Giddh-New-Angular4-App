@@ -129,7 +129,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
             description: []
         });
 
-        this.store.dispatch(this._settingsTagActions.GetALLTags());
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 
@@ -158,7 +157,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-
+        this.store.dispatch(this._settingsTagActions.GetALLTags());
+        
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {

@@ -73,7 +73,6 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         this.paymentActionFormObj = new InvoicePaymentRequest();
         this.paymentActionFormObj.paymentDate = moment().toDate();
         this.isActionSuccess$ = this.store.pipe(select(s => s.invoice.invoiceActionUpdated), takeUntil(this.destroyed$));
-        this.store.dispatch(this._settingsTagActions.GetALLTags());
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
@@ -100,6 +99,8 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     };
 
     public ngOnInit() {
+        this.store.dispatch(this._settingsTagActions.GetALLTags());
+        
         this.store.pipe(select(s => s.settings.tags), takeUntil(this.destroyed$)).subscribe((tags => {
             if (tags && tags.length) {
                 let arr: IOption[] = [];

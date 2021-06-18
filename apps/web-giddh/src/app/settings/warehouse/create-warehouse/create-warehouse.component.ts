@@ -93,6 +93,14 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
             name: ['', Validators.required],
             address: ['']
         });
+    }
+
+    /**
+     * Initializes the component
+     *
+     * @memberof CreateWarehouseComponent
+     */
+    public ngOnInit(): void {
         this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.name) {
                 this.companyDetails = {
@@ -112,14 +120,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                 }
             }
         });
-    }
-
-    /**
-     * Initializes the component
-     *
-     * @memberof CreateWarehouseComponent
-     */
-    public ngOnInit(): void {
+        
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.loadLinkedEntities();
         this.loadAddresses('GET', { count: 0 });

@@ -130,7 +130,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.currentBranchNameAlias = companyInfo.nameAlias;
             }
         });
+    }
 
+    public ngOnInit() {
         let branchFilterRequest = new BranchFilterRequest();
 
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
@@ -182,32 +184,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.loadBranchAndWarehouseDetails();
             }
         });
-    }
 
-    /**
-     * This will return page heading based on active tab
-     *
-     * @param {boolean} event
-     * @memberof InventoryComponent
-     */
-     public getPageHeading(): string {
-        if(this.isMobileView){
-            if(this.activeTabIndex === 0) {
-                return "Inventory";
-            }
-            else if(this.activeTabIndex === 1) {
-                return "Job Work";
-            }
-            else if(this.activeTabIndex === 2) {
-                return "Manufacturing";
-            }
-            else if(this.activeTabIndex === 3) {
-                return "Report";
-            }
-        }
-    }
-
-    public ngOnInit() {
         this.isBranchVisible$ = this.store.pipe(select(s => s.inventory.showBranchScreen), takeUntil(this.destroyed$));
         this.store.dispatch(this.companyActions.getTax());
         document.querySelector('body').classList.add('inventory-page');
@@ -525,6 +502,29 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             let currentEntityUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : this.generalService.companyUniqueName;
             this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: `${branch.alias || branch.name}`, value: branch.uniqueName }));
             this.loadBranchWarehouse(currentEntityUniqueName);
+        }
+    }
+
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof InventoryComponent
+     */
+     public getPageHeading(): string {
+        if(this.isMobileView){
+            if(this.activeTabIndex === 0) {
+                return "Inventory";
+            }
+            else if(this.activeTabIndex === 1) {
+                return "Job Work";
+            }
+            else if(this.activeTabIndex === 2) {
+                return "Manufacturing";
+            }
+            else if(this.activeTabIndex === 3) {
+                return "Report";
+            }
         }
     }
 }
