@@ -180,7 +180,7 @@
                                 <h2 class="section-head pb-0">{{localeData?.subscription?.associated_companies}}</h2>
                                 <div class="clearfix">
                                     <div class="active d-inline-block middle"
-                                        *ngIf="activeCompany?.subscription?.status === 'active' || calculateRemainingDays(activeCompany?.subscription?.expiry) === commonLocaleData?.app_active">
+                                        *ngIf="activeCompany?.subscription?.status === 'active' && calculateRemainingDays(activeCompany?.subscription?.expiry) === commonLocaleData?.app_active">
                                         <span class="green-dote"> </span> {{commonLocaleData?.app_active}}
                                     </div>
                                     <div class="text-warning font-14 d-inline-block middle"
