@@ -20,7 +20,7 @@
     </div>
     <tabset class="custom-tabs position-relative" #staticTabs>
         <i class="icon-copmany-branch-connect"></i>
-        <tab [heading]="commonLocaleData?.app_company" (selectTab)="tabChanged('branch')">
+        <tab [heading]="commonLocaleData?.app_company" [customClass]="'icon-company'" (selectTab)="tabChanged('branch')">
             <div>
                 <p class="font-12 d-flex justify-content-between mt-2">
                     <span>{{companyList?.length}} {{localeData?.companies}}</span>
@@ -38,7 +38,7 @@
                             (click)="getCompanyBranches(company)"> <i class="icon-company mr-2"></i>
                             <span class="company-name-right">{{ company.name }}</span>
                         </span>
-                        <ul id="dropdown-basic" *dropdownMenuppri class="dropdown-menu" role="menu"
+                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                             aria-labelledby="button-basic">
                             <li class="create-branch mt-1" [routerLink]="['/pages/settings/create-branch']"
                                 *ngIf="activeCompany?.uniqueName === company.uniqueName">{{localeData?.create_branch}}
@@ -73,7 +73,7 @@
                 <giddh-page-loader *ngIf="(isCompanyRefreshInProcess$ | async)"></giddh-page-loader>
             </div>
         </tab>
-        <tab [heading]="commonLocaleData?.app_branch" [disabled]="!companyBranches?.name"
+        <tab [heading]="commonLocaleData?.app_branch" [customClass]="'icon-branch1'" [disabled]="!companyBranches?.name"
             (selectTab)="tabChanged('branch')">
             <div>
                 <p class="font-12 d-flex justify-content-between mt-2">
