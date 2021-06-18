@@ -9,11 +9,10 @@ import { ImportExcelRequestStates } from '../../store/import-excel/import-excel.
 import { take, takeUntil } from 'rxjs/operators';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
-import { base64ToBlob } from '../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment';
-import { GeneralService } from '../../services/general.service';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'import-report',
@@ -81,7 +80,7 @@ export class ImportReportComponent implements OnInit, OnDestroy {
     }
 
     public downloadItem(item: ImportExcelStatusResponse) {
-        let blob = base64ToBlob(item.fileBase64, 'application/vnd.ms-excel', 512);
+        let blob = this.generalService.base64ToBlob(item.fileBase64, 'application/vnd.ms-excel', 512);
         return saveAs(blob, item.fileName);
     }
 

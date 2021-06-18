@@ -187,10 +187,10 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * Hides the welcome page modal once the user presses 'back' button
      * on Welcome page
      *
-     * @returns {Promise<any>} Promise to indicate successful hiding of model
+     * @returns {Promise<void>} Promise to indicate successful hiding of model
      * @memberof WarehouseComponent
      */
-    public hideWelcomePage(): Promise<any> {
+    public hideWelcomePage(): Promise<void> {
         return new Promise((resolve) => {
             if (this.welcomePageModalInstance) {
                 this.welcomePageModalInstance.hide();
@@ -458,10 +458,10 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * Hides the create company modal
      *
      * @private
-     * @returns {Promise<any>} Promise to carry out further operation
+     * @returns {Promise<void>} Promise to carry out further operation
      * @memberof WarehouseComponent
      */
-    private hideAddCompanyModal(): Promise<any> {
+    private hideAddCompanyModal(): Promise<void> {
         return new Promise((resolve) => {
             if (this.warehouseOnBoardingModal && this.warehouseOnBoardingModal.isShown) {
                 this.warehouseOnBoardingModal.hide();

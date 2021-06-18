@@ -67,7 +67,6 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
     switch (action.type) {
 
         case EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS: {
-            let res: BaseResponse<IEwayBillAllList, any> = action.payload;
             return Object.assign({}, state, {
                 isGetAllEwaybillRequestSuccess: false,
                 isGetAllEwaybillRequestInProcess: true
@@ -165,7 +164,6 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
                 d.isUserLoggedInEwaybillSuccess = false;
                 return Object.assign({}, state, d);
             }
-            return state;
         }
         // Transporter
 
@@ -210,7 +208,6 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
             else {
                 return Object.assign({}, state, { updateTransporterInProcess: false, updateTransporterSuccess: false });
             }
-            return state;
         }
         case EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER_RESPONSE: {
             let newState = _.cloneDeep(state);
@@ -246,7 +243,6 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
                 newState.updateEwayvehicleSuccess = false;
                 return Object.assign({}, state, newState);
             }
-            return state;
         }
         // CANCEL EWAY BILL
         case EWAYBILL_ACTIONS.CANCEL_EWAYBILL: {

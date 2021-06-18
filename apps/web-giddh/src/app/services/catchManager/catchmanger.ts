@@ -58,7 +58,7 @@ export class GiddhErrorHandler {
                         this.store.dispatch({ type: 'LoginOut' });
                     } else if (data.code === 'INVALID_JSON') {
                         let dataToSend = {
-                            requestBody: '', // r.error.request ? r.error.request : request
+                            requestBody: '',
                             queryString: data.queryString,
                             method: '',
                             url: r.url,
@@ -70,7 +70,6 @@ export class GiddhErrorHandler {
                         this.store.dispatch({ type: 'REPORT_INVALID_JSON', payload: dataToSend });
                     } else if (data.code === '') {
                         // handle unshared company response
-                        // this.store.dispatch({type: 'CompanyRefresh'});
                     }
                     if (typeof data !== 'string') {
                         data.request = request;
@@ -120,7 +119,6 @@ export function HandleCatch<TResponce, TRequest>(r: any, request?: any, queryStr
         data.queryString = queryString;
     } else {
         if (r.text() === '') {
-            //
             data.status = 'error';
             data.message = 'Something went wrong';
             data.body = null;
@@ -128,7 +126,6 @@ export function HandleCatch<TResponce, TRequest>(r: any, request?: any, queryStr
         } else {
             data = r.json();
             if (data.code === 'SESSION_EXPIRED_OR_INVALID') {
-                // this.store.dispatch('LoginOut');
                 this.store.dispatch({ type: 'LoginOut' });
             }
         }

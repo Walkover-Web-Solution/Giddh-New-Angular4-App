@@ -93,31 +93,6 @@ export class AgingAdvanceSearchModal {
     name: string[];
 }
 
-export class CustomerAdvanceSearchModal {
-    openingBalance: number;
-    openingBalanceType: string = "debit";
-    openingBalanceGreaterThan: boolean;
-    openingBalanceLessThan: boolean;
-    openingBalanceEqual: boolean;
-    closingBalance: number;
-    closingBalanceType: string = "debit";
-    closingBalanceGreaterThan: boolean;
-    closingBalanceLessThan: boolean;
-    closingBalanceEqual: boolean;
-    creditTotal: number;
-    creditTotalGreaterThan: boolean;
-    creditTotalLessThan: boolean;
-    creditTotalEqual: boolean;
-    debitTotal: number;
-    debitTotalGreaterThan: boolean;
-    debitTotalLessThan: boolean;
-    debitTotalEqual: boolean;
-    openingBalanceNotEqual: boolean;
-    closingBalanceNotEqual: boolean;
-    creditTotalNotEqual: boolean;
-    debitTotalNotEqual: boolean;
-}
-
 export class CustomerVendorFiledFilter {
     public selectAll: boolean = false;
     public parentGroup: boolean = false;
@@ -173,7 +148,6 @@ export class BulkUpdateInvoiceNote extends BulkUpdateInvoice {
  * @extends {BulkUpdateInvoice}
  */
 export class BulkUpdateInvoiceTemplates extends BulkUpdateInvoice {
-
     templateUniqueName: string;
 }
 /**

@@ -1,13 +1,11 @@
 import { Observable, of, ReplaySubject } from 'rxjs';
-
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 
 @Component({
     selector: 'generic-aside-menu-account',
@@ -29,8 +27,6 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     public activeGroupUniqueName: string;
     public isGstEnabledAcc: boolean = true;
     public isHsnSacEnabledAcc: boolean = false;
-    public fetchingAccUniqueName$: Observable<boolean>;
-    public isAccountNameAvailable$: Observable<boolean>;
     public createAccountInProcess$: Observable<boolean>;
     public updateAccountInProcess$: Observable<boolean>;
     public showBankDetail: boolean = false;
@@ -75,14 +71,11 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         private accountsAction: AccountsAction
     ) {
         // account-add component's property
-        this.fetchingAccUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingAccUniqueName), takeUntil(this.destroyed$));
-        this.isAccountNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isAccountNameAvailable), takeUntil(this.destroyed$));
         this.createAccountInProcess$ = this.store.pipe(select(state => state.sales.createAccountInProcess), takeUntil(this.destroyed$));
         this.updateAccountInProcess$ = this.store.pipe(select(state => state.sales.updateAccountInProcess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        //
         this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
     }
 

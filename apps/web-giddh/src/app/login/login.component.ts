@@ -8,7 +8,6 @@ import { Configuration } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
-    LinkedInRequestModel,
     SignupwithEmaillModel,
     SignupWithMobile,
     VerifyEmailModel,
@@ -18,14 +17,11 @@ import {
 import {
     AuthService,
     GoogleLoginProvider,
-    LinkedinLoginProvider,
     SocialUser
 } from "../theme/ng-social-login-module/index";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
-
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
-import { AuthenticationService } from "../services/authentication.service";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { isCordova } from "@giddh-workspaces/utils";
 import { GeneralService } from "../services/general.service";
@@ -36,14 +32,11 @@ import { GeneralService } from "../services/general.service";
     styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent implements OnInit, OnDestroy {
-
-
     public isLoginWithMobileSubmited$: Observable<boolean>;
     @ViewChild("emailVerifyModal", { static: true }) public emailVerifyModal: ModalDirective;
     public isLoginWithEmailSubmited$: Observable<boolean>;
     @ViewChild("mobileVerifyModal", { static: true }) public mobileVerifyModal: ModalDirective;
     @ViewChild("twoWayAuthModal", { static: true }) public twoWayAuthModal: ModalDirective;
-    // @ViewChild('forgotPasswordModal') public forgotPasswordModal: ModalDirective;
 
     public isSubmited: boolean = false;
     public mobileVerifyForm: FormGroup;
@@ -78,17 +71,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     public showForgotPassword: boolean = false;
     public forgotStep: number = 0;
     public retryCount: number = 0;
-    private imageURL: string;
-    private email: string;
-    private name: string;
-    private token: string;
     private userUniqueKey: string;
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-    //Button to hide linkedIn button till functionality is available
-    public showLinkedInButton = false;
     /** Modal config */
     public modalConfig: {
         backdrop: 'static'
@@ -100,7 +86,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         private loginAction: LoginActions,
         private authService: AuthService,
         @Inject(DOCUMENT) private document: Document,
-        private _authService: AuthenticationService,
         private _generalService: GeneralService
     ) {
         this.urlPath = (isElectron || isCordova()) ? "" : AppUrl + APP_FOLDER;
@@ -128,7 +113,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             return state.login.isVerifyEmailSuccess;
         }), takeUntil(this.destroyed$)).subscribe((value) => {
             if (value) {
-                // this.router.navigate(['home']);
+                
             }
         });
 
@@ -136,7 +121,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             return state.login.isVerifyMobileSuccess;
         }), takeUntil(this.destroyed$)).subscribe((value) => {
             if (value) {
-                // this.router.navigate(['home']);
+                
             }
         });
 
@@ -217,13 +202,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                                 this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
                                 break;
                             }
-                            case "LINKEDIN": {
-                                let obj: LinkedInRequestModel = new LinkedInRequestModel();
-                                obj.email = user.email;
-                                obj.token = user.token;
-                                this.store.dispatch(this.loginAction.signupWithLinkedin(obj));
-                                break;
-                            }
                             default: {
                                 // do something
                                 break;
@@ -262,11 +240,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.isLoginWithPasswordSuccessNotVerified$.subscribe(res => {
-            if (res) {
-                //
-            }
-        });
         this.isLoginWithPasswordIsShowVerifyOtp$.subscribe(res => {
             if (res) {
                 this.showTwoWayAuthModal();
@@ -279,13 +252,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             return this.resetTwoWayAuthModal();
         }
     }
-
-    // public showEmailModal() {
-    //     this.emailVerifyModal.show();
-    //     this.emailVerifyModal.onShow.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-    //         this.isSubmited = false;
-    //     });
-    // }
 
     public LoginWithEmail(email: string) {
         let data = new SignupwithEmaillModel();
@@ -357,16 +323,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.loginAction.SignupWithMobileRequest(data));
     }
 
-    /**
-     * Getting data from browser's local storage
-     */
-    public getData() {
-        this.token = localStorage.getItem("token");
-        this.imageURL = localStorage.getItem("image");
-        this.name = localStorage.getItem("name");
-        this.email = localStorage.getItem("email");
-    }
-
     public async signInWithProviders(provider: string) {
         if (Configuration.isElectron) {
             // electronOauth2
@@ -379,10 +335,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                 });
 
             } else {
-                // linked in
-                // const t = ipcRenderer.send("authenticate", provider);
-                // this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
-                const t = ipcRenderer.send("authenticate", provider);
                 ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
@@ -410,8 +362,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
             if (provider === "google") {
                 this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-            } else if (provider === "linkedin") {
-                this.authService.signIn(LinkedinLoginProvider.PROVIDER_ID);
             }
         }
     }
@@ -447,11 +397,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         if (ObjToSend) {
             this.store.dispatch(this.loginAction.LoginWithPasswdRequest(ObjToSend));
         }
-        // let pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$/g;
-        // if (pattern.test(ObjToSend.password)) {
-        // } else {
-        //   return this._toaster.errorToast('Password is weak');
-        // }
     }
 
     public showForgotPasswordModal() {

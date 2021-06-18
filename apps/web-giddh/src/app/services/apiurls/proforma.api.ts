@@ -9,7 +9,6 @@ export const PROFORMA_API = {
     download: `${baseUrlV3}download?fileType=:fileType`,
     generateInvoice: `company/:companyUniqueName/vouchers/accounts/:accountUniqueName/v3/generate-via-proforma`,
     updateAction: `${baseUrlV3}action`,
-    generateEstimate: `${baseUrlV3}generate/estimate`,
     mailProforma: `${baseUrlV3}mail`
 };
 
@@ -21,6 +20,5 @@ export const ESTIMATES_API = {
     generateInvoice: `/company/:companyUniqueName/vouchers/accounts/:accountUniqueName/v3/generate-via-estimate`,
     generateProforma: `v3/company/:companyUniqueName/accounts/:accountUniqueName/proformas/generate-via-estimate`,
     updateAction: `${baseUrlV3}action`,
-    getVersions: `${baseUrlV2}versions/all?`,
-    getVersion: `${baseUrlV2}versions`
+    getVersions: `${baseUrlV2}versions/all?`
 };

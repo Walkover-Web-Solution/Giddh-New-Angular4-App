@@ -1,5 +1,4 @@
 import * as fromVerifyMobileReducer from './authentication/verifyMobile.reducer';
-import * as fromRouter from '@ngrx/router-store';
 import * as fromGeneral from './General/general.reducer';
 import * as fromHome from './home/home.reducer';
 import * as fromPermission from './Permission/permission.reducer';
@@ -10,7 +9,6 @@ import * as fromGroupAndAccounts from './GroupWithAccounts/groupwithaccounts.red
 import * as fromInventory from './Inventory/inventory.reducer';
 import * as fromSearch from './Search/search.reducer';
 import * as fromAuditLogs from './AuditLogs/audit-logs.reducer';
-import * as fromFlyAccounts from './header/fly-accounts.reducer';
 import * as fromInvoice from './Invoice/invoice.reducer';
 import * as fromInvoiceTemp from './Invoice/invoice.template.reducer';
 import * as fromTlPl from './tl-pl/tl-pl.reducer';
@@ -41,7 +39,6 @@ import * as fromPurchaseOrder from '../store/purchase-order/purchase-order.reduc
 import { ActionReducerMap } from '@ngrx/store';
 
 export interface AppState {
-    //router: fromRouter.RouterReducerState;
     general: fromGeneral.GeneralState;
     home: fromHome.HomeState;
     login: fromLogin.AuthenticationState;
@@ -54,7 +51,6 @@ export interface AppState {
     search: fromSearch.SearchState;
     auditlog: fromAuditLogs.AuditLogsState;
     permission: fromPermission.PermissionState;
-    flyAccounts: fromFlyAccounts.FlyAccountsState;
     invoice: fromInvoice.InvoiceState;
     invoiceTemplate: fromInvoiceTemp.CustomTemplateState;
     tlPl: fromTlPl.TBPlBsState;
@@ -85,7 +81,6 @@ export interface AppState {
 }
 
 export const reducers: ActionReducerMap<AppState> = {
-    //router: fromRouter.routerReducer,
     general: fromGeneral.GeneRalReducer,
     home: fromHome.homeReducer,
     sales: fromSales.salesReducer,
@@ -102,7 +97,6 @@ export const reducers: ActionReducerMap<AppState> = {
     invoiceTemplate: fromInvoiceTemp.InvoiceTemplateReducer,
     search: fromSearch.searchReducer,
     auditlog: fromAuditLogs.auditLogsReducer,
-    flyAccounts: fromFlyAccounts.FlyAccountsReducer,
     tlPl: fromTlPl.tbPlBsReducer,
     ledger: fromLedger.ledgerReducer,
     invoicePurchase: fromInvoicePurchase.InvoicePurchaseReducer,

@@ -2,18 +2,15 @@ import { map, switchMap } from 'rxjs/operators';
 import { SettingsPermissionService } from '../../../services/settings.permission.service';
 import { SETTINGS_PERMISSION_ACTIONS } from './settings.permissions.const';
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
-import { Action, Store } from '@ngrx/store';
-import { AppState } from '../../../store/roots';
+import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { Router } from '@angular/router';
 import { CustomActions } from '../../../store/customActions';
 
 @Injectable()
 export class SettingsPermissionActions {
-
 
     public GetUsersWithPermissions$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -22,7 +19,6 @@ export class SettingsPermissionActions {
                 return this.settingsPermissionService.GetUsersWithCompanyPermissions(action.payload).pipe(
                     map(response => this.GetUsersWithPermissionsResponse(response)));
             })));
-
 
     public GetUsersWithPermissionsResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -37,8 +33,6 @@ export class SettingsPermissionActions {
 
     constructor(private action$: Actions,
         private toasty: ToasterService,
-        private router: Router,
-        private store: Store<AppState>,
         private settingsPermissionService: SettingsPermissionService) {
     }
 

@@ -1,16 +1,14 @@
 import { Component, OnInit, OnDestroy} from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import {
-    Gstr3bOverviewResult,
     GstOverViewRequest,
     GstDatePeriod,
-    GstrSheetDownloadRequest,
     Gstr3bOverviewResult2
 } from '../../models/api-models/GstReconcile';
 import { takeUntil, take } from 'rxjs/operators';
-import { Store, select, createSelector } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
-import { Route, Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService } from '../../services/toaster.service';
 import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
 import * as moment from 'moment/moment';
@@ -52,7 +50,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public isCompany: boolean;
 
     private gstr3BOverviewDataFetchedSuccessfully$: Observable<boolean>;
-    private gstr3BOverviewDataFetchedInProgress$: Observable<boolean>;
     private gstr3BOverviewData$: Observable<Gstr3bOverviewResult2>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -72,7 +69,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private _invoicePurchaseActions: InvoicePurchaseActions,
     ) {
-        //
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstr3BOverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDataFetchedSuccessfully, takeUntil(this.destroyed$)));
         this.gstr3BOverviewData$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDate), takeUntil(this.destroyed$));

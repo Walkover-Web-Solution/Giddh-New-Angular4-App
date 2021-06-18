@@ -54,12 +54,6 @@
                         {{commonLocaleData?.app_clear_filter}}</button>
                 </div>
                 <!-- Invoice filter section ends -->
-
-                <!-- not remove this code
-                <div class="clearfix">
-                    <a href="javascript:void(0)" class="btn btn-primary" (click)="refundModalOpen(refundAmount)">Refund amount</a>
-                    <a href="javascript:void(0)" class="btn btn-primary" (click)="adjustModal(adjustInvoiceModal)">Adjust invoice modal</a>
-                </div>-->
             </div>
 
 
@@ -270,18 +264,6 @@
         </div>
     </div>
     <!-- Adjust Payment modal End-->
-
-    <!-- Adjust invoice modal start -->
-    <ng-template #adjustInvoiceModal>
-        <adjust-invoice-modal></adjust-invoice-modal>
-    </ng-template>
-    <!-- Adjust invoice modal End-->
-
-    <!-- Refund Amount modal start -->
-    <ng-template #refundAmount>
-        <refund-amount></refund-amount>
-    </ng-template>
-    <!-- Refund Amount modal End-->
 
     <!-- region sort icon template -->
     <ng-template #sortTemplate let-column="column">

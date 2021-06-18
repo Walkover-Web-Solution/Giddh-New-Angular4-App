@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Subject } from 'rxjs';
-
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../common/confirmation-modal/confirmation-modal.interface';
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
-import * as moment from 'moment';
 import { cloneDeep, find } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
@@ -26,44 +24,6 @@ export class GeneralService {
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    private _dateRangePickerDefaultRanges = {
-        Today: [moment(), moment()],
-        Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
-        'Last Month': [
-            moment().subtract(1, 'month').startOf('month'),
-            moment().subtract(1, 'month').endOf('month')
-        ],
-        'This Week': [{
-            'Sun - Today': [moment().startOf('week'), moment()],
-            'Mon - Today': [moment().startOf('week').add(1, 'd'), moment()]
-        }],
-        'This Quarter to Date': [
-            moment().quarter(moment().quarter()).startOf('quarter'),
-            moment()
-        ],
-        'This Financial Year to Date': [
-            moment().startOf('year').subtract(9, 'year'),
-            moment()
-        ],
-        'This Year to Date': [
-            moment().startOf('year'),
-            moment()
-        ],
-        'Last Quarter': [
-            moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-            moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-        ],
-        'Last Financial Year': [
-            moment().startOf('year').subtract(10, 'year'),
-            moment().endOf('year').subtract(10, 'year')
-        ],
-        'Last Year': [
-            moment().subtract(1, 'year').startOf('year'),
-            moment().subtract(1, 'year').endOf('year')
-        ]
-    };
 
     get user(): UserDetails {
         return this._user;
@@ -87,14 +47,6 @@ export class GeneralService {
 
     set sessionId(sessionId: string) {
         this._sessionId = sessionId;
-    }
-
-    get dateRangePickerDefaultRanges(): any {
-        return this._dateRangePickerDefaultRanges;
-    }
-
-    set dateRangePickerDefaultRanges(value: any) {
-        this._dateRangePickerDefaultRanges = value;
     }
 
     // currencyType define specific type of currency out of four type of urrencyType a.1,00,00,000 ,b.10,000,000,c.10\'000\'000,d.10 000 000
@@ -130,12 +82,6 @@ export class GeneralService {
         private router: Router
     ) {}
 
-    public resetGeneralServiceState() {
-        this.user = null;
-        this.sessionId = null;
-        this.companyUniqueName = null;
-    }
-
     public SetIAmLoaded(iAmLoaded: boolean) {
         this.IAmLoaded.next(iAmLoaded);
     }
@@ -169,12 +115,9 @@ export class GeneralService {
         }
         return url;
     }
+
     public setIsMobileView(isMobileView: boolean) {
         this.isMobileSite.next(isMobileView);
-    }
-
-    public capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     public base64ToBlob(b64Data, contentType, sliceSize) {
@@ -367,26 +310,6 @@ export class GeneralService {
     }
 
     /**
-     * This will remove the selectall value from array used for multi checkbox dropdown
-     *
-     * @param {Array<string>} array
-     * @returns {Array<string>}
-     * @memberof GeneralService
-     */
-    public removeSelectAllFromArray(array: Array<string>): Array<string> {
-        let newArray = [];
-        if (array && array.length > 0) {
-            array.forEach(key => {
-                if (key !== "selectall") {
-                    newArray.push(key);
-                }
-            });
-        }
-
-        return newArray;
-    }
-
-    /**
      * Calculates tax inclusively for Advance receipt else exclusively
      *
      * @param {boolean} [inclusive=false] If true, inclusive tax will be calculated
@@ -448,31 +371,6 @@ export class GeneralService {
         }
 
         return { x: xPosition, y: yPosition };
-    }
-
-    /**
-     * Returns a particular cookie value
-     *
-     * @param {string} cookieName Name of the cookie whose value is required
-     * @returns {string} Cookie value
-     * @memberof GeneralService
-     */
-    public getCookie(cookieName: string): string {
-        const name = `${cookieName}=`;
-        const decodedCookie = decodeURIComponent(document.cookie);
-        const availableCookies = decodedCookie.split(';');
-        if (availableCookies && availableCookies.length > 0) {
-            for (let index = 0; index < availableCookies.length; index++) {
-                let cookie = availableCookies[index];
-                while (cookie.charAt(0) === ' ') {
-                    cookie = cookie.substring(1);
-                }
-                if (cookie.indexOf(name) === 0) {
-                    return cookie.substring(name.length, cookie.length);
-                }
-            }
-        }
-        return '';
     }
 
     /**
@@ -920,9 +818,10 @@ export class GeneralService {
      *
      * @param {*} route Route to navigate to
      * @param {*} [parameter] Route params
+     * @param {*} [isSocialLogin] To Reload page
      * @memberof GeneralService
      */
-    public finalNavigate(route: any, parameter?: any): void {
+    public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean): void {
         let isQueryParams: boolean;
         if (screen.width <= 767 || isCordova) {
             this.router.navigate(["/pages/mobile-home"]);
@@ -943,6 +842,11 @@ export class GeneralService {
                 this.router.navigate([route], { queryParams: parameter });
             } else {
                 this.router.navigate([route], parameter);
+            }
+            if(isElectron && isSocialLogin) {
+                setTimeout(() => {
+                    window.location.reload();
+                }, 200);
             }
         }
     }

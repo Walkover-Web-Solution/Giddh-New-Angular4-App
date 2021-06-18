@@ -116,11 +116,9 @@
     <!--delete discount confirmation model -->
     <div bsModal #discountConfirmationModel="bs-modal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-md">
-            <!-- modal-liq-90 class is removed for now-->
             <div class="modal-content">
                 <confirm-modal [body]="localeData?.delete_discount" (successCallBack)="delete()"
                     (cancelCallBack)="hideDeleteDiscountModal()"></confirm-modal>
-                <!--<delete-tax-confirmation-model [message]="confirmationMessage" (userConfirmationEvent)="userConfirmation($event)"></delete-tax-confirmation-model>-->
             </div>
         </div>
     </div>

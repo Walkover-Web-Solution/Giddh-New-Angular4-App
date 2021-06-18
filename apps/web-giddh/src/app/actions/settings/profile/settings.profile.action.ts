@@ -16,7 +16,6 @@ import { LocaleService } from '../../../services/locale.service';
 @Injectable()
 export class SettingsProfileActions {
 
-
     public GetSMSKey$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO),
@@ -29,7 +28,6 @@ export class SettingsProfileActions {
                 payload: res
             }))));
 
-
     public UpdateProfile$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE),
@@ -37,7 +35,6 @@ export class SettingsProfileActions {
                 return this.settingsProfileService.UpdateProfile(action.payload).pipe(
                     map(response => this.UpdateProfileResponse(response)));
             })));
-
 
     public GetInventoryInfo$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -51,7 +48,6 @@ export class SettingsProfileActions {
                 payload: res
             }))));
 
-
     public UpdateInventory$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY),
@@ -59,7 +55,6 @@ export class SettingsProfileActions {
                 return this.settingsProfileService.UpdateInventory(action.payload).pipe(
                     map(response => this.UpdateInventoryResponse(response)));
             })));
-
 
     public UpdateProfileResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -75,7 +70,6 @@ export class SettingsProfileActions {
                 return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);
             })));
 
-
     public PatchProfile$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE),
@@ -84,7 +78,6 @@ export class SettingsProfileActions {
                     map(response => this.PatchProfileResponse(response)));
             })));
 
-    //({ dispatch: false })
     public PatchProfileResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE),
@@ -110,7 +103,6 @@ export class SettingsProfileActions {
                 }
             })));
 
-
     public UpdateInventoryResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE),
@@ -119,7 +111,6 @@ export class SettingsProfileActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    // this.store.dispatch(this.companyActions.RefreshCompanies()); // commented because if i change refresh then inrefresh will check to change company so there is no need to change company call
                     this.toasty.successToast(this.localeService.translate("app_messages.inventory_settings_updated"));
                 }
                 return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);

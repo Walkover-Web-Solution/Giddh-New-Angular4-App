@@ -1,7 +1,6 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { WAREHOUSE_API } from '../settings/warehouse/constants/warehouse.constant';
 import { GiddhErrorHandler } from './catchManager/catchmanger';

@@ -1,5 +1,4 @@
 const COMMON_URL_FOR_RECIPT = 'company/:companyUniqueName/accounts/:accountUniqueName/vouchers';
-const COMMON_URL_FOR_RECIPT_GET_ALL = 'company/:companyUniqueName/vouchers/get-all?page=:page&count=:count&from=:from&to=:to&type=:type';
 const COMMON_URL_FOR_RECIPT_V4 = 'v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers';
 export const RECEIPT_API = {
     PUT: COMMON_URL_FOR_RECIPT,

@@ -2,8 +2,7 @@
     (commonLocaleData)="commonLocaleData = $event">
     <tb-pl-bs-filter #filter [selectedCompany]="selectedCompany" [showLoader]="showLoader | async" [showLabels]="true"
         (seachChange)="searchChanged($event)" (onPropertyChanged)="filterData($event)"
-        (expandAll)="expandAllEvent($event)" (tbExportCsvEvent)="exportCsv($event)"
-        (tbExportPdfEvent)="exportPdf($event)" (tbExportXLSEvent)="exportXLS($event)" [tbExportCsv]="true"
+        (expandAll)="expandAllEvent($event)" [tbExportCsv]="true"
         [tbExportPdf]="true" [tbExportXLS]="true"></tb-pl-bs-filter>
     <div *ngIf="(showLoader | async)">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
