@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
@@ -104,14 +103,11 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     constructor(private store: Store<AppState>,
         private companyService: CompanyService,
         private auditLogsActions: AuditLogsActions,
-        private bsConfig: BsDatepickerConfig,
         private auditLogsService: LogsService,
         private groupService: GroupService,
         private searchService: SearchService
     ) {
-        this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
-        this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
-        this.bsConfig.showWeekNumbers = false;
+        
     }
 
     /**
@@ -266,7 +262,6 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      */
     public getOperationsFilterData(entityType: string): any {
         this.auditLogFormVM.filters = [];
-        // this.forceClearOperations$ = observableOf({ status: true });
         if (entityType) {
             let selectedEntityObject = this.auditLogFilterForm.filter(element => {
                 if (element.entity.label.toLocaleLowerCase() === entityType.toLocaleLowerCase()) {

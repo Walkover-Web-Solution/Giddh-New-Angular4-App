@@ -17,13 +17,12 @@ import { Store, select } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-import * as _ from '../../lodash-optimized';
 import { TaxResponse } from '../../models/api-models/Company';
 import { ITaxDetail } from '../../models/interfaces/tax.interface';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { AppState } from '../../store';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { isEqual, orderBy } from '../../lodash-optimized';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -120,7 +119,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
 
         if ('applicableTaxes' in changes && (Array.isArray(changes.applicableTaxes.currentValue)) &&
-            !_.isEqual(changes.applicableTaxes.currentValue, changes.applicableTaxes.previousValue)) {
+            !isEqual(changes.applicableTaxes.currentValue, changes.applicableTaxes.previousValue)) {
             this.prepareTaxObject();
             this.change();
         }
@@ -173,7 +172,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 taxObj.type = tax.taxType;
 
                 if (this.date) {
-                    let taxObject = _.orderBy(tax.taxDetail, (p: ITaxDetail) => {
+                    let taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
                         return moment(p.date, GIDDH_DATE_FORMAT);
                     }, 'desc');
                     let exactDate = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT).isSame(moment(this.date, GIDDH_DATE_FORMAT)));
@@ -338,17 +337,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    private isTaxApplicable(tax): boolean {
-        const today = moment(moment().format(GIDDH_DATE_FORMAT), GIDDH_DATE_FORMAT, true).valueOf();
-        let isApplicable = false;
-        _.each(tax.taxDetail, (det: any) => {
-            if (today >= moment(det.date, GIDDH_DATE_FORMAT, true).valueOf()) {
-                return isApplicable = true;
-            }
-        });
-        return isApplicable;
-    }
-
     /**
      * calculate sum of selected tax amount
      * @returns {number}
@@ -365,12 +353,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      */
     private generateSelectedTaxes(): string[] {
         return this.taxRenderData.filter(p => p.isChecked).map(p => p.uniqueName);
-    }
-
-    public taxInputBlur(event) {
-        if (event && event.relatedTarget && this.taxInputElement && !this.taxInputElement?.nativeElement.contains(event.relatedTarget)) {
-            // this.toggleTaxPopup(false);
-        }
     }
 
     /**

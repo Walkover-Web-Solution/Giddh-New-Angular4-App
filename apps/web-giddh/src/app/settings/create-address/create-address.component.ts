@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { SettingsAsideFormType } from '../constants/settings.constant';
 import { IForceClear } from '../../models/api-models/Sales';
 import { ToasterService } from '../../services/toaster.service';

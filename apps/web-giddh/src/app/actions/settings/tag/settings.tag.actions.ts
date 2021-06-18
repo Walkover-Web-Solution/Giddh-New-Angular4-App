@@ -29,7 +29,6 @@ export class SettingsTagActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public CreateTag$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.CREATE_TAG),
@@ -37,7 +36,6 @@ export class SettingsTagActions {
                 return this.settingsTagService.CreateTag(action.payload).pipe(
                     map(response => this.CreateTagResponse(response)));
             })));
-
 
     public CreateTagResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -52,7 +50,6 @@ export class SettingsTagActions {
                 return this.GetALLTags();
             })));
 
-
     public UpdateTag$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.UPDATE_TAG),
@@ -60,7 +57,6 @@ export class SettingsTagActions {
                 return this.settingsTagService.UpdateTag(action.payload).pipe(
                     map(response => this.UpdateTagResponse(response)));
             })));
-
 
     public UpdateTagResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -75,7 +71,6 @@ export class SettingsTagActions {
                 return this.GetALLTags();
             })));
 
-
     public DeleteTag$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.DELETE_TAG),
@@ -83,7 +78,6 @@ export class SettingsTagActions {
                 return this.settingsTagService.DeleteTag(action.payload).pipe(
                     map(response => this.DeleteTagResponse(response)));
             })));
-
 
     public DeleteTagResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -97,31 +91,6 @@ export class SettingsTagActions {
                 }
                 return this.GetALLTags();
             })));
-
-    // @Effect()
-    // public RemoveBranch$: Observable<Action> = this.action$
-    //   .ofType(SETTINGS_TAG_ACTIONS.REMOVE_BRANCH)
-    //   .switchMap((action: CustomActions) => this.settingsTagService.RemoveBranch(action.payload))
-    //   .map(response => this.CreateBranchesResponse(response));
-
-    // @Effect()
-    // public RemoveBranchResponse$: Observable<Action> = this.action$
-    //   .ofType(SETTINGS_TAG_ACTIONS.REMOVE_BRANCH_RESPONSE)
-    //   .map((response: CustomActions) => {
-    //     let data: BaseResponse<any, any> = response.payload;
-    //     if (data.status === 'error') {
-    //       this.toasty.errorToast(data.message, data.code);
-    //     } else {
-    //       this.toasty.successToast(data.body);
-    //     }
-    //     return this.GetALLBranches();
-    //   });
-
-    // @Effect()
-    // public GetParentCompany$: Observable<Action> = this.action$
-    //   .ofType(SETTINGS_TAG_ACTIONS.GET_PARENT_COMPANY)
-    //   .switchMap((action: CustomActions) => this.settingsTagService.GetParentCompany())
-    //   .map(response => this.GetParentCompanyResponse(response));
 
     constructor(private action$: Actions,
         private toasty: ToasterService,
@@ -176,33 +145,6 @@ export class SettingsTagActions {
             payload: value
         };
     }
-
-    // public RemoveBranch(branchUniqueName: string): CustomActions {
-    //   return {
-    //     type: SETTINGS_TAG_ACTIONS.REMOVE_BRANCH,
-    //     payload: branchUniqueName
-    //   };
-    // }
-
-    // public RemoveBranchResponse(value): CustomActions {
-    //   return {
-    //     type: SETTINGS_TAG_ACTIONS.REMOVE_BRANCH_RESPONSE,
-    //     payload: value
-    //   };
-    // }
-
-    // public GetParentCompany(): CustomActions {
-    //   return {
-    //     type: SETTINGS_TAG_ACTIONS.GET_PARENT_COMPANY
-    //   };
-    // }
-
-    // public GetParentCompanyResponse(value): CustomActions {
-    //   return {
-    //     type: SETTINGS_TAG_ACTIONS.GET_PARENT_COMPANY_RESPONSE,
-    //     payload: value
-    //   };
-    // }
 
     public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
         if (response.status === 'error') {

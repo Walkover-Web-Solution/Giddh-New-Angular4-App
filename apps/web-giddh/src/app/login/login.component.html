@@ -113,7 +113,6 @@
 
                                     <div class="d-flex align-items-center account mt-1">
                                         <p class="mb-0 mr-2 bold text-light-2">Don't have an account?</p>
-                                        <!-- https://giddh.com -->
                                         <a routerLink="/signup" class="btn btn-secondary"> Signup</a>
                                     </div>
                                 </section>
@@ -127,42 +126,6 @@
         </div>
     </div>
 </div>
-
-
-<!-- <section id="videoBg" class="intro login" style="height: 100%;">
-    <div class="intro-body">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    <h1 class="brand-heading arvo">Enter your accounting space</h1>
-
-                    <div id="box" class="text-uppercase">
-                        <div class="clearfix mr-b1">
-                            <p class="lead ">Sign In or register</p>
-                        </div>
-                        <button type="login" class="btn sharp btn-block btn-lg btn-login google" (click)="signInWithProviders('google')">
-              <img src="./assets/images/google-plus-icon.png">
-              connect with Google
-            </button>
-                        <button type="login" class="btn sharp btn-block btn-lg btn-login linkedin" (click)="signInWithProviders('linkedin')">
-              <img src="./assets/images/linkedin-icon.png">
-              Login with LinkedIn
-            </button>
-                        <button type="login" class="btn sharp btn-block btn-lg btn-login email" (click)="showEmailModal()">
-              <i class="glyphicon glyphicon-envelope"></i>
-              connect with Email
-    </button>
-
-                        <button type="login" class="btn sharp btn-block btn-lg btn-login mobile" (click)="showMobileModal()">
-              <i class="glyphicon glyphicon-phone"></i>
-              Login with Mobile
-            </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section> -->
 
 <!--email varify modal  -->
 <div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true"
@@ -285,43 +248,6 @@
     </div>
 </div>
 <!-- two way auth popup -->
-
-<!--mobile varify form  -->
-<!-- <div class="modal fade" tabindex="-1" bsModal #forgotPasswordModal="bs-modal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="border-radius-0">
-                <div class="modal-header">
-                    <h3>Forgot Password</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideForgotPasswordModal()">×</span>
-                </div>
-                <div class="modal-body clearfix">
-                    <form class="col-xs-12" id="forgotPassword" name="forgotPassword" novalidate [formGroup]="forgotPasswordForm" *ngIf="!(isForgotPasswordInProgress$ | async)">
-                        <div class="clearfix form-group">
-                            <input class="form-control" formControlName="userId" type="text" placeholder="Email Id" required />
-                        </div>
-                        <button class="btn btn-sm btn-success pull-right" type="submit" (click)="forgotPassword(forgotPasswordForm.controls['userId'].value)">Reset Password</button>
-                    </form>
-                    <form class="col-xs-12" id="resetPassword" name="resetPassword" novalidate [formGroup]="resetPasswordForm" *ngIf="isForgotPasswordInProgress$ | async">
-                        <div class="row">
-                            <div class="clearfix form-group">
-                                <div class="col-xs-6">
-                                    <input class="form-control" formControlName="verificationCode" type="text" placeholder="Verification Code" required />
-                                </div>
-                                <div class="col-xs-6">
-                                    <input class="form-control" formControlName="newPassword" type="password" placeholder="New Password" required />
-                                </div>
-                            </div>
-                        </div>
-                        <button class="btn btn-sm btn-success  pull-right" type="submit" (click)="resetPassword(resetPasswordForm)">Submit</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-<!--mobile verify form  -->
-
 
 <div
     *ngIf="(isLoginWithPasswordInProcess$ | async) || (isLoginWithEmailInProcess$ | async) || (isLoginWithGoogleInProcess$ | async)">

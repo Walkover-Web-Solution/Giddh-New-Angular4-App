@@ -6,7 +6,7 @@ import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Co
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 
 @Component({
-    selector: 'import-excel',  // <home></home>
+    selector: 'import-excel',
     styleUrls: ['./import-excel.component.scss'],
     templateUrl: './import-excel.component.html'
 })

@@ -7,7 +7,6 @@
                 <i class="icon-dots-three-vertical"></i>
             </button>
             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                <!-- <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onOpenAdvanceSearch()">{{commonLocaleData?.app_advance_search}}</a></li> -->
                 <li role="menuitem"><a class="dropdown-item" id="share-ledger" href="javascript:void(0)"
                         (click)="showShareLedgerModal()">{{localeData?.share_ledger}}</a></li>
                 <li role="menuitem"><a class="dropdown-item" id="export-ledger-mobile-view" href="javascript:void(0)"
@@ -80,8 +79,6 @@
                                     href="javascript:;" (click)="resetAdvanceSearch()"
                                     [tooltip]="commonLocaleData?.app_reset_advance_search">
                                     <i aria-hidden="true" class="icon-refresh"></i>
-                                    <!-- remove text as per shubhendr sir -->
-                                    <!-- {{commonLocaleData?.app_clear_filter}} -->
                                 </a>
                             </div>
 
@@ -106,8 +103,6 @@
                                 *ngIf="isAdvanceSearchImplemented && !isMobileScreen" href="javascript:;"
                                 (click)="resetAdvanceSearch()" [tooltip]="commonLocaleData?.app_reset_advance_search">
                                 <i aria-hidden="true" class="icon-refresh"></i>
-                                <!-- remove as per shubhendra sir comment -->
-                                <!-- {{commonLocaleData?.app_clear_filter}} -->
                             </a>
                             <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering?.length > 0 && !isMobileScreen">
 

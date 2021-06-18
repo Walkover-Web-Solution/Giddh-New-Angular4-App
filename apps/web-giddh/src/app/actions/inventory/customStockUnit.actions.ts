@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StockUnitRequest, StockUnitResponse } from '../../models/api-models/Inventory';
 import { InventoryService } from '../../services/inventory.service';
 import { ToasterService } from '../../services/toaster.service';
 import { CustomActions } from '../../store/customActions';
-import { AppState } from '../../store/roots';
 import { CUSTOM_STOCK_UNIT_ACTIONS } from './inventory.const';
 
 @Injectable()
@@ -86,7 +84,6 @@ export class CustomStockUnitAction {
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,
-        private store: Store<AppState>,
         private _inventoryService: InventoryService) {
     }
 

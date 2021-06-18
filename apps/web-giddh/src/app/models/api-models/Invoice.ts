@@ -24,21 +24,6 @@ export interface IInvoiceResult {
     dueDate?: string;
 }
 
-export interface IGetAllInvoicesResponse extends IPagination {
-    size: number;
-    results: IInvoiceResult[];
-}
-
-export class GetAllInvoicesPaginatedResponse {
-    public count: number;
-    public page: number;
-    // public results: ILedgersInvoiceResult[];
-    public results: IInvoiceResult[];
-    public size: number;
-    public totalItems: number;
-    public totalPages: number;
-}
-
 export class CommonPaginatedRequest {
     public from?: string;
     public to?: string;
@@ -94,6 +79,7 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
     public expireFrom?: string;
     public expireTo?: string;
     public purchaseOrderNumber?: any;
+    public status?: string;
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {
@@ -153,28 +139,6 @@ export class GetAllLedgersOfInvoicesResponse {
 export class GenerateBulkInvoiceRequest {
     public accountUniqueName: string;
     public entries: string[];
-}
-
-/**
- * Action On Invoice Request
- * method: 'POST'
- * url: '/company/:companyUniqueName/invoices/action'
- */
-
-export class ActionOnInvoiceRequest {
-    public amount: number;
-    public action: string;
-}
-
-/**
- * Get Template Response
- * method: 'GET'
- * url: '/company/:companyUniqueName/invoices/proforma/templates'
- */
-
-export class GetTemplateResponse {
-    public templates: Template[];
-    public templateData: TemplateData;
 }
 
 export interface Template {
@@ -245,18 +209,6 @@ export interface Signature {
     name: string;
     data: string;
     path: string;
-}
-
-/**
- * Send Mail Request
- * method: 'POST'
- * url: '/company/:companyUniqueName/invoices/proforma/mail'
- */
-
-export class SendMailRequest {
-    public emailId: string[];
-    public invoiceNumber: string[];
-    public typeOfInvoice: string[];
 }
 
 /**
@@ -408,10 +360,6 @@ export class GenerateInvoiceRequestClass {
     public voucher?: any;
 }
 
-/*
-*
-*/
-
 export class GenBulkInvoiceGroupByObj {
     public accUniqueName: any;
     public uniqueName: any;
@@ -542,19 +490,6 @@ export class Esignature {
     public CUrl: string = 'https://esign.giddh.com/fxaLuXqhG9GhvCezvqMp/';
 }
 
-export class EwaybillGenerateFormInvoice {
-    public supplyType: string;
-    public subSupplyType: string;
-    public toPinCode: string;
-    public transMode: string;
-    public transDistance: string;
-    public invoiceNumber: string;
-    public vehicleNo: string;
-    public vehicleType: string;
-    public transactionType: string;
-    public docType: string;
-}
-
 export class EwayBillLogin {
     public userName: string;
     public password: string;
@@ -572,7 +507,6 @@ export class GenerateEwayBill {
     public transporterId?: string;
     public transDocNo?: string;
     public transDocDate?: string;
-
     public vehicleNo: string;
     public vehicleType: string;
     public transactionType: string;
@@ -592,21 +526,6 @@ export class UpdateEwayVehicle {
     public transDocDate?: string;
     public transMode: string;
     public vehicleType: string;
-}
-
-/**
- * @request -> model request to generate invoice from outer route
- * @response -> will get base 64 data
- */
-
-export class CreateInvoiceClass {
-    public entries: SalesEntryClass[];
-}
-
-export interface IEwayBilldropDownValues {
-    value: any;
-    name: string;
-    type?: any;
 }
 
 export interface Account {
@@ -752,7 +671,6 @@ export class InvoicePreviewDetailsVm {
     voucherStatus?: string;
     accountCurrencySymbol?: string;
 }
-
 
 export class InvoicePaymentRequest {
     accountUniqueName: string;

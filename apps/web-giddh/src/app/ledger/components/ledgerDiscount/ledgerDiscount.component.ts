@@ -36,7 +36,6 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
-    // @HostBinding('attr.tabindex') public tabindex = '0';
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -53,7 +52,6 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
             return;
         }
         let focussableElements = '.ledger-panel input[type=text]:not([disabled]),.ledger-panel [tabindex]:not([disabled]):not([tabindex="-1"])';
-        // if (document.activeElement && document.activeElement.form) {
         let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
             (element) => {
                 // check for visibility while always include the current activeElement
@@ -176,7 +174,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public trackByFn(index) {
-        return index; // or item.id
+        return index;
     }
 
     public hideDiscountMenu() {

@@ -8,67 +8,10 @@
         <span>Content</span>
         <span *ngIf="errorCount" class="badge">{{errorCount}}</span>
     </button>
-    <!--<button type="button" class="btn btn-default" (click)="openTab('email')">Email</button>-->
 </div>
 
 
 <div class="tab">
     <design-filters [hidden]="!ifDesignSelected" [design]="ifDesignSelected" [mode]="editMode"></design-filters>
     <content-selector [hidden]="!ifContentSelected" [content]="ifContentSelected"></content-selector>
-    <invoice-email-filter-component *ngIf="ifEmailSelected"></invoice-email-filter-component>
-
-    <div id="emails" class="design-tab-content" *ngIf="ifEmailSelected">
-
-        <div class="clearfix mr-t2">
-            <h2 class="mb-0">Standard email</h2>
-            <small>Edit the email content your customer gets</small>
-        </div>
-        <div class="clearfix mr-t2">
-            <div class="form-group">
-                Subject
-                <input class="form-control" placeholder="Invoice AB4123 from Walkover " />
-            </div>
-        </div>
-
-        <div class="clearfix mr-t2">
-            <div class="form-group row">
-                <div class="col-12">
-                    <input type="checkbox" /> Use greeting
-                </div>
-                <div class="col-4 pl-0">
-                    <div class="custom-select position-relative">
-                        <select class="form-control">
-                            <option value="dear">dear</option>
-                        </select>
-                        <span class="select-drop">
-                            <i class="fa fa-caret-down"></i>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-8">
-                    <div>
-                        <div class="custom-select position-relative">
-                            <select class="form-control">
-                                <option value="dear">Customer name</option>
-                            </select>
-                            <span class="select-drop">
-                                <i class="fa fa-caret-down"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="clearfix mr-t2">
-            <div class="form-group">
-                Message to customer
-                <div>
-                    <textarea class="form-control" rows="5">Here’s your invoice! We appreciate your prompt payment. Thanks for your business. Walkover Web Solutions Private
-            Limited
-          </textarea>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>

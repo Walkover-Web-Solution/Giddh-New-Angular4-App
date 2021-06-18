@@ -47,10 +47,6 @@ export class ProformaUpdateActionRequest extends ProformaGetRequest {
     action: string;
 }
 
-export class EstimateGetVersionByVersionNoRequest extends ProformaGetRequest {
-    estimateVersionNumber: string;
-}
-
 export class ProformaGetAllVersionRequest extends CommonPaginatedRequest {
     public estimateNumber?: string;
     public proformaNumber?: string;

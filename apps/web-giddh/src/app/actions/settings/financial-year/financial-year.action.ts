@@ -14,7 +14,6 @@ import { LocaleService } from '../../../services/locale.service';
 @Injectable()
 export class SettingsFinancialYearActions {
 
-
     public GetAllFinancialYears$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_ALL_FINANCIAL_YEARS),
@@ -27,7 +26,6 @@ export class SettingsFinancialYearActions {
                 payload: res
             }))));
 
-
     public LockFinancialYear$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.LOCK_FINANCIAL_YEAR),
@@ -35,7 +33,6 @@ export class SettingsFinancialYearActions {
                 return this._settingsFinancialYearService.LockFinancialYear(action.payload).pipe(
                     map(response => this.LockFinancialYearResponse(response)));
             })));
-
 
     public LockFinancialYearResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -50,7 +47,6 @@ export class SettingsFinancialYearActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public UnlockFinancialYear$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR),
@@ -58,7 +54,6 @@ export class SettingsFinancialYearActions {
                 return this._settingsFinancialYearService.UnlockFinancialYear(action.payload).pipe(
                     map(response => this.UnlockFinancialYearResponse(response)));
             })));
-
 
     public UnlockFinancialYearResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -73,7 +68,6 @@ export class SettingsFinancialYearActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public SwitchFinancialYear$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR),
@@ -81,7 +75,6 @@ export class SettingsFinancialYearActions {
                 return this._settingsFinancialYearService.SwitchFinancialYear(action.payload).pipe(
                     map(response => this.SwitchFinancialYearResponse(response)));
             })));
-
 
     public SwitchFinancialYearResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -96,7 +89,6 @@ export class SettingsFinancialYearActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public UpdateFinancialYearPeriod$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD),
@@ -104,7 +96,6 @@ export class SettingsFinancialYearActions {
                 return this._settingsFinancialYearService.UpdateFinancialYearPeriod(action.payload).pipe(
                     map(response => this.UpdateFinancialYearPeriodResponse(response)));
             })));
-
 
     public UpdateFinancialYearPeriodResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -119,7 +110,6 @@ export class SettingsFinancialYearActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public AddFinancialYear$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR),
@@ -131,7 +121,6 @@ export class SettingsFinancialYearActions {
                 type: SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR_RESPONSE,
                 payload: res
             }))));
-
 
     public AddFutureFinancialYear$: Observable<Action> = createEffect(() => this.action$
         .pipe(

@@ -4,7 +4,6 @@ import { Action, Store, select } from '@ngrx/store';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Observable } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
-
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import {
     CompanyCountry,
@@ -51,8 +50,6 @@ export class CompanyActions {
     public static SET_ACTIVE_COMPANY = 'CompanyActiveCompany';
     public static SET_CONTACT_NO = 'SET_CONTACT_NO';
 
-    public static DELETE_COMPANY = 'CompanyDelete';
-    public static DELETE_COMPANY_RESPONSE = 'CompanyDeleteResponse';
     public static GET_TAX = 'GroupTax';
     public static GET_TAX_RESPONSE = 'GroupTaxResponse';
     public static USER_SELECTED_PLANS = 'USER_SELECTED_PLANS';
@@ -84,12 +81,6 @@ export class CompanyActions {
 
     public static SET_STATE_DETAILS_REQUEST = 'SET_STATE_DETAILS_REQUEST';
 
-    public createCompany$: Observable<Action> = createEffect(() => this.action$
-        .pipe(
-            ofType(CompanyActions.CREATE_COMPANY),
-            switchMap((action: CustomActions) => this._companyService.CreateCompany(action.payload)),
-            map(response => this.CreateCompanyResponse(response))));
-
     public createNewCompany$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.CREATE_NEW_COMPANY),
@@ -107,9 +98,7 @@ export class CompanyActions {
                 }
                 this._toasty.successToast(this.localeService.translate("app_messages.company_created"), this.localeService.translate("app_success"));
 
-                // is brahch set
                 if (response.request.isBranch) {
-                    //
                     let branchUniqueName: any[] = [];
                     branchUniqueName.push(response.request.uniqueName);
                     let dataToSend = { childCompanyUniqueNames: branchUniqueName };
@@ -143,7 +132,6 @@ export class CompanyActions {
                      * if user is signed up on their own take him to sales module
                      */
                     if (this._generalService.user.isNewUser) {
-                        // stateDetailsObj.lastState = 'sales';
                         stateDetailsObj.lastState = isNewUser ? 'welcome' : 'sales';
                     } else {
                         stateDetailsObj.lastState = 'home';
@@ -156,8 +144,7 @@ export class CompanyActions {
                 return this.RefreshCompanies();
             })));
 
-
-    // CreateNewCompany Response
+    // CreateNewCompanyPage Response
 
     public createNewCompanyResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -174,9 +161,7 @@ export class CompanyActions {
                 });
                 this._toasty.successToast(this.localeService.translate("app_messages.new_company_created"), this.localeService.translate("app_success"));
 
-                // is brahch set
                 if (response.request.isBranch) {
-                    //
                     this.store.dispatch(this.userStoreCreateBranch(null));
                     let branchUniqueName: any[] = [];
                     branchUniqueName.push(response.request.uniqueName);
@@ -196,7 +181,7 @@ export class CompanyActions {
                     isNewUser = s.userLoginState === 2;
                     prevTab = s.lastState;
                 });
-                //
+
                 if (isNewUser) {
                     this.store.dispatch({
                         type: 'SetLoginStatus',
@@ -212,7 +197,6 @@ export class CompanyActions {
                      */
                     if (this._generalService.user.isNewUser) {
                         stateDetailsObj.lastState = 'pages/onboarding';
-                        // stateDetailsObj.lastState = isNewUser ? 'onboarding' : 'sales';
                     } else {
                         stateDetailsObj.lastState = 'home';
                     }
@@ -285,18 +269,6 @@ export class CompanyActions {
                 }
             })));
 
-    public GetStateDetails$: Observable<Action> = createEffect(() => this.action$
-        .pipe(
-            ofType(CompanyActions.GET_STATE_DETAILS),
-            switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload)),
-            map(response => {
-                if (response.status === 'error') {
-                    this._toasty.errorToast(response.message, response.code);
-                    return { type: 'EmptyAction' };
-                }
-                return this.GetStateDetailsResponse(response);
-            })));
-
     public SetStateDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.SET_STATE_DETAILS),
@@ -333,28 +305,6 @@ export class CompanyActions {
                     this._toasty.successToast(this.localeService.translate("app_messages.universal_date_updated"), this.localeService.translate("app_success"));
                     return this.SeApplicationDateResponse(response);
                 }
-            })));
-
-    public DeleteCompany$: Observable<Action> = createEffect(() => this.action$
-        .pipe(
-            ofType(CompanyActions.DELETE_COMPANY),
-            switchMap((action: CustomActions) => this._companyService.DeleteCompany(action.payload)),
-            map(response => {
-                return this.DeleteCompanyResponse(response);
-            })));
-
-    public DeleteCompanyResponse$: Observable<Action> = createEffect(() => this.action$
-        .pipe(
-            ofType(CompanyActions.DELETE_COMPANY_RESPONSE),
-            map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
-                    this._toasty.errorToast(action.payload.message, action.payload.code);
-                    return { type: 'EmptyAction' };
-                } else {
-                    this._toasty.successToast(action.payload.body, 'success');
-                }
-                this.store.dispatch(this.RefreshCompanies());
-                return { type: 'EmptyAction' };
             })));
 
     public CompanyTax$: Observable<Action> = createEffect(() => this.action$
@@ -439,12 +389,6 @@ export class CompanyActions {
     ) {
     }
 
-    public CreateCompany(value: CompanyRequest): CustomActions {
-        return {
-            type: CompanyActions.CREATE_COMPANY,
-            payload: value
-        };
-    }
     public CreateNewCompany(value: CompanyCreateRequest): CustomActions {
         return {
             type: CompanyActions.CREATE_NEW_COMPANY,
@@ -465,43 +409,41 @@ export class CompanyActions {
         };
     }
 
-    public SetActiveCompany(value: string): CustomActions {
-        return {
-            type: CompanyActions.SET_ACTIVE_COMPANY,
-            payload: value
-        };
-    }
-
     public selectedPlan(value: CreateCompanyUsersPlan): CustomActions {
         return {
             type: CompanyActions.USER_SELECTED_PLANS,
             payload: value
         };
     }
+
     public setCurrentCompanySubscriptionPlan(value: CreateCompanyUsersPlan): CustomActions {
         return {
             type: CompanyActions.CURRENT_COMPANY_SUBSCRIPTIONS_PLANS,
             payload: value
         };
     }
+
     public setTotalNumberofCompanies(value: number): CustomActions {
         return {
             type: CompanyActions.TOTAL_COMPANIES,
             payload: value
         };
     }
+
     public setCurrentCompanyCurrency(value: CompanyCountry): CustomActions {
         return {
             type: CompanyActions.CURRENT_COMPANY_CURRENCY,
             payload: value
         };
     }
+
     public userStoreCreateCompany(value: CompanyCreateRequest): CustomActions {
         return {
             type: CompanyActions.USER_CAREATE_COMPANY,
             payload: value
         };
     }
+
     public userStoreCreateBranch(value: CompanyCreateRequest): CustomActions {
         return {
             type: CompanyActions.USER_CAREATE_BRANCH,
@@ -509,13 +451,6 @@ export class CompanyActions {
         };
     }
 
-    public CreateCompanyResponse(value: BaseResponse<CompanyResponse, CompanyRequest>): CustomActions {
-        this.store.dispatch(this.ResetApplicationData());
-        return {
-            type: CompanyActions.CREATE_COMPANY_RESPONSE,
-            payload: value
-        };
-    }
     public CreateNewCompanyResponse(value: BaseResponse<CompanyResponse, CompanyCreateRequest>): CustomActions {
         this.store.dispatch(this.ResetApplicationData());
         const details = {
@@ -538,13 +473,6 @@ export class CompanyActions {
     public ResetApplicationData(): CustomActions {
         return {
             type: COMMON_ACTIONS.RESET_APPLICATION_DATA
-        };
-    }
-
-    public GetStateDetails(cmpUniqueName?: string): CustomActions {
-        return {
-            type: CompanyActions.GET_STATE_DETAILS,
-            payload: cmpUniqueName
         };
     }
 
@@ -606,20 +534,6 @@ export class CompanyActions {
     public SetStateDetailsResponse(value: BaseResponse<string, StateDetailsRequest>): CustomActions {
         return {
             type: CompanyActions.SET_STATE_DETAILS_RESPONSE,
-            payload: value
-        };
-    }
-
-    public DeleteCompany(value: string) {
-        return {
-            type: CompanyActions.DELETE_COMPANY,
-            payload: value
-        };
-    }
-
-    public DeleteCompanyResponse(value: BaseResponse<string, string>) {
-        return {
-            type: CompanyActions.DELETE_COMPANY_RESPONSE,
             payload: value
         };
     }

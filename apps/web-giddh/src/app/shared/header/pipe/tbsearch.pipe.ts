@@ -1,6 +1,5 @@
 import { NgZone, Pipe, PipeTransform } from '@angular/core';
-
-import * as _ from '../../../lodash-optimized';
+import { isUndefined } from '../../../lodash-optimized';
 import { ChildGroup } from '../../../models/api-models/Search';
 
 @Pipe({
@@ -10,28 +9,24 @@ import { ChildGroup } from '../../../models/api-models/Search';
 })
 
 export class TbsearchPipe implements PipeTransform {
-    /**
-     *
-     */
     public srch: string;
 
     constructor(private zone: NgZone
     ) {
-        //
+        
     }
 
     public transform(input: any, search: string): any {
-        if (!_.isUndefined(search)) {
+        if (!isUndefined(search)) {
             this.srch = search.toLowerCase();
         }
-        let initial = input;
 
-        if (!_.isUndefined(this.srch) && this.srch.length > 2) {
+        if (!isUndefined(this.srch) && this.srch.length > 2) {
             this.zone.run(() => {
                 this.performSearch(input);
             });
         } else {
-            if (!_.isUndefined(this.srch)) {
+            if (!isUndefined(this.srch)) {
                 if (this.srch.length < 3) {
                     this.zone.run(() => {
                         this.resetSearch(input);

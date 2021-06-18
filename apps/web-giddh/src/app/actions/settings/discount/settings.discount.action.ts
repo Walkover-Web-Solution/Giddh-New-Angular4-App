@@ -14,7 +14,6 @@ import { LocaleService } from '../../../services/locale.service';
 @Injectable()
 export class SettingsDiscountActions {
 
-
     public GetDiscount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT),
@@ -29,7 +28,6 @@ export class SettingsDiscountActions {
                     })));
             })));
 
-
     public CreateDiscount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_DISCOUNT_ACTIONS.CREATE_DISCOUNT),
@@ -37,7 +35,6 @@ export class SettingsDiscountActions {
                 return this.settingsDiscountService.CreateDiscount(action.payload).pipe(
                     map(response => this.CreateDiscountResponse(response)));
             })));
-
 
     public CreateDiscountResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -52,7 +49,6 @@ export class SettingsDiscountActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public UpdateDiscount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_DISCOUNT_ACTIONS.UPDATE_DISCOUNT),
@@ -60,7 +56,6 @@ export class SettingsDiscountActions {
                 return this.settingsDiscountService.UpdateDiscount(action.payload.modal, action.payload.uniqueName).pipe(
                     map(response => this.UpdateDiscountResponse(response)));
             })));
-
 
     public UpdateDiscountResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -75,7 +70,6 @@ export class SettingsDiscountActions {
                 return { type: 'EmptyAction' };
             })));
 
-
     public DeleteDiscount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_DISCOUNT_ACTIONS.DELETE_DISCOUNT),
@@ -83,7 +77,6 @@ export class SettingsDiscountActions {
                 return this.settingsDiscountService.DeleteDiscount(action.payload).pipe(
                     map(response => this.DeleteDiscountResponse(response)));
             })));
-
 
     public DeleteDiscountResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(

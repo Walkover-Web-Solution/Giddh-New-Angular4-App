@@ -85,7 +85,6 @@ export class PettyCashResonse {
     public pettyCashEntryStatus: PettyCashEntryStatus;
     public ledgerUniqueNames: any[];
     public othersCategory: boolean = false;
-
     public chequeClearanceDate?: string;
     public chequeNumber?: string;
     public generateInvoice?: boolean;

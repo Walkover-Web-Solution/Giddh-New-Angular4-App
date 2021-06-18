@@ -1,22 +1,11 @@
 <div class="modal-header">
     <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
-    <!-- <i class="icon-cross text-right close-modal" data-dismiss="modal" aria-hidden="true"  aria-label="Close"></i> -->
     <h3>{{localeData?.connect_banks}}</h3>
 </div>
 <div id="my-frame" class="modal-body clearfix">
     <div *ngIf="step === 1">
         <div class="form-group">
             <label>{{localeData?.search_provider_label}} <sup>*</sup></label>
-            <!-- Commented for now can be replaced with new dynamic search sh-select
-                <input [ngbTypeahead]="dataSource" type="text" [(ngModel)]="selectedProvider.name" name="providers"
-                [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" autocomplete="off"
-                required maxlength="50" placeholder="Search Provider" pattern="^[^\s]+(\s+[^\s]+)*$" (click)="click$.next($any($event).target.value)">
-
-            <ng-template #rt let-r="result" let-t="term">
-                <span (keyup.enter)="typeaheadOnSelect(r)"> <span class="provider_ico"><img
-                            src="{{r.favicon}}" /></span>
-                    {{ r.name }} <label *ngIf="r.countryISOCode">({{r.countryISOCode}})</label></span>
-            </ng-template> -->
             <sh-select [options]="searchResults" [(ngModel)]="selectedProvider.name" [isPaginationEnabled]="true"
                 [forceClearReactive]="forceClearReactive$ | async" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
                 [enableDynamicSearch]="true" (selected)="typeaheadOnSelect($event)"
@@ -80,14 +69,9 @@
                 [disabled]="bankSyncInProgress">{{commonLocaleData?.app_update}}</button>
             <small *ngIf="bankSyncInProgress" class="grey-color clearfix mr-t2 row">{{commonLocaleData?.app_status}}:
                 <span class="primary-color">{{localeData?.authenticating}}</span>
-                <!-- <p>You can wait or check again in 15-20 min</p> -->
             </small>
         </form>
     </div>
-    <!-- <p class="text-center" *ngIf="isIframeLoading; else frame">Loading...</p>
-  <ng-template #frame>
-      <iframe id="player" *ngIf="url" class="embed-responsive-item" [src]="url" frameborder="0"></iframe>
-  </ng-template> -->
 </div>
 
 <div class="modal-footer text-center">
@@ -101,5 +85,4 @@
                 height="59" class="border-none">
         </div>
     </div>
-    <!-- <br> <span style="font-weight:bold; font-size:7pt"><a href="https://ssl.comodo.com">SSL Certificate</a></span><br> -->
 </div>
