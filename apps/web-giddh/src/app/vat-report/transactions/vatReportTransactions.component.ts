@@ -3,7 +3,6 @@ import { takeUntil, delay } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ComponentFactoryResolver, } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { VatReportTransactionsRequest } from '../../models/api-models/Vat';
-import * as _ from '../../lodash-optimized';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ToasterService } from '../../services/toaster.service';
@@ -29,7 +28,6 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: ModalDirective;
     @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
-    @ViewChild('invoiceGenerateModel', { static: true }) public invoiceGenerateModel: ModalDirective;
 
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -61,7 +59,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
 
     constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private invoiceService: InvoiceService, private generalService: GeneralService, private breakpointObserver: BreakpointObserver) {
-        
+
     }
 
     /**
@@ -70,8 +68,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public ngOnInit(): void {
-        this.toggleGstPane();
-        
+        document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
         .observe(['(max-width: 767px)'])
         .pipe(takeUntil(this.destroyed$))
@@ -115,7 +112,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out'
+        this.asideGstSidebarMenuState === 'out';
     }
 
     /**
@@ -213,10 +210,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      */
     public closeDownloadOrSendMailPopup(userResponse: { action: string }): void {
         this.downloadOrSendMailModel.hide();
-        if (userResponse.action === 'update') {
-            this.store.dispatch(this.invoiceActions.VisitToInvoiceFromPreview());
-            this.invoiceGenerateModel.show();
-        } else if (userResponse.action === 'closed') {
+        if (userResponse.action === 'closed') {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }
     }
@@ -228,7 +222,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public closeInvoiceModel(e): void {
-        this.invoiceGenerateModel.hide();
         setTimeout(() => {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }, 2000);
@@ -299,33 +292,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      */
     public navigateToPreviousPage(): void {
         this.router.navigate(['/pages/vat-report'], { state: { taxNumber: this.vatReportTransactionsRequest.taxNumber, from: this.vatReportTransactionsRequest.from, to: this.vatReportTransactionsRequest.to } })
-    }
-    
-    /**
-     * Aside pane toggle fixed class
-     *
-     *
-     * @memberof VatReportTransactionsComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideGstSidebarMenuState === 'in') {
-            document.querySelector('body').classList.add('gst-sidebar-open');
-        } else {
-            document.querySelector('body').classList.remove('gst-sidebar-open');
-        }
-    }
-
-    /**
-      * This will toggle the settings popup
-      *
-      * @param {*} [event]
-      * @memberof VatReportTransactionsComponent
-      */
-    public toggleGstPane(event?): void {
-        this.toggleBodyClass();
-        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
-            this.asideGstSidebarMenuState = "out";
-        }
     }
 
     /**

@@ -102,7 +102,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public moreLogsDisplayed: boolean = true;
     public voucherVersions: ProformaVersionItem[] = [];
     public filteredVoucherVersions: ProformaVersionItem[] = [];
-    public ckeditorContent;
     public invoiceDetailWrapperHeight: number;
     public invoiceDetailViewHeight: number;
     public invoiceImageSectionViewHeight: number;
@@ -389,7 +388,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             }
         } else if (this.voucherType === VoucherTypeEnum.purchase) {
             const requestObject: any = {
-                accountUniqueName: this.selectedItem.account.uniqueName,
+                accountUniqueName: this.selectedItem?.account.uniqueName,
                 purchaseRecordUniqueName: this.selectedItem.uniqueName
             };
             this.purchaseRecordService.downloadAttachedFile(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((data) => {

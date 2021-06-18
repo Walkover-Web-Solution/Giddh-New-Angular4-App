@@ -7609,7 +7609,6 @@ span#HW_badge_cont:nth-child(3) {
 .date-field {
     flex-direction: column;
 }
-
 .mobile-home {
     background-color: $lavender;
     .fixed-padding,
@@ -7704,11 +7703,8 @@ span#HW_badge_cont:nth-child(3) {
 .menu_open aside-setting.setting-sidebar {
     right: 0 !important;
 }
-.on-setting-page aside-setting.setting-sidebar,
-.on-user-page aside-setting.setting-sidebar {
-   // left: -250px;
-}
-.setting-sidebar-open #content-wrapper.menu_open {
+
+.setting-sidebar-open #content-wrapper{
     padding-right: 240px;
     padding-left: 60px !important;
 }
@@ -7724,6 +7720,18 @@ span#HW_badge_cont:nth-child(3) {
 }
 .desktop-header.menu_open {
     padding-left: 60px !important;
+}
+.setting-sidebar-open {
+    &.on-setting-page{
+        #content-wrapper{
+            padding-left: 60px;
+        }
+    }
+    &.on-user-page{
+        #content-wrapper{
+            padding-left: 60px;
+        }
+    }
 }
 /*flex css start*/
 .flex-column {
@@ -8277,9 +8285,14 @@ input.mat-input-element {
 .plan-wrapper {
     padding-left: 60px;
 }
-.on-setting-page .plan-wrapper,
-.on-user-page .plan-wrapper {
-    padding-left: 0;
+.setting-sidebar-open.on-setting-page .plan-wrapper,
+.setting-sidebar-open.on-user-page .plan-wrapper {
+    padding-left: 60px !important;
+
+}
+.setting-sidebar-open .plan-wrapper,
+.setting-sidebar-open.on-user-page .plan-wrapper{
+    padding-right: 240px !important;
 }
 .plan-wrapper.menu_open {
     padding-left: 240px !important;
@@ -8344,10 +8357,10 @@ input.mat-input-element {
 }
 .gst-sidebar-open {
     .gst-sidebar {
-        left: -250px !important;
+        left: 60px !important;
     }
     #content-wrapper {
-        padding-left: 0;
+        padding-left: 300px;
     }
     .nav-left-bar {
         display: block;
@@ -8359,7 +8372,7 @@ input.mat-input-element {
         transform: translate3d(0px, 0px, 0px);
     }
     .plan-wrapper {
-        padding-left: 0;
+        padding-left: 300px !important;
     }
     .menu_open {
         .gst-sidebar {
@@ -8731,6 +8744,19 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 768px) {
+    .setting-sidebar{
+        display: none;
+    }
+    .setting-sidebar-open {
+        #content-wrapper{
+            padding-right: 0;
+            padding-left: 60px;
+            &.menu_open{
+                padding-right: 0;
+                padding-left: 60px;
+            }
+        }
+    }
     .tax-engine .transactions-list .filter-row + .filter-row {
         margin-left: 5px;
     }
@@ -8919,6 +8945,24 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
+    .setting-sidebar-open {
+        #content-wrapper{
+            padding-left: 0 !important;
+            &.menu_open{
+                padding-left: 0 !important;
+            }
+        }
+    }
+    .gst-sidebar-open{
+        &.on-setting-page{
+            .gst-menu-icon{
+                display: none !important;
+            }
+        }
+    }
+    .setting-sidebar{
+        display: block;
+    }
     .on-setting-page .nav-left-bar.open,
     .on-user-page .nav-left-bar.open on-user-page {
         left: 0 !important;

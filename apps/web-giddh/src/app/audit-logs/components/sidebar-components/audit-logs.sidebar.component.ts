@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { map as lodashMap } from '../../../lodash-optimized';
@@ -74,13 +73,10 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private _companyService: CompanyService,
         private _auditLogsActions: AuditLogsActions,
-        private bsConfig: BsDatepickerConfig,
         private groupService: GroupService,
         private searchService: SearchService
     ) {
-        this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
-        this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
-        this.bsConfig.showWeekNumbers = false;
+        
     }
 
     public ngOnInit() {

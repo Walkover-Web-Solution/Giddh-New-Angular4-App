@@ -8,10 +8,7 @@ import {
 } from './../models/api-models/Company';
 import { AccountSharedWithResponse } from '../models/api-models/Account';
 import {
-    BankTransferRequest,
-    CompanyRequest,
     CompanyResponse,
-    GetCouponResp,
     StateDetailsRequest,
     StateDetailsResponse,
     States,

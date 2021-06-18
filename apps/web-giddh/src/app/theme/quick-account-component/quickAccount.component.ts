@@ -1,6 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
@@ -14,6 +13,7 @@ import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-selec
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'quickAccount',
@@ -124,7 +124,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
         let gstVal: string = gstForm.get('gstNumber').value;
-        if (gstVal.length >= 2) {
+        if (gstVal?.length >= 2) {
             this.statesSource$.pipe(take(1)).subscribe(state => {
                 let s = state.find(st => st.value === gstVal.substr(0, 2));
                 statesEle.disabled = true;
@@ -177,7 +177,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public submit() {
-        let createAccountRequest: AccountRequestV2 = _.cloneDeep(this.newAccountForm.value);
+        let createAccountRequest: AccountRequestV2 = cloneDeep(this.newAccountForm.value);
         if (!this.showGstBox) {
             delete createAccountRequest.addresses;
         }

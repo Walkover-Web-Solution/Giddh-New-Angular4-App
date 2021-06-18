@@ -20,12 +20,6 @@ export interface Scope {
     selectAll?: boolean;
 }
 
-export interface UpdateRoleRequest {
-    scopes: Scope[];
-    roleUniqueName: string;
-    uniqueName?: string;
-}
-
 export interface CreateNewRoleResponse {
     isFixed: boolean;
     scopes: Scope[];
@@ -67,10 +61,6 @@ export class ShareRequestForm {
     public uniqueName?: string;
     public dateRange?: any;
     public isLoggedInUser?: boolean;
-}
-
-export interface ISharedWithResponseForUI {
-    [key: string]: ShareRequestForm[];
 }
 
 export interface IUpdatePermissionResponse extends INameUniqueName {

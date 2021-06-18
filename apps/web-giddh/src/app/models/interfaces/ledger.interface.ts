@@ -44,23 +44,6 @@ export interface IUnit {
     quantityPerUnit?: number;
 }
 
-export interface IInvoiceRequest {
-    invoice: IInvoice;
-}
-
-export interface IInvoiceTransactionItem {
-    accountUniqueName: string;
-    description?: string;
-}
-
-export interface IInvoiceEntryItem {
-    transactions: IInvoiceTransactionItem[];
-}
-
-export interface IInvoice {
-    entries: IInvoiceEntryItem[];
-}
-
 export interface ILedger {
     applyApplicableTaxes?: boolean;
     attachedFile?: string;
@@ -113,11 +96,9 @@ export interface ITransactionItem {
     entryDate: string;
     entryUniqueName: string;
     inventory?: IInventory;
-    // invoiceNumber: string;
     voucherNumber: string;
     isBaseAccount: boolean;
     isCompoundEntry: boolean;
-    // isInvoiceGenerated: boolean;
     voucherGenerated: boolean;
     isTax: boolean;
     particular: INameUniqueName;
@@ -150,11 +131,4 @@ export interface IVoucherItem {
 export interface ITotalItem {
     amount: number;
     type: string;
-}
-
-export interface ILedgerDiscount {
-    name: string;
-    particular: string;
-    amount: number;
-    type?: string;
 }

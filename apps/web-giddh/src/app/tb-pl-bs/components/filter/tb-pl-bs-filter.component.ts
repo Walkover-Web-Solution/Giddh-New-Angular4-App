@@ -5,7 +5,6 @@ import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import * as moment from 'moment/moment';
-import * as _ from '../../../lodash-optimized';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
@@ -19,6 +18,7 @@ import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { cloneDeep, map, orderBy } from '../../../lodash-optimized';
 
 @Component({
     selector: 'tb-pl-bs-filter',
@@ -180,17 +180,17 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
 
         this.tags$ = this.store.pipe(select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
             if (tags && tags.length) {
-                _.map(tags, (tag) => {
+                map(tags, (tag) => {
                     tag.value = tag.name;
                     tag.label = tag.name;
                 });
-                return _.orderBy(tags, 'name');
+                return orderBy(tags, 'name');
             }
         })), takeUntil(this.destroyed$));
 
         this.universalDate$.subscribe((a) => {
             if (a) {
-                let date = _.cloneDeep(a);
+                let date = cloneDeep(a);
                 if (date[0].getDate() === (new Date().getDate() + 1) && date[1].getDate() === new Date().getDate()) {
                     this.universalDateICurrent = true;
                     this.setCurrentFY();
@@ -215,7 +215,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
                     this.cd.detectChanges();
                 }
                 /** To set local datepicker */
-                let universalDate = _.cloneDeep(a);
+                let universalDate = cloneDeep(a);
                 this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
                 this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -250,7 +250,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -331,7 +331,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
 
     public refreshData() {
         this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption'].value);
-        let data = _.cloneDeep(this.filterForm.value);
+        let data = cloneDeep(this.filterForm.value);
         data.refresh = true;
         this.onPropertyChanged.emit(data);
     }

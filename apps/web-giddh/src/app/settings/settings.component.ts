@@ -150,6 +150,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
             }
 
             if(this.activeTab === "taxes") {
+                this.asideGstSidebarMenuState = "in";
                 this.asideSettingMenuState = "out";
                 document.querySelector('body').classList.remove('setting-sidebar-open');
                 document.querySelector('body').classList.add('gst-sidebar-open');
@@ -379,6 +380,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
      */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('setting-sidebar-open');
+        document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideSettingMenuState = "out";
         this.asideGstSidebarMenuState = "out";
         this.destroyed$.next(true);

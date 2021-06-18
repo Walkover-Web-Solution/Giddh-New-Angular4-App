@@ -15,7 +15,6 @@ import { AppState } from '../../../../store';
 import { Store, select } from '@ngrx/store';
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import * as _ from '../../../../lodash-optimized';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequestV2, AccountResponseV2, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -30,6 +29,7 @@ import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import { SettingsDiscountActions } from '../../../../actions/settings/discount/settings.discount.action';
 import { IDiscountList } from '../../../../models/api-models/SettingsDiscount';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
+import { differenceBy, each, flatten, flattenDeep, map, omit, union } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'account-operations',
@@ -163,16 +163,16 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                         if (activeAccountTaxHierarchy) {
 
                             if (activeAccountTaxHierarchy.inheritedTaxes) {
-                                let inheritedTaxes = _.flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
+                                let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
                                 let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
                                 // set value in tax group form
                                 this.taxGroupForm.setValue({ taxes: allTaxes });
                             } else {
                                 this.taxGroupForm.setValue({ taxes: applicableTaxes });
                             }
-                            return _.differenceBy(taxes.map(p => {
+                            return differenceBy(taxes.map(p => {
                                 return { label: p.name, value: p.uniqueName };
-                            }), _.flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
+                            }), flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
                                 return { label: p.name, value: p.uniqueName };
                             }), 'value');
 
@@ -404,10 +404,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public flattenGroup(rawList: any[], parents: any[] = []) {
         let listofUN;
-        listofUN = _.map(rawList, (listItem) => {
+        listofUN = map(rawList, (listItem) => {
             let newParents;
             let result;
-            newParents = _.union([], parents);
+            newParents = union([], parents);
             newParents.push({
                 name: listItem.name,
                 uniqueName: listItem.uniqueName
@@ -416,13 +416,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             listItem.parentGroups = newParents;
             if (listItem.groups.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
-                result.push(_.omit(listItem, 'groups'));
+                result.push(omit(listItem, 'groups'));
             } else {
-                result = _.omit(listItem, 'groups');
+                result = omit(listItem, 'groups');
             }
             return result;
         });
-        return _.flatten(listofUN);
+        return flatten(listofUN);
     }
 
     public isRootLevelGroupFunc(uniqueName: string) {
@@ -438,7 +438,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public flattenAccounts(groups: GroupsWithAccountsResponse[] = [], accounts: IAccountsInfo[]): IAccountsInfo[] {
-        _.each(groups, grp => {
+        each(groups, grp => {
             accounts.push(...grp.accounts);
             if (grp.groups) {
                 this.flattenAccounts(grp.groups, accounts);
@@ -449,7 +449,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public makeGroupListFlatwithLessDtl(rawList: any) {
         let obj;
-        obj = _.map(rawList, (item: any) => {
+        obj = map(rawList, (item: any) => {
             obj = {};
             obj.name = item.name;
             obj.uniqueName = item.uniqueName;
@@ -599,7 +599,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 obj.uniqueName = acc;
                 finalData.push(obj);
             });
-            this.store.dispatch(this.accountsAction.mergeAccount(activeAccount.uniqueName, finalData));
+            this.store.dispatch(this.accountsAction.mergeAccount(activeAccount?.uniqueName, finalData));
             this.showDeleteMove = false;
         } else {
             this._toaster.errorToast(this.localeData?.merge_account_error);

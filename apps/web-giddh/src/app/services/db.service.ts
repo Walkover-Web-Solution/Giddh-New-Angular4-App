@@ -14,7 +14,7 @@ export class DbService {
         private store: Store<AppState>,
         private generalService: GeneralService
     ) {
-        
+
     }
 
     public getItemDetails(key: any): Observable<ICompAidata> {
@@ -41,6 +41,10 @@ export class DbService {
             branches = response || [];
         });
         return GIDDH_DB.removeItem(key, entity, uniqueName, this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1);
+    }
+
+    public deleteAllData(): void {
+        GIDDH_DB.forceDeleteDB();
     }
 
     public clearAllData(): void {

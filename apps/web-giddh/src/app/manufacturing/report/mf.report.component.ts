@@ -11,7 +11,6 @@ import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import * as _ from '../../lodash-optimized';
 import { StocksResponse } from '../../models/api-models/Inventory';
 import { IMfStockSearchRequest } from '../../models/interfaces/manufacturing.interface';
 import { OrganizationType } from '../../models/user-login-state';
@@ -24,6 +23,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { IForceClear } from '../../models/api-models/Sales';
 import { LinkedStocksResponse } from '../../models/api-models/BranchTransfer';
+import { cloneDeep, forEach } from '../../lodash-optimized';
 
 const filter1 = [
     { label: 'Greater', value: 'greaterThan' },
@@ -149,7 +149,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
             if (o) {
                 if (o.results) {
                     this.stockListDropDown = [];
-                    _.forEach(o.results, (unit: any) => {
+                    forEach(o.results, (unit: any) => {
                         this.stockListDropDown.push({
                             label: ` ${unit.name} (${unit.uniqueName})`,
                             value: unit.uniqueName,
@@ -163,7 +163,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
         });
         this.store.pipe(select(p => p.manufacturing.reportData), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o) {
-                this.reportData = _.cloneDeep(o);
+                this.reportData = cloneDeep(o);
             }
         });
 
@@ -175,7 +175,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
         // Refresh report data according to universal date
         this.store.pipe(select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
-                this.universalDate = _.cloneDeep(dateObj);
+                this.universalDate = cloneDeep(dateObj);
                 this.mfStockSearchRequest.dateRange = this.universalDate;
                 this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                 this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -212,7 +212,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -248,7 +248,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     }
 
     public getReports() {
-        let data = _.cloneDeep(this.mfStockSearchRequest);
+        let data = cloneDeep(this.mfStockSearchRequest);
         data.from = this.fromDate;
         data.to = this.toDate;
         this.store.dispatch(this.manufacturingActions.GetMfReport(data));
@@ -257,7 +257,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public pageChanged(event: any): void {
         if (event.page !== this.lastPage) {
             this.lastPage = event.page;
-            let data = _.cloneDeep(this.mfStockSearchRequest);
+            let data = cloneDeep(this.mfStockSearchRequest);
             data.page = event.page;
             this.store.dispatch(this.manufacturingActions.GetMfReport(data));
         }
@@ -271,7 +271,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     }
 
     public getReportDataOnFresh() {
-        let data = _.cloneDeep(this.mfStockSearchRequest);
+        let data = cloneDeep(this.mfStockSearchRequest);
         if (this.universalDate) {
             data.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
             data.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
