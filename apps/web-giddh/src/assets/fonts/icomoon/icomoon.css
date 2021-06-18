@@ -830,3 +830,22 @@
   .icon-folder:before {
     content: "\f2334";
   }
+  .icon-company, .icon-branch1{
+      position: relative;
+  }
+.custom-tabs .nav-tabs .nav-item.icon-company:before {
+    position: absolute !important;
+    left: 20px !important;
+    top: 5px;
+}
+.custom-tabs .nav-tabs .nav-item.active.icon-company:before{
+    color: #1a237e;
+}
+.custom-tabs .nav-tabs .nav-item.icon-branch1:before {
+    position: absolute !important;
+    left: 20px !important;
+    top: 5px;
+}
+.custom-tabs .nav-tabs .nav-item.active.icon-branch1:before{
+    color: #1a237e;
+}

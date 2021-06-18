@@ -8400,8 +8400,8 @@ body.update-scroll-hidden {
     }
 }
 .company-branch-dropdown{
-    .custom-tabs{
-        ul{
+    .custom-tabs {
+        ul {
             &.nav.nav-tabs{
                 position: inherit !important;
                 background-color: transparent;
@@ -8419,8 +8419,14 @@ body.update-scroll-hidden {
                         }
                     }
                     padding-right: 0;
+                    &.icon-company{
+                        &:before{
+                            position: absolute;
+                            left: 20px;
+                        }
+                    }
                     a{
-                        padding: 0 10px !important;
+                        padding: 6px 10px !important;
                         min-width: 110px;
                         font-family: 'opensans-regular';
                         color: $grey-chateau !important;
@@ -8430,6 +8436,15 @@ body.update-scroll-hidden {
             }
         }
     }
+}
+
+.custom-tabs .nav-tabs .nav-item.icon-company::before {
+    position: absolute !important;
+    left: 20px !important;
+}
+.custom-tabs .nav-tabs .nav-item.icon-branch1::before {
+    position: absolute !important;
+    left: 20px !important;
 }
 /* responsive  starts here*/
 
