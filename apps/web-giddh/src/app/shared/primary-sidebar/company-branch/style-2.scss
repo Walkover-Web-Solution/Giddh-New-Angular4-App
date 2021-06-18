@@ -571,7 +571,7 @@ input {
     font-size: 13px;
     color: $chetwode-blue !important;
     display: block;
-    padding: 7px 10px !important;
+    padding: 7px 10px;
     display: block;
     width: 100%;
     text-align: left;
@@ -6931,6 +6931,7 @@ ul.dropdown-menu p.lead.pd {
     height: 36px !important;
     border-right: 1px solid $gainsboro !important;
     color: $nobel !important;
+    cursor: pointer;
 }
 
 .date-advance-search .input-group input.form-control {
@@ -7608,6 +7609,7 @@ span#HW_badge_cont:nth-child(3) {
 .date-field {
     flex-direction: column;
 }
+
 .mobile-home {
     background-color: $lavender;
     .fixed-padding,
@@ -7702,31 +7704,26 @@ span#HW_badge_cont:nth-child(3) {
 .menu_open aside-setting.setting-sidebar {
     right: 0 !important;
 }
-
-.setting-sidebar-open #content-wrapper{
+.on-setting-page aside-setting.setting-sidebar,
+.on-user-page aside-setting.setting-sidebar {
+   // left: -250px;
+}
+.setting-sidebar-open #content-wrapper.menu_open {
     padding-right: 240px;
     padding-left: 60px !important;
 }
+
 .setting-sidebar-open .desktop-header {
     padding-left: 0;
 }
 .setting-sidebar-open .desktop-header.menu_open {
     padding-right: 240px !important;
 }
+.gst-sidebar-open .menu_open {
+    padding-left: 300px !important;
+}
 .desktop-header.menu_open {
     padding-left: 60px !important;
-}
-.setting-sidebar-open {
-    &.on-setting-page{
-        #content-wrapper{
-            padding-left: 60px;
-        }
-    }
-    &.on-user-page{
-        #content-wrapper{
-            padding-left: 60px;
-        }
-    }
 }
 /*flex css start*/
 .flex-column {
@@ -8280,13 +8277,9 @@ input.mat-input-element {
 .plan-wrapper {
     padding-left: 60px;
 }
-.setting-sidebar-open.on-setting-page .plan-wrapper,
-.setting-sidebar-open.on-user-page .plan-wrapper {
-    padding-left: 60px !important;
-}
-.setting-sidebar-open .plan-wrapper,
-.setting-sidebar-open.on-user-page .plan-wrapper{
-    padding-right: 240px !important;
+.on-setting-page .plan-wrapper,
+.on-user-page .plan-wrapper {
+    padding-left: 0;
 }
 .plan-wrapper.menu_open {
     padding-left: 240px !important;
@@ -8351,10 +8344,10 @@ input.mat-input-element {
 }
 .gst-sidebar-open {
     .gst-sidebar {
-        left: 60px !important;
+        left: -250px !important;
     }
     #content-wrapper {
-        padding-left: 300px !important;
+        padding-left: 0;
     }
     .nav-left-bar {
         display: block;
@@ -8366,7 +8359,7 @@ input.mat-input-element {
         transform: translate3d(0px, 0px, 0px);
     }
     .plan-wrapper {
-        padding-left: 300px !important;
+        padding-left: 0;
     }
     .menu_open {
         .gst-sidebar {
@@ -8380,28 +8373,22 @@ input.mat-input-element {
         }
     }
 }
-
+body.update-scroll-hidden {
+    overflow-y: hidden;
+}
 .e-waybill-tabs.custom-tabs .nav-tabs {
     position: static !important;
     padding-left: 15px !important;
 }
-
-body.update-scroll-hidden {
-    overflow-y: hidden;
+.e-waybill-tabs.custom-tabs .nav-tabs {
+    position: static !important;
+    padding-left: 15px !important;
 }
-.wrap-billing-address.clearfix {
-    .bottom-border-only {
-        padding-left: 0 !important;
-    }
+.sales-register {
+    width: calc(100% - 60px) !important;
 }
-.nav-left-bar{
-    &.width-60  {
-        .sidebar-collapse {
-            .sub-menu{
-                display: none !important;
-            }
-        }
-    }
+.menu_open .sales-register {
+    width: calc(100% - 240px) !important;
 }
 .nav-left-bar{
     &.width-60  {
@@ -8413,8 +8400,8 @@ body.update-scroll-hidden {
     }
 }
 .company-branch-dropdown{
-    .custom-tabs{
-        ul{
+    .custom-tabs {
+        ul {
             &.nav.nav-tabs{
                 position: inherit !important;
                 background-color: transparent;
@@ -8432,8 +8419,14 @@ body.update-scroll-hidden {
                         }
                     }
                     padding-right: 0;
+                    &.icon-company{
+                        &:before{
+                            position: absolute;
+                            left: 20px;
+                        }
+                    }
                     a{
-                        padding: 0 10px !important;
+                        padding: 6px 10px !important;
                         min-width: 110px;
                         font-family: 'opensans-regular';
                         color: $grey-chateau !important;
@@ -8443,6 +8436,15 @@ body.update-scroll-hidden {
             }
         }
     }
+}
+
+.custom-tabs .nav-tabs .nav-item.icon-company::before {
+    position: absolute !important;
+    left: 20px !important;
+}
+.custom-tabs .nav-tabs .nav-item.icon-branch1::before {
+    position: absolute !important;
+    left: 20px !important;
 }
 /* responsive  starts here*/
 
@@ -8498,29 +8500,6 @@ body.update-scroll-hidden {
         width: 90px;
         height: 90px !important;
         font-size: 14px;
-    }
-    .gst-sidebar-open {
-         .gst-sidebar{
-            left: -250px !important;
-         }
-         #content-wrapper{
-            padding-left: 0;
-        }
-        .plan-wrapper{
-            padding-left: 0;
-        }
-        .menu_open{
-            #content-wrapper {
-                padding-left: 240px;
-            }
-            .plan-wrapper{
-                padding-left: 60px;
-            }
-        }
-    }
-    .e-waybill-tabs.custom-tabs .nav-tabs{
-        position: static !important;
-        padding-left: 15px !important;
     }
     .groups-buttons {
         height: auto;
@@ -8734,19 +8713,6 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 768px) {
-    .setting-sidebar{
-        display: none;
-    }
-    .setting-sidebar-open {
-        #content-wrapper{
-            padding-right: 0;
-            padding-left: 60px;
-            &.menu_open{
-                padding-right: 0;
-                padding-left: 60px;
-            }
-        }
-    }
     .tax-engine .transactions-list .filter-row + .filter-row {
         margin-left: 5px;
     }
@@ -8935,27 +8901,6 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
-    .setting-sidebar-open {
-        #content-wrapper{
-            padding-left: 0 !important;
-            &.menu_open{
-                padding-left: 0 !important;
-            }
-        }
-    }
-    .gst-sidebar-open{
-        &.on-setting-page{
-            .gst-menu-icon{
-                display: none !important;
-            }
-        }
-        #content-wrapper{
-            padding-left: 0;
-        }
-    }
-    .setting-sidebar{
-        display: block;
-    }
     .on-setting-page .nav-left-bar.open,
     .on-user-page .nav-left-bar.open on-user-page {
         left: 0 !important;
@@ -8966,7 +8911,7 @@ body.update-scroll-hidden {
     .on-setting-page .nav-left-bar {
         display: none;
     }
-    .on-setting-page, .gst-sidebar-open, .on-user-page{
+    .on-setting-page, .gst-sidebar-open , .on-user-page{
         .hamburger-menu-icon{
             left: 80px !important;
             width: calc(100% - 160px) !important;
@@ -9561,8 +9506,8 @@ body.update-scroll-hidden {
 
 @media (max-width: 575px) {
     .gst-sidebar-open .daterangepicker {
-        left: auto !important;
-        right: 90px !important;
+        left: 15px !important;
+        right: 0 !important;
     }
     .filter-band ul{
         left: auto !important;
@@ -9585,7 +9530,6 @@ body.update-scroll-hidden {
     }
     .daterangepicker.ltr .ranges {
         float: left;
-
         ul {
             li {
                 font-size: 11px;
@@ -9623,6 +9567,10 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 375px) {
+    .gst-sidebar-open .daterangepicker {
+        left: 15px !important;
+        right: auto !important;
+    }
     .setting-page.tb-pl-bs-tabs ul.nav.nav-tabs {
         overflow-x: auto;
         white-space: nowrap;
@@ -9648,6 +9596,15 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 360px) {
+    .on-setting-page{
+        .hamburger-menu-icon.page-has-heading{
+            li{
+                h4{
+                  min-width: 150px !important;
+                }
+            }
+        }
+    }
     .pagination-sm > li > a,
     .pagination-sm > li > span {
         padding: 5px 8px;
@@ -9852,7 +9809,7 @@ body.update-scroll-hidden {
         display: none;
     }
     .modal-dialog {
-        max-width: 600px !important;
+        max-width: 650px !important;
         margin: 56px auto;
         padding: 0 10px;
     }
@@ -9862,6 +9819,7 @@ body.update-scroll-hidden {
     .receipt-note-modal {
         max-width: 100% !important;
     }
+
     .po-preview-modal {
         max-width: 100% !important;
         width: 900px !important;
@@ -10089,7 +10047,4 @@ body.prevent-body-scroll {
 }
 .sky-blue-bg {
     background-color: $light-sky-blue;
-}
-.giddh-no-permissions {
-    display: none !important;
 }

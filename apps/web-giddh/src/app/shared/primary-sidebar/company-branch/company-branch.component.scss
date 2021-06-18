@@ -37,18 +37,19 @@
             border-bottom-left-radius: 0px !important;
         }
     }
+    tab{
+        position: relative;
+        font-family: 'opensans-regular' !important;
+    }
     tab.icon-company{
         &::before{
-            top: 14px;
-            left: -16px;
-            position: absolute;
+            display: none;
+
         }
     }
     tab.icon-branch1{
         &::before{
-            top: 14px;
-            left: -16px;
-            position: absolute;
+            display: none;
         }
     }
     .company-list {
@@ -58,7 +59,7 @@
         padding: 0 20px;
         ul{
             li{
-                padding: 8px 0;
+                padding: 10px 0;
                 cursor: pointer;
                 color: $trout;
                 &.btn-group{
@@ -200,7 +201,7 @@
         .icon-copmany-branch-connect{
             position: absolute;
             top: 14px;
-            left: 90px;
+            left: 100px;
         }
     }
 }
