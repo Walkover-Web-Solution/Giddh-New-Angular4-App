@@ -1,9 +1,8 @@
 <ng-container appTranslate [file]="'all-items'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="primary-sidebar py-3 position-relative" [ngClass]="{'sidebar-collapse': !isOpen}">
-        <div class="company-branch-block pd-l2 pd-r2 position-relative" [ngClass]="{'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1}" dropdown [autoClose]="false">
-            <ul class="list-style-none branch-connection" id="button-company-branch" dropdownToggle class="dropdown-toggle"
-            aria-controls="dropdown-basic-company-branch">
+        <div class="company-branch-block pd-l2 pd-r2 position-relative" [ngClass]="{'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1}">
+            <ul class="list-style-none branch-connection" id="button-company-branch" (click)="openCompanyBranchDropdown()">
                 <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
                     <span class="inner-span"></span>
                 </span>
@@ -22,8 +21,8 @@
                                     <i class="icon-branch-connect" *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"></i>
                                 </span>
                                 <span class="d-flex">
-                                    <i class="icon-down-new"></i>
-                                    <i class="icon-cross"></i>
+                                    <i class="icon-down-new" *ngIf="!showCompanyBranchSwitch"></i>
+                                    <i class="icon-cross" *ngIf="showCompanyBranchSwitch"></i>
                                 </span>
                             </div>
                         </div>
@@ -33,8 +32,7 @@
                     </ul>
                 </li>
             </ul>
-            <div id="dropdown-basic-company-branch" *dropdownMenu class="dropdown-menu company-branch-nav"
-            role="menu" aria-labelledby="button-company-branch">
+            <div class="dropdown-menu company-branch-nav" *ngIf="showCompanyBranchSwitch">
                 <company-branch [localeData]="localeData" [commonLocaleData]="commonLocaleData" (createNewCompany)="createNewCompany()"></company-branch>
             </div>
         </div>

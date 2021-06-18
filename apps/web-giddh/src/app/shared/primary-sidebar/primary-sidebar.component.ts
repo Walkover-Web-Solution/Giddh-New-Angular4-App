@@ -137,6 +137,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public commonLocaleData: any = {};
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** This will open company branch switch dropdown */
+    public showCompanyBranchSwitch:boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -292,7 +294,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.companyListForFilter = orderedCompanies;
             this.companies$ = observableOf(orderedCompanies);
         });
-        
+
         this.user$ = this.store.pipe(select(createSelector([(state: AppState) => state.session.user], (user) => {
             if (user && user.user && user.user.name && user.user.name.length > 1) {
                 let name = user.user.name;
@@ -968,5 +970,15 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 });
             }
         }
+    }
+
+    /**
+     * It will show/hide company branch switch dropdown
+     *
+     *
+     * @memberof PrimarySidebarComponent
+     */
+    public openCompanyBranchDropdown():void{
+        this.showCompanyBranchSwitch = !this.showCompanyBranchSwitch;
     }
 }
