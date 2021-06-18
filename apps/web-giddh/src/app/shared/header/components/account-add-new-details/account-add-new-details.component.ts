@@ -165,9 +165,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private groupWithAccountsAction: GroupWithAccountsAction,
         private invoiceService: InvoiceService) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
-        this.getCountry();
-        this.getCallingCodes();
-        this.getPartyTypes();
+        
     }
 
     /**
@@ -176,6 +174,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public ngOnInit(): void {
+        this.getCountry();
+        this.getCallingCodes();
+        this.getPartyTypes();
+        
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }

@@ -157,8 +157,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         private groupWithAction: GroupWithAccountsAction,
         private localeService: LocaleService
     ) {
-        // Reset old stored application date
-        this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.activeAccount$ = this.store.pipe(select(appStore => appStore.ledger.account), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(appStore => appStore.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
@@ -233,6 +231,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnInit(): void {
+        // Reset old stored application date
+        this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.updateIndexDbSuccess$ = this.store.pipe(select(appStore => appStore.general.updateIndexDbComplete), takeUntil(this.destroyed$))
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
             if (selectedCmp && selectedCmp?.uniqueName === this.generalService.companyUniqueName) {

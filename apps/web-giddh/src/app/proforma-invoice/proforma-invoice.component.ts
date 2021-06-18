@@ -645,17 +645,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private voucherTypeToNamePipe: VoucherTypeToNamePipe,
         private titleCasePipe: TitleCasePipe
     ) {
-        this.getInventorySettings();
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
-        this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
-        this.store.dispatch(this.companyActions.getTax());
-        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
-        this.store.dispatch(this._settingsDiscountAction.GetDiscount());
-        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
-        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
-        this.store.dispatch(this.settingsBranchAction.resetAllBranches());
-        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
 
         this.invFormData = new VoucherClass();
         this.activeAccount$ = this.store.pipe(select(p => p.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
@@ -687,21 +678,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         );
         this.getOnboardingFormInProcess$ = this.store.pipe(select(s => s.common.getOnboardingFormInProcess), takeUntil(this.destroyed$));
         this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
-
-        this.loaderService.loaderState.pipe(delay(500), takeUntil(this.destroyed$)).subscribe((stateLoader: LoaderState) => {
-            // check if we really need to show a loader
-            if (!this.shouldShowLoader) {
-                return;
-            }
-        });
-        this.generateUpdateButtonClicked.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((form: NgForm) => {
-            this.startLoader(true);
-            if (this.isUpdateMode) {
-                this.handleUpdateInvoiceForm(form);
-            } else {
-                this.onSubmitInvoiceForm(form);
-            }
-        });
     }
 
     public ngAfterViewInit() {
@@ -749,6 +725,31 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnInit() {
+        this.getInventorySettings();
+        this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
+        this.store.dispatch(this.companyActions.getTax());
+        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+        this.store.dispatch(this._settingsDiscountAction.GetDiscount());
+        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
+        this.store.dispatch(this.settingsBranchAction.resetAllBranches());
+        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+
+        this.loaderService.loaderState.pipe(delay(500), takeUntil(this.destroyed$)).subscribe((stateLoader: LoaderState) => {
+            // check if we really need to show a loader
+            if (!this.shouldShowLoader) {
+                return;
+            }
+        });
+        this.generateUpdateButtonClicked.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((form: NgForm) => {
+            this.startLoader(true);
+            if (this.isUpdateMode) {
+                this.handleUpdateInvoiceForm(form);
+            } else {
+                this.onSubmitInvoiceForm(form);
+            }
+        });
+
         this.isPendingSales = this.router.url.includes('/pages/invoice/preview/pending/sales' && '/pages/purchase-management/purchase/bill');
         this.autoFillShipping = true;
         this.isUpdateMode = false;

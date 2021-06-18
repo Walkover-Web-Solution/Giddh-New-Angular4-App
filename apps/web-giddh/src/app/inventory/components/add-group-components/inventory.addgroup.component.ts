@@ -66,15 +66,15 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         this.isUpdateGroupInProcess$ = this.store.pipe(select(state => state.inventory.isUpdateGroupInProcess), takeUntil(this.destroyed$));
         this.isDeleteGroupInProcess$ = this.store.pipe(select(state => state.inventory.isDeleteGroupInProcess), takeUntil(this.destroyed$));
         this.manageInProcess$ = this.store.pipe(select(s => s.inventory.inventoryAsideState), takeUntil(this.destroyed$));
+        this.companyTaxesList$ = this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$));
+    }
+
+    public ngOnInit() {
         this.store.pipe(take(1)).subscribe(state => {
             if (state.inventory.groupsWithStocks === null) {
                 this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
             }
         });
-        this.companyTaxesList$ = this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$));
-    }
-
-    public ngOnInit() {
         // get all groups
         this.getParentGroupData();
         this.getInvoiceSettings();

@@ -29,6 +29,15 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
         private connectionService: ConnectionService,
         private authService: AuthenticationService
     ) {
+        
+    }
+
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    public ngOnInit() {
         this.connectionService.monitor().pipe(takeUntil(this.destroyed$)).subscribe(isConnected => {
             if (!isConnected) {
                 this.isConnected = false;
@@ -39,14 +48,7 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
                 }
             }
         });
-    }
-
-    public ngOnDestroy() {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    public ngOnInit() {
+        
         if (this.route.snapshot.queryParams['signup'] && this.generalService.user) {
             this.authService.ClearSession().pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response.status === 'success') {
