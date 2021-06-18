@@ -272,7 +272,9 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
      */
     public showAllBranches(company: any): void {
         this.companyBranches = company;
-        this.staticTabs.tabs[1].active = true;
+        if (this.staticTabs && this.staticTabs.tabs[1]) {
+            this.staticTabs.tabs[1].active = true;
+        }
     }
 
     /**
