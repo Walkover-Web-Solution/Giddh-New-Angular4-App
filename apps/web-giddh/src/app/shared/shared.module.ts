@@ -69,6 +69,9 @@ import { AmountFieldComponent } from './amount-field/amount-field.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { ScheduleNowComponent } from './schedule-now/schedule-now.component';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+
+import { CompanyBranchComponent } from './primary-sidebar/company-branch/company-branch.component';
+
 import localeEn from '@angular/common/locales/en-GB';
 import localeHi from '@angular/common/locales/hi';
 import localeMr from '@angular/common/locales/mr';
@@ -157,7 +160,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         GiddhPageLoaderComponent,
         AmountFieldComponent,
         PrimarySidebarComponent,
-        ScheduleNowComponent
+        ScheduleNowComponent,
+        CompanyBranchComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -250,7 +254,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         CurrencyModule,
         PrimarySidebarComponent,
         ScheduleNowComponent,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        CompanyBranchComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

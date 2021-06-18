@@ -26,7 +26,16 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-manage-group-acc:before {
+.icon-copmany-branch-connect:before {
+    content: "\e9f7";
+  }
+  .icon-logout:before {
+    content: "\e9f9";
+  }
+  .icon-head-branch:before {
+    content: "\e9f8";
+  }
+  .icon-manage-group-acc:before {
     content: "\e9ef";
   }
   .icon-e-commerce:before {
@@ -821,3 +830,7 @@
   .icon-folder:before {
     content: "\f2334";
   }
+  .icon-company, .icon-branch1{
+      position: relative;
+  }
+
