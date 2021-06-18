@@ -484,7 +484,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             let gstVal: string = gstNo.value;
             this.companyProfileObj.gstNumber = gstVal;
 
-            if (gstVal.length >= 2) {
+            if (gstVal?.length >= 2) {
                 this.statesSource$.pipe(take(1)).subscribe(state => {
                     let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
