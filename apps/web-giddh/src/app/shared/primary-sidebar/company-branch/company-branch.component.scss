@@ -1,5 +1,6 @@
 @import '../../../../assets/css/color.scss';
-.company-branch-dorpdown{
+.company-branch-dropdown{
+    font-family: 'opensans-regular';
     padding: 0 20px;
     .search-box {
         .input-group-text {
@@ -36,7 +37,21 @@
             border-bottom-left-radius: 0px !important;
         }
     }
-    .company-list{
+    tab.icon-company{
+        &::before{
+            top: 14px;
+            left: -16px;
+            position: absolute;
+        }
+    }
+    tab.icon-branch1{
+        &::before{
+            top: 14px;
+            left: -16px;
+            position: absolute;
+        }
+    }
+    .company-list {
         height: calc(66vh - 60px) !important;
         overflow: auto;
         margin: 0 -20px;
@@ -49,6 +64,18 @@
                 &.btn-group{
                     display: flex;
                     flex-direction: column;
+                    span{
+                        white-space: normal;
+                        word-break: break-all;
+                        i.icon-company{
+                            float: left;
+                            width: 14px;
+                        }
+                        .company-name-right{
+                            float: left;
+                            width: 86%;
+                        }
+                    }
                     &.open{
                         background-color: $dark-alice-blue;
                         margin: 0 -20px;
@@ -71,9 +98,12 @@
                         padding: 0;
                         li{
                             padding:  0;
+                            &.show-more-branches, &.create-branch{
+                                padding: 0 20px;
+                            }
                             a{
                                 background-color: transparent;
-                                padding:8px 15px;
+                                padding:8px 20px;
                                 &:hover{
                                     background-color: initial !important;
                                     color: initial !important;
@@ -128,14 +158,15 @@
             }
         }
     }
-    .profile-user{
+    .profile-user {
         position: fixed;
-        bottom: -7px;
+        bottom: -20px;
         width: 240px;
         left: 0;
         padding: 0;
         border-top: 1px solid $gainsboro;
         background-color: $white;
+        z-index: 990;
         .profile-name{
             padding: 14px 15px;
             cursor: pointer;
@@ -165,7 +196,7 @@
             }
         }
     }
-    .custom-tabs{
+    .custom-tabs {
         .icon-copmany-branch-connect{
             position: absolute;
             top: 14px;
@@ -173,15 +204,15 @@
         }
     }
 }
-.digit-blue{
+.digit-blue {
     color: $cornflower;
 }
-.digit-orange{
+.digit-orange {
     color: $orange-new;
 }
 
 @media screen and (max-height: 768px) {
-    .company-branch-dorpdown{
+    .company-branch-dropdown{
         .company-list {
             height: calc(60vh - 60px) !important;
         }
