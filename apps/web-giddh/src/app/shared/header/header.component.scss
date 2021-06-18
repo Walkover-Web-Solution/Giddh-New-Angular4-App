@@ -314,6 +314,9 @@ a[vr-item]:focus {
 .nav-left-bar.open {
     left: 0;
     width: 240px;
+    &.width-60{
+        width: 60px;
+    }
 }
 
 .left-sub-menu ul > li > a {
@@ -966,6 +969,12 @@ ul.sub-list {
                 padding: 3px !important;
                 font-size: 22px;
             }
+            &.disable-icon{
+                i{
+                    color: $gainsboro !important;
+                    cursor: no-drop;
+                }
+            }
         }
     }
 }
@@ -1021,6 +1030,12 @@ ul.sub-list {
     }
 }
 @media (max-width: 767px) {
+    .gst-menu-icon, .setting-menu-icon {
+        padding: 4px 8px;
+        display: none;
+        width: 32px;
+        text-align: center;
+    }
     .fixed-padding {
         padding-top: 90px;
         #primary-new-header.primary-main-header {

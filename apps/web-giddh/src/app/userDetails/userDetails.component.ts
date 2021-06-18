@@ -348,4 +348,32 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         stateDetailsRequest.lastState = `pages/user-details/${tabName}`;
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
+
+     /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof UserDetailsComponent
+     */
+      public getPageHeading(): string {
+        let pageHeading = "";
+
+        if (this.isMobileScreen) {
+            switch (this.activeTab) {
+                case 'auth-key':
+                    pageHeading = this.localeData?.auth_key?.tab_heading;
+                    break;
+                case 'mobile-number':
+                    pageHeading = this.localeData?.mobile_number?.tab_heading;
+                    break;
+                case 'session':
+                    pageHeading = this.localeData?.session?.tab_heading;
+                    break;
+                case 'subscription':
+                    pageHeading = this.localeData?.subscription?.tab_heading;
+                    break;
+            }
+        }
+        return pageHeading;
+    }
 }

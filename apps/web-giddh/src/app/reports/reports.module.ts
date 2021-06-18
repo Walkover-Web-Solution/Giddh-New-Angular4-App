@@ -28,6 +28,7 @@ import { ReverseChargeReport } from './components/reverse-charge-report-componen
 import { SalesRegisterExpandComponent } from './components/salesRegister-expand-component/sales.register.expand.component';
 import { ReportsComponent } from './reports.component';
 import { ReportsRoutingModule } from './reports.routing.module';
+import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 
 @NgModule({
     declarations: [
@@ -73,7 +74,8 @@ import { ReportsRoutingModule } from './reports.routing.module';
         TooltipModule,
         ElementViewChildModule,
         ModalModule.forRoot(),
-        SharedModule
+        SharedModule,
+        TaxSidebarModule
     ]
 })
 

@@ -1,4 +1,4 @@
-@import '../../../assets/css/color.scss';
+@import "../../../assets/css/color.scss";
 
 :host.gst-sidebar {
     position: fixed;
@@ -9,7 +9,7 @@
     width: 240px;
     left: 0;
     z-index: 999;
-    box-shadow: -2px -2px 15px rgba(0,0,0,.2)!important;
+    box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2) !important;
     .aside-pane {
         background: $white;
         overflow: initial;
@@ -20,30 +20,31 @@
             margin-bottom: 0;
         }
         .help-aside-body {
-            .inventory-items {
+            .gst-menu-items {
                 ul {
                     li {
                         padding: 0px;
                         a {
                             display: flex;
                             align-items: flex-start;
-                            padding: 7px 15px;
+                            padding: 7px 20px;
+                            margin-bottom: 4px;
                             span {
                                 i {
                                     color: $gray;
                                     margin-right: 10px;
-                                    font-size: 14px;
+                                    font-size: 20px;
                                 }
                             }
-                            &.disabled{
-                                span{
+                            &.disabled {
+                                span {
                                     color: $gray !important;
                                 }
                             }
                             &.active {
                                 background-color: $cornflower !important;
-                                span, 
-                                span i{
+                                span,
+                                span i {
                                     color: $white !important;
                                 }
                             }
@@ -55,27 +56,39 @@
     }
 }
 
-.inventory-items {
+.gst-menu-items {
     padding: 15px 0 0;
     ul {
         padding: 0;
         list-style: none;
         font-size: 14px;
         font-family: "opensans-semibold";
+        color: $trout;
         li {
             padding: 6px 20px;
             margin-bottom: 0px;
+            &.disabled {
+                &:hover {
+                    background-color: transparent;
+                    span{
+                        i{
+                            color: $gray !important;
+                        }
+                    }
+                }
+
+            }
             a {
                 cursor: pointer;
                 pointer-events: all;
-                &.disabled{
+                &.disabled {
                     pointer-events: none;
                 }
                 img {
                     margin-right: 12px;
                 }
                 span {
-                    color: $nero;
+                    color: $trout;
                     &:first-child {
                         line-height: 1.6;
                         height: 20px;
@@ -93,12 +106,15 @@
             }
             &:hover {
                 background-color: $lavender;
+                span{
+                    i{
+                        color: $nero !important;
+                    }
+                }
             }
+
         }
     }
-}
-.inventory-items ul li:hover a span i {
-    color: $nero !important;
 }
 @media (max-width: 767px) {
     :host.gst-sidebar {
