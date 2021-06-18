@@ -343,13 +343,4 @@ export class VatReportComponent implements OnInit, OnDestroy {
             this.isTaxApiInProgress = false;
         });
     }
-
-    /**
-     * Handles GST Sidebar Navigation
-     *
-     * @memberof VatReportComponent
-     */
-     public handleNavigation(): void {
-        this._route.navigate(['pages', 'gstfiling']);
-    }
 }
