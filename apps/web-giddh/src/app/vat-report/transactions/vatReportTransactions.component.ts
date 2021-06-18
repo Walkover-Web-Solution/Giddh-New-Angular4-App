@@ -300,13 +300,4 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public navigateToPreviousPage(): void {
         this.router.navigate(['/pages/vat-report'], { state: { taxNumber: this.vatReportTransactionsRequest.taxNumber, from: this.vatReportTransactionsRequest.from, to: this.vatReportTransactionsRequest.to } })
     }
-
-    /**
-     * Handles GST Sidebar Navigation
-     *
-     * @memberof VatReportTransactionsComponent
-     */
-     public handleNavigation(): void {
-        this.router.navigate(['pages', 'gstfiling']);
-    }
 }
