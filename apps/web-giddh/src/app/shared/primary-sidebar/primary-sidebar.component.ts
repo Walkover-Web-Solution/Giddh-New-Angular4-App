@@ -137,6 +137,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public commonLocaleData: any = {};
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** This will holds true if we added ledger item in local db once */
+    public isItemAdded: boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -373,7 +375,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
         if(this.router.url.includes("/ledger")) {
             this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
-                if(account) {
+                if(account && !this.isItemAdded) {
+                    this.isItemAdded = true;
+                    
                     // save data to db
                     let item: any = {};
                     item.time = +new Date();
