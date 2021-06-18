@@ -314,6 +314,9 @@ a[vr-item]:focus {
 .nav-left-bar.open {
     left: 0;
     width: 240px;
+    &.width-60{
+        width: 60px;
+    }
 }
 
 .left-sub-menu ul > li > a {
@@ -965,6 +968,12 @@ ul.sub-list {
                 padding: 3px !important;
                 font-size: 22px;
             }
+            &.disable-icon{
+                i{
+                    color: $gainsboro !important;
+                    cursor: no-drop;
+                }
+            }
         }
     }
 }
@@ -1249,7 +1258,7 @@ ul.sub-list {
             margin: 0 15px;
         }
     }
-    .setting-menu-icon {
+    .gst-menu-icon, .setting-menu-icon {
         padding: 4px 8px 4px 2px;
         display: none;
         width: 27px;

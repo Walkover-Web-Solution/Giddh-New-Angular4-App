@@ -4,6 +4,9 @@
     <div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideSettingMenuState === 'in'">
         <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane($event)"></aside-setting>
     </div>
+    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
+        <tax-sidebar (navigateEvent)="handleNavigation()" (clickOutside)="isMobileScreen ? asideGstSidebarMenuState = 'out' : ''" [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
+    </div>
 
     <div class="container-fluid settings-bg setting-data" [keyboardShortcut]="['alt+right', 'alt+left']"
         [config]="{ignoreHost:true}" (onShortcutPress)="selectTabByShortcut($event)">
@@ -12,14 +15,15 @@
                 <div id="setting-tab">
                     <div class="relative">
                     <div *ngIf="activeTab === 'taxes'">
-                        <hamburger-menu [pageHeading]="localeData?.setting_taxes"></hamburger-menu>
+                        <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.setting_taxes">
+                        </hamburger-menu>
                         <div class="setting-container">
                             <setting-taxes></setting-taxes>
                         </div>
                     </div>
 
                     <div *ngIf="activeTab === 'integration'">
-                        <hamburger-menu [pageHeading]="localeData?.setting_integration"></hamburger-menu>
+                        <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.setting_integration"></hamburger-menu>
                         <div class="setting-container">
                             <setting-integration #integrationComponent [selectedTabParent]="selectedChildTab">
                             </setting-integration>
@@ -27,13 +31,13 @@
                     </div>
 
                     <div *ngIf="activeTab === 'linked-accounts'">
-                        <hamburger-menu [pageHeading]="localeData?.setting_linked_accounts"></hamburger-menu>
+                        <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.setting_linked_accounts"></hamburger-menu>
                         <div class="setting-container">
                             <setting-linked-accounts #eBankComp></setting-linked-accounts>
                         </div>
                     </div>
                     <div *ngIf="activeTab === 'profile'">
-                        <hamburger-menu></hamburger-menu>
+                        <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="profileTabHeading"></hamburger-menu>
                         <div class="setting-container">
                             <setting-profile #profileComponent></setting-profile>
                             <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)"
@@ -48,49 +52,49 @@
                     </div>
 
                     <div *ngIf="activeTab === 'financial-year'">
-                        <hamburger-menu [pageHeading]="localeData?.setting_financial_year"></hamburger-menu>
+                        <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.setting_financial_year"></hamburger-menu>
                         <div class="setting-container">
                             <financial-year #financialYearComp></financial-year>
                         </div>
                     </div>
 
                     <div *ngIf="activeTab === 'permission'">
-                        <hamburger-menu [pageHeading]="localeData?.setting_permission"></hamburger-menu>
+                        <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.setting_permission"></hamburger-menu>
                         <div class="setting-container">
                             <setting-permission #permissionComp></setting-permission>
                         </div>
                     </div>
 
                     <div *ngIf="activeTab === 'branch'">
-                        <hamburger-menu [pageHeading]="localeData?.setting_branch"></hamburger-menu>
+                        <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.setting_branch"></hamburger-menu>
                         <div class="setting-container">
                             <setting-branch></setting-branch>
                         </div>
                     </div>
 
                     <div *ngIf="activeTab === 'tag'">
-                        <hamburger-menu [pageHeading]="localeData?.setting_tag"></hamburger-menu>
+                        <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.setting_tag"></hamburger-menu>
                         <div class="setting-container">
                             <setting-tags #tagComp></setting-tags>
                         </div>
                     </div>
 
                     <div *ngIf="activeTab === 'trigger'">
-                        <hamburger-menu [pageHeading]="localeData?.setting_trigger"></hamburger-menu>
+                        <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.setting_trigger"></hamburger-menu>
                         <div class="setting-container">
                             <setting-trigger></setting-trigger>
                         </div>
                     </div>
 
                     <div *ngIf="activeTab === 'discount'">
-                        <hamburger-menu [pageHeading]="localeData?.setting_discount"></hamburger-menu>
+                        <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.setting_discount"></hamburger-menu>
                         <div class="setting-container">
                             <setting-discount></setting-discount>
                         </div>
                     </div>
 
                     <div *ngIf="activeTab === 'warehouse'">
-                        <hamburger-menu [pageHeading]="localeData?.setting_warehouse"></hamburger-menu>
+                        <hamburger-menu [allowSidebarToggle]="false" [pageHeading]="localeData?.setting_warehouse"></hamburger-menu>
                         <div class="setting-container">
                             <setting-warehouse></setting-warehouse>
                         </div>

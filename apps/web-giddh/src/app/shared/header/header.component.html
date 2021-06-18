@@ -1,6 +1,6 @@
 <ng-container appTranslate [file]="'header'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
-    <div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen, 'unvisible': companyList.length===0 }"
+    <div (mouseover)="expandSidebar();" (mouseout)="collapseSidebar(false, true);" class="nav-left-bar" [ngClass]="{'open': isSidebarExpanded, 'unvisible': companyList.length===0 }"
         (clickOutside)="closeSidebarMobile($event)">
         <div class="menu-wrapper">
             <primary-sidebar [isOpen]="sideMenu?.isopen" [apiMenuItems]="apiMenuItems"
@@ -29,6 +29,7 @@
                         </span>
                         <span class="mobile-back-btn" (click)="redirectToMobileHome()"><i
                                 class="icon-back-arrow"></i></span>
+                        <span *ngIf="showGstIcon()" (click)="openGstSideMenu()" class="gst-menu-icon"> <i class="icon-bar"></i> </span>
                     </li>
                 </ul>
             </div>
@@ -57,7 +58,7 @@
                         <a href="javascript:void(0);" id="add-manage" (click)="showManageGroupsModal()"><i
                                 class="icon-master-new1"></i> {{commonLocaleData?.app_master}}</a>
                     </li>
-                    <li *ngIf="!isMobileScreen" class="header-utility-icons" (click)="toggleSidebarPane(true, false)">
+                    <li *ngIf="!isMobileScreen" [ngClass]="{'disable-icon' : isSettingsIconDisabled && !isIpadScreen}" class="header-utility-icons" (click)="toggleSidebarPane(true, false)">
                         <a href="javascript:void(0);"><i class="icon-settings-cog"></i></a>
                     </li>
                     <li class="header-utility-icons">

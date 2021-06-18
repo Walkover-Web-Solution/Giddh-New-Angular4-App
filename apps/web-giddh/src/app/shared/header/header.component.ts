@@ -92,7 +92,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public title: Observable<string>;
     public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
     public noGroups: boolean;
-    public sideMenu: { isopen: boolean } = { isopen: false };
+    public sideMenu: { isopen: boolean, isExpanded: boolean } = { isopen: false, isExpanded: false };
     public companyMenu: { isopen: boolean } = { isopen: false };
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     public companies$: Observable<CompanyResponse[]>;
@@ -215,7 +215,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public commonLocaleData: any = {};
     /** This holds the active locale */
     public activeLocale: string = "";
-
+    /** True if sidebar is expanded */
+    public isSidebarExpanded: boolean = false;
+    /** This will hold if setting icon is disabled */
+    public isSettingsIconDisabled: boolean = false;
+    /* This will hold if resolution is 768 consider as ipad screen */
+    public isIpadScreen: boolean = false;
     /**
      * Returns whether the back button in header should be displayed or not
      *
@@ -463,9 +468,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.getCurrentCompanyData();
         this._breakpointObserver.observe([
-            '(max-width: 767px)'
+            '(max-width: 767px)',
+            '(max-width: 768px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
+            this.isMobileScreen = result?.breakpoints['(max-width: 767px)'];
+            this.isIpadScreen = result?.breakpoints['(max-width: 768px)'];
         });
 
         this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
@@ -480,6 +487,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         //this.sideBarStateChange(true);
         this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
             this.sideBarStateChange(response);
+
+            if(response) {
+                this.expandSidebar(true);
+            } else {
+                this.collapseSidebar(true);
+            }
         });
         this.generalService.isMobileSite.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.isMobileSite = s;
@@ -781,6 +794,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
+        if(!this.isIpadScreen) {
+            this.isSettingsIconDisabled = (this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/settings/taxes")) || this.router.url.includes("/pages/user-details")
+            if (this.isSettingsIconDisabled) {
+                return;
+            }
+        }
+
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
             this.asideHelpSupportMenuState = 'out';
@@ -789,10 +809,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             if (this.asideSettingMenuState === "in") {
                 document.querySelector('body').classList.add('mobile-setting-sidebar');
-            } else {
+            }
+            else {
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
-        }, (this.asideSettingMenuState === 'out') ? 100 : 0);
+
+        }, ((this.asideSettingMenuState === 'out') ? 100 : 0));
     }
 
     /**
@@ -1012,6 +1034,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.sideMenu.isopen = false;
             this.menuStateChange.emit(false);
         }
+
     }
 
     public forceCloseSidebar(event) {
@@ -1366,16 +1389,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         setTimeout(() => {
             if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
-                this.sideBarStateChange(true);
                 document.querySelector('body').classList.add('on-setting-page');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-user-page');
-            } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page").length > 0) {
+            } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page").length > 0
+            ) {
                 document.querySelector('body').classList.add('on-user-page');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
-            } else if (document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0 && !this.router.url.includes("/vendor")) {
+            } else if (
+                document.getElementsByTagName("tabset") &&
+                document.getElementsByTagName("tabset").length > 0 &&
+                !this.router.url.includes("/vendor")) {
                 document.querySelector('body').classList.add('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
@@ -1387,8 +1413,58 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
+
+            if(document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0) {
+                this.collapseSidebar(true);
+            } else {
+                if(this.sideMenu.isopen) {
+                    this.sideMenu.isExpanded = true;
+                    this.expandSidebar(true);
+                }
+            }
         }, 500);
 
+    }
+
+    /**
+    * This will expand sidebar
+    *
+    * @memberof HeaderComponent
+    */
+    public expandSidebar(forceExpand: boolean = false): void {
+        if(forceExpand) {
+            this.sideBarStateChange(true);
+        }
+        this.isSidebarExpanded = true;
+        document.querySelector('.primary-sidebar')?.classList?.remove('sidebar-collapse');
+        document.querySelector('.nav-left-bar')?.classList?.remove('width-60');
+    }
+
+    /**
+    * This will collpase sidebar
+    *
+    * @memberof HeaderComponent
+    */
+    public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
+        if(closeOnHover && this.isSidebarExpanded && (document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0)) {
+            forceCollapse = true;
+        }
+
+        if(forceCollapse) {
+            this.sideMenu.isExpanded = false;
+        } else {
+            if(!this.sideMenu.isopen) {
+                this.sideMenu.isExpanded = false;
+            } else {
+                this.sideMenu.isExpanded = true;
+            }
+        }
+
+        if(!this.sideMenu.isExpanded || forceCollapse) {
+            this.isSidebarExpanded = false;
+            document.querySelector('.primary-sidebar')?.classList?.add('sidebar-collapse');
+            document.querySelector('.nav-left-bar')?.classList?.add('width-60');
+        }
     }
 
     /**
@@ -1656,5 +1732,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let text = this.localeData?.transaction_limit_crossed;
         text = text?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt);
         return text;
+    }
+
+    /**
+     * This will show/hide gst menu icon
+     *
+     * @returns {string}
+     * @memberof HeaderComponent
+     */
+    public showGstIcon(): boolean {
+        return (this.currentPageUrl?.indexOf('pages/gstfiling') > -1 ||
+            this.currentPageUrl?.indexOf('pages/reports/reverse-charge') > -1 ||
+            this.currentPageUrl?.indexOf('pages/invoice/ewaybill') > -1);
     }
 }
