@@ -34,7 +34,14 @@
     position: relative;
     z-index: 999;
 }
-
+.disable-icon {
+    button{
+        i{
+            color: $gainsboro !important;
+            cursor: no-drop;
+        }
+    }
+}
 @media screen and (max-width:767px) {
     .hamburger-menu-icon.page-has-heading{
         display: flex !important;

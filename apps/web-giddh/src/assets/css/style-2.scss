@@ -7608,7 +7608,6 @@ span#HW_badge_cont:nth-child(3) {
 .date-field {
     flex-direction: column;
 }
-
 .mobile-home {
     background-color: $lavender;
     .fixed-padding,
@@ -7692,33 +7691,45 @@ span#HW_badge_cont:nth-child(3) {
 
 .on-setting-page .nav-left-bar.open,
 .on-user-page .nav-left-bar.open on-user-page {
-    left: -240px !important;
-    display: none !important;
+    left: 0 !important;
+    display: block !important;
 }
 .setting-sidebar-open .nav-left-bar,
 .on-user-page .nav-left-bar,
 .on-setting-page .nav-left-bar {
-    display: none;
+    display: block;
 }
 .menu_open aside-setting.setting-sidebar {
-    left: 0 !important;
-}
-.on-setting-page aside-setting.setting-sidebar,
-.on-user-page aside-setting.setting-sidebar {
-    left: -250px;
-}
-.setting-sidebar-open #content-wrapper.menu_open {
-    padding-left: -240px;
+    right: 0 !important;
 }
 
+.setting-sidebar-open #content-wrapper{
+    padding-right: 240px;
+    padding-left: 60px !important;
+}
 .setting-sidebar-open .desktop-header {
     padding-left: 0;
 }
 .setting-sidebar-open .desktop-header.menu_open {
-    padding-left: 240px !important;
+    padding-right: 240px !important;
+}
+.gst-sidebar-open .menu_open {
+    padding-left: 300px !important;
 }
 .desktop-header.menu_open {
     padding-left: 60px !important;
+}
+.setting-sidebar-open {
+    &.on-setting-page{
+        #content-wrapper{
+            padding-left: 60px;
+        }
+    }
+    &.on-user-page{
+        #content-wrapper{
+            padding-left: 60px;
+        }
+    }
 }
 /*flex css start*/
 .flex-column {
@@ -8272,9 +8283,13 @@ input.mat-input-element {
 .plan-wrapper {
     padding-left: 60px;
 }
-.on-setting-page .plan-wrapper,
-.on-user-page .plan-wrapper {
-    padding-left: 0;
+.setting-sidebar-open.on-setting-page .plan-wrapper,
+.setting-sidebar-open.on-user-page .plan-wrapper {
+    padding-left: 60px !important;
+}
+.setting-sidebar-open .plan-wrapper,
+.setting-sidebar-open.on-user-page .plan-wrapper{
+    padding-right: 240px !important;
 }
 .plan-wrapper.menu_open {
     padding-left: 240px !important;
@@ -8323,6 +8338,54 @@ input.mat-input-element {
         }
     }
 }
+.gst-sidebar-open {
+    .nav-left-bar{
+        -moz-transition: all 100ms linear;
+        -webkit-transition: all 100ms linear;
+        -o-transition: all 100ms linear;
+        transition: all 100ms linear;
+        -moz-transform: translate3d(-100px, 0px, 0px);
+        -webkit-transform: translate3d(-100px, 0px, 0px);
+        -o-transform: translate(-100px, 0px);
+        -ms-transform: translate(-100px, 0px);
+        transform: translate3d(-100px, 0px, 0px);
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.2) !important;
+    }
+}
+.gst-sidebar-open {
+    .gst-sidebar {
+        left: 60px !important;
+    }
+    #content-wrapper {
+        padding-left: 300px !important;
+    }
+    .nav-left-bar {
+        display: block;
+        z-index: 9991 !important;
+        -moz-transform: translate3d(0px, 0px, 0px);
+        -webkit-transform: translate3d(0px, 0px, 0px);
+        -o-transform: translate(0px, 0px);
+        -ms-transform: translate(0px, 0px);
+        transform: translate3d(0px, 0px, 0px);
+    }
+    .plan-wrapper {
+        padding-left: 300px !important;
+    }
+    .menu_open {
+        .gst-sidebar {
+            left: 60px !important;
+        }
+        #content-wrapper {
+            padding-left: 240px;
+        }
+        .plan-wrapper {
+            padding-left: 60px;
+        }
+    }
+}
+body.update-scroll-hidden {
+    overflow-y: hidden;
+}
 .e-waybill-tabs.custom-tabs .nav-tabs {
     position: static !important;
     padding-left: 15px !important;
@@ -8336,6 +8399,25 @@ body.update-scroll-hidden {
         padding-left: 0 !important;
     }
 }
+.nav-left-bar{
+    &.width-60  {
+        .sidebar-collapse {
+            .sub-menu{
+                display: none !important;
+            }
+        }
+    }
+}
+.nav-left-bar{
+    &.width-60  {
+        .sidebar-collapse {
+            .sub-menu{
+                display: none !important;
+            }
+        }
+    }
+}
+
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {
@@ -8398,41 +8480,10 @@ body.update-scroll-hidden {
          #content-wrapper{
             padding-left: 0;
         }
-        .nav-left-bar{
-            display: none;
-        }
         .plan-wrapper{
             padding-left: 0;
         }
         .menu_open{
-            .gst-sidebar{
-                left: 0 !important;
-            }
-            #content-wrapper {
-                padding-left: 240px;
-            }
-            .plan-wrapper{
-                padding-left: 60px;
-            }
-        }
-    }
-    .gst-sidebar-open {
-         .gst-sidebar{
-            left: -250px !important;
-         }
-         #content-wrapper{
-            padding-left: 0;
-        }
-        .nav-left-bar{
-            display: none;
-        }
-        .plan-wrapper{
-            padding-left: 0;
-        }
-        .menu_open{
-            .gst-sidebar{
-                left: 0 !important;
-            }
             #content-wrapper {
                 padding-left: 240px;
             }
@@ -8509,6 +8560,17 @@ body.update-scroll-hidden {
 @media (max-width: 1019px) {
     .hide-sub-sidebar .sidebar-handle {
         left: 0 !important;
+    }
+}
+
+@media (min-width:768px) and (max-width: 1019px) {
+    .gst-sidebar-open {
+        .gst-sidebar {
+            left: 60px !important;
+        }
+        #content-wrapper {
+            padding-left: 300px !important;
+        }
     }
 }
 
@@ -8659,6 +8721,22 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 768px) {
+    .setting-sidebar{
+        display: none;
+    }
+    .setting-sidebar-open {
+        #content-wrapper{
+            padding-right: 0;
+            padding-left: 60px;
+            &.menu_open{
+                padding-right: 0;
+                padding-left: 60px;
+            }
+        }
+    }
+    .tax-engine .transactions-list .filter-row + .filter-row {
+        margin-left: 5px;
+    }
     .menu_open .sales-register {
         width: 100% !important;
         padding-right: 0 !important;
@@ -8839,10 +8917,90 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 767px) {
+    .gst-sidebar-open {
+        #content-wrapper{
+           padding-left: 0 !important;
+       }
+   }
+    .setting-sidebar-open {
+        #content-wrapper{
+            padding-left: 0 !important;
+            &.menu_open{
+                padding-left: 0 !important;
+            }
+        }
+    }
+    .gst-sidebar-open{
+        &.on-setting-page{
+            .gst-menu-icon{
+                display: none !important;
+            }
+        }
+        #content-wrapper{
+            padding-left: 0;
+        }
+    }
+    .gst-sidebar-open .gst-menu-icon{
+        display: inline-flex!important;
+    }
+    .setting-sidebar{
+        display: block;
+    }
+    .on-setting-page .nav-left-bar.open,
+    .on-user-page .nav-left-bar.open on-user-page {
+        left: 0 !important;
+        display: none !important;
+    }
+    .setting-sidebar-open .nav-left-bar,
+    .on-user-page .nav-left-bar,
+    .on-setting-page .nav-left-bar {
+        display: none;
+    }
+    .on-setting-page, .gst-sidebar-open, .on-user-page{
+        .hamburger-menu-icon{
+            left: 80px !important;
+            width: calc(100% - 160px) !important;
+        }
+    }
     .all-features-modal{
         height: 100vh;
     }
-    .invoice-modal-content{
+    .tax-engine .transactions-overview .gstr-transactions-summary .title {
+        margin-bottom: 15px;
+    }
+    .gst-sidebar-open{
+        .menu_open{
+            .gst-sidebar{
+                left: 0 !important;
+            }
+        }
+        .gst-sidebar{
+            left: 0 !important;
+        }
+    }
+    .gst-sidebar-wrapper{
+        &:after{
+            position: absolute;
+            content: "";
+            background-color: $black;
+            width: 100%;
+            height: 100vh;
+            z-index: 999;
+            top: -10px;
+            left: 0;
+            opacity: 0.5;
+        }
+    }
+    .tax-engine .transactions-list .filter-row .name {
+        min-width: 120px;
+    }
+    #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs {
+        display: inline-block;
+    }
+    .e-waybill-tabs.custom-tabs .nav-tabs {
+        position: fixed !important;
+    }
+    .invoice-modal-content {
         left: 0 !important;
         width: 100% !important;
     }
@@ -8937,7 +9095,7 @@ body.update-scroll-hidden {
     #setting-tab > .tab-container > .tab-content {
         padding-top: 15px !important;
     }
-    
+
 }
 @media (max-width: 1199px) {
     .ledger-book .left-col-new .entry-modal {

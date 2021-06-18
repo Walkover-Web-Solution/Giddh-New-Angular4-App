@@ -23,11 +23,6 @@
             ],
             [
                 {
-                    "label": "कर",
-                    "link": "/pages/settings/taxes",
-                    "icon": "<i class='icon-tax-new'></i>"
-                },
-                {
                     "label": "एकीकरण",
                     "link": "/pages/settings/integration",
                     "icon": "<i class='icon-integration1 font-12'></i>"
@@ -97,11 +92,6 @@
                 }
             ],
             [
-                {
-                    "label": "कर",
-                    "link": "/pages/settings/taxes",
-                    "icon": "<i class='icon-tax-new'></i>"
-                },
                 {
                     "label": "एकीकरण",
                     "link": "/pages/settings/integration",

@@ -37,6 +37,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CreateAddressComponent } from './create-address/create-address.component';
 import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
+import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -82,7 +83,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgxMaskModule.forRoot(),
         DigitsOnlyModule,
         ShSelectModule,
-        SalesShSelectModule
+        SalesShSelectModule,
+        TaxSidebarModule
     ],
     providers: [
         {

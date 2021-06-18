@@ -15,7 +15,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
-
+import { Router } from '@angular/router';
 @Component({
     selector: 'reverse-charge-report',
     templateUrl: './reverse-charge-report.component.html',
@@ -27,6 +27,11 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     @ViewChild('suppliersNameField', { static: true }) public suppliersNameField;
     @ViewChild('invoiceNumberField', { static: true }) public invoiceNumberField;
     @ViewChild('supplierCountryField', { static: true }) public supplierCountryField;
+
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
 
     public showEntryDate = true;
     public activeCompany: any;
@@ -100,6 +105,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
+        private router: Router,
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -110,11 +116,24 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public ngOnInit(): void {
-
+        document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakPointObservar.observe([
-            '(max-width: 575px)'
+            '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
+            if (!this.isMobileScreen) {
+                this.asideGstSidebarMenuState = 'in';
+            }
+        });
+
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+                }
+            }
         });
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -217,6 +236,8 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('gst-sidebar-open');
+        this.asideGstSidebarMenuState === 'out';
     }
 
     /**
@@ -408,5 +429,14 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.currentBranch.name = selectedEntity.label;
         this.reverseChargeReportGetRequest.branchUniqueName = selectedEntity.value;
         this.getReverseChargeReport(true);
+    }
+
+    /**
+     * Handles GST Sidebar Navigation
+     *
+     * @memberof ReverseChargeReport
+     */
+    public handleNavigation(): void {
+        this.router.navigate(['pages', 'gstfiling']);
     }
 }

@@ -60,6 +60,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** This holds heading for profile tab */
+    public profileTabHeading: string = "";
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
 
     constructor(
         private store: Store<AppState>,
@@ -143,6 +147,19 @@ export class SettingsComponent implements OnInit, OnDestroy {
                         this.tagComp.getTags();
                     }
                 }, 0);
+            }
+
+            if(this.activeTab === "taxes") {
+                this.asideGstSidebarMenuState = "in";
+                this.asideSettingMenuState = "out";
+                document.querySelector('body').classList.remove('setting-sidebar-open');
+                document.querySelector('body').classList.add('gst-sidebar-open');
+                this.toggleGstPane();
+            } else {
+                this.asideSettingMenuState = "in";
+                this.asideGstSidebarMenuState = "out";
+                document.querySelector('body').classList.add('setting-sidebar-open');
+                document.querySelector('body').classList.remove('gst-sidebar-open');
             }
         });
 
@@ -363,8 +380,30 @@ export class SettingsComponent implements OnInit, OnDestroy {
      */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('setting-sidebar-open');
+        document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideSettingMenuState = "out";
+        this.asideGstSidebarMenuState = "out";
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+      * This will toggle the gst sidebar
+      *
+      * @memberof SettingsComponent
+      */
+     public toggleGstPane(): void {
+        if (this.isMobileScreen && this.asideGstSidebarMenuState === 'in') {
+            this.asideGstSidebarMenuState = "out";
+        }
+    }
+
+    /**
+     * Handles GST Sidebar Navigation
+     *
+     * @memberof SettingsComponent
+     */
+     public handleNavigation(): void {
+        this.router.navigate(['pages', 'gstfiling']);
     }
 }
