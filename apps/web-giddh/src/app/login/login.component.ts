@@ -19,7 +19,6 @@ import {
     GoogleLoginProvider,
     SocialUser
 } from "../theme/ng-social-login-module/index";
-import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
@@ -109,22 +108,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             return state.login.isLoginWithEmailSubmited;
         }), takeUntil(this.destroyed$));
 
-        this.store.pipe(select(state => {
-            return state.login.isVerifyEmailSuccess;
-        }), takeUntil(this.destroyed$)).subscribe((value) => {
-            if (value) {
-                
-            }
-        });
-
-        this.store.pipe(select(state => {
-            return state.login.isVerifyMobileSuccess;
-        }), takeUntil(this.destroyed$)).subscribe((value) => {
-            if (value) {
-                
-            }
-        });
-
         this.isLoginWithPasswordInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithPasswordInProcess;
         }), takeUntil(this.destroyed$));
@@ -144,9 +127,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isLoginWithGoogleInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithGoogleInProcess;
         }), takeUntil(this.destroyed$));
-        contriesWithCodes.map(c => {
-            this.countryCodeList.push({ value: c.countryName, label: c.value });
-        });
         this.userLoginState$ = this.store.pipe(select(p => p.session.userLoginState), takeUntil(this.destroyed$));
         this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
         this.isTwoWayAuthInProcess$ = this.store.pipe(select(p => p.login.isTwoWayAuthInProcess), takeUntil(this.destroyed$));

@@ -1,18 +1,14 @@
-import { Directive, ElementRef, HostListener, Input, OnInit } from '@angular/core';
+import { Directive, HostListener, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Directive({
     selector: '[textCaseChangeDirective]'
 })
-export class TextCaseChangeDirective implements OnInit {
+export class TextCaseChangeDirective {
     @Input() public control: FormControl;
 
-    constructor(private el: ElementRef) {
-        //
-    }
-
-    public ngOnInit() {
-        //
+    constructor() {
+        
     }
 
     @HostListener('document:paste', ['$event'])

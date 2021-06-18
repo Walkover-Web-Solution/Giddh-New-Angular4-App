@@ -89,6 +89,13 @@ export class RecurringComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver, private modalService: BsModalService) {
         this.recurringData$ = this.store.pipe(takeUntil(this.destroyed$), select(s => s.invoice.recurringInvoiceData.recurringInvoices));
+    }
+
+    openModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template);
+    }
+
+    public ngOnInit() {
         this.recurringData$.subscribe(p => {
             if (p && p.recurringVoucherDetails) {
                 let items = _.cloneDeep(p.recurringVoucherDetails);
@@ -101,13 +108,6 @@ export class RecurringComponent implements OnInit, OnDestroy {
                 this.isLoading = false;
             }
         });
-    }
-
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template);
-    }
-
-    public ngOnInit() {
         this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices());
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
