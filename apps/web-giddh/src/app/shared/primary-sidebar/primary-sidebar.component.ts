@@ -370,6 +370,21 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 this.onItemSelected(data.next, data);
             }
         });
+
+        if(this.router.url.includes("/ledger")) {
+            this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
+                if(account) {
+                    // save data to db
+                    let item: any = {};
+                    item.time = +new Date();
+                    item.route = this.router.url;
+                    item.parentGroups = account.parentGroups;
+                    item.uniqueName = account.uniqueName;
+                    item.name = account.name;
+                    this.doEntryInDb('accounts', item);
+                }
+            });
+        }
     }
 
     /**
