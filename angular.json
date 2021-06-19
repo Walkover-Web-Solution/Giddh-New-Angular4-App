@@ -123,9 +123,6 @@
                             "apps/web-giddh/src/assets/css/toastr.css"
                         ],
                         "scripts": [
-                            "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
-                            "apps/web-giddh/src/assets/js/lodash.min.js",
-                            "node_modules/bootstrap-daterangepicker/moment.min.js",
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js"
                         ],
                         "customWebpackConfig": {
@@ -277,7 +274,7 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseHref": "http://localhost:3000",
+                            "baseHref": "/",
                             "optimization": false,
                             "outputHashing": "none",
                             "sourceMap": true,
@@ -409,9 +406,6 @@
                             "apps/web-giddh/src/assets/css/toastr.css"
                         ],
                         "scripts": [
-                            "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
-                            "node_modules/bootstrap-daterangepicker/moment.min.js",
-                            "apps/web-giddh/src/assets/js/lodash.min.js",
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js"
                         ]
                     },
@@ -620,9 +614,6 @@
                             "apps/web-giddh/src/assets/css/toastr.css"
                         ],
                         "scripts": [
-                            "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
-                            "node_modules/bootstrap-daterangepicker/moment.min.js",
-                            "apps/web-giddh/src/assets/js/lodash.min.js",
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js"
                         ]
                     },
