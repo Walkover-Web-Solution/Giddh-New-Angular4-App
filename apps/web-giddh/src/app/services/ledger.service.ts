@@ -571,13 +571,14 @@ export class LedgerService {
     /**
      * Deletes the bank transactions
      *
+     * @param {string} accountUniqueName
      * @param {*} params
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof LedgerService
      */
-    public deleteBankTransactions(params: any): Observable<BaseResponse<any, any>> {
+    public deleteBankTransactions(accountUniqueName: string, params: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        const url = `${this.config.apiUrl}${LEDGER_API.DELETE_BANK_TRANSACTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))}`;
+        const url = `${this.config.apiUrl}${LEDGER_API.DELETE_BANK_TRANSACTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
         return this._http.deleteWithBody(url, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error)));
     }
 }
