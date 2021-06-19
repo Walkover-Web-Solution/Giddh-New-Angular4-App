@@ -2135,7 +2135,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public hideUploadBankStatementModal(): void {
         if (this.importStatementModal) {
             this.importStatementModal.hide();
-            this.getTransactionData();
+            this.getBankTransactions();
         }
     }
 
@@ -2290,11 +2290,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         let transactionIds = this.entryUniqueNamesForBulkAction.map((m: any) => { return m.transactionId; });
         let params = {transactionIds: transactionIds};
-        this._ledgerService.deleteBankTransactions(params).subscribe(response => {
+        this._ledgerService.deleteBankTransactions(this.trxRequest.accountUniqueName, params).subscribe(response => {
             this._toaster.clearAllToaster();
             if(response?.status === "success") {
                 this.getBankTransactions();
-                this._toaster.successToast(this.localeData?.bank_transaction_deleted);
+                this._toaster.successToast(response?.body);
             } else {
                 this._toaster.errorToast(response?.message);
             }
