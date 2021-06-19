@@ -131,24 +131,33 @@
                 },
                 {
                     "label": "जीएसटीआर 1",
-                    "link": "/pages/gstfiling",
                     "icon": "icon-GSTR",
                     "description": "जीएसटीआर 1 फाइल करा आणि पहा",
-                    "hide": "sidebar"
+                    "hide": "sidebar",
+                    "additional": {
+                        "isGstMenu": true,
+                        "type": "gstr1"
+                    }
                 },
                 {
                     "label": "जीएसटीआर 2",
-                    "link": "/pages/gstfiling",
                     "icon": "icon-GSTR",
                     "description": "जीएसटीआर 2 फाइल करा आणि पहा",
-                    "hide": "sidebar"
+                    "hide": "sidebar",
+                    "additional": {
+                        "isGstMenu": true,
+                        "type": "gstr2"
+                    }
                 },
                 {
                     "label": "जीएसटीआर 3B",
-                    "link": "/pages/gstfiling",
                     "icon": "icon-GSTR",
                     "description": "जीएसटीआर 3B फाइल करा आणि पहा",
-                    "hide": "sidebar"
+                    "hide": "sidebar",
+                    "additional": {
+                        "isGstMenu": true,
+                        "type": "gstr3b"
+                    }
                 },
                 {
                     "label": "उलट शुल्क",
