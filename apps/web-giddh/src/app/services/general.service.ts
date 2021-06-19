@@ -801,7 +801,7 @@ export class GeneralService {
      */
     public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
-        itemList.forEach((menuItem, menuIndex) => {
+        itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
             menuItem.items.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem.uniqueName === item.link);
