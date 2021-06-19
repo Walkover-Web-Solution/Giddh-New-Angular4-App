@@ -48,7 +48,6 @@ import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { AsideHelpSupportComponent } from './header/components/aside-help-support/aside-help-support.component';
 import { AsideSettingComponent } from './header/components/aside-setting/aside-setting.component';
 import { DeleteTemplateConfirmationModelComponent } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
-import { DatepickerWrapperComponent } from './datepicker-wrapper/datepicker.wrapper.component';
 import { LoaderComponent } from '../loader/loader.component';
 import { ProformaAddBulkItemsComponent } from '../proforma-invoice/components/proforma-add-bulk-items/proforma-add-bulk-items.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -72,6 +71,7 @@ import { AmountFieldComponentModule } from './amount-field/amount-field.module';
 import { AccountAddNewDetailsModule } from './header/components/account-add-new-details/account-add-new-details.module';
 import { LedgerDiscountModule } from '../ledger/components/ledgerDiscount/ledgerDiscount.module';
 import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
+import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
 registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
@@ -142,7 +142,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         AccountUpdateNewDetailsComponent,
         WelcomeComponent,
         DeleteTemplateConfirmationModelComponent,
-        DatepickerWrapperComponent,
         LoaderComponent,
         ProformaAddBulkItemsComponent,
         GiddhDatepickerComponent,
@@ -234,7 +233,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         BsDatepickerModule,
         NgxDaterangepickerMd,
         DeleteTemplateConfirmationModelComponent,
-        DatepickerWrapperComponent,
         LoaderComponent,
         ProformaAddBulkItemsComponent,
         GiddhDatepickerComponent,
@@ -250,7 +248,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         AmountFieldComponentModule,
         AccountAddNewDetailsModule,
         LedgerDiscountModule,
-        ConfirmationModalModule
+        ConfirmationModalModule,
+        DatepickerWrapperModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
