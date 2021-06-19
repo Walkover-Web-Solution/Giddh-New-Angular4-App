@@ -567,4 +567,17 @@ export class LedgerService {
         const url = `${this.config.apiUrl}${LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))}/${attachmentUniqueName}`;
         return this._http.delete(url).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error)));
     }
+
+    /**
+     * Deletes the bank transactions
+     *
+     * @param {*} params
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof LedgerService
+     */
+    public deleteBankTransactions(params: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        const url = `${this.config.apiUrl}${LEDGER_API.DELETE_BANK_TRANSACTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))}`;
+        return this._http.deleteWithBody(url, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error)));
+    }
 }
