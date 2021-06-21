@@ -24,6 +24,7 @@ import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { isCordova } from "@giddh-workspaces/utils";
 import { GeneralService } from "../services/general.service";
+import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
 @Component({
     selector: "login",
@@ -127,6 +128,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isLoginWithGoogleInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithGoogleInProcess;
         }), takeUntil(this.destroyed$));
+        contriesWithCodes.map(c => {
+            this.countryCodeList.push({ value: c.countryName, label: c.value });
+        });
         this.userLoginState$ = this.store.pipe(select(p => p.session.userLoginState), takeUntil(this.destroyed$));
         this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
         this.isTwoWayAuthInProcess$ = this.store.pipe(select(p => p.login.isTwoWayAuthInProcess), takeUntil(this.destroyed$));
