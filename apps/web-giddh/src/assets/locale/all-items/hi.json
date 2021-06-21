@@ -131,24 +131,33 @@
                 },
                 {
                     "label": "जीएसटीआर 1",
-                    "link": "/pages/gstfiling",
                     "icon": "icon-GSTR",
                     "description": "फाइल करें और देखें GSTR1, GSTR2 और GSTR3B",
-                    "hide": "sidebar"
+                    "hide": "sidebar",
+                    "additional": {
+                        "isGstMenu": true,
+                        "type": "gstr1"
+                    }
                 },
                 {
                     "label": "जीएसटीआर 2",
-                    "link": "/pages/gstfiling",
                     "icon": "icon-GSTR",
                     "description": "फाइल करें और देखें GSTR2",
-                    "hide": "sidebar"
+                    "hide": "sidebar",
+                    "additional": {
+                        "isGstMenu": true,
+                        "type": "gstr2"
+                    }
                 },
                 {
                     "label": "जीएसटीआर 3B",
-                    "link": "/pages/gstfiling",
                     "icon": "icon-GSTR",
                     "description": "फाइल करें और देखें GSTR3",
-                    "hide": "sidebar"
+                    "hide": "sidebar",
+                    "additional": {
+                        "isGstMenu": true,
+                        "type": "gstr3b"
+                    }
                 },
                 {
                     "label": "रिवर्स चार्ज",
