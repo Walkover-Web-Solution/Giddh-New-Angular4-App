@@ -1,4 +1,4 @@
-import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
@@ -7,7 +7,7 @@ import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
-import { ModalDirective, BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -210,7 +210,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isSidebarExpanded: boolean = false;
     /** This will hold if setting icon is disabled */
     public isSettingsIconDisabled: boolean = false;
-    /* This will hold if resolution is more than 767 to consider as ipad screen */
+    /* This will hold if resolution is more than 768 to consider as ipad screen */
     public isIpadScreen: boolean = false;
     /**
      * Returns whether the back button in header should be displayed or not
@@ -406,9 +406,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         this.totalNumberOfcompanies$ = this.store.pipe(select(state => state.session.totalNumberOfcompanies), takeUntil(this.destroyed$));
         this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
-            if (value === 'openschedulemodal') {
-                this.openScheduleCalendlyModel();
-            }
             if (value === 'resetcompanysession') {
                 this.removeCompanySessionData();
             }
@@ -662,7 +659,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.store.dispatch(this.commonActions.resetOnboardingForm());
                 }
                 if (res.subscription) {
-                    this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
                     if (res.baseCurrency) {
 
                         this.companyCountry.baseCurrency = res.baseCurrency;
@@ -806,7 +802,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
 
         }, ((this.asideSettingMenuState === 'out') ? 100 : 0) && (this.asideInventorySidebarMenuState === 'out') ? 100 : 0);
-
     }
 
     /**
@@ -1382,7 +1377,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         setTimeout(() => {
             if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
-                this.sideBarStateChange(true);
                 document.querySelector('body').classList.add('on-setting-page');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-user-page');
@@ -1403,7 +1397,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
             /* this code is not working so that inventory sidebar is not working on mobile view, developer please check it */
             else if (document.getElementsByClassName("new-inventory-page") && document.getElementsByClassName("new-inventory-page").length > 0) {
-                this.sideBarStateChange(true);
                 document.querySelector('body').classList.add('inventory-sidebar');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-user-page');
@@ -1732,5 +1725,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let text = this.localeData?.transaction_limit_crossed;
         text = text?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt);
         return text;
+    }
+
+    /**
+     * This will show/hide gst menu icon
+     *
+     * @returns {string}
+     * @memberof HeaderComponent
+     */
+    public showGstIcon(): boolean {
+        return (this.currentPageUrl?.indexOf('pages/gstfiling') > -1 ||
+            this.currentPageUrl?.indexOf('pages/reports/reverse-charge') > -1 ||
+            this.currentPageUrl?.indexOf('pages/invoice/ewaybill') > -1);
     }
 }

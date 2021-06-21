@@ -7703,11 +7703,8 @@ span#HW_badge_cont:nth-child(3) {
 .menu_open aside-setting.setting-sidebar {
     right: 0 !important;
 }
-.on-setting-page aside-setting.setting-sidebar,
-.on-user-page aside-setting.setting-sidebar {
-   // left: -250px;
-}
-.setting-sidebar-open #content-wrapper.menu_open {
+
+.setting-sidebar-open #content-wrapper{
     padding-right: 240px;
     padding-left: 60px !important;
 }
@@ -7723,6 +7720,18 @@ span#HW_badge_cont:nth-child(3) {
 }
 .desktop-header.menu_open {
     padding-left: 60px !important;
+}
+.setting-sidebar-open {
+    &.on-setting-page{
+        #content-wrapper{
+            padding-left: 60px;
+        }
+    }
+    &.on-user-page{
+        #content-wrapper{
+            padding-left: 60px;
+        }
+    }
 }
 /*flex css start*/
 .flex-column {
@@ -8279,6 +8288,11 @@ input.mat-input-element {
 .setting-sidebar-open.on-setting-page .plan-wrapper,
 .setting-sidebar-open.on-user-page .plan-wrapper {
     padding-left: 60px !important;
+
+}
+.setting-sidebar-open .plan-wrapper,
+.setting-sidebar-open.on-user-page .plan-wrapper{
+    padding-right: 240px !important;
 }
 .plan-wrapper.menu_open {
     padding-left: 240px !important;
@@ -8398,7 +8412,71 @@ body.update-scroll-hidden {
         }
     }
 }
-
+.company-branch-dropdown{
+    .custom-tabs {
+        ul {
+            &.nav.nav-tabs{
+                position: inherit !important;
+                background-color: transparent;
+                padding-left: 0 !important;
+                margin: 0 -20px;
+                flex-wrap: nowrap;
+                width: initial;
+                display: flex;
+                justify-content: space-between;
+                li{
+                    &.active{
+                        a{
+                            color: $midnight-blue !important;
+                            border-bottom: 2px solid $midnight-blue !important;
+                        }
+                    }
+                    padding-right: 0;
+                    &.icon-company{
+                        &:before{
+                            position: absolute;
+                            left: 20px;
+                        }
+                    }
+                    a{
+                        padding: 0 10px !important;
+                        min-width: 110px;
+                        font-family: 'opensans-regular';
+                        color: $grey-chateau !important;
+                        padding-left: 40px !important;
+                        padding-top: 5px !important;
+                    }
+                }
+            }
+            .nav-item{
+                &.icon-company{
+                    &.active{
+                        &::before{
+                            color: $midnight-blue;
+                        }
+                    }
+                    &::before{
+                        position: absolute !important;
+                        left: 20px !important;
+                        top: 5px;
+                    }
+                }
+                &.icon-branch1{
+                    &.active{
+                        &::before{
+                            color: $midnight-blue;
+                        }
+                    }
+                    &::before{
+                        position: absolute !important;
+                        left: 20px !important;
+                        top: 5px;
+                    }
+                }
+            }
+        }
+    }
+}
 /* responsive  starts here*/
 
 @media (max-width: 1440px) {

@@ -96,8 +96,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                 return s.session.user.countryCode;
             }
         }), takeUntil(this.destroyed$));
-        /** To reset isUpdateCompanyInProgress in case of subscription module */
-        this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
+        
         this.isAddNewMobileNoInProcess$ = this.store.pipe(select(s => s.login.isAddNewMobileNoInProcess), takeUntil(this.destroyed$));
         this.isAddNewMobileNoSuccess$ = this.store.pipe(select(s => s.login.isAddNewMobileNoSuccess), takeUntil(this.destroyed$));
         this.isVerifyAddNewMobileNoInProcess$ = this.store.pipe(select(s => s.login.isVerifyAddNewMobileNoInProcess), takeUntil(this.destroyed$));
@@ -113,6 +112,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
+        /** To reset isUpdateCompanyInProgress in case of subscription module */
+        this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
+        
         this.breakPointObservar.observe([
             '(max-width:767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {

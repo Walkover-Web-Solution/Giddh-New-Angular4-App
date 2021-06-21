@@ -133,6 +133,7 @@ export class GstComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
         .observe(['(max-width: 767px)'])
         .pipe(takeUntil(this.destroyed$))
@@ -142,7 +143,6 @@ export class GstComponent implements OnInit, OnDestroy {
                 this.asideGstSidebarMenuState = 'in';
             }
         });
-        this.toggleGstPane();
         this.loadTaxDetails();
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
@@ -203,31 +203,7 @@ export class GstComponent implements OnInit, OnDestroy {
             }
         });
     }
-    /**
-     * Aside pane toggle fixed class
-     *
-     *
-     * @memberof GstComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideGstSidebarMenuState === 'in') {
-            document.querySelector('body').classList.add('gst-sidebar-open');
-        } else {
-            document.querySelector('body').classList.remove('gst-sidebar-open');
-        }
-    }
-    /**
-      * This will toggle the settings popup
-      *
-      * @param {*} [event]
-      * @memberof GstComponent
-      */
-    public toggleGstPane(event?): void {
-        this.toggleBodyClass();
-        if (this.isMobileScreen && event && this.asideGstSidebarMenuState === 'in') {
-            this.asideGstSidebarMenuState = "out";
-        }
-    }
+
     /**
      * Unsubscribes from subscription
      *

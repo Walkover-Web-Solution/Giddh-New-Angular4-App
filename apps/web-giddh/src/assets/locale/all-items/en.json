@@ -131,24 +131,36 @@
                 },
                 {
                     "label": "GSTR1",
-                    "link": "/pages/gstfiling",
                     "icon": "icon-GSTR",
                     "description": "File & view GSTR1",
-                    "hide": "sidebar"
+                    "hide": "sidebar",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "isGstMenu": true,
+                        "type": "gstr1"
+                    }
                 },
                 {
                     "label": "GSTR2",
-                    "link": "/pages/gstfiling",
                     "icon": "icon-GSTR",
                     "description": "File & view GSTR2",
-                    "hide": "sidebar"
+                    "hide": "sidebar",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "isGstMenu": true,
+                        "type": "gstr2"
+                    }
                 },
                 {
                     "label": "GSTR3B",
-                    "link": "/pages/gstfiling",
                     "icon": "icon-GSTR",
                     "description": "File & view GSTR3B",
-                    "hide": "sidebar"
+                    "hide": "sidebar",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "isGstMenu": true,
+                        "type": "gstr3b"
+                    }
                 },
                 {
                     "label": "Reverse Charge",
@@ -362,16 +374,16 @@
     ],
     "switch_branch": "Switch Branch",
     "sb": "SB",
-    "search_branch": "Search Branch here",
+    "search_branch": "Search Branches",
     "goto_company": "Go to company",
-    "create_branch": "Create Branch",
+    "create_branch": "+ Create Branch",
     "accounts": "Accounts",
     "show_more": "Show more",
     "menu": "Menu",
     "import_export_backup": "Import/Export Data (Backup)",
     "switch_company": "Switch company",
-    "search_company": "Search Company here",
-    "create_company": "Create Company",
+    "search_company": "Search Companies",
+    "create_company": "+ Create Company",
     "profile": "Profile",
     "user_profile": "User Profile",
     "api": "API",
@@ -382,5 +394,8 @@
     "settings_permission": "Settings > Permission",
     "user_details": "User Details",
     "inventory_inout": "Inventory In/Out",
-    "import_data": "Import Data"
+    "import_data": "Import Data",
+    "companies": "Companies",
+    "refresh_manually": "Refresh Manually",
+    "branches": "Branches"
 }

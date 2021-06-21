@@ -19,6 +19,8 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     public invoiceType: string[] = [];
+    /** True, when original copy is to be downloaded */
+    public isOriginal: boolean = true;
     public isTransport: boolean = false;
     public isCustomer: boolean = false;
     public isProformaEstimatesInvoice: boolean = false;

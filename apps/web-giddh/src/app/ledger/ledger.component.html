@@ -235,10 +235,20 @@
                                     (click)="showShareLedgerModal()">
                                     <i class="icon-ledger-path lh-0"></i>
                                 </a>
-                                <a class="icomoon-ico d-flex align-items-center mr-0" id="export-ledger"
+                                <a class="icomoon-ico d-flex align-items-center" id="export-ledger"
                                     href="javascript:void(0)" [tooltip]="commonLocaleData?.app_export"
                                     [placement]="'top'" (click)="showExportLedgerModal()">
                                     <i class="icon-ledger-union-5 lh-0"></i>
+                                </a>
+                                <a class="icomoon-ico d-flex align-items-center" id="delete-bank-transaction"
+                                    href="javascript:void(0)" [tooltip]="localeData?.delete_bank_transactions"
+                                    [placement]="'top'" (click)="showBulkDeleteBankTransactionsConfirmationModal()" *ngIf="entryUniqueNamesForBulkAction?.length > 0">
+                                    <i class="icon-trash lh-0"></i>
+                                </a>
+                                <a class="icomoon-ico d-flex align-items-center mr-0" id="reload-bank-transaction"
+                                    href="javascript:void(0)" [tooltip]="localeData?.reload_bank_transactions"
+                                    [placement]="'top'" (click)="getBankTransactions()">
+                                    <i class="icon-refresh lh-0"></i>
                                 </a>
                             </div>
                         </div>
@@ -281,7 +291,7 @@
                 <div *ngIf="!isMobileScreen">
                     <h1 class="mr-t2 primary-color" *ngIf="isBankTransactionLoading">
                         {{localeData?.loading_transactions}}</h1>
-                    <section id="eledgerwrap" class="mr-t2" *ngIf="lc.showEledger">
+                    <section id="eledgerwrap" class="mr-t2" *ngIf="lc.showEledger && !isBankTransactionLoading">
                         <div class="alert alert-danger ledger-book fade in position-relative pd-r15">
                             <button type="button" class="close">
                                 <span class="font-12 font-weight-normal"
@@ -1902,5 +1912,36 @@
                 </div>
             </div>
         </div>
+
+        <!-- Bulk action confirmation popup -->
+        <div bsModal #bulkDeleteBankTransactionsConfirmationModal="bs-modal" tabindex="-1" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-md" *ngIf="bulkDeleteBankTransactionsConfirmationModal?.isShown">
+                <div class="modal-content">
+                    <div>
+                        <div class="modal-header theme-bg pd-l2 pd-r2 clearfix">
+                            <h3 class="modal-title bg" id="modal-title">{{commonLocaleData?.app_confirmation}} </h3>
+                            <i class="icon-cross text-right close-modal" aria-hidden="true"
+                                (click)="cancelDeleteBankTransactions()"></i>
+                        </div>
+                        <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
+                            <form name="newRole" novalidate autocomplete="off">
+                                <div class="modal-wrap mr-b2">
+                                    <h3>{{localeData?.delete_bank_transactions_title}}</h3>
+                                </div>
+                                <div class="pull-right">
+                                    <button type="submit" class="btn btn-md btn-success mr-r1"
+                                        (click)="deleteBankTransactions()">{{commonLocaleData?.app_yes}}
+                                    </button>
+                                    <button type="submit" class="btn btn-md btn-primary"
+                                        (click)="cancelDeleteBankTransactions()">{{commonLocaleData?.app_no}}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Bulk action confirmation popup -->
     </ng-container>
 </ng-container>
