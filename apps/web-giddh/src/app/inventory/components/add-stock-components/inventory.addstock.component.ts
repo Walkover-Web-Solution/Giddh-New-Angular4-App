@@ -130,11 +130,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 this.stockUnitsDropDown$ = of(unitArr);
             }
         });
-
-        this.getParentGroupData();
     }
 
     public ngOnInit() {
+        this.getParentGroupData();
         // get all groups
         this.formDivBoundingRect.next({
             top: 0,

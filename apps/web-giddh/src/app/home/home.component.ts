@@ -12,7 +12,6 @@ import { AccountService } from 'apps/web-giddh/src/app/services/account.service'
 import { ProfitLossComponent } from './components/profit-loss/profile-loss.component';
 import { BankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
 import { CrDrComponent } from './components/cr-dr-list/cr-dr-list.component';
-import { SubscriptionsUser } from "../models/api-models/Subscriptions";
 import { GeneralService } from "../services/general.service";
 
 @Component({
@@ -28,7 +27,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     @ViewChild('bankaccount', { static: true }) public bankaccount: BankAccountsComponent;
     @ViewChild('crdrlist', { static: true }) public crdrlist: CrDrComponent;
 
-    public subscribedPlan: SubscriptionsUser;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public hideallcharts: boolean = false;
     /* This will hold common JSON data */
@@ -43,28 +41,19 @@ export class HomeComponent implements OnInit, OnDestroy {
         private _generalService: GeneralService
     ) {
         this.needsToRedirectToLedger$ = this.store.pipe(select(p => p.login.needsToRedirectToLedger), takeUntil(this.destroyed$));
+    }
 
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                if (activeCompany.subscription) {
-                    this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(activeCompany.subscription));
-                    this.subscribedPlan = activeCompany.subscription;
-                }
-
-                this.needsToRedirectToLedger$.pipe(take(1)).subscribe(result => {
-                    if (result) {
-                        this._accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                            if (data.status === 'success' && data.body.results.length > 0) {
-                                this._router.navigate([`ledger/${data.body.results[0].uniqueName}`]);
-                            }
-                        });
+    public ngOnInit() {
+        this.needsToRedirectToLedger$.pipe(take(1)).subscribe(result => {
+            if (result) {
+                this._accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    if (data.status === 'success' && data.body.results.length > 0) {
+                        this._router.navigate([`ledger/${data.body.results[0].uniqueName}`]);
                     }
                 });
             }
         });
-    }
-
-    public ngOnInit() {
+        
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
@@ -86,9 +75,5 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._homeActions.ResetHomeState());
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    public goToSelectPlan() {
-        this._router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, showPlans: true } });
     }
 }
