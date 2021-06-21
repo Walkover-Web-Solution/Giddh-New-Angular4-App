@@ -34,7 +34,7 @@ export class DeleteInvoiceConfirmationModelComponent {
      */
     public translationComplete(event: any): void {
         if (event) {
-            this.localeData?.confirmation_messages.map(c => {
+            this.localeData?.confirmation_messages?.map(c => {
                 this.confirmationMessages[c.module] = c;
             });
             this.translationLoaded = true;
