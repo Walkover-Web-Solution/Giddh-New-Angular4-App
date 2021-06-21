@@ -420,7 +420,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     /**
      * This will return page heading based on active tab
      *
-     * @param {boolean} event
      * @memberof ExpensesComponent
      */
     public getPageHeading(): string {
