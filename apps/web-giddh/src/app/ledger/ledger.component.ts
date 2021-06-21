@@ -470,6 +470,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public hideEledgerWrap() {
         this.lc.showEledger = false;
+        this.entryUniqueNamesForBulkAction = [];
     }
     /**
      * To change pagination page number
