@@ -1915,7 +1915,7 @@
 
         <!-- Bulk action confirmation popup -->
         <div bsModal #bulkDeleteBankTransactionsConfirmationModal="bs-modal" tabindex="-1" class="modal fade" role="dialog">
-            <div class="modal-dialog modal-md">
+            <div class="modal-dialog modal-md" *ngIf="bulkDeleteBankTransactionsConfirmationModal?.isShown">
                 <div class="modal-content">
                     <div>
                         <div class="modal-header theme-bg pd-l2 pd-r2 clearfix">

@@ -2290,7 +2290,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         let transactionIds = this.entryUniqueNamesForBulkAction.map((m: any) => { return m.transactionId; });
         let params = {transactionIds: transactionIds};
-        this._ledgerService.deleteBankTransactions(this.trxRequest.accountUniqueName, params).subscribe(response => {
+        this._ledgerService.deleteBankTransactions(this.trxRequest.accountUniqueName, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this._toaster.clearAllToaster();
             if(response?.status === "success") {
                 this.getBankTransactions();
