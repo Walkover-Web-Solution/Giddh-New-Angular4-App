@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularResizedEventModule } from 'angular-resize-event';
 import { LaddaModule } from 'angular2-ladda';
-import { TextMaskModule } from 'angular2-text-mask';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -13,10 +12,8 @@ import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination'
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ClipboardModule } from 'ngx-clipboard';
 import { NgxUploaderModule } from 'ngx-uploader';
+import { InventoryAddStockModule } from '../inventory/components/add-stock-components/inventory.addstock.module';
 
-import { InventoryModule } from '../inventory/inventory.module';
-import { SalesModule } from '../sales/sales.module';
-import { SettingsServiceModule } from '../settings/settings-service.module';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
@@ -28,7 +25,6 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { NumberToWordsModule } from '../shared/helpers/pipes/numberToWords/numberToWords.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { SelectModule } from '../theme/ng-select/ng-select';
@@ -76,7 +72,7 @@ import { LedgerRoutingModule } from './ledger.routing.module';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        TaxControlModule.forRoot(),
+        TaxControlModule,
         LedgerRoutingModule,
         ModalModule.forRoot(),
         TooltipModule,
@@ -86,7 +82,6 @@ import { LedgerRoutingModule } from './ledger.routing.module';
         Daterangepicker,
         LaddaModule,
         ElementViewChildModule,
-        TextMaskModule,
         NumberToWordsModule,
         ConfirmModalModule,
         ShSelectModule,
@@ -96,14 +91,10 @@ import { LedgerRoutingModule } from './ledger.routing.module';
         BsDropdownModule,
         TextCaseChangeModule,
         ClickOutsideModule,
-        QuickAccountModule.forRoot(),
-        InventoryModule,
-        CurrencyModule,
+        QuickAccountModule,
         SelectModule.forRoot(),
-        SalesModule,
         AngularResizedEventModule,
         NgxMaskModule.forRoot(),
-        SettingsServiceModule,
         AdvanceReceiptAdjustmentModule,
         NgxDaterangepickerMd.forRoot(),
         AmountFieldComponentModule,
@@ -113,7 +104,8 @@ import { LedgerRoutingModule } from './ledger.routing.module';
         BsDatepickerModule,
         LedgerDiscountModule,
         UpdateLedgerEntryPanelModule,
-        DatepickerWrapperModule
+        DatepickerWrapperModule,
+        InventoryAddStockModule
     ],
 })
 export class LedgerModule {
