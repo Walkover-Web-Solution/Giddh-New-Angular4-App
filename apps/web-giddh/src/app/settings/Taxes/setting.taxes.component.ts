@@ -66,15 +66,17 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         private _companyActions: CompanyActions,
         private _settingsTaxesActions: SettingsTaxesActions
     ) {
+        
+    }
+
+    public ngOnInit() {
         for (let i = 1; i <= 31; i++) {
             let day = i.toString();
             this.days.push({ label: day, value: day });
         }
 
         this.store.dispatch(this._companyActions.getTax());
-    }
-
-    public ngOnInit() {
+        
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.taxes) {
                 this.forceClear$ = observableOf({ status: true });

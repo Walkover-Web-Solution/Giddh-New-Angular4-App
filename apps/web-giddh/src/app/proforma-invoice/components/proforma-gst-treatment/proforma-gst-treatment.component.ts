@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
     selector: 'proforma-gst-treatment-component',
@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ProformaGstTreatmentComponent implements OnInit {
+export class ProformaGstTreatmentComponent {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -15,9 +15,6 @@ export class ProformaGstTreatmentComponent implements OnInit {
     @Input() public commonLocaleData: any = {};
 
     constructor() {
-    }
-
-    ngOnInit() {
     }
 
     public clickInside(event) {

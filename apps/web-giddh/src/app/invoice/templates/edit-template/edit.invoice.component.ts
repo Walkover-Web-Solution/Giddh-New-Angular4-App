@@ -644,7 +644,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         private invoiceService: InvoiceService,
         private _invoiceUiDataService: InvoiceUiDataService
     ) {
-        this.store.dispatch(this.invoiceActions.getTemplateState());
+        
     }
 
     /**
@@ -659,6 +659,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+        this.store.dispatch(this.invoiceActions.getTemplateState());
         this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(route => {
             if (route && route.selectedType) {
                 if (route.selectedType === VoucherTypeEnum.creditNote || route.selectedType === VoucherTypeEnum.debitNote) {

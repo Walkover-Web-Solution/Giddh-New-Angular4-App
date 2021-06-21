@@ -284,13 +284,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.isTransactionRequestInProcess$ = this.store.pipe(select(p => p.ledger.transactionInprogress), takeUntil(this.destroyed$));
         this.ledgerBulkActionSuccess$ = this.store.pipe(select(p => p.ledger.ledgerBulkActionSuccess), takeUntil(this.destroyed$));
-        this.store.dispatch(this._settingsDiscountAction.GetDiscount());
-        this.store.dispatch(this._settingsTagActions.GetALLTags());
-        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
-        // get company taxes
-        this.store.dispatch(this._companyActions.getTax());
-        // reset redirect state from login action
-        this.store.dispatch(this._loginActions.ResetRedirectToledger());
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
@@ -496,6 +489,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.store.dispatch(this._settingsDiscountAction.GetDiscount());
+        this.store.dispatch(this._settingsTagActions.GetALLTags());
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
+        // get company taxes
+        this.store.dispatch(this._companyActions.getTax());
+        // reset redirect state from login action
+        this.store.dispatch(this._loginActions.ResetRedirectToledger());
+        
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.breakPointObservar.observe([

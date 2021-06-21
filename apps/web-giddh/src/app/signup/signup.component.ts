@@ -19,12 +19,11 @@ import {
     GoogleLoginProvider,
     SocialUser
 } from "../theme/ng-social-login-module/index";
-import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
-import { ToasterService } from "../services/toaster.service";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { GeneralService } from "../services/general.service";
+import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
 @Component({
     selector: "signup",
@@ -74,7 +73,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         private loginAction: LoginActions,
         private authService: AuthService,
         @Inject(DOCUMENT) private document: Document,
-        private _toaster: ToasterService,
         private _generalService: GeneralService
     ) {
         this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
@@ -98,16 +96,6 @@ export class SignupComponent implements OnInit, OnDestroy {
             return state.login.isLoginWithEmailSubmited;
         }), takeUntil(this.destroyed$));
 
-        this.store.pipe(select(state => {
-            return state.login.isVerifyEmailSuccess;
-        }), takeUntil(this.destroyed$)).subscribe((value) => {
-            
-        });
-        this.store.pipe(select(state => {
-            return state.login.isVerifyMobileSuccess;
-        }), takeUntil(this.destroyed$)).subscribe((value) => {
-            
-        });
         this.isSignupWithPasswordInProcess$ = this.store.pipe(select(state => {
             return state.login.isSignupWithPasswordInProcess;
         }), takeUntil(this.destroyed$));
@@ -121,7 +109,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.signupVerifyEmail$ = this.store.pipe(select(p => p.login.signupVerifyEmail), takeUntil(this.destroyed$));
 
         this.isSocialLogoutAttempted$ = this.store.pipe(select(p => p.login.isSocialLogoutAttempted), takeUntil(this.destroyed$));
-
         contriesWithCodes.map(c => {
             this.countryCodeList.push({ value: c.countryName, label: c.value });
         });

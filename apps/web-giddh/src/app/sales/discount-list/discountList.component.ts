@@ -106,14 +106,15 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
         private store: Store<AppState>
     ) {
         this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
+    }
+
+    public ngOnInit() {
         this.discountAccountsList$.subscribe(data => {
             if (data && data.length) {
                 this.prepareDiscountList();
             }
         });
-    }
 
-    public ngOnInit() {
         if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
             this.discountFixedValueModal = this.defaultDiscount.amount;
         } else {

@@ -43,6 +43,18 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isQuickAccountCreatedSuccessfully$ = this.store.pipe(select(p => p.ledger.isQuickAccountCreatedSuccessfully), takeUntil(this.destroyed$));
         this.groupsArrayStream$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));
 
+        // bind state sources
+        this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                Object.keys(res.stateList).forEach(key => {
+                    this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
+                });
+                this.statesSource$ = observableOf(this.states);
+            }
+        });
+    }
+
+    public ngOnInit() {
         this._groupService.GetFlattenGroupsAccounts('', 1, 5000, 'true').pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result.status === 'success') {
                 let groupsListArray: IOption[] = [];
@@ -59,19 +71,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             }
         });
-
-        // bind state sources
-        this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                Object.keys(res.stateList).forEach(key => {
-                    this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
-                });
-                this.statesSource$ = observableOf(this.states);
-            }
-        });
-    }
-
-    public ngOnInit() {
+        
         this.newAccountForm = this._fb.group({
             name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
             uniqueName: ['', [Validators.required]],

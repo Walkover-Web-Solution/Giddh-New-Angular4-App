@@ -102,8 +102,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         private domSanitizer: DomSanitizer,
         private generalService: GeneralService
     ) {
-        this.getInventorySettings();
-        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+        
     }
 
     /**
@@ -112,6 +111,9 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public ngOnInit(): void {
+        this.getInventorySettings();
+        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+        
         this.getPurchaseOrder();
 
         if (this.purchaseOrders && this.purchaseOrders.items) {

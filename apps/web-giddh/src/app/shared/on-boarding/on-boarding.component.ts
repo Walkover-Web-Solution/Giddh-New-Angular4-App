@@ -8,7 +8,6 @@ import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-
 import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { LoginActions } from '../../actions/login.action';

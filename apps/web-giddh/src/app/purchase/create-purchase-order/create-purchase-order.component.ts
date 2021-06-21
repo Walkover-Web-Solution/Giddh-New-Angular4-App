@@ -385,15 +385,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         private searchService: SearchService,
         private ngZone: NgZone
     ) {
-        this.getInvoiceSettings();
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
-        this.store.dispatch(this.settingsDiscountAction.GetDiscount());
-        this.store.dispatch(this.companyActions.getTax());
-        this.store.dispatch(this.settingsBranchAction.resetAllBranches());
-        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
-
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
         this.createdAccountDetails$ = this.store.pipe(select(state => state.sales.createdAccountDetails), takeUntil(this.destroyed$));
         this.updatedAccountDetails$ = this.store.pipe(select(state => state.sales.updatedAccountDetails), takeUntil(this.destroyed$));
@@ -408,6 +400,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public ngOnInit(): void {
+        this.getInvoiceSettings();
+        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
+        this.store.dispatch(this.settingsDiscountAction.GetDiscount());
+        this.store.dispatch(this.companyActions.getTax());
+        this.store.dispatch(this.settingsBranchAction.resetAllBranches());
+        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+
         this.breakPointObservar.observe([
             '(max-width: 1024px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
