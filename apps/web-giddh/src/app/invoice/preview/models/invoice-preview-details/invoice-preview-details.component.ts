@@ -836,11 +836,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public downloadCreditDebitNotePdf(): void {
         let voucherType = this.selectedItem?.voucherType;
         let dataToSend = {
-            voucherNumber: [this.selectedItem.voucherNumber],
+            voucherNumber: [this.selectedItem?.voucherNumber],
             voucherType
         };
         if (voucherType) {
-            this.invoiceService.DownloadInvoice(this.selectedItem.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
+            this.invoiceService.DownloadInvoice(this.selectedItem?.account?.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
                 .subscribe(res => {
                     if (res) {
                         saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
