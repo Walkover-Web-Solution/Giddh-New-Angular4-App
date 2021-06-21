@@ -23,6 +23,7 @@ import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { GeneralService } from "../services/general.service";
+import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
 @Component({
     selector: "signup",
@@ -108,7 +109,9 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.signupVerifyEmail$ = this.store.pipe(select(p => p.login.signupVerifyEmail), takeUntil(this.destroyed$));
 
         this.isSocialLogoutAttempted$ = this.store.pipe(select(p => p.login.isSocialLogoutAttempted), takeUntil(this.destroyed$));
-
+        contriesWithCodes.map(c => {
+            this.countryCodeList.push({ value: c.countryName, label: c.value });
+        });
         this.userLoginState$ = this.store.pipe(select(p => p.session.userLoginState), takeUntil(this.destroyed$));
         this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
         this.isTwoWayAuthInProcess$ = this.store.pipe(select(p => p.login.isTwoWayAuthInProcess), takeUntil(this.destroyed$));
