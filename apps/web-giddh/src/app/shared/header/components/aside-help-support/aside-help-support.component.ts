@@ -1,10 +1,8 @@
 import { Component, EventEmitter, OnInit, Output, HostListener, OnDestroy } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState } from 'apps/web-giddh/src/app/store';
-import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 import { AuthenticationService } from 'apps/web-giddh/src/app/services/authentication.service';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 @Component({
     selector: 'aside-help-support',
     templateUrl: './aside-help-support.component.html',
@@ -25,8 +23,10 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if oncehub SOE script loaded */
+    public soeLoaded: boolean = false;
 
-    constructor(private store: Store<AppState>, private generalActions: GeneralActions, private authService: AuthenticationService) {
+    constructor(private authService: AuthenticationService) {
 
     }
 
@@ -39,6 +39,17 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+
+        if (window['SOE'] === undefined) {
+            this.soeLoaded = true;
+            /* For Schedule now */
+            let scriptTag = document.createElement('script');
+            scriptTag.src = 'https://cdn.oncehub.com/mergedjs/so.js';
+            scriptTag.type = 'text/javascript';
+            scriptTag.defer = true;
+            document.body.appendChild(scriptTag);
+            /* For Schedule now */
+        }
     }
 
     /**
@@ -55,29 +66,13 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
      * This will initialize the function to show calendly
      *
      * @param {*} event
-     * @returns
      * @memberof AsideHelpSupportComponent
      */
-    public scheduleNow(event): boolean {
-        this.closeAsidePane(event);
-
-        if (isElectron) {
-            (window as any).require("electron").shell.openExternal('https://calendly.com/sales-accounting-software/talk-to-sale');
-        } else if (isCordova) {
-            window.open("https://calendly.com/sales-accounting-software/talk-to-sale", "_blank");
-        } else {
-            this.openScheduleCalendlyModel();
+    public scheduleNow(event): void {
+        if(!this.soeLoaded) {
+            window['SOE'].prototype.toggleLightBox('giddhbooks');
         }
-        return false;
-    }
-
-    /**
-     * This will open the calendly modal
-     *
-     * @memberof AsideHelpSupportComponent
-     */
-    public openScheduleCalendlyModel(): void {
-        this.store.dispatch(this.generalActions.isOpenCalendlyModel(true));
+        this.closeAsidePane(event);
     }
 
     /**
