@@ -36,7 +36,6 @@ export interface GeneralState {
     sideMenuBarOpen: boolean;
     headerTitle: { uniqueName: string, additional: { tab: string, tabIndex: number } };
     currentPage: CurrentPage;
-    isCalendlyModelOpen: boolean;
     updateIndexDbInProcess: boolean;
     updateIndexDbComplete: boolean;
     openSideMenu: boolean;
@@ -52,7 +51,6 @@ const initialState: GeneralState = {
     sideMenuBarOpen: false,
     headerTitle: null,
     currentPage: null,
-    isCalendlyModelOpen: false,
     updateIndexDbComplete: false,
     updateIndexDbInProcess: false,
     openSideMenu: true,
@@ -290,12 +288,6 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         case GENERAL_ACTIONS.SET_PAGE_HEADER_TITLE: {
             return {
                 ...state, currentPage: action.payload
-            }
-        }
-
-        case GENERAL_ACTIONS.OPEN_CALENDLY_MODEL: {
-            return {
-                ...state, isCalendlyModelOpen: action.payload
             }
         }
         case GENERAL_ACTIONS.OPEN_SIDE_MENU: {
