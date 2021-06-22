@@ -58,6 +58,7 @@ export interface IGstObj {
     ]
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
+    /** This will emit pageHeading */
     @Output() public pageHeading: EventEmitter<string> = new EventEmitter();
 
     public countrySource: IOption[] = [];

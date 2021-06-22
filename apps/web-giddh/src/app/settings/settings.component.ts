@@ -39,8 +39,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('permissionComp', { static: false }) public permissionComp: SettingPermissionComponent;
     @ViewChild('tagComp', { static: false }) public tagComp: SettingsTagsComponent;
 
-
-
     public isUserSuperAdmin: boolean = false;
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCompanyProfileUpdated: boolean = false;

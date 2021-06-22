@@ -152,15 +152,6 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
                 case 'recurring':
                     pageHeading = this.localeData?.tabs?.recurring;
                     break;
-                case 'pending':
-                    pageHeading = this.localeData?.tabs?.pending;
-                    break;
-                case 'templates':
-                    pageHeading = this.localeData?.tabs?.templates;
-                    break;
-                case 'settings':
-                    pageHeading = this.localeData?.tabs?.settings;
-                    break;
             }
         }
         return pageHeading;
