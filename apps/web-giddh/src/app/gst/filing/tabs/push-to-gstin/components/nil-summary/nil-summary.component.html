@@ -34,38 +34,26 @@
                     <tr *ngFor="let item of nilSummary.inv">
                         <td [attr.data-title]="localeData?.filing?.supply_type"> {{item.sply_ty ? item.sply_ty : '-'}} </td>
                         <td [attr.data-title]="localeData?.filing?.nil_amount" class="text-right">
-                            <!-- {{item.nil_amt | giddhCurrency} -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.nil_amt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
                         <td [attr.data-title]="localeData?.filing?.exempt_amount" class="text-right">
-                            <!-- {{item.expt_amt | giddhCurrency}}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.expt_amt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
                         <td [attr.data-title]="localeData?.filing?.non_gst_amount" class="text-right">
-                            <!-- {{item.ngsup_amt | giddhCurrency}}  -->
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.ngsup_amt" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </td>
                     </tr>
-
                 </tbody>
-
             </table>
-
-            <!--      <div class="text-center" *ngIf="(nilSummaryResponse$ | async)?.totalPages > 1">-->
-            <!--        <pagination [maxSize]="5" [totalItems]="(nilSummaryResponse$ | async)?.totalItems" [itemsPerPage]="10"-->
-            <!--                    (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"-->
-            <!--                    [rotate]="false"></pagination>-->
-            <!--      </div>-->
-
         </div>
 
         <div *ngIf="!nilSummary">

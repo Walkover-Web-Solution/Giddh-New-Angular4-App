@@ -135,7 +135,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
 
                 if (account.parentStockGroup) {
                     this.selectedGroup = { label: account.parentStockGroup.name, value: account.parentStockGroup.uniqueName };
-                    // updGroupObj.parentStockGroupUniqueName = this.selectedGroup.value;
                     this.parentStockSearchString = account.parentStockGroup.uniqueName;
                     updGroupObj.isSubGroup = true;
                 } else {
@@ -246,7 +245,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     }
 
     public ngOnDestroy() {
-        // this.store.dispatch(this.inventoryActions.resetActiveGroup());
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

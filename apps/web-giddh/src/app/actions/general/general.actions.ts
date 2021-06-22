@@ -1,18 +1,14 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-
-import { FlattenAccountsResponse } from '../../models/api-models/Account';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CurrentPage } from '../../models/api-models/Common';
 import { States, StatesRequest } from '../../models/api-models/Company';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
-import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
-import { IUlist, IUpdateDbRequest } from '../../models/interfaces/ulist.interface';
-import { AccountService } from '../../services/account.service';
+import { IUpdateDbRequest } from '../../models/interfaces/ulist.interface';
 import { CompanyService } from '../../services/companyService.service';
 import { DbService } from '../../services/db.service';
 import { GroupService } from '../../services/group.service';
@@ -31,29 +27,6 @@ export class GeneralActions {
             map(response => {
                 return this.getGroupWithAccountsResponse(response);
             })));
-
-
-    public GetFlattenGroups$: Observable<Action> = createEffect(() => this.action$
-        .pipe(
-            ofType(GENERAL_ACTIONS.FLATTEN_GROUPS_REQ),
-            switchMap((action: CustomActions) =>
-                this._groupService.GetFlattenGroups(action.payload)
-            ),
-            map(response => {
-                return this.getFlattenGroupsRes(response);
-            })));
-
-
-    public getFlattenAccounts$: Observable<Action> = createEffect(() => this.action$
-        .pipe(
-            ofType(GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS),
-            switchMap((action: CustomActions) =>
-                this._accountService.getFlattenAccounts(action.payload)
-            ),
-            map(response => {
-                return this.getFlattenAccountResponse(response);
-            })));
-
 
     public getAllState$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -125,8 +98,8 @@ export class GeneralActions {
             switchMap(() => this._companyService.getMenuItems()),
             map(resp => this.saveSideMenuItems(resp.body))));
 
-    constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService, private _companyService: CompanyService, private _dbService: DbService, private _activatedRoute: ActivatedRoute, private route: Router) {
-        //
+    constructor(private action$: Actions, private _groupService: GroupService, private _companyService: CompanyService, private _dbService: DbService, private route: Router) {
+        
     }
 
     public getGroupWithAccounts(value?: string): CustomActions {
@@ -139,20 +112,6 @@ export class GeneralActions {
     public getGroupWithAccountsResponse(value: BaseResponse<GroupsWithAccountsResponse[], string>): CustomActions {
         return {
             type: GENERAL_ACTIONS.GENERAL_GET_GROUP_WITH_ACCOUNTS_RESPONSE,
-            payload: value
-        };
-    }
-
-    public getFlattenAccount(value?: string): CustomActions {
-        return {
-            type: GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS,
-            payload: value
-        };
-    }
-
-    public getFlattenAccountResponse(value: BaseResponse<FlattenAccountsResponse, string>): CustomActions {
-        return {
-            type: GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS_RESPONSE,
             payload: value
         };
     }
@@ -177,40 +136,6 @@ export class GeneralActions {
         };
     }
 
-    public getFlattenGroupsReq(value?: any): CustomActions {
-        return {
-            type: GENERAL_ACTIONS.FLATTEN_GROUPS_REQ,
-            payload: value
-        };
-    }
-
-    public getFlattenGroupsRes(model: BaseResponse<IPaginatedResponse, any>): CustomActions {
-        return {
-            type: GENERAL_ACTIONS.FLATTEN_GROUPS_RES,
-            payload: model
-        };
-    }
-
-    public setCombinedList(model: IUlist[]): CustomActions {
-        return {
-            type: GENERAL_ACTIONS.SET_COMBINED_LIST,
-            payload: model
-        };
-    }
-
-    public resetCombinedList(): CustomActions {
-        return {
-            type: GENERAL_ACTIONS.RESET_COMBINED_LIST
-        };
-    }
-
-    public setSmartList(model: IUlist[]): CustomActions {
-        return {
-            type: GENERAL_ACTIONS.SET_SMART_LIST,
-            payload: model
-        };
-    }
-
     public setSideMenuBarState(value: boolean): CustomActions {
         return {
             type: GENERAL_ACTIONS.SET_SIDE_MENU_BAR_STATE,
@@ -223,12 +148,6 @@ export class GeneralActions {
             type: GENERAL_ACTIONS.SET_APP_HEADER_TITLE,
             payload: { uniqueName, additional }
         }
-    }
-
-    public resetSmartList(): CustomActions {
-        return {
-            type: GENERAL_ACTIONS.RESET_SMART_LIST
-        };
     }
 
     public resetStatesList(): CustomActions {
@@ -323,6 +242,19 @@ export class GeneralActions {
         return {
             type: GENERAL_ACTIONS.SAVE_SIDE_MENU_ITEMS,
             payload: items
+        }
+    }
+    /**
+     * Returns the action to open the GST side menu
+     *
+     * @params {boolean} shouldOpen True, if GST menu needs to be opened
+     * @return {*} {CustomActions} Action to open GST side menu
+     * @memberof GeneralActions
+     */
+     public openGstSideMenu(shouldOpen: boolean): CustomActions {
+        return {
+            type: GENERAL_ACTIONS.OPEN_GST_SIDE_MENU,
+            payload: shouldOpen
         }
     }
 }

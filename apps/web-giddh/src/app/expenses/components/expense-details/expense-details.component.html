@@ -1,5 +1,5 @@
 <div *ngIf="ispPettycashEntrySuccess$ | async">
-    <div class="clearfix p-15">
+    <div class="clearfix p-15 pt-0">
         <div class="row">
             <div class="col-sm-6">
                 <p class="bold mr-b05">{{selectedItem?.entryDate}} | {{selectedItem.baseAccount.name}}</p>
@@ -10,7 +10,7 @@
                 </button>
                 <button type="button" class="mr-b05 btn btn-danger"
                     (click)="openModal(RejectionReason)">{{localeData?.reject}}</button>
-                <span class="close-modal cp" (click)="closeDetailsMode()">
+                <span class="close-modal cp pull-right" (click)="closeDetailsMode()">
                     <img src="assets/images/multiply.svg">
                 </span>
             </div>
@@ -80,19 +80,6 @@
                             </sh-select>
                         </div>
                     </div>
-
-                    <!-- <div class="d-inline-block">
-                <span class="mr-1 d-inline-block font-14">USD</span>
-                <div class="toggle d-inline-block" data-key="disabled">
-                    <input type="checkbox" class="toggle-checkbox" id="disabled">
-                    <label class="toggle-label" for="disabled">
-            <span class="toggle-inner"></span>
-            <span class="toggle-switch"></span>
-          </label>
-                </div>
-                <span class="ml-1 d-inline-block font-14">INR</span>
-            </div> -->
-
                 </div>
 
                 <div class="col-sm-4 text-right xs-left" (click)="toggleEntryAgainst()"

@@ -114,27 +114,6 @@
                     </div>
 
                 </div>
-                <!-- <div class="row mt-2">
-                    <div class="col-md-4">
-                        <label>Account</label>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="row">
-                            <div class="pr-0 col-sm-5 col-12">
-                                <div class="checkbox square-switch">
-                                    <input type="checkbox" id="includeParticulars" />
-                                    <label for="includeParticulars">
-                                        <span class="pull-left" >Include</span>
-                                        <span class="pull-right" hidden>Exclude</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-sm-7 col-12">
-                                    <sh-select></sh-select>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
                 <div class="row mt-2">
 
                     <div class="col-md-4 col-sm-12">
@@ -149,6 +128,28 @@
                                 <sh-select [placeholder]="commonLocaleData?.app_select_action" [multiple]="true"
                                     [options]="statusDropdownOptions" name="balanceStatus"
                                     [(ngModel)]="request.balanceStatus" [ItemHeight]="33"></sh-select>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 pr-0">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="isEInvoiceEnabled" class="row mt-2">
+
+                    <div class="col-md-4 col-sm-12">
+                        <label>{{localeData?.e_invoice_status}}</label>
+                    </div>
+
+                    <div class="col-md-8 col-sm-12">
+
+                        <div class="status-description row mr-0 ml-0">
+
+                            <div class="col-md-8 col-sm-12 pl-0 pr-0 pl-0">
+                                <sh-select [placeholder]="commonLocaleData?.app_select_action" [multiple]="true"
+                                    [options]="eInvoiceStatusDropdownOptions" name="balanceStatus"
+                                    [(ngModel)]="request.status" [ItemHeight]="33"></sh-select>
                             </div>
 
                             <div class="col-sm-4 col-md-4 pr-0">
@@ -232,6 +233,28 @@
                                 <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total"
                                     type="tel">
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="type === 'drcr' && isEInvoiceEnabled" class="row mt-2">
+
+                    <div class="col-md-4 col-sm-12">
+                        <label>{{localeData?.e_invoice_status}}</label>
+                    </div>
+
+                    <div class="col-md-8 col-sm-12">
+
+                        <div class="status-description row mr-0 ml-0">
+
+                            <div class="col-md-8 col-sm-12 pl-0 pr-0 pl-0">
+                                <sh-select [placeholder]="commonLocaleData?.app_select_action" [multiple]="true"
+                                    [options]="eInvoiceStatusDropdownOptions" name="balanceStatus"
+                                    [(ngModel)]="request.status" [ItemHeight]="33"></sh-select>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 pr-0">
+                            </div>
+
                         </div>
                     </div>
                 </div>

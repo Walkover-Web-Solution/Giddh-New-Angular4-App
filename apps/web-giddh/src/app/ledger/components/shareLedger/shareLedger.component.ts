@@ -1,6 +1,6 @@
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import { AccountsAction } from './../../../actions/accounts.actions';
-import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnDestroy } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { MagicLinkRequest } from '../../../models/api-models/Ledger';
 import { Store, select } from '@ngrx/store';
@@ -16,7 +16,7 @@ import { ReplaySubject } from 'rxjs';
     styleUrls: ['./shareLedger.component.scss']
 })
 
-export class ShareLedgerComponent implements OnInit, OnDestroy {
+export class ShareLedgerComponent implements OnDestroy {
     @Input() public accountUniqueName: string = '';
     @Input() public from: string = '';
     @Input() public to: string = '';
@@ -34,10 +34,6 @@ export class ShareLedgerComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
 
     constructor(private _ledgerService: LedgerService, private store: Store<AppState>, private _ledgerActions: LedgerActions, private accountActions: AccountsAction) {
-    }
-
-    public ngOnInit() {
-
     }
 
     public checkAccountSharedWith() {

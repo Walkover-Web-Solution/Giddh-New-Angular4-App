@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-
 import { ReceiptAdvanceSearchModel } from '../../constants/reports.constant';
 
 @Component({

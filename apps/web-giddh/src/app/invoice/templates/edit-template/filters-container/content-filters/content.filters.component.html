@@ -1,7 +1,7 @@
 <div id="contentTab" class="design-tab-content mr-t2 template-editor" *ngIf="customTemplate?.uniqueName"
     [hidden]="!(content && customTemplate && customTemplate.sections)">
     <!-- start header -->
-    <form #contentForm="ngForm" (ngSubmit)="save()" novalidate>
+    <form #contentForm="ngForm" novalidate>
         <div id="headerDiv" [hidden]="!templateUISectionVisibility.header">
             <h2>Header</h2>
             <div class="scroll-auto">
@@ -47,19 +47,19 @@
                         </div>
                     </div>
                     <div class="form-group"
-                        *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && showGstComposition">
+                        *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && showGstComposition && customTemplate.sections['header'].data['showIrnNumber']">
                         <input type="checkbox" name="irnCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['showIrnNumber'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show IRN number
                     </div>
-                    <div *ngIf="showGstComposition && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')"
+                    <div *ngIf="showGstComposition && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && customTemplate.sections['header'].data['showQrCode']"
                         class="form-group">
                         <input type="checkbox" name="showQrCodeCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show QR code
                     </div>
                     <div class="form-group"
-                        *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
+                        *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales' && customTemplate.sections['header'].data['showCompanyAddress']">
                         <input type="checkbox" name="companyAddressCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['showCompanyAddress'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Address
@@ -614,6 +614,15 @@
                                 </ng-container>
                             </td>
                         </tr>
+                        <tr *ngIf="customTemplate.sections['table'].data['item'].display && customTemplate.sections['table'].data['showDescriptionInRows']">
+                            <td class="pb-3" colspan="2">
+                                <label>
+                                    <input type="checkbox" name="showDescriptionInRows"
+                                        [(ngModel)]="customTemplate.sections['table'].data['showDescriptionInRows'].display"
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show description as a new row
+                                </label>
+                            </td>
+                        </tr>
                         <tr *ngIf="fieldsAndVisibility.table.hsnSac">
                             <td>
                                 <label>
@@ -1118,10 +1127,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="clearfix mr-t1 form-group" *ngIf="customTemplate?.type === 'invoice'">
+                    <div class="clearfix mr-t1 form-group" *ngIf="customTemplate?.type === 'invoice' && customTemplate.sections['footer'].data['showNotesAtLastPage']">
                         <div>
                             <input type="checkbox" name="showNotesAtLastPage"
-                                [checked]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display"
+                                [checked]="customTemplate.sections['footer'].data['showNotesAtLastPage']?.display"
                                 [(ngModel)]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Show notes at the last
                             page
@@ -1139,14 +1148,14 @@
                                     <!-- No limit on characters in Notes 1 & 2 if user has opted to show notes at last page -->
                                     <textarea class="form-control" rows="3"
                                         [class.error-box]="contentForm?.controls['msg11']?.errors?.maxlength"
-                                        [maxlength]="customTemplate.sections['footer'].data['showNotesAtLastPage'].display ? null : 200"
+                                        [maxlength]="customTemplate.sections['footer'].data['showNotesAtLastPage']?.display ? null : 200"
                                         hasFocus #message1="hasFocus"
                                         placeholder="Enter any other text you would like in the footer. "
                                         [(ngModel)]="customTemplate.sections['footer'].data['message1'].label"
                                         name="msg11" (ngModelChange)='onFieldChange(null, null, null)'
                                         [disabled]="!customTemplate.sections['footer'].data['message1'].display"></textarea>
                                     <ng-container
-                                        *ngIf="(message1?.isFocused || contentForm?.controls['msg11']?.errors?.maxlength) && !customTemplate.sections['footer'].data['showNotesAtLastPage'].display">
+                                        *ngIf="(message1?.isFocused || contentForm?.controls['msg11']?.errors?.maxlength) && !customTemplate.sections['footer'].data['showNotesAtLastPage']?.display">
                                         <span class="max-character-label">Characters left:&nbsp;</span><span
                                             class="max-character-value">{{(200 -
                                             customTemplate.sections['footer'].data['message1'].label.length)}}</span>
@@ -1155,7 +1164,7 @@
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')"
+                    <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && customTemplate.sections['footer'].data['showMessage2']"
                         class="clearfix mr-t1 form-group">
                         <div>
                             <input [checked]="customTemplate.sections.footer.data.showMessage2?.display"
@@ -1183,7 +1192,7 @@
                                 customTemplate.sections['footer'].data['thanks'].label.length)}}</span>
                         </div>
                     </div>
-                    <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e')"
+                    <div *ngIf="customTemplate?.type === 'invoice' && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && customTemplate.sections['footer'].data['textUnderSlogan']"
                         class="clearfix mr-t1 form-group">
                         <input type="checkbox" name="textUnderSloganCheckbox"
                             [(ngModel)]="customTemplate.sections['footer'].data['textUnderSlogan'].display"

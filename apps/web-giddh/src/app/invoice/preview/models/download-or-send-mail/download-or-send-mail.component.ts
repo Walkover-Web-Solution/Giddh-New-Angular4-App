@@ -1,17 +1,16 @@
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-// import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import * as _ from '../../../../lodash-optimized';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { ReceiptVoucherDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { Router } from '@angular/router';
+import { findIndex, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'download-or-send-mail-invoice',
@@ -101,12 +100,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                     URL.revokeObjectURL(this.pdfFileURL);
                     this.pdfFileURL = URL.createObjectURL(file);
                     this.sanitizedPdfFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
-                    if (this.isCordova) {
-                        // todo: show PDF
-                    }
-                    //   this.pdfViewer.pdfSrc =  new Blob([ e.srcElement.result], { type: "application/pdf" }); // pdfSrc can be Blob or Uint8Array
-                    //  this.pdfViewer.refresh();
-
                 });
 
                 reader.readAsDataURL(o);
@@ -138,7 +131,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(p => p.receipt.voucher), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o && o.voucherDetails) {
-                // this.showEditButton = o.voucherDetails.uniqueName ? true : false;
                 this.accountUniqueName = o.accountDetails.uniqueName;
                 this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails.templateUniqueName));
             }
@@ -168,7 +160,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
      * onSendInvoiceOnMail
      */
     public onSendInvoiceOnMail(email: string) {
-        if (_.isEmpty(email)) {
+        if (isEmpty(email)) {
             this._toasty.warningToast(this.localeData?.enter_valid_email_error);
             return;
         }
@@ -185,7 +177,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
      * onSendInvoiceOnSms
      */
     public onSendInvoiceOnSms(numbers: string) {
-        if (_.isEmpty(numbers)) {
+        if (isEmpty(numbers)) {
             this._toasty.warningToast(this.localeData?.enter_valid_number_error);
             return;
         }
@@ -204,7 +196,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         if (event.target.checked) {
             this.invoiceType.push(val);
         } else {
-            let idx = _.findIndex(this.invoiceType, (o) => o === val);
+            let idx = findIndex(this.invoiceType, (o) => o === val);
             return this.invoiceType.splice(idx, 1);
         }
     }

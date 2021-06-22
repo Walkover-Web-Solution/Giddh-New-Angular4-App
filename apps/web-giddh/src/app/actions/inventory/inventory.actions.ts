@@ -5,7 +5,7 @@ import { Action, Store } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AppState } from '../../store/roots';
 import { InventoryService } from '../../services/inventory.service';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 import { INVENTORY_BRANCH_TRANSFER, INVENTORY_LINKED_STOCKS, InventoryActionsConst } from './inventory.const';
@@ -169,7 +169,6 @@ export class InventoryAction {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    // this.router.navigate(['/pages', 'inventory', 'add-group', data.queryString.stockGroupUniqueName, 'add-stock']);
                     this._toasty.successToast('Stock Created Successfully');
                     this.store.dispatch(this._salesActions.createStockAcSuccess({
                         name: data.body.name,
@@ -199,7 +198,6 @@ export class InventoryAction {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    // this.router.navigate(['/pages', 'inventory', 'add-group', data.queryString.stockGroupUniqueName, 'add-stock', data.body.uniqueName]);
                     this._toasty.successToast('Stock Updated Successfully');
                 }
                 return { type: 'EmptyAction' };

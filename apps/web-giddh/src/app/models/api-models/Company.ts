@@ -236,15 +236,6 @@ export class States {
     }]
 }
 
-export class GetCouponResp {
-    public validUntil: string;
-    public maxAmount: number;
-    public code: string;
-    public count: number;
-    public value: number;
-    public type: string;
-}
-
 export interface ICurrencyResponse {
     code: string;
     symbol: string;
@@ -353,7 +344,6 @@ export class UserDetail {
 export class CompanyCountry {
     baseCurrency: string;
     country: string;
-
 }
 
 export class CountryResponse {

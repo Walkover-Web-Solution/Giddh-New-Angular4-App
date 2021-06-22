@@ -30,13 +30,7 @@ const PERMISSION_ROUTES: Routes = [
                 path: 'details',
                 component: PermissionDetailsComponent,
                 canActivate: [NeedsAuthentication]
-            },
-            // {
-            //   path: 'details/:id',
-            //   component: PermissionDetailsComponent,
-            //   canActivate: [NeedsAuthentication]
-            // },
-            // { path: '*', redirectTo: 'list' }
+            }
         ]
     }
 ];

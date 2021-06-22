@@ -38,7 +38,6 @@ export class LedgerVM {
     public accountUnq: string = '';
     public blankLedger: BlankLedgerVM;
     public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-    // public datePipe = createAutoCorrectedDatePipe('dd-mm-yyyy');
     public showTaxationDiscountBox: boolean = false;
     public ledgerUnderStandingObj = {
         accountType: '',
@@ -165,7 +164,6 @@ export class LedgerVM {
     public prepareBlankLedgerRequestObject(): BlankLedgerVM {
         let requestObj: BlankLedgerVM;
         requestObj = cloneDeep(this.blankLedger);
-        // requestObj.entryDate = moment(requestObj.entryDate).format(GIDDH_DATE_FORMAT);
 
         // filter transactions which have selected account
         requestObj.transactions = requestObj.transactions.filter((bl: TransactionVM) => bl.particular);

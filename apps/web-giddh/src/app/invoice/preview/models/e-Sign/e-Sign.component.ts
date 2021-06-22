@@ -27,7 +27,7 @@ export class EsignModalComponent implements OnInit, OnDestroy {
         private _toasty: ToasterService,
         private store: Store<AppState>
     ) {
-        // this.eSignModel.authToken = '3Ru6iWp1qoWpjkz90fvRzheO8M0KpLxP0TEEk08jKfXL/4NdJUisPtWFw7A0gIja';
+        
     }
 
     public ngOnInit() {

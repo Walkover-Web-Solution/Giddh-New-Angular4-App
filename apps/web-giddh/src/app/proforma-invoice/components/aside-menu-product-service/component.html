@@ -17,8 +17,7 @@
         </div>
 
         <div class="aside-body flexy-child-1 " *ngIf="isAddStockOpen">
-            <sales-create-stock [autoFocusInChild]="autoFocusInChild" (closeAsideEvent)="closeAsidePane($event)"
-                (animateAside)="animateAside($event)"></sales-create-stock>
+            <sales-create-stock [autoFocusInChild]="autoFocusInChild" (closeAsideEvent)="closeAsidePane($event)"></sales-create-stock>
         </div>
         <div class="aside-body flexy-child-1" *ngIf="isAddServiceOpen">
             <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"

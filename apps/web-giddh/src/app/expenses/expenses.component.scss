@@ -15,6 +15,7 @@
 }
 .input-calender {
     width: 225px;
+    top: 55px;
 }
 .input-calender > span {
     background: none;
@@ -35,11 +36,21 @@
     justify-content: center;
     color: $gray;
 }
+.expense-head{
+    padding-top: 55px;
+}
+
 @media only screen and (max-width: 767px) {
     .left-expense {
         width: 100%;
     }
     .main-edit-expense {
         display: block;
+    }
+    .expense-head{
+        padding-top: 20px;
+    }
+    .input-calender {
+        top: 15px;
     }
 }

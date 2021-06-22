@@ -157,7 +157,6 @@ export class PurchaseRegisterTableComponent implements OnInit, OnDestroy {
     public gotoDetailedPurchase(item: PurchaseReportsModel) {
         let from = item.from;
         let to = item.to;
-        let aa = this.activeFinacialYr;
 
         if (from != null && to != null) {
             this._router.navigate(['pages', 'reports', 'purchase-detailed-expand'], {

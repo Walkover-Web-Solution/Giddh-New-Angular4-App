@@ -126,26 +126,60 @@
                     "label": "ई-वे बिल",
                     "link": "/pages/invoice/ewaybill",
                     "icon": "icon-eway-bill-new",
-                    "description": "नंतर थेट गीधमधून व्युत्पन्न करा"
+                    "description": "नंतर थेट गीधमधून व्युत्पन्न करा",
+                    "hide": "sidebar"
                 },
                 {
-                    "label": "जीएसटीआर",
-                    "link": "/pages/gstfiling",
+                    "label": "जीएसटीआर 1",
                     "icon": "icon-GSTR",
-                    "description": "जीएसटीआर 1, जीएसटीआर 2 आणि जीएसटीआर 3 बी फाइल करा आणि पहा"
+                    "description": "जीएसटीआर 1 फाइल करा आणि पहा",
+                    "hide": "sidebar",
+                    "additional": {
+                        "isGstMenu": true,
+                        "type": "gstr1"
+                    }
+                },
+                {
+                    "label": "जीएसटीआर 2",
+                    "icon": "icon-GSTR",
+                    "description": "जीएसटीआर 2 फाइल करा आणि पहा",
+                    "hide": "sidebar",
+                    "additional": {
+                        "isGstMenu": true,
+                        "type": "gstr2"
+                    }
+                },
+                {
+                    "label": "जीएसटीआर 3B",
+                    "icon": "icon-GSTR",
+                    "description": "जीएसटीआर 3B फाइल करा आणि पहा",
+                    "hide": "sidebar",
+                    "additional": {
+                        "isGstMenu": true,
+                        "type": "gstr3b"
+                    }
                 },
                 {
                     "label": "उलट शुल्क",
                     "link": "/pages/reports/reverse-charge",
                     "icon": "icon-reverse-charge",
                     "description": "एकूण करपात्र मूल्य आणि कराच्या एकूण रकमेचा अहवाल",
-                    "alwaysPresent": "True"
+                    "alwaysPresent": true,
+                    "hide": "sidebar"
                 },
                 {
                     "label": "व्हॅट अहवाल",
                     "link": "/pages/vat-report",
                     "icon": "icon-vat",
-                    "description": "व्हॅट फाइल आणि पुनरावलोकन करा"
+                    "description": "व्हॅट फाइल आणि पुनरावलोकन करा",
+                    "hide": "sidebar"
+                },
+                {
+                    "label": "सेटिंग्ज",
+                    "link": "/pages/settings/taxes",
+                    "icon": "icon-settings-cog",
+                    "description": "कर सेटिंग्ज",
+                    "hide": "sidebar"
                 }
             ]
         },

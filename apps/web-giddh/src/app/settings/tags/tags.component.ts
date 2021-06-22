@@ -3,11 +3,11 @@ import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store/roots';
-import * as _ from '../../lodash-optimized';
 import { createSelector } from 'reselect';
 import { SettingsTagActions } from '../../actions/settings/tag/settings.tag.actions';
 import { TagRequest } from '../../models/api-models/settingsTags';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { cloneDeep, filter, map, orderBy } from '../../lodash-optimized';
 
 @Component({
     selector: 'setting-tags',
@@ -45,11 +45,11 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
 
         this.tags$ = this.store.pipe(select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
             if (tags && tags.length) {
-                _.map(tags, (tag) => {
+                map(tags, (tag) => {
                     tag.uniqueName = tag.name;
                 });
-                let tagsData = _.orderBy(tags, 'name');
-                this.tagsBackup = _.cloneDeep(tagsData);
+                let tagsData = orderBy(tags, 'name');
+                this.tagsBackup = cloneDeep(tagsData);
                 return tagsData;
             } else {
                 this.tagsBackup = null;
@@ -85,14 +85,14 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
     }
 
     public resetUpdateIndex() {
-        this.tags$ = observableOf(_.cloneDeep(this.tagsBackup));
+        this.tags$ = observableOf(cloneDeep(this.tagsBackup));
         this.updateIndex = null;
     }
 
     public onUserConfirmation(yesOrNo: boolean) {
         this.confirmationModal.hide();
         if (yesOrNo) {
-            let data = _.cloneDeep(this.newTag);
+            let data = cloneDeep(this.newTag);
             this.store.dispatch(this.settingsTagsActions.DeleteTag(data));
         }
         this.newTag = new TagRequest();
@@ -102,9 +102,9 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
     public filterData(searchTxt: string) {
         let tags;
         if (searchTxt) {
-            tags = _.filter(this.tagsBackup, (tag) => tag.name.includes(searchTxt.toLowerCase()));
+            tags = filter(this.tagsBackup, (tag) => tag.name.includes(searchTxt.toLowerCase()));
         } else {
-            tags = _.cloneDeep(this.tagsBackup);
+            tags = cloneDeep(this.tagsBackup);
         }
         this.tags$ = observableOf(tags);
     }
