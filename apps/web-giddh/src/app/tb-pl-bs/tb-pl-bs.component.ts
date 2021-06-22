@@ -32,6 +32,8 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
      * same route which cancels the previous route with route ID and doesn't highlight the menu item
      */
     public preventTabChangeWithRoute: boolean;
+    /** This will store screen size */
+    public isMobileScreen: boolean = false;
 
     @ViewChild('staticTabsTBPL', { static: true }) public staticTabs: TabsetComponent;
 
@@ -49,7 +51,38 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
         });
     }
 
+
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof InvoiceComponent
+     */
+     public getPageHeading(): string {
+        if(this.isMobileScreen){
+            if(this.CanTBLoad) {
+                return this.localeData?.tabs?.trial_balance;
+            }
+            else if(this.CanPLLoad) {
+                return this.localeData?.tabs?.profit_loss;
+            }
+            else if(this.CanBSLoad) {
+                return this.localeData?.tabs?.balance_sheet;
+            }
+        }
+        else {
+            return " ";
+        }
+    }
+
     public ngOnInit() {
+
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
         if (TEST_ENV) {
             this.CanNewTBLoadOnThisEnv = true;
         } else {

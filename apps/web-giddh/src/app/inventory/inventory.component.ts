@@ -88,6 +88,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
+    /* This will hold if it's mobile screen or not */
+    public isMobileView: boolean = false;
     /** Holds the observable for universal date */
     public universalDate$: Observable<any>;
 
@@ -110,12 +112,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         private generalService: GeneralService
     ) {
         this.breakPointObservar.observe([
-            '(max-width:1024px)'
+            '(max-width: 1023px)',
+            '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (this.isMobileScreen && !result.matches) {
-                this.setDefaultGroup();
-            }
-            this.isMobileScreen = result.matches;
+            this.isMobileScreen = result?.breakpoints['(max-width: 1023px)'];
+            this.isMobileView = result?.breakpoints['(max-width: 767px)'];
         });
 
         this.activeStock$ = this.store.pipe(select(p => p.inventory.activeStock), takeUntil(this.destroyed$));
@@ -181,6 +182,29 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.loadBranchAndWarehouseDetails();
             }
         });
+    }
+
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof InventoryComponent
+     */
+     public getPageHeading(): string {
+        if(this.isMobileView){
+            if(this.activeTabIndex === 0) {
+                return "Inventory";
+            }
+            else if(this.activeTabIndex === 1) {
+                return "Job Work";
+            }
+            else if(this.activeTabIndex === 2) {
+                return "Manufacturing";
+            }
+            else if(this.activeTabIndex === 3) {
+                return "Report";
+            }
+        }
     }
 
     public ngOnInit() {
