@@ -247,7 +247,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public UpdateForm(form = null) {
 
-        let razorpayObj: RazorPayDetailsResponse = cloneDeep(this.settingResponse.razorPayform) || new RazorPayDetailsResponse();
+        let razorpayObj: RazorPayDetailsResponse = cloneDeep(this.settingResponse?.razorPayform) || new RazorPayDetailsResponse();
 
         if (this.webhooks && this.webhooks.length > 0 && !this.webhooks[this.webhooks.length - 1].url && !this.webhooks[this.webhooks.length - 1].triggerAt) {
             this.webhooks.splice(this.webhooks.length - 1);
