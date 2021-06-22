@@ -147,8 +147,7 @@
                         <button class="btn btn-green" (click)="goToSelectPlan();">{{localeData?.change_plan}}</button>
                     </li>
                     <li><span class="d-inline-block pr-1">{{localeData?.or}}</span> <a class="cursor-pointer"
-                            (click)="openScheduleCalendlyModel();modelRefExpirePlan.hide();">{{localeData?.contact_us}}</a>
-                    </li>
+                        (click)="openScheduleModel();modelRefExpirePlan.hide();">{{localeData?.contact_us}}</a></li>
                 </ul>
             </div>
         </div>
@@ -174,23 +173,11 @@
                             (click)="goToSelectPlan();">{{commonLocaleData?.app_buy_plan}}</button>
                     </li>
                     <li><span class="d-inline-block pr-1">{{localeData?.or}}</span> <a class="cursor-pointer"
-                            (click)="openScheduleCalendlyModel();modelRefCrossLimit.hide();">{{localeData?.contact_us}}</a>
-                    </li>
+                        (click)="openScheduleModel();modelRefCrossLimit.hide();">{{localeData?.contact_us}}</a></li>
                 </ul>
             </div>
         </div>
     </ng-template>
-    <div class="overlay-cal" *ngIf="isCalendlyModelActivate">
-        <div id="scheduleCall" class="tab-pane active vertical-center modal-body">
-            <div class="calendly-box" #reder>
-                <div class="calendly-inline-widget">
-                    <button id="close" class="close-2" (click)="hideScheduleCalendlyModel()"><i
-                            class="icon-cross"></i></button>
-                    <object data="https://calendly.com/sales-accounting-software/talk-to-sale"></object>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!--help & support sidebar  -->
     <div class="help-support-aside" *ngIf="asideHelpSupportMenuState === 'in'"
@@ -218,3 +205,4 @@
         </div>
     </ng-template>
 </ng-container>
+<a class="schedule-now-link" id="SOIBTN_giddhbooks" data-psz="00" data-so-page="giddhbooks" data-delay="1">&nbsp;</a>
