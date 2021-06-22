@@ -1,7 +1,6 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { PurchaseRecordRequest } from '../models/api-models/Sales';
 import { PURCHASE_RECORD_API } from './apiurls/purchase-record.api';

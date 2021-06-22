@@ -1,5 +1,4 @@
-import * as _ from '../../lodash-optimized';
-import { isNull, pick } from '../../lodash-optimized';
+import { cloneDeep, forEach, isNull, pick } from '../../lodash-optimized';
 import { LedgerDiscountClass } from './SettingsDiscount';
 import { LedgerResponseDiscountClass } from './Ledger';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
@@ -152,7 +151,6 @@ export class AccountDetailsClass {
     public mobileNumber?: string;
 
     constructor(attrs?: any) {
-        //this.country = new CountryClass();
         this.currency = new CurrencyClass(attrs);
         this.billingDetails = new GstDetailsClass();
         this.shippingDetails = new GstDetailsClass();
@@ -192,9 +190,7 @@ export class AccountDetailsClass {
                 this.shippingDetails.panNumber = '';
             }
         } else {
-            //this.attentionTo = null;
             this.email = '';
-            //this.mobileNo = '';
         }
     }
 }
@@ -265,7 +261,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public getTotalTaxOfEntry(taxArr: TaxControlData[]): number {
         let count: number = 0;
         if (taxArr.length > 0) {
-            _.forEach(taxArr, (item: TaxControlData) => {
+            forEach(taxArr, (item: TaxControlData) => {
                 count += item.amount;
             });
             return this.checkForInfinity(count);
@@ -283,10 +279,10 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
         if (tax > 0) {
             let a = this.getTaxableValue(entry) * (tax / 100);
             a = this.checkForInfinity(a);
-            let b = _.cloneDeep(this.getTaxableValue(entry));
+            let b = cloneDeep(this.getTaxableValue(entry));
             count = a + b;
         } else {
-            count = _.cloneDeep(this.getTaxableValue(entry));
+            count = cloneDeep(this.getTaxableValue(entry));
         }
         return giddhRoundOff(count, 2);
     }
@@ -395,7 +391,6 @@ export class OtherSalesItemClass {
         this.customField1 = null;
         this.customField2 = null;
         this.customField3 = null;
-        // this.message2 = null;
     }
 }
 
@@ -433,7 +428,6 @@ export interface GenericRequestForGenerateSCD extends GenericRequest {
     entryUniqueNames?: string[];
     taxes?: string[];
     voucher: VoucherClass;
-    // account?: AccountDetailsClass;
     updateAccountDetails?: boolean;
     paymentAction?: IPaymentAction;
     depositAccountUniqueName?: string;
@@ -441,13 +435,9 @@ export interface GenericRequestForGenerateSCD extends GenericRequest {
     validateTax?: boolean;
     applyApplicableTaxes?: boolean;
     action?: string;
-    // dueDate?: string;
     oldVersions?: any[];
     entries?: SalesEntryClassMulticurrency[],
-    // date?: string,
     exchangeRate?: number,
-    // type?: string,
-    // number?: string,
     uniqueName?: string,
     templateDetails?: TemplateDetailsClass
     deposit?: AmountClassMulticurrency;
@@ -617,16 +607,6 @@ export class CodeStockMulticurrency {
 
 export class Currency {
     code: string;
-}
-
-export class SalesStockItemMulticurrency {
-    name: string;
-    uniqueName: string;
-    quantity: number = 1;
-    rate: number = 0;
-    skuCode: string;
-    skuCodeHeading?: string;
-    stockUnit?: string;
 }
 
 export class StateCode {

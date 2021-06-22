@@ -19,13 +19,13 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { ToasterService } from '../../services/toaster.service';
 import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
-import { VAT_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SearchResultText } from '../../app.constant';
+import { VAT_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SearchResultText, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, SalesEntryClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, AccountDetailsClass } from '../../models/api-models/Sales';
 import { TaxResponse } from '../../models/api-models/Company';
 import { IContentCommon } from '../../models/api-models/Invoice';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
-import { cloneDeep, isEqual } from '../../lodash-optimized';
+import { cloneDeep } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
 import { TaxControlComponent } from '../../theme/tax-control/tax-control.component';
@@ -33,7 +33,6 @@ import { SettingsDiscountActions } from '../../actions/settings/discount/setting
 import { CompanyActions } from '../../actions/company.actions';
 import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../common/confirmation-modal/confirmation-modal.interface';
 import { NgForm } from '@angular/forms';
-import { EMAIL_REGEX_PATTERN } from '../../shared/helpers/universalValidations';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { LoaderState } from '../../loader/loader';
 import { LoaderService } from '../../loader/loader.service';
@@ -360,6 +359,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public commonLocaleData: any = {};
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** Length of entry description */
+    public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
 
     constructor(
         private store: Store<AppState>,
@@ -1776,7 +1777,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
             let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
             if (tax) {
-                if (!modal.appliedOtherTax.name) {
+                if (!modal.appliedOtherTax?.name) {
                     entry.otherTaxModal.appliedOtherTax.name = tax.name;
                 }
                 if (['tcsrc', 'tcspay'].includes(tax.taxType)) {

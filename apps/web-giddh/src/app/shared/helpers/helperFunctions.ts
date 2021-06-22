@@ -9,40 +9,10 @@ export const uniqueNameInvalidStringReplace = (val: string = ''): string => {
     if (!val) {
         return;
     }
-    //  if (val) {
-    //   return val.replace(/[\\/(){};:"<>#?%,+-@&$!^*]/g, '').toLowerCase();      //  /[\\/(){};:"<>#?%,+-@&$!^*]/g
-    // }
-    if ((/[^0-9A-Za-z~|'_\[\]`]/g).test(val)) { // /[^1-9A-Za-z~|'_]/g
+    if ((/[^0-9A-Za-z~|'_\[\]`]/g).test(val)) {
         return val.replace(/[^0-9A-Za-z~|'_\[\]`]/g, '').toLowerCase();
     }
     return val.toLowerCase();
-};
-
-/**
- * base 64 to blob
- * @param b64Data
- * @param contentType
- * @param sliceSize
- */
-export const base64ToBlob = (b64Data, contentType, sliceSize) => {
-    contentType = contentType || '';
-    sliceSize = sliceSize || 512;
-    let byteCharacters = atob(b64Data);
-    let byteArrays = [];
-    let offset = 0;
-    while (offset < byteCharacters.length) {
-        let slice = byteCharacters.slice(offset, offset + sliceSize);
-        let byteNumbers = new Array(slice.length);
-        let i = 0;
-        while (i < slice.length) {
-            byteNumbers[i] = slice.charCodeAt(i);
-            i++;
-        }
-        let byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-        offset += sliceSize;
-    }
-    return new Blob(byteArrays, { type: contentType });
 };
 
 /**

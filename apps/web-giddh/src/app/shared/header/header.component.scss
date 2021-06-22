@@ -18,12 +18,6 @@
     z-index: 991;
     box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2) !important;
 }
-/*
-Comment for now
-.nav-left-bar.open {
-    box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2);
-}
-*/
 
 .account-search .input-group-addon {
     color: $charcoal;
@@ -153,9 +147,6 @@ a[vr-item]:focus {
     position: relative;
     font-family: "opensans-semibold";
 }
-.no-padding {
-    padding: 0px !important;
-}
 
 .button-back-head {
     position: absolute;
@@ -223,14 +214,6 @@ a[vr-item]:focus {
     white-space: inherit;
     line-height: 1.3;
 }
-
-/*
-.left-fixed-header > li:hover a,
-.left-fixed-header > li > a:hover span,
-.left-fixed-header > li:hover a span {
-    color: #fff;
-}
-*/
 
 .left-fixed-header [class^="icon-"] {
     font-size: 20px;
@@ -331,6 +314,9 @@ a[vr-item]:focus {
 .nav-left-bar.open {
     left: 0;
     width: 240px;
+    &.width-60{
+        width: 60px;
+    }
 }
 
 .left-sub-menu ul > li > a {
@@ -630,8 +616,6 @@ ul.sub-list {
 .nav-left-bar .company-name-finance-year {
     display: inline;
     padding-left: 0;
-    /*float: right;
-    width: 150px;*/
     position: relative;
     top: -3px;
 }
@@ -984,6 +968,12 @@ ul.sub-list {
                 padding: 3px !important;
                 font-size: 22px;
             }
+            &.disable-icon{
+                i{
+                    color: $gainsboro !important;
+                    cursor: no-drop;
+                }
+            }
         }
     }
 }
@@ -1267,7 +1257,7 @@ ul.sub-list {
             margin: 0 15px;
         }
     }
-    .setting-menu-icon {
+    .gst-menu-icon, .setting-menu-icon {
         padding: 4px 8px 4px 2px;
         display: none;
         width: 27px;

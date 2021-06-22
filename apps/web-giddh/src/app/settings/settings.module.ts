@@ -6,10 +6,6 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
 import { OmitByKeyPipeModule } from '../shared/helpers/pipes/omitBy/omitBy.module';
 import { SharedModule } from '../shared/shared.module';
 import { BranchComponent } from './branch/branch.component';
-import { BunchComponent } from './bunch/bunch.component';
-import { BunchAddCompanyModalComponent } from './bunch/components-modal/add-company/bunch-add-company.component';
-import { CreateBunchModalComponent } from './bunch/components-modal/create-bunch/create-bunch.component';
-import { GetBunchModalComponent } from './bunch/components-modal/get-companies/get-companies.component';
 import { DiscountComponent } from './discount/discount.component';
 import { FinancialYearComponent } from './financial-year/financial-year.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
@@ -41,6 +37,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CreateAddressComponent } from './create-address/create-address.component';
 import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
+import { BeneficiaryComponent } from './integration/beneficiary/beneficiary.component';
+import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -64,10 +62,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DiscountComponent,
         SettingsTagsComponent,
         SettingTriggerComponent,
-        BunchComponent,
-        CreateBunchModalComponent,
-        BunchAddCompanyModalComponent,
-        GetBunchModalComponent,
         WarehouseComponent,
         CreateWarehouseComponent,
         CreateAddressComponent,
@@ -90,7 +84,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgxMaskModule.forRoot(),
         DigitsOnlyModule,
         ShSelectModule,
-        SalesShSelectModule
+        SalesShSelectModule,
+        TaxSidebarModule
     ],
     providers: [
         {

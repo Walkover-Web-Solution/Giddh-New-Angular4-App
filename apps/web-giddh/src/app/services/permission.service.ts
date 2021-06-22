@@ -16,7 +16,6 @@ export class PermissionService {
 
     private user: UserDetails;
     private companyUniqueName: string;
-    private roleUniqueName: string;
 
     constructor(private errorHandler: GiddhErrorHandler, private _http: HttpWrapperService,
         private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
@@ -86,59 +85,5 @@ export class PermissionService {
             data.queryString = {};
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<IPageStr[], string>(e)));
-    }
-
-    /**
-     * Share Company
-     */
-    public ShareCompany(model: { role: string, user: string }): Observable<BaseResponse<any, any>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.put(this.config.apiUrl + PERMISSION_API.SHARE_COMPANY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
-            let data: BaseResponse<any, any> = res;
-            data.request = model;
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
-    }
-
-    /**
-     * Share Company
-     */
-    public UnShareCompany(model: { user: string }): Observable<BaseResponse<any, any>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.put(this.config.apiUrl + PERMISSION_API.UN_SHARE_COMPANY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
-            let data: BaseResponse<any, any> = res;
-            data.request = model;
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
-    }
-
-    /**
-     * Share Company
-     */
-    public GetCompanySharedWith(): Observable<BaseResponse<any, any>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + PERMISSION_API.COMPANY_SHARED_WITH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<any, any> = res;
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
-    }
-
-
-    /**
-     * To get all modules data in which user have access permission
-     *
-     * @returns {Observable<BaseResponse<any, any>>}
-     * @memberof PermissionService
-     */
-    public getSharedAllModules(): Observable<BaseResponse<any, any>> {
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + PERMISSION_API.GET_SHARED_ALL_MODULE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<any, any> = res;
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 }

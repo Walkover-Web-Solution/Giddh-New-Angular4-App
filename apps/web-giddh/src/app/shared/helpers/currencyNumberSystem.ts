@@ -11,7 +11,6 @@ export const currencyNumberSystems: ICurrencynumberSystem[] = [
 ];
 export const digitAfterDecimal: ICurrencynumberSystem[] = [
     { value: '0', name: '0 digit' },
-    // {value: '1', name: '1 digit'},
     { value: '2', name: '2 digits' },
     { value: '4', name: '4 digits' }
 ];

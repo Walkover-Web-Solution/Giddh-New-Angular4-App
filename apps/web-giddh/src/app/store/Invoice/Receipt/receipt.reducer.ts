@@ -1,11 +1,10 @@
 import { CustomActions } from '../../customActions';
 import { INVOICE_RECEIPT_ACTIONS } from '../../../actions/invoice/receipt/receipt.const';
-import { InvoiceReceiptFilter, ReciptDeleteRequest, ReciptRequest, ReciptRequestParams, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
+import { InvoiceReceiptFilter, ReciptDeleteRequest, ReciptRequest, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { INVOICE_ACTIONS } from 'apps/web-giddh/src/app/actions/invoice/invoice.const';
 import { ILedgersInvoiceResult, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from 'apps/web-giddh/src/app/models/api-models/Invoice';
-import { GenericRequestForGenerateSCD, VoucherClass, VoucherTypeEnum } from '../../../models/api-models/Sales';
-import * as _ from '../../../lodash-optimized';
+import { VoucherClass, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { SalesRegisteDetailedResponse, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
 
 export interface ReceiptState {
@@ -58,7 +57,6 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
     switch (action.type) {
 
         case INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT: {
-            let res: BaseResponse<ReciptResponse, ReciptRequestParams> = action.payload;
             return Object.assign({}, state, {
                 isGetAllRequestSuccess: false,
                 isGetAllRequestInProcess: true
@@ -257,7 +255,6 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         case INVOICE_ACTIONS.RESET_INVOICE_DATA: {
             return Object.assign({}, state, {
                 voucher: null
-                // base64Data:
             });
         }
         case INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE: {

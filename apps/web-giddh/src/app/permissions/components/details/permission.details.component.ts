@@ -7,9 +7,9 @@ import { AppState } from '../../../store/roots';
 import { Observable, ReplaySubject } from 'rxjs';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { IRoleCommonResponseAndRequest, Permission, Scope } from '../../../models/api-models/Permission';
-import * as _ from '../../../lodash-optimized';
 import { IPage, IPageStr, NewPermissionObj, NewRoleClass } from '../../permission.utility';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { cloneDeep, concat, filter, find, findIndex, forEach, isEmpty, map, remove } from '../../../lodash-optimized';
 
 @Component({
     templateUrl: './permission.details.html',
@@ -42,18 +42,18 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     ) {
 
         this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((permission) => {
-            this.allRoles = _.cloneDeep(permission.roles);
-            this.singlePageForFreshStart = _.find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
+            this.allRoles = cloneDeep(permission.roles);
+            this.singlePageForFreshStart = find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
                 return o.uniqueName === 'super_admin';
             });
-            this.adminPageObj = _.find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
+            this.adminPageObj = find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
                 return o.uniqueName === 'admin';
             });
-            this.viewPageObj = _.find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
+            this.viewPageObj = find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
                 return o.uniqueName === 'view';
             });
-            this.rawDataForAllRoles = _.cloneDeep(this.singlePageForFreshStart.scopes[0].permissions);
-            this.allRolesOfPage = this.getAllRolesOfPageReady(_.cloneDeep(this.rawDataForAllRoles));
+            this.rawDataForAllRoles = cloneDeep(this.singlePageForFreshStart.scopes[0].permissions);
+            this.allRolesOfPage = this.getAllRolesOfPageReady(cloneDeep(this.rawDataForAllRoles));
             this.newRole = permission.newRole;
             this.pageList = permission.pages;
         });
@@ -75,7 +75,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
             }
         });
 
-        if (_.isEmpty(this.newRole)) {
+        if (isEmpty(this.newRole)) {
             this.router.navigate(['/pages/permissions/list']);
         } else if (this.newRole.isUpdateCase) {
             const roleObj = new NewRoleClass(this.newRole.name, this.setScopeForCurrentRole(), false, this.newRole.uniqueName, this.newRole.isUpdateCase);
@@ -107,7 +107,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
 
     public addNewPage(page: string) {
         if (page && !this.checkForAlreadyExistInPageArray(page)) {
-            let pageObj = _.find(this.singlePageForFreshStart.scopes, (o: Scope) => o.name === page);
+            let pageObj = find(this.singlePageForFreshStart.scopes, (o: Scope) => o.name === page);
             pageObj.permissions = pageObj.permissions.map((o: Permission) => {
                 return o = new NewPermissionObj(o.code, false);
             });
@@ -120,7 +120,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
 
     public checkForAlreadyExistInPageArray(page: string): boolean {
-        let idx = _.findIndex(this.roleObj.scopes, (o: Scope) => {
+        let idx = findIndex(this.roleObj.scopes, (o: Scope) => {
             return o.name === page;
         });
         if (idx !== -1) {
@@ -136,14 +136,14 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
 
     public getScopeDataReadyForAPI(data): Scope[] {
         let arr: Scope[];
-        arr = _.forEach(data.scopes, (page: Scope) => {
-            _.remove(page.permissions, (o: Permission) => !o.isSelected);
+        arr = forEach(data.scopes, (page: Scope) => {
+            remove(page.permissions, (o: Permission) => !o.isSelected);
         });
-        return _.filter(arr, (o: Scope) => o.permissions.length > 0);
+        return filter(arr, (o: Scope) => o.permissions.length > 0);
     }
 
     public addNewRole(): any {
-        let data = _.cloneDeep(this.roleObj);
+        let data = cloneDeep(this.roleObj);
         data.scopes = this.getScopeDataReadyForAPI(data);
         if (data.scopes.length < 1) {
             return this._toaster.errorToast(this.localeData?.add_role_error);
@@ -152,7 +152,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
 
     public updateRole() {
-        let data = _.cloneDeep(this.roleObj);
+        let data = cloneDeep(this.roleObj);
         data.scopes = this.getScopeDataReadyForAPI(data);
         this.store.dispatch(this.permissionActions.UpdateRole(data));
     }
@@ -175,19 +175,19 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
 
     public generateUIFromExistedRole() {
         let pRole: string = this.newRole.uniqueName;
-        let res = _.find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
+        let res = find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
             return o.uniqueName === pRole;
         });
         if (res) {
-            _.forEach(res.scopes, (obj: Scope) => {
+            forEach(res.scopes, (obj: Scope) => {
                 obj.permissions = obj.permissions.map((o: Permission) => {
                     return o = new NewPermissionObj(o.code, true);
                 });
                 if (obj.permissions.length < 6 && obj.name !== 'SHARE') {
-                    obj.permissions = this.pushNonExistRoles(obj.permissions, this.getAllRolesOfPageReady(_.cloneDeep(this.rawDataForAllRoles)));
+                    obj.permissions = this.pushNonExistRoles(obj.permissions, this.getAllRolesOfPageReady(cloneDeep(this.rawDataForAllRoles)));
                 }
                 let count = 0;
-                _.forEach(obj.permissions, (o: Permission) => {
+                forEach(obj.permissions, (o: Permission) => {
                     if (o.isSelected) {
                         count += 1;
                     }
@@ -201,22 +201,22 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
 
     public pushNonExistRoles(arr1, arr2) {
-        _.forEach(arr1, (o: Permission) => {
-            _.remove(arr2, (item: Permission) => {
+        forEach(arr1, (o: Permission) => {
+            remove(arr2, (item: Permission) => {
                 return item.code === o.code;
             });
         });
-        return _.concat(arr1, arr2);
+        return concat(arr1, arr2);
     }
 
     public generateFreshUI() {
         let arr = [];
-        let allRoles = _.cloneDeep(this.singlePageForFreshStart.scopes);
-        _.forEach(this.newRole.pageList, (item: IPage) => {
+        let allRoles = cloneDeep(this.singlePageForFreshStart.scopes);
+        forEach(this.newRole.pageList, (item: IPage) => {
             if (item.isSelected) {
-                let res = _.find(allRoles, (o: Scope) => o.name === item.name);
+                let res = find(allRoles, (o: Scope) => o.name === item.name);
                 if (res) {
-                    res.permissions = _.map(res.permissions, (o: Permission) => new NewPermissionObj(o.code, false));
+                    res.permissions = map(res.permissions, (o: Permission) => new NewPermissionObj(o.code, false));
                     arr.push(res);
                 }
             }
@@ -273,12 +273,12 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
             return false;
         }
         if (type === 'admin') {
-            page = _.find(this.adminPageObj.scopes, (o: Scope) => o.name === pageName);
+            page = find(this.adminPageObj.scopes, (o: Scope) => o.name === pageName);
         } else {
-            page = _.find(this.viewPageObj.scopes, (o: Scope) => o.name === pageName);
+            page = find(this.viewPageObj.scopes, (o: Scope) => o.name === pageName);
         }
         if (page) {
-            let access = _.find(page.permissions, (p: Permission) => p.code === item.code);
+            let access = find(page.permissions, (p: Permission) => p.code === item.code);
             // && access.isSelected
             if (access) {
                 return true;
@@ -290,16 +290,16 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
 
     public toggleItems(pageName: string, event: any) {
-        let res = _.find(this.roleObj.scopes, (o: Scope) => o.name === pageName);
+        let res = find(this.roleObj.scopes, (o: Scope) => o.name === pageName);
         if (res) {
-            _.map(res.permissions, (o: Permission) => o.isSelected = event.target.checked ? true : false);
+            map(res.permissions, (o: Permission) => o.isSelected = event.target.checked ? true : false);
         }
     }
 
     public toggleItem(pageName: string, item: Permission, event: any) {
-        let res = _.find(this.roleObj.scopes, (o: Scope) => o.name === pageName);
+        let res = find(this.roleObj.scopes, (o: Scope) => o.name === pageName);
         if (event.target.checked) {
-            let idx = _.findIndex(res.permissions, (o: Permission) => o.isSelected === false);
+            let idx = findIndex(res.permissions, (o: Permission) => o.isSelected === false);
             if (idx !== -1) {
                 return res.selectAll = false;
             } else {

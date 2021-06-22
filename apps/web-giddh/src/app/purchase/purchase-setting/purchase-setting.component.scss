@@ -1,5 +1,6 @@
 @import "../../../assets/css/color.scss";
 #invoice-setting {
+    margin-top: 55px;
     .single-tab-block {
         box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
         margin: 0 15px;
@@ -147,6 +148,14 @@
         }
         .btn-wrapper {
             padding: 0 15px;
+        }
+    }
+}
+@media screen and (max-width: 767px) {
+    #invoice-setting {
+        margin-top: 15px;
+        .btn-wrapper {
+            margin-top: 15px;
         }
     }
 }

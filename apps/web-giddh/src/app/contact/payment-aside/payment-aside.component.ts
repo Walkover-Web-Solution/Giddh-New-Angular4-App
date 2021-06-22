@@ -156,7 +156,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public ngOnInit() {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.initializeNewForm();
-        // this.amount = this.selectedAccForPayment.closingBalanceAmount;
         // get all registered account
         this.store.pipe((select(c => c.session.companyUniqueName)), take(2)).subscribe(s => this.companyUniqueName = s);
         this.store.dispatch(this._companyActions.getAllRegistrations());
@@ -550,7 +549,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         let sec: any = remaining % 60;
         min = Number(min) < 10 ? '0' + min : Number(min);
         sec = Number(sec) < 10 ? '0' + sec : Number(sec);
-        // document.getElementById('timerElement').innerHTML = min + ':' + sec;
         this.timerCountDown$ = of(min + ':' + sec);
         remaining -= 1;
 
@@ -596,7 +594,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public addAccountTransactionsFormObject(value: any): any {    // commented code because we no need GSTIN No. to add new address
-        // if (value && !value.startsWith(' ', 0)) {
         const transactions = this.addAccountBulkPaymentForm.get('bankPaymentTransactions') as FormArray;
         transactions.push(this.initialAccountTransactionsForm(value));
         return;

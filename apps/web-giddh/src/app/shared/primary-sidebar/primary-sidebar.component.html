@@ -1,7 +1,7 @@
 <ng-container appTranslate [file]="'all-items'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
-    <div class="primary-sidebar py-3 position-relative" [ngClass]="{'sidebar-collapse': !isOpen}">
-        <div class="company-branch-block pd-l2 pd-r2 position-relative">
+    <div class="primary-sidebar py-3 position-relative">
+        <div class="company-branch-block pd-l2 pd-r2 position-relative" [ngClass]="{'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1}">
             <ul class="list-style-none branch-connection">
                 <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
                     <span class="inner-span"></span>
@@ -50,8 +50,8 @@
                 </div>
             </div>
         </div>
-        <div class="wrap-menus">
-            <div class="account-block mr-t2 mr-b2 pd-l2 pd-r2">
+        <div class="wrap-menus  mr-t2">
+            <div class="account-block mr-b2 pd-l2 pd-r2">
                 <div class="account-collapse">
                     <p class="font-12 d-flex justify-content-between">{{localeData?.accounts}} <i
                             class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i> </p>
@@ -103,8 +103,8 @@
                         </p>
                     </div>
                     <ul class="list-style-none giddh-primary-items">
-                        <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems" dropdown
-                            [attr.container]="!isOpen ? 'body' : ''">
+                        <li class="main-item btn-group" *ngFor="let menu of allItems; trackBy: trackItems;index as itemIndex" dropdown #dropdown="bs-dropdown" [autoClose]="isOpen ? false : true"
+                            [attr.container]="!isOpen ? 'body' : ''" (click)="openActiveItem(itemIndex)">
                             <a href="javascript:void(0);" tooltip="{{menu?.label}}" *ngIf="menu?.items?.length"
                                 id="button-basic-02" dropdownToggle type="button" class="dropdown-toggle"
                                 aria-controls="dropdown-basic-02" [class.active]="menu?.isActive">
@@ -252,20 +252,11 @@
 
                         <a id="button-basic" dropdownToggle href="javascript:void(0)"
                             class="dropdown-toggle cursor-pointer switch-branch-section font-14 branch-name">
-                            <!-- <ng-container *ngIf="currentBranch">
-                                <div class="branch-name-full w-100">
-                                    <span class="branch-ellipsis">{{currentBranch?.alias}} </span> <i class="icon-down-new"></i>
-                                </div>
-                            </ng-container> -->
                             <ng-container>
                                 <div class="switch-branch w-100">
                                     {{localeData?.switch_branch}} <i class="icon-arrow-down"></i>
                                 </div>
                             </ng-container>
-                            <!-- <ng-container>
-                                <div [tooltip]="localeData?.switch_branch" class="switch-branch-alice w-100  mt-2 a"> {{localeData?.sb}} <i
-                                        class="icon-right"></i> </div>
-                            </ng-container> -->
                         </a>
 
 
@@ -311,18 +302,12 @@
                             </li>
                         </ul>
                     </li>
-
-                    <!-- <li>
-                                                                                            <a href="javascript:void(0)" *ngIf="branchInitials" class="font-14 branch-alice">{{branchInitials}}</a>
-                                                                                        </li> -->
                 </ul>
             </div>
         <li class="mr-t05">
             <a href="javascript:void(0)"
                 (click)="analyzeMenus($event, '/pages/company-import-export')">{{localeData?.import_export_backup}}</a>
         </li>
-        <!-- #dropdown="bs-dropdown" -->
-
 
         <li role="separator" class="divider width-100"></li>
 
