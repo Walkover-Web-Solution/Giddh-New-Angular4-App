@@ -23,8 +23,6 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** True if oncehub SOE script loaded */
-    public soeLoaded: boolean = false;
 
     constructor(private authService: AuthenticationService) {
 
@@ -39,17 +37,6 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-
-        if (window['SOE'] === undefined) {
-            this.soeLoaded = true;
-            /* For Schedule now */
-            let scriptTag = document.createElement('script');
-            scriptTag.src = 'https://cdn.oncehub.com/mergedjs/so.js';
-            scriptTag.type = 'text/javascript';
-            scriptTag.defer = true;
-            document.body.appendChild(scriptTag);
-            /* For Schedule now */
-        }
     }
 
     /**
@@ -63,13 +50,13 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will initialize the function to show calendly
+     * This will open schedule now window
      *
      * @param {*} event
      * @memberof AsideHelpSupportComponent
      */
     public scheduleNow(event): void {
-        if(!this.soeLoaded) {
+        if (window['SOE'] !== undefined) {
             window['SOE'].prototype.toggleLightBox('giddhbooks');
         }
         this.closeAsidePane(event);
