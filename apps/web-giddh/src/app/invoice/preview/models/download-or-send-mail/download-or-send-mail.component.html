@@ -61,8 +61,6 @@
                 </ng-container>
 
                 <div class="clearfix">
-                    {{originalCopy}}
-                    {{originalCopy?.checked}}
                     <button [hidden]="!emailTabActive" [disabled]="!emailList?.value || (currentVoucherFilter === 'invoices' && !invoiceType?.length)" type="button" class="btn btn-sm btn-success"
                         (click)="onSendInvoiceOnMail(emailList.value)">{{commonLocaleData?.app_send}}
                     </button>
