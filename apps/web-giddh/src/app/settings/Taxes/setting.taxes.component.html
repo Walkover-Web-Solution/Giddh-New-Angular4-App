@@ -150,18 +150,6 @@
                                         </button>
                                     </div>
 
-                                    <!--              <button *ngIf="taxToEdit[i]" type="button" class="btn btn-xs"-->
-                                    <!--                      (click)="updateTax(i); taxToEdit[i] = false">-->
-                                    <!--                <i class="fa fa-check" aria-hidden="true"-->
-                                    <!--                   tooltip="Save"></i>-->
-                                    <!--              </button>-->
-
-                                    <!--              <button *ngIf="taxToEdit[i]" type="button" class="btn btn-xs"-->
-                                    <!--                      (click)="reloadTaxList(); taxToEdit[i] = false">-->
-                                    <!--                <i class="icon-cross" aria-hidden="true"-->
-                                    <!--                   tooltip="Reset"></i>-->
-                                    <!--              </button>-->
-
                                 </td>
                             </tr>
                         </tbody>
@@ -196,7 +184,6 @@
     <!-- region delete Tax confirmation model -->
     <div bsModal #taxConfirmationModel="bs-modal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-md">
-            <!-- modal-liq-90 class is removed for now-->
             <div class="modal-content">
                 <delete-tax-confirmation-model [message]="confirmationMessage" [commonLocaleData]="commonLocaleData"
                     (userConfirmationEvent)="userConfirmation($event)">

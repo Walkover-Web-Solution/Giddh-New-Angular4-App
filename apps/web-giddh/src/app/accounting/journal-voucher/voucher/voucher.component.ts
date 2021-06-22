@@ -27,8 +27,6 @@ import { BsDatepickerConfig, BsDatepickerDirective } from 'ngx-bootstrap/datepic
 import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, ReplaySubject, of as observableOf, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-
-import { GeneralActions } from '../../../actions/general/general.actions';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { SalesActions } from '../../../actions/sales/sales.action';
 import { AccountResponse, AddAccountRequest, UpdateAccountRequest } from '../../../models/api-models/Account';
@@ -257,7 +255,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private tallyModuleService: TallyModuleService,
         private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
-        private generalAction: GeneralActions,
         private fb: FormBuilder, public bsConfig: BsDatepickerConfig,
         private salesAction: SalesActions,
         private modalService: BsModalService,

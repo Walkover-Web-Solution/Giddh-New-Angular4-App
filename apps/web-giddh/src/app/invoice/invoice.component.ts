@@ -9,7 +9,6 @@ import { combineLatest, ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { GeneralActions } from '../actions/general/general.actions';
 @Component({
     templateUrl: './invoice.component.html',
     styleUrls: [`./invoice.component.scss`]
@@ -29,7 +28,7 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(private store: Store<AppState>,
         private companyActions: CompanyActions,
-        private router: Router, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver, private _generalActions: GeneralActions) {
+        private router: Router, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver) {
 
         this._breakPointObservar.observe([
             '(max-width: 1023px)',

@@ -5,7 +5,6 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-
 import { Organization, OrganizationDetails } from '../../models/api-models/Company';
 import { OrganizationType } from '../../models/user-login-state';
 import { CompanyService } from '../../services/companyService.service';

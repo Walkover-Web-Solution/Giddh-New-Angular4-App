@@ -1,19 +1,13 @@
 <div class="other-setting-container">
     <div *ngIf="organizationType === 'BRANCH'" class="row">
         <div class="col-md-12">
-            <div class="border-bottom font-14">
+            <div class="border-bottom font-14 pd-t4">
                 <p class="pd-b15" [innerHTML]="getInformationSaveText(profileData?.companyName)"></p>
                 <!-- branch profile element start -->
                 <div class="other-detail-section">
                     <div class="mr-b15">
                         <label>{{localeData?.number_system_label}}</label> <span>{{numberSystem}}</span>
                     </div>
-                    <!-- <div class="mr-b15">
-                        <label>Date Format</label> <span>DD/MM/YYYY (15/09/2020)</span>
-                    </div>
-                    <div class="mr-b15">
-                        <label>Number System</label> <span>(GMT 5:30) India Standard Time (Asia/Calcutta)</span>
-                    </div> -->
                     <div class="mr-b15">
                         <label>{{localeData?.inventory_type}}</label> <span>{{profileData?.manageInventory ?
                             commonLocaleData?.app_product : commonLocaleData?.app_service}}</span>
@@ -24,7 +18,7 @@
         </div>
     </div>
     <div *ngIf="organizationType === 'COMPANY'" class="row pb-2">
-        <div class="col-lg-12 col-xl-7 other-information">
+        <div class="col-lg-12 col-xl-7 other-information mr-t4">
             <div class="clearfix">
                 <div class="form-group row">
                     <div class="col-md-12 col-lg-6 col-12">
@@ -53,7 +47,7 @@
                                 <div class="form-group">
                                     <label>{{localeData?.inventory_type}}</label>
                                     <div class="mr-t1">
-                                        <span class="pd0 mr-r3">
+                                        <span class="p-0 mr-r3">
                                             <input id="radio-1" class="radio-custom cp ml-0" name="radio-group"
                                                 type="radio" [checked]="profileData?.manageInventory"
                                                 (change)="inventoryTypeUpdated(true)" name="inventoryType" checked>
@@ -61,7 +55,7 @@
                                                 class="radio-custom-label">{{commonLocaleData?.app_product}}</label>
                                         </span>
                                         <span class="p-0">
-                                            <input id="radio-2" class="radio-custom cp ml0" name="radio-group"
+                                            <input id="radio-2" class="radio-custom cp ml-0" name="radio-group"
                                                 type="radio" [checked]="!profileData?.manageInventory"
                                                 (change)="inventoryTypeUpdated(false)" name="inventoryType">
                                             <label for="radio-2"
@@ -81,49 +75,8 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-9">
-                                        <div class="form-group">
-                                        <label>Date Format</label>
-                                        <input type="text" class="form-control">
-                                        </div>
-                                </div>
-                                <div class="col-3 pl-0">
-                                        <div class="form-group">
-                                        <label>&nbsp;</label>
-                                        <input type="text" class="form-control">
-                                        </div>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                        <div class="form-group row">
-                                <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Financial Year Period</label>
-                                            <input type="text" class="form-control">
-                                            </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                            <div class="form-group">
-                                            <label>Time Zone</label>
-                                            <input type="text" class="form-control">
-                                            </div>
-                            </div>
-                        </div> -->
                 </div>
-                <!-- <div class="form-group row">
-                    <div class="checkbox col-md-6 m-0">
-                        <span>
-                            <input id="isMultiple" (change)="profileUpdated('isMultipleCurrency')"
-                                [(ngModel)]="profileData.isMultipleCurrency" class="checkbox-custom" name="isMultiple"
-                                type="checkbox">
-                            <label for="isMultiple"
-                                class="checkbox-custom-label multicurrency-checkbox">Multicurrency?</label>
-                        </span>
-                    </div>
-                </div> -->
             </div>
         </div>
     </div>
+</div>

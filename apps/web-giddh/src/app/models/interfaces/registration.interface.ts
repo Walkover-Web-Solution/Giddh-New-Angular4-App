@@ -1,5 +1,3 @@
-
-
 export interface IRegistration {
     iciciCorporateDetails: {
         corpId: string,

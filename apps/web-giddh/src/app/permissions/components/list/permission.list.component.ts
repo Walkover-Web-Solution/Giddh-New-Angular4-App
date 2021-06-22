@@ -86,7 +86,6 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        //    this.store.dispatch(this.permissionActions.RemoveNewlyCreatedRoleFromStore());
     }
 
     public redirectToDashboard() {
@@ -95,7 +94,6 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
             next: { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home' },
             previous: { type: 'MENU', name: 'Permissions', uniqueName: '/pages/permissions/list', isInvalidState: true }
         });
-        // this.router.navigateByUrl('/home');
     }
 
     public closePopupEvent(userAction) {

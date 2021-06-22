@@ -12,9 +12,9 @@ import { GeneralService } from '../../../services/general.service';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import * as _ from "../../../lodash-optimized";
 import { CompanyResponse } from "../../../models/api-models/Company";
 import { createSelector } from "reselect";
+import { each, find, orderBy } from '../../../lodash-optimized';
 
 @Component({
     selector: 'aside-branch-transfer-pane',
@@ -78,12 +78,12 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {
         // tslint:disable-next-line:no-shadowed-variable
         this._store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (branches) => {
             if (branches && branches.length > 0) {
-                _.each(branches, (branch) => {
+                each(branches, (branch) => {
                     if (branch.addresses && branch.addresses.length) {
-                        branch.addresses = [_.find(branch.addresses, (gst) => gst && gst.isDefault)];
+                        branch.addresses = [find(branch.addresses, (gst) => gst && gst.isDefault)];
                     }
                 });
-                this.branches$ = observableOf(_.orderBy(branches, 'name'));
+                this.branches$ = observableOf(orderBy(branches, 'name'));
             } else if (branches && branches.length === 0) {
                 this.branches$ = observableOf(null);
             }

@@ -594,7 +594,6 @@
                                 class="cp d-flex status-mobile flex-column min-wid-status">
                                 <div class="d-flex flex-row align-items-center">
                                     <span class="d-flex balance-status">{{ item.balanceStatus}}</span>
-                                    <!-- *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected" -->
                                     <div class="action-icon ml-auto"
                                         [ngClass]="{'item-selected': hoveredItemForAction === item.uniqueName || item.isSelected}">
                                         <a [tooltip]="commonLocaleData?.app_send_email"
@@ -964,18 +963,6 @@
                     </div>
                 </div>
             </div>
-            <!-- modal dialog -->
-            <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
-                tabindex="-1">
-                <div class="modal-dialog gray modal-liquid">
-                    <div class="modal-content">
-                        <invoice-generate-model *ngIf="showInvoiceGenerateModal"
-                            (closeEvent)="closeInvoiceModel($event)">
-                        </invoice-generate-model>
-                    </div>
-                </div>
-            </div>
-
             <!--advance_seearch Modal-->
             <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
                 tabindex="-1">
@@ -983,7 +970,7 @@
                     <div class="modal-content">
                         <invoice-advance-search-component #advanceSearchComponent
                             [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : (selectedVoucher === 'purchase') ? selectedVoucher : 'invoice'"
-                            [request]="advanceSearchFilter" [localeData]="localeData"
+                            [request]="advanceSearchFilter" [localeData]="localeData" [isEInvoiceEnabled]="gstEInvoiceEnable"
                             [commonLocaleData]="commonLocaleData" (applyFilterEvent)="applyAdvanceSearch($event)"
                             (closeModelEvent)="toggleAdvanceSearchPopup(true)">
                         </invoice-advance-search-component>

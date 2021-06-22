@@ -9,9 +9,11 @@ import {
     OnDestroy,
     OnInit,
     Output,
+    QueryList,
     SimpleChanges,
     TemplateRef,
     ViewChild,
+    ViewChildren,
 } from '@angular/core';
 import { NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { createSelector, select, Store } from '@ngrx/store';
@@ -19,18 +21,17 @@ import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { LoginActions } from '../../actions/login.action';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { clone, cloneDeep, find, slice } from '../../lodash-optimized';
+import { clone, find, slice } from '../../lodash-optimized';
 import { AccountResponse } from '../../models/api-models/Account';
-import { ActiveFinancialYear, CompanyResponse, Organization, OrganizationDetails } from '../../models/api-models/Company';
+import { CompanyResponse, Organization, OrganizationDetails } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { CompAidataModel } from '../../models/db';
-import { DEFAULT_AC, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
+import { DEFAULT_AC, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
 import { OrganizationType } from '../../models/user-login-state';
 import { CompanyService } from '../../services/companyService.service';
@@ -64,12 +65,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public selectedCompanyDetails: CompanyResponse;
     /** Current organization type */
     public currentOrganizationType: OrganizationType;
-
     /** store current selected company */
     public selectedCompany: Observable<CompanyResponse>;
-    /** Stores the current financial year data */
-    public activeFinancialYear: ActiveFinancialYear;
-
     /** Stores the details of the current branch */
     public currentBranch: any;
     /** Avatar image */
@@ -92,8 +89,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public isLedgerAccSelected: boolean = false;
     /** Holds the navigated accounts */
     public accountItemsFromIndexDB: any[] = DEFAULT_AC;
-    /** Stores the list of menu and accounts navigated */
-    private smartCombinedList$: Observable<any>;
     /** Company name initials (upto 2 characters) */
     public companyInitials: any = '';
     /** Branch alias/name initials (upto 2 characters) */
@@ -130,6 +125,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Stores the instance of company detail dropdown */
     @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
+    /** Stores the dropdown instances as querylist */
+    @ViewChildren('dropdown') itemDropdown: QueryList<BsDropdownDirective>;
     /** Search company name */
     public searchCmp: string = '';
     /** Holds if company refresh is in progress */
@@ -140,6 +137,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public commonLocaleData: any = {};
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** This will holds true if we added ledger item in local db once */
+    public isItemAdded: boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -155,7 +154,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private loginAction: LoginActions,
         private socialAuthService: AuthService,
-        private groupWithAction: GroupWithAccountsAction, 
+        private groupWithAction: GroupWithAccountsAction,
         private localeService: LocaleService
     ) {
         // Reset old stored application date
@@ -224,7 +223,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length && this.localeData?.page_heading) {
-            this.allItems = this.generalService.getVisibleMenuItems(changes.apiMenuItems.currentValue, this.localeData?.items);
+            this.allItems = this.generalService.getVisibleMenuItems("sidebar", changes.apiMenuItems.currentValue, this.localeData?.items);
         }
     }
 
@@ -234,16 +233,14 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public ngOnInit(): void {
-        this.smartCombinedList$ = this.store.pipe(select(appStore => appStore.general.smartCombinedList), takeUntil(this.destroyed$));
         this.updateIndexDbSuccess$ = this.store.pipe(select(appStore => appStore.general.updateIndexDbComplete), takeUntil(this.destroyed$))
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if (selectedCmp) {
+            if (selectedCmp && selectedCmp?.uniqueName === this.generalService.companyUniqueName) {
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
                 this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
                 this.branchInitials = this.generalService.getInitialsFromString(this.currentBranch?.alias || this.currentBranch?.name);
-                this.activeFinancialYear = selectedCmp.activeFinancialYear;
-                this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
+                this.store.dispatch(this.companyActions.setActiveFinancialYear(selectedCmp.activeFinancialYear));
 
                 this.activeCompanyForDb = new CompAidataModel();
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
@@ -252,6 +249,20 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 } else {
                     this.activeCompanyForDb.name = selectedCmp.name;
                     this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
+                }
+                if (this.generalService.companyUniqueName) {
+                    this.dbService.getAllItems(this.activeCompanyForDb.uniqueName, 'accounts').subscribe(accountList => {
+                        if (accountList?.length) {
+                            if (window.innerWidth > 1440 && window.innerHeight > 717) {
+                                this.accountItemsFromIndexDB = accountList.slice(0, 7);
+                            } else {
+                                this.accountItemsFromIndexDB = accountList.slice(0, 5);
+                            }
+                        } else {
+                            this.accountItemsFromIndexDB = DEFAULT_AC;
+                        }
+                        this.changeDetectorRef.detectChanges();
+                    });
                 }
             }
         });
@@ -313,15 +324,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
         });
-        this.smartCombinedList$.subscribe(smartList => {
-            if (smartList && smartList.length) {
-                if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
-                    this.dbService.getItemDetails(this.activeCompanyForDb.uniqueName).toPromise().then(dbResult => {
-                        this.findListFromDb(dbResult);
-                    });
-                }
-            }
-        });
         this.updateIndexDbSuccess$.subscribe(res => {
             if (res) {
                 if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
@@ -332,18 +334,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
         });
-        if (this.activeCompanyForDb?.uniqueName) {
-            this.dbService.getAllItems(this.activeCompanyForDb.uniqueName, 'accounts').subscribe(accountList => {
-                if (accountList?.length) {
-                    if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                        this.accountItemsFromIndexDB = accountList.slice(0, 7);
-                    } else {
-                        this.accountItemsFromIndexDB = accountList.slice(0, 5);
-                    }
-                    this.changeDetectorRef.detectChanges();
-                }
-            });
-        }
+
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
                 const queryParamsIndex = this.router.url.indexOf('?');
@@ -354,6 +345,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                         return true;
                     }
                 })));
+                this.openActiveItem();
+
                 this.changeDetectorRef.detectChanges();
             }
 
@@ -373,6 +366,29 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             }
             this.activeLocale = response?.value;
         });
+        // if invalid menu item clicked then navigate to default route and remove invalid entry from db
+        this.generalService.invalidMenuClicked.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data) {
+                this.onItemSelected(data.next, data);
+            }
+        });
+
+        if(this.router.url.includes("/ledger")) {
+            this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
+                if(account && !this.isItemAdded) {
+                    this.isItemAdded = true;
+                    
+                    // save data to db
+                    let item: any = {};
+                    item.time = +new Date();
+                    item.route = this.router.url;
+                    item.parentGroups = account.parentGroups;
+                    item.uniqueName = account.uniqueName;
+                    item.name = account.name;
+                    this.doEntryInDb('accounts', item);
+                }
+            });
+        }
     }
 
     /**
@@ -412,16 +428,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         this.setOrganizationDetails(OrganizationType.Branch, details);
         this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(take(1)).subscribe(response => {
             if (response && response.body) {
-                if (screen.width <= 767 || isCordova) {
-                    window.location.href = '/pages/mobile-home';
-                } else if (isElectron) {
-                    this.router.navigate([response.body.lastState]);
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 200);
-                } else {
-                    window.location.href = response.body.lastState;
-                }
+                this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+                    this.generalService.finalNavigate(response.body.lastState);
+                });
             }
         });
     }
@@ -520,52 +529,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Prepares list of accounts and menus
-     *
-     * @param {IUlist[]} data Data with which list needs to be created
-     * @memberof PrimarySidebarComponent
-     */
-    public prepareSmartList(data: IUlist[]): void {
-        // hardcoded aiData
-        // '/pages/trial-balance-and-profit-loss'
-        let menuList: IUlist[] = [];
-        let groupList: IUlist[] = [];
-        let acList: IUlist[] = DEFAULT_AC;
-        let defaultMenu = cloneDeep(DEFAULT_MENUS);
-
-        // parse and push default menu to menulist for sidebar menu for initial usage
-        if (defaultMenu && defaultMenu.length > 0) {
-            defaultMenu.forEach(item => {
-                let newItem: IUlist = {
-                    name: item.name,
-                    uniqueName: item.uniqueName,
-                    additional: item.additional,
-                    type: 'MENU',
-                    time: +new Date(),
-                    pIndex: item.pIndex,
-                    isRemoved: item.isRemoved
-                };
-                menuList.push(newItem);
-            });
-        }
-
-        let combined = cloneDeep([...menuList, ...acList]);
-        this.store.dispatch(this.generalActions.setSmartList(combined));
-        if (!this.activeCompanyForDb) {
-            this.activeCompanyForDb = new CompAidataModel();
-        }
-        this.activeCompanyForDb.aidata = {
-            menus: menuList,
-            groups: groupList,
-            accounts: acList
-        };
-
-        // due to some issue
-        // this.selectedPage = menuList[0].name;
-        this.dbService.insertFreshData(this.activeCompanyForDb);
-    }
-
-    /**
      * Finds the item list from DB
      *
      * @param {ICompAidata} dbResult Current DB result
@@ -586,13 +549,15 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 this.accountItemsFromIndexDB = (dbResult && dbResult.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : [];
             }
         } else {
-            let data: IUlist[];
-            this.smartCombinedList$.pipe(take(1)).subscribe(listResult => {
-                data = listResult;
-            });
-            // make entry with smart list data
-            this.prepareSmartList(data);
-
+            if (!this.activeCompanyForDb) {
+                this.activeCompanyForDb = new CompAidataModel();
+            }
+            this.activeCompanyForDb.aidata = {
+                menus: [],
+                groups: [],
+                accounts: DEFAULT_AC
+            };
+            this.dbService.insertFreshData(this.activeCompanyForDb);
             // slice default menus and account on small screen
             if (!(window.innerWidth > 1440 && window.innerHeight > 717)) {
                 this.accountItemsFromIndexDB = slice(this.accountItemsFromIndexDB, 0, 5);
@@ -653,9 +618,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 // direct account scenario
                 let url = `ledger/${item.uniqueName}`;
-                // if (!this.isLedgerAccSelected) {
-                //   this.navigateToUser = true;
-                // }
                 if (!isCtrlClicked) {
                     this.router.navigate([url]); // added link in routerLink
                 }
@@ -810,7 +772,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             event.preventDefault();
             event.stopPropagation();
         }
-        // this.companyDropdown.isOpen = false;
         if (this.subBranchDropdown) {
             this.subBranchDropdown.hide();
         }
@@ -954,12 +915,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null): void {
         if (entity === 'menus') {
-            //this.selectedPage = item.name;
             this.isLedgerAccSelected = false;
         } else if (entity === 'accounts') {
             this.isLedgerAccSelected = true;
             this.selectedLedgerName = item.uniqueName;
-            //this.selectedPage = 'ledger - ' + item.name;
         }
 
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
@@ -1014,7 +973,34 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public translationComplete(event: any): void {
         if (event) {
-            this.allItems = this.generalService.getVisibleMenuItems(this.apiMenuItems, this.localeData?.items);
+            this.allItems = this.generalService.getVisibleMenuItems("sidebar", this.apiMenuItems, this.localeData?.items);
+        }
+    }
+
+    /**
+     * Opens the active item and closes the rest
+     *
+     * @param {*} [itemIndex] Current item index
+     * @memberof PrimarySidebarComponent
+     */
+    public openActiveItem(itemIndex?: any): void {
+        if (itemIndex !== undefined) {
+            this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
+                if (index !== itemIndex) {
+                    dropdown.hide();
+                }
+            });
+        } else {
+            if (this.isOpen) {
+                const activeItemIndex = this.allItems.findIndex(item => item.isActive);
+                this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
+                    if (index === activeItemIndex) {
+                        dropdown.show();
+                    } else {
+                        dropdown.hide();
+                    }
+                });
+            }
         }
     }
 }

@@ -290,7 +290,7 @@ export const RESTRICTED_BRANCH_ROUTES = [
 ];
 
 export const SUPPORT_TEAM_NUMBERS = [
-    "+918889500411", "+918889500350", "+918889378604"
+    "+918889500350", "+918889378604"
 ];
 
 /** Settings integration tabs */
@@ -314,3 +314,8 @@ export enum EInvoiceStatus {
     Failed = 'failed',
     NA = 'na',
 }
+
+/** Length of entry description on vouchers */
+export const ENTRY_DESCRIPTION_LENGTH = 100;
+
+export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;

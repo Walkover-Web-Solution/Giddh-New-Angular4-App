@@ -24,7 +24,6 @@ export function daybookReducer(state = initialState, action: CustomActions): Day
             // no payload means error from server
             if (action.payload) {
                 let data: DayBookResponseModel = _.cloneDeep(action.payload) as DayBookResponseModel;
-                // data.groupDetails = removeZeroAmountAccount((data.groupDetails));
                 let noData = false;
                 let showLoader = false;
                 if (data.entries.length < 1) {

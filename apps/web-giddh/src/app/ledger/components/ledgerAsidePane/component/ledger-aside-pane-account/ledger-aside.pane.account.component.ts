@@ -25,8 +25,6 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
     };
     public isGstEnabledAcc: boolean = false;
     public isHsnSacEnabledAcc: boolean = false;
-    public fetchingAccUniqueName$: Observable<boolean>;
-    public isAccountNameAvailable$: Observable<boolean>;
     public createAccountInProcess$: Observable<boolean>;
     public flattenGroupsArray: IOption[] = [];
     public isDebtorCreditor: boolean = false;
@@ -39,8 +37,6 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
         private accountsAction: AccountsAction,
     ) {
         // account-add component's property
-        this.fetchingAccUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingAccUniqueName), takeUntil(this.destroyed$));
-        this.isAccountNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isAccountNameAvailable), takeUntil(this.destroyed$));
         this.createAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$));
     }
 

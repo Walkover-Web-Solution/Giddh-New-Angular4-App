@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { WindowRef } from '../shared/helpers/window.object';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../services/general.service';
@@ -40,13 +39,12 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public commonLocaleData: any = {};
 
     constructor(
-        private _router: Router, private _window: WindowRef, private _generalService: GeneralService,
+        private _router: Router, private _generalService: GeneralService,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
         private companyActions: CompanyActions,
         private generalActions: GeneralActions
     ) {
-        this._window.nativeWindow.superformIds = ['Jkvq'];
         this.supportTeamNumber = SUPPORT_TEAM_NUMBERS[Math.floor(Math.random() * SUPPORT_TEAM_NUMBERS.length)];
     }
 

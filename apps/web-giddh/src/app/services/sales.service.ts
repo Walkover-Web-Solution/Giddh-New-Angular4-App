@@ -9,7 +9,6 @@ import { GenericRequestForGenerateSCD } from '../models/api-models/Sales';
 import { SALES_API_V2, SALES_API_V4 } from './apiurls/sales.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from "../models/api-models/Reports";
 import { AdvanceReceiptRequest, VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
 import { ADVANCE_RECEIPTS_API } from './apiurls/advance-receipt-adjustment.api';
 
@@ -26,24 +25,6 @@ export class SalesService {
         @Optional() @Inject(ServiceConfig)
         private config: IServiceConfigArgs
     ) {
-    }
-
-    /**
-     *
-     * @param model : any object
-     * @param updateAccount: boolean flag
-     */
-    public generateSales(model: any): Observable<BaseResponse<any, any>> {
-        let accountUniqueName = model.invoice.account.uniqueName;
-        this.user = this._generalService.user;
-        this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + SALES_API_V2.GENERATE_SALES.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
-            map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = model;
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
     /**

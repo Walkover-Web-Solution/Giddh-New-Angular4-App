@@ -1,6 +1,6 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GroupsAccountSidebarComponent } from '../new-group-account-sidebar/groups-account-sidebar.component';
-import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { AppState } from '../../../../store/roots';
 import { Store, select } from '@ngrx/store';
@@ -55,15 +55,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public isMobileScreen: boolean = false;
     /** Add custom field form reference */
     public customFieldForm: FormGroup;
-
     /** List custom row data type  */
     public dataTypeList: IOption[] = [];
-    /** List of custom row value type */
-    public booleanDataTypeList: IOption[] =
-        [
-            { label: "Yes", value: "true" },
-            { label: "No", value: "false" },
-        ];
     /** To check API call in progress */
     public isGetCustomInProgress: boolean = true;
     /** To check API call in progress */
@@ -446,28 +439,5 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                 { label: this.commonLocaleData?.app_datatype_list?.boolean, value: "BOOLEAN" }
             ];
         }
-    }
-
-    /**
-     * Loads the default groups
-     *
-     * @private
-     * @memberof ManageGroupsAccountsComponent
-     */
-    private loadDefaultGroups(): void {
-        const requestObject: any = {
-            q: '',
-            onlyTop: true
-        }
-        this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data?.body?.results) {
-                this.groupList$ = of(data.body.results);
-                if (this.keyupInitialized) {
-                    setTimeout(() => {
-                        this.groupSrch?.nativeElement.focus();
-                    }, 200);
-                }
-            }
-        });
     }
 }

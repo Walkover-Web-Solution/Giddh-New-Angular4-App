@@ -42,23 +42,6 @@
 
                                 </div>
 
-                                <!-- <div class="clearfix pd-t1">
-                                    <div class="row">
-
-                                        <div class="col-xs-12 col-sm-3">
-                                            <input type="checkbox" [(ngModel)]="companyCashFreeSettings.autoCreateVirtualAccountsForDebtors" name="autoCreateVirtualAccountsForDebtors" class="pull-left show-on-mobile" />
-                                            <label>Create virtual accounts for customers</label>
-                                        </div>
-
-                                        <div class="col-xs-6 col-sm-9">
-                                            <div class="form-group clearfix" *ngIf="companyCashFreeSettings">
-                                                <input type="checkbox" [(ngModel)]="companyCashFreeSettings.autoCreateVirtualAccountsForDebtors" name="autoCreateVirtualAccountsForDebtors" class="pull-left hide-on-mobile" />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div> -->
-
                                 <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
 
                             </div>
@@ -207,7 +190,6 @@
                                                         [placeholder]="localeData?.eg_placeholder"
                                                         name="estimateHeaderName" />
                                                 </div>
-                                                <!--                                            <input type="checkbox" name="estimate-checkbox" />-->
                                             </div>
                                         </div>
 
@@ -241,32 +223,6 @@
 
                                 </div>
                             </div>
-
-                            <!--will use in v2 -->
-                            <!--                      <div class="row">-->
-                            <!--                        <div class="col-xs-5 lh-34"><label>Send alert</label></div>-->
-                            <!--                        <div class="col-xs-7">-->
-
-                            <!--                          <div class="row send-alert">-->
-                            <!--                            <ul class="webook-list form-group">-->
-                            <!--                              <li *ngFor="let webhook of estimateWebhook; let i = index" class="clearfix">-->
-                            <!--                                <div  [ngClass]="{'input-group': true}">-->
-
-                            <!--                                  <input type="text" class="form-control send-alert" name='alertDuedate_+{{i}}' [(ngModel)]='webhook.triggerAt' (ngModelChange)="checkDueDays(webhook.triggerAt, i, 'alpha')" (blur)="checkDueDays(webhook.triggerAt, i, 'length')" [disabled]='webhook.uniqueName' />-->
-                            <!--                                  <span> Days </span>-->
-
-                            <!--                                  <div class="d-inline-flex position-relative">-->
-                            <!--                                    <input type="text" class="form-control" name='webhookUrl_+{{i}}' [(ngModel)]='webhook.url' [disabled]='webhook.uniqueName' />-->
-                            <!--                                    <span class="viasocket"><a href="#">viasocket.com</a></span>-->
-                            <!--                                  </div>-->
-                            <!--                                  <span class="cp" [hidden]="i == estimateWebhook.length-1"> <i class="icon-trash delete-ico" (click)="deleteWebhook(webhook, i)"></i></span>-->
-                            <!--                                  <a href="javascript:void(0);"  class="cp" *ngIf="i == estimateWebhook.length-1" (click)="addNewWebhook(webhook, 'estimate')"> <i class="icon-plus"></i> Add webhook URL</a>-->
-                            <!--                                </div>-->
-                            <!--                              </li>-->
-                            <!--                            </ul>-->
-                            <!--                          </div>-->
-                            <!--                        </div>-->
-                            <!--                      </div>-->
 
                             <div class="row next-step-estimate">
 
@@ -351,26 +307,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--                        <div class="clearfix pd-t1">-->
-                            <!--                            <div class="row">-->
-                            <!--                                <div class="col-xs-5"><label>Custom Estimation</label></div>-->
-                            <!--                                <div class="col-xs-7 p-0">-->
-                            <!--                                    <div class="form-group clearfix ">-->
-                            <!--                                        <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left d-inline-flex estimation-check" name="customInvoice" />-->
-                            <!--                                        <div class=" d-inline-flex custom-estimation " *ngIf="invoiceSetting.useCustomInvoiceNumber">-->
-                            <!--                                            <div class="d-inline-flex position-relative">-->
-                            <!--                                                <label>Initial No.</label>-->
-                            <!--                                                <input type="text" class="form-control text-right initial-number" name="initialNumber" [(ngModel)]="invoiceSetting.initialInvoiceNumber">-->
-                            <!--                                            </div>-->
-                            <!--                                            <div class="d-inline-flex position-relative">-->
-                            <!--                                                <label style="right:0px;">Prefix</label>-->
-                            <!--                                                <input type="text" class="form-control text-right" name="prefixNumber" [(ngModel)]="invoiceSetting.invoiceNumberPrefix">-->
-                            <!--                                            </div>-->
-                            <!--                                        </div>-->
-                            <!--                                    </div>-->
-                            <!--                                </div>-->
-                            <!--                            </div>-->
-                            <!--                        </div>-->
 
                             <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                         </div>
@@ -408,7 +344,6 @@
                                                         [(ngModel)]="proformaSetting.headerName" />
 
                                                 </div>
-                                                <!--                                            <input type="checkbox" name="estimate-checkbox" />-->
                                             </div>
                                         </div>
 
@@ -436,31 +371,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--will use in v2 -->
-                            <!--                        <div class="row">-->
-                            <!--                            <div class="col-xs-5 lh-34"><label>Send alert</label></div>-->
-                            <!--                            <div class="col-xs-7">-->
-
-                            <!--                              <div class="row send-alert">-->
-                            <!--                                <ul class="webook-list form-group">-->
-                            <!--                                  <li *ngFor="let webhook of proformaWebhook; let i = index" class="clearfix">-->
-                            <!--                                    <div  [ngClass]="{'input-group': true}">-->
-
-                            <!--                                      <input type="text" class="form-control send-alert" name='alertDuedate_+{{i}}' [(ngModel)]='webhook.triggerAt' (ngModelChange)="checkDueDays(webhook.triggerAt, i, 'alpha')" (blur)="checkDueDays(webhook.triggerAt, i, 'length')" [disabled]='webhook.uniqueName' />-->
-                            <!--                                      <span> Days </span>-->
-
-                            <!--                                      <div class="d-inline-flex position-relative">-->
-                            <!--                                        <input type="text" class="form-control" name='webhookUrl_+{{i}}' [(ngModel)]='webhook.url' [disabled]='webhook.uniqueName' />-->
-                            <!--                                        <span class="viasocket"><a href="#">viasocket.com</a></span>-->
-                            <!--                                      </div>-->
-                            <!--                                      <span class="cp" [hidden]="i == proformaWebhook.length-1"> <i class="icon-trash delete-ico" (click)="deleteWebhook(webhook, i)"></i></span>-->
-                            <!--                                      <a href="javascript:void(0);"  class="cp" *ngIf="i == proformaWebhook.length-1" (click)="addNewWebhook(webhook, 'proforma')"> <i class="icon-plus"></i> Add webhook URL</a>-->
-                            <!--                                    </div>-->
-                            <!--                                  </li>-->
-                            <!--                                </ul>-->
-                            <!--                              </div>-->
-                            <!--                            </div>-->
-                            <!--                        </div>-->
 
                             <div class="clearfix  pd-t1">
                                 <div class="row">
@@ -502,26 +412,10 @@
                                             <input type="checkbox" [(ngModel)]="proformaSetting.sendSms"
                                                 class="pull-left" name="proformaCreatePaymentEntry"
                                                 class="hide-on-mobile" />
-                                            <!-- <div class="mr-t1 max-width-250 mr-t3" *ngIf="invoiceSetting.sendInvLinkOnSms">
-        <textarea [(ngModel)]="invoiceSetting.smsContent" class="pull-left form-control" name="sendInvLinkOnSms" rows="3"></textarea>
-    </div> -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <!--                      will  use in v2 -->
-                            <!--                        <div class="clearfix pd-t1">-->
-                            <!--                            <div class="row">-->
-                            <!--                                <div class="col-xs-5"><label>Custom Proforma#</label></div>-->
-                            <!--                                <div class="col-xs-7 p-0">-->
-                            <!--                                    <div class="form-group clearfix ">-->
-                            <!--                                        <input type="checkbox" class="pull-left d-inline-flex estimation-check" name="customInvoice" />-->
-
-                            <!--                                    </div>-->
-                            <!--                                </div>-->
-                            <!--                            </div>-->
-                            <!--                        </div>-->
 
                             <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                         </div>
@@ -545,27 +439,6 @@
                     <div class="box clearfix mb-2">
                         <h4 class="clearfix bd-rb">{{commonLocaleData?.app_invoice}} <span></span></h4>
                         <div class="clearfix">
-
-                            <!--                        <div class="row heading-name">-->
-
-                            <!--                            <div class="col-xs-5 lh-34"><label>Heading Name</label></div>-->
-
-                            <!--                            <div class="col-xs-7">-->
-                            <!--                                <div class="row">-->
-                            <!--                                    <div class="">-->
-                            <!--                                        <div class=" form-group">-->
-                            <!--                                            <div class="estimate-proforma" [ngClass]="{'input-group': true}">-->
-                            <!--                                                <input type="text" class="form-control" [(ngModel)]="invoiceSetting.headerName" placeholder="Eg. Estimate/Quotation/Proforma" name="estimateProforma" />-->
-
-                            <!--                                            </div>-->
-                            <!--                                            <input type="checkbox" name="estimate-checkbox"  />-->
-                            <!--                                        </div>-->
-                            <!--                                    </div>-->
-
-                            <!--                                </div>-->
-                            <!--                            </div>-->
-                            <!--                        </div>-->
-
                             <div class="row">
 
                                 <div class="col-xs-12 col-sm-12 col-lg-3 lh-34">
@@ -587,30 +460,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--will use in v2 -->
-                            <!--                        <div class="row">-->
-                            <!--                            <div class="col-xs-5 lh-34"><label>Send alert</label></div>-->
-                            <!--                            <div class="col-xs-7">-->
-                            <!--                                <div class="row send-alert">-->
-                            <!--                                    <ul class="webook-list form-group">-->
-                            <!--                                      <li *ngFor="let webhook of invoiceWebhook; let i = index" class="clearfix">-->
-                            <!--                                        <div  [ngClass]="{'input-group': true}">-->
-
-                            <!--                                          <input type="text" class="form-control send-alert" name='alertDuedate_+{{i}}' [(ngModel)]='webhook.triggerAt' (ngModelChange)="checkDueDays(webhook.triggerAt, i, 'alpha')" (blur)="checkDueDays(webhook.triggerAt, i, 'length')" [disabled]='webhook.uniqueName' />-->
-                            <!--                                          <span> Days </span>-->
-
-                            <!--                                          <div class="d-inline-flex position-relative">-->
-                            <!--                                            <input type="text" class="form-control" name='webhookUrl_+{{i}}' [(ngModel)]='webhook.url' [disabled]='webhook.uniqueName' />-->
-                            <!--                                            <span class="viasocket"><a href="#">viasocket.com</a></span>-->
-                            <!--                                          </div>-->
-                            <!--                                          <span class="cp" [hidden]="i == invoiceWebhook.length-1"> <i class="icon-trash delete-ico" (click)="deleteWebhook(webhook, i)"></i></span>-->
-                            <!--                                          <a href="javascript:void(0);"  class="cp" *ngIf="i == invoiceWebhook.length-1" (click)="addNewWebhook(webhook, 'invoice')"> <i class="icon-plus"></i> Add webhook URL</a>-->
-                            <!--                                        </div>-->
-                            <!--                                      </li>-->
-                            <!--                                    </ul>-->
-                            <!--                                </div>-->
-                            <!--                            </div>-->
-                            <!--                        </div>-->
 
                             <div class="clearfix ">
 
@@ -643,18 +492,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- <div class="clearfix  pd-t1">
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-3">
-                                        <input type="checkbox" [(ngModel)]="invoiceSetting.autoPaid" name="invoiceAutoPaid" class="show-on-mobile" />
-                                        <label>Auto Paid</label>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-9 form-group ">
-                                        <input type="checkbox" [(ngModel)]="invoiceSetting.autoPaid" name="invoiceAutoPaid" class="hide-on-mobile" />
-                                    </div>
-                                </div>
-                            </div> -->
 
                             <div class="clearfix  pd-t1">
                                 <div class="row">

@@ -15,8 +15,7 @@
                         <section class="right-bar" *ngIf="!isMobileScreen || (isMobileScreen && activeView === 'group')"
                             [ngClass]="{'welcome-inventory-page':!activeView}">
                             <!-- uiView: inventory-detail -->
-                            <section class="container-fluid  clearfix pd-t15">
-
+                            <section class="container-fluid  clearfix inventory-head">
                                 <div class="wrap-top-inventory">
                                     <div *ngIf="isMobileScreen && activeView === 'group'" class="mr-b15">
                                         <button class="btn btn-sky-blue" [routerLink]="['/pages/inventory/']"

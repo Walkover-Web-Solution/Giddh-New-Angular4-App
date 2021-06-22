@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { ConnectionService } from 'ng-connection-service';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { LoginActions } from '../actions/login.action';
 import { AuthenticationService } from '../services/authentication.service';
 import { GeneralService } from '../services/general.service';

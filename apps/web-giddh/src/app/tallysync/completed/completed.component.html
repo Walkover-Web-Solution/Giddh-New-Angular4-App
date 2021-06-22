@@ -9,31 +9,6 @@
                         #shCompany formControlName="filterCompany" (selected)="onDDElementCompanySelect($event)">
                     </sh-select>
                 </div>
-                <!-- Commented as currently the Tally plugin doesn't support branch wise import -->
-                <!-- <div *ngIf="currentCompanyBranches?.length" class="col-lg-3 col-md-12 form-group company linked-entities">
-                    <label>Branch</label>
-                    <sh-select [options]="currentCompanyBranches" formControlName="branchUniqueName" [showClear]="false"
-                        [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
-                        placeholder="Select Entity" [fixedValue]="currentBranch?.alias" name="entity">
-                        <ng-template #optionTemplate let-option="option">
-                            <ng-container>
-                                <a href="javascript:void(0)" class="list-item d-flex">
-                                    <span class="entity-icon">
-                                        <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
-                                        <i class="icon-branch-icon pull-right" *ngIf="!option.parentBranch && !option.isCompany"
-                                            tooltip="HO Branch"></i>
-                                    </span>
-                                    <span class="entity-details">
-                                        <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                        <div class="item-unique giddh-limit single-line-clamp">
-                                            {{ option.name || '-' }}
-                                        </div>
-                                    </span>
-                                </a>
-                            </ng-container>
-                        </ng-template>
-                    </sh-select>
-                </div> -->
                 <div class="col-lg-3 col-md-12 form-group date">
                     <label>{{commonLocaleData?.app_date}}</label>
                     <input name="filterDate" formControlName="filterDate" type="text" autocomplete="off"
@@ -62,9 +37,9 @@
             *ngIf="!isLoading && completedData?.length">
             <div class="panel panel-default" *ngFor="let row of completedData;">
                 <div class="panel-heading">
-                    <span class="m-r-15">{{row.type === 'TALLY' ? localeData?.tally : row.type === 'COMPANY_JSON_IMPORT'
+                    <span class="mr-r15">{{row.type === 'TALLY' ? localeData?.tally : row.type === 'COMPANY_JSON_IMPORT'
                         ? localeData?.import_json : ''}} {{row.company.name}}</span>
-                    <small class="m-r-15">{{localeData?.last_import}} {{row.dateString}}</small>
+                    <small class="mr-r15">{{localeData?.last_import}} {{row.dateString}}</small>
                     <small class="running"><i class="fa fa-circle"></i> {{row.status}}</small>
                 </div>
                 <div class="panel-body">
@@ -72,7 +47,7 @@
                         <li class="list-group-item">
                             <div class="clearfix">
                                 <div class="col-sm-2 col-xs-12">
-                                    <img src="./../../../assets/images/folder.svg" height="20" class="m-r-10">
+                                    <img src="./../../../assets/images/folder.svg" height="20" class="mr-r1">
                                     <span>{{localeData?.groups}}</span>
                                 </div>
                                 <div class="col-sm-6 col-xs-8">
@@ -87,7 +62,7 @@
                                 </div>
                                 <div class="col-sm-4 col-xs-4 text-success">
                                     <div class="status">
-                                        <small class="m-r-10"><i class="fa fa-check"></i>{{row.groupsPercent}}
+                                        <small class="mr-r1"><i class="fa fa-check"></i>{{row.groupsPercent}}
                                             {{localeData?.complete}}</small>
                                         <small class="text-danger"
                                             *ngIf="row.tallyErrorGroups>0">{{row.groupsErrorPercent}}
@@ -100,7 +75,7 @@
                         <li class="list-group-item">
                             <div class="clearfix">
                                 <div class="col-sm-2 col-xs-12">
-                                    <img src="./../../../assets/images/folder.svg" height="20" class="m-r-10">
+                                    <img src="./../../../assets/images/folder.svg" height="20" class="mr-r1">
                                     <span>{{localeData?.accounts}}</span>
                                 </div>
                                 <div class="col-sm-6 col-xs-8">
@@ -116,7 +91,7 @@
                                 </div>
                                 <div class="col-sm-4 col-xs-4 text-success">
                                     <div class="status">
-                                        <small class="m-r-10"><i class="fa fa-check"></i>{{row.accountsPercent}}
+                                        <small class="mr-r1"><i class="fa fa-check"></i>{{row.accountsPercent}}
                                             {{localeData?.complete}}</small>
                                         <small class="text-danger"
                                             *ngIf="row.tallyErrorAccounts>0">{{row.accountsErrorPercent}}
@@ -129,7 +104,7 @@
                         <li class="list-group-item">
                             <div class="clearfix">
                                 <div class="col-sm-2 col-xs-12">
-                                    <img src="./../../../assets/images/folder.svg" height="20" class="m-r-10">
+                                    <img src="./../../../assets/images/folder.svg" height="20" class="mr-r1">
                                     <span>{{localeData?.entries}}</span>
                                 </div>
                                 <div class="col-sm-6 col-xs-8">
@@ -144,7 +119,7 @@
                                 </div>
                                 <div class="col-sm-4 col-xs-4 text-success">
                                     <div class="status">
-                                        <small class="m-r-10"><i class="fa fa-check"></i>{{row.entriesPercent}}
+                                        <small class="mr-r1"><i class="fa fa-check"></i>{{row.entriesPercent}}
                                             {{localeData?.complete}}</small>
                                         <small class="text-danger"
                                             *ngIf="row.tallyErrorEntries>0">{{row.entriesErrorPercent}}
@@ -158,7 +133,7 @@
                 </div>
                 <div class="panel-footer"
                     *ngIf="row.tallyErrorEntries>0 || row.tallyErrorAccounts>0 || row.tallyErrorGroups>0">
-                    <span class="m-r-15">{{localeData?.error_report}}</span>
+                    <span class="mr-r15">{{localeData?.error_report}}</span>
                     <a href="javascript:;" class="running"
                         (click)="downloadLog(row)">{{row.company.name}}-error-log.xlsx</a>
                 </div>

@@ -90,9 +90,6 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
             this.CanNewTBLoadOnThisEnv = false;
         }
 
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-
         this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tab && val.tabIndex) {
                 this.activeTab = val.tab;

@@ -126,28 +126,66 @@
                     "label": "E-way bill",
                     "link": "/pages/invoice/ewaybill",
                     "icon": "icon-eway-bill-new",
-                    "description": "Generate directly from Giddh after"
+                    "description": "Generate directly from Giddh after",
+                    "hide": "sidebar"
                 },
                 {
-                    "label": "GSTR",
-                    "link": "/pages/gstfiling",
+                    "label": "GSTR1",
                     "icon": "icon-GSTR",
-                    "description": "File & view GSTR1, GSTR2 & GSTR3B"
+                    "description": "File & view GSTR1",
+                    "hide": "sidebar",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "isGstMenu": true,
+                        "type": "gstr1"
+                    }
+                },
+                {
+                    "label": "GSTR2",
+                    "icon": "icon-GSTR",
+                    "description": "File & view GSTR2",
+                    "hide": "sidebar",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "isGstMenu": true,
+                        "type": "gstr2"
+                    }
+                },
+                {
+                    "label": "GSTR3B",
+                    "icon": "icon-GSTR",
+                    "description": "File & view GSTR3B",
+                    "hide": "sidebar",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "isGstMenu": true,
+                        "type": "gstr3b"
+                    }
                 },
                 {
                     "label": "Reverse Charge",
                     "link": "/pages/reports/reverse-charge",
                     "icon": "icon-reverse-charge",
                     "description": "Report of total taxable value & total tax amount",
-                    "alwaysPresent": true
+                    "alwaysPresent": true,
+                    "hide": "sidebar"
                 },
                 {
                     "label": "VAT Report",
                     "link": "/pages/vat-report",
                     "icon": "icon-vat",
-                    "description": "File & review VAT"
+                    "description": "File & review VAT",
+                    "hide": "sidebar"
+                },
+                {
+                    "label": "Setting",
+                    "link": "/pages/settings/taxes",
+                    "icon": "icon-settings-cog",
+                    "description": "Tax setting",
+                    "hide": "sidebar"
                 }
-            ]
+            ],
+            "link": "/pages/settings/taxes"
         },
         {
             "label": "Reports",

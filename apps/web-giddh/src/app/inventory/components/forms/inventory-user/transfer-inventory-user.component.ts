@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
@@ -15,7 +15,7 @@ import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/default
   `],
 })
 
-export class InventoryUserComponent implements OnChanges, OnInit {
+export class InventoryUserComponent implements OnChanges {
     @Output() public onCancel = new EventEmitter();
     @Output() public onSave = new EventEmitter<{ entry: InventoryEntry, user: Partial<InventoryUser> }>();
     @Input() public stockList: IStocksItem[];
@@ -28,15 +28,7 @@ export class InventoryUserComponent implements OnChanges, OnInit {
     public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     public today = new Date();
 
-    // public inventoryEntryDateValid;
     constructor(private _fb: FormBuilder) {
-        const transaction = this._fb.group({
-            type: ['SENDER', Validators.required],
-            quantity: ['', Validators.required],
-            inventoryUser: ['', Validators.required],
-            stock: ['', Validators.required],
-            stockUnit: ['', Validators.required]
-        });
         this.form = this._fb.group({
             name: ['']
         });
@@ -48,10 +40,6 @@ export class InventoryUserComponent implements OnChanges, OnInit {
 
     public get transactions(): FormArray {
         return this.form.get('transactions') as FormArray;
-    }
-
-    public ngOnInit() {
-        // this.inventoryEntryDateValid = this.form.get('inventoryEntryDate').errors?.required
     }
 
     public ngOnChanges(changes: SimpleChanges): void {

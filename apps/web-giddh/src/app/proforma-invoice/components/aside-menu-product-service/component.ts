@@ -27,11 +27,8 @@ import { ReplaySubject } from 'rxjs';
 export class AsideMenuProductServiceComponent implements OnDestroy {
 
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @Output() public animatePAside: EventEmitter<any> = new EventEmitter();
     @Input() public selectedVoucherType: string;
     public autoFocusInChild: boolean = true;
-
-    // public
     public isAddStockOpen: boolean = false;
     public isAddServiceOpen: boolean = false;
     public hideFirstStep: boolean = false;
@@ -65,16 +62,11 @@ export class AsideMenuProductServiceComponent implements OnDestroy {
         this.hideFirstStep = false;
         this.isAddStockOpen = false;
         this.isAddServiceOpen = false;
-        if (e) {
-            //
-        } else {
+        if (!e) {
             this.closeAsideEvent.emit();
         }
     }
-
-    public animateAside(e: any) {
-        this.animatePAside.emit(e);
-    }
+    
     public backButtonPressed() {
         this.hideFirstStep = false;
         this.isAddStockOpen = false;
