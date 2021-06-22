@@ -9604,6 +9604,15 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 360px) {
+    .on-setting-page{
+        .hamburger-menu-icon.page-has-heading{
+            li{
+                h4{
+                  min-width: 150px !important;
+                }
+            }
+        }
+    }
     .pagination-sm > li > a,
     .pagination-sm > li > span {
         padding: 5px 8px;

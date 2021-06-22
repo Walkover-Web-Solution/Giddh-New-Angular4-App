@@ -37,11 +37,8 @@
                     </div>
 
                     <div id="setting-tab" class="w-100">
-                        <hamburger-menu></hamburger-menu>
-                        <ng-template
-                            [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
-
-
+                        <hamburger-menu *ngIf="localeData?.tabs" [pageHeading]="getPageHeading()"></hamburger-menu>
+                        <ng-template [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
                             <tabset #staticTabs>
 
                                 <tab [heading]="localeData?.tabs?.debit_note" [active]="activeTab === 'debit note'"
@@ -95,10 +92,7 @@
 
                         </ng-template>
 
-
-                        <ng-template
-                            [ngIf]="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note'">
-
+                        <ng-template [ngIf]="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note'">
                             <tabset #staticTabs>
 
                                 <tab [heading]="localeData?.tabs?.estimates" (selectTab)="tabChanged('estimates', $event);
