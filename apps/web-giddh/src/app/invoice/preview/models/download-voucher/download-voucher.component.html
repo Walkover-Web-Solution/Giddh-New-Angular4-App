@@ -45,8 +45,8 @@
 
         <div class="checkbox">
             <label>
-                <input name="originalCopy" type="checkbox" value="Transport" checked [(ngModel)]="isOriginal">
-                {{localeData?.original_copy}}
+                <input name="originalCopy" type="checkbox" value="Transport" checked [(ngModel)]="isOriginal" (change)="invoiceTypeChanged($event)">
+                {{localeData?.invoice_copy_options?.original}}
             </label>
         </div>
         <div class="checkbox">
