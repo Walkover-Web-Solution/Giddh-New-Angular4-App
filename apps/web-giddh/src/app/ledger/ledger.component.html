@@ -14,7 +14,7 @@
             </ul>
         </div>
         <hamburger-menu
-            [pageHeading]="(lc?.activeAccount?.name) ? (localeData?.page_heading + lc?.activeAccount?.name) + ' ' + commonLocaleData?.app_ac : ''">
+            [pageHeading]="(lc?.activeAccount?.name) ? ((!isMobileScreen ? localeData?.page_heading: '') + lc?.activeAccount?.name) + ' ' + commonLocaleData?.app_ac : ''">
         </hamburger-menu>
         <section class="container ledger-section" [hidden]="isShowLedgerColumnarReportTable">
             <!-- region ledger table-->

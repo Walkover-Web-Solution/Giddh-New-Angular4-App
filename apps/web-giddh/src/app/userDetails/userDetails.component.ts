@@ -349,7 +349,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
-     /**
+    /**
      * This will return page heading based on active tab
      *
      * @param {boolean} event

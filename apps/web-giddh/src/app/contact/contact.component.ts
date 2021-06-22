@@ -225,6 +225,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
+    /** This will store screen size */
+    public isMobileView: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -240,7 +242,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
         private _route: ActivatedRoute, private _generalAction: GeneralActions,
         private _router: Router,
-        private _breakPointObservar: BreakpointObserver, private modalService: BsModalService,
+        private breakPointObservar: BreakpointObserver,
+        private modalService: BsModalService,
         private settingsProfileActions: SettingsProfileActions, private groupService: GroupService,
         private settingsBranchAction: SettingsBranchActions,
         public currencyPipe: GiddhCurrencyPipe) {
@@ -303,6 +306,26 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof ContactComponent
+     */
+     public getPageHeading(): string {
+        if(this.isMobileView){
+            if(this.activeTab === 'aging-report') {
+                return this.localeData?.aging_report;
+            }
+            else if(this.activeTab !== 'aging-report') {
+                return this.localeData?.customer;
+            }
+         }
+         else {
+             return "";
+         }
+    }
+
     public sort(key, ord = 'asc') {
         this.key = key;
         this.order = ord;
@@ -357,10 +380,13 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 }
             });
-        this._breakPointObservar.observe([
-            '(max-width: 1023px)'
+
+        this.breakPointObservar.observe([
+            '(max-width: 1023px)',
+            '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
+            this.isMobileScreen = result?.breakpoints['(max-width: 1023px)'];
+            this.isMobileView = result?.breakpoints['(max-width: 767px)'];
         });
 
         combineLatest([this._route.params, this._route.queryParams])
