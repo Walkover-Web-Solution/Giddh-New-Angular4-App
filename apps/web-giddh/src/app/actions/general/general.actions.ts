@@ -163,13 +163,6 @@ export class GeneralActions {
         }
     }
 
-    public isOpenCalendlyModel(isOpen: boolean) {
-        return {
-            type: GENERAL_ACTIONS.OPEN_CALENDLY_MODEL,
-            payload: isOpen
-        }
-    }
-
     public updateCurrentLiabilities(uniqueName: string) {
         return {
             type: GENERAL_ACTIONS.UPDATE_CURRENT_LIABILITIES,

@@ -119,9 +119,6 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
     }
-    public openScheduleCalendlyModel() {
-        this.store.dispatch(this.generalActions.isOpenCalendlyModel(true));
-    }
 
     /**
      * Releases memory

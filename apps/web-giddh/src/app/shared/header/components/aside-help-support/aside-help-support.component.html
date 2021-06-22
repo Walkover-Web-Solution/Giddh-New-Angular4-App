@@ -56,7 +56,7 @@
                 <div class="file-image">
                     <img src="{{imgPath}}request-demo.svg">
                     <p class="text-gray">{{localeData?.request_demo}}:</p>
-                    <a class="btn btn-sky-blue mb-3 mr-0" id="SOIBTN_giddhbooks" data-psz="00" data-so-page="giddhbooks" data-delay="1" (click)="scheduleNow($event)">{{commonLocaleData?.app_schedule_now}}</a>
+                    <a class="btn btn-sky-blue mb-3 mr-0" (click)="scheduleNow($event)">{{commonLocaleData?.app_schedule_now}}</a>
                     <br>
                     <p class="text-gray">{{localeData?.contact}}:</p>
                 </div>
