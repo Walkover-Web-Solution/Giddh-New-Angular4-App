@@ -7,10 +7,7 @@ import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Compa
 import { CompanyActions } from '../actions/company.actions';
 import { ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-<<<<<<< HEAD
 import { GeneralActions } from '../actions/general/general.actions';
-=======
->>>>>>> beta-stage
 import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
@@ -47,18 +44,13 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-<<<<<<< HEAD
     constructor(private store: Store<AppState>, private companyActions: CompanyActions, private _route: ActivatedRoute, private router: Router, private _generalActions: GeneralActions, private breakPointObservar: BreakpointObserver,) {
-=======
-    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private _route: ActivatedRoute, private router: Router, private breakPointObservar: BreakpointObserver,) {
->>>>>>> beta-stage
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
             }
         });
     }
-
 
     /**
      * This will return page heading based on active tab
