@@ -270,21 +270,6 @@ span.close-modal.cp.pull-right {
         margin-right: 8px;
     }
 }
-.more-btn-dropdown {
-    border: 1px solid $gainsboro !important;
-    box-shadow: none !important;
-    border-radius: 5px !important;
-    font-size: 14px;
-    padding: 5px 10px;
-    background: $white !important;
-    width: 160px;
-    text-align: left;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    color: $charcoal;
-}
 // responsive
 @media (max-width: 1023px) {
     .pending-advance-search {

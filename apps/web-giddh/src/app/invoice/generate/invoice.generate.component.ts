@@ -151,8 +151,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         { label: '', value: 'lessThanOrEquals' },
         { label: '', value: 'equals' }
     ];
-    /** True, if company supports new voucher version */
-    public isNewVoucherVersion: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -180,7 +178,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        this.isNewVoucherVersion = this.generalService.voucherApiVersion === 2;
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
