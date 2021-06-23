@@ -399,7 +399,7 @@
                 (click)="sortButtonClicked('desc', column)"
                 [ngClass]="{'active-text-color': filter.sortBy === column && filter.sort === 'asc'}"></div>
 
-            <div class="icon-sort-dsc " *ngIf="filter.sortBy === column && filter.sort === 'desc'"
+            <div class="icon-sort-asc " *ngIf="filter.sortBy === column && filter.sort === 'desc'"
                 (click)="sortButtonClicked('asc', column)"
                 [ngClass]="{'active-text-color': filter.sortBy === column && filter.sort === 'desc'}"></div>
 

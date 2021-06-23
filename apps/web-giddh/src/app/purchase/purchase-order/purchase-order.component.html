@@ -357,7 +357,7 @@
             (click)="sortPurchaseOrders('desc', column)"
             [ngClass]="{'active-text-color': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'}">
         </div>
-        <div class="icon-sort-dsc"
+        <div class="icon-sort-asc"
             *ngIf="purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'"
             (click)="sortPurchaseOrders('asc', column)"
             [ngClass]="{'active-text-color': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'}">
