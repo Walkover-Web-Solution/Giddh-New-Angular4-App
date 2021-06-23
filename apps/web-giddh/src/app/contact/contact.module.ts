@@ -20,7 +20,6 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { Ng2OrderModule } from 'ng2-order-pipe';
-import { GhSortByPipeModule } from '../shared/helpers/pipes/ghSortByPipe/ghSortByPipe.module';
 import { ContactAdvanceSearchComponent } from './advanceSearch/contactAdvanceSearch.component';
 import { AgingReportComponent } from './aging-report/aging-report.component';
 import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component'; // importing the module for table column sort
@@ -30,7 +29,6 @@ import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { TextMaskModule } from 'angular2-text-mask';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
-//payemnt aside component
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: false,
@@ -71,7 +69,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         Daterangepicker,
         Ng2OrderModule,
         PerfectScrollbarModule,
-        GhSortByPipeModule,
         GenericAsideMenuAccountModule,
         NgxDaterangepickerMd.forRoot(),
         TextMaskModule,

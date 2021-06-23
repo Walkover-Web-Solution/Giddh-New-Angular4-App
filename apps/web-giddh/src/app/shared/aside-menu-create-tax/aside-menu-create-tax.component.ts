@@ -50,13 +50,15 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         private _settingsTaxesActions: SettingsTaxesActions,
         private salesService: SalesService
     ) {
+        
+    }
+
+    ngOnInit() {
         for (let i = 1; i <= 31; i++) {
             this.days.push({ label: i.toString(), value: i.toString() });
         }
         this.newTaxObj.date = moment().toDate();
-    }
-
-    ngOnInit() {
+        
         this.duration = [
             { label: this.commonLocaleData?.app_duration?.monthly, value: 'MONTHLY' },
             { label: this.commonLocaleData?.app_duration?.quarterly, value: 'QUARTERLY' },
