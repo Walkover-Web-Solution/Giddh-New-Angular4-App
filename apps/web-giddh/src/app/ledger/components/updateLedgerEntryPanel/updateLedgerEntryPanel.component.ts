@@ -253,6 +253,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public branches: Array<any>;
     /** Stores the adjustments as a backup that are present on the current opened entry */
     public originalVoucherAdjustments: VoucherAdjustments;
+    public Shown: boolean = true;
+    public isHide: boolean = false;
+    public condition: boolean = true;
+    public condition2: boolean = false;
 
     constructor(
         private _accountService: AccountService,
@@ -283,14 +287,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.isTxnUpdateSuccess$ = this.store.pipe(select(p => p.ledger.isTxnUpdateSuccess), takeUntil(this.destroyed$));
         this.closeUpdateLedgerModal.pipe(takeUntil(this.destroyed$));
         this.vm.currencyList$ = this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$));
-        this.store.dispatch(this._settingsTagActions.GetALLTags());
         this.selectedPettycashEntry$ = this.store.pipe(select(p => p.expense.pettycashEntry), takeUntil(this.destroyed$));
     }
-
-    Shown: boolean = true;
-    isHide: boolean = false;
-    condition: boolean = true;
-    condition2: boolean = false;
 
     toggleShow() {
         this.condition = !this.condition;
@@ -305,6 +303,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
+        this.store.dispatch(this._settingsTagActions.GetALLTags());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
@@ -2060,7 +2059,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.firstBaseAccountSelected = resp[0].particular.uniqueName;
 
                         const initialAccounts: Array<IOption> = [];
-                        this.vm.selectedLedger.transactions.map(t => {
+                        this.vm.selectedLedger.transactions?.map(t => {
                             if (this.vm.selectedLedger.discounts && this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
                                 let category = this.vm.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
                                 if (this.vm.isValidCategory(category)) {

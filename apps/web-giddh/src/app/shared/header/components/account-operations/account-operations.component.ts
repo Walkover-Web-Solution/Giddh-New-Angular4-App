@@ -129,6 +129,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions,
         private _settingsDiscountAction: SettingsDiscountActions) {
         this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
+        
+    }
+
+    public ngOnInit() {
         this.showNewForm$ = this.store.pipe(select(state => state.groupwithaccounts.showAddNew), takeUntil(this.destroyed$));
         this.showAddNewAccount$ = this.store.pipe(select(state => state.groupwithaccounts.showAddNewAccount), takeUntil(this.destroyed$));
         this.showAddNewGroup$ = this.store.pipe(select(state => state.groupwithaccounts.showAddNewGroup), takeUntil(this.destroyed$));
@@ -204,9 +208,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.updateAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$));
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
-    }
-
-    public ngOnInit() {
+        
         this.selectedItems = [];
         this.settings = {
             singleSelection: false,
@@ -599,7 +601,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 obj.uniqueName = acc;
                 finalData.push(obj);
             });
-            this.store.dispatch(this.accountsAction.mergeAccount(activeAccount.uniqueName, finalData));
+            this.store.dispatch(this.accountsAction.mergeAccount(activeAccount?.uniqueName, finalData));
             this.showDeleteMove = false;
         } else {
             this._toaster.errorToast(this.localeData?.merge_account_error);

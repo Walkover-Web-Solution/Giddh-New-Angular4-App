@@ -830,3 +830,7 @@
   .icon-folder:before {
     content: "\f2334";
   }
+  .icon-company, .icon-branch1{
+      position: relative;
+  }
+

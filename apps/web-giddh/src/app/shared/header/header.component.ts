@@ -1,4 +1,4 @@
-import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
@@ -7,7 +7,7 @@ import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
-import { ModalDirective, BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -148,7 +148,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         country: ''
     };
     public currentState: any = '';
-    public isCalendlyModelActivate: boolean = false;
     public forceOpenNavigation: boolean = false;
     /** True, if GST side menu is opened in responsive mode */
     public isGstSideMenuOpened: boolean = false;
@@ -320,9 +319,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             }
         });
-        this.store.pipe(select(s => s.general.isCalendlyModelOpen), takeUntil(this.destroyed$)).subscribe(response => {
-            this.isCalendlyModelActivate = response;
-        });
         this.user$ = this.store.pipe(select(createSelector([(state: AppState) => state.session.user], (user) => {
             if (user && user.user && user.user.name && user.user.name.length > 1) {
                 let name = user.user.name;
@@ -406,9 +402,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         this.totalNumberOfcompanies$ = this.store.pipe(select(state => state.session.totalNumberOfcompanies), takeUntil(this.destroyed$));
         this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
-            if (value === 'openschedulemodal') {
-                this.openScheduleCalendlyModel();
-            }
             if (value === 'resetcompanysession') {
                 this.removeCompanySessionData();
             }
@@ -663,7 +656,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.store.dispatch(this.commonActions.resetOnboardingForm());
                 }
                 if (res.subscription) {
-                    this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
                     if (res.baseCurrency) {
 
                         this.companyCountry.baseCurrency = res.baseCurrency;
@@ -704,6 +696,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             /* TO SHOW NOTIFICATIONS */
         } else {
             window['Headway'].init();
+        }
+
+        if (window['SOE'] === undefined) {
+            /* For Schedule now */
+            let scriptTag = document.createElement('script');
+            scriptTag.src = 'https://cdn.oncehub.com/mergedjs/so.js';
+            scriptTag.type = 'text/javascript';
+            scriptTag.defer = true;
+            document.body.appendChild(scriptTag);
+            /* For Schedule now */
         }
 
         if (this.selectedPlanStatus === 'expired') {// active expired
@@ -1153,14 +1155,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             && attrs.getNamedItem('aria-expanded') && attrs.getNamedItem('aria-expanded').nodeValue === 'true');
     }
 
-    public scheduleNow() {
-        let newwindow = window.open('https://app.intercom.io/a/meeting-scheduler/calendar/VEd2SmtLSyt2YisyTUpEYXBCRWg1YXkwQktZWmFwckF6TEtwM3J5Qm00R2dCcE5IWVZyS0JjSXF2L05BZVVWYS0tck81a21EMVZ5Z01SQWFIaG00RlozUT09--c6f3880a4ca63a84887d346889b11b56a82dd98f', 'scheduleWindow', 'height=650,width=1199,left=200,top=100`');
-        if (window.focus) {
-            newwindow.focus();
-        }
-        return false;
-    }
-
     public mouseEnteredOnCompanyName(i: number) {
         this.hoveredIndx = i;
     }
@@ -1315,21 +1309,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-     *To hide calendly model
+     * To show schedule now model
      *
      * @memberof HeaderComponent
      */
-    public hideScheduleCalendlyModel() {
-        this.store.dispatch(this._generalActions.isOpenCalendlyModel(false));
-    }
-
-    /**
-     *To show calendly model
-     *
-     * @memberof HeaderComponent
-     */
-    public openScheduleCalendlyModel() {
-        this.store.dispatch(this._generalActions.isOpenCalendlyModel(true));
+    public openScheduleModel() {
+        if (window['SOE'] !== undefined) {
+            window['SOE'].prototype.toggleLightBox('giddhbooks');
+        }
     }
 
     /**

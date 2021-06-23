@@ -34,6 +34,7 @@ export class JobworkWelcomeComponent implements OnDestroy {
         this.asideTransferPaneState = this.asideTransferPaneState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
+    
     public toggleBodyClass() {
         if (this.asideTransferPaneState === 'in') {
             document.querySelector('body').classList.add('fixed');

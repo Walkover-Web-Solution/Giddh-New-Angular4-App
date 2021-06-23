@@ -19,12 +19,12 @@ import {
     GoogleLoginProvider,
     SocialUser
 } from "../theme/ng-social-login-module/index";
-import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { isCordova } from "@giddh-workspaces/utils";
 import { GeneralService } from "../services/general.service";
+import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
 @Component({
     selector: "login",
@@ -108,22 +108,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isLoginWithEmailSubmited$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailSubmited;
         }), takeUntil(this.destroyed$));
-
-        this.store.pipe(select(state => {
-            return state.login.isVerifyEmailSuccess;
-        }), takeUntil(this.destroyed$)).subscribe((value) => {
-            if (value) {
-                
-            }
-        });
-
-        this.store.pipe(select(state => {
-            return state.login.isVerifyMobileSuccess;
-        }), takeUntil(this.destroyed$)).subscribe((value) => {
-            if (value) {
-                
-            }
-        });
 
         this.isLoginWithPasswordInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithPasswordInProcess;

@@ -632,9 +632,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         case CompanyActions.USER_SELECTED_PLANS:
             return Object.assign({}, state, { userSelectedSubscriptionPlan: action.payload });
 
-        case CompanyActions.CURRENT_COMPANY_SUBSCRIPTIONS_PLANS:
-            return Object.assign({}, state, { currentCompanySubscriptionPlan: action.payload });
-
         case CompanyActions.TOTAL_COMPANIES:
             return Object.assign({}, state, { totalNumberOfcompanies: action.payload });
 

@@ -196,5 +196,8 @@
     "import_services": "सेवाओं का आयात",
     "others": "अन्य",
     "choose_file": "फाइलें चुनें",
-    "remove_file": "सफलतापूर्वक मिटाया गया"
+    "remove_file": "सफलतापूर्वक मिटाया गया",
+    "delete_bank_transactions": "Delete Bank Transactions",
+    "delete_bank_transactions_title": "Do you want to delete the selected bank transaction(s)?",
+    "reload_bank_transactions": "Reload bank transactions"
 }

@@ -128,14 +128,21 @@ export class MfEditComponent implements OnInit, OnDestroy {
         private searchService: SearchService,
         private warehouseActions: WarehouseActions
     ) {
-
-        this.store.dispatch(this.inventoryAction.GetManufacturingCreateStock());
-        this.store.dispatch(this.inventoryAction.GetStock());
         this.isGetManufactureStockInProgress$ = this.store.pipe(select(state => state.inventory.isGetManufactureStockInProgress), takeUntil(this.destroyed$));
         this.isStockWithRateInprogress$ = this.store.pipe(select(state => state.manufacturing.isStockWithRateInprogress), takeUntil(this.destroyed$));
 
         this.manufacturingDetails = new ManufacturingItemRequest();
         this.initializeOtherExpenseObj();
+
+        this.manufacturingDetails.quantity = 1;
+        this.setCurrentPageTitle();
+        this.setToday();
+    }
+
+    public ngOnInit() {
+        this.store.dispatch(this.inventoryAction.GetManufacturingCreateStock());
+        this.store.dispatch(this.inventoryAction.GetStock());
+
         // Update/Delete condition
         this.store.pipe(select(manufacturingStore => manufacturingStore.manufacturing), takeUntil(this.destroyed$)).subscribe((res: any) => {
             if (res.stockToUpdate) {
@@ -166,13 +173,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
             }
         });
 
-
-        this.manufacturingDetails.quantity = 1;
-        this.setCurrentPageTitle();
-        this.setToday();
-    }
-
-    public ngOnInit() {
         this.isInventoryPage = this.router.url.includes('/pages/inventory');
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
