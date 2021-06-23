@@ -262,10 +262,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.selectedCompany = activeCompany;
             }
         });
-
-        this.store.dispatch(this._companyActions.getAllRegistrations());
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        this.getCompanyCustomField();
     }
 
     /**
@@ -310,18 +306,16 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @param {boolean} event
      * @memberof ContactComponent
      */
-     public getPageHeading(): string {
-        if(this.isMobileView){
-            if(this.activeTab === 'aging-report') {
+    public getPageHeading(): string {
+        if (this.isMobileView) {
+            if (this.activeTab === 'aging-report') {
                 return this.localeData?.aging_report;
-            }
-            else if(this.activeTab !== 'aging-report') {
+            } else if (this.activeTab !== 'aging-report') {
                 return this.localeData?.customer;
             }
-         }
-         else {
-             return "";
-         }
+        } else {
+            return "";
+        }
     }
 
     public sort(key, ord = 'asc') {
@@ -333,6 +327,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.store.dispatch(this._companyActions.getAllRegistrations());
+        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+        this.getCompanyCustomField();
         this.currentOrganizationType = this._generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
         // localStorage supported

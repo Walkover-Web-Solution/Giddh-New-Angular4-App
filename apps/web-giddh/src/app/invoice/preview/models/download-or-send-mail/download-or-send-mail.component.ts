@@ -68,7 +68,9 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         this.isErrOccured$ = this.store.pipe(select(p => p.invoice.invoiceDataHasError), distinctUntilChanged(), takeUntil(this.destroyed$));
         this.voucherDetailsInProcess$ = this.store.pipe(select(p => p.receipt.voucherDetailsInProcess), takeUntil(this.destroyed$));
         this.voucherPreview$ = this.store.pipe(select(p => p.receipt.base64Data), distinctUntilChanged(), takeUntil(this.destroyed$));
+    }
 
+    public ngOnInit() {
         this.voucherPreview$.subscribe((o: any) => {
             if (o) {
 
@@ -116,11 +118,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                 this.showEditButton = false;
             }
         });
-
-    }
-
-    public ngOnInit() {
-
+        
         this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o && o.invoiceSettings) {
                 this.isSendSmsEnabled = o.invoiceSettings.sendInvLinkOnSms;

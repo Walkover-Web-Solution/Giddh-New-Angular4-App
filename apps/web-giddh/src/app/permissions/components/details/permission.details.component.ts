@@ -40,7 +40,15 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
         private permissionActions: PermissionActions,
         private _toaster: ToasterService
     ) {
+        this.addUpdateRoleInProcess$ = this.store.pipe(select(p => p.permission.addUpdateRoleInProcess), takeUntil(this.destroyed$));
+    }
 
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    public ngOnInit() {
         this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((permission) => {
             this.allRoles = cloneDeep(permission.roles);
             this.singlePageForFreshStart = find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
@@ -57,16 +65,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
             this.newRole = permission.newRole;
             this.pageList = permission.pages;
         });
-        this.addUpdateRoleInProcess$ = this.store.pipe(select(p => p.permission.addUpdateRoleInProcess), takeUntil(this.destroyed$));
-    }
-
-    public ngOnDestroy() {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    public ngOnInit() {
-
+        
         // listener for add update role case
         this.addUpdateRoleInProcess$.subscribe((result: boolean) => {
             if (result) {

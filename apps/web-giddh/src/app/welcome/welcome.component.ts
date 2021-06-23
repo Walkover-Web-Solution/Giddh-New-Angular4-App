@@ -220,8 +220,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         private zone: NgZone
     ) {
         this.companyProfileObj = {};
-        this.store.dispatch(this._generalActions.resetStatesList());
-        this.store.dispatch(this.commonActions.resetOnboardingForm());
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -231,6 +229,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
+        this.store.dispatch(this._generalActions.resetStatesList());
+        this.store.dispatch(this.commonActions.resetOnboardingForm());
+        
         this.store.pipe(select(state => state.itemOnboarding), takeUntil(this.destroyed$))
             .subscribe((itemOnBoardingDetails: ItemOnBoardingState) => {
                 this.itemOnBoardingDetails = itemOnBoardingDetails;

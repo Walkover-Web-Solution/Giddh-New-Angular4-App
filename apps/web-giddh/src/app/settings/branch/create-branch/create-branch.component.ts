@@ -94,6 +94,14 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             name: [''],
             address: ['']
         });
+    }
+
+    /**
+     * Initializes the component
+     *
+     * @memberof CreateBranchComponent
+     */
+    public ngOnInit(): void {
         this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.name) {
                 this.companyDetails = {
@@ -113,14 +121,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                 }
             }
         });
-    }
 
-    /**
-     * Initializes the component
-     *
-     * @memberof CreateBranchComponent
-     */
-    public ngOnInit(): void {
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.loadAddresses('GET', { count: 0 });
         this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/branch'));
