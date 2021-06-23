@@ -173,7 +173,7 @@
                 {
                     "label": "VAT Report",
                     "link": "/pages/vat-report",
-                    "icon": "icon-vat",
+                    "icon": "icon-vat1",
                     "description": "File & review VAT",
                     "hide": "sidebar"
                 },
