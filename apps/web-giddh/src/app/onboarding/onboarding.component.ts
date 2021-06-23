@@ -45,10 +45,11 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         private companyActions: CompanyActions,
         private generalActions: GeneralActions
     ) {
-        this.supportTeamNumber = SUPPORT_TEAM_NUMBERS[Math.floor(Math.random() * SUPPORT_TEAM_NUMBERS.length)];
+        
     }
 
     public ngOnInit() {
+        this.supportTeamNumber = SUPPORT_TEAM_NUMBERS[Math.floor(Math.random() * SUPPORT_TEAM_NUMBERS.length)];
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
@@ -89,10 +90,6 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public scheduleNow() {
         this.scheduleNowModel?.show();
-    }
-
-    public openScheduleModal() {
-        this._generalService.invokeEvent.next("openschedulemodal");
     }
 
     public sidebarStatusChange(event) {

@@ -254,8 +254,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.datesUpdated = new EventEmitter();
         this.locale = { ...this._locale };
 
-        this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
-
         this.store.pipe(select(state => state.settings.financialYearLimits), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.startDate && response.endDate) {
                 if (moment(moment(response.startDate, GIDDH_DATE_FORMAT).toDate()) !== this.minDate || moment(moment(response.endDate, GIDDH_DATE_FORMAT).toDate()) !== this.maxDate) {
@@ -304,6 +302,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public ngOnInit(): void {
+        this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
+        
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {

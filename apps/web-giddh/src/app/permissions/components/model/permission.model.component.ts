@@ -32,6 +32,20 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private permissionActions: PermissionActions) {
+        
+    }
+
+    get isFormValid() {
+        if (this.newRoleObj.name && this.newRoleObj.isFresh && this.makeCount() > 0) {
+            return true;
+        } else if (this.newRoleObj.name && !this.newRoleObj.isFresh && this.newRoleObj.uniqueName) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public ngOnInit() {
         this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((p: PermissionState) => {
             if (p.roles && p.roles.length) {
                 this.allRoles = [];
@@ -46,19 +60,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
                 });
             }
         });
-    }
-
-    get isFormValid() {
-        if (this.newRoleObj.name && this.newRoleObj.isFresh && this.makeCount() > 0) {
-            return true;
-        } else if (this.newRoleObj.name && !this.newRoleObj.isFresh && this.newRoleObj.uniqueName) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public ngOnInit() {
+        
         this.dropdownHeading = this.localeData?.select_pages;
 
         this.store.dispatch(this.permissionActions.GetAllPages());

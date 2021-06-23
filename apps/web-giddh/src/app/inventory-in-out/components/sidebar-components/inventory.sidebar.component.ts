@@ -43,15 +43,9 @@ export class InventoryInOutSidebarComponent implements OnInit, OnDestroy {
     constructor(private store: Store<AppState>,
         private _inventoryAction: InventoryAction,
         private sideBarAction: SidebarAction) {
-        this.store.dispatch(this._inventoryAction.GetStock());
         this.stocksList$ = this.store.pipe(select(s => s.inventory.stocksList && s.inventory.stocksList.results), takeUntil(this.destroyed$));
         this.inventoryUsers$ = this.store.pipe(select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers), takeUntil(this.destroyed$));
         this.sidebarRect = window.screen.height;
-        this.store.pipe(take(1)).subscribe(state => {
-            if (state.inventory.groupsWithStocks === null) {
-                this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
-            }
-        });
     }
 
     @HostListener('window:resize')
@@ -60,7 +54,12 @@ export class InventoryInOutSidebarComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-
+        this.store.dispatch(this._inventoryAction.GetStock());
+        this.store.pipe(take(1)).subscribe(state => {
+            if (state.inventory.groupsWithStocks === null) {
+                this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
+            }
+        });
     }
 
     public ngOnDestroy() {
