@@ -9,7 +9,6 @@ import { combineLatest, ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { GeneralService } from '../services/general.service';
 @Component({
     templateUrl: './invoice.component.html',
     styleUrls: [`./invoice.component.scss`]
@@ -25,13 +24,10 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     public localeData: any = {};
     /* This will store screen size */
     public isMobileScreen: boolean = false;
-    /** True, if company supports new voucher version */
-    public isNewVoucherVersion: boolean;
 
     constructor(private store: Store<AppState>,
         private companyActions: CompanyActions,
-        private router: Router, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver,
-        private generalService: GeneralService) {
+        private router: Router, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver) {
 
         this._breakPointObservar.observe([
             '(max-width: 1023px)',
@@ -43,7 +39,6 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
-        this.isNewVoucherVersion = this.generalService.voucherApiVersion === 2;
         combineLatest([this._activatedRoute.params, this._activatedRoute.queryParams])
             .pipe(takeUntil(this.destroyed$))
             .subscribe(result => {
